@@ -11,4 +11,5 @@ appVersion: 0.0.301
 
 maintainers:
   - name: 2gis
+    url: https://github.com/2gis
     email: selfhosting@2gis.com
