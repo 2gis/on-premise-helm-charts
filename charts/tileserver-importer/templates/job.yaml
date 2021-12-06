@@ -1,0 +1,47 @@
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name:  {{ include "tileserver.name" . }}
+  labels:
+    {{- include "importer.labels" . | nindent 4 }}
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "tileserver.name" . }}
+    spec:
+      serviceAccountName: {{ include "tileserver.name" . }}
+
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+
+        - name: config-volume
+          configMap:
+            name: {{ include "tileserver.name" . }}
+
+      {{- with .Values.tileserver.importer.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      containers:
+        - name: import-worker
+          {{- with .Values.tileserver.importer }}
+          image: {{ .image }}:{{ .tag }}
+          {{- end}}
+          command: ["/selfimporter", "scheduler"]
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+
+            - mountPath: "/config"
+              name: config-volume
+
+          env:
+            - name: CONFIG_PATH
+              value: /config/config.yaml
+
+      restartPolicy: Never

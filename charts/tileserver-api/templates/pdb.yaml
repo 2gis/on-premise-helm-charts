@@ -1,0 +1,17 @@
+{{- if .Values.tileserver.api.podDisruptionBudget.enabled }}
+---
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "tileserver.name" . }}
+  labels:
+    {{- include "api.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.tileserver.api.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.tileserver.api.podDisruptionBudget.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "api.selectorLabels" . | nindent 6 }}
+{{- end }}

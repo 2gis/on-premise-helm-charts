@@ -1,0 +1,47 @@
+---
+
+# manifestPath -- Path to the manifest in S3-like storage. The manifest is downloaded via the dgctl utility
+manifestPath: manifests/1635402744.json
+
+tileserver:
+
+  # -- The type of data being uploaded. Can have one of the values: web, native, raster
+  type: web
+
+  # -- The ID of the service, it is used to search block in the manifest
+  serviceName: tileserver-api
+
+  cassandra:
+    # -- List of available Cassandra database nodes
+    hosts: []
+
+    # -- Replication factor for Cassandra
+    replicaFactor: 1
+
+    # -- Consistency level for database read queries
+    consistencyLevelRead: ONE
+
+    # -- Consistency level for database write queries
+    consistencyLevelWrite: ONE
+
+  importer:
+    # -- The path to the docker image. Must have a path to your private docker registry
+    image: 2gis/selfimporter
+    # -- Tag with application version
+    tag: v1.0.0
+
+    pullPolicy: IfNotPresent
+
+    # -- Number of parallel import processes (spawned jobs)
+    workerNum: 10
+
+    # -- Number of write processes per import process
+    writerNum: 8
+
+    nodeSelector: {}
+
+    storage:
+      host: s3host.local
+      bucket: backet
+      accessKey: accessKey
+      secretKey: secretKey

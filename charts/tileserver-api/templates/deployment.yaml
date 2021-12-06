@@ -1,0 +1,85 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tileserver.name" . }}
+  labels:
+    {{- include "api.labels" . | nindent 4 }}
+
+spec:
+  replicas: {{ .Values.tileserver.api.replicaCount }}
+  revisionHistoryLimit: {{ .Values.tileserver.api.revisionHistory }}
+
+  selector:
+    matchLabels:
+      {{- include "api.selectorLabels" . | nindent 6 }}
+
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+
+  template:
+    metadata:
+      labels:
+        {{- include "api.selectorLabels" . | nindent 8 }}
+
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.tileserver.api.terminationGracePeriodSeconds }}
+
+      volumes:
+        - configMap:
+            name: {{ include "tileserver.name" . }}
+          name: config-volume
+
+      {{- with .Values.tileserver.api.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.tileserver.api.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.tileserver.api.image }}:{{ .Values.tileserver.api.tag }}
+
+          volumeMounts:
+            - mountPath: "/config"
+              name: config-volume
+
+          ports:
+            - name: http
+              containerPort: 5000
+
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+            failureThreshold: 6
+
+          {{- with .Values.tileserver.api.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          env:
+            - name: JAEGER_DISABLED
+              value: "true"
+            - name: JAEGER_SERVICE_NAME
+              value: "tileserver"
+            - name: PEERS_IGNORE
+              value: "true"

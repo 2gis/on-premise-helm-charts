@@ -1,0 +1,109 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "tileserver.name" . }}
+data:
+  config.yaml: |
+    manifest-path: {{ .Values.manifestPath }}
+    migrations-path: "/migrations"
+    service-name: {{ .Values.tileserver.serviceName }}
+    workers: {{ .Values.tileserver.importer.workerNum }}
+    data-type: {{ .Values.tileserver.type }}
+
+    cassandra:
+      name: local
+      timeout: 10s
+      num-retries: 1
+      reconnect-interval: 30s
+
+      keyspaces:
+        - tileset: {{ .Values.tileserver.type }}
+          keyspace: dgis_tileserver_{{ .Values.tileserver.type}}_{{ include "tileserver.manifestCode" . }}
+          default: true
+          partition-size: 4
+
+      {{- with .Values.tileserver.cassandra }}
+      hosts:
+        {{- toYaml .hosts | nindent 8 }}
+
+      replication-factor: {{ .replicaFactor }}
+
+      consistency-level-read: {{ .consistencyLevelRead }}
+      consistency-level-write: {{ .consistencyLevelWrite }}
+      {{- end }}
+
+    {{- with .Values.tileserver.importer.storage }}
+    storage:
+      host: {{ .host }}
+      bucket: {{ .bucket }}
+      access-key: {{ .accessKey }}
+      secret-key: {{ .secretKey }}
+      url-lifetime-period: 60m
+    {{- end }}
+
+    k8s:
+      job-template-file-path: /config/job.yaml
+      {{- with .Values.tileserver.importer }}
+      worker-image: {{ .image }}:{{ .tag }}
+      {{- end }}
+      namespace: default
+
+    worker:
+      temp-dir: /tmp
+      writer-num: {{ .Values.tileserver.importer.writerNum }}
+
+    log-level: info
+    log-format: text
+
+  job.yaml: |
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: {{`{{.task_id}}`}}
+      labels:
+        task-id: {{`{{.task_id}}`}}
+        import-id: {{`{{.import_id}}`}}
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          name: {{`{{.task_type}}`}}
+        spec:
+          volumes:
+            - name: tmp-volume
+              emptyDir: {}
+
+            - name: config-volume
+              configMap:
+                name: {{ include "tileserver.name" . }}
+
+          {{- with .Values.tileserver.importer.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          containers:
+            - name: import-worker
+              image: {{`{{.image_path}}`}}
+              command: ["/selfimporter", "worker"]
+
+              volumeMounts:
+                - name: tmp-volume
+                  mountPath: /tmp
+
+                - mountPath: "/config"
+                  name: config-volume
+
+              env:
+                - name: WORKER_SEGMENT_NAME
+                  value: {{`{{.segment_name}}`}}
+                - name: WORKER_ACTION_TYPE
+                  value: {{`{{.action_type}}`}}
+                - name: WORKER_SEGMENT_URL
+                  value: {{`{{.segment_url}}`}}
+                - name: CONFIG_PATH
+                  value: /config/config.yaml
+
+          restartPolicy: Never

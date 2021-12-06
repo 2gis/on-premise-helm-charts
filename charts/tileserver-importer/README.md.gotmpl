@@ -1,0 +1,20 @@
+# 2GIS Tileserver importer
+
+This repository contains the application for uploading map data divided by tiles.
+
+It consists of a K8S Job that, by downloading data files, spawn child jobs to import and save them in the Cassandra database
+
+## Requirements
+
+- Cassandra database
+- S3 compatible storage
+
+## Deploy
+
+Deploy the chart with the release name `importer-release`:
+
+``` shell
+helm upgrade --install importer-release ./tileserver-importer
+```
+
+{{ template "chart.valuesSection" . }}

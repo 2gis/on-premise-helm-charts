@@ -1,0 +1,20 @@
+{{- with .Values.tileserver.api.hpa }}
+{{- if .enabled }}
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "tileserver.name" $ }}
+  labels:
+    {{- include "api.labels" $ | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "tileserver.name" $ }}
+  minReplicas: {{ .minReplicas }}
+  maxReplicas: {{ .maxReplicas }}
+  targetCPUUtilizationPercentage: {{ .targetCPUUtilizationPercentage }}
+{{- end }}
+{{- end }}
