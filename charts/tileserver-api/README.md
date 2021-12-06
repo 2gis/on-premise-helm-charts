@@ -1,14 +1,18 @@
-# tileserver-api
+# 2GIS Tileserver API
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+The repository contains a HTTP server for giving tiles data.
 
-Tileserver API for getting cartographic data
+## Requirements
 
-## Maintainers
+- Cassandra database
 
-| Name | Email | Url |
-| ---- | ------ | --- |
-| 2GIS dev team | selfhosting@2gis.com |  |
+## Deploy
+
+Deploy the chart with the release name `api-release`:
+
+``` shell
+helm upgrade --install api-release ./tileserver-api
+```
 
 ## Values
 
@@ -46,3 +50,6 @@ Tileserver API for getting cartographic data
 | tileserver.api.vpa.updateMode | string | `"Auto"` |  |
 | tileserver.type | string | `"web"` | The type of data being uploaded. Can have one of the values: web, native, raster |
 
+| Name | Email | Url |
+| ---- | ------ | --- |
+| 2gis | selfhosting@2gis.com | https://github.com/2gis |

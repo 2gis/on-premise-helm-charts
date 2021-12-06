@@ -1,0 +1,19 @@
+# 2GIS Tileserver API
+
+The repository contains a HTTP server for giving tiles data.
+
+## Requirements
+
+- Cassandra database
+
+## Deploy
+
+Deploy the chart with the release name `api-release`:
+
+``` shell
+helm upgrade --install api-release ./tileserver-api
+```
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "chart.maintainersTable" . }}
