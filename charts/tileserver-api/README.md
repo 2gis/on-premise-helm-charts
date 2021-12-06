@@ -50,6 +50,8 @@ helm upgrade --install api-release ./tileserver-api
 | tileserver.api.vpa.updateMode | string | `"Auto"` |  |
 | tileserver.type | string | `"web"` | The type of data being uploaded. Can have one of the values: web, native, raster |
 
+## Maintainers
+
 | Name | Email | Url |
 | ---- | ------ | --- |
 | 2gis | selfhosting@2gis.com | https://github.com/2gis |

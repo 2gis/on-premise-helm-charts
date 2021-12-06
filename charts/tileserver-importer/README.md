@@ -39,6 +39,8 @@ helm upgrade --install importer-release ./tileserver-importer
 | tileserver.serviceName | string | `"tileserver-api"` | The ID of the service, it is used to search block in the manifest |
 | tileserver.type | string | `"web"` | The type of data being uploaded. Can have one of the values: web, native, raster |
 
+## Maintainers
+
 | Name | Email | Url |
 | ---- | ------ | --- |
 | 2gis | selfhosting@2gis.com | https://github.com/2gis |
