@@ -1,0 +1,14 @@
+---
+
+apiVersion: v2
+name: mapgl-js-api
+description: Basic WebGL map chart template for 2GIS SelfHosting
+
+type: application
+
+version: 0.0.1
+appVersion: 0.0.301
+
+maintainers:
+  - name: 2GIS dev team
+    email: selfhosting@2gis.com
