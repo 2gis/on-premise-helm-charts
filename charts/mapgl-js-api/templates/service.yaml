@@ -1,0 +1,25 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mapgl.fullname" . }}
+  {{- if .Values.service.annotations }}
+  annotations:
+    {{- toYaml .Values.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "mapgl.labels" . | nindent 4 }}
+  {{- if .Values.service.labels }}
+    {{- toYaml .Values.service.labels | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      appProtocol: http
+  selector:
+    {{- include "mapgl.selectorLabels" . | nindent 4 }}

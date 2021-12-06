@@ -1,0 +1,60 @@
+---
+
+replicaCount: 1
+
+image:
+  repository:
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
+podAnnotations: {}
+podLabels: {}
+
+service:
+  annotations: {}
+  labels: {}
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 30m
+    memory: 32M
+  limits:
+    cpu: 100m
+    memory: 64M
+
+
+nodeSelector: {}
+affinity: {}
+tolerations: []
+podDisruptionBudget:
+  enabled: false
+  maxUnavailable: 1
+
+hpa:
+  enabled: false
+  maxReplicas: 2
+  minReplicas: 1
+  targetCPUUtilizationPercentage: 80
+
+vpa:
+  enabled: false
+  updateMode: Auto
+  minAllowed:
+    memory: 100Mi
+  maxAllowed:
+    cpu: 200m
+    memory: 200Mi
