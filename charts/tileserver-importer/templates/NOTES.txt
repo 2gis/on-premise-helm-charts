@@ -1,5 +1,0 @@
-{{ .Chart.Name }} is installed by release "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace
-
-You can check the status of the app using command
-
-kubectl get job -n {{ .Release.Namespace}} -l app.kubernetes.io/import-uid={{ include "tileserver.manifestCode" . }}

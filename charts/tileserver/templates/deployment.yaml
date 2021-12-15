@@ -3,49 +3,57 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "tileserver.name" . }}
+  name: {{ include "tileserver.fullname" . }}
   labels:
-    {{- include "api.labels" . | nindent 4 }}
+    {{- include "tileserver.labels" . | nindent 4 }}
+    {{- if $.Values.api.labels }}
+    {{- toYaml $.Values.api.labels | nindent 4 }}
+    {{- end }}
+
+  {{- if $.Values.api.annotations }}
+  annotations:
+    {{- toYaml $.Values.api.annotations | nindent 4 }}
+  {{- end }}
 
 spec:
-  replicas: {{ .Values.tileserver.api.replicaCount }}
-  revisionHistoryLimit: {{ .Values.tileserver.api.revisionHistory }}
+  replicas: {{ .Values.api.replicaCount }}
+  revisionHistoryLimit: {{ .Values.api.revisionHistory }}
 
   selector:
     matchLabels:
-      {{- include "api.selectorLabels" . | nindent 6 }}
+      {{- include "tileserver.selectorLabels" . | nindent 6 }}
 
+  {{- with .Values.api.strategy }}
   strategy:
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 1
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 
   template:
     metadata:
       labels:
-        {{- include "api.selectorLabels" . | nindent 8 }}
+        {{- include "tileserver.selectorLabels" . | nindent 8 }}
 
     spec:
-      terminationGracePeriodSeconds: {{ .Values.tileserver.api.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.api.terminationGracePeriodSeconds }}
 
       volumes:
         - configMap:
-            name: {{ include "tileserver.name" . }}
+            name: {{ include "tileserver.fullname" . }}
           name: config-volume
 
-      {{- with .Values.tileserver.api.nodeSelector }}
+      {{- with .Values.api.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.tileserver.api.affinity }}
+      {{- with .Values.api.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
       containers:
-        - name: {{ .Chart.Name }}
-          image: {{ .Values.tileserver.api.image }}:{{ .Values.tileserver.api.tag }}
+        - name: {{ include "tileserver.name" . }}
+          image: {{ .Values.api.image }}:{{ .Values.api.tag }}
 
           volumeMounts:
             - mountPath: "/config"
@@ -71,7 +79,7 @@ spec:
             timeoutSeconds: 10
             failureThreshold: 6
 
-          {{- with .Values.tileserver.api.resources }}
+          {{- with .Values.api.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}

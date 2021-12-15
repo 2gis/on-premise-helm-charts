@@ -3,14 +3,50 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "tileserver.name" . }}
+  name: {{ include "tileserver.fullname" . }}
+  labels:
+    {{- include "tileserver.labels" . | nindent 4 }}
+
+  annotations:
+    {{- include "importer.hook-annotations" . | nindent 4 }}
+
 data:
   config.yaml: |
+    layers-refresh-period-minutes: 5
+    layers-ald-refresh-period-minutes: 5
+    metrics-refresh-period-minutes: 5
+    graceful-shutdown-time: 5s
+    cassandra-clusters:
+      - name: kubernetes
+        timeout: 1s
+        num-retries: 2
+        reconnect-interval: 30s
+
+        keyspaces:
+          - tileset: {{ .Values.type }}
+            keyspace: dgis_tileserver_{{ .Values.type }}_{{ include "tileserver.manifestCode" . }}
+            default: true
+            partition-size: 4
+
+        {{- with .Values.cassandra }}
+        hosts:
+          {{- toYaml .hosts | nindent 12 }}
+
+        replication-factor: {{ .replicaFactor }}
+
+        consistency-level-read: {{ .consistencyLevelRead }}
+        consistency-level-write: {{ .consistencyLevelWrite }}
+        {{- end }}
+
+    log-level: info
+    log-format: json
+
+  importer.yaml: |
     manifest-path: {{ .Values.manifestPath }}
     migrations-path: "/migrations"
-    service-name: {{ .Values.tileserver.serviceName }}
-    workers: {{ .Values.tileserver.importer.workerNum }}
-    data-type: {{ .Values.tileserver.type }}
+    service-name: {{ .Values.serviceName }}
+    workers: {{ .Values.importer.workerNum }}
+    data-type: {{ .Values.type }}
 
     cassandra:
       name: local
@@ -19,12 +55,12 @@ data:
       reconnect-interval: 30s
 
       keyspaces:
-        - tileset: {{ .Values.tileserver.type }}
-          keyspace: dgis_tileserver_{{ .Values.tileserver.type}}_{{ include "tileserver.manifestCode" . }}
+        - tileset: {{ .Values.type }}
+          keyspace: dgis_tileserver_{{ .Values.type}}_{{ include "tileserver.manifestCode" . }}
           default: true
           partition-size: 4
 
-      {{- with .Values.tileserver.cassandra }}
+      {{- with .Values.cassandra }}
       hosts:
         {{- toYaml .hosts | nindent 8 }}
 
@@ -34,7 +70,7 @@ data:
       consistency-level-write: {{ .consistencyLevelWrite }}
       {{- end }}
 
-    {{- with .Values.tileserver.importer.storage }}
+    {{- with .Values.importer.storage }}
     storage:
       host: {{ .host }}
       bucket: {{ .bucket }}
@@ -45,14 +81,14 @@ data:
 
     k8s:
       job-template-file-path: /config/job.yaml
-      {{- with .Values.tileserver.importer }}
+      {{- with .Values.importer }}
       worker-image: {{ .image }}:{{ .tag }}
       {{- end }}
-      namespace: default
+      namespace: {{ .Release.Namespace }}
 
     worker:
       temp-dir: /tmp
-      writer-num: {{ .Values.tileserver.importer.writerNum }}
+      writer-num: {{ .Values.importer.writerNum }}
 
     log-level: info
     log-format: text
@@ -65,11 +101,18 @@ data:
       labels:
         task-id: {{`{{.task_id}}`}}
         import-id: {{`{{.import_id}}`}}
+        {{- include "tileserver.labels" . | nindent 8 }}
+
     spec:
       backoffLimit: 0
       template:
         metadata:
           name: {{`{{.task_type}}`}}
+          labels:
+            task-id: {{`{{.task_id}}`}}
+            import-id: {{`{{.import_id}}`}}
+            {{- include "tileserver.labels" . | nindent 12 }}
+
         spec:
           volumes:
             - name: tmp-volume
@@ -77,9 +120,9 @@ data:
 
             - name: config-volume
               configMap:
-                name: {{ include "tileserver.name" . }}
+                name: {{ include "tileserver.fullname" . }}
 
-          {{- with .Values.tileserver.importer.nodeSelector }}
+          {{- with .Values.importer.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -96,6 +139,11 @@ data:
                 - mountPath: "/config"
                   name: config-volume
 
+              {{- with .Values.importer.workerResources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+
               env:
                 - name: WORKER_SEGMENT_NAME
                   value: {{`{{.segment_name}}`}}
@@ -104,6 +152,6 @@ data:
                 - name: WORKER_SEGMENT_URL
                   value: {{`{{.segment_url}}`}}
                 - name: CONFIG_PATH
-                  value: /config/config.yaml
+                  value: /config/importer.yaml
 
           restartPolicy: Never

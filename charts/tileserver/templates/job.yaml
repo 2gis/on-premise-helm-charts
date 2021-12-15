@@ -3,16 +3,19 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name:  {{ include "tileserver.name" . }}
+  name:  {{ include "tileserver.fullname" . }}
   labels:
-    {{- include "importer.labels" . | nindent 4 }}
+    {{- include "tileserver.labels" . | nindent 4 }}
+  annotations:
+    {{- include "importer.removable-hook-annotations" . | nindent 4 }}
+
 spec:
   backoffLimit: 0
   template:
     metadata:
-      name: {{ include "tileserver.name" . }}
+      name: {{ include "tileserver.fullname" . }}
     spec:
-      serviceAccountName: {{ include "tileserver.name" . }}
+      serviceAccountName: {{ include "tileserver.fullname" . }}
 
       volumes:
         - name: tmp-volume
@@ -20,16 +23,16 @@ spec:
 
         - name: config-volume
           configMap:
-            name: {{ include "tileserver.name" . }}
+            name: {{ include "tileserver.fullname" . }}
 
-      {{- with .Values.tileserver.importer.nodeSelector }}
+      {{- with .Values.importer.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
       containers:
         - name: import-worker
-          {{- with .Values.tileserver.importer }}
+          {{- with .Values.importer }}
           image: {{ .image }}:{{ .tag }}
           {{- end}}
           command: ["/selfimporter", "scheduler"]
@@ -42,6 +45,6 @@ spec:
 
           env:
             - name: CONFIG_PATH
-              value: /config/config.yaml
+              value: /config/importer.yaml
 
       restartPolicy: Never

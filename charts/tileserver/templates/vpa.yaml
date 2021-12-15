@@ -1,23 +1,23 @@
-{{ with .Values.tileserver.api.vpa }}
+{{ with .Values.api.vpa }}
 {{- if .enabled }}
 ---
 
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
-  name: {{ include "tileserver.name" $ }}
+  name: {{ include "tileserver.fullname" $ }}
   labels:
-    {{- include "api.labels" $ | nindent 4 }}
+    {{- include "tileserver.labels" $ | nindent 4 }}
 spec:
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "tileserver.name" $ }}
+    name: {{ include "tileserver.fullname" $ }}
   updatePolicy:
     updateMode: {{ .updateMode }}
   resourcePolicy:
     containerPolicies:
-      - containerName: {{ $.Chart.Name }}
+      - containerName: {{ include "tileserver.name" }}
         mode: Auto
         {{- with .minAllowed }}
         minAllowed:

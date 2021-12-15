@@ -1,21 +1,27 @@
-{{- if .Values.tileserver.api.ingress.enabled -}}
+{{- with .Values.api.ingress }}
+{{- if .enabled -}}
 ---
 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "tileserver.name" . }}
+  name: {{ include "tileserver.fullname" $ }}
   labels:
-    {{- include "api.labels" . | nindent 4 }}
-  {{- with .Values.tileserver.api.ingress.annotations }}
+    {{- include "tileserver.labels" $ | nindent 4 }}
+    {{- if .labels }}
+    {{- toYaml .labels | nindent 4 }}
+    {{- end }}
+
+  {{- with .annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+
 spec:
-  ingressClassName: {{ .Values.tileserver.api.ingress.className }}
-  {{- if .Values.tileserver.api.ingress.tls }}
+  ingressClassName: {{ .className }}
+  {{- if .tls }}
   tls:
-    {{- range .Values.tileserver.api.ingress.tls }}
+    {{- range .tls }}
     - hosts:
       {{- range .hosts }}
         - {{ . | quote }}
@@ -24,7 +30,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.tileserver.api.ingress.hosts }}
+    {{- range .hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -33,9 +39,11 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "tileserver.name" $ }}
+                name: {{ include "tileserver.fullname" $ }}
                 port:
-                  number: {{ $.Values.tileserver.api.service.port }}
+                  number: {{ $.Values.api.service.port }}
           {{- end }}
     {{- end }}
+
+{{- end }}
 {{- end }}

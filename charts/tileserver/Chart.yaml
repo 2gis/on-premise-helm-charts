@@ -1,8 +1,8 @@
 ---
 
 apiVersion: v2
-name: tileserver-importer
-description: Tileserver Importer for import data to Cassandra
+name: tileserver
+description: Tileserver API for getting cartographic data
 
 type: application
 
