@@ -32,10 +32,11 @@ spec:
 
       containers:
         - name: import-worker
-          {{- with .Values.importer }}
+
+          {{- with $.Values.importer }}
           image: {{ .image }}:{{ .tag }}
-          {{- end}}
           command: ["/selfimporter", "scheduler"]
+
           volumeMounts:
             - name: tmp-volume
               mountPath: /tmp
@@ -43,8 +44,15 @@ spec:
             - mountPath: "/config"
               name: config-volume
 
+          {{- with .resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
           env:
             - name: CONFIG_PATH
               value: /config/importer.yaml
+
+          {{- end}}
 
       restartPolicy: Never

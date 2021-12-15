@@ -36,7 +36,14 @@ api:
 
   replicaCount: 3
   revisionHistory: 1
-  resources: {}
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
+
   nodeSelector: {}
   affinity: {}
   tolerations: {}
@@ -89,6 +96,14 @@ importer:
 
   pullPolicy: IfNotPresent
 
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+
   # -- Number of parallel import processes (spawned jobs)
   workerNum: 10
 
@@ -96,7 +111,14 @@ importer:
   writerNum: 8
 
   nodeSelector: {}
-  workerResources: {}
+  workerResources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 4
+      memory: 512Mi
+
 
   storage:
     host: s3host.local

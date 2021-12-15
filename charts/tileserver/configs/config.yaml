@@ -1,0 +1,28 @@
+layers-refresh-period-minutes: 5
+layers-ald-refresh-period-minutes: 5
+metrics-refresh-period-minutes: 5
+graceful-shutdown-time: 5s
+cassandra-clusters:
+  - name: kubernetes
+    timeout: 1s
+    num-retries: 2
+    reconnect-interval: 30s
+
+    keyspaces:
+      - tileset: {{ .Values.type }}
+        keyspace: dgis_tileserver_{{ .Values.type }}_{{ include "tileserver.manifestCode" . }}
+        default: true
+        partition-size: 4
+
+        {{- with .Values.cassandra }}
+        hosts:
+          {{- toYaml .hosts | nindent 12 }}
+
+        replication-factor: {{ .replicaFactor }}
+
+        consistency-level-read: {{ .consistencyLevelRead }}
+        consistency-level-write: {{ .consistencyLevelWrite }}
+        {{- end }}
+
+    log-level: info
+    log-format: json

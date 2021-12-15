@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{`{{.task_id}}`}}
+  labels:
+    task-id: {{`{{.task_id}}`}}
+    import-id: {{`{{.import_id}}`}}
+    {{- include "tileserver.labels" . | nindent 8 }}
+
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{`{{.task_type}}`}}
+      labels:
+        task-id: {{`{{.task_id}}`}}
+        import-id: {{`{{.import_id}}`}}
+        {{- include "tileserver.labels" . | nindent 12 }}
+
+    spec:
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+
+        - name: config-volume
+          configMap:
+            name: {{ include "tileserver.fullname" . }}
+
+      {{- with .Values.importer.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}
+
+      containers:
+        - name: import-worker
+          image: {{`{{.image_path}}`}}
+          command: ["/selfimporter", "worker"]
+
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+
+            - mountPath: "/config"
+              name: config-volume
+
+          {{- with .Values.importer.workerResources }}
+          resources:
+            {{- toYaml . | nindent 16 }}
+          {{- end }}
+
+          env:
+            - name: WORKER_SEGMENT_NAME
+              value: {{`{{.segment_name}}`}}
+            - name: WORKER_ACTION_TYPE
+              value: {{`{{.action_type}}`}}
+            - name: WORKER_SEGMENT_URL
+              value: {{`{{.segment_url}}`}}
+            - name: CONFIG_PATH
+              value: /config/importer.yaml
+
+      restartPolicy: Never
