@@ -1,3 +1,4 @@
+{{- if .Values.importer.enabled }}
 ---
 
 apiVersion: batch/v1
@@ -23,10 +24,20 @@ spec:
 
         - name: config-volume
           configMap:
-            name: {{ include "tileserver.fullname" . }}
+            name: {{ include "tileserver.fullname" . }}-import
 
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.importer.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.importer.imagePullSecrets }}
+      imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
@@ -52,7 +63,18 @@ spec:
           env:
             - name: CONFIG_PATH
               value: /config/importer.yaml
+            - name: STORAGE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tileserver.fullname" $ }}
+                  key: s3AccessKey
+            - name: STORAGE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tileserver.fullname" $ }}
+                  key: s3SecretKey
 
           {{- end}}
 
       restartPolicy: Never
+{{- end }}

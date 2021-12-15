@@ -32,13 +32,21 @@ spec:
     metadata:
       labels:
         {{- include "tileserver.selectorLabels" . | nindent 8 }}
+        {{- with .Values.api.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+
+      {{- with .Values.api.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 
     spec:
       terminationGracePeriodSeconds: {{ .Values.api.terminationGracePeriodSeconds }}
 
       volumes:
         - configMap:
-            name: {{ include "tileserver.fullname" . }}
+            name: {{ include "tileserver.fullname" . }}-api
           name: config-volume
 
       {{- with .Values.api.nodeSelector }}
@@ -48,6 +56,16 @@ spec:
 
       {{- with .Values.api.affinity }}
       affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.api.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.api.imagePullSecrets }}
+      imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 

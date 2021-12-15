@@ -21,6 +21,13 @@ spec:
     - port: {{ .port }}
       name: http
       targetPort: http
+      {{- if .nodePort }}
+      nodePort: {{ .nodePort }}
+      {{- end }}
+
+  {{- if .externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .externalTrafficPolicy }}
+  {{- end }}
 
   selector:
     {{- include "tileserver.selectorLabels" $ | nindent 4 }}

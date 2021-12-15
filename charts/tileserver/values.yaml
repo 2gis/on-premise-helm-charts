@@ -44,6 +44,9 @@ api:
       cpu: 1
       memory: 512Mi
 
+  podAnnotations: {}
+  podLabels: {}
+
   nodeSelector: {}
   affinity: {}
   tolerations: {}
@@ -89,6 +92,8 @@ api:
       memory: 512Mi
 
 importer:
+  enabled: true
+
   # -- The path to the docker image. Must have a path to your private docker registry
   image: 2gis/selfimporter
   # -- Tag with application version
@@ -105,10 +110,13 @@ importer:
       memory: 256Mi
 
   # -- Number of parallel import processes (spawned jobs)
-  workerNum: 10
+  workerNum: 20
 
   # -- Number of write processes per import process
   writerNum: 8
+
+  tolerations: {}
+  imagePullSecrets: {}
 
   nodeSelector: {}
   workerResources:

@@ -14,15 +14,15 @@ cassandra-clusters:
         default: true
         partition-size: 4
 
-        {{- with .Values.cassandra }}
-        hosts:
-          {{- toYaml .hosts | nindent 12 }}
+    {{- with .Values.cassandra }}
+    hosts:
+       {{- toYaml .hosts | nindent 8 }}
 
-        replication-factor: {{ .replicaFactor }}
+    replication-factor: {{ .replicaFactor }}
 
-        consistency-level-read: {{ .consistencyLevelRead }}
-        consistency-level-write: {{ .consistencyLevelWrite }}
-        {{- end }}
+    consistency-level-read: {{ .consistencyLevelRead }}
+    consistency-level-write: {{ .consistencyLevelWrite }}
+    {{- end }}
 
-    log-level: info
-    log-format: json
+log-level: info
+log-format: json

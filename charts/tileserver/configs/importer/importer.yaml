@@ -30,8 +30,6 @@ cassandra:
 storage:
   host: {{ .host }}
   bucket: {{ .bucket }}
-  access-key: {{ .accessKey }}
-  secret-key: {{ .secretKey }}
   url-lifetime-period: 60m
 {{- end }}
 
