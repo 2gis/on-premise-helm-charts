@@ -1,0 +1,23 @@
+# 2GIS Tileserver
+
+The repository contains a HTTP server for giving tiles data with import process
+
+## Requirements
+
+- Cassandra database
+
+## Data importing
+Data import starts before the main HTTP API is launched and is based on the mechanism of hooks
+
+## Deploy
+
+Deploy the chart with the release name `testing`:
+
+``` shell
+helm upgrade --install --atomic --timeout=60m -f ./customvalues.yaml testing ./charts/tileserver
+```
+
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "chart.maintainersSection" . }}
