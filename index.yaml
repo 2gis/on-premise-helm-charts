@@ -15,4 +15,19 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/mapgl-js-api-0.0.1/mapgl-js-api-0.0.1.tgz
     version: 0.0.1
-generated: "2021-12-06T07:52:33.330820146Z"
+  tileserver:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2021-12-16T05:21:11.338425474Z"
+    description: Tileserver API for getting cartographic data
+    digest: 5714d3134f3df641cadaebf919dcd3277fbcc00686f9c8fa007579bff1b35588
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: tileserver
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/tileserver-1.0.0/tileserver-1.0.0.tgz
+    version: 1.0.0
+generated: "2021-12-16T05:21:11.338438674Z"
