@@ -6,9 +6,9 @@ For more information on MapGL JS API, see the [service documentation](https://do
 
 To learn more about 2GIS On-Premise services, visit [docs.2gis.com](https://docs.2gis.com/en/on-premise/overview).
 
-## Installing
+## Installing the Chart
 
-To install the service, clone this repository and create a YAML file with the registry URL of the service's Docker image.
+To install the chart, create a YAML file with the registry URL of the service's Docker image.
 
 ```yaml
 image:
@@ -16,18 +16,19 @@ image:
   tag: 1.0.0
 ```
 
-Then, call the `helm install` command and specify the name of the created file:
+Then, add 2gis helm repository and call the `helm install` command and specify the name of the chart and the created file:
 
 ```bash
-helm install mapgl . -f settings.yaml
+helm repo add 2gis-on-premise https://2gis.github.io/on-premise-helm-charts
+helm install mapgl 2gis-on-premise/mapgl-js-api -f values.yaml
 ```
 
-## Updating
+## Upgrading
 
-To update the service after changing the settings or after updating the Docker image, call the `helm upgrade` command:
+To upgrade the chart after changing the values or after updating the Docker image, call the `helm upgrade` command:
 
 ```bash
-helm upgrade mapgl . -f settings.yaml
+helm upgrade mapgl 2igs-on-premise/mapgl-js-api -f values.yaml
 ```
 
 ## Testing the deployment
