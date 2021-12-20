@@ -28,7 +28,7 @@ helm install mapgl 2gis-on-premise/mapgl-js-api -f values.yaml
 To upgrade the chart after changing the values or after updating the Docker image, call the `helm upgrade` command:
 
 ```bash
-helm upgrade mapgl 2igs-on-premise/mapgl-js-api -f values.yaml
+helm upgrade mapgl 2gis-on-premise/mapgl-js-api -f values.yaml
 ```
 
 ## Testing the deployment
