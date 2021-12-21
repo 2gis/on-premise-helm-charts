@@ -15,10 +15,10 @@ cassandra:
   # -- Replication factor for Cassandra
   replicaFactor: 3
 
-  # -- Consistency level for database read queries. All possible values can be viewed by [link] (https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels)
+  # -- Consistency level for database read queries. All possible values can be viewed by [link](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels)
   consistencyLevelRead: LOCAL_QUORUM
 
-  # -- Consistency level for database write queries. All possible values can be viewed by [link] (https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels)
+  # -- Consistency level for database write queries. All possible values can be viewed by [link](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels)
   consistencyLevelWrite: LOCAL_QUORUM
 
 api:
