@@ -71,10 +71,10 @@ helm upgrade testing 2gis-on-premise/tileserver --atomic --timeout=60m -f ./cust
 | api.vpa.maxAllowed.memory | string | `"512Mi"` |  |
 | api.vpa.minAllowed.memory | string | `"128Mi"` |  |
 | api.vpa.updateMode | string | `"Auto"` |  |
-| cassandra.consistencyLevelRead | string | `"ONE"` | Consistency level for database read queries |
-| cassandra.consistencyLevelWrite | string | `"ONE"` | Consistency level for database write queries |
+| cassandra.consistencyLevelRead | string | `"LOCAL_QUORUM"` | Consistency level for database read queries. All possible values can be viewed by link https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels |
+| cassandra.consistencyLevelWrite | string | `"LOCAL_QUORUM"` | Consistency level for database write queries. All possible values can be viewed by link https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels |
 | cassandra.hosts | list | `[]` | List of available Cassandra database nodes |
-| cassandra.replicaFactor | int | `1` | Replication factor for Cassandra |
+| cassandra.replicaFactor | int | `3` | Replication factor for Cassandra |
 | importer.enabled | bool | `true` |  |
 | importer.image | string | `"2gis/selfimporter"` | The path to the docker image. Must have a path to your private docker registry |
 | importer.imagePullSecrets | object | `{}` |  |
