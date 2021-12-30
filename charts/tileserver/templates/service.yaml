@@ -1,0 +1,35 @@
+{{- with .Values.api.service }}
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: {{ include "tileserver.fullname" $ }}
+  {{- if .annotations }}
+  annotations:
+    {{- toYaml .annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "tileserver.labels" $ | nindent 4 }}
+    {{- if .labels }}
+    {{- toYaml .labels | nindent 4 }}
+    {{- end }}
+
+spec:
+  type: {{ .type }}
+  ports:
+    - port: {{ .port }}
+      name: http
+      targetPort: http
+      {{- if .nodePort }}
+      nodePort: {{ .nodePort }}
+      {{- end }}
+
+  {{- if .externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .externalTrafficPolicy }}
+  {{- end }}
+
+  selector:
+    {{- include "tileserver.selectorLabels" $ | nindent 4 }}
+
+{{- end }}
