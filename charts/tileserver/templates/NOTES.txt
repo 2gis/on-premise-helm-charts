@@ -1,0 +1,5 @@
+{{ .Chart.Name }} is installed by release "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace
+
+You can check the status of the app using command
+
+kubectl get pods -n {{ .Release.Namespace}} -l app.kubernetes.io/name={{ include "tileserver.name" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
