@@ -6,7 +6,7 @@ description: Tileserver API for getting cartographic data
 
 type: application
 
-version: 1.0.2
+version: 1.0.4
 appVersion: 1.0.0
 
 maintainers:
