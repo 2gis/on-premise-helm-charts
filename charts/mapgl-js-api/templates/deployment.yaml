@@ -39,9 +39,26 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env: 
+            - name: MAPGL_TILESERVER
+              value: "{{ .Values.env.MAPGL_TILESERVER }}"
+            - name: MAPGL_TRAFFICSERVER
+              value: "{{ .Values.env.MAPGL_TRAFFICSERVER }}"
+            - name: MAPGL_FLOORSSERVER
+              value: "https://{{ .Values.env.MAPGL_FLOORSSERVER }}"
+            - name: MAPGL_FLOORSSERVER_HOST
+              value: "{{ .Values.env.MAPGL_FLOORSSERVER }}"
+            - name: MAPGL_KEYSERVER
+              value: "https://{{ .Values.env.MAPGL_KEYSERVER }}/public/v1/keys/{keyID}/services/mapgl-js-api"
+            - name: MAPGL_KEYSERVER_HOST
+              value: "{{ .Values.env.MAPGL_KEYSERVER }}"
+            - name: MAPGL_RTLPLUGIN
+              value: "{{ .Values.env.MAPGL_RTLPLUGIN }}"
+            - name: MAPGL_RTLPLUGINHASH
+              value: "{{ .Values.env.MAPGL_RTLPLUGINHASH }}"
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
