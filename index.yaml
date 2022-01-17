@@ -3,6 +3,20 @@ entries:
   mapgl-js-api:
   - apiVersion: v2
     appVersion: 0.0.301
+    created: "2022-01-17T10:31:03.651690844Z"
+    description: Basic WebGL map chart template for 2GIS SelfHosting
+    digest: 6aa6c6cfa6d53a04f53b32823ad728a34bdba4de03f0d75818d39dc84178b1f3
+    maintainers:
+    - email: selfhosting@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: mapgl-js-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/mapgl-js-api-0.0.3/mapgl-js-api-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    appVersion: 0.0.301
     created: "2021-12-21T07:27:53.456441055Z"
     description: Basic WebGL map chart template for 2GIS SelfHosting
     digest: f1752f68ea1d216f5b01b5d6fe49d3b729e6f8aad0503823c25d03c60b1970d0
@@ -86,4 +100,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tileserver-1.0.0/tileserver-1.0.0.tgz
     version: 1.0.0
-generated: "2022-01-11T06:47:42.096041527Z"
+generated: "2022-01-17T10:31:03.651711844Z"
