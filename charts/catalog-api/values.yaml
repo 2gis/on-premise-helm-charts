@@ -1,0 +1,50 @@
+nodeSelector: {}
+affinity: {}
+tolerations: []
+
+podAnnotations: {}
+podLabels: {}
+podDisruptionBudget:
+  enabled: false
+  maxUnavailable: 1
+
+imagePullSecrets: []
+
+api:
+  image: ""
+  # Overrides the image tag whose default is the chart app version.
+  tag: ""
+
+  replicas: 1
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+
+  resources:
+    requests:
+      cpu: 2
+      memory: 6000Mi
+    limits:
+      cpu: 4
+      memory: 6500Mi
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: false
+
+db:
+  host: localhost
+  port: 5432
+  name: catalog
+  username: postgres
+  password: secret
+
+search:
+  url: http://localhost:80

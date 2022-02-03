@@ -1,0 +1,3 @@
+Catalog service is released as "{{ .Release.Name }}" service at "{{ .Release.Namespace }}" namespace.
+
+You should publish the service in your preferred way (ingress, balancer, etc).
