@@ -10,7 +10,7 @@ To learn more about 2GIS On-Premise services, visit [docs.2gis.com](https://docs
 
 Before installing Catalog API, make sure that you have a running PostgreSQL instance and a running [Sapphire API](https://docs.2gis.com/en/on-premise/search) service.
 
-To install the service, clone this repository and create a YAML file that will contain:
+To install the service create a YAML file that will contain:
 
 - Registry URL of the service's Docker image
 - PostgreSQL access parameters
@@ -37,8 +37,9 @@ search:
 
 Then, call the `helm install` command and specify the name of the created file:
 
-```bash
-helm install catalog . -f settings.yaml
+```shell
+helm repo add 2gis-on-premise https://2gis.github.io/on-premise-helm-charts
+helm install catalog 2gis-on-premise/catalog-api -f values.yaml
 ```
 
 ## Updating
@@ -46,5 +47,5 @@ helm install catalog . -f settings.yaml
 To update the service after changing the settings or after updating the Docker image, call the `helm upgrade` command:
 
 ```bash
-helm upgrade catalog . -f settings.yaml
+helm upgrade catalog 2gis-on-premise/catalog-api -f values.yaml
 ```
