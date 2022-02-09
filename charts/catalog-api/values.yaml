@@ -11,9 +11,11 @@ podDisruptionBudget:
 imagePullSecrets: []
 
 api:
-  image: ""
-  # Overrides the image tag whose default is the chart app version.
-  tag: ""
+  image:
+    repository: ""
+    # Overrides the image tag whose default is the chart app version.
+    tag: ""
+    pullPolicy: IfNotPresent
 
   replicas: 1
   hpa:
