@@ -1,0 +1,67 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "sapphire.fullname" . }}
+  labels:
+    {{- include "sapphire.labels" . | nindent 4 }}
+data:
+  sapphire_config: |
+    <?xml version='1.0' encoding='UTF-8' ?>
+    <sapphire>
+            <log_level>Info</log_level>
+
+            <socket_path>:{{ .Values.sph_fcgi_port }}</socket_path>
+            <socket_backlog_size>128</socket_backlog_size>
+            <worker_threads>64</worker_threads>
+
+            <status_path>/run/</status_path>
+
+            <index_path>{{ .Values.sph_data_dir }}/indexes</index_path>
+            <ads_path>{{ .Values.sph_data_dir }}/ads</ads_path>
+            <rtw_path>{{ .Values.sph_data_dir }}/rtw</rtw_path>
+
+            <search_timeout>5000</search_timeout>
+            <slow_search_request_threshold>2000</slow_search_request_threshold>
+            <segment_geometry_source>segments</segment_geometry_source>
+    </sapphire>
+
+  nginx_config: |
+    daemon off;
+    worker_processes 2;
+    pid /run/nginx.pid;
+
+    events {
+        worker_connections 768;
+    }
+
+    http {
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+
+        keepalive_requests 100;
+        keepalive_timeout 10;
+        types_hash_max_size 2048;
+
+        include /etc/nginx/mime.types;
+
+        gzip on;
+        gzip_types application/json;
+        gzip_min_length 512;
+
+        access_log off;
+        error_log off;
+
+        server {
+            listen {{ .Values.nginx_port }};
+
+            location / {
+                    fastcgi_pass 127.0.0.1:{{ .Values.sph_fcgi_port }};
+                    fastcgi_keep_conn on;
+                    fastcgi_param URI $request_uri;
+                    include /etc/nginx/fastcgi_params;
+            }
+        }
+    }
