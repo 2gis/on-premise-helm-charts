@@ -37,7 +37,8 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: {{ .Values.api.image }}:{{ default .Chart.AppVersion .Values.api.tag }}
+          image: {{ .Values.api.image.repository }}:{{ default .Chart.AppVersion .Values.api.image.tag }}
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 5000
