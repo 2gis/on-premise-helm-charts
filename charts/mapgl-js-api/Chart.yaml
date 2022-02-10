@@ -6,7 +6,7 @@ description: Basic WebGL map chart template for 2GIS SelfHosting
 
 type: application
 
-version: 0.0.3
+version: 0.0.4
 appVersion: 0.0.301
 
 maintainers:
