@@ -18,6 +18,20 @@ entries:
   mapgl-js-api:
   - apiVersion: v2
     appVersion: 0.0.301
+    created: "2022-02-14T04:06:44.44773581Z"
+    description: Basic WebGL map chart template for 2GIS SelfHosting
+    digest: 8dbb0c2b23ecdf1157d66163e9b514ebb27ce271bf59694d3fb872fe7c85f8cc
+    maintainers:
+    - email: selfhosting@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: mapgl-js-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/mapgl-js-api-0.0.4/mapgl-js-api-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
+    appVersion: 0.0.301
     created: "2022-01-17T10:31:03.651690844Z"
     description: Basic WebGL map chart template for 2GIS SelfHosting
     digest: 6aa6c6cfa6d53a04f53b32823ad728a34bdba4de03f0d75818d39dc84178b1f3
@@ -58,6 +72,21 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/mapgl-js-api-0.0.1/mapgl-js-api-0.0.1.tgz
     version: 0.0.1
+  sapphire:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2022-02-14T04:06:44.652446736Z"
+    description: Search engine for catalog
+    digest: 58e13c36e20ca623a477c8f164e2a6fa4db8a748d2db72ecd61c372870acf067
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: sapphire
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/sapphire-1.0.0/sapphire-1.0.0.tgz
+    version: 1.0.0
   tileserver:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -115,4 +144,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tileserver-1.0.0/tileserver-1.0.0.tgz
     version: 1.0.0
-generated: "2022-02-09T07:48:43.489676901Z"
+generated: "2022-02-14T04:06:44.652471236Z"
