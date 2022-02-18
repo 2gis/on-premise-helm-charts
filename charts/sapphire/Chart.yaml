@@ -1,0 +1,15 @@
+---
+
+apiVersion: v2
+name: sapphire
+description: Search engine for catalog
+
+type: application
+
+version: 1.0.0
+appVersion: 1.0.0
+
+maintainers:
+  - name: 2gis
+    url: https://github.com/2gis
+    email: on-premise@2gis.com
