@@ -1,12 +1,4 @@
 ---
-resources:
-  limits:
-    cpu: 1
-    memory: 3G
-  requests:
-    cpu: 100m
-    memory: 1G
-
 service:
   annotations:
     router.deis.io/domains: sapphire.deis.domain
@@ -32,7 +24,21 @@ s3_manifest: manifests/1644220485.json
 sapphire:
   repository: docker-registry/dgis/sapphire
   tag: 7.15.0_29073
+  resources:
+    limits:
+      cpu: 1
+      memory: 3G
+    requests:
+      cpu: 100m
+      memory: 1G
 
 nginx:
   repository: docker-registry/dgis/nginx
   tag: 1.21.4-2
+  resources:
+    limits:
+      cpu: 1
+      memory: 1G
+    requests:
+      cpu: 100m
+      memory: 200m
