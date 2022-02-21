@@ -75,6 +75,20 @@ entries:
   sapphire:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2022-02-21T02:59:24.43185949Z"
+    description: Search engine for catalog
+    digest: 0ff4283498021beab92462d54e56ad49c879858c1c9683ae83ff4190e241369b
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: sapphire
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/sapphire-1.0.1/sapphire-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2022-02-14T04:06:44.652446736Z"
     description: Search engine for catalog
     digest: 58e13c36e20ca623a477c8f164e2a6fa4db8a748d2db72ecd61c372870acf067
@@ -144,4 +158,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tileserver-1.0.0/tileserver-1.0.0.tgz
     version: 1.0.0
-generated: "2022-02-14T04:06:44.652471236Z"
+generated: "2022-02-21T02:59:24.43195269Z"
