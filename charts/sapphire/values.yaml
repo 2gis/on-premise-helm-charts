@@ -1,0 +1,52 @@
+---
+
+replicaCount: 1
+
+sapphire:
+  repository: op-sapphire
+  pullPolicy: IfNotPresent
+  tag: "7.11.0_28654"
+  resources: {}
+
+nginx:
+  repository: op-nginx
+  pullPolicy: IfNotPresent
+  tag: "1.21.4-2"
+  resources: {}
+
+sph_data_dir: /sapphire
+sph_fcgi_port: 9090
+nginx_port: 8080
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
+podAnnotations: {}
+podLabels: {}
+
+service:
+  annotations: {}
+  labels: {}
+  type: ClusterIP
+  port: 80
+
+nodeSelector: {}
+affinity: {}
+tolerations: []
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 1
+
+hpa:
+  enabled: false
+  maxReplicas: 2
+  minReplicas: 1
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+redeploy_label: ""

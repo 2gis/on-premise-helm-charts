@@ -1,0 +1,18 @@
+{{- if .Values.hpa.enabled }}
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "sapphire.fullname" . }}
+  labels:
+    {{- include "sapphire.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "sapphire.fullname" . }}
+  minReplicas: {{ .Values.hpa.minReplicas }}
+  maxReplicas: {{ .Values.hpa.maxReplicas }}
+  targetCPUUtilizationPercentage: {{ .Values.hpa.targetCPUUtilizationPercentage }}
+{{- end }}
