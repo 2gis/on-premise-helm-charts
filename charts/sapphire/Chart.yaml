@@ -1,12 +1,12 @@
 ---
 
 apiVersion: v2
-name: tileserver
-description: Tileserver API for getting cartographic data
+name: sapphire
+description: Search engine for catalog
 
 type: application
 
-version: 1.0.4
+version: 1.0.1
 appVersion: 1.0.0
 
 maintainers:

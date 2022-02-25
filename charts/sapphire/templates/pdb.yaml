@@ -8,14 +8,14 @@ apiVersion: policy/v1beta1
 {{- end }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "mapgl.fullname" . }}
+  name: {{ include "sapphire.fullname" . }}
   labels:
-    {{- include "mapgl.labels" . | nindent 4 }}
+    {{- include "sapphire.labels" . | nindent 4 }}
 spec:
   {{- if .Values.podDisruptionBudget.maxUnavailable }}
   maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "mapgl.selectorLabels" . | nindent 6 }}
+      {{- include "sapphire.selectorLabels" . | nindent 6 }}
 {{- end }}

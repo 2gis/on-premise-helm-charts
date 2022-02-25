@@ -1,13 +1,12 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "mapgl.fullname" . -}}
+{{- $fullName := include "sapphire.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "mapgl.labels" . | nindent 4 }}
+    {{- include "sapphire.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -40,3 +39,4 @@ spec:
           {{- end }}
     {{- end }}
 {{- end }}
+

@@ -62,7 +62,7 @@ spec:
               value: "{{ .Values.env.MAPGL_RTLPLUGINHASH }}"
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
