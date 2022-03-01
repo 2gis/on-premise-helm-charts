@@ -2,29 +2,4 @@ MapGL service is released as "{{ .Release.Name }}" service at "{{ .Release.Names
 
 You should publish the service in your preferred way (ingress, balancer, etc).
 
-You can check service operation with this simple map example. 
-
-<html>
-    <head>
-        <title>MapGL Selfhosting</title>
-        <style>
-            #map {
-                width: 100%;
-                height: 100%;
-            }
-        </style>        
-    </head>
-<body>
-    <div id="map"></div>
-    <script src="http://mapgl.service.published.host/api.js"></script>
-    <script>
-        const map = window.map = new mapgl.Map('map', {
-            key: 'your key',
-            center: [55.31878, 25.23584],
-                     
-            style: 'http://mapgl.service.published.host/style/',
-            zoom: 13,
-        });
-    </script>
-</body>
-</html>
+After deployment completes, service will be available at: //{{ .Values.env.PUBLIC_HOST }}
