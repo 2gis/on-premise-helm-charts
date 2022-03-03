@@ -2,9 +2,14 @@
 
 apiVersion: v2
 name: proxy-traffic-jams
-description: Basic On-Premise chart
+description: A Helm chart for Kubernetes to deploy Proxy for traffic jams
 
 type: application
 
 version: 0.0.1
 appVersion: 0.0.0
+
+maintainers:
+  - name: 2gis
+    url: https://github.com/2gis
+    email: on-premise@2gis.com
