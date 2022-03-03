@@ -21,7 +21,7 @@ data:
         include /etc/nginx/mime.types;
         default_type application/octet-stream;
 
-        log_format main escape=json '{"remote_addr":"$remote_addr","remote_user":"$remote_user","time_local":"$time_local","time_msec":"$msec","request":"$request","status":$status,"host":"$host","request_time":$request_time,"upstream_response_time":"$upstream_response_time","body_bytes_sent":$body_bytes_sent,"http_referer":"$http_referer","http_user_agent":"$http_user_agent","request_id":"$http_x_request_id","upstream_request_id":"$upstream_http_x_request_id"}';
+        log_format main escape=json '{"remote_addr":"$remote_addr","remote_user":"$remote_user","time_local":"$time_local","time_msec":"$msec","request":"$request","status":$status,"host":"$host","request_time":$request_time,"upstream_response_time":"$upstream_response_time","body_bytes_sent":$body_bytes_sent,"http_referer":"$http_referer","http_user_agent":"$http_user_agent"}';
 
         access_log /dev/stdout  main;
         error_log /dev/stderr  error;
@@ -37,7 +37,7 @@ data:
             listen        80;
             server_name _;
             location / {
-                proxy_pass         http://traffic-jams.2gis.com:80;
+                proxy_pass         {{- toYaml .Values.proxy.host | nindent 8 }}:80;
                 proxy_http_version 1.1;
                 proxy_set_header   Upgrade $http_upgrade;
                 proxy_set_header   Connection keep-alive;

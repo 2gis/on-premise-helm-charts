@@ -2,6 +2,9 @@
 
 replicaCount: 1
 
+proxy:
+  host: traffic-jams.2gis.com
+
 image:
   repository: nginx
   pullPolicy: IfNotPresent
