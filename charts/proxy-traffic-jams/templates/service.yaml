@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "proxy-traffic-jams.fullname" . }
+  name: {{ include "proxy-traffic-jams.fullname" . }}
   {{- if .Values.service.annotations }}
   annotations:
     {{- toYaml .Values.service.annotations | nindent 4 }}
