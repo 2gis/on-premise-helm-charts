@@ -1,0 +1,16 @@
+{{- if .Values.install.apps -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "keys.redis.name" . }}
+data:
+  redis.conf: |
+    # must be smaller than .Values.redis.resources.limits.memory
+    maxmemory 262144000
+
+    logfile ""
+    databases 1
+    timeout 600
+    tcp-keepalive 60
+    port {{ .Values.redis.port }}
+{{- end }}

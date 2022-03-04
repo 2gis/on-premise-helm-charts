@@ -1,0 +1,63 @@
+{{- if .Values.install.apps -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "keys.tasker.name" . }}
+  {{- with .Values.tasker.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "keys.tasker.labels" . | nindent 4 }}
+    {{- with .Values.tasker.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "keys.tasker.labels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.tasker.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "keys.tasker.labels" . | nindent 8 }}
+        {{- with .Values.tasker.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+        - name: tasker
+          image: {{ .Values.backend.image.repository }}:{{ default .Chart.AppVersion .Values.backend.image.tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: [ "zuul-tasker", "-notify", "false" ]
+          resources:
+            {{- toYaml .Values.tasker.resources | nindent 12 }}
+          env:
+            {{- include "keys.env.db" . | nindent 12 }}
+            {{- include "keys.env.tasker" . | nindent 12 }}
+      {{- with .Values.tasker.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tasker.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tasker.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
