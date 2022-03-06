@@ -41,9 +41,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: PUBLIC_HOST
-              value: "{{ .Values.env.PUBLIC_HOST }}" 
+              value: "{{ or .Values.env.PUBLIC_HOST .Values.env.MAPGL_PUBLIC_HOST }}" 
             - name: DEMO_KEY
-              value: "{{ .Values.env.DEMO_KEY }}" 
+              value: "{{ or .Values.env.DEMO_KEY .Values.env.MAPGL_DEMO_KEY }}" 
             - name: MAPGL_TILESERVER
               value: "{{ .Values.env.MAPGL_TILESERVER }}"
             - name: MAPGL_TRAFFICSERVER

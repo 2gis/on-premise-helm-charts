@@ -33,35 +33,4 @@ helm upgrade mapgl 2gis-on-premise/mapgl-js-api -f values.yaml
 
 ## Testing the deployment
 
-To test that the service is working, you can create the following HTML file and open it in a browser. Replace the `mapgl.service.published.host` string with the URL of the published MapGL JS API service.
-
-```html
-<html>
-    <head>
-        <title>MapGL JS API. On-Premise</title>
-        <style>
-            #map {
-                width: 100%;
-                height: 100%;
-            }
-        </style>
-    </head>
-
-    <body>
-        <div id="map"></div>
-        <script src="http://mapgl.service.published.host/api.js"></script>
-        <script>
-            const map = new mapgl.Map('map', {
-                key: 'your key',
-                center: [55.31878, 25.23584],
-                style: 'http://mapgl.service.published.host/style/',
-                styleOptions: {
-                    iconsPath: 'http://mapgl.service.published.host/style/images/',
-                    fontsPath: 'http://mapgl.service.published.host/style/fonts/',
-                },
-                zoom: 13,
-            });
-        </script>
-    </body>
-</html>
-```
+After deployment completes, service will be available at http(s)://MAPGL_PUBLIC_HOST address. You can see there working map if mapgl and tileserver services were set up correctly. 

@@ -7,8 +7,8 @@ image:
   pullPolicy: IfNotPresent
 
 env:
-  DEMO_KEY: empty
-  PUBLIC_HOST: mapgl.service
+  MAPGL_DEMO_KEY: empty
+  MAPGL_PUBLIC_HOST: mapgl.service
   MAPGL_TILESERVER: tile{subdomain}-sdk.maps.2gis.com
   MAPGL_TRAFFICSERVER: traffic0.edromaps.2gis.com
   MAPGL_FLOORSSERVER: floors.api.2gis.ru
