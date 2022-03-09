@@ -2,6 +2,9 @@ layers-refresh-period-minutes: 5
 layers-ald-refresh-period-minutes: 5
 metrics-refresh-period-minutes: 5
 graceful-shutdown-time: 5s
+{{- if $.Values.api.uiWhitelist }}
+ui-whitelist: {{ $.Values.api.uiWhitelist }}
+{{- end }}
 cassandra-clusters:
   - name: kubernetes
     timeout: 1s
