@@ -100,6 +100,21 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/mapgl-js-api-0.0.1/mapgl-js-api-0.0.1.tgz
     version: 0.0.1
+  proxy-traffic-jams:
+  - apiVersion: v2
+    appVersion: 0.0.0
+    created: "2022-03-09T09:01:19.488120364Z"
+    description: A Helm chart for Kubernetes to deploy Proxy for traffic jams
+    digest: 8e9236cfc5542a6fed04572c6992b658267c1648f5f4ff7a0b7334b599830147
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: proxy-traffic-jams
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/proxy-traffic-jams-0.0.1/proxy-traffic-jams-0.0.1.tgz
+    version: 0.0.1
   sapphire:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -186,4 +201,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tileserver-1.0.0/tileserver-1.0.0.tgz
     version: 1.0.0
-generated: "2022-03-09T06:49:55.173383408Z"
+generated: "2022-03-09T09:01:19.488147364Z"
