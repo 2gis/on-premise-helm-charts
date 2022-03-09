@@ -7,7 +7,9 @@ image:
   pullPolicy: IfNotPresent
 
 env:
-  MAPGL_TILESERVER: tile{subdomain}-sdk.maps.2gis.com
+  MAPGL_DEMO_KEY: empty
+  MAPGL_HOST: mapgl.service
+  MAPGL_TILES_API: tile{subdomain}-sdk.maps.2gis.com
   MAPGL_TRAFFICSERVER: traffic0.edromaps.2gis.com
   MAPGL_FLOORSSERVER: floors.api.2gis.ru
   MAPGL_KEYSERVER: keys.api.2gis.com

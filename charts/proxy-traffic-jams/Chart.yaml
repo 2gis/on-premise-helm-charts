@@ -1,13 +1,13 @@
 ---
 
 apiVersion: v2
-name: sapphire
-description: Search engine for catalog
+name: proxy-traffic-jams
+description: A Helm chart for Kubernetes to deploy Proxy for traffic jams
 
 type: application
 
-version: 1.0.1
-appVersion: 1.0.0
+version: 0.0.1
+appVersion: 0.0.0
 
 maintainers:
   - name: 2gis

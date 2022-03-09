@@ -3,13 +3,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "mapgl.fullname" . }}
+  name: {{ include "proxy-traffic-jams.fullname" . }}
   {{- if .Values.annotations }}
   annotations:
     {{- toYaml .Values.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "mapgl.labels" . | nindent 4 }}
+    {{- include "proxy-traffic-jams.labels" . | nindent 4 }}
   {{- if .Values.labels }}
     {{- toYaml .Values.labels | nindent 4 }}
   {{- end }}
@@ -21,7 +21,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "mapgl.selectorLabels" . | nindent 6 }}
+      {{- include "proxy-traffic-jams.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -29,7 +29,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "mapgl.selectorLabels" . | nindent 8 }}
+        {{- include "proxy-traffic-jams.selectorLabels" . | nindent 8 }}
       {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -39,30 +39,9 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          env:
-            - name: PUBLIC_HOST
-              value: "{{ .Values.env.MAPGL_HOST }}" 
-            - name: DEMO_KEY
-              value: "{{ .Values.env.MAPGL_DEMO_KEY }}" 
-            - name: MAPGL_TILESERVER
-              value: "{{ .Values.env.MAPGL_TILES_API }}"
-            - name: MAPGL_TRAFFICSERVER
-              value: "{{ .Values.env.MAPGL_TRAFFICSERVER }}"
-            - name: MAPGL_FLOORSSERVER
-              value: "https://{{ .Values.env.MAPGL_FLOORSSERVER }}"
-            - name: MAPGL_FLOORSSERVER_HOST
-              value: "{{ .Values.env.MAPGL_FLOORSSERVER }}"
-            - name: MAPGL_KEYSERVER
-              value: "https://{{ .Values.env.MAPGL_KEYSERVER }}/public/v1/keys/{keyID}/services/mapgl-js-api"
-            - name: MAPGL_KEYSERVER_HOST
-              value: "{{ .Values.env.MAPGL_KEYSERVER }}"
-            - name: MAPGL_RTLPLUGIN
-              value: "{{ .Values.env.MAPGL_RTLPLUGIN }}"
-            - name: MAPGL_RTLPLUGINHASH
-              value: "{{ .Values.env.MAPGL_RTLPLUGINHASH }}"
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: 80
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -89,7 +68,15 @@ spec:
               exec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           volumeMounts:
+            - name: {{ include "proxy-traffic-jams.name" $ }}-configmap
+              mountPath: /usr/share/nginx/html
       volumes:
+        - name: {{ include "proxy-traffic-jams.name" . }}-configmap
+          configMap:
+            name: {{ include "proxy-traffic-jams.fullname" . }}
+            items:
+              - key: nginx.conf
+                path: nginx.conf
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
