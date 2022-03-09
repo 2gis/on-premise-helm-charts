@@ -2,4 +2,4 @@ MapGL service is released as "{{ .Release.Name }}" service at "{{ .Release.Names
 
 You should publish the service in your preferred way (ingress, balancer, etc).
 
-After deployment completes, service will be available at: //{{ .Values.env.PUBLIC_HOST }}
+After deployment completes, service will be available at: //{{ .Values.env.MAPGL_HOST }}
