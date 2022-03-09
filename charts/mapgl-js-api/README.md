@@ -33,4 +33,4 @@ helm upgrade mapgl 2gis-on-premise/mapgl-js-api -f values.yaml
 
 ## Testing the deployment
 
-After deployment completes, service will be available at http(s)://MAPGL_PUBLIC_HOST address. You can see there working map if mapgl and tileserver services were set up correctly. 
+After deployment completes, service will be available at http(s)://MAPGL_PUBLIC_HOST address. You can see there working map if MapGL JS API and Tiles API services were set up correctly. 
