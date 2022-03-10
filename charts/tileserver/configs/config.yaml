@@ -5,9 +5,14 @@ graceful-shutdown-time: 5s
 {{- if $.Values.api.uiWhitelist }}
 ui-whitelist: {{ $.Values.api.uiWhitelist }}
 {{- end }}
+
+cassandra-credentials:
+  user: {{ .Values.cassandra.credentials.user }}
+  password: {{ .Values.cassandra.credentials.password }}
+
 cassandra-clusters:
   - name: kubernetes
-    timeout: 1s
+    timeout: 10s
     num-retries: 2
     reconnect-interval: 30s
 
