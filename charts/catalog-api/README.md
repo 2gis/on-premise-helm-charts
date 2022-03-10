@@ -15,6 +15,7 @@ To install the service create a YAML file that will contain:
 - Registry URL of the service's Docker image
 - PostgreSQL access parameters
 - Sapphire API URL
+- API Keys service credentials
 
 ```yaml
 # Docker image
@@ -34,6 +35,16 @@ db:
 # Sapphire API
 search:
   url: http://localhost:80
+
+# API Keys service
+keys:
+  endpoint: https://keys-api.host
+  serviceKeys:
+    places: ""  # set if available in API Keys service
+    geocoder: ""  # set if available in API Keys service
+    suggest: ""  # set if available in API Keys service
+    categories: ""  # set if available in API Keys service
+    regions: ""  # set if available in API Keys service
 ```
 
 Then, call the `helm install` command and specify the name of the created file:

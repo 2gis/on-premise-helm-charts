@@ -50,3 +50,13 @@ db:
 
 search:
   url: http://localhost:80
+
+keys:
+  endpoint: https://keys-api.host
+  requestTimeout: 5s
+  serviceKeys:
+    places: ""  # set if available in API Keys service
+    geocoder: ""  # set if available in API Keys service
+    suggest: ""  # set if available in API Keys service
+    categories: ""  # set if available in API Keys service
+    regions: ""  # set if available in API Keys service
