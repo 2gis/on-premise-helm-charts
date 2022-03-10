@@ -12,6 +12,11 @@ cassandra:
   # -- List of available Cassandra database nodes
   hosts: []
 
+  # -- Credentials for Cassandra authentication
+  credentials:
+    user: "cassandra",
+    password: "cassandra"
+
   # -- Replication factor for Cassandra
   replicaFactor: 3
 

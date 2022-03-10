@@ -4,6 +4,10 @@ service-name: {{ .Values.serviceName }}
 workers: {{ .Values.importer.workerNum }}
 data-type: {{ .Values.type }}
 
+credentials:
+  user: {{ .Values.cassandra.credentials.user }}
+  password: {{ .Values.cassandra.credentials.password }}
+
 cassandra:
   name: local
   timeout: 10s
