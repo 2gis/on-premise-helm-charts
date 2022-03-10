@@ -147,6 +147,20 @@ entries:
   tileserver:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2022-03-10T05:51:12.024395881Z"
+    description: Tileserver API for getting cartographic data
+    digest: d4908eab82f18c666bfd077d70745c0e824b0181db097fa75d3e3cd2135ca694
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: tileserver
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/tileserver-1.0.5/tileserver-1.0.5.tgz
+    version: 1.0.5
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2022-01-11T06:47:42.096023827Z"
     description: Tileserver API for getting cartographic data
     digest: 56401f4f794db58e1fb4a085be45650ea533293ad87fc9550202b06419e8b406
@@ -201,4 +215,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tileserver-1.0.0/tileserver-1.0.0.tgz
     version: 1.0.0
-generated: "2022-03-09T09:01:19.488147364Z"
+generated: "2022-03-10T05:51:12.026270804Z"
