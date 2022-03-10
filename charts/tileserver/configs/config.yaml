@@ -12,7 +12,7 @@ cassandra-credentials:
 
 cassandra-clusters:
   - name: kubernetes
-    timeout: 1s
+    timeout: 10s
     num-retries: 2
     reconnect-interval: 30s
 
