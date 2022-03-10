@@ -1,0 +1,25 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gis-platform-portal.fullname" . }}
+  {{- if .Values.portal.service.annotations }}
+  annotations:
+    {{- toYaml .Values.portal.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "gis-platform-portal.labels" . | nindent 4 }}
+  {{- if .Values.portal.service.labels }}
+    {{- toYaml .Values.portal.service.labels | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.portal.service.type }}
+  ports:
+    - port: {{ .Values.portal.service.port }}
+      targetPort: 8000
+      protocol: TCP
+      name: http
+      appProtocol: http
+  selector:
+    {{- include "gis-platform-portal.selectorLabels" . | nindent 4 }}

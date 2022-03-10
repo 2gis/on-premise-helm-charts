@@ -1,0 +1,98 @@
+external_hostname: gis-platform
+external_proto: https
+
+ingress:
+  enabled: false
+  className: nginx
+  annotations: {}
+  hosts:
+    - paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+spcore:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 800m
+      memory: 4096Mi
+    limits:
+      cpu: 800m
+      memory: 4096Mi
+  service: {}
+  debug_mode: false
+  reset_cluster: false
+  terminationGracePeriodSeconds: 60
+  image:
+    repository: ''
+    tag: latest
+  cors:
+    allow_everyone: false
+    origins: []
+  s3:
+    access_key: ''
+    secret_key: ''
+    host: s3.example.com
+    region: US
+    bucket: spstatic
+    preview_bucket: sppreview
+  pg:
+    host: 'localhost'
+    port: 5432
+    user: 'gisadmin'
+    password: 'dbpass'
+    dbname: 'gis-platform'
+    poolsize: 25
+  admin:
+    email: 'admin@example.com'
+    password: '123456'
+  jwt:
+    token_key: 'supersecrettoken'
+    token_admin: 'supersecrettoken'
+  catalog:
+    url: https://catalog.api.2gis.com
+    key: ''
+  cloud_port: 5050
+  http_port: 5051
+  defaultLimits:
+    tables: 500
+    layers: 500
+    projects: 1000
+    features: 1000000
+
+portal:
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 80
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 100m
+      memory: 512Mi
+  terminationGracePeriodSeconds: 60
+  image:
+    repository: ''
+    tag: latest
+
+zookeeper:
+  image:
+    registry: docker.io
+    repository: bitnami/zookeeper
+    tag: 3.7.0-debian-10-r265
+  pdb:
+    create: true
+    maxUnavailable: 1
+  replicaCount: 3
+  persistence:
+    enabled: false
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi

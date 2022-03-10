@@ -1,0 +1,122 @@
+{
+  "tileInfo": {
+    "origin": [
+      -20037508.0342787,
+      20037508.0342787
+    ],
+    "boundingRectangle": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "reversedY": false,
+    "dpi": 96,
+    "height": 256,
+    "width": 256,
+    "format": "PNG",
+    "tilesSubDomains": null,
+    "sr": 3857,
+    "lods": [
+      {
+        "level": 0,
+        "resolution": 156543.033928
+      },
+      {
+        "level": 1,
+        "resolution": 78271.516964
+      },
+      {
+        "level": 2,
+        "resolution": 39135.758482
+      },
+      {
+        "level": 3,
+        "resolution": 19567.879241
+      },
+      {
+        "level": 4,
+        "resolution": 9783.9396205
+      },
+      {
+        "level": 5,
+        "resolution": 4891.96981025
+      },
+      {
+        "level": 6,
+        "resolution": 2445.984905125
+      },
+      {
+        "level": 7,
+        "resolution": 1222.9924525625
+      },
+      {
+        "level": 8,
+        "resolution": 611.49622628125
+      },
+      {
+        "level": 9,
+        "resolution": 305.748113140625
+      },
+      {
+        "level": 10,
+        "resolution": 152.8740565703125
+      },
+      {
+        "level": 11,
+        "resolution": 76.43702828515625
+      },
+      {
+        "level": 12,
+        "resolution": 38.21851414257812
+      },
+      {
+        "level": 13,
+        "resolution": 19.10925707128906
+      },
+      {
+        "level": 14,
+        "resolution": 9.55462853564453
+      },
+      {
+        "level": 15,
+        "resolution": 4.777314267822265
+      },
+      {
+        "level": 16,
+        "resolution": 2.3886571339111327
+      },
+      {
+        "level": 17,
+        "resolution": 1.1943285669555663
+      }
+    ]
+  },
+  "urlFormat": "https://tile{0}.maps.2gis.com/tiles?x={2}&y={3}&z={1}&v=1.5&ts=online_sd_ar&layerType=nc",
+  "tileCacheLimit": 0,
+  "subDomains": [
+    "0",
+    "1",
+    "2"
+  ],
+  "copyrightText": "string",
+  "allowDirectAccess": true,
+  "RequestTimeout": 0,
+  "name": "2gis",
+  "alias": "2gis",
+  "description": "2gis",
+  "acl": {
+    "data": [
+      {
+        "role": "__public",
+        "permissions": "read"
+      },
+      {
+        "role": "__admin",
+        "permissions": "read,write,configure"
+      }
+    ]
+  },
+  "icon": null,
+  "owner": null
+}

@@ -1,0 +1,246 @@
+{
+  "modules": [
+    {
+      "name": "basemap-select",
+      "options": {
+        "items": [
+          {
+            "name": "2gis",
+            "theme": "light",
+            "title": "2GIS",
+            "preview": ""
+          },
+          {
+            "name": "2gis_local_tiles",
+            "theme": "light",
+            "title": "Satellites",
+            "preview": ""
+          }
+        ]
+      },
+      "priority": 1,
+      "modulePath": "MapControls/BasemapSelect",
+      "layoutOptions": {
+        "area": "mainControls"
+      }
+    },
+    {
+      "name": "bookmark-control",
+      "priority": 3,
+      "modulePath": "MapControls/BookmarkControl",
+      "layoutOptions": {
+        "area": "mainControls"
+      }
+    },
+    {
+      "name": "measurer-control",
+      "priority": 4,
+      "modulePath": "MapControls/MeasureControl",
+      "layoutOptions": {
+        "area": "mainControls"
+      }
+    },
+    {
+      "name": "tools",
+      "route": {
+        "name": "MAIN",
+        "payload": {
+          "panel": "tools"
+        }
+      },
+      "options": {
+        "items": [
+          {
+            "name": "print",
+            "route": {
+              "type": "PRINT"
+            },
+            "title": "Экспортировать картинку",
+            "imageName": "print",
+            "description": "Сохраняет в виде картинки выделенную область карты и дополнительные элементы"
+          },
+          {
+            "name": "buffer",
+            "title": "Буферные зоны",
+            "imageName": "buffer",
+            "description": "Построение окружностей заданного радиуса вокруг объектов слоя"
+          },
+          {
+            "name": "availabilityArea",
+            "title": "Зоны доступности",
+            "options": {
+              "solvers": [
+                {
+                  "text": "Пешая",
+                  "value": "2gis"
+                },
+                {
+                  "text": "Автомобильная",
+                  "value": "2gis-carrouting"
+                }
+              ]
+            },
+            "imageName": "access",
+            "description": "Построение изохрон пешей и автомобильной доступности"
+          },
+          {
+            "name": "geometrySelection",
+            "title": "Выборка геометрией",
+            "imageName": "geometrySelection",
+            "description": "Выборка объектов одного слоя с помощью геометрии другого"
+          },
+          {
+            "name": "aggregation",
+            "title": "Агрегация данных",
+            "imageName": "aggregation",
+            "description": "Агрегирование атрибутов объектов исходного слоя в полигоны целевого слоя"
+          }
+        ]
+      },
+      "priority": 2,
+      "modulePath": "Tools/Tools",
+      "layoutOptions": {
+        "area": "panel",
+        "menu": {
+          "icon": "tools",
+          "title": "Геообработка"
+        }
+      }
+    },
+    {
+      "name": "map",
+      "priority": 1,
+      "modulePath": "Map/Map",
+      "submodules": [
+        {
+          "name": "feature-selector",
+          "modulePath": "FeatureSelector/FeatureSelector"
+        },
+        {
+          "name": "print-area",
+          "route": "PRINT",
+          "modulePath": "PrintArea/PrintArea"
+        }
+      ],
+      "layoutOptions": {
+        "area": "main"
+      }
+    },
+    {
+      "name": "feature-card",
+      "priority": 1,
+      "modulePath": "FeatureCard/FeatureCard",
+      "layoutOptions": {
+        "area": "main"
+      }
+    },
+    {
+      "name": "catalog",
+      "route": "CATALOG",
+      "priority": 4,
+      "modulePath": "Catalog/Catalog",
+      "layoutOptions": {
+        "area": "portal",
+        "menu": {
+          "icon": "catalog_variant",
+          "title": "Каталог"
+        }
+      }
+    },
+    {
+      "name": "scale-control",
+      "priority": 2,
+      "modulePath": "MapControls/ScaleControl",
+      "layoutOptions": {
+        "area": "mainControls"
+      }
+    },
+    {
+      "name": "style",
+      "route": "STYLE",
+      "priority": 3,
+      "modulePath": "Style/Style",
+      "layoutOptions": {
+        "area": "panel"
+      }
+    },
+    {
+      "name": "project-panel",
+      "route": "MAIN",
+      "priority": 1,
+      "modulePath": "ProjectPanel/ProjectPanel",
+      "layoutOptions": {
+        "area": "panel"
+      }
+    },
+    {
+      "name": "print",
+      "route": "PRINT",
+      "priority": 3,
+      "modulePath": "Print/Print",
+      "layoutOptions": {
+        "area": "panel"
+      }
+    },
+    {
+      "name": "address-search",
+      "options": {
+        "provider": "2gis"
+      },
+      "priority": 5,
+      "modulePath": "MapControls/AddressSearch",
+      "layoutOptions": {
+        "area": "mainControls"
+      }
+    },
+    {
+      "name": "layer-list",
+      "route": {
+        "name": "MAIN",
+        "default": true,
+        "payload": {
+          "panel": [
+            "layers",
+            "table"
+          ]
+        }
+      },
+      "options": {
+        "content": "layers",
+        "allowDevView": true
+      },
+      "priority": 1,
+      "modulePath": "LayerList/LayerList",
+      "layoutOptions": {
+        "area": "panel",
+        "menu": {
+          "icon": "layers",
+          "title": "Слои"
+        }
+      }
+    },
+    {
+      "name": "table",
+      "route": {
+        "name": "MAIN",
+        "payload": {
+          "panel": "table"
+        }
+      },
+      "preload": true,
+      "priority": 3,
+      "modulePath": "Table/Table",
+      "layoutOptions": {
+        "area": "bottom"
+      }
+    },
+    {
+      "name": "notifications",
+      "priority": 3,
+      "modulePath": "Notifications/Notifications",
+      "layoutOptions": {
+        "area": "portal"
+      }
+    }
+  ]
+}

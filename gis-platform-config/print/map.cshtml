@@ -1,0 +1,155 @@
+@using System
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    html,body {
+      margin: 0;
+      width: @(Model.Width)px;
+      height: @(Model.Height)px;
+
+	  font-family: Roboto;
+  	  font-size: 14px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+    }
+
+	.mapContainer {
+	    position: relative;
+	}
+
+    .grid {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      border: 0.5px solid @Model.Map.GridElement.Color;
+    }
+
+	.gridLabel {
+		position: absolute;
+	}
+
+    .gridXLabel {
+	  width: @(Model.Width - Model.Margin[1] - Model.Margin[3])px;
+      height: 24px;
+      left: 72px;
+    }
+
+    .gridYLabel {
+      width: 72px;
+      height: @(Model.Height - Model.Margin[0] - Model.Margin[2])px;
+      top: 108px;
+    }
+
+	.gridCoord {
+		position: absolute;
+		opacity: 0.87;
+	}
+
+	.gridXCoord {
+		padding-bottom: 8px;
+	    width: 50px;
+    	text-align: center;
+	}
+
+	.gridYCoord {
+		padding-right: 8px;
+	    width: 64px;
+    	text-align: right;
+	}
+
+	.gridLine {
+		position: absolute;
+		background-color: @Model.Map.GridElement.Color ;
+	}
+
+    .gridXLine {
+      width: 1px;
+      height: 100%;
+    }
+
+    .gridYLine {
+      width: 100%;
+      height: 1px;
+    }
+
+    .map {
+	  width: @(Model.Width - Model.Margin[1] - Model.Margin[3])px;
+      height: @(Model.Height - Model.Margin[0] - Model.Margin[2])px;
+      margin: 24px 0 0 72px;
+      position: relative;
+    }
+
+    .mapImage {
+        border: 1px solid black;
+    }
+
+    .scale {
+      float: right;
+	  margin: 10px 72px 0 0;
+    }
+
+	.mapTitle {
+		font-size: 24px;
+	    text-align: center;
+    	width: 100%;
+    	padding: 32px 0 24px 0;
+    }
+
+	.empty {
+    	width: 100%;
+    	height: 72px;
+    	background: white;
+	}
+</style>
+
+<title>Map print</title>
+</head>
+<body>
+
+<div class="mapContainer">
+	<div class = "mapTitle">@Model.Title</div>
+	<div class = "gridLabel gridXLabel">
+			@foreach(var coordinate in Model.Map.GridElement.CoordinatesList[0])
+			 {
+				<div class="gridCoord gridXCoord" style="left: @(coordinate.Item1 - 23)px"> @coordinate.Item2&deg </div>
+			 }
+	</div>
+	<div class = "gridLabel gridYLabel">
+			@foreach(var coordinate in Model.Map.GridElement.CoordinatesList[1])
+			 {
+				<div class="gridCoord gridYCoord" style="top: @(coordinate.Item1 - 8)px"> @coordinate.Item2&deg </div>
+			 }
+	</div>
+	<div class="map">
+   		<div class="grid">
+			@foreach(var coordinate in Model.Map.GridElement.CoordinatesList[0])
+			 {
+				<div class="gridLine gridXLine" style="left: @(coordinate.Item1)px"></div>
+			 }
+
+			@foreach(var coordinate in Model.Map.GridElement.CoordinatesList[1])
+			 {
+				<div class="gridLine gridYLine" style="top: @(coordinate.Item1)px"></div>
+			 }
+
+    	</div>
+        <img
+          class="mapImage"
+          src = "data:image;base64,@Convert.ToBase64String(Model.Map.MapImage)"
+        />
+
+      </div>
+		@if(Model.Map.ScaleBar != null)
+		{
+			<img
+				class="scale"
+				src = "data:image;base64,@Convert.ToBase64String(Model.Map.ScaleBar.ScaleBarImage)"
+			/>
+		}
+	<div class="empty" />
+</div>
+</body>
+</html>

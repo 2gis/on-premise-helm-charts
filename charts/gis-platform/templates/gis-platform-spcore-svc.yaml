@@ -1,0 +1,20 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gis-platform-spcore.fullname" . }}
+  {{- if .Values.spcore.service.annotations }}
+  annotations:
+    {{- toYaml .Values.spcore.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "gis-platform-spcore.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "gis-platform-spcore.selectorLabels" . | nindent 4 }}
+  ports:
+  - name: spcore
+    port: {{ .Values.spcore.http_port }}
+    targetPort: {{ .Values.spcore.http_port }}

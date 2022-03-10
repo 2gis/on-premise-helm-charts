@@ -1,0 +1,88 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gis-platform-spcore.fullname" . }}
+  labels:
+    {{- include "gis-platform-spcore.labels" . | nindent 4 }}
+data:
+  spcore-entrypoint.sh: |
+    #!/bin/bash
+
+    set -e
+    set -u
+
+    RESET=false
+    UPDATE=false
+
+    while getopts "ru" opt; do
+        case "$opt" in
+            "r") RESET=true ;;
+            "u") UPDATE=true ;;
+        esac
+    done
+
+    envsubst < /app/SPCore.json.template > /app/SPCore.json
+
+    /usr/bin/dotnet SPCore.App.Public.dll --updateDb=$UPDATE --resetCluster=$RESET --continue=true
+
+  SPCore.json.template: |
+    {
+      "createSuperuser": true,
+      "nodeAddress": "${INSTANCE_ID}.{{ include "gis-platform.spcore.headless_service" . }}.{{ .Release.Namespace }}.svc:${SPCORE_cloudConnectorPort}",
+      "maximumActiveRequests": 20,
+      "pluginsPath": "plugins",
+      "silentlyApplyMigrations": true,
+      "staticPath": "/app/static",
+      "previewStaticPath": "/app/static",
+      "apiServerPath": "/sp",
+      {{- if and (not .Values.spcore.cors.allow_everyone) (.Values.spcore.cors.origins) }}
+      "corsOrigins": {{ .Values.spcore.cors.origins | toJson }},
+      {{- end }}
+      "securityManagerConfiguration": {
+        "searchConstraintCount": "3",
+        "jwtConfiguration": {
+          "refreshTokenCookie": "refreshToken",
+          "jwtCookie": "jwt",
+          "minutesToExpireJwt": 10,
+          "minutesToExpireRefreshToken": 1440
+        }
+      },
+      "sessionManager": {
+        "sessionTimeout": 86400
+      },
+      "geocodeManager": {
+        "TwoGisProvider": {
+             "serviceName": "geocode2gis",
+             "providerKey": "2gis",
+             "geocodeUrl": "${GIS_PLATFORM_CATALOG_URL}/2.0/geo/search",
+             "SuggestUrl": "${GIS_PLATFORM_CATALOG_URL}/2.0/suggest/list",
+             "key": "${GIS_PLATFORM_CATALOG_KEY}"
+           }
+      },
+      "DefaultLimits": {
+        "Tables": {{ .Values.spcore.defaultLimits.tables | int | quote }},
+        "Layers": {{ .Values.spcore.defaultLimits.layers | int | quote }},
+        "Projects": {{ .Values.spcore.defaultLimits.projects | int | quote }},
+        "Features": {{ .Values.spcore.defaultLimits.features | int | quote }}
+      },
+      "routes": {
+          "TwoGisProviders": [
+             {
+                 "name": "2gis",
+                 "type": "2gis",
+                 "url": "${GIS_PLATFORM_CATALOG_URL}",
+                 "token": "${GIS_PLATFORM_CATALOG_KEY}",
+                 "mode": "walking"
+             },
+             {
+                 "name": "2gis-carrouting",
+                 "type": "2gis",
+                 "url": "${GIS_PLATFORM_CATALOG_URL}",
+                 "token": "${GIS_PLATFORM_CATALOG_KEY}",
+                 "mode": "driving"
+             }
+          ]
+      }
+    }

@@ -1,0 +1,42 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gis-platform-portal.fullname" . }}
+spec:
+  replicas: {{ .Values.portal.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "gis-platform-portal.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "gis-platform-portal.selectorLabels" . | nindent 8 }}
+    spec:
+{{- if .Values.portal.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.portal.nodeSelector | indent 8 }}
+{{- end }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+               {{- include "gis-platform-portal.selectorLabels" . | nindent 16 }}
+            topologyKey: kubernetes.io/hostname
+      containers:
+        - name: {{ include "gis-platform-portal.fullname" . }}
+          image: {{ .Values.portal.image.repository }}:{{ .Values.portal.image.tag }}
+          ports:
+            - containerPort: 80
+          resources:
+            {{- toYaml .Values.portal.resources | nindent 12 }}
+          volumeMounts:
+            - name: {{ include "gis-platform-portal.name" . }}-configmap
+              mountPath: /etc/nginx/templates/default.conf.template
+              subPath: default.conf.template
+      volumes:
+        - name: {{ include "gis-platform-portal.name" . }}-configmap
+          configMap:
+            name: {{ include "gis-platform-portal.fullname" . }}

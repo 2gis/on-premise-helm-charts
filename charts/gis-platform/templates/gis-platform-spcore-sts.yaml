@@ -1,0 +1,119 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "gis-platform-spcore.fullname" . }}
+spec:
+{{- if .Values.spcore.reset_cluster }}
+  replicas: 1
+{{- else }}
+  replicas: {{ .Values.spcore.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "gis-platform-spcore.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "gis-platform.spcore.headless_service" . }}
+  template:
+    metadata:
+      labels:
+        {{- include "gis-platform-spcore.selectorLabels" . | nindent 8 }}
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.spcore.terminationGracePeriodSeconds }}
+{{- if .Values.spcore.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.spcore.nodeSelector | indent 8 }}
+{{- end }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                {{- include "gis-platform-spcore.selectorLabels" . | nindent 16 }}
+            topologyKey: kubernetes.io/hostname
+      containers:
+        - name: {{ include "gis-platform-spcore.fullname" . }}
+          command: ["/spcore-entrypoint.sh"]
+          {{- if .Values.spcore.reset_cluster }}
+          args: ["-ru"]
+          {{- else }}
+          {{- end }}
+          image: {{ .Values.spcore.image.repository }}:{{ .Values.spcore.image.tag }}
+          ports:
+          - containerPort: {{ .Values.spcore.cloud_port }}
+          - containerPort: {{ .Values.spcore.http_port }}
+          resources:
+            {{- toYaml .Values.spcore.resources | nindent 12 }}
+          env:
+          - name: GIS_PLATFORM_CATALOG_URL
+            value: {{ .Values.spcore.catalog.url }}
+          - name: GIS_PLATFORM_CATALOG_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "gis-platform.secret" . }}
+                key: gis_platform_catalog_key
+          - name: INSTANCE_ID
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: SPCORE_host
+            value: "{{ .Values.external_proto }}://{{ .Values.external_hostname }}"
+          - name: SPCORE_securityManagerConfiguration__jwtConfiguration__adminAccessToken
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "gis-platform.secret" . }}
+                key: jwt_token_admin
+          - name: SPCORE_securityManagerConfiguration__jwtConfiguration__tokenKey
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "gis-platform.secret" . }}
+                key: jwt_token_key
+          - name: SPCORE_debugMode
+            value: {{ .Values.spcore.debug_mode | quote }}
+          - name: SPCORE_cloudConnectorPort
+            value: {{ .Values.spcore.cloud_port | quote }}
+          - name: SPCORE_httpPort
+            value: {{ .Values.spcore.http_port | quote }}
+          - name: SPCORE_dbConnectionString
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "gis-platform.secret" . }}
+                key: db_connection_string
+          - name: SPCORE_s3Configuration__host
+            value: {{ .Values.spcore.s3.host | quote }}
+          - name: SPCORE_s3Configuration__region
+            value: {{ .Values.spcore.s3.region | quote }}
+          - name: SPCORE_s3Configuration__bucketName
+            value: {{ .Values.spcore.s3.bucket | quote }}
+          - name: SPCORE_s3Configuration__previewStorageBucketName
+            value: {{ .Values.spcore.s3.preview_bucket | quote }}
+          - name: SPCORE_s3Configuration__accessKey
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "gis-platform.secret" . }}
+                key: s3_access_key
+          - name: SPCORE_s3Configuration__secretKey
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "gis-platform.secret" . }}
+                key: s3_secret_key
+          - name: SPCORE_zkConnectionAddress
+            value: {{ include "gis-platform.zookeeper_connection_string" . | quote }}
+          - name: SPCORE_SuEmail
+            value: {{ .Values.spcore.admin.email | quote }}
+          - name: SPCORE_SuPassword
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "gis-platform.secret" . }}
+                key: admin_password
+          volumeMounts:
+          - name: {{ include "gis-platform-spcore.name" . }}-configmap
+            mountPath: /app/SPCore.json.template
+            subPath: SPCore.json.template
+          - name: {{ include "gis-platform-spcore.name" . }}-configmap
+            mountPath: /spcore-entrypoint.sh
+            subPath: spcore-entrypoint.sh
+      volumes:
+        - name: {{ include "gis-platform-spcore.name" . }}-configmap
+          configMap:
+            name: {{ include "gis-platform-spcore.fullname" . }}
+            defaultMode: 0755
