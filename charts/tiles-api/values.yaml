@@ -5,7 +5,7 @@ manifestPath: manifests/1635402744.json
 
 serviceName: tiles-api-webgl
 
-name: tileserver
+name: tiles-api
 type: web
 
 cassandra:
@@ -72,7 +72,7 @@ api:
     className: nginx
     tls: []
     hosts:
-      - host: tileserver.loc
+      - host: tiles-api.loc
         paths:
           - path: /
 

@@ -1,4 +1,4 @@
-# 2GIS Tileserver
+# 2GIS Tiles API
 
 The repository contains a HTTP server for giving tiles data with import process
 
@@ -16,7 +16,7 @@ To install the chart with the release name `testing`:
 
 ``` shell
 helm repo add 2gis-on-premise https://2gis.github.io/on-premise-helm-charts
-helm install testing 2gis-on-premise/tileserver --atomic --timeout=60m -f ./customvalues.yaml
+helm install testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./customvalues.yaml
 ```
 
 ## Upgrading
@@ -24,7 +24,7 @@ helm install testing 2gis-on-premise/tileserver --atomic --timeout=60m -f ./cust
 To upgrade the chart:
 
 ```shell
-helm upgrade testing 2gis-on-premise/tileserver --atomic --timeout=60m -f ./customvalues.yaml
+helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./customvalues.yaml
 ```
 
 ## Values
@@ -41,7 +41,7 @@ helm upgrade testing 2gis-on-premise/tileserver --atomic --timeout=60m -f ./cust
 | api.imagePullSecrets | object | `{}` |  |
 | api.ingress.className | string | `"nginx"` |  |
 | api.ingress.enabled | bool | `false` |  |
-| api.ingress.hosts[0].host | string | `"tileserver.loc"` |  |
+| api.ingress.hosts[0].host | string | `"tiles-api.loc"` |  |
 | api.ingress.hosts[0].paths[0].path | string | `"/"` |  |
 | api.ingress.tls | list | `[]` |  |
 | api.labels | object | `{}` |  |
@@ -98,7 +98,7 @@ helm upgrade testing 2gis-on-premise/tileserver --atomic --timeout=60m -f ./cust
 | importer.workerResources.requests.memory | string | `"512Mi"` |  |
 | importer.writerNum | int | `8` | Number of write processes per import process |
 | manifestPath | string | `"manifests/1635402744.json"` | Path to the manifest in S3-like storage. The manifest is downloaded via the dgctl utility |
-| name | string | `"tileserver"` |  |
+| name | string | `"tiles-api"` |  |
 | serviceName | string | `"tiles-api-webgl"` |  |
 | type | string | `"web"` |  |
 

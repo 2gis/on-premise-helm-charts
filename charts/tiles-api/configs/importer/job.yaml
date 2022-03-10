@@ -5,7 +5,7 @@ metadata:
   labels:
     task-id: {{`{{.task_id}}`}}
     import-id: {{`{{.import_id}}`}}
-    {{- include "tileserver.labels" . | nindent 6 }}
+    {{- include "tiles.labels" . | nindent 6 }}
 
 spec:
   backoffLimit: 0
@@ -15,7 +15,7 @@ spec:
       labels:
         task-id: {{`{{.task_id}}`}}
         import-id: {{`{{.import_id}}`}}
-        {{- include "tileserver.labels" . | nindent 10 }}
+        {{- include "tiles.labels" . | nindent 10 }}
 
     spec:
       volumes:
@@ -24,7 +24,7 @@ spec:
 
         - name: config-volume
           configMap:
-            name: {{ include "tileserver.fullname" . }}-import
+            name: {{ include "tiles.fullname" . }}-import
 
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:

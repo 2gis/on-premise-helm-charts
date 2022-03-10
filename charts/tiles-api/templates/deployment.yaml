@@ -3,9 +3,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "tileserver.fullname" . }}
+  name: {{ include "tiles.fullname" . }}
   labels:
-    {{- include "tileserver.labels" . | nindent 4 }}
+    {{- include "tiles.labels" . | nindent 4 }}
     {{- if $.Values.api.labels }}
     {{- toYaml $.Values.api.labels | nindent 4 }}
     {{- end }}
@@ -21,7 +21,7 @@ spec:
 
   selector:
     matchLabels:
-      {{- include "tileserver.selectorLabels" . | nindent 6 }}
+      {{- include "tiles.selectorLabels" . | nindent 6 }}
 
   {{- with .Values.api.strategy }}
   strategy:
@@ -31,7 +31,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "tileserver.selectorLabels" . | nindent 8 }}
+        {{- include "tiles.selectorLabels" . | nindent 8 }}
         {{- with .Values.api.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -46,7 +46,7 @@ spec:
 
       volumes:
         - configMap:
-            name: {{ include "tileserver.fullname" . }}-api
+            name: {{ include "tiles.fullname" . }}-api
           name: config-volume
 
       {{- with .Values.api.nodeSelector }}
@@ -70,7 +70,7 @@ spec:
       {{- end }}
 
       containers:
-        - name: {{ include "tileserver.name" . }}
+        - name: {{ include "tiles.name" . }}
           image: {{ .Values.api.image }}:{{ .Values.api.tag }}
 
           volumeMounts:
@@ -106,6 +106,6 @@ spec:
             - name: JAEGER_DISABLED
               value: "true"
             - name: JAEGER_SERVICE_NAME
-              value: "tileserver"
+              value: "tiles"
             - name: PEERS_IGNORE
               value: "true"
