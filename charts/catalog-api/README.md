@@ -8,13 +8,13 @@ To learn more about 2GIS On-Premise services, visit [docs.2gis.com](https://docs
 
 ## Installing
 
-Before installing Catalog API, make sure that you have a running PostgreSQL instance and a running [Sapphire API](https://docs.2gis.com/en/on-premise/search) service.
+Before installing Catalog API, make sure that you have a running PostgreSQL instance and a running [Search API](https://docs.2gis.com/en/on-premise/search) service.
 
 To install the service create a YAML file that will contain:
 
 - Registry URL of the service's Docker image
 - PostgreSQL access parameters
-- Sapphire API URL
+- Search API URL
 
 ```yaml
 # Docker image
