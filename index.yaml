@@ -2,6 +2,20 @@ apiVersion: v1
 entries:
   catalog-api:
   - apiVersion: v2
+    appVersion: 3.557.0
+    created: "2022-03-11T12:39:07.299633793Z"
+    description: A Helm chart for Kubernetes to deploy Catalog APIs
+    digest: 05adac22110a5a1c35da9c93c686abd937bff8e85702ed92a52120df42a9bc80
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: catalog-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/catalog-api-1.0.1/catalog-api-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
     appVersion: 1.0.0
     created: "2022-02-09T07:48:43.489648101Z"
     description: A Helm chart for Kubernetes to deploy Catalog APIs
@@ -15,6 +29,25 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/catalog-api-1.0.0/catalog-api-1.0.0.tgz
     version: 1.0.0
+  gis-platform:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2022-03-11T12:39:07.53824542Z"
+    dependencies:
+    - name: zookeeper
+      repository: https://charts.bitnami.com/bitnami
+      version: ~8.0.1
+    description: GIS Platform
+    digest: 92f558d076024d28dfcf1cee25b011276db246482bdfc27b143b73332779196d
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: gis-platform
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/gis-platform-0.0.1/gis-platform-0.0.1.tgz
+    version: 0.0.1
   mapgl-js-api:
   - apiVersion: v2
     appVersion: 0.0.301
@@ -259,4 +292,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tileserver-1.0.0/tileserver-1.0.0.tgz
     version: 1.0.0
-generated: "2022-03-11T03:46:54.423175286Z"
+generated: "2022-03-11T12:39:07.538310534Z"
