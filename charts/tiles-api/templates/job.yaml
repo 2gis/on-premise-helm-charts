@@ -1,0 +1,80 @@
+{{- if .Values.importer.enabled }}
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name:  {{ include "tiles.fullname" . }}
+  labels:
+    {{- include "tiles.labels" . | nindent 4 }}
+  annotations:
+    {{- include "importer.removable-hook-annotations" . | nindent 4 }}
+
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "tiles.fullname" . }}
+    spec:
+      serviceAccountName: {{ include "tiles.fullname" . }}
+
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+
+        - name: config-volume
+          configMap:
+            name: {{ include "tiles.fullname" . }}-import
+
+      {{- with .Values.importer.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.importer.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.importer.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      containers:
+        - name: import-worker
+
+          {{- with $.Values.importer }}
+          image: {{ .image }}:{{ .tag }}
+          command: ["/selfimporter", "scheduler"]
+
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+
+            - mountPath: "/config"
+              name: config-volume
+
+          {{- with .resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          env:
+            - name: CONFIG_PATH
+              value: /config/importer.yaml
+            - name: STORAGE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}
+                  key: s3AccessKey
+            - name: STORAGE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}
+                  key: s3SecretKey
+
+          {{- end}}
+
+      restartPolicy: Never
+{{- end }}

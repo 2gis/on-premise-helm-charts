@@ -1,0 +1,31 @@
+{{ with .Values.api.vpa }}
+{{- if .enabled }}
+---
+
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "tiles.fullname" $ }}
+  labels:
+    {{- include "tiles.labels" $ | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "tiles.fullname" $ }}
+  updatePolicy:
+    updateMode: {{ .updateMode }}
+  resourcePolicy:
+    containerPolicies:
+      - containerName: {{ include "tiles.name" }}
+        mode: Auto
+        {{- with .minAllowed }}
+        minAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .maxAllowed }}
+        maxAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+{{- end }}
+{{- end }}
