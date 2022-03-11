@@ -4,13 +4,13 @@ apiVersion: v1
 kind: Service
 
 metadata:
-  name: {{ include "tileserver.fullname" $ }}
+  name: {{ include "tiles.fullname" $ }}
   {{- if .annotations }}
   annotations:
     {{- toYaml .annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "tileserver.labels" $ | nindent 4 }}
+    {{- include "tiles.labels" $ | nindent 4 }}
     {{- if .labels }}
     {{- toYaml .labels | nindent 4 }}
     {{- end }}
@@ -30,6 +30,6 @@ spec:
   {{- end }}
 
   selector:
-    {{- include "tileserver.selectorLabels" $ | nindent 4 }}
+    {{- include "tiles.selectorLabels" $ | nindent 4 }}
 
 {{- end }}

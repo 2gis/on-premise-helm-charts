@@ -4,9 +4,9 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name:  {{ include "tileserver.fullname" . }}
+  name:  {{ include "tiles.fullname" . }}
   labels:
-    {{- include "tileserver.labels" . | nindent 4 }}
+    {{- include "tiles.labels" . | nindent 4 }}
   annotations:
     {{- include "importer.removable-hook-annotations" . | nindent 4 }}
 
@@ -14,9 +14,9 @@ spec:
   backoffLimit: 0
   template:
     metadata:
-      name: {{ include "tileserver.fullname" . }}
+      name: {{ include "tiles.fullname" . }}
     spec:
-      serviceAccountName: {{ include "tileserver.fullname" . }}
+      serviceAccountName: {{ include "tiles.fullname" . }}
 
       volumes:
         - name: tmp-volume
@@ -24,7 +24,7 @@ spec:
 
         - name: config-volume
           configMap:
-            name: {{ include "tileserver.fullname" . }}-import
+            name: {{ include "tiles.fullname" . }}-import
 
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:
@@ -66,12 +66,12 @@ spec:
             - name: STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "tileserver.fullname" $ }}
+                  name: {{ include "tiles.fullname" $ }}
                   key: s3AccessKey
             - name: STORAGE_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "tileserver.fullname" $ }}
+                  name: {{ include "tiles.fullname" $ }}
                   key: s3SecretKey
 
           {{- end}}

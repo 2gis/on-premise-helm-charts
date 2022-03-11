@@ -3,9 +3,9 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ include "tileserver.fullname" . }}
+  name: {{ include "tiles.fullname" . }}
   labels:
-    {{- include "tileserver.labels" . | nindent 4 }}
+    {{- include "tiles.labels" . | nindent 4 }}
   annotations:
     {{- include "importer.removable-hook-annotations" . | nindent 4 }}
 

@@ -3,16 +3,16 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ include "tileserver.fullname" . }}
+  name: {{ include "tiles.fullname" . }}
   labels:
-    {{- include "tileserver.labels" $ | nindent 4 }}
+    {{- include "tiles.labels" $ | nindent 4 }}
   annotations:
     {{- include "importer.removable-hook-annotations" . | nindent 4 }}
 
 subjects:
 - kind: ServiceAccount
-  name: {{ include "tileserver.fullname" . }}
+  name: {{ include "tiles.fullname" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "tileserver.fullname" . }}
+  name: {{ include "tiles.fullname" . }}

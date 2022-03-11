@@ -6,6 +6,7 @@ graceful-shutdown-time: 5s
 ui-whitelist: {{ $.Values.api.uiWhitelist }}
 {{- end }}
 
+
 cassandra-credentials:
   user: {{ .Values.cassandra.credentials.user }}
   password: {{ .Values.cassandra.credentials.password }}
@@ -18,7 +19,7 @@ cassandra-clusters:
 
     keyspaces:
       - tileset: {{ .Values.type }}
-        keyspace: dgis_tileserver_{{ .Values.type }}_{{ include "tileserver.manifestCode" . }}
+        keyspace: dgis_tileserver_{{ .Values.type }}_{{ include "tiles.manifestCode" . }}
         default: true
         partition-size: 4
 

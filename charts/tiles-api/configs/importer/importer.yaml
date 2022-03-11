@@ -4,6 +4,7 @@ service-name: {{ .Values.serviceName }}
 workers: {{ .Values.importer.workerNum }}
 data-type: {{ .Values.type }}
 
+
 credentials:
   user: {{ .Values.cassandra.credentials.user }}
   password: {{ .Values.cassandra.credentials.password }}
@@ -11,12 +12,12 @@ credentials:
 cassandra:
   name: local
   timeout: 10s
-  num-retries: 1
+  num-retries: 2
   reconnect-interval: 30s
 
   keyspaces:
     - tileset: {{ .Values.type }}
-      keyspace: dgis_tileserver_{{ .Values.type}}_{{ include "tileserver.manifestCode" . }}
+      keyspace: dgis_tileserver_{{ .Values.type}}_{{ include "tiles.manifestCode" . }}
       default: true
       partition-size: 4
 
