@@ -144,6 +144,21 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/sapphire-1.0.0/sapphire-1.0.0.tgz
     version: 1.0.0
+  search-api:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2022-03-11T03:18:03.354183677Z"
+    description: Search engine for catalog
+    digest: c56dff214967354e57a53e1f0244f6e4a95ae398a2023a00c4a6a0cc4a0ba4ad
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: search-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/search-api-1.0.1/search-api-1.0.1.tgz
+    version: 1.0.1
   tileserver:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -229,4 +244,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tileserver-1.0.0/tileserver-1.0.0.tgz
     version: 1.0.0
-generated: "2022-03-10T14:48:01.719795374Z"
+generated: "2022-03-11T03:18:03.354247278Z"
