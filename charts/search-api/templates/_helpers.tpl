@@ -1,8 +1,8 @@
-{{- define "sapphire.name" -}}
+{{- define "search_api.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "sapphire.fullname" -}}
+{{- define "search_api.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -15,18 +15,18 @@
 {{- end -}}
 {{- end -}}
 
-{{- define "sapphire.chart" -}}
+{{- define "search_api.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "sapphire.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "sapphire.name" . }}
+{{- define "search_api.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "search_api.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
-{{- define "sapphire.labels" -}}
-helm.sh/chart: {{ include "sapphire.name" . }}
-{{ include "sapphire.selectorLabels" . }}
+{{- define "search_api.labels" -}}
+helm.sh/chart: {{ include "search_api.name" . }}
+{{ include "search_api.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}

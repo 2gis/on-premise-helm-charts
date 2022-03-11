@@ -3,13 +3,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "sapphire.fullname" . }}
+  name: {{ include "search_api.fullname" . }}
   {{- if .Values.annotations }}
   annotations:
     {{- toYaml .Values.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "sapphire.labels" . | nindent 4 }}
+    {{- include "search_api.labels" . | nindent 4 }}
   {{- if .Values.labels }}
     {{- toYaml .Values.labels | nindent 4 }}
   {{- end }}
@@ -21,7 +21,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "sapphire.selectorLabels" . | nindent 6 }}
+      {{- include "search_api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -29,16 +29,16 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "sapphire.labels" . | nindent 8 }}
+        {{- include "search_api.labels" . | nindent 8 }}
       {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       initContainers:
-        - name: sapphire-init
-          image: {{ .Values.sapphire.repository }}:{{ .Values.sapphire.tag }}
-          imagePullPolicy: {{ .Values.sapphire.pullPolicy }}
+        - name: init
+          image: "{{ .Values.api.repository }}:{{ .Values.api.tag }}"
+          imagePullPolicy: {{ .Values.api.pullPolicy }}
           command:
             - importer
             - --endpoint={{ required "Valid s3_host value required!" .Values.s3_host }}
@@ -46,30 +46,30 @@ spec:
             - --secret-access-key={{ required "Valid s3_s_key value required!" .Values.s3_s_key }}
             - --bucket-name={{ required "Valid s3_bucket value required!" .Values.s3_bucket }}
             - --manifest={{ required "Valid s3_manifest value required!" .Values.s3_manifest }}
-            - --output-dir-path={{ .Values.sph_data_dir }}
+            - --output-dir-path={{ .Values.api.data_dir }}
           resources:
-            {{- toYaml .Values.sapphire.resources | nindent 12 }}
+            {{- toYaml .Values.api.resources | nindent 12 }}
           volumeMounts:
-            - name: {{ include "sapphire.name" $ }}-configmap
+            - name: {{ include "search_api.name" $ }}-configmap
               mountPath: /etc/2gis
-            - name: sapphire-data
-              mountPath: {{ .Values.sph_data_dir }}
+            - name: search-api-data
+              mountPath: {{ .Values.api.data_dir }}
       containers:
-        - name: sapphire
-          image: {{ .Values.sapphire.repository }}:{{ .Values.sapphire.tag }}
-          imagePullPolicy: {{ .Values.sapphire.pullPolicy }}
+        - name: api
+          image: {{ .Values.api.repository }}:{{ .Values.api.tag }}
+          imagePullPolicy: {{ .Values.api.pullPolicy }}
           command: ["Sapphire2", "--exec"]
           resources:
-            {{- toYaml .Values.sapphire.resources | nindent 12 }}
+            {{- toYaml .Values.api.resources | nindent 12 }}
           lifecycle:
             preStop:
               exec:
                 command: ["/bin/sh", "-c", "sleep 15"]
           volumeMounts:
-            - name: {{ include "sapphire.name" $ }}-configmap
+            - name: {{ include "search_api.name" $ }}-configmap
               mountPath: /etc/2gis
-            - name: sapphire-data
-              mountPath: {{ .Values.sph_data_dir }}
+            - name: search-api-data
+              mountPath: {{ .Values.api.data_dir }}
           env:
             - name: REDEPLOY_LABEL
               value: "{{ .Values.redeploy_label }}"
@@ -77,7 +77,7 @@ spec:
           image: {{ .Values.nginx.repository }}:{{ .Values.nginx.tag }}
           imagePullPolicy: {{ .Values.nginx.pullPolicy }}
           command: ["nginx", "-c", "/etc/2gis/nginx.conf"]
-          {{- if (le .Values.nginx_port 1024.0) }}
+          {{- if (le .Values.nginx.http_port 1024.0) }}
           securityContext:
             capabilities:
               add:
@@ -85,12 +85,12 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.nginx_port }}
+              containerPort: {{ .Values.nginx.http_port }}
               protocol: TCP
           readinessProbe:
             httpGet:
               path: /v2/status
-              port: {{ .Values.nginx_port }}
+              port: {{ .Values.nginx.http_port }}
             successThreshold: 1
             failureThreshold: 5
             timeoutSeconds: 5
@@ -102,18 +102,18 @@ spec:
               exec:
                 command: ["/bin/sh", "-c", "sleep 15"]
           volumeMounts:
-            - name: {{ include "sapphire.name" $ }}-configmap
+            - name: {{ include "search_api.name" $ }}-configmap
               mountPath: /etc/2gis
       volumes:
-        - name: {{ include "sapphire.name" . }}-configmap
+        - name: {{ include "search_api.name" . }}-configmap
           configMap:
-            name: {{ include "sapphire.fullname" . }}
+            name: {{ include "search_api.fullname" . }}
             items:
-              - key: sapphire_config
+              - key: search_api_config
                 path: Sapphire2.xml
               - key: nginx_config
                 path: nginx.conf
-        - name: sapphire-data
+        - name: search-api-data
           emptyDir: {}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

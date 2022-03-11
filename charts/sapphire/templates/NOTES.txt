@@ -1,3 +1,0 @@
-Sapphire service is released as "{{ .Release.Name }}" service at "{{ .Release.Namespace }}" namespace.
-
-You can check service using curl http://<service published domain name>/v2/status

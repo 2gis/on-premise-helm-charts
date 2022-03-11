@@ -3,13 +3,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "sapphire.fullname" . }}
+  name: {{ include "search_api.fullname" . }}
   {{- if .Values.service.annotations }}
   annotations:
     {{- toYaml .Values.service.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "sapphire.labels" . | nindent 4 }}
+    {{- include "search_api.labels" . | nindent 4 }}
   {{- if .Values.service.labels }}
     {{- toYaml .Values.service.labels | nindent 4 }}
   {{- end }}
@@ -22,4 +22,4 @@ spec:
       name: http
       appProtocol: http
   selector:
-    {{- include "sapphire.selectorLabels" . | nindent 4 }}
+    {{- include "search_api.selectorLabels" . | nindent 4 }}

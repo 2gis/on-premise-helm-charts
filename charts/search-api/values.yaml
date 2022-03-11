@@ -2,21 +2,20 @@
 
 replicaCount: 1
 
-sapphire:
-  repository: op-sapphire
+api:
+  repository: search-api
   pullPolicy: IfNotPresent
   tag: "7.11.0_28654"
   resources: {}
+  data_dir: "/data"
+  fcgi_port: 9090
 
 nginx:
-  repository: op-nginx
+  repository: search-nginx
   pullPolicy: IfNotPresent
   tag: "1.21.4-2"
   resources: {}
-
-sph_data_dir: /sapphire
-sph_fcgi_port: 9090
-nginx_port: 8080
+  http_port: 8080
 
 strategy:
   type: RollingUpdate
