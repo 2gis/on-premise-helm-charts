@@ -70,3 +70,37 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: CATALOG_SAPPHIRE_URL
   value: "{{ .Values.search.url }}"
 {{- end }}
+
+{{- define "catalog.env.keys" -}}
+- name: CATALOG_KEYS_ENABLED
+  value: "true"
+- name: CATALOG_KEYS_ENDPOINT
+  value: "{{ .Values.keys.endpoint }}"
+- name: CATALOG_KEYS_REQUEST_TIMEOUT
+  value: "{{ .Values.keys.requestTimeout }}"
+- name: CATALOG_KEYS_SERVICE_PLACES_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "catalog.name" . }}
+      key: keysServicePlaces
+- name: CATALOG_KEYS_SERVICE_GEOCODER_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "catalog.name" . }}
+      key: keysServiceGeocoder
+- name: CATALOG_KEYS_SERVICE_SUGGEST_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "catalog.name" . }}
+      key: keysServiceSuggest
+- name: CATALOG_KEYS_SERVICE_CATEGORIES_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "catalog.name" . }}
+      key: keysServiceCategories
+- name: CATALOG_KEYS_SERVICE_REGIONS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "catalog.name" . }}
+      key: keysServiceRegions
+{{- end }}

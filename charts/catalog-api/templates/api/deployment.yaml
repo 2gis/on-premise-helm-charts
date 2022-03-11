@@ -51,6 +51,7 @@ spec:
           env:
             {{- include "catalog.env.db" . | nindent 12 }}
             {{- include "catalog.env.search" . | nindent 12 }}
+            {{- include "catalog.env.keys" . | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
