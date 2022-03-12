@@ -37,6 +37,8 @@ echo "Configuring LocalTileService for Satellite imagery"
 curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @LocalTileService.json "$GIS_PLATFORM_URL/sp/layers?type=LocalTileService"
 echo "Configuring Map"
 curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @MapConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/map"
+echo "Configuring Portal"
+curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @PortalConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/portal"
 echo "Configuring Printing"
 for template in print/*.cshtml; do
     echo "Uploading template: $template"
