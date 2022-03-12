@@ -3,6 +3,20 @@ entries:
   catalog-api:
   - apiVersion: v2
     appVersion: 3.557.0
+    created: "2022-03-12T06:01:04.981949256Z"
+    description: A Helm chart for Kubernetes to deploy Catalog APIs
+    digest: 0ef5c788dbfe300b42127c7b1d86750fea0f6d02220b8cadb6ac4af6b46fe6a5
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: catalog-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/catalog-api-1.0.2/catalog-api-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: 3.557.0
     created: "2022-03-11T12:39:07.299633793Z"
     description: A Helm chart for Kubernetes to deploy Catalog APIs
     digest: 05adac22110a5a1c35da9c93c686abd937bff8e85702ed92a52120df42a9bc80
@@ -134,6 +148,20 @@ entries:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/mapgl-js-api-0.0.1/mapgl-js-api-0.0.1.tgz
     version: 0.0.1
   proxy-traffic-jams:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2022-03-12T06:01:05.196176196Z"
+    description: A Helm chart for Kubernetes to deploy Proxy for traffic jams
+    digest: 9a941859af9d500c21aa22f8517786f430e81bae2e0d60aa6b24664427ef119d
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: proxy-traffic-jams
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/proxy-traffic-jams-0.0.2/proxy-traffic-jams-0.0.2.tgz
+    version: 0.0.2
   - apiVersion: v2
     appVersion: 0.0.0
     created: "2022-03-09T09:01:19.488120364Z"
@@ -292,4 +320,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tileserver-1.0.0/tileserver-1.0.0.tgz
     version: 1.0.0
-generated: "2022-03-11T12:39:07.538310534Z"
+generated: "2022-03-12T06:01:05.196241898Z"
