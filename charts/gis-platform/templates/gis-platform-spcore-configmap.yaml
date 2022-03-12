@@ -56,8 +56,9 @@ data:
         "TwoGisProvider": {
              "serviceName": "geocode2gis",
              "providerKey": "2gis",
-             "geocodeUrl": "${GIS_PLATFORM_CATALOG_URL}/2.0/geo/search",
-             "SuggestUrl": "${GIS_PLATFORM_CATALOG_URL}/2.0/suggest/list",
+             "geocodeUrl": "${GIS_PLATFORM_CATALOG_URL}/3.0/items/geocode",
+             "geocodeByIdUrl": "${GIS_PLATFORM_CATALOG_URL}/3.0/items/byid",
+             "SuggestUrl": "${GIS_PLATFORM_CATALOG_URL}/3.0/suggests",
              "key": "${GIS_PLATFORM_CATALOG_KEY}"
            }
       },
