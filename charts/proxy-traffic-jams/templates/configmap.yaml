@@ -9,47 +9,43 @@ metadata:
 data:
   nginx.conf: |
     user  nginx;
-    worker_processes  auto;
+    worker_processes  2;
 
-    pid /var/run/nginx.pid;
+    pid        /var/run/nginx.pid;
 
     events {
         worker_connections  1024;
     }
 
     http {
-        include /etc/nginx/mime.types;
-        default_type application/octet-stream;
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
 
-        log_format main escape=json '{"remote_addr":"$remote_addr","remote_user":"$remote_user","time_local":"$time_local","time_msec":"$msec","request":"$request","status":$status,"host":"$host","request_time":$request_time,"upstream_response_time":"$upstream_response_time","body_bytes_sent":$body_bytes_sent,"http_referer":"$http_referer","http_user_agent":"$http_user_agent"}';
+        log_format main escape=json '{"remote_addr":"$remote_addr","remote_user":"$remote_user","time_local":"$time_local","time_msec":"$msec","request":"$request","status":$status,"host":"$host","request_time":$request_time,"upstream_response_time":"$upstream_response_time","body_bytes_sent":$body_bytes_sent,"http_referer":"$http_referer","http_user_agent":"$http_user_agent","request_id":"$http_x_request_id","upstream_request_id":"$upstream_http_x_request_id"}';
 
-        access_log /dev/stdout  main;
-        error_log /dev/stderr  error;
+        access_log off;
+        error_log  /dev/stderr  error;
 
-        sendfile on;
-        tcp_nopush on;
-
-        keepalive_timeout 65;
-
-        #gzip on;
+        sendfile       on;
+        tcp_nopush     on;
+        keepalive_timeout  65;
 
         server {
-            listen        80;
-            server_name _;
-            location / {
-                proxy_pass         {{- toYaml .Values.proxy.host | nindent 8 }}:80;
-                proxy_http_version 1.1;
-                proxy_set_header   Upgrade $http_upgrade;
-                proxy_set_header   Connection keep-alive;
-                proxy_set_header   Host $host;
-                proxy_cache_bypass $http_upgrade;
-                proxy_cache_path /data/nginx/cache keys_zone=one:5m;
-                proxy_cache_valid any 5m;
-                proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header   X-Forwarded-Proto $scheme;
-            }
-        }
+          listen 80 default;
+          server_name _;
 
-        include /etc/nginx/conf.d/*.conf;
+          location / {
+              proxy_pass         {{ .Values.proxy.host }};
+              proxy_set_header   Upgrade $http_upgrade;
+              proxy_set_header   Connection keep-alive;
+              proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header   X-Forwarded-Proto $scheme;
+              proxy_cache_bypass $http_upgrade;
+          }
+
+          location /health {
+              default_type text/html;
+              return 200 "<!DOCTYPE html><h2>OK</h2>\n";
+          }
+        }
     }
- 

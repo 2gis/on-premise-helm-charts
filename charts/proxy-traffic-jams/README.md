@@ -1,8 +1,6 @@
 # Proxy Traffic Jams
 
-The repository contains a HTTP server for proxing service traffic-jams
-
-Data import starts before the main HTTP API is launched and is based on the mechanism of hooks
+The repository contains an HTTP server for proxying service traffic-jams
 
 ## Installing the Chart
 

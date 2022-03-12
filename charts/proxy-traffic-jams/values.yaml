@@ -3,11 +3,12 @@
 replicaCount: 1
 
 proxy:
-  host: traffic-jams.2gis.com
+  host: 'https://traffic-jams.2gis.com'
 
 image:
   repository: nginx
   pullPolicy: IfNotPresent
+  tag: "1.20.0"
 
 imagePullSecrets: []
 nameOverride: ""

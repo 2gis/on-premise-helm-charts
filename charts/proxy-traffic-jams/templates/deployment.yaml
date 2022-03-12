@@ -24,8 +24,9 @@ spec:
       {{- include "proxy-traffic-jams.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -45,7 +46,7 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /health
               port: http
             failureThreshold: 5
             initialDelaySeconds: 5
@@ -54,7 +55,7 @@ spec:
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
-              path: /
+              path: /health
               port: http
             failureThreshold: 3
             initialDelaySeconds: 5
@@ -69,7 +70,8 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           volumeMounts:
             - name: {{ include "proxy-traffic-jams.name" $ }}-configmap
-              mountPath: /usr/share/nginx/html
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
       volumes:
         - name: {{ include "proxy-traffic-jams.name" . }}-configmap
           configMap:
