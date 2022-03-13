@@ -99,8 +99,8 @@
             }
         ]
     },
-    "name": "2gis_satellites",
-    "alias": "2GIS Satellites",
+    "name": "satellite_imagery",
+    "alias": "Satellite imagery",
     "acl": {
         "data": [
             {
