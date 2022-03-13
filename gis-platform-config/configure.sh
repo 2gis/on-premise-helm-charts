@@ -29,9 +29,11 @@ if ! grep --silent -c refreshToken $cookie; then
     exit 1
 fi
 
-echo "Configuring RemoteTile"
+echo "Configuring RemoteTileService for 2GIS Basemap"
 jq --arg url ${tileserver_url} '.urlFormat=$url' RemoteTileService.json | curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
-echo "Configuring LocalTile"
+echo "Configuring RemoteTileService for 2GIS Traffic"
+curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
+echo "Configuring LocalTileService for Satellite imagery"
 curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @LocalTileService.json "$GIS_PLATFORM_URL/sp/layers?type=LocalTileService"
 echo "Configuring Map"
 curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @MapConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/map"
