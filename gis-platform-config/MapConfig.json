@@ -7,15 +7,21 @@
           {
             "name": "2gis",
             "theme": "light",
-            "title": "2GIS",
+            "title": "2GIS base map",
             "preview": ""
           },
           {
-            "name": "2gis_local_tiles",
+            "name": "2gis_satellites",
             "theme": "light",
-            "title": "Satellites",
+            "title": "2GIS Satellites",
             "preview": ""
-          }
+          },
+          {
+            "name": "empty",
+            "theme": "empty",
+            "title": "Disable base map",
+            "preview": ""
+          },
         ]
       },
       "priority": 1,
