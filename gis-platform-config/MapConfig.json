@@ -7,13 +7,13 @@
           {
             "name": "2gis",
             "theme": "light",
-            "title": "2GIS base map",
+            "title": "2GIS Basemap",
             "preview": ""
           },
           {
-            "name": "2gis_satellites",
+            "name": "satellite_imagery",
             "theme": "light",
-            "title": "2GIS Satellites",
+            "title": "Satellite imagery",
             "preview": ""
           },
           {
