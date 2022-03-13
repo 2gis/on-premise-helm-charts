@@ -100,7 +100,7 @@
         ]
     },
     "name": "satellite_imagery",
-    "alias": "Satellite imagery",
+    "alias": "Satellite Imagery",
     "acl": {
         "data": [
             {
