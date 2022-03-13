@@ -15,13 +15,7 @@
             "theme": "light",
             "title": "Satellite Imagery",
             "preview": ""
-          },
-          {
-            "name": "empty",
-            "theme": "empty",
-            "title": "Disable base map",
-            "preview": ""
-          },
+          }
         ]
       },
       "priority": 1,
