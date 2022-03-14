@@ -4,13 +4,15 @@
 : ${GIS_PLATFORM_USER:='superuser'}
 : ${GIS_PLATFORM_PASS:=''}
 : ${GIS_PLATFORM_TILES_API:=''}
+: ${GIS_PLATFORM_TRAFFIC_API:=''}
 
-if [[ -z $GIS_PLATFORM_PASS ]] || [[ -z $GIS_PLATFORM_USER ]] || [[ -z $GIS_PLATFORM_URL ]] || [[ -z $GIS_PLATFORM_TILES_API ]]; then
-    echo -e "\n\nSet GIS_PLATFORM_TILES_API, GIS_PLATFORM_PASS, GIS_PLATFORM_USER and GIS_PLATFORM_URL\n" >&2
+if [[ -z $GIS_PLATFORM_PASS ]] || [[ -z $GIS_PLATFORM_USER ]] || [[ -z $GIS_PLATFORM_URL ]] || [[ -z $GIS_PLATFORM_TILES_API ]] || [[ -z $GIS_PLATFORM_TRAFFIC_API ]]; then
+    echo -e "\n\nSet GIS_PLATFORM_TRAFFIC_API, GIS_PLATFORM_TILES_API, GIS_PLATFORM_PASS, GIS_PLATFORM_USER and GIS_PLATFORM_URL\n" >&2
     exit 1
 fi
 
 tileserver_url="${GIS_PLATFORM_TILES_API%/}/tiles?x={2}&y={3}&z={1}&v=1.5&ts=online_sd_ar&layerType=nc"
+traffic_url="${GIS_PLATFORM_TRAFFIC_API}/dammam/traffic/{1}/{2}/{3}/speed/0/?1640062200"
 
 cookie=$(mktemp evergis.cookie.XXXXX)
 login=''
@@ -30,15 +32,15 @@ if ! grep --silent -c refreshToken $cookie; then
 fi
 
 echo "Configuring RemoteTileService for 2GIS Basemap"
-jq --arg url ${tileserver_url} '.urlFormat=$url' RemoteTileService.json | curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
+jq --arg url "${tileserver_url}" '.urlFormat=$url' layer/tiles_api.json | curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
 echo "Configuring RemoteTileService for 2GIS Traffic"
-curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
+jq --arg url "${traffic_url}" '.urlFormat=$url'  layer/tiles_traffic.json | curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
 echo "Configuring LocalTileService for Satellite imagery"
-curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @LocalTileService.json "$GIS_PLATFORM_URL/sp/layers?type=LocalTileService"
+curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @layer/s3_satellite.json "$GIS_PLATFORM_URL/sp/layers?type=LocalTileService"
 echo "Configuring Map"
-curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @MapConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/map"
+curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @config/MapConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/map"
 echo "Configuring Portal"
-curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @PortalConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/portal"
+curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @config/PortalConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/portal"
 echo "Configuring Printing"
 for template in print/*.cshtml; do
     echo "Uploading template: $template"
