@@ -47,4 +47,10 @@ for template in print/*.cshtml; do
     curl -s -S -b $cookie -c $cookie -XPOST -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F "template=@${template}" "$GIS_PLATFORM_URL/sp/print/templates?name=$template&rewrite=false"
 done
 
+echo "Setting permissions"
+for layer in layer/*json; do
+    layer_name=$(jq --raw-output .name $layer)
+    acl='{"data":[{"role":"__superuser","permissions":"read,write,configure"},{"role":"__admin","permissions":"read,write,configure"},{"role":"__public","permissions":"read"}]}'
+    curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json-patch+json' -d "$acl" "$GIS_PLATFORM_URL/sp/layers/$layer_name/permissions"
+
 rm $cookie
