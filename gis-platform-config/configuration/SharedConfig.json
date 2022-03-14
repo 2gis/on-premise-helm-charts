@@ -1,0 +1,89 @@
+{
+  "modules": [
+    {
+      "name": "basemap-select",
+      "options": {
+        "items": [
+          {
+            "name": "2gis",
+            "title": "2GIS Basemap",
+            "preview": ""
+          },
+          {
+            "name": "satellite_imagery",
+            "title": "Satellite Imagery",
+            "preview": ""
+          }
+        ]
+      },
+      "priority": 1,
+      "modulePath": "SharedMapControls/BasemapSelect",
+      "layoutOptions": {
+        "area": "mainControls"
+      }
+    },
+    {
+      "name": "map",
+      "priority": 1,
+      "modulePath": "SharedMap/SharedMap",
+      "submodules": [
+        {
+          "name": "feature-selector",
+          "modulePath": "FeatureSelector/SharedFeatureSelector"
+        }
+      ],
+      "layoutOptions": {
+        "area": "main"
+      }
+    },
+    {
+      "name": "feature-card",
+      "options": {},
+      "modulePath": "FeatureCard/FeatureCard",
+      "layoutOptions": {
+        "area": "main"
+      }
+    },
+    {
+      "name": "bookmark-control",
+      "priority": 3,
+      "modulePath": "SharedMapControls/BookmarkControl",
+      "layoutOptions": {
+        "area": "mainControls"
+      }
+    },
+    {
+      "name": "scale-control",
+      "priority": 2,
+      "modulePath": "MapControls/ScaleControl",
+      "layoutOptions": {
+        "area": "mainControls"
+      }
+    },
+    {
+      "name": "project-panel",
+      "route": "MAIN",
+      "priority": 1,
+      "modulePath": "SharedProjectPanel/SharedProjectPanel",
+      "layoutOptions": {
+        "area": "panel"
+      }
+    },
+    {
+      "name": "shared-layer-list",
+      "route": "MAIN",
+      "priority": 1,
+      "modulePath": "SharedLayerList/SharedLayerList",
+      "layoutOptions": {
+        "area": "panel"
+      }
+    }
+  ],
+  "routing": {
+    "MAIN": "/:sharedMap"
+  },
+  "connection": {
+    "url": "/sp/",
+    "ws_url": "ever.2gis.ru/sp/ws/"
+  }
+}

@@ -41,6 +41,8 @@ echo "Configuring Map"
 curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @config/MapConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/map"
 echo "Configuring Portal"
 curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @config/PortalConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/portal"
+echo "Configuring map sharing"
+jq --arg url "${GIS_PLATFORM_URL#http*://}" '.connection.ws_url=$url+"/sp/ws/"' config/SharedConfig.json | curl -s -S -b $cookie -c $cookie -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/settings?urlPath=/shared"
 echo "Configuring Printing"
 for template in print/*.cshtml; do
     echo "Uploading template: $template"
