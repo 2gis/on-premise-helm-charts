@@ -2,6 +2,10 @@
 
 The repository contains an HTTP server for proxying service traffic-jams
 
+Данный сервис является честью сервисов 2GIS On-Premise. Служит для проксирования внешних HTTP запросов к данным сервиса пробок [2GIS products](https://dev.2gis.com/).
+
+Для дополнительной информации используйте [docs.2gis.com](https://docs.2gis.com/en/on-premise/overview)
+
 ## Installing the Chart
 
 To install the chart with the release name `testing`:
