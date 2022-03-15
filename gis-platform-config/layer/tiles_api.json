@@ -99,12 +99,12 @@
     "1",
     "2"
   ],
-  "copyrightText": "string",
+  "copyrightText": "",
   "allowDirectAccess": true,
   "RequestTimeout": 0,
   "name": "2gis",
-  "alias": "2gis",
-  "description": "2gis",
+  "alias": "2GIS Basemap",
+  "description": "2GIS Basemap",
   "acl": {
     "data": [
       {

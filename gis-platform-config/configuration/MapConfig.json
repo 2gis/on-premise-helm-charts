@@ -7,13 +7,13 @@
           {
             "name": "2gis",
             "theme": "light",
-            "title": "2GIS",
+            "title": "2GIS Basemap",
             "preview": ""
           },
           {
-            "name": "2gis_local_tiles",
+            "name": "satellite_imagery",
             "theme": "light",
-            "title": "Satellites",
+            "title": "Satellite Imagery",
             "preview": ""
           }
         ]
@@ -242,5 +242,9 @@
         "area": "portal"
       }
     }
-  ]
+  ],
+  "settings": {
+    "help": false,
+    "gotoPortal": false
+  }
 }
