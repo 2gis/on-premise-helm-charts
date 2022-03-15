@@ -22,7 +22,6 @@ To install the service create a YAML file that will contain:
 api:
   image:
     repository: your-docker-hub/2gis/catalog-api
-    tag: 1.0.0
 
 # PostgreSQL access
 db:
