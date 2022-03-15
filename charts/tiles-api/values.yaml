@@ -30,7 +30,7 @@ proxy:
   # -- The path to the docker image. Must have a path to your private docker registry
   image: on-premise/tiles-api-proxy
   # -- Tag with application version
-  tag: v1.0.0
+  tag: v4.19.0
 
   containerPort: 5000
   timeout: 5s
@@ -55,7 +55,7 @@ api:
   # -- The path to the docker image. Must have a path to your private docker registry
   image: on-premise/tiles-api
   # -- Tag with application version
-  tag: v1.0.0
+  tag: v4.19.0
   pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
@@ -127,7 +127,7 @@ importer:
   # -- The path to the docker image. Must have a path to your private docker registry
   image: on-premise/tiles-api-importer
   # -- Tag with application version
-  tag: v1.0.0
+  tag: v4.19.0
 
   pullPolicy: IfNotPresent
 
