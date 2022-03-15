@@ -10,7 +10,7 @@ if [[ -z $GIS_PLATFORM_PASS ]] || [[ -z $GIS_PLATFORM_URL ]] || [[ -z $GIS_PLATF
     exit 1
 fi
 
-tileserver_url="${GIS_PLATFORM_TILES_API%/}/tiles?x={2}&y={3}&z={1}&v=1.5&ts=online_sd_ar&layerType=nc"
+tiles_api_url="${GIS_PLATFORM_TILES_API%/}/tiles?x={2}&y={3}&z={1}&v=1.5&ts=online_sd_ar&layerType=nc"
 traffic_url="${GIS_PLATFORM_TRAFFIC_API}/dammam/traffic/{1}/{2}/{3}/speed/0/?1640062200"
 
 cookie=$(mktemp gis-platform.cookie.XXXXX)
@@ -59,7 +59,7 @@ if ! grep --silent -c refreshToken $cookie; then
 fi
 
 echo "Configuring RemoteTileService for 2GIS Basemap"
-jq --arg url "${tileserver_url}" '.urlFormat=$url' layer/tiles_api.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
+jq --arg url "${tiles_api_url}" '.urlFormat=$url' layer/tiles_api.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
 echo "Configuring RemoteTileService for 2GIS Traffic"
 jq --arg url "${traffic_url}" '.urlFormat=$url' layer/tiles_traffic.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
 echo "Configuring LocalTileService for Satellite imagery"
