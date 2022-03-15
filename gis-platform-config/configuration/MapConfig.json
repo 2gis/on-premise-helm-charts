@@ -242,5 +242,9 @@
         "area": "portal"
       }
     }
-  ]
+  ],
+  "settings": {
+    "help": false,
+    "gotoPortal": false
+  }
 }
