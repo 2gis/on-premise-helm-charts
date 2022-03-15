@@ -70,11 +70,6 @@ echo "Configuring Portal"
 $CURL -XPOST -H 'Content-Type: application/json' -d @configuration/PortalConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/portal"
 echo "Configuring map sharing"
 jq --arg url "${GIS_PLATFORM_URL#http*://}" '.connection.ws_url=$url+"/sp/ws/"' configuration/SharedConfig.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/settings?urlPath=/shared"
-echo "Configuring Printing"
-for template in print/*.cshtml; do
-    echo "Uploading template: $template"
-    $CURL -XPOST -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F "template=@${template}" "$GIS_PLATFORM_URL/sp/print/templates?name=$template&rewrite=false"
-done
 
 echo "Setting permissions"
 for layer in layer/*json; do
