@@ -1,9 +1,9 @@
 nginx:
-  image: 
+  image:
     repository: "docker-hub.2gis.ru/navi/mfront"
     tag: "releases-navi-moses-6-2-1-k8s-7278f5be"
   port: 8081
- 
+
 replicaCount: 2
 
 resources:
