@@ -1,13 +1,12 @@
 #!/bin/bash
 
 : ${GIS_PLATFORM_URL:=''}
-: ${GIS_PLATFORM_USER:='superuser'}
 : ${GIS_PLATFORM_PASS:=''}
 : ${GIS_PLATFORM_TILES_API:=''}
 : ${GIS_PLATFORM_TRAFFIC_API:=''}
 
-if [[ -z $GIS_PLATFORM_PASS ]] || [[ -z $GIS_PLATFORM_USER ]] || [[ -z $GIS_PLATFORM_URL ]] || [[ -z $GIS_PLATFORM_TILES_API ]] || [[ -z $GIS_PLATFORM_TRAFFIC_API ]]; then
-    echo -e "\n\nSet GIS_PLATFORM_TRAFFIC_API, GIS_PLATFORM_TILES_API, GIS_PLATFORM_PASS, GIS_PLATFORM_USER and GIS_PLATFORM_URL\n" >&2
+if [[ -z $GIS_PLATFORM_PASS ]] || [[ -z $GIS_PLATFORM_URL ]] || [[ -z $GIS_PLATFORM_TILES_API ]] || [[ -z $GIS_PLATFORM_TRAFFIC_API ]]; then
+    echo -e "\n\nSet GIS_PLATFORM_TRAFFIC_API, GIS_PLATFORM_TILES_API, GIS_PLATFORM_PASS and GIS_PLATFORM_URL\n" >&2
     exit 1
 fi
 
@@ -18,16 +17,40 @@ cookie=$(mktemp evergis.cookie.XXXXX)
 
 CURL="curl -s -S -b $cookie -c $cookie"
 
-login=''
-read -r -d '' login <<-EOF_LOGIN
-{ "username":"$GIS_PLATFORM_USER", "password":"$GIS_PLATFORM_PASS" }
-EOF_LOGIN
+superuser_login=''
+read -r -d '' superuser_login <<-EOF_SUPERUSER_LOGIN
+{ "username":"superuser", "password":"$GIS_PLATFORM_PASS" }
+EOF_SUPERUSER_LOGIN
+
+read -r -d '' admin_account <<-EOF_ADMIN_ACC
+{ "username": "admin", "password":"$GIS_PLATFORM_PASS", "email": "admin_user@example.com", "is_subscribed": false, "namespace": "admin" }
+EOF_ADMIN_ACC
+
+admin_login=''
+read -r -d '' admin_login <<-EOF_ADMIN_LOGIN
+{ "username":"admin", "password":"$GIS_PLATFORM_PASS" }
+EOF_ADMIN_LOGIN
+
 
 set -e
 set -u
 
 echo "Authorizing"
-$CURL -XPOST -H 'Content-Type: application/json' -d "$login" "$GIS_PLATFORM_URL/sp/account/login"
+$CURL -XPOST -H 'Content-Type: application/json' -d "$superuser_login" "$GIS_PLATFORM_URL/sp/account/login"
+
+if ! grep --silent -c refreshToken $cookie; then
+    echo -e "\n\nFailed to get authorization cookie\n" >&2
+    exit 1
+fi
+
+echo "Creating admin user"
+$CURL -XPOST -H 'Content-Type: application/json' -d "$admin_account" "$GIS_PLATFORM_URL/sp/account"
+echo "Adding __superuser role to admin"
+$CURL -XPOST -H 'Content-Type: application/json' -d'{}' "$GIS_PLATFORM_URL/sp/account/user/admin/role/__superuser"
+
+echo "Logging as admin"
+echo "Authorizing"
+$CURL -XPOST -H 'Content-Type: application/json' -d "$admin_login" "$GIS_PLATFORM_URL/sp/account/login"
 
 if ! grep --silent -c refreshToken $cookie; then
     echo -e "\n\nFailed to get authorization cookie\n" >&2
