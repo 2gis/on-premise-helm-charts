@@ -78,29 +78,39 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.keys.endpoint }}"
 - name: CATALOG_KEYS_REQUEST_TIMEOUT
   value: "{{ .Values.keys.requestTimeout }}"
+{{- if .Values.keys.serviceKeys.places }}
 - name: CATALOG_KEYS_SERVICE_PLACES_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.name" . }}
       key: keysServicePlaces
+{{- end }}
+{{- if .Values.keys.serviceKeys.geocoder }}
 - name: CATALOG_KEYS_SERVICE_GEOCODER_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.name" . }}
       key: keysServiceGeocoder
+{{- end }}
+{{- if .Values.keys.serviceKeys.suggest }}
 - name: CATALOG_KEYS_SERVICE_SUGGEST_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.name" . }}
       key: keysServiceSuggest
+{{- end }}
+{{- if .Values.keys.serviceKeys.categories }}
 - name: CATALOG_KEYS_SERVICE_CATEGORIES_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.name" . }}
       key: keysServiceCategories
+{{- end }}
+{{- if .Values.keys.serviceKeys.regions }}
 - name: CATALOG_KEYS_SERVICE_REGIONS_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.name" . }}
       key: keysServiceRegions
+{{- end }}
 {{- end }}
