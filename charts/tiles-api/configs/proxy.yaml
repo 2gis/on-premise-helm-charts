@@ -1,0 +1,26 @@
+{{- with $.Values.proxy }}
+host: 0.0.0.0
+port:  {{ .containerPort }}
+
+log-level: info
+log-format: json
+
+proxy:
+  timeout: {{ .timeout }}
+  heartbeat: 1m
+  target-hosts:
+    - host: http://127.0.0.1:{{ $.Values.api.containerPort }}
+      weight: 100
+
+access:
+  enabled: {{ .access.enabled }}
+  sync-period: 5m
+  host: {{ .access.host }}
+  token: {{ .access.token }}
+
+storage:
+  enabled: false
+
+invalidator:
+  update-interval: 8h
+{{- end }}

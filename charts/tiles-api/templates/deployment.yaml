@@ -70,21 +70,15 @@ spec:
       {{- end }}
 
       containers:
-        - name: {{ include "tiles.name" . }}
-          image: {{ .Values.api.image }}:{{ .Values.api.tag }}
 
-          volumeMounts:
-            - mountPath: "/config"
-              name: config-volume
-
-          ports:
-            - name: http
-              containerPort: 5000
+        {{- with $.Values.proxy }}
+        - name: tiles-api-proxy
+          image: {{ .image }}:{{ .tag }}
 
           readinessProbe:
             httpGet:
               path: /healthcheck
-              port: http
+              port: proxy
             initialDelaySeconds: 30
             timeoutSeconds: 10
             failureThreshold: 3
@@ -92,10 +86,35 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthcheck
-              port: http
+              port: proxy
             initialDelaySeconds: 60
             timeoutSeconds: 10
             failureThreshold: 6
+
+          volumeMounts:
+            - mountPath: "/config"
+              name: config-volume
+
+          ports:
+            - name: proxy
+              containerPort: {{ .containerPort }}
+
+          {{- with .resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          env:
+            - name: CONFIG_PATH
+              value: "/config/proxy.yaml"
+        {{- end }}
+
+        - name: tiles-api
+          image: {{ .Values.api.image }}:{{ .Values.api.tag }}
+
+          volumeMounts:
+            - mountPath: "/config"
+              name: config-volume
 
           {{- with .Values.api.resources }}
           resources:
@@ -109,3 +128,7 @@ spec:
               value: "tiles"
             - name: PEERS_IGNORE
               value: "true"
+            - name: CONFIG_FILE_PATH
+              value: "/config/api.yaml"
+            - name: API_PORT
+              value: "{{ .Values.api.containerPort }}"

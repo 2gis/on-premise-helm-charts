@@ -8,4 +8,4 @@ metadata:
     {{- include "tiles.labels" . | nindent 4 }}
 
 data:
-  {{ (tpl (.Files.Glob "configs/config.yaml").AsConfig $) | nindent 2 }}
+  {{- (tpl (.Files.Glob "configs/*.yaml").AsConfig $) | nindent 2 }}

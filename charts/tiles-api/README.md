@@ -33,6 +33,7 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 |-----|------|---------|-------------|
 | api.affinity | object | `{}` |  |
 | api.annotations | object | `{}` |  |
+| api.containerPort | int | `8000` |  |
 | api.hpa.enabled | bool | `false` |  |
 | api.hpa.maxReplicas | int | `1` |  |
 | api.hpa.minReplicas | int | `1` |  |
@@ -99,6 +100,17 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | importer.writerNum | int | `8` | Number of write processes per import process |
 | manifestPath | string | `"manifests/1635402744.json"` | Path to the manifest in S3-like storage. The manifest is downloaded via the dgctl utility |
 | name | string | `"tiles-api"` |  |
+| proxy.access.enabled | bool | `false` | Flag to enable verification access key |
+| proxy.access.host | string | `"http://keys-api.localhost"` | Host for Keys API service |
+| proxy.access.token | string | `""` | Service key for Keys API |
+| proxy.containerPort | int | `5000` |  |
+| proxy.image | string | `"on-premise/tiles-api-proxy"` | The path to the docker image. Must have a path to your private docker registry |
+| proxy.resources.limits.cpu | int | `1` |  |
+| proxy.resources.limits.memory | string | `"512Mi"` |  |
+| proxy.resources.requests.cpu | string | `"50m"` |  |
+| proxy.resources.requests.memory | string | `"128Mi"` |  |
+| proxy.tag | string | `"v1.0.0"` | Tag with application version |
+| proxy.timeout | string | `"5s"` |  |
 | serviceName | string | `"tiles-api-webgl"` |  |
 | type | string | `"web"` |  |
 
