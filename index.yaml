@@ -62,6 +62,21 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/gis-platform-0.0.1/gis-platform-0.0.1.tgz
     version: 0.0.1
+  keys:
+  - apiVersion: v2
+    appVersion: 1.23.5
+    created: "2022-03-15T13:08:15.667331012Z"
+    description: A Helm chart for Kubernetes to deploy API Keys service
+    digest: 5b66436484730f674fe669f6c69d465833653f08e7d87a393a9e5413543897c6
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: keys
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/keys-1.0.0/keys-1.0.0.tgz
+    version: 1.0.0
   mapgl-js-api:
   - apiVersion: v2
     appVersion: 0.0.301
@@ -206,4 +221,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tiles-api-1.0.0/tiles-api-1.0.0.tgz
     version: 1.0.0
-generated: "2022-03-12T06:01:05.196241898Z"
+generated: "2022-03-15T13:08:15.667370612Z"
