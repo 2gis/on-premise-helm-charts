@@ -1,0 +1,72 @@
+{{- if .Values.install.apps -}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "keys.redis.name" . }}
+  {{- with .Values.redis.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "keys.redis.labels" . | nindent 4 }}
+    {{- with .Values.redis.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  serviceName: {{ include "keys.redis.name" . }}
+  selector:
+    matchLabels:
+      {{- include "keys.redis.labels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.redis.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "keys.redis.labels" . | nindent 8 }}
+        {{- with .Values.redis.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      volumes:
+        - configMap:
+            name: {{ include "keys.redis.name" . }}
+          name: conf
+      containers:
+        - name: redis
+          image: {{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command:
+            - redis-server
+            - {{ .Values.redis.configPath }}
+          ports:
+            - containerPort: 6237
+          readinessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+          resources:
+            {{- toYaml .Values.redis.resources | nindent 12 }}
+          volumeMounts:
+            - name: conf
+              mountPath: {{ .Values.redis.configPath }}
+              subPath: redis.conf
+      {{- with .Values.redis.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.redis.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.redis.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

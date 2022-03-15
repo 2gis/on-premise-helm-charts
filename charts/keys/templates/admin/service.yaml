@@ -1,0 +1,23 @@
+{{- if .Values.install.apps -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "keys.admin.name" . }}
+  {{- with .Values.admin.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "keys.admin.labels" . | nindent 4 }}
+    {{- with .Values.admin.service.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.admin.service.type }}
+  ports:
+    - port: {{ .Values.admin.service.port }}
+      name: http
+      targetPort: http
+  selector:
+    {{- include "keys.admin.labels" . | nindent 4 }}
+{{- end }}

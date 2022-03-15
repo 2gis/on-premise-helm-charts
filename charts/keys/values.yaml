@@ -1,0 +1,187 @@
+install:
+  apps: true
+  data: true
+
+imagePullSecrets: {}
+imagePullPolicy: IfNotPresent
+
+backend:
+  image:
+    repository: ""
+    tag: "1.23.5"
+
+admin:
+  image:
+    repository: ""
+    tag: "1.0.0"
+
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 300m
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 384Mi
+
+  apiUrl: "https://api.url/admin/v1"
+  appHost: "https://app.host"
+
+  annotations: {}
+  labels: {}
+
+  podAnnotations: {}
+  podLabels: {}
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+
+  ingress: {}
+
+api:
+  adminUsers: ""  # username1:password1,username2:password2
+
+  replicas: 1
+
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 256Mi
+
+  annotations: {}
+  labels: {}
+
+  podAnnotations: {}
+  podLabels: {}
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+
+  ingress: {}
+
+import:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+  nodeSelector: {}
+
+migrate:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+  nodeSelector: {}
+
+tasker:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+  delay: 30s
+
+  annotations: {}
+  labels: {}
+
+  podAnnotations: {}
+  podLabels: {}
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
+redis:
+  image:
+    repository: redis
+    tag: 6.2.6-alpine
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi
+    limits:
+      cpu: 1
+      memory: 256Mi
+
+  port: 6379
+  configPath: /opt/redis.conf
+
+  annotations: {}
+  labels: {}
+
+  podAnnotations: {}
+  podLabels: {}
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
+db:
+  ro:
+    host: localhost
+    port: 5432
+    name: keys
+    username: keys
+    password: secret
+
+  rw:
+    host: localhost
+    port: 5432
+    name: keys
+    username: keys
+    password: secret
+
+ldap:
+  host: 2gis.local
+  port: 3268
+
+  useStartTLS: false
+  useLDAPS: false
+  skipServerCertificateVerify: false
+  serverName: ""
+  clientCertificatePath: ""
+  clientKeyPath: ""
+  rootCertificateAuthoritiesPath: ""
+
+  bind:
+    dn: user
+    password: secret
+  search:
+    baseDN: "dc=2gis"
+    filter: "(&(objectClass=user)(sAMAccountName=%s))"
