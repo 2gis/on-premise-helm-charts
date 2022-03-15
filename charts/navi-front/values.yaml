@@ -88,4 +88,3 @@ affinity: {}
 
 front:
   port: 8080
-  

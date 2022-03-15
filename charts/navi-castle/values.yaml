@@ -93,7 +93,7 @@ persistentVolume:
   size: 5Gi
 
 castle:
-  image: 
+  image:
     repository: 2gis/castle
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.

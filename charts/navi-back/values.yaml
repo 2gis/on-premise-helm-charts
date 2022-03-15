@@ -40,7 +40,7 @@ service:
   type: ClusterIP
   port: 80
   annotations: {}
-  labels: 
+  labels:
 
 ingress:
   enabled: false
@@ -93,7 +93,3 @@ podDisruptionBudget: {}
 
 naviback:
   app_port: 8080
-  
-
-
-  
