@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "front.fullname" . }}
+  labels:
+    {{- include "front.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "front.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/configextra: {{ include (print $.Template.BasePath "/extra-config-nginx.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}    
+      {{- end }}
+      labels:
+        {{- include "front.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "front.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes: 
+      - name: {{ include "front.fullname" . }}-configmap
+        configMap:
+          name: {{ include "front.fullname" . }}-configmap
+      {{- if or .Values.serverBlock .Values.locationsBlock }}
+      - name: nginx-extra-path
+        configMap:
+          name: {{ include "front.fullname" . }}-extra-config
+          items:
+          {{- if or .Values.serverBlock }}
+            - key: server-block.conf
+              path: server-block.conf
+          {{- end }}
+          {{- if or .Values.locationsBlock }}
+            - key: locations-block.conf
+              path: locations-block.conf
+          {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: {{ include "front.fullname" . }}-configmap
+            mountPath: /etc/nginx/conf.d/front.conf
+            subPath: front.conf
+          {{- if or .Values.serverBlock .Values.locationsBlock }}
+          - name: nginx-extra-path
+            mountPath: /etc/nginx/conf.d/extra
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+          
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

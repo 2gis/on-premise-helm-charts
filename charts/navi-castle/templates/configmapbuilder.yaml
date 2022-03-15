@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "castle.fullname" . }}-builder-config
+data:
+  config_builder.conf: |-
+    # --------------------------------------------
+    # COMMON CONFIGURATION
+    lock_file_location:'/var/run/2gis/%service%.lock'
+    service_name: 'castle'
+    # LOGGING
+    log_level: 'DEBUG'
+    log_location:'/var/log/castle-%service%.log'
+    # PATHS AND FILE PROPERTIES
+    # owner for result files
+    owner: 'root:root'
+    # path to store city data
+    data_destination_dir: {{ .Values.castle.castle_data_path | quote }}
+    # --------------------------------------------
+    # CONFIGURATION BUILDER ONLY
+    # BUILDING CITY CONFIGURATION FROM TEMPLATE
+    # path to conf files and templates
+    work_dir: '{{ .Values.castle.castle_data_path }}'
+    # path to store temporary configs
+    tmp_dir: '/opt/castle/tmp/'
+    templates:
+    {
+        # template file name in work_dir: 'full path to result destination'
+        'cities_template': '{{ .Values.castle.castle_data_path }}/cities.conf'
+    }
+    cities_file: 'cities.conf'
+    cities_zip_file: 'cities.conf.zip'
+    index_file: 'index.json'
+    index_zip_file: 'index.json.zip'
+    # UPDATING CITY DATA
+    s3:
+    {
+    server: '{{ .Values.castle.s3_server }}',
+    bucket: '{{ .Values.castle.s3_bucket }}',
+    login: '{{ .Values.castle.s3_login }}',
+    pwd: '{{ .Values.castle.s3_password }}',
+    header: 'Last-Modified',
+    }
+    manifest:
+    {
+        pattern: '/manifests/',
+        service: 'routing',
+    }
+    # --------------------------------------------
+    # DATA PACKAGE
+    packages:
+    {
+        remote_name: '%path%',
+        remote_dir: '',
+        local_name: '%issue-month%_%timestamp%.2gis',
+        local_dir: 'packages/%project%',
+        unpack: 'tar',
+        meta: '%project%.json',
+        store_period: 'month'
+    }
+  cities_template: |-
+    [
+    {% for project in projects %}
+        {
+            "name" : "{{`{{project.name}}`}}",
+            "id" : {{`{{project.id}}`}},
+            "country" : "{{`{{project.country}}`}}",
+            "time_zone" : "{{`{{project.time_zone}}`}}",
+            "bound" : "{{`{{project.wkt}}`}}",
+            "centroid" : "POINT({{`{{project.centroid}}`}})"
+        },{% endfor %}
+        {
+        }
+    ]
+ 

@@ -1,0 +1,13 @@
+apiVersion: v2
+name: navi-router
+description: Navi router Helm chart for Kubernetes
+type: application
+keywords:
+  - navi
+  - router
+version: 0.1.0
+appVersion: "6.3.0"
+maintainers:
+  - name: 2gis
+    url: https://github.com/2gis
+    email: on-premise@2gis.com

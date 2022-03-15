@@ -1,0 +1,61 @@
+{{- range $i, $e := until ( .Values.replicaCount | int ) }}
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "castle.fullname" $ }}-cronjob-{{ $i }}
+  labels:
+    {{- include "castle.labels" $ | nindent 4 }}
+spec:
+  schedule: "{{ $.Values.cron.schedule }}"
+  concurrencyPolicy: {{ $.Values.cron.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ $.Values.cron.successfulJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+        {{- include "castle.selectorLabels" $ | nindent 12 }}
+        spec:
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: statefulset.kubernetes.io/pod-name
+                    operator: In
+                    values:
+                    - {{ include "castle.fullname" $ }}-{{ $i }} 
+                topologyKey: "kubernetes.io/hostname"
+          restartPolicy: OnFailure
+          volumes:
+          - name: {{ include "castle.fullname" $ }}-pvc
+            persistentVolumeClaim:
+              claimName: {{ include "castle.fullname" $ }}-pvc-{{ include "castle.fullname" $ }}-{{ $i }} 
+          - name: {{ include "castle.fullname" $ }}-builder-config
+            configMap:
+              name: {{ include "castle.fullname" $ }}-builder-config           
+          containers:
+            - name: castle-cron
+              image: "{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag | default $.Chart.AppVersion }}"
+              imagePullPolicy: {{ $.Values.castle.image.pullPolicy }} 
+              command: [ "/opt/configuration_builder" ]
+              args: 
+              - --config 
+              - /opt/config_builder.conf
+              - --service=package 
+              volumeMounts:
+              - name: {{ include "castle.fullname" $ }}-builder-config
+                mountPath: /opt/config_builder.conf
+                subPath: config_builder.conf
+              - name: {{ include "castle.fullname" $ }}-builder-config
+                mountPath: {{ $.Values.castle.castle_data_path }}/cities_template
+                subPath: cities_template
+              - name: {{ include "castle.fullname" $ }}-pvc
+                mountPath: {{ $.Values.castle.castle_data_path }}
+              resources:
+                {{- toYaml $.Values.resources | nindent 16 }}
+          
+{{- end -}}
+
+

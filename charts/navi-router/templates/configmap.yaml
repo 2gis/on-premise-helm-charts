@@ -1,0 +1,69 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "router.fullname" . }}-configmap
+data:
+  router.conf: |
+    {
+      "log": {
+        "logger_name": "router",
+        "file_prefix": "../../../../",
+        "enable_syslog": true,
+        "level": "Warning",
+        "disabled_tags_": [
+          "http",
+          "UploadData",
+          "Download"
+        ],
+        "format": "Json"
+      },
+      "service": {
+        "pid_file": "/var/run/2gis/router.pid"
+      },
+      "http": {
+        "port": 8080,
+        "handlers_number": 20,
+        "queue_size" : 256,
+        "log_verbose": false,
+        "max_process_time": 20,
+        "response_timelimit": 60,
+        "request_timeout": 60,
+        "server" : "0.0.0.0"
+      },
+      "context": {
+        "variables": {
+          "LOCAL_ETC": "/src/etc",
+          "REMOTE_PATH": "{{ required "A valid .Values.app_castle_host  entry required!" .Values.router.app_castle_host }}",
+          "LOCAL_PATH": "/var/lib/2gis/castle/"
+        },
+        "cities": {
+          "update_period": 600,
+          "nodes": [
+            "http://{REMOTE_PATH}/cities.conf.zip"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
+        "rules": {
+          "update_period": 600,
+          "nodes": [
+            "file://{LOCAL_ETC}/rules.conf"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
+        "server_info": {
+          "server_id": "{{ include "router.fullname" . }}"
+        }
+        {{ if .Values.router.additional_sections }}
+        {{ println "," }}
+         {{- include "tplvalues.render" ( dict "value" .Values.router.additional_sections "context" $) | nindent 8 }}
+        {{ end }}
+      }
+    }
+  rules.conf: |-
+{{ .Files.Get "rules.conf" | indent 4 }}
+

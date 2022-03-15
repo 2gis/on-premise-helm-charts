@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "router.fullname" . }}
+  labels:
+    {{- include "router.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- toYaml .Values.strategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "router.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}    
+      {{- end }}
+      labels:
+        {{- include "router.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "router.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes: 
+      - name: {{ include "router.fullname" . }}-configmap
+        configMap:
+          name: {{ include "router.fullname" . }}-configmap
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: {{ include "router.fullname" . }}-configmap
+            mountPath: /src/etc/router.conf
+            subPath: router.conf
+          - name: {{ include "router.fullname" . }}-configmap
+            mountPath: /src/etc/rules.conf
+            subPath: rules.conf
+          ports:
+            - name: http
+              containerPort: {{ .Values.router.app_port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /heartbeat
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+          readinessProbe:
+            httpGet:
+              path: /successfulwork
+              port: http
+            initialDelaySeconds: 75
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}   
+      terminationGracePeriodSeconds: {{ .Values.termination_grace_period_seconds | default 60 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

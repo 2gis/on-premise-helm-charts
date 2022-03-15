@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "castle.fullname" . }}-castle-nginx-config
+data:
+  castle.conf: |
+    server {
+        listen {{ .Values.nginx.port }} default_server;
+        server_name _;
+
+        location / {
+            root {{ .Values.castle.castle_data_path }};
+            autoindex on;
+        }
+
+        location /healthcheck {
+          return 200 "Ok!";
+        }
+    }
+ 

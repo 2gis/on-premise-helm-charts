@@ -1,0 +1,38 @@
+nginx:
+  image: 
+    repository: "docker-hub.2gis.ru/navi/mfront"
+    tag: "releases-navi-moses-6-2-1-k8s-7278f5be"
+  port: 8081
+ 
+replicaCount: 2
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 512Mi
+  requests:
+    cpu: 500m
+    memory: 128Mi
+
+castle:
+  image: 
+    repository: docker-hub.2gis.ru/navi/castle
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "master-33ba1c9f"
+  castle_data_path: /opt/castle/data/
+  s3_server: "localhost:3777"
+  s3_bucket: 'routing'
+  s3_login: 'user'
+  s3_password: 'password'
+
+persistentVolume:
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ceph-csi-rbd
+  size: 5Gi
+
+cron:
+  schedule: "*/10 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3

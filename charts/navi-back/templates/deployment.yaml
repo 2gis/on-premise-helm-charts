@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "naviback.fullname" . }}
+  labels:
+    {{- include "naviback.labels" . | nindent 4 }}
+    rule: {{ .Values.naviback.app_rule | default "" | quote  }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- include "tplvalues.render" ( dict "value" .Values.strategy "context" $) | nindent 6 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "naviback.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}    
+      {{- end }}
+      labels:
+        {{- include "naviback.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "naviback.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes: 
+      - name: {{ include "naviback.fullname" . }}-configmap
+        configMap:
+          name: {{ include "naviback.fullname" . }}-configmap
+      containers:
+        - name: {{ include "naviback.fullname" . }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/usr/sbin/2gis/mosesd/mosesd" ]
+          args: 
+           - --config 
+           - /etc/2gis/mosesd/navi-back.conf
+          volumeMounts:
+          - name: {{ include "naviback.fullname" . }}-configmap
+            mountPath: /etc/2gis/mosesd/navi-back.conf
+            subPath: navi-back.conf
+          - name: {{ include "naviback.fullname" . }}-configmap
+            mountPath: /etc/2gis/mosesd/rules.conf
+            subPath: rules.conf
+          ports:
+            - name: http
+              containerPort: {{ .Values.naviback.app_port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /heartbeat
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+          readinessProbe:
+            httpGet:
+              path: /successfulwork
+              port: http
+            initialDelaySeconds: 75
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: RULE
+            value: {{ .Values.naviback.app_rule | default "" | quote  }}
+          - name: PROJECT
+            value: {{ .Values.app_project | default "" | quote }}
+          
+      terminationGracePeriodSeconds: {{ .Values.termination_grace_period_seconds | default 60 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
