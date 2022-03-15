@@ -13,7 +13,7 @@ fi
 tileserver_url="${GIS_PLATFORM_TILES_API%/}/tiles?x={2}&y={3}&z={1}&v=1.5&ts=online_sd_ar&layerType=nc"
 traffic_url="${GIS_PLATFORM_TRAFFIC_API}/dammam/traffic/{1}/{2}/{3}/speed/0/?1640062200"
 
-cookie=$(mktemp evergis.cookie.XXXXX)
+cookie=$(mktemp gis-platform.cookie.XXXXX)
 
 CURL="curl -s -S -b $cookie -c $cookie"
 
@@ -44,12 +44,13 @@ if ! grep --silent -c refreshToken $cookie; then
 fi
 
 echo "Creating admin user"
-$CURL -XPOST -H 'Content-Type: application/json' -d "$admin_account" "$GIS_PLATFORM_URL/sp/account"
+$CURL -XPOST -H 'Content-Type: application/json' -d "$admin_account" "$GIS_PLATFORM_URL/sp/account/user"
+echo "Creating admin namespace"
+$CURL -XPOST -H 'Content-Type: application/json' -d'{}' "$GIS_PLATFORM_URL/sp/namespaces?userName=admin&adjustName=true"
 echo "Adding __superuser role to admin"
 $CURL -XPOST -H 'Content-Type: application/json' -d'{}' "$GIS_PLATFORM_URL/sp/account/user/admin/role/__superuser"
 
 echo "Logging as admin"
-echo "Authorizing"
 $CURL -XPOST -H 'Content-Type: application/json' -d "$admin_login" "$GIS_PLATFORM_URL/sp/account/login"
 
 if ! grep --silent -c refreshToken $cookie; then
@@ -60,15 +61,15 @@ fi
 echo "Configuring RemoteTileService for 2GIS Basemap"
 jq --arg url "${tileserver_url}" '.urlFormat=$url' layer/tiles_api.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
 echo "Configuring RemoteTileService for 2GIS Traffic"
-jq --arg url "${traffic_url}" '.urlFormat=$url'  layer/tiles_traffic.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
+jq --arg url "${traffic_url}" '.urlFormat=$url' layer/tiles_traffic.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
 echo "Configuring LocalTileService for Satellite imagery"
 $CURL -XPOST -H 'Content-Type: application/json' -d @layer/s3_satellite.json "$GIS_PLATFORM_URL/sp/layers?type=LocalTileService"
 echo "Configuring Map"
-$CURL -XPOST -H 'Content-Type: application/json' -d @config/MapConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/map"
+$CURL -XPOST -H 'Content-Type: application/json' -d @configuration/MapConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/map"
 echo "Configuring Portal"
-$CURL -XPOST -H 'Content-Type: application/json' -d @config/PortalConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/portal"
+$CURL -XPOST -H 'Content-Type: application/json' -d @configuration/PortalConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/portal"
 echo "Configuring map sharing"
-jq --arg url "${GIS_PLATFORM_URL#http*://}" '.connection.ws_url=$url+"/sp/ws/"' config/SharedConfig.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/settings?urlPath=/shared"
+jq --arg url "${GIS_PLATFORM_URL#http*://}" '.connection.ws_url=$url+"/sp/ws/"' configuration/SharedConfig.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/settings?urlPath=/shared"
 echo "Configuring Printing"
 for template in print/*.cshtml; do
     echo "Uploading template: $template"
@@ -78,7 +79,8 @@ done
 echo "Setting permissions"
 for layer in layer/*json; do
     layer_name=$(jq --raw-output .name $layer)
-    acl='{"data":[{"role":"__superuser","permissions":"read,write,configure"},{"role":"__admin","permissions":"read,write,configure"},{"role":"__public","permissions":"read"}]}'
+    acl='{"data":[{"role":"__admin","permissions":"read,write,configure"},{"role":"__public","permissions":"read"}]}'
     $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$acl" "$GIS_PLATFORM_URL/sp/layers/$layer_name/permissions"
+done
 
 rm $cookie
