@@ -136,7 +136,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: ZUUL_LDAP_CLIENT_KEY_PATH
   value: "{{ .Values.ldap.clientKeyPath }}"
 - name: ZUUL_LDAP_ROOT_CERTIFICATE_AUTHORITIES_PATH
-  value: "{{ .Values.ldap.search.baseDN }}"
+  value: "{{ .Values.ldap.rootCertificateAuthoritiesPath }}"
 - name: ZUUL_LDAP_BIND_DN
   value: "{{ .Values.ldap.bind.dn }}"
 - name: ZUUL_LDAP_BIND_PASSWORD
