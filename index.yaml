@@ -3,6 +3,20 @@ entries:
   catalog-api:
   - apiVersion: v2
     appVersion: 3.557.1
+    created: "2022-03-16T16:26:03.52247559Z"
+    description: A Helm chart for Kubernetes to deploy Catalog APIs
+    digest: 50f4c6198bbaf189498385c5657c35eb4c3cbc521d8f2c8cedc4999f6db0dd3e
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: catalog-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/catalog-api-1.0.4/catalog-api-1.0.4.tgz
+    version: 1.0.4
+  - apiVersion: v2
+    appVersion: 3.557.1
     created: "2022-03-15T14:36:04.842704215Z"
     description: A Helm chart for Kubernetes to deploy Catalog APIs
     digest: 25271020b407152ccd2599b47d5c222b50ccd4eecd43518388261fa4e747f936
@@ -263,4 +277,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tiles-api-1.0.0/tiles-api-1.0.0.tgz
     version: 1.0.0
-generated: "2022-03-16T08:27:25.079894712Z"
+generated: "2022-03-16T16:26:03.522524991Z"
