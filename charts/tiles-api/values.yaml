@@ -26,14 +26,41 @@ cassandra:
   # -- Consistency level for database write queries. All possible values can be viewed by [link](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels)
   consistencyLevelWrite: LOCAL_QUORUM
 
+proxy:
+  # -- The path to the docker image. Must have a path to your private docker registry
+  image: on-premise/tiles-api-proxy
+  # -- Tag with application version
+  tag: v4.19.0
+
+  containerPort: 5000
+  timeout: 5s
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
+
+  access:
+    # -- Flag to enable verification access key
+    enabled: false
+    # -- Host for Keys API service
+    host: http://keys-api.localhost
+    # -- Service key for Keys API
+    token: ""
+    syncPeriod: 2m
+
 api:
   # -- The path to the docker image. Must have a path to your private docker registry
   image: on-premise/tiles-api
   # -- Tag with application version
-  tag: v1.0.0
+  tag: v4.19.0
   pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
+  containerPort: 8000
 
   labels: {}
   annotations: {}
@@ -101,7 +128,7 @@ importer:
   # -- The path to the docker image. Must have a path to your private docker registry
   image: on-premise/tiles-api-importer
   # -- Tag with application version
-  tag: v1.0.0
+  tag: v4.19.0
 
   pullPolicy: IfNotPresent
 
@@ -114,7 +141,7 @@ importer:
       memory: 256Mi
 
   # -- Number of parallel import processes (spawned jobs)
-  workerNum: 20
+  workerNum: 6
 
   # -- Number of write processes per import process
   writerNum: 8

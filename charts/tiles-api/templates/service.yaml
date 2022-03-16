@@ -19,8 +19,8 @@ spec:
   type: {{ .type }}
   ports:
     - port: {{ .port }}
-      name: http
-      targetPort: http
+      name: proxy
+      targetPort: proxy
       {{- if .nodePort }}
       nodePort: {{ .nodePort }}
       {{- end }}
