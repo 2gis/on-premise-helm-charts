@@ -78,6 +78,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.keys.endpoint }}"
 - name: CATALOG_KEYS_REQUEST_TIMEOUT
   value: "{{ .Values.keys.requestTimeout }}"
+- name: CATALOG_KEYS_SERVICE_CATALOG_KEY
+  value: ""
 {{- if .Values.keys.serviceKeys.places }}
 - name: CATALOG_KEYS_SERVICE_PLACES_KEY
   valueFrom:
