@@ -50,6 +50,7 @@ proxy:
     host: http://keys-api.localhost
     # -- Service key for Keys API
     token: ""
+    syncPeriod: 2m
 
 api:
   # -- The path to the docker image. Must have a path to your private docker registry
