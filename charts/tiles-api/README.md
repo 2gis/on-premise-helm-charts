@@ -64,7 +64,7 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | api.service.type | string | `"ClusterIP"` |  |
 | api.strategy.rollingUpdate.maxSurge | int | `1` |  |
 | api.strategy.rollingUpdate.maxUnavailable | int | `0` |  |
-| api.tag | string | `"v1.0.0"` | Tag with application version |
+| api.tag | string | `"v4.19.0"` | Tag with application version |
 | api.terminationGracePeriodSeconds | int | `30` |  |
 | api.tolerations | object | `{}` |  |
 | api.vpa.enabled | bool | `false` |  |
@@ -90,9 +90,9 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | importer.storage.bucket | string | `"backet"` |  |
 | importer.storage.host | string | `"s3host.local"` |  |
 | importer.storage.secretKey | string | `"secretKey"` |  |
-| importer.tag | string | `"v1.0.0"` | Tag with application version |
+| importer.tag | string | `"v4.19.0"` | Tag with application version |
 | importer.tolerations | object | `{}` |  |
-| importer.workerNum | int | `20` | Number of parallel import processes (spawned jobs) |
+| importer.workerNum | int | `6` | Number of parallel import processes (spawned jobs) |
 | importer.workerResources.limits.cpu | int | `2` |  |
 | importer.workerResources.limits.memory | string | `"2048Mi"` |  |
 | importer.workerResources.requests.cpu | string | `"256m"` |  |
@@ -109,7 +109,7 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | proxy.resources.limits.memory | string | `"512Mi"` |  |
 | proxy.resources.requests.cpu | string | `"50m"` |  |
 | proxy.resources.requests.memory | string | `"128Mi"` |  |
-| proxy.tag | string | `"v1.0.0"` | Tag with application version |
+| proxy.tag | string | `"v4.19.0"` | Tag with application version |
 | proxy.timeout | string | `"5s"` |  |
 | serviceName | string | `"tiles-api-webgl"` |  |
 | type | string | `"web"` |  |

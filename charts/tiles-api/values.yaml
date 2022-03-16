@@ -140,7 +140,7 @@ importer:
       memory: 256Mi
 
   # -- Number of parallel import processes (spawned jobs)
-  workerNum: 20
+  workerNum: 6
 
   # -- Number of write processes per import process
   writerNum: 8
