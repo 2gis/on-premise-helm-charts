@@ -81,17 +81,6 @@ tolerations: []
 
 affinity: {}
 
-cron:
-  schedule: "*/10 * * * *"
-  concurrencyPolicy: Forbid
-  successfulJobsHistoryLimit: 3
-
-persistentVolume:
-  accessModes:
-    - ReadWriteOnce
-  storageClass: ceph-csi
-  size: 5Gi
-
 castle:
   image:
     repository: 2gis/castle
