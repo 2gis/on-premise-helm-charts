@@ -5,13 +5,13 @@
       "options": {
         "items": [
           {
-            "name": "2gis",
+            "name": "admin.2gis",
             "theme": "light",
             "title": "2GIS Basemap",
             "preview": ""
           },
           {
-            "name": "satellite_imagery",
+            "name": "admin.satellite_imagery",
             "theme": "light",
             "title": "Satellite Imagery",
             "preview": ""

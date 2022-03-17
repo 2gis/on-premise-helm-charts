@@ -99,7 +99,7 @@
             }
         ]
     },
-    "name": "satellite_imagery",
+    "name": "admin.satellite_imagery",
     "alias": "Satellite Imagery",
     "acl": {
         "data": [

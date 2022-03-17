@@ -13,6 +13,6 @@
         "traffic9"
     ],
     "allowDirectAccess": true,
-    "name": "2gis_traffic",
+    "name": "admin.2gis_traffic",
     "alias": "2GIS Traffic"
 }

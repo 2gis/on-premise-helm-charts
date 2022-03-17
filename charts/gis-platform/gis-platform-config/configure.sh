@@ -72,7 +72,7 @@ echo "Configuring map sharing"
 jq --arg url "${GIS_PLATFORM_URL#http*://}" '.connection.ws_url=$url+"/sp/ws/"' configuration/SharedConfig.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/settings?urlPath=/shared"
 
 echo "Setting permissions"
-for layer in layer/*json; do
+for layer in layer/*.json; do
     layer_name=$(jq --raw-output .name $layer)
     acl='{"data":[{"role":"__admin","permissions":"read,write,configure"},{"role":"__public","permissions":"read"}]}'
     $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$acl" "$GIS_PLATFORM_URL/sp/layers/$layer_name/permissions"
