@@ -1,0 +1,127 @@
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "castle.fullname" . }}
+  {{- if .Values.annotations }}
+  annotations:
+    {{- toYaml .Values.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "castle.labels" . | nindent 4 }}
+  {{- if .Values.labels }}
+    {{- toYaml .Values.labels | nindent 4 }}
+  {{- end }}
+spec:
+  serviceName: {{ include "castle.fullname" . }}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "castle.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/configbuilder: {{ include (print $.Template.BasePath "/configmapbuilder.yaml") . | sha256sum }}
+        checksum/confignginx: {{ include (print $.Template.BasePath "/configmapnginx.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}    
+      {{- end }}
+      labels:
+        {{- include "castle.selectorLabels" . | nindent 8 }}
+      {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      volumes:
+        - name: {{ include "castle.fullname" . }}-builder-config
+          configMap:
+            name: {{ include "castle.fullname" . }}-builder-config
+        - name: {{ include "castle.fullname" . }}-castle-nginx-config
+          configMap:
+            name: {{ include "castle.fullname" . }}-castle-nginx-config
+        {{- if (not .Values.persistentVolume.enabled) }}
+        - name: {{ include "castle.fullname" . }}-data
+          emptyDir: {}
+        {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      initContainers:
+        - name: castle-init
+          image: "{{ .Values.castle.image.repository }}:{{ .Values.castle.image.tag | default .Chart.AppVersion }}"
+          command: [ "/opt/configuration_builder" ]
+          args: 
+           - --config 
+           - /opt/config_builder.conf 
+           - --service=package
+          volumeMounts:
+          - name: {{ include "castle.fullname" . }}-builder-config
+            mountPath: /opt/config_builder.conf
+            subPath: config_builder.conf
+          - name: {{ include "castle.fullname" . }}-builder-config
+            mountPath: {{ .Values.castle.castle_data_path }}/cities_template
+            subPath: cities_template
+          {{- if .Values.persistentVolume.enabled }}
+          - name: {{ include "castle.fullname" . }}-pvc
+            mountPath: {{ .Values.castle.castle_data_path }}
+          {{- else }}
+          - name: {{ include "castle.fullname" . }}-data
+            mountPath: {{ .Values.castle.castle_data_path }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      containers:
+        - name: castle-nginx
+          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag | default .Chart.AppVersion }}"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          - name: {{ include "castle.fullname" . }}-castle-nginx-config
+            mountPath: /etc/nginx/conf.d/castle.conf
+            subPath: castle.conf
+          {{- if .Values.persistentVolume.enabled }}
+          - name: {{ include "castle.fullname" . }}-pvc
+            mountPath: {{ .Values.castle.castle_data_path }}
+          {{- else }}
+          - name: {{ include "castle.fullname" . }}-data
+            mountPath: {{ .Values.castle.castle_data_path }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.nginx.port }}
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  {{- if .Values.persistentVolume.enabled }} 
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ include "castle.fullname" . }}-pvc
+      spec:
+        {{- with .Values.persistentVolume.accessModes }}
+        accessModes:
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
+        storageClassName: {{ .Values.persistentVolume.storageClass }}
+        resources:
+          requests:
+            storage: {{ .Values.persistentVolume.size }}
+  {{- end }}

@@ -1,0 +1,346 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "naviback.fullname" . }}-configmap
+data:
+  navi-back.conf: |
+    {
+      "log": {
+        "logger_name": "navi-back",
+        "file_prefix": "../../../../",
+        "enable_syslog": true,
+        "level": "Info",
+        "disabled_tags_": [
+          "http",
+          "UploadData",
+          "Download",
+          "ProjectContext"
+        ],
+        "format": "Json",
+        "enable_mirroring": true
+      },
+      "service": {
+        "pid_file": "/var/run/2gis/navi-back.pid"
+      },
+      "http": {
+        "port": {{ .Values.naviback.app_port }},
+        "handlers_number": 20,
+        "log_verbose": false,
+        "max_process_time": 20,
+        "response_timelimit": 60,
+        "request_timeout": 60,
+        "server": "0.0.0.0"
+      },
+      "context": {
+        "variables": {
+          "LOCAL_PATH": "/opt/castle",
+          "LOCAL_ETC": "/etc/2gis/mosesd",
+          "REMOTE_PATH": "{{ .Values.naviback.app_castle_host }}",
+          "REMOTE_FORECAST" : "{{ .Values.naviback.forecast_host }}",
+          "REMOTE_ECA" : "{{ .Values.naviback.eca_host }}"
+        },
+      "rules": {
+        "update_period" : 0,
+          "nodes": [
+            "file://{LOCAL_ETC}/rules.conf"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "cities": {
+          "update_period": 0,
+          "nodes": [
+            "http://{REMOTE_PATH}/cities.conf.zip"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "index": {
+          "update_period": 600,
+          "nodes": [
+            "http://{REMOTE_PATH}/index.json.zip"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "speed_index" :
+        {
+            "update_period" : 20,
+            "nodes" :
+            [
+                "http://{REMOTE_ECA}/traffic/moses/speeds5.json"
+            ],
+            "timeout_seconds":
+            {
+                "count": 60
+            }
+        },
+        "forecasted_speeds_index" :
+        {
+            "update_period" : 20,
+            "nodes" :
+            [
+                "http://{REMOTE_FORECAST}/index.json"
+            ],
+            "timeout_seconds": 
+            {
+                "count": 30
+            }
+        },
+        "forecasted_speeds" :
+        {
+            "update_period" : 0,
+            "nodes" :
+            [
+                "http://{REMOTE_FORECAST}/"
+            ],
+            "timeout_seconds": 
+            {
+                "count": 30
+            }
+        },
+        "eta_correction_cores" :
+        {
+            "update_period" : 0,
+            "nodes" :
+            [
+                "http://{REMOTE_PATH}/"
+            ],
+            "timeout_seconds": 
+            {
+                "count": 60
+            }
+        },
+        "taxi_referers":
+        {
+            "update_period" : 3600,
+             "nodes" :
+            [
+                "http://{REMOTE_PATH}/options/taxi_referers.json"
+            ],
+            "timeout_seconds": 
+            {
+                "count": 360
+            }
+        },
+        "ctx_options": {
+          "update_period": 0,
+          "nodes": [
+            "http://{REMOTE_PATH}/options/ctx_config.json"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "car_options": {
+          "update_period": 0,
+          "nodes": [
+            "http://{REMOTE_PATH}/options/carrouting.json"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "country_car_options": {
+          "update_period": 0,
+          "nodes": [
+            "http://{REMOTE_PATH}/options/{payload}.json"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "project_car_options": {
+          "update_period": 0,
+          "nodes": [
+            "http://{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "routing_resources": {
+          "nodes": [
+            "dir:///usr/share/2gis/moses2-routing-resources/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "packages": {
+          "update_period": 0,
+          "nodes": [
+            "http://{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "restrictions": {
+          "update_period": 0,
+          "nodes": [
+            "http://{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "smatrix": {
+          "update_period": 0,
+          "nodes": [
+            "http://{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "entrances": {
+          "update_period": 0,
+          "nodes": [
+            "http://{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "speed_cams": {
+          "update_period": 0,
+          "nodes": [
+            "http://{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "tugc_users_index" :
+        {
+            "update_period" : 300,
+            "nodes" :
+            [
+                "http://{REMOTE_PATH}/tugc_users.json.zip"
+            ],
+            "timeout_seconds": 
+            {
+                "count": 30
+            }
+        },
+        "tugc_users" :
+        {
+            "update_period" : 0,
+            "nodes" :
+            [
+                "http://{REMOTE_PATH}/"
+            ],
+            "timeout_seconds": 
+            {
+                "count": 30
+            }
+        },
+        "tugc_2gis_index" :
+        {
+            "update_period" : 600,
+            "nodes" :
+            [
+                "http://{REMOTE_PATH}/tugc_2gis.json.zip"
+            ],
+            "timeout_seconds": 
+            {
+                "count": 30
+            }
+        },
+        "tugc_2gis" :
+        {
+            "update_period" : 0,
+            "nodes" :
+            [
+                "http://{REMOTE_PATH}/"
+            ],
+            "timeout_seconds": 
+            {
+                "count": 30
+            }
+        },
+        "online_speeds" :
+        {
+            "update_period" : 0,
+            "max_updated_time_diff_minutes" : 20,
+            "nodes" :
+            [
+                "http://{REMOTE_ECA}/"
+            ],
+            "timeout_seconds":
+            {
+                "count": 30
+            }
+        },
+        {{- if eq .Values.naviback.type "taxi" }}
+            "taxi_speed_index": {
+                "update_period": 20,
+                "nodes": [
+                "http://{REMOTE_ECA}/traffic/moses/speeds5.json"
+                ],
+                "timeout_seconds": {
+                "count": 60
+                }
+                },
+                "online_taxi_speeds" :
+                {
+                  "update_period" : 0,
+                  "max_updated_time_diff_minutes" : 20,
+                  "nodes" :
+                  [
+                    "http://{REMOTE_ECA}/"
+                  ],
+                  "timeout_seconds":
+                  {
+                    "count": 60
+                  }
+                },
+        {{- end }}
+        {{- if .Values.naviback.additional_sections }}
+          {{- include "tplvalues.render" ( dict "value" .Values.naviback.additional_sections "context" $) | nindent 8 }}
+        {{- end }}
+        "server_info": {
+          {{ include "config.serversection" . }}
+          "carrouting_page_cache_size" : 8192,
+          "carrouting_tile_cache_size" : 8192,
+          "carrouting_bit_tile_cache_size" : 2048,
+          "dump_query" : true,
+          "dump_result" : true,
+          "dump_answer" : true,
+          "use_memory_mapped_vfs" : true,
+          "engine_update_period_sec" : 30,
+          "reduce_edges_optimization_flag" : false,
+          {{- if .Values.naviback.server_id }}
+          "server_id" : "{{- include "tplvalues.render" ( dict "value" .Values.naviback.server_id "context" .) }}",
+          {{- else }}
+          "server_id" : "{{- include "naviback.fullname" . }}",
+          {{- end }}
+          "extended_metrics": [ ],
+          "dash_colors": [
+            {
+              "ratio": 2,
+              "class": 0
+            },
+            {
+              "ratio": 3.75,
+              "class": 1
+            },
+            {
+              "ratio": 10,
+              "class": 2
+            },
+            {
+              "ratio": 1000,
+              "class": 5
+            }
+          ]
+        }
+      }
+    }
+  rules.conf: |-
+{{ .Files.Get "rules.conf" | indent 4 }}
