@@ -222,6 +222,76 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/mapgl-js-api-0.0.1/mapgl-js-api-0.0.1.tgz
     version: 0.0.1
+  navi-back:
+  - apiVersion: v2
+    appVersion: 6.3.0
+    created: "2022-03-17T10:44:26.573169821Z"
+    description: Navi backend helm chart for Kubernetes
+    digest: 072614f55a413dbeadab3966b99ed8bdb546447155f6509bcefb4f51d0d5dfe8
+    keywords:
+    - navi
+    - back
+    - backend
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: navi-back
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/navi-back-0.1.0/navi-back-0.1.0.tgz
+    version: 0.1.0
+  navi-castle:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2022-03-17T10:44:26.782765292Z"
+    description: Castle Helm chart for Kubernetes
+    digest: a86fdb8849e2c1a5fd1eec55a094c7bfe77809d83f874faa12895232bea07154
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: navi-castle
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/navi-castle-1.0.0/navi-castle-1.0.0.tgz
+    version: 1.0.0
+  navi-front:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-03-17T10:44:26.958700893Z"
+    description: Navigation front Helm chart for Kubernetes
+    digest: 1ec313ccb6b66688bf00c051dd169ca6cf808cbee34277b741a4ae20bbfe5bc7
+    keywords:
+    - navi
+    - front
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: navi-front
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/navi-front-0.1.0/navi-front-0.1.0.tgz
+    version: 0.1.0
+  navi-router:
+  - apiVersion: v2
+    appVersion: 6.3.0
+    created: "2022-03-17T10:44:27.144162383Z"
+    description: Navi router Helm chart for Kubernetes
+    digest: 419a9c7b684ebdd5bf78027514603ad2435555c96916867b88297820e30d9bb6
+    keywords:
+    - navi
+    - router
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: navi-router
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/navi-router-0.1.0/navi-router-0.1.0.tgz
+    version: 0.1.0
   proxy-traffic-jams:
   - apiVersion: v2
     appVersion: 0.0.1
@@ -295,4 +365,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tiles-api-1.0.0/tiles-api-1.0.0.tgz
     version: 1.0.0
-generated: "2022-03-17T08:22:43.050794808Z"
+generated: "2022-03-17T10:44:27.144209484Z"
