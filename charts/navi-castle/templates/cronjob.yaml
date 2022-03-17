@@ -1,3 +1,4 @@
+{{- if ( and .Values.persistentVolume.enabled .Values.cron.enabled ) }}
 {{- range $i, $e := until ( .Values.replicaCount | int ) }}
 ---
 apiVersion: batch/v1beta1
@@ -28,7 +29,7 @@ spec:
                     - {{ include "castle.fullname" $ }}-{{ $i }} 
                 topologyKey: "kubernetes.io/hostname"
           restartPolicy: OnFailure
-          volumes:
+          volumes:     
           - name: {{ include "castle.fullname" $ }}-pvc
             persistentVolumeClaim:
               claimName: {{ include "castle.fullname" $ }}-pvc-{{ include "castle.fullname" $ }}-{{ $i }} 
@@ -50,12 +51,13 @@ spec:
                 subPath: config_builder.conf
               - name: {{ include "castle.fullname" $ }}-builder-config
                 mountPath: {{ $.Values.castle.castle_data_path }}/cities_template
-                subPath: cities_template
+                subPath: cities_template       
               - name: {{ include "castle.fullname" $ }}-pvc
                 mountPath: {{ $.Values.castle.castle_data_path }}
               resources:
                 {{- toYaml $.Values.resources | nindent 16 }}
           
+{{- end -}}
 {{- end -}}
 
 

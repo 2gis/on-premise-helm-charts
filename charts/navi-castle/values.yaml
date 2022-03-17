@@ -109,3 +109,16 @@ nginx:
   image:
     repository: 2gis/navi-front
     tag: ""
+
+cron:
+  enabled: false
+  schedule: "*/10 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+
+persistentVolume:
+  enabled: false
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ceph-csi-rbd
+  size: 5Gi

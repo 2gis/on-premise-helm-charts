@@ -41,10 +41,12 @@
 | castle.s3_login | string | `""` | S3 login  |
 | castle.s3_password | string | `""` | S3 password |
 | persistentVolume | object | `{}` | Persistent volume definition |
+| persistentVolume.enabled | string | `"false"` | Enable or disable persistent volume claim |
 | persistentVolume.accessModes | array | `[]` | Access modes for PV |
 | persistentVolume.storageClass | string | `""` | Storage class for PV |
 | persistentVolume.size | string | `""` | Size of PV |
 | cron | object | `{}` | Cron job definition |
+| cron.enabled | string | `"false"` | Enable or disable cron | 
 | cron.schedule | string | `""` | Schedule in cron format |
 | cron.concurrencyPolicy | string | `""` | Concurrency policy |
 | cron.concurrencyPolicy | string | `""` | Concurrency policy |
@@ -60,8 +62,8 @@
 ```
 nginx:
   image: 
-    repository: "docker-hub.2gis.ru/navi/mfront"
-    tag: "releases-navi-moses-6-2-1-k8s-7278f5be"
+    repository: "2gis/navi-front"
+    tag: "1.21"
  
 replicaCount: 2
 
@@ -75,10 +77,10 @@ resources:
 
 castle:
   image: 
-    repository: docker-hub.2gis.ru/navi/castle
+    repository: 2gis/navi-castle
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "castle-on-premise-export-11664b4b""
+    tag: "1.0.3"
   castle_data_path: '/opt/castle/data/'
   s3_server: "server:9000"
   s3_bucket: 'routing'
@@ -86,12 +88,14 @@ castle:
   s3_password: 'admin'
 
 persistentVolume:
+  enabled: false
   accessModes:
     - ReadWriteOnce
   storageClass: ceph-csi-rbd
   size: 5Gi
 
 cron:
+  enabled: false
   schedule: "*/10 * * * *"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
