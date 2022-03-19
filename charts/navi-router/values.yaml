@@ -5,9 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: 2gis/router
+  repository: dgis-on-premise/navi-router
   pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: "6.3.0"
 
 imagePullSecrets: []
 nameOverride: ""

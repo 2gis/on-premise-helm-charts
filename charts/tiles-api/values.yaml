@@ -28,7 +28,7 @@ cassandra:
 
 proxy:
   # -- The path to the docker image. Must have a path to your private docker registry
-  image: on-premise/tiles-api-proxy
+  image: dgis-on-premise/tiles-api-proxy
   # -- Tag with application version
   tag: v4.19.0
 
@@ -54,7 +54,7 @@ proxy:
 
 api:
   # -- The path to the docker image. Must have a path to your private docker registry
-  image: on-premise/tiles-api
+  image: dgis-on-premise/tiles-api
   # -- Tag with application version
   tag: v4.19.0
   pullPolicy: IfNotPresent
@@ -126,7 +126,7 @@ importer:
   enabled: true
 
   # -- The path to the docker image. Must have a path to your private docker registry
-  image: on-premise/tiles-api-importer
+  image: dgis-on-premise/tiles-api-importer
   # -- Tag with application version
   tag: v4.19.0
 

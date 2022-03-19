@@ -22,8 +22,6 @@ s3_s_key: sekret_key
 s3_manifest: manifests/1644220485.json
 
 api:
-  repository: docker-registry/dgis/search-api
-  tag: 7.15.0_29073
   resources:
     limits:
       cpu: 1
@@ -33,8 +31,6 @@ api:
       memory: 1G
 
 nginx:
-  repository: docker-registry/dgis/search-nginx
-  tag: 1.21.4-2
   resources:
     limits:
       cpu: 1

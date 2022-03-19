@@ -120,10 +120,6 @@ autoscaling:
   scaleDownWindowsSeconds: 600
   scaleUpWindowSeconds: 300
   targetCPUUtilizationPercentage: 90
-image:
-  pullPolicy: IfNotPresent
-  repository: docker-hub.2gis.ru/navi/mosesd
-  tag: releases-navi-moses-6-3-0-ffe19b6f
 naviback:
   app_castle_host: castle1.m1.navi
   eca_host: eca1.m9.navi

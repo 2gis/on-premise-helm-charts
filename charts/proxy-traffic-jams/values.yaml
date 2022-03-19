@@ -6,7 +6,7 @@ proxy:
   host: 'https://traffic-jams.2gis.com'
 
 image:
-  repository: nginx
+  repository: dgis-on-premise/nginx
   pullPolicy: IfNotPresent
   tag: "1.20.0"
 

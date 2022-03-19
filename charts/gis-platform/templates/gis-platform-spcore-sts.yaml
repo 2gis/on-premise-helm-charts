@@ -37,7 +37,7 @@ spec:
           args: ["-ru"]
           {{- else }}
           {{- end }}
-          image: {{ .Values.spcore.image.repository }}:{{ .Values.spcore.image.tag }}
+          image: {{ required "A valid .Values.dgctl_docker_registry entry required" .Values.dgctl_docker_registry }}/{{ .Values.spcore.image.repository }}:{{ .Values.spcore.image.tag }}
           ports:
           - containerPort: {{ .Values.spcore.cloud_port }}
           - containerPort: {{ .Values.spcore.http_port }}

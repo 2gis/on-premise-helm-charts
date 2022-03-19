@@ -37,7 +37,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       initContainers:
         - name: init
-          image: "{{ .Values.api.repository }}:{{ .Values.api.tag }}"
+          image: {{ required "A valid .Values.dgctl_docker_registry entry required" .Values.dgctl_docker_registry }}/{{ .Values.api.repository }}:{{ .Values.api.tag }}
           imagePullPolicy: {{ .Values.api.pullPolicy }}
           command:
             - importer
@@ -56,7 +56,7 @@ spec:
               mountPath: {{ .Values.api.data_dir }}
       containers:
         - name: api
-          image: {{ .Values.api.repository }}:{{ .Values.api.tag }}
+          image: {{ required "A valid .Values.dgctl_docker_registry entry required" .Values.dgctl_docker_registry }}/{{ .Values.api.repository }}:{{ .Values.api.tag }}
           imagePullPolicy: {{ .Values.api.pullPolicy }}
           command: ["Sapphire2", "--exec"]
           resources:
@@ -74,7 +74,7 @@ spec:
             - name: REDEPLOY_LABEL
               value: "{{ .Values.redeploy_label }}"
         - name: nginx
-          image: {{ .Values.nginx.repository }}:{{ .Values.nginx.tag }}
+          image: {{ required "A valid .Values.dgctl_docker_registry entry required" .Values.dgctl_docker_registry }}/{{ .Values.nginx.repository }}:{{ .Values.nginx.tag }}
           imagePullPolicy: {{ .Values.nginx.pullPolicy }}
           command: ["nginx", "-c", "/etc/2gis/nginx.conf"]
           {{- if (le .Values.nginx.http_port 1024.0) }}

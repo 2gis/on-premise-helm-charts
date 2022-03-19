@@ -5,10 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: 2gis/navi-back
+  repository: dgis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "master"
+  tag: "6.3.0"
 
 imagePullSecrets: []
 nameOverride: ""

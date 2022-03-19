@@ -60,10 +60,7 @@
 ## Пример деплоя
 1. Создать файл castle_values.conf со своими параметрами для подключения к S3-хранилищу
 ```
-nginx:
-  image: 
-    repository: "2gis/navi-front"
-    tag: "1.21"
+dgctl_docker_registry: 'your-docker-hub-registry'
  
 replicaCount: 2
 
@@ -76,11 +73,6 @@ resources:
     memory: 128Mi
 
 castle:
-  image: 
-    repository: 2gis/navi-castle
-    pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: "1.0.3"
   castle_data_path: '/opt/castle/data/'
   s3_server: "server:9000"
   s3_bucket: 'routing'

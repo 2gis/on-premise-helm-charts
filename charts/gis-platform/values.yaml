@@ -25,8 +25,8 @@ spcore:
   reset_cluster: false
   terminationGracePeriodSeconds: 60
   image:
-    repository: ''
-    tag: latest
+    repository: 'dgis-on-premise/gis_platform_spcore'
+    tag: '2022-03-14'
   cors:
     allow_everyone: false
     origins: []
@@ -75,13 +75,12 @@ portal:
       memory: 512Mi
   terminationGracePeriodSeconds: 60
   image:
-    repository: ''
-    tag: latest
+    repository: 'dgis-on-premise/gis_platform_portal'
+    tag: '2022-03-14'
 
 zookeeper:
   image:
-    registry: docker.io
-    repository: bitnami/zookeeper
+    repository: 'dgis-on-premise/zookeeper'
     tag: 3.7.0-debian-10-r265
   pdb:
     create: true
