@@ -17,7 +17,7 @@ helm.sh/chart: {{ include "tiles.chart" . | quote }}
 {{- end }}
 
 {{- define "tiles.manifestCode" -}}
-{{- base $.Values.manifestPath | trimSuffix ".json" }}
+{{- base $.Values.dgctl_storage.manifest | trimSuffix ".json" }}
 {{- end }}
 
 {{- define "tiles.name" -}}

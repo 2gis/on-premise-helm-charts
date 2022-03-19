@@ -1,4 +1,4 @@
-manifest-path: {{ .Values.manifestPath }}
+manifest-path: {{ required "Valid .Values.dgctl_storage.manifest required!" .Values.dgctl_storage.manifest }}
 migrations-path: "/migrations"
 service-name: {{ .Values.serviceName }}
 workers: {{ .Values.importer.workerNum }}
