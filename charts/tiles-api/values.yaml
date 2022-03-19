@@ -1,4 +1,12 @@
 ---
+dgctl_docker_registry: ''
+dgctl_storage:
+  host: ''
+  bucket: ''
+  access_key: ''
+  secret_key: ''
+  manifest: ''
+
 serviceName: tiles-api-webgl
 
 name: tiles-api
