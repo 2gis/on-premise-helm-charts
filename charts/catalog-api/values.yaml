@@ -13,7 +13,7 @@ imagePullSecrets: []
 api:
   image:
     repository: "dgis-on-premise/ipa-app-op"
-    tag: "tag-3.557.2"
+    tag: "tag-3.557.4"
     pullPolicy: IfNotPresent
 
   replicas: 1
