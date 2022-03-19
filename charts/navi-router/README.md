@@ -108,6 +108,7 @@
 ```
 2. Создать файл stage_values.yaml со следующим содержимым:
 ```
+dgctl_docker_registry: 'your-docker-hub-registry'
 router:
   app_castle_host: stage-castle 
   additional_sections: |- 
@@ -135,10 +136,6 @@ resources":
   requests":
     cpu: "500m"
     memory": "128Mi"
-
-image:
-  repository: "docker-hub.2gis.ru/navi/moses-router"
-  tag: "master-9a2134fb"
 
 resources:
   limits:

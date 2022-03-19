@@ -41,7 +41,7 @@ spec:
         - name: {{ include "naviback.fullname" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: {{ required "A valid .Values.dgctl_docker_registry entry required" .Values.dgctl_docker_registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: [ "/usr/sbin/2gis/mosesd/mosesd" ]
           args: 

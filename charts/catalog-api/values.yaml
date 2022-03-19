@@ -12,9 +12,8 @@ imagePullSecrets: []
 
 api:
   image:
-    repository: ""
-    # Overrides the image tag whose default is the chart app version.
-    tag: ""
+    repository: "2gis-on-premise/ipa-app-op"
+    tag: "tag-3.557.4"
     pullPolicy: IfNotPresent
 
   replicas: 1

@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
         - name: tasker
-          image: {{ .Values.backend.image.repository }}:{{ default .Chart.AppVersion .Values.backend.image.tag }}
+          image: {{ required "A valid .Values.dgctl_docker_registry entry required" .Values.dgctl_docker_registry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           command: [ "zuul-tasker", "-notify", "false" ]
           resources:

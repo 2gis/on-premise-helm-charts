@@ -45,7 +45,7 @@ spec:
         - name: import-worker
 
           {{- with $.Values.importer }}
-          image: {{ .image }}:{{ .tag }}
+          image: {{ required "A valid .Values.dgctl_docker_registry entry required" $.Values.dgctl_docker_registry }}/{{ .image }}:{{ .tag }}
           command: ["/selfimporter", "scheduler"]
 
           volumeMounts:

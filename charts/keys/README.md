@@ -18,9 +18,7 @@ To install the service create a YAML file that will contain:
 
 ```yaml
 # Docker image
-backend:
-  image:
-    repository: your-docker-hub/2gis/keys-backend
+dgctl_docker_registry: 'your-docker-hub-registry'
 
 # PostgreSQL access
 db:
@@ -59,9 +57,6 @@ ldap:
 
 # Admin
 admin:
-  image:
-    repository: your-docker-hub/2gis/keys-admin
-
   apiUrl: "https://api.url/admin/v1"
   appHost: "https://app.host"
 ```

@@ -1,7 +1,11 @@
 ---
-
-# manifestPath -- Path to the manifest in S3-like storage. The manifest is downloaded via the dgctl utility
-manifestPath: manifests/1635402744.json
+dgctl_docker_registry: ''
+dgctl_storage:
+  host: ''
+  bucket: ''
+  access_key: ''
+  secret_key: ''
+  manifest: ''
 
 serviceName: tiles-api-webgl
 
@@ -28,7 +32,7 @@ cassandra:
 
 proxy:
   # -- The path to the docker image. Must have a path to your private docker registry
-  image: on-premise/tiles-api-proxy
+  image: 2gis-on-premise/tiles-api-proxy
   # -- Tag with application version
   tag: v4.19.0
 
@@ -54,7 +58,7 @@ proxy:
 
 api:
   # -- The path to the docker image. Must have a path to your private docker registry
-  image: on-premise/tiles-api
+  image: 2gis-on-premise/tiles-api
   # -- Tag with application version
   tag: v4.19.0
   pullPolicy: IfNotPresent
@@ -126,7 +130,7 @@ importer:
   enabled: true
 
   # -- The path to the docker image. Must have a path to your private docker registry
-  image: on-premise/tiles-api-importer
+  image: 2gis-on-premise/tiles-api-importer
   # -- Tag with application version
   tag: v4.19.0
 
@@ -157,10 +161,3 @@ importer:
     limits:
       cpu: 2
       memory: 2048Mi
-
-
-  storage:
-    host: s3host.local
-    bucket: backet
-    accessKey: accessKey
-    secretKey: secretKey

@@ -27,7 +27,7 @@ spec:
             topologyKey: kubernetes.io/hostname
       containers:
         - name: {{ include "gis-platform-portal.fullname" . }}
-          image: {{ .Values.portal.image.repository }}:{{ .Values.portal.image.tag }}
+          image: {{ required "A valid .Values.dgctl_docker_registry entry required" .Values.dgctl_docker_registry }}/{{ .Values.portal.image.repository }}:{{ .Values.portal.image.tag }}
           ports:
             - containerPort: 80
           resources:

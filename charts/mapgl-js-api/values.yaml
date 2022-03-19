@@ -3,7 +3,8 @@
 replicaCount: 1
 
 image:
-  repository:
+  repository: 2gis-on-premise/mapgl-selfhosting
+  tag: 'v1.24.1'
   pullPolicy: IfNotPresent
 
 env:

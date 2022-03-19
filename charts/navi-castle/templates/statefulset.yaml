@@ -47,7 +47,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       initContainers:
         - name: castle-init
-          image: "{{ .Values.castle.image.repository }}:{{ .Values.castle.image.tag | default .Chart.AppVersion }}"
+          image: {{ required "A valid .Values.dgctl_docker_registry entry required" .Values.dgctl_docker_registry }}/{{ .Values.castle.image.repository }}:{{ .Values.castle.image.tag }}
           command: [ "/opt/configuration_builder" ]
           args: 
            - --config 
@@ -71,7 +71,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
       containers:
         - name: castle-nginx
-          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag | default .Chart.AppVersion }}"
+          image: {{ required "A valid .Values.dgctl_docker_registry entry required" .Values.dgctl_docker_registry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:

@@ -1,14 +1,15 @@
 # Default values for castle.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+dgctl_docker_registry: ''
+dgctl_storage:
+  host: ''
+  bucket: ''
+  access_key: ''
+  secret_key: ''
+  manifest: ''
 
 replicaCount: 1
-
-image:
-  repository: 2gis/castle
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -83,21 +84,16 @@ affinity: {}
 
 castle:
   image:
-    repository: 2gis/castle
+    repository: 2gis-on-premise/castle
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: "master"
+    tag: "1.0.2"
   castle_data_path: /opt/castle/data/
-  s3_server: "localhost:3777"
-  s3_bucket: 'routing'
-  s3_login: 'user'
-  s3_password: 'password'
 
 nginx:
   port: 8080
   image:
-    repository: 2gis/navi-front
-    tag: ""
+    repository: 2gis-on-premise/navi-front-unpriv
+    tag: '1.21'
 
 cron:
   enabled: false

@@ -31,6 +31,12 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| dgctl_docker_registry | string | `""` | docker registry server name  |
+| dgctl_storage.host | string | `""` | host:port of S3 server  |
+| dgctl_storage.bucket | string | `""` | S3 bucket  |
+| dgctl_storage.access_key | string | `""` | S3 access key  |
+| dgctl_storage.secret_key | string | `""` | S3 secret key |
+| dgctl_storage.manifest | string | `""` | Path to the manifest in S3-like storage. The manifest is downloaded via the dgctl utility |
 | api.affinity | object | `{}` |  |
 | api.annotations | object | `{}` |  |
 | api.containerPort | int | `8000` |  |
@@ -86,10 +92,6 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | importer.resources.limits.memory | string | `"256Mi"` |  |
 | importer.resources.requests.cpu | string | `"50m"` |  |
 | importer.resources.requests.memory | string | `"128Mi"` |  |
-| importer.storage.accessKey | string | `"accessKey"` |  |
-| importer.storage.bucket | string | `"backet"` |  |
-| importer.storage.host | string | `"s3host.local"` |  |
-| importer.storage.secretKey | string | `"secretKey"` |  |
 | importer.tag | string | `"v4.19.0"` | Tag with application version |
 | importer.tolerations | object | `{}` |  |
 | importer.workerNum | int | `6` | Number of parallel import processes (spawned jobs) |
@@ -98,7 +100,6 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | importer.workerResources.requests.cpu | string | `"256m"` |  |
 | importer.workerResources.requests.memory | string | `"512Mi"` |  |
 | importer.writerNum | int | `8` | Number of write processes per import process |
-| manifestPath | string | `"manifests/1635402744.json"` | Path to the manifest in S3-like storage. The manifest is downloaded via the dgctl utility |
 | name | string | `"tiles-api"` |  |
 | proxy.access.enabled | bool | `false` | Flag to enable verification access key |
 | proxy.access.host | string | `"http://keys-api.localhost"` | Host for Keys API service |

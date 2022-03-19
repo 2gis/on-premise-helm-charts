@@ -5,10 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: 2gis/navi-front
+  repository: 2gis-on-premise/navi-front-unpriv
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "master"
+  tag: '1.21'
 
 imagePullSecrets: []
 nameOverride: ""

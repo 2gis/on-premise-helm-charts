@@ -35,10 +35,10 @@ data:
     # UPDATING CITY DATA
     s3:
     {
-    server: '{{ .Values.castle.s3_server }}',
-    bucket: '{{ .Values.castle.s3_bucket }}',
-    login: '{{ .Values.castle.s3_login }}',
-    pwd: '{{ .Values.castle.s3_password }}',
+    server: '{{ required "Valid .Values.dgctl_storage.host required!" .Values.dgctl_storage.host }}',
+    bucket: '{{ required "Valid .Values.dgctl_storage.bucket required!" .Values.dgctl_storage.bucket }}',
+    login: '{{ required "Valid .Values.dgctl_storage.access_key required!" .Values.dgctl_storage.access_key }}',
+    pwd: '{{ required "Valid .Values.dgctl_storage.secret_key required!" .Values.dgctl_storage.secret_key }}',
     header: 'Last-Modified',
     }
     manifest:

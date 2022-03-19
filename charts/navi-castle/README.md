@@ -6,6 +6,11 @@
 ## Описание values
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| dgctl_docker_registry | string | `""` | docker registry server name  |
+| dgctl_storage.host | string | `""` | host:port of S3 server  |
+| dgctl_storage.bucket | string | `""` | S3 bucket  |
+| dgctl_storage.access_key | string | `""` | S3 access key  |
+| dgctl_storage.secret_key | string | `""` | S3 secret key |
 | affinity | object or string | `{}` |  |
 | annotations | object | `{}` |  |
 | ingress.className | string | `"nginx"` |  |
@@ -36,10 +41,6 @@
 | castle.image.repository | string | `2gis/castle` | Image name  |
 | castle.image.tag | string | `''` | Image tag  |
 | castle.castle_data_path | string | `/opt/castle` | Store path for castle data  |
-| caslte.s3_server | string | `""` | URL of S3 server  |
-| caslte.s3_bucket | string | `""` | S3 bucket  |
-| castle.s3_login | string | `""` | S3 login  |
-| castle.s3_password | string | `""` | S3 password |
 | persistentVolume | object | `{}` | Persistent volume definition |
 | persistentVolume.enabled | string | `"false"` | Enable or disable persistent volume claim |
 | persistentVolume.accessModes | array | `[]` | Access modes for PV |
@@ -60,10 +61,13 @@
 ## Пример деплоя
 1. Создать файл castle_values.conf со своими параметрами для подключения к S3-хранилищу
 ```
-nginx:
-  image: 
-    repository: "2gis/navi-front"
-    tag: "1.21"
+dgctl_docker_registry: 'your-docker-hub-registry'
+dgctl_storage:
+  host: server_name:9000
+  bucket: dgis
+  access_key: access_key
+  secret_key: secret_key
+  manifest: manifests/1644220485.json
  
 replicaCount: 2
 
@@ -76,16 +80,7 @@ resources:
     memory: 128Mi
 
 castle:
-  image: 
-    repository: 2gis/navi-castle
-    pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: "1.0.3"
   castle_data_path: '/opt/castle/data/'
-  s3_server: "server:9000"
-  s3_bucket: 'routing'
-  s3_login: 'admin'
-  s3_password: 'admin'
 
 persistentVolume:
   enabled: false

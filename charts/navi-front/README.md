@@ -56,6 +56,7 @@
 1. Создать файл front_values.yaml со следующим содержимым
 
 ```
+dgctl_docker_registry: 'your-docker-hub-registry'
 affinity: "nodeAffinity:\n  preferredDuringSchedulingIgnoredDuringExecution:\n  - preference:\n      matchExpressions:\n      - key: cpu\n        operator: In\n        values:\n        - slow\n    weight: 50\n  - preference:\n      matchExpressions:\n      - key: role\n        operator: In\n        values:\n        - worker\n    weight: 20\n  requiredDuringSchedulingIgnoredDuringExecution: \n    nodeSelectorTerms:\n    - matchExpressions:\n      - key: role\n        operator: In\n        values:\n        - worker\npodAntiAffinity:\n  requiredDuringSchedulingIgnoredDuringExecution:\n  - labelSelector:\n      matchExpressions:\n      - key: app.kubernetes.io/instance\n        operator: In\n        values:\n        - {{ .Release.Name }}\n    topologyKey: kubernetes.io/hostname\n"
 autoscaling:
   enabled: "true"
@@ -72,13 +73,7 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
-image: 
-  repository: "docker-hub.2gis.ru/navi/mfront"
-  tag: "releases-navi-moses-6-2-1-k8s-7278f5be"
-tolerations:
-  - key: cpu
-    operator: Equal
-    value: slow
+
 ```
 3. Запусить установку helm-чарта
 ```
