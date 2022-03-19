@@ -41,11 +41,11 @@ spec:
           imagePullPolicy: {{ .Values.api.pullPolicy }}
           command:
             - importer
-            - --endpoint={{ required "Valid s3_host value required!" .Values.s3_host }}
-            - --access-key-id={{ required "Valid s3_a_key value required!" .Values.s3_a_key }}
-            - --secret-access-key={{ required "Valid s3_s_key value required!" .Values.s3_s_key }}
-            - --bucket-name={{ required "Valid s3_bucket value required!" .Values.s3_bucket }}
-            - --manifest={{ required "Valid s3_manifest value required!" .Values.s3_manifest }}
+            - --endpoint={{ required "Valid .Values.dgctl_storage.host required!" .Values.dgctl_storage.host }}
+            - --access-key-id={{ required "Valid .Values.dgctl_storage.access_key required!" .Values.dgctl_storage.access_key }}
+            - --secret-access-key={{ required "Valid .Values.dgctl_storage.secret_key required!" .Values.dgctl_storage.secret_key }}
+            - --bucket-name={{ required "Valid .Values.dgctl_storage.bucket required!" .Values.dgctl_storage.bucket }}
+            - --manifest={{ required "Valid .Values.dgctl_storage.manifest required!" .Values.dgctl_storage.manifest }}
             - --output-dir-path={{ .Values.api.data_dir }}
           resources:
             {{- toYaml .Values.api.resources | nindent 12 }}

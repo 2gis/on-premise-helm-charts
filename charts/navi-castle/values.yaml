@@ -81,10 +81,6 @@ castle:
     pullPolicy: IfNotPresent
     tag: "1.0.2"
   castle_data_path: /opt/castle/data/
-  s3_server: "localhost:3777"
-  s3_bucket: 'routing'
-  s3_login: 'user'
-  s3_password: 'password'
 
 nginx:
   port: 8080

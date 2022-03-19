@@ -36,10 +36,6 @@
 | castle.image.repository | string | `2gis/castle` | Image name  |
 | castle.image.tag | string | `''` | Image tag  |
 | castle.castle_data_path | string | `/opt/castle` | Store path for castle data  |
-| caslte.s3_server | string | `""` | URL of S3 server  |
-| caslte.s3_bucket | string | `""` | S3 bucket  |
-| castle.s3_login | string | `""` | S3 login  |
-| castle.s3_password | string | `""` | S3 password |
 | persistentVolume | object | `{}` | Persistent volume definition |
 | persistentVolume.enabled | string | `"false"` | Enable or disable persistent volume claim |
 | persistentVolume.accessModes | array | `[]` | Access modes for PV |
@@ -61,6 +57,12 @@
 1. Создать файл castle_values.conf со своими параметрами для подключения к S3-хранилищу
 ```
 dgctl_docker_registry: 'your-docker-hub-registry'
+dgctl_storage:
+  host: server_name:9000
+  bucket: dgis
+  access_key: access
+  secret_key: sekret_key
+  manifest: manifests/1644220485.json
  
 replicaCount: 2
 
@@ -74,10 +76,6 @@ resources:
 
 castle:
   castle_data_path: '/opt/castle/data/'
-  s3_server: "server:9000"
-  s3_bucket: 'routing'
-  s3_login: 'admin'
-  s3_password: 'admin'
 
 persistentVolume:
   enabled: false

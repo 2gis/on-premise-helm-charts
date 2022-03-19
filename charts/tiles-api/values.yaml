@@ -1,8 +1,4 @@
 ---
-
-# manifestPath -- Path to the manifest in S3-like storage. The manifest is downloaded via the dgctl utility
-manifestPath: manifests/1635402744.json
-
 serviceName: tiles-api-webgl
 
 name: tiles-api
@@ -157,10 +153,3 @@ importer:
     limits:
       cpu: 2
       memory: 2048Mi
-
-
-  storage:
-    host: s3host.local
-    bucket: backet
-    accessKey: accessKey
-    secretKey: secretKey

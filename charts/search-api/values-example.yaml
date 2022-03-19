@@ -15,11 +15,12 @@ ingress:
     - path: '/'
       pathType: Prefix
 
-s3_host: server_name:9000
-s3_bucket: dgis
-s3_a_key: access
-s3_s_key: sekret_key
-s3_manifest: manifests/1644220485.json
+dgctl_storage:
+  host: server_name:9000
+  bucket: dgis
+  access_key: access
+  secret_key: sekret_key
+  manifest: manifests/1644220485.json
 
 api:
   resources:
