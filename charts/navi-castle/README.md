@@ -6,6 +6,11 @@
 ## Описание values
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| dgctl_docker_registry | string | `""` | docker registry server name  |
+| dgctl_storage.host | string | `""` | host:port of S3 server  |
+| dgctl_storage.bucket | string | `""` | S3 bucket  |
+| dgctl_storage.access_key | string | `""` | S3 access key  |
+| dgctl_storage.secret_key | string | `""` | S3 secret key |
 | affinity | object or string | `{}` |  |
 | annotations | object | `{}` |  |
 | ingress.className | string | `"nginx"` |  |
