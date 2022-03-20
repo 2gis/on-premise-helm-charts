@@ -65,8 +65,8 @@ dgctl_docker_registry: 'your-docker-hub-registry'
 dgctl_storage:
   host: server_name:9000
   bucket: dgis
-  access_key: access
-  secret_key: sekret_key
+  access_key: access_key
+  secret_key: secret_key
   manifest: manifests/1644220485.json
  
 replicaCount: 2

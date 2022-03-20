@@ -57,9 +57,6 @@ ldap:
 
 # Admin
 admin:
-  image:
-    repository: your-docker-hub/2gis/keys-admin
-
   apiUrl: "https://api.url/admin/v1"
   appHost: "https://app.host"
 ```
