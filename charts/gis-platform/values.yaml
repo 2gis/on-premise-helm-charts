@@ -26,7 +26,7 @@ spcore:
   terminationGracePeriodSeconds: 60
   image:
     repository: 'dgis-on-premise/gis_platform_spcore'
-    tag: '2022-03-14'
+    tag: '2022-03-19'
   cors:
     allow_everyone: false
     origins: []
