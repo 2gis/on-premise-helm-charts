@@ -82,8 +82,8 @@
 
 
 ## Пример деплоя
-Деплой mosesd для региона Даммам
-1. Создать файл rules.conf в директории с helm-чартом
+Деплой navi-router для региона Даммам
+1. Создать файл rules.conf в директории с helm-чартом. В данном примере роутер будет обслуживать запросы carrouting и построение изохроны(hull) для Даммама
 ```
 [ 
   {
@@ -103,9 +103,30 @@
     "routing": [
         "driving"
     ]
+  },
+  {
+    "name": "dammam_hull",
+    "router_projects": [
+        "dammam"
+    ],
+    "moses_projects": [
+        "dammam"
+    ],
+    "projects": [
+        "dammam"
+    ],
+    "queries": [
+        "get_hull"
+    ],
+    "routing": [
+        "driving"
+    ]
   }
+
 ]
 ```
+В данном примере создаются два правила - для построения маршрутов и построения изохроны
+
 2. Создать файл stage_values.yaml со следующим содержимым:
 ```
 dgctl_docker_registry: 'your-docker-hub-registry'
@@ -188,4 +209,30 @@ curl -Lv http://localhost:7777/carrouting/6.0.0/global -d @dammam_data.json
 Ответ:
 ```
 dammam_cr
+```
+
+Для проверки правила на построение изохроны:
+```
+data_dammam_hull.json
+
+{
+  "start": {
+    "lon": 50.13365224280279,
+    "lat": 26.36327359825565
+  },
+  "durations": [
+    600
+  ],
+  "mode": "driving"
+}
+```
+
+Отправялем запрос через curl:
+```
+curl -Lv http://localhost:7777/get_hull -d @data_dammam_hull.json
+```
+
+Ответ:
+```
+dammam_hull
 ```
