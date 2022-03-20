@@ -32,6 +32,14 @@ data:
         }
         {{- end }}
 
+        {{ if .Values.hullLocation }}
+        {{ include "tplvalues.render" ( dict "value" .Values.hullLocation "context" $ ) | indent 4 }} 
+        {{ else  }}
+        location ^~ /get_hull {
+            js_content bundle.geo_coding;
+        }
+        {{- end }}
+
         location /geocoding {
             rewrite ^/geocoding(.*)$ $1 break;
             proxy_pass http://{{ include "front.getMrouterUpstream" .}};
