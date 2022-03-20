@@ -105,7 +105,11 @@
         "data": [
             {
                 "role": "__public",
-                "permissions": "Read"
+                "permissions": "read"
+            },
+            {
+                "role": "__admin",
+                "permissions": "read,write,configure"
             }
         ]
     }

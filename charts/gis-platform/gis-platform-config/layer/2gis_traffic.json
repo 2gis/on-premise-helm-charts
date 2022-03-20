@@ -14,5 +14,18 @@
     ],
     "allowDirectAccess": true,
     "name": "admin.2gis_traffic",
-    "alias": "2GIS Traffic"
+    "alias": "2GIS Traffic",
+    "description": "2GIS Traffic",
+    "acl": {
+        "data": [
+            {
+                "role": "__public",
+                "permissions": "read"
+            },
+            {
+                "role": "__admin",
+                "permissions": "read,write,configure"
+            }
+        ]
+    },
 }

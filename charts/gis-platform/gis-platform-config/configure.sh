@@ -59,11 +59,11 @@ if ! grep --silent -c refreshToken $cookie; then
 fi
 
 echo "Configuring RemoteTileService for 2GIS Basemap"
-jq --arg url "${tiles_api_url}" '.urlFormat=$url' layer/tiles_api.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
+jq --arg url "${tiles_api_url}" '.urlFormat=$url' layer/2gis.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
 echo "Configuring RemoteTileService for 2GIS Traffic"
-jq --arg url "${traffic_url}" '.urlFormat=$url' layer/tiles_traffic.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
+jq --arg url "${traffic_url}" '.urlFormat=$url' layer/2gis_traffic.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=RemoteTileService"
 echo "Configuring LocalTileService for Satellite imagery"
-$CURL -XPOST -H 'Content-Type: application/json' -d @layer/s3_satellite.json "$GIS_PLATFORM_URL/sp/layers?type=LocalTileService"
+$CURL -XPOST -H 'Content-Type: application/json' -d @layer/satellite_imagery.json "$GIS_PLATFORM_URL/sp/layers?type=LocalTileService"
 echo "Configuring Map"
 $CURL -XPOST -H 'Content-Type: application/json' -d @configuration/MapConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/map"
 echo "Configuring Portal"
@@ -71,11 +71,8 @@ $CURL -XPOST -H 'Content-Type: application/json' -d @configuration/PortalConfig.
 echo "Configuring map sharing"
 jq --arg url "${GIS_PLATFORM_URL#http*://}" '.connection.ws_url=$url+"/sp/ws/"' configuration/SharedConfig.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/settings?urlPath=/shared"
 
-echo "Setting permissions"
-for layer in layer/*.json; do
-    layer_name=$(jq --raw-output .name $layer)
-    acl='{"data":[{"role":"__admin","permissions":"read,write,configure"},{"role":"__public","permissions":"read"}]}'
-    $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$acl" "$GIS_PLATFORM_URL/sp/layers/$layer_name/permissions"
-done
+layer_names='[ "admin.2gis", "admin.2gis_traffic", "admin.satellite_imagery"]'
+echo "Share all basemaps: $layer_names"
+$CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$layer_names" "$GIS_PLATFORM_URL/sp/resources/layers/shareAll"
 
 rm $cookie
