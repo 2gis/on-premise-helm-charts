@@ -27,5 +27,5 @@
                 "permissions": "read,write,configure"
             }
         ]
-    },
+    }
 }

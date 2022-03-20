@@ -71,7 +71,7 @@ $CURL -XPOST -H 'Content-Type: application/json' -d @configuration/PortalConfig.
 echo "Configuring map sharing"
 jq --arg url "${GIS_PLATFORM_URL#http*://}" '.connection.ws_url=$url+"/sp/ws/"' configuration/SharedConfig.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/settings?urlPath=/shared"
 
-layer_names='[ "admin.2gis", "admin.2gis_traffic", "admin.satellite_imagery"]'
+layer_names=$(jq --slurp --compact-output '[ .[].name ]' layer/*.json)
 echo "Share all basemaps: $layer_names"
 $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$layer_names" "$GIS_PLATFORM_URL/sp/resources/layers/shareAll"
 
