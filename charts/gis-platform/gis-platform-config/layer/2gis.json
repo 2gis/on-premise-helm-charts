@@ -102,7 +102,7 @@
   "copyrightText": "",
   "allowDirectAccess": true,
   "RequestTimeout": 0,
-  "name": "2gis",
+  "name": "admin.2gis",
   "alias": "2GIS Basemap",
   "description": "2GIS Basemap",
   "acl": {
