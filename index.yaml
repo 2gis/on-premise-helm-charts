@@ -88,6 +88,24 @@ entries:
   gis-platform:
   - apiVersion: v2
     appVersion: 0.0.1
+    created: "2022-03-21T03:59:00.06603681Z"
+    dependencies:
+    - name: zookeeper
+      repository: https://charts.bitnami.com/bitnami
+      version: ~8.0.1
+    description: GIS Platform
+    digest: 666c040ff1176933f8cced0b8022d430b11c4bbef3f780071b9494f5e968c7fc
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: gis-platform
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/gis-platform-0.0.6/gis-platform-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v2
+    appVersion: 0.0.1
     created: "2022-03-20T16:36:53.624151816Z"
     dependencies:
     - name: zookeeper
@@ -415,4 +433,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tiles-api-1.0.0/tiles-api-1.0.0.tgz
     version: 1.0.0
-generated: "2022-03-20T16:36:53.624200816Z"
+generated: "2022-03-21T03:59:00.066397215Z"
