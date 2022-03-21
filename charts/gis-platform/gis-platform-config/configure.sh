@@ -77,7 +77,6 @@ $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$layer_names" "$
 
 echo "Setting autoshared list for all basemaps"
 for layer in layer/*.json; do
-    layer_name=$(jq --raw-output .name $layer)
     data=$(jq --compact-output '{name: .name, type: "layer"}' $layer)
     $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$data" "$GIS_PLATFORM_URL/sp/autosharedList"
 done
