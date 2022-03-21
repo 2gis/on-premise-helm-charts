@@ -76,9 +76,9 @@ echo "Share all basemaps: $layer_names"
 $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$layer_names" "$GIS_PLATFORM_URL/sp/resources/layers/shareAll"
 
 echo "Setting autoshared list for all basemaps"
-for layer in layer/*json; do
+for layer in layer/*.json; do
     layer_name=$(jq --raw-output .name $layer)
-    data="{\"name\":\"${layer_name}\", \"type\": \"layer\"}"
+    data=$(jq --compact-output '{name: .name, type: "layer"}' $layer)
     $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$data" "$GIS_PLATFORM_URL/sp/autosharedList"
 done
 
