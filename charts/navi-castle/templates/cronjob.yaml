@@ -38,7 +38,7 @@ spec:
               name: {{ include "castle.fullname" $ }}-builder-config           
           containers:
             - name: castle-cron
-              image: {{ required "A valid .Values.dgctl_docker_registry entry required" $.Values.dgctl_docker_registry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag | default $.Chart.AppVersion }}
+              image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag | default $.Chart.AppVersion }}
               imagePullPolicy: {{ $.Values.castle.image.pullPolicy }} 
               command: [ "/opt/configuration_builder" ]
               args: 

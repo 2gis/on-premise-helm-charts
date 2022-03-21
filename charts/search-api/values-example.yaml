@@ -8,11 +8,11 @@ ingress:
     - path: '/'
       pathType: Prefix
 
-dgctl_storage:
+dgctlStorage:
   host: server_name:9000
   bucket: dgis
-  access_key: access_key
-  secret_key: secret_key
+  accessKey: access_key
+  secretKey: secret_key
   manifest: manifests/1644220485.json
 
 api:

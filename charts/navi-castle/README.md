@@ -6,11 +6,11 @@
 ## Описание values
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| dgctl_docker_registry | string | `""` | docker registry server name  |
-| dgctl_storage.host | string | `""` | host:port of S3 server  |
-| dgctl_storage.bucket | string | `""` | S3 bucket  |
-| dgctl_storage.access_key | string | `""` | S3 access key  |
-| dgctl_storage.secret_key | string | `""` | S3 secret key |
+| dgctlDockerRegistry | string | `""` | docker registry server name  |
+| dgctlStorage.host | string | `""` | host:port of S3 server  |
+| dgctlStorage.bucket | string | `""` | S3 bucket  |
+| dgctlStorage.accessKey | string | `""` | S3 access key  |
+| dgctlStorage.secretKey | string | `""` | S3 secret key |
 | affinity | object or string | `{}` |  |
 | annotations | object | `{}` |  |
 | ingress.className | string | `"nginx"` |  |
@@ -61,12 +61,12 @@
 ## Пример деплоя
 1. Создать файл castle_values.conf со своими параметрами для подключения к S3-хранилищу
 ```
-dgctl_docker_registry: 'your-docker-hub-registry'
-dgctl_storage:
+dgctlDockerRegistry: 'your-docker-hub-registry'
+dgctlStorage:
   host: server_name:9000
   bucket: dgis
-  access_key: access_key
-  secret_key: secret_key
+  accessKey: access_key
+  secretKey: secret_key
   manifest: manifests/1644220485.json
  
 replicaCount: 2

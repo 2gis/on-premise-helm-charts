@@ -35,10 +35,10 @@ data:
     # UPDATING CITY DATA
     s3:
     {
-    server: '{{ required "Valid .Values.dgctl_storage.host required!" .Values.dgctl_storage.host }}',
-    bucket: '{{ required "Valid .Values.dgctl_storage.bucket required!" .Values.dgctl_storage.bucket }}',
-    login: '{{ required "Valid .Values.dgctl_storage.access_key required!" .Values.dgctl_storage.access_key }}',
-    pwd: '{{ required "Valid .Values.dgctl_storage.secret_key required!" .Values.dgctl_storage.secret_key }}',
+    server: '{{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}',
+    bucket: '{{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}',
+    login: '{{ required "Valid .Values.dgctlStorage.accessKey required!" .Values.dgctlStorage.accessKey }}',
+    pwd: '{{ required "Valid .Values.dgctlStorage.secretKey required!" .Values.dgctlStorage.secretKey }}',
     header: 'Last-Modified',
     }
     manifest:

@@ -31,12 +31,12 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| dgctl_docker_registry | string | `""` | docker registry server name  |
-| dgctl_storage.host | string | `""` | host:port of S3 server  |
-| dgctl_storage.bucket | string | `""` | S3 bucket  |
-| dgctl_storage.access_key | string | `""` | S3 access key  |
-| dgctl_storage.secret_key | string | `""` | S3 secret key |
-| dgctl_storage.manifest | string | `""` | Path to the manifest in S3-like storage. The manifest is downloaded via the dgctl utility |
+| dgctlDockerRegistry | string | `""` | docker registry server name  |
+| dgctlStorage.host | string | `""` | host:port of S3 server  |
+| dgctlStorage.bucket | string | `""` | S3 bucket  |
+| dgctlStorage.accessKey | string | `""` | S3 access key  |
+| dgctlStorage.secretKey | string | `""` | S3 secret key |
+| dgctlStorage.manifest | string | `""` | Path to the manifest in S3-like storage. The manifest is downloaded via the dgctl utility |
 | api.affinity | object | `{}` |  |
 | api.annotations | object | `{}` |  |
 | api.containerPort | int | `8000` |  |

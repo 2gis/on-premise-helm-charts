@@ -1,4 +1,4 @@
-manifest-path: {{ required "Valid .Values.dgctl_storage.manifest required!" .Values.dgctl_storage.manifest }}
+manifest-path: {{ required "Valid .Values.dgctlStorage.manifest required!" .Values.dgctlStorage.manifest }}
 migrations-path: "/migrations"
 service-name: {{ .Values.serviceName }}
 workers: {{ .Values.importer.workerNum }}
@@ -32,14 +32,14 @@ cassandra:
   {{- end }}
 
 storage:
-  host: {{ required "Valid .Values.dgctl_storage.host required!" .Values.dgctl_storage.host }}
-  bucket: {{ required "Valid .Values.dgctl_storage.bucket required!" .Values.dgctl_storage.bucket }}
+  host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
+  bucket: {{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}
   url-lifetime-period: 60m
 
 k8s:
   job-template-file-path: /config/job.yaml
   {{- with .Values.importer }}
-  worker-image: {{ required "A valid .Values.dgctl_docker_registry entry required" $.Values.dgctl_docker_registry }}/{{ .image }}:{{ .tag }}
+  worker-image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image }}:{{ .tag }}
   {{- end }}
   namespace: {{ .Release.Namespace }}
 

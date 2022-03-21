@@ -1,10 +1,10 @@
 ---
-dgctl_docker_registry: ''
-dgctl_storage:
+dgctlDockerRegistry: ''
+dgctlStorage:
   host: ''
   bucket: ''
-  access_key: ''
-  secret_key: ''
+  accessKey: ''
+  secretKey: ''
   manifest: ''
 
 serviceName: tiles-api-webgl

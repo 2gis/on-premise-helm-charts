@@ -108,7 +108,7 @@
 ```
 2. Создать файл stage_values.yaml со следующим содержимым:
 ```
-dgctl_docker_registry: 'your-docker-hub-registry'
+dgctlDockerRegistry: 'your-docker-hub-registry'
 router:
   app_castle_host: stage-castle 
   additional_sections: |- 

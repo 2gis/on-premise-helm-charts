@@ -19,7 +19,7 @@ To install the service create a YAML file that will contain:
 
 ```yaml
 # Docker image
-dgctl_docker_registry: 'your-docker-hub-registry'
+dgctlDockerRegistry: 'your-docker-hub-registry'
 
 # PostgreSQL access
 db:

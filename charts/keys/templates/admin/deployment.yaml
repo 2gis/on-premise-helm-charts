@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
         - name: keys-admin
-          image: {{ required "A valid .Values.dgctl_docker_registry entry required" .Values.dgctl_docker_registry }}/{{ .Values.admin.image.repository }}:{{ .Values.admin.image.tag }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.admin.image.repository }}:{{ .Values.admin.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           ports:
             - name: http

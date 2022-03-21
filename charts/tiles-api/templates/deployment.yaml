@@ -74,7 +74,7 @@ spec:
 
         {{- with $.Values.proxy }}
         - name: tiles-api-proxy
-          image: {{ required "A valid .Values.dgctl_docker_registry entry required" $.Values.dgctl_docker_registry }}/{{ .image }}:{{ .tag }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image }}:{{ .tag }}
 
           readinessProbe:
             httpGet:
@@ -111,7 +111,7 @@ spec:
         {{- end }}
 
         - name: tiles-api
-          image: {{ required "A valid .Values.dgctl_docker_registry entry required" .Values.dgctl_docker_registry }}/{{ .Values.api.image }}:{{ .Values.api.tag }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image }}:{{ .Values.api.tag }}
 
           volumeMounts:
             - mountPath: "/config"

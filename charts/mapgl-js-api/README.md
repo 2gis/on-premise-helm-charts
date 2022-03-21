@@ -11,7 +11,7 @@ To learn more about 2GIS On-Premise services, visit [docs.2gis.com](https://docs
 To install the chart, create a YAML file with the registry URL of the service's Docker image.
 
 ```yaml
-dgctl_docker_registry: 'your-docker-hub-registry'
+dgctlDockerRegistry: 'your-docker-hub-registry'
 ```
 
 Then, add 2gis helm repository and call the `helm install` command and specify the name of the chart and the created file:
