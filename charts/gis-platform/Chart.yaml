@@ -6,7 +6,7 @@ description: GIS Platform
 
 type: application
 
-version: 0.0.6
+version: 0.0.7
 appVersion: 0.0.1
 
 dependencies:
