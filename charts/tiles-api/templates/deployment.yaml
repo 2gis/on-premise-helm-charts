@@ -36,8 +36,9 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
 
-      {{- with .Values.api.podAnnotations }}
       annotations:
+        manifest/code: {{ include "tiles.manifestCode" . | sha256sum }}
+      {{- with .Values.api.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
