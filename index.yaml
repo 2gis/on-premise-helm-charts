@@ -425,6 +425,20 @@ entries:
   tiles-api:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2022-03-22T06:33:24.032198896Z"
+    description: Tiles API for getting cartographic data
+    digest: 597928d20221de948885a2ab4ad135aa8ca77b06d55447648f99480e8de9f85a
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: tiles-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/tiles-api-1.1.1/tiles-api-1.1.1.tgz
+    version: 1.1.1
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2022-03-16T04:49:52.650614965Z"
     description: Tiles API for getting cartographic data
     digest: 18dbf4275d9d84be0c75ba8978f5ba6c15b56788475b7f54027a2d59fe7d773e
@@ -451,4 +465,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tiles-api-1.0.0/tiles-api-1.0.0.tgz
     version: 1.0.0
-generated: "2022-03-22T06:22:03.825540854Z"
+generated: "2022-03-22T06:33:24.032341597Z"
