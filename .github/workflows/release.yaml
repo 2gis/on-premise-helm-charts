@@ -4,8 +4,8 @@ name: Release Charts
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - "*"
 
 jobs:
   release:
@@ -21,7 +21,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.2.1
+      - name: Release charts
+        uses: ./.github/actions/release-charts
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
