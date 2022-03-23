@@ -26,7 +26,7 @@ spec:
         - name: migrate
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          command: [ "keysctl", "import", "/appdata/services.json" ]
+          command: [ "keysctl", "import", "/data" ]
           resources:
             {{- toYaml .Values.import.resources | nindent 12 }}
           env:
