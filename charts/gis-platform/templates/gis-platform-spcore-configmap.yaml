@@ -34,6 +34,7 @@ data:
       "maximumActiveRequests": 20,
       "pluginsPath": "plugins",
       "silentlyApplyMigrations": true,
+      "maxRenderTargets": {{- .Values.spcore.maxRenderTargets }},
       "staticPath": "/app/static",
       "previewStaticPath": "/app/static",
       "apiServerPath": "/sp",
