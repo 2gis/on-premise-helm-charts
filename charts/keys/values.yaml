@@ -8,12 +8,12 @@ imagePullPolicy: IfNotPresent
 backend:
   image:
     repository: "2gis-on-premise/zuul"
-    tag: "tag-1.23.5"
+    tag: "tag-1.25.0"
 
 admin:
   image:
     repository: "2gis-on-premise/keys-admin"
-    tag: "main-ff8916f9-app-on-prem"
+    tag: "main-195e0396-app-on-prem"
 
   replicas: 1
 
