@@ -1,6 +1,21 @@
 {
   "settings": {
     "allowSNS": false,
-    "allowRegistration": false
+    "allowRegistration": false,
+    "customLogo": {
+      "src": "/urbi.png",
+      "width": 110,
+      "height": 46
+    },
+    "disabledComponents": {
+      "vk": true,
+      "help": true,
+      "main": true,
+      "about": true,
+      "footer": true,
+      "google": true,
+      "facebook": true
+    },
+    "disableSubscription": true
   }
 }
