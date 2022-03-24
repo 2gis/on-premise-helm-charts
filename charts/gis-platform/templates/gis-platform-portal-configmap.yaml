@@ -59,6 +59,14 @@ data:
             return 302 $scheme://$http_host/sp/;
         }
 
+        location /dgis_test {
+            return 302 $scheme://$http_host/dgis_test/;
+        }
+        location /dgis_test/ {
+            alias /app/dgis_test/;
+            autoindex on;
+        }
+
         location /sp/ {
             {{- if .Values.spcore.cors.allow_everyone }}
             # CORS block
