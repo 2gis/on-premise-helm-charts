@@ -33,6 +33,15 @@ data:
             try_files $uri /index.html;
         }
 
+        location = /static/map/favicon.png {
+            root /app/client/;
+            try_files $uri =404;
+        }
+
+        location ~ /favicon.png$ {
+            rewrite ^.*$ /static/map/favicon.png last;
+        }
+
         location /admin/ {
             alias /app/admin/;
             try_files $uri /admin/index.html;
