@@ -30,6 +30,7 @@ spec:
               matchLabels:
                 {{- include "gis-platform-spcore.selectorLabels" . | nindent 16 }}
             topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 1
       containers:
         - name: {{ include "gis-platform-spcore.fullname" . }}
           command: ["/spcore-entrypoint.sh"]
