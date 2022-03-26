@@ -84,21 +84,12 @@
             {
                 "level": 17,
                 "resolution": 1.1943285669555663
-            },
-            {
-                "level": 18,
-                "resolution": 0.5971642834777832
-            },
-            {
-                "level": 19,
-                "resolution": 0.2985821417388916
-            },
-            {
-                "level": 20,
-                "resolution": 0.1492910708694458
             }
         ]
     },
+    "allowDirectAccess": true,
+    "tileCacheLimit": 0,
+    "RequestTimeout": 0,
     "name": "admin.satellite_imagery",
     "alias": "Satellite Imagery",
     "acl": {

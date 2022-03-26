@@ -13,6 +13,8 @@
         "traffic9"
     ],
     "allowDirectAccess": true,
+    "tileCacheLimit": 0,
+    "RequestTimeout": 0,
     "name": "admin.2gis_traffic",
     "alias": "2GIS Traffic",
     "description": "2GIS Traffic",

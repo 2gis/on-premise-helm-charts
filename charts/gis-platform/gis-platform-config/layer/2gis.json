@@ -92,15 +92,13 @@
       }
     ]
   },
-  "urlFormat": "https://tile{0}.maps.2gis.com/tiles?x={2}&y={3}&z={1}&v=1.5&ts=online_sd_ar&layerType=nc",
-  "tileCacheLimit": 0,
+  "urlFormat": "https://tile1.maps.2gis.com/tiles?x={2}&y={3}&z={1}&v=1.5&ts=online_sd_ar&layerType=nc",
   "subDomains": [
-    "0",
-    "1",
-    "2"
+    
   ],
   "copyrightText": "",
   "allowDirectAccess": true,
+  "tileCacheLimit": 0,
   "RequestTimeout": 0,
   "name": "admin.2gis",
   "alias": "2GIS Basemap",
