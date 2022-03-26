@@ -1,0 +1,117 @@
+upstream spcore-upstream {
+    server {{ include "gis-platform-spcore.fullname" . }}:{{ .Values.spcore.http_port }};
+}
+
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+{{- if .Values.spcore.cors.allow_everyone }}
+map $http_origin $cors_origin {
+    default $http_origin;
+    ''      '*';
+}
+{{- end }}
+
+server {
+    listen 8000;
+    client_max_body_size 200m;
+
+    location / {
+        alias /app/portal/;
+        try_files $uri /index.html;
+    }
+
+    location = /static/map/favicon.png {
+        root /app/client/;
+        try_files $uri =404;
+    }
+
+    location ~ /favicon.png$ {
+        rewrite ^.*$ /static/map/favicon.png last;
+    }
+
+    location /admin/ {
+        alias /app/admin/;
+        try_files $uri /admin/index.html;
+    }
+
+    location /static/admin/ {
+        alias /app/admin/static/admin/;
+    }
+
+    location /static/portal/ {
+        alias /app/portal/static/portal/;
+    }
+
+    location /map/ {
+        alias /app/client/;
+        try_files $uri /map/index.html;
+    }
+
+    location /static/map/ {
+        alias /app/client/static/map/;
+    }
+
+    location /sp {
+        return 302 $scheme://$http_host/sp/;
+    }
+
+    location /dgis_test {
+        return 302 $scheme://$http_host/dgis_test/;
+    }
+    location /dgis_test/ {
+        alias /app/dgis_test/;
+        autoindex on;
+    }
+
+    location /sp/ {
+        {{- if .Values.spcore.cors.allow_everyone }}
+        # CORS block
+        if ($request_method = OPTIONS) {
+            add_header Content-Length 0;
+            add_header Content-Type text/plain;
+            add_header Access-Control-Allow-Origin $cors_origin;
+            add_header Access-Control-Allow-Methods 'GET,POST,PUT,DELETE,PATCH,OPTIONS';
+            add_header Access-Control-Allow-Headers 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization';
+            add_header Access-Control-Allow-Credentials 'true';
+            add_header Access-Control-Max-Age 1728000;
+            return 204;
+        }
+        add_header Access-Control-Allow-Origin $cors_origin always;
+        add_header Access-Control-Allow-Methods 'GET,POST,PUT,DELETE,PATCH,OPTIONS' always;
+        add_header Access-Control-Allow-Headers 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization' always;
+        add_header Access-Control-Allow-Credentials 'true' always;
+        add_header Access-Control-Max-Age 1728000 always;
+        # end CORS block
+        {{- end }}
+
+        proxy_pass http://spcore-upstream/;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+        proxy_connect_timeout 1d;
+        proxy_send_timeout 1d;
+        proxy_read_timeout 1d;
+        client_max_body_size 20000m;
+    }
+
+    location /sp/ws {
+        proxy_pass http://spcore-upstream/ws;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header Host $host;
+        proxy_connect_timeout 7d;
+        proxy_send_timeout 7d;
+        proxy_read_timeout 7d;
+    }
+
+    location /swagger/ {
+        proxy_pass http://spcore-upstream/swagger/;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+    }
+}
