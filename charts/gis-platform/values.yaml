@@ -76,6 +76,13 @@ portal:
       cpu: 100m
       memory: 512Mi
   terminationGracePeriodSeconds: 60
+  cache:
+    enabled: false
+    size: 1G
+    valid: 1m
+    regex:
+      - ^/sp/wms.*layers=admin.satellite_imagery&.*$
+      - ^/sp/wms.*layers=admin.2gis&.*$
   image:
     repository: '2gis-on-premise/gis_platform_portal'
     tag: '2022-03-25'
