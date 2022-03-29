@@ -11,6 +11,8 @@ spec:
       {{- include "gis-platform-portal.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/gis-platform-portal-configmap.yaml") . | sha256sum }}
       labels:
         {{- include "gis-platform-portal.selectorLabels" . | nindent 8 }}
     spec:
