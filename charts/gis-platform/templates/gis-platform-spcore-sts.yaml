@@ -46,8 +46,14 @@ spec:
               path: /
               port: {{ .Values.spcore.http_port }}
               scheme: HTTP
-            initialDelaySeconds: 30
+            initialDelaySeconds: 45
             periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.spcore.http_port }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
           ports:
           - containerPort: {{ .Values.spcore.cloud_port }}
           - containerPort: {{ .Values.spcore.http_port }}
