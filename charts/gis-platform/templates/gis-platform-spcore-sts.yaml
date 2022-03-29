@@ -41,6 +41,13 @@ spec:
           {{- else }}
           {{- end }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.spcore.image.repository }}:{{ .Values.spcore.image.tag }}
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.spcore.http_port }}
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
           ports:
           - containerPort: {{ .Values.spcore.cloud_port }}
           - containerPort: {{ .Values.spcore.http_port }}
