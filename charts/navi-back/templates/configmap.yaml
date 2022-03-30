@@ -343,4 +343,6 @@ data:
       }
     }
   rules.conf: |-
-{{ .Files.Get "rules.conf" | indent 4 }}
+   {{- include "rules.renderRules" . }}
+
+
