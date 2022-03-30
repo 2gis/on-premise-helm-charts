@@ -75,3 +75,20 @@ Usage:
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
 {{- end -}}
+
+{{/* vim: set filetype=mustache: */}}
+{{/*
+Renders a value or file that contains rules.
+Usage:
+{{ include "rules.renderRules" }}
+*/}}
+{{- define "rules.renderRules" -}}
+    {{- $rules_file_content := .Files.Get "rules.conf" }}
+    {{- if .Values.rules -}}
+        {{- .Values.rules | toPrettyJson | nindent 6 }}
+    {{- else if $rules_file_content  }}
+        {{- .Files.Get "rules.conf" |  nindent 6}}
+    {{- else }}
+        {{- fail "Rules value is not set or rules file is empty" }}
+    {{- end -}}
+{{- end -}}
