@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/gis-platform-portal-configmap.yaml") . | sha256sum }}
+        checksum/config: {{ (include (print $.Template.BasePath "/gis-platform-portal-configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
       labels:
         {{- include "gis-platform-portal.selectorLabels" . | nindent 8 }}
     spec:
