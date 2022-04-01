@@ -1,0 +1,189 @@
+---
+# -- Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+dgctlDockerRegistry: ''
+
+# -- <h3>Deployment Artifacts Storage</h3>
+# @default --  
+dgctlStorage:
+
+  # -- S3 endpoint. Format: `host:port`.
+  host: ''
+  
+  # -- S3 bucket name.
+  bucket: ''
+  
+  # -- S3 access key for accessing the bucket.
+  accessKey: ''
+  
+  # -- S3 secret key for accessing the bucket.
+  secretKey: ''
+  
+  # -- The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2--Common_deployment_steps). 
+  # Format: `manifests/0000000000.json`.
+  # <br>
+  # This file contains the description of pieces of data that the service requires to operate.
+  manifest: ''
+
+# -- Name of the service.
+# It depends on the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Architecture):
+# <ul><li>`tiles-api-webgl` for Tiles API with vector tiles support.
+# </li><li>`tiles-api-raster` for Tiles API with raster tiles support.</li><ul>
+serviceName: tiles-api-webgl
+
+# -- Name of the deployment
+name: tiles-api
+
+# -- Type of the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Architecture):
+# <ul><li>An empty string for Tiles API with vector tiles support.</li>
+# <li>`raster` for Tiles API with raster tiles support.</li><ul>
+type: web
+
+cassandra:
+  # -- List of available Cassandra database nodes
+  hosts: []
+
+  # -- Credentials for Cassandra authentication
+  credentials:
+    user: cassandra
+    password: cassandra
+
+  # -- Replication factor for Cassandra
+  replicaFactor: 3
+
+  # -- Consistency level for database read queries. All possible values can be viewed by [link](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels)
+  consistencyLevelRead: LOCAL_QUORUM
+
+  # -- Consistency level for database write queries. All possible values can be viewed by [link](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels)
+  consistencyLevelWrite: LOCAL_QUORUM
+
+proxy:
+  # -- The path to the docker image. Must have a path to your private docker registry
+  image: 2gis-on-premise/tiles-api-proxy
+  # -- Tag with application version
+  tag: v4.19.2
+
+  containerPort: 5000
+  timeout: 5s
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
+
+  access:
+    # -- Flag to enable verification access key
+    enabled: false
+    # -- Host for Keys API service
+    host: http://keys-api.localhost
+    # -- Service key for Keys API
+    token: ""
+    syncPeriod: 2m
+
+api:
+  # -- The path to the docker image. Must have a path to your private docker registry
+  image: 2gis-on-premise/tiles-api
+  # -- Tag with application version
+  tag: v4.19.2
+  pullPolicy: IfNotPresent
+
+  terminationGracePeriodSeconds: 30
+  containerPort: 8000
+
+  labels: {}
+  annotations: {}
+
+  replicaCount: 3
+  revisionHistory: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
+
+  podAnnotations: {}
+  podLabels: {}
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+  imagePullSecrets: {}
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  service:
+    port: 80
+    type: ClusterIP
+    annotations: {}
+    labels: {}
+
+  ingress:
+    enabled: false
+
+    className: nginx
+    tls: []
+    hosts:
+      - host: tiles-api.loc
+        paths:
+          - path: /
+
+  pdb:
+    enabled: true
+    maxUnavailable: 1
+
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 50
+
+  vpa:
+    enabled: false
+    updateMode: Auto
+    minAllowed:
+      memory: 128Mi
+    maxAllowed:
+      cpu: 1
+      memory: 512Mi
+
+importer:
+  enabled: true
+
+  # -- The path to the docker image. Must have a path to your private docker registry
+  image: 2gis-on-premise/tiles-api-importer
+  # -- Tag with application version
+  tag: v4.19.2
+
+  pullPolicy: IfNotPresent
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+
+  # -- Number of parallel import processes (spawned jobs)
+  workerNum: 6
+
+  # -- Number of write processes per import process
+  writerNum: 8
+
+  tolerations: {}
+  imagePullSecrets: {}
+
+  nodeSelector: {}
+  workerResources:
+    requests:
+      cpu: 256m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2048Mi
