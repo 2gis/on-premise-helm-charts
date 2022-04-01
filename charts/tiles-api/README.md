@@ -8,21 +8,13 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 >
 > All On-Premise services are beta, and under development.
 
-## Requirements
+See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn how to:
 
-See the [documentation](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Requirements) for details.
+- Install the service.
 
-## Installing
+    When filling in the keys for `values-tiles.yaml` configuration file, refer to the documentation and the list of keys below.
 
-See the [documentation](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Installing) for the installation instructions.
-
-When filling in the keys for `values-tiles.yaml` configuration file, refer to the documentation and the list of keys below.
-
-Also, you can use the sample [values.yaml](./values.yaml) file as a reference.
-
-## Updating
-
-See the [documentation](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Updating) for the update instructions.
+- Update the service.
 
 ## Values
 
@@ -41,8 +33,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Updati
 | dgctlStorage.secretKey                                    | string        | `""`                      | S3 secret key for accessing the bucket. |
 | dgctlStorage.manifest                                     | string        | `""`                      | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2--Common_deployment_steps). Format: `manifests/0000000000.json`.<br>This file contains the description of pieces of data that the service requires to operate. |
 | <h3>**Apache Cassandra Data Storage**</h3>                                                                                                                                                    |
-| cassandra.consistencyLevelRead                            | string        | `"LOCAL_QUORUM"`          | [Write consistency level]((https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels)).  |
-| cassandra.consistencyLevelWrite                           | string        | `"LOCAL_QUORUM"`          | [Read consistency levels](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels) |
+| cassandra.consistencyLevelRead                            | string        | `"LOCAL_QUORUM"`          | [Write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels).|
+| cassandra.consistencyLevelWrite                           | string        | `"LOCAL_QUORUM"`          | [Read consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels) |
 | cassandra.credentials                                     | object        | `{"password":"cassandra","user":"cassandra"}` | Credentials for accessing Apache Cassandra. |
 | cassandra.hosts                                           | list          | `[]`                      | An array of the one of more IP adresses or hostnames of the Apache Cassandra installation. |
 | cassandra.replicaFactor                                   | int           | `3`                       | Apache Cassandra [replication factor](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html). |
