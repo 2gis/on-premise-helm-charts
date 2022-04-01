@@ -62,6 +62,14 @@ spcore:
     layers: 500
     projects: 1000
     features: 1000000
+  startupProbe:
+    initialDelaySeconds: 45
+    periodSeconds: 10
+    failureThreshold: 30
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    failureThreshold: 3
 
 portal:
   replicaCount: 1

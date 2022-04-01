@@ -47,15 +47,17 @@ spec:
               path: /
               port: {{ .Values.spcore.http_port }}
               scheme: HTTP
-            initialDelaySeconds: 45
-            periodSeconds: 10
+            initialDelaySeconds: {{ .Values.spcore.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.spcore.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.spcore.startupProbe.failureThreshold }}
           readinessProbe:
             httpGet:
               path: /
               port: {{ .Values.spcore.http_port }}
               scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            initialDelaySeconds: {{ .Values.spcore.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.spcore.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.spcore.readinessProbe.failureThreshold }}
           ports:
           - containerPort: {{ .Values.spcore.cloud_port }}
           - containerPort: {{ .Values.spcore.http_port }}
