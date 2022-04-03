@@ -1,163 +1,338 @@
 ---
+
+# -- Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 dgctlDockerRegistry: ''
+
+# -- <h3>Deployment Artifacts Storage</h3>
+# @default --  
 dgctlStorage:
+  # -- S3 endpoint. Format: `host:port`.
   host: ''
+  # -- S3 bucket name.
   bucket: ''
+  # -- S3 access key for accessing the bucket.
   accessKey: ''
+  # -- S3 secret key for accessing the bucket.
   secretKey: ''
+  # -- The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2--Common_deployment_steps). 
+    # Format: `manifests/0000000000.json`.
+  # <br>
+  # This file contains the description of pieces of data that the service requires to operate.
   manifest: ''
 
+# -- Name of the service.
+# It depends on the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Architecture):
+# <ul><li>`tiles-api-webgl` for Tiles API with vector tiles support.
+# </li><li>`tiles-api-raster` for Tiles API with raster tiles support.</li><ul>
 serviceName: tiles-api-webgl
 
+# -- Name of the deployment
 name: tiles-api
+
+# -- Type of the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Architecture):
+# <ul><li>An empty string for Tiles API with vector tiles support.</li>
+# <li>`raster` for Tiles API with raster tiles support.</li><ul>
 type: web
 
+# -- <h3>Apache Cassandra Data Storage</h3>
+# @default --  
 cassandra:
-  # -- List of available Cassandra database nodes
+  # -- An array of the one of more IP adresses or hostnames of the Apache Cassandra installation.
   hosts: []
 
-  # -- Credentials for Cassandra authentication
+  # -- Credentials for accessing Apache Cassandra.
+  # @default --  
   credentials:
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # User name.
     user: cassandra
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # Password.
     password: cassandra
 
-  # -- Replication factor for Cassandra
+  # -- Apache Cassandra [replication factor](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html).
   replicaFactor: 3
 
-  # -- Consistency level for database read queries. All possible values can be viewed by [link](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels)
+  # -- [Read consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels)
   consistencyLevelRead: LOCAL_QUORUM
 
-  # -- Consistency level for database write queries. All possible values can be viewed by [link](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels)
+  # -- [Write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels).
   consistencyLevelWrite: LOCAL_QUORUM
 
+# -- <h3>Proxy to access the API Keys service</h3>
+# @default --  
 proxy:
-  # -- The path to the docker image. Must have a path to your private docker registry
+  # -- The path to the Docker image. This image must exist in the Docker Registry, specified in the `dgctlDockerRegistry` key.
   image: 2gis-on-premise/tiles-api-proxy
-  # -- Tag with application version
+  
+  # -- Tag with proxy version.
   tag: v4.19.2
-
+  
+  # -- Proxy container port.
   containerPort: 5000
+  
+  # -- Proxy timeout, in seconds.
   timeout: 5s
 
+  # -- Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the proxy.
+  # @default --  
   resources:
     requests:
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A CPU request.
       cpu: 50m
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A memory request.
       memory: 128Mi
     limits:
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A CPU limit.
       cpu: 1
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A memory limit.
       memory: 512Mi
 
+  # -- Proxy access settings
+  # @default --  
   access:
-    # -- Flag to enable verification access key
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
     enabled: false
-    # -- Host for Keys API service
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # API Keys endpoint hostname.
     host: http://keys-api.localhost
-    # -- Service key for Keys API
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # [Service key](https://docs.2gis.com/en/on-premise/keys#nav-lvl1--Fetching_the_service_API_keys) for accessing Keys API.
     token: ""
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # Sync period.
     syncPeriod: 2m
 
+# -- <h3>Tiles API service</h3>
+# @default --  
 api:
-  # -- The path to the docker image. Must have a path to your private docker registry
+  # -- The path to the Docker image. This image must exist in the Docker Registry, specified in the `dgctlDockerRegistry` key.
   image: 2gis-on-premise/tiles-api
-  # -- Tag with application version
+  
+  # -- Tag with Tiles API service version.
   tag: v4.19.2
+
+  # -- Kubernetes [image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) for pulling the services' images.
   pullPolicy: IfNotPresent
 
+  # -- Duration in seconds the Tiles API service pod needs to terminate gracefully.
   terminationGracePeriodSeconds: 30
+
+  # -- Tiles API container port.
   containerPort: 8000
 
+  ## -- Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   labels: {}
+
+  # -- Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   annotations: {}
 
+  # -- A replica count for the pod.
   replicaCount: 3
+
+  # -- Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
   revisionHistory: 1
+
+  # -- Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the Tiles API service.
+  # @default --  
   resources:
     requests:
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A CPU request.
       cpu: 50m
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A memory request.
       memory: 128Mi
     limits:
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A CPU limit.
       cpu: 1
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;  
+      # A memory limit.
       memory: 512Mi
 
+  # -- Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   podAnnotations: {}
+
+  # -- Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   podLabels: {}
 
+  # -- Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   nodeSelector: {}
+
+  # -- Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   affinity: {}
+
+  #-- Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
   tolerations: {}
+
+  # -- A list of references to secrets to use for [pulling any images from the Docker Registry](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod), specified in the `dgctlDockerRegistry` key.
   imagePullSecrets: {}
+
+  # -- [Rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) strategy settings.
+  # @default --  
   strategy:
     rollingUpdate:
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
       maxUnavailable: 0
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
       maxSurge: 1
 
+  # -- Kubernetes [service settings](https://kubernetes.io/docs/concepts/services-networking/service/) to expose the service.
+  # @default --  
   service:
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # Tiles API service port.
     port: 80
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
     type: ClusterIP
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
     annotations: {}
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
     labels: {}
 
+  # -- Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings.
+  # @default --  
   ingress:
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # If Ingress is enabled for the service.
     enabled: false
-
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource.
     className: nginx
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress.
     tls: []
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # Host settings:
     hosts:
+        # -- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        # Fully qualified domain name of the Tiles API service.
       - host: tiles-api.loc
         paths:
+          # -- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          # Path to associate the Tiles API service with.
           - path: /
 
+  # -- Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings.
+  # @default --  
   pdb:
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # If PDB is enabled for the service.
     enabled: true
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # How many pods must always be available, even during a disruption.
     maxUnavailable: 1
 
+  # -- Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings:
+  # @default --  
   hpa:
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # If HPA is enabled for the service.
     enabled: false
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # Lower limit for the number of replicas to which the autoscaler can scale down
     minReplicas: 1
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # Upper limit for the number of replicas to which the autoscaler can scale up
     maxReplicas: 1
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
     targetCPUUtilizationPercentage: 50
 
+  # -- [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings.
+  # @default --  
   vpa:
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # If VPA is enabled for the service.
     enabled: false
+    # -- &nbsp;&nbsp;&nbsp;&nbsp;
+    # VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start)
     updateMode: Auto
     minAllowed:
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # Lower limit for the RAM size to which the autoscaler can scale down
       memory: 128Mi
     maxAllowed:
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # Upper limit for the number of CPUs to which the autoscaler can scale up
       cpu: 1
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # Upper limit for the RAM size to which the autoscaler can scale up
       memory: 512Mi
 
+# -- <h3>Kubernetes Importer job</h3>
+# @default --  
 importer:
+  # -- If Importer job is enabled.
   enabled: true
 
-  # -- The path to the docker image. Must have a path to your private docker registry
+  # -- The path to the Docker image. This image must exist in the Docker Registry, specified in the `dgctlDockerRegistry` key.
   image: 2gis-on-premise/tiles-api-importer
-  # -- Tag with application version
+
+  # -- Tag with Importer job version.
   tag: v4.19.2
 
+  # -- Kubernetes [image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) for pulling the services' images.
   pullPolicy: IfNotPresent
 
+  # -- Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the Importer job.
+  # @default --  
   resources:
     requests:
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A CPU request.
       cpu: 50m
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;``
+      # A memory request.
       memory: 128Mi
     limits:
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A CPU limit.
       cpu: 100m
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A memory limit.
       memory: 256Mi
 
-  # -- Number of parallel import processes (spawned jobs)
+  # -- Number of parallel import processes (workers)
   workerNum: 6
 
-  # -- Number of write processes per import process
+  # -- Number of write processes per import process (worker)
   writerNum: 8
 
+  # -- Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
   tolerations: {}
+
+  # -- A list of references to secrets to use for [pulling any images from the Docker Registry](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod), specified in the `dgctlDockerRegistry` key.
   imagePullSecrets: {}
 
+  # -- Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   nodeSelector: {}
+
+  # -- Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the import processes (workers).
+  # @default --  
   workerResources:
     requests:
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A CPU request.
       cpu: 256m
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A memory request.
       memory: 512Mi
     limits:
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A CPU limit.
       cpu: 2
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
+      # A memory limit.
       memory: 2048Mi
