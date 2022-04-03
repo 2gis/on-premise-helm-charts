@@ -23,6 +23,7 @@ data:
             <rtw_path>{{ .Values.api.data_dir }}/rtw</rtw_path>
 
             <search_timeout>5000</search_timeout>
+            <is_container>1</is_container>
             <slow_search_request_threshold>2000</slow_search_request_threshold>
             <segment_geometry_source>segments</segment_geometry_source>
     </sapphire>
@@ -52,7 +53,7 @@ data:
         gzip_min_length 512;
 
         access_log off;
-        error_log off;
+        error_log stderr;
 
         server {
             listen {{ .Values.nginx.http_port }};
