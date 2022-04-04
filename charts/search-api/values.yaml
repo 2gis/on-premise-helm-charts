@@ -13,7 +13,7 @@ replicaCount: 1
 api:
   repository: 2gis-on-premise/search-api
   pullPolicy: IfNotPresent
-  tag: "7.16.0"
+  tag: "7.18.1"
   resources: {}
   data_dir: "/data"
   fcgi_port: 9090
@@ -21,7 +21,7 @@ api:
 nginx:
   repository: 2gis-on-premise/search-nginx
   pullPolicy: IfNotPresent
-  tag: "1.21.4-3"
+  tag: "1.21.6"
   resources: {}
   http_port: 8080
 
