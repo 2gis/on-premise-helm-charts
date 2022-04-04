@@ -219,12 +219,12 @@ api:
     hosts:
         # -- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         # Fully qualified domain name of the Tiles API service
-        # @default -- "tiles-api.loc"
+        # @default -- `"tiles-api.loc"`
       - host: tiles-api.loc
         paths:
           # -- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           # Path to associate the Tiles API service with
-          # @default -- "/"
+          # @default -- `"/"`
           - path: /
 
   # -- Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings:
@@ -296,7 +296,7 @@ importer:
       # -- &nbsp;&nbsp;&nbsp;&nbsp;
       # A CPU request
       cpu: 50m
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;``
+      # -- &nbsp;&nbsp;&nbsp;&nbsp;
       # A memory request
       memory: 128Mi
     limits:

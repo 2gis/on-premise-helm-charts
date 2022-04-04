@@ -37,8 +37,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | api.ingress.className | string | `"nginx"` | &nbsp;&nbsp;&nbsp;&nbsp; Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource |
 | api.ingress.enabled | bool | `false` | &nbsp;&nbsp;&nbsp;&nbsp; If Ingress is enabled for the service |
 | api.ingress.hosts | list |   | &nbsp;&nbsp;&nbsp;&nbsp; Host settings for Tiles API service: |
-| api.ingress.hosts[0] | object | "tiles-api.loc" | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fully qualified domain name of the Tiles API service |
-| api.ingress.hosts[0].paths[0] | object | "/" | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Path to associate the Tiles API service with |
+| api.ingress.hosts[0] | object | `"tiles-api.loc"` | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fully qualified domain name of the Tiles API service |
+| api.ingress.hosts[0].paths[0] | object | `"/"` | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Path to associate the Tiles API service with |
 | api.ingress.tls | list | `[]` | &nbsp;&nbsp;&nbsp;&nbsp; [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress |
 | api.nodeSelector | object | `{}` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) |
 | api.pdb | object |   | Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings: |
@@ -95,7 +95,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | importer.resources.limits.cpu | string | `"100m"` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU limit |
 | importer.resources.limits.memory | string | `"256Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory limit |
 | importer.resources.requests.cpu | string | `"50m"` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU request |
-| importer.resources.requests.memory | string | `"128Mi"` | &nbsp;&nbsp;&nbsp;&nbsp;`` A memory request |
+| importer.resources.requests.memory | string | `"128Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory request |
 | importer.tag | string | `"v4.19.2"` | Tag with Importer job version |
 | importer.tolerations | object | `{}` | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings |
 | importer.workerNum | int | `6` | Number of parallel import processes (workers) |
