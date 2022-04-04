@@ -23,106 +23,106 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | api | object |   | <h3>Tiles API service</h3> |
-| api.affinity | object | `{}` | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). |
-| api.annotations | object | `{}` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). |
-| api.containerPort | int | `8000` | Tiles API container port. |
+| api.affinity | object | `{}` | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) |
+| api.annotations | object | `{}` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) |
+| api.containerPort | int | `8000` | Tiles API container port |
 | api.hpa | object |   | Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings: |
-| api.hpa.enabled | bool | `false` | &nbsp;&nbsp;&nbsp;&nbsp; If HPA is enabled for the service. |
+| api.hpa.enabled | bool | `false` | &nbsp;&nbsp;&nbsp;&nbsp; If HPA is enabled for the service |
 | api.hpa.maxReplicas | int | `1` | &nbsp;&nbsp;&nbsp;&nbsp; Upper limit for the number of replicas to which the autoscaler can scale up |
 | api.hpa.minReplicas | int | `1` | &nbsp;&nbsp;&nbsp;&nbsp; Lower limit for the number of replicas to which the autoscaler can scale down |
-| api.hpa.targetCPUUtilizationPercentage | int | `50` | &nbsp;&nbsp;&nbsp;&nbsp; Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used. |
-| api.image | string | `"2gis-on-premise/tiles-api"` | The path to the Docker image. This image must exist in the Docker Registry, specified in the `dgctlDockerRegistry` key. |
-| api.imagePullSecrets | object | `{}` | A list of references to secrets to use for [pulling any images from the Docker Registry](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod), specified in the `dgctlDockerRegistry` key. |
-| api.ingress | object |   | Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings. |
-| api.ingress.className | string | `"nginx"` | &nbsp;&nbsp;&nbsp;&nbsp; Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource. |
-| api.ingress.enabled | bool | `false` | &nbsp;&nbsp;&nbsp;&nbsp; If Ingress is enabled for the service. |
-| api.ingress.hosts | list | `[{"host":"tiles-api.loc","paths":[{"path":"/"}]}]` | &nbsp;&nbsp;&nbsp;&nbsp; Host settings: |
-| api.ingress.hosts[0] | object | `{"host":"tiles-api.loc","paths":[{"path":"/"}]}` | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fully qualified domain name of the Tiles API service. |
-| api.ingress.hosts[0].paths[0] | object | `{"path":"/"}` | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Path to associate the Tiles API service with. |
-| api.ingress.tls | list | `[]` | &nbsp;&nbsp;&nbsp;&nbsp; [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress. |
-| api.nodeSelector | object | `{}` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). |
-| api.pdb | object |   | Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings. |
-| api.pdb.enabled | bool | `true` | &nbsp;&nbsp;&nbsp;&nbsp; If PDB is enabled for the service. |
-| api.pdb.maxUnavailable | int | `1` | &nbsp;&nbsp;&nbsp;&nbsp; How many pods must always be available, even during a disruption. |
-| api.podAnnotations | object | `{}` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). |
-| api.podLabels | object | `{}` | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/). |
-| api.pullPolicy | string | `"IfNotPresent"` | Kubernetes [image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) for pulling the services' images. |
-| api.replicaCount | int | `3` | A replica count for the pod. |
-| api.resources | object |   | Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the Tiles API service. |
-| api.resources.limits.cpu | int | `1` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU limit. |
-| api.resources.limits.memory | string | `"512Mi"` | &nbsp;&nbsp;&nbsp;&nbsp;   A memory limit. |
-| api.resources.requests.cpu | string | `"50m"` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU request. |
-| api.resources.requests.memory | string | `"128Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory request. |
-| api.revisionHistory | int | `1` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). |
-| api.service | object |   | Kubernetes [service settings](https://kubernetes.io/docs/concepts/services-networking/service/) to expose the service. |
-| api.service.annotations | object | `{}` | &nbsp;&nbsp;&nbsp;&nbsp; Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). |
-| api.service.labels | object | `{}` | &nbsp;&nbsp;&nbsp;&nbsp; Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/). |
-| api.service.port | int | `80` | &nbsp;&nbsp;&nbsp;&nbsp; Tiles API service port. |
-| api.service.type | string | `"ClusterIP"` | &nbsp;&nbsp;&nbsp;&nbsp; Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). |
-| api.strategy | object |   | [Rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) strategy settings. |
-| api.strategy.rollingUpdate.maxSurge | int | `1` | &nbsp;&nbsp;&nbsp;&nbsp; Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process. |
-| api.strategy.rollingUpdate.maxUnavailable | int | `0` | &nbsp;&nbsp;&nbsp;&nbsp; Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). |
-| api.tag | string | `"v4.19.2"` | Tag with Tiles API service version. |
-| api.terminationGracePeriodSeconds | int | `30` | Duration in seconds the Tiles API service pod needs to terminate gracefully. |
-| api.vpa | object |   | [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings. |
-| api.vpa.enabled | bool | `false` | &nbsp;&nbsp;&nbsp;&nbsp; If VPA is enabled for the service. |
+| api.hpa.targetCPUUtilizationPercentage | int | `50` | &nbsp;&nbsp;&nbsp;&nbsp; Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used |
+| api.image | string | `"2gis-on-premise/tiles-api"` | The path to the Docker image. This image must exist in the Docker Registry, specified in the `dgctlDockerRegistry` key |
+| api.imagePullSecrets | object | `{}` | A list of references to secrets to use for [pulling any images from the Docker Registry](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod), specified in the `dgctlDockerRegistry` key |
+| api.ingress | object |   | Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings: |
+| api.ingress.className | string | `"nginx"` | &nbsp;&nbsp;&nbsp;&nbsp; Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource |
+| api.ingress.enabled | bool | `false` | &nbsp;&nbsp;&nbsp;&nbsp; If Ingress is enabled for the service |
+| api.ingress.hosts | list |   | &nbsp;&nbsp;&nbsp;&nbsp; Host settings for Tiles API service: |
+| api.ingress.hosts[0] | object | "tiles-api.loc" | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fully qualified domain name of the Tiles API service |
+| api.ingress.hosts[0].paths[0] | object | "/" | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Path to associate the Tiles API service with |
+| api.ingress.tls | list | `[]` | &nbsp;&nbsp;&nbsp;&nbsp; [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress |
+| api.nodeSelector | object | `{}` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) |
+| api.pdb | object |   | Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings: |
+| api.pdb.enabled | bool | `true` | &nbsp;&nbsp;&nbsp;&nbsp; If PDB is enabled for the service |
+| api.pdb.maxUnavailable | int | `1` | &nbsp;&nbsp;&nbsp;&nbsp; How many pods must always be available, even during a disruption |
+| api.podAnnotations | object | `{}` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) |
+| api.podLabels | object | `{}` | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) |
+| api.pullPolicy | string | `"IfNotPresent"` | Kubernetes [image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) for pulling the services' images |
+| api.replicaCount | int | `3` | A replica count for the pod |
+| api.resources | object |   | Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the Tiles API service: |
+| api.resources.limits.cpu | int | `1` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU limit |
+| api.resources.limits.memory | string | `"512Mi"` | &nbsp;&nbsp;&nbsp;&nbsp;   A memory limit |
+| api.resources.requests.cpu | string | `"50m"` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU request |
+| api.resources.requests.memory | string | `"128Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory request |
+| api.revisionHistory | int | `1` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment) |
+| api.service | object |   | Kubernetes [service settings](https://kubernetes.io/docs/concepts/services-networking/service/) to expose the service: |
+| api.service.annotations | object | `{}` | &nbsp;&nbsp;&nbsp;&nbsp; Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) |
+| api.service.labels | object | `{}` | &nbsp;&nbsp;&nbsp;&nbsp; Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) |
+| api.service.port | int | `80` | &nbsp;&nbsp;&nbsp;&nbsp; Tiles API service port |
+| api.service.type | string | `"ClusterIP"` | &nbsp;&nbsp;&nbsp;&nbsp; Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) |
+| api.strategy | object |   | [Rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) strategy settings: |
+| api.strategy.rollingUpdate.maxSurge | int | `1` | &nbsp;&nbsp;&nbsp;&nbsp; Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process |
+| api.strategy.rollingUpdate.maxUnavailable | int | `0` | &nbsp;&nbsp;&nbsp;&nbsp; Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) |
+| api.tag | string | `"v4.19.2"` | Tag with Tiles API service version |
+| api.terminationGracePeriodSeconds | int | `30` | Duration in seconds the Tiles API service pod needs to terminate gracefully |
+| api.vpa | object |   | [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings: |
+| api.vpa.enabled | bool | `false` | &nbsp;&nbsp;&nbsp;&nbsp; If VPA is enabled for the service |
 | api.vpa.maxAllowed.cpu | int | `1` | &nbsp;&nbsp;&nbsp;&nbsp; Upper limit for the number of CPUs to which the autoscaler can scale up |
 | api.vpa.maxAllowed.memory | string | `"512Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; Upper limit for the RAM size to which the autoscaler can scale up |
 | api.vpa.minAllowed.memory | string | `"128Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; Lower limit for the RAM size to which the autoscaler can scale down |
 | api.vpa.updateMode | string | `"Auto"` | &nbsp;&nbsp;&nbsp;&nbsp; VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start) |
 | cassandra | object |   | <h3>Apache Cassandra Data Storage</h3> |
 | cassandra.consistencyLevelRead | string | `"LOCAL_QUORUM"` | [Read consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels) |
-| cassandra.consistencyLevelWrite | string | `"LOCAL_QUORUM"` | [Write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels). |
-| cassandra.credentials | object |   | Credentials for accessing Apache Cassandra. |
-| cassandra.credentials.password | string | `"cassandra"` | &nbsp;&nbsp;&nbsp;&nbsp; Password. |
-| cassandra.credentials.user | string | `"cassandra"` | &nbsp;&nbsp;&nbsp;&nbsp; User name. |
-| cassandra.hosts | list | `[]` | An array of the one of more IP adresses or hostnames of the Apache Cassandra installation. |
-| cassandra.replicaFactor | int | `3` | Apache Cassandra [replication factor](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html). |
-| dgctlDockerRegistry | string | `""` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. |
+| cassandra.consistencyLevelWrite | string | `"LOCAL_QUORUM"` | [Write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels) |
+| cassandra.credentials | object |   | Credentials for accessing Apache Cassandra: |
+| cassandra.credentials.password | string | `"cassandra"` | &nbsp;&nbsp;&nbsp;&nbsp; Password |
+| cassandra.credentials.user | string | `"cassandra"` | &nbsp;&nbsp;&nbsp;&nbsp; User name |
+| cassandra.hosts | list | `[]` | An array of the one of more IP adresses or hostnames of the Apache Cassandra installation |
+| cassandra.replicaFactor | int | `3` | Apache Cassandra [replication factor](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html) |
+| dgctlDockerRegistry | string | `""` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port` |
 | dgctlStorage | object |   | <h3>Deployment Artifacts Storage</h3> |
-| dgctlStorage.accessKey | string | `""` | S3 access key for accessing the bucket. |
-| dgctlStorage.bucket | string | `""` | S3 bucket name. |
-| dgctlStorage.host | string | `""` | S3 endpoint. Format: `host:port`. |
-| dgctlStorage.manifest | string | `""` | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2--Common_deployment_steps).  Format: `manifests/0000000000.json`. <br> This file contains the description of pieces of data that the service requires to operate. |
-| dgctlStorage.secretKey | string | `""` | S3 secret key for accessing the bucket. |
+| dgctlStorage.accessKey | string | `""` | S3 access key for accessing the bucket |
+| dgctlStorage.bucket | string | `""` | S3 bucket name |
+| dgctlStorage.host | string | `""` | S3 endpoint. Format: `host:port` |
+| dgctlStorage.manifest | string | `""` | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2--Common_deployment_steps).  Format: `manifests/0000000000.json`. <br> This file contains the description of pieces of data that the service requires to operate |
+| dgctlStorage.secretKey | string | `""` | S3 secret key for accessing the bucket |
 | importer | object |   | <h3>Kubernetes Importer job</h3> |
-| importer.enabled | bool | `true` | If Importer job is enabled. |
-| importer.image | string | `"2gis-on-premise/tiles-api-importer"` | The path to the Docker image. This image must exist in the Docker Registry, specified in the `dgctlDockerRegistry` key. |
-| importer.imagePullSecrets | object | `{}` | A list of references to secrets to use for [pulling any images from the Docker Registry](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod), specified in the `dgctlDockerRegistry` key. |
-| importer.nodeSelector | object | `{}` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). |
-| importer.pullPolicy | string | `"IfNotPresent"` | Kubernetes [image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) for pulling the services' images. |
-| importer.resources | object |   | Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the Importer job. |
-| importer.resources.limits.cpu | string | `"100m"` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU limit. |
-| importer.resources.limits.memory | string | `"256Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory limit. |
-| importer.resources.requests.cpu | string | `"50m"` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU request. |
-| importer.resources.requests.memory | string | `"128Mi"` | &nbsp;&nbsp;&nbsp;&nbsp;`` A memory request. |
-| importer.tag | string | `"v4.19.2"` | Tag with Importer job version. |
-| importer.tolerations | object | `{}` | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings. |
+| importer.enabled | bool | `true` | If Importer job is enabled |
+| importer.image | string | `"2gis-on-premise/tiles-api-importer"` | The path to the Docker image. This image must exist in the Docker Registry, specified in the `dgctlDockerRegistry` key |
+| importer.imagePullSecrets | object | `{}` | A list of references to secrets to use for [pulling any images from the Docker Registry](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod), specified in the `dgctlDockerRegistry` key |
+| importer.nodeSelector | object | `{}` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) |
+| importer.pullPolicy | string | `"IfNotPresent"` | Kubernetes [image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) for pulling the services' images |
+| importer.resources | object |   | Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the Importer job: |
+| importer.resources.limits.cpu | string | `"100m"` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU limit |
+| importer.resources.limits.memory | string | `"256Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory limit |
+| importer.resources.requests.cpu | string | `"50m"` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU request |
+| importer.resources.requests.memory | string | `"128Mi"` | &nbsp;&nbsp;&nbsp;&nbsp;`` A memory request |
+| importer.tag | string | `"v4.19.2"` | Tag with Importer job version |
+| importer.tolerations | object | `{}` | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings |
 | importer.workerNum | int | `6` | Number of parallel import processes (workers) |
-| importer.workerResources | object |   | Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the import processes (workers). |
-| importer.workerResources.limits.cpu | int | `2` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU limit. |
-| importer.workerResources.limits.memory | string | `"2048Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory limit. |
-| importer.workerResources.requests.cpu | string | `"256m"` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU request. |
-| importer.workerResources.requests.memory | string | `"512Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory request. |
+| importer.workerResources | object |   | Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the import processes (workers): |
+| importer.workerResources.limits.cpu | int | `2` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU limit |
+| importer.workerResources.limits.memory | string | `"2048Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory limit |
+| importer.workerResources.requests.cpu | string | `"256m"` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU request |
+| importer.workerResources.requests.memory | string | `"512Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory request |
 | importer.writerNum | int | `8` | Number of write processes per import process (worker) |
 | name | string | `"tiles-api"` | Name of the deployment |
 | proxy | object |   | <h3>Proxy to access the API Keys service</h3> |
-| proxy.access | object |   | Proxy access settings |
-| proxy.access.enabled | bool | `false` | &nbsp;&nbsp;&nbsp;&nbsp; If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled. |
-| proxy.access.host | string | `"http://keys-api.localhost"` | &nbsp;&nbsp;&nbsp;&nbsp; API Keys endpoint hostname. |
-| proxy.access.syncPeriod | string | `"2m"` | &nbsp;&nbsp;&nbsp;&nbsp; Sync period. |
-| proxy.access.token | string | `""` | &nbsp;&nbsp;&nbsp;&nbsp; [Service key](https://docs.2gis.com/en/on-premise/keys#nav-lvl1--Fetching_the_service_API_keys) for accessing Keys API. |
-| proxy.containerPort | int | `5000` | Proxy container port. |
-| proxy.image | string | `"2gis-on-premise/tiles-api-proxy"` | The path to the Docker image. This image must exist in the Docker Registry, specified in the `dgctlDockerRegistry` key. |
-| proxy.resources | object |   | Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the proxy. |
-| proxy.resources.limits.cpu | int | `1` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU limit. |
-| proxy.resources.limits.memory | string | `"512Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory limit. |
-| proxy.resources.requests.cpu | string | `"50m"` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU request. |
-| proxy.resources.requests.memory | string | `"128Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory request. |
-| proxy.tag | string | `"v4.19.2"` | Tag with proxy version. |
-| proxy.timeout | string | `"5s"` | Proxy timeout, in seconds. |
-| serviceName | string | `"tiles-api-webgl"` | Name of the service. It depends on the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Architecture): <ul><li>`tiles-api-webgl` for Tiles API with vector tiles support. </li><li>`tiles-api-raster` for Tiles API with raster tiles support.</li><ul> |
-| type | string | `"web"` | Type of the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Architecture): <ul><li>An empty string for Tiles API with vector tiles support.</li> <li>`raster` for Tiles API with raster tiles support.</li><ul> |
+| proxy.access | object |   | Proxy access settings: |
+| proxy.access.enabled | bool | `false` | &nbsp;&nbsp;&nbsp;&nbsp; If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled |
+| proxy.access.host | string | `"http://keys-api.localhost"` | &nbsp;&nbsp;&nbsp;&nbsp; API Keys endpoint hostname |
+| proxy.access.syncPeriod | string | `"2m"` | &nbsp;&nbsp;&nbsp;&nbsp; Sync period |
+| proxy.access.token | string | `""` | &nbsp;&nbsp;&nbsp;&nbsp; [Service key](https://docs.2gis.com/en/on-premise/keys#nav-lvl1--Fetching_the_service_API_keys) for accessing Keys API |
+| proxy.containerPort | int | `5000` | Proxy container port |
+| proxy.image | string | `"2gis-on-premise/tiles-api-proxy"` | The path to the Docker image. This image must exist in the Docker Registry, specified in the `dgctlDockerRegistry` key |
+| proxy.resources | object |   | Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the proxy: |
+| proxy.resources.limits.cpu | int | `1` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU limit |
+| proxy.resources.limits.memory | string | `"512Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory limit |
+| proxy.resources.requests.cpu | string | `"50m"` | &nbsp;&nbsp;&nbsp;&nbsp; A CPU request |
+| proxy.resources.requests.memory | string | `"128Mi"` | &nbsp;&nbsp;&nbsp;&nbsp; A memory request |
+| proxy.tag | string | `"v4.19.2"` | Tag with proxy version |
+| proxy.timeout | string | `"5s"` | Proxy timeout, in seconds |
+| serviceName | string | `"tiles-api-webgl"` | Name of the service. It depends on the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Architecture): <ul><li>`tiles-api-webgl` for Tiles API with vector tiles support </li><li>`tiles-api-raster` for Tiles API with raster tiles support</li><ul> |
+| type | string | `"web"` | Type of the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Architecture): <ul><li>An empty string for Tiles API with vector tiles support</li> <li>`raster` for Tiles API with raster tiles support</li><ul> |
 
 ## Maintainers
 
