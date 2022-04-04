@@ -38,6 +38,9 @@ spec:
             - name: {{ include "gis-platform-portal.name" . }}-configmap
               mountPath: /etc/nginx/templates/default.conf.template
               subPath: default.conf.template
+            - name: {{ include "gis-platform-portal.name" . }}-configmap
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
       volumes:
         - name: {{ include "gis-platform-portal.name" . }}-configmap
           configMap:

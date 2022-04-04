@@ -87,3 +87,24 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- define "gis-platform.spcore.headless_service" -}}
 {{ include "gis-platform-spcore.fullname" . }}-headless
 {{- end -}}
+
+{{- define "gis-platform.nginx_log_format" }}
+'{'
+     '"@timestamp":"$time_iso8601"'
+    ',"remote_addr":"$remote_addr"'
+    ',"http_status":"$status"'
+    ',"request_uri":"$request_uri"'
+    ',"request_method":"$request_method"'
+    ',"bytes_sent":"$bytes_sent"'
+    ',"request_time":"$request_time"'
+    ',"request_completion":"$request_completion"'
+    ',"cache_status":"$upstream_cache_status"'
+    ',"user_agent":"$http_user_agent"'
+    ',"referer":"$http_referer"'
+    ',"x-forwarded-for":"$http_x_forwarded_for"'
+    ',"upstream_addr":"$upstream_addr"'
+    ',"upstream_connect_time":"$upstream_connect_time"'
+    ',"upstream_response_time":"$upstream_response_time"'
+    ',"upstream_response_length":"$upstream_response_length"'
+'}';
+{{- end }}
