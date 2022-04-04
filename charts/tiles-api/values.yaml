@@ -43,11 +43,9 @@ cassandra:
   # -- Credentials for accessing Apache Cassandra:
   # @default --  
   credentials:
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # User name
+    # -- User name
     user: cassandra
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # Password
+    # -- Password
     password: cassandra
 
   # -- Apache Cassandra [replication factor](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html)
@@ -78,34 +76,26 @@ proxy:
   # @default --  
   resources:
     requests:
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A CPU request
+      # -- A CPU request
       cpu: 50m
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A memory request
+      # -- A memory request
       memory: 128Mi
     limits:
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A CPU limit
+      # -- A CPU limit
       cpu: 1
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A memory limit
+      # -- A memory limit
       memory: 512Mi
 
   # -- Proxy access settings:
   # @default --  
   access:
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled
+    # -- If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled
     enabled: false
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # API Keys endpoint hostname
+    # -- API Keys endpoint hostname
     host: http://keys-api.localhost
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # [Service key](https://docs.2gis.com/en/on-premise/keys#nav-lvl1--Fetching_the_service_API_keys) for accessing Keys API
+    # -- [Service key](https://docs.2gis.com/en/on-premise/keys#nav-lvl1--Fetching_the_service_API_keys) for accessing Keys API
     token: ""
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # Sync period
+    # -- Sync period
     syncPeriod: 2m
 
 # -- <h3>Tiles API service</h3>
@@ -142,18 +132,14 @@ api:
   # @default --  
   resources:
     requests:
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A CPU request
+      # -- A CPU request
       cpu: 50m
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A memory request
+      # -- A memory request
       memory: 128Mi
     limits:
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A CPU limit
+      # -- A CPU limit
       cpu: 1
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;  
-      # A memory limit
+      # -- A memory limit
       memory: 512Mi
 
   # -- Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
@@ -178,100 +164,77 @@ api:
   # @default --  
   strategy:
     rollingUpdate:
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+      # -- Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
       maxUnavailable: 0
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process
+      # -- Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process
       maxSurge: 1
 
   # -- Kubernetes [service settings](https://kubernetes.io/docs/concepts/services-networking/service/) to expose the service:
   # @default --  
   service:
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # Tiles API service port
+    # -- Tiles API service port
     port: 80
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
+    # -- Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
     type: ClusterIP
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+    # -- Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
     annotations: {}
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+    # -- Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
     labels: {}
 
   # -- Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings:
   # @default --  
   ingress:
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # If Ingress is enabled for the service
+    # -- If Ingress is enabled for the service
     enabled: false
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource
+    # -- Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource
     className: nginx
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress
+    # -- [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress
     tls: []
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # Host settings for Tiles API service:
+    # -- Host settings for Tiles API service:
     # @default --  
     hosts:
-        # -- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        # Fully qualified domain name of the Tiles API service
+        # -- Fully qualified domain name of the Tiles API service
         # @default -- `"tiles-api.loc"`
       - host: tiles-api.loc
         paths:
-          # -- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          # Path to associate the Tiles API service with
+          # -- Path to associate the Tiles API service with
           # @default -- `"/"`
           - path: /
 
   # -- Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings:
   # @default --  
   pdb:
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # If PDB is enabled for the service
+    # -- If PDB is enabled for the service
     enabled: true
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # How many pods must always be available, even during a disruption
+    # -- How many pods must always be available, even during a disruption
     maxUnavailable: 1
 
   # -- Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings:
   # @default --  
   hpa:
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # If HPA is enabled for the service
+    # -- If HPA is enabled for the service
     enabled: false
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # Lower limit for the number of replicas to which the autoscaler can scale down
+    # -- Lower limit for the number of replicas to which the autoscaler can scale down
     minReplicas: 1
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # Upper limit for the number of replicas to which the autoscaler can scale up
+    # -- Upper limit for the number of replicas to which the autoscaler can scale up
     maxReplicas: 1
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used
+    # -- Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used
     targetCPUUtilizationPercentage: 50
 
   # -- [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings:
   # @default --  
   vpa:
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # If VPA is enabled for the service
+    # -- If VPA is enabled for the service
     enabled: false
-    # -- &nbsp;&nbsp;&nbsp;&nbsp;
-    # VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start)
+    # -- VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start)
     updateMode: Auto
     minAllowed:
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # Lower limit for the RAM size to which the autoscaler can scale down
+      # -- Lower limit for the RAM size to which the autoscaler can scale down
       memory: 128Mi
     maxAllowed:
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # Upper limit for the number of CPUs to which the autoscaler can scale up
+      # -- Upper limit for the number of CPUs to which the autoscaler can scale up
       cpu: 1
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # Upper limit for the RAM size to which the autoscaler can scale up
+      # -- Upper limit for the RAM size to which the autoscaler can scale up
       memory: 512Mi
 
 # -- <h3>Kubernetes Importer job</h3>
@@ -293,18 +256,14 @@ importer:
   # @default --  
   resources:
     requests:
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A CPU request
+      # -- A CPU request
       cpu: 50m
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A memory request
+      # -- A memory request
       memory: 128Mi
     limits:
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A CPU limit
+      # -- A CPU limit
       cpu: 100m
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A memory limit
+      # -- A memory limit
       memory: 256Mi
 
   # -- Number of parallel import processes (workers)
@@ -326,16 +285,12 @@ importer:
   # @default --  
   workerResources:
     requests:
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A CPU request
+      # -- A CPU request
       cpu: 256m
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A memory request
+      # -- A memory request
       memory: 512Mi
     limits:
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A CPU limit
+      # -- A CPU limit
       cpu: 2
-      # -- &nbsp;&nbsp;&nbsp;&nbsp;
-      # A memory limit
+      # -- A memory limit
       memory: 2048Mi
