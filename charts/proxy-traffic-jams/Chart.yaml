@@ -6,7 +6,7 @@ description: A Helm chart for Kubernetes to deploy Proxy for traffic jams
 
 type: application
 
-version: 0.1.9
+version: 0.2.0
 appVersion: 0.0.1
 
 maintainers:
