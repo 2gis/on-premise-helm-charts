@@ -59,3 +59,30 @@ keys:
     suggest: ""  # set if available in API Keys service
     categories: ""  # set if available in API Keys service
     regions: ""  # set if available in API Keys service
+
+importer:
+  enabled: true
+
+  image:
+    repository: "2gis-on-premise/catalog-importer"
+    tag: "tag-3.557.4"
+    pullPolicy: IfNotPresent
+
+  resources:
+    requests:
+      cpu: 256m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2048Mi
+
+  nodeSelector: {}
+
+  s3:
+    endpoint: "s3.example.com"
+    bucket: ""
+    accessKey: ""
+    secretKey: ""
+
+  manifest: ""
+  workerNum: 3

@@ -2,6 +2,9 @@
 {{- .Release.Name | trunc 32 | trimSuffix "-" }}
 {{- end }}
 
+{{- define "catalog.importer.name" -}}
+{{ include "catalog.name" . }}-importer
+{{- end }}
 
 {{- define "catalog.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
@@ -10,6 +13,12 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 
 {{- define "catalog.labels" -}}
 {{ include "catalog.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "catalog.importer.labels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}-importer
+app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
@@ -115,4 +124,38 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       name: {{ include "catalog.name" . }}
       key: keysServiceRegions
 {{- end }}
+{{- end }}
+
+{{- define "catalog.env.importer" -}}
+- name: IMPORTER_DB_CATALOG_HOST
+  value: "{{ .Values.db.host }}"
+- name: IMPORTER_DB_CATALOG_PORT
+  value: "{{ .Values.db.port }}"
+- name: IMPORTER_DB_CATALOG_NAME
+  value: "{{ .Values.db.name }}"
+- name: IMPORTER_DB_CATALOG_USERNAME
+  value: "{{ .Values.db.username }}"
+- name: IMPORTER_DB_CATALOG_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "catalog.name" . }}
+      key: dbPassword
+- name: IMPORTER_S3_ENDPOINT
+  value: "{{ .Values.importer.s3.endpoint }}"
+- name: IMPORTER_S3_BUCKET
+  value: "{{ .Values.importer.s3.bucket }}"
+- name: IMPORTER_S3_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "catalog.name" . }}
+      key: importerAccessKey
+- name: IMPORTER_S3_SECRET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "catalog.name" . }}
+      key: importerSecretKey
+- name: IMPORTER_MANIFEST_PATH
+  value: "{{ .Values.importer.manifest }}"
+- name: IMPORTER_WORKER_POOL_SIZE
+  value: "{{ .Values.importer.workerNum }}"
 {{- end }}

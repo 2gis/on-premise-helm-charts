@@ -42,6 +42,19 @@ keys:
     suggest: ""  # set if available in API Keys service
     categories: ""  # set if available in API Keys service
     regions: ""  # set if available in API Keys service
+
+# Data importer 
+importer:
+  enabled: true
+
+  s3:
+    endpoint: "s3.example.com"
+    bucket: ""
+    accessKey: ""
+    secretKey: ""
+
+  manifest: "" # path in s3 to manifest file
+  workerNum: 3 # number of parallel import processes
 ```
 
 Then, call the `helm install` command and specify the name of the created file:
