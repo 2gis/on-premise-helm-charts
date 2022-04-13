@@ -39,7 +39,8 @@ spec:
           command: ["/spcore-entrypoint.sh"]
           {{- if .Values.spcore.reset_cluster }}
           args: ["-ru"]
-          {{- else }}
+          {{- else if .Values.spcore.update_db }}
+          args: ["-u"]
           {{- end }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.spcore.image.repository }}:{{ .Values.spcore.image.tag }}
           startupProbe:
