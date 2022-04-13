@@ -78,12 +78,12 @@ spec:
                 fieldPath: metadata.name
           - name: SPCORE_host
             value: "{{ .Values.external_proto }}://{{ .Values.external_hostname }}"
-          - name: SPCORE_securityManagerConfiguration__jwtConfiguration__adminAccessToken
+          - name: SPCORE_jwtConfiguration__adminAccessToken
             valueFrom:
               secretKeyRef:
                 name: {{ include "gis-platform.secret" . }}
                 key: jwt_token_admin
-          - name: SPCORE_securityManagerConfiguration__jwtConfiguration__tokenKey
+          - name: SPCORE_jwtConfiguration__tokenKey
             valueFrom:
               secretKeyRef:
                 name: {{ include "gis-platform.secret" . }}
