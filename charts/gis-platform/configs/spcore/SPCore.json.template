@@ -11,14 +11,11 @@
   {{- if and (not .Values.spcore.cors.allow_everyone) (.Values.spcore.cors.origins) }}
   "corsOrigins": {{ .Values.spcore.cors.origins | toJson }},
   {{- end }}
-  "securityManagerConfiguration": {
-    "searchConstraintCount": "3",
-    "jwtConfiguration": {
+  "jwtConfiguration": {
       "refreshTokenCookie": "refreshToken",
       "jwtCookie": "jwt",
       "minutesToExpireJwt": 10,
       "minutesToExpireRefreshToken": 1440
-    }
   },
   "sessionManager": {
     "sessionTimeout": 86400
