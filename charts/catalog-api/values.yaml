@@ -10,6 +10,14 @@ podDisruptionBudget:
 
 imagePullSecrets: []
 
+dgctlDockerRegistry: ''
+dgctlStorage:
+  host: ''
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+  manifest: ''
+
 api:
   image:
     repository: "2gis-on-premise/ipa-app-op"
@@ -77,12 +85,4 @@ importer:
       memory: 2048Mi
 
   nodeSelector: {}
-
-  s3:
-    endpoint: "s3.example.com"
-    bucket: ""
-    accessKey: ""
-    secretKey: ""
-
-  manifest: ""
   workerNum: 3

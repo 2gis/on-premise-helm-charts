@@ -141,21 +141,21 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       name: {{ include "catalog.name" . }}
       key: dbPassword
 - name: IMPORTER_S3_ENDPOINT
-  value: "{{ .Values.importer.s3.endpoint }}"
+  value: "{{ .Values.dgctlStorage.host }}"
 - name: IMPORTER_S3_BUCKET
-  value: "{{ .Values.importer.s3.bucket }}"
+  value: "{{ .Values.dgctlStorage.bucket }}"
 - name: IMPORTER_S3_ACCESS_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.name" . }}
-      key: importerAccessKey
+      key: dgctlStorageAccessKey
 - name: IMPORTER_S3_SECRET_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.name" . }}
-      key: importerSecretKey
+      key: dgctlStorageSecretKey
 - name: IMPORTER_MANIFEST_PATH
-  value: "{{ .Values.importer.manifest }}"
+  value: "{{ .Values.dgctlStorage.manifest }}"
 - name: IMPORTER_WORKER_POOL_SIZE
   value: "{{ .Values.importer.workerNum }}"
 {{- end }}
