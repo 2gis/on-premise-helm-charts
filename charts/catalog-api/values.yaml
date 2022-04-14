@@ -10,17 +10,17 @@ podDisruptionBudget:
 
 imagePullSecrets: []
 
-dgctlDockerRegistry: ''
+dgctlDockerRegistry: ""
 dgctlStorage:
-  host: ''
-  bucket: ''
-  accessKey: ''
-  secretKey: ''
-  manifest: ''
+  host: ""
+  bucket: ""
+  accessKey: ""
+  secretKey: ""
+  manifest: ""
 
 api:
   image:
-    repository: "2gis-on-premise/ipa-app-op"
+    repository: "2gis-on-premise/catalog-api"
     tag: "tag-3.557.4"
     pullPolicy: IfNotPresent
 
