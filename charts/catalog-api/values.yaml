@@ -21,7 +21,7 @@ dgctlStorage:
 api:
   image:
     repository: "2gis-on-premise/catalog-api"
-    tag: "tag-3.557.4"
+    tag: "3.557.4"
     pullPolicy: IfNotPresent
 
   replicas: 1
@@ -73,7 +73,7 @@ importer:
 
   image:
     repository: "2gis-on-premise/catalog-importer"
-    tag: "tag-3.557.4"
+    tag: "3.557.4"
     pullPolicy: IfNotPresent
 
   resources:
