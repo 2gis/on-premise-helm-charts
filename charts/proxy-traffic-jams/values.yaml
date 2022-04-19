@@ -4,11 +4,11 @@ replicaCount: 1
 
 proxy:
   host: 'https://traffic-jams.2gis.com'
-
+  listen: 8080
 image:
   repository: 2gis-on-premise/nginx
   pullPolicy: IfNotPresent
-  tag: "1.20.0"
+  tag: "1.21.6"
 
 imagePullSecrets: []
 nameOverride: ""

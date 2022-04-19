@@ -47,7 +47,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: http
+              port: {{ .Values.proxy.listen }}
             failureThreshold: 5
             initialDelaySeconds: 5
             periodSeconds: 15
@@ -56,7 +56,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health
-              port: http
+              port: {{ .Values.proxy.listen }}
             failureThreshold: 3
             initialDelaySeconds: 5
             periodSeconds: 5
