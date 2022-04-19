@@ -68,6 +68,8 @@ echo "Configuring Map"
 $CURL -XPOST -H 'Content-Type: application/json' -d @configuration/MapConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/map"
 echo "Configuring Portal"
 $CURL -XPOST -H 'Content-Type: application/json' -d @configuration/PortalConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/portal"
+echo "Configuring Admin panel"
+$CURL -XPOST -H 'Content-Type: application/json' -d @configuration/AdminConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/admin"
 echo "Configuring map sharing"
 jq --arg url "${GIS_PLATFORM_URL#http*://}" '.connection.ws_url=$url+"/sp/ws/"' configuration/SharedConfig.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/settings?urlPath=/shared"
 
