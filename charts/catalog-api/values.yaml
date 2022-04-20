@@ -10,10 +10,18 @@ podDisruptionBudget:
 
 imagePullSecrets: []
 
+dgctlDockerRegistry: ""
+dgctlStorage:
+  host: ""
+  bucket: ""
+  accessKey: ""
+  secretKey: ""
+  manifest: ""
+
 api:
   image:
-    repository: "2gis-on-premise/ipa-app-op"
-    tag: "tag-3.557.4"
+    repository: "2gis-on-premise/catalog-api"
+    tag: "3.557.4"
     pullPolicy: IfNotPresent
 
   replicas: 1
@@ -59,3 +67,22 @@ keys:
     suggest: ""  # set if available in API Keys service
     categories: ""  # set if available in API Keys service
     regions: ""  # set if available in API Keys service
+
+importer:
+  enabled: true
+
+  image:
+    repository: "2gis-on-premise/catalog-importer"
+    tag: "3.557.4"
+    pullPolicy: IfNotPresent
+
+  resources:
+    requests:
+      cpu: 256m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2048Mi
+
+  nodeSelector: {}
+  workerNum: 3
