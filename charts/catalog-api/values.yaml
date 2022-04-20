@@ -12,7 +12,7 @@ imagePullSecrets: []
 
 api:
   image:
-    repository: 2gis-on-premise/ipa-app-op
+    repository: 2gis-on-premise/catalog
     tag: tag-3.557.4
     pullPolicy: IfNotPresent
 

@@ -7,12 +7,12 @@ imagePullPolicy: IfNotPresent
 
 backend:
   image:
-    repository: 2gis-on-premise/zuul
+    repository: 2gis-on-premise/keys-backend
     tag: tag-1.25.0
 
 admin:
   image:
-    repository: 2gis-on-premise/keys-admin
+    repository: 2gis-on-premise/keys-ui
     tag: main-195e0396-app-on-prem
 
   replicas: 1
@@ -128,7 +128,7 @@ tasker:
 
 redis:
   image:
-    repository: 2gis-on-premise/redis
+    repository: 2gis-on-premise/keys-redis
     tag: 6.2.6-alpine
 
   resources:
