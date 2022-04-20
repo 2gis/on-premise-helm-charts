@@ -7,13 +7,13 @@ imagePullPolicy: IfNotPresent
 
 backend:
   image:
-    repository: "2gis-on-premise/zuul"
-    tag: "tag-1.25.0"
+    repository: 2gis-on-premise/zuul
+    tag: tag-1.25.0
 
 admin:
   image:
-    repository: "2gis-on-premise/keys-admin"
-    tag: "main-195e0396-app-on-prem"
+    repository: 2gis-on-premise/keys-admin
+    tag: main-195e0396-app-on-prem
 
   replicas: 1
 
@@ -25,8 +25,8 @@ admin:
       cpu: 1
       memory: 384Mi
 
-  apiUrl: "https://api.url/admin/v1"
-  appHost: "https://app.host"
+  apiUrl: https://api.url/admin/v1
+  appHost: https://app.host
 
   annotations: {}
   labels: {}
@@ -47,7 +47,7 @@ admin:
   ingress: {}
 
 api:
-  adminUsers: ""  # username1:password1,username2:password2
+  adminUsers: ''  # username1:password1,username2:password2
 
   replicas: 1
 
@@ -174,14 +174,14 @@ ldap:
   useStartTLS: false
   useLDAPS: false
   skipServerCertificateVerify: false
-  serverName: ""
-  clientCertificatePath: ""
-  clientKeyPath: ""
-  rootCertificateAuthoritiesPath: ""
+  serverName: ''
+  clientCertificatePath: ''
+  clientKeyPath: ''
+  rootCertificateAuthoritiesPath: ''
 
   bind:
     dn: user
     password: secret
   search:
-    baseDN: "dc=2gis"
-    filter: "(&(objectClass=user)(sAMAccountName=%s))"
+    baseDN: dc=2gis
+    filter: (&(objectClass=user)(sAMAccountName=%s))

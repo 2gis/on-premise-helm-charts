@@ -1,10 +1,9 @@
----
 
 replicaCount: 1
 
 image:
   repository: 2gis-on-premise/mapgl-selfhosting
-  tag: 'v1.24.1'
+  tag: v1.24.1
   pullPolicy: IfNotPresent
 
 env:
@@ -18,8 +17,8 @@ env:
   MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
 
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: ''
+fullnameOverride: ''
 
 strategy:
   type: RollingUpdate

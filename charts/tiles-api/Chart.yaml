@@ -1,4 +1,3 @@
----
 
 apiVersion: v2
 name: tiles-api
@@ -10,6 +9,6 @@ version: 0.2.1
 appVersion: 4.19.2
 
 maintainers:
-  - name: 2gis
-    url: https://github.com/2gis
-    email: on-premise@2gis.com
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

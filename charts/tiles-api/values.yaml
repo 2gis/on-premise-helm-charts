@@ -1,4 +1,3 @@
----
 dgctlDockerRegistry: ''
 dgctlStorage:
   host: ''
@@ -53,7 +52,7 @@ proxy:
     # -- Host for Keys API service
     host: http://keys-api.localhost
     # -- Service key for Keys API
-    token: ""
+    token: ''
     syncPeriod: 2m
 
 api:
@@ -103,9 +102,9 @@ api:
     className: nginx
     tls: []
     hosts:
-      - host: tiles-api.loc
-        paths:
-          - path: /
+    - host: tiles-api.loc
+      paths:
+      - path: /
 
   pdb:
     enabled: true

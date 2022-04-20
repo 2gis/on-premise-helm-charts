@@ -6,10 +6,10 @@ ingress:
   className: nginx
   annotations: {}
   hosts:
-    - host: gis-platform.local
-      paths:
-        - path: /
-          pathType: Prefix
+  - host: gis-platform.local
+    paths:
+    - path: /
+      pathType: Prefix
   tls: []
 
 spcore:
@@ -27,8 +27,8 @@ spcore:
   update_db: false
   terminationGracePeriodSeconds: 60
   image:
-    repository: '2gis-on-premise/gis_platform_spcore'
-    tag: '2022-04-13.01'
+    repository: 2gis-on-premise/gis_platform_spcore
+    tag: 2022-04-13.01
   cors:
     allow_everyone: false
     origins: []
@@ -40,18 +40,18 @@ spcore:
     bucket: spstatic
     preview_bucket: sppreview
   pg:
-    host: 'localhost'
+    host: localhost
     port: 5432
-    user: 'gisadmin'
-    password: 'dbpass'
-    dbname: 'gis-platform'
+    user: gisadmin
+    password: dbpass
+    dbname: gis-platform
     poolsize: 25
   admin:
-    email: 'admin@example.com'
+    email: admin@example.com
     password: '123456'
   jwt:
-    token_key: 'supersecrettoken'
-    token_admin: 'supersecrettoken'
+    token_key: supersecrettoken
+    token_admin: supersecrettoken
   catalog:
     url: https://catalog.api.2gis.com
     key: ''
@@ -90,15 +90,15 @@ portal:
     size: 1G
     valid: 1m
     regex:
-      - ^/sp/wms.*layers=admin.satellite_imagery&.*$
-      - ^/sp/wms.*layers=admin.2gis&.*$
+    - ^/sp/wms.*layers=admin.satellite_imagery&.*$
+    - ^/sp/wms.*layers=admin.2gis&.*$
   image:
-    repository: '2gis-on-premise/gis_platform_portal'
+    repository: 2gis-on-premise/gis_platform_portal
     tag: '2022-04-13'
 
 zookeeper:
   image:
-    repository: '2gis-on-premise/zookeeper'
+    repository: 2gis-on-premise/zookeeper
     tag: 3.7.0-debian-10-r265
   pdb:
     create: true
