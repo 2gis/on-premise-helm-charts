@@ -1,11 +1,10 @@
-
 apiVersion: v2
 name: proxy-traffic-jams
 description: A Helm chart for Kubernetes to deploy Proxy for traffic jams
 
 type: application
 
-version: 0.2.1
+version: 0.2.2
 appVersion: 0.0.1
 
 maintainers:

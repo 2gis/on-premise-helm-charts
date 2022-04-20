@@ -1,9 +1,8 @@
-
 replicaCount: 1
 
 image:
   repository: 2gis-on-premise/mapgl
-  tag: v1.24.1
+  tag: v1.26.0
   pullPolicy: IfNotPresent
 
 env:

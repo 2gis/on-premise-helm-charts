@@ -1,11 +1,10 @@
-
 apiVersion: v2
 name: tiles-api
 description: Tiles API for getting cartographic data
 
 type: application
 
-version: 0.2.1
+version: 0.2.2
 appVersion: 4.19.2
 
 maintainers:
