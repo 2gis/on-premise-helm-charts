@@ -4,11 +4,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-ws
   labels:
     {{- include "gis-platform-portal.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: {{ .Values.portal.websocket.timeout | quote }}
+    nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.portal.websocket.timeout | quote }}
+    nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.portal.websocket.timeout | quote }}
+    nginx.org/websocket-services: websocket
+  {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
@@ -28,7 +32,7 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
-          - path: /
+          - path: /sp/ws
             pathType: Prefix
             backend:
               service:

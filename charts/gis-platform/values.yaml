@@ -7,9 +7,6 @@ ingress:
   annotations: {}
   hosts:
   - host: gis-platform.local
-    paths:
-    - path: /
-      pathType: Prefix
   tls: []
 
 spcore:
@@ -85,6 +82,8 @@ portal:
       cpu: 100m
       memory: 512Mi
   terminationGracePeriodSeconds: 60
+  websocket:
+    timeout: 604800
   cache:
     enabled: false
     size: 1G
