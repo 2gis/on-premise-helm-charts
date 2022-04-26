@@ -83,7 +83,7 @@ api:
   nodeSelector: {}
   affinity: {}
   tolerations: {}
-  imagePullSecrets: {}
+  imagePullSecrets: []
   strategy:
     rollingUpdate:
       maxUnavailable: 0
@@ -147,7 +147,7 @@ importer:
   writerNum: 8
 
   tolerations: {}
-  imagePullSecrets: {}
+  imagePullSecrets: []
 
   nodeSelector: {}
   workerResources:

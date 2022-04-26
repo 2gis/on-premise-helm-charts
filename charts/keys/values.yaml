@@ -2,7 +2,7 @@ install:
   apps: true
   data: true
 
-imagePullSecrets: {}
+imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
 backend:
