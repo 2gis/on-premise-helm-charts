@@ -61,7 +61,7 @@ spcore:
     projects: 1000
     features: 1000000
   startupProbe:
-    initialDelaySeconds: 45
+    initialDelaySeconds: 5
     periodSeconds: 10
     failureThreshold: 30
   readinessProbe:
