@@ -39,7 +39,7 @@ storage:
 k8s:
   job-template-file-path: /config/job.yaml
   {{- with .Values.importer }}
-  worker-image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image }}:{{ .tag }}
+  worker-image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}
   {{- end }}
   namespace: {{ .Release.Namespace }}
 

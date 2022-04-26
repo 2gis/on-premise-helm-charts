@@ -10,17 +10,19 @@ dgctlStorage:
 replicaCount: 1
 
 api:
-  repository: 2gis-on-premise/search-api
-  pullPolicy: IfNotPresent
-  tag: 7.18.1
+  image:
+    repository: 2gis-on-premise/search-api
+    tag: 7.18.1
+    pullPolicy: IfNotPresent
   resources: {}
   data_dir: /data
   fcgi_port: 9090
 
 nginx:
-  repository: 2gis-on-premise/search-nginx
-  pullPolicy: IfNotPresent
-  tag: 1.21.6
+  image:
+    repository: 2gis-on-premise/search-nginx
+    tag: 1.21.6
+    pullPolicy: IfNotPresent
   resources: {}
   http_port: 8080
 

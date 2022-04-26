@@ -38,8 +38,8 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       initContainers:
         - name: init
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.repository }}:{{ .Values.api.tag }}
-          imagePullPolicy: {{ .Values.api.pullPolicy }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           command:
             - importer
             - --endpoint={{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
@@ -57,8 +57,8 @@ spec:
               mountPath: {{ .Values.api.data_dir }}
       containers:
         - name: api
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.repository }}:{{ .Values.api.tag }}
-          imagePullPolicy: {{ .Values.api.pullPolicy }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           command: ["Sapphire2", "--exec"]
           resources:
             {{- toYaml .Values.api.resources | nindent 12 }}
@@ -75,8 +75,8 @@ spec:
             - name: REDEPLOY_LABEL
               value: "{{ .Values.redeploy_label }}"
         - name: nginx
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.repository }}:{{ .Values.nginx.tag }}
-          imagePullPolicy: {{ .Values.nginx.pullPolicy }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}
+          imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
           command: ["nginx", "-c", "/etc/2gis/nginx.conf"]
           {{- if (le .Values.nginx.http_port 1024.0) }}
           securityContext:

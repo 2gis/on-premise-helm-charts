@@ -30,10 +30,10 @@ cassandra:
   consistencyLevelWrite: LOCAL_QUORUM
 
 proxy:
-  # -- The path to the docker image. Must have a path to your private docker registry
-  image: 2gis-on-premise/tiles-api-proxy
-  # -- Tag with application version
-  tag: v4.19.2
+  image:
+    repository: 2gis-on-premise/tiles-api-proxy
+    tag: v4.19.2
+    pullPolicy: IfNotPresent
 
   containerPort: 5000
   timeout: 5s
@@ -56,11 +56,10 @@ proxy:
     syncPeriod: 2m
 
 api:
-  # -- The path to the docker image. Must have a path to your private docker registry
-  image: 2gis-on-premise/tiles-api
-  # -- Tag with application version
-  tag: v4.19.2
-  pullPolicy: IfNotPresent
+  image:
+    repository: 2gis-on-premise/tiles-api
+    tag: v4.19.2
+    pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
   containerPort: 8000
@@ -128,12 +127,10 @@ api:
 importer:
   enabled: true
 
-  # -- The path to the docker image. Must have a path to your private docker registry
-  image: 2gis-on-premise/tiles-api-importer
-  # -- Tag with application version
-  tag: v4.19.2
-
-  pullPolicy: IfNotPresent
+  image:
+    repository: 2gis-on-premise/tiles-api-importer
+    tag: v4.19.2
+    pullPolicy: IfNotPresent
 
   resources:
     requests:
