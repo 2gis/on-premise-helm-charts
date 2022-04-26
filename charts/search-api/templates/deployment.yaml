@@ -40,11 +40,22 @@ spec:
         - name: init
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          env:
+          - name: STORAGE_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "search_api.fullname" . }}
+                key: s3AccessKey
+          - name: STORAGE_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "search_api.fullname" . }}
+                key: s3SecretKey
           command:
             - importer
             - --endpoint={{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
-            - --access-key-id={{ required "Valid .Values.dgctlStorage.accessKey required!" .Values.dgctlStorage.accessKey }}
-            - --secret-access-key={{ required "Valid .Values.dgctlStorage.secretKey required!" .Values.dgctlStorage.secretKey }}
+            - --access-key-id=$(STORAGE_ACCESS_KEY)
+            - --secret-access-key=$(STORAGE_SECRET_KEY)
             - --bucket-name={{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}
             - --manifest={{ required "Valid .Values.dgctlStorage.manifest required!" .Values.dgctlStorage.manifest }}
             - --output-dir-path={{ .Values.api.data_dir }}
