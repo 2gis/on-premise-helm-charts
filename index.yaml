@@ -3,6 +3,20 @@ entries:
   catalog-api:
   - apiVersion: v2
     appVersion: 3.557.4
+    created: "2022-04-27T05:25:36.900051034Z"
+    description: A Helm chart for Kubernetes to deploy Catalog APIs
+    digest: de788e8980b00818eef372f752cdb4f41967b85e9b7c6fc31ac6a5ebb8211ad5
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: catalog-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/catalog-api-0.2.2/catalog-api-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 3.557.4
     created: "2022-04-05T10:55:54.136388453Z"
     description: A Helm chart for Kubernetes to deploy Catalog APIs
     digest: af8b95d6a24f1db622419ee5f13fbbe1b5acb56ad8241f5b52860853f10388b9
@@ -128,6 +142,24 @@ entries:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/catalog-api-0.1.2/catalog-api-0.1.2.tgz
     version: 0.1.2
   gis-platform:
+  - apiVersion: v2
+    appVersion: 0.0.2
+    created: "2022-04-27T05:25:37.10162138Z"
+    dependencies:
+    - name: zookeeper
+      repository: https://charts.bitnami.com/bitnami
+      version: ~8.0.1
+    description: GIS Platform
+    digest: 3724aa65bb5fb3a23c5a41b51bf1326a7c3f37c4b79158708ee41a2e743eb77b
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: gis-platform
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/gis-platform-0.2.2/gis-platform-0.2.2.tgz
+    version: 0.2.2
   - apiVersion: v2
     appVersion: 0.0.2
     created: "2022-04-05T10:55:54.362234341Z"
@@ -293,6 +325,20 @@ entries:
   keys:
   - apiVersion: v2
     appVersion: 1.23.5
+    created: "2022-04-27T05:25:37.317776279Z"
+    description: A Helm chart for Kubernetes to deploy API Keys service
+    digest: d8b19d559b7fefc8eb3281809f166a5beabe8c861cdc94b061f69e45f066d7d4
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: keys
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/keys-0.2.2/keys-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 1.23.5
     created: "2022-04-05T10:55:54.585419491Z"
     description: A Helm chart for Kubernetes to deploy API Keys service
     digest: 1ccb3a4c69f41892200f70a14b782bcebc01344e644a354dc60bc0dda5031c2d
@@ -420,6 +466,20 @@ entries:
   mapgl-js-api:
   - apiVersion: v2
     appVersion: 1.24.1
+    created: "2022-04-27T05:25:37.519914046Z"
+    description: Basic WebGL map chart template for 2GIS On-Premise
+    digest: 5d5dde08aab77c6cb7ba1b58da40060c4610893dda3274554f36fe44969993dc
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: mapgl-js-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/mapgl-js-api-0.2.2/mapgl-js-api-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 1.24.1
     created: "2022-04-05T10:55:54.786385327Z"
     description: Basic WebGL map chart template for 2GIS On-Premise
     digest: cd6596925904393f8971ef7917eb39b6e5f6754e65ab72d4984f8d4e4b89bb2b
@@ -545,6 +605,24 @@ entries:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/mapgl-js-api-0.1.2/mapgl-js-api-0.1.2.tgz
     version: 0.1.2
   navi-back:
+  - apiVersion: v2
+    appVersion: 6.3.0
+    created: "2022-04-27T05:25:37.716894418Z"
+    description: Navi backend helm chart for Kubernetes
+    digest: a3138301f320709ac39bfc015bf84889761d81d87e73455d5596c5a8359bd443
+    keywords:
+    - navi
+    - back
+    - backend
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: navi-back
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/navi-back-0.2.2/navi-back-0.2.2.tgz
+    version: 0.2.2
   - apiVersion: v2
     appVersion: 6.3.0
     created: "2022-04-05T10:55:55.011330202Z"
@@ -710,6 +788,20 @@ entries:
   navi-castle:
   - apiVersion: v2
     appVersion: 1.0.2
+    created: "2022-04-27T05:25:37.924358887Z"
+    description: Castle Helm chart for Kubernetes
+    digest: ceea1280074ced4e6df235274818e0f784d0fe055b1f484a80074112e6116da2
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: navi-castle
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/navi-castle-0.2.2/navi-castle-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 1.0.2
     created: "2022-04-05T10:55:55.28610308Z"
     description: Castle Helm chart for Kubernetes
     digest: 6ae1224fab23bbb88ab4c75b7ff204b3d8c16282d4ae67082138d293dbbbc301
@@ -835,6 +927,23 @@ entries:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/navi-castle-0.1.2/navi-castle-0.1.2.tgz
     version: 0.1.2
   navi-front:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-04-27T05:25:38.119502789Z"
+    description: Navigation front Helm chart for Kubernetes
+    digest: ea6c49d9f6d3333b2ebfc801c2d98e1d271373cccafbad0fb76789d6791b9d63
+    keywords:
+    - navi
+    - front
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: navi-front
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/navi-front-0.2.2/navi-front-0.2.2.tgz
+    version: 0.2.2
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2022-04-05T10:55:55.502344432Z"
@@ -991,6 +1100,23 @@ entries:
   navi-router:
   - apiVersion: v2
     appVersion: 6.3.0
+    created: "2022-04-27T05:25:38.327628983Z"
+    description: Navi router Helm chart for Kubernetes
+    digest: 9f91aed0210590d5ed87814dc709297022c7a3a460125748e0a9a6c53e4ddbb0
+    keywords:
+    - navi
+    - router
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: navi-router
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/navi-router-0.2.2/navi-router-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 6.3.0
     created: "2022-04-05T10:55:55.714866832Z"
     description: Navi router Helm chart for Kubernetes
     digest: c22ce65721d52b9114ed70218f7d62ac687ff1d96c0c15efbd6f55c64eeadfd7
@@ -1145,6 +1271,20 @@ entries:
   proxy-traffic-jams:
   - apiVersion: v2
     appVersion: 0.0.1
+    created: "2022-04-27T05:25:38.539882834Z"
+    description: A Helm chart for Kubernetes to deploy Proxy for traffic jams
+    digest: 3e7a0d4454a7055160ff5ebe6d2109c78f2b41e89f8f474c3d0fe6a45fb7dadc
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: proxy-traffic-jams
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/proxy-traffic-jams-0.2.2/proxy-traffic-jams-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 0.0.1
     created: "2022-04-05T10:55:55.928553848Z"
     description: A Helm chart for Kubernetes to deploy Proxy for traffic jams
     digest: 083e905c25ad11d281543cc9c1e6c6ebd94eb39450bfbe4e7a1832f03a8fd4b8
@@ -1270,6 +1410,20 @@ entries:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/proxy-traffic-jams-0.1.2/proxy-traffic-jams-0.1.2.tgz
     version: 0.1.2
   search-api:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2022-04-27T05:25:38.761038723Z"
+    description: Search engine for catalog
+    digest: a1f045cf0f7ff09d504c2300a3137ec7d48b93278ffa2fb45824b0179bff81b3
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: search-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/search-api-0.2.2/search-api-0.2.2.tgz
+    version: 0.2.2
   - apiVersion: v2
     appVersion: 1.0.0
     created: "2022-04-05T10:55:56.157198175Z"
@@ -1399,6 +1553,20 @@ entries:
   tiles-api:
   - apiVersion: v2
     appVersion: 4.19.2
+    created: "2022-04-27T05:25:38.965445876Z"
+    description: Tiles API for getting cartographic data
+    digest: f354ce80757ba31e9a3b5607480aefdb69d5bb9b8c60160197c785fcceaf932f
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: tiles-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/tiles-api-0.2.2/tiles-api-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 4.19.2
     created: "2022-04-05T10:55:56.396967559Z"
     description: Tiles API for getting cartographic data
     digest: ab5bfc9d4c489f75a21529c73accfb1aa1a927f24024859138d7ae3c84d20710
@@ -1523,4 +1691,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tiles-api-0.1.2/tiles-api-0.1.2.tgz
     version: 0.1.2
-generated: "2022-04-05T10:55:56.397513967Z"
+generated: "2022-04-27T05:25:38.965868892Z"
