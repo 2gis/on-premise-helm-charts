@@ -9,11 +9,12 @@
 
 function usage() {
     echo "Usage ${0} <option>:"
-    echo "No options: configure gis-platform"
+    echo ""
     echo "-h    Show this help"
     echo "-g    Get configuration"
     echo "-d    Diff dumped config vs proposed config"
-    echo "-p    Patch existing layers"
+    echo "-c    Push configs to server"
+    echo "-p    Patch existing layers (implies -c)"
     echo ""
 }
 
@@ -127,6 +128,28 @@ fi
 tiles_api_url="${GIS_PLATFORM_TILES_API%/}/tiles?x={2}&y={3}&z={1}&v=1.5&ts=online_sd_ar&layerType=nc"
 traffic_url="${GIS_PLATFORM_TRAFFIC_API}/dammam/traffic/{1}/{2}/{3}/speed/0/?1640062200"
 
+HAS_OPT=0
+CONFIGURE=0
+DUMP_CONFIG=0
+DIFF_CONFIG=0
+PATCH_LAYERS=0
+
+while getopts "gdph" opt; do
+    case "$opt" in
+        "d") HAS_OPT=1 && DIFF_CONFIG=1 ;;
+        "g") HAS_OPT=1 && DUMP_CONFIG=1 ;;
+        "c") HAS_OPT=1 && CONFIGURE=1 ;;
+        "p") HAS_OPT=1 && CONFIGURE=1 && PATCH_LAYERS=1 ;;
+        "h") usage && exit 0 ;;
+        "?") usage && exit 1 ;;
+    esac
+done
+
+if [[ $HAS_OPT -eq 0 ]]; then
+    usage
+    exit 0
+fi
+
 cookie=$(mktemp gis-platform.cookie.XXXXX)
 
 trap "rm -f $cookie" EXIT
@@ -163,21 +186,6 @@ if ! grep --silent -c refreshToken $cookie; then
     echo -e "\n\nFailed to get authorization cookie\n" >&2
     exit 1
 fi
-
-CONFIGURE=1
-DUMP_CONFIG=0
-DIFF_CONFIG=0
-PATCH_LAYERS=0
-
-while getopts "gdph" opt; do
-    case "$opt" in
-        "d") DIFF_CONFIG=1 && CONFIGURE=0 ;;
-        "g") DUMP_CONFIG=1 && CONFIGURE=0 ;;
-        "p") PATCH_LAYERS=1 ;;
-        "h") usage && exit 0 ;;
-        "?") usage && exit 1 ;;
-    esac
-done
 
 if [[ $DUMP_CONFIG -eq 1 ]]; then
     dump_configuration
