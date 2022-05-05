@@ -5,19 +5,119 @@
 : ${GIS_PLATFORM_TILES_API:=''}
 : ${GIS_PLATFORM_TRAFFIC_API:=''}
 
+#---------------
+
+function usage() {
+    echo "Usage ${0} <option>:"
+    echo "No options: configure gis-platform"
+    echo "-h    Show this help"
+    echo "-g    Get configuration"
+    echo "-d    Diff dumped config vs proposed config"
+    echo "-p    Patch existing layers"
+    echo ""
+}
+
+#---------------
+
+function get_layer_config() {
+    layer_name=$1
+    $CURL -XGET "$GIS_PLATFORM_URL/sp/layers/$layer_name"
+}
+
+#---------------
+
 function create_or_update_layer() {
     layer_type="$1"
     layer_data="$2"
     layer_name=$( jq --raw-output .name <<< $layer_data )
 
-    if [[ -z $( $CURL -XGET "$GIS_PLATFORM_URL/sp/layers/$layer_name" | jq --raw-output .name ) ]]; then
+    if [[ -z $( get_layer_config $layer_name | jq --raw-output .name ) ]]; then
         echo "Configuring $layer_name $layer_type"
         echo $layer_data | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=$layer_type"
     else
-        echo "Updating $layer_name configuration"
-        echo $layer_data | $CURL -XPATCH -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers/$layer_name?type=$layer_type" > /dev/null
+        if [[ $PATCH_LAYERS -eq 1 ]]; then
+            echo "Updating $layer_name configuration"
+            echo $layer_data | $CURL -XPATCH -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers/$layer_name?type=$layer_type" > /dev/null
+        else
+            echo "Layer $layer_name already exists, skipping"
+        fi
     fi
 }
+
+#---------------
+
+function configure() {
+  if [[ "x1" == "x$( $CURL -XGET "$GIS_PLATFORM_URL/sp/account/user/list?filter=admin" | jq --raw-output .totalCount )" ]]; then
+      echo "Admin user already exists, skipping"
+  else
+      echo "Creating admin user"
+      $CURL -XPOST -H 'Content-Type: application/json' -d "$admin_account" "$GIS_PLATFORM_URL/sp/account/user"
+      echo "Creating admin namespace"
+      $CURL -XPOST -H 'Content-Type: application/json' -d'{}' "$GIS_PLATFORM_URL/sp/namespaces?userName=admin&adjustName=true"
+      echo "Adding __superuser role to admin"
+      $CURL -XPOST -H 'Content-Type: application/json' -d'{}' "$GIS_PLATFORM_URL/sp/account/user/admin/role/__superuser"
+  fi
+
+  echo "Logging as admin"
+  $CURL -XPOST -H 'Content-Type: application/json' -d "$admin_login" "$GIS_PLATFORM_URL/sp/account/login"
+
+  if ! grep --silent -c refreshToken $cookie; then
+      echo -e "\n\nFailed to get authorization cookie\n" >&2
+      exit 1
+  fi
+
+  create_or_update_layer "RemoteTileService" "$(jq --arg url "${tiles_api_url}" '.urlFormat=$url' layer/2gis.json)"
+  create_or_update_layer "RemoteTileService" "$(jq --arg url "${traffic_url}" '.urlFormat=$url' layer/2gis_traffic.json)"
+  create_or_update_layer "LocalTileService" "$(cat layer/satellite_imagery.json)"
+
+  echo "Configuring Map"
+  $CURL -XPOST -H 'Content-Type: application/json' -d @configuration/MapConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/map"
+  echo "Configuring Portal"
+  $CURL -XPOST -H 'Content-Type: application/json' -d @configuration/PortalConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/portal"
+  echo "Configuring Admin panel"
+  $CURL -XPOST -H 'Content-Type: application/json' -d @configuration/AdminConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/admin"
+  echo "Configuring map sharing"
+  jq --arg url "${GIS_PLATFORM_URL#http*://}" '.connection.ws_url=$url+"/sp/ws/"' configuration/SharedConfig.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/settings?urlPath=/shared"
+
+  layer_names=$(jq --slurp --compact-output '[ .[].name ]' layer/*.json)
+  echo "Share all basemaps: $layer_names"
+  $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$layer_names" "$GIS_PLATFORM_URL/sp/resources/layers/shareAll"
+
+  echo "Setting autoshared list for all basemaps"
+  for layer in layer/*.json; do
+      data=$(jq --compact-output '{name: .name, type: "layer"}' $layer)
+      $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$data" "$GIS_PLATFORM_URL/sp/autosharedList"
+  done
+}
+
+#---------------
+
+function dump_configuration {
+    for layer in layer/*.json; do
+        name=$(jq --raw-output .name $layer)
+        echo "Fetching layer $name"
+        get_layer_config $name | jq . > "$TMPDIR/layer_${name}.json"
+    done
+    for config in map portal admin shared; do
+        echo "Fetching config: $config"
+        $CURL -XGET "$GIS_PLATFORM_URL/sp/settings?urlPath=/$config" | jq . > "$TMPDIR/${config^}Config.json"
+    done
+}
+
+#---------------
+
+function config_diff() {
+#    dump_configuration
+    for layer in layer/*.json; do
+        name=$(jq --raw-output .name $layer)
+        diff -urBb $layer $TMPDIR/layer_$name.json
+    done
+    for config in configuration/*.json; do
+        diff -urBb $config $TMPDIR/$(basename $config)
+    done
+}
+
+#---------------
 
 if [[ -z $GIS_PLATFORM_PASS ]] || [[ -z $GIS_PLATFORM_URL ]] || [[ -z $GIS_PLATFORM_TILES_API ]] || [[ -z $GIS_PLATFORM_TRAFFIC_API ]]; then
     echo -e "\n\nSet GIS_PLATFORM_TRAFFIC_API, GIS_PLATFORM_TILES_API, GIS_PLATFORM_PASS and GIS_PLATFORM_URL\n" >&2
@@ -53,6 +153,9 @@ set -u
 
 echo "Configuring $GIS_PLATFORM_URL"
 
+TMPDIR="_tmp/${GIS_PLATFORM_URL#http*://}"
+mkdir -p "$TMPDIR"
+
 echo "Authorizing"
 $CURL -XPOST -H 'Content-Type: application/json' -d "$superuser_login" "$GIS_PLATFORM_URL/sp/account/login"
 
@@ -61,44 +164,29 @@ if ! grep --silent -c refreshToken $cookie; then
     exit 1
 fi
 
-if [[ "x1" == "x$( $CURL -XGET "$GIS_PLATFORM_URL/sp/account/user/list?filter=admin" | jq --raw-output .totalCount )" ]]; then
-    echo "Admin user already exists, skipping"
-else
-    echo "Creating admin user"
-    $CURL -XPOST -H 'Content-Type: application/json' -d "$admin_account" "$GIS_PLATFORM_URL/sp/account/user"
-    echo "Creating admin namespace"
-    $CURL -XPOST -H 'Content-Type: application/json' -d'{}' "$GIS_PLATFORM_URL/sp/namespaces?userName=admin&adjustName=true"
-    echo "Adding __superuser role to admin"
-    $CURL -XPOST -H 'Content-Type: application/json' -d'{}' "$GIS_PLATFORM_URL/sp/account/user/admin/role/__superuser"
-fi
+CONFIGURE=1
+DUMP_CONFIG=0
+DIFF_CONFIG=0
+PATCH_LAYERS=0
 
-echo "Logging as admin"
-$CURL -XPOST -H 'Content-Type: application/json' -d "$admin_login" "$GIS_PLATFORM_URL/sp/account/login"
-
-if ! grep --silent -c refreshToken $cookie; then
-    echo -e "\n\nFailed to get authorization cookie\n" >&2
-    exit 1
-fi
-
-create_or_update_layer "RemoteTileService" "$(jq --arg url "${tiles_api_url}" '.urlFormat=$url' layer/2gis.json)"
-create_or_update_layer "RemoteTileService" "$(jq --arg url "${traffic_url}" '.urlFormat=$url' layer/2gis_traffic.json)"
-create_or_update_layer "LocalTileService" "$(cat layer/satellite_imagery.json)"
-
-echo "Configuring Map"
-$CURL -XPOST -H 'Content-Type: application/json' -d @configuration/MapConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/map"
-echo "Configuring Portal"
-$CURL -XPOST -H 'Content-Type: application/json' -d @configuration/PortalConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/portal"
-echo "Configuring Admin panel"
-$CURL -XPOST -H 'Content-Type: application/json' -d @configuration/AdminConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/admin"
-echo "Configuring map sharing"
-jq --arg url "${GIS_PLATFORM_URL#http*://}" '.connection.ws_url=$url+"/sp/ws/"' configuration/SharedConfig.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/settings?urlPath=/shared"
-
-layer_names=$(jq --slurp --compact-output '[ .[].name ]' layer/*.json)
-echo "Share all basemaps: $layer_names"
-$CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$layer_names" "$GIS_PLATFORM_URL/sp/resources/layers/shareAll"
-
-echo "Setting autoshared list for all basemaps"
-for layer in layer/*.json; do
-    data=$(jq --compact-output '{name: .name, type: "layer"}' $layer)
-    $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$data" "$GIS_PLATFORM_URL/sp/autosharedList"
+while getopts "gdph" opt; do
+    case "$opt" in
+        "d") DIFF_CONFIG=1 && CONFIGURE=0 ;;
+        "g") DUMP_CONFIG=1 && CONFIGURE=0 ;;
+        "p") PATCH_LAYERS=1 ;;
+        "h") usage && exit 0 ;;
+        "?") usage && exit 1 ;;
+    esac
 done
+
+if [[ $DUMP_CONFIG -eq 1 ]]; then
+    dump_configuration
+fi
+
+if [[ $DIFF_CONFIG -eq 1 ]]; then
+    config_diff
+fi
+
+if [[ $CONFIGURE -eq 1 ]]; then
+    configure
+fi
