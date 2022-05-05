@@ -52,6 +52,8 @@ spcore:
   catalog:
     url: https://catalog.api.2gis.com
     key: ''
+  navi:
+    url: https://catalog.api.2gis.com
   cloud_port: 5050
   http_port: 5051
   maxRenderTargets: 1000
