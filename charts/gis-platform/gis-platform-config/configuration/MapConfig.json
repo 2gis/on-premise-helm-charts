@@ -77,7 +77,12 @@
             "imageName": "aggregation",
             "description": "Агрегирование атрибутов объектов исходного слоя в полигоны целевого слоя"
           }
-        ]
+        ],
+        "customLogo": {
+          "src": "/urbi.png",
+          "width": 110,
+          "height": 46
+        }
       },
       "priority": 2,
       "modulePath": "Tools/Tools",
@@ -91,6 +96,13 @@
     },
     {
       "name": "map",
+      "options": {
+        "defaultPosition": [
+          5576398,
+          3041529
+        ],
+        "defaultResolution": 38.21851414257816
+      },
       "priority": 1,
       "modulePath": "Map/Map",
       "submodules": [
@@ -119,6 +131,13 @@
     {
       "name": "catalog",
       "route": "CATALOG",
+      "options": {
+        "customLogo": {
+          "src": "/urbi.png",
+          "width": 79,
+          "height": 34
+        }
+      },
       "priority": 4,
       "modulePath": "Catalog/Catalog",
       "layoutOptions": {
