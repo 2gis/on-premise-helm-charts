@@ -95,6 +95,8 @@ import:
   nodeSelector: {}
 
 migrate:
+  initialDelaySeconds: 0
+
   resources:
     requests:
       cpu: 10m
