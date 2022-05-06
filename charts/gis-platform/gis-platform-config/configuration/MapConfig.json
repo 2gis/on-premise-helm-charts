@@ -66,6 +66,20 @@
             "description": "Построение окружностей заданного радиуса вокруг объектов слоя"
           },
           {
+            "name": "availabilityArea",
+            "title": "Availability Area",
+            "options": {
+              "solvers": [
+                {
+                  "text": "Driving",
+                  "value": "2gis-carrouting"
+                }
+              ]
+            },
+            "imageName": "access",
+            "description": "Построение изохрон автомобильной доступности"
+          },
+          {
             "name": "geometrySelection",
             "title": "Выборка геометрией",
             "imageName": "geometrySelection",

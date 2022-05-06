@@ -67,6 +67,8 @@ spec:
           env:
           - name: GIS_PLATFORM_CATALOG_URL
             value: {{ .Values.spcore.catalog.url }}
+          - name: GIS_PLATFORM_NAVI_URL
+            value: {{ .Values.spcore.navi.url }}
           - name: GIS_PLATFORM_CATALOG_KEY
             valueFrom:
               secretKeyRef:
