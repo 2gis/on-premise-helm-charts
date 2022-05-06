@@ -1,6 +1,11 @@
 upstream spcore-upstream {
     server {{ include "gis-platform-spcore.fullname" . }}:{{ .Values.spcore.http_port }};
 }
+{{- if .Values.portal.s3proxy.enabled }}
+upstream s3-upstream {
+    server {{ .Values.spcore.s3.host }};
+}
+{{- end }}
 
 map $http_upgrade $connection_upgrade {
     default upgrade;
@@ -78,6 +83,17 @@ server {
         autoindex on;
     }
 
+    {{- if .Values.portal.s3proxy.enabled }}
+    location ~ ^/sp/layers/admin.satellite_imagery/tile/(.*)$ {
+        proxy_pass {{ .Values.portal.s3proxy.scheme }}://s3-upstream/{{ .Values.spcore.s3.bucket }}/localTiles_admin.satellite_imagery/$1.png;
+        proxy_set_header Host {{ .Values.spcore.s3.host }};
+        {{- if .Values.portal.cache.enabled }}
+        proxy_cache gis-platform;
+        proxy_cache_valid {{ .Values.portal.cache.valid }};
+        {{- end }}
+    }
+
+    {{- end }}
     location /sp/ {
         {{- if .Values.spcore.cors.allow_everyone }}
         # CORS block
