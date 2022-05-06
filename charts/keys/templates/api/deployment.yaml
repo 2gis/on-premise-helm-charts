@@ -23,7 +23,7 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      {{- include "keys.api.labels" . | nindent 6 }}
+      {{- include "keys.api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.api.podAnnotations }}

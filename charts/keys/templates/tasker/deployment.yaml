@@ -21,7 +21,7 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      {{- include "keys.tasker.labels" . | nindent 6 }}
+      {{- include "keys.tasker.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.tasker.podAnnotations }}
