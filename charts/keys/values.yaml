@@ -13,7 +13,7 @@ backend:
 admin:
   image:
     repository: 2gis-on-premise/keys-ui
-    tag: 0.0.1-9719aa19
+    tag: 0.0.2
 
   replicas: 1
 

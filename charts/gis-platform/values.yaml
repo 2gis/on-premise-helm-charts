@@ -25,7 +25,7 @@ spcore:
   terminationGracePeriodSeconds: 60
   image:
     repository: 2gis-on-premise/gis_platform_spcore
-    tag: 2022-04-13.01
+    tag: '2022-04-22'
   cors:
     allow_everyone: false
     origins: []
@@ -98,7 +98,7 @@ portal:
     scheme: http
   image:
     repository: 2gis-on-premise/gis_platform_portal
-    tag: '2022-04-13'
+    tag: '2022-04-22'
 
 zookeeper:
   image:
