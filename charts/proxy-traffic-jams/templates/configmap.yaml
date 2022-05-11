@@ -8,10 +8,9 @@ metadata:
     {{- include "proxy-traffic-jams.labels" . | nindent 4 }}
 data:
   nginx.conf: |
-    user  nginx;
     worker_processes  2;
 
-    pid        /var/run/nginx.pid;
+    pid /run/nginx.pid;
 
     events {
         worker_connections  1024;
@@ -31,7 +30,7 @@ data:
         keepalive_timeout  65;
 
         server {
-          listen 80 default;
+          listen {{ .Values.proxy.listen }} default;
           server_name _;
 
           location / {

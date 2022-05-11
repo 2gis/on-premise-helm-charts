@@ -1,18 +1,16 @@
----
-
 replicaCount: 1
 
 proxy:
-  host: 'https://traffic-jams.2gis.com'
-
+  host: https://traffic-jams.2gis.com
+  listen: 8080
 image:
   repository: 2gis-on-premise/nginx
   pullPolicy: IfNotPresent
-  tag: "1.20.0"
+  tag: 1.21.6
 
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: ''
+fullnameOverride: ''
 
 strategy:
   type: RollingUpdate
@@ -31,13 +29,13 @@ service:
 
 ingress:
   enabled: false
-  className: ""
+  className: ''
   annotations: {}
   hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
+  - host: chart-example.local
+    paths:
+    - path: /
+      pathType: ImplementationSpecific
   tls: []
 
 resources:

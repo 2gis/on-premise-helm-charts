@@ -11,14 +11,11 @@
   {{- if and (not .Values.spcore.cors.allow_everyone) (.Values.spcore.cors.origins) }}
   "corsOrigins": {{ .Values.spcore.cors.origins | toJson }},
   {{- end }}
-  "securityManagerConfiguration": {
-    "searchConstraintCount": "3",
-    "jwtConfiguration": {
+  "jwtConfiguration": {
       "refreshTokenCookie": "refreshToken",
       "jwtCookie": "jwt",
       "minutesToExpireJwt": 10,
       "minutesToExpireRefreshToken": 1440
-    }
   },
   "sessionManager": {
     "sessionTimeout": 86400
@@ -42,16 +39,9 @@
   "routes": {
       "TwoGisProviders": [
          {
-             "name": "2gis",
-             "type": "2gis",
-             "url": "${GIS_PLATFORM_CATALOG_URL}",
-             "token": "${GIS_PLATFORM_CATALOG_KEY}",
-             "mode": "walking"
-         },
-         {
              "name": "2gis-carrouting",
              "type": "2gis",
-             "url": "${GIS_PLATFORM_CATALOG_URL}",
+             "url": "${GIS_PLATFORM_NAVI_URL}",
              "token": "${GIS_PLATFORM_CATALOG_KEY}",
              "mode": "driving"
          }

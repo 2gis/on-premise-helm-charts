@@ -3,12 +3,12 @@ name: navi-back
 description: Navi backend helm chart for Kubernetes
 type: application
 keywords:
-  - navi
-  - back
-  - backend
-version: 0.1.9
-appVersion: "6.3.0"
+- navi
+- back
+- backend
+version: 0.2.2
+appVersion: 6.3.0
 maintainers:
-  - name: 2gis
-    url: https://github.com/2gis
-    email: on-premise@2gis.com
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

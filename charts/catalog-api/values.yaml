@@ -12,8 +12,8 @@ imagePullSecrets: []
 
 api:
   image:
-    repository: "2gis-on-premise/ipa-app-op"
-    tag: "tag-3.557.4"
+    repository: 2gis-on-premise/catalog
+    tag: 3.560.0
     pullPolicy: IfNotPresent
 
   replicas: 1
@@ -54,8 +54,8 @@ keys:
   endpoint: https://keys-api.host
   requestTimeout: 5s
   serviceKeys:
-    places: ""  # set if available in API Keys service
-    geocoder: ""  # set if available in API Keys service
-    suggest: ""  # set if available in API Keys service
-    categories: ""  # set if available in API Keys service
-    regions: ""  # set if available in API Keys service
+    places: ''  # set if available in API Keys service
+    geocoder: ''  # set if available in API Keys service
+    suggest: ''  # set if available in API Keys service
+    categories: ''  # set if available in API Keys service
+    regions: ''  # set if available in API Keys service

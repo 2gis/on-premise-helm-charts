@@ -7,5 +7,7 @@ metadata:
   labels:
     {{- include "gis-platform-portal.labels" . | nindent 4 }}
 data:
+  nginx.conf: |-
+    {{- tpl (.Files.Get "configs/portal/nginx.conf.template") . | nindent 4 }}
   default.conf.template: |-
     {{- tpl (.Files.Get "configs/portal/default.conf.template") . | nindent 4 }}

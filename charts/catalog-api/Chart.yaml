@@ -3,10 +3,10 @@ name: catalog-api
 type: application
 description: A Helm chart for Kubernetes to deploy Catalog APIs
 
-version: 0.1.9
+version: 0.2.2
 appVersion: 3.557.4
 
 maintainers:
-  - name: 2gis
-    url: https://github.com/2gis
-    email: on-premise@2gis.com
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

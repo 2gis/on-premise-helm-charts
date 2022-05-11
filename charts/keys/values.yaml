@@ -2,18 +2,18 @@ install:
   apps: true
   data: true
 
-imagePullSecrets: {}
+imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
 backend:
   image:
-    repository: "2gis-on-premise/zuul"
-    tag: "tag-1.25.0"
+    repository: 2gis-on-premise/keys-backend
+    tag: 1.27.0
 
 admin:
   image:
-    repository: "2gis-on-premise/keys-admin"
-    tag: "main-195e0396-app-on-prem"
+    repository: 2gis-on-premise/keys-ui
+    tag: 0.0.1-9719aa19
 
   replicas: 1
 
@@ -25,8 +25,8 @@ admin:
       cpu: 1
       memory: 384Mi
 
-  apiUrl: "https://api.url/admin/v1"
-  appHost: "https://app.host"
+  apiUrl: https://api.url/admin/v1
+  appHost: https://app.host
 
   annotations: {}
   labels: {}
@@ -47,7 +47,7 @@ admin:
   ingress: {}
 
 api:
-  adminUsers: ""  # username1:password1,username2:password2
+  adminUsers: ''  # username1:password1,username2:password2
 
   replicas: 1
 
@@ -128,8 +128,8 @@ tasker:
 
 redis:
   image:
-    repository: 2gis-on-premise/redis
-    tag: 6.2.6-alpine
+    repository: 2gis-on-premise/keys-redis
+    tag: 6.2.6-alpine3.15
 
   resources:
     requests:
@@ -174,14 +174,14 @@ ldap:
   useStartTLS: false
   useLDAPS: false
   skipServerCertificateVerify: false
-  serverName: ""
-  clientCertificatePath: ""
-  clientKeyPath: ""
-  rootCertificateAuthoritiesPath: ""
+  serverName: ''
+  clientCertificatePath: ''
+  clientKeyPath: ''
+  rootCertificateAuthoritiesPath: ''
 
   bind:
     dn: user
     password: secret
   search:
-    baseDN: "dc=2gis"
-    filter: "(&(objectClass=user)(sAMAccountName=%s))"
+    baseDN: dc=2gis
+    filter: (&(objectClass=user)(sAMAccountName=%s))

@@ -1,6 +1,3 @@
----
-
-# -- Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`
 dgctlDockerRegistry: ''
 
 # -- <h3>Deployment Artifacts Storage</h3>
@@ -60,13 +57,11 @@ cassandra:
 # -- <h3>Proxy to access the API Keys service</h3>
 # @default --  
 proxy:
-  # -- The path to the Docker image. This image must exist in the Docker Registry, specified in the `dgctlDockerRegistry` key
-  image: 2gis-on-premise/tiles-api-proxy
-  
-  # -- Tag with proxy version
-  tag: v4.19.2
-  
-  # -- Proxy container port
+  image:
+    repository: 2gis-on-premise/tiles-api-proxy
+    tag: v4.19.2
+    pullPolicy: IfNotPresent
+
   containerPort: 5000
   
   # -- Proxy timeout, in seconds
@@ -93,22 +88,17 @@ proxy:
     enabled: false
     # -- API Keys endpoint hostname
     host: http://keys-api.localhost
-    # -- [Service key](https://docs.2gis.com/en/on-premise/keys#nav-lvl1--Fetching_the_service_API_keys) for accessing Keys API
-    token: ""
-    # -- Sync period
+    # -- Service key for Keys API
+    token: ''
     syncPeriod: 2m
 
 # -- <h3>Tiles API service</h3>
 # @default --  
 api:
-  # -- The path to the Docker image. This image must exist in the Docker Registry, specified in the `dgctlDockerRegistry` key
-  image: 2gis-on-premise/tiles-api
-  
-  # -- Tag with Tiles API service version
-  tag: v4.19.2
-
-  # -- Kubernetes [image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) for pulling the services' images
-  pullPolicy: IfNotPresent
+  image:
+    repository: 2gis-on-premise/tiles-api
+    tag: v4.19.2
+    pullPolicy: IfNotPresent
 
   # -- Duration in seconds the Tiles API service pod needs to terminate gracefully
   terminationGracePeriodSeconds: 30
@@ -156,12 +146,7 @@ api:
 
   #-- Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
   tolerations: {}
-
-  # -- A list of references to secrets to use for [pulling any images from the Docker Registry](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod), specified in the `dgctlDockerRegistry` key
-  imagePullSecrets: {}
-
-  # -- [Rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) strategy settings:
-  # @default --  
+  imagePullSecrets: []
   strategy:
     rollingUpdate:
       # -- Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
@@ -193,13 +178,9 @@ api:
     # -- Host settings for Tiles API service:
     # @default --  
     hosts:
-        # -- Fully qualified domain name of the Tiles API service
-        # @default -- `"tiles-api.loc"`
-      - host: tiles-api.loc
-        paths:
-          # -- Path to associate the Tiles API service with
-          # @default -- `"/"`
-          - path: /
+    - host: tiles-api.loc
+      paths:
+      - path: /
 
   # -- Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings:
   # @default --  
@@ -243,14 +224,10 @@ importer:
   # -- If Importer job is enabled
   enabled: true
 
-  # -- The path to the Docker image. This image must exist in the Docker Registry, specified in the `dgctlDockerRegistry` key
-  image: 2gis-on-premise/tiles-api-importer
-
-  # -- Tag with Importer job version
-  tag: v4.19.2
-
-  # -- Kubernetes [image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) for pulling the services' images
-  pullPolicy: IfNotPresent
+  image:
+    repository: 2gis-on-premise/tiles-api-importer
+    tag: v4.19.2
+    pullPolicy: IfNotPresent
 
   # -- Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the Importer job:
   # @default --  
@@ -274,9 +251,7 @@ importer:
 
   # -- Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
   tolerations: {}
-
-  # -- A list of references to secrets to use for [pulling any images from the Docker Registry](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod), specified in the `dgctlDockerRegistry` key
-  imagePullSecrets: {}
+  imagePullSecrets: []
 
   # -- Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
   nodeSelector: {}

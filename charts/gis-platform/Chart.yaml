@@ -1,12 +1,10 @@
----
-
 apiVersion: v2
 name: gis-platform
 description: GIS Platform
 
 type: application
 
-version: 0.1.9
+version: 0.2.2
 appVersion: 0.0.2
 
 dependencies:
@@ -15,6 +13,6 @@ dependencies:
   repository: https://charts.bitnami.com/bitnami
 
 maintainers:
-  - name: 2gis
-    url: https://github.com/2gis
-    email: on-premise@2gis.com
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com
