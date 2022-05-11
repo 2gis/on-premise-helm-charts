@@ -19,5 +19,5 @@ spec:
       name: http
       targetPort: http
   selector:
-    {{- include "keys.api.labels" . | nindent 4 }}
+    {{- include "keys.api.selectorLabels" . | nindent 4 }}
 {{- end }}

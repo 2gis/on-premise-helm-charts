@@ -21,7 +21,7 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      {{- include "keys.admin.labels" . | nindent 6 }}
+      {{- include "keys.admin.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.admin.podAnnotations }}

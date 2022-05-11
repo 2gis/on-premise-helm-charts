@@ -27,15 +27,23 @@
 {{- end }}
 
 
-{{- define "keys.labels" -}}
+{{- define "keys.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "keys.labels" -}}
+{{ include "keys.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
-{{- define "keys.api.labels" -}}
+{{- define "keys.api.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-api
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "keys.api.labels" -}}
+{{ include "keys.api.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
@@ -45,15 +53,23 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
-{{- define "keys.redis.labels" -}}
+{{- define "keys.redis.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-redis
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "keys.redis.labels" -}}
+{{ include "keys.redis.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
-{{- define "keys.tasker.labels" -}}
+{{- define "keys.tasker.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-tasker
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "keys.tasker.labels" -}}
+{{ include "keys.tasker.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
@@ -63,9 +79,13 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
-{{- define "keys.admin.labels" -}}
+{{- define "keys.admin.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-admin
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "keys.admin.labels" -}}
+{{ include "keys.admin.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
