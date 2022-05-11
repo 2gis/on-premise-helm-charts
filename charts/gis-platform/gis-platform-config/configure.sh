@@ -16,6 +16,11 @@ function usage() {
     echo "-c    Push configs to server"
     echo "-p    Patch existing layers (implies -c)"
     echo ""
+    echo "Required environment variables:"
+    echo "- GIS_PLATFORM_URL"
+    echo "- GIS_PLATFORM_PASS"
+    echo "- GIS_PLATFORM_TILES_API"
+    echo "- GIS_PLATFORM_TRAFFIC_API"
 }
 
 #---------------
@@ -103,6 +108,8 @@ function dump_configuration {
         echo "Fetching config: $config"
         $CURL -XGET "$GIS_PLATFORM_URL/sp/settings?urlPath=/$config" | jq . > "$TMPDIR/${config^}Config.json"
     done
+    echo ""
+    echo "Configs stored in $TMPDIR"
 }
 
 #---------------
@@ -119,14 +126,6 @@ function config_diff() {
 }
 
 #---------------
-
-if [[ -z $GIS_PLATFORM_PASS ]] || [[ -z $GIS_PLATFORM_URL ]] || [[ -z $GIS_PLATFORM_TILES_API ]] || [[ -z $GIS_PLATFORM_TRAFFIC_API ]]; then
-    echo -e "\n\nSet GIS_PLATFORM_TRAFFIC_API, GIS_PLATFORM_TILES_API, GIS_PLATFORM_PASS and GIS_PLATFORM_URL\n" >&2
-    exit 1
-fi
-
-tiles_api_url="${GIS_PLATFORM_TILES_API%/}/tiles?x={2}&y={3}&z={1}&v=1.5&ts=online_sd_ar&layerType=nc"
-traffic_url="${GIS_PLATFORM_TRAFFIC_API}/dammam/traffic/{1}/{2}/{3}/speed/0/?1640062200"
 
 HAS_OPT=0
 CONFIGURE=0
@@ -150,11 +149,13 @@ if [[ $HAS_OPT -eq 0 ]]; then
     exit 0
 fi
 
-cookie=$(mktemp gis-platform.cookie.XXXXX)
+if [[ -z $GIS_PLATFORM_PASS ]] || [[ -z $GIS_PLATFORM_URL ]] || [[ -z $GIS_PLATFORM_TILES_API ]] || [[ -z $GIS_PLATFORM_TRAFFIC_API ]]; then
+    echo -e "\n\nSet GIS_PLATFORM_TRAFFIC_API, GIS_PLATFORM_TILES_API, GIS_PLATFORM_PASS and GIS_PLATFORM_URL\n" >&2
+    exit 1
+fi
 
-trap "rm -f $cookie" EXIT
-
-CURL="curl -s -S -b $cookie -c $cookie"
+tiles_api_url="${GIS_PLATFORM_TILES_API%/}/tiles?x={2}&y={3}&z={1}&v=1.5&ts=online_sd_ar&layerType=nc"
+traffic_url="${GIS_PLATFORM_TRAFFIC_API}/dammam/traffic/{1}/{2}/{3}/speed/0/?1640062200"
 
 superuser_login=''
 read -r -d '' superuser_login <<-EOF_SUPERUSER_LOGIN
@@ -174,10 +175,18 @@ set -E
 set -e
 set -u
 
-echo "Configuring $GIS_PLATFORM_URL"
+WORKDIR=$( cd $(dirname $0) ; pwd )
+pushd "$WORKDIR" > /dev/null
 
-TMPDIR="_tmp/${GIS_PLATFORM_URL#http*://}"
+TMPDIR="${WORKDIR}/_tmp/${GIS_PLATFORM_URL#http*://}"
 mkdir -p "$TMPDIR"
+
+cookie=$(mktemp "$WORKDIR/_tmp/gis-platform.cookie.XXXXX")
+trap "rm -f $cookie ; popd > /dev/null" EXIT
+
+CURL="curl -s -S -b $cookie -c $cookie"
+
+echo "Configuring $GIS_PLATFORM_URL"
 
 echo "Authorizing"
 $CURL -XPOST -H 'Content-Type: application/json' -d "$superuser_login" "$GIS_PLATFORM_URL/sp/account/login"
