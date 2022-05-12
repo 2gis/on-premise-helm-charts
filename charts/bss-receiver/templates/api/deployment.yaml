@@ -28,6 +28,8 @@ spec:
         {{- if .Values.api.labels }}
         {{- toYaml .Values.api.labels | nindent 8 }}
         {{- end }}
+      annotations:
+        checksum/config: {{ (include (print $.Template.BasePath "/streams/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
     spec:
       containers:
       - name: api

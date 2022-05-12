@@ -9,12 +9,6 @@ api:
   replicas: 1
 
   service:
-    annotations:
-      router.deis.io/ssl.enforce: "false"
-      router.deis.io/keepaliveCount: "64"
-      router.deis.io/domains: "bss-receiver-api-on-premise"
-    labels:
-      router.deis.io/routable: "true"
     type: ClusterIP
     port: 80
     targetPort: 8080
@@ -54,3 +48,6 @@ kafka:
   security: {}
   sasl:
     jaas: {}
+
+ingress:
+  enabled: false
