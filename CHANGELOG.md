@@ -1,5 +1,27 @@
 # 2GIS On-Premise Changelog
 
+## [1.0.0]
+#### Images
+```
+catalog-api
+-       catalog:3.560.0
++       catalog:3.561.0
+gis-platform
+-       gis_platform_spcore:2022-04-13.01
+-       gis_platform_portal:2022-04-13
++       gis_platform_spcore:2022-04-22
++       gis_platform_portal:2022-04-22
+keys
+-       keys-ui:0.0.1-9719aa19
++       keys-ui:0.0.2
+mapgl-js-api
+-       mapgl:v1.26.0
++       mapgl:v1.28.1
+search-api
+-       search-api:7.18.1
++       search-api:7.19.1
+```
+
 ## [0.2.2]
 #### [Breaking-Changes](Breaking-Changes.md#022)
 #### Images
