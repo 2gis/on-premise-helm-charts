@@ -133,7 +133,7 @@ DUMP_CONFIG=0
 DIFF_CONFIG=0
 PATCH_LAYERS=0
 
-while getopts "gdph" opt; do
+while getopts "gdphc" opt; do
     case "$opt" in
         "d") HAS_OPT=1 && DIFF_CONFIG=1 ;;
         "g") HAS_OPT=1 && DUMP_CONFIG=1 ;;
