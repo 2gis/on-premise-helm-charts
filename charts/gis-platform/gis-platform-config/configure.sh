@@ -67,7 +67,7 @@ function configure() {
   echo "Logging as admin"
   $CURL -XPOST -H 'Content-Type: application/json' -d "$admin_login" "$GIS_PLATFORM_URL/sp/account/login"
 
-  if ! grep --silent -c refreshToken $cookie; then
+  if ! grep -q -c refreshToken $cookie; then
       echo -e "\n\nFailed to get authorization cookie\n" >&2
       exit 1
   fi
@@ -181,7 +181,7 @@ pushd "$WORKDIR" > /dev/null
 TMPDIR="${WORKDIR}/_tmp/${GIS_PLATFORM_URL#http*://}"
 mkdir -p "$TMPDIR"
 
-cookie=$(mktemp "$WORKDIR/_tmp/gis-platform.cookie.XXXXX")
+cookie=$(mktemp "$WORKDIR/_tmp/gis-platform.cookie.XXXXXX")
 trap "rm -f $cookie ; popd > /dev/null" EXIT
 
 CURL="curl -s -S -b $cookie -c $cookie"
@@ -191,7 +191,7 @@ echo "Configuring $GIS_PLATFORM_URL"
 echo "Authorizing"
 $CURL -XPOST -H 'Content-Type: application/json' -d "$superuser_login" "$GIS_PLATFORM_URL/sp/account/login"
 
-if ! grep --silent -c refreshToken $cookie; then
+if ! grep -q refreshToken $cookie; then
     echo -e "\n\nFailed to get authorization cookie\n" >&2
     exit 1
 fi
