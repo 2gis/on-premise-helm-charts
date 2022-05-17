@@ -20,6 +20,9 @@ spec:
       nodeSelector:
 {{ toYaml .Values.portal.nodeSelector | indent 8 }}
 {{- end }}
+      {{- if .Values.portal.priorityClassName }}
+      priorityClassName: {{ .Values.portal.priorityClassName }}
+      {{- end }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
