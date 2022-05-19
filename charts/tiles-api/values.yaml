@@ -13,7 +13,7 @@ type: web
 
 cassandra:
   # -- Environment name (prod, stage, etc) allows creating multiple environments on a single cassandra cluster
-  environment: prod
+  environment: ''
 
   # -- List of available Cassandra database nodes
   hosts: []
