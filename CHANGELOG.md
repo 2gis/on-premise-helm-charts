@@ -1,5 +1,18 @@
 # 2GIS On-Premise Changelog
 
+## [1.0.4]
+#### [Breaking-Changes](Breaking-Changes.md#104)
+#### Images
+```
+tiles-api
+-       tiles-api-proxy:v4.19.2
+-       tiles-api:v4.19.2
+-       tiles-api-importer:v4.19.2
++       tiles-api-proxy:v4.21.0
++       tiles-api:v4.21.0
++       tiles-api-importer:v4.21.0
+```
+
 ## [1.0.0]
 #### Images
 ```
