@@ -84,16 +84,16 @@ affinity: {}
 
 castle:
   image:
-    repository: 2gis-on-premise/castle
+    repository: 2gis-on-premise/navi-castle
     pullPolicy: IfNotPresent
-    tag: 1.0.2
+    tag: 1.0.5
   castle_data_path: /opt/castle/data/
 
 nginx:
   port: 8080
   image:
-    repository: 2gis-on-premise/navi-front-unpriv
-    tag: '1.21'
+    repository: 2gis-on-premise/navi-front
+    tag: 1.21-ad06a0e0
 
 cron:
   enabled: false

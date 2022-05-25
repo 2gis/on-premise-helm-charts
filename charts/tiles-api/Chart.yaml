@@ -4,7 +4,7 @@ description: Tiles API for getting cartographic data
 
 type: application
 
-version: 1.0.4
+version: 1.0.5
 appVersion: 4.19.2
 
 maintainers:

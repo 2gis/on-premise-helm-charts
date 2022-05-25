@@ -1,5 +1,19 @@
 # 2GIS On-Premise Changelog
 
+## [1.0.5]
+#### Images
+```
+ navi-castle
+-       castle:1.0.2
+-       navi-front-unpriv:1.21
++       navi-castle:1.0.5
++       navi-front:1.21-ad06a0e0
+ navi-front
+-       navi-front-unpriv:1.21
++       navi-front:1.21-ad06a0e0
+
+```
+
 ## [1.0.4]
 #### [Breaking-Changes](Breaking-Changes.md#104)
 #### Images
