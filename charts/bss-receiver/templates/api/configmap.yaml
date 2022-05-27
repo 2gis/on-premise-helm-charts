@@ -1,0 +1,62 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "bss-receiver-api.name" . }}
+  labels:
+    {{- include "bss-receiver-api.labels" . | nindent 4 }}
+data:
+  application.conf: |
+    include classpath("application")
+
+    schema-loader = {
+      v-1-schemas-path = "file:///app/schema/v1/"
+      v-2-schemas-path = "file:///app/schema/v2/"
+      v-3-schemas-path = "file:///app/schema/v3/0/"
+    }
+    
+    initialize-topics = {{ required "A valid .Values.initializeTopics entry required" .Values.initializeTopics }}
+    topics-manager.prefix = {{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}
+
+    input-bss-topic = "{{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}input"
+
+    kafka = {
+      servers = {{ required "A valid .Values.kafka.servers entry required" .Values.kafka.servers | quote }}
+      client-id = "bss.receiver.api"
+      properties = {
+        {{- if .Values.kafka.sasl.mechanism }}
+        "sasl.mechanism" = {{ .Values.kafka.sasl.mechanism }}
+        {{- end }}
+        {{- if .Values.kafka.security.protocol }}
+        "security.protocol" = {{ .Values.kafka.security.protocol }}
+        {{- end }}
+        {{- if .Values.kafka.sasl.jaas.config }}
+        "sasl.jaas.config" = {{ .Values.kafka.sasl.jaas.config }}
+        {{- end }}
+        "max.request.size" = "31457280"
+        "compression.type" = "gzip"
+      }
+    }
+
+  logback.xml: |
+    <configuration>
+      <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+          <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+            <maxDepthPerThrowable>30</maxDepthPerThrowable>
+            <maxLength>28672</maxLength> <!-- 28Kb for stacktrace, because full json ELK limit is 32Kb-->
+            <shortenedClassNameLength>20</shortenedClassNameLength>
+            <exclude>scala\.concurrent\.Future.*</exclude>
+            <exclude>scala\.concurrent\.forkjoin..*</exclude>
+            <rootCauseFirst>true</rootCauseFirst>
+          </throwableConverter>
+        </encoder>
+      </appender>
+
+      <logger name="org.http4s.blaze.channel" level="WARN" />
+
+      <root level="INFO">
+        <appender-ref ref="STDOUT" />
+      </root>
+    </configuration>
