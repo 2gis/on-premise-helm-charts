@@ -57,6 +57,7 @@ spcore:
   cloud_port: 5050
   http_port: 5051
   maxRenderTargets: 1000
+  loglevel: Info
   defaultLimits:
     tables: 500
     layers: 500

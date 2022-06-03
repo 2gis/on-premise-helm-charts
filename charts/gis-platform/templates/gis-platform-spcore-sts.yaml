@@ -135,6 +135,9 @@ spec:
           - name: {{ include "gis-platform-spcore.name" . }}-configmap
             mountPath: /spcore-entrypoint.sh
             subPath: spcore-entrypoint.sh
+          - name: {{ include "gis-platform-spcore.name" . }}-configmap
+            mountPath: /app/NLog.config
+            subPath: NLog.config.template
       volumes:
         - name: {{ include "gis-platform-spcore.name" . }}-configmap
           configMap:
