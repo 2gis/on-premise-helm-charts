@@ -3,6 +3,10 @@ replicaCount: 1
 proxy:
   host: https://traffic-jams.2gis.com
   listen: 8080
+  cache:
+    enabled: true
+  chacheValid: '1m'
+
 image:
   repository: 2gis-on-premise/nginx
   pullPolicy: IfNotPresent
