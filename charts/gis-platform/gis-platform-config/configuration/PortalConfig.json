@@ -2,6 +2,7 @@
   "settings": {
     "allowSNS": false,
     "allowRegistration": false,
+    "allowRecovery": false,
     "customLogo": {
       "src": "/urbi.png",
       "width": 110,
