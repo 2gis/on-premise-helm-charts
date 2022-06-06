@@ -37,16 +37,16 @@ function create_or_update_layer() {
     layer_data="$2"
     layer_name=$( jq --raw-output .name <<< $layer_data )
 
-    if [[ -z $( get_layer_config $layer_name | jq --raw-output .name ) ]]; then
-        echo "Configuring $layer_name $layer_type"
-        echo $layer_data | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=$layer_type"
-    else
+    if [[ $layer_name == $( get_layer_config $layer_name | jq --raw-output .name ) ]]; then
         if [[ $PATCH_LAYERS -eq 1 ]]; then
             echo "Updating $layer_name configuration"
             echo $layer_data | $CURL -XPATCH -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers/$layer_name?type=$layer_type" > /dev/null
         else
             echo "Layer $layer_name already exists, skipping"
         fi
+    else
+        echo "Configuring $layer_name $layer_type"
+        echo $layer_data | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=$layer_type"
     fi
 }
 
