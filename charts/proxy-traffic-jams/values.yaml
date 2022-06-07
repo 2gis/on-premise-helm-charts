@@ -6,6 +6,7 @@ proxy:
   cache:
     enabled: true
     age: '1m'
+    size: '32m'
 
 image:
   repository: 2gis-on-premise/nginx
