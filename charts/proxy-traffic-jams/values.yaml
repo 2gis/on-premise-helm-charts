@@ -5,7 +5,8 @@ proxy:
   listen: 8080
   cache:
     enabled: true
-  chacheValid: '1m'
+  chache:
+    age: '1m'
 
 image:
   repository: 2gis-on-premise/nginx

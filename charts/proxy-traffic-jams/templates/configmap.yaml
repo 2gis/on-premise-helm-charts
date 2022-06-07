@@ -43,7 +43,7 @@ data:
         keepalive_timeout  65;
 
       {{ if .Values.proxy.cache.enabled }}
-        proxy_cache_path /var/cache/nginx/trafficcache keys_zone=trafficcache:{{ .Values.proxy.chacheValid }};
+        proxy_cache_path /var/cache/nginx/trafficcache keys_zone=trafficcache:{{ .Values.proxy.chache.age }};
       {{ end }}
 
         server {
