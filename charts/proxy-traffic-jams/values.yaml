@@ -5,7 +5,6 @@ proxy:
   listen: 8080
   cache:
     enabled: true
-  chache:
     age: '1m'
 
 image:
