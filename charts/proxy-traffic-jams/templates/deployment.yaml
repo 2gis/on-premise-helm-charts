@@ -72,6 +72,10 @@ spec:
             - name: {{ include "proxy-traffic-jams.name" $ }}-configmap
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
+          {{- if .Values.proxy.cache.enabled }}
+            - name: trafficcache
+              mountPath: /var/cache/nginx/trafficcache
+          {{- end }}
       volumes:
         - name: {{ include "proxy-traffic-jams.name" . }}-configmap
           configMap:
@@ -79,6 +83,10 @@ spec:
             items:
               - key: nginx.conf
                 path: nginx.conf
+      {{- if .Values.proxy.cache.enabled }}
+        - name: trafficcache
+          emptyDir: {}
+      {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
