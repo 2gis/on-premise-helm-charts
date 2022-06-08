@@ -5,8 +5,8 @@ proxy:
   listen: 8080
   cache:
     enabled: true
-    age: '1m'
-    size: '32m'
+    age: 1m
+    size: 32m
 
 image:
   repository: 2gis-on-premise/nginx

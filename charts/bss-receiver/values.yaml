@@ -1,9 +1,7 @@
----
-
 api:
   image:
-    repository: "casino/bss-receiver-api-on-premise"
-    tag: "0.8.3"
+    repository: casino/bss-receiver-api-on-premise
+    tag: 0.8.3
     pullPolicy: IfNotPresent
 
   replicas: 1
@@ -25,8 +23,8 @@ api:
 
 streams:
   image:
-    repository: "casino/bss-receiver-streams-on-premise"
-    tag: "0.8.3"
+    repository: casino/bss-receiver-streams-on-premise
+    tag: 0.8.3
     pullPolicy: IfNotPresent
 
   replicas: 1
@@ -39,7 +37,7 @@ streams:
       cpu: 2
       memory: 4G
 
-  jvmXmx: "-Xmx2G -XX:+UseParallelGC"
+  jvmXmx: -Xmx2G -XX:+UseParallelGC
 
   jmxPort: 9010
   metricsPort: 8080

@@ -1,5 +1,24 @@
 # 2GIS On-Premise Changelog
 
+## [1.0.8]
+#### Images
+```
+ bss-receiver
++       bss-receiver-api-on-premise:0.8.3
++       bss-receiver-streams-on-premise:0.8.3
+ catalog-api
+-       catalog:3.561.0
++       catalog:3.564.0
+ gis-platform
+-       gis_platform_spcore:2022-04-22
+-       gis_platform_portal:2022-04-22
++       gis_platform_spcore:2022-06-05
++       gis_platform_portal:2022-06-05
+ search-api
+-       search-api:7.19.1
++       search-api:7.22.1
+```
+
 ## [1.0.5]
 #### Images
 ```
