@@ -17,6 +17,9 @@ api:
   resources: {}
   data_dir: /data
   fcgi_port: 9090
+  logLevel: Info
+  logFormat: json  # plaintext
+  configOpt: []
 
 nginx:
   image:
