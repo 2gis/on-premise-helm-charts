@@ -10,7 +10,7 @@ data:
         "logger_name": "router",
         "file_prefix": "../../../../",
         "enable_syslog": true,
-        "level": "Warning",
+        "level": {{ .Values.router.log_level | default "Warning" | quote  }},
         "disabled_tags_": [
           "http",
           "UploadData",

@@ -77,3 +77,9 @@ vpa:
 router:
   app_port: 8080
   additional_sections: ''
+  # Available log levels:
+  # - Warning
+  # - Info
+  # - Verbose
+  # Default is Warning
+  # log_level: 'Warning'
