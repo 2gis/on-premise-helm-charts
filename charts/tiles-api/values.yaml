@@ -1,64 +1,80 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
 dgctlDockerRegistry: ''
 
-# -- <h3>Deployment Artifacts Storage</h3>
-# @default --  
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
+# @param dgctlStorage.bucket S3 bucket name.
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket.
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate.
+
 dgctlStorage:
-  # -- S3 endpoint. Format: `host:port`
   host: ''
-  # -- S3 bucket name
   bucket: ''
-  # -- S3 access key for accessing the bucket
   accessKey: ''
-  # -- S3 secret key for accessing the bucket
   secretKey: ''
-  # -- The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2--Common_deployment_steps). 
-    # Format: `manifests/0000000000.json`.
-  # <br>
-  # This file contains the description of pieces of data that the service requires to operate
   manifest: ''
 
-# -- Name of the service.
-# It depends on the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Architecture):
-# <ul><li>`tiles-api-webgl` for Tiles API with vector tiles support
-# </li><li>`tiles-api-raster` for Tiles API with raster tiles support</li><ul>
+# @section Tiles API configuration
+
+# @param serviceName Name of the service.<br>It depends on the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture): <ul><li>`tiles-api-webgl` for Tiles API with vector tiles support</li><li>`tiles-api-raster` for Tiles API with raster tiles support</li><ul>
+# @param name Name of the deployment.
+# @param type Type of the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture):<ul><li>`web` for Tiles API with vector tiles support</li><li>`raster` for Tiles API with raster tiles support</li><ul>
+
 serviceName: tiles-api-webgl
-
-# -- Name of the deployment
 name: tiles-api
-
-# -- Type of the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1--Architecture):
-# <ul><li>An empty string for Tiles API with vector tiles support</li>
-# <li>`raster` for Tiles API with raster tiles support</li><ul>
 type: web
 
-# -- <h3>Apache Cassandra Data Storage</h3>
-# @default --  
+# @section Apache Cassandra Data Storage settings
+
+# @extra cassandra **Common settings**
+# @param cassandra.environment Environment name (`prod`, `stage`, etc).<br>Support for differently named environments allows hosting multiple Tiles API deployments on a single Cassandra cluster.
+# @param cassandra.hosts An array of the one of more IP adresses or hostnames of the Apache Cassandra installation.
+# @param cassandra.replicaFactor Apache Cassandra [replication factor](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html).
+# @param cassandra.consistencyLevelRead Apache Cassandra [read consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels).
+# @param cassandra.consistencyLevelWrite Apache Cassandra [write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels).
+
+# @extra cassandra.credentials **Credentials for accessing Apache Cassandra**
+# @param cassandra.credentials.user User name
+# @param cassandra.credentials.password Password
+
 cassandra:
-  # -- Environment name (prod, stage, etc) allows creating multiple environments on a single cassandra cluster
   environment: ''
-
-  # -- List of available Cassandra database nodes
   hosts: []
-
-  # -- Credentials for accessing Apache Cassandra:
-  # @default --  
   credentials:
-    # -- User name
     user: cassandra
-    # -- Password
     password: cassandra
-
-  # -- Apache Cassandra [replication factor](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html)
   replicaFactor: 3
-
-  # -- [Read consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels)
   consistencyLevelRead: LOCAL_QUORUM
-
-  # -- [Write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels)
   consistencyLevelWrite: LOCAL_QUORUM
 
-# -- <h3>Proxy to access the API Keys service</h3>
-# @default --  
+# @section API Keys proxy settings
+
+# @extra proxy **Common settings**
+# @param proxy.containerPort Port the proxy listens on.
+# @param proxy.timeout Proxy timeout, in seconds.
+
+# @extra proxy.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @param proxy.resources.requests.cpu A CPU request.
+# @param proxy.resources.requests.memory A memory request.
+# @param proxy.resources.limits.cpu A CPU limit.
+# @param proxy.resources.limits.memory A memory limit.
+
+# @extra proxy.image **Docker image settings**
+# @param proxy.image.repository Docker Repository.
+# @param proxy.image.tag Docker image tag.
+# @param proxy.image.pullPolicy Kubernetes pull policy for the service's Docker image.
+
+# @extra proxy.access **API Keys service access settings**
+# @param proxy.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
+# @param proxy.access.host API Keys endpoint hostname.
+# @param proxy.access.token Service key for Keys API.
+# @param proxy.access.syncPeriod Proxy sync period.
+
 proxy:
   image:
     repository: 2gis-on-premise/tiles-api-proxy
@@ -66,209 +82,213 @@ proxy:
     pullPolicy: IfNotPresent
 
   containerPort: 5000
-  
-  # -- Proxy timeout, in seconds
   timeout: 5s
 
-  # -- Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the proxy:
-  # @default --  
   resources:
     requests:
-      # -- A CPU request
       cpu: 50m
-      # -- A memory request
       memory: 128Mi
     limits:
-      # -- A CPU limit
       cpu: 1
-      # -- A memory limit
       memory: 512Mi
 
-  # -- Proxy access settings:
-  # @default --  
   access:
-    # -- If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled
     enabled: false
-    # -- API Keys endpoint hostname
     host: http://keys-api.localhost
-    # -- Service key for Keys API
     token: ''
     syncPeriod: 2m
 
-# -- <h3>Tiles API service</h3>
-# @default --  
+# @section Tiles API settings
+
+# @extra api **Common settings**
+
+# @param api.terminationGracePeriodSeconds Duration in seconds the Tiles API service pod needs to terminate gracefully.
+# @param api.containerPort Tiles API container port.
+
+# @param api.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param api.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param api.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param api.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param api.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param api.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+# @param api.replicaCount A replica count for the pod.
+# @param api.revisionHistory Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+# @extra api.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @param api.resources.requests.cpu A CPU request.
+# @param api.resources.requests.memory A memory request.
+# @param api.resources.limits.cpu A CPU limit.
+# @param api.resources.limits.memory A memory limit.
+
 api:
+
+  # @extra api.image **Docker image settings**
+  # @param api.image.repository Docker Repository.
+  # @param api.image.tag Docker image tag.
+  # @param api.image.pullPolicy Kubernetes pull policy for the service's Docker image.
+  # @param api.imagePullSecrets Kubernetes image pull secrets. 
+
   image:
     repository: 2gis-on-premise/tiles-api
     tag: v4.21.0
     pullPolicy: IfNotPresent
 
-  # -- Duration in seconds the Tiles API service pod needs to terminate gracefully
   terminationGracePeriodSeconds: 30
-
-  # -- Tiles API container port
   containerPort: 8000
 
-  ## -- Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
   labels: {}
-
-  # -- Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   annotations: {}
 
-  # -- A replica count for the pod
   replicaCount: 3
-
-  # -- Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment)
   revisionHistory: 1
 
-  # -- Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the Tiles API service:
-  # @default --  
   resources:
     requests:
-      # -- A CPU request
       cpu: 50m
-      # -- A memory request
       memory: 128Mi
     limits:
-      # -- A CPU limit
       cpu: 1
-      # -- A memory limit
       memory: 512Mi
 
-  # -- Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   podAnnotations: {}
-
-  # -- Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
   podLabels: {}
-
-  # -- Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
   nodeSelector: {}
-
-  # -- Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
   affinity: {}
-
-  #-- Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
   tolerations: {}
+
   imagePullSecrets: []
+
+  # @extra api.strategy.rollingUpdate **Service's Rolling Update strategy settings**
+  # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param api.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
   strategy:
     rollingUpdate:
-      # -- Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
       maxUnavailable: 0
-      # -- Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process
       maxSurge: 1
 
-  # -- Kubernetes [service settings](https://kubernetes.io/docs/concepts/services-networking/service/) to expose the service:
-  # @default --  
+  # @extra api.service **Kubernetes [service settings](https://kubernetes.io/docs/concepts/services-networking/service/) to expose the service**
+  # @param api.service.port Tiles API service port.
+  # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
   service:
-    # -- Tiles API service port
     port: 80
-    # -- Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
     type: ClusterIP
-    # -- Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
     annotations: {}
-    # -- Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
     labels: {}
 
-  # -- Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings:
-  # @default --  
+  # @extra api.ingress **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings**
+  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.className Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource.
+  # @param api.ingress.hosts[0].host Host FQDN.
+  # @param api.ingress.hosts[0].paths[0].path Path (forms a service's URL if appended to the host FQDN).
+  # @param api.ingress.tls Ingress [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress.
+
   ingress:
-    # -- If Ingress is enabled for the service
     enabled: false
-    # -- Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource
     className: nginx
-    # -- [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress
     tls: []
-    # -- Host settings for Tiles API service:
-    # @default --  
     hosts:
     - host: tiles-api.loc
       paths:
       - path: /
 
-  # -- Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings:
-  # @default --  
+  # @extra api.pdb **Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings**
+  # @param api.pdb.enabled If PDB is enabled for the service.
+  # @param api.pdb.maxUnavailable How many pods must always be available, even during a disruption.
+
   pdb:
-    # -- If PDB is enabled for the service
     enabled: true
-    # -- How many pods must always be available, even during a disruption
     maxUnavailable: 1
 
-  # -- Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings:
-  # @default --  
+  # @extra api.hpa **Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings**
+  # @param api.hpa.enabled If HPA is enabled for the service.
+  # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+  # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+  # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+
   hpa:
-    # -- If HPA is enabled for the service
     enabled: false
-    # -- Lower limit for the number of replicas to which the autoscaler can scale down
     minReplicas: 1
-    # -- Upper limit for the number of replicas to which the autoscaler can scale up
     maxReplicas: 1
-    # -- Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used
     targetCPUUtilizationPercentage: 50
 
-  # -- [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings:
-  # @default --  
+  # @extra api.vpa **Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings**
+  # @param api.vpa.enabled If VPA is enabled for the service.
+  # @param api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+  # @param api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+  # @param api.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+  # @param api.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+
   vpa:
-    # -- If VPA is enabled for the service
     enabled: false
-    # -- VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start)
     updateMode: Auto
     minAllowed:
-      # -- Lower limit for the RAM size to which the autoscaler can scale down
       memory: 128Mi
     maxAllowed:
-      # -- Upper limit for the number of CPUs to which the autoscaler can scale up
       cpu: 1
-      # -- Upper limit for the RAM size to which the autoscaler can scale up
       memory: 512Mi
 
-# -- <h3>Kubernetes Importer job</h3>
-# @default --  
+# @section Kubernetes Importer job settings
+
+# @extra importer **Common settings**
+
+# @param importer.enabled If Importer job is enabled.
+# @param importer.workerNum Number of parallel import processes (workers).
+# @param importer.writerNum Number of write processes per import process (worker).
+
+# @param importer.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+
+# @extra importer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @param importer.resources.requests.cpu A CPU request.
+# @param importer.resources.requests.memory A memory request.
+# @param importer.resources.limits.cpu A CPU limit.
+# @param importer.resources.limits.memory A memory limit.
+
 importer:
-  # -- If Importer job is enabled
   enabled: true
+
+  # @extra importer.image **Docker image settings**
+  # @param importer.image.repository Docker Repository.
+  # @param importer.image.tag Docker image tag.
+  # @param importer.image.pullPolicy Kubernetes pull policy for the service's Docker image.
+  # @param importer.imagePullSecrets Kubernetes image pull secrets. 
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
     tag: v4.21.0
     pullPolicy: IfNotPresent
 
-  # -- Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the Importer job:
-  # @default --  
   resources:
     requests:
-      # -- A CPU request
       cpu: 50m
-      # -- A memory request
       memory: 128Mi
     limits:
-      # -- A CPU limit
       cpu: 100m
-      # -- A memory limit
       memory: 256Mi
 
-  # -- Number of parallel import processes (workers)
   workerNum: 6
-
-  # -- Number of write processes per import process (worker)
   writerNum: 8
-
-  # -- Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+  
   tolerations: {}
   imagePullSecrets: []
-
-  # -- Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
   nodeSelector: {}
 
-  # -- Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the import processes (workers):
-  # @default --  
+  # @extra importer.workerResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the workers**
+  # @param importer.workerResources.requests.cpu A CPU request.
+  # @param importer.workerResources.requests.memory A memory request.
+  # @param importer.workerResources.limits.cpu A CPU limit.
+  # @param importer.workerResources.limits.memory A memory limit.
+
   workerResources:
     requests:
-      # -- A CPU request
       cpu: 256m
-      # -- A memory request
       memory: 512Mi
     limits:
-      # -- A CPU limit
       cpu: 2
-      # -- A memory limit
       memory: 2048Mi

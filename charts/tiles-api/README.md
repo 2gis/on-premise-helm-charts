@@ -18,96 +18,155 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 - Updating the service.
 
-## Values
+## Chart values
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| api.affinity | object | `{}` |  |
-| api.annotations | object | `{}` |  |
-| api.containerPort | int | `8000` |  |
-| api.hpa.enabled | bool | `false` |  |
-| api.hpa.maxReplicas | int | `1` |  |
-| api.hpa.minReplicas | int | `1` |  |
-| api.hpa.targetCPUUtilizationPercentage | int | `50` |  |
-| api.image.pullPolicy | string | `"IfNotPresent"` |  |
-| api.image.repository | string | `"2gis-on-premise/tiles-api"` |  |
-| api.image.tag | string | `"v4.19.2"` |  |
-| api.imagePullSecrets | list | `[]` |  |
-| api.ingress.className | string | `"nginx"` |  |
-| api.ingress.enabled | bool | `false` |  |
-| api.ingress.hosts[0].host | string | `"tiles-api.loc"` |  |
-| api.ingress.hosts[0].paths[0].path | string | `"/"` |  |
-| api.ingress.tls | list | `[]` |  |
-| api.labels | object | `{}` |  |
-| api.nodeSelector | object | `{}` |  |
-| api.pdb.enabled | bool | `true` |  |
-| api.pdb.maxUnavailable | int | `1` |  |
-| api.podAnnotations | object | `{}` |  |
-| api.podLabels | object | `{}` |  |
-| api.replicaCount | int | `3` |  |
-| api.resources.limits.cpu | int | `1` |  |
-| api.resources.limits.memory | string | `"512Mi"` |  |
-| api.resources.requests.cpu | string | `"50m"` |  |
-| api.resources.requests.memory | string | `"128Mi"` |  |
-| api.revisionHistory | int | `1` |  |
-| api.service.annotations | object | `{}` |  |
-| api.service.labels | object | `{}` |  |
-| api.service.port | int | `80` |  |
-| api.service.type | string | `"ClusterIP"` |  |
-| api.strategy.rollingUpdate.maxSurge | int | `1` |  |
-| api.strategy.rollingUpdate.maxUnavailable | int | `0` |  |
-| api.terminationGracePeriodSeconds | int | `30` |  |
-| api.tolerations | object | `{}` |  |
-| api.vpa.enabled | bool | `false` |  |
-| api.vpa.maxAllowed.cpu | int | `1` |  |
-| api.vpa.maxAllowed.memory | string | `"512Mi"` |  |
-| api.vpa.minAllowed.memory | string | `"128Mi"` |  |
-| api.vpa.updateMode | string | `"Auto"` |  |
-| cassandra.consistencyLevelRead | string | `"LOCAL_QUORUM"` | Consistency level for database read queries. All possible values can be viewed by [link](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels) |
-| cassandra.consistencyLevelWrite | string | `"LOCAL_QUORUM"` | Consistency level for database write queries. All possible values can be viewed by [link](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels) |
-| cassandra.credentials | object | `{"password":"cassandra","user":"cassandra"}` | Credentials for Cassandra authentication |
-| cassandra.environment | string | `""` | Environment name (prod, stage, etc) allows creating multiple environments on a single cassandra cluster |
-| cassandra.hosts | list | `[]` | List of available Cassandra database nodes |
-| cassandra.replicaFactor | int | `3` | Replication factor for Cassandra |
-| dgctlDockerRegistry | string | `""` |  |
-| dgctlStorage.accessKey | string | `""` |  |
-| dgctlStorage.bucket | string | `""` |  |
-| dgctlStorage.host | string | `""` |  |
-| dgctlStorage.manifest | string | `""` |  |
-| dgctlStorage.secretKey | string | `""` |  |
-| importer.enabled | bool | `true` |  |
-| importer.image.pullPolicy | string | `"IfNotPresent"` |  |
-| importer.image.repository | string | `"2gis-on-premise/tiles-api-importer"` |  |
-| importer.image.tag | string | `"v4.19.2"` |  |
-| importer.imagePullSecrets | list | `[]` |  |
-| importer.nodeSelector | object | `{}` |  |
-| importer.resources.limits.cpu | string | `"100m"` |  |
-| importer.resources.limits.memory | string | `"256Mi"` |  |
-| importer.resources.requests.cpu | string | `"50m"` |  |
-| importer.resources.requests.memory | string | `"128Mi"` |  |
-| importer.tolerations | object | `{}` |  |
-| importer.workerNum | int | `6` | Number of parallel import processes (spawned jobs) |
-| importer.workerResources.limits.cpu | int | `2` |  |
-| importer.workerResources.limits.memory | string | `"2048Mi"` |  |
-| importer.workerResources.requests.cpu | string | `"256m"` |  |
-| importer.workerResources.requests.memory | string | `"512Mi"` |  |
-| importer.writerNum | int | `8` | Number of write processes per import process |
-| name | string | `"tiles-api"` |  |
-| proxy.access.enabled | bool | `false` | Flag to enable verification access key |
-| proxy.access.host | string | `"http://keys-api.localhost"` | Host for Keys API service |
-| proxy.access.syncPeriod | string | `"2m"` |  |
-| proxy.access.token | string | `""` | Service key for Keys API |
-| proxy.containerPort | int | `5000` |  |
-| proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
-| proxy.image.repository | string | `"2gis-on-premise/tiles-api-proxy"` |  |
-| proxy.image.tag | string | `"v4.19.2"` |  |
-| proxy.resources.limits.cpu | int | `1` |  |
-| proxy.resources.limits.memory | string | `"512Mi"` |  |
-| proxy.resources.requests.cpu | string | `"50m"` |  |
-| proxy.resources.requests.memory | string | `"128Mi"` |  |
-| proxy.timeout | string | `"5s"` |  |
-| serviceName | string | `"tiles-api-webgl"` |  |
-| type | string | `"web"` |  |
+### Docker Registry settings
+
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
+
+
+### Deployment Artifacts Storage settings
+
+| Name                     | Description                                                                                                                                                                                                                                              | Value |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`  |
+| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `""`  |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`  |
+
+
+### Tiles API configuration
+
+| Name          | Description                                                                                                                                                                                                                                                                             | Value             |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `serviceName` | Name of the service.<br>It depends on the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture): <ul><li>`tiles-api-webgl` for Tiles API with vector tiles support</li><li>`tiles-api-raster` for Tiles API with raster tiles support</li><ul> | `tiles-api-webgl` |
+| `name`        | Name of the deployment.                                                                                                                                                                                                                                                                 | `tiles-api`       |
+| `type`        | Type of the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture):<ul><li>`web` for Tiles API with vector tiles support</li><li>`raster` for Tiles API with raster tiles support</li><ul>                                                      | `web`             |
+
+
+### Apache Cassandra Data Storage settings
+
+| Name                              | Description                                                                                                                                                         | Value          |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `cassandra`                       | **Common settings**                                                                                                                                                 |                |
+| `cassandra.environment`           | Environment name (`prod`, `stage`, etc).<br>Support for differently named environments allows hosting multiple Tiles API deployments on a single Cassandra cluster. | `""`           |
+| `cassandra.hosts`                 | An array of the one of more IP adresses or hostnames of the Apache Cassandra installation.                                                                          | `[]`           |
+| `cassandra.replicaFactor`         | Apache Cassandra [replication factor](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html).                    | `3`            |
+| `cassandra.consistencyLevelRead`  | Apache Cassandra [read consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels).           | `LOCAL_QUORUM` |
+| `cassandra.consistencyLevelWrite` | Apache Cassandra [write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels).           | `LOCAL_QUORUM` |
+| `cassandra.credentials`           | **Credentials for accessing Apache Cassandra**                                                                                                                      |                |
+| `cassandra.credentials.user`      | User name                                                                                                                                                           | `cassandra`    |
+| `cassandra.credentials.password`  | Password                                                                                                                                                            | `cassandra`    |
+
+
+### API Keys proxy settings
+
+| Name                              | Description                                                                                                                   | Value                             |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `proxy`                           | **Common settings**                                                                                                           |                                   |
+| `proxy.containerPort`             | Port the proxy listens on.                                                                                                    | `5000`                            |
+| `proxy.timeout`                   | Proxy timeout, in seconds.                                                                                                    | `5s`                              |
+| `proxy.resources`                 | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)** |                                   |
+| `proxy.resources.requests.cpu`    | A CPU request.                                                                                                                | `50m`                             |
+| `proxy.resources.requests.memory` | A memory request.                                                                                                             | `128Mi`                           |
+| `proxy.resources.limits.cpu`      | A CPU limit.                                                                                                                  | `1`                               |
+| `proxy.resources.limits.memory`   | A memory limit.                                                                                                               | `512Mi`                           |
+| `proxy.image`                     | **Docker image settings**                                                                                                     |                                   |
+| `proxy.image.repository`          | Docker Repository.                                                                                                            | `2gis-on-premise/tiles-api-proxy` |
+| `proxy.image.tag`                 | Docker image tag.                                                                                                             | `v4.21.0`                         |
+| `proxy.image.pullPolicy`          | Kubernetes pull policy for the service's Docker image.                                                                        | `IfNotPresent`                    |
+| `proxy.access`                    | **API Keys service access settings**                                                                                          |                                   |
+| `proxy.access.enabled`            | If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.                                     | `false`                           |
+| `proxy.access.host`               | API Keys endpoint hostname.                                                                                                   | `http://keys-api.localhost`       |
+| `proxy.access.token`              | Service key for Keys API.                                                                                                     | `""`                              |
+| `proxy.access.syncPeriod`         | Proxy sync period.                                                                                                            | `2m`                              |
+
+
+### Tiles API settings
+
+| Name                                        | Description                                                                                                                                                                                              | Value                       |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `api`                                       | **Common settings**                                                                                                                                                                                      |                             |
+| `api.terminationGracePeriodSeconds`         | Duration in seconds the Tiles API service pod needs to terminate gracefully.                                                                                                                             | `30`                        |
+| `api.containerPort`                         | Tiles API container port.                                                                                                                                                                                | `8000`                      |
+| `api.labels`                                | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                          | `{}`                        |
+| `api.annotations`                           | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                | `{}`                        |
+| `api.podAnnotations`                        | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                            | `{}`                        |
+| `api.podLabels`                             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`                        |
+| `api.nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`                        |
+| `api.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`                        |
+| `api.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `{}`                        |
+| `api.replicaCount`                          | A replica count for the pod.                                                                                                                                                                             | `3`                         |
+| `api.revisionHistory`                       | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                           | `1`                         |
+| `api.resources`                             | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**                                                                            |                             |
+| `api.resources.requests.cpu`                | A CPU request.                                                                                                                                                                                           | `50m`                       |
+| `api.resources.requests.memory`             | A memory request.                                                                                                                                                                                        | `128Mi`                     |
+| `api.resources.limits.cpu`                  | A CPU limit.                                                                                                                                                                                             | `1`                         |
+| `api.resources.limits.memory`               | A memory limit.                                                                                                                                                                                          | `512Mi`                     |
+| `api.image`                                 | **Docker image settings**                                                                                                                                                                                |                             |
+| `api.image.repository`                      | Docker Repository.                                                                                                                                                                                       | `2gis-on-premise/tiles-api` |
+| `api.image.tag`                             | Docker image tag.                                                                                                                                                                                        | `v4.21.0`                   |
+| `api.image.pullPolicy`                      | Kubernetes pull policy for the service's Docker image.                                                                                                                                                   | `IfNotPresent`              |
+| `api.imagePullSecrets`                      | Kubernetes image pull secrets.                                                                                                                                                                           | `[]`                        |
+| `api.strategy.rollingUpdate`                | **Service's Rolling Update strategy settings**                                                                                                                                                           |                             |
+| `api.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`                         |
+| `api.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`                         |
+| `api.service`                               | **Kubernetes [service settings](https://kubernetes.io/docs/concepts/services-networking/service/) to expose the service**                                                                                |                             |
+| `api.service.port`                          | Tiles API service port.                                                                                                                                                                                  | `80`                        |
+| `api.service.type`                          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                           | `ClusterIP`                 |
+| `api.service.annotations`                   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                        | `{}`                        |
+| `api.service.labels`                        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                  | `{}`                        |
+| `api.ingress`                               | **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings**                                                                                                      |                             |
+| `api.ingress.enabled`                       | If Ingress is enabled for the service.                                                                                                                                                                   | `false`                     |
+| `api.ingress.className`                     | Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource.                                                                 | `nginx`                     |
+| `api.ingress.hosts[0].host`                 | Host FQDN.                                                                                                                                                                                               | `tiles-api.loc`             |
+| `api.ingress.hosts[0].paths[0].path`        | Path (forms a service's URL if appended to the host FQDN).                                                                                                                                               | `/`                         |
+| `api.ingress.tls`                           | Ingress [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress.                                                                                                | `[]`                        |
+| `api.pdb`                                   | **Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings**                                                                   |                             |
+| `api.pdb.enabled`                           | If PDB is enabled for the service.                                                                                                                                                                       | `true`                      |
+| `api.pdb.maxUnavailable`                    | How many pods must always be available, even during a disruption.                                                                                                                                        | `1`                         |
+| `api.hpa`                                   | **Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings**                                                                         |                             |
+| `api.hpa.enabled`                           | If HPA is enabled for the service.                                                                                                                                                                       | `false`                     |
+| `api.hpa.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                                                           | `1`                         |
+| `api.hpa.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                                                             | `1`                         |
+| `api.hpa.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.                                           | `50`                        |
+| `api.vpa`                                   | **Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings**                                                               |                             |
+| `api.vpa.enabled`                           | If VPA is enabled for the service.                                                                                                                                                                       | `false`                     |
+| `api.vpa.updateMode`                        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).                                                                                             | `Auto`                      |
+| `api.vpa.minAllowed.memory`                 | Lower limit for the RAM size to which the autoscaler can scale down.                                                                                                                                     | `128Mi`                     |
+| `api.vpa.maxAllowed.cpu`                    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                                                                                                                 | `1`                         |
+| `api.vpa.maxAllowed.memory`                 | Upper limit for the RAM size to which the autoscaler can scale up.                                                                                                                                       | `512Mi`                     |
+
+
+### Kubernetes Importer job settings
+
+| Name                                       | Description                                                                                                                                   | Value                                |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `importer`                                 | **Common settings**                                                                                                                           |                                      |
+| `importer.enabled`                         | If Importer job is enabled.                                                                                                                   | `true`                               |
+| `importer.workerNum`                       | Number of parallel import processes (workers).                                                                                                | `6`                                  |
+| `importer.writerNum`                       | Number of write processes per import process (worker).                                                                                        | `8`                                  |
+| `importer.tolerations`                     | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                             | `{}`                                 |
+| `importer.nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                           | `{}`                                 |
+| `importer.resources`                       | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**                 |                                      |
+| `importer.resources.requests.cpu`          | A CPU request.                                                                                                                                | `50m`                                |
+| `importer.resources.requests.memory`       | A memory request.                                                                                                                             | `128Mi`                              |
+| `importer.resources.limits.cpu`            | A CPU limit.                                                                                                                                  | `100m`                               |
+| `importer.resources.limits.memory`         | A memory limit.                                                                                                                               | `256Mi`                              |
+| `importer.image`                           | **Docker image settings**                                                                                                                     |                                      |
+| `importer.image.repository`                | Docker Repository.                                                                                                                            | `2gis-on-premise/tiles-api-importer` |
+| `importer.image.tag`                       | Docker image tag.                                                                                                                             | `v4.21.0`                            |
+| `importer.image.pullPolicy`                | Kubernetes pull policy for the service's Docker image.                                                                                        | `IfNotPresent`                       |
+| `importer.imagePullSecrets`                | Kubernetes image pull secrets.                                                                                                                | `[]`                                 |
+| `importer.workerResources`                 | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the workers** |                                      |
+| `importer.workerResources.requests.cpu`    | A CPU request.                                                                                                                                | `256m`                               |
+| `importer.workerResources.requests.memory` | A memory request.                                                                                                                             | `512Mi`                              |
+| `importer.workerResources.limits.cpu`      | A CPU limit.                                                                                                                                  | `2`                                  |
+| `importer.workerResources.limits.memory`   | A memory limit.                                                                                                                               | `2048Mi`                             |
+
 
 ## Maintainers
 
