@@ -26,6 +26,9 @@ spec:
       nodeSelector:
 {{ toYaml .Values.spcore.nodeSelector | indent 8 }}
 {{- end }}
+      {{- if .Values.spcore.priorityClassName }}
+      priorityClassName: {{ .Values.spcore.priorityClassName }}
+      {{- end }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -135,6 +138,9 @@ spec:
           - name: {{ include "gis-platform-spcore.name" . }}-configmap
             mountPath: /spcore-entrypoint.sh
             subPath: spcore-entrypoint.sh
+          - name: {{ include "gis-platform-spcore.name" . }}-configmap
+            mountPath: /app/NLog.config
+            subPath: NLog.config.template
       volumes:
         - name: {{ include "gis-platform-spcore.name" . }}-configmap
           configMap:

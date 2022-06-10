@@ -34,7 +34,10 @@ type: web
 # -- <h3>Apache Cassandra Data Storage</h3>
 # @default --  
 cassandra:
-  # -- An array of the one of more IP adresses or hostnames of the Apache Cassandra installation
+  # -- Environment name (prod, stage, etc) allows creating multiple environments on a single cassandra cluster
+  environment: ''
+
+  # -- List of available Cassandra database nodes
   hosts: []
 
   # -- Credentials for accessing Apache Cassandra:
@@ -59,7 +62,7 @@ cassandra:
 proxy:
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: v4.19.2
+    tag: v4.21.0
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -97,7 +100,7 @@ proxy:
 api:
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: v4.19.2
+    tag: v4.21.0
     pullPolicy: IfNotPresent
 
   # -- Duration in seconds the Tiles API service pod needs to terminate gracefully
@@ -226,7 +229,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: v4.19.2
+    tag: v4.21.0
     pullPolicy: IfNotPresent
 
   # -- Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the Importer job:

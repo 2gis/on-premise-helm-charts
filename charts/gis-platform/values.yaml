@@ -25,7 +25,7 @@ spcore:
   terminationGracePeriodSeconds: 60
   image:
     repository: 2gis-on-premise/gis_platform_spcore
-    tag: 2022-04-13.01
+    tag: '2022-06-05'
   cors:
     allow_everyone: false
     origins: []
@@ -57,6 +57,7 @@ spcore:
   cloud_port: 5050
   http_port: 5051
   maxRenderTargets: 1000
+  loglevel: Info
   defaultLimits:
     tables: 500
     layers: 500
@@ -93,9 +94,13 @@ portal:
     regex:
     - ^/sp/wms.*layers=admin.satellite_imagery&.*$
     - ^/sp/wms.*layers=admin.2gis&.*$
+  gzip_enabled: true
+  s3proxy:
+    enabled: false
+    scheme: http
   image:
     repository: 2gis-on-premise/gis_platform_portal
-    tag: '2022-04-13'
+    tag: '2022-06-05'
 
 zookeeper:
   image:

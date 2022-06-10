@@ -16,7 +16,7 @@ spec:
   serviceName: {{ include "keys.redis.name" . }}
   selector:
     matchLabels:
-      {{- include "keys.redis.labels" . | nindent 6 }}
+      {{- include "keys.redis.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.redis.podAnnotations }}

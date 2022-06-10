@@ -22,8 +22,14 @@ http {
     #tcp_nopush     on;
 
     keepalive_timeout  65;
+{{- if .Values.portal.gzip_enabled }}
+
+    gzip on;
+    gzip_types application/json;
+{{- else }}
 
     #gzip  on;
+{{- end }}
 
     include /etc/nginx/conf.d/*.conf;
 }

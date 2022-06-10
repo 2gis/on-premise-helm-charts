@@ -9,5 +9,5 @@ spec:
     - port: {{ .Values.redis.port }}
       targetPort: {{ .Values.redis.port }}
   selector:
-    {{- include "keys.redis.labels" . | nindent 4 }}
+    {{- include "keys.redis.selectorLabels" . | nindent 4 }}
 {{- end }}

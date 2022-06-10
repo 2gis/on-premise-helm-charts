@@ -1,12 +1,11 @@
 apiVersion: v2
-name: navi-router
-description: Navi router Helm chart for Kubernetes
+name: bss-receiver
 type: application
-keywords:
-- navi
-- router
+description: A Helm chart for Kubernetes to deploy BSS Receiver
+
 version: 1.0.8
-appVersion: 6.3.0
+appVersion: 0.8.3
+
 maintainers:
 - name: 2gis
   url: https://github.com/2gis

@@ -11,3 +11,5 @@ data:
     {{- .Files.Get "configs/spcore/spcore-entrypoint.sh" | nindent 4 }}
   SPCore.json.template: |
     {{- tpl (.Files.Get "configs/spcore/SPCore.json.template") . | nindent 4 }}
+  NLog.config.template: |
+    {{- tpl (.Files.Get "configs/spcore/NLog.config.template") . | nindent 4 }}

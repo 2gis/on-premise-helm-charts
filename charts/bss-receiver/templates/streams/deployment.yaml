@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bss-receiver-streams.name" . }}
+  {{- if .Values.streams.annotations }}
+  annotations:
+    {{- toYaml .Values.streams.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "bss-receiver-streams.labels" . | nindent 4 }}
+    {{- if .Values.streams.labels }}
+    {{- toYaml .Values.streams.labels | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.streams.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "bss-receiver-streams.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "bss-receiver-streams.labels" . | nindent 8 }}
+        {{- if .Values.streams.labels }}
+        {{- toYaml .Values.streams.labels | nindent 8 }}
+        {{- end }}
+      annotations:
+        checksum/config: {{ (include (print $.Template.BasePath "/api/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
+    spec:
+      containers:
+      - name: streams
+        args: ["casino.bss.receiver.streams.StreamsApp"]
+        image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.streams.image.repository }}:{{ .Values.streams.image.tag }}
+        imagePullPolicy: {{ .Values.streams.image.pullPolicy }}
+        ports:
+          - containerPort: {{ .Values.streams.metricsPort }}
+          - containerPort: {{ .Values.streams.jmxPort }}
+        resources:
+          {{- toYaml .Values.streams.resources | nindent 12 }}
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        env:
+          - name: JAVA_OPTS
+            value: {{ .Values.streams.jvmXmx | quote }}
+          - name: METRICS_PORT
+            value: {{ .Values.streams.metricsPort | quote  }}
+          - name: JMX_PORT
+            value: {{ .Values.streams.jmxPort | quote  }}
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "bss-receiver-streams.name" . }}

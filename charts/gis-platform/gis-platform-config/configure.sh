@@ -16,6 +16,11 @@ function usage() {
     echo "-c    Push configs to server"
     echo "-p    Patch existing layers (implies -c)"
     echo ""
+    echo "Required environment variables:"
+    echo "- GIS_PLATFORM_URL"
+    echo "- GIS_PLATFORM_PASS"
+    echo "- GIS_PLATFORM_TILES_API"
+    echo "- GIS_PLATFORM_TRAFFIC_API"
 }
 
 #---------------
@@ -32,16 +37,16 @@ function create_or_update_layer() {
     layer_data="$2"
     layer_name=$( jq --raw-output .name <<< $layer_data )
 
-    if [[ -z $( get_layer_config $layer_name | jq --raw-output .name ) ]]; then
-        echo "Configuring $layer_name $layer_type"
-        echo $layer_data | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=$layer_type"
-    else
+    if [[ $layer_name == $( get_layer_config $layer_name | jq --raw-output .name ) ]]; then
         if [[ $PATCH_LAYERS -eq 1 ]]; then
             echo "Updating $layer_name configuration"
             echo $layer_data | $CURL -XPATCH -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers/$layer_name?type=$layer_type" > /dev/null
         else
             echo "Layer $layer_name already exists, skipping"
         fi
+    else
+        echo "Configuring $layer_name $layer_type"
+        echo $layer_data | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/layers?type=$layer_type"
     fi
 }
 
@@ -62,7 +67,7 @@ function configure() {
   echo "Logging as admin"
   $CURL -XPOST -H 'Content-Type: application/json' -d "$admin_login" "$GIS_PLATFORM_URL/sp/account/login"
 
-  if ! grep --silent -c refreshToken $cookie; then
+  if ! grep -q -c refreshToken $cookie; then
       echo -e "\n\nFailed to get authorization cookie\n" >&2
       exit 1
   fi
@@ -103,6 +108,8 @@ function dump_configuration {
         echo "Fetching config: $config"
         $CURL -XGET "$GIS_PLATFORM_URL/sp/settings?urlPath=/$config" | jq . > "$TMPDIR/${config^}Config.json"
     done
+    echo ""
+    echo "Configs stored in $TMPDIR"
 }
 
 #---------------
@@ -120,21 +127,13 @@ function config_diff() {
 
 #---------------
 
-if [[ -z $GIS_PLATFORM_PASS ]] || [[ -z $GIS_PLATFORM_URL ]] || [[ -z $GIS_PLATFORM_TILES_API ]] || [[ -z $GIS_PLATFORM_TRAFFIC_API ]]; then
-    echo -e "\n\nSet GIS_PLATFORM_TRAFFIC_API, GIS_PLATFORM_TILES_API, GIS_PLATFORM_PASS and GIS_PLATFORM_URL\n" >&2
-    exit 1
-fi
-
-tiles_api_url="${GIS_PLATFORM_TILES_API%/}/tiles?x={2}&y={3}&z={1}&v=1.5&ts=online_sd_ar&layerType=nc"
-traffic_url="${GIS_PLATFORM_TRAFFIC_API}/dammam/traffic/{1}/{2}/{3}/speed/0/?1640062200"
-
 HAS_OPT=0
 CONFIGURE=0
 DUMP_CONFIG=0
 DIFF_CONFIG=0
 PATCH_LAYERS=0
 
-while getopts "gdph" opt; do
+while getopts "gdphc" opt; do
     case "$opt" in
         "d") HAS_OPT=1 && DIFF_CONFIG=1 ;;
         "g") HAS_OPT=1 && DUMP_CONFIG=1 ;;
@@ -150,11 +149,13 @@ if [[ $HAS_OPT -eq 0 ]]; then
     exit 0
 fi
 
-cookie=$(mktemp gis-platform.cookie.XXXXX)
+if [[ -z $GIS_PLATFORM_PASS ]] || [[ -z $GIS_PLATFORM_URL ]] || [[ -z $GIS_PLATFORM_TILES_API ]] || [[ -z $GIS_PLATFORM_TRAFFIC_API ]]; then
+    echo -e "\n\nSet GIS_PLATFORM_TRAFFIC_API, GIS_PLATFORM_TILES_API, GIS_PLATFORM_PASS and GIS_PLATFORM_URL\n" >&2
+    exit 1
+fi
 
-trap "rm -f $cookie" EXIT
-
-CURL="curl -s -S -b $cookie -c $cookie"
+tiles_api_url="${GIS_PLATFORM_TILES_API%/}/tiles?x={2}&y={3}&z={1}&v=1.5&ts=online_sd_ar&layerType=nc"
+traffic_url="${GIS_PLATFORM_TRAFFIC_API}/dammam/traffic/{1}/{2}/{3}/speed/0/?1640062200"
 
 superuser_login=''
 read -r -d '' superuser_login <<-EOF_SUPERUSER_LOGIN
@@ -174,15 +175,23 @@ set -E
 set -e
 set -u
 
-echo "Configuring $GIS_PLATFORM_URL"
+WORKDIR=$( cd $(dirname $0) ; pwd )
+pushd "$WORKDIR" > /dev/null
 
-TMPDIR="_tmp/${GIS_PLATFORM_URL#http*://}"
+TMPDIR="${WORKDIR}/_tmp/${GIS_PLATFORM_URL#http*://}"
 mkdir -p "$TMPDIR"
+
+cookie=$(mktemp "$WORKDIR/_tmp/gis-platform.cookie.XXXXXX")
+trap "rm -f $cookie ; popd > /dev/null" EXIT
+
+CURL="curl -s -S -b $cookie -c $cookie"
+
+echo "Configuring $GIS_PLATFORM_URL"
 
 echo "Authorizing"
 $CURL -XPOST -H 'Content-Type: application/json' -d "$superuser_login" "$GIS_PLATFORM_URL/sp/account/login"
 
-if ! grep --silent -c refreshToken $cookie; then
+if ! grep -q refreshToken $cookie; then
     echo -e "\n\nFailed to get authorization cookie\n" >&2
     exit 1
 fi

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      internalLogFile="nlog.log" internalLogLevel="Info">
+
+    <variable name="logDirectory" value="${basedir}/logs/${shortdate}" />
+
+    <extensions>
+        <add assembly="NLog.Web.AspNetCore" />
+    </extensions>
+
+    <targets>
+        <target name="console" xsi:type="Console"
+                layout="${longdate} ${level}  ${message} ${exception:format=tostring}" />
+    </targets>
+
+    <rules>
+                <logger name="SPCore.Security.PublicAccess.*" maxLevel="Info" final="true" />
+                <logger name="SPCore.Security.AdminAccess.*" maxLevel="Info" final="true" />
+                <logger name="SPCore.Security.Basic.*" maxLevel="Info" final="true" />
+                <logger name="SPCore.Security.JWT.*" maxLevel="Info" final="true" />
+
+                <logger name="SPCore.Connectors.AspConnector.Middleware.LoggingMiddleware" minlevel="Info" final="true"/>
+
+                <logger name="*" minlevel="{{ .Values.spcore.loglevel }}" writeTo="console" />
+        </rules>
+</nlog>

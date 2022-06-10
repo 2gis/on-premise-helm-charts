@@ -1,0 +1,51 @@
+api:
+  image:
+    repository: casino/bss-receiver-api-on-premise
+    tag: 0.8.3
+    pullPolicy: IfNotPresent
+
+  replicas: 1
+
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 1500Mi
+    limits:
+      cpu: 1
+      memory: 1500Mi
+
+  jvmXmx: -Xmx1500m
+
+streams:
+  image:
+    repository: casino/bss-receiver-streams-on-premise
+    tag: 0.8.3
+    pullPolicy: IfNotPresent
+
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 1
+      memory: 4G
+    limits:
+      cpu: 2
+      memory: 4G
+
+  jvmXmx: -Xmx2G -XX:+UseParallelGC
+
+  jmxPort: 9010
+  metricsPort: 8080
+
+kafka:
+  security: {}
+  sasl:
+    jaas: {}
+
+ingress:
+  enabled: false
