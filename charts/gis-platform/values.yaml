@@ -87,6 +87,7 @@ portal:
   terminationGracePeriodSeconds: 60
   websocket:
     timeout: 604800
+  max_body_size: 100m
   cache:
     enabled: false
     size: 1G
