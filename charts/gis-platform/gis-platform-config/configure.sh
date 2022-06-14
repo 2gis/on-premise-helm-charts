@@ -134,6 +134,7 @@ DUMP_CONFIG=0
 DIFF_CONFIG=0
 PATCH_LAYERS=0
 IGNORE_CERT=''
+
 while getopts "gdphck" opt; do
     case "$opt" in
         "d") HAS_OPT=1 && DIFF_CONFIG=1 ;;
