@@ -15,6 +15,7 @@ function usage() {
     echo "-d    Diff dumped config vs proposed config"
     echo "-c    Push configs to server"
     echo "-p    Patch existing layers (implies -c)"
+    echo "-k    Ignore self-signed ssl certificate"
     echo ""
     echo "Required environment variables:"
     echo "- GIS_PLATFORM_URL"
@@ -132,13 +133,15 @@ CONFIGURE=0
 DUMP_CONFIG=0
 DIFF_CONFIG=0
 PATCH_LAYERS=0
+IGNORE_CERT=''
 
-while getopts "gdphc" opt; do
+while getopts "gdphck" opt; do
     case "$opt" in
         "d") HAS_OPT=1 && DIFF_CONFIG=1 ;;
         "g") HAS_OPT=1 && DUMP_CONFIG=1 ;;
         "c") HAS_OPT=1 && CONFIGURE=1 ;;
         "p") HAS_OPT=1 && CONFIGURE=1 && PATCH_LAYERS=1 ;;
+        "k") IGNORE_CERT='-k' ;;
         "h") usage && exit 0 ;;
         "?") usage && exit 1 ;;
     esac
@@ -184,7 +187,7 @@ mkdir -p "$TMPDIR"
 cookie=$(mktemp "$WORKDIR/_tmp/gis-platform.cookie.XXXXXX")
 trap "rm -f $cookie ; popd > /dev/null" EXIT
 
-CURL="curl -s -S -b $cookie -c $cookie"
+CURL="curl -s -S -b $cookie -c $cookie $IGNORE_CERT"
 
 echo "Configuring $GIS_PLATFORM_URL"
 
