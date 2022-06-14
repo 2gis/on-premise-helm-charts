@@ -4,8 +4,8 @@ bss-receiver
 catalog-api
 	catalog:3.564.0
 gis-platform
-	gis_platform_spcore:2022-06-05
-	gis_platform_portal:2022-06-05
+	gis_platform_spcore:2022-06-10
+	gis_platform_portal:2022-06-10
 	zookeeper:3.7.0-debian-10-r265
 keys
 	keys-backend:1.27.0

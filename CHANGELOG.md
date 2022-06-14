@@ -1,5 +1,16 @@
 # 2GIS On-Premise Changelog
 
+## [1.0.9]
+#### Images
+```
+ gis-platform
+-       gis_platform_spcore:2022-06-05
+-       gis_platform_portal:2022-06-05
++       gis_platform_spcore:2022-06-10
++       gis_platform_portal:2022-06-10
+
+```
+
 ## [1.0.8]
 #### Images
 ```
