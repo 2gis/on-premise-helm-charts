@@ -33,7 +33,7 @@ map $request_uri $cache_disabled {
 
 server {
     listen 8000;
-    client_max_body_size 200m;
+    client_max_body_size {{ .Values.portal.max_body_size }};
 
     location / {
         alias /app/portal/;
