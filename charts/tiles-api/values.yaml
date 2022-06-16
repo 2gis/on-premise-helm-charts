@@ -20,10 +20,10 @@ cassandra:
 
   # -- Credentials for Cassandra authentication
   credentials:
-    # user / password for CQL queries (read/write to database)
+    # -- user / password for CQL queries (read/write to database)
     user: cassandra
     password: cassandra
-    # user / password for JMX queries (like calling nodetool)
+    # -- user / password for JMX queries (like calling nodetool)
     jmxUser: cassandra
     jmxPassword: cassandra
 
@@ -153,7 +153,7 @@ importer:
   # -- Number of write processes per import process
   writerNum: 8
 
-  # Delete existing keyspace and make imports if true, otherwise skip imports
+  # -- Delete existing keyspace and make imports if true, otherwise skip imports
   forceImport: false
 
   tolerations: {}
@@ -169,10 +169,10 @@ importer:
       memory: 2048Mi
 
   cleaner:
-    # Enables cassandra previous tilesets cleaning before making new imports
+    # -- Enables cassandra previous tilesets cleaning before making new imports
     enabled: false
 
-    # How many old tilesets leave untouched, minimum 1
+    # -- How many old tilesets leave untouched, minimum 1
     limit: 3
 
     resources:

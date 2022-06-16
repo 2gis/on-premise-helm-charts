@@ -75,6 +75,8 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | cassandra.consistencyLevelRead | string | `"LOCAL_QUORUM"` | Consistency level for database read queries. All possible values can be viewed by [link](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels) |
 | cassandra.consistencyLevelWrite | string | `"LOCAL_QUORUM"` | Consistency level for database write queries. All possible values can be viewed by [link](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels) |
 | cassandra.credentials | object | `{"jmxPassword":"cassandra","jmxUser":"cassandra","password":"cassandra","user":"cassandra"}` | Credentials for Cassandra authentication |
+| cassandra.credentials.jmxUser | string | `"cassandra"` | user / password for JMX queries (like calling nodetool) |
+| cassandra.credentials.user | string | `"cassandra"` | user / password for CQL queries (read/write to database) |
 | cassandra.environment | string | `""` | Environment name (prod, stage, etc) allows creating multiple environments on a single cassandra cluster |
 | cassandra.hosts | list | `[]` | List of available Cassandra database nodes |
 | cassandra.replicaFactor | int | `3` | Replication factor for Cassandra |
@@ -84,14 +86,14 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | dgctlStorage.host | string | `""` |  |
 | dgctlStorage.manifest | string | `""` |  |
 | dgctlStorage.secretKey | string | `""` |  |
-| importer.cleaner.enabled | bool | `false` |  |
-| importer.cleaner.limit | int | `3` |  |
+| importer.cleaner.enabled | bool | `false` | Enables cassandra previous tilesets cleaning before making new imports |
+| importer.cleaner.limit | int | `3` | How many old tilesets leave untouched, minimum 1 |
 | importer.cleaner.resources.limits.cpu | string | `"1000m"` |  |
 | importer.cleaner.resources.limits.memory | string | `"512Mi"` |  |
 | importer.cleaner.resources.requests.cpu | string | `"50m"` |  |
 | importer.cleaner.resources.requests.memory | string | `"128Mi"` |  |
 | importer.enabled | bool | `true` |  |
-| importer.forceImport | bool | `false` |  |
+| importer.forceImport | bool | `false` | Delete existing keyspace and make imports if true, otherwise skip imports |
 | importer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | importer.image.repository | string | `"2gis-on-premise/tiles-api-importer"` |  |
 | importer.image.tag | string | `"v4.21.0"` |  |
