@@ -96,6 +96,7 @@ portal:
     - ^/sp/wms.*layers=admin.satellite_imagery&.*$
     - ^/sp/wms.*layers=admin.2gis&.*$
   gzip_enabled: true
+  wms_force_png: false
   s3proxy:
     enabled: false
     scheme: http

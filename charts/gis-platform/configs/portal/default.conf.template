@@ -121,6 +121,12 @@ server {
         proxy_cache_bypass $cache_disabled;
         proxy_ignore_headers Set-Cookie;
         {{- end }}
+        {{- if .Values.portal.wms_force_png }}
+
+        if ( $request_uri ~* ^/sp/wms\?(.*)format=image%2Fjpeg(.*) ) {
+            set $args $1format=image%2Fpng$2;
+        }
+        {{- end }}
 
         proxy_pass http://spcore-upstream/;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
