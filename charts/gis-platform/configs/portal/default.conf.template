@@ -123,7 +123,7 @@ server {
         {{- end }}
         {{- if .Values.portal.wms_force_png }}
 
-        if ( $request_uri ~* ^/sp/wms\?(.*)format=image%2Fjpeg(.*) ) {
+        if ( $request_uri ~* ^/sp/wms\?(.*)format=image(?:%2F|/)jpeg(.*)$ ) {
             set $args $1format=image%2Fpng$2;
         }
         {{- end }}
