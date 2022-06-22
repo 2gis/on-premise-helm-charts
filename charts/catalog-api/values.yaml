@@ -69,8 +69,6 @@ keys:
     regions: ""  # set if available in API Keys service
 
 importer:
-  enabled: true
-
   image:
     repository: "2gis-on-premise/catalog-importer"
     tag: "3.557.4"
