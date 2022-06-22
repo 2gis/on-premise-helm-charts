@@ -45,7 +45,6 @@ keys:
 
 # Data importer 
 importer:
-  enabled: true
   workerNum: 3 # number of parallel import processes
 ```
 
