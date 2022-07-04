@@ -46,29 +46,33 @@ spec:
         {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       initContainers:
-        - name: castle-init
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.castle.image.repository }}:{{ .Values.castle.image.tag }}
+        {{- range $flavor, $init_enabled := dict "import" true "restriction" .Values.cron.enabled.restriction }}
+        {{- if $init_enabled }}
+        - name: castle-{{ $flavor }}-init
+          image: {{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}
           command: [ "/opt/configuration_builder" ]
           args: 
            - --config 
            - /opt/config_builder.conf 
-           - --service=package
+           - --service={{ $flavor }}
           volumeMounts:
-          - name: {{ include "castle.fullname" . }}-builder-config
+          - name: {{ include "castle.fullname" $ }}-builder-config
             mountPath: /opt/config_builder.conf
             subPath: config_builder.conf
-          - name: {{ include "castle.fullname" . }}-builder-config
-            mountPath: {{ .Values.castle.castle_data_path }}/cities_template
+          - name: {{ include "castle.fullname" $ }}-builder-config
+            mountPath: {{ $.Values.castle.castle_data_path }}/cities_template
             subPath: cities_template
-          {{- if .Values.persistentVolume.enabled }}
-          - name: {{ include "castle.fullname" . }}-pvc
-            mountPath: {{ .Values.castle.castle_data_path }}
+          {{- if $.Values.persistentVolume.enabled }}
+          - name: {{ include "castle.fullname" $ }}-pvc
+            mountPath: {{ $.Values.castle.castle_data_path }}
           {{- else }}
-          - name: {{ include "castle.fullname" . }}-data
-            mountPath: {{ .Values.castle.castle_data_path }}
+          - name: {{ include "castle.fullname" $ }}-data
+            mountPath: {{ $.Values.castle.castle_data_path }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml $.Values.resources | nindent 12 }}
+        {{- end }} # if
+        {{- end }} # range
       containers:
         - name: castle-nginx
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}

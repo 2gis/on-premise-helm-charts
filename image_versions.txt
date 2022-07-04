@@ -20,8 +20,11 @@ navi-castle
 	navi-front:1.21-ad06a0e0
 navi-front
 	navi-front:1.21-ad06a0e0
+navi-restrictions
+	navi-restrictions-api:1.0.0
+	navi-restrictions-syncer:1.0.0
 navi-router
-	navi-router:6.3.0
+	navi-router:1.0.7-049fb4cc
 proxy-traffic-jams
 	nginx:1.21.6
 search-api

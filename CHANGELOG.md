@@ -1,5 +1,16 @@
 # 2GIS On-Premise Changelog
 
+## [1.1.2]
+#### Images
+```
++navi-restrictions
++       navi-restrictions-api:1.0.0
++       navi-restrictions-syncer:1.0.0
+ navi-router
+-       navi-router:6.3.0
++       navi-router:1.0.7-049fb4cc
+```
+
 ## [1.1.1]
 #### Images
 ```

@@ -1,0 +1,6 @@
+Restrictions backend consists of API and Sync CronJob released as follows:
+
+Release - {{ .Release.Name }}
+Namespace - {{ .Release.Namespace }}
+
+API service is optionally published through Ingress, Balancer, etc.
