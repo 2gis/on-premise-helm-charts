@@ -88,6 +88,8 @@ castle:
     pullPolicy: IfNotPresent
     tag: castle-restriction-1.2.0
   castle_data_path: /opt/castle/data/
+  restrictions_api_url: http://restrictions-api.web-staging.2gis.ru
+  restrictions_api_key: key
 
 nginx:
   port: 8080
@@ -96,8 +98,13 @@ nginx:
     tag: 1.21-ad06a0e0
 
 cron:
-  enabled: false
-  schedule: '*/10 * * * *'
+  enabled:
+    import: false
+    # switches on Restriction cron job and init container
+    restriction: false
+  schedule:
+    import: 11 * * * *
+    restriction: '*/5 * * * *'
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
 

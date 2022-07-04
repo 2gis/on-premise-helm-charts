@@ -47,11 +47,13 @@
 | persistentVolume.storageClass | string | `""` | Storage class for PV |
 | persistentVolume.size | string | `""` | Size of PV |
 | cron | object | `{}` | Cron job definition |
-| cron.enabled | string | `"false"` | Enable or disable cron | 
-| cron.schedule | string | `""` | Schedule in cron format |
-| cron.concurrencyPolicy | string | `""` | Concurrency policy |
+| cron.enabled.import | bool | `"false"` | If import cron job enabled (requires persistentVolume.enabled) |
+| cron.enabled.restriction | bool | `"false"` | If restriction cron job enabled (requires persistentVolume.enabled) |
+| cron.schedule.import | string | `""` | Schedule in cron format |
+| cron.schedule.restriction | string | `""` | Schedule in cron format |
 | cron.concurrencyPolicy | string | `""` | Concurrency policy |
 | cron.successfulJobsHistoryLimit | string | `""` | Number of stored succeful jobs |
+
 
 
 
@@ -90,8 +92,9 @@ persistentVolume:
   size: 5Gi
 
 cron:
-  enabled: false
-  schedule: "*/10 * * * *"
+  enabled:
+    import: false
+    restriction: false
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
 ```

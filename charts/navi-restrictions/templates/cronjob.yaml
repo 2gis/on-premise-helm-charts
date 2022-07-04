@@ -1,0 +1,86 @@
+{{- if .Values.cron.enabled -}}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "navi-restrictions.fullname" . }}-cron
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "navi-restrictions.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.cron.schedule | quote }}
+  concurrencyPolicy: {{ .Values.cron.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ .Values.cron.successfulJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          annotations:
+            prometheus.io/path: "/metrics"
+            prometheus.io/port: {{ .Values.cron.containerPort | quote }}
+            {{- if .Values.prometheusEnabled }}
+            prometheus.io/scrape: "true"
+            {{- end }}
+          {{- with .Values.podAnnotations }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          labels:
+            {{- include "navi-restrictions.labels" . | nindent 12 }}
+          {{- with .Values.podLabels }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        spec:
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "navi-restrictions.serviceAccountName" . }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- tpl (. | toYaml) $ | nindent 12 }}
+          {{- end }}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.priorityClassName }}
+          priorityClassName: {{ .Values.priorityClassName }}
+          {{- end }}
+          {{- with .Values.podSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          restartPolicy: OnFailure
+          containers:
+            - name: navi-restrictions-cron
+              image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.cron.image.repository }}:{{ .Values.cron.image.tag | default .Chart.AppVersion }}'
+              imagePullPolicy: {{ .Values.cron.image.pullPolicy }} 
+              ports:
+                - name: http
+                  containerPort: {{ .Values.cron.containerPort }}
+                  protocol: TCP
+              resources:
+                {{- toYaml .Values.cron.resources | nindent 16 }}
+              env:
+                - name: MAX_ATTRIBUTES_FETCHER_RPS
+                  value: "{{ .Values.cron.max_attributes_fetcher_rps }}"
+                - name: EDGES_URL_TEMPLATE
+                  value: {{ .Values.cron.edges_url_template | quote }}
+                - name: EDGE_ATTRIBUTES_URL_TEMPLATE
+                  value: {{ .Values.cron.edge_attributes_url_template | quote }}
+                - name: PROJECTS
+                  value: {{ join "," .Values.cron.projects | quote }}
+                - name: RESTRICTIONS_API_URL
+                  value: 'http://{{ include "navi-restrictions.fullname" . }}/edges/'
+                - name: RESTRICTIONS_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "navi-restrictions.fullname" . }}
+                      key: keysApi
+{{- end }}

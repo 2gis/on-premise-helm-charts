@@ -48,15 +48,48 @@ data:
     }
     # --------------------------------------------
     # DATA PACKAGE
-    packages:
+    imports:
     {
         remote_name: '%path%',
         remote_dir: '',
-        local_name: '%issue-month%_%timestamp%.2gis',
-        local_dir: 'packages/%project%',
+
+        package: '%project%.2gis',
+        package_info:
+        {
+            local_name: '%issue-month%_%timestamp%.2gis',
+            local_dir: 'packages/%project%',
+        },
+
+        restriction: '%project%-restriction.json',
+        restriction_info:
+        {
+            local_name: '%current-date%_%hour%.json',
+            local_dir: 'restrictions_json/%project%'
+        },
+
         unpack: 'tar',
-        meta: '%project%.json',
-        store_period: 'month'
+        meta: '%project%.json'
+    }
+
+    restriction:
+    {
+        remote_name: '',
+        remote_dir: '',
+
+        local_name: '%project%-restriction.json',
+        local_dir: 'restrictions/%project%',
+
+        tmp_name: '%project%-restriction.json',
+
+        http:
+        {
+            server: '{{ .Values.castle.restrictions_api_url }}',
+            base_dir: 'edges/',
+            api_key: '{{ .Values.castle.restrictions_api_key }}',
+            timeout: 5  #sec
+        },
+
+        store_period: 'week'
     }
   cities_template: |-
     [
