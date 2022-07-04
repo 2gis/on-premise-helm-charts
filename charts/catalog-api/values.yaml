@@ -13,7 +13,7 @@ imagePullSecrets: []
 api:
   image:
     repository: 2gis-on-premise/catalog
-    tag: 3.564.0
+    tag: 3.567.0
     pullPolicy: IfNotPresent
 
   replicas: 1
