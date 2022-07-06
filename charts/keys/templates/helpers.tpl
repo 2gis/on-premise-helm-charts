@@ -26,6 +26,13 @@
 {{ include "keys.name" . }}-admin
 {{- end }}
 
+{{- define "keys.secret.deploys.name" -}}
+{{ include "keys.name" . }}-deploys
+{{- end }}
+
+{{- define "keys.secret.jobs.name" -}}
+{{ include "keys.name" . }}-jobs
+{{- end }}
 
 {{- define "keys.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
@@ -98,11 +105,6 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.env.db" -}}
 - name: ZUUL_DB_RO_HOST
   value: "{{ .Values.db.ro.host }}"
-- name: ZUUL_DB_RO_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "keys.name" . }}
-      key: dbROPassword
 - name: ZUUL_DB_RO_PORT
   value: "{{ .Values.db.ro.port }}"
 - name: ZUUL_DB_RO_NAME
@@ -111,17 +113,40 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.db.ro.username }}"
 - name: ZUUL_DB_RW_HOST
   value: "{{ .Values.db.rw.host }}"
-- name: ZUUL_DB_RW_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "keys.name" . }}
-      key: dbRWPassword
 - name: ZUUL_DB_RW_PORT
   value: "{{ .Values.db.rw.port }}"
 - name: ZUUL_DB_RW_NAME
   value: "{{ .Values.db.rw.name }}"
 - name: ZUUL_DB_RW_USERNAME
   value: "{{ .Values.db.rw.username }}"
+{{- end }}
+
+{{- define "keys.env.db.deploys" -}}
+{{ include "keys.env.db" . }}
+- name: ZUUL_DB_RO_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.deploys.name" . }}
+      key: dbROPassword
+- name: ZUUL_DB_RW_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.deploys.name" . }}
+      key: dbRWPassword
+{{- end }}
+
+{{- define "keys.env.db.jobs" -}}
+{{ include "keys.env.db" . }}
+- name: ZUUL_DB_RO_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.jobs.name" . }}
+      key: dbROPassword
+- name: ZUUL_DB_RW_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.jobs.name" . }}
+      key: dbRWPassword
 {{- end }}
 
 {{- define "keys.env.redis" -}}
@@ -136,7 +161,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: ZUUL_ADMIN_USERS
   valueFrom:
     secretKeyRef:
-      name: {{ include "keys.name" . }}
+      name: {{ include "keys.secret.deploys.name" . }}
       key: apiAdminUsers
 {{- end }}
 - name: ZUUL_LDAP_HOST
@@ -162,7 +187,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: ZUUL_LDAP_BIND_PASSWORD
   valueFrom:
     secretKeyRef:
-      name: {{ include "keys.name" . }}
+      name: {{ include "keys.secret.deploys.name" . }}
       key: ldapBindPassword
 - name: ZUUL_LDAP_SEARCH_BASE_DN
   value: "{{ .Values.ldap.search.baseDN }}"

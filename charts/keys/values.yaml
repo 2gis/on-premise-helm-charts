@@ -1,9 +1,7 @@
-install:
-  apps: true
-  data: true
-
 imagePullSecrets: []
 imagePullPolicy: IfNotPresent
+
+dgctlDockerRegistry: ''
 
 backend:
   image:
