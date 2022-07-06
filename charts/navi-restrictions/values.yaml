@@ -121,7 +121,7 @@ api:
 
   debug: false
   is_init_db: true
-  attractor_url: https://example.com/attractor
+  attractor_url: http://example.com/attract/1.0.0/global/
 
 db:
   host: localhost
@@ -156,8 +156,8 @@ cron:
       cpu: 100m
       memory: 256Mi
 
-  edges_url_template: https://example.com/restrictions_json/{project}/{date_str}_{hour}.json
-  edge_attributes_url_template: https://example.com/edge?edge_id={edge_id}&offset=200
+  edges_url_template: http://example.com/restrictions_json/{project}/{date_str}_{hour}.json
+  edge_attributes_url_template: http://example.com/develop/edge?edge_id={edge_id}&offset=200&routing=carrouting
   projects:
   - dammam
   max_attributes_fetcher_rps: 25
