@@ -1,5 +1,20 @@
 # 2GIS On-Premise Changelog
 
+## [1.1.3]
+#### Images
+```
+keys
+	- keys-ui:0.2.0
+	+ keys-ui:1.0.0
+navi-back
+	- navi-back:6.9.2
+	+ navi-back:6.10.2
+search-api
+	- search-api:7.25.0
+	+ search-api:7.27.0
+
+```
+
 ## [1.1.2]
 #### Images
 ```

@@ -10,11 +10,11 @@ gis-platform
 keys
 	keys-backend:1.30.1
 	keys-redis:6.2.6-alpine3.15
-	keys-ui:0.2.0
+	keys-ui:1.0.0
 mapgl-js-api
 	mapgl:v1.28.1
 navi-back
-	navi-back:6.9.2
+	navi-back:6.10.2
 navi-castle
 	navi-castle:castle-restriction-1.2.0
 	navi-front:1.21-ad06a0e0
@@ -28,7 +28,7 @@ navi-router
 proxy-traffic-jams
 	nginx:1.21.6
 search-api
-	search-api:7.25.0
+	search-api:7.27.0
 	search-nginx:1.21.6
 tiles-api
 	tiles-api-importer:v4.21.1

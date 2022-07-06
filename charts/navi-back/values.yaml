@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 6.9.2
+  tag: 6.10.2
 
 imagePullSecrets: []
 nameOverride: ''
