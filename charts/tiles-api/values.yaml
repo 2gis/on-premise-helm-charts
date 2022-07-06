@@ -156,6 +156,9 @@ importer:
   # -- Delete existing keyspace and make imports if true, otherwise skip imports
   forceImport: false
 
+  # -- In case of removing keyspace also remove its snapshots (using `nodetool clearsnapshot` over JMX)
+  clearSnapshots: false
+
   tolerations: {}
   imagePullSecrets: []
 

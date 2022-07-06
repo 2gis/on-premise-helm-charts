@@ -92,6 +92,7 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | importer.cleaner.resources.limits.memory | string | `"512Mi"` |  |
 | importer.cleaner.resources.requests.cpu | string | `"50m"` |  |
 | importer.cleaner.resources.requests.memory | string | `"128Mi"` |  |
+| importer.clearSnapshots | bool | `false` | In case of removing keyspace also remove its snapshots (using `nodetool clearsnapshot` over JMX) |
 | importer.enabled | bool | `true` |  |
 | importer.forceImport | bool | `false` | Delete existing keyspace and make imports if true, otherwise skip imports |
 | importer.image.pullPolicy | string | `"IfNotPresent"` |  |
