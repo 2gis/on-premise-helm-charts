@@ -8,7 +8,6 @@ metadata:
     {{- include "tiles.labels" . | nindent 4 }}
   annotations:
     {{- include "importer.removable-hook-annotations" . | nindent 4 }}
-    "helm.sh/hook-weight": "-1"
 
 data:
   {{ (tpl (.Files.Glob "configs/importer/*").AsConfig $) | nindent 2 }}

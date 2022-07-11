@@ -20,8 +20,12 @@ cassandra:
 
   # -- Credentials for Cassandra authentication
   credentials:
+    # -- user / password for CQL queries (read/write to database)
     user: cassandra
     password: cassandra
+    # -- user / password for JMX queries (like calling nodetool)
+    jmxUser: cassandra
+    jmxPassword: cassandra
 
   # -- Replication factor for Cassandra
   replicaFactor: 3
@@ -35,7 +39,7 @@ cassandra:
 proxy:
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: v4.21.1
+    tag: v4.22.0
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -61,7 +65,7 @@ proxy:
 api:
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: v4.21.1
+    tag: v4.22.0
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
@@ -132,7 +136,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: v4.21.1
+    tag: v4.22.0
     pullPolicy: IfNotPresent
 
   resources:
@@ -149,6 +153,12 @@ importer:
   # -- Number of write processes per import process
   writerNum: 8
 
+  # -- Delete existing keyspace and make imports if true, otherwise skip imports
+  forceImport: false
+
+  # -- In case of removing keyspace also remove its snapshots (using `nodetool clearsnapshot` over JMX)
+  clearSnapshots: false
+
   tolerations: {}
   imagePullSecrets: []
 
@@ -160,3 +170,18 @@ importer:
     limits:
       cpu: 2
       memory: 2048Mi
+
+  cleaner:
+    # -- Enables cassandra previous tilesets cleaning before making new imports
+    enabled: false
+
+    # -- How many old tilesets leave untouched, minimum 1
+    limit: 3
+
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 1000m
+        memory: 512Mi

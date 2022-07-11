@@ -3,11 +3,14 @@ migrations-path: "/migrations"
 service-name: {{ .Values.serviceName }}
 workers: {{ .Values.importer.workerNum }}
 data-type: {{ .Values.type }}
-
+force-import: {{ .Values.importer.forceImport }}
+clear-snapshots: {{ .Values.importer.clearSnapshots }}
 
 credentials:
   user: {{ .Values.cassandra.credentials.user }}
   password: {{ .Values.cassandra.credentials.password }}
+  jmx-user: {{ .Values.cassandra.credentials.jmxUser }}
+  jmx-password: {{ .Values.cassandra.credentials.jmxPassword }}
 
 cassandra:
   name: local
@@ -42,6 +45,9 @@ k8s:
   worker-image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}
   {{- end }}
   namespace: {{ .Release.Namespace }}
+
+cleaner:
+  limit: {{ .Values.importer.cleaner.limit }}
 
 worker:
   temp-dir: /tmp
