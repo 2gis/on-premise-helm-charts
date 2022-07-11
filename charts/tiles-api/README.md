@@ -40,7 +40,7 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | api.hpa.targetCPUUtilizationPercentage | int | `50` |  |
 | api.image.pullPolicy | string | `"IfNotPresent"` |  |
 | api.image.repository | string | `"2gis-on-premise/tiles-api"` |  |
-| api.image.tag | string | `"v4.21.0"` |  |
+| api.image.tag | string | `"v4.22.0"` |  |
 | api.imagePullSecrets | list | `[]` |  |
 | api.ingress.className | string | `"nginx"` |  |
 | api.ingress.enabled | bool | `false` |  |
@@ -97,7 +97,7 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | importer.forceImport | bool | `false` | Delete existing keyspace and make imports if true, otherwise skip imports |
 | importer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | importer.image.repository | string | `"2gis-on-premise/tiles-api-importer"` |  |
-| importer.image.tag | string | `"v4.21.0"` |  |
+| importer.image.tag | string | `"v4.22.0"` |  |
 | importer.imagePullSecrets | list | `[]` |  |
 | importer.nodeSelector | object | `{}` |  |
 | importer.resources.limits.cpu | string | `"100m"` |  |
@@ -119,7 +119,7 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | proxy.containerPort | int | `5000` |  |
 | proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | proxy.image.repository | string | `"2gis-on-premise/tiles-api-proxy"` |  |
-| proxy.image.tag | string | `"v4.21.0"` |  |
+| proxy.image.tag | string | `"v4.22.0"` |  |
 | proxy.resources.limits.cpu | int | `1` |  |
 | proxy.resources.limits.memory | string | `"512Mi"` |  |
 | proxy.resources.requests.cpu | string | `"50m"` |  |

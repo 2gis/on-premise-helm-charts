@@ -39,7 +39,7 @@ cassandra:
 proxy:
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: v4.21.1
+    tag: v4.22.0
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -65,7 +65,7 @@ proxy:
 api:
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: v4.21.1
+    tag: v4.22.0
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
@@ -136,7 +136,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: v4.21.1
+    tag: v4.22.0
     pullPolicy: IfNotPresent
 
   resources:
