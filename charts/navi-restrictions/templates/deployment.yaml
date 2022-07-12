@@ -107,7 +107,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "navi-restrictions.fullname" . }}
                   key: dbPassword
-            - name: API_KEY
+            - name: RESTRICTIONS_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "navi-restrictions.fullname" . }}
