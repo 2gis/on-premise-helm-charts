@@ -101,6 +101,42 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 2
+        # If Persistent volume is not enabled then cron jobs will be running as sidecar containers
+        {{- if (not .Values.persistentVolume.enabled) }}
+        - name: castle-cron
+          image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}"
+          command: ["/tini","--"]
+          args:
+          - /usr/local/bin/supercronic
+          - -json
+          - -prometheus-listen-address
+          - '0.0.0.0:9476'
+          - /opt/update_services
+          resources:
+            {{- toYaml $.Values.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9476
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          ports:
+            - name: cron-prom
+              containerPort: 9476
+              protocol: TCP
+          volumeMounts:
+          - name: {{ include "castle.fullname" $ }}-builder-config
+            mountPath: /opt/config_builder.conf
+            subPath: config_builder.conf
+          - name: {{ include "castle.fullname" $ }}-builder-config
+            mountPath: {{ $.Values.castle.castle_data_path }}/cities_template
+            subPath: cities_template
+          - name: {{ include "castle.fullname" $ }}-builder-config
+            mountPath: /opt/update_services
+            subPath: update_services
+          - name: {{ include "castle.fullname" $ }}-data
+            mountPath: {{ $.Values.castle.castle_data_path }}
+        {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}

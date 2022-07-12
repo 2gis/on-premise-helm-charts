@@ -48,6 +48,7 @@ data:
     }
     # --------------------------------------------
     # DATA PACKAGE
+
     imports:
     {
         remote_name: '%path%',
@@ -91,6 +92,7 @@ data:
 
         store_period: 'week'
     }
+
   cities_template: |-
     [
     {% for project in projects %}
@@ -105,4 +107,10 @@ data:
         {
         }
     ]
- 
+
+  update_services: |
+    {{- range $_, $flavor := tuple "import" "restriction" }}
+    {{- if index $.Values.cron.enabled $flavor }}
+    {{ index $.Values.cron.schedule $flavor }} /opt/configuration_builder --config /opt/config_builder.conf --service={{ $flavor }}
+    {{- end }}
+    {{- end }}
