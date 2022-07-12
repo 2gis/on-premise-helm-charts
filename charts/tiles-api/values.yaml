@@ -159,6 +159,9 @@ importer:
   # -- In case of removing keyspace also remove its snapshots (using `nodetool clearsnapshot` over JMX)
   clearSnapshots: false
 
+  # -- Maximum difference over cassandra hosts clock time
+  cassandraHostsClockTimeCheckLimit: 1s
+
   tolerations: {}
   imagePullSecrets: []
 
