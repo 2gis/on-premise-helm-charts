@@ -6,7 +6,7 @@ which allows one to deploy [2GIS products](https://dev.2gis.com/)
 on one's own sites.
 
 For more information on Restrictions Backend refer to the
-[service documentation](https://confluence.2gis.ru/display/TRAFFIC/Restrictions+Service). (TODO: link to docs.2gis.com needed)
+[service documentation](https://docs.2gis.com/en/on-premise/restrictions).
 
 To learn more about 2GIS On-Premise services, visit
 [docs.2gis.com](https://docs.2gis.com/en/on-premise/overview).
@@ -16,9 +16,7 @@ To learn more about 2GIS On-Premise services, visit
 Before installation, make sure that you have:
 
 * PostgreSQL DB instance (with `plpgsql` enabled)
-* [Attractor service](https://confluence.2gis.ru/display/TRAFFIC/Attractor+Service). (TODO: link to docs.2gis.com needed)
-* Navi backend
-* Castle service
+* [Navi Castle and Navi Back](https://docs.2gis.com/en/on-premise/navigation)
 
 To install Restrictions Backend, create a `values.yaml` file with
 the following content:
