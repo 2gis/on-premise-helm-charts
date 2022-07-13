@@ -76,7 +76,7 @@ data:
         remote_name: '',
         remote_dir: '',
 
-        local_name: '%project%-restriction.json',
+        local_name: 'restrictions-%project%.json',
         local_dir: 'restrictions/%project%',
 
         tmp_name: '%project%-restriction.json',
