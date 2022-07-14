@@ -12,11 +12,14 @@ replicaCount: 1
 api:
   image:
     repository: 2gis-on-premise/search-api
-    tag: 7.22.1
+    tag: 7.25.0
     pullPolicy: IfNotPresent
   resources: {}
   data_dir: /data
   fcgi_port: 9090
+  logLevel: Info
+  logFormat: json  # plaintext
+  configOpt: []
 
 nginx:
   image:

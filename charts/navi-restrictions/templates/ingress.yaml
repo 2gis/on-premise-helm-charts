@@ -1,22 +1,21 @@
-{{- if .Values.ingress.enabled -}}
-{{- $fullName := include "gis-platform-portal.fullname" . -}}
-{{- $svcPort := .Values.portal.service.port -}}
+{{- if .Values.api.ingress.enabled -}}
+{{- $fullName := include "navi-restrictions.fullname" . -}}
+{{- $svcPort := .Values.api.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "gis-platform-portal.labels" . | nindent 4 }}
+    {{- include "navi-restrictions.labels" . | nindent 4 }}
+  {{- with .Values.api.ingress.annotations }}
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.portal.max_body_size }}
-  {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: {{ .Values.ingress.className }}
-  {{- if .Values.ingress.tls }}
+  ingressClassName: {{ .Values.api.ingress.className }}
+  {{- if .Values.api.ingress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range .Values.api.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -25,16 +24,18 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
+    {{- range .Values.api.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
               service:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
+          {{- end }}
     {{- end }}
 {{- end }}

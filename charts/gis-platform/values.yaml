@@ -25,7 +25,7 @@ spcore:
   terminationGracePeriodSeconds: 60
   image:
     repository: 2gis-on-premise/gis_platform_spcore
-    tag: '2022-06-05'
+    tag: '2022-06-10'
   cors:
     allow_everyone: false
     origins: []
@@ -87,6 +87,7 @@ portal:
   terminationGracePeriodSeconds: 60
   websocket:
     timeout: 604800
+  max_body_size: 100m
   cache:
     enabled: false
     size: 1G
@@ -100,7 +101,7 @@ portal:
     scheme: http
   image:
     repository: 2gis-on-premise/gis_platform_portal
-    tag: '2022-06-05'
+    tag: '2022-06-10'
 
 zookeeper:
   image:

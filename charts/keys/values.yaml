@@ -1,19 +1,17 @@
-install:
-  apps: true
-  data: true
-
 imagePullSecrets: []
 imagePullPolicy: IfNotPresent
+
+dgctlDockerRegistry: ''
 
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.27.0
+    tag: 1.30.1
 
 admin:
   image:
     repository: 2gis-on-premise/keys-ui
-    tag: 0.0.2
+    tag: 0.2.0
 
   replicas: 1
 

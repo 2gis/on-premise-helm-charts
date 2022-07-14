@@ -4,8 +4,8 @@ description: Castle Helm chart for Kubernetes
 type: application
 
 
-version: 1.0.8
-appVersion: 1.0.2
+version: 1.1.2
+appVersion: castle-restriction-1.2.0
 
 maintainers:
 - name: 2gis

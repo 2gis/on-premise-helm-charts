@@ -8,7 +8,8 @@ To learn more about 2GIS On-Premise services, visit [docs.2gis.com](https://docs
 
 ## Installing
 
-Before installing API Keys service, make sure that you have a running PostgreSQL instance with installed `pg_trgm` extension.
+Before installing API Keys service, make sure that you have a running PostgreSQL instance with installed `pg_trgm`
+extension.
 
 To install the service create a YAML file that will contain:
 
@@ -61,16 +62,14 @@ admin:
   appHost: "https://app.host"
 ```
 
-To install/upgrade use `helm upgrade` command and specify path to the created file with values. If you are doing a fresh
-install or data migrate/upgrade, you need to set value of `install.apps` to `false`. Example command for fresh
-installation:
+To install/upgrade use `helm upgrade` command and specify path to the created file with values:
 
 ```shell
 helm repo add 2gis-on-premise https://2gis.github.io/on-premise-helm-charts
+
 helm upgrade keys 2gis-on-premise/keys \
   --install --atomic --wait-for-jobs \
-  --values values.yaml \
-  --set install.apps=false
+  --values custom-values.yaml 
 ```
 
 Add users that can authorize in AD/LDAP (users don't sync between systems) using `keysctl` inside any `keys-api` pod:
@@ -80,7 +79,8 @@ keysctl users add "username" "Display Name"
 ```
 
 If you haven't LDAP or LDAP don't work, you may to set value of `api.adminUsers`
-with list of usernames and passwords (will be store in secret). For example, `admin:$uperPassw0rd`.
+with list of usernames and passwords (will be store in secret). For example: `username:password` (single user),
+`username1:password1,username2:password2` (multiple users).
 
 Get list of services with their API keys:
 
@@ -96,5 +96,5 @@ the `helm upgrade` command:
 ```bash
 helm upgrade keys 2gis-on-premise/keys \
   --atomic --wait-for-jobs \
-  --values keys-values.yaml
+  --values custom-values.yaml
 ```

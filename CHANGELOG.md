@@ -1,5 +1,63 @@
 # 2GIS On-Premise Changelog
 
+## [1.1.2]
+#### Images
+```
++navi-restrictions
++       navi-restrictions-api:1.0.0
++       navi-restrictions-syncer:1.0.0
+ navi-router
+-       navi-router:6.3.0
++       navi-router:1.0.7-049fb4cc
+```
+
+## [1.1.1]
+#### Images
+```
+ catalog-api
+-       catalog:3.564.0
++       catalog:3.567.0
+ keys
+-       keys-ui:0.0.2
+-       keys-backend:1.27.0
++       keys-ui:0.2.0
++       keys-backend:1.30.1
+ navi-back
+-       navi-back:6.3.0
++       navi-back:6.9.2
+ navi-castle
+-       navi-castle:1.0.5
++       navi-castle:castle-restriction-1.2.0
+ search-api
+-       search-api:7.22.1
++       search-api:7.25.0
+ tiles-api
+-       tiles-api-proxy:v4.21.0
+-       tiles-api:v4.21.0
+-       tiles-api-importer:v4.21.0
++       tiles-api-proxy:v4.21.1
++       tiles-api:v4.21.1
++       tiles-api-importer:v4.21.1
+
+```
+
+## [1.1.0]
+#### Images
+```
+no changes
+```
+
+## [1.0.9]
+#### Images
+```
+ gis-platform
+-       gis_platform_spcore:2022-06-05
+-       gis_platform_portal:2022-06-05
++       gis_platform_spcore:2022-06-10
++       gis_platform_portal:2022-06-10
+
+```
+
 ## [1.0.8]
 #### Images
 ```

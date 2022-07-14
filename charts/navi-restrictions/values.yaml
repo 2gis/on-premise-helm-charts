@@ -1,0 +1,163 @@
+# Default values for navi-restrictions.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+
+imagePullSecrets: []
+nameOverride: ''
+fullnameOverride: ''
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ''
+
+podAnnotations: {}
+podLabels: {}
+labels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+nodeSelector: {}
+
+tolerations: []
+
+# affinity gets passed through render, references to other values allowed, e.g.
+# affinity:
+#   podAntiAffinity:
+#     requiredDuringSchedulingIgnoredDuringExecution:
+#     - labelSelector:
+#         matchExpressions:
+#         - key: app.kubernetes.io/instance
+#           operator: In
+#           values:
+#           - "{{ .Release.Name }}"
+#       topologyKey: kubernetes.io/hostname
+# to avoide iterpolation use the following syntax: '{{ "{{ .Release.Name }}" }}'
+affinity: {}
+
+priorityClassName: ''
+
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 1
+
+terminationGracePeriodSeconds: 120
+
+# if prometheus scrape enabled (adds annotation)
+prometheusEnabled: true
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
+api:
+  image:
+    repository: 2gis-on-premise/navi-restrictions-api
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 1.0.0
+
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8000
+    annotations: {}
+    labels: {}
+
+  ingress:
+    enabled: false
+    className: ''
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    hosts:
+    - host: chart-example.local
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1024Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+  hpa:
+    enabled: false
+    maxReplicas: 2
+    minReplicas: 1
+    targetCPUUtilizationPercentage: 80
+
+  vpa:
+    enabled: false
+    updateMode: Auto
+    minAllowed:
+      memory: 256Mi
+    maxAllowed:
+      cpu: 2000m
+      memory: 1024Mi
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  debug: false
+  is_init_db: true
+  attractor_url: https://example.com/attractor
+
+db:
+  host: localhost
+  port: 5432
+  name: restrictions
+  user: dbuser
+  # must be specified in overrides
+  password: dbpassword
+
+# must be specified in overrides
+api_key: example
+
+# Syncer
+cron:
+  enabled: false
+  schedule: 1 * * * *
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  containerPort: 8000
+
+  image:
+    repository: 2gis-on-premise/navi-restrictions-syncer
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 1.0.0
+
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1024Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+  edges_url_template: https://example.com/restrictions_json/{project}/{date_str}_{hour}.json
+  edge_attributes_url_template: https://example.com/edge?edge_id={edge_id}&offset=200
+  projects:
+  - dammam
+  max_attributes_fetcher_rps: 25

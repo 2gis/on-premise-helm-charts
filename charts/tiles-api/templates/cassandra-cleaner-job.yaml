@@ -1,27 +1,27 @@
-{{- if .Values.importer.enabled }}
+{{- if .Values.importer.cleaner.enabled }}
 ---
 
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name:  {{ include "tiles.fullname" . }}-importer-job
+  name: {{ include "tiles.fullname" . }}-cleaner-job
   labels:
     {{- include "tiles.labels" . | nindent 4 }}
   annotations:
     {{- include "importer.removable-hook-annotations" . | nindent 4 }}
-    "helm.sh/hook-weight": "2" # after cleaning
+    "helm.sh/hook-weight": "1" # before imports
 
 spec:
   backoffLimit: 0
   template:
     metadata:
-      name: {{ include "tiles.fullname" . }}-importer
+      name: {{ include "tiles.fullname" . }}-cleaner
     spec:
       serviceAccountName: {{ include "tiles.fullname" . }}
 
       volumes:
         - name: tmp-volume
-          emptyDir: {}
+          emptyDir: { }
 
         - name: config-volume
           configMap:
@@ -43,12 +43,13 @@ spec:
       {{- end }}
 
       containers:
-        - name: importer
+        - name: cleaner-job
 
           {{- with $.Values.importer }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}
           imagePullPolicy: {{ .image.pullPolicy }}
-          command: ["/selfimporter", "scheduler"]
+          command: [ "/selfimporter", "clear" ]
+          {{- end}}
 
           volumeMounts:
             - name: tmp-volume
@@ -57,7 +58,7 @@ spec:
             - mountPath: "/config"
               name: config-volume
 
-          {{- with .resources }}
+          {{- with .Values.importer.cleaner.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -65,18 +66,5 @@ spec:
           env:
             - name: CONFIG_PATH
               value: /config/importer.yaml
-            - name: STORAGE_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}
-                  key: s3AccessKey
-            - name: STORAGE_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}
-                  key: s3SecretKey
-
-          {{- end}}
-
       restartPolicy: Never
 {{- end }}

@@ -10,7 +10,11 @@ data:
   search_api_config: |
     <?xml version='1.0' encoding='UTF-8' ?>
     <sapphire>
-            <log_level>Info</log_level>
+            <!-- Alert|Critical|Error|Warning|Notice|Info|Debug -->
+            <log_level>{{ .Values.api.logLevel }}</log_level>
+            <log_type>stdout</log_type>
+            <!-- json/plaintext -->
+            <log_format>{{ .Values.api.logFormat }}</log_format>
 
             <socket_path>:{{ .Values.api.fcgi_port }}</socket_path>
             <socket_backlog_size>128</socket_backlog_size>
@@ -26,6 +30,9 @@ data:
             <is_container>1</is_container>
             <slow_search_request_threshold>2000</slow_search_request_threshold>
             <segment_geometry_source>segments</segment_geometry_source>
+            {{- range .Values.api.configOpt }}
+            {{ . }}
+            {{- end }}
     </sapphire>
 
   nginx_config: |
