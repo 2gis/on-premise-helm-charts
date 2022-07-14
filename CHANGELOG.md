@@ -1,5 +1,21 @@
 # 2GIS On-Premise Changelog
 
+## [1.1.3]
+#### Images
+```
+navi-castle
+	- navi-castle:castle-restriction-1.2.0
+	+ navi-castle:1.0.5
+tiles-api
+	- tiles-api-importer:v4.21.1
+	+ tiles-api-importer:v4.22.0
+	- tiles-api-proxy:v4.21.1
+	+ tiles-api-proxy:v4.22.0
+	- tiles-api:v4.21.1
+	+ tiles-api:v4.22.0
+
+```
+
 ## [1.1.2]
 #### Images
 ```

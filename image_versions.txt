@@ -16,7 +16,7 @@ mapgl-js-api
 navi-back
 	navi-back:6.9.2
 navi-castle
-	navi-castle:castle-restriction-1.2.0
+	navi-castle:1.0.5
 	navi-front:1.21-ad06a0e0
 navi-front
 	navi-front:1.21-ad06a0e0
@@ -31,6 +31,6 @@ search-api
 	search-api:7.25.0
 	search-nginx:1.21.6
 tiles-api
-	tiles-api-importer:v4.21.1
-	tiles-api-proxy:v4.21.1
-	tiles-api:v4.21.1
+	tiles-api-importer:v4.22.0
+	tiles-api-proxy:v4.22.0
+	tiles-api:v4.22.0
