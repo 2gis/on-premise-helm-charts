@@ -86,7 +86,6 @@ helm upgrade testing 2gis-on-premise/tiles-api --atomic --timeout=60m -f ./custo
 | dgctlStorage.host | string | `""` |  |
 | dgctlStorage.manifest | string | `""` |  |
 | dgctlStorage.secretKey | string | `""` |  |
-| importer.cassandraHostsClockTimeCheckLimit | string | `"1s"` | Maximum difference over cassandra hosts clock time |
 | importer.cleaner.enabled | bool | `false` | Enables cassandra previous tilesets cleaning before making new imports |
 | importer.cleaner.limit | int | `3` | How many old tilesets leave untouched, minimum 1 |
 | importer.cleaner.resources.limits.cpu | string | `"1000m"` |  |
