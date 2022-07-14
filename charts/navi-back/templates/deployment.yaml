@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "naviback.labels" . | nindent 4 }}
     rule: {{ .Values.naviback.app_rule | default "" | quote  }}
+    navigroup: {{ .Values.navigroup | default "" | quote }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
