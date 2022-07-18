@@ -76,6 +76,7 @@
 | vpa.maxAllowed.memory | string | `"512Mi"` |  |
 | vpa.minAllowed.memory | string | `"128Mi"` |  |
 | naviback.app_rule | string | `""` | Mosesd rule  |
+| naviback.simple_network_emergency | bool | `false` | Enable/disable emergency routing  |
 | naviback.type | string | `""` | Routing type: taxi or carrouting  |
 | naviback.app_castle_host | string | `""` | URL of castle server  |
 | naviback.eca_host | string | `""` | URL of ECA server  |

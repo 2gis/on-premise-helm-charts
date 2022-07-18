@@ -83,6 +83,21 @@ Usage:
 {{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : true,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": true," }}
 {{- end -}}
 
+{{- define "config.truck" -}}
+{{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : true,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": false," }}
+{{- end -}}
+
+{{- define "config.ctx" -}}
+{{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": false," }}
+{{- end -}}
+
+{{- define "config.pairs" -}}
+{{ print  "\"simple_network_car\" : true,\"simple_network_pedestrian\": true,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_car\" : true,\"attractor_pedestrian\": true,\"attractor_bicycle\": false,\"attractor_taxi\": true,\"reduce_edges_optimization_flag\": true," }}
+{{- end -}}
+
+{{- define "config.dm" -}}
+{{ print  "\"simple_network_car\" : true,\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_car\" : true,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": false,\"reduce_edges_optimization_flag\": true," }}
+{{- end -}}
 {{- define "config.serversection" -}}
 {{- if eq .Values.naviback.type "carrouting" -}}
    {{ include "config.carrouting" $ }}
@@ -90,6 +105,30 @@ Usage:
 {{- if eq .Values.naviback.type "taxi" -}}
    {{ include "config.taxi" $ }}
 {{- end -}}
+{{- if eq .Values.naviback.type "truck" -}}
+   {{ include "config.truck" $ }}
+{{- end -}}
+{{- if eq .Values.naviback.type "ctx" -}}
+   {{ include "config.ctx" $ }}
+{{- end -}}
+{{- if eq .Values.naviback.type "dm" -}}
+   {{ include "config.dm" $ }}
+{{- end -}}
+{{- if eq .Values.naviback.type "pairs" -}}
+   {{ include "config.pairs" $ }}
+{{- end -}}
+{{- end -}}
+
+{{- define "config.setDistMatrixPool" }}
+{{- $cpu_divider := 1 }}
+{{- $num_threads := 0 }}
+{{- $resources := regexSplit "m" (toString .Values.resources.limits.cpu) -1 }}
+{{- if eq (len $resources) 2 }}
+ {{- $cpu_divider = 1000 }} 
+{{- end }}
+{{- $cpu_value := index $resources 0 }}
+{{- $num_threads = ceil (divf $cpu_value $cpu_divider) }} 
+{{- print $num_threads }}
 {{- end -}}
 
 {{/* vim: set filetype=mustache: */}}
