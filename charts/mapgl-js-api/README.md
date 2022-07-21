@@ -1,10 +1,22 @@
-# 2GIS MapGL JS API (Helm chart)
+# 2GIS MapGL JS API service
 
-This repository contains a [Helm chart](https://helm.sh/docs/topics/charts/) for deploying the MapGL JS API service. This service is part of 2GIS On-Premise services, which allow you to deploy [2GIS products](https://dev.2gis.com/) on your own sites.
+Use this Helm chart to deploy MapGL JS API service, which is a part of 2GIS's [On-Premise Maps services](https://docs.2gis.com/en/on-premise/map).
 
-For more information on MapGL JS API, see the [service documentation](https://docs.2gis.com/en/on-premise/map).
+Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-To learn more about 2GIS On-Premise services, visit [docs.2gis.com](https://docs.2gis.com/en/on-premise/overview).
+> **Note:**
+>
+> All On-Premise services are beta, and under development.
+
+See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
+
+- Architecture of the service.
+
+- Installing the service.
+
+    When filling in the keys for `values-mapgl.yaml` configuration file, refer to the documentation and the list of keys below.
+
+- Updating the service.
 
 ## Installing the Chart
 
