@@ -1,4 +1,32 @@
+# @section Common settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param replicaCount A replica count for the pod.
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param redeploy_label If this label is changed since the last deployment, the whole chart will be redeployed.
+
 dgctlDockerRegistry: ''
+podAnnotations: {}
+podLabels: {}
+replicaCount: 1
+nodeSelector: {}
+affinity: {}
+tolerations: []
+redeploy_label: ''
+
+
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
+# @param dgctlStorage.bucket S3 bucket name.
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket.
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate.
+
 dgctlStorage:
   host: ''
   bucket: ''
@@ -7,19 +35,44 @@ dgctlStorage:
   manifest: ''
 
 
-replicaCount: 1
-
 api:
+
+  # @section Deployment settings
+
+  # @param api.image.repository Repository
+  # @param api.image.tag Tag
+  # @param api.image.pullPolicy Pull Policy
+
   image:
     repository: 2gis-on-premise/search-api
     tag: 7.25.0
     pullPolicy: IfNotPresent
+
+
+  # @section API settings
+
+  # @param api.resources API container resources.
+  # @param api.data_dir Path to the directory storing search indexes.
+  # @param api.fcgi_port TCP port of the Search API.
+  # @param api.logLevel Log level.
+  # @param api.logFormat Log format: `json` or `plaintext`.
+  # @param api.configOpt Additional options (for debugging purposes).
+
   resources: {}
   data_dir: /data
   fcgi_port: 9090
   logLevel: Info
-  logFormat: json  # plaintext
+  logFormat: json
   configOpt: []
+
+
+# @section NGINX settings
+
+# @param nginx.image.repository Docker Repository.
+# @param nginx.image.tag Docker image tag.
+# @param nginx.image.pullPolicy Kubernetes pull policy for the service's Docker image.
+# @param nginx.resources NGINX container resources.
+# @param nginx.http_port HTTP port on which NGINX will be listening.
 
 nginx:
   image:
@@ -29,14 +82,26 @@ nginx:
   resources: {}
   http_port: 8080
 
+
+# @section Strategy settings
+
+# @param strategy.type
+# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.
+# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
 strategy:
   type: RollingUpdate
   rollingUpdate:
     maxUnavailable: 0
     maxSurge: 1
 
-podAnnotations: {}
-podLabels: {}
+
+# @section Service settings
+
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.port Tiles API service port.
 
 service:
   annotations: {}
@@ -44,12 +109,23 @@ service:
   type: ClusterIP
   port: 80
 
-nodeSelector: {}
-affinity: {}
-tolerations: []
+
+# @section Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param podDisruptionBudget.enabled If PDB is enabled for the service.
+# @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
+
 podDisruptionBudget:
   enabled: true
   maxUnavailable: 1
+
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+# @param hpa.enabled If HPA is enabled for the service.
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
 
 hpa:
   enabled: false
@@ -57,7 +133,10 @@ hpa:
   minReplicas: 1
   targetCPUUtilizationPercentage: 80
 
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param ingress.enabled If Ingress is enabled for the service.
+
 ingress:
   enabled: false
-
-redeploy_label: ''
