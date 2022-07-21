@@ -18,7 +18,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 - Updating the service.
 
-## Chart values
+## Values
 
 ### Docker Registry settings
 
@@ -129,7 +129,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `api.ingress.tls`                           | Ingress [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress.                                                                                                | `[]`                        |
 | `api.pdb`                                   | **Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings**                                                                   |                             |
 | `api.pdb.enabled`                           | If PDB is enabled for the service.                                                                                                                                                                       | `true`                      |
-| `api.pdb.maxUnavailable`                    | How many pods must always be available, even during a disruption.                                                                                                                                        | `1`                         |
+| `api.pdb.maxUnavailable`                    | How many pods can be unavailable after the eviction.                                                                                                                                                     | `1`                         |
 | `api.hpa`                                   | **Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings**                                                                         |                             |
 | `api.hpa.enabled`                           | If HPA is enabled for the service.                                                                                                                                                                       | `false`                     |
 | `api.hpa.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                                                           | `1`                         |
