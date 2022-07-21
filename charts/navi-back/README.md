@@ -1,12 +1,12 @@
-# Mosesd Helm Chart
+# Navi-back Helm Chart
 ## Описание
 Данный helm-чарт предназначен для установки экземпляра Navi-back, который позволяет обслуживать запросы, исходя из файла *rules.conf*
 
 ## Файл *rules.conf*
-Является важнейшим файлом, описывающим правила и проекты, которые будет обслуживать разворачиваемый экземпляр Navi-back.  
+Является важнейшим файлом, описывающим правила и проекты, которые будет обслуживать разворачиваемый экземпляр Navi-back.
 Пример файла *rules.conf*:
 ```
-[ 
+[
   {
     "name": "ukhta_cr",
     "router_projects": [
@@ -27,9 +27,10 @@
   }
 ]
 ```
-В данном примере создается правило ukhta_cr, содержащее регион Ухта с типом запроса "routing" и видом роутина "driving".  
-Значение поля "name" передается экземпляру mosesd через переменную окружения *RULE*, вследствие чего mosesd выкачивает проекты для Ухты и обслуживает только для этого региона - Ухта.  
-## ***Внимание!!! Файл rules.conf необходимо подкладывать в директорию с helm-чартом***
+В данном примере создается правило ukhta_cr, содержащее регион Ухта с типом запроса "routing" и видом роутина "driving".
+Значение поля "name" передается экземпляру navi-back через переменную окружения *RULE*, вследствие чего navi-back выкачивает проекты для Ухты и обслуживает только для этого региона - Ухта.
+
+Содержимое *rules.conf* передаётся параметром `rules` или файл подкладывается в директорию с helm-чартом.
 
 
 ## Описание values
@@ -41,7 +42,7 @@
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `50` |  |
-| image | string | `"2gis/mosesd"` | The path to the docker image. Must have a path to your private docker registry |
+| image | string | `"2gis-on-premise/navi-back"` | The path to the docker image. Must have a path to your private docker registry |
 | imagePullSecrets | object | `{}` |  |
 | ingress.className | string | `"nginx"` |  |
 | ingress.enabled | bool | `false` |  |
@@ -61,6 +62,11 @@
 | resources.limits.memory | string | `"512Mi"` |  |
 | resources.requests.cpu | string | `"50m"` |  |
 | resources.requests.memory | string | `"128Mi"` |  |
+| testResources | object | {} |  |
+| testResources.limits.cpu | int | `1` |  |
+| testResources.limits.memory | string | `"512Mi"` |  |
+| testResources.requests.cpu | string | `"50m"` |  |
+| testResources.requests.memory | string | `"128Mi"` |  |
 | revisionHistory | int | `1` |  |
 | service.annotations | object | `{}` |  |
 | service.labels | object | `{}` |  |
@@ -75,7 +81,7 @@
 | vpa.maxAllowed.cpu | int | `1` |  |
 | vpa.maxAllowed.memory | string | `"512Mi"` |  |
 | vpa.minAllowed.memory | string | `"128Mi"` |  |
-| naviback.app_rule | string | `""` | Mosesd rule  |
+| naviback.app_rule | string | `""` | Navi-back rule  |
 | naviback.simple_network_emergency | bool | `false` | Enable/disable emergency routing  |
 | naviback.type | string | `""` | Routing type: taxi or carrouting  |
 | naviback.app_castle_host | string | `""` | URL of castle server  |
@@ -84,13 +90,37 @@
 | naviback.ftp_conn_string | string | `""` | FTP connection string to build server  |
 | naviback.additional_sections | string | `""` | Additional sections of naviback.conf file  |
 | naviback.server_id | string | `"Chart release name"` | Server id sended to statistic server  |
+| kafka | object | `{}` | Kafka service for asynchronous distance matrix  |
+| kafka.enabled | bool | `false` | If configured  |
+| kafka.server | string | `"example.com"` | Bootstrap server  |
+| kafka.port | int | `9092` | Bootstrap server port  |
+| kafka.groupId | string | `test_id` | Consumer group ID  |
+| kafka.user | string | `kafkauser` | Connection user name  |
+| kafka.password | string | `kafkapassword` | Connection password  |
+| kafka.protocol | string | `SASL_SSL` | Connection protocol  |
+| kafka.mechanism | string | `SCRAM-SHA-512` | SASL mechanism  |
+| kafka.distanceMatrix | object | `{}` | Topics for distance matrix  |
+| kafka.distanceMatrix.taskTopic | object | `request_topic` | Tasks topic name |
+| kafka.distanceMatrix.cancelTopic | object | `cancel_topic` | Cancel topic name |
+| kafka.distanceMatrix.statusTopic | object | `status_topic` | Status topic name |
+| kafka.distanceMatrix.updateTaskStatusPeriodSec | int | `120` | Update period |
+| kafka.distanceMatrix.messageExpiredPeriodSec | int | `3600` | Expiration period |
+| kafka.distanceMatrix.requestDownloadTimeoutSec | int | `20` | Download timeout |
+| kafka.distanceMatrix.responseUploadTimeoutSec | int | `40` | Upload timeout |
+| s3 | object | `{}` | S3 storage for asynchronous distance matrix  |
+| s3.enabled | bool | `false` | If configured  |
+| s3.url | string | `example.com:80` | Server base URL  |
+| s3.bucket | string | `samplebucket` | Bucket name  |
+| s3.keyId | string | `sampleid` | Authorization ID  |
+| s3.key| string | `samplekey` | Authorization secret key  |
+| rules | object | `[]` | `rules.conf` content  |
 
 
 ## Пример деплоя
 Деплой navi-back для региона Даммам
 1. Создать файл rules.conf в директории с helm-чартом
 ```
-[ 
+[
   {
     "name": "dammam_cr",
     "router_projects": [
@@ -189,7 +219,7 @@ dammam_data.json:
 ```
 Отправляем через curl например
 ```
-curl -Lv http://localhost:7777/carrouting/6.0.0/global -d @dammam_data.json 
+curl -Lv http://localhost:7777/carrouting/6.0.0/global -d @dammam_data.json
 ```
 
 Примерный вариант ответ:
