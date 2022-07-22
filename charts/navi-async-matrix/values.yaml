@@ -1,15 +1,13 @@
----
-
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: ''
+fullnameOverride: ''
 
 replicaCount: 1
 
 image:
-  repository: navi/dm-async-service-dev
+  repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
   # Chart.AppVersion if unset
-  tag:
+  tag: 1.0.0
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -18,7 +16,7 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  name: ''
 
 annotations: {}
 labels: {}
@@ -45,7 +43,7 @@ affinity: {}
 nodeSelector: {}
 tolerations: []
 
-priorityClassName: ""
+priorityClassName: ''
 
 podSecurityContext: {}
 securityContext: {}
@@ -75,15 +73,15 @@ service:
 
 ingress:
   enabled: false
-  className: ""
+  className: ''
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
+  - host: chart-example.local
+    paths:
+    - path: /
+      pathType: ImplementationSpecific
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -101,7 +99,7 @@ hpa:
 
 vpa:
   enabled: false
-  updateMode: "Auto"
+  updateMode: Auto
   minAllowed:
     cpu: 1000m
     memory: 1Gi
@@ -114,7 +112,7 @@ dm:
   port: 8000
   configType: env
   workerCount: 4
-  citiesUrl: 'http://example.com/cities.conf'
+  citiesUrl: http://example.com/cities.conf
   citiesUpdatePeriod: 3600
 
 db:
@@ -126,7 +124,7 @@ db:
   password: dbpassword
 
 kafka:
-  bootstrap: "example.com:9092"
+  bootstrap: example.com:9092
   groupId: test_id
   user: kafkauser
   password: kafkapassword
@@ -143,7 +141,7 @@ kafka:
     - dammam
 
 s3:
-  url: "https://example.com"
+  url: https://example.com
   bucket: samplebucket
   keyId: sampleid
   key: samplekey

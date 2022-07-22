@@ -13,8 +13,10 @@ keys
 	keys-ui:0.2.0
 mapgl-js-api
 	mapgl:v1.28.1
+navi-async-matrix
+	navi-async-matrix:1.0.0
 navi-back
-	navi-back:6.9.2
+	navi-back:6.10.1
 navi-castle
 	navi-castle:1.0.5
 	navi-front:1.21-ad06a0e0

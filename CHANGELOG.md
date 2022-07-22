@@ -1,5 +1,16 @@
 # 2GIS On-Premise Changelog
 
+## [1.3.0]
+#### Images
+```
+navi-back
+	- navi-back:6.9.2
+	+ navi-back:6.10.1
+navi-async-matrix
+	+ navi-async-matrix:1.0.0
+
+```
+
 ## [1.1.4]
 #### Images
 ```

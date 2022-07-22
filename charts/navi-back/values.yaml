@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 6.9.2
+  tag: 6.10.1
 
 imagePullSecrets: []
 nameOverride: ''
@@ -122,7 +122,7 @@ kafka:
 s3:
   # if s3.distance_matrix section included in config
   enabled: false
-  url: "example.com:80"
+  url: example.com:80
   bucket: samplebucket
   keyId: sampleid
   key: samplekey
