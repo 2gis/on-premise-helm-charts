@@ -1,0 +1,15 @@
+---
+
+apiVersion: v2
+name: navi-async-matrix
+description: Service implements asynchronous API over Distance Matrix
+
+type: application
+
+version: 0.0.1
+appVersion: 0.0.0
+
+maintainers:
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com
