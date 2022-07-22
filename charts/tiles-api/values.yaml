@@ -133,7 +133,7 @@ api:
   # @param api.image.repository Docker Repository.
   # @param api.image.tag Docker image tag.
   # @param api.image.pullPolicy Kubernetes pull policy for the service's Docker image.
-  # @param api.imagePullSecrets Kubernetes image pull secrets. 
+  # @param api.imagePullSecrets Kubernetes image pull secrets.
 
   image:
     repository: 2gis-on-premise/tiles-api
@@ -262,7 +262,7 @@ importer:
   # @param importer.image.repository Docker Repository.
   # @param importer.image.tag Docker image tag.
   # @param importer.image.pullPolicy Kubernetes pull policy for the service's Docker image.
-  # @param importer.imagePullSecrets Kubernetes image pull secrets. 
+  # @param importer.imagePullSecrets Kubernetes image pull secrets.
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
