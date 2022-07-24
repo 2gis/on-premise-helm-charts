@@ -32,7 +32,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `imagePullSecrets` | Kubernetes secrets for [pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/). | `[]`  |
 
 
-### Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                                 | Description                                          | Value   |
 | ------------------------------------ | ---------------------------------------------------- | ------- |
@@ -111,12 +111,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `search.url` | URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster. | `http://localhost:80` |
 
 
-### Keys dsxsxsxs
+### Keys
 
 | Name                          | Description                                                                                              | Value                   |
 | ----------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `keys.endpoint`               | URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster. | `https://keys-api.host` |
-| `keys.requestTimeout`         | Timeout, after which                                                                                     | `5s`                    |
+| `keys.requestTimeout`         | Timeout for requests to the Keys API.                                                                    | `5s`                    |
 | `keys.serviceKeys.places`     | Places API key (if available).                                                                           | `""`                    |
 | `keys.serviceKeys.geocoder`   | Geocoder API key (if available).                                                                         | `""`                    |
 | `keys.serviceKeys.suggest`    | Suggest API key (if available).                                                                          | `""`                    |

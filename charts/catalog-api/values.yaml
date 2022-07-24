@@ -15,7 +15,7 @@ podLabels: {}
 imagePullSecrets: []
 
 
-# @section Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 # @param podDisruptionBudget.enabled If PDB is enabled for the service.
 # @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
