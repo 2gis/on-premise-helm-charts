@@ -1,5 +1,20 @@
+# @section Common settings
+
+# @param external_hostname Service hostname.
+# @param external_proto Protocol to use: `http` or `https`.
+
 external_hostname: gis-platform
 external_proto: https
+
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Ingress class name.
+# @param ingress.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @extra ingress.hosts List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{'host': 'gis-platform.local'}]`.
+# @skip ingress.hosts[0].host
+# @param ingress.tls TLS settings.
 
 ingress:
   enabled: false
@@ -9,8 +24,48 @@ ingress:
   - host: gis-platform.local
   tls: []
 
+
+# @section Docker registry settings
+
+# @param spcore.image.repository SPCore service image repository.
+# @param spcore.image.tag SPCore service image tag.
+# @param portal.image.repository Portal service image repository.
+# @param portal.image.tag Portal service image tag.
+# @param zookeeper.image.repository ZooKeeper service image repository.
+# @param zookeeper.image.tag ZooKeeper service image tag.
+
+
+# @section SPCore service settings
+
+# @param spcore.replicaCount A replica count for the pod.
+# @param spcore.service Service settings.
+# @param spcore.debug_mode If the debug mode is enabled.
+# @param spcore.reset_cluster If true, the cluster will be reset when applying this configuration.
+# @param spcore.update_db If true, the database schema and data will be updated when applying this configuration.
+# @param spcore.terminationGracePeriodSeconds Wait for up to this amount of seconds for a running instance of the service to shut down.
+# @param spcore.cloud_port Cloud port.
+# @param spcore.http_port SPCore service HTTP port.
+# @param spcore.maxRenderTargets Maximum number of targets to render simultaneously.
+# @param spcore.loglevel Log level.
+
 spcore:
   replicaCount: 1
+
+  service: {}
+  debug_mode: false
+  reset_cluster: false
+  update_db: true
+  terminationGracePeriodSeconds: 60
+
+  cloud_port: 5050
+  http_port: 5051
+  maxRenderTargets: 1000
+  loglevel: Info
+
+  image:
+    repository: 2gis-on-premise/gis_platform_spcore
+    tag: '2022-06-10'
+
   resources:
     requests:
       cpu: 800m
@@ -18,17 +73,23 @@ spcore:
     limits:
       cpu: 800m
       memory: 4096Mi
-  service: {}
-  debug_mode: false
-  reset_cluster: false
-  update_db: true
-  terminationGracePeriodSeconds: 60
-  image:
-    repository: 2gis-on-premise/gis_platform_spcore
-    tag: '2022-06-10'
+
+  # @extra spcore.cors **CORS settings.**
+  # @param spcore.cors.allow_everyone If true, requests from any origin will be allowed.
+  # @param spcore.cors.origins List of allowed origins (if `allow_everyone` is false).
+
   cors:
     allow_everyone: false
     origins: []
+
+  # @extra spcore.s3 **S3-compatible storage settings.**
+  # @param spcore.s3.access_key S3 access key for accessing the bucket.
+  # @param spcore.s3.secret_key S3 secret key for accessing the bucket.
+  # @param spcore.s3.host S3 endpoint. Format: `host:port`.
+  # @param spcore.s3.region S3 region.
+  # @param spcore.s3.bucket S3 bucket name.
+  # @param spcore.s3.preview_bucket S3 bucket name for preview.
+
   s3:
     access_key: ''
     secret_key: ''
@@ -36,6 +97,15 @@ spcore:
     region: US
     bucket: spstatic
     preview_bucket: sppreview
+
+  # @extra spcore.pg **Database access settings.**
+  # @param spcore.pg.host PostgreSQL host.
+  # @param spcore.pg.port PostgreSQL port.
+  # @param spcore.pg.user PostgreSQL username.
+  # @param spcore.pg.password PostgreSQL password.
+  # @param spcore.pg.dbname PostgreSQL database name.
+  # @param spcore.pg.poolsize PostgreSQL connection pool size.
+
   pg:
     host: localhost
     port: 5432
@@ -43,40 +113,99 @@ spcore:
     password: dbpass
     dbname: gis-platform
     poolsize: 25
+
+  # @extra spcore.admin **Admin access settings.**
+  # @param spcore.admin.email Admin email
+  # @param spcore.admin.password Admin password
+
   admin:
     email: admin@example.com
     password: '123456'
+
+  # @extra spcore.jwt **JSON Web Token (JWT) settings.**
+  # @param spcore.jwt.token_key JWT default user token.
+  # @param spcore.jwt.token_admin JWT admin user token.
+
   jwt:
     token_key: supersecrettoken
     token_admin: supersecrettoken
+
+  # @extra spcore.catalog **Catalog settings.**
+  # @param spcore.catalog.url Catalog service URL.
+  # @param spcore.catalog.key Catalog access key.
+
   catalog:
     url: https://catalog.api.2gis.com
     key: ''
+
+  # @extra spcore.navi **Navi settings.**
+  # @param spcore.navi.url Navi service URL.
+
   navi:
     url: https://catalog.api.2gis.com
-  cloud_port: 5050
-  http_port: 5051
-  maxRenderTargets: 1000
-  loglevel: Info
+
+  # @extra spcore.defaultLimits **Default limits.**
+  # @param spcore.defaultLimits.tables Maximum number of tables.
+  # @param spcore.defaultLimits.layers Maximum number of layers.
+  # @param spcore.defaultLimits.projects Maximum number of projects.
+  # @param spcore.defaultLimits.features Maximum number of features.
+
   defaultLimits:
     tables: 500
     layers: 500
     projects: 1000
     features: 1000000
+
+  # @extra spcore.startupProbe **Startup probe settings.**
+  # @param spcore.startupProbe.initialDelaySeconds Seconds before the first probe.
+  # @param spcore.startupProbe.periodSeconds Probing period.
+  # @param spcore.startupProbe.failureThreshold Probing failure threshold.
+
   startupProbe:
     initialDelaySeconds: 5
     periodSeconds: 10
     failureThreshold: 30
+
+  # @extra spcore.readinessProbe **Readiness probe settings.**
+  # @param spcore.readinessProbe.initialDelaySeconds Seconds before the first probe.
+  # @param spcore.readinessProbe.periodSeconds Probing period.
+  # @param spcore.readinessProbe.failureThreshold Probing failure threshold.
+
   readinessProbe:
     initialDelaySeconds: 5
     periodSeconds: 5
     failureThreshold: 3
 
+
+# @section Portal settings
+
+# @param portal.replicaCount A replica count for the pod.
+# @param portal.terminationGracePeriodSeconds Wait for up to this amount of seconds for a running instance of the service to shut down.
+# @param portal.max_body_size Maximum HTTP request body size.
+# @param portal.gzip_enabled If GZip compression should be enabled for the HTTP requests and responses.
+
 portal:
   replicaCount: 1
+  terminationGracePeriodSeconds: 60
+  max_body_size: 100m
+  gzip_enabled: true
+
+  # @param portal.service.type Kubernetes [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param portal.service.port HTTP port.
+
   service:
     type: ClusterIP
     port: 80
+
+  # @param portal.websocket.timeout WebSocket timeout in seconds.
+
+  websocket:
+    timeout: 604800
+
+  image:
+    repository: 2gis-on-premise/gis_platform_portal
+    tag: '2022-06-10'
+
   resources:
     requests:
       cpu: 100m
@@ -84,10 +213,13 @@ portal:
     limits:
       cpu: 100m
       memory: 512Mi
-  terminationGracePeriodSeconds: 60
-  websocket:
-    timeout: 604800
-  max_body_size: 100m
+
+  # @extra portal.cache **Cache settings**
+  # @param portal.cache.enabled If caching should be enabled for the Portal service.
+  # @param portal.cache.size Maximum cache size.
+  # @param portal.cache.valid Cache vailidity period.
+  # @param portal.cache.regex Array of regexes to match the resources that should be cached.
+
   cache:
     enabled: false
     size: 1G
@@ -95,24 +227,31 @@ portal:
     regex:
     - ^/sp/wms.*layers=admin.satellite_imagery&.*$
     - ^/sp/wms.*layers=admin.2gis&.*$
-  gzip_enabled: true
+
+  # @extra portal.s3proxy **S3 storage proxy settings**
+  # @param portal.s3proxy.enabled If S3 proxy should be enabled.
+  # @param portal.s3proxy.scheme Protocol to use: `http` or `https`.
+
   s3proxy:
     enabled: false
     scheme: http
-  image:
-    repository: 2gis-on-premise/gis_platform_portal
-    tag: '2022-06-10'
+
+
+# @section ZooKeeper settings
+
+# @param zookeeper.replicaCount A replica count for the pod.
+# @param zookeeper.persistence.enabled If Kubernetes persistence volume should be enabled for ZooKeeper.
 
 zookeeper:
+  replicaCount: 3
+
+  persistence:
+    enabled: false
+
   image:
     repository: 2gis-on-premise/zookeeper
     tag: 3.7.0-debian-10-r265
-  pdb:
-    create: true
-    maxUnavailable: 1
-  replicaCount: 3
-  persistence:
-    enabled: false
+
   resources:
     requests:
       cpu: 100m
@@ -120,3 +259,32 @@ zookeeper:
     limits:
       cpu: 200m
       memory: 512Mi
+
+  # @extra zookeeper.pdb **Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings**
+  # @param zookeeper.pdb.create If PDB is enabled for the service.
+  # @param zookeeper.pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+  pdb:
+    create: true
+    maxUnavailable: 1
+
+
+# @section Limits
+
+# @extra spcore.resources **Limits for the SPCore service**
+# @param spcore.resources.requests.cpu A CPU request.
+# @param spcore.resources.requests.memory A memory request.
+# @param spcore.resources.limits.cpu A CPU limit.
+# @param spcore.resources.limits.memory A memory limit.
+
+# @extra portal.resources **Limits for the Portal service**
+# @param portal.resources.requests.cpu A CPU request.
+# @param portal.resources.requests.memory A memory request.
+# @param portal.resources.limits.cpu A CPU limit.
+# @param portal.resources.limits.memory A memory limit.
+
+# @extra zookeeper.resources **Limits for the ZooKeeper service**
+# @param zookeeper.resources.requests.cpu A CPU request.
+# @param zookeeper.resources.requests.memory A memory request.
+# @param zookeeper.resources.limits.cpu A CPU limit.
+# @param zookeeper.resources.limits.memory A memory limit.
