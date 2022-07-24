@@ -1,100 +1,204 @@
-# 2GIS API Keys service (Helm chart)
+# 2GIS API Keys service
 
-This repository contains a [Helm chart](https://helm.sh/docs/topics/charts/) for deploying the API Keys service. This
-service is part of 2GIS On-Premise services, which allow you to deploy [2GIS products](https://dev.2gis.com/) on your
-own sites.
+Use this Helm chart to deploy API Keys service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
 
-To learn more about 2GIS On-Premise services, visit [docs.2gis.com](https://docs.2gis.com/en/on-premise/overview).
+> **Note:**
+>
+> All On-Premise services are beta, and under development.
 
-## Installing
+See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about:
 
-Before installing API Keys service, make sure that you have a running PostgreSQL instance with installed `pg_trgm`
-extension.
+- Architecture of the service.
 
-To install the service create a YAML file that will contain:
+- Installing the service.
 
-- Registry URL of the service's Docker image
-- PostgreSQL access parameters
-- Keys API URL for Admin panel
+    When filling in the keys for `values-keys.yaml` configuration file, refer to the documentation and the list of keys below.
 
-```yaml
-# Docker image
-dgctlDockerRegistry: 'your-docker-hub-registry'
+- Updating the service.
 
-# PostgreSQL access
-db:
-  ro:
-    host: localhost
-    port: 5432
-    name: keys
-    username: keys
-    password: secret
-  rw:
-    host: localhost
-    port: 5432
-    name: keys
-    username: keys
-    password: secret
+## Values
 
-# LDAP
-ldap:
-  host: 2gis.local
-  port: 3268
+### Docker registry settings
 
-  useStartTLS: false
-  useLDAPS: false
-  skipServerCertificateVerify: false
-  serverName: ""
-  clientCertificatePath: ""
-  clientKeyPath: ""
-  rootCertificateAuthoritiesPath: ""
+| Name                       | Description                                                                             | Value                          |
+| -------------------------- | --------------------------------------------------------------------------------------- | ------------------------------ |
+| `dgctlDockerRegistry`      | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`                           |
+| `imagePullSecrets`         | Kubernetes image pull secrets.                                                          | `[]`                           |
+| `imagePullPolicy`          | Pull policy.                                                                            | `IfNotPresent`                 |
+| `backend.image.repository` | Backend service image repository.                                                       | `2gis-on-premise/keys-backend` |
+| `backend.image.tag`        | Backend service image tag.                                                              | `1.30.1`                       |
+| `admin.image.repository`   | Admin service image repository.                                                         | `2gis-on-premise/keys-ui`      |
+| `admin.image.tag`          | Admin service image tag.                                                                | `0.2.0`                        |
+| `redis.image.repository`   | Redis image repository.                                                                 | `2gis-on-premise/keys-redis`   |
+| `redis.image.tag`          | Redis image tag.                                                                        | `6.2.6-alpine3.15`             |
 
-  bind:
-    dn: user
-    password: secret
-  search:
-    baseDN: "dc=2gis"
-    filter: "(&(objectClass=user)(sAMAccountName=%s))"
 
-# Admin
-admin:
-  apiUrl: "https://api.url/admin/v1"
-  appHost: "https://app.host"
-```
+### Admin service settings
 
-To install/upgrade use `helm upgrade` command and specify path to the created file with values:
+| Name                        | Description                                                                                                                    | Value                      |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `admin.replicas`            | A replica count for the pod.                                                                                                   | `1`                        |
+| `admin.apiUrl`              | Base URL for the admin API.                                                                                                    | `https://api.url/admin/v1` |
+| `admin.appHost`             | Base URL for the admin web interface.                                                                                          | `https://app.host`         |
+| `admin.annotations`         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                      | `{}`                       |
+| `admin.labels`              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                | `{}`                       |
+| `admin.podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                  | `{}`                       |
+| `admin.podLabels`           | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                            | `{}`                       |
+| `admin.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).            | `{}`                       |
+| `admin.affinity`            | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).    | `{}`                       |
+| `admin.tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.              | `{}`                       |
+| `admin.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`                       |
+| `admin.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`                       |
+| `admin.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`                |
+| `admin.service.port`        | Tiles API service port.                                                                                                        | `80`                       |
+| `admin.ingress`             | If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.                     | `{}`                       |
 
-```shell
-helm repo add 2gis-on-premise https://2gis.github.io/on-premise-helm-charts
 
-helm upgrade keys 2gis-on-premise/keys \
-  --install --atomic --wait-for-jobs \
-  --values custom-values.yaml 
-```
+### API service settings
 
-Add users that can authorize in AD/LDAP (users don't sync between systems) using `keysctl` inside any `keys-api` pod:
+| Name                                     | Description                                                                                                                                                    | Value       |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `api.adminUsers`                         | Usernames and passwords of admin users. Format: `username1:password1,username2:password2`.                                                                     | `""`        |
+| `api.replicas`                           | A replica count for the pod.                                                                                                                                   | `1`         |
+| `api.hpa.enabled`                        | If [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) is enabled for the service.                        | `false`     |
+| `api.hpa.maxReplicas`                    | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                   | `2`         |
+| `api.hpa.minReplicas`                    | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                 | `1`         |
+| `api.hpa.targetCPUUtilizationPercentage` | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used. | `80`        |
+| `api.annotations`                        | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                      | `{}`        |
+| `api.labels`                             | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                | `{}`        |
+| `api.podAnnotations`                     | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                  | `{}`        |
+| `api.podLabels`                          | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                            | `{}`        |
+| `api.nodeSelector`                       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                            | `{}`        |
+| `api.affinity`                           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                    | `{}`        |
+| `api.tolerations`                        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                              | `{}`        |
+| `api.service.annotations`                | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                              | `{}`        |
+| `api.service.labels`                     | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                        | `{}`        |
+| `api.service.type`                       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                 | `ClusterIP` |
+| `api.service.port`                       | Tiles API service port.                                                                                                                                        | `80`        |
+| `api.ingress`                            | If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.                                                     | `{}`        |
 
-```shell
-keysctl users add "username" "Display Name"
-```
 
-If you haven't LDAP or LDAP don't work, you may to set value of `api.adminUsers`
-with list of usernames and passwords (will be store in secret). For example: `username:password` (single user),
-`username1:password1,username2:password2` (multiple users).
+### Import service settings
 
-Get list of services with their API keys:
+| Name                  | Description                                                                                                         | Value |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
+| `import.nodeSelector` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`  |
 
-```shell
-keysctl services
-```
 
-## Updating
+### Migrate service settings
 
-To update the service data or apps after changing the settings or after updating the Docker image, use
-the `helm upgrade` command:
+| Name                          | Description                                                                                                         | Value |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
+| `migrate.initialDelaySeconds` | Delay in seconds at the service startup.                                                                            | `0`   |
+| `migrate.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`  |
 
-```bash
-helm upgrade keys 2gis-on-premise/keys \
-  --atomic --wait-for-jobs \
-  --values custom-values.yaml
-```
+
+### Tasker service settings
+
+| Name                    | Description                                                                                                                 | Value |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `tasker.delay`          | Delay in seconds at the service startup.                                                                                    | `30s` |
+| `tasker.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
+| `tasker.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
+| `tasker.podAnnotations` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
+| `tasker.podLabels`      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
+| `tasker.nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
+| `tasker.affinity`       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
+| `tasker.tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`  |
+
+
+### Redis settings
+
+| Name                   | Description                                                                                                                 | Value             |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `redis.port`           | HTTP port for Redis to listen.                                                                                              | `6379`            |
+| `redis.configPath`     | Configuration file for Redis.                                                                                               | `/opt/redis.conf` |
+| `redis.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`              |
+| `redis.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`              |
+| `redis.podAnnotations` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`              |
+| `redis.podLabels`      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`              |
+| `redis.nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`              |
+| `redis.affinity`       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`              |
+| `redis.tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`              |
+
+
+### Database access settings
+
+| Name             | Description                            | Value       |
+| ---------------- | -------------------------------------- | ----------- |
+| `db.ro`          | **Settings for the read-only access**  |             |
+| `db.ro.host`     | PostgreSQL host.                       | `localhost` |
+| `db.ro.port`     | PostgreSQL port.                       | `5432`      |
+| `db.ro.name`     | PostgreSQL database name.              | `keys`      |
+| `db.ro.username` | PostgreSQL username.                   | `keys`      |
+| `db.ro.password` | PostgreSQL password.                   | `secret`    |
+| `db.rw`          | **Settings for the read-write access** |             |
+| `db.rw.host`     | PostgreSQL host.                       | `localhost` |
+| `db.rw.port`     | PostgreSQL port.                       | `5432`      |
+| `db.rw.name`     | PostgreSQL database name.              | `keys`      |
+| `db.rw.username` | PostgreSQL username.                   | `keys`      |
+| `db.rw.password` | PostgreSQL password.                   | `secret`    |
+
+
+### LDAP connection settings
+
+| Name                                  | Description                                        | Value                                      |
+| ------------------------------------- | -------------------------------------------------- | ------------------------------------------ |
+| `ldap.host`                           | LDAP host.                                         | `2gis.local`                               |
+| `ldap.port`                           | LDAP port.                                         | `3268`                                     |
+| `ldap.useStartTLS`                    | If LDAP should use TLS.                            | `false`                                    |
+| `ldap.useLDAPS`                       | Use LDAPS instead of LDAP.                         | `false`                                    |
+| `ldap.skipServerCertificateVerify`    | Trust the server certificate without verification. | `false`                                    |
+| `ldap.serverName`                     | Server name.                                       | `""`                                       |
+| `ldap.clientCertificatePath`          | Path to client certificate for authentication.     | `""`                                       |
+| `ldap.clientKeyPath`                  | Path to client key for authentication.             | `""`                                       |
+| `ldap.rootCertificateAuthoritiesPath` | Path to the Root CA certificate.                   | `""`                                       |
+| `ldap.bind`                           | **LDAP bind settings**                             |                                            |
+| `ldap.bind.dn`                        | LDAP distinguished name.                           | `user`                                     |
+| `ldap.bind.password`                  | LDAP password.                                     | `secret`                                   |
+| `ldap.search`                         | **LDAP search settings**                           |                                            |
+| `ldap.search.baseDN`                  | LDAP base distinguished name.                      | `dc=2gis`                                  |
+| `ldap.search.filter`                  | LDAP search filter.                                | `(&(objectClass=user)(sAMAccountName=%s))` |
+
+
+### Limits
+
+| Name                                | Description                        | Value   |
+| ----------------------------------- | ---------------------------------- | ------- |
+| `admin.resources`                   | **Limits for the Admin service**   |         |
+| `admin.resources.requests.cpu`      | A CPU request.                     | `300m`  |
+| `admin.resources.requests.memory`   | A memory request.                  | `256Mi` |
+| `admin.resources.limits.cpu`        | A CPU limit.                       | `1`     |
+| `admin.resources.limits.memory`     | A memory limit.                    | `384Mi` |
+| `api.resources`                     | **Limits for the API service**     |         |
+| `api.resources.requests.cpu`        | A CPU request.                     | `50m`   |
+| `api.resources.requests.memory`     | A memory request.                  | `128Mi` |
+| `api.resources.limits.cpu`          | A CPU limit.                       | `1`     |
+| `api.resources.limits.memory`       | A memory limit.                    | `256Mi` |
+| `import.resources`                  | **Limits for the Import service**  |         |
+| `import.resources.requests.cpu`     | A CPU request.                     | `10m`   |
+| `import.resources.requests.memory`  | A memory request.                  | `32Mi`  |
+| `import.resources.limits.cpu`       | A CPU limit.                       | `100m`  |
+| `import.resources.limits.memory`    | A memory limit.                    | `64Mi`  |
+| `migrate.resources`                 | **Limits for the Migrate service** |         |
+| `migrate.resources.requests.cpu`    | A CPU request.                     | `10m`   |
+| `migrate.resources.requests.memory` | A memory request.                  | `32Mi`  |
+| `migrate.resources.limits.cpu`      | A CPU limit.                       | `100m`  |
+| `migrate.resources.limits.memory`   | A memory limit.                    | `64Mi`  |
+| `tasker.resources`                  | **Limits for the Tasker service**  |         |
+| `tasker.resources.requests.cpu`     | A CPU request.                     | `10m`   |
+| `tasker.resources.requests.memory`  | A memory request.                  | `32Mi`  |
+| `tasker.resources.limits.cpu`       | A CPU limit.                       | `100m`  |
+| `tasker.resources.limits.memory`    | A memory limit.                    | `64Mi`  |
+| `redis.resources`                   | **Limits for Redis**               |         |
+| `redis.resources.requests.cpu`      | A CPU request.                     | `50m`   |
+| `redis.resources.requests.memory`   | A memory request.                  | `32Mi`  |
+| `redis.resources.limits.cpu`        | A CPU limit.                       | `1`     |
+| `redis.resources.limits.memory`     | A memory limit.                    | `256Mi` |
+
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| 2gis | <on-premise@2gis.com> | <https://github.com/2gis> |
