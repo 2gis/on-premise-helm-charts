@@ -121,7 +121,7 @@ After deployment completes, service will be available at http(s)://MAPGL_HOST ad
 | `resources.limits.memory`   | A memory limit.   | `64M`  |
 
 
-### Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                                 | Description                                          | Value   |
 | ------------------------------------ | ---------------------------------------------------- | ------- |
