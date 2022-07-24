@@ -96,7 +96,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `service.port`        | Tiles API service port.                                                                                                        | `80`        |
 
 
-### Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                                 | Description                                          | Value  |
 | ------------------------------------ | ---------------------------------------------------- | ------ |
