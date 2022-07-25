@@ -226,6 +226,7 @@ data:
           }
         },
         {{- if ne .Values.naviback.type "ctx" }}
+
         "smatrix": {
           "update_period": 0,
           "nodes": [
@@ -344,6 +345,37 @@ data:
                 }
               },
         {{- end }}
+        {{- if .Values.s3.enabled }}
+          "s3": {
+            "distance_matrix": {
+              "endpoint": {{ .Values.s3.url | quote }},
+              "bucket": {{ .Values.s3.bucket | quote }},
+              "access_key": {{ .Values.s3.keyId | quote }},
+              "secret_key": {{ .Values.s3.key | quote }}
+            }
+          },
+        {{- end }}
+        {{- if .Values.kafka.enabled }}
+          "kafka": {
+            "server" : {{ .Values.kafka.server | quote }},
+            "port" : {{ .Values.kafka.port | int }},
+            "user": {{ .Values.kafka.user | quote }},
+            "password": {{ .Values.kafka.password | quote }},
+            "sasl_mechanism": {{ .Values.kafka.mechanism | quote }},
+            "security_protocol": {{ .Values.kafka.protocol | quote }},
+            "task_group_id" : {{ .Values.kafka.groupId | quote }},
+            "cancel_group_id": {{ .Values.kafka.groupId | quote }},
+            "distance_matrix": {
+              "task_topic": {{ .Values.kafka.distanceMatrix.taskTopic | quote }},
+              "cancel_topic":  {{ .Values.kafka.distanceMatrix.cancelTopic | quote }},
+              "status_topic":  {{ .Values.kafka.distanceMatrix.statusTopic | quote }},
+              "update_task_status_period_sec": {{ .Values.kafka.distanceMatrix.updateTaskStatusPeriodSec | int }},
+              "message_expired_period_sec" : {{ .Values.kafka.distanceMatrix.messageExpiredPeriodSec | int }},
+              "request_download_timeout_sec" : {{ .Values.kafka.distanceMatrix.requestDownloadTimeoutSec | int }},
+              "response_upload_timeout_sec": {{ .Values.kafka.distanceMatrix.responseUploadTimeoutSec | int }}
+            }
+          },
+        {{- end }}
         {{- if .Values.naviback.additional_sections }}
           {{- include "tplvalues.render" ( dict "value" .Values.naviback.additional_sections "context" $) | nindent 8 }}
         {{- end }}
@@ -362,7 +394,7 @@ data:
           "attractor_taxi" : {{ .Values.naviback.attractor_taxi | default "false" }},
           "reduce_edges_optimization_flag" : {{ .Values.naviback.reduce_edges_optimization_flag | default "false" }},
           {{- end }}
-          {{- if .Values.resources.limits.cpu }}
+          {{- if ((.Values.resources).limits).cpu }}
           "dist_matrix_thread_pool_size" : {{ include "config.setDistMatrixPool" . }},
           {{- end }}
           "simple_network_emergency" : {{ .Values.naviback.simple_network_emergency | default "false" }},
@@ -404,5 +436,3 @@ data:
     }
   rules.conf: |-
    {{- include "rules.renderRules" . }}
-
-

@@ -1,12 +1,12 @@
 apiVersion: v2
-name: navi-front
-description: Navigation front Helm chart for Kubernetes
+name: navi-async-matrix
+description: Service implements asynchronous API over Distance Matrix
+
 type: application
-keywords:
-- navi
-- front
+
 version: 1.3.0
-appVersion: 1.21-ad06a0e0
+appVersion: 1.0.0
+
 maintainers:
 - name: 2gis
   url: https://github.com/2gis

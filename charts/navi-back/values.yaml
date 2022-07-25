@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 6.9.2
+  tag: 6.10.1
 
 imagePullSecrets: []
 nameOverride: ''
@@ -65,6 +65,15 @@ resources:
     cpu: 500m
     memory: 1024Mi
 
+# resources for test-connection
+testResources:
+  limits:
+    cpu: 100m
+    memory: 100Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi
+
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -88,3 +97,32 @@ podDisruptionBudget: {}
 
 naviback:
   app_port: 8080
+
+rules: []
+
+kafka:
+  # if kafka and kafka.distance_matrix sections included in config
+  enabled: false
+  server: example.com
+  port: 9092
+  groupId: test_id
+  user: kafkauser
+  password: kafkapassword
+  mechanism: SCRAM-SHA-512
+  protocol: SASL_SSL
+  distanceMatrix:
+    taskTopic: request_topic
+    cancelTopic: cancel_topic
+    statusTopic: service_message_bus
+    updateTaskStatusPeriodSec: 120
+    messageExpiredPeriodSec: 3600
+    requestDownloadTimeoutSec: 20
+    responseUploadTimeoutSec: 40
+
+s3:
+  # if s3.distance_matrix section included in config
+  enabled: false
+  url: example.com:80
+  bucket: samplebucket
+  keyId: sampleid
+  key: samplekey

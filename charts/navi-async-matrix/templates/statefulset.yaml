@@ -1,0 +1,170 @@
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "navi-async-matrix.fullname" . }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "navi-async-matrix.labels" . | nindent 4 }}
+  {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "navi-async-matrix.fullname" . }}
+  {{- if .Values.updateStrategy }}
+  updateStrategy:
+    {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "navi-async-matrix.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      annotations:
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: {{ .Values.dm.port | quote }}
+        {{- if .Values.prometheusEnabled }}
+        prometheus.io/scrape: "true"
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "navi-async-matrix.labels" . | nindent 8 }}
+      {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "navi-async-matrix.serviceAccountName" . }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.dm.port | int }}
+              protocol: TCP
+          livenessProbe: &healthProbe
+            httpGet:
+              path: /healthcheck
+              port: http
+            failureThreshold: 5
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 5
+          readinessProbe: *healthProbe
+          # exposing Pod's ordinal is not yet achieved:
+          # https://github.com/kubernetes/kubernetes/issues/30427
+          # here is a workaround for that
+          command:
+            - uvicorn
+            - src.main:app
+            - '--host'
+            - '0.0.0.0'
+            - '--port'
+            - '{{ .Values.dm.port | int }}'
+          env:
+            - name: CONFIG_TYPE
+              value: {{ .Values.dm.configType | quote }}
+            - name: DM_ASYNC_SERVICE_WORKER_COUNT
+              value: {{ .Values.dm.workerCount | quote }}
+            - name: DM_ASYNC_SERVICE_CITIES_SETTING__LINK_TO_CITIES_FILE
+              value: {{ .Values.dm.citiesUrl | quote }}
+            - name: DM_ASYNC_SERVICE_CITIES_SETTING__CITIES_INFO_UPDATE_PERIOD
+              value: {{ .Values.dm.citiesUpdatePeriod | quote }}
+            - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_USE_MINIO
+              value: 'true'
+            - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__AWS_ACCESS_KEY_ID
+              value: {{ .Values.s3.keyId | quote }}
+            - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__S3_ENDPOINT_URL
+              value: {{ .Values.s3.url | quote }}
+            - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__S3_BUCKET
+              value: {{ .Values.s3.bucket | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_TASK_TOPIC
+              value: {{ .Values.kafka.consumerTaskTopic | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CANCEL_TOPIC
+              value: {{ .Values.kafka.consumerCancelTopic | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__GROUP_ID
+              value: {{ .Values.kafka.groupId | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__BOOTSTRAP_SERVERS
+              value: {{ .Values.kafka.bootstrap | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__BOOTSTRAP_SERVERS
+              value: {{ .Values.kafka.bootstrap | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__SECURITY_PROTOCOL
+              value: {{ .Values.kafka.protocol | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__SECURITY_PROTOCOL
+              value: {{ .Values.kafka.protocol | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__SASL_MECHANISM
+              value: {{ .Values.kafka.mechanism | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__SASL_MECHANISM
+              value: {{ .Values.kafka.mechanism | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__SASL_PLAIN_USERNAME
+              value: {{ .Values.kafka.user | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__SASL_PLAIN_USERNAME
+              value: {{ .Values.kafka.user | quote }}
+            - name: DM_ASYNC_SERVICE_TOPIC_RULES
+              value: {{ .Values.kafka.topicRules | mustToJson | quote }}
+            - name: DM_ASYNC_SERVICE_NODE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            # sensitive data
+            - name: DM_ASYNC_SERVICE_DB_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  key: dbDsn
+            - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  key: s3key
+            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__SASL_PLAIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  key: kafkaPassword
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__SASL_PLAIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  key: kafkaPassword

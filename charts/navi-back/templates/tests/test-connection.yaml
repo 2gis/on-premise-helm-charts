@@ -11,5 +11,7 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
+      resources:
+        {{- toYaml .Values.testResources | nindent 8 }}
       args: ['{{ include "naviback.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never
