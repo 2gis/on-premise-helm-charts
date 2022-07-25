@@ -5,6 +5,7 @@ workers: {{ .Values.importer.workerNum }}
 data-type: {{ .Values.type }}
 force-import: {{ .Values.importer.forceImport }}
 clear-snapshots: {{ .Values.importer.clearSnapshots }}
+cassandra-hosts-clock-time-check-limit: {{ .Values.importer.cassandraHostsClockTimeCheckLimit }}
 
 credentials:
   user: {{ .Values.cassandra.credentials.user }}
