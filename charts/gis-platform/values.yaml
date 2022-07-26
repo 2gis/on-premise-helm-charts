@@ -3,7 +3,7 @@
 # @param external_hostname Service hostname.
 # @param external_proto Protocol to use: `http` or `https`.
 
-external_hostname: gis-platform
+external_hostname: gis-platform.host
 external_proto: https
 
 
@@ -12,7 +12,7 @@ external_proto: https
 # @param ingress.enabled If Ingress is enabled for the service.
 # @param ingress.className Ingress class name.
 # @param ingress.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @extra ingress.hosts List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{'host': 'gis-platform.local'}]`.
+# @extra ingress.hosts List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{'host': 'gis-platform.host'}]`.
 # @skip ingress.hosts[0].host
 # @param ingress.tls TLS settings.
 
@@ -21,7 +21,7 @@ ingress:
   className: nginx
   annotations: {}
   hosts:
-  - host: gis-platform.local
+  - host: gis-platform.host
   tls: []
 
 
@@ -93,7 +93,7 @@ spcore:
   s3:
     access_key: ''
     secret_key: ''
-    host: s3.example.com
+    host: s3.host
     region: US
     bucket: spstatic
     preview_bucket: sppreview
@@ -107,7 +107,7 @@ spcore:
   # @param spcore.pg.poolsize PostgreSQL connection pool size.
 
   pg:
-    host: localhost
+    host: postgres.host
     port: 5432
     user: gisadmin
     password: dbpass
@@ -135,14 +135,14 @@ spcore:
   # @param spcore.catalog.key Catalog access key.
 
   catalog:
-    url: https://catalog.api.2gis.com
+    url: https://catalog-api.host
     key: ''
 
   # @extra spcore.navi **Navi settings.**
   # @param spcore.navi.url Navi service URL.
 
   navi:
-    url: https://catalog.api.2gis.com
+    url: https://catalog-api.host
 
   # @extra spcore.defaultLimits **Default limits.**
   # @param spcore.defaultLimits.tables Maximum number of tables.
