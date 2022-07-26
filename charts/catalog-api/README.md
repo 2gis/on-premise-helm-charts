@@ -95,20 +95,20 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Database settings
 
-| Name          | Description               | Value       |
-| ------------- | ------------------------- | ----------- |
-| `db.host`     | PostgreSQL host.          | `localhost` |
-| `db.port`     | PostgreSQL port.          | `5432`      |
-| `db.name`     | PostgreSQL database name. | `catalog`   |
-| `db.username` | PostgreSQL username.      | `postgres`  |
-| `db.password` | PostgreSQL password.      | `secret`    |
+| Name          | Description               | Value           |
+| ------------- | ------------------------- | --------------- |
+| `db.host`     | PostgreSQL host.          | `postgres.host` |
+| `db.port`     | PostgreSQL port.          | `5432`          |
+| `db.name`     | PostgreSQL database name. | `catalog`       |
+| `db.username` | PostgreSQL username.      | `postgres`      |
+| `db.password` | PostgreSQL password.      | `secret`        |
 
 
 ### Search
 
-| Name         | Description                                                                                                | Value                 |
-| ------------ | ---------------------------------------------------------------------------------------------------------- | --------------------- |
-| `search.url` | URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster. | `http://localhost:80` |
+| Name         | Description                                                                                                | Value                    |
+| ------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `search.url` | URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster. | `http://search-api.host` |
 
 
 ### Keys

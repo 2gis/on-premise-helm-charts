@@ -106,7 +106,7 @@ api:
 # @param db.password PostgreSQL password.
 
 db:
-  host: localhost
+  host: postgres.host
   port: 5432
   name: catalog
   username: postgres
@@ -118,7 +118,7 @@ db:
 # @param search.url URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster.
 
 search:
-  url: http://localhost:80
+  url: http://search-api.host
 
 
 # @section Keys
