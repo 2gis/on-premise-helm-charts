@@ -18,33 +18,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 - Updating the service.
 
-## Installing the Chart
-
-To install the chart, create a YAML file with the registry URL of the service's Docker image.
-
-```yaml
-dgctlDockerRegistry: 'your-docker-hub-registry'
-```
-
-Then, add 2gis helm repository and call the `helm install` command and specify the name of the chart and the created file:
-
-```bash
-helm repo add 2gis-on-premise https://2gis.github.io/on-premise-helm-charts
-helm install mapgl 2gis-on-premise/mapgl-js-api -f values.yaml
-```
-
-## Upgrading
-
-To upgrade the chart after changing the values or after updating the Docker image, call the `helm upgrade` command:
-
-```bash
-helm upgrade mapgl 2gis-on-premise/mapgl-js-api -f values.yaml
-```
-
-## Testing the deployment
-
-After deployment completes, service will be available at http(s)://MAPGL_HOST address. You can see there working map if MapGL JS API and Tiles API services were set up correctly.
-
 ## Values
 
 ### Common settings
@@ -87,11 +60,11 @@ After deployment completes, service will be available at http(s)://MAPGL_HOST ad
 
 ### Strategy settings
 
-| Name                                    | Description                                                                                                                                                                          | Value           |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                 | `RollingUpdate` |
-| `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.                                                           | `0`             |
-| `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process. | `1`             |
+| Name                                    | Description                                                                                                                                                                                              | Value           |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
+| `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
+| `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
 
 
 ### Service settings
