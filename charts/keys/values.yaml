@@ -42,8 +42,8 @@ admin:
   # @param admin.apiUrl Base URL for the admin API.
   # @param admin.appHost Base URL for the admin web interface.
 
-  apiUrl: https://api.url/admin/v1
-  appHost: https://app.host
+  apiUrl: https://keys-api.host/admin/v1
+  appHost: https://keys.host
 
   # @param admin.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param admin.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -278,7 +278,7 @@ db:
   # @param db.ro.password PostgreSQL password.
 
   ro:
-    host: localhost
+    host: postgres.host
     port: 5432
     name: keys
     username: keys
@@ -293,7 +293,7 @@ db:
   # @param db.rw.password PostgreSQL password.
 
   rw:
-    host: localhost
+    host: postgres.host
     port: 5432
     name: keys
     username: keys
@@ -313,7 +313,7 @@ db:
 # @param ldap.rootCertificateAuthoritiesPath Path to the Root CA certificate.
 
 ldap:
-  host: 2gis.local
+  host: 2gis-ldap.host
   port: 3268
 
   useStartTLS: false

@@ -35,23 +35,23 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Admin service settings
 
-| Name                        | Description                                                                                                                    | Value                      |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `admin.replicas`            | A replica count for the pod.                                                                                                   | `1`                        |
-| `admin.apiUrl`              | Base URL for the admin API.                                                                                                    | `https://api.url/admin/v1` |
-| `admin.appHost`             | Base URL for the admin web interface.                                                                                          | `https://app.host`         |
-| `admin.annotations`         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                      | `{}`                       |
-| `admin.labels`              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                | `{}`                       |
-| `admin.podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                  | `{}`                       |
-| `admin.podLabels`           | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                            | `{}`                       |
-| `admin.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).            | `{}`                       |
-| `admin.affinity`            | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).    | `{}`                       |
-| `admin.tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.              | `{}`                       |
-| `admin.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`                       |
-| `admin.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`                       |
-| `admin.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`                |
-| `admin.service.port`        | Tiles API service port.                                                                                                        | `80`                       |
-| `admin.ingress`             | If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.                     | `{}`                       |
+| Name                        | Description                                                                                                                    | Value                            |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
+| `admin.replicas`            | A replica count for the pod.                                                                                                   | `1`                              |
+| `admin.apiUrl`              | Base URL for the admin API.                                                                                                    | `https://keys-api.host/admin/v1` |
+| `admin.appHost`             | Base URL for the admin web interface.                                                                                          | `https://keys.host`              |
+| `admin.annotations`         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                      | `{}`                             |
+| `admin.labels`              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                | `{}`                             |
+| `admin.podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                  | `{}`                             |
+| `admin.podLabels`           | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                            | `{}`                             |
+| `admin.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).            | `{}`                             |
+| `admin.affinity`            | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).    | `{}`                             |
+| `admin.tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.              | `{}`                             |
+| `admin.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`                             |
+| `admin.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`                             |
+| `admin.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`                      |
+| `admin.service.port`        | Tiles API service port.                                                                                                        | `80`                             |
+| `admin.ingress`             | If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.                     | `{}`                             |
 
 
 ### API service settings
@@ -124,27 +124,27 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Database access settings
 
-| Name             | Description                            | Value       |
-| ---------------- | -------------------------------------- | ----------- |
-| `db.ro`          | **Settings for the read-only access**  |             |
-| `db.ro.host`     | PostgreSQL host.                       | `localhost` |
-| `db.ro.port`     | PostgreSQL port.                       | `5432`      |
-| `db.ro.name`     | PostgreSQL database name.              | `keys`      |
-| `db.ro.username` | PostgreSQL username.                   | `keys`      |
-| `db.ro.password` | PostgreSQL password.                   | `secret`    |
-| `db.rw`          | **Settings for the read-write access** |             |
-| `db.rw.host`     | PostgreSQL host.                       | `localhost` |
-| `db.rw.port`     | PostgreSQL port.                       | `5432`      |
-| `db.rw.name`     | PostgreSQL database name.              | `keys`      |
-| `db.rw.username` | PostgreSQL username.                   | `keys`      |
-| `db.rw.password` | PostgreSQL password.                   | `secret`    |
+| Name             | Description                            | Value           |
+| ---------------- | -------------------------------------- | --------------- |
+| `db.ro`          | **Settings for the read-only access**  |                 |
+| `db.ro.host`     | PostgreSQL host.                       | `postgres.host` |
+| `db.ro.port`     | PostgreSQL port.                       | `5432`          |
+| `db.ro.name`     | PostgreSQL database name.              | `keys`          |
+| `db.ro.username` | PostgreSQL username.                   | `keys`          |
+| `db.ro.password` | PostgreSQL password.                   | `secret`        |
+| `db.rw`          | **Settings for the read-write access** |                 |
+| `db.rw.host`     | PostgreSQL host.                       | `postgres.host` |
+| `db.rw.port`     | PostgreSQL port.                       | `5432`          |
+| `db.rw.name`     | PostgreSQL database name.              | `keys`          |
+| `db.rw.username` | PostgreSQL username.                   | `keys`          |
+| `db.rw.password` | PostgreSQL password.                   | `secret`        |
 
 
 ### LDAP connection settings
 
 | Name                                  | Description                                        | Value                                      |
 | ------------------------------------- | -------------------------------------------------- | ------------------------------------------ |
-| `ldap.host`                           | LDAP host.                                         | `2gis.local`                               |
+| `ldap.host`                           | LDAP host.                                         | `2gis-ldap.host`                           |
 | `ldap.port`                           | LDAP port.                                         | `3268`                                     |
 | `ldap.useStartTLS`                    | If LDAP should use TLS.                            | `false`                                    |
 | `ldap.useLDAPS`                       | Use LDAPS instead of LDAP.                         | `false`                                    |
