@@ -81,7 +81,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 | Name                                    | Description                                                                                                                                                                          | Value           |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `strategy.type`                         |                                                                                                                                                                                      | `RollingUpdate` |
+| `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                 | `RollingUpdate` |
 | `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.                                                           | `0`             |
 | `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process. | `1`             |
 
