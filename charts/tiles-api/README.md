@@ -82,7 +82,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `proxy.image.pullPolicy`          | Kubernetes pull policy for the service's Docker image.                                                                        | `IfNotPresent`                    |
 | `proxy.access`                    | **API Keys service access settings**                                                                                          |                                   |
 | `proxy.access.enabled`            | If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.                                     | `false`                           |
-| `proxy.access.host`               | API Keys endpoint hostname.                                                                                                   | `http://keys-api.localhost`       |
+| `proxy.access.host`               | API Keys endpoint hostname.                                                                                                   | `http://keys-api.host`            |
 | `proxy.access.token`              | Service key for Keys API.                                                                                                     | `""`                              |
 | `proxy.access.syncPeriod`         | Proxy sync period.                                                                                                            | `2m`                              |
 

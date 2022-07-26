@@ -99,7 +99,7 @@ proxy:
 
   access:
     enabled: false
-    host: http://keys-api.localhost
+    host: http://keys-api.host
     token: ''
     syncPeriod: 2m
 
