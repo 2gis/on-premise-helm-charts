@@ -12,7 +12,7 @@ metadata:
     {{- include "navi-restrictions.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.api.hpa.enabled }}
-  replicas: {{ .Values.api.replicas }}
+  replicas: {{ .Values.replicaCount }}
   {{- end }}
   {{- if .Values.strategy }}
   strategy:
