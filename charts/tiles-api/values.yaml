@@ -99,7 +99,7 @@ proxy:
 
   access:
     enabled: false
-    host: http://keys-api.localhost
+    host: http://keys-api.host
     token: ''
     syncPeriod: 2m
 
@@ -202,9 +202,9 @@ api:
       paths:
       - path: /
 
-  # @extra api.pdb **Kubernetes [pod diruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings**
+  # @extra api.pdb **Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings**
   # @param api.pdb.enabled If PDB is enabled for the service.
-  # @param api.pdb.maxUnavailable How many pods must always be available, even during a disruption.
+  # @param api.pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
   pdb:
     enabled: true
