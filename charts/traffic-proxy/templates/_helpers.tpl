@@ -1,8 +1,8 @@
-{{- define "proxy-traffic-jams.name" -}}
+{{- define "traffic-proxy.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "proxy-traffic-jams.fullname" -}}
+{{- define "traffic-proxy.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -15,18 +15,18 @@
 {{- end -}}
 {{- end -}}
 
-{{- define "proxy-traffic-jams.chart" -}}
+{{- define "traffic-proxy.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "proxy-traffic-jams.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "proxy-traffic-jams.name" . }}
+{{- define "traffic-proxy.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "traffic-proxy.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
-{{- define "proxy-traffic-jams.labels" -}}
-helm.sh/chart: {{ include "proxy-traffic-jams.chart" . }}
-{{ include "proxy-traffic-jams.selectorLabels" . }}
+{{- define "traffic-proxy.labels" -}}
+helm.sh/chart: {{ include "traffic-proxy.chart" . }}
+{{ include "traffic-proxy.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
