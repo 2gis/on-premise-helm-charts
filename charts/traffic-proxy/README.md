@@ -1,24 +1,112 @@
-# Proxy Traffic Jams
+# Traffic Proxy API
 
-The repository contains an HTTP server for proxying service traffic-jams
+Use this Helm chart to deploy Traffic Proxy API service, which is a part of 2GIS's [On-Premise Traffic Proxy services](https://docs.2gis.com/en/on-premise/traffic-proxy).
 
-Данный сервис является честью сервисов 2GIS On-Premise. Служит для проксирования внешних HTTP запросов к данным сервиса пробок [2GIS products](https://dev.2gis.com/).
+Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-Для дополнительной информации используйте [docs.2gis.com](https://docs.2gis.com/en/on-premise/overview)
+> **Note:**
+>
+> All On-Premise services are beta, and under development.
 
-## Installing the Chart
+See the [documentation](https://docs.2gis.com/en/on-premise/traffic-proxy) to learn about:
 
-To install the chart with the release name `testing`:
+- Architecture of the service.
 
-``` shell
-helm repo add 2gis-on-premise https://2gis.github.io/on-premise-helm-charts
-helm install testing 2gis-on-premise/traffic-proxy --atomic --timeout=60m -f ./values.yaml
-```
+- Installing the service.
 
-## Upgrading
+    When filling in the keys for `values-traffic-proxy.yaml` configuration file, refer to the documentation and the list of keys below.
 
-To upgrade the chart:
+- Updating the service.
 
-```shell
-helm upgrade testing 2gis-on-premise/traffic-proxy --atomic --timeout=60m -f ./values.yaml
-```
+## Values
+
+### Common settings
+
+| Name               | Description                                                                                                                 | Value |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `replicaCount`     | A replica count for the pod.                                                                                                | `1`   |
+| `imagePullSecrets` | Kubernetes image pull secrets.                                                                                              | `[]`  |
+| `nameOverride`     | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
+| `fullnameOverride` | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
+| `podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
+| `podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
+| `nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
+| `affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
+| `tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
+
+
+### Proxy server settings
+
+| Name                  | Description                                        | Value                            |
+| --------------------- | -------------------------------------------------- | -------------------------------- |
+| `proxy.host`          | URL for the proxy server to serve.                 | `https://traffic-proxy-api.host` |
+| `proxy.listen`        | Port for the cache server to listen.               | `8080`                           |
+| `proxy.cache.enabled` | If caching should be enabled for the proxy server. | `true`                           |
+| `proxy.cache.age`     | Cache vailidity period.                            | `1m`                             |
+| `proxy.cache.size`    | Maximum cache size.                                | `32m`                            |
+
+
+### Deployment settings
+
+| Name               | Description | Value                   |
+| ------------------ | ----------- | ----------------------- |
+| `image.repository` | Repository  | `2gis-on-premise/nginx` |
+| `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
+| `image.tag`        | Tag         | `1.21.6`                |
+
+
+### Strategy settings
+
+| Name                                    | Description                                                                                                                                                                                              | Value           |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
+| `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
+| `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
+
+
+### Service settings
+
+| Name                  | Description                                                                                                                    | Value       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
+| `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
+| `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `service.port`        | Traffic Proxy API service port.                                                                                                | `80`        |
+
+
+### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+| Name                                 | Description                                                                                                                                | Value                    |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `ingress.enabled`                    | If Ingress is enabled for the service.                                                                                                     | `false`                  |
+| `ingress.className`                  | Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource.   | `""`                     |
+| `ingress.annotations`                | Kubernetes annotations.                                                                                                                    | `{}`                     |
+| `ingress.hosts[0].host`              | Host FQDN.                                                                                                                                 | `traffic-proxy-api.host` |
+| `ingress.hosts[0].paths[0].path`     | Path (forms a service's URL if appended to the host FQDN).                                                                                 | `/`                      |
+| `ingress.hosts[0].paths[0].pathType` | Path type (see [Path types](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types) in the Kubernetes documentation). | `ImplementationSpecific` |
+| `ingress.tls`                        | Ingress [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress.                                  | `[]`                     |
+
+
+### Limits
+
+| Name                        | Description       | Value   |
+| --------------------------- | ----------------- | ------- |
+| `resources.requests.cpu`    | A CPU request.    | `10m`   |
+| `resources.requests.memory` | A memory request. | `32Mi`  |
+| `resources.limits.cpu`      | A CPU limit.      | `500m`  |
+| `resources.limits.memory`   | A memory limit.   | `256Mi` |
+
+
+### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+| Name                                 | Description                                          | Value  |
+| ------------------------------------ | ---------------------------------------------------- | ------ |
+| `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `true` |
+| `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
+
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| 2gis | <on-premise@2gis.com> | <https://github.com/2gis> |
