@@ -283,6 +283,7 @@ importer:
   # @extra importer.cleaner **Cassandra keyspace lifecycle management and Cleaner settings**
   # @param importer.forceImport If enabled, then the Importer job will delete existing keyspace and do import, otherwise import will be skipped.
   # @param importer.clearSnapshots If enabled, then the Importer job will delete keyspace's snapshot as well when deleting a keyspace.<br>It executes the `nodetool clearsnapshot` command over JMX to do so, and therefore requires JMS to be enabled on the Cassandra side, and `cassandra.credentials.jmxUser`/`cassandra.credentials.jmxPassword` values to be set.
+  # @param importer.cassandraHostsClockTimeCheckLimit Maximum difference over cassandra hosts clock time.
 
   # @param importer.cleaner.enabled Enables deletion of obsolete tilesets before making new imports.
   # @param importer.cleaner.limit Limit on the number of old tilesets to leave untouched when cleaning, minimum 1.
@@ -295,6 +296,7 @@ importer:
 
   forceImport: false
   clearSnapshots: false
+  cassandraHostsClockTimeCheckLimit: 1s
 
   tolerations: {}
   imagePullSecrets: []
