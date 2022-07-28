@@ -1,23 +1,65 @@
+# @section Common settings
+
+# @param replicaCount A replica count for the pod.
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
 replicaCount: 1
+imagePullSecrets: []
+nameOverride: ''
+fullnameOverride: ''
+nodeSelector: {}
+affinity: {}
+tolerations: []
+podAnnotations: {}
+podLabels: {}
+
+
+# @section Deployment settings
+
+# @param image.repository Repository
+# @param image.tag Tag
+# @param image.pullPolicy Pull Policy
 
 image:
   repository: 2gis-on-premise/mapgl
   tag: v1.28.1
   pullPolicy: IfNotPresent
 
+
+# @section Environment variables
+
+# @skip env.MAPGL_DEMO_KEY
+# @param env.MAPGL_HOST Domain name for MapGL JS API service.
+# @param env.MAPGL_TILES_API Domain name of the Tiles API service.
+# @param env.MAPGL_TRAFFICSERVER Domain name of the Traffic Proxy service.
+# @skip env.MAPGL_FLOORSSERVER
+# @param env.MAPGL_KEYSERVER Domain name of the API Keys service.
+# @param env.MAPGL_RTLPLUGIN URL of the plugin for right-to-left languages support.
+# @param env.MAPGL_RTLPLUGINHASH SHA512 hash of the RTL plugin.
+
 env:
   MAPGL_DEMO_KEY: empty
-  MAPGL_HOST: mapgl.service
-  MAPGL_TILES_API: tile{subdomain}-sdk.maps.2gis.com
-  MAPGL_TRAFFICSERVER: traffic0.edromaps.2gis.com
+  MAPGL_HOST: mapgl-api.host
+  MAPGL_TILES_API: tiles-api.host
+  MAPGL_TRAFFICSERVER: traffic-proxy.host
   MAPGL_FLOORSSERVER: floors.api.2gis.ru
-  MAPGL_KEYSERVER: keys.api.2gis.com
-  MAPGL_RTLPLUGIN: https://mapgl.2gis.com/api/js/plugins/rtl-v1.0.0.js
+  MAPGL_KEYSERVER: keys-api.host
+  MAPGL_RTLPLUGIN: https://mapgl-api.host/api/js/plugins/rtl-v1.0.0.js
   MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
 
-imagePullSecrets: []
-nameOverride: ''
-fullnameOverride: ''
+
+# @section Strategy settings
+
+# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
 
 strategy:
   type: RollingUpdate
@@ -25,8 +67,13 @@ strategy:
     maxUnavailable: 0
     maxSurge: 1
 
-podAnnotations: {}
-podLabels: {}
+
+# @section Service settings
+
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.port Tiles API service port.
 
 service:
   annotations: {}
@@ -34,8 +81,21 @@ service:
   type: ClusterIP
   port: 80
 
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param ingress.enabled If Ingress is enabled for the service.
+
 ingress:
   enabled: false
+
+
+# @section Limits
+
+# @param resources.requests.cpu A CPU request.
+# @param resources.requests.memory A memory request.
+# @param resources.limits.cpu A CPU limit.
+# @param resources.limits.memory A memory limit.
 
 resources:
   requests:
@@ -46,18 +106,37 @@ resources:
     memory: 64M
 
 
-nodeSelector: {}
-affinity: {}
-tolerations: []
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param podDisruptionBudget.enabled If PDB is enabled for the service.
+# @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
+
 podDisruptionBudget:
   enabled: false
   maxUnavailable: 1
+
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+# @param hpa.enabled If HPA is enabled for the service.
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
 
 hpa:
   enabled: false
   maxReplicas: 2
   minReplicas: 1
   targetCPUUtilizationPercentage: 80
+
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+# @param vpa.enabled If VPA is enabled for the service.
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @param vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @param vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
 
 vpa:
   enabled: false
