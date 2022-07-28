@@ -35,11 +35,11 @@ image:
 
 # @section Environment variables
 
-# @param env.MAPGL_DEMO_KEY MapGL JS API key to use for demos.
+# @skip env.MAPGL_DEMO_KEY
 # @param env.MAPGL_HOST Domain name for MapGL JS API service.
 # @param env.MAPGL_TILES_API Domain name of the Tiles API service.
 # @param env.MAPGL_TRAFFICSERVER Domain name of the Traffic Proxy service.
-# @param env.MAPGL_FLOORSSERVER Domain name of the Floors JS API service
+# @skip env.MAPGL_FLOORSSERVER
 # @param env.MAPGL_KEYSERVER Domain name of the API Keys service.
 # @param env.MAPGL_RTLPLUGIN URL of the plugin for right-to-left languages support.
 # @param env.MAPGL_RTLPLUGINHASH SHA512 hash of the RTL plugin.
@@ -47,11 +47,11 @@ image:
 env:
   MAPGL_DEMO_KEY: empty
   MAPGL_HOST: mapgl-api.host
-  MAPGL_TILES_API: tile{subdomain}-sdk.maps.2gis.com
-  MAPGL_TRAFFICSERVER: traffic0.edromaps.2gis.com
+  MAPGL_TILES_API: tiles-api.host
+  MAPGL_TRAFFICSERVER: traffic-proxy.host
   MAPGL_FLOORSSERVER: floors.api.2gis.ru
   MAPGL_KEYSERVER: keys-api.host
-  MAPGL_RTLPLUGIN: https://mapgl.2gis.com/api/js/plugins/rtl-v1.0.0.js
+  MAPGL_RTLPLUGIN: https://mapgl-api.host/api/js/plugins/rtl-v1.0.0.js
   MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
 
 

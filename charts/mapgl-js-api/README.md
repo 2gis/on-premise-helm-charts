@@ -48,13 +48,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 | Name                      | Description                                            | Value                                                                                             |
 | ------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| `env.MAPGL_DEMO_KEY`      | MapGL JS API key to use for demos.                     | `empty`                                                                                           |
 | `env.MAPGL_HOST`          | Domain name for MapGL JS API service.                  | `mapgl-api.host`                                                                                  |
-| `env.MAPGL_TILES_API`     | Domain name of the Tiles API service.                  | `tile{subdomain}-sdk.maps.2gis.com`                                                               |
-| `env.MAPGL_TRAFFICSERVER` | Domain name of the Traffic Proxy service.              | `traffic0.edromaps.2gis.com`                                                                      |
-| `env.MAPGL_FLOORSSERVER`  | Domain name of the Floors JS API service               | `floors.api.2gis.ru`                                                                              |
+| `env.MAPGL_TILES_API`     | Domain name of the Tiles API service.                  | `tiles-api.host`                                                                                  |
+| `env.MAPGL_TRAFFICSERVER` | Domain name of the Traffic Proxy service.              | `traffic-proxy.host`                                                                              |
 | `env.MAPGL_KEYSERVER`     | Domain name of the API Keys service.                   | `keys-api.host`                                                                                   |
-| `env.MAPGL_RTLPLUGIN`     | URL of the plugin for right-to-left languages support. | `https://mapgl.2gis.com/api/js/plugins/rtl-v1.0.0.js`                                             |
+| `env.MAPGL_RTLPLUGIN`     | URL of the plugin for right-to-left languages support. | `https://mapgl-api.host/api/js/plugins/rtl-v1.0.0.js`                                             |
 | `env.MAPGL_RTLPLUGINHASH` | SHA512 hash of the RTL plugin.                         | `sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==` |
 
 
