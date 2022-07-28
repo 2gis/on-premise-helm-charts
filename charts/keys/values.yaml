@@ -42,7 +42,7 @@ admin:
   # @param admin.apiUrl Base URL for the admin API.
   # @param admin.appHost Base URL for the admin web interface.
 
-  apiUrl: https://keys-api.host/admin/v1
+  apiUrl: https://keys-api.host
   appHost: https://keys.host
 
   # @param admin.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -313,7 +313,7 @@ db:
 # @param ldap.rootCertificateAuthoritiesPath Path to the Root CA certificate.
 
 ldap:
-  host: 2gis-ldap.host
+  host: ldap.host
   port: 3268
 
   useStartTLS: false
