@@ -43,7 +43,7 @@ admin:
   # @param admin.appHost Base URL for the admin web interface.
 
   apiUrl: https://keys-api.host
-  appHost: https://keys.host
+  appHost: https://keys-ui.host
 
   # @param admin.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param admin.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).

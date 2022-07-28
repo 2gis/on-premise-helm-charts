@@ -39,7 +39,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `admin.replicas`            | A replica count for the pod.                                                                                                   | `1`                     |
 | `admin.apiUrl`              | Base URL for the admin API.                                                                                                    | `https://keys-api.host` |
-| `admin.appHost`             | Base URL for the admin web interface.                                                                                          | `https://keys.host`     |
+| `admin.appHost`             | Base URL for the admin web interface.                                                                                          | `https://keys-ui.host`  |
 | `admin.annotations`         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                      | `{}`                    |
 | `admin.labels`              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                | `{}`                    |
 | `admin.podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                  | `{}`                    |
