@@ -1,6 +1,6 @@
 # 2GIS GIS Platform service
 
-Use this Helm chart to deploy API Keys service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
+Use this Helm chart to deploy the GIS Platform service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
 
 > **Note:**
 >
