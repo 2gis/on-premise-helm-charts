@@ -193,4 +193,3 @@ importer:
     limits:
       cpu: 2
       memory: 2048Mi
-
