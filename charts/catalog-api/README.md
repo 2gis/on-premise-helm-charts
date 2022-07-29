@@ -22,14 +22,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Common settings
 
-| Name               | Description                                                                                                                                          | Value |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                  | `{}`  |
-| `affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                          | `{}`  |
-| `tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                    | `[]`  |
-| `podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                         | `{}`  |
-| `podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                  | `{}`  |
-| `imagePullSecrets` | Kubernetes secrets for [pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/). | `[]`  |
+| Name                  | Description                                                                                                                                          | Value |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.                                                              | `""`  |
+| `nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                  | `{}`  |
+| `affinity`            | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                          | `{}`  |
+| `tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                    | `[]`  |
+| `podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                         | `{}`  |
+| `podLabels`           | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                  | `{}`  |
+| `imagePullSecrets`    | Kubernetes secrets for [pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/). | `[]`  |
 
 
 ### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
@@ -38,6 +39,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | ------------------------------------ | ---------------------------------------------------- | ------- |
 | `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `false` |
 | `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
+
+
+### Deployment Artifacts Storage settings
+
+| Name                     | Description                                                                                                                                                                                                                                              | Value |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`  |
+| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `""`  |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`  |
 
 
 ### API settings
@@ -122,6 +134,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `keys.serviceKeys.suggest`    | Suggest API key (if available).                                                                          | `""`                    |
 | `keys.serviceKeys.categories` | Categories API key (if available).                                                                       | `""`                    |
 | `keys.serviceKeys.regions`    | Regions API key (if available).                                                                          | `""`                    |
+
+
+### Kubernetes Importer job settings
+
+| Name                                 | Description                                                                                                                   | Value                              |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `importer`                           | **Common settings**                                                                                                           |                                    |
+| `importer.nodeSelector`              | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).           | `{}`                               |
+| `importer.workerNum`                 | Number of parallel import processes (workers).                                                                                | `3`                                |
+| `importer.image`                     | **Deployment settings**                                                                                                       |                                    |
+| `importer.image.repository`          | Repository                                                                                                                    | `2gis-on-premise/catalog-importer` |
+| `importer.image.tag`                 | Tag                                                                                                                           | `3.557.4`                          |
+| `importer.image.pullPolicy`          | Pull Policy                                                                                                                   | `IfNotPresent`                     |
+| `importer.resources`                 | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)** |                                    |
+| `importer.resources.requests.cpu`    | A CPU request.                                                                                                                | `256m`                             |
+| `importer.resources.requests.memory` | A memory request.                                                                                                             | `512Mi`                            |
+| `importer.resources.limits.cpu`      | A CPU limit.                                                                                                                  | `2`                                |
+| `importer.resources.limits.memory`   | A memory limit.                                                                                                               | `2048Mi`                           |
 
 
 ## Maintainers
