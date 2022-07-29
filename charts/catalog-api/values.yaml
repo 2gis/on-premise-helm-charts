@@ -23,6 +23,15 @@ imagePullSecrets: []
 podDisruptionBudget:
   enabled: false
   maxUnavailable: 1
+  
+  
+dgctlDockerRegistry: ""
+dgctlStorage:
+  host: ""
+  bucket: ""
+  accessKey: ""
+  secretKey: ""
+  manifest: ""
 
 
 # @section API settings
@@ -140,3 +149,21 @@ keys:
     suggest: ''
     categories: ''
     regions: ''
+
+
+importer:
+  image:
+    repository: "2gis-on-premise/catalog-importer"
+    tag: "3.557.4"
+    pullPolicy: IfNotPresent
+
+  resources:
+    requests:
+      cpu: 256m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2048Mi
+
+  nodeSelector: {}
+  workerNum: 3

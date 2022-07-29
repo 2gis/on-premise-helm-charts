@@ -2,6 +2,9 @@
 {{- .Release.Name | trunc 32 | trimSuffix "-" }}
 {{- end }}
 
+{{- define "catalog.importer.name" -}}
+{{ include "catalog.name" . }}-importer
+{{- end }}
 
 {{- define "catalog.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
@@ -13,8 +16,20 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "catalog.importer.labels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}-importer
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "catalog.manifestCode" -}}
+{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- end }}
+
 
 {{- define "catalog.env.db" -}}
+- name: CATALOG_DB_SCHEMA
+  value: {{ include "catalog.manifestCode" . }}
 - name: CATALOG_DB_BRANCH_URL
   value: "jdbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}"
 - name: CATALOG_DB_BRANCH_LOGIN
@@ -115,4 +130,40 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       name: {{ include "catalog.name" . }}
       key: keysServiceRegions
 {{- end }}
+{{- end }}
+
+{{- define "catalog.env.importer" -}}
+- name: IMPORTER_DB_CATALOG_SCHEMA
+  value: {{ include "catalog.manifestCode" . }}
+- name: IMPORTER_DB_CATALOG_HOST
+  value: "{{ .Values.db.host }}"
+- name: IMPORTER_DB_CATALOG_PORT
+  value: "{{ .Values.db.port }}"
+- name: IMPORTER_DB_CATALOG_NAME
+  value: "{{ .Values.db.name }}"
+- name: IMPORTER_DB_CATALOG_USERNAME
+  value: "{{ .Values.db.username }}"
+- name: IMPORTER_DB_CATALOG_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "catalog.name" . }}
+      key: dbPassword
+- name: IMPORTER_S3_ENDPOINT
+  value: "{{ .Values.dgctlStorage.host }}"
+- name: IMPORTER_S3_BUCKET
+  value: "{{ .Values.dgctlStorage.bucket }}"
+- name: IMPORTER_S3_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "catalog.name" . }}
+      key: dgctlStorageAccessKey
+- name: IMPORTER_S3_SECRET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "catalog.name" . }}
+      key: dgctlStorageSecretKey
+- name: IMPORTER_MANIFEST_PATH
+  value: "{{ .Values.dgctlStorage.manifest }}"
+- name: IMPORTER_WORKER_POOL_SIZE
+  value: "{{ .Values.importer.workerNum }}"
 {{- end }}
