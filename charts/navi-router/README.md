@@ -1,238 +1,140 @@
-# Router Helm Chart
-## Описание
-Данный helm-чарт предназначен для установки экземпляра navi-router, который позволяет обслуживать запросы и отдавать правила, исходя из файла *rules.conf*
+# 2GIS Navi-Router service
 
-## Файл *rules.conf*
-Является важнейшим файлом, описывающим правила и проекты, которые будут обслуживаться разворачиваемый экземпляр navi-router.   
-Пример файла *rules.conf*:
-```
-[ 
-  {
-    "name": "dammam_cr",
-    "router_projects": [
-        "dammam"
-    ],
-    "moses_projects": [
-        "dammam"
-    ],
-    "projects": [
-        "dammam"
-    ],
-    "queries": [
-        "routing"
-    ],
-    "routing": [
-        "driving"
-    ]
-  }
-]
-```
-В данном примере создается правило dammam_cr, содержащее регион Даммам с типом запроса "routing" и видом роутина "driving".  
-При передаче запроса на navi-router сам сервис извлекает из переданных данных проект и отдает соответствующее правило - dammam, если точки маршрута находятся в Даммаме.  
-## ***Внимание!!! Файл rules.conf необходимо подкладывать в директорию с helm-чартом***
+Use this Helm chart to deploy Navi-Router service, which is a part of 2GIS's [On-Premise Navigation services](https://docs.2gis.com/en/on-premise/navigation).
 
+Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-## Описание values
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| affinity | object or string | `{}` |  |
-| annotations | object | `{}` |  |
-| autoscaling.enabled | bool | `false` |  |
-| autoscaling.maxReplicas | int | `100` |  |
-| autoscaling.minReplicas | int | `1` |  |
-| autoscaling.targetCPUUtilizationPercentage | int | `50` |  |
-| image | string | `"2gis/mosesd"` | The path to the docker image. Must have a path to your private docker registry |
-| imagePullSecrets | object | `{}` |  |
-| ingress.className | string | `"nginx"` |  |
-| ingress.enabled | bool | `false` |  |
-| ingress.hosts[0].host | string | `"chart-example.local"` |  |
-| ingress.hosts[0].paths[0].path | string | `"/"` |  |
-| ingress.tls | list | `[]` |  |
-| labels | object | `{}` |  |
-| nodeSelector | object | `{}` |  |
-| podDisruptionBudget.enabled | bool | `false` |  |
-| podDisruptionBudget.maxUnavailable | int | `1` |  |
-| podAnnotations | object | `{}` |  |
-| podLabels | object | `{}` |  |
-| pullPolicy | string | `"IfNotPresent"` |  |
-| replicaCount | int | `1` |  |
-| resources | object | {} |  |
-| resources.limits.cpu | int | `1` |  |
-| resources.limits.memory | string | `"512Mi"` |  |
-| resources.requests.cpu | string | `"50m"` |  |
-| resources.requests.memory | string | `"128Mi"` |  |
-| revisionHistory | int | `1` |  |
-| service.annotations | object | `{}` |  |
-| service.labels | object | `{}` |  |
-| service.port | int | `80` |  |
-| service.type | string | `"ClusterIP"` |  |
-| strategy.rollingUpdate.maxSurge | int | `1` |  |
-| strategy.rollingUpdate.maxUnavailable | int | `0` |  |
-| tag | string | `"v1.0.0"` | Tag with application version |
-| terminationGracePeriodSeconds | int | `60` |  |
-| tolerations | object | `{}` |  |
-| vpa.enabled | bool | `false` |  |
-| vpa.maxAllowed.cpu | int | `1` |  |
-| vpa.maxAllowed.memory | string | `"512Mi"` |  |
-| vpa.minAllowed.memory | string | `"128Mi"` |  |
-| router.app_castle_host | string | `""` | URL of castle server  |
-| router.ftp_conn_string | string | `""` | FTP connection string to build server  |
-| router.additional_sections | string | `""` | Additional sections of mosesd.conf file  |
-| router.server_id | string | `"Chart release name"` | Server id sended to statistic server  |
+> **Note:**
+>
+> All On-Premise services are beta, and under development.
+
+See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn about:
+
+- Architecture of the service.
+
+- Installing the service.
+
+    When filling in the keys for `values-router.yaml` configuration file, refer to the documentation and the list of keys below.
+
+- Updating the service.
+
+## Values
+
+### Common settings
+
+| Name                 | Description                                                                                                                 | Value |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `replicaCount`       | A replica count for the pod.                                                                                                | `1`   |
+| `imagePullSecrets`   | Kubernetes image pull secrets.                                                                                              | `[]`  |
+| `nameOverride`       | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
+| `fullnameOverride`   | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
+| `podAnnotations`     | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
+| `podSecurityContext` | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).              | `{}`  |
+| `securityContext`    | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                  | `{}`  |
+| `nodeSelector`       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
+| `tolerations`        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
+| `affinity`           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
 
 
-## Пример деплоя
-Деплой navi-router для региона Даммам
-1. Создать файл rules.conf в директории с helm-чартом. В данном примере роутер будет обслуживать запросы carrouting и построение изохроны(hull) для Даммама
-```
-[ 
-  {
-    "name": "dammam_cr",
-    "router_projects": [
-        "dammam"
-    ],
-    "moses_projects": [
-        "dammam"
-    ],
-    "projects": [
-        "dammam"
-    ],
-    "queries": [
-        "routing"
-    ],
-    "routing": [
-        "driving"
-    ]
-  },
-  {
-    "name": "dammam_hull",
-    "router_projects": [
-        "dammam"
-    ],
-    "moses_projects": [
-        "dammam"
-    ],
-    "projects": [
-        "dammam"
-    ],
-    "queries": [
-        "get_hull"
-    ],
-    "routing": [
-        "driving"
-    ]
-  }
+### Deployment settings
 
-]
-```
-В данном примере создаются два правила - для построения маршрутов и построения изохроны
+| Name               | Description | Value                         |
+| ------------------ | ----------- | ----------------------------- |
+| `image.repository` | Repository  | `2gis-on-premise/navi-router` |
+| `image.tag`        | Tag         | `1.0.7-049fb4cc`              |
+| `image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
-2. Создать файл stage_values.yaml со следующим содержимым:
-```
-dgctlDockerRegistry: 'your-docker-hub-registry'
-router:
-  app_castle_host: stage-castle 
-  additional_sections: |- 
-    "kkey_management_service" :
-    {
-      "service_remote_address" : "https://keys.api.k8s.2gis.dev/service/v1/keys",
-      "keys_refresh_interval_min" : 1,
-      "keys_download_timeout_sec" : 10,
-      "service_apis" :
-      [
-          {"type" : "directions", "token" : "5e34adec-7f4c-449e-bdd0-5a6c43690eac"},
-          {"type" : "distance-matrix", "token" : "ce10377b-c610-48b2-8c56-90f9c0c282cf"},
-          {"type" : "pairs-directions", "token" : "f2e3f996-438c-42eb-948e-4964d2691c3e"},
-          {"type" : "truck-directions", "token" : "47d7857d-38da-482f-855f-b265934fc43f"},
-          {"type" : "public-transport", "token" : "373a808b-25ca-4ee7-8f37-fc5fd1d40269"},
-          {"type" : "isochrone", "token" : "0d0c1d63-7427-401a-b2ec-ad74f7a0ad13"},
-          {"type" : "map-matching", "token" : "5fd44f87-fdac-4375-911b-1bf546620fde"}
-      ]
-    }
-replicaCount: 2
-resources": 
-  limits: 
-    cpu: "2000m"
-    memory: "1024Mi"
-  requests":
-    cpu: "500m"
-    memory": "128Mi"
 
-resources:
-  limits:
-    cpu: 2000m
-    memory: 1024Mi
-  requests:
-    cpu: 500m
-    memory: 128Mi
-```
-В данном примере отключено использование ключей, для прода нужно переименовать kkey_management_service в key_management_service и прописать корректные токены. Пример:
-```
-additional_sections: |- 
-    "key_management_service" :
-    {
-      "service_remote_address" : "https://keys.api.k8s.2gis.dev/service/v1/keys",
-      "keys_refresh_interval_min" : 1,
-      "keys_download_timeout_sec" : 10,
-      "service_apis" :
-      [
-          {"type" : "directions", "token" : "5e34adec-7f4c-449e-bdd0-5a6c43690eac"},
-          {"type" : "distance-matrix", "token" : "ce10377b-c610-48b2-8c56-90f9c0c282cf"},
-          {"type" : "pairs-directions", "token" : "f2e3f996-438c-42eb-948e-4964d2691c3e"},
-          {"type" : "truck-directions", "token" : "47d7857d-38da-482f-855f-b265934fc43f"},
-          {"type" : "public-transport", "token" : "373a808b-25ca-4ee7-8f37-fc5fd1d40269"},
-          {"type" : "isochrone", "token" : "0d0c1d63-7427-401a-b2ec-ad74f7a0ad13"},
-          {"type" : "map-matching", "token" : "5fd44f87-fdac-4375-911b-1bf546620fde"}
-      ]
-    }
-```
+### Navi-Router service settings
 
-3. Запусить установку helm-чарта
-```
-helm upgrade --install stage-router . -f stage_values.yaml
-```
-4. Отправить POST-запрос на pod(в примере через port forwarding kubernetes):
-```
-kubectl port-forward stage-router-6864944c7-vrpns 7777:8080
-```
+| Name                         | Description                                                     | Value  |
+| ---------------------------- | --------------------------------------------------------------- | ------ |
+| `router.app_port`            | Navi-Router service HTTP port.                                  | `8080` |
+| `router.additional_sections` | Additional configurations sections for the Navi-Router service. | `""`   |
 
-```
-dammam_data.json:
 
-{"locale":"en","point_a_name":"Source","point_b_name":"Target","points":[{"type":"pedo","x":50.061144,"y":26.409866},{"type":"pedo","x":50.044684,"y":26.377784}],"purpose":"autoSearch","type":"online5","viewport":{"topLeft":{"x":50.00440730970801,"y":26.41121847602915},"bottomRight":{"x":50.098948690292,"y":26.374867207538756},"zoom":14.50947229805369}}
-```
-Отправляем через curl например
-```
-curl -Lv http://localhost:7777/carrouting/6.0.0/global -d @dammam_data.json 
-```
+### Service account settings
 
-Ответ:
-```
-dammam_cr
-```
+| Name                         | Description                                                                                                             | Value  |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
+| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `true` |
+| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`   |
+| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
 
-Для проверки правила на построение изохроны:
-```
-data_dammam_hull.json
 
-{
-  "start": {
-    "lon": 50.13365224280279,
-    "lat": 26.36327359825565
-  },
-  "durations": [
-    600
-  ],
-  "mode": "driving"
-}
-```
+### Strategy settings
 
-Отправялем запрос через curl:
-```
-curl -Lv http://localhost:7777/get_hull -d @data_dammam_hull.json
-```
+| Name                                    | Description                                                                                                                                                                                              | Value           |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
+| `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
+| `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
 
-Ответ:
-```
-dammam_hull
-```
+
+### Service settings
+
+| Name                  | Description                                                                                                                    | Value       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `service.port`        | Port inside the container.                                                                                                     | `80`        |
+| `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
+| `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `nil`       |
+
+
+### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+| Name                  | Description                                                                                                                                                                                                | Value   |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `ingress.enabled`     | If Ingress is enabled for the service.                                                                                                                                                                     | `false` |
+| `ingress.className`   | Ingress class name.                                                                                                                                                                                        | `""`    |
+| `ingress.annotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). <br/> For example: `{"kubernetes.io/ingress.class": "nginx", "kubernetes.io/tls-acme": "true"}`. | `{}`    |
+| `ingress.hosts`       | List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{"host": "navi-router.host", "paths": [{"path": "/", "pathType": "ImplementationSpecific"]}]`.                     |         |
+| `ingress.tls`         | TLS settings. <br/> For example: `[{'secretName': 'navi-router-tls', 'hosts': ['navi-router.host']}]`.                                                                                                     | `[]`    |
+
+
+### Limits
+
+| Name                        | Description                      | Value |
+| --------------------------- | -------------------------------- | ----- |
+| `resources.requests.cpu`    | A CPU request, e.g., `100m`.     |       |
+| `resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
+| `resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
+| `resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
+
+
+### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+| Name                                            | Description                                                                                                                                                          | Value   |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `autoscaling.enabled`                           | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `autoscaling.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `autoscaling.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `100`   |
+| `autoscaling.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `autoscaling.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. |         |
+
+
+### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+| Name                                 | Description                                          | Value |
+| ------------------------------------ | ---------------------------------------------------- | ----- |
+| `podDisruptionBudget.create`         | If PDB is enabled for the service.                   |       |
+| `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  |       |
+| `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. |       |
+
+
+### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+| Name                    | Description                                                                                                  | Value   |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
+| `vpa.enabled`           | If VPA is enabled for the service.                                                                           | `false` |
+| `vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). | `Auto`  |
+| `vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         | `128Mi` |
+| `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `2000`  |
+| `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `512Mi` |
+
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| 2gis | <on-premise@2gis.com> | <https://github.com/2gis> |

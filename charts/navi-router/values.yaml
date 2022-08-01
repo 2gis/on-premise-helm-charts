@@ -1,22 +1,67 @@
-# Default values for router.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+# @section Common settings
+
+# @param replicaCount A replica count for the pod.
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 
 replicaCount: 1
+imagePullSecrets: []
+nameOverride: ''
+fullnameOverride: ''
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+
+# @section Deployment settings
+
+# @param image.repository Repository
+# @param image.tag Tag
+# @param image.pullPolicy Pull Policy
 
 image:
   repository: 2gis-on-premise/navi-router
   pullPolicy: IfNotPresent
   tag: 1.0.7-049fb4cc
 
-imagePullSecrets: []
-nameOverride: ''
-fullnameOverride: ''
+
+# @section Navi-Router service settings
+
+# @param router.app_port Navi-Router service HTTP port.
+# @param router.additional_sections Additional configurations sections for the Navi-Router service.
+
+router:
+  app_port: 8080
+  additional_sections: ''
+
+
+# @section Service account settings
+
+# @param serviceAccount.create Specifies whether a service account should be created.
+# @param serviceAccount.annotations Annotations to add to the service account.
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
 
 serviceAccount:
   create: true
   annotations: {}
   name: ''
+
+
+# @section Strategy settings
+
+# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
 
 strategy:
   type: RollingUpdate
@@ -25,11 +70,12 @@ strategy:
     maxSurge: 1
 
 
-podAnnotations: {}
+# @section Service settings
 
-podSecurityContext: {}
-
-securityContext: {}
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.port Port inside the container.
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
 service:
   type: ClusterIP
@@ -37,18 +83,48 @@ service:
   annotations: {}
   labels:
 
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Ingress class name.
+# @param ingress.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). <br/> For example: `{"kubernetes.io/ingress.class": "nginx", "kubernetes.io/tls-acme": "true"}`.
+# @extra ingress.hosts List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{"host": "navi-router.host", "paths": [{"path": "/", "pathType": "ImplementationSpecific"]}]`.
+# @skip ingress.hosts[0].host
+# @skip ingress.hosts[0].paths[0].path
+# @skip ingress.hosts[0].paths[0].pathType
+# @param ingress.tls TLS settings. <br/> For example: `[{'secretName': 'navi-router-tls', 'hosts': ['navi-router.host']}]`.
+
 ingress:
   enabled: false
   className: ''
   annotations: {}
   hosts:
-  - host: chart-example.local
+  - host: navi-router.host
     paths:
     - path: /
       pathType: ImplementationSpecific
   tls: []
 
+
+# @section Limits
+
+# @skip resources
+# @extra resources.requests.cpu A CPU request, e.g., `100m`.
+# @extra resources.requests.memory A memory request, e.g., `128Mi`.
+# @extra resources.limits.cpu A CPU limit, e.g., `100m`.
+# @extra resources.limits.memory A memory limit, e.g., `128Mi`.
+
 resources: {}
+
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+# @param autoscaling.enabled If HPA is enabled for the service.
+# @param autoscaling.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param autoscaling.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param autoscaling.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @extra autoscaling.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
 autoscaling:
   enabled: false
@@ -57,13 +133,24 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-nodeSelector: {}
 
-tolerations: []
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-affinity: {}
+# @skip podDisruptionBudget
+# @extra podDisruptionBudget.create If PDB is enabled for the service.
+# @extra podDisruptionBudget.minAvailable How many pods must be available after the eviction.
+# @extra podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
 
 podDisruptionBudget: {}
+
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+# @param vpa.enabled If VPA is enabled for the service.
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @param vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @param vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
 
 vpa:
   enabled: false
@@ -73,7 +160,3 @@ vpa:
   maxAllowed:
     cpu: 2000
     memory: 512Mi
-
-router:
-  app_port: 8080
-  additional_sections: ''
