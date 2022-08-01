@@ -1,56 +1,73 @@
-# Default values for navi-restrictions.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-replicaCount: 1
+# @section Common settings
 
+# @param replicaCount A replica count for the pod.
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
+# @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).
+# @param prometheusEnabled If Prometheus scrape is enabled.
+
+replicaCount: 1
 imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: false
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ''
-
 podAnnotations: {}
 podLabels: {}
 labels: {}
-
 podSecurityContext: {}
-  # fsGroup: 2000
-
 nodeSelector: {}
-
 tolerations: []
-
-# affinity gets passed through render, references to other values allowed, e.g.
-# affinity:
-#   podAntiAffinity:
-#     requiredDuringSchedulingIgnoredDuringExecution:
-#     - labelSelector:
-#         matchExpressions:
-#         - key: app.kubernetes.io/instance
-#           operator: In
-#           values:
-#           - "{{ .Release.Name }}"
-#       topologyKey: kubernetes.io/hostname
-# to avoide iterpolation use the following syntax: '{{ "{{ .Release.Name }}" }}'
 affinity: {}
-
 priorityClassName: ''
+terminationGracePeriodSeconds: 120
+prometheusEnabled: true
+
+
+# @section Docker registry settings
+
+# @param api.image.repository API service image repository.
+# @param api.image.pullPolicy API service pull policy.
+# @param api.image.tag API service image tag.
+# @param cron.image.repository Syncer service image repository.
+# @param cron.image.pullPolicy Syncer service pull policy.
+# @param cron.image.tag Syncer service image tag.
+
+
+# @section Service account settings
+
+# @param serviceAccount.create Specifies whether a service account should be created.
+# @param serviceAccount.annotations Annotations to add to the service account.
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ''
+
+
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param podDisruptionBudget.enabled If PDB is enabled for the service.
+# @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
 
 podDisruptionBudget:
   enabled: true
   maxUnavailable: 1
 
-terminationGracePeriodSeconds: 120
 
-# if prometheus scrape enabled (adds annotation)
-prometheusEnabled: true
+# @section Strategy settings
+
+# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
 
 strategy:
   type: RollingUpdate
@@ -58,35 +75,27 @@ strategy:
     maxUnavailable: 0
     maxSurge: 1
 
+
+# @section API service settings
+
+# @param api.api_key API key.
+# @param api.debug If the debug mode is enabled.
+# @param api.is_init_db If `true` and the database does not exist, it will be created.
+# @param api.attractor_url URL of Navi-Back service.
+# @param api.securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+
 api:
+  api_key: example
+  debug: false
+  is_init_db: true
+  attractor_url: http://restrictions-api.host/attract/1.0.0/global/
+
+  securityContext: {}
+
   image:
     repository: 2gis-on-premise/navi-restrictions-api
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
     tag: 1.0.0
-
-  service:
-    type: ClusterIP
-    port: 80
-    targetPort: 8000
-    annotations: {}
-    labels: {}
-
-  ingress:
-    enabled: false
-    className: ''
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
-    hosts:
-    - host: chart-example.local
-      paths:
-      - path: /
-        pathType: ImplementationSpecific
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
 
   resources:
     limits:
@@ -96,11 +105,59 @@ api:
       cpu: 100m
       memory: 256Mi
 
+  # @extra api.service **Service settings.**
+  # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param api.service.port Port inside the container.
+  # @param api.service.targetPort External port.
+  # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8000
+    annotations: {}
+    labels: {}
+
+  # @extra api.ingress **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings.**
+  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.className Ingress class name.
+  # @param api.ingress.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). <br/> For example: `{"kubernetes.io/ingress.class": "nginx", "kubernetes.io/tls-acme": "true"}`.
+  # @extra api.ingress.hosts List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{"host": "restrictions-api.host", "paths": [{"path": "/", "pathType": "ImplementationSpecific"]}]`.
+  # @skip api.ingress.hosts[0].host
+  # @skip api.ingress.hosts[0].paths[0].path
+  # @skip api.ingress.hosts[0].paths[0].pathType
+  # @param api.ingress.tls TLS settings. <br/> For example: `[{'secretName': 'restrictions-api-tls', 'hosts': ['restrictions-api.host']}]`.
+
+  ingress:
+    enabled: false
+    className: ''
+    annotations: {}
+    hosts:
+    - host: restrictions-api.host
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+    tls: []
+
+  # @extra api.hpa **Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings.**
+  # @param api.hpa.enabled If HPA is enabled for the service.
+  # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+  # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+  # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+
   hpa:
     enabled: false
     maxReplicas: 2
     minReplicas: 1
     targetCPUUtilizationPercentage: 80
+
+  # @extra api.vpa **Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings.**
+  # @param api.vpa.enabled If VPA is enabled for the service.
+  # @param api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+  # @param api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+  # @param api.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+  # @param api.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
 
   vpa:
     enabled: false
@@ -111,41 +168,50 @@ api:
       cpu: 2000m
       memory: 1024Mi
 
-  securityContext: {}
-    # capabilities:
-    #   drop:
-    #   - ALL
-    # readOnlyRootFilesystem: true
-    # runAsNonRoot: true
-    # runAsUser: 1000
 
-  debug: false
-  is_init_db: true
-  attractor_url: http://example.com/attract/1.0.0/global/
+# @section Database settings
+
+# @param db.host PostgreSQL host.
+# @param db.port PostgreSQL port.
+# @param db.name PostgreSQL database name.
+# @param db.user PostgreSQL username.
+# @param db.password PostgreSQL password. Must be specified in overrides.
 
 db:
   host: localhost
   port: 5432
   name: restrictions
   user: dbuser
-  # must be specified in overrides
   password: dbpassword
 
-# must be specified in overrides
-api_key: example
 
-# Syncer
+# @section Cron job settings
+
+# @param cron.enabled If Cron job is enabled.
+# @param cron.schedule Cron job schedule.
+# @param cron.concurrencyPolicy Cron job concurrency policy: `Allow` or `Forbid`.
+# @param cron.successfulJobsHistoryLimit How many completed and failed jobs should be kept.
+# @param cron.containerPort Cron container port.
+# @param cron.edges_url_template URL template for getting edges.
+# @param cron.edge_attributes_url_template URL template for getting an edge's details.
+# @param cron.projects List of projects to get data for.
+# @param cron.max_attributes_fetcher_rps Maximum amount oif requests to `edge_attributes_url_template` per second.
+
 cron:
   enabled: false
   schedule: 1 * * * *
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   containerPort: 8000
+  edges_url_template: http://navi-back.host/restrictions_json/{project}/{date_str}_{hour}.json
+  edge_attributes_url_template: http://navi-back.host/develop/edge?edge_id={edge_id}&offset=200&routing=carrouting
+  projects:
+  - dammam
+  max_attributes_fetcher_rps: 25
 
   image:
     repository: 2gis-on-premise/navi-restrictions-syncer
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
     tag: 1.0.1
 
   resources:
@@ -156,8 +222,17 @@ cron:
       cpu: 100m
       memory: 256Mi
 
-  edges_url_template: http://example.com/restrictions_json/{project}/{date_str}_{hour}.json
-  edge_attributes_url_template: http://example.com/develop/edge?edge_id={edge_id}&offset=200&routing=carrouting
-  projects:
-  - dammam
-  max_attributes_fetcher_rps: 25
+
+# @section Limits
+
+# @extra api.resources **Limits for the API service**
+# @param api.resources.requests.cpu A CPU request.
+# @param api.resources.requests.memory A memory request.
+# @param api.resources.limits.cpu A CPU limit.
+# @param api.resources.limits.memory A memory limit.
+
+# @extra cron.resources **Limits for the Cron service**
+# @param cron.resources.requests.cpu A CPU request.
+# @param cron.resources.requests.memory A memory request.
+# @param cron.resources.limits.cpu A CPU limit.
+# @param cron.resources.limits.memory A memory limit.
