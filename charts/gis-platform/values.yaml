@@ -64,7 +64,7 @@ spcore:
 
   image:
     repository: 2gis-on-premise/gis_platform_spcore
-    tag: '2022-06-10'
+    tag: '2022-08-03'
 
   resources:
     requests:
@@ -88,7 +88,7 @@ spcore:
   # @param spcore.s3.host S3 endpoint. Format: `host:port`.
   # @param spcore.s3.region S3 region.
   # @param spcore.s3.bucket S3 bucket name.
-  # @param spcore.s3.preview_bucket S3 bucket name for preview.
+  # @param spcore.s3.session_bucket S3 bucket name for temporary session files.
 
   s3:
     access_key: ''
@@ -96,7 +96,7 @@ spcore:
     host: s3.host
     region: US
     bucket: spstatic
-    preview_bucket: sppreview
+    session_bucket: spsession
 
   # @extra spcore.pg **Database access settings.**
   # @param spcore.pg.host PostgreSQL host.
@@ -204,7 +204,7 @@ portal:
 
   image:
     repository: 2gis-on-premise/gis_platform_portal
-    tag: '2022-06-10'
+    tag: '2022-08-03'
 
   resources:
     requests:
