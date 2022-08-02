@@ -256,6 +256,14 @@
       "layoutOptions": {
         "area": "portal"
       }
+    },
+    {
+      "name": "selection-control",
+      "priority": 2,
+      "modulePath": "MapControls/SelectionControls",
+      "layoutOptions": {
+        "area": "mainControls"
+      }
     }
   ],
   "settings": {
