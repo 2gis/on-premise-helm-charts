@@ -169,7 +169,7 @@ vpa:
 # @section Distance Matrix Async Service settings
 
 # @param dm.port Distance Matrix Async Service HTTP port.
-# @param dm.configType
+# @param dm.configType Configuration type. Must always be `env`.
 # @param dm.workerCount Number of Distance Matrix Async workers.
 # @param dm.citiesUrl URL of the information about cities provided by the Navi-Castle service.
 # @param dm.citiesUpdatePeriod Period (in seconds) between requesting data from `citiesUrl`.

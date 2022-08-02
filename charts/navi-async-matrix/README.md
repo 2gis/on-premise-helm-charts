@@ -134,7 +134,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name                    | Description                                                              | Value                                 |
 | ----------------------- | ------------------------------------------------------------------------ | ------------------------------------- |
 | `dm.port`               | Distance Matrix Async Service HTTP port.                                 | `8000`                                |
-| `dm.configType`         |                                                                          | `env`                                 |
+| `dm.configType`         | Configuration type. Must always be `env`.                                | `env`                                 |
 | `dm.workerCount`        | Number of Distance Matrix Async workers.                                 | `4`                                   |
 | `dm.citiesUrl`          | URL of the information about cities provided by the Navi-Castle service. | `http://navi-castle.host/cities.conf` |
 | `dm.citiesUpdatePeriod` | Period (in seconds) between requesting data from `citiesUrl`.            | `3600`                                |
