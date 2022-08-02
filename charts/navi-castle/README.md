@@ -1,128 +1,153 @@
-# Castle Helm Chart
-## Описание
-Данный helm-чарт предназначен для установки экземпляра Castle в режиме statefulset, который будет хранить данные, необходмые для экземпляра Navigation. Также параллельно запускают CronJob'ы, которые обновляют данные, полученные с S3-хранлилища, на экземплярах Castle.
+# 2GIS Navi-Castle service
+
+Use this Helm chart to deploy Navi-Castle service, which is a part of 2GIS's [On-Premise Navigation services](https://docs.2gis.com/en/on-premise/navigation).
+
+Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
+
+> **Note:**
+>
+> All On-Premise services are beta, and under development.
+
+See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn about:
+
+- Architecture of the service.
+
+- Installing the service.
+
+    When filling in the keys for `values-castle.yaml` configuration file, refer to the documentation and the list of keys below.
+
+- Updating the service.
+
+## Values
+
+### Docker Registry settings
+
+| Name                      | Description                                                                             | Value                         |
+| ------------------------- | --------------------------------------------------------------------------------------- | ----------------------------- |
+| `dgctlDockerRegistry`     | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`                          |
+| `castle.image.repository` | Castle service image repository.                                                        | `2gis-on-premise/navi-castle` |
+| `castle.image.pullPolicy` | Castle service pull policy.                                                             | `IfNotPresent`                |
+| `castle.image.tag`        | Castle service image tag.                                                               | `1.0.5`                       |
+| `nginx.image.repository`  | NGINX image repository.                                                                 | `2gis-on-premise/navi-front`  |
+| `nginx.image.tag`         | NGINX image tag.                                                                        | `1.21-ad06a0e0`               |
 
 
-## Описание values
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| dgctlDockerRegistry | string | `""` | docker registry server name  |
-| dgctlStorage.host | string | `""` | host:port of S3 server  |
-| dgctlStorage.bucket | string | `""` | S3 bucket  |
-| dgctlStorage.accessKey | string | `""` | S3 access key  |
-| dgctlStorage.secretKey | string | `""` | S3 secret key |
-| affinity | object or string | `{}` |  |
-| annotations | object | `{}` |  |
-| ingress.className | string | `"nginx"` |  |
-| ingress.enabled | bool | `false` |  |
-| ingress.hosts[0].host | string | `"chart-example.local"` |  |
-| ingress.hosts[0].paths[0].path | string | `"/"` |  |
-| ingress.tls | list | `[]` |  |
-| labels | object | `{}` |  |
-| nodeSelector | object | `{}` |  |
-| podDisruptionBudget.enabled | bool | `false` |  |
-| podDisruptionBudget.maxUnavailable | int | `1` |  |
-| podAnnotations | object | `{}` |  |
-| podLabels | object | `{}` |  |
-| pullPolicy | string | `"IfNotPresent"` |  |
-| replicaCount | int | `1` |  |
-| resources | object | {} |  |
-| resources.limits.cpu | int | `1` |  |
-| resources.limits.memory | string | `"512Mi"` |  |
-| resources.requests.cpu | string | `"50m"` |  |
-| resources.requests.memory | string | `"128Mi"` |  |
-| revisionHistory | int | `1` |  |
-| service.annotations | object | `{}` |  |
-| service.labels | object | `{}` |  |
-| service.port | int | `80` |  |
-| service.type | string | `"None"` |  |
-| tolerations | object | `{}` |  |
-| castle.image | object | `{}` | Castle image  |
-| castle.image.repository | string | `2gis/castle` | Image name  |
-| castle.image.tag | string | `''` | Image tag  |
-| castle.castle_data_path | string | `/opt/castle` | Store path for castle data  |
-| persistentVolume | object | `{}` | Persistent volume definition |
-| persistentVolume.enabled | string | `"false"` | Enable or disable persistent volume claim |
-| persistentVolume.accessModes | array | `[]` | Access modes for PV |
-| persistentVolume.storageClass | string | `""` | Storage class for PV |
-| persistentVolume.size | string | `""` | Size of PV |
-| cron | object | `{}` | Cron job definition |
-| cron.enabled.import | bool | `"false"` | If import cron job enabled (requires persistentVolume.enabled) |
-| cron.enabled.restriction | bool | `"false"` | If restriction cron job enabled (requires persistentVolume.enabled) |
-| cron.schedule.import | string | `""` | Schedule in cron format |
-| cron.schedule.restriction | string | `""` | Schedule in cron format |
-| cron.concurrencyPolicy | string | `""` | Concurrency policy |
-| cron.successfulJobsHistoryLimit | string | `""` | Number of stored succeful jobs |
+### Deployment Artifacts Storage settings
+
+| Name                     | Description                                                                                                                                                                                                                                              | Value |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`  |
+| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `""`  |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`  |
 
 
+### Common settings
+
+| Name                 | Description                                                                                                                 | Value |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `replicaCount`       | A replica count for the pod.                                                                                                | `1`   |
+| `imagePullSecrets`   | Kubernetes image pull secrets.                                                                                              | `[]`  |
+| `nameOverride`       | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
+| `fullnameOverride`   | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
+| `podAnnotations`     | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
+| `podSecurityContext` | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).              | `{}`  |
+| `securityContext`    | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                  | `{}`  |
+| `nodeSelector`       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
+| `tolerations`        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
+| `affinity`           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
 
 
+### Service account settings
+
+| Name                         | Description                                                                                                             | Value  |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
+| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `true` |
+| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`   |
+| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
 
 
+### Service settings
 
-## Пример деплоя
-1. Создать файл castle_values.conf со своими параметрами для подключения к S3-хранилищу
-```
-dgctlDockerRegistry: 'your-docker-hub-registry'
-dgctlStorage:
-  host: server_name:9000
-  bucket: dgis
-  accessKey: access_key
-  secretKey: secret_key
-  manifest: manifests/1644220485.json
- 
-replicaCount: 2
-
-resources:
-  limits:
-    cpu: 1000m
-    memory: 512Mi
-  requests:
-    cpu: 500m
-    memory: 128Mi
-
-castle:
-  castle_data_path: '/opt/castle/data/'
-
-persistentVolume:
-  enabled: false
-  accessModes:
-    - ReadWriteOnce
-  storageClass: ceph-csi-rbd
-  size: 5Gi
-
-cron:
-  enabled:
-    import: false
-    restriction: false
-  concurrencyPolicy: Forbid
-  successfulJobsHistoryLimit: 3
-```
-
-2. Запусить установку helm-чарта
-```
-helm upgrade --install stage-castle . -f castle_values.yaml
-```
-3. Проверить работоспособность можно следующим способом:
-Прокинуть порт через kubectl 
-
-```
-kubectl port-forward stage-castle-0 7777:8080
-```
-Отправить GET-запрос, в ответ должен появиться список файлов
-
-```
-curl -Lv http://localhost:7777/
+| Name           | Description                                                                                                                    | Value       |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `service.type` | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `service.port` | Port inside the container.                                                                                                     | `80`        |
 
 
-<html>
-<head><title>Index of /</title></head>
-<body>
-<h1>Index of /</h1><hr><pre><a href="../">../</a>
-<a href="lost%2Bfound/">lost+found/</a>                                        09-Mar-2022 13:33                   -
-<a href="packages/">packages/</a>                                          09-Mar-2022 13:33                   -
-<a href="index.json">index.json</a>                                         09-Mar-2022 13:33                 634
-<a href="index.json.zip">index.json.zip</a>                                     09-Mar-2022 13:33                 357
-</pre><hr></body>
-</html>
-```
+### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+| Name                  | Description                                                                                                                                                                                                | Value   |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `ingress.enabled`     | If Ingress is enabled for the service.                                                                                                                                                                     | `false` |
+| `ingress.className`   | Ingress class name.                                                                                                                                                                                        | `""`    |
+| `ingress.annotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). <br/> For example: `{"kubernetes.io/ingress.class": "nginx", "kubernetes.io/tls-acme": "true"}`. | `{}`    |
+| `ingress.hosts`       | List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{"host": "navi-castle.host", "paths": [{"path": "/", "pathType": "ImplementationSpecific"]}]`.                     |         |
+| `ingress.tls`         | TLS settings. <br/> For example: `[{'secretName': 'navi-castle-tls', 'hosts': ['navi-castle.host']}]`.                                                                                                     | `[]`    |
+
+
+### Limits
+
+| Name                        | Description                      | Value |
+| --------------------------- | -------------------------------- | ----- |
+| `resources.requests.cpu`    | A CPU request, e.g., `100m`.     |       |
+| `resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
+| `resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
+| `resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
+
+
+### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+| Name                                            | Description                                                                                                                                                          | Value   |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `autoscaling.enabled`                           | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `autoscaling.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `autoscaling.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `100`   |
+| `autoscaling.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `autoscaling.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. |         |
+
+
+### Navi-Castle service settings
+
+| Name                          | Description                 | Value                          |
+| ----------------------------- | --------------------------- | ------------------------------ |
+| `castle.castle_data_path`     | Path to the data directory. | `/opt/castle/data/`            |
+| `castle.restrictions_api_url` | Restrictions API base URL.  | `http://restrictions-api.host` |
+| `castle.restrictions_api_key` | Restrictions API key.       | `key`                          |
+
+
+### NGINX settings
+
+| Name         | Description                                 | Value  |
+| ------------ | ------------------------------------------- | ------ |
+| `nginx.port` | HTTP port on which NGINX will be listening. | `8080` |
+
+
+### Cron settings
+
+| Name                              | Description                                        | Value         |
+| --------------------------------- | -------------------------------------------------- | ------------- |
+| `cron.enabled.import`             | If the `import` cron job is enabled.               | `false`       |
+| `cron.enabled.restriction`        | Id the `restriction` cron job is enabled.          | `false`       |
+| `cron.schedule.import`            | Cron job schedule for `import`.                    | `11 * * * *`  |
+| `cron.schedule.restriction`       | Cron job schedule for `restriction`.               | `*/5 * * * *` |
+| `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`.  | `Forbid`      |
+| `cron.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. | `3`           |
+
+
+### Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
+
+| Name                            | Description                                                                           | Value               |
+| ------------------------------- | ------------------------------------------------------------------------------------- | ------------------- |
+| `persistentVolume.enabled`      | If Kubernetes persistence volume should be enabled for ZooKeeper.                     | `false`             |
+| `persistentVolume.accessModes`  | Volume access mode.                                                                   | `["ReadWriteOnce"]` |
+| `persistentVolume.storageClass` | Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/). | `ceph-csi-rbd`      |
+| `persistentVolume.size`         | Volume size.                                                                          | `5Gi`               |
+
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| 2gis | <on-premise@2gis.com> | <https://github.com/2gis> |
