@@ -30,6 +30,13 @@
          "key": "${GIS_PLATFORM_CATALOG_KEY}"
        }
   },
+  "s3Configuration": {
+    "host": "{{ .Values.spcore.s3.host }}",
+    "region": "{{ .Values.spcore.s3.region }}",
+    "bucketName": "{{ .Values.spcore.s3.bucket }}",
+    "sessionStorageBucketName": "{{ .Values.spcore.s3.session_bucket }}",
+    "provider": "aws"
+  },
   "DefaultLimits": {
     "Tables": {{ .Values.spcore.defaultLimits.tables | int | quote }},
     "Layers": {{ .Values.spcore.defaultLimits.layers | int | quote }},
