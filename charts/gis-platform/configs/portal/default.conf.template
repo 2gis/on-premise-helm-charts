@@ -87,6 +87,25 @@ server {
     location ~ ^/sp/layers/admin.satellite_imagery/tile/(.*)$ {
         proxy_pass {{ .Values.portal.s3proxy.scheme }}://s3-upstream/{{ .Values.spcore.s3.bucket }}/localTiles_admin.satellite_imagery/$1.png;
         proxy_set_header Host {{ .Values.spcore.s3.host }};
+        {{- if .Values.spcore.cors.allow_everyone }}
+        # CORS block
+        if ($request_method = OPTIONS) {
+            add_header Content-Length 0;
+            add_header Content-Type text/plain;
+            add_header Access-Control-Allow-Origin $cors_origin;
+            add_header Access-Control-Allow-Methods 'GET,POST,PUT,DELETE,PATCH,OPTIONS';
+            add_header Access-Control-Allow-Headers 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization';
+            add_header Access-Control-Allow-Credentials 'true';
+            add_header Access-Control-Max-Age 1728000;
+            return 204;
+        }
+        add_header Access-Control-Allow-Origin $cors_origin always;
+        add_header Access-Control-Allow-Methods 'GET,POST,PUT,DELETE,PATCH,OPTIONS' always;
+        add_header Access-Control-Allow-Headers 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization' always;
+        add_header Access-Control-Allow-Credentials 'true' always;
+        add_header Access-Control-Max-Age 1728000 always;
+        # end CORS block
+        {{- end }}
         {{- if .Values.portal.cache.enabled }}
         proxy_cache gis-platform;
         proxy_cache_valid {{ .Values.portal.cache.valid }};
