@@ -29,7 +29,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "catalog.env.db" -}}
 - name: CATALOG_DB_SCHEMA
-  value: {{ include "catalog.manifestCode" . }}
+  value: "{{ include "catalog.manifestCode" . }}"
 - name: CATALOG_DB_BRANCH_URL
   value: "jdbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}"
 - name: CATALOG_DB_BRANCH_LOGIN
@@ -134,7 +134,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "catalog.env.importer" -}}
 - name: IMPORTER_DB_CATALOG_SCHEMA
-  value: {{ include "catalog.manifestCode" . }}
+  value: "{{ include "catalog.manifestCode" . }}"
 - name: IMPORTER_DB_CATALOG_HOST
   value: "{{ .Values.db.host }}"
 - name: IMPORTER_DB_CATALOG_PORT
