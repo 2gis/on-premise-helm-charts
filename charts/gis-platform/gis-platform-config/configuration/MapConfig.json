@@ -269,6 +269,7 @@
   "settings": {
     "help": false,
     "gotoPortal": false,
-    "feedbackForm": false
+    "feedbackForm": false,
+    "uniqueClassesLimit": 300
   }
 }
