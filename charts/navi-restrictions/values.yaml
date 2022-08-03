@@ -206,7 +206,7 @@ cron:
   edges_url_template: http://navi-back.host/restrictions_json/{project}/{date_str}_{hour}.json
   edge_attributes_url_template: http://navi-back.host/develop/edge?edge_id={edge_id}&offset=200&routing=carrouting
   projects:
-  - dammam
+  - moscow
   max_attributes_fetcher_rps: 25
 
   image:

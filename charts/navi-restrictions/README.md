@@ -134,7 +134,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `cron.containerPort`                | Cron container port.                                                      | `8000`                                                                               |
 | `cron.edges_url_template`           | URL template for getting edges.                                           | `http://navi-back.host/restrictions_json/{project}/{date_str}_{hour}.json`           |
 | `cron.edge_attributes_url_template` | URL template for getting an edge's details.                               | `http://navi-back.host/develop/edge?edge_id={edge_id}&offset=200&routing=carrouting` |
-| `cron.projects`                     | List of projects to get data for.                                         | `["dammam"]`                                                                         |
+| `cron.projects`                     | List of projects to get data for.                                         | `["moscow"]`                                                                         |
 | `cron.max_attributes_fetcher_rps`   | Maximum amount oif requests to `edge_attributes_url_template` per second. | `25`                                                                                 |
 
 
