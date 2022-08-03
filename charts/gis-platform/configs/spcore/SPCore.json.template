@@ -4,6 +4,7 @@
   "maximumActiveRequests": 20,
   "pluginsPath": "plugins",
   "silentlyApplyMigrations": true,
+  "RequireUniqueEmail": true,
   "maxRenderTargets": {{- .Values.spcore.maxRenderTargets }},
   "staticPath": "/app/static",
   "previewStaticPath": "/app/static",
