@@ -2,11 +2,11 @@
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
-# @param castle.image.repository Castle service image repository.
-# @param castle.image.pullPolicy Castle service pull policy.
-# @param castle.image.tag Castle service image tag.
-# @param nginx.image.repository NGINX image repository.
-# @param nginx.image.tag NGINX image tag.
+# @param castle.image.repository Navi-Castle service image repository.
+# @param castle.image.pullPolicy Navi-Castle service pull policy.
+# @param castle.image.tag Navi-Castle service image tag.
+# @param nginx.image.repository Navi-Front image repository.
+# @param nginx.image.tag Navi-Front image tag.
 
 dgctlDockerRegistry: ''
 
@@ -140,9 +140,9 @@ castle:
   restrictions_api_key: key
 
 
-# @section NGINX settings
+# @section Navi-Front settings
 
-# @param nginx.port HTTP port on which NGINX will be listening.
+# @param nginx.port HTTP port on which Navi-Front will be listening.
 
 nginx:
   port: 8080
@@ -154,7 +154,7 @@ nginx:
 # @section Cron settings
 
 # @param cron.enabled.import If the `import` cron job is enabled.
-# @param cron.enabled.restriction Id the `restriction` cron job is enabled.
+# @param cron.enabled.restriction If the `restriction` cron job is enabled.
 # @param cron.schedule.import Cron job schedule for `import`.
 # @param cron.schedule.restriction Cron job schedule for `restriction`.
 # @param cron.concurrencyPolicy Cron job concurrency policy: `Allow` or `Forbid`.
