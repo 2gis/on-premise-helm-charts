@@ -4,17 +4,18 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name:  {{ include "tiles.fullname" . }}
+  name:  {{ include "tiles.fullname" . }}-importer-job
   labels:
     {{- include "tiles.labels" . | nindent 4 }}
   annotations:
     {{- include "importer.removable-hook-annotations" . | nindent 4 }}
+    "helm.sh/hook-weight": "2" # after cleaning
 
 spec:
   backoffLimit: 0
   template:
     metadata:
-      name: {{ include "tiles.fullname" . }}
+      name: {{ include "tiles.fullname" . }}-importer
     spec:
       serviceAccountName: {{ include "tiles.fullname" . }}
 
@@ -42,10 +43,11 @@ spec:
       {{- end }}
 
       containers:
-        - name: import-worker
+        - name: importer
 
           {{- with $.Values.importer }}
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image }}:{{ .tag }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}
+          imagePullPolicy: {{ .image.pullPolicy }}
           command: ["/selfimporter", "scheduler"]
 
           volumeMounts:

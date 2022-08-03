@@ -7,8 +7,9 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "gis-platform-portal.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.portal.max_body_size }}
+  {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
@@ -28,14 +29,12 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            pathType: {{ .pathType }}
+          - path: /
+            pathType: Prefix
             backend:
               service:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
-          {{- end }}
     {{- end }}
 {{- end }}

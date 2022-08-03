@@ -1,4 +1,3 @@
-{{- if .Values.install.apps -}}
 {{- with .Values.api.hpa }}
 {{- if .enabled }}
 apiVersion: autoscaling/v2beta2
@@ -23,6 +22,5 @@ spec:
           type: Utilization
           averageUtilization: {{ . }}
   {{- end }}
-{{- end }}
 {{- end }}
 {{- end }}

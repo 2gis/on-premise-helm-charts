@@ -1,0 +1,9 @@
+{
+  "settings": {
+    "customLogo": {
+      "src": "/urbi.png",
+      "width": 110,
+      "height": 46
+    }
+  }
+}

@@ -1,13 +1,11 @@
----
-
 apiVersion: v2
 name: gis-platform
 description: GIS Platform
 
 type: application
 
-version: 0.2.1
-appVersion: 0.0.2
+version: 1.3.0
+appVersion: 2022.06.10
 
 dependencies:
 - name: zookeeper
@@ -15,6 +13,6 @@ dependencies:
   repository: https://charts.bitnami.com/bitnami
 
 maintainers:
-  - name: 2gis
-    url: https://github.com/2gis
-    email: on-premise@2gis.com
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

@@ -3,11 +3,15 @@ migrations-path: "/migrations"
 service-name: {{ .Values.serviceName }}
 workers: {{ .Values.importer.workerNum }}
 data-type: {{ .Values.type }}
-
+force-import: {{ .Values.importer.forceImport }}
+clear-snapshots: {{ .Values.importer.clearSnapshots }}
+cassandra-hosts-clock-time-check-limit: {{ .Values.importer.cassandraHostsClockTimeCheckLimit }}
 
 credentials:
   user: {{ .Values.cassandra.credentials.user }}
   password: {{ .Values.cassandra.credentials.password }}
+  jmx-user: {{ .Values.cassandra.credentials.jmxUser }}
+  jmx-password: {{ .Values.cassandra.credentials.jmxPassword }}
 
 cassandra:
   name: local
@@ -17,7 +21,7 @@ cassandra:
 
   keyspaces:
     - tileset: {{ .Values.type }}
-      keyspace: dgis_tileserver_{{ .Values.type}}_{{ include "tiles.manifestCode" . }}
+      keyspace: dgis_tileserver_{{ .Values.type }}_{{ required "Valid .Values.cassandra.environment required" .Values.cassandra.environment }}_{{ include "tiles.manifestCode" . }}
       default: true
       partition-size: 4
 
@@ -39,9 +43,12 @@ storage:
 k8s:
   job-template-file-path: /config/job.yaml
   {{- with .Values.importer }}
-  worker-image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image }}:{{ .tag }}
+  worker-image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}
   {{- end }}
   namespace: {{ .Release.Namespace }}
+
+cleaner:
+  limit: {{ .Values.importer.cleaner.limit }}
 
 worker:
   temp-dir: /tmp

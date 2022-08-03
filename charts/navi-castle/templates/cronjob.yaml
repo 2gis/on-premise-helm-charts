@@ -1,14 +1,16 @@
-{{- if ( and .Values.persistentVolume.enabled .Values.cron.enabled ) }}
+{{- if .Values.persistentVolume.enabled }}
 {{- range $i, $e := until ( .Values.replicaCount | int ) }}
+{{- range $_, $flavor := tuple "import" "restriction" }}
+{{- if index $.Values.cron.enabled $flavor }}
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ include "castle.fullname" $ }}-cronjob-{{ $i }}
+  name: {{ include "castle.fullname" $ }}-cronjob-{{ $flavor }}-{{ $i }}
   labels:
     {{- include "castle.labels" $ | nindent 4 }}
 spec:
-  schedule: "{{ $.Values.cron.schedule }}"
+  schedule: {{ index $.Values.cron.schedule $flavor | quote }}
   concurrencyPolicy: {{ $.Values.cron.concurrencyPolicy }}
   successfulJobsHistoryLimit: {{ $.Values.cron.successfulJobsHistoryLimit }}
   jobTemplate:
@@ -44,7 +46,7 @@ spec:
               args: 
               - --config 
               - /opt/config_builder.conf
-              - --service=package 
+              - --service={{ $flavor }}
               volumeMounts:
               - name: {{ include "castle.fullname" $ }}-builder-config
                 mountPath: /opt/config_builder.conf
@@ -56,8 +58,7 @@ spec:
                 mountPath: {{ $.Values.castle.castle_data_path }}
               resources:
                 {{- toYaml $.Values.resources | nindent 16 }}
-          
-{{- end -}}
-{{- end -}}
-
-
+{{- end -}} # if
+{{- end -}} # range $flavor
+{{- end -}} # range $i, $e
+{{- end -}} # if

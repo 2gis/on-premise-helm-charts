@@ -46,29 +46,33 @@ spec:
         {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       initContainers:
-        - name: castle-init
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.castle.image.repository }}:{{ .Values.castle.image.tag }}
+        {{- range $flavor, $init_enabled := dict "import" true "restriction" .Values.cron.enabled.restriction }}
+        {{- if $init_enabled }}
+        - name: castle-{{ $flavor }}-init
+          image: {{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}
           command: [ "/opt/configuration_builder" ]
           args: 
            - --config 
            - /opt/config_builder.conf 
-           - --service=package
+           - --service={{ $flavor }}
           volumeMounts:
-          - name: {{ include "castle.fullname" . }}-builder-config
+          - name: {{ include "castle.fullname" $ }}-builder-config
             mountPath: /opt/config_builder.conf
             subPath: config_builder.conf
-          - name: {{ include "castle.fullname" . }}-builder-config
-            mountPath: {{ .Values.castle.castle_data_path }}/cities_template
+          - name: {{ include "castle.fullname" $ }}-builder-config
+            mountPath: {{ $.Values.castle.castle_data_path }}/cities_template
             subPath: cities_template
-          {{- if .Values.persistentVolume.enabled }}
-          - name: {{ include "castle.fullname" . }}-pvc
-            mountPath: {{ .Values.castle.castle_data_path }}
+          {{- if $.Values.persistentVolume.enabled }}
+          - name: {{ include "castle.fullname" $ }}-pvc
+            mountPath: {{ $.Values.castle.castle_data_path }}
           {{- else }}
-          - name: {{ include "castle.fullname" . }}-data
-            mountPath: {{ .Values.castle.castle_data_path }}
+          - name: {{ include "castle.fullname" $ }}-data
+            mountPath: {{ $.Values.castle.castle_data_path }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml $.Values.resources | nindent 12 }}
+        {{- end }} # if
+        {{- end }} # range
       containers:
         - name: castle-nginx
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}
@@ -97,6 +101,42 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 2
+        # If Persistent volume is not enabled then cron jobs will be running as sidecar containers
+        {{- if (not .Values.persistentVolume.enabled) }}
+        - name: castle-cron
+          image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}"
+          command: ["/tini","--"]
+          args:
+          - /usr/local/bin/supercronic
+          - -json
+          - -prometheus-listen-address
+          - '0.0.0.0:9476'
+          - /opt/update_services
+          resources:
+            {{- toYaml $.Values.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9476
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          ports:
+            - name: cron-prom
+              containerPort: 9476
+              protocol: TCP
+          volumeMounts:
+          - name: {{ include "castle.fullname" $ }}-builder-config
+            mountPath: /opt/config_builder.conf
+            subPath: config_builder.conf
+          - name: {{ include "castle.fullname" $ }}-builder-config
+            mountPath: {{ $.Values.castle.castle_data_path }}/cities_template
+            subPath: cities_template
+          - name: {{ include "castle.fullname" $ }}-builder-config
+            mountPath: /opt/update_services
+            subPath: update_services
+          - name: {{ include "castle.fullname" $ }}-data
+            mountPath: {{ $.Values.castle.castle_data_path }}
+        {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}

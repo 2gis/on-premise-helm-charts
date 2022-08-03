@@ -1,0 +1,70 @@
+{{- if .Values.importer.cleaner.enabled }}
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "tiles.fullname" . }}-cleaner-job
+  labels:
+    {{- include "tiles.labels" . | nindent 4 }}
+  annotations:
+    {{- include "importer.removable-hook-annotations" . | nindent 4 }}
+    "helm.sh/hook-weight": "1" # before imports
+
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "tiles.fullname" . }}-cleaner
+    spec:
+      serviceAccountName: {{ include "tiles.fullname" . }}
+
+      volumes:
+        - name: tmp-volume
+          emptyDir: { }
+
+        - name: config-volume
+          configMap:
+            name: {{ include "tiles.fullname" . }}-import
+
+      {{- with .Values.importer.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.importer.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.importer.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      containers:
+        - name: cleaner-job
+
+          {{- with $.Values.importer }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}
+          imagePullPolicy: {{ .image.pullPolicy }}
+          command: [ "/selfimporter", "clear" ]
+          {{- end}}
+
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+
+            - mountPath: "/config"
+              name: config-volume
+
+          {{- with .Values.importer.cleaner.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          env:
+            - name: CONFIG_PATH
+              value: /config/importer.yaml
+      restartPolicy: Never
+{{- end }}

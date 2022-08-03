@@ -26,6 +26,9 @@ spec:
       nodeSelector:
 {{ toYaml .Values.spcore.nodeSelector | indent 8 }}
 {{- end }}
+      {{- if .Values.spcore.priorityClassName }}
+      priorityClassName: {{ .Values.spcore.priorityClassName }}
+      {{- end }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -39,7 +42,8 @@ spec:
           command: ["/spcore-entrypoint.sh"]
           {{- if .Values.spcore.reset_cluster }}
           args: ["-ru"]
-          {{- else }}
+          {{- else if .Values.spcore.update_db }}
+          args: ["-u"]
           {{- end }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.spcore.image.repository }}:{{ .Values.spcore.image.tag }}
           startupProbe:
@@ -66,6 +70,8 @@ spec:
           env:
           - name: GIS_PLATFORM_CATALOG_URL
             value: {{ .Values.spcore.catalog.url }}
+          - name: GIS_PLATFORM_NAVI_URL
+            value: {{ .Values.spcore.navi.url }}
           - name: GIS_PLATFORM_CATALOG_KEY
             valueFrom:
               secretKeyRef:
@@ -77,12 +83,12 @@ spec:
                 fieldPath: metadata.name
           - name: SPCORE_host
             value: "{{ .Values.external_proto }}://{{ .Values.external_hostname }}"
-          - name: SPCORE_securityManagerConfiguration__jwtConfiguration__adminAccessToken
+          - name: SPCORE_jwtConfiguration__adminAccessToken
             valueFrom:
               secretKeyRef:
                 name: {{ include "gis-platform.secret" . }}
                 key: jwt_token_admin
-          - name: SPCORE_securityManagerConfiguration__jwtConfiguration__tokenKey
+          - name: SPCORE_jwtConfiguration__tokenKey
             valueFrom:
               secretKeyRef:
                 name: {{ include "gis-platform.secret" . }}
@@ -132,6 +138,9 @@ spec:
           - name: {{ include "gis-platform-spcore.name" . }}-configmap
             mountPath: /spcore-entrypoint.sh
             subPath: spcore-entrypoint.sh
+          - name: {{ include "gis-platform-spcore.name" . }}-configmap
+            mountPath: /app/NLog.config
+            subPath: NLog.config.template
       volumes:
         - name: {{ include "gis-platform-spcore.name" . }}-configmap
           configMap:

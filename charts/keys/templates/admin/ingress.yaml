@@ -1,4 +1,3 @@
-{{- if .Values.install.apps -}}
 {{- if .Values.admin.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -37,5 +36,4 @@ spec:
                   number: {{ $.Values.admin.service.port }}
           {{- end }}
     {{- end }}
-{{- end }}
 {{- end }}

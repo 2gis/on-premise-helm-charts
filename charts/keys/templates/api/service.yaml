@@ -1,4 +1,3 @@
-{{- if .Values.install.apps -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,5 +18,4 @@ spec:
       name: http
       targetPort: http
   selector:
-    {{- include "keys.api.labels" . | nindent 4 }}
-{{- end }}
+    {{- include "keys.api.selectorLabels" . | nindent 4 }}

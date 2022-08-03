@@ -1,6 +1,11 @@
 upstream spcore-upstream {
     server {{ include "gis-platform-spcore.fullname" . }}:{{ .Values.spcore.http_port }};
 }
+{{- if .Values.portal.s3proxy.enabled }}
+upstream s3-upstream {
+    server {{ .Values.spcore.s3.host }};
+}
+{{- end }}
 
 map $http_upgrade $connection_upgrade {
     default upgrade;
@@ -28,7 +33,7 @@ map $request_uri $cache_disabled {
 
 server {
     listen 8000;
-    client_max_body_size 200m;
+    client_max_body_size {{ .Values.portal.max_body_size }};
 
     location / {
         alias /app/portal/;
@@ -78,6 +83,36 @@ server {
         autoindex on;
     }
 
+    {{- if .Values.portal.s3proxy.enabled }}
+    location ~ ^/sp/layers/admin.satellite_imagery/tile/(.*)$ {
+        proxy_pass {{ .Values.portal.s3proxy.scheme }}://s3-upstream/{{ .Values.spcore.s3.bucket }}/localTiles_admin.satellite_imagery/$1.png;
+        proxy_set_header Host {{ .Values.spcore.s3.host }};
+        {{- if .Values.spcore.cors.allow_everyone }}
+        # CORS block
+        if ($request_method = OPTIONS) {
+            add_header Content-Length 0;
+            add_header Content-Type text/plain;
+            add_header Access-Control-Allow-Origin $cors_origin;
+            add_header Access-Control-Allow-Methods 'GET,POST,PUT,DELETE,PATCH,OPTIONS';
+            add_header Access-Control-Allow-Headers 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization';
+            add_header Access-Control-Allow-Credentials 'true';
+            add_header Access-Control-Max-Age 1728000;
+            return 204;
+        }
+        add_header Access-Control-Allow-Origin $cors_origin always;
+        add_header Access-Control-Allow-Methods 'GET,POST,PUT,DELETE,PATCH,OPTIONS' always;
+        add_header Access-Control-Allow-Headers 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization' always;
+        add_header Access-Control-Allow-Credentials 'true' always;
+        add_header Access-Control-Max-Age 1728000 always;
+        # end CORS block
+        {{- end }}
+        {{- if .Values.portal.cache.enabled }}
+        proxy_cache gis-platform;
+        proxy_cache_valid {{ .Values.portal.cache.valid }};
+        {{- end }}
+    }
+
+    {{- end }}
     location /sp/ {
         {{- if .Values.spcore.cors.allow_everyone }}
         # CORS block
@@ -122,9 +157,9 @@ server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
         proxy_set_header Host $host;
-        proxy_connect_timeout 7d;
-        proxy_send_timeout 7d;
-        proxy_read_timeout 7d;
+        proxy_connect_timeout {{ .Values.portal.websocket.timeout }};
+        proxy_send_timeout {{ .Values.portal.websocket.timeout }};
+        proxy_read_timeout {{ .Values.portal.websocket.timeout }};
     }
 
     location /swagger/ {

@@ -3,11 +3,11 @@ name: navi-front
 description: Navigation front Helm chart for Kubernetes
 type: application
 keywords:
-  - navi
-  - front
-version: 0.2.1
-appVersion: "1.16.0"
+- navi
+- front
+version: 1.3.0
+appVersion: 1.21-ad06a0e0
 maintainers:
-  - name: 2gis
-    url: https://github.com/2gis
-    email: on-premise@2gis.com
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com
