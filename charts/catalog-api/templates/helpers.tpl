@@ -6,6 +6,14 @@
 {{ include "catalog.name" . }}-importer
 {{- end }}
 
+{{- define "catalog.secret.deploys.name" -}}
+{{ include "catalog.name" . }}-deploys
+{{- end }}
+
+{{- define "catalog.secret.jobs.name" -}}
+{{ include "catalog.name" . }}-jobs
+{{- end }}
+
 {{- define "catalog.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
@@ -37,7 +45,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: CATALOG_DB_BRANCH_PASS
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.deploys.name" . }}
       key: dbPassword
 
 - name: CATALOG_DB_REGION_URL
@@ -47,7 +55,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: CATALOG_DB_REGION_PASS
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.deploys.name" . }}
       key: dbPassword
 
 - name: CATALOG_DB_API_KEY_URL
@@ -57,7 +65,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: CATALOG_DB_API_KEY_PASS
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.deploys.name" . }}
       key: dbPassword
 
 - name: CATALOG_DB_RUBRIC_URL
@@ -67,7 +75,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: CATALOG_DB_RUBRIC_PASS
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.deploys.name" . }}
       key: dbPassword
 
 - name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_URL
@@ -77,7 +85,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_PASS
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.deploys.name" . }}
       key: dbPassword
 {{- end }}
 
@@ -99,35 +107,35 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: CATALOG_KEYS_SERVICE_PLACES_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServicePlaces
 {{- end }}
 {{- if .Values.keys.serviceKeys.geocoder }}
 - name: CATALOG_KEYS_SERVICE_GEOCODER_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServiceGeocoder
 {{- end }}
 {{- if .Values.keys.serviceKeys.suggest }}
 - name: CATALOG_KEYS_SERVICE_SUGGEST_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServiceSuggest
 {{- end }}
 {{- if .Values.keys.serviceKeys.categories }}
 - name: CATALOG_KEYS_SERVICE_CATEGORIES_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServiceCategories
 {{- end }}
 {{- if .Values.keys.serviceKeys.regions }}
 - name: CATALOG_KEYS_SERVICE_REGIONS_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServiceRegions
 {{- end }}
 {{- end }}
@@ -146,7 +154,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: IMPORTER_DB_CATALOG_PASSWORD
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.jobs.name" . }}
       key: dbPassword
 - name: IMPORTER_S3_ENDPOINT
   value: "{{ .Values.dgctlStorage.host }}"
@@ -155,12 +163,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: IMPORTER_S3_ACCESS_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.jobs.name" . }}
       key: dgctlStorageAccessKey
 - name: IMPORTER_S3_SECRET_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ include "catalog.name" . }}
+      name: {{ include "catalog.secret.jobs.name" . }}
       key: dgctlStorageSecretKey
 - name: IMPORTER_MANIFEST_PATH
   value: "{{ .Values.dgctlStorage.manifest }}"
