@@ -1,6 +1,10 @@
-# 2GIS BSS Receiver (Helm chart)
+# 2GIS Stat Receiver service
 
-This repository contains a [Helm chart](https://helm.sh/docs/topics/charts/) for deploying the BSS Receiver service. This service is part of 2GIS On-Premise services, which allow you to deploy [2GIS products](https://dev.2gis.com/) on your own sites.
+Use this Helm chart to deploy the Stat Receiver service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
+
+> **Note:**
+>
+> All On-Premise services are beta, and under development.
 
 ## Installing
 
@@ -40,3 +44,75 @@ To update the service after changing the settings or after updating the Docker i
 ```bash
 helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values.yaml
 ```
+
+
+## Values
+
+### API service settings
+
+| Name                     | Description                                                                                                                    | Value                                |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
+| `api`                    | **Common settings**                                                                                                            |                                      |
+| `api.replicas`           | A replica count for the pod.                                                                                                   | `1`                                  |
+| `api.jvmXmx`             | Memory allocation options for JVM.                                                                                             | `-Xmx1500m`                          |
+| `api.image`              | **Deployment settings**                                                                                                        |                                      |
+| `api.image.repository`   | Repository                                                                                                                     | `casino/bss-receiver-api-on-premise` |
+| `api.image.tag`          | Tag                                                                                                                            | `0.8.3`                              |
+| `api.image.pullPolicy`   | Pull Policy                                                                                                                    | `IfNotPresent`                       |
+| `api.service`            | **Service settings**                                                                                                           |                                      |
+| `api.service.type`       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`                          |
+| `api.service.port`       | Port inside the container.                                                                                                     | `80`                                 |
+| `api.service.targetPort` | External port.                                                                                                                 | `8080`                               |
+
+
+### Streams service settings
+
+| Name                       | Description                        | Value                                    |
+| -------------------------- | ---------------------------------- | ---------------------------------------- |
+| `streams`                  | **Common settings**                |                                          |
+| `streams.replicas`         | A replica count for the pod.       | `1`                                      |
+| `streams.jvmXmx`           | Memory allocation options for JVM. | `-Xmx2G -XX:+UseParallelGC`              |
+| `streams.jmxPort`          | Port for JMX protocol.             | `9010`                                   |
+| `streams.metricsPort`      | Port for metrics.                  | `8080`                                   |
+| `streams.image`            | **Deployment settings**            |                                          |
+| `streams.image.repository` | Repository                         | `casino/bss-receiver-streams-on-premise` |
+| `streams.image.tag`        | Tag                                | `0.8.3`                                  |
+| `streams.image.pullPolicy` | Pull Policy                        | `IfNotPresent`                           |
+
+
+### Kafka service settings
+
+| Name              | Description | Value |
+| ----------------- | ----------- | ----- |
+| `kafka.security`  |             | `{}`  |
+| `kafka.sasl.jaas` |             | `{}`  |
+
+
+### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+| Name              | Description                            | Value   |
+| ----------------- | -------------------------------------- | ------- |
+| `ingress.enabled` | If Ingress is enabled for the service. | `false` |
+
+
+### Limits
+
+| Name                                | Description                        | Value    |
+| ----------------------------------- | ---------------------------------- | -------- |
+| `api.resources`                     | **Limits for the API service**     |          |
+| `api.resources.requests.cpu`        | A CPU request.                     | `0.5`    |
+| `api.resources.requests.memory`     | A memory request.                  | `1500Mi` |
+| `api.resources.limits.cpu`          | A CPU limit.                       | `1`      |
+| `api.resources.limits.memory`       | A memory limit.                    | `1500Mi` |
+| `streams.resources`                 | **Limits for the Streams service** |          |
+| `streams.resources.requests.cpu`    | A CPU request.                     | `1`      |
+| `streams.resources.requests.memory` | A memory request.                  | `4G`     |
+| `streams.resources.limits.cpu`      | A CPU limit.                       | `2`      |
+| `streams.resources.limits.memory`   | A memory limit.                    | `4G`     |
+
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| 2gis | <on-premise@2gis.com> | <https://github.com/2gis> |
