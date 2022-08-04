@@ -24,7 +24,7 @@ podLabels: {}
 # @section Proxy server settings
 
 # @param proxy.host URL for the proxy server to serve.
-# @param proxy.listen Port for the cache server to listen.
+# @param proxy.listen Port for the proxy server to listen.
 # @param proxy.cache.enabled If caching should be enabled for the proxy server.
 # @param proxy.cache.age Cache vailidity period.
 # @param proxy.cache.size Maximum cache size.
