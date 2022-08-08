@@ -3,6 +3,8 @@ replicaCount: 1
 proxy:
   host: https://traffic-jams.2gis.com
   listen: 8080
+  protocol: https  # don't document
+  upstreams: []  # don't document
   cache:
     enabled: true
     age: 1m
