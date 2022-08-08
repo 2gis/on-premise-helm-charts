@@ -1,6 +1,6 @@
-# 2GIS Distance Matrix Async Service
+# 2GIS Distance Matrix Async API
 
-Use this Helm chart to deploy Distance Matrix Async Service, which is a part of 2GIS's [On-Premise Navigation services](https://docs.2gis.com/en/on-premise/navigation).
+Use this Helm chart to deploy Distance Matrix Async API, which is a part of 2GIS's [On-Premise Navigation services](https://docs.2gis.com/en/on-premise/navigation).
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
@@ -129,11 +129,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `2Gi`   |
 
 
-### Distance Matrix Async Service settings
+### Distance Matrix Async API settings
 
 | Name                    | Description                                                              | Value                                 |
 | ----------------------- | ------------------------------------------------------------------------ | ------------------------------------- |
-| `dm.port`               | Distance Matrix Async Service HTTP port.                                 | `8000`                                |
+| `dm.port`               | Distance Matrix Async API HTTP port.                                     | `8000`                                |
 | `dm.configType`         | Configuration type. Must always be `env`.                                | `env`                                 |
 | `dm.workerCount`        | Number of Distance Matrix Async workers.                                 | `4`                                   |
 | `dm.citiesUrl`          | URL of the information about cities provided by the Navi-Castle service. | `http://navi-castle.host/cities.conf` |
