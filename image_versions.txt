@@ -25,7 +25,7 @@ navi-restrictions
 	navi-restrictions-syncer:1.0.1
 navi-router
 	navi-router:1.0.7-049fb4cc
-proxy-traffic-jams
+traffic-proxy
 	nginx:1.21.6
 search-api
 	search-api:7.25.0
