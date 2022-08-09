@@ -1,0 +1,129 @@
+# @section Common settings
+
+# @param replicaCount A replica count for the pod.
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+replicaCount: 1
+imagePullSecrets: []
+nameOverride: ''
+fullnameOverride: ''
+nodeSelector: {}
+affinity: {}
+tolerations: []
+podAnnotations: {}
+podLabels: {}
+
+
+# @section Proxy server settings
+
+# @param proxy.host URL for the proxy server to serve.
+# @param proxy.listen Port for the proxy server to listen.
+# @skip proxy.protocol
+# @skip proxy.upstreams
+# @param proxy.cache.enabled If caching should be enabled for the proxy server.
+# @param proxy.cache.age Cache vailidity period.
+# @param proxy.cache.size Maximum cache size.
+
+proxy:
+  host: https://traffic-proxy-api.host
+  listen: 8080
+  protocol: https  # don't document
+  upstreams: []  # don't document
+  cache:
+    enabled: true
+    age: 1m
+    size: 32m
+
+
+# @section Deployment settings
+
+# @param image.repository Repository
+# @param image.pullPolicy Pull Policy
+# @param image.tag Tag
+
+image:
+  repository: 2gis-on-premise/nginx
+  tag: 1.21.6
+  pullPolicy: IfNotPresent
+
+
+# @section Strategy settings
+
+# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
+
+# @section Service settings
+
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.port Traffic Proxy API service port.
+
+service:
+  annotations: {}
+  labels: {}
+  type: ClusterIP
+  port: 80
+
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource.
+# @param ingress.annotations Kubernetes annotations.
+# @param ingress.hosts[0].host Host FQDN.
+# @param ingress.hosts[0].paths[0].path Path (forms a service's URL if appended to the host FQDN).
+# @param ingress.hosts[0].paths[0].pathType Path type (see [Path types](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types) in the Kubernetes documentation).
+# @param ingress.tls Ingress [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress.
+
+ingress:
+  enabled: false
+  className: ''
+  annotations: {}
+  hosts:
+  - host: traffic-proxy-api.host
+    paths:
+    - path: /
+      pathType: ImplementationSpecific
+  tls: []
+
+
+# @section Limits
+
+# @param resources.requests.cpu A CPU request.
+# @param resources.requests.memory A memory request.
+# @param resources.limits.cpu A CPU limit.
+# @param resources.limits.memory A memory limit.
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param podDisruptionBudget.enabled If PDB is enabled for the service.
+# @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
+
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 1
