@@ -1,0 +1,73 @@
+# @section Docker registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param imagePullPolicy Pull policy.
+# @param ui.image.repository UI service image repository.
+# @param ui.image.tag UI service image tag.
+
+dgctlDockerRegistry: ""
+imagePullSecrets: []
+imagePullPolicy: IfNotPresent
+
+# @section UI service settings
+
+ui:
+  image:
+    repository: 2gis-on-premise/pro-ui
+    tag: 0.0.0
+
+  # @param ui.replicas A replica count for the pod.
+
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 300m
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 384Mi
+
+  # @param ui.URBI_API_URL Base URL for the UI API.
+  # @param ui.MAPGL_KEY A key to MapGL service.
+
+  URBI_API_URL: https://2gis-pro.host
+  MAPGL_KEY: ""
+  LOG_LEVEL: error
+  NODE_ENV: production
+
+  # @param ui.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param ui.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  annotations: {}
+  labels: {}
+
+  # @param ui.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param ui.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  podAnnotations: {}
+  podLabels: {}
+
+  # @param ui.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param ui.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param ui.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
+  # @param ui.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param ui.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param ui.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param ui.service.port UI service port.
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 3000
+
+  # @param ui.ingress If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.
+
+  ingress: {}
