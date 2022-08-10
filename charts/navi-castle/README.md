@@ -25,11 +25,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                      | Description                                                                             | Value                         |
 | ------------------------- | --------------------------------------------------------------------------------------- | ----------------------------- |
 | `dgctlDockerRegistry`     | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`                          |
-| `castle.image.repository` | Castle service image repository.                                                        | `2gis-on-premise/navi-castle` |
-| `castle.image.pullPolicy` | Castle service pull policy.                                                             | `IfNotPresent`                |
-| `castle.image.tag`        | Castle service image tag.                                                               | `1.0.5`                       |
-| `nginx.image.repository`  | NGINX image repository.                                                                 | `2gis-on-premise/navi-front`  |
-| `nginx.image.tag`         | NGINX image tag.                                                                        | `1.21-ad06a0e0`               |
+| `castle.image.repository` | Navi-Castle service image repository.                                                   | `2gis-on-premise/navi-castle` |
+| `castle.image.pullPolicy` | Navi-Castle service pull policy.                                                        | `IfNotPresent`                |
+| `castle.image.tag`        | Navi-Castle service image tag.                                                          | `1.0.5`                       |
+| `nginx.image.repository`  | Navi-Front image repository.                                                            | `2gis-on-premise/navi-front`  |
+| `nginx.image.tag`         | Navi-Front image tag.                                                                   | `1.21-ad06a0e0`               |
 
 
 ### Deployment Artifacts Storage settings
@@ -117,11 +117,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `castle.restrictions_api_key` | Restrictions API key.       | `key`                          |
 
 
-### NGINX settings
+### Navi-Front settings
 
-| Name         | Description                                 | Value  |
-| ------------ | ------------------------------------------- | ------ |
-| `nginx.port` | HTTP port on which NGINX will be listening. | `8080` |
+| Name         | Description                                      | Value  |
+| ------------ | ------------------------------------------------ | ------ |
+| `nginx.port` | HTTP port on which Navi-Front will be listening. | `8080` |
 
 
 ### Cron settings
@@ -129,7 +129,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                              | Description                                        | Value         |
 | --------------------------------- | -------------------------------------------------- | ------------- |
 | `cron.enabled.import`             | If the `import` cron job is enabled.               | `false`       |
-| `cron.enabled.restriction`        | Id the `restriction` cron job is enabled.          | `false`       |
+| `cron.enabled.restriction`        | If the `restriction` cron job is enabled.          | `false`       |
 | `cron.schedule.import`            | Cron job schedule for `import`.                    | `11 * * * *`  |
 | `cron.schedule.restriction`       | Cron job schedule for `restriction`.               | `*/5 * * * *` |
 | `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`.  | `Forbid`      |
