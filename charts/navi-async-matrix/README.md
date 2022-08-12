@@ -90,13 +90,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                  | Description                                                                                                                                                                                                | Value   |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `ingress.enabled`     | If Ingress is enabled for the service.                                                                                                                                                                     | `false` |
-| `ingress.className`   | Ingress class name.                                                                                                                                                                                        | `""`    |
-| `ingress.annotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). <br/> For example: `{"kubernetes.io/ingress.class": "nginx", "kubernetes.io/tls-acme": "true"}`. | `{}`    |
-| `ingress.hosts`       | List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{"host": "async-matrix-api.host", "paths": [{"path": "/", "pathType": "ImplementationSpecific"]}]`.                |         |
-| `ingress.tls`         | TLS settings. <br/> For example: `[{'secretName': 'async-matrix-tls', 'hosts': ['async-matrix.host']}]`.                                                                                                   | `[]`    |
+| Name      | Description                                                                                                                                        | Value |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ingress` | Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'navi-async-matrix.host'}]}`. |       |
 
 
 ### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
