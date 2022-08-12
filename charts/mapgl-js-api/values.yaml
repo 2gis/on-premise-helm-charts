@@ -84,10 +84,18 @@ service:
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-# @param ingress.enabled If Ingress is enabled for the service.
+# @extra ingress Configuration of the Ingress resource. Adapt it to your Ingress installation.
+# @skip ingress.hosts[0].host
+# @skip ingress.tls[0].hosts
+# @skip ingress.tls[0].secretName
 
 ingress:
-  enabled: false
+  hosts:
+  - host: mapgl-js-api.host
+  tls:
+  - hosts:
+    - mapgl-js-api.host
+    secretName: mapgl-js-api
 
 
 # @section Limits
