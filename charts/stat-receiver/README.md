@@ -90,9 +90,9 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values.yaml
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name              | Description                            | Value   |
-| ----------------- | -------------------------------------- | ------- |
-| `ingress.enabled` | If Ingress is enabled for the service. | `false` |
+| Name      | Description                                                                                                                                    | Value |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ingress` | Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'stat-receiver.host'}]}`. |       |
 
 
 ### Limits

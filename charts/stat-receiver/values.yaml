@@ -88,10 +88,12 @@ kafka:
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-# @param ingress.enabled If Ingress is enabled for the service.
+# @extra ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'stat-receiver.host'}]}`.
+# @skip ingress.hosts[0].host
 
 ingress:
-  enabled: false
+  hosts:
+  - host: stat-receiver.host
 
 
 # @section Limits
