@@ -77,15 +77,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/traffic-proxy) to le
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                                 | Description                                                                                                                                | Value                    |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
-| `ingress.enabled`                    | If Ingress is enabled for the service.                                                                                                     | `false`                  |
-| `ingress.className`                  | Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource.   | `""`                     |
-| `ingress.annotations`                | Kubernetes annotations.                                                                                                                    | `{}`                     |
-| `ingress.hosts[0].host`              | Host FQDN.                                                                                                                                 | `traffic-proxy-api.host` |
-| `ingress.hosts[0].paths[0].path`     | Path (forms a service's URL if appended to the host FQDN).                                                                                 | `/`                      |
-| `ingress.hosts[0].paths[0].pathType` | Path type (see [Path types](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types) in the Kubernetes documentation). | `ImplementationSpecific` |
-| `ingress.tls`                        | Ingress [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress.                                  | `[]`                     |
+| Name      | Description                                                                                                                                        | Value |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ingress` | Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'traffic-proxy-api.host'}]}`. |       |
 
 
 ### Limits
