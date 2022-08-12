@@ -76,25 +76,12 @@ service:
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-# @param ingress.enabled If Ingress is enabled for the service.
-# @param ingress.className Ingress class name.
-# @param ingress.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). <br/> For example: `{"kubernetes.io/ingress.class": "nginx", "kubernetes.io/tls-acme": "true"}`.
-# @extra ingress.hosts List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{"host": "navi-castle.host", "paths": [{"path": "/", "pathType": "ImplementationSpecific"]}]`.
+# @extra ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'navi-castle.host'}]}`.
 # @skip ingress.hosts[0].host
-# @skip ingress.hosts[0].paths[0].path
-# @skip ingress.hosts[0].paths[0].pathType
-# @param ingress.tls TLS settings. <br/> For example: `[{'secretName': 'navi-castle-tls', 'hosts': ['navi-castle.host']}]`.
 
 ingress:
-  enabled: false
-  className: ''
-  annotations: {}
   hosts:
   - host: navi-castle.host
-    paths:
-    - path: /
-      pathType: ImplementationSpecific
-  tls: []
 
 
 # @section Limits
