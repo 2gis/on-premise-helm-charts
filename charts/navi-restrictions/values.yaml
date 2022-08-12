@@ -119,26 +119,12 @@ api:
     annotations: {}
     labels: {}
 
-  # @extra api.ingress **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings.**
-  # @param api.ingress.enabled If Ingress is enabled for the service.
-  # @param api.ingress.className Ingress class name.
-  # @param api.ingress.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). <br/> For example: `{"kubernetes.io/ingress.class": "nginx", "kubernetes.io/tls-acme": "true"}`.
-  # @extra api.ingress.hosts List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{"host": "restrictions-api.host", "paths": [{"path": "/", "pathType": "ImplementationSpecific"]}]`.
+  # @extra api.ingress **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings** <br/> Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'navi-restrictions.host'}]}`.
   # @skip api.ingress.hosts[0].host
-  # @skip api.ingress.hosts[0].paths[0].path
-  # @skip api.ingress.hosts[0].paths[0].pathType
-  # @param api.ingress.tls TLS settings. <br/> For example: `[{'secretName': 'restrictions-api-tls', 'hosts': ['restrictions-api.host']}]`.
 
   ingress:
-    enabled: false
-    className: ''
-    annotations: {}
     hosts:
-    - host: restrictions-api.host
-      paths:
-      - path: /
-        pathType: ImplementationSpecific
-    tls: []
+    - host: navi-restrictions.host
 
   # @extra api.hpa **Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings.**
   # @param api.hpa.enabled If HPA is enabled for the service.
