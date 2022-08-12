@@ -74,13 +74,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                  | Description                                                                                                                                                                                                | Value   |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `ingress.enabled`     | If Ingress is enabled for the service.                                                                                                                                                                     | `false` |
-| `ingress.className`   | Ingress class name.                                                                                                                                                                                        | `""`    |
-| `ingress.annotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). <br/> For example: `{"kubernetes.io/ingress.class": "nginx", "kubernetes.io/tls-acme": "true"}`. | `{}`    |
-| `ingress.hosts`       | List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{"host": "navi-back.host", "paths": [{"path": "/", "pathType": "ImplementationSpecific"]}]`.                       |         |
-| `ingress.tls`         | TLS settings. <br/> For example: `[{'secretName': 'navi-back-tls', 'hosts': ['navi-back.host']}]`.                                                                                                         | `[]`    |
+| Name      | Description                                                                                                                                | Value |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `ingress` | Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'navi-back.host'}]}`. |       |
 
 
 ### Limits
