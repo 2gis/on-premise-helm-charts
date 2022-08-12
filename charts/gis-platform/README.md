@@ -28,13 +28,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                  | Description                                                                                                              | Value   |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------- |
-| `ingress.enabled`     | If Ingress is enabled for the service.                                                                                   | `false` |
-| `ingress.className`   | Ingress class name.                                                                                                      | `nginx` |
-| `ingress.annotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                | `{}`    |
-| `ingress.hosts`       | List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{'host': 'gis-platform.host'}]`. |         |
-| `ingress.tls`         | TLS settings.                                                                                                            | `[]`    |
+| Name      | Description                                                                                                                                   | Value |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ingress` | Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'gis-platform.host'}]}`. |       |
 
 
 ### Docker registry settings
