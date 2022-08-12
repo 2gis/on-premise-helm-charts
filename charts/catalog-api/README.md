@@ -100,9 +100,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                  | Description                            | Value   |
-| --------------------- | -------------------------------------- | ------- |
-| `api.ingress.enabled` | If Ingress is enabled for the service. | `false` |
+| Name          | Description                                                                                                                                  | Value |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `api.ingress` | Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'catalog-api.host'}]}`. |       |
 
 
 ### Database settings

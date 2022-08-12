@@ -109,10 +109,12 @@ api:
 
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @extra api.ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'catalog-api.host'}]}`.
+  # @skip api.ingress.hosts[0].host
 
   ingress:
-    enabled: false
+    hosts:
+    - host: catalog-api.host
 
 
 # @section Database settings
