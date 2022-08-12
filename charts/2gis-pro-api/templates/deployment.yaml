@@ -1,0 +1,165 @@
+﻿---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "urbi-pro.name" . }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "urbi-pro.labels" . | nindent 4 }}
+  {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- toYaml .Values.strategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "urbi-pro.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "urbi-pro.labels" . | nindent 8 }}
+      {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      volumes:
+        - name: temp-volume
+          emptyDir: {}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "{{ .Values.env.tempPath }}"
+              name: temp-volume
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 5
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5"]
+          env:
+            - name: DEBUG
+              value: "{{ .Values.env.debug }}"
+            - name: TEMP_PATH
+              value: "{{ .Values.env.tempPath }}"
+            - name: CATALOG_API_2GIS_URL
+              value: "{{ .Values.env.catalogApi2gisUrl }}"
+            - name: CATALOG_API_2GIS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: catalogApi2gisKey
+                  name: {{ include "urbi-pro.name" . }}-secret
+            {{ if .Values.env.routingApi2gisKey }}
+            - name: ROUTING_API_2GIS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: routingApi2gisKey
+                  name: {{ include "urbi-pro.name" . }}-secret
+            {{ end }}
+            - name: ES_HOST
+              value: "{{ .Values.env.esHost }}"
+            - name: LOG_ES_QUERIES
+              value: "{{ .Values.env.logEsQueries }}"
+            - name: ALLOW_ANY_ORIGIN
+              value: "{{ .Values.env.allowAnyOrigin }}"
+            - name: ENV
+              value: "{{ .Values.env.env }}"
+            - name: DB_CONNECTION_STRING
+              value: "{{ .Values.env.dbConnectionString }}"
+            - name: DB_CONNECTION_PWD
+              valueFrom:
+                secretKeyRef:
+                  key: dbConnectionPwd
+                  name: {{ include "urbi-pro.name" . }}-secret
+            - name: S3Settings__Url
+              value: "{{ .Values.env.s3Host }}"
+            - name: S3Settings__LayerDataBucket
+              value: "{{ .Values.env.layerDataBucket }}"
+            - name: S3Settings__AssetDataBucket
+              value: "{{ .Values.env.assetDataBucket }}"
+            - name: S3Settings__AccessKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3AccessKey
+                  name: {{ include "urbi-pro.name" . }}-secret
+            - name: S3Settings__SecretKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3SecretKey
+                  name: {{ include "urbi-pro.name" . }}-secret
+            {{ if .Values.env.esCredentials }}
+            - name: ES_CREDENTIALS
+              valueFrom:
+                secretKeyRef:
+                  key: esCredentials
+                  name: {{ include "urbi-pro.name" . }}-secret
+            {{ end }}

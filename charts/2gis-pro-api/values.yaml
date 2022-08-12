@@ -1,0 +1,189 @@
+﻿---
+# @section Docker Registry settings
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+dgctlDockerRegistry: ''
+
+# @section 2GIS PRO API common settings
+# @param appName Name of the service.
+# @skip nameOverride
+# @skip fullnameOverride
+# @param replicaCount A replica count for the pod.
+# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+appName: "pro-api"
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 2
+revisionHistoryLimit: 3
+
+# @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+annotations: {}
+labels: {}
+podAnnotations: {}
+podLabels: {}
+
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+imagePullSecrets: []
+affinity: {}
+nodeSelector: {}
+tolerations: []
+
+# @param priorityClassName Kubernetes [priorityClassName](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) settings.
+priorityClassName: ""
+
+# @param terminationGracePeriodSeconds Duration in seconds the Tiles API service pod needs to terminate gracefully.
+terminationGracePeriodSeconds: 60
+
+# @extra strategy **Service's update strategy settings**
+# @skip strategy.type
+# @extra strategy.rollingUpdate **Service's Rolling Update strategy settings**
+# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
+# @extra service **Kubernetes [service settings](https://kubernetes.io/docs/concepts/services-networking/service/) to expose the service**
+# @param service.port 2GIS PRO API service port.
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+service:
+  port: 80
+  type: ClusterIP
+  annotations: {}
+  labels: {}
+
+# @extra resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @param resources.requests.cpu A CPU request.
+# @param resources.requests.memory A memory request.
+# @param resources.limits.cpu A CPU limit.
+# @param resources.limits.memory A memory limit.
+resources:
+  requests:
+    cpu: 400m
+    memory: 256M
+  limits:
+    cpu: 1
+    memory: 1024M
+
+# @extra vpa **Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings**
+# @param vpa.enabled If VPA is enabled for the service.
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @param vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @param vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @param vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+vpa:
+  enabled: false
+  updateMode: Auto
+  minAllowed:
+    cpu: 400m
+    memory: 256M
+  maxAllowed:
+    cpu: 1
+    memory: 1024M
+
+# @extra image **Docker image settings**
+# @param image.repository Docker Repository.
+# @param image.tag Docker image tag
+# @param image.pullPolicy Kubernetes pull policy for the service's Docker image.
+image:
+  repository: 2gis-on-premise/pro-api
+  tag: "0.5.0"
+  pullPolicy: IfNotPresent
+
+# @section 2GIS PRO API configuration
+# @param env.tempPath Path to directory used for temp data
+# @param env.catalogApi2gisKey Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).
+# @param env.dbConnectionString Connection string to the PostgreSql database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;Pwd={0};`
+# @param env.dbConnectionPwd User password to connect to the PostgreSql database.
+# @param env.esHost ElasticSearch host address. Format: `https://{0}@HOST:PORT`
+# @param env.esCredentials User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD`
+# @param env.s3AccessKey S3 access key.
+# @param env.s3SecretKey S3 secret key.
+# @param env.layerDataBucket S3 bucket with prepared layer data.
+# @param env.assetDataBucket S3 bucket with `assets` data, prepared for import into ElasticSearch.
+# @param env.apiUrl 2GIS PRO API Url
+# @skip env.diggerPassword
+env:
+  tempPath: '/tmp'
+  catalogApi2gisKey: ""
+  dbConnectionString: ""
+  dbConnectionPwd: ""
+  esHost: ""
+  esCredentials: ""
+  s3AccessKey: ""
+  s3SecretKey: ""
+  layerDataBucket: ""
+  assetDataBucket: ""
+  apiUrl: ""
+  diggerPassword: ""
+
+# @section 2GIS PRO API Job settings
+# @param appImporterName Data Import job name.
+# @param appDataPreparerName Data preparation job name
+appImporterName: "urbigeo-importer"
+appDataPreparerName: "urbigeo-data-preparer"
+
+# @extra importJob Import job settings
+# @param importJob.schedule Import job start schedule
+# @param importJob.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
+# @param importJob.successfulJobsHistoryLimit How many completed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
+# @param importJob.image Docker Repository Image.
+# @param importJob.serviceAccount  Kubernetes service account
+# @extra importJob.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @param importJob.resources.requests.cpu A CPU request.
+# @param importJob.resources.requests.memory A memory request.
+# @param importJob.resources.limits.cpu A CPU limit.
+# @param importJob.resources.limits.memory A memory limit.
+# @param importJob.maxParallelJobs How many import jobs can be run simultaneously
+# @skip importJob.files
+importJob:
+  schedule: "0 18 * * *"
+  backoffLimit: 2
+  successfulJobsHistoryLimit: 3
+  image: 2gis-on-premise/urbigeo-importer
+  serviceAccount: "runner"
+  resources:
+    requests:
+      cpu: 700m
+      memory: 256M
+    limits:
+      cpu: 1000m
+      memory: 1024M
+  maxParallelJobs: 4
+  files: ""
+
+# @extra dataPrepareJob Data prepare job settings
+# @param dataPrepareJob.schedule Data prepare job start schedule
+# @param dataPrepareJob.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
+# @param dataPrepareJob.successfulJobsHistoryLimit How many completed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
+# @param dataPrepareJob.image Docker Repository Image.
+# @extra dataPrepareJob.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @param dataPrepareJob.resources.requests.cpu A CPU request.
+# @param dataPrepareJob.resources.requests.memory A memory request.
+# @param dataPrepareJob.resources.limits.cpu A CPU limit.
+# @param dataPrepareJob.resources.limits.memory A memory limit.
+# @param dataPrepareJob.maxParallelJobs How many import jobs can be run simultaneously
+dataPrepareJob:
+  schedule: "0 16 * * 6"
+  backoffLimit: 2
+  successfulJobsHistoryLimit: 1
+  image: 2gis-on-premise/urbigeo-import
+  resources:
+    requests:
+      cpu: 300m
+      memory: 256M
+    limits:
+      cpu: 500m
+      memory: 512M
+  maxParallelJobs: 1

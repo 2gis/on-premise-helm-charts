@@ -1,0 +1,13 @@
+apiVersion: v2
+name: 2gis-pro-api
+description: Geo API for getting geo data
+
+type: application
+
+version: 0.0.3
+appVersion: 0.0.0
+
+maintainers:
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

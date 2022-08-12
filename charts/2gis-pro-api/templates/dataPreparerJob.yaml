@@ -1,0 +1,82 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "urbi-pro.data-preparer-name" . }}
+spec:
+  concurrencyPolicy: Forbid
+  schedule: {{ .Values.dataPrepareJob.schedule }}
+  successfulJobsHistoryLimit: {{ .Values.dataPrepareJob.successfulJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      backoffLimit: {{ .Values.dataPrepareJob.backoffLimit }}
+      template:
+        spec:
+          nodeSelector:
+            role: worker
+          restartPolicy: Never
+          volumes:
+            - name: temp-volume
+              emptyDir: {}
+          containers:
+            - name: {{ include "urbi-pro.import-name" . }}
+              image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.dataPrepareJob.image }}:{{ .Values.image.tag }}
+              imagePullPolicy: IfNotPresent
+              resources:
+                {{- toYaml .Values.dataPrepareJob.resources | nindent 16 }}
+              volumeMounts:
+                - mountPath: "{{ .Values.env.tempPath }}"
+                  name: temp-volume
+              env:
+                - name: JOB_NAME
+                  value: {{ include "urbi-pro.data-preparer-name" . }}
+                - name: TEMP_PATH
+                  value: "{{ .Values.env.tempPath }}"
+                - name: ENV
+                  value: "{{ .Values.env.env }}"
+                - name: MODE
+                  value: "PrepareDemand"
+                - name: MAX_PARALLEL_JOBS
+                  value: "{{ .Values.dataPrepareJob.maxParallelJobs }}"
+                - name: S3Settings__Url
+                  value: "{{ .Values.env.s3Host }}"
+                - name: S3Settings__AssetDataBucket
+                  value: "{{ .Values.env.assetDataBucket }}"
+                - name: S3Settings__AccessKey
+                  valueFrom:
+                    secretKeyRef:
+                      key: s3AccessKey
+                      name: {{ include "urbi-pro.name" . }}-secret
+                - name: S3Settings__SecretKey
+                  valueFrom:
+                    secretKeyRef:
+                      key: s3SecretKey
+                      name: {{ include "urbi-pro.name" . }}-secret
+                - name: DB_CONNECTION_STRING
+                  value: "{{ .Values.env.dbConnectionString }}"
+                - name: DB_CONNECTION_PWD
+                  valueFrom:
+                    secretKeyRef:
+                      key: dbConnectionPwd
+                      name: {{ include "urbi-pro.name" . }}-secret
+                - name: ES_HOST
+                  value: "{{ .Values.env.esHost }}"
+                {{ if .Values.env.esCredentials }}
+                - name: ES_CREDENTIALS
+                  valueFrom:
+                    secretKeyRef:
+                      key: esCredentials
+                      name: {{ include "urbi-pro.name" . }}-secret
+                {{ end }}
+                - name: API_URL
+                  value: "{{ .Values.env.apiUrl }}"
+                {{ if .Values.dataPrepareJob.files }}
+                - name: FILES
+                  value: "{{ .Values.dataPrepareJob.files}}"
+                {{ end }}
+                - name: Digger__UserName
+                  value: "{{ .Values.env.diggerUserName}}"
+                - name: Digger__Password
+                  valueFrom:
+                    secretKeyRef:
+                      key: diggerPassword
+                      name: {{ include "urbi-pro.name" . }}-secret
