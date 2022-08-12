@@ -35,23 +35,23 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Admin service settings
 
-| Name                        | Description                                                                                                                    | Value                   |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
-| `admin.replicas`            | A replica count for the pod.                                                                                                   | `1`                     |
-| `admin.apiUrl`              | Base URL for the admin API.                                                                                                    | `https://keys-api.host` |
-| `admin.appHost`             | Base URL for the admin web interface.                                                                                          | `https://keys-ui.host`  |
-| `admin.annotations`         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                      | `{}`                    |
-| `admin.labels`              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                | `{}`                    |
-| `admin.podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                  | `{}`                    |
-| `admin.podLabels`           | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                            | `{}`                    |
-| `admin.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).            | `{}`                    |
-| `admin.affinity`            | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).    | `{}`                    |
-| `admin.tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.              | `{}`                    |
-| `admin.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`                    |
-| `admin.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`                    |
-| `admin.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`             |
-| `admin.service.port`        | Tiles API service port.                                                                                                        | `80`                    |
-| `admin.ingress`             | If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.                     | `{}`                    |
+| Name                        | Description                                                                                                                              | Value                   |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `admin.replicas`            | A replica count for the pod.                                                                                                             | `1`                     |
+| `admin.apiUrl`              | Base URL for the admin API.                                                                                                              | `https://keys-api.host` |
+| `admin.appHost`             | Base URL for the admin web interface.                                                                                                    | `https://keys-ui.host`  |
+| `admin.annotations`         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                | `{}`                    |
+| `admin.labels`              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                          | `{}`                    |
+| `admin.podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                            | `{}`                    |
+| `admin.podLabels`           | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                      | `{}`                    |
+| `admin.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                      | `{}`                    |
+| `admin.affinity`            | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).              | `{}`                    |
+| `admin.tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                        | `{}`                    |
+| `admin.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                        | `{}`                    |
+| `admin.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                  | `{}`                    |
+| `admin.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).           | `ClusterIP`             |
+| `admin.service.port`        | Tiles API service port.                                                                                                                  | `80`                    |
+| `admin.ingress`             | Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'keys-ui.host'}]}`. |                         |
 
 
 ### API service settings
@@ -75,7 +75,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.service.labels`                     | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                        | `{}`        |
 | `api.service.type`                       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                 | `ClusterIP` |
 | `api.service.port`                       | Tiles API service port.                                                                                                                                        | `80`        |
-| `api.ingress`                            | If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.                                                     | `{}`        |
+| `api.ingress`                            | Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'keys-api.host'}]}`.                      |             |
 
 
 ### Import service settings

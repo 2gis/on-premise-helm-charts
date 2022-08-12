@@ -76,9 +76,12 @@ admin:
     type: ClusterIP
     port: 80
 
-  # @param admin.ingress If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.
+  # @extra admin.ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'keys-ui.host'}]}`.
+  # @skip admin.ingress.hosts[0].host
 
-  ingress: {}
+  ingress:
+    hosts:
+    - host: keys-ui.host
 
 
 # @section API service settings
@@ -143,9 +146,12 @@ api:
     type: ClusterIP
     port: 80
 
-  # @param api.ingress If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.
+  # @extra api.ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'keys-api.host'}]}`.
+  # @skip api.ingress.hosts[0].host
 
-  ingress: {}
+  ingress:
+    hosts:
+    - host: keys-api.host
 
 
 # @section Import service settings
