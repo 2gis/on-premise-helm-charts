@@ -25,12 +25,12 @@ navi-restrictions
 	navi-restrictions-syncer:1.0.1
 navi-router
 	navi-router:1.0.7-049fb4cc
-traffic-proxy
-	nginx:1.21.6
 search-api
-	search-api:7.25.0
+	search-api:7.28.0
 	search-nginx:1.21.6
 tiles-api
 	tiles-api-importer:v4.22.0
 	tiles-api-proxy:v4.22.0
 	tiles-api:v4.22.0
+traffic-proxy
+	nginx:1.21.6

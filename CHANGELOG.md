@@ -1,5 +1,16 @@
 # 2GIS On-Premise Changelog
 
+## [1.2.0]
+#### [Breaking-Changes](Breaking-Changes.md#120)
+#### Images
+```
+proxy-traffic-jams → traffic-proxy
+search-api
+	- search-api:7.25.0
+	+ search-api:7.28.0
+
+```
+
 ## [1.1.4]
 #### Images
 ```

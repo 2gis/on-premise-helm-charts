@@ -1,5 +1,10 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.2.0]
+#### proxy-traffic-jams 
+- proxy-traffic-jams is renamed to traffic-proxy
+
+---
 ## [1.0.4]
 #### tiles-api
 - `.Values.cassandra.environment` is required
