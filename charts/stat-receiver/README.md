@@ -34,7 +34,7 @@ Then, call the `helm install` command and specify the name of the created file:
 
 ```shell
 helm repo add 2gis-on-premise https://2gis.github.io/on-premise-helm-charts
-helm install stat-receiver 2gis-on-premise/stat-receiver -f values.yaml
+helm install stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver.yaml
 ```
 
 ## Updating
@@ -42,7 +42,7 @@ helm install stat-receiver 2gis-on-premise/stat-receiver -f values.yaml
 To update the service after changing the settings or after updating the Docker image, call the `helm upgrade` command:
 
 ```bash
-helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values.yaml
+helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver.yaml
 ```
 
 
