@@ -76,16 +76,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                  | Description                                                                                                                    | Value       |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `service.port`        | Port inside the container.                                                                                                     | `80`        |
+| `service.port`        | The port that the service listens.                                                                                             | `80`        |
 | `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `nil`       |
 
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name      | Description                                                                                                                                  | Value |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `ingress` | Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'navi-router.host'}]}`. |       |
+| Name      | Description                                                                   | Value |
+| --------- | ----------------------------------------------------------------------------- | ----- |
+| `ingress` | Configuration of the Ingress resource. Adapt it to your Ingress installation. |       |
 
 
 ### Limits
@@ -113,7 +113,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 | Name                                 | Description                                          | Value |
 | ------------------------------------ | ---------------------------------------------------- | ----- |
-| `podDisruptionBudget.create`         | If PDB is enabled for the service.                   |       |
+| `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   |       |
 | `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  |       |
 | `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. |       |
 
