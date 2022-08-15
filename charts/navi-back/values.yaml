@@ -35,9 +35,9 @@ image:
   tag: 6.10.1
 
 
-# @section Navi-Back service settings
+# @section Navi-Back application settings
 
-# @param naviback.app_port Navi-Back service HTTP port.
+# @skip naviback.app_port
 # @param rules Rules that define which projects are loaded by this Navi-Back instance.
 
 naviback:

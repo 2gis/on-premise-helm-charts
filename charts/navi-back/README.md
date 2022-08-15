@@ -45,12 +45,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 
-### Navi-Back service settings
+### Navi-Back application settings
 
-| Name                | Description                                                             | Value  |
-| ------------------- | ----------------------------------------------------------------------- | ------ |
-| `naviback.app_port` | Navi-Back service HTTP port.                                            | `8080` |
-| `rules`             | Rules that define which projects are loaded by this Navi-Back instance. | `[]`   |
+| Name    | Description                                                             | Value |
+| ------- | ----------------------------------------------------------------------- | ----- |
+| `rules` | Rules that define which projects are loaded by this Navi-Back instance. | `[]`  |
 
 
 ### Service account settings
