@@ -73,7 +73,7 @@ strategy:
 # @section Service settings
 
 # @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-# @param service.port Port inside the container.
+# @param service.port The port that the service listens.
 # @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
@@ -124,7 +124,7 @@ autoscaling:
 # @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 # @skip podDisruptionBudget
-# @extra podDisruptionBudget.create If PDB is enabled for the service.
+# @extra podDisruptionBudget.enabled If PDB is enabled for the service.
 # @extra podDisruptionBudget.minAvailable How many pods must be available after the eviction.
 # @extra podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
 
