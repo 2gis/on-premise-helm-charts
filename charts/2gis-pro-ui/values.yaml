@@ -30,19 +30,30 @@ ui:
       memory: 384Mi
 
   # @param ui.URBI_API_URL Base URL for the UI API.
+  # @param ui.MAPGL_HOST Host for MapGL service.
   # @param ui.MAPGL_KEY A key to MapGL service.
+  # @param ui.LOG_LEVEL Log messages importance.
 
   URBI_API_URL: https://2gis-pro.host
   MAPGL_HOST: https://mapgl.host
   MAPGL_KEY: ""
   LOG_LEVEL: error
-  NODE_ENV: production
 
   # @param ui.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param ui.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
   annotations: {}
   labels: {}
+
+  # @param ui.strategy.rollingUpdate.maxSurge Kubernetes [maxSurge](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#max-surge).
+  # @param ui.strategy.rollingUpdate.maxUnavailable Kubernetes [maxUnavailable](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#max-unavailable).
+  # @param ui.strategy.type Kubernetes [type](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).
+
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
 
   # @param ui.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param ui.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -72,3 +83,11 @@ ui:
   # @param ui.ingress If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.
 
   ingress: {}
+
+# @section Limits
+
+# @extra ui.resources **Limits for the UI service**
+# @param ui.resources.requests.cpu A CPU request.
+# @param ui.resources.requests.memory A memory request.
+# @param ui.resources.limits.cpu A CPU limit.
+# @param ui.resources.limits.memory A memory limit.
