@@ -1,20 +1,10 @@
-# 2GIS API Keys service
+# 2GIS-PRO UI service
 
-Use this Helm chart to deploy API Keys service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
+Use this Helm chart to deploy 2GIS-PRO UI service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
 
 > **Note:**
 >
 > All On-Premise services are beta, and under development.
-
-See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-    When filling in the keys for `values-keys.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
 
 ## Values
 
@@ -38,6 +28,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `ui.MAPGL_HOST`                            | Host for MapGL service.                                                                                                        | `https://mapgl.host`    |
 | `ui.MAPGL_KEY`                             | A key to MapGL service.                                                                                                        | `""`                    |
 | `ui.LOG_LEVEL`                             | Log messages importance.                                                                                                       | `error`                 |
+| `ui.IS_ON_PREM`                            | Application's environment.                                                                                                     | `True`                  |
 | `ui.annotations`                           | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                      | `{}`                    |
 | `ui.labels`                                | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                | `{}`                    |
 | `ui.strategy.rollingUpdate.maxSurge`       | Kubernetes [maxSurge](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#max-surge).                        | `1`                     |

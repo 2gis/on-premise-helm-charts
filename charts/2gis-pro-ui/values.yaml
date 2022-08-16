@@ -39,7 +39,7 @@ ui:
   MAPGL_HOST: https://mapgl.host
   MAPGL_KEY: ""
   LOG_LEVEL: error
-  IS_ON_PREM: True
+  IS_ON_PREM: 'True'
 
   # @param ui.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param ui.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
