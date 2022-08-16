@@ -123,12 +123,14 @@ autoscaling:
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-# @skip podDisruptionBudget
-# @extra podDisruptionBudget.enabled If PDB is enabled for the service.
-# @extra podDisruptionBudget.minAvailable How many pods must be available after the eviction.
-# @extra podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
+# @param podDisruptionBudget.enabled If PDB is enabled for the service.
+# @param podDisruptionBudget.minAvailable How many pods must be available after the eviction.
+# @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
 
-podDisruptionBudget: {}
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+  maxUnavailable: 50%
 
 
 # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings

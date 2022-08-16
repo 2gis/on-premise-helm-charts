@@ -111,11 +111,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                                 | Description                                          | Value |
-| ------------------------------------ | ---------------------------------------------------- | ----- |
-| `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   |       |
-| `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  |       |
-| `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. |       |
+| Name                                 | Description                                          | Value   |
+| ------------------------------------ | ---------------------------------------------------- | ------- |
+| `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `false` |
+| `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  | `1`     |
+| `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `50%`   |
 
 
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
