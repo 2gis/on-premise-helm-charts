@@ -47,9 +47,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Back application settings
 
-| Name    | Description                                                             | Value |
-| ------- | ----------------------------------------------------------------------- | ----- |
-| `rules` | Rules that define which projects are loaded by this Navi-Back instance. | `[]`  |
+| Name                       | Description                                                                                                                                                                                               | Value |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `naviback.app_castle_host` | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.                                                                                          |       |
+| `naviback.eca_host`        | Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.                       |       |
+| `naviback.forecast_host`   | URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster. |       |
 
 
 ### Service account settings
