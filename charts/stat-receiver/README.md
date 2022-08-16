@@ -50,34 +50,34 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 
 ### API service settings
 
-| Name                     | Description                                                                                                                    | Value                          |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
-| `api`                    | **Common settings**                                                                                                            |                                |
-| `api.replicas`           | A replica count for the pod.                                                                                                   | `1`                            |
-| `api.jvmXmx`             | Memory allocation options for JVM.                                                                                             | `-Xmx1500m`                    |
-| `api.image`              | **Deployment settings**                                                                                                        |                                |
-| `api.image.repository`   | Repository                                                                                                                     | `2gis-on-premise/bss-receiver` |
-| `api.image.tag`          | Tag                                                                                                                            | `0.8.3`                        |
-| `api.image.pullPolicy`   | Pull Policy                                                                                                                    | `IfNotPresent`                 |
-| `api.service`            | **Service settings**                                                                                                           |                                |
-| `api.service.type`       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`                    |
-| `api.service.port`       | Port inside the container.                                                                                                     | `80`                           |
-| `api.service.targetPort` | External port.                                                                                                                 | `8080`                         |
+| Name                     | Description                                                                                                                    | Value                              |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
+| `api`                    | **Common settings**                                                                                                            |                                    |
+| `api.replicas`           | A replica count for the pod.                                                                                                   | `1`                                |
+| `api.jvmXmx`             | Memory allocation options for JVM.                                                                                             | `-Xmx1500m`                        |
+| `api.image`              | **Deployment settings**                                                                                                        |                                    |
+| `api.image.repository`   | Repository                                                                                                                     | `2gis-on-premise/bss-receiver-api` |
+| `api.image.tag`          | Tag                                                                                                                            | `1.1.4`                            |
+| `api.image.pullPolicy`   | Pull Policy                                                                                                                    | `IfNotPresent`                     |
+| `api.service`            | **Service settings**                                                                                                           |                                    |
+| `api.service.type`       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`                        |
+| `api.service.port`       | Port inside the container.                                                                                                     | `80`                               |
+| `api.service.targetPort` | External port.                                                                                                                 | `8080`                             |
 
 
 ### Streams service settings
 
-| Name                       | Description                        | Value                                    |
-| -------------------------- | ---------------------------------- | ---------------------------------------- |
-| `streams`                  | **Common settings**                |                                          |
-| `streams.replicas`         | A replica count for the pod.       | `1`                                      |
-| `streams.jvmXmx`           | Memory allocation options for JVM. | `-Xmx2G -XX:+UseParallelGC`              |
-| `streams.jmxPort`          | Port for JMX protocol.             | `9010`                                   |
-| `streams.metricsPort`      | Port for metrics.                  | `8080`                                   |
-| `streams.image`            | **Deployment settings**            |                                          |
-| `streams.image.repository` | Repository                         | `casino/bss-receiver-streams-on-premise` |
-| `streams.image.tag`        | Tag                                | `0.8.3`                                  |
-| `streams.image.pullPolicy` | Pull Policy                        | `IfNotPresent`                           |
+| Name                       | Description                        | Value                                  |
+| -------------------------- | ---------------------------------- | -------------------------------------- |
+| `streams`                  | **Common settings**                |                                        |
+| `streams.replicas`         | A replica count for the pod.       | `1`                                    |
+| `streams.jvmXmx`           | Memory allocation options for JVM. | `-Xmx2G -XX:+UseParallelGC`            |
+| `streams.jmxPort`          | Port for JMX protocol.             | `9010`                                 |
+| `streams.metricsPort`      | Port for metrics.                  | `8080`                                 |
+| `streams.image`            | **Deployment settings**            |                                        |
+| `streams.image.repository` | Repository                         | `2gis-on-premise/bss-receiver-streams` |
+| `streams.image.tag`        | Tag                                | `1.1.4`                                |
+| `streams.image.pullPolicy` | Pull Policy                        | `IfNotPresent`                         |
 
 
 ### Kafka service settings

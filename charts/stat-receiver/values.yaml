@@ -16,8 +16,8 @@ api:
   # @param api.image.pullPolicy Pull Policy
 
   image:
-    repository: 2gis-on-premise/bss-receiver
-    tag: 0.8.3
+    repository: 2gis-on-premise/bss-receiver-api
+    tag: 1.1.4
     pullPolicy: IfNotPresent
 
 
@@ -62,8 +62,8 @@ streams:
   # @param streams.image.pullPolicy Pull Policy
 
   image:
-    repository: casino/bss-receiver-streams-on-premise
-    tag: 0.8.3
+    repository: 2gis-on-premise/bss-receiver-streams
+    tag: 1.1.4
     pullPolicy: IfNotPresent
 
   resources:
