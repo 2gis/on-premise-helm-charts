@@ -109,7 +109,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `autoscaling.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. |         |
 
 
-### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                                 | Description                                          | Value |
 | ------------------------------------ | ---------------------------------------------------- | ----- |

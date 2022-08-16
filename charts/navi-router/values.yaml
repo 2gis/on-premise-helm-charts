@@ -121,7 +121,7 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 
-# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 # @skip podDisruptionBudget
 # @extra podDisruptionBudget.enabled If PDB is enabled for the service.
