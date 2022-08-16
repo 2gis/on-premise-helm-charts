@@ -82,10 +82,10 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 
 ### Kafka service settings
 
-| Name              | Description                                                                                                                                   | Value |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `kafka.security`  | (https://kafka.apache.org/documentation/#security_sasl_config) for Kafka clients.                                                             | `{}`  |
-| `kafka.sasl.jaas` | (https://kafka.apache.org/documentation/#brokerconfigs_sasl.jaas.config) for SASL connections in the format used by JAAS configuration files. | `{}`  |
+| Name              | Description                                                                                                                                                                                          | Value |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `kafka.security`  | SASL configuration for Kafka clients (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config)).                                                                        | `{}`  |
+| `kafka.sasl.jaas` | JAAS login context parameters for SASL connections in the format used by JAAS configuration files (see [the documentation](https://kafka.apache.org/documentation/#brokerconfigs_sasl.jaas.config)). | `{}`  |
 
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
