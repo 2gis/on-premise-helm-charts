@@ -47,10 +47,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Router service settings
 
-| Name                         | Description                                                     | Value  |
-| ---------------------------- | --------------------------------------------------------------- | ------ |
-| `router.app_port`            | Navi-Router service HTTP port.                                  | `8080` |
-| `router.additional_sections` | Additional configurations sections for the Navi-Router service. | `""`   |
+| Name                         | Description                                                                                                      | Value  |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------ |
+| `router.app_castle_host`     | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster. |        |
+| `router.app_port`            | Navi-Router service HTTP port.                                                                                   | `8080` |
+| `router.additional_sections` | Additional configurations sections for the Navi-Router service.                                                  | `""`   |
 
 
 ### Service account settings
