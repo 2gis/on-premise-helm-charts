@@ -33,6 +33,7 @@ ui:
   # @param ui.MAPGL_KEY A key to MapGL service.
 
   URBI_API_URL: https://2gis-pro.host
+  MAPGL_HOST: https://mapgl.host
   MAPGL_KEY: ""
   LOG_LEVEL: error
   NODE_ENV: production

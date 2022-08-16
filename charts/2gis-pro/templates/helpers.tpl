@@ -19,6 +19,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "2gis-pro.env.ui" -}}
 - name: URBI_API_URL
   value: "{{ .Values.ui.URBI_API_URL }}"
+- name: MAPGL_HOST
+  value: "{{ .Values.ui.MAPGL_HOST }}"
 - name: MAPGL_KEY
   value: "{{ .Values.ui.MAPGL_KEY }}"
 - name: LOG_LEVEL
