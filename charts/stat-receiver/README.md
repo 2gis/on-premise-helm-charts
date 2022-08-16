@@ -25,7 +25,7 @@ kafka:
 
 # Kafka topics settings
 initializeTopics: true
-topicsPrefix: bss.env.
+topicsPrefix: stat.env.
 ```
 
 App may initialize required topics on startup (`initilizeTopics` setting) however in cases when topics settings are explicitly managed you may initialize it manually using provided settings (see `topics-config.md`).
