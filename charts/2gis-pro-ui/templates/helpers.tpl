@@ -27,4 +27,6 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.ui.LOG_LEVEL }}"
 - name: NODE_ENV
   value: "{{ .Values.ui.NODE_ENV }}"
+- name: IS_ON_PREM
+  value: "{{ .Values.ui.IS_ON_PREM }}"
 {{- end }}
