@@ -16,7 +16,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
 
   image:
-    repository: casino/bss-receiver-api-on-premise
+    repository: 2gis-on-premise/bss-receiver
     tag: 0.8.3
     pullPolicy: IfNotPresent
 
