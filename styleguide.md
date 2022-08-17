@@ -45,6 +45,9 @@ README.md формируется полуавтоматически: табли�
 * serviceaccount.yaml - 
 * configmap.yaml — 
 * deployment.yaml — 
+* job.yaml — 
+* secret.yaml —
+* statefulset.yaml — 
 
 # Домены в переменных оформляем по шаблону 'http://{service-name}.host'
 * Пример: restrictions_api_url: 'http://navi-restrictions.host'
