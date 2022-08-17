@@ -88,7 +88,7 @@ api:
   api_key: example
   debug: false
   is_init_db: true
-  attractor_url: http://restrictions-api.host/attract/1.0.0/global/
+  attractor_url: http://restrictions-api.host/attract
 
   securityContext: {}
 
@@ -190,7 +190,7 @@ cron:
   successfulJobsHistoryLimit: 3
   containerPort: 8000
   edges_url_template: http://navi-back.host/restrictions_json/{project}/{date_str}_{hour}.json
-  edge_attributes_url_template: http://navi-back.host/develop/edge?edge_id={edge_id}&offset=200&routing=carrouting
+  edge_attributes_url_template: http://navi-back.host/edge?edge_id={edge_id}&offset=200&routing=carrouting
   projects:
   - moscow
   max_attributes_fetcher_rps: 25
