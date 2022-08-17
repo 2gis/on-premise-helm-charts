@@ -35,6 +35,17 @@ README.md формируется полуавтоматически: табли�
   * kafka - https://github.com/2gis/on-premise-helm-charts/pull/124/files#diff-439bd87592d0ae6027750dd8342d3e2bef43c01e3b68e5330049f0076eb23af6R140 
   * S3 - https://github.com/2gis/on-premise-helm-charts/pull/124/files#diff-439bd87592d0ae6027750dd8342d3e2bef43c01e3b68e5330049f0076eb23af6R162  
 
+# ToDo. Примеры типовых шаблонов yaml
+* helpers.tpl —  
+* ingress.yaml —
+* service.yaml  — 
+* vpa.yaml  — 
+* hpa.yaml — 
+* pdb.yaml — 
+* serviceaccount.yaml - 
+* configmap.yaml — 
+* deployment.yaml — 
+
 # Домены в переменных оформляем по шаблону 'http://{service-name}.host'
 * Пример: restrictions_api_url: 'http://navi-restrictions.host'
 
