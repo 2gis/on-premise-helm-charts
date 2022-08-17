@@ -77,8 +77,8 @@ streams:
 
 # @section Kafka service settings
 
-# @param kafka.security [SASL configuration](https://kafka.apache.org/documentation/#security_sasl_config) for Kafka clients.
-# @param kafka.sasl.jaas [JAAS login context parameters](https://kafka.apache.org/documentation/#brokerconfigs_sasl.jaas.config) for SASL connections in the format used by JAAS configuration files.
+# @param kafka.security  SASL configuration for Kafka clients (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config)).
+# @param kafka.sasl.jaas JAAS login context parameters for SASL connections in the format used by JAAS configuration files (see [the documentation](https://kafka.apache.org/documentation/#brokerconfigs_sasl.jaas.config)).
 
 kafka:
   security: {}
