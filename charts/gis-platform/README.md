@@ -20,10 +20,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ### Common settings
 
-| Name                | Description                         | Value               |
-| ------------------- | ----------------------------------- | ------------------- |
-| `external_hostname` | Service hostname.                   | `gis-platform.host` |
-| `external_proto`    | Protocol to use: `http` or `https`. | `https`             |
+| Name                  | Description                                                                             | Value               |
+| --------------------- | --------------------------------------------------------------------------------------- | ------------------- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`                |
+| `external_hostname`   | Service hostname.                                                                       | `gis-platform.host` |
+| `external_proto`      | Protocol to use: `http` or `https`.                                                     | `https`             |
 
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings

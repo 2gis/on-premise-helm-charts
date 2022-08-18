@@ -1,5 +1,6 @@
 # @section Common settings
 
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 # @param replicaCount A replica count for the pod.
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
@@ -10,6 +11,7 @@
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
+dgctlDockerRegistry: ''
 replicaCount: 1
 imagePullSecrets: []
 nameOverride: ''

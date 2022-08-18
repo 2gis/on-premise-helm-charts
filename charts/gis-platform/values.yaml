@@ -1,8 +1,10 @@
 # @section Common settings
 
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 # @param external_hostname Service hostname.
 # @param external_proto Protocol to use: `http` or `https`.
 
+dgctlDockerRegistry: ''
 external_hostname: gis-platform.host
 external_proto: https
 

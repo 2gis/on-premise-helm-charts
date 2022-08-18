@@ -48,6 +48,13 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 
 ## Values
 
+### Common settings
+
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
+
+
 ### API service settings
 
 | Name                     | Description                                                                                                                    | Value                              |

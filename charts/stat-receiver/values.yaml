@@ -1,3 +1,10 @@
+# @section Common settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+
 # @section API service settings
 
 api:

@@ -1,5 +1,6 @@
 # @section Common settings
 
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 # @param replicaCount A replica count for the pod.
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
@@ -10,6 +11,7 @@
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 
+dgctlDockerRegistry: ''
 replicaCount: 1
 imagePullSecrets: []
 nameOverride: ''
