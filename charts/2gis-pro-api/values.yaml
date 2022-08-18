@@ -134,8 +134,10 @@ env:
 
 # @section 2GIS PRO API Job settings
 # @param appImporterName Data Import job name.
+# @param appUserDataImporterName User Data Import job name.
 # @param appDataPreparerName Data preparation job name
 appImporterName: "urbigeo-importer"
+appUserDataImporterName: "urbigeo-userdata-importer"
 appDataPreparerName: "urbigeo-data-preparer"
 
 # @extra importJob Import job settings

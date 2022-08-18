@@ -6,6 +6,10 @@
 {{- default .Values.appImporterName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{- define "urbi-pro.userdata-import-name" -}}
+{{- default .Values.appUserDataImporterName | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{- define "urbi-pro.data-preparer-name" -}}
 {{- default .Values.appDataPreparerName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
