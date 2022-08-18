@@ -1,5 +1,6 @@
 # @section Common settings
 
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 # @param replicaCount A replica count for the pod.
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
@@ -15,6 +16,7 @@
 # @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).
 # @param prometheusEnabled If Prometheus scrape is enabled.
 
+dgctlDockerRegistry: ''
 replicaCount: 1
 imagePullSecrets: []
 nameOverride: ''
