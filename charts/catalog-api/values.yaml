@@ -155,6 +155,8 @@ importer:
     tag: "1.0.0"
     pullPolicy: IfNotPresent
 
+  initialDelaySeconds: 0
+
   resources:
     requests:
       cpu: 256m
