@@ -108,10 +108,12 @@ image:
 # @param env.dbConnectionPwd User password to connect to the PostgreSql database.
 # @param env.esHost ElasticSearch host address. Format: `https://{0}@HOST:PORT`
 # @param env.esCredentials User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD`
+# @param env.s3Host Amazon S3 host address. Format: `https://HOST:PORT`
 # @param env.s3AccessKey S3 access key.
 # @param env.s3SecretKey S3 secret key.
-# @param env.layerDataBucket S3 bucket with prepared layer data.
-# @param env.assetDataBucket S3 bucket with `assets` data, prepared for import into ElasticSearch.
+# @param env.s3LayerDataBucket S3 bucket with prepared layer data.
+# @param env.s3AssetDataBucket S3 bucket with `assets` data, prepared for import into ElasticSearch.
+# @param env.s3UserAssetsDataBucket S3 bucket with assets, aggregations and filters that user created.
 # @param env.apiUrl 2GIS PRO API Url
 # @skip env.diggerPassword
 env:
@@ -121,10 +123,12 @@ env:
   dbConnectionPwd: ""
   esHost: ""
   esCredentials: ""
+  s3Host: ""
   s3AccessKey: ""
   s3SecretKey: ""
-  layerDataBucket: ""
-  assetDataBucket: ""
+  s3LayerDataBucket: ""
+  s3AssetDataBucket: ""
+  s3UserAssetsDataBucket: ""
   apiUrl: ""
   diggerPassword: ""
 
@@ -138,7 +142,8 @@ appDataPreparerName: "urbigeo-data-preparer"
 # @param importJob.schedule Import job start schedule
 # @param importJob.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
 # @param importJob.successfulJobsHistoryLimit How many completed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
-# @param importJob.image Docker Repository Image.
+# @param importJob.repository Docker Repository Image.
+# @param importJob.tag Docker image tag
 # @param importJob.serviceAccount  Kubernetes service account
 # @extra importJob.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
 # @param importJob.resources.requests.cpu A CPU request.
@@ -151,7 +156,8 @@ importJob:
   schedule: "0 18 * * *"
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
-  image: 2gis-on-premise/urbigeo-importer
+  repository: 2gis-on-premise/urbigeo-importer
+  tag: "0.5.0"
   serviceAccount: "runner"
   resources:
     requests:
@@ -167,7 +173,8 @@ importJob:
 # @param dataPrepareJob.schedule Data prepare job start schedule
 # @param dataPrepareJob.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
 # @param dataPrepareJob.successfulJobsHistoryLimit How many completed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
-# @param dataPrepareJob.image Docker Repository Image.
+# @param dataPrepareJob.repository Docker Repository Image.
+# @param dataPrepareJob.tag Docker image tag
 # @extra dataPrepareJob.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
 # @param dataPrepareJob.resources.requests.cpu A CPU request.
 # @param dataPrepareJob.resources.requests.memory A memory request.
@@ -178,7 +185,8 @@ dataPrepareJob:
   schedule: "0 16 * * 6"
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
-  image: 2gis-on-premise/urbigeo-import
+  repository: 2gis-on-premise/urbigeo-import
+  tag: "0.5.0"
   resources:
     requests:
       cpu: 300m

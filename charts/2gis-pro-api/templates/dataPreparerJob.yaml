@@ -19,7 +19,7 @@ spec:
               emptyDir: {}
           containers:
             - name: {{ include "urbi-pro.import-name" . }}
-              image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.dataPrepareJob.image }}:{{ .Values.image.tag }}
+              image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.dataPrepareJob.repository }}:{{ .Values.dataPrepareJob.tag }}
               imagePullPolicy: IfNotPresent
               resources:
                 {{- toYaml .Values.dataPrepareJob.resources | nindent 16 }}
@@ -40,7 +40,7 @@ spec:
                 - name: S3Settings__Url
                   value: "{{ .Values.env.s3Host }}"
                 - name: S3Settings__AssetDataBucket
-                  value: "{{ .Values.env.assetDataBucket }}"
+                  value: "{{ .Values.env.s3AssetDataBucket }}"
                 - name: S3Settings__AccessKey
                   valueFrom:
                     secretKeyRef:

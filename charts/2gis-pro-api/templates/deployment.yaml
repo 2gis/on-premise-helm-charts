@@ -143,9 +143,9 @@ spec:
             - name: S3Settings__Url
               value: "{{ .Values.env.s3Host }}"
             - name: S3Settings__LayerDataBucket
-              value: "{{ .Values.env.layerDataBucket }}"
+              value: "{{ .Values.env.s3LayerDataBucket }}"
             - name: S3Settings__AssetDataBucket
-              value: "{{ .Values.env.assetDataBucket }}"
+              value: "{{ .Values.env.s3AssetDataBucket }}"
             - name: S3Settings__AccessKey
               valueFrom:
                 secretKeyRef:

@@ -1,7 +1,7 @@
 ﻿apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ include "urbi-pro.import-name" . }}
+  name: {{ include "urbi-pro.userdata-import-name" . }}
 spec:
   concurrencyPolicy: Forbid
   schedule: {{ .Values.importJob.schedule }}
@@ -29,7 +29,7 @@ spec:
                   name: temp-volume
               env:
                 - name: JOB_NAME
-                  value: {{ include "urbi-pro.import-name" . }}
+                  value: {{ include "urbi-pro.userdata-import-name" . }}
                 - name: TEMP_PATH
                   value: "{{ .Values.env.tempPath }}"
                 - name: ENV
@@ -41,7 +41,7 @@ spec:
                 - name: S3Settings__Url
                   value: "{{ .Values.env.s3Host }}"
                 - name: S3Settings__AssetDataBucket
-                  value: "{{ .Values.env.s3AssetDataBucket }}"
+                  value: "{{ .Values.env.s3UserAssetsDataBucket }}"
                 - name: S3Settings__LayerDataBucket
                   value: "{{ .Values.env.s3LayerDataBucket }}"
                 - name: S3Settings__AccessKey
@@ -72,7 +72,5 @@ spec:
                 {{ end }}
                 - name: API_URL
                   value: "{{ .Values.env.apiUrl }}"
-                {{ if .Values.importJob.files }}
-                - name: FILES
-                  value: "{{ .Values.importJob.files}}"
-                {{ end }}
+                - name: CREATE_ASSET
+                  value: "true"
