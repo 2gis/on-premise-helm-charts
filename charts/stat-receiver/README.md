@@ -61,8 +61,8 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | `api.image.pullPolicy`   | Pull Policy                                                                                                                    | `IfNotPresent`                     |
 | `api.service`            | **Service settings**                                                                                                           |                                    |
 | `api.service.type`       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`                        |
-| `api.service.port`       | Port inside the container.                                                                                                     | `80`                               |
-| `api.service.targetPort` | External port.                                                                                                                 | `8080`                             |
+| `api.service.port`       | External port.                                                                                                                 | `80`                               |
+| `api.service.targetPort` | Port inside the container.                                                                                                     | `8080`                             |
 
 
 ### Streams service settings

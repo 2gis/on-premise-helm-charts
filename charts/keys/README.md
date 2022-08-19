@@ -50,7 +50,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `admin.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`                    |
 | `admin.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`                    |
 | `admin.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`             |
-| `admin.service.port`        | Tiles API service port.                                                                                                        | `80`                    |
+| `admin.service.port`        | Service port.                                                                                                                  | `80`                    |
 | `admin.ingress`             | If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.                     | `{}`                    |
 
 
@@ -74,7 +74,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.service.annotations`                | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                              | `{}`        |
 | `api.service.labels`                     | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                        | `{}`        |
 | `api.service.type`                       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                 | `ClusterIP` |
-| `api.service.port`                       | Tiles API service port.                                                                                                                                        | `80`        |
+| `api.service.port`                       | Service port.                                                                                                                                                  | `80`        |
 | `api.ingress`                            | If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.                                                     | `{}`        |
 
 
