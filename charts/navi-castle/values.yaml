@@ -67,7 +67,7 @@ serviceAccount:
 # @section Service settings
 
 # @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-# @param service.port Port inside the container.
+# @param service.port Service port.
 
 service:
   type: ClusterIP

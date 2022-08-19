@@ -73,7 +73,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name           | Description                                                                                                                    | Value       |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `service.type` | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `service.port` | Port inside the container.                                                                                                     | `80`        |
+| `service.port` | Service port.                                                                                                                  | `80`        |
 
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
