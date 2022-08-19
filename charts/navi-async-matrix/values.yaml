@@ -1,60 +1,80 @@
+# @section Common settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+# @param replicaCount A replica count for the pod.
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
+# @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).
+# @param prometheusEnabled If Prometheus scrape is enabled.
+
+dgctlDockerRegistry: ''
+replicaCount: 1
+imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
+podAnnotations: {}
+podLabels: {}
+annotations: {}
+labels: {}
+podSecurityContext: {}
+securityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+priorityClassName: ''
+terminationGracePeriodSeconds: 60
+prometheusEnabled: true
 
-replicaCount: 1
+
+# @section Deployment settings
+
+# @param image.repository Repository
+# @param image.tag Tag
+# @param image.pullPolicy Pull Policy
 
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  # Chart.AppVersion if unset
   tag: 1.0.0
 
+
+# @section Service account settings
+
+# @param serviceAccount.create Specifies whether a service account should be created.
+# @param serviceAccount.annotations Annotations to add to the service account.
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+
 serviceAccount:
-  # Specifies whether a service account should be created
   create: false
-  # Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
   name: ''
 
-annotations: {}
-labels: {}
-podAnnotations: {}
-podLabels: {}
 
-imagePullSecrets: []
-# affinity gets passed through render, references to other values allowed, e.g.:
-#
-# affinity:
-#   podAntiAffinity:
-#     requiredDuringSchedulingIgnoredDuringExecution:
-#     # do not stack up on the same node
-#     - labelSelector:
-#         matchExpressions:
-#         - key: app.kubernetes.io/instance
-#           operator: In
-#           values:
-#           - "{{ .Release.Name }}"
-#       topologyKey: kubernetes.io/hostname
-#
-# to avoide iterpolation use the following syntax: '{{ "{{ .Release.Name }}" }}'
-affinity: {}
-nodeSelector: {}
-tolerations: []
+# @section Strategy settings
 
-priorityClassName: ''
-
-podSecurityContext: {}
-securityContext: {}
-
-terminationGracePeriodSeconds: 60
-
-# if prometheus metrics needed
-prometheusEnabled: true
+# @param updateStrategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
 
 updateStrategy:
   type: RollingUpdate
+
+
+# @section Limits
+
+# @param resources.requests.cpu A CPU request.
+# @param resources.requests.memory A memory request.
+# @param resources.limits.cpu A CPU limit.
+# @param resources.limits.memory A memory limit.
 
 resources:
   limits:
@@ -64,6 +84,15 @@ resources:
     cpu: 1000m
     memory: 1Gi
 
+
+# @section Service settings
+
+# @param service.enabled If the service is enabled.
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.port Service port.
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
 service:
   enabled: true
   type: ClusterIP
@@ -71,31 +100,49 @@ service:
   annotations: {}
   labels: {}
 
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @extra ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'navi-async-matrix.host'}]}`.
+# @skip ingress.hosts[0].host
+
 ingress:
-  enabled: false
-  className: ''
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
   hosts:
-  - host: chart-example.local
-    paths:
-    - path: /
-      pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  - host: navi-async-matrix.host
+
+
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param podDisruptionBudget.enabled If PDB is enabled for the service.
+# @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
 
 podDisruptionBudget:
   enabled: true
   maxUnavailable: 1
+
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+# @param hpa.enabled If HPA is enabled for the service.
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
 
 hpa:
   enabled: false
   maxReplicas: 2
   minReplicas: 1
   targetCPUUtilizationPercentage: 80
+
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+# @param vpa.enabled If VPA is enabled for the service.
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale up.
+# @param vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @param vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @param vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
 
 vpa:
   enabled: false
@@ -107,24 +154,60 @@ vpa:
     cpu: 2000m
     memory: 2Gi
 
+
+# @section Distance Matrix Async API settings
+
+# @param dm.port Distance Matrix Async API HTTP port.
+# @param dm.configType Configuration type. Must always be `env`.
+# @param dm.workerCount Number of Distance Matrix Async workers.
+# @param dm.citiesUrl URL of the information about cities provided by the Navi-Castle service.
+# @param dm.citiesUpdatePeriod Period (in seconds) between requesting data from `citiesUrl`.
+
 dm:
-  # port exposed by DM Async
   port: 8000
   configType: env
   workerCount: 4
-  citiesUrl: http://example.com/cities.conf
+  citiesUrl: http://navi-castle.host/cities.conf
   citiesUpdatePeriod: 3600
+
+
+# @section Database settings
+
+# @param db.host PostgreSQL host.
+# @param db.port PostgreSQL port.
+# @param db.name PostgreSQL database name.
+# @param db.user PostgreSQL username.
+# @param db.password PostgreSQL password. Must be specified in overrides.
 
 db:
   host: localhost
   port: 5432
   name: dm
   user: dbuser
-  # must be specified in overrides
   password: dbpassword
 
+
+# @section Kafka settings
+
+# @param kafka.bootstrap URL of the Kafka server.
+# @param kafka.groupId Distance Matrix Async API group identifier.
+# @param kafka.user Username for accessing the Kafka server.
+# @param kafka.password Password for accessing the Kafka server.
+# @param kafka.mechanism Authentication mechanism.
+# @param kafka.protocol Kafka protocol.
+# @param kafka.consumerTaskTopic Name of the topic for sending new tasks to.
+# @param kafka.consumerCancelTopic Name of the topic for canceling or receiving information about finished tasks.
+# @extra kafka.topicRules **Information about the topics that Distance Matrix Async API will use to send the requests.**
+# @extra kafka.topicRules[].topic Name of the topic.
+# @extra kafka.topicRules[].default If this topic is used for projects by default.
+# @extra kafka.topicRules[].projects List of projects to use this topic for, e.g., `['dammam']`.
+# @skip kafka.topicRules[0].topic
+# @skip kafka.topicRules[0].default
+# @skip kafka.topicRules[1].topic
+# @skip kafka.topicRules[1].projects
+
 kafka:
-  bootstrap: example.com:9092
+  bootstrap: async-matrix-api.host:9092
   groupId: test_id
   user: kafkauser
   password: kafkapassword
@@ -133,15 +216,22 @@ kafka:
   consumerTaskTopic: service_message_bus
   consumerCancelTopic: cancel_topic
   topicRules:
-  # topic for requests with no specific match
   - topic: task_request_topic
     default: true
   - topic: task_request_topic
     projects:
     - dammam
 
+
+# @section S3-compatible storage settings
+
+# @param s3.url S3 endpoint URL.
+# @param s3.bucket S3 bucket name.
+# @param s3.keyId S3 access key for accessing the bucket.
+# @param s3.key S3 secret key for accessing the bucket.
+
 s3:
-  url: https://example.com
+  url: https://async-matrix-s3.host
   bucket: samplebucket
   keyId: sampleid
   key: samplekey
