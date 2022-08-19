@@ -1,6 +1,6 @@
 # 2GIS Restrictions service
 
-Use this Helm chart to deploy Restrictions API service, which is a part of 2GIS's [On-Premise Navigation services](https://docs.2gis.com/en/on-premise/navigation).
+Use this Helm chart to deploy Restrictions API service, which is a part of 2GIS's [On-Premise Navigation services](https://docs.2gis.com/en/on-premise/navigation/restrictions).
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
