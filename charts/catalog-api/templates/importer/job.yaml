@@ -20,7 +20,7 @@ spec:
       {{- if .Values.importer.initialDelaySeconds }}
       initContainers:
         - name: delay
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag }}
           command: [ "sh", "-c", "sleep {{ .Values.importer.initialDelaySeconds }}" ]
           resources:
             {{- toYaml .Values.importer.resources | nindent 12 }}
