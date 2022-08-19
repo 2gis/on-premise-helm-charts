@@ -109,7 +109,7 @@ api:
 
   # @extra api.service **Service settings.**
   # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-  # @param api.service.port External port.
+  # @param api.service.port Service port.
   # @param api.service.targetPort Port inside the container.
   # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
