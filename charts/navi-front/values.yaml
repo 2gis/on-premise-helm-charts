@@ -1,71 +1,100 @@
-# Default values for front.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+# @section Common settings
 
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+# @param replicaCount A replica count for the pod.
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+
+dgctlDockerRegistry: ''
 replicaCount: 1
+imagePullSecrets: []
+nameOverride: ''
+fullnameOverride: ''
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+
+# @section Deployment settings
+
+# @param image.repository Repository
+# @param image.tag Tag
+# @param image.pullPolicy Pull Policy
 
 image:
   repository: 2gis-on-premise/navi-front
   pullPolicy: IfNotPresent
   tag: 1.21-ad06a0e0
 
-imagePullSecrets: []
-nameOverride: ''
-fullnameOverride: ''
+
+# @section Navi-Front service settings
+
+# @param front.port Navi-Front service HTTP port.
+
+front:
+  port: 8080
+
+
+# @section Service account settings
+
+# @param serviceAccount.create Specifies whether a service account should be created.
+# @param serviceAccount.annotations Annotations to add to the service account.
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
 
 serviceAccount:
-  # Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
   name: ''
 
-podAnnotations: {}
 
-podSecurityContext: {}
-  # fsGroup: 2000
+# @section Service settings
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.port Service port.
 
 service:
   type: ClusterIP
   port: 80
 
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @extra ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'navi-front.host'}]}`.
+# @skip ingress.hosts[0].host
+
 ingress:
-  enabled: false
-  className: ''
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
   hosts:
-  - host: chart-example.local
-    paths:
-    - path: /
-      pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  - host: navi-front.host
+
+
+# @section Limits
+
+# @skip resources
+# @extra resources.requests.cpu A CPU request, e.g., `100m`.
+# @extra resources.requests.memory A memory request, e.g., `128Mi`.
+# @extra resources.limits.cpu A CPU limit, e.g., `100m`.
+# @extra resources.limits.memory A memory limit, e.g., `128Mi`.
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+# @param autoscaling.enabled If HPA is enabled for the service.
+# @param autoscaling.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param autoscaling.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param autoscaling.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @extra autoscaling.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
 autoscaling:
   enabled: false
@@ -74,16 +103,14 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-nodeSelector: {}
+
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param pdb.create If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
 pdb:
   create: false
   minAvailable: 1
   maxUnavailable: 0
-
-tolerations: []
-
-affinity: {}
-
-front:
-  port: 8080
