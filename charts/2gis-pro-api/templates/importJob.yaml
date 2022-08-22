@@ -38,6 +38,8 @@ spec:
                   value: "Schedule"
                 - name: MAX_PARALLEL_JOBS
                   value: "{{ .Values.importJob.maxParallelJobs }}"
+                - name: manifest
+                  value: "{{ .Values.importJob.manifest }}"
                 - name: S3Settings__Url
                   value: "{{ .Values.env.s3Host }}"
                 - name: S3Settings__AssetDataBucket

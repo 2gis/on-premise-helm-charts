@@ -154,6 +154,7 @@ appDataPreparerName: "urbigeo-data-preparer"
 # @param importJob.resources.limits.memory A memory limit.
 # @param importJob.maxParallelJobs How many import jobs can be run simultaneously
 # @skip importJob.files
+# @param importJob.manifest Path to DataGateway manifest JSON file
 importJob:
   schedule: "0 18 * * *"
   backoffLimit: 2
@@ -170,6 +171,7 @@ importJob:
       memory: 1024M
   maxParallelJobs: 4
   files: ""
+  manifest: ''
 
 # @extra dataPrepareJob Data prepare job settings
 # @param dataPrepareJob.schedule Data prepare job start schedule
