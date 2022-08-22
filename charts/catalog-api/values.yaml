@@ -155,6 +155,13 @@ importer:
     tag: "1.0.0"
     pullPolicy: IfNotPresent
 
+  persistentVolume:
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    storageClass: topolvm-ext4
+    size: 50Gi
+
   initialDelaySeconds: 1
 
   resources:

@@ -33,6 +33,17 @@ spec:
             {{- toYaml .Values.importer.resources | nindent 12 }}
           env:
             {{- include "catalog.env.importer" . | nindent 12 }}
+          {{- if .Values.importer.persistentVolume.enabled }}
+          volumeMounts:
+            - name: {{ include "catalog.importer.name" . }}-pvc
+              mountPath: "/tmp"
+          {{- end }}
+      {{- if .Values.importer.persistentVolume.enabled }}
+      volumes:
+        - name: {{ include "catalog.importer.name" . }}-pvc
+          persistentVolumeClaim:
+            claimName: {{ include "catalog.importer.name" . }}-pvc
+      {{- end }}
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

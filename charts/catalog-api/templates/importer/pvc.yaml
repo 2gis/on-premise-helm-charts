@@ -1,0 +1,15 @@
+{{- if .Values.importer.persistentVolume.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "catalog.importer.name" . }}-pvc
+spec:
+  storageClassName: {{ .Values.importer.persistentVolume.storageClass }}
+  {{- with .Values.importer.persistentVolume.accessModes }}
+  accessModes:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.importer.persistentVolume.size }}
+{{- end }}
