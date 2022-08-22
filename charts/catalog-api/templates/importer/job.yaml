@@ -35,12 +35,12 @@ spec:
             {{- include "catalog.env.importer" . | nindent 12 }}
           {{- if .Values.importer.persistentVolume.enabled }}
           volumeMounts:
-            - name: {{ include "catalog.importer.name" . }}-pvc
+            - name: {{ include "catalog.importer.name" . }}-pv
               mountPath: "/tmp"
           {{- end }}
       {{- if .Values.importer.persistentVolume.enabled }}
       volumes:
-        - name: {{ include "catalog.importer.name" . }}-pvc
+        - name: {{ include "catalog.importer.name" . }}-pv
           persistentVolumeClaim:
             claimName: {{ include "catalog.importer.name" . }}-pvc
       {{- end }}
