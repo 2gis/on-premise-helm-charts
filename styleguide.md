@@ -1,81 +1,111 @@
-# Описание общих принципов, которым нужно следовать при разработке helm чартов
+# Styleguide
 
-## Следуем официальным [Best Practices](https://helm.sh/docs/chart_best_practices/templates/#structure-of-templates) написания helm чартов
+В этом документе описаны общие принципы, которым нужно следовать при разработке helm-чартов.
 
-## Написание README.md 
+## Структура файлов
 
-* README.md формируется полуавтоматически: таблица с параметрами из values.yaml генерируется [readme-generator-for-helm](https://github.com/bitnami-labs/readme-generator-for-helm) от Bitnami, как ей пользоваться описано в [документе](https://docs.google.com/document/d/1iEPG8tcCYu9q5iZssTAPOd43xh8uCQhNXyXhFPUTir8/edit).
+Мы следуем [официальным best practices для helm-чартов](https://helm.sh/docs/chart_best_practices/templates/#structure-of-templates).
 
-## Скрываем лишние переменные в README.md 
+## Генерация README.md
 
-* Делаем это через @skip переменные, которые константные или которые никогда не менются в типовом использовании сервиса
+Файлы `README.md` формируются полуавтоматически. Для каждого чарта сначала необходимо создать файл `README.md` с общим описанием сервиса и пустым разделом «Values», а затем запустить инструмент [`readme-generator-for-helm`](https://github.com/bitnami-labs/readme-generator-for-helm) от Bitnami, чтобы автоматически заполнить раздел «Values» описаниями настроек на основе комментариев из `values.yaml`. Подробнее об использовании генератора можно прочитать в [документе](https://docs.google.com/document/d/1iEPG8tcCYu9q5iZssTAPOd43xh8uCQhNXyXhFPUTir8/edit).
 
-## Всегда добавляем общую секцию с Docker registry settings
+Генератор можно запускать напрямую или с помощью [`Makefile`](Makefile), например:
 
-* пример https://github.com/2gis/on-premise-helm-charts/pull/131/files#diff-16650db0a687f4e9f6e519cbf8703aaf4c02413fc6d8dfc80dee71fc622ba636R11
+```
+make prepare
+make charts/navi-back
+```
 
-## В переменных, где предполагается конечный список значений, всегда его явно перечисляем, дефолт уровня ошибка / критичная ошибка
-* Пример: LOG_LEVEL - error, warn, info, debug. Default - error
+## Описание параметров
 
-## K8s специфичные настройки
+- В каждом чарте должна быть секция под названием «Docker registry settings». В ней должны быть описаны `dgctlDockerRegistry` и другие настройки, связанные с получением Docker-образов.
 
-* Для каждого блока настроек всегда должна быть ссылка на официальную документацию (VPA, HPA, PDB, ...) 
-
-* Для каждой настройки должен стоять дефолт, как его ставить:
-  * описание делать через @extra
-  * с этой установкой сервис должен подняться в dev контуре
-  * настройка должна подходить для типового использования сервиса у партнера
-  * исключение составляет настройка, которая критично повлияет на сервис, при не правильном указании, для такой ставим визуальную отметку **required** : 
-     * например, суффикс в Cassandra для Tiles API. Если выставить дефолт, то клиент про него не узнает, или забудет и в конечном итоге себе что-нибудь сломает, т.к. суффикс служит защитой от перетирания кейсейсов, когда бой и тест используют одну касандру.
-
-* Одинаковые настройки называем везде одинаково.
-  * enabled — когда опция включена / выключена. Дефолт: чаще всего false
-    * Пример: serviceAccount.create → serviceAccount.enabled 
-  * группы настроек тоже называем одинаково, без сокращений (официальные названия можно взять [тут](https://github.com/helm/helm/blob/main/pkg/releaseutil/kind_sorter.go#L72))
-    * ingress — описывем только enabled, host и cсылку на официальную документацию
-    * horizontalPodAutoscaler
-    * verticalPodAutoscaler
-    * podDisruptionBudget
-    * serviceAccount
-
-* Ресурсы всегда пишем с дефолтами, на которых сервис запустится на dev контуре
-* Блоки настроек именуем одноименно с сервисом:
-  * postgres
-  * s3
-  * kafka
-  * redis
-  * zookeeper
-  * ...
-  * catalog (2ГИС сервис) 
-  * keys (2ГИС сервис)
-  * ...
+  ```yaml
+  # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+  # @param imagePullSecrets Kubernetes image pull secrets.
+  # @param imagePullPolicy Pull policy.
+  # @param ui.image.repository UI service image repository.
+  # @param ui.image.tag UI service image tag.
   
-* Пример неймингов для блоков
-  * ingress - TODO
-  * horizontalPodAutoscaler - TODO
-  * verticalPodAutoscaler - TODO
-  * podDisruptionBudget - TODO
-  * serviceaccount.yaml - TODO
-  * kafka - https://github.com/2gis/on-premise-helm-charts/pull/124/files#diff-439bd87592d0ae6027750dd8342d3e2bef43c01e3b68e5330049f0076eb23af6R140 
-  * S3 - https://github.com/2gis/on-premise-helm-charts/pull/124/files#diff-439bd87592d0ae6027750dd8342d3e2bef43c01e3b68e5330049f0076eb23af6R162  
-  * postgres — ?
+  dgctlDockerRegistry: ""
+  imagePullSecrets: []
+  imagePullPolicy: IfNotPresent
+  ```
 
-## ToDo. Примеры типовых шаблонов yaml
+- В заголовке каждого блока k8s-специфичных настроек необходимо ставить ссылку на соответствующий раздел официальной документации.
 
-* helpers.tpl —  
-* ingress.yaml —
-* service.yaml  — 
-* vpa.yaml  — 
-* hpa.yaml — 
-* pdb.yaml — 
-* serviceaccount.yaml - 
-* configmap.yaml — 
-* deployment.yaml — 
-* job.yaml — 
-* secret.yaml —
-* statefulset.yaml — 
+  ```yaml
+  # @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+  
+  # @param podDisruptionBudget.enabled If PDB is enabled for the service.
+  # @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
+  
+  podDisruptionBudget:
+    enabled: false
+    maxUnavailable: 1
+  ```
 
-## Домены в переменных оформляем по шаблону 'http://{service-name}.host'
+- В переменных, где предполагается конечный список значений, всегда его явно перечисляем.
 
-  * restrictions_api_url: http://navi-restrictions.host
-  * postgres.host: postgres.host 
+  ```yaml
+  # @param LOG_LEVEL Log level: `error`, `warn`, `info` or `debug`.
+  LOG_LEVEL: error
+  ```
+
+- Константы или переменные, которые никогда не меняются при типовом использовании сервиса, следует скрывать из `README.md` при помощи тэга `@skip`.
+  
+  Обратите внимание, что из-за особенностей генератора описание не может начинаться со ссылки (любая конструкция в квадратных скобках в начале описания будет принята за декларацию типа). Формулируйте описания настроек и секций так, чтобы ссылки были не в начале.
+
+## Именование настроек
+
+- Одинаковые настройки называем везде одинаково.
+  
+  Примеры:
+ 
+  - Не `serviceAccount.create`, а `serviceAccount.enabled`.
+  - [Настройки Kafka](https://github.com/documentat-alibaev/on-premise-helm-charts/blob/1f7b7d269aec9c6e265c41da3718bfc9135125a1/charts/navi-back/values.yaml#L185).
+  - Настройки S3: `host`, `bucket`, `access-key`, `secret-key`.
+  - Настройки PostgreSQL: `host`, `port`, `name`, `username`, `password`.
+  - Настройки Ingress: `enabled`, `host`. Другие настройки Ingress не описываем.
+  - horizontalPodAutoscaler - TODO
+  - verticalPodAutoscaler - TODO
+  - podDisruptionBudget - TODO
+  - serviceAccount.yaml - TODO
+
+- Группы настроек называем везде одинаково. Предпочтение отдаём не сокращённым, а полным названиям. По возможности используем [официальные названия](https://github.com/helm/helm/blob/main/pkg/releaseutil/kind_sorter.go#L72).
+
+- Настройки, отвечающие за включение или отключение какой-то функции, должны называться `enabled`.
+
+  Примеры:
+
+  - Не `autoscaling.enabled`, а ` hpa.enabled`.
+  - Не `verticalscaling.enabled`, а `vpa.enabled`.
+  - Не `podDisruptionBudget.enabled`, а `pdb.enabled`.
+
+- Если блок настроек связан с определенным сервисом или типом хранилища, это должно быть отражено в его названии. Например: не `storage`, а `postgres` или `s3`.
+
+## Дефолтные значения
+
+Для каждой настройки должно быть указано дефолтное значение. Дефолтное значение должно подходить для типового использования сервиса у партнёра, а также с ним сервис должен мочь подняться в dev-контуре.
+
+Исключение составляют настройки, которые критично повлияют на сервис при неправильном указании. Для таких настроек ставим визуальную отметку **required**. Пример: суффикс в касандре для Tiles API. Если выставить дефолт, то клиент про него не узнает или забудет и в конечном итоге себе что-нибудь сломает, т.к. суффикс служит защитой от перетирания кейспейсов, когда бой и тест используют одну касандру.
+
+Для доменов и URL сервисов нужно использовать шаблон `http://{service-name}.host`. Например: `http://navi-restrictions.host`, `postgres.host`.
+
+## Примеры типовых шаблонов yaml
+
+TODO
+
+- helpers.tpl
+- ingress.yaml
+- service.yaml
+- vpa.yaml
+- hpa.yaml
+- pdb.yaml
+- serviceAccount.yaml
+- configmap.yaml
+- deployment.yaml
+- job.yaml
+- secret.yaml
+- statefulset.yaml
