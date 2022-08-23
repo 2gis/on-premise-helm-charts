@@ -66,29 +66,24 @@ make charts/navi-back
   Примеры:
  
   - Не `serviceAccount.create`, а `serviceAccount.enabled`.
-  - [Примеры именования настроек Kafka](https://github.com/documentat-alibaev/on-premise-helm-charts/blob/1f7b7d269aec9c6e265c41da3718bfc9135125a1/charts/navi-back/values.yaml#L185).
-  - [Примеры именования настроек S3](https://github.com/documentat-alibaev/on-premise-helm-charts/blob/1f7b7d269aec9c6e265c41da3718bfc9135125a1/charts/navi-back/values.yaml#L212).
+  - [Настройки Kafka](https://github.com/documentat-alibaev/on-premise-helm-charts/blob/1f7b7d269aec9c6e265c41da3718bfc9135125a1/charts/navi-back/values.yaml#L185).
+  - Настройки S3: `host`, `bucket`, `access-key`, `secret-key`.
+  - Настройки PostgreSQL: `host`, `port`, `name`, `username`, `password`.
   - ingress - TODO
   - horizontalPodAutoscaler - TODO
   - verticalPodAutoscaler - TODO
   - podDisruptionBudget - TODO
-  - serviceaccount.yaml - TODO
-  - postgres — ?
+  - serviceAccount.yaml - TODO
 
 - Группы настроек называем везде одинаково. Предпочтение отдаём не сокращённым, а полным названиям. По возможности используем [официальные названия](https://github.com/helm/helm/blob/main/pkg/releaseutil/kind_sorter.go#L72).
+
+- Настройки, отвечающие за включение или отключение какой-то функции, должны называться `enabled`.
 
   Примеры:
 
   - Не `autoscaling.enabled`, а ` hpa.enabled`.
   - Не `verticalscaling.enabled`, а `vpa.enabled`.
   - Не `podDisruptionBudget.enabled`, а `pdb.enabled`.
-
-  Исключения:
-
-  - `serviceAccount` не сокращаем, как и [в официальном репозитории helm](https://github.com/helm/helm/blob/main/pkg/chartutil/create.go#L122).
-  - `ingress` не сокращаем.
-
-- Настройки, отвечающие за включение или отключение какой-то функции, должны называться `enabled`.
 
 - Если блок настроек связан с определенным сервисом или типом хранилища, это должно быть отражено в его названии. Например: не `storage`, а `postgres` или `s3`.
 
@@ -110,7 +105,7 @@ TODO
 - vpa.yaml
 - hpa.yaml
 - pdb.yaml
-- serviceaccount.yaml
+- serviceAccount.yaml
 - configmap.yaml
 - deployment.yaml
 - job.yaml
