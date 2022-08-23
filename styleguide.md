@@ -57,6 +57,8 @@ make charts/navi-back
   
   Обратите внимание, что из-за особенностей генератора описание не может начинаться со ссылки (любая конструкция в квадратных скобках в начале описания будет принята за декларацию типа). Формулируйте описания настроек и секций так, чтобы ссылки были не в начале.
 
+- В настройках Ingress описывем только `enabled` и `host` и даём cсылку на официальную документацию.
+
 ## Именование настроек
 
 - Одинаковые настройки называем везде одинаково.
@@ -66,8 +68,14 @@ make charts/navi-back
   - Не `serviceAccount.create`, а `serviceAccount.enabled`.
   - [Примеры именования настроек Kafka](https://github.com/documentat-alibaev/on-premise-helm-charts/blob/1f7b7d269aec9c6e265c41da3718bfc9135125a1/charts/navi-back/values.yaml#L185).
   - [Примеры именования настроек S3](https://github.com/documentat-alibaev/on-premise-helm-charts/blob/1f7b7d269aec9c6e265c41da3718bfc9135125a1/charts/navi-back/values.yaml#L212).
+  - ingress - TODO
+  - horizontalPodAutoscaler - TODO
+  - verticalPodAutoscaler - TODO
+  - podDisruptionBudget - TODO
+  - serviceaccount.yaml - TODO
+  - postgres — ?
 
-- Группы настроек называем везде одинаково. Предпочтение отдаём сокращённым названиям.
+- Группы настроек называем везде одинаково. Предпочтение отдаём не сокращённым, а полным названиям. По возможности используем [официальные названия](https://github.com/helm/helm/blob/main/pkg/releaseutil/kind_sorter.go#L72).
 
   Примеры:
 
@@ -91,3 +99,20 @@ make charts/navi-back
 Исключение составляют настройки, которые критично повлияют на сервис при неправильном указании. Для таких настроек ставим визуальную отметку **required**. Пример: суффикс в касандре для Tiles API. Если выставить дефолт, то клиент про него не узнает или забудет и в конечном итоге себе что-нибудь сломает, т.к. суффикс служит защитой от перетирания кейспейсов, когда бой и тест используют одну касандру.
 
 Для доменов и URL сервисов нужно использовать шаблон `http://{service-name}.host`. Например: `http://navi-restrictions.host`, `postgres.host`.
+
+## Примеры типовых шаблонов yaml
+
+TODO
+
+- helpers.tpl
+- ingress.yaml
+- service.yaml
+- vpa.yaml
+- hpa.yaml
+- pdb.yaml
+- serviceaccount.yaml
+- configmap.yaml
+- deployment.yaml
+- job.yaml
+- secret.yaml
+- statefulset.yaml
