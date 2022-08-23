@@ -30,14 +30,13 @@
 
 * Одинаковые настройки называем везде одинаково.
   * enabled — когда опция включена / выключена. Дефолт: чаще всего false
-    * Пример: serviceAccount.create → serviceAccount.enabled
-  * группы настроек тоже называем одинаково (сокращенно) 
-    * autoscaling →  hpa
-    * verticalscaling → vpa
-    * podDisruptionBudget → pdb
-    * Исключения:
-      * serviceAccount не сокращаем как и в [официальной репе helm](https://github.com/helm/helm/blob/main/pkg/chartutil/create.go#L122)
-      * ingress не сокращаем, описывем только enabled, host и cсылку на официальную документацию
+    * Пример: serviceAccount.create → serviceAccount.enabled 
+  * группы настроек тоже называем одинаково, без сокращений (официальные названия можно взять [тут](https://github.com/helm/helm/blob/main/pkg/releaseutil/kind_sorter.go#L72))
+    * ingress — описывем только enabled, host и cсылку на официальную документацию
+    * horizontalPodAutoscaler
+    * verticalPodAutoscaler
+    * podDisruptionBudget
+    * serviceAccount
 
 * Ресурсы всегда пишем с дефолтами, на которых сервис запустится на dev контуре
 * Блоки настроек именуем одноименно с сервисом:
@@ -51,11 +50,11 @@
   * keys (2ГИС сервис)
   * ...
   
-* Пример неймингов для 
+* Пример неймингов для блоков
   * ingress - TODO
-  * vpa — TODO
-  * hpa — TODO
-  * pdb — TODO
+  * horizontalPodAutoscaler - TODO
+  * verticalPodAutoscaler - TODO
+  * podDisruptionBudget - TODO
   * serviceaccount.yaml - TODO
   * kafka - https://github.com/2gis/on-premise-helm-charts/pull/124/files#diff-439bd87592d0ae6027750dd8342d3e2bef43c01e3b68e5330049f0076eb23af6R140 
   * S3 - https://github.com/2gis/on-premise-helm-charts/pull/124/files#diff-439bd87592d0ae6027750dd8342d3e2bef43c01e3b68e5330049f0076eb23af6R162  
