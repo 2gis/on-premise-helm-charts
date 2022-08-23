@@ -1,5 +1,6 @@
 # @section Common settings
 
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -7,6 +8,7 @@
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 # @param imagePullSecrets Kubernetes secrets for [pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/).
 
+dgctlDockerRegistry: ''
 nodeSelector: {}
 affinity: {}
 tolerations: []
@@ -25,17 +27,25 @@ podDisruptionBudget:
   maxUnavailable: 1
 
 
-# @section API settings
+# @section Deployment Artifacts Storage settings
 
-# @param api.replicas Number of replicas of API pods.
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
+# @param dgctlStorage.bucket S3 bucket name.
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket.
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate.
 
-dgctlDockerRegistry: ""
 dgctlStorage:
   host: ""
   bucket: ""
   accessKey: ""
   secretKey: ""
   manifest: ""
+
+
+# @section API settings
+
+# @param api.replicas Number of replicas of API pods.
 
 api:
   replicas: 1
@@ -100,9 +110,13 @@ api:
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @extra api.ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'catalog-api.host'}]}`.
+  # @skip api.ingress.hosts[0].host
 
   ingress:
     enabled: false
+    hosts:
+    - host: catalog-api.host
 
 
 # @section Database settings
@@ -149,11 +163,35 @@ keys:
     categories: ''
     regions: ''
 
+
+# @section Kubernetes Importer job settings
+
+# @extra importer **Common settings**
+# @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param importer.workerNum Number of parallel import processes (workers).
+# @param importer.initialDelaySeconds Number of seconds after the container has started before liveness or readiness probes are initiated.
+
+# @extra importer.image **Deployment settings**
+# @param importer.image.repository Repository
+# @param importer.image.tag Tag
+# @param importer.image.pullPolicy Pull Policy
+
+# @extra importer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @param importer.resources.requests.cpu A CPU request.
+# @param importer.resources.requests.memory A memory request.
+# @param importer.resources.limits.cpu A CPU limit.
+# @param importer.resources.limits.memory A memory limit.
+
 importer:
+  nodeSelector: {}
+  workerNum: 3
+  initialDelaySeconds: 1
+
   image:
     repository: "2gis-on-premise/catalog-importer"
     tag: "1.0.0"
     pullPolicy: IfNotPresent
+
 
   persistentVolume:
     enabled: false
@@ -171,6 +209,3 @@ importer:
     limits:
       cpu: 2
       memory: 2048Mi
-
-  nodeSelector: {}
-  workerNum: 3
