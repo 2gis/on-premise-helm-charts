@@ -57,8 +57,6 @@ make charts/navi-back
   
   Обратите внимание, что из-за особенностей генератора описание не может начинаться со ссылки (любая конструкция в квадратных скобках в начале описания будет принята за декларацию типа). Формулируйте описания настроек и секций так, чтобы ссылки были не в начале.
 
-- В настройках Ingress описывем только `enabled` и `host` и даём cсылку на официальную документацию.
-
 ## Именование настроек
 
 - Одинаковые настройки называем везде одинаково.
@@ -69,7 +67,7 @@ make charts/navi-back
   - [Настройки Kafka](https://github.com/documentat-alibaev/on-premise-helm-charts/blob/1f7b7d269aec9c6e265c41da3718bfc9135125a1/charts/navi-back/values.yaml#L185).
   - Настройки S3: `host`, `bucket`, `access-key`, `secret-key`.
   - Настройки PostgreSQL: `host`, `port`, `name`, `username`, `password`.
-  - ingress - TODO
+  - Настройки Ingress: `enabled`, `host`. Другие настройки Ingress не описываем.
   - horizontalPodAutoscaler - TODO
   - verticalPodAutoscaler - TODO
   - podDisruptionBudget - TODO
