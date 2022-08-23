@@ -78,4 +78,4 @@
 ## Домены в переменных оформляем по шаблону 'http://{service-name}.host'
 
   * restrictions_api_url: http://navi-restrictions.host
-  * postgres.host: http://postgres.host 
+  * postgres.host: postgres.host 
