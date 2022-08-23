@@ -29,9 +29,9 @@ README.md формируется полуавтоматически: табли�
   * enabled — когда опция включена / выключена. Дефолт: чаще всего false
     * Пример: serviceAccount.create → serviceAccount.enabled
   * группы настроек тоже называем одинаково (сокращенно) 
-    * autoscaling.enabled →  hpa.enabled
-    * verticalscaling.enabled → vpa.enabled
-    * podDisruptionBudget.enabled → pdb.enabled
+    * autoscaling →  hpa
+    * verticalscaling → vpa
+    * podDisruptionBudget → pdb
     * Исключения:
       * serviceAccount не сокращаем как и в [официальной репе helm](https://github.com/helm/helm/blob/main/pkg/chartutil/create.go#L122)
       * ingress не сокращаем, описывем только enabled, host и cсылку на официальную документацию
