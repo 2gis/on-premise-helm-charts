@@ -49,6 +49,11 @@ README.md формируется полуавтоматически: табли�
   * ...
   
 * Пример неймингов для 
+  * ingress - TODO
+  * vpa — TODO
+  * hpa — TODO
+  * pdb — TODO
+  * serviceaccount.yaml - TODO
   * kafka - https://github.com/2gis/on-premise-helm-charts/pull/124/files#diff-439bd87592d0ae6027750dd8342d3e2bef43c01e3b68e5330049f0076eb23af6R140 
   * S3 - https://github.com/2gis/on-premise-helm-charts/pull/124/files#diff-439bd87592d0ae6027750dd8342d3e2bef43c01e3b68e5330049f0076eb23af6R162  
   * postgres — ?
