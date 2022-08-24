@@ -28,7 +28,7 @@ make charts/navi-back
   # @param ui.image.repository UI service image repository.
   # @param ui.image.tag UI service image tag.
   
-  dgctlDockerRegistry: ""
+  dgctlDockerRegistry: ''
   imagePullSecrets: []
   imagePullPolicy: IfNotPresent
   ```
@@ -83,7 +83,25 @@ make charts/navi-back
   - Не `verticalscaling.enabled`, а `vpa.enabled`.
   - Не `podDisruptionBudget.enabled`, а `pdb.enabled`.
 
+- Команды для импорта данных должны называться `importer`. Пример: [настройка `importer` в MapGL JS API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/tiles-api/values.yaml#L258).
+
 - Если блок настроек связан с определенным сервисом или типом хранилища, это должно быть отражено в его названии. Например: не `storage`, а `postgres` или `s3`.
+
+  При этом вместо терминов, специфичных для 2GIS, должны использоваться более универсальные термины. Например: не `bss`, а `stat`.
+
+- В именах и значениях настроек должны переиспользоваться те же имена, которые используются в названиях чартов.
+
+  Пример для чарта `pro-api`: не `repository: 2gis-on-premise/urbigeo-importer`, а `repository: 2gis-on-premise/pro-api-importer`.
+
+- Настройки, связанные с подключением к другим сервисам On-Premise, должны группироваться в блоки, названные в соответствии с сервисом. Адрес сервиса должен указываться в настройке `host`. Ключ для авторизации должен указываться в настройке `key`.
+
+  Пример:
+
+  ```yaml
+  navi:
+    host: http://navi-back.host
+    key: ''
+  ```
 
 ## Дефолтные значения
 
@@ -92,6 +110,20 @@ make charts/navi-back
 Исключение составляют настройки, которые критично повлияют на сервис при неправильном указании. Для таких настроек ставим визуальную отметку **required**. Пример: суффикс в касандре для Tiles API. Если выставить дефолт, то клиент про него не узнает или забудет и в конечном итоге себе что-нибудь сломает, т.к. суффикс служит защитой от перетирания кейспейсов, когда бой и тест используют одну касандру.
 
 Для доменов и URL сервисов нужно использовать шаблон `http://{service-name}.host`. Например: `http://navi-restrictions.host`, `postgres.host`.
+
+## Стиль кода
+
+- Непустые строковые значения пишем без кавычек.
+
+  ```yaml
+  repository: 2gis-on-premise/navi-back
+  ```
+
+- Пустые строки указываем с использованием одинарных кавычек.
+
+  ```yaml
+  name: ''
+  ```
 
 ## Примеры типовых шаблонов yaml
 
