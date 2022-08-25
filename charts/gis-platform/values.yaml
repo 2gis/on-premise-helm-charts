@@ -260,14 +260,6 @@ zookeeper:
       cpu: 200m
       memory: 512Mi
 
-  # @extra zookeeper.pdb **Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings**
-  # @param zookeeper.pdb.create If PDB is enabled for the service.
-  # @param zookeeper.pdb.maxUnavailable How many pods can be unavailable after the eviction.
-
-  pdb:
-    create: true
-    maxUnavailable: 1
-
 
 # @section Limits
 

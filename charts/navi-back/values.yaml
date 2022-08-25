@@ -157,14 +157,16 @@ vpa:
   enabled: false
 
 
-# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-# @skip podDisruptionBudget
-# @extra podDisruptionBudget.create If PDB is enabled for the service.
-# @extra podDisruptionBudget.minAvailable How many pods must be available after the eviction.
-# @extra podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
+# @param podDisruptionBudget.enabled If PDB is enabled for the service.
+# @param podDisruptionBudget.minAvailable How many pods must be available after the eviction.
+# @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
 
-podDisruptionBudget: {}
+podDisruptionBudget:
+  enabled: false
+  minAvailable: ''
+  maxUnavailable: ''
 
 
 # @section Kafka settings for interacting with Distance Matrix Async Service

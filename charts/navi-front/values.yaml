@@ -108,13 +108,13 @@ autoscaling:
   targetMemoryUtilizationPercentage: ''
 
 
-# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-# @param pdb.create If PDB is enabled for the service.
+# @param pdb.enabled If PDB is enabled for the service.
 # @param pdb.minAvailable How many pods must be available after the eviction.
 # @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
 pdb:
-  create: false
+  enabled: false
   minAvailable: 1
   maxUnavailable: 0

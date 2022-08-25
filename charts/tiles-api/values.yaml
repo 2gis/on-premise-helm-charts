@@ -204,10 +204,12 @@ api:
 
   # @extra api.pdb **Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings**
   # @param api.pdb.enabled If PDB is enabled for the service.
+  # @param api.pdb.minAvailable How many pods must be available after the eviction.
   # @param api.pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
   pdb:
     enabled: true
+    minAvailable: ''
     maxUnavailable: 1
 
   # @extra api.hpa **Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings**

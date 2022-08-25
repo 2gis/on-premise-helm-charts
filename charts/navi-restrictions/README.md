@@ -62,11 +62,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
 
-### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                                 | Description                                          | Value  |
 | ------------------------------------ | ---------------------------------------------------- | ------ |
 | `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `true` |
+| `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
 | `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
 
 

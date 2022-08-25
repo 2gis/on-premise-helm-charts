@@ -128,13 +128,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           |         |
 
 
-### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                                 | Description                                          | Value |
-| ------------------------------------ | ---------------------------------------------------- | ----- |
-| `podDisruptionBudget.create`         | If PDB is enabled for the service.                   |       |
-| `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  |       |
-| `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. |       |
+| Name                                 | Description                                          | Value   |
+| ------------------------------------ | ---------------------------------------------------- | ------- |
+| `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `false` |
+| `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
+| `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `""`    |
 
 
 ### Kafka settings for interacting with Distance Matrix Async Service

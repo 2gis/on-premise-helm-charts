@@ -32,11 +32,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `imagePullSecrets` | Kubernetes secrets for [pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/). | `[]`  |
 
 
-### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                                 | Description                                          | Value   |
 | ------------------------------------ | ---------------------------------------------------- | ------- |
 | `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `false` |
+| `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
 | `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
 
 

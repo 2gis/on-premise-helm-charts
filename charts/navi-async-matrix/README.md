@@ -96,11 +96,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `ingress` | Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'navi-async-matrix.host'}]}`. |       |
 
 
-### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                                 | Description                                          | Value  |
 | ------------------------------------ | ---------------------------------------------------- | ------ |
 | `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `true` |
+| `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
 | `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
 
 

@@ -129,13 +129,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ### ZooKeeper settings
 
-| Name                            | Description                                                                                                                             | Value   |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `zookeeper.replicaCount`        | A replica count for the pod.                                                                                                            | `3`     |
-| `zookeeper.persistence.enabled` | If Kubernetes persistence volume should be enabled for ZooKeeper.                                                                       | `false` |
-| `zookeeper.pdb`                 | **Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings** |         |
-| `zookeeper.pdb.create`          | If PDB is enabled for the service.                                                                                                      | `true`  |
-| `zookeeper.pdb.maxUnavailable`  | How many pods can be unavailable after the eviction.                                                                                    | `1`     |
+| Name                            | Description                                                       | Value   |
+| ------------------------------- | ----------------------------------------------------------------- | ------- |
+| `zookeeper.replicaCount`        | A replica count for the pod.                                      | `3`     |
+| `zookeeper.persistence.enabled` | If Kubernetes persistence volume should be enabled for ZooKeeper. | `false` |
 
 
 ### Limits
