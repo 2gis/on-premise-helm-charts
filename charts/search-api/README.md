@@ -20,18 +20,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ## Values
 
+### Docker Registry settings
+
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
+
+
 ### Common settings
 
-| Name                  | Description                                                                                                                 | Value |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.                                     | `""`  |
-| `podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
-| `podLabels`           | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
-| `replicaCount`        | A replica count for the pod.                                                                                                | `1`   |
-| `nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
-| `affinity`            | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
-| `tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
-| `redeploy_label`      | If this label is changed since the last deployment, the whole chart will be redeployed.                                     | `""`  |
+| Name             | Description                                                                                                                 | Value |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `podAnnotations` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
+| `podLabels`      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
+| `replicaCount`   | A replica count for the pod.                                                                                                | `1`   |
+| `nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
+| `affinity`       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
+| `tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
+| `redeploy_label` | If this label is changed since the last deployment, the whole chart will be redeployed.                                     | `""`  |
 
 
 ### Deployment Artifacts Storage settings

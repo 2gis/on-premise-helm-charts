@@ -18,19 +18,25 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ## Values
 
+### Docker Registry settings
+
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
+
+
 ### Docker registry settings
 
-| Name                       | Description                                                                             | Value                          |
-| -------------------------- | --------------------------------------------------------------------------------------- | ------------------------------ |
-| `dgctlDockerRegistry`      | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`                           |
-| `imagePullSecrets`         | Kubernetes image pull secrets.                                                          | `[]`                           |
-| `imagePullPolicy`          | Pull policy.                                                                            | `IfNotPresent`                 |
-| `backend.image.repository` | Backend service image repository.                                                       | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.                                                              | `1.30.1`                       |
-| `admin.image.repository`   | Admin service image repository.                                                         | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.                                                                | `0.2.0`                        |
-| `redis.image.repository`   | Redis image repository.                                                                 | `2gis-on-premise/keys-redis`   |
-| `redis.image.tag`          | Redis image tag.                                                                        | `6.2.6-alpine3.15`             |
+| Name                       | Description                       | Value                          |
+| -------------------------- | --------------------------------- | ------------------------------ |
+| `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
+| `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
+| `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
+| `backend.image.tag`        | Backend service image tag.        | `1.30.1`                       |
+| `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
+| `admin.image.tag`          | Admin service image tag.          | `0.2.0`                        |
+| `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
+| `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
 
 
 ### Admin service settings

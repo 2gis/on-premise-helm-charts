@@ -20,6 +20,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ## Values
 
+### Docker Registry settings
+
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
+
+
 ### Common settings
 
 | Name                 | Description                                                                                                                 | Value |

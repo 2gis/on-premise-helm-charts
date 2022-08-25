@@ -1,6 +1,12 @@
-# @section Common settings
+# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+
+# @section Common settings
+
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 # @param replicaCount A replica count for the pod.
@@ -9,7 +15,6 @@
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param redeploy_label If this label is changed since the last deployment, the whole chart will be redeployed.
 
-dgctlDockerRegistry: ''
 podAnnotations: {}
 podLabels: {}
 replicaCount: 1

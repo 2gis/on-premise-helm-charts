@@ -20,11 +20,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ## Values
 
+### Docker Registry settings
+
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
+
+
 ### Common settings
 
 | Name                            | Description                                                                                                                 | Value  |
 | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `dgctlDockerRegistry`           | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.                                     | `""`   |
 | `replicaCount`                  | A replica count for the pod.                                                                                                | `1`    |
 | `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                              | `[]`   |
 | `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`   |

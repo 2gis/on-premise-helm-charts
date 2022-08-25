@@ -1,6 +1,12 @@
-# @section Docker registry settings
+# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+
+# @section Docker registry settings
+
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param imagePullPolicy Pull policy.
 # @param backend.image.repository Backend service image repository.
@@ -10,7 +16,6 @@
 # @param redis.image.repository Redis image repository.
 # @param redis.image.tag Redis image tag.
 
-dgctlDockerRegistry: ''
 imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
