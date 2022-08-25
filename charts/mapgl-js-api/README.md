@@ -72,7 +72,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
 | `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `service.port`        | Tiles API service port.                                                                                                        | `80`        |
+| `service.port`        | Service port.                                                                                                                  | `80`        |
 
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
