@@ -22,14 +22,20 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Docker Registry settings
 
-| Name                      | Description                                                                             | Value                         |
-| ------------------------- | --------------------------------------------------------------------------------------- | ----------------------------- |
-| `dgctlDockerRegistry`     | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`                          |
-| `castle.image.repository` | Navi-Castle service image repository.                                                   | `2gis-on-premise/navi-castle` |
-| `castle.image.pullPolicy` | Navi-Castle service pull policy.                                                        | `IfNotPresent`                |
-| `castle.image.tag`        | Navi-Castle service image tag.                                                          | `1.0.5`                       |
-| `nginx.image.repository`  | Navi-Front image repository.                                                            | `2gis-on-premise/navi-front`  |
-| `nginx.image.tag`         | Navi-Front image tag.                                                                   | `1.21-ad06a0e0`               |
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
+
+
+### Deployment settings
+
+| Name                      | Description                           | Value                         |
+| ------------------------- | ------------------------------------- | ----------------------------- |
+| `castle.image.repository` | Navi-Castle service image repository. | `2gis-on-premise/navi-castle` |
+| `castle.image.pullPolicy` | Navi-Castle service pull policy.      | `IfNotPresent`                |
+| `castle.image.tag`        | Navi-Castle service image tag.        | `1.0.5`                       |
+| `nginx.image.repository`  | Navi-Front image repository.          | `2gis-on-premise/navi-front`  |
+| `nginx.image.tag`         | Navi-Front image tag.                 | `1.21-ad06a0e0`               |
 
 
 ### Deployment Artifacts Storage settings
