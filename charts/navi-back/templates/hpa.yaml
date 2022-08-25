@@ -14,9 +14,9 @@ spec:
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   behavior:
     scaleUp:
-        stabilizationWindowSeconds: {{ .Values.autoscaling.scaleUpWindowSeconds }}
+        stabilizationWindowSeconds: {{ .Values.autoscaling.scaleUpStabilizationWindowSeconds }}
     scaleDown:
-        stabilizationWindowSeconds: {{ .Values.autoscaling.scaleDownWindowsSeconds }}
+        stabilizationWindowSeconds: {{ .Values.autoscaling.scaleDownStabilizationWindowSeconds }}
   metrics:
     {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource

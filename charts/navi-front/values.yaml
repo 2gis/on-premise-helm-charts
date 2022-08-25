@@ -93,15 +93,19 @@ resources: {}
 # @param autoscaling.enabled If HPA is enabled for the service.
 # @param autoscaling.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
 # @param autoscaling.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param autoscaling.scaleDownStabilizationWindowSeconds Scale-down window.
+# @param autoscaling.scaleUpStabilizationWindowSeconds Scale-up window.
 # @param autoscaling.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
-# @extra autoscaling.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+# @param autoscaling.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 100
+  scaleDownStabilizationWindowSeconds: ''
+  scaleUpStabilizationWindowSeconds: ''
   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ''
 
 
 # @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
