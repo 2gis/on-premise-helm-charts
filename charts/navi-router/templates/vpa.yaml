@@ -1,6 +1,7 @@
-{{- if .Values.vpa.enabled }}
----
 {{ with .Values.vpa }}
+{{- if .enabled }}
+---
+
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
@@ -16,7 +17,7 @@ spec:
     updateMode: {{ .updateMode }}
   resourcePolicy:
     containerPolicies:
-      - containerName: {{ $.Chart.Name }}
+      - containerName: {{ include "router.name" }}
         mode: Auto
         {{- with .minAllowed }}
         minAllowed:

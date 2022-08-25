@@ -231,6 +231,7 @@ api:
   # @extra api.vpa **Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings**
   # @param api.vpa.enabled If VPA is enabled for the service.
   # @param api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+  # @param api.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale up.
   # @param api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
   # @param api.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
   # @param api.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
@@ -239,6 +240,7 @@ api:
     enabled: false
     updateMode: Auto
     minAllowed:
+      cpu: ''
       memory: 128Mi
     maxAllowed:
       cpu: 1

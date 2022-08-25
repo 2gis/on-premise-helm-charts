@@ -1,4 +1,5 @@
-{{- if .Values.vpa.enabled }}
+{{ with .Values.vpa }}
+{{- if .enabled }}
 ---
 
 apiVersion: autoscaling.k8s.io/v1
@@ -13,18 +14,18 @@ spec:
     kind: StatefulSet
     name: {{ include "navi-async-matrix.fullname" . }}
   updatePolicy:
-    updateMode: {{ .Values.vpa.updateMode }}
+    updateMode: {{ .updateMode }}
   resourcePolicy:
     containerPolicies:
-      - containerName: {{ .Chart.Name }}
-        controlledValues: RequestsOnly
+      - containerName: {{ include "navi-async-matrix.name" }}
         mode: Auto
-        {{- with .Values.vpa.minAllowed }}
+        {{- with .minAllowed }}
         minAllowed:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-        {{- with .Values.vpa.maxAllowed }}
+        {{- with .maxAllowed }}
         maxAllowed:
           {{- toYaml . | nindent 10 }}
         {{- end }}
+{{- end }}
 {{- end }}
