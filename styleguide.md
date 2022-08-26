@@ -4,7 +4,7 @@
 
 ## Структура файлов
 
-Мы следуем [официальным best practices для helm-чартов](https://helm.sh/docs/chart_best_practices/templates/#structure-of-templates).
+Мы следуем [официальным best practices для helm-чартов](https://helm.sh/docs/chart_best_practices/conventions/).
 
 ## Генерация README.md
 
