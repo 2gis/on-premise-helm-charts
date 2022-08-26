@@ -5,8 +5,8 @@
 - Remove the `zookeeper.pdb` section
 
 #### navi-back
-- Rename `autoscaling.scaleUpWindowSeconds` to `api.hpa.scaleUpStabilizationWindowSeconds`
-- Rename `autoscaling.scaleDownWindowsSeconds` to `api.hpa.scaleDownStabilizationWindowSeconds`
+- Rename `autoscaling.scaleUpWindowSeconds` to `autoscaling.scaleUpStabilizationWindowSeconds`
+- Rename `autoscaling.scaleDownWindowsSeconds` to `autoscaling.scaleDownStabilizationWindowSeconds`
 - Rename `podDisruptionBudget.create` to `podDisruptionBudget.enabled`
 
 #### navi-castle
