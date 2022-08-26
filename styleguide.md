@@ -17,7 +17,7 @@ make prepare
 make charts/navi-back
 ```
 
-## Описание параметров
+## Описание настроек
 
 - В каждом чарте должна быть секция под названием «Docker registry settings». В ней должны быть описаны `dgctlDockerRegistry` и другие настройки, связанные с получением Docker-образов.
 
