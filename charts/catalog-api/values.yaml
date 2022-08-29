@@ -200,8 +200,6 @@ importer:
     storageClass: topolvm-ext4
     size: 50Gi
 
-  initialDelaySeconds: 1
-
   resources:
     requests:
       cpu: 256m
