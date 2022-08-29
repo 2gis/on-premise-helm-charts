@@ -1,0 +1,118 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+
+# @section API service settings
+
+api:
+
+  # @extra api **Common settings**
+  # @param api.replicas A replica count for the pod.
+  # @param api.jvmXmx Memory allocation options for JVM.
+
+  replicas: 1
+  jvmXmx: -Xmx1500m
+
+
+  # @extra api.image **Deployment settings**
+  # @param api.image.repository Repository
+  # @param api.image.tag Tag
+  # @param api.image.pullPolicy Pull Policy
+
+  image:
+    repository: 2gis-on-premise/bss-receiver-api
+    tag: 1.1.4
+    pullPolicy: IfNotPresent
+
+
+  # @extra api.service **Service settings**
+  # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param api.service.port Service port.
+  # @param api.service.targetPort Port inside the container.
+
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 1500Mi
+    limits:
+      cpu: 1
+      memory: 1500Mi
+
+
+# @section Streams service settings
+
+streams:
+
+  # @extra streams **Common settings**
+  # @param streams.replicas A replica count for the pod.
+  # @param streams.jvmXmx Memory allocation options for JVM.
+  # @param streams.jmxPort Port for JMX protocol.
+  # @param streams.metricsPort Port for metrics.
+
+  replicas: 1
+  jvmXmx: -Xmx2G -XX:+UseParallelGC
+  jmxPort: 9010
+  metricsPort: 8080
+
+
+  # @extra streams.image **Deployment settings**
+  # @param streams.image.repository Repository
+  # @param streams.image.tag Tag
+  # @param streams.image.pullPolicy Pull Policy
+
+  image:
+    repository: 2gis-on-premise/bss-receiver-streams
+    tag: 1.1.4
+    pullPolicy: IfNotPresent
+
+  resources:
+    requests:
+      cpu: 1
+      memory: 4G
+    limits:
+      cpu: 2
+      memory: 4G
+
+
+# @section Kafka service settings
+
+# @param kafka.security  SASL configuration for Kafka clients (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config)).
+# @param kafka.sasl.jaas JAAS login context parameters for SASL connections in the format used by JAAS configuration files (see [the documentation](https://kafka.apache.org/documentation/#brokerconfigs_sasl.jaas.config)).
+
+kafka:
+  security: {}
+  sasl:
+    jaas: {}
+
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @extra ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'stat-receiver.host'}]}`.
+# @skip ingress.hosts[0].host
+
+ingress:
+  hosts:
+  - host: stat-receiver.host
+
+
+# @section Limits
+
+# @extra api.resources **Limits for the API service**
+# @param api.resources.requests.cpu A CPU request.
+# @param api.resources.requests.memory A memory request.
+# @param api.resources.limits.cpu A CPU limit.
+# @param api.resources.limits.memory A memory limit.
+
+# @extra streams.resources **Limits for the Streams service**
+# @param streams.resources.requests.cpu A CPU request.
+# @param streams.resources.requests.memory A memory request.
+# @param streams.resources.limits.cpu A CPU limit.
+# @param streams.resources.limits.memory A memory limit.
