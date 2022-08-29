@@ -1,7 +1,21 @@
-﻿---
+---
 # @section Docker Registry settings
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 dgctlDockerRegistry: ''
+
+# @section Deployment Artifacts Storage settings
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
+# @param dgctlStorage.bucket S3 bucket name.
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket.
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate.
+
+dgctlStorage: &s3config
+  host: ""
+  bucket: ""
+  accessKey: ""
+  secretKey: ""
+  manifest: manifests/latest.json
 
 # @section 2GIS PRO API common settings
 # @param appName Name of the service.
@@ -37,7 +51,7 @@ tolerations: []
 # @param priorityClassName Kubernetes [priorityClassName](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) settings.
 priorityClassName: ""
 
-# @param terminationGracePeriodSeconds Duration in seconds the Tiles API service pod needs to terminate gracefully.
+# @param terminationGracePeriodSeconds Duration in seconds the PRO-API service pod needs to terminate gracefully.
 terminationGracePeriodSeconds: 60
 
 # @extra strategy **Service's update strategy settings**
@@ -101,46 +115,76 @@ image:
   tag: "0.5.0"
   pullPolicy: IfNotPresent
 
+# @section 2GIS PRO Storage configuration
+# @skip s3.<<.host
+# @skip s3.<<.bucket
+# @skip s3.<<.accessKey
+# @skip s3.<<.secretKey
+# @skip s3.<<.manifest
+# @param s3.layerDataBucket S3 bucket with prepared layer data.
+# @param s3.userAssetsDataBucket S3 bucket with user-created assets, aggregations, and filters
+s3:
+  <<: *s3config
+  layerDataBucket: ""
+  userAssetsDataBucket: ""
+
 # @section 2GIS PRO API configuration
-# @param env.tempPath Path to directory used for temp data
-# @param env.catalogApi2gisKey Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).
-# @param env.dbConnectionString Connection string to the PostgreSql database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;Pwd={0};`
-# @param env.dbConnectionPwd User password to connect to the PostgreSql database.
-# @param env.esHost ElasticSearch host address. Format: `https://{0}@HOST:PORT`
-# @param env.esCredentials User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD`
-# @param env.s3Host Amazon S3 host address. Format: `https://HOST:PORT`
-# @param env.s3AccessKey S3 access key.
-# @param env.s3SecretKey S3 secret key.
-# @param env.s3LayerDataBucket S3 bucket with prepared layer data.
-# @param env.s3AssetDataBucket S3 bucket with `assets` data, prepared for import into ElasticSearch.
-# @param env.s3UserAssetsDataBucket S3 bucket with assets, aggregations and filters that user created.
-# @param env.apiUrl 2GIS PRO API Url
-# @skip env.diggerPassword
-env:
+# @param api.tempPath Path to directory used for temp data
+# @param api.host pro-api host address
+# @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
+# @skip api.diggerPassword
+# @skip api.diggerUserName
+# @skip api.logEsQueries
+# @skip api.debug
+# @skip api.env
+
+# @extra postgres **PostgreSql settings**
+# @param postgres.connectionString Connection string to the PostgreSql database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;Pwd={0};`
+# @param postgres.password User password to connect to the PostgreSql database.
+
+# @extra elastic **ElasticSearch settings**
+# @param elastic.host ElasticSearch host address. Format: `https://{0}@HOST:PORT`
+# @param elastic.credentials User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD`
+
+# @extra catalog **Catalog API settings**
+# @param catalog.host Host for [Catalog API](https://docs.2gis.com/en/on-premise/search).
+# @param catalog.key Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).
+
+# @extra navi **Navigation API settings**
+# @param navi.host Host for [Navigation API](https://docs.2gis.com/en/on-premise/search).
+# @param navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+api:
   tempPath: '/tmp'
-  catalogApi2gisKey: ""
-  dbConnectionString: ""
-  dbConnectionPwd: ""
-  esHost: ""
-  esCredentials: ""
-  s3Host: ""
-  s3AccessKey: ""
-  s3SecretKey: ""
-  s3LayerDataBucket: ""
-  s3AssetDataBucket: ""
-  s3UserAssetsDataBucket: ""
-  apiUrl: ""
+  host: ""
   diggerPassword: ""
+  diggerUserName: ""
+  allowAnyOrigin: false
+  logEsQueries: false
+  debug: false
+  env: ""
+
+postgres:
+  connectionString: ""
+  password: ""
+elastic:
+  host: ""
+  credentials: ""
+catalog:
+  host: http://catalog.host
+  key: ""
+navi:
+  host: http://navi-back.host
+  key: ""
 
 # @section 2GIS PRO API Job settings
 # @param appImporterName Data Import job name.
 # @param appUserDataImporterName User Data Import job name.
-# @param appDataPreparerName Data preparation job name
-appImporterName: "urbigeo-importer"
-appUserDataImporterName: "urbigeo-userdata-importer"
-appDataPreparerName: "urbigeo-data-preparer"
+# @skip appDataPreparerName
+appImporterName: "pro-importer"
+appUserDataImporterName: "pro-userdata-importer"
+appDataPreparerName: "pro-data-preparer"
 
-# @extra importJob Import job settings
+# @extra importJob **Import job settings**
 # @param importJob.schedule Import job start schedule
 # @param importJob.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
 # @param importJob.successfulJobsHistoryLimit How many completed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
@@ -154,12 +198,11 @@ appDataPreparerName: "urbigeo-data-preparer"
 # @param importJob.resources.limits.memory A memory limit.
 # @param importJob.maxParallelJobs How many import jobs can be run simultaneously
 # @skip importJob.files
-# @param importJob.manifest Path to DataGateway manifest JSON file
 importJob:
   schedule: "0 18 * * *"
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
-  repository: 2gis-on-premise/urbigeo-importer
+  repository: 2gis-on-premise/pro-importer
   tag: "0.5.0"
   serviceAccount: "runner"
   resources:
@@ -171,25 +214,24 @@ importJob:
       memory: 1024M
   maxParallelJobs: 4
   files: ""
-  manifest: ''
 
-# @extra dataPrepareJob Data prepare job settings
-# @param dataPrepareJob.schedule Data prepare job start schedule
-# @param dataPrepareJob.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
-# @param dataPrepareJob.successfulJobsHistoryLimit How many completed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
-# @param dataPrepareJob.repository Docker Repository Image.
-# @param dataPrepareJob.tag Docker image tag
-# @extra dataPrepareJob.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
-# @param dataPrepareJob.resources.requests.cpu A CPU request.
-# @param dataPrepareJob.resources.requests.memory A memory request.
-# @param dataPrepareJob.resources.limits.cpu A CPU limit.
-# @param dataPrepareJob.resources.limits.memory A memory limit.
-# @param dataPrepareJob.maxParallelJobs How many import jobs can be run simultaneously
+# @skip dataPrepareJob **Data prepare job settings**
+# @skip dataPrepareJob.schedule
+# @skip dataPrepareJob.backoffLimit
+# @skip dataPrepareJob.successfulJobsHistoryLimit
+# @skip dataPrepareJob.repository
+# @skip dataPrepareJob.resources
+# @skip dataPrepareJob.resources.requests.cpu
+# @skip dataPrepareJob.resources.requests.memory
+# @skip dataPrepareJob.tag
+# @skip dataPrepareJob.resources.limits.cpu
+# @skip dataPrepareJob.resources.limits.memory
+# @skip dataPrepareJob.maxParallelJobs
 dataPrepareJob:
   schedule: "0 16 * * 6"
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
-  repository: 2gis-on-premise/urbigeo-import
+  repository: 2gis-on-premise/pro-importer
   tag: "0.5.0"
   resources:
     requests:

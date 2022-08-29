@@ -25,25 +25,25 @@ spec:
               resources:
                 {{- toYaml .Values.importJob.resources | nindent 16 }}
               volumeMounts:
-                - mountPath: "{{ .Values.env.tempPath }}"
+                - mountPath: "{{ .Values.api.tempPath }}"
                   name: temp-volume
               env:
                 - name: JOB_NAME
                   value: {{ include "urbi-pro.userdata-import-name" . }}
                 - name: TEMP_PATH
-                  value: "{{ .Values.env.tempPath }}"
+                  value: "{{ .Values.api.tempPath }}"
                 - name: ENV
-                  value: "{{ .Values.env.env }}"
+                  value: "{{ .Values.api.env }}"
                 - name: MODE
                   value: "Schedule"
                 - name: MAX_PARALLEL_JOBS
                   value: "{{ .Values.importJob.maxParallelJobs }}"
                 - name: S3Settings__Url
-                  value: "{{ .Values.env.s3Host }}"
+                  value: "{{ .Values.s3.host }}"
                 - name: S3Settings__AssetDataBucket
-                  value: "{{ .Values.env.s3UserAssetsDataBucket }}"
+                  value: "{{ .Values.s3.userAssetsDataBucket }}"
                 - name: S3Settings__LayerDataBucket
-                  value: "{{ .Values.env.s3LayerDataBucket }}"
+                  value: "{{ .Values.s3.layerDataBucket }}"
                 - name: S3Settings__AccessKey
                   valueFrom:
                     secretKeyRef:
@@ -55,15 +55,15 @@ spec:
                       key: s3SecretKey
                       name: {{ include "urbi-pro.name" . }}-secret
                 - name: DB_CONNECTION_STRING
-                  value: "{{ .Values.env.dbConnectionString }}"
+                  value: "{{ .Values.postgres.connectionString }}"
                 - name: DB_CONNECTION_PWD
                   valueFrom:
                     secretKeyRef:
                       key: dbConnectionPwd
                       name: {{ include "urbi-pro.name" . }}-secret
                 - name: ES_HOST
-                  value: "{{ .Values.env.esHost }}"
-                {{ if .Values.env.esCredentials }}
+                  value: "{{ .Values.elastic.host }}"
+                {{ if .Values.elastic.credentials }}
                 - name: ES_CREDENTIALS
                   valueFrom:
                     secretKeyRef:
@@ -71,6 +71,6 @@ spec:
                       name: {{ include "urbi-pro.name" . }}-secret
                 {{ end }}
                 - name: API_URL
-                  value: "{{ .Values.env.apiUrl }}"
+                  value: "{{ .Values.api.host }}"
                 - name: CREATE_ASSET
                   value: "true"

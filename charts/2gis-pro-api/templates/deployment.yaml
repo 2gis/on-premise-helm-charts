@@ -1,5 +1,3 @@
-﻿---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -71,7 +69,7 @@ spec:
               containerPort: 80
               protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.env.tempPath }}"
+            - mountPath: "{{ .Values.api.tempPath }}"
               name: temp-volume
           livenessProbe:
             httpGet:
@@ -108,17 +106,17 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           env:
             - name: DEBUG
-              value: "{{ .Values.env.debug }}"
+              value: "{{ .Values.api.debug }}"
             - name: TEMP_PATH
-              value: "{{ .Values.env.tempPath }}"
+              value: "{{ .Values.api.tempPath }}"
             - name: CATALOG_API_2GIS_URL
-              value: "{{ .Values.env.catalogApi2gisUrl }}"
+              value: "{{ .Values.catalog.host }}"
             - name: CATALOG_API_2GIS_KEY
               valueFrom:
                 secretKeyRef:
                   key: catalogApi2gisKey
                   name: {{ include "urbi-pro.name" . }}-secret
-            {{ if .Values.env.routingApi2gisKey }}
+            {{ if .Values.navi.key }}
             - name: ROUTING_API_2GIS_KEY
               valueFrom:
                 secretKeyRef:
@@ -126,26 +124,26 @@ spec:
                   name: {{ include "urbi-pro.name" . }}-secret
             {{ end }}
             - name: ES_HOST
-              value: "{{ .Values.env.esHost }}"
+              value: "{{ .Values.elastic.host }}"
             - name: LOG_ES_QUERIES
-              value: "{{ .Values.env.logEsQueries }}"
+              value: "{{ .Values.api.logEsQueries }}"
             - name: ALLOW_ANY_ORIGIN
-              value: "{{ .Values.env.allowAnyOrigin }}"
+              value: "{{ .Values.api.allowAnyOrigin }}"
             - name: ENV
-              value: "{{ .Values.env.env }}"
+              value: "{{ .Values.api.env }}"
             - name: DB_CONNECTION_STRING
-              value: "{{ .Values.env.dbConnectionString }}"
+              value: "{{ .Values.postgres.connectionString }}"
             - name: DB_CONNECTION_PWD
               valueFrom:
                 secretKeyRef:
                   key: dbConnectionPwd
                   name: {{ include "urbi-pro.name" . }}-secret
             - name: S3Settings__Url
-              value: "{{ .Values.env.s3Host }}"
+              value: "{{ .Values.s3.host }}"
             - name: S3Settings__LayerDataBucket
-              value: "{{ .Values.env.s3LayerDataBucket }}"
+              value: "{{ .Values.s3.layerDataBucket }}"
             - name: S3Settings__AssetDataBucket
-              value: "{{ .Values.env.s3AssetDataBucket }}"
+              value: "{{ .Values.s3.bucket }}"
             - name: S3Settings__AccessKey
               valueFrom:
                 secretKeyRef:
@@ -156,7 +154,7 @@ spec:
                 secretKeyRef:
                   key: s3SecretKey
                   name: {{ include "urbi-pro.name" . }}-secret
-            {{ if .Values.env.esCredentials }}
+            {{ if .Values.elastic.credentials }}
             - name: ES_CREDENTIALS
               valueFrom:
                 secretKeyRef:
