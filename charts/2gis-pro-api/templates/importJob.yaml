@@ -4,26 +4,26 @@ metadata:
   name: {{ include "2gis-pro-api.import-name" . }}
 spec:
   concurrencyPolicy: Forbid
-  schedule: {{ .Values.importJob.schedule }}
-  successfulJobsHistoryLimit: {{ .Values.importJob.successfulJobsHistoryLimit }}
+  schedule: {{ .Values.importer.schedule }}
+  successfulJobsHistoryLimit: {{ .Values.importer.successfulJobsHistoryLimit }}
   jobTemplate:
     spec:
-      backoffLimit: {{ .Values.importJob.backoffLimit }}
+      backoffLimit: {{ .Values.importer.backoffLimit }}
       template:
         spec:
           nodeSelector:
             role: worker
           restartPolicy: Never
-          serviceAccountName: {{ .Values.importJob.serviceAccount }}
+          serviceAccountName: {{ .Values.importer.serviceAccount }}
           volumes:
             - name: temp-volume
               emptyDir: {}
           containers:
             - name: {{ include "2gis-pro-api.import-name" . }}
-              image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.importJob.repository }}:{{ .Values.importJob.tag }}
+              image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.importer.repository }}:{{ .Values.importer.tag }}
               imagePullPolicy: IfNotPresent
               resources:
-                {{- toYaml .Values.importJob.resources | nindent 16 }}
+                {{- toYaml .Values.importer.resources | nindent 16 }}
               volumeMounts:
                 - mountPath: "{{ .Values.api.tempPath }}"
                   name: temp-volume
@@ -37,7 +37,7 @@ spec:
                 - name: MODE
                   value: "Schedule"
                 - name: MAX_PARALLEL_JOBS
-                  value: "{{ .Values.importJob.maxParallelJobs }}"
+                  value: "{{ .Values.importer.maxParallelJobs }}"
                 - name: manifest
                   value: "{{ .Values.s3.manifest }}"
                 - name: S3Settings__Url
@@ -74,7 +74,7 @@ spec:
                 {{ end }}
                 - name: API_URL
                   value: "{{ .Values.api.host }}"
-                {{ if .Values.importJob.files }}
+                {{ if .Values.importer.files }}
                 - name: FILES
-                  value: "{{ .Values.importJob.files}}"
+                  value: "{{ .Values.importer.files}}"
                 {{ end }}
