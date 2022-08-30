@@ -1,12 +1,33 @@
 # 2GIS PRO API Service
 
-## Chart values
+## Values
 
 ### Docker Registry settings
 
 | Name                  | Description                                                                             | Value |
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
+
+
+### Common settings
+
+| Name                            | Description                                                                                                                                    | Value     |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| `appName`                       | Name of the service.                                                                                                                           | `pro-api` |
+| `replicaCount`                  | A replica count for the pod.                                                                                                                   | `2`       |
+| `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                 | `[]`      |
+| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                        | `""`      |
+| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                    | `""`      |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                            | `{}`      |
+| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                    | `{}`      |
+| `priorityClassName`             | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                                   | `""`      |
+| `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).                              | `60`      |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                              | `[]`      |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                  | `{}`      |
+| `podLabels`                     | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                            | `{}`      |
+| `annotations`                   | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`      |
+| `labels`                        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`      |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`       |
 
 
 ### Deployment Artifacts Storage settings
@@ -20,48 +41,44 @@
 | `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `manifests/latest.json` |
 
 
-### 2GIS PRO API common settings
+### Strategy settings
 
-| Name                                    | Description                                                                                                                                                                                              | Value                     |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `appName`                               | Name of the service.                                                                                                                                                                                     | `pro-api`                 |
-| `replicaCount`                          | A replica count for the pod.                                                                                                                                                                             | `2`                       |
-| `revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                           | `3`                       |
-| `annotations`                           | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                | `{}`                      |
-| `labels`                                | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                          | `{}`                      |
-| `podAnnotations`                        | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                            | `{}`                      |
-| `podLabels`                             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`                      |
-| `imagePullSecrets`                      | Kubernetes image pull secrets.                                                                                                                                                                           | `[]`                      |
-| `affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`                      |
-| `nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`                      |
-| `tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `[]`                      |
-| `priorityClassName`                     | Kubernetes [priorityClassName](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) settings.                                                                               | `""`                      |
-| `terminationGracePeriodSeconds`         | Duration in seconds the PRO-API service pod needs to terminate gracefully.                                                                                                                               | `60`                      |
-| `strategy`                              | **Service's update strategy settings**                                                                                                                                                                   |                           |
-| `strategy.rollingUpdate`                | **Service's Rolling Update strategy settings**                                                                                                                                                           |                           |
-| `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`                       |
-| `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`                       |
-| `service`                               | **Kubernetes [service settings](https://kubernetes.io/docs/concepts/services-networking/service/) to expose the service**                                                                                |                           |
-| `service.port`                          | 2GIS PRO API service port.                                                                                                                                                                               | `80`                      |
-| `service.type`                          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                           | `ClusterIP`               |
-| `service.annotations`                   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                        | `{}`                      |
-| `service.labels`                        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                  | `{}`                      |
-| `resources`                             | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**                                                                            |                           |
-| `resources.requests.cpu`                | A CPU request.                                                                                                                                                                                           | `400m`                    |
-| `resources.requests.memory`             | A memory request.                                                                                                                                                                                        | `256M`                    |
-| `resources.limits.cpu`                  | A CPU limit.                                                                                                                                                                                             | `1`                       |
-| `resources.limits.memory`               | A memory limit.                                                                                                                                                                                          | `1024M`                   |
-| `vpa`                                   | **Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings**                                                               |                           |
-| `vpa.enabled`                           | If VPA is enabled for the service.                                                                                                                                                                       | `false`                   |
-| `vpa.updateMode`                        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).                                                                                             | `Auto`                    |
-| `vpa.minAllowed.cpu`                    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                                                                                                               | `400m`                    |
-| `vpa.minAllowed.memory`                 | Lower limit for the RAM size to which the autoscaler can scale down.                                                                                                                                     | `256M`                    |
-| `vpa.maxAllowed.cpu`                    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                                                                                                                 | `1`                       |
-| `vpa.maxAllowed.memory`                 | Upper limit for the RAM size to which the autoscaler can scale up.                                                                                                                                       | `1024M`                   |
-| `image`                                 | **Docker image settings**                                                                                                                                                                                |                           |
-| `image.repository`                      | Docker Repository.                                                                                                                                                                                       | `2gis-on-premise/pro-api` |
-| `image.tag`                             | Docker image tag                                                                                                                                                                                         | `0.5.0`                   |
-| `image.pullPolicy`                      | Kubernetes pull policy for the service's Docker image.                                                                                                                                                   | `IfNotPresent`            |
+| Name                                    | Description                                                                                                                                                                                              | Value           |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
+| `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
+| `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
+
+
+### Service settings
+
+| Name                  | Description                                                                                                                    | Value       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)               | `{}`        |
+| `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
+| `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `service.port`        | Tiles API service port.                                                                                                        | `80`        |
+
+
+### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+| Name                    | Description                                                                                                  | Value   |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
+| `vpa.enabled`           | If VPA is enabled for the service.                                                                           | `false` |
+| `vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). | `Auto`  |
+| `vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                   | `400m`  |
+| `vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         | `256M`  |
+| `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `1`     |
+| `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `1024M` |
+
+
+### Deployment settings
+
+| Name               | Description | Value                     |
+| ------------------ | ----------- | ------------------------- |
+| `image.repository` | Repository  | `2gis-on-premise/pro-api` |
+| `image.tag`        | Tag         | `0.5.0`                   |
+| `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
 
 ### 2GIS PRO Storage configuration
@@ -74,44 +91,86 @@
 
 ### 2GIS PRO API configuration
 
-| Name                        | Description                                                                                                       | Value                   |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `api.tempPath`              | Path to directory used for temp data                                                                              | `/tmp`                  |
-| `api.host`                  | pro-api host address                                                                                              | `""`                    |
-| `api.allowAnyOrigin`        | Cors policy: allow any origin to perform requests to pro-api service                                              | `false`                 |
-| `postgres`                  | **PostgreSql settings**                                                                                           |                         |
-| `postgres.connectionString` | Connection string to the PostgreSql database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;Pwd={0};` | `""`                    |
-| `postgres.password`         | User password to connect to the PostgreSql database.                                                              | `""`                    |
-| `elastic`                   | **ElasticSearch settings**                                                                                        |                         |
-| `elastic.host`              | ElasticSearch host address. Format: `https://{0}@HOST:PORT`                                                       | `""`                    |
-| `elastic.credentials`       | User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD`                              | `""`                    |
-| `catalog`                   | **Catalog API settings**                                                                                          |                         |
-| `catalog.host`              | Host for [Catalog API](https://docs.2gis.com/en/on-premise/search).                                               | `http://catalog.host`   |
-| `catalog.key`               | Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).                                          | `""`                    |
-| `navi`                      | **Navigation API settings**                                                                                       |                         |
-| `navi.host`                 | Host for [Navigation API](https://docs.2gis.com/en/on-premise/search).                                            | `http://navi-back.host` |
-| `navi.key`                  | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).                          | `""`                    |
+| Name                 | Description                                                          | Value   |
+| -------------------- | -------------------------------------------------------------------- | ------- |
+| `api.tempPath`       | Path to directory used for temp data                                 | `/tmp`  |
+| `api.host`           | pro-api host address                                                 | `""`    |
+| `api.allowAnyOrigin` | Cors policy: allow any origin to perform requests to pro-api service | `false` |
+
+
+### PostgreSql settings
+
+| Name                        | Description                                                                                                       | Value |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
+| `postgres.connectionString` | Connection string to the PostgreSql database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;Pwd={0};` | `""`  |
+| `postgres.password`         | User password to connect to the PostgreSql database.                                                              | `""`  |
+
+
+### ElasticSearch settings
+
+| Name                  | Description                                                                          | Value |
+| --------------------- | ------------------------------------------------------------------------------------ | ----- |
+| `elastic.host`        | ElasticSearch host address. Format: `https://{0}@HOST:PORT`                          | `""`  |
+| `elastic.credentials` | User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD` | `""`  |
+
+
+### Catalog API settings
+
+| Name           | Description                                                              | Value                     |
+| -------------- | ------------------------------------------------------------------------ | ------------------------- |
+| `catalog.host` | Host for [Catalog API](https://docs.2gis.com/en/on-premise/search).      | `http://catalog-api.host` |
+| `catalog.key`  | Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search). | `""`                      |
+
+
+### Navigation API settings
+
+| Name        | Description                                                                              | Value                   |
+| ----------- | ---------------------------------------------------------------------------------------- | ----------------------- |
+| `navi.host` | Host for [Navigation API](https://docs.2gis.com/en/on-premise/search).                   | `http://navi-back.host` |
+| `navi.key`  | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). | `""`                    |
 
 
 ### 2GIS PRO API Job settings
 
+| Name                      | Description                | Value                   |
+| ------------------------- | -------------------------- | ----------------------- |
+| `appImporterName`         | Data Import job name.      | `pro-importer`          |
+| `appUserDataImporterName` | User Data Import job name. | `pro-userdata-importer` |
+
+
+### Import job settings
+
 | Name                                   | Description                                                                                                                                            | Value                          |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
-| `appImporterName`                      | Data Import job name.                                                                                                                                  | `pro-importer`                 |
-| `appUserDataImporterName`              | User Data Import job name.                                                                                                                             | `pro-userdata-importer`        |
-| `importJob`                            | **Import job settings**                                                                                                                                |                                |
-| `importJob.schedule`                   | Import job start schedule                                                                                                                              | `0 18 * * *`                   |
+| `importJob.schedule`                   | Import job schedule.                                                                                                                                   | `0 18 * * *`                   |
 | `importJob.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed. | `2`                            |
-| `importJob.successfulJobsHistoryLimit` | How many completed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).          | `3`                            |
+| `importJob.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept.                                                                                                     | `3`                            |
 | `importJob.repository`                 | Docker Repository Image.                                                                                                                               | `2gis-on-premise/pro-importer` |
 | `importJob.tag`                        | Docker image tag                                                                                                                                       | `0.5.0`                        |
 | `importJob.serviceAccount`             | Kubernetes service account                                                                                                                             | `runner`                       |
-| `importJob.resources`                  | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**                          |                                |
-| `importJob.resources.requests.cpu`     | A CPU request.                                                                                                                                         | `700m`                         |
-| `importJob.resources.requests.memory`  | A memory request.                                                                                                                                      | `256M`                         |
-| `importJob.resources.limits.cpu`       | A CPU limit.                                                                                                                                           | `1000m`                        |
-| `importJob.resources.limits.memory`    | A memory limit.                                                                                                                                        | `1024M`                        |
 | `importJob.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                         | `4`                            |
+
+
+### Data prepare job settings
+
+| Name | Description | Value |
+| ---- | ----------- | ----- |
+
+
+### Limits
+
+| Name                                  | Description                            | Value   |
+| ------------------------------------- | -------------------------------------- | ------- |
+| `resources`                           | **Limits for the application service** |         |
+| `resources.requests.cpu`              | A CPU request.                         | `400m`  |
+| `resources.requests.memory`           | A memory request.                      | `256M`  |
+| `resources.limits.cpu`                | A CPU limit.                           | `1`     |
+| `resources.limits.memory`             | A memory limit.                        | `1024M` |
+| `importJob.resources`                 | **Limits for the import job**          |         |
+| `importJob.resources.requests.cpu`    | A CPU request.                         | `700m`  |
+| `importJob.resources.requests.memory` | A memory request.                      | `256M`  |
+| `importJob.resources.limits.cpu`      | A CPU limit.                           | `1000m` |
+| `importJob.resources.limits.memory`   | A memory limit.                        | `1024M` |
 
 
 ## Installing
