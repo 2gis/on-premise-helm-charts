@@ -103,7 +103,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/traffic-proxy) to le
 | Name                                 | Description                                          | Value  |
 | ------------------------------------ | ---------------------------------------------------- | ------ |
 | `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `true` |
-| `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
+| `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  | `1`    |
 | `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
 
 

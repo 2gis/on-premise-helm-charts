@@ -135,7 +135,7 @@ autoscaling:
 podDisruptionBudget:
   enabled: false
   minAvailable: 1
-  maxUnavailable: 50%
+  maxUnavailable: 1
 
 
 # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings

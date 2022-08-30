@@ -165,8 +165,8 @@ vpa:
 
 podDisruptionBudget:
   enabled: false
-  minAvailable: ''
-  maxUnavailable: ''
+  minAvailable: 1
+  maxUnavailable: 1
 
 
 # @section Kafka settings for interacting with Distance Matrix Async Service

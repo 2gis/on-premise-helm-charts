@@ -114,7 +114,7 @@ resources:
 
 podDisruptionBudget:
   enabled: false
-  minAvailable: ''
+  minAvailable: 1
   maxUnavailable: 1
 
 
