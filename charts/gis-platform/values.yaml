@@ -20,9 +20,9 @@ external_proto: https
 # @param ingress.hosts[0].host Hostname for the Ingress service.
 
 ingress:
-  enabled: true
+  enabled: false
   hosts:
-  - host: navi-front.host
+  - host: gis-platform.host
 
 
 # @section Docker registry settings

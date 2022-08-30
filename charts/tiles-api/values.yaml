@@ -192,7 +192,7 @@ api:
   # @param api.ingress.hosts[0].host Hostname for the Ingress service.
 
   ingress:
-    enabled: true
+    enabled: false
     hosts:
     - host: tiles-api.host
 

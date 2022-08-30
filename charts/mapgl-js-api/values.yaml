@@ -97,7 +97,7 @@ service:
 # @param ingress.tls[0].secretName Secret name to use for the Ingress service.
 
 ingress:
-  enabled: true
+  enabled: false
   hosts:
   - host: mapgl-js-api.host
   tls:

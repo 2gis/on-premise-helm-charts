@@ -35,10 +35,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value             |
-| ----------------------- | -------------------------------------- | ----------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `true`            |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `navi-front.host` |
+| Name                    | Description                            | Value               |
+| ----------------------- | -------------------------------------- | ------------------- |
+| `ingress.enabled`       | If Ingress is enabled for the service. | `false`             |
+| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `gis-platform.host` |
 
 
 ### Docker registry settings

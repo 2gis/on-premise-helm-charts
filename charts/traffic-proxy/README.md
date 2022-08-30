@@ -86,7 +86,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/traffic-proxy) to le
 
 | Name                    | Description                            | Value                    |
 | ----------------------- | -------------------------------------- | ------------------------ |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `true`                   |
+| `ingress.enabled`       | If Ingress is enabled for the service. | `false`                  |
 | `ingress.hosts[0].host` | Hostname for the Ingress service.      | `traffic-proxy-api.host` |
 
 

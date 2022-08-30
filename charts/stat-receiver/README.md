@@ -99,7 +99,7 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 
 | Name                    | Description                            | Value                |
 | ----------------------- | -------------------------------------- | -------------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `true`               |
+| `ingress.enabled`       | If Ingress is enabled for the service. | `false`              |
 | `ingress.hosts[0].host` | Hostname for the Ingress service.      | `stat-receiver.host` |
 
 

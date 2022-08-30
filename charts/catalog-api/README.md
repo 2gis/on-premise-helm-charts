@@ -95,12 +95,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                            | Description                                 | Value                   |
-| ------------------------------- | ------------------------------------------- | ----------------------- |
-| `api.ingress.enabled`           | If Ingress is enabled for the service.      | `true`                  |
-| `api.ingress.hosts[0].host`     | Hostname for the Ingress service.           | `mapgl-js-api.host`     |
-| `api.ingress.tls[0].hosts`      | TLS hosts for the Ingress service.          | `["mapgl-js-api.host"]` |
-| `api.ingress.tls[0].secretName` | Secret name to use for the Ingress service. | `mapgl-js-api`          |
+| Name                        | Description                            | Value              |
+| --------------------------- | -------------------------------------- | ------------------ |
+| `api.ingress.enabled`       | If Ingress is enabled for the service. | `false`            |
+| `api.ingress.hosts[0].host` | Hostname for the Ingress service.      | `catalog-api.host` |
 
 
 ### Database settings

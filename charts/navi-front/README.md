@@ -80,7 +80,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 | Name                    | Description                            | Value             |
 | ----------------------- | -------------------------------------- | ----------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `true`            |
+| `ingress.enabled`       | If Ingress is enabled for the service. | `false`           |
 | `ingress.hosts[0].host` | Hostname for the Ingress service.      | `navi-front.host` |
 
 
