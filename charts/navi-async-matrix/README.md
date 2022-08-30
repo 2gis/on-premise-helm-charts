@@ -124,7 +124,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | ----------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
 | `vpa.enabled`           | If VPA is enabled for the service.                                                                           | `false` |
 | `vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). | `Auto`  |
-| `vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale up.                                     | `1000m` |
+| `vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                   | `1000m` |
 | `vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         | `1Gi`   |
 | `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `2000m` |
 | `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `2Gi`   |
