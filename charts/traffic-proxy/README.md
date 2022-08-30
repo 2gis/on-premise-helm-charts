@@ -84,9 +84,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/traffic-proxy) to le
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name      | Description                                                                                                                                        | Value |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `ingress` | Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'traffic-proxy-api.host'}]}`. |       |
+| Name                    | Description                            | Value                    |
+| ----------------------- | -------------------------------------- | ------------------------ |
+| `ingress.enabled`       | If Ingress is enabled for the service. | `true`                   |
+| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `traffic-proxy-api.host` |
 
 
 ### Limits

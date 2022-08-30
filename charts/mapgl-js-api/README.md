@@ -84,9 +84,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name      | Description                                                                   | Value |
-| --------- | ----------------------------------------------------------------------------- | ----- |
-| `ingress` | Configuration of the Ingress resource. Adapt it to your Ingress installation. |       |
+| Name                        | Description                                 | Value                   |
+| --------------------------- | ------------------------------------------- | ----------------------- |
+| `ingress.enabled`           | If Ingress is enabled for the service.      | `true`                  |
+| `ingress.hosts[0].host`     | Hostname for the Ingress service.           | `mapgl-js-api.host`     |
+| `ingress.tls[0].hosts`      | TLS hosts for the Ingress service.          | `["mapgl-js-api.host"]` |
+| `ingress.tls[0].secretName` | Secret name to use for the Ingress service. | `mapgl-js-api`          |
 
 
 ### Limits

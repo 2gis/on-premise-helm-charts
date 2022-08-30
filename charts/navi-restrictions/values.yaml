@@ -126,10 +126,13 @@ api:
     annotations: {}
     labels: {}
 
-  # @extra api.ingress **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings** <br/> Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'navi-restrictions.host'}]}`.
-  # @skip api.ingress.hosts[0].host
+  # @extra api.ingress **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings**
+
+  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
 
   ingress:
+    enabled: true
     hosts:
     - host: navi-restrictions.host
 
