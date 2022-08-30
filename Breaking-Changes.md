@@ -1,19 +1,42 @@
 # 2GIS On-Premise Breaking-Changes
 
 ## [1.3.1]
+
+#### catalog-api
+- Rename `podDisruptionBudget` to `pdb`
+
 #### gis-platform
 - Remove the `zookeeper.pdb` section
+
+#### mapgl-js-api
+- Rename `podDisruptionBudget` to `pdb`
+
+#### navi-async-matrix
+- Rename `podDisruptionBudget` to `pdb`
 
 #### navi-back
 - Rename `autoscaling.scaleUpWindowSeconds` to `autoscaling.scaleUpStabilizationWindowSeconds`
 - Rename `autoscaling.scaleDownWindowsSeconds` to `autoscaling.scaleDownStabilizationWindowSeconds`
-- Rename `podDisruptionBudget.create` to `podDisruptionBudget.enabled`
+- Rename `podDisruptionBudget` to `pdb`
+- Rename `podDisruptionBudget.create` to `pdb.enabled`
 
 #### navi-castle
 - Remove the `autoscaling` section
 
 #### navi-front
 - Rename `pdb.create` to `pdb.enabled`
+
+#### navi-restrictions
+- Rename `podDisruptionBudget` to `pdb`
+
+#### navi-router
+- Rename `podDisruptionBudget` to `pdb`
+
+#### search-api
+- Rename `podDisruptionBudget` to `pdb`
+
+#### traffic-proxy
+- Rename `podDisruptionBudget` to `pdb`
 
 ---
 ## [1.0.4]

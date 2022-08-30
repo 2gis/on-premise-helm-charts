@@ -130,11 +130,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                                 | Description                                          | Value   |
-| ------------------------------------ | ---------------------------------------------------- | ------- |
-| `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `false` |
-| `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  | `1`     |
-| `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
+| Name                 | Description                                          | Value   |
+| -------------------- | ---------------------------------------------------- | ------- |
+| `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
+| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`     |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
 
 
 ### Kafka settings for interacting with Distance Matrix Async Service
