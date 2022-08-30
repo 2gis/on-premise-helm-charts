@@ -110,7 +110,7 @@
 
 | Name                  | Description                                                                          | Value |
 | --------------------- | ------------------------------------------------------------------------------------ | ----- |
-| `elastic.host`        | ElasticSearch host address. Format: `https://{0}@HOST:PORT`                          | `""`  |
+| `elastic.host`        | ElasticSearch host address. Format: `http://{0}@HOST:PORT`                           | `""`  |
 | `elastic.credentials` | User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD` | `""`  |
 
 
