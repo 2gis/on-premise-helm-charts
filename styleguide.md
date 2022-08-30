@@ -78,8 +78,7 @@ make charts/navi-back
   - serviceAccount.yaml - serviceAccount
 
 - Группы настроек называем везде одинаково. Предпочтение отдаём не сокращённым, а полным названиям. По возможности используем [официальные названия](https://github.com/helm/helm/blob/main/pkg/releaseutil/kind_sorter.go#L72).
-  - Исключения:
-    -  hpa, vpa, pdb
+  - Исключения: hpa, vpa, pdb
 
 - Настройки, отвечающие за включение или отключение какой-то функции, должны называться `enabled`.
 
