@@ -98,12 +98,12 @@
 | `api.allowAnyOrigin` | Cors policy: allow any origin to perform requests to pro-api service | `false` |
 
 
-### PostgreSql settings
+### PostgreSQL settings
 
 | Name                        | Description                                                                                                       | Value |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
-| `postgres.connectionString` | Connection string to the PostgreSql database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;Pwd={0};` | `""`  |
-| `postgres.password`         | User password to connect to the PostgreSql database.                                                              | `""`  |
+| `postgres.connectionString` | Connection string to the PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;Pwd={0};` | `""`  |
+| `postgres.password`         | User password to connect to the PostgreSQL database.                                                              | `""`  |
 
 
 ### ElasticSearch settings
@@ -140,15 +140,15 @@
 
 ### Import job settings
 
-| Name                                   | Description                                                                                                                                            | Value                          |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
-| `importJob.schedule`                   | Import job schedule.                                                                                                                                   | `0 18 * * *`                   |
-| `importJob.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed. | `2`                            |
-| `importJob.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept.                                                                                                     | `3`                            |
-| `importJob.repository`                 | Docker Repository Image.                                                                                                                               | `2gis-on-premise/pro-importer` |
-| `importJob.tag`                        | Docker image tag                                                                                                                                       | `0.5.0`                        |
-| `importJob.serviceAccount`             | Kubernetes service account                                                                                                                             | `runner`                       |
-| `importJob.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                         | `4`                            |
+| Name                                  | Description                                                                                                                                              | Value                          |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `importer.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
+| `importer.tag`                        | Docker image tag                                                                                                                                         | `0.5.0`                        |
+| `importer.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
+| `importer.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
+| `importer.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
+| `importer.serviceAccount`             | Kubernetes service account                                                                                                                               | `runner`                       |
+| `importer.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                           | `4`                            |
 
 
 ### Data prepare job settings
@@ -159,18 +159,18 @@
 
 ### Limits
 
-| Name                                  | Description                            | Value   |
-| ------------------------------------- | -------------------------------------- | ------- |
-| `resources`                           | **Limits for the application service** |         |
-| `resources.requests.cpu`              | A CPU request.                         | `400m`  |
-| `resources.requests.memory`           | A memory request.                      | `256M`  |
-| `resources.limits.cpu`                | A CPU limit.                           | `1`     |
-| `resources.limits.memory`             | A memory limit.                        | `1024M` |
-| `importJob.resources`                 | **Limits for the import job**          |         |
-| `importJob.resources.requests.cpu`    | A CPU request.                         | `700m`  |
-| `importJob.resources.requests.memory` | A memory request.                      | `256M`  |
-| `importJob.resources.limits.cpu`      | A CPU limit.                           | `1000m` |
-| `importJob.resources.limits.memory`   | A memory limit.                        | `1024M` |
+| Name                                 | Description                            | Value   |
+| ------------------------------------ | -------------------------------------- | ------- |
+| `resources`                          | **Limits for the application service** |         |
+| `resources.requests.cpu`             | A CPU request.                         | `400m`  |
+| `resources.requests.memory`          | A memory request.                      | `256M`  |
+| `resources.limits.cpu`               | A CPU limit.                           | `1`     |
+| `resources.limits.memory`            | A memory limit.                        | `1024M` |
+| `importer.resources`                 | **Limits for the import job**          |         |
+| `importer.resources.requests.cpu`    | A CPU request.                         | `700m`  |
+| `importer.resources.requests.memory` | A memory request.                      | `256M`  |
+| `importer.resources.limits.cpu`      | A CPU limit.                           | `1000m` |
+| `importer.resources.limits.memory`   | A memory limit.                        | `1024M` |
 
 
 ## Installing
