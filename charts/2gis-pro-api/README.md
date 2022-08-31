@@ -173,6 +173,14 @@
 | `importer.resources.limits.memory`   | A memory limit.                        | `1024M` |
 
 
+### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+| Name                    | Description                            | Value               |
+| ----------------------- | -------------------------------------- | ------------------- |
+| `ingress.enabled`       | If Ingress is enabled for the service. | `false`             |
+| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `2gis-pro-api.host` |
+
+
 ## Installing
 
 1. Create a configuration file values-api.yaml and fill in all the required parameters according to the docs above.
