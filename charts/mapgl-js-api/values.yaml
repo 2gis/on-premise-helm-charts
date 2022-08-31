@@ -151,7 +151,7 @@ vpa:
   enabled: false
   updateMode: Auto
   minAllowed:
-    cpu: ''
+    cpu: 100m
     memory: 100Mi
   maxAllowed:
     cpu: 200m

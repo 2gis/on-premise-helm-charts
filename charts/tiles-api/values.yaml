@@ -242,7 +242,7 @@ api:
     enabled: false
     updateMode: Auto
     minAllowed:
-      cpu: ''
+      cpu: 100m
       memory: 128Mi
     maxAllowed:
       cpu: 1

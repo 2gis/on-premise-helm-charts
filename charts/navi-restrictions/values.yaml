@@ -160,7 +160,7 @@ api:
     enabled: false
     updateMode: Auto
     minAllowed:
-      cpu: ''
+      cpu: 500m
       memory: 256Mi
     maxAllowed:
       cpu: 2000m
