@@ -274,4 +274,4 @@ resources:
 ingress:
   enabled: false
   hosts:
-  - host: 2gis-pro-api.host
+  - host: pro-api.host

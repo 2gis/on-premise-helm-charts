@@ -1,20 +1,20 @@
-{{- define "2gis-pro-api.name" -}}
+{{- define "pro-api.name" -}}
 {{- default .Values.appName .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "2gis-pro-api.import-name" -}}
+{{- define "pro-api.import-name" -}}
 {{- default .Values.appImporterName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "2gis-pro-api.userdata-import-name" -}}
+{{- define "pro-api.userdata-import-name" -}}
 {{- default .Values.appUserDataImporterName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "2gis-pro-api.data-preparer-name" -}}
+{{- define "pro-api.data-preparer-name" -}}
 {{- default .Values.appDataPreparerName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "2gis-pro-api.fullname" -}}
+{{- define "pro-api.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,18 +27,18 @@
 {{- end -}}
 {{- end -}}
 
-{{- define "2gis-pro-api.chart" -}}
+{{- define "pro-api.chart" -}}
 {{- printf "%s-%s" .Values.appName .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "2gis-pro-api.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "2gis-pro-api.name" . }}
+{{- define "pro-api.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "pro-api.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
-{{- define "2gis-pro-api.labels" -}}
-helm.sh/chart: {{ include "2gis-pro-api.chart" . }}
-{{ include "2gis-pro-api.selectorLabels" . }}
+{{- define "pro-api.labels" -}}
+helm.sh/chart: {{ include "pro-api.chart" . }}
+{{ include "pro-api.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}

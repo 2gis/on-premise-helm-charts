@@ -178,14 +178,14 @@
 | Name                    | Description                            | Value               |
 | ----------------------- | -------------------------------------- | ------------------- |
 | `ingress.enabled`       | If Ingress is enabled for the service. | `false`             |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `2gis-pro-api.host` |
+| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `pro-api.host` |
 
 
 ## Installing
 
 1. Create a configuration file values-api.yaml and fill in all the required parameters according to the docs above.
 2. Then execute command:<br/>
-`- helm upgrade "2gis-pro-api" --install --atomic --wait --wait-for-jobs --timeout 10m --values ./values-api.yaml`
+`- helm upgrade "pro-api" --install --atomic --wait --wait-for-jobs --timeout 10m --values ./values-api.yaml`
 3. Check installation by executing request<br/>
 `https://2GIS_API_HOST/building/items?bounds=POLYGON%20%28%2854.605596%2024.429549%2C%2054.539606%2024.429549%2C%2054.539606%2024.413378%2C%2054.605596%2024.413378%2C%2054.605596%2024.429549%29%29`
 <br/>The response must contain a list of elements in json format, response http code = 200
