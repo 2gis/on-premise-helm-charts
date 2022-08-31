@@ -118,22 +118,20 @@ api:
     hosts:
     - host: catalog-api.host
 
+  # @section Database settings
 
-# @section Database settings
+  # @param db.host PostgreSQL host.
+  # @param db.port PostgreSQL port.
+  # @param db.name PostgreSQL database name.
+  # @param db.username PostgreSQL username.
+  # @param db.password PostgreSQL password.
 
-# @param db.host PostgreSQL host.
-# @param db.port PostgreSQL port.
-# @param db.name PostgreSQL database name.
-# @param db.username PostgreSQL username.
-# @param db.password PostgreSQL password.
-
-db:
-  host: postgres.host
-  port: 5432
-  name: catalog
-  username: postgres
-  password: secret
-
+  db:
+    host: postgres.host
+    port: 5432
+    name: catalog
+    username: postgres
+    password: secret
 
 # @section Search
 
@@ -192,6 +190,20 @@ importer:
     tag: "1.0.0"
     pullPolicy: IfNotPresent
 
+  # @section Database settings
+
+  # @param db.host PostgreSQL host.
+  # @param db.port PostgreSQL port.
+  # @param db.name PostgreSQL database name.
+  # @param db.username PostgreSQL username.
+  # @param db.password PostgreSQL password.
+
+  db:
+    host: postgres.host
+    port: 5432
+    name: catalog
+    username: postgres
+    password: secret
 
   persistentVolume:
     enabled: false

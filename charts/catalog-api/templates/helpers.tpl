@@ -39,54 +39,54 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: CATALOG_DB_SCHEMA
   value: "{{ include "catalog.manifestCode" . }}"
 - name: CATALOG_DB_BRANCH_URL
-  value: "jdbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}"
+  value: "jdbc:postgresql://{{ .Values.api.db.host }}:{{ .Values.api.db.port }}/{{ .Values.api.db.name }}"
 - name: CATALOG_DB_BRANCH_LOGIN
-  value: "{{ .Values.db.username }}"
+  value: "{{ .Values.api.db.username }}"
 - name: CATALOG_DB_BRANCH_PASS
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
-      key: dbPassword
+      key: apiDbPassword
 
 - name: CATALOG_DB_REGION_URL
-  value: "jdbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}"
+  value: "jdbc:postgresql://{{ .Values.api.db.host }}:{{ .Values.api.db.port }}/{{ .Values.api.db.name }}"
 - name: CATALOG_DB_REGION_LOGIN
-  value: "{{ .Values.db.username }}"
+  value: "{{ .Values.api.db.username }}"
 - name: CATALOG_DB_REGION_PASS
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
-      key: dbPassword
+      key: apiDbPassword
 
 - name: CATALOG_DB_API_KEY_URL
-  value: "jdbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}"
+  value: "jdbc:postgresql://{{ .Values.api.db.host }}:{{ .Values.api.db.port }}/{{ .Values.api.db.name }}"
 - name: CATALOG_DB_API_KEY_LOGIN
-  value: "{{ .Values.db.username }}"
+  value: "{{ .Values.api.db.username }}"
 - name: CATALOG_DB_API_KEY_PASS
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
-      key: dbPassword
+      key: apiDbPassword
 
 - name: CATALOG_DB_RUBRIC_URL
-  value: "jdbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}"
+  value: "jdbc:postgresql://{{ .Values.api.db.host }}:{{ .Values.api.db.port }}/{{ .Values.api.db.name }}"
 - name: CATALOG_DB_RUBRIC_LOGIN
-  value: "{{ .Values.db.username }}"
+  value: "{{ .Values.api.db.username }}"
 - name: CATALOG_DB_RUBRIC_PASS
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
-      key: dbPassword
+      key: apiDbPassword
 
 - name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_URL
-  value: "jdbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}"
+  value: "jdbc:postgresql://{{ .Values.api.db.host }}:{{ .Values.api.db.port }}/{{ .Values.api.db.name }}"
 - name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_LOGIN
-  value: "{{ .Values.db.username }}"
+  value: "{{ .Values.api.db.username }}"
 - name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_PASS
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
-      key: dbPassword
+      key: apiDbPassword
 {{- end }}
 
 {{- define "catalog.env.search" -}}
@@ -144,18 +144,18 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: IMPORTER_DB_CATALOG_SCHEMA
   value: "{{ include "catalog.manifestCode" . }}"
 - name: IMPORTER_DB_CATALOG_HOST
-  value: "{{ .Values.db.host }}"
+  value: "{{ .Values.importer.db.host }}"
 - name: IMPORTER_DB_CATALOG_PORT
-  value: "{{ .Values.db.port }}"
+  value: "{{ .Values.importer.db.port }}"
 - name: IMPORTER_DB_CATALOG_NAME
-  value: "{{ .Values.db.name }}"
+  value: "{{ .Values.importer.db.name }}"
 - name: IMPORTER_DB_CATALOG_USERNAME
-  value: "{{ .Values.db.username }}"
+  value: "{{ .Values.importer.db.username }}"
 - name: IMPORTER_DB_CATALOG_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.jobs.name" . }}
-      key: dbPassword
+      key: importerDbPassword
 - name: IMPORTER_S3_ENDPOINT
   value: "{{ .Values.dgctlStorage.host }}"
 - name: IMPORTER_S3_BUCKET
