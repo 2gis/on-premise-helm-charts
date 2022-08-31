@@ -120,7 +120,7 @@ api:
 
   # @section Database settings
 
-  # @param api.db.host PostgreSQL host.
+  # @param api.db.host PostgreSQL rw/ro host.
   # @param api.db.port PostgreSQL port.
   # @param api.db.name PostgreSQL database name.
   # @param api.db.username PostgreSQL username.
@@ -192,10 +192,10 @@ importer:
 
   # @section Database settings
 
-  # @param importer.db.host PostgreSQL host.
+  # @param importer.db.host PostgreSQL rw host.
   # @param importer.db.port PostgreSQL port.
   # @param importer.db.name PostgreSQL database name.
-  # @param importer.db.username PostgreSQL username.
+  # @param importer.db.username PostgreSQL username with rw access.
   # @param importer.db.password PostgreSQL password.
 
   db:
