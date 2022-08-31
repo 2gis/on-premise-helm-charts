@@ -120,11 +120,11 @@ api:
 
   # @section Database settings
 
-  # @param db.host PostgreSQL host.
-  # @param db.port PostgreSQL port.
-  # @param db.name PostgreSQL database name.
-  # @param db.username PostgreSQL username.
-  # @param db.password PostgreSQL password.
+  # @param api.db.host PostgreSQL host.
+  # @param api.db.port PostgreSQL port.
+  # @param api.db.name PostgreSQL database name.
+  # @param api.db.username PostgreSQL username.
+  # @param api.db.password PostgreSQL password.
 
   db:
     host: postgres.host
@@ -192,11 +192,11 @@ importer:
 
   # @section Database settings
 
-  # @param db.host PostgreSQL host.
-  # @param db.port PostgreSQL port.
-  # @param db.name PostgreSQL database name.
-  # @param db.username PostgreSQL username.
-  # @param db.password PostgreSQL password.
+  # @param importer.db.host PostgreSQL host.
+  # @param importer.db.port PostgreSQL port.
+  # @param importer.db.name PostgreSQL database name.
+  # @param importer.db.username PostgreSQL username.
+  # @param importer.db.password PostgreSQL password.
 
   db:
     host: postgres.host

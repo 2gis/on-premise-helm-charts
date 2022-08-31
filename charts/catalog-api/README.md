@@ -108,13 +108,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Database settings
 
-| Name          | Description               | Value           |
-| ------------- | ------------------------- | --------------- |
-| `db.host`     | PostgreSQL host.          | `postgres.host` |
-| `db.port`     | PostgreSQL port.          | `5432`          |
-| `db.name`     | PostgreSQL database name. | `catalog`       |
-| `db.username` | PostgreSQL username.      | `postgres`      |
-| `db.password` | PostgreSQL password.      | `secret`        |
+| Name              | Description               | Value           |
+| ----------------- | ------------------------- | --------------- |
+| `api.db.host`     | PostgreSQL host.          | `postgres.host` |
+| `api.db.port`     | PostgreSQL port.          | `5432`          |
+| `api.db.name`     | PostgreSQL database name. | `catalog`       |
+| `api.db.username` | PostgreSQL username.      | `postgres`      |
+| `api.db.password` | PostgreSQL password.      | `secret`        |
 
 
 ### Search
@@ -154,7 +154,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.resources.requests.memory` | A memory request.                                                                                                             | `512Mi`                            |
 | `importer.resources.limits.cpu`      | A CPU limit.                                                                                                                  | `2`                                |
 | `importer.resources.limits.memory`   | A memory limit.                                                                                                               | `2048Mi`                           |
-
+| `importer.db.host`                   | PostgreSQL host.                                                                                                              | `postgres.host`                    |
+| `importer.db.port`                   | PostgreSQL port.                                                                                                              | `5432`                             |
+| `importer.db.name`                   | PostgreSQL database name.                                                                                                     | `catalog`                          |
+| `importer.db.username`               | PostgreSQL username.                                                                                                          | `postgres`                         |
+| `importer.db.password`               | PostgreSQL password.                                                                                                          | `secret`                           |
 
 ## Maintainers
 
