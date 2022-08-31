@@ -157,7 +157,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.db.host`                   | PostgreSQL host.                                                                                                              | `postgres.host`                    |
 | `importer.db.port`                   | PostgreSQL port.                                                                                                              | `5432`                             |
 | `importer.db.name`                   | PostgreSQL database name.                                                                                                     | `catalog`                          |
-| `importer.db.username`               | PostgreSQL username.                                                                                                          | `postgres`                         |
+| `importer.db.username`               | PostgreSQL username with RW access.                                                                                           | `postgres`                         |
 | `importer.db.password`               | PostgreSQL password.                                                                                                          | `secret`                           |
 
 ## Maintainers
