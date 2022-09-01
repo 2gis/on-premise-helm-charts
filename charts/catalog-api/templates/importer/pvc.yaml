@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "catalog.importer.name" . }}-pvc
+  name: {{ include "catalog.importer.name" . }}
   labels:
     {{- include "catalog.importer.labels" . | nindent 4 }}
   annotations:

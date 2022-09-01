@@ -42,7 +42,7 @@ spec:
       volumes:
         - name: {{ include "catalog.importer.name" . }}-pv
           persistentVolumeClaim:
-            claimName: {{ include "catalog.importer.name" . }}-pvc
+            claimName: {{ include "catalog.importer.name" . }}
       {{- end }}
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:
