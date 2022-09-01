@@ -37,7 +37,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "catalog.env.db" -}}
 - name: CATALOG_DB_SCHEMA
-  value: "{{ include "catalog.manifestCode" . }}"
+  value: "{{ include "catalog.manifestCode" . }},extensions"
 - name: CATALOG_DB_BRANCH_URL
   value: "jdbc:postgresql://{{ .Values.api.db.host }}:{{ .Values.api.db.port }}/{{ .Values.api.db.name }}"
 - name: CATALOG_DB_BRANCH_LOGIN
