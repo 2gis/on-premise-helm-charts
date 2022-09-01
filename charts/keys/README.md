@@ -18,19 +18,25 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ## Values
 
+### Docker Registry settings
+
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
+
+
 ### Docker registry settings
 
-| Name                       | Description                                                                             | Value                          |
-| -------------------------- | --------------------------------------------------------------------------------------- | ------------------------------ |
-| `dgctlDockerRegistry`      | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`                           |
-| `imagePullSecrets`         | Kubernetes image pull secrets.                                                          | `[]`                           |
-| `imagePullPolicy`          | Pull policy.                                                                            | `IfNotPresent`                 |
-| `backend.image.repository` | Backend service image repository.                                                       | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.                                                              | `1.30.1`                       |
-| `admin.image.repository`   | Admin service image repository.                                                         | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.                                                                | `0.2.0`                        |
-| `redis.image.repository`   | Redis image repository.                                                                 | `2gis-on-premise/keys-redis`   |
-| `redis.image.tag`          | Redis image tag.                                                                        | `6.2.6-alpine3.15`             |
+| Name                       | Description                       | Value                          |
+| -------------------------- | --------------------------------- | ------------------------------ |
+| `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
+| `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
+| `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
+| `backend.image.tag`        | Backend service image tag.        | `1.30.1`                       |
+| `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
+| `admin.image.tag`          | Admin service image tag.          | `0.2.0`                        |
+| `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
+| `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
 
 
 ### Admin service settings
@@ -50,7 +56,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `admin.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`                    |
 | `admin.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`                    |
 | `admin.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`             |
-| `admin.service.port`        | Tiles API service port.                                                                                                        | `80`                    |
+| `admin.service.port`        | Service port.                                                                                                                  | `80`                    |
 | `admin.ingress`             | If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.                     | `{}`                    |
 
 
@@ -74,7 +80,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.service.annotations`                | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                              | `{}`        |
 | `api.service.labels`                     | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                        | `{}`        |
 | `api.service.type`                       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                 | `ClusterIP` |
-| `api.service.port`                       | Tiles API service port.                                                                                                                                        | `80`        |
+| `api.service.port`                       | Service port.                                                                                                                                                  | `80`        |
 | `api.ingress`                            | If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.                                                     | `{}`        |
 
 
