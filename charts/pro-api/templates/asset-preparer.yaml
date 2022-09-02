@@ -40,7 +40,7 @@ spec:
                 - name: S3Settings__Url
                   value: "{{ .Values.s3.host }}"
                 - name: S3Settings__AssetDataBucket
-                  value: "{{ .Values.s3.bucket }}"
+                  value: "{{ .Values.s3.assetDataBucket }}"
                 - name: S3Settings__AccessKey
                   valueFrom:
                     secretKeyRef:

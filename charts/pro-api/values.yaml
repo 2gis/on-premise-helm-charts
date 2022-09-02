@@ -109,17 +109,21 @@ image:
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
+
 # @param s3.host S3 endpoint. Format: `host:port`.
 # @param s3.accessKey S3 access key for accessing the bucket.
 # @param s3.secretKey S3 secret key for accessing the bucket.
 # @param s3.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate.
+# @param s3.assetDataBucket S3 bucket with common assets, aggregations, and filters.
 # @param s3.layerDataBucket S3 bucket with prepared layer data.
 # @param s3.userAssetsDataBucket S3 bucket with user-created assets, aggregations, and filters
+
 s3:
   host: ''
   accessKey: ''
   secretKey: ''
   manifest: manifests/latest.json
+  assetDataBucket: ''
   layerDataBucket: ''
   userAssetsDataBucket: ''
 

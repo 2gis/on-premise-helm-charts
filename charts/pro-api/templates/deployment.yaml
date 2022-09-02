@@ -143,7 +143,7 @@ spec:
             - name: S3Settings__LayerDataBucket
               value: "{{ .Values.s3.layerDataBucket }}"
             - name: S3Settings__AssetDataBucket
-              value: "{{ .Values.s3.bucket }}"
+              value: "{{ .Values.s3.assetDataBucket }}"
             - name: S3Settings__AccessKey
               valueFrom:
                 secretKeyRef:
