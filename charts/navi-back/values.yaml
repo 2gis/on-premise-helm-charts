@@ -147,7 +147,7 @@ verticalscaling:
 # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 # @param vpa.enabled If VPA is enabled for the service.
-# @extra vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
 # @extra vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
 # @extra vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
 # @extra vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
@@ -155,6 +155,7 @@ verticalscaling:
 
 vpa:
   enabled: false
+  updateMode: Auto
 
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
