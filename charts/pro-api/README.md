@@ -132,10 +132,10 @@
 
 ### 2GIS PRO API Job settings
 
-| Name                      | Description                | Value                   |
-| ------------------------- | -------------------------- | ----------------------- |
-| `appImporterName`         | Data Import job name.      | `pro-importer`          |
-| `appUserDataImporterName` | User Data Import job name. | `pro-userdata-importer` |
+| Name                       | Description                | Value                     |
+| -------------------------- | -------------------------- | ------------------------- |
+| `appAssetImporterName`     | Data Import job name.      | `pro-asset-importer`      |
+| `appUserAssetImporterName` | User Data Import job name. | `pro-user-asset-importer` |
 
 
 ### Import job settings
@@ -175,9 +175,9 @@
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value               |
-| ----------------------- | -------------------------------------- | ------------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`             |
+| Name                    | Description                            | Value          |
+| ----------------------- | -------------------------------------- | -------------- |
+| `ingress.enabled`       | If Ingress is enabled for the service. | `false`        |
 | `ingress.hosts[0].host` | Hostname for the Ingress service.      | `pro-api.host` |
 
 

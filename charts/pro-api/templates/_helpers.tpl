@@ -2,16 +2,16 @@
 {{- default .Values.appName .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "pro-api.import-name" -}}
-{{- default .Values.appImporterName | trunc 63 | trimSuffix "-" -}}
+{{- define "pro-api.asset-importer-name" -}}
+{{- default .Values.appAssetImporterName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "pro-api.userdata-import-name" -}}
-{{- default .Values.appUserDataImporterName | trunc 63 | trimSuffix "-" -}}
+{{- define "pro-api.user-asset-importer-name" -}}
+{{- default .Values.appUserAssetImporterName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "pro-api.data-preparer-name" -}}
-{{- default .Values.appDataPreparerName | trunc 63 | trimSuffix "-" -}}
+{{- define "pro-api.asset-preparer-name" -}}
+{{- default .Values.appAssetPreparerName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{- define "pro-api.fullname" -}}

@@ -1,7 +1,7 @@
 ﻿apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ include "pro-api.import-name" . }}
+  name: {{ include "pro-api.asset-importer-name" . }}
 spec:
   concurrencyPolicy: Forbid
   schedule: {{ .Values.importer.schedule }}
@@ -19,7 +19,7 @@ spec:
             - name: temp-volume
               emptyDir: {}
           containers:
-            - name: {{ include "pro-api.import-name" . }}
+            - name: {{ include "pro-api.asset-importer-name" . }}
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.importer.repository }}:{{ .Values.importer.tag }}
               imagePullPolicy: IfNotPresent
               resources:
@@ -29,7 +29,7 @@ spec:
                   name: temp-volume
               env:
                 - name: JOB_NAME
-                  value: {{ include "pro-api.import-name" . }}
+                  value: {{ include "pro-api.asset-importer-name" . }}
                 - name: TEMP_PATH
                   value: "{{ .Values.api.tempPath }}"
                 - name: ENV

@@ -180,13 +180,13 @@ navi:
 
 # @section 2GIS PRO API Job settings
 
-# @param appImporterName Data Import job name.
-# @param appUserDataImporterName User Data Import job name.
-# @skip appDataPreparerName
+# @param appAssetImporterName Data Import job name.
+# @param appUserAssetImporterName User Data Import job name.
+# @skip appAssetPreparerName
 
-appImporterName: pro-importer
-appUserDataImporterName: pro-userdata-importer
-appDataPreparerName: pro-data-preparer
+appAssetImporterName: pro-asset-importer
+appUserAssetImporterName: pro-user-asset-importer
+appAssetPreparerName: pro-asset-preparer
 
 # @section Import job settings
 
