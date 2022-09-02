@@ -83,10 +83,14 @@
 
 ### 2GIS PRO Storage configuration
 
-| Name                      | Description                                                   | Value |
-| ------------------------- | ------------------------------------------------------------- | ----- |
-| `s3.layerDataBucket`      | S3 bucket with prepared layer data.                           | `""`  |
-| `s3.userAssetsDataBucket` | S3 bucket with user-created assets, aggregations, and filters | `""`  |
+| Name                      | Description                                                                                                                                                                                                                                              | Value                   |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `s3.host`                 | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`                    |
+| `s3.accessKey`            | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`                    |
+| `s3.secretKey`            | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`                    |
+| `s3.manifest`             | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `manifests/latest.json` |
+| `s3.layerDataBucket`      | S3 bucket with prepared layer data.                                                                                                                                                                                                                      | `""`                    |
+| `s3.userAssetsDataBucket` | S3 bucket with user-created assets, aggregations, and filters                                                                                                                                                                                            | `""`                    |
 
 
 ### 2GIS PRO API configuration
