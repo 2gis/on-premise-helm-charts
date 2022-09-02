@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ include "urbi-pro.data-preparer-name" . }}
+  name: {{ include "pro-api.asset-preparer-name" . }}
 spec:
   concurrencyPolicy: Forbid
   schedule: {{ .Values.dataPrepareJob.schedule }}
@@ -18,7 +18,7 @@ spec:
             - name: temp-volume
               emptyDir: {}
           containers:
-            - name: {{ include "urbi-pro.import-name" . }}
+            - name: {{ include "pro-api.asset-importer-name" . }}
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.dataPrepareJob.repository }}:{{ .Values.dataPrepareJob.tag }}
               imagePullPolicy: IfNotPresent
               resources:
@@ -28,7 +28,7 @@ spec:
                   name: temp-volume
               env:
                 - name: JOB_NAME
-                  value: {{ include "urbi-pro.data-preparer-name" . }}
+                  value: {{ include "pro-api.asset-preparer-name" . }}
                 - name: TEMP_PATH
                   value: "{{ .Values.api.tempPath }}"
                 - name: ENV
@@ -45,19 +45,19 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: s3AccessKey
-                      name: {{ include "urbi-pro.name" . }}-secret
+                      name: {{ include "pro-api.name" . }}-secret
                 - name: S3Settings__SecretKey
                   valueFrom:
                     secretKeyRef:
                       key: s3SecretKey
-                      name: {{ include "urbi-pro.name" . }}-secret
+                      name: {{ include "pro-api.name" . }}-secret
                 - name: DB_CONNECTION_STRING
                   value: "{{ .Values.postgres.connectionString }}"
                 - name: DB_CONNECTION_PWD
                   valueFrom:
                     secretKeyRef:
                       key: dbConnectionPwd
-                      name: {{ include "urbi-pro.name" . }}-secret
+                      name: {{ include "pro-api.name" . }}-secret
                 - name: ES_HOST
                   value: "{{ .Values.elastic.host }}"
                 {{ if .Values.elastic.credentials }}
@@ -65,7 +65,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: esCredentials
-                      name: {{ include "urbi-pro.name" . }}-secret
+                      name: {{ include "pro-api.name" . }}-secret
                 {{ end }}
                 - name: API_URL
                   value: "{{ .Values.api.host }}"
@@ -79,4 +79,4 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: diggerPassword
-                      name: {{ include "urbi-pro.name" . }}-secret
+                      name: {{ include "pro-api.name" . }}-secret
