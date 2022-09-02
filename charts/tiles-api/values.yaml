@@ -196,7 +196,8 @@ api:
     hosts:
     - host: tiles-api.host
 
-  # @extra api.pdb **Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings**
+  # @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
   # @param api.pdb.enabled If PDB is enabled for the service.
   # @param api.pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
