@@ -192,16 +192,16 @@ appAssetPreparerName: pro-asset-preparer
 
 # @section Import job settings
 
-# @param importer.repository Docker Repository Image.
-# @param importer.tag Docker image tag
-# @param importer.schedule Import job schedule.
-# @param importer.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
-# @param importer.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
-# @param importer.serviceAccount  Kubernetes service account
-# @param importer.maxParallelJobs How many import jobs can be run simultaneously
-# @skip importer.files
+# @param assetImporter.repository Docker Repository Image.
+# @param assetImporter.tag Docker image tag
+# @param assetImporter.schedule Import job schedule.
+# @param assetImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
+# @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
+# @param assetImporter.serviceAccount  Kubernetes service account
+# @param assetImporter.maxParallelJobs How many import jobs can be run simultaneously
+# @skip assetImporter.files
 
-importer:
+assetImporter:
   repository: 2gis-on-premise/pro-importer
   tag: 0.5.0
   schedule: '0 18 * * *'
@@ -254,11 +254,11 @@ assetPreparer:
 # @param resources.limits.cpu A CPU limit.
 # @param resources.limits.memory A memory limit.
 
-# @extra importer.resources **Limits for the import job**
-# @param importer.resources.requests.cpu A CPU request.
-# @param importer.resources.requests.memory A memory request.
-# @param importer.resources.limits.cpu A CPU limit.
-# @param importer.resources.limits.memory A memory limit.
+# @extra assetImporter.resources **Limits for the import job**
+# @param assetImporter.resources.requests.cpu A CPU request.
+# @param assetImporter.resources.requests.memory A memory request.
+# @param assetImporter.resources.limits.cpu A CPU limit.
+# @param assetImporter.resources.limits.memory A memory limit.
 
 resources:
   requests:
