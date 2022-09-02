@@ -1,4 +1,5 @@
-{{- if .Values.pdb.enabled }}
+{{- with .Values.pdb }}
+{{- if .enabled }}
 ---
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
@@ -7,12 +8,13 @@ metadata:
   labels:
     {{- include "router.labels" . | nindent 4 }}
 spec:
-  {{- if .Values.pdb.minAvailable }}
-  minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
   {{- end }}
-  {{- if .Values.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
+  {{- if .maxUnavailable }}
+  maxUnavailable: {{ .maxUnavailable }}
   {{- end }}
   selector:
     matchLabels: {{- include "router.selectorLabels" . | nindent 6 }}
+{{- end }}
 {{- end }}

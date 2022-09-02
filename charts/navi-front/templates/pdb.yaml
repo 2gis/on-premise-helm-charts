@@ -1,16 +1,18 @@
-{{- if .Values.pdb.enabled }}
+{{- with .Values.pdb }}
+{{- if .enabled }}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "front.fullname" . }}-pdb
   namespace: {{ .Release.Namespace }}
 spec:
-  {{- if .Values.pdb.minAvailable }}
-  minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
   {{- end }}
-  {{- if .Values.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
+  {{- if .maxUnavailable }}
+  maxUnavailable: {{ .maxUnavailable }}
   {{- end }}
   selector:
     matchLabels: {{ include "front.selectorLabels" .  | nindent 6 }}
+{{- end }}
 {{- end }}

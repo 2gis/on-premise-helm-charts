@@ -1,4 +1,5 @@
-{{- if .Values.pdb.enabled }}
+{{- with .Values.pdb }}
+{{- if .enabled }}
 ---
 
 {{- if $.Capabilities.APIVersions.Has "policy/v1" }}
@@ -12,13 +13,14 @@ metadata:
   labels:
     {{- include "mapgl.labels" . | nindent 4 }}
 spec:
-  {{- if .Values.pdb.minAvailable }}
-  minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
   {{- end }}
-  {{- if .Values.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
+  {{- if .maxUnavailable }}
+  maxUnavailable: {{ .maxUnavailable }}
   {{- end }}
   selector:
     matchLabels:
       {{- include "mapgl.selectorLabels" . | nindent 6 }}
+{{- end }}
 {{- end }}
