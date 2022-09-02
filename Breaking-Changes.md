@@ -4,15 +4,21 @@
 
 #### catalog-api
 - Rename `podDisruptionBudget` to `pdb`
+- For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
 #### gis-platform
 - Remove the unused `zookeeper.pdb` section
 
+#### keys
+- For the HPA section, switched from `autoscaling/v2beta2` to `autoscaling/v2`
+
 #### mapgl-js-api
 - Rename `podDisruptionBudget` to `pdb`
+- For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
 #### navi-async-matrix
 - Rename `podDisruptionBudget` to `pdb`
+- For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
 #### navi-back
 - Rename `autoscaling.scaleUpWindowSeconds` to `autoscaling.scaleUpStabilizationWindowSeconds`
@@ -25,15 +31,22 @@
 
 #### navi-front
 - Rename `pdb.create` to `pdb.enabled`
+- For the HPA section, switched from `autoscaling/v2beta2` to `autoscaling/v2`
 
 #### navi-restrictions
 - Rename `podDisruptionBudget` to `pdb`
+- For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
 #### navi-router
 - Rename `podDisruptionBudget` to `pdb`
+- For the HPA section, switched from `autoscaling/v2beta2` to `autoscaling/v2`
 
 #### search-api
 - Rename `podDisruptionBudget` to `pdb`
+- For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
+
+#### tiles-api
+- For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
 #### traffic-proxy
 - Rename `podDisruptionBudget` to `pdb`
