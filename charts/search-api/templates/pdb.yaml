@@ -12,6 +12,9 @@ metadata:
   labels:
     {{- include "search_api.labels" . | nindent 4 }}
 spec:
+  {{- if .Values.pdb.minAvailable }}
+  minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- end }}
   {{- if .Values.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.pdb.maxUnavailable }}
   {{- end }}

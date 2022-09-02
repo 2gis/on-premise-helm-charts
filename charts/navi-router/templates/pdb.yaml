@@ -9,8 +9,9 @@ metadata:
 spec:
   {{- if .Values.pdb.minAvailable }}
   minAvailable: {{ .Values.pdb.minAvailable }}
-  {{ else if .Values.pdb.maxUnavailable }}
-  maxUnavailable: {{.Values.pdb.maxUnavailable }}
+  {{- end }}
+  {{- if .Values.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
   {{- end }}
   selector:
     matchLabels: {{- include "router.selectorLabels" . | nindent 6 }}
