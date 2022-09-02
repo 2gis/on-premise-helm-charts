@@ -6,7 +6,7 @@
 - Rename `podDisruptionBudget` to `pdb`
 
 #### gis-platform
-- Remove the `zookeeper.pdb` section
+- Remove the unused `zookeeper.pdb` section
 
 #### mapgl-js-api
 - Rename `podDisruptionBudget` to `pdb`
