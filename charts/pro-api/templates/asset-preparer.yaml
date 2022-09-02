@@ -4,11 +4,11 @@ metadata:
   name: {{ include "pro-api.asset-preparer-name" . }}
 spec:
   concurrencyPolicy: Forbid
-  schedule: {{ .Values.dataPrepareJob.schedule }}
-  successfulJobsHistoryLimit: {{ .Values.dataPrepareJob.successfulJobsHistoryLimit }}
+  schedule: {{ .Values.assetPreparer.schedule }}
+  successfulJobsHistoryLimit: {{ .Values.assetPreparer.successfulJobsHistoryLimit }}
   jobTemplate:
     spec:
-      backoffLimit: {{ .Values.dataPrepareJob.backoffLimit }}
+      backoffLimit: {{ .Values.assetPreparer.backoffLimit }}
       template:
         spec:
           nodeSelector:
@@ -19,10 +19,10 @@ spec:
               emptyDir: {}
           containers:
             - name: {{ include "pro-api.asset-importer-name" . }}
-              image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.dataPrepareJob.repository }}:{{ .Values.dataPrepareJob.tag }}
+              image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.assetPreparer.repository }}:{{ .Values.assetPreparer.tag }}
               imagePullPolicy: IfNotPresent
               resources:
-                {{- toYaml .Values.dataPrepareJob.resources | nindent 16 }}
+                {{- toYaml .Values.assetPreparer.resources | nindent 16 }}
               volumeMounts:
                 - mountPath: "{{ .Values.api.tempPath }}"
                   name: temp-volume
@@ -36,7 +36,7 @@ spec:
                 - name: MODE
                   value: "PrepareDemand"
                 - name: MAX_PARALLEL_JOBS
-                  value: "{{ .Values.dataPrepareJob.maxParallelJobs }}"
+                  value: "{{ .Values.assetPreparer.maxParallelJobs }}"
                 - name: S3Settings__Url
                   value: "{{ .Values.s3.host }}"
                 - name: S3Settings__AssetDataBucket
@@ -69,9 +69,9 @@ spec:
                 {{ end }}
                 - name: API_URL
                   value: "{{ .Values.api.host }}"
-                {{ if .Values.dataPrepareJob.files }}
+                {{ if .Values.assetPreparer.files }}
                 - name: FILES
-                  value: "{{ .Values.dataPrepareJob.files}}"
+                  value: "{{ .Values.assetPreparer.files}}"
                 {{ end }}
                 - name: Digger__UserName
                   value: "{{ .Values.api.diggerUserName}}"

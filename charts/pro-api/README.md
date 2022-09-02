@@ -151,12 +151,6 @@
 | `importer.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                           | `4`                            |
 
 
-### Data prepare job settings
-
-| Name | Description | Value |
-| ---- | ----------- | ----- |
-
-
 ### Limits
 
 | Name                                 | Description                            | Value   |

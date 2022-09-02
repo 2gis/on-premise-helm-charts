@@ -216,20 +216,20 @@ importer:
   maxParallelJobs: 4
   files: ''
 
-# @section Data prepare job settings
+# Data prepare job settings
 
-# @skip dataPrepareJob.repository
-# @skip dataPrepareJob.tag
-# @skip dataPrepareJob.schedule
-# @skip dataPrepareJob.backoffLimit
-# @skip dataPrepareJob.successfulJobsHistoryLimit
-# @skip dataPrepareJob.resources.requests.cpu
-# @skip dataPrepareJob.resources.requests.memory
-# @skip dataPrepareJob.resources.limits.cpu
-# @skip dataPrepareJob.resources.limits.memory
-# @skip dataPrepareJob.maxParallelJobs
+# @skip assetPreparer.repository
+# @skip assetPreparer.tag
+# @skip assetPreparer.schedule
+# @skip assetPreparer.backoffLimit
+# @skip assetPreparer.successfulJobsHistoryLimit
+# @skip assetPreparer.resources.requests.cpu
+# @skip assetPreparer.resources.requests.memory
+# @skip assetPreparer.resources.limits.cpu
+# @skip assetPreparer.resources.limits.memory
+# @skip assetPreparer.maxParallelJobs
 
-dataPrepareJob:
+assetPreparer:
   repository: 2gis-on-premise/pro-importer
   tag: 0.5.0
   schedule: '0 16 * * 6'
