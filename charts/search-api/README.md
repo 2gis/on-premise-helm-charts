@@ -64,7 +64,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 | Name            | Description                                   | Value   |
 | --------------- | --------------------------------------------- | ------- |
-| `api.resources` | API container resources.                      | `{}`    |
 | `api.data_dir`  | Path to the directory storing search indexes. | `/data` |
 | `api.fcgi_port` | TCP port of the Search API.                   | `9090`  |
 | `api.logLevel`  | Log level.                                    | `Info`  |
@@ -79,7 +78,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `nginx.image.repository` | Docker Repository.                                     | `2gis-on-premise/search-nginx` |
 | `nginx.image.tag`        | Docker image tag.                                      | `1.21.6`                       |
 | `nginx.image.pullPolicy` | Kubernetes pull policy for the service's Docker image. | `IfNotPresent`                 |
-| `nginx.resources`        | NGINX container resources.                             | `{}`                           |
 | `nginx.http_port`        | HTTP port on which NGINX will be listening.            | `8080`                         |
 
 
@@ -125,6 +123,22 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name              | Description                            | Value   |
 | ----------------- | -------------------------------------- | ------- |
 | `ingress.enabled` | If Ingress is enabled for the service. | `false` |
+
+
+### Limits
+
+| Name                              | Description                      | Value |
+| --------------------------------- | -------------------------------- | ----- |
+| `api.resources`                   | **Limits for the API service**   | `{}`  |
+| `api.resources.requests.cpu`      | A CPU request, e.g., `100m`.     |       |
+| `api.resources.requests.memory`   | A memory request, e.g., `128Mi`. |       |
+| `api.resources.limits.cpu`        | A CPU limit, e.g., `100m`.       |       |
+| `api.resources.limits.memory`     | A memory limit, e.g., `128Mi`.   |       |
+| `nginx.resources`                 | **Limits for the NGINX service** | `{}`  |
+| `nginx.resources.requests.cpu`    | A CPU request, e.g., `100m`.     |       |
+| `nginx.resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
+| `nginx.resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
+| `nginx.resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
 
 
 ## Maintainers
