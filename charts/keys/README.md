@@ -41,51 +41,61 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Admin service settings
 
-| Name                          | Description                                                                                                                    | Value                   |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
-| `admin.replicas`              | A replica count for the pod.                                                                                                   | `1`                     |
-| `admin.apiUrl`                | Base URL for the admin API.                                                                                                    | `https://keys-api.host` |
-| `admin.appHost`               | Base URL for the admin web interface.                                                                                          | `https://keys-ui.host`  |
-| `admin.annotations`           | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                      | `{}`                    |
-| `admin.labels`                | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                | `{}`                    |
-| `admin.podAnnotations`        | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                  | `{}`                    |
-| `admin.podLabels`             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                            | `{}`                    |
-| `admin.nodeSelector`          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).            | `{}`                    |
-| `admin.affinity`              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).    | `{}`                    |
-| `admin.tolerations`           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.              | `{}`                    |
-| `admin.service.annotations`   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`                    |
-| `admin.service.labels`        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`                    |
-| `admin.service.type`          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`             |
-| `admin.service.port`          | Service port.                                                                                                                  | `80`                    |
-| `admin.ingress`               | **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings**                            |                         |
-| `admin.ingress.enabled`       | If Ingress is enabled for the service.                                                                                         | `false`                 |
-| `admin.ingress.hosts[0].host` | Hostname for the Ingress service.                                                                                              | `keys-ui.host`          |
+| Name                        | Description                                                                                                                    | Value                   |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `admin.replicas`            | A replica count for the pod.                                                                                                   | `1`                     |
+| `admin.apiUrl`              | Base URL for the admin API.                                                                                                    | `https://keys-api.host` |
+| `admin.appHost`             | Base URL for the admin web interface.                                                                                          | `https://keys-ui.host`  |
+| `admin.annotations`         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                      | `{}`                    |
+| `admin.labels`              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                | `{}`                    |
+| `admin.podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                  | `{}`                    |
+| `admin.podLabels`           | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                            | `{}`                    |
+| `admin.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).            | `{}`                    |
+| `admin.affinity`            | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).    | `{}`                    |
+| `admin.tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.              | `{}`                    |
+| `admin.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`                    |
+| `admin.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`                    |
+| `admin.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`             |
+| `admin.service.port`        | Service port.                                                                                                                  | `80`                    |
+
+
+### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+| Name                          | Description                            | Value          |
+| ----------------------------- | -------------------------------------- | -------------- |
+| `admin.ingress.enabled`       | If Ingress is enabled for the service. | `false`        |
+| `admin.ingress.hosts[0].host` | Hostname for the Ingress service.      | `keys-ui.host` |
 
 
 ### API service settings
 
-| Name                                     | Description                                                                                                                                                    | Value           |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `api.adminUsers`                         | Usernames and passwords of admin users. Format: `username1:password1,username2:password2`.                                                                     | `""`            |
-| `api.replicas`                           | A replica count for the pod.                                                                                                                                   | `1`             |
-| `api.hpa.enabled`                        | If [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) is enabled for the service.                        | `false`         |
-| `api.hpa.maxReplicas`                    | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                   | `2`             |
-| `api.hpa.minReplicas`                    | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                 | `1`             |
-| `api.hpa.targetCPUUtilizationPercentage` | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used. | `80`            |
-| `api.annotations`                        | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                      | `{}`            |
-| `api.labels`                             | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                | `{}`            |
-| `api.podAnnotations`                     | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                  | `{}`            |
-| `api.podLabels`                          | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                            | `{}`            |
-| `api.nodeSelector`                       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                            | `{}`            |
-| `api.affinity`                           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                    | `{}`            |
-| `api.tolerations`                        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                              | `{}`            |
-| `api.service.annotations`                | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                              | `{}`            |
-| `api.service.labels`                     | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                        | `{}`            |
-| `api.service.type`                       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                 | `ClusterIP`     |
-| `api.service.port`                       | Service port.                                                                                                                                                  | `80`            |
-| `api.ingress`                            | **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings**                                                            |                 |
-| `api.ingress.enabled`                    | If Ingress is enabled for the service.                                                                                                                         | `false`         |
-| `api.ingress.hosts[0].host`              | Hostname for the Ingress service.                                                                                                                              | `keys-api.host` |
+| Name                                     | Description                                                                                                                                                    | Value       |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `api.adminUsers`                         | Usernames and passwords of admin users. Format: `username1:password1,username2:password2`.                                                                     | `""`        |
+| `api.replicas`                           | A replica count for the pod.                                                                                                                                   | `1`         |
+| `api.hpa.enabled`                        | If [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) is enabled for the service.                        | `false`     |
+| `api.hpa.maxReplicas`                    | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                   | `2`         |
+| `api.hpa.minReplicas`                    | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                 | `1`         |
+| `api.hpa.targetCPUUtilizationPercentage` | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used. | `80`        |
+| `api.annotations`                        | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                      | `{}`        |
+| `api.labels`                             | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                | `{}`        |
+| `api.podAnnotations`                     | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                  | `{}`        |
+| `api.podLabels`                          | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                            | `{}`        |
+| `api.nodeSelector`                       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                            | `{}`        |
+| `api.affinity`                           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                    | `{}`        |
+| `api.tolerations`                        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                              | `{}`        |
+| `api.service.annotations`                | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                              | `{}`        |
+| `api.service.labels`                     | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                        | `{}`        |
+| `api.service.type`                       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                 | `ClusterIP` |
+| `api.service.port`                       | Service port.                                                                                                                                                  | `80`        |
+
+
+### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+| Name                        | Description                            | Value           |
+| --------------------------- | -------------------------------------- | --------------- |
+| `api.ingress.enabled`       | If Ingress is enabled for the service. | `false`         |
+| `api.ingress.hosts[0].host` | Hostname for the Ingress service.      | `keys-api.host` |
 
 
 ### Import service settings

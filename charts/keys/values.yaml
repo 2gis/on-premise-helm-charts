@@ -81,7 +81,7 @@ admin:
     type: ClusterIP
     port: 80
 
-  # @extra admin.ingress **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings**
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
   # @param admin.ingress.enabled If Ingress is enabled for the service.
   # @param admin.ingress.hosts[0].host Hostname for the Ingress service.
@@ -154,7 +154,7 @@ api:
     type: ClusterIP
     port: 80
 
-  # @extra api.ingress **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings**
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
   # @param api.ingress.hosts[0].host Hostname for the Ingress service.
