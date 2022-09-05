@@ -36,12 +36,12 @@ make charts/navi-back
 - В заголовке каждого блока k8s-специфичных настроек необходимо ставить ссылку на соответствующий раздел официальной документации.
 
   ```yaml
-  # @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+  # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
   
-  # @param podDisruptionBudget.enabled If PDB is enabled for the service.
-  # @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
+  # @param pdb.enabled If PDB is enabled for the service.
+  # @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
   
-  podDisruptionBudget:
+  pdb:
     enabled: false
     maxUnavailable: 1
   ```
