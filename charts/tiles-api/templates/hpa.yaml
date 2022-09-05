@@ -1,20 +1,39 @@
 {{- with .Values.api.hpa }}
 {{- if .enabled }}
----
-
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "tileserver.fullname" $ }}
+  name: {{ include "tiles.fullname" $ }}
   labels:
     {{- include "tiles.labels" $ | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "tiles.fullname" $ }}
+    name: {{ include "tiles.fullname" . }}
   minReplicas: {{ .minReplicas }}
   maxReplicas: {{ .maxReplicas }}
-  targetCPUUtilizationPercentage: {{ .targetCPUUtilizationPercentage }}
+  behavior:
+    scaleUp:
+        stabilizationWindowSeconds: {{ .scaleUpStabilizationWindowSeconds }}
+    scaleDown:
+        stabilizationWindowSeconds: {{ .scaleDownStabilizationWindowSeconds }}
+  metrics:
+  {{- with .targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
+  {{- end }}
+  {{- with .targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
+  {{- end }}
 {{- end }}
 {{- end }}

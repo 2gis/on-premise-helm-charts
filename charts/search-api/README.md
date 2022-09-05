@@ -102,22 +102,26 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `service.port`        | Service port.                                                                                                                  | `80`        |
 
 
-### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                                 | Description                                          | Value  |
-| ------------------------------------ | ---------------------------------------------------- | ------ |
-| `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `true` |
-| `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
+| Name                 | Description                                          | Value  |
+| -------------------- | ---------------------------------------------------- | ------ |
+| `pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
+| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`    |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
 
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-| Name                                 | Description                                                                                                                                                    | Value   |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `hpa.enabled`                        | If HPA is enabled for the service.                                                                                                                             | `false` |
-| `hpa.maxReplicas`                    | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                   | `2`     |
-| `hpa.minReplicas`                    | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                 | `1`     |
-| `hpa.targetCPUUtilizationPercentage` | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used. | `80`    |
+| Name                                      | Description                                                                                                                                                          | Value   |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
+| `hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
+| `hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
+| `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings

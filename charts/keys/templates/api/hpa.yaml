@@ -1,6 +1,6 @@
 {{- with .Values.api.hpa }}
 {{- if .enabled }}
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "keys.api.name" . }}
@@ -13,11 +13,24 @@ spec:
     name: {{ include "keys.api.name" . }}
   minReplicas: {{ .minReplicas }}
   maxReplicas: {{ .maxReplicas }}
+  behavior:
+    scaleUp:
+        stabilizationWindowSeconds: {{ .scaleUpStabilizationWindowSeconds }}
+    scaleDown:
+        stabilizationWindowSeconds: {{ .scaleDownStabilizationWindowSeconds }}
   metrics:
   {{- with .targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
+  {{- end }}
+  {{- with .targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
         target:
           type: Utilization
           averageUtilization: {{ . }}

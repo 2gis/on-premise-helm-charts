@@ -100,12 +100,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/traffic-proxy) to le
 | `resources.limits.memory`   | A memory limit.   | `256Mi` |
 
 
-### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                                 | Description                                          | Value  |
-| ------------------------------------ | ---------------------------------------------------- | ------ |
-| `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `true` |
-| `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
+| Name                 | Description                                          | Value  |
+| -------------------- | ---------------------------------------------------- | ------ |
+| `pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
+| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`    |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
 
 
 ## Maintainers

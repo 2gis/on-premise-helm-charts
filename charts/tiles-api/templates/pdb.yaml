@@ -14,6 +14,9 @@ metadata:
   labels:
     {{- include "tiles.labels" $ | nindent 4 }}
 spec:
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
+  {{- end }}
   {{- if .maxUnavailable }}
   maxUnavailable: {{ .maxUnavailable }}
   {{- end }}

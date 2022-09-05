@@ -39,12 +39,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `imagePullSecrets` | Kubernetes secrets for [pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/). | `[]`  |
 
 
-### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                                 | Description                                          | Value   |
-| ------------------------------------ | ---------------------------------------------------- | ------- |
-| `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `false` |
-| `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
+| Name                 | Description                                          | Value   |
+| -------------------- | ---------------------------------------------------- | ------- |
+| `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
+| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`     |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
 
 
 ### Deployment Artifacts Storage settings
@@ -76,12 +77,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-| Name                                     | Description                                                                                                                                                    | Value   |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `api.hpa.enabled`                        | If HPA is enabled for the service.                                                                                                                             | `false` |
-| `api.hpa.minReplicas`                    | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                 | `1`     |
-| `api.hpa.maxReplicas`                    | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                   | `2`     |
-| `api.hpa.targetCPUUtilizationPercentage` | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used. | `80`    |
+| Name                                          | Description                                                                                                                                                          | Value   |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `api.hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `api.hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `api.hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
+| `api.hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
+| `api.hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
+| `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
 
 ### Limits

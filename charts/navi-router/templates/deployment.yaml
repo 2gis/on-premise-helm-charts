@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "router.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
+  {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   {{- if .Values.strategy }}
