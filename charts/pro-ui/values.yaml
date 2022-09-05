@@ -1,25 +1,99 @@
-# @section Docker registry settings
+# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
-# @param imagePullSecrets Kubernetes image pull secrets.
-# @param imagePullPolicy Pull policy.
-# @param ui.image.repository UI service image repository.
-# @param ui.image.tag UI service image tag.
 
-dgctlDockerRegistry: ""
-imagePullSecrets: []
+dgctlDockerRegistry: ''
+
 imagePullPolicy: IfNotPresent
-
-# @section UI service settings
+imagePullSecrets: []
 
 ui:
+  # @section Common settings
+
+  # @param ui.replicas A replica count for the pod.
+  # @param ui.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param ui.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param ui.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  # @param ui.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param ui.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param ui.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param ui.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  replicas: 1
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  podAnnotations: {}
+  podLabels: {}
+  annotations: {}
+  labels: {}
+
+  # @section Deployment settings
+
+  # @param ui.image.repository Repository
+  # @param ui.image.tag Tag
+  # @param imagePullPolicy Pull Policy
+  # @param imagePullSecrets Kubernetes image pull secrets.
+
   image:
     repository: 2gis-on-premise/pro-ui
     tag: 0.0.1
 
-  # @param ui.replicas A replica count for the pod.
+  # @section UI service settings
 
-  replicas: 1
+  # @param ui.URBI_API_URL Base URL for the API.
+  # @param ui.MAPGL_HOST FQDN for MapGL service.
+  # @param ui.MAPGL_KEY A key to MapGL service.
+  # @param ui.LOG_LEVEL Log messages importance.
+  # @param ui.IS_ON_PREM Application's environment.
+
+  URBI_API_URL: https://pro-api.host
+  MAPGL_HOST: mapgl-api.host
+  MAPGL_KEY: ""
+  LOG_LEVEL: error
+  IS_ON_PREM: 'True'
+
+  # @section Strategy settings
+
+  # @param ui.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param ui.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param ui.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  # @section Service settings
+
+  # @param ui.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param ui.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param ui.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param ui.service.port Service port.
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 3000
+
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+  # @param ui.ingress.enabled If Ingress is enabled for the service.
+  # @param ui.ingress.hosts[0].host Hostname for the Ingress service.
+
+  ingress:
+    enabled: false
+    hosts:
+    - host: pro-ui.host
+
+  # @section Limits
+
+  # @param ui.resources.requests.cpu A CPU request.
+  # @param ui.resources.requests.memory A memory request.
+  # @param ui.resources.limits.cpu A CPU limit.
+  # @param ui.resources.limits.memory A memory limit.
 
   resources:
     requests:
@@ -28,68 +102,3 @@ ui:
     limits:
       cpu: 1
       memory: 384Mi
-
-  # @param ui.URBI_API_URL Base URL for the API.
-  # @param ui.MAPGL_HOST FQDN for MapGL service.
-  # @param ui.MAPGL_KEY A key to MapGL service.
-  # @param ui.LOG_LEVEL Log messages importance.
-  # @param ui.IS_ON_PREM Application's environment.
-
-  URBI_API_URL: https://2gis-pro-api.host
-  MAPGL_HOST: mapgl.host
-  MAPGL_KEY: ""
-  LOG_LEVEL: error
-  IS_ON_PREM: 'True'
-
-  # @param ui.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-  # @param ui.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-
-  annotations: {}
-  labels: {}
-
-  # @param ui.strategy.rollingUpdate.maxSurge Kubernetes [maxSurge](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#max-surge).
-  # @param ui.strategy.rollingUpdate.maxUnavailable Kubernetes [maxUnavailable](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#max-unavailable).
-  # @param ui.strategy.type Kubernetes [type](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).
-
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-    type: RollingUpdate
-
-  # @param ui.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-  # @param ui.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-
-  podAnnotations: {}
-  podLabels: {}
-
-  # @param ui.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-  # @param ui.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
-  # @param ui.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-
-  nodeSelector: {}
-  affinity: {}
-  tolerations: {}
-
-  # @param ui.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-  # @param ui.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @param ui.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-  # @param ui.service.port UI service port.
-
-  service:
-    annotations: {}
-    labels: {}
-    type: ClusterIP
-    port: 3000
-
-  # @param ui.ingress If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.
-
-  ingress: {}
-
-# @section Limits
-
-# @extra ui.resources **Limits for the UI service**
-# @param ui.resources.requests.cpu A CPU request.
-# @param ui.resources.requests.memory A memory request.
-# @param ui.resources.limits.cpu A CPU limit.
-# @param ui.resources.limits.memory A memory limit.
