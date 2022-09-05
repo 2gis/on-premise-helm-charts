@@ -29,18 +29,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 ### Common settings
 
-| Name                  | Description                                                                                                                 | Value |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.                                     | `""`  |
-| `replicaCount`        | A replica count for the pod.                                                                                                | `1`   |
-| `imagePullSecrets`    | Kubernetes image pull secrets.                                                                                              | `[]`  |
-| `nameOverride`        | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
-| `fullnameOverride`    | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
-| `nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
-| `affinity`            | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
-| `tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
-| `podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
-| `podLabels`           | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
+| Name               | Description                                                                                                                 | Value |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `replicaCount`     | A replica count for the pod.                                                                                                | `1`   |
+| `imagePullSecrets` | Kubernetes image pull secrets.                                                                                              | `[]`  |
+| `nameOverride`     | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
+| `fullnameOverride` | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
+| `nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
+| `affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
+| `tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
+| `podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
+| `podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
 
 
 ### Deployment settings
