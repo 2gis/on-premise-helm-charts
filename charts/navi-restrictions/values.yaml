@@ -126,7 +126,7 @@ api:
     annotations: {}
     labels: {}
 
-  # @extra api.ingress **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings**
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
   # @param api.ingress.hosts[0].host Hostname for the Ingress service.
@@ -136,7 +136,8 @@ api:
     hosts:
     - host: navi-restrictions.host
 
-  # @extra api.hpa **Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings.**
+  # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
   # @param api.hpa.enabled If HPA is enabled for the service.
   # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
   # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
@@ -148,7 +149,8 @@ api:
     minReplicas: 1
     targetCPUUtilizationPercentage: 80
 
-  # @extra api.vpa **Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings.**
+  # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
   # @param api.vpa.enabled If VPA is enabled for the service.
   # @param api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
   # @param api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
