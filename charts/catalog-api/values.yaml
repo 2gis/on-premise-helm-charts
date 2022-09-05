@@ -22,18 +22,6 @@ podLabels: {}
 imagePullSecrets: []
 
 
-# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
-
-# @param pdb.enabled If PDB is enabled for the service.
-# @param pdb.minAvailable How many pods must be available after the eviction.
-# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
-
-pdb:
-  enabled: false
-  minAvailable: 1
-  maxUnavailable: 1
-
-
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`.
@@ -50,52 +38,22 @@ dgctlStorage:
   manifest: ""
 
 
+# @section Deployment settings
+
+# @param api.image.repository API image repository
+# @param api.image.tag API image tag
+# @param api.image.pullPolicy API image Pull Policy
+# @param importer.image.repository Importer job repository
+# @param importer.image.tag Importer job tag
+# @param importer.image.pullPolicy Importer job Pull Policy
+
+
 # @section API settings
 
 # @param api.replicas Number of replicas of API pods.
 
 api:
   replicas: 1
-
-
-  # @section Deployment settings
-
-  # @param api.image.repository Repository
-  # @param api.image.tag Tag
-  # @param api.image.pullPolicy Pull Policy
-
-  image:
-    repository: 2gis-on-premise/catalog-api
-    tag: 3.567.0
-    pullPolicy: IfNotPresent
-
-
-  # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
-
-  # @param api.hpa.enabled If HPA is enabled for the service.
-  # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
-  # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
-  # @param api.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
-  # @param api.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
-  # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
-  # @param api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
-
-  hpa:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 2
-    scaleDownStabilizationWindowSeconds: ''
-    scaleUpStabilizationWindowSeconds: ''
-    targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: ''
-
-
-  # @section Limits
-
-  # @param api.resources.requests.cpu A CPU request.
-  # @param api.resources.requests.memory A memory request.
-  # @param api.resources.limits.cpu A CPU limit.
-  # @param api.resources.limits.memory A memory limit.
 
   resources:
     requests:
@@ -104,6 +62,27 @@ api:
     limits:
       cpu: 4
       memory: 6500Mi
+
+  image:
+    repository: 2gis-on-premise/catalog-api
+    tag: 3.567.0
+    pullPolicy: IfNotPresent
+
+
+  # @section Database settings
+
+  # @param api.db.host PostgreSQL rw/ro host.
+  # @param api.db.port PostgreSQL port.
+  # @param api.db.name PostgreSQL database name.
+  # @param api.db.username PostgreSQL username.
+  # @param api.db.password PostgreSQL password.
+
+  db:
+    host: postgres.host
+    port: 5432
+    name: catalog
+    username: postgres
+    password: secret
 
 
   # @section Service settings
@@ -131,20 +110,36 @@ api:
     - host: catalog-api.host
 
 
-  # @section Database settings
+  # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-  # @param api.db.host PostgreSQL rw/ro host.
-  # @param api.db.port PostgreSQL port.
-  # @param api.db.name PostgreSQL database name.
-  # @param api.db.username PostgreSQL username.
-  # @param api.db.password PostgreSQL password.
+  # @param api.hpa.enabled If HPA is enabled for the service.
+  # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+  # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+  # @param api.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+  # @param api.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
+  # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+  # @param api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
-  db:
-    host: postgres.host
-    port: 5432
-    name: catalog
-    username: postgres
-    password: secret
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    scaleDownStabilizationWindowSeconds: ''
+    scaleUpStabilizationWindowSeconds: ''
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: ''
+
+
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+pdb:
+  enabled: false
+  minAvailable: 1
+  maxUnavailable: 1
 
 
 # @section Search
@@ -183,21 +178,18 @@ keys:
 # @param importer.workerNum Number of parallel import processes (workers).
 # @param importer.initialDelaySeconds Number of seconds after the container has started before liveness or readiness probes are initiated.
 
-# @extra importer.image **Deployment settings**
-# @param importer.image.repository Repository
-# @param importer.image.tag Tag
-# @param importer.image.pullPolicy Pull Policy
-
-# @extra importer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
-# @param importer.resources.requests.cpu A CPU request.
-# @param importer.resources.requests.memory A memory request.
-# @param importer.resources.limits.cpu A CPU limit.
-# @param importer.resources.limits.memory A memory limit.
-
 importer:
   nodeSelector: {}
   workerNum: 3
   initialDelaySeconds: 1
+
+  resources:
+    requests:
+      cpu: 256m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2048Mi
 
   image:
     repository: "2gis-on-premise/catalog-importer"
@@ -205,7 +197,6 @@ importer:
     pullPolicy: IfNotPresent
 
   # @extra importer.db **Database settings**
-
   # @param importer.db.host PostgreSQL rw host.
   # @param importer.db.port PostgreSQL port.
   # @param importer.db.name PostgreSQL database name.
@@ -220,7 +211,6 @@ importer:
     password: secret
 
   # @extra importer.persistentVolume **Persistent Volume settings**
-
   # @param importer.persistentVolume.enabled If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service.
   # @param importer.persistentVolume.accessModes AccessModes.
   # @param importer.persistentVolume.storageClass StorageClass.
@@ -233,10 +223,17 @@ importer:
     storageClass: topolvm-ext4
     size: 50Gi
 
-  resources:
-    requests:
-      cpu: 256m
-      memory: 512Mi
-    limits:
-      cpu: 2
-      memory: 2048Mi
+
+# @section Limits
+
+# @extra api.resources **Limits for the API service**
+# @param api.resources.requests.cpu A CPU request.
+# @param api.resources.requests.memory A memory request.
+# @param api.resources.limits.cpu A CPU limit.
+# @param api.resources.limits.memory A memory limit.
+
+# @extra importer.resources **Limits for the importer job**
+# @param importer.resources.requests.cpu A CPU request.
+# @param importer.resources.requests.memory A memory request.
+# @param importer.resources.limits.cpu A CPU limit.
+# @param importer.resources.limits.memory A memory limit.

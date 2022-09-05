@@ -39,15 +39,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `imagePullSecrets` | Kubernetes secrets for [pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/). | `[]`  |
 
 
-### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
-
-| Name                 | Description                                          | Value   |
-| -------------------- | ---------------------------------------------------- | ------- |
-| `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
-| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`     |
-| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
-
-
 ### Deployment Artifacts Storage settings
 
 | Name                     | Description                                                                                                                                                                                                                                              | Value |
@@ -59,6 +50,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`  |
 
 
+### Deployment settings
+
+| Name                        | Description              | Value                              |
+| --------------------------- | ------------------------ | ---------------------------------- |
+| `api.image.repository`      | API image repository     | `2gis-on-premise/catalog-api`      |
+| `api.image.tag`             | API image tag            | `3.567.0`                          |
+| `api.image.pullPolicy`      | API image Pull Policy    | `IfNotPresent`                     |
+| `importer.image.repository` | Importer job repository  | `2gis-on-premise/catalog-importer` |
+| `importer.image.tag`        | Importer job tag         | `1.0.0`                            |
+| `importer.image.pullPolicy` | Importer job Pull Policy | `IfNotPresent`                     |
+
+
 ### API settings
 
 | Name           | Description                     | Value |
@@ -66,36 +69,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.replicas` | Number of replicas of API pods. | `1`   |
 
 
-### Deployment settings
+### Database settings
 
-| Name                   | Description | Value                         |
-| ---------------------- | ----------- | ----------------------------- |
-| `api.image.repository` | Repository  | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag         | `3.567.0`                     |
-| `api.image.pullPolicy` | Pull Policy | `IfNotPresent`                |
-
-
-### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
-
-| Name                                          | Description                                                                                                                                                          | Value   |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `api.hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
-| `api.hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
-| `api.hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
-| `api.hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
-| `api.hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
-| `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
-| `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
-
-
-### Limits
-
-| Name                            | Description       | Value    |
-| ------------------------------- | ----------------- | -------- |
-| `api.resources.requests.cpu`    | A CPU request.    | `2`      |
-| `api.resources.requests.memory` | A memory request. | `6000Mi` |
-| `api.resources.limits.cpu`      | A CPU limit.      | `4`      |
-| `api.resources.limits.memory`   | A memory limit.   | `6500Mi` |
+| Name              | Description               | Value           |
+| ----------------- | ------------------------- | --------------- |
+| `api.db.host`     | PostgreSQL rw/ro host.    | `postgres.host` |
+| `api.db.port`     | PostgreSQL port.          | `5432`          |
+| `api.db.name`     | PostgreSQL database name. | `catalog`       |
+| `api.db.username` | PostgreSQL username.      | `postgres`      |
+| `api.db.password` | PostgreSQL password.      | `secret`        |
 
 
 ### Service settings
@@ -116,15 +98,26 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.ingress.hosts[0].host` | Hostname for the Ingress service.      | `catalog-api.host` |
 
 
-### Database settings
+### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-| Name              | Description               | Value           |
-| ----------------- | ------------------------- | --------------- |
-| `api.db.host`     | PostgreSQL rw/ro host.    | `postgres.host` |
-| `api.db.port`     | PostgreSQL port.          | `5432`          |
-| `api.db.name`     | PostgreSQL database name. | `catalog`       |
-| `api.db.username` | PostgreSQL username.      | `postgres`      |
-| `api.db.password` | PostgreSQL password.      | `secret`        |
+| Name                                          | Description                                                                                                                                                          | Value   |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `api.hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `api.hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `api.hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
+| `api.hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
+| `api.hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
+| `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+
+
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+| Name                 | Description                                          | Value   |
+| -------------------- | ---------------------------------------------------- | ------- |
+| `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
+| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`     |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
 
 
 ### Search
@@ -149,32 +142,39 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Kubernetes Importer job settings
 
-| Name                                     | Description                                                                                                                   | Value                              |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `importer`                               | **Common settings**                                                                                                           |                                    |
-| `importer.nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).           | `{}`                               |
-| `importer.workerNum`                     | Number of parallel import processes (workers).                                                                                | `3`                                |
-| `importer.initialDelaySeconds`           | Number of seconds after the container has started before liveness or readiness probes are initiated.                          | `1`                                |
-| `importer.image`                         | **Deployment settings**                                                                                                       |                                    |
-| `importer.image.repository`              | Repository                                                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`                     | Tag                                                                                                                           | `1.0.0`                            |
-| `importer.image.pullPolicy`              | Pull Policy                                                                                                                   | `IfNotPresent`                     |
-| `importer.resources`                     | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)** |                                    |
-| `importer.resources.requests.cpu`        | A CPU request.                                                                                                                | `256m`                             |
-| `importer.resources.requests.memory`     | A memory request.                                                                                                             | `512Mi`                            |
-| `importer.resources.limits.cpu`          | A CPU limit.                                                                                                                  | `2`                                |
-| `importer.resources.limits.memory`       | A memory limit.                                                                                                               | `2048Mi`                           |
-| `importer.db`                            | **Database settings**                                                                                                         |                                    |
-| `importer.db.host`                       | PostgreSQL rw host.                                                                                                           | `postgres.host`                    |
-| `importer.db.port`                       | PostgreSQL port.                                                                                                              | `5432`                             |
-| `importer.db.name`                       | PostgreSQL database name.                                                                                                     | `catalog`                          |
-| `importer.db.username`                   | PostgreSQL username with rw access.                                                                                           | `postgres`                         |
-| `importer.db.password`                   | PostgreSQL password.                                                                                                          | `secret`                           |
-| `importer.persistentVolume`              | **Persistent Volume settings**                                                                                                |                                    |
-| `importer.persistentVolume.enabled`      | If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service.          | `false`                            |
-| `importer.persistentVolume.accessModes`  | AccessModes.                                                                                                                  | `["ReadWriteOnce"]`                |
-| `importer.persistentVolume.storageClass` | StorageClass.                                                                                                                 | `topolvm-ext4`                     |
-| `importer.persistentVolume.size`         | Volume size.                                                                                                                  | `50Gi`                             |
+| Name                                     | Description                                                                                                          | Value               |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `importer`                               | **Common settings**                                                                                                  |                     |
+| `importer.nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).  | `{}`                |
+| `importer.workerNum`                     | Number of parallel import processes (workers).                                                                       | `3`                 |
+| `importer.initialDelaySeconds`           | Number of seconds after the container has started before liveness or readiness probes are initiated.                 | `1`                 |
+| `importer.db`                            | **Database settings**                                                                                                |                     |
+| `importer.db.host`                       | PostgreSQL rw host.                                                                                                  | `postgres.host`     |
+| `importer.db.port`                       | PostgreSQL port.                                                                                                     | `5432`              |
+| `importer.db.name`                       | PostgreSQL database name.                                                                                            | `catalog`           |
+| `importer.db.username`                   | PostgreSQL username with rw access.                                                                                  | `postgres`          |
+| `importer.db.password`                   | PostgreSQL password.                                                                                                 | `secret`            |
+| `importer.persistentVolume`              | **Persistent Volume settings**                                                                                       |                     |
+| `importer.persistentVolume.enabled`      | If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service. | `false`             |
+| `importer.persistentVolume.accessModes`  | AccessModes.                                                                                                         | `["ReadWriteOnce"]` |
+| `importer.persistentVolume.storageClass` | StorageClass.                                                                                                        | `topolvm-ext4`      |
+| `importer.persistentVolume.size`         | Volume size.                                                                                                         | `50Gi`              |
+
+
+### Limits
+
+| Name                                 | Description                     | Value    |
+| ------------------------------------ | ------------------------------- | -------- |
+| `api.resources`                      | **Limits for the API service**  |          |
+| `api.resources.requests.cpu`         | A CPU request.                  | `2`      |
+| `api.resources.requests.memory`      | A memory request.               | `6000Mi` |
+| `api.resources.limits.cpu`           | A CPU limit.                    | `4`      |
+| `api.resources.limits.memory`        | A memory limit.                 | `6500Mi` |
+| `importer.resources`                 | **Limits for the importer job** |          |
+| `importer.resources.requests.cpu`    | A CPU request.                  | `256m`   |
+| `importer.resources.requests.memory` | A memory request.               | `512Mi`  |
+| `importer.resources.limits.cpu`      | A CPU limit.                    | `2`      |
+| `importer.resources.limits.memory`   | A memory limit.                 | `2048Mi` |
 
 
 ## Maintainers
