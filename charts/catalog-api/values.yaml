@@ -63,8 +63,8 @@ api:
   # @param api.image.pullPolicy Pull Policy
 
   image:
-    repository: "2gis-on-premise/catalog-api"
-    tag: "3.567.0"
+    repository: 2gis-on-premise/catalog-api
+    tag: 3.567.0
     pullPolicy: IfNotPresent
 
 
@@ -115,13 +115,13 @@ api:
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
-  # @extra api.ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'catalog-api.host'}]}`.
-  # @skip api.ingress.hosts[0].host
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
 
   ingress:
     enabled: false
     hosts:
     - host: catalog-api.host
+
 
   # @section Database settings
 
@@ -137,6 +137,7 @@ api:
     name: catalog
     username: postgres
     password: secret
+
 
 # @section Search
 

@@ -186,23 +186,18 @@ api:
     annotations: {}
     labels: {}
 
-  # @extra api.ingress **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings**
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
   # @param api.ingress.enabled If Ingress is enabled for the service.
-  # @param api.ingress.className Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource.
-  # @param api.ingress.hosts[0].host Host FQDN.
-  # @param api.ingress.hosts[0].paths[0].path Path (forms a service's URL if appended to the host FQDN).
-  # @param api.ingress.tls Ingress [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress.
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
 
   ingress:
     enabled: false
-    className: nginx
-    tls: []
     hosts:
-    - host: tiles-api.loc
-      paths:
-      - path: /
+    - host: tiles-api.host
 
-  # @extra api.pdb **Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings**
+  # @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
   # @param api.pdb.enabled If PDB is enabled for the service.
   # @param api.pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
@@ -210,7 +205,8 @@ api:
     enabled: true
     maxUnavailable: 1
 
-  # @extra api.hpa **Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings**
+  # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
   # @param api.hpa.enabled If HPA is enabled for the service.
   # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
   # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
@@ -222,7 +218,8 @@ api:
     maxReplicas: 1
     targetCPUUtilizationPercentage: 50
 
-  # @extra api.vpa **Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings**
+  # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
   # @param api.vpa.enabled If VPA is enabled for the service.
   # @param api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
   # @param api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.

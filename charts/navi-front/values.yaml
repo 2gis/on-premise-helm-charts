@@ -74,10 +74,11 @@ service:
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-# @extra ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'navi-front.host'}]}`.
-# @skip ingress.hosts[0].host
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
 
 ingress:
+  enabled: false
   hosts:
   - host: navi-front.host
 

@@ -91,23 +91,12 @@ service:
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 # @param ingress.enabled If Ingress is enabled for the service.
-# @param ingress.className Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource.
-# @param ingress.annotations Kubernetes annotations.
-# @param ingress.hosts[0].host Host FQDN.
-# @param ingress.hosts[0].paths[0].path Path (forms a service's URL if appended to the host FQDN).
-# @param ingress.hosts[0].paths[0].pathType Path type (see [Path types](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types) in the Kubernetes documentation).
-# @param ingress.tls Ingress [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
 
 ingress:
   enabled: false
-  className: ''
-  annotations: {}
   hosts:
   - host: traffic-proxy-api.host
-    paths:
-    - path: /
-      pathType: ImplementationSpecific
-  tls: []
 
 
 # @section Limits
