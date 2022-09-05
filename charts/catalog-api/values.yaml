@@ -195,7 +195,7 @@ importer:
     tag: "1.0.0"
     pullPolicy: IfNotPresent
 
-  # @section Database settings
+  # @extra importer.db **Database settings**
 
   # @param importer.db.host PostgreSQL rw host.
   # @param importer.db.port PostgreSQL port.
@@ -209,6 +209,13 @@ importer:
     name: catalog
     username: postgres
     password: secret
+
+  # @extra importer.persistentVolume **Persistent Volume settings**
+
+  # @param importer.persistentVolume.enabled If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service.
+  # @param importer.persistentVolume.accessModes AccessModes.
+  # @param importer.persistentVolume.storageClass StorageClass.
+  # @param importer.persistentVolume.size Volume size.
 
   persistentVolume:
     enabled: false
