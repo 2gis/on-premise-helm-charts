@@ -21,8 +21,9 @@
 - For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
 #### navi-back
-- Rename `autoscaling.scaleUpWindowSeconds` to `autoscaling.scaleUpStabilizationWindowSeconds`
-- Rename `autoscaling.scaleDownWindowsSeconds` to `autoscaling.scaleDownStabilizationWindowSeconds`
+- Rename `autoscaling` to `hpa`
+- Rename `autoscaling.scaleUpWindowSeconds` to `hpa.scaleUpStabilizationWindowSeconds`
+- Rename `autoscaling.scaleDownWindowsSeconds` to `hpa.scaleDownStabilizationWindowSeconds`
 - Rename `podDisruptionBudget` to `pdb`
 - Rename `podDisruptionBudget.create` to `pdb.enabled`
 
@@ -30,6 +31,7 @@
 - Remove the `autoscaling` section
 
 #### navi-front
+- Rename `autoscaling` to `hpa`
 - Rename `pdb.create` to `pdb.enabled`
 - For the HPA section, switched from `autoscaling/v2beta2` to `autoscaling/v2`
 
@@ -38,6 +40,7 @@
 - For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
 #### navi-router
+- Rename `autoscaling` to `hpa`
 - Rename `podDisruptionBudget` to `pdb`
 - For the HPA section, switched from `autoscaling/v2beta2` to `autoscaling/v2`
 
