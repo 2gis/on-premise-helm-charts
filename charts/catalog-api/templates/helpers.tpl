@@ -174,4 +174,6 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.dgctlStorage.manifest }}"
 - name: IMPORTER_WORKER_POOL_SIZE
   value: "{{ .Values.importer.workerNum }}"
+- name: IMPORTER_NUMBER_SCHEMA_BACKUPS
+  value: "{{ .Values.importer.cleaner.limit }}"
 {{- end }}

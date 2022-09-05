@@ -231,3 +231,25 @@ importer:
     limits:
       cpu: 2
       memory: 2048Mi
+
+  # @extra importer.cleaner **Cleaner scheme settings**
+  # @param importer.cleaner.enabled If clean schemes is enabled for the service.
+  # @param importer.cleaner.limit Number of backup schemes.
+
+  # @extra importer.cleaner.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+  # @param importer.cleaner.resources.requests.cpu A CPU request.
+  # @param importer.cleaner.resources.requests.memory A memory request.
+  # @param importer.cleaner.resources.limits.cpu A CPU limit.
+  # @param importer.cleaner.resources.limits.memory A memory limit.
+
+  cleaner:
+    enabled: false
+    limit: 2
+
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 1000m
+        memory: 512Mi
