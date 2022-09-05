@@ -1,7 +1,7 @@
 apiVersion: v2
-name: 2gis-pro-ui
+name: pro-ui
 type: application
-description: A Helm chart for Kubernetes to deploy 2gis-pro-ui service
+description: A Helm chart for Kubernetes to deploy 2GIS PRO UI service
 
 version: 1.3.0
 appVersion: 0.0.0

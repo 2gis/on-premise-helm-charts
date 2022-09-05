@@ -33,7 +33,7 @@ spec:
         {{- end }}
     spec:
       containers:
-        - name: 2gis-pro-ui
+        - name: pro-ui
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           ports:
