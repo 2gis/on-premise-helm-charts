@@ -18,6 +18,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ## Values
 
+### Docker Registry settings
+
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
+
+
 ### Common settings
 
 | Name                  | Description                                                                             | Value               |
@@ -116,7 +123,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | `portal.max_body_size`                 | Maximum HTTP request body size.                                                                                                | `100m`                                                                               |
 | `portal.gzip_enabled`                  | If GZip compression should be enabled for the HTTP requests and responses.                                                     | `true`                                                                               |
 | `portal.service.type`                  | Kubernetes [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`                                                                          |
-| `portal.service.port`                  | HTTP port.                                                                                                                     | `80`                                                                                 |
+| `portal.service.port`                  | Service port.                                                                                                                  | `80`                                                                                 |
 | `portal.websocket.timeout`             | WebSocket timeout in seconds.                                                                                                  | `604800`                                                                             |
 | `portal.cache`                         | **Cache settings**                                                                                                             |                                                                                      |
 | `portal.cache.enabled`                 | If caching should be enabled for the Portal service.                                                                           | `false`                                                                              |

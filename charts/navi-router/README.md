@@ -20,6 +20,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ## Values
 
+### Docker Registry settings
+
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
+
+
 ### Common settings
 
 | Name                  | Description                                                                                                                 | Value |
@@ -78,7 +85,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                  | Description                                                                                                                    | Value       |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `service.port`        | The port that the service listens.                                                                                             | `80`        |
+| `service.port`        | Service port.                                                                                                                  | `80`        |
 | `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `nil`       |
 

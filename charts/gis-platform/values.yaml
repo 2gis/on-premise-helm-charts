@@ -1,3 +1,10 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+
 # @section Common settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
@@ -193,7 +200,7 @@ portal:
   gzip_enabled: true
 
   # @param portal.service.type Kubernetes [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-  # @param portal.service.port HTTP port.
+  # @param portal.service.port Service port.
 
   service:
     type: ClusterIP
