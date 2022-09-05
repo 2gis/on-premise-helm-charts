@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "urbi-pro.name" . }}
+  name: {{ include "pro-api.name" . }}
   {{- with .Values.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "urbi-pro.labels" . | nindent 4 }}
+    {{- include "pro-api.labels" . | nindent 4 }}
   {{- with .Values.labels }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -20,7 +20,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "urbi-pro.selectorLabels" . | nindent 6 }}
+      {{- include "pro-api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -28,7 +28,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "urbi-pro.labels" . | nindent 8 }}
+        {{- include "pro-api.labels" . | nindent 8 }}
       {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -115,13 +115,13 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: catalogApi2gisKey
-                  name: {{ include "urbi-pro.name" . }}-secret
+                  name: {{ include "pro-api.name" . }}-secret
             {{ if .Values.navi.key }}
             - name: ROUTING_API_2GIS_KEY
               valueFrom:
                 secretKeyRef:
                   key: routingApi2gisKey
-                  name: {{ include "urbi-pro.name" . }}-secret
+                  name: {{ include "pro-api.name" . }}-secret
             {{ end }}
             - name: ES_HOST
               value: "{{ .Values.elastic.host }}"
@@ -137,27 +137,27 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: dbConnectionPwd
-                  name: {{ include "urbi-pro.name" . }}-secret
+                  name: {{ include "pro-api.name" . }}-secret
             - name: S3Settings__Url
               value: "{{ .Values.s3.host }}"
             - name: S3Settings__LayerDataBucket
               value: "{{ .Values.s3.layerDataBucket }}"
             - name: S3Settings__AssetDataBucket
-              value: "{{ .Values.s3.bucket }}"
+              value: "{{ .Values.s3.assetDataBucket }}"
             - name: S3Settings__AccessKey
               valueFrom:
                 secretKeyRef:
                   key: s3AccessKey
-                  name: {{ include "urbi-pro.name" . }}-secret
+                  name: {{ include "pro-api.name" . }}-secret
             - name: S3Settings__SecretKey
               valueFrom:
                 secretKeyRef:
                   key: s3SecretKey
-                  name: {{ include "urbi-pro.name" . }}-secret
+                  name: {{ include "pro-api.name" . }}-secret
             {{ if .Values.elastic.credentials }}
             - name: ES_CREDENTIALS
               valueFrom:
                 secretKeyRef:
                   key: esCredentials
-                  name: {{ include "urbi-pro.name" . }}-secret
+                  name: {{ include "pro-api.name" . }}-secret
             {{ end }}

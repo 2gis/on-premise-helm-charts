@@ -1,20 +1,20 @@
-{{- define "urbi-pro.name" -}}
+{{- define "pro-api.name" -}}
 {{- default .Values.appName .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "urbi-pro.import-name" -}}
-{{- default .Values.appImporterName | trunc 63 | trimSuffix "-" -}}
+{{- define "pro-api.asset-importer-name" -}}
+{{- default .Values.appAssetImporterName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "urbi-pro.userdata-import-name" -}}
-{{- default .Values.appUserDataImporterName | trunc 63 | trimSuffix "-" -}}
+{{- define "pro-api.user-asset-importer-name" -}}
+{{- default .Values.appUserAssetImporterName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "urbi-pro.data-preparer-name" -}}
-{{- default .Values.appDataPreparerName | trunc 63 | trimSuffix "-" -}}
+{{- define "pro-api.asset-preparer-name" -}}
+{{- default .Values.appAssetPreparerName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "urbi-pro.fullname" -}}
+{{- define "pro-api.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,18 +27,18 @@
 {{- end -}}
 {{- end -}}
 
-{{- define "urbi-pro.chart" -}}
+{{- define "pro-api.chart" -}}
 {{- printf "%s-%s" .Values.appName .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "urbi-pro.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "urbi-pro.name" . }}
+{{- define "pro-api.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "pro-api.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
-{{- define "urbi-pro.labels" -}}
-helm.sh/chart: {{ include "urbi-pro.chart" . }}
-{{ include "urbi-pro.selectorLabels" . }}
+{{- define "pro-api.labels" -}}
+helm.sh/chart: {{ include "pro-api.chart" . }}
+{{ include "pro-api.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}

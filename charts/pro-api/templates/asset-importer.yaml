@@ -1,35 +1,35 @@
 ﻿apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ include "urbi-pro.import-name" . }}
+  name: {{ include "pro-api.asset-importer-name" . }}
 spec:
   concurrencyPolicy: Forbid
-  schedule: {{ .Values.importJob.schedule }}
-  successfulJobsHistoryLimit: {{ .Values.importJob.successfulJobsHistoryLimit }}
+  schedule: {{ .Values.assetImporter.schedule }}
+  successfulJobsHistoryLimit: {{ .Values.assetImporter.successfulJobsHistoryLimit }}
   jobTemplate:
     spec:
-      backoffLimit: {{ .Values.importJob.backoffLimit }}
+      backoffLimit: {{ .Values.assetImporter.backoffLimit }}
       template:
         spec:
           nodeSelector:
             role: worker
           restartPolicy: Never
-          serviceAccountName: {{ .Values.importJob.serviceAccount }}
+          serviceAccountName: {{ .Values.assetImporter.serviceAccount }}
           volumes:
             - name: temp-volume
               emptyDir: {}
           containers:
-            - name: {{ include "urbi-pro.import-name" . }}
-              image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.importJob.repository }}:{{ .Values.importJob.tag }}
+            - name: {{ include "pro-api.asset-importer-name" . }}
+              image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.assetImporter.repository }}:{{ .Values.assetImporter.tag }}
               imagePullPolicy: IfNotPresent
               resources:
-                {{- toYaml .Values.importJob.resources | nindent 16 }}
+                {{- toYaml .Values.assetImporter.resources | nindent 16 }}
               volumeMounts:
                 - mountPath: "{{ .Values.api.tempPath }}"
                   name: temp-volume
               env:
                 - name: JOB_NAME
-                  value: {{ include "urbi-pro.import-name" . }}
+                  value: {{ include "pro-api.asset-importer-name" . }}
                 - name: TEMP_PATH
                   value: "{{ .Values.api.tempPath }}"
                 - name: ENV
@@ -37,32 +37,32 @@ spec:
                 - name: MODE
                   value: "Schedule"
                 - name: MAX_PARALLEL_JOBS
-                  value: "{{ .Values.importJob.maxParallelJobs }}"
+                  value: "{{ .Values.assetImporter.maxParallelJobs }}"
                 - name: manifest
                   value: "{{ .Values.s3.manifest }}"
                 - name: S3Settings__Url
                   value: "{{ .Values.s3.host }}"
                 - name: S3Settings__AssetDataBucket
-                  value: "{{ .Values.s3.bucket }}"
+                  value: "{{ .Values.s3.assetDataBucket }}"
                 - name: S3Settings__LayerDataBucket
                   value: "{{ .Values.s3.layerDataBucket }}"
                 - name: S3Settings__AccessKey
                   valueFrom:
                     secretKeyRef:
                       key: s3AccessKey
-                      name: {{ include "urbi-pro.name" . }}-secret
+                      name: {{ include "pro-api.name" . }}-secret
                 - name: S3Settings__SecretKey
                   valueFrom:
                     secretKeyRef:
                       key: s3SecretKey
-                      name: {{ include "urbi-pro.name" . }}-secret
+                      name: {{ include "pro-api.name" . }}-secret
                 - name: DB_CONNECTION_STRING
                   value: "{{ .Values.postgres.connectionString }}"
                 - name: DB_CONNECTION_PWD
                   valueFrom:
                     secretKeyRef:
                       key: dbConnectionPwd
-                      name: {{ include "urbi-pro.name" . }}-secret
+                      name: {{ include "pro-api.name" . }}-secret
                 - name: ES_HOST
                   value: "{{ .Values.elastic.host }}"
                 {{ if .Values.elastic.credentials }}
@@ -70,11 +70,11 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: esCredentials
-                      name: {{ include "urbi-pro.name" . }}-secret
+                      name: {{ include "pro-api.name" . }}-secret
                 {{ end }}
                 - name: API_URL
                   value: "{{ .Values.api.host }}"
-                {{ if .Values.importJob.files }}
+                {{ if .Values.assetImporter.files }}
                 - name: FILES
-                  value: "{{ .Values.importJob.files}}"
+                  value: "{{ .Values.assetImporter.files}}"
                 {{ end }}
