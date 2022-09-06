@@ -41,17 +41,27 @@ ui:
 
   # @section UI service settings
 
-  # @param ui.URBI_API_URL Base URL for the API.
-  # @param ui.MAPGL_HOST FQDN for MapGL service.
-  # @param ui.MAPGL_KEY A key to MapGL service.
-  # @param ui.LOG_LEVEL Log messages importance.
-  # @param ui.IS_ON_PREM Application's environment.
+  # @param ui.logLevel Log messages importance.
+  # @skip ui.IS_ON_PREM
 
-  URBI_API_URL: https://pro-api.host
-  MAPGL_HOST: mapgl-api.host
-  MAPGL_KEY: ""
-  LOG_LEVEL: error
-  IS_ON_PREM: 'True'
+  logLevel: error
+  IS_ON_PREM: True
+
+  # @section 2GIS PRO API settings
+
+  # @param ui.api.host Base URL for the API.
+
+  api:
+    host: pro-api.host
+
+  # @section MapGL JS API settings
+
+  # @param ui.mapgl.host FQDN for MapGL service.
+  # @param ui.mapgl.key A key to MapGL service.
+
+  mapgl:
+    host: mapgl-api.host
+    key: ''
 
   # @section Strategy settings
 

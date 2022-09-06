@@ -41,13 +41,24 @@ Use this Helm chart to deploy 2GIS-PRO UI service, which is a part of 2GIS's [On
 
 ### UI service settings
 
-| Name              | Description                | Value                  |
-| ----------------- | -------------------------- | ---------------------- |
-| `ui.URBI_API_URL` | Base URL for the API.      | `https://pro-api.host` |
-| `ui.MAPGL_HOST`   | FQDN for MapGL service.    | `mapgl-api.host`       |
-| `ui.MAPGL_KEY`    | A key to MapGL service.    | `""`                   |
-| `ui.LOG_LEVEL`    | Log messages importance.   | `error`                |
-| `ui.IS_ON_PREM`   | Application's environment. | `True`                 |
+| Name          | Description              | Value   |
+| ------------- | ------------------------ | ------- |
+| `ui.logLevel` | Log messages importance. | `error` |
+
+
+### 2GIS PRO API settings
+
+| Name          | Description           | Value          |
+| ------------- | --------------------- | -------------- |
+| `ui.api.host` | Base URL for the API. | `pro-api.host` |
+
+
+### MapGL JS API settings
+
+| Name            | Description             | Value            |
+| --------------- | ----------------------- | ---------------- |
+| `ui.mapgl.host` | FQDN for MapGL service. | `mapgl-api.host` |
+| `ui.mapgl.key`  | A key to MapGL service. | `""`             |
 
 
 ### Strategy settings
