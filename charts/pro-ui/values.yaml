@@ -47,9 +47,9 @@ ui:
   logLevel: error
   isOnPremise: True
 
-  # @section 2GIS PRO API settings
+  # @section 2GIS Pro API settings
 
-  # @param ui.api.host Base URL for the API.
+  # @param ui.api.host Base URL for the 2GIS Pro API.
 
   api:
     host: pro-api.host

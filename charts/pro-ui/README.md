@@ -46,11 +46,11 @@ Use this Helm chart to deploy 2GIS-PRO UI service, which is a part of 2GIS's [On
 | `ui.logLevel` | Log messages importance. | `error` |
 
 
-### 2GIS PRO API settings
+### 2GIS Pro API settings
 
-| Name          | Description           | Value          |
-| ------------- | --------------------- | -------------- |
-| `ui.api.host` | Base URL for the API. | `pro-api.host` |
+| Name          | Description                    | Value          |
+| ------------- | ------------------------------ | -------------- |
+| `ui.api.host` | Base URL for the 2GIS Pro API. | `pro-api.host` |
 
 
 ### MapGL JS API settings
