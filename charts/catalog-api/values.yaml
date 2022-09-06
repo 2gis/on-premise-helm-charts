@@ -32,6 +32,22 @@ podDisruptionBudget:
   maxUnavailable: 1
 
 
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
+# @param dgctlStorage.bucket S3 bucket name.
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket.
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate.
+
+dgctlStorage:
+  host: ""
+  bucket: ""
+  accessKey: ""
+  secretKey: ""
+  manifest: ""
+
+
 # @section API settings
 
 # @param api.replicas Number of replicas of API pods.
@@ -47,8 +63,8 @@ api:
   # @param api.image.pullPolicy Pull Policy
 
   image:
-    repository: 2gis-on-premise/catalog
-    tag: 3.567.0
+    repository: "2gis-on-premise/catalog-api"
+    tag: "3.567.0"
     pullPolicy: IfNotPresent
 
 
@@ -99,26 +115,28 @@ api:
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @extra api.ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'catalog-api.host'}]}`.
+  # @skip api.ingress.hosts[0].host
 
   ingress:
     enabled: false
+    hosts:
+    - host: catalog-api.host
 
+  # @section Database settings
 
-# @section Database settings
+  # @param api.db.host PostgreSQL rw/ro host.
+  # @param api.db.port PostgreSQL port.
+  # @param api.db.name PostgreSQL database name.
+  # @param api.db.username PostgreSQL username.
+  # @param api.db.password PostgreSQL password.
 
-# @param db.host PostgreSQL host.
-# @param db.port PostgreSQL port.
-# @param db.name PostgreSQL database name.
-# @param db.username PostgreSQL username.
-# @param db.password PostgreSQL password.
-
-db:
-  host: postgres.host
-  port: 5432
-  name: catalog
-  username: postgres
-  password: secret
-
+  db:
+    host: postgres.host
+    port: 5432
+    name: catalog
+    username: postgres
+    password: secret
 
 # @section Search
 
@@ -147,3 +165,69 @@ keys:
     suggest: ''
     categories: ''
     regions: ''
+
+
+# @section Kubernetes Importer job settings
+
+# @extra importer **Common settings**
+# @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param importer.workerNum Number of parallel import processes (workers).
+# @param importer.initialDelaySeconds Number of seconds after the container has started before liveness or readiness probes are initiated.
+
+# @extra importer.image **Deployment settings**
+# @param importer.image.repository Repository
+# @param importer.image.tag Tag
+# @param importer.image.pullPolicy Pull Policy
+
+# @extra importer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @param importer.resources.requests.cpu A CPU request.
+# @param importer.resources.requests.memory A memory request.
+# @param importer.resources.limits.cpu A CPU limit.
+# @param importer.resources.limits.memory A memory limit.
+
+importer:
+  nodeSelector: {}
+  workerNum: 3
+  initialDelaySeconds: 1
+
+  image:
+    repository: "2gis-on-premise/catalog-importer"
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+
+  # @extra importer.db **Database settings**
+
+  # @param importer.db.host PostgreSQL rw host.
+  # @param importer.db.port PostgreSQL port.
+  # @param importer.db.name PostgreSQL database name.
+  # @param importer.db.username PostgreSQL username with rw access.
+  # @param importer.db.password PostgreSQL password.
+
+  db:
+    host: postgres.host
+    port: 5432
+    name: catalog
+    username: postgres
+    password: secret
+
+  # @extra importer.persistentVolume **Persistent Volume settings**
+
+  # @param importer.persistentVolume.enabled If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service.
+  # @param importer.persistentVolume.accessModes AccessModes.
+  # @param importer.persistentVolume.storageClass StorageClass.
+  # @param importer.persistentVolume.size Volume size.
+
+  persistentVolume:
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    storageClass: topolvm-ext4
+    size: 50Gi
+
+  resources:
+    requests:
+      cpu: 256m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2048Mi

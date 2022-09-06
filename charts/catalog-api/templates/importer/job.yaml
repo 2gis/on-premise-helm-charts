@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "catalog.importer.name" . }}
+  labels:
+    {{- include "catalog.importer.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "10"
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "catalog.importer.name" . }}
+      labels:
+        {{- include "catalog.importer.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      {{- if .Values.importer.initialDelaySeconds }}
+      initContainers:
+        - name: delay
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag }}
+          command: [ "sh", "-c", "sleep {{ .Values.importer.initialDelaySeconds }}" ]
+          resources:
+            {{- toYaml .Values.importer.resources | nindent 12 }}
+      {{- end }}
+      containers:
+        - name: importer
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          resources:
+            {{- toYaml .Values.importer.resources | nindent 12 }}
+          env:
+            {{- include "catalog.env.importer" . | nindent 12 }}
+          {{- if .Values.importer.persistentVolume.enabled }}
+          volumeMounts:
+            - name: {{ include "catalog.importer.name" . }}-pv
+              mountPath: "/tmp"
+          {{- end }}
+      {{- if .Values.importer.persistentVolume.enabled }}
+      volumes:
+        - name: {{ include "catalog.importer.name" . }}-pv
+          persistentVolumeClaim:
+            claimName: {{ include "catalog.importer.name" . }}
+      {{- end }}
+      {{- with .Values.importer.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
