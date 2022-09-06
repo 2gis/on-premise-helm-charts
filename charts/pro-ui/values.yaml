@@ -42,10 +42,10 @@ ui:
   # @section UI service settings
 
   # @param ui.logLevel Log messages importance.
-  # @skip ui.IS_ON_PREM
+  # @skip ui.isOnPremise
 
   logLevel: error
-  IS_ON_PREM: True
+  isOnPremise: True
 
   # @section 2GIS PRO API settings
 

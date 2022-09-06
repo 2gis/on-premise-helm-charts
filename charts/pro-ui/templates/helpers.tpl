@@ -26,5 +26,5 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: LOG_LEVEL
   value: "{{ .Values.ui.logLevel }}"
 - name: IS_ON_PREM
-  value: "{{ .Values.ui.IS_ON_PREM }}"
+  value: "{{ .Values.ui.isOnPremise }}"
 {{- end }}
