@@ -55,10 +55,10 @@ Use this Helm chart to deploy 2GIS-PRO UI service, which is a part of 2GIS's [On
 
 ### MapGL JS API settings
 
-| Name            | Description             | Value            |
-| --------------- | ----------------------- | ---------------- |
-| `ui.mapgl.host` | FQDN for MapGL service. | `mapgl-api.host` |
-| `ui.mapgl.key`  | A key to MapGL service. | `""`             |
+| Name            | Description                                                                   | Value            |
+| --------------- | ----------------------------------------------------------------------------- | ---------------- |
+| `ui.mapgl.host` | FQDN for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service. | `mapgl-api.host` |
+| `ui.mapgl.key`  | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service. | `""`             |
 
 
 ### Strategy settings
