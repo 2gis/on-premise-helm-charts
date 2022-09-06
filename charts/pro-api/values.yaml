@@ -151,10 +151,12 @@ api:
 # @section PostgreSQL settings
 
 # @param postgres.connectionString Connection string to the PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;Pwd={0};`
+# @param postgres.connectionStringReadonly Connection string to the readonly node of PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;Pwd={0};`
 # @param postgres.password User password to connect to the PostgreSQL database.
 
 postgres:
   connectionString: ''
+  connectionStringReadonly: ''
   password: ''
 
 # @section ElasticSearch settings

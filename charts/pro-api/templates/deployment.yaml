@@ -133,6 +133,10 @@ spec:
               value: "{{ .Values.api.env }}"
             - name: DB_CONNECTION_STRING
               value: "{{ .Values.postgres.connectionString }}"
+            {{ if .Values.postgres.connectionStringReadonly }}
+            - name: DB_CONNECTION_STRING_READONLY
+              value: "{{ .Values.postgres.connectionStringReadonly }}"
+            {{ end }}
             - name: DB_CONNECTION_PWD
               valueFrom:
                 secretKeyRef:
