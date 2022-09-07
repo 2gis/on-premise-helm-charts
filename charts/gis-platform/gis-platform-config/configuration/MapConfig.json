@@ -286,6 +286,7 @@
     "help": false,
     "gotoPortal": false,
     "feedbackForm": false,
-    "uniqueClassesLimit": 300
+    "uniqueClassesLimit": 300,
+    "labelInsidePosition": true
   }
 }
