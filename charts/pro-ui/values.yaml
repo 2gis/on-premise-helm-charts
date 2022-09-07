@@ -56,7 +56,7 @@ ui:
 
   # @section MapGL JS API settings
 
-  # @param ui.mapgl.host FQDN for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.
+  # @param ui.mapgl.host Hostname for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.
   # @param ui.mapgl.key A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.
 
   mapgl:
