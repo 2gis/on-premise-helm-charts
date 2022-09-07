@@ -1,6 +1,6 @@
-# 2GIS-PRO UI service
+# 2GIS Pro UI service
 
-Use this Helm chart to deploy 2GIS-PRO UI service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
+Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
 
 > **Note:**
 >
