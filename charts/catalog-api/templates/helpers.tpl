@@ -175,5 +175,5 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: IMPORTER_WORKER_POOL_SIZE
   value: "{{ .Values.importer.workerNum }}"
 - name: IMPORTER_NUMBER_SCHEMA_BACKUPS
-  value: "{{ .Values.importer.cleaner.limit }}"
+  value: "{{ .Values.importer.cleaner.versionLimit }}"
 {{- end }}
