@@ -266,14 +266,6 @@
       }
     },
     {
-      "name": "snapping",
-      "priority": 5,
-      "modulePath": "MapControls/Snapping",
-      "layoutOptions": {
-        "area": "topControls"
-      }
-    },
-    {
       "name": "zoom-selection",
       "priority": 3,
       "modulePath": "MapControls/ZoomSelection",
