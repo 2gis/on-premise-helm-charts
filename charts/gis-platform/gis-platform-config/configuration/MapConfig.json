@@ -222,7 +222,16 @@
       },
       "options": {
         "content": "layers",
-        "allowDevView": true
+        "allowDevView": true,
+        "defaultLayersCondition": {
+          "group": "public",
+          "limit": 1000,
+          "filter": "favorite",
+          "orderByFields": [
+            "-changedDate"
+          ],
+          "geometryFilter": []
+        }
       },
       "priority": 1,
       "modulePath": "LayerList/LayerList",
