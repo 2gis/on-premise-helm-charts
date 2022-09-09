@@ -279,6 +279,7 @@
     "gotoPortal": false,
     "feedbackForm": false,
     "uniqueClassesLimit": 300,
-    "labelInsidePosition": true
+    "labelInsidePosition": true,
+    "scaleSegmentation": false
   }
 }
