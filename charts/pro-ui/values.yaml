@@ -49,14 +49,14 @@ ui:
 
   # @section 2GIS Pro API settings
 
-  # @param ui.api.host Base URL for the 2GIS Pro API.
+  # @param ui.api.host Base URL for the Pro API with protocol and trailing slash.
 
   api:
-    host: pro-api.host
+    host: http://pro-api.host/
 
   # @section MapGL JS API settings
 
-  # @param ui.mapgl.host Hostname for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.
+  # @param ui.mapgl.host FQDN (domain or ip) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol and trailing slash.
   # @param ui.mapgl.key A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.
 
   mapgl:
