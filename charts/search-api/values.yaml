@@ -1,6 +1,12 @@
-# @section Common settings
+# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+
+# @section Common settings
+
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 # @param replicaCount A replica count for the pod.
@@ -9,7 +15,6 @@
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param redeploy_label If this label is changed since the last deployment, the whole chart will be redeployed.
 
-dgctlDockerRegistry: ''
 podAnnotations: {}
 podLabels: {}
 replicaCount: 1
@@ -51,7 +56,6 @@ api:
 
   # @section API settings
 
-  # @param api.resources API container resources.
   # @param api.data_dir Path to the directory storing search indexes.
   # @param api.fcgi_port TCP port of the Search API.
   # @param api.logLevel Log level.
@@ -71,7 +75,6 @@ api:
 # @param nginx.image.repository Docker Repository.
 # @param nginx.image.tag Docker image tag.
 # @param nginx.image.pullPolicy Kubernetes pull policy for the service's Docker image.
-# @param nginx.resources NGINX container resources.
 # @param nginx.http_port HTTP port on which NGINX will be listening.
 
 nginx:
@@ -148,3 +151,18 @@ hpa:
 
 ingress:
   enabled: false
+
+
+# @section Limits
+
+# @param api.resources **Limits for the API service**
+# @extra api.resources.requests.cpu A CPU request, e.g., `100m`.
+# @extra api.resources.requests.memory A memory request, e.g., `128Mi`.
+# @extra api.resources.limits.cpu A CPU limit, e.g., `100m`.
+# @extra api.resources.limits.memory A memory limit, e.g., `128Mi`.
+
+# @param nginx.resources **Limits for the NGINX service**
+# @extra nginx.resources.requests.cpu A CPU request, e.g., `100m`.
+# @extra nginx.resources.requests.memory A memory request, e.g., `128Mi`.
+# @extra nginx.resources.limits.cpu A CPU limit, e.g., `100m`.
+# @extra nginx.resources.limits.memory A memory limit, e.g., `128Mi`.

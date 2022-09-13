@@ -2,13 +2,16 @@
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
+dgctlDockerRegistry: ''
+
+
+# @section Deployment settings
+
 # @param castle.image.repository Navi-Castle service image repository.
 # @param castle.image.pullPolicy Navi-Castle service pull policy.
 # @param castle.image.tag Navi-Castle service image tag.
 # @param nginx.image.repository Navi-Front image repository.
 # @param nginx.image.tag Navi-Front image tag.
-
-dgctlDockerRegistry: ''
 
 
 # @section Deployment Artifacts Storage settings

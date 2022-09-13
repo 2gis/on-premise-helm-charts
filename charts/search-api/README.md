@@ -20,18 +20,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ## Values
 
+### Docker Registry settings
+
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
+
+
 ### Common settings
 
-| Name                  | Description                                                                                                                 | Value |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.                                     | `""`  |
-| `podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
-| `podLabels`           | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
-| `replicaCount`        | A replica count for the pod.                                                                                                | `1`   |
-| `nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
-| `affinity`            | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
-| `tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
-| `redeploy_label`      | If this label is changed since the last deployment, the whole chart will be redeployed.                                     | `""`  |
+| Name             | Description                                                                                                                 | Value |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `podAnnotations` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
+| `podLabels`      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
+| `replicaCount`   | A replica count for the pod.                                                                                                | `1`   |
+| `nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
+| `affinity`       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
+| `tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
+| `redeploy_label` | If this label is changed since the last deployment, the whole chart will be redeployed.                                     | `""`  |
 
 
 ### Deployment Artifacts Storage settings
@@ -58,7 +64,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 | Name            | Description                                   | Value   |
 | --------------- | --------------------------------------------- | ------- |
-| `api.resources` | API container resources.                      | `{}`    |
 | `api.data_dir`  | Path to the directory storing search indexes. | `/data` |
 | `api.fcgi_port` | TCP port of the Search API.                   | `9090`  |
 | `api.logLevel`  | Log level.                                    | `Info`  |
@@ -73,7 +78,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `nginx.image.repository` | Docker Repository.                                     | `2gis-on-premise/search-nginx` |
 | `nginx.image.tag`        | Docker image tag.                                      | `1.21.6`                       |
 | `nginx.image.pullPolicy` | Kubernetes pull policy for the service's Docker image. | `IfNotPresent`                 |
-| `nginx.resources`        | NGINX container resources.                             | `{}`                           |
 | `nginx.http_port`        | HTTP port on which NGINX will be listening.            | `8080`                         |
 
 
@@ -123,6 +127,22 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name              | Description                            | Value   |
 | ----------------- | -------------------------------------- | ------- |
 | `ingress.enabled` | If Ingress is enabled for the service. | `false` |
+
+
+### Limits
+
+| Name                              | Description                      | Value |
+| --------------------------------- | -------------------------------- | ----- |
+| `api.resources`                   | **Limits for the API service**   | `{}`  |
+| `api.resources.requests.cpu`      | A CPU request, e.g., `100m`.     |       |
+| `api.resources.requests.memory`   | A memory request, e.g., `128Mi`. |       |
+| `api.resources.limits.cpu`        | A CPU limit, e.g., `100m`.       |       |
+| `api.resources.limits.memory`     | A memory limit, e.g., `128Mi`.   |       |
+| `nginx.resources`                 | **Limits for the NGINX service** | `{}`  |
+| `nginx.resources.requests.cpu`    | A CPU request, e.g., `100m`.     |       |
+| `nginx.resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
+| `nginx.resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
+| `nginx.resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
 
 
 ## Maintainers
