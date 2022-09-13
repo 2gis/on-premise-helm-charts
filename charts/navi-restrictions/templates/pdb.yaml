@@ -5,9 +5,9 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "navi-restrictions.fullname" . }}
+  name: {{ include "navi-restrictions.fullname" $ }}
   labels:
-    {{- include "navi-restrictions.labels" . | nindent 4 }}
+    {{- include "navi-restrictions.labels" $ | nindent 4 }}
 spec:
   {{- if .minAvailable }}
   minAvailable: {{ .minAvailable }}
@@ -17,7 +17,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "navi-restrictions.selectorLabels" . | nindent 6 }}
+      {{- include "navi-restrictions.selectorLabels" $ | nindent 6 }}
     matchExpressions:
     # skip CronJobs
     - key: job-name

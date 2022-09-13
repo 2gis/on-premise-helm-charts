@@ -5,9 +5,9 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "traffic-proxy.fullname" . }}
+  name: {{ include "traffic-proxy.fullname" $ }}
   labels:
-    {{- include "traffic-proxy.labels" . | nindent 4 }}
+    {{- include "traffic-proxy.labels" $ | nindent 4 }}
 spec:
   {{- if .minAvailable }}
   minAvailable: {{ .minAvailable }}
@@ -17,6 +17,6 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "traffic-proxy.selectorLabels" . | nindent 6 }}
+      {{- include "traffic-proxy.selectorLabels" $ | nindent 6 }}
 {{- end }}
 {{- end }}
