@@ -1,10 +1,11 @@
-﻿apiVersion: batch/v1beta1
+﻿{{ if .Values.assetImporter.enabled }}
+apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: {{ include "pro-api.user-asset-importer-name" . }}
 spec:
   concurrencyPolicy: Forbid
-  schedule: {{ .Values.assetImporter.schedule }}
+  schedule: "{{ .Values.assetImporter.schedule }}"
   successfulJobsHistoryLimit: {{ .Values.assetImporter.successfulJobsHistoryLimit }}
   jobTemplate:
     spec:
@@ -54,17 +55,6 @@ spec:
                     secretKeyRef:
                       key: s3SecretKey
                       name: {{ include "pro-api.name" . }}-secret
-                - name: DB_CONNECTION_STRING
-                  value: "{{ .Values.postgres.connectionString }}"
-                {{ if .Values.postgres.connectionStringReadonly }}
-                - name: DB_CONNECTION_STRING_READONLY
-                  value: "{{ .Values.postgres.connectionStringReadonly }}"
-                {{ end }}
-                - name: DB_CONNECTION_PWD
-                  valueFrom:
-                    secretKeyRef:
-                      key: dbConnectionPwd
-                      name: {{ include "pro-api.name" . }}-secret
                 - name: ES_HOST
                   value: "{{ .Values.elastic.host }}"
                 {{ if .Values.elastic.credentials }}
@@ -78,3 +68,4 @@ spec:
                   value: "{{ .Values.api.host }}"
                 - name: CREATE_ASSET
                   value: "true"
+{{ end }}

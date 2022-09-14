@@ -1,3 +1,4 @@
+{{ if .Values.assetPreparer.enabled }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -84,3 +85,4 @@ spec:
                     secretKeyRef:
                       key: diggerPassword
                       name: {{ include "pro-api.name" . }}-secret
+{{ end }}

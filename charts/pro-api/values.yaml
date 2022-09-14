@@ -137,6 +137,7 @@ s3:
 # @skip api.logEsQueries
 # @skip api.debug
 # @skip api.env
+# @skip api.useMockAuth
 
 api:
   tempPath: /tmp
@@ -147,6 +148,13 @@ api:
   logEsQueries: false
   debug: false
   env: ''
+  useMockAuth: true
+
+# @skip auth
+# @skip auth.host
+
+auth:
+  host: ''
 
 # @section PostgreSQL settings
 
@@ -158,6 +166,15 @@ postgres:
   connectionString: ''
   connectionStringReadonly: ''
   password: ''
+
+# @section Keys Service settings
+
+# @param keys.url API URL of service for managing partners' keys to 2GIS services (keys.api).
+# @param keys.token keys.api access token.
+
+keys:
+  host: ''
+  token: ''
 
 # @section ElasticSearch settings
 
@@ -205,6 +222,7 @@ appAssetPreparerName: pro-asset-preparer
 # @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
 # @param assetImporter.serviceAccount  Kubernetes service account
 # @param assetImporter.maxParallelJobs How many import jobs can be run simultaneously
+# @param assetImporter.enabled If assetImporter is enabled for the service.
 # @skip assetImporter.files
 
 assetImporter:
@@ -222,6 +240,7 @@ assetImporter:
       cpu: 1000m
       memory: 1024M
   maxParallelJobs: 4
+  enabled: true
   files: ''
 
 # Data prepare job settings
@@ -235,6 +254,7 @@ assetImporter:
 # @skip assetPreparer.resources.requests.memory
 # @skip assetPreparer.resources.limits.cpu
 # @skip assetPreparer.resources.limits.memory
+# @skip assetPreparer.enabled
 # @skip assetPreparer.maxParallelJobs
 
 assetPreparer:
@@ -250,6 +270,7 @@ assetPreparer:
     limits:
       cpu: 500m
       memory: 512M
+  enabled: true
   maxParallelJobs: 1
 
 # @section Limits

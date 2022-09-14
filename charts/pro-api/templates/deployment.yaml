@@ -142,6 +142,15 @@ spec:
                 secretKeyRef:
                   key: dbConnectionPwd
                   name: {{ include "pro-api.name" . }}-secret
+            - name: KEYS_SERVICE_URL
+              value: "{{ .Values.keys.host }}"
+            {{ if .Values.keys.token }}
+            - name: KEYS_SERVICE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: keysServiceToken
+                  name: {{ include "pro-api.name" . }}-secret
+            {{ end }}
             - name: S3Settings__Url
               value: "{{ .Values.s3.host }}"
             - name: S3Settings__LayerDataBucket
@@ -165,3 +174,7 @@ spec:
                   key: esCredentials
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}
+            - name: AUTH_ENDPOINT
+              value: "{{ .Values.auth.host }}"
+            - name: USE_MOCK_AUTH
+              value: "{{ .Values.api.useMockAuth }}"
