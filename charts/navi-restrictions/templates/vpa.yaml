@@ -1,30 +1,31 @@
-{{- if .Values.api.vpa.enabled }}
+{{ with .Values.api.vpa }}
+{{- if .enabled }}
 ---
 
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
-  name: {{ include "navi-restrictions.fullname" . }}
+  name: {{ include "navi-restrictions.fullname" $ }}
   labels:
-    {{- include "navi-restrictions.labels" . | nindent 4 }}
+    {{- include "navi-restrictions.labels" $ | nindent 4 }}
 spec:
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "navi-restrictions.fullname" . }}
+    name: {{ include "navi-restrictions.fullname" $ }}
   updatePolicy:
-    updateMode: {{ .Values.api.vpa.updateMode }}
+    updateMode: {{ .updateMode }}
   resourcePolicy:
     containerPolicies:
-      - containerName: {{ .Chart.Name }}
-        controlledValues: RequestsOnly
+      - containerName: {{ include "navi-restrictions.name" }}
         mode: Auto
-        {{- with .Values.api.vpa.minAllowed }}
+        {{- with .minAllowed }}
         minAllowed:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-        {{- with .Values.api.vpa.maxAllowed }}
+        {{- with .maxAllowed }}
         maxAllowed:
           {{- toYaml . | nindent 10 }}
         {{- end }}
+{{- end }}
 {{- end }}

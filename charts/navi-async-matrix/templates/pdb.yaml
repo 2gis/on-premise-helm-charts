@@ -1,17 +1,22 @@
-{{- if .Values.podDisruptionBudget.enabled }}
+{{- with .Values.pdb }}
+{{- if .enabled }}
 ---
 
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "navi-async-matrix.fullname" . }}
+  name: {{ include "navi-async-matrix.fullname" $ }}
   labels:
-    {{- include "navi-async-matrix.labels" . | nindent 4 }}
+    {{- include "navi-async-matrix.labels" $ | nindent 4 }}
 spec:
-  {{- if .Values.podDisruptionBudget.maxUnavailable }}
-  maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
+  {{- end }}
+  {{- if .maxUnavailable }}
+  maxUnavailable: {{ .maxUnavailable }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "navi-async-matrix.selectorLabels" . | nindent 6 }}
+      {{- include "navi-async-matrix.selectorLabels" $ | nindent 6 }}
+{{- end }}
 {{- end }}

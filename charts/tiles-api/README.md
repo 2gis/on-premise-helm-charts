@@ -136,17 +136,21 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | Name                     | Description                                          | Value  |
 | ------------------------ | ---------------------------------------------------- | ------ |
 | `api.pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
+| `api.pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`    |
 | `api.pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
 
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-| Name                                     | Description                                                                                                                                                    | Value   |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `api.hpa.enabled`                        | If HPA is enabled for the service.                                                                                                                             | `false` |
-| `api.hpa.minReplicas`                    | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                 | `1`     |
-| `api.hpa.maxReplicas`                    | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                   | `1`     |
-| `api.hpa.targetCPUUtilizationPercentage` | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used. | `50`    |
+| Name                                          | Description                                                                                                                                                          | Value   |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `api.hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `api.hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `api.hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `1`     |
+| `api.hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
+| `api.hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
+| `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `50`    |
+| `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
 
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
@@ -155,6 +159,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | --------------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
 | `api.vpa.enabled`           | If VPA is enabled for the service.                                                                           | `false` |
 | `api.vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). | `Auto`  |
+| `api.vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                   | `100m`  |
 | `api.vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         | `128Mi` |
 | `api.vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `1`     |
 | `api.vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `512Mi` |

@@ -199,10 +199,12 @@ api:
   # @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
   # @param api.pdb.enabled If PDB is enabled for the service.
+  # @param api.pdb.minAvailable How many pods must be available after the eviction.
   # @param api.pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
   pdb:
     enabled: true
+    minAvailable: 1
     maxUnavailable: 1
 
   # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
@@ -210,18 +212,25 @@ api:
   # @param api.hpa.enabled If HPA is enabled for the service.
   # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
   # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+  # @param api.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+  # @param api.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
   # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+  # @param api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
   hpa:
     enabled: false
     minReplicas: 1
     maxReplicas: 1
+    scaleDownStabilizationWindowSeconds: ''
+    scaleUpStabilizationWindowSeconds: ''
     targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: ''
 
   # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
   # @param api.vpa.enabled If VPA is enabled for the service.
   # @param api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+  # @param api.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
   # @param api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
   # @param api.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
   # @param api.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
@@ -230,6 +239,7 @@ api:
     enabled: false
     updateMode: Auto
     minAllowed:
+      cpu: 100m
       memory: 128Mi
     maxAllowed:
       cpu: 1

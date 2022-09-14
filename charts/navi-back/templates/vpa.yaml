@@ -1,5 +1,5 @@
-{{- if .Values.vpa.enabled }}
 {{ with .Values.vpa }}
+{{- if .enabled }}
 ---
 
 apiVersion: autoscaling.k8s.io/v1
@@ -14,10 +14,10 @@ spec:
     kind: Deployment
     name: {{ include "naviback.fullname" $ }}
   updatePolicy:
-    updateMode: {{ default "Auto" .updateMode }}
+    updateMode: {{ .updateMode }}
   resourcePolicy:
     containerPolicies:
-      - containerName: {{ include "naviback.fullname" $ }}
+      - containerName: {{ include "naviback.name" }}
         mode: Auto
         {{- with .minAllowed }}
         minAllowed:

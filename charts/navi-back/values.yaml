@@ -124,19 +124,22 @@ testResources:
 
 # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-# @param autoscaling.enabled If HPA is enabled for the service.
-# @param autoscaling.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
-# @param autoscaling.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
-# @extra autoscaling.scaleDownWindowsSeconds Scale-down window.
-# @extra autoscaling.scaleUpWindowSeconds Scale-up window.
-# @param autoscaling.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
-# @extra autoscaling.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.enabled If HPA is enabled for the service.
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window.
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
-autoscaling:
+hpa:
   enabled: false
   minReplicas: 1
   maxReplicas: 100
+  scaleDownStabilizationWindowSeconds: ''
+  scaleUpStabilizationWindowSeconds: ''
   targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ''
 
 
 # @section Vertical scaling settings
@@ -150,23 +153,27 @@ verticalscaling:
 # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 # @param vpa.enabled If VPA is enabled for the service.
-# @extra vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @extra vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
 # @extra vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
 # @extra vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
 # @extra vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
 
 vpa:
   enabled: false
+  updateMode: Auto
 
 
-# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-# @skip podDisruptionBudget
-# @extra podDisruptionBudget.create If PDB is enabled for the service.
-# @extra podDisruptionBudget.minAvailable How many pods must be available after the eviction.
-# @extra podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
+# @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
-podDisruptionBudget: {}
+pdb:
+  enabled: false
+  minAvailable: 1
+  maxUnavailable: 1
 
 
 # @section Kafka settings for interacting with Distance Matrix Async Service

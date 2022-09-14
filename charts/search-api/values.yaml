@@ -56,7 +56,6 @@ api:
 
   # @section API settings
 
-  # @param api.resources API container resources.
   # @param api.data_dir Path to the directory storing search indexes.
   # @param api.fcgi_port TCP port of the Search API.
   # @param api.logLevel Log level.
@@ -76,7 +75,6 @@ api:
 # @param nginx.image.repository Docker Repository.
 # @param nginx.image.tag Docker image tag.
 # @param nginx.image.pullPolicy Kubernetes pull policy for the service's Docker image.
-# @param nginx.resources NGINX container resources.
 # @param nginx.http_port HTTP port on which NGINX will be listening.
 
 nginx:
@@ -115,28 +113,36 @@ service:
   port: 80
 
 
-# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-# @param podDisruptionBudget.enabled If PDB is enabled for the service.
-# @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
+# @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
-podDisruptionBudget:
+pdb:
   enabled: true
+  minAvailable: 1
   maxUnavailable: 1
 
 
 # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
 # @param hpa.enabled If HPA is enabled for the service.
-# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
 # @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window.
 # @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
 hpa:
   enabled: false
-  maxReplicas: 2
   minReplicas: 1
+  maxReplicas: 2
+  scaleDownStabilizationWindowSeconds: ''
+  scaleUpStabilizationWindowSeconds: ''
   targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ''
 
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
@@ -148,3 +154,18 @@ ingress:
   enabled: false
   hosts:
   - host: search-api.host
+
+
+# @section Limits
+
+# @param api.resources **Limits for the API service**
+# @extra api.resources.requests.cpu A CPU request, e.g., `100m`.
+# @extra api.resources.requests.memory A memory request, e.g., `128Mi`.
+# @extra api.resources.limits.cpu A CPU limit, e.g., `100m`.
+# @extra api.resources.limits.memory A memory limit, e.g., `128Mi`.
+
+# @param nginx.resources **Limits for the NGINX service**
+# @extra nginx.resources.requests.cpu A CPU request, e.g., `100m`.
+# @extra nginx.resources.requests.memory A memory request, e.g., `128Mi`.
+# @extra nginx.resources.limits.cpu A CPU limit, e.g., `100m`.
+# @extra nginx.resources.limits.memory A memory limit, e.g., `128Mi`.

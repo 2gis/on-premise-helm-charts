@@ -96,22 +96,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-| Name                                            | Description                                                                                                                                                          | Value   |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `autoscaling.enabled`                           | If HPA is enabled for the service.                                                                                                                                   | `false` |
-| `autoscaling.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
-| `autoscaling.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `100`   |
-| `autoscaling.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
-| `autoscaling.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. |         |
+| Name                                      | Description                                                                                                                                                          | Value   |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `100`   |
+| `hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
+| `hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
+| `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
 
-### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                 | Description                                          | Value   |
 | -------------------- | ---------------------------------------------------- | ------- |
-| `pdb.create`         | If PDB is enabled for the service.                   | `false` |
+| `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
 | `pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`     |
-| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `0`     |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
 
 
 ## Maintainers

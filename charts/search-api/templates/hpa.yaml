@@ -1,7 +1,6 @@
-{{- if .Values.hpa.enabled }}
----
-
-apiVersion: autoscaling/v1
+{{- with .Values.hpa }}
+{{- if .enabled }}
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "search_api.fullname" . }}
@@ -12,7 +11,29 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "search_api.fullname" . }}
-  minReplicas: {{ .Values.hpa.minReplicas }}
-  maxReplicas: {{ .Values.hpa.maxReplicas }}
-  targetCPUUtilizationPercentage: {{ .Values.hpa.targetCPUUtilizationPercentage }}
+  minReplicas: {{ .minReplicas }}
+  maxReplicas: {{ .maxReplicas }}
+  behavior:
+    scaleUp:
+        stabilizationWindowSeconds: {{ .scaleUpStabilizationWindowSeconds }}
+    scaleDown:
+        stabilizationWindowSeconds: {{ .scaleDownStabilizationWindowSeconds }}
+  metrics:
+  {{- with .targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
+  {{- end }}
+  {{- with .targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
+  {{- end }}
+{{- end }}
 {{- end }}

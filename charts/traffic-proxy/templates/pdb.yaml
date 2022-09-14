@@ -1,17 +1,22 @@
-{{- if .Values.podDisruptionBudget.enabled }}
+{{- with .Values.pdb }}
+{{- if .enabled }}
 ---
 
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "traffic-proxy.fullname" . }}
+  name: {{ include "traffic-proxy.fullname" $ }}
   labels:
-    {{- include "traffic-proxy.labels" . | nindent 4 }}
+    {{- include "traffic-proxy.labels" $ | nindent 4 }}
 spec:
-  {{- if .Values.podDisruptionBudget.maxUnavailable }}
-  maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
+  {{- end }}
+  {{- if .maxUnavailable }}
+  maxUnavailable: {{ .maxUnavailable }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "traffic-proxy.selectorLabels" . | nindent 6 }}
+      {{- include "traffic-proxy.selectorLabels" $ | nindent 6 }}
+{{- end }}
 {{- end }}
