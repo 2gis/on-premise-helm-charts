@@ -125,13 +125,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                                 | Description                                                                                                                              | Value           |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `api.ingress.enabled`                | If Ingress is enabled for the service.                                                                                                   | `false`         |
-| `api.ingress.className`              | Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource. | `nginx`         |
-| `api.ingress.hosts[0].host`          | Host FQDN.                                                                                                                               | `tiles-api.loc` |
-| `api.ingress.hosts[0].paths[0].path` | Path (forms a service's URL if appended to the host FQDN).                                                                               | `/`             |
-| `api.ingress.tls`                    | Ingress [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress.                                | `[]`            |
+| Name                        | Description                            | Value            |
+| --------------------------- | -------------------------------------- | ---------------- |
+| `api.ingress.enabled`       | If Ingress is enabled for the service. | `false`          |
+| `api.ingress.hosts[0].host` | Hostname for the Ingress service.      | `tiles-api.host` |
 
 
 ### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings

@@ -148,9 +148,12 @@ hpa:
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 # @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
 
 ingress:
   enabled: false
+  hosts:
+  - host: search-api.host
 
 
 # @section Limits

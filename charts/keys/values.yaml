@@ -5,7 +5,7 @@
 dgctlDockerRegistry: ''
 
 
-# @section Docker registry settings
+# @section Common settings
 
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param imagePullPolicy Pull policy.
@@ -81,9 +81,15 @@ admin:
     type: ClusterIP
     port: 80
 
-  # @param admin.ingress If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-  ingress: {}
+  # @param admin.ingress.enabled If Ingress is enabled for the service.
+  # @param admin.ingress.hosts[0].host Hostname for the Ingress service.
+
+  ingress:
+    enabled: false
+    hosts:
+    - host: keys-ui.host
 
 
 # @section API service settings
@@ -137,9 +143,15 @@ api:
     type: ClusterIP
     port: 80
 
-  # @param api.ingress If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-  ingress: {}
+  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+
+  ingress:
+    enabled: false
+    hosts:
+    - host: keys-api.host
 
 
   # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings

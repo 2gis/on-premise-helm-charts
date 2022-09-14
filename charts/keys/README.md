@@ -25,7 +25,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
 
-### Docker registry settings
+### Common settings
 
 | Name                       | Description                       | Value                          |
 | -------------------------- | --------------------------------- | ------------------------------ |
@@ -57,7 +57,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `admin.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`                    |
 | `admin.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`             |
 | `admin.service.port`        | Service port.                                                                                                                  | `80`                    |
-| `admin.ingress`             | If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.                     | `{}`                    |
+
+
+### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+| Name                          | Description                            | Value          |
+| ----------------------------- | -------------------------------------- | -------------- |
+| `admin.ingress.enabled`       | If Ingress is enabled for the service. | `false`        |
+| `admin.ingress.hosts[0].host` | Hostname for the Ingress service.      | `keys-ui.host` |
 
 
 ### API service settings
@@ -77,7 +84,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
 | `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `api.service.port`        | Service port.                                                                                                                  | `80`        |
-| `api.ingress`             | If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.                     | `{}`        |
+
+
+### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+| Name                        | Description                            | Value           |
+| --------------------------- | -------------------------------------- | --------------- |
+| `api.ingress.enabled`       | If Ingress is enabled for the service. | `false`         |
+| `api.ingress.hosts[0].host` | Hostname for the Ingress service.      | `keys-api.host` |
 
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
