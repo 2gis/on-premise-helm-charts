@@ -60,13 +60,15 @@ serviceAccount:
   name: ''
 
 
-# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-# @param podDisruptionBudget.enabled If PDB is enabled for the service.
-# @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
+# @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
-podDisruptionBudget:
+pdb:
   enabled: true
+  minAvailable: 1
   maxUnavailable: 1
 
 
@@ -133,21 +135,30 @@ api:
     hosts:
     - host: navi-restrictions.host
 
-  # @extra api.hpa **Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings.**
+  # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
   # @param api.hpa.enabled If HPA is enabled for the service.
   # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
   # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+  # @param api.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+  # @param api.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
   # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+  # @param api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
   hpa:
     enabled: false
-    maxReplicas: 2
     minReplicas: 1
+    maxReplicas: 2
+    scaleDownStabilizationWindowSeconds: ''
+    scaleUpStabilizationWindowSeconds: ''
     targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: ''
 
-  # @extra api.vpa **Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings.**
+  # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
   # @param api.vpa.enabled If VPA is enabled for the service.
   # @param api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+  # @param api.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
   # @param api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
   # @param api.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
   # @param api.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
@@ -156,6 +167,7 @@ api:
     enabled: false
     updateMode: Auto
     minAllowed:
+      cpu: 500m
       memory: 256Mi
     maxAllowed:
       cpu: 2000m

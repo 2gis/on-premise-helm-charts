@@ -121,26 +121,51 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `api.service.type`                          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                           | `ClusterIP`                 |
 | `api.service.annotations`                   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                        | `{}`                        |
 | `api.service.labels`                        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                  | `{}`                        |
-| `api.ingress`                               | **Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings**                                                                                                      |                             |
-| `api.ingress.enabled`                       | If Ingress is enabled for the service.                                                                                                                                                                   | `false`                     |
-| `api.ingress.className`                     | Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource.                                                                 | `nginx`                     |
-| `api.ingress.hosts[0].host`                 | Host FQDN.                                                                                                                                                                                               | `tiles-api.loc`             |
-| `api.ingress.hosts[0].paths[0].path`        | Path (forms a service's URL if appended to the host FQDN).                                                                                                                                               | `/`                         |
-| `api.ingress.tls`                           | Ingress [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress.                                                                                                | `[]`                        |
-| `api.pdb`                                   | **Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings**                                                                  |                             |
-| `api.pdb.enabled`                           | If PDB is enabled for the service.                                                                                                                                                                       | `true`                      |
-| `api.pdb.maxUnavailable`                    | How many pods can be unavailable after the eviction.                                                                                                                                                     | `1`                         |
-| `api.hpa`                                   | **Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings**                                                                         |                             |
-| `api.hpa.enabled`                           | If HPA is enabled for the service.                                                                                                                                                                       | `false`                     |
-| `api.hpa.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                                                           | `1`                         |
-| `api.hpa.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                                                             | `1`                         |
-| `api.hpa.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.                                           | `50`                        |
-| `api.vpa`                                   | **Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings**                                                               |                             |
-| `api.vpa.enabled`                           | If VPA is enabled for the service.                                                                                                                                                                       | `false`                     |
-| `api.vpa.updateMode`                        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).                                                                                             | `Auto`                      |
-| `api.vpa.minAllowed.memory`                 | Lower limit for the RAM size to which the autoscaler can scale down.                                                                                                                                     | `128Mi`                     |
-| `api.vpa.maxAllowed.cpu`                    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                                                                                                                 | `1`                         |
-| `api.vpa.maxAllowed.memory`                 | Upper limit for the RAM size to which the autoscaler can scale up.                                                                                                                                       | `512Mi`                     |
+
+
+### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+| Name                                 | Description                                                                                                                              | Value           |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `api.ingress.enabled`                | If Ingress is enabled for the service.                                                                                                   | `false`         |
+| `api.ingress.className`              | Name of the `IngressClass` cluster resource. The associated `IngressClass` defines which controller will implement the Ingress resource. | `nginx`         |
+| `api.ingress.hosts[0].host`          | Host FQDN.                                                                                                                               | `tiles-api.loc` |
+| `api.ingress.hosts[0].paths[0].path` | Path (forms a service's URL if appended to the host FQDN).                                                                               | `/`             |
+| `api.ingress.tls`                    | Ingress [TLS settings](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) for Ingress.                                | `[]`            |
+
+
+### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+| Name                     | Description                                          | Value  |
+| ------------------------ | ---------------------------------------------------- | ------ |
+| `api.pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
+| `api.pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`    |
+| `api.pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
+
+
+### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+| Name                                          | Description                                                                                                                                                          | Value   |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `api.hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `api.hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `api.hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `1`     |
+| `api.hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
+| `api.hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
+| `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `50`    |
+| `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+
+
+### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+| Name                        | Description                                                                                                  | Value   |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
+| `api.vpa.enabled`           | If VPA is enabled for the service.                                                                           | `false` |
+| `api.vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). | `Auto`  |
+| `api.vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                   | `100m`  |
+| `api.vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         | `128Mi` |
+| `api.vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `1`     |
+| `api.vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `512Mi` |
 
 
 ### Kubernetes Importer job settings

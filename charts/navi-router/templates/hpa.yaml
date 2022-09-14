@@ -1,5 +1,6 @@
-{{- if .Values.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+{{- with .Values.hpa }}
+{{- if .enabled }}
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "router.fullname" . }}
@@ -10,19 +11,29 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "router.fullname" . }}
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  minReplicas: {{ .minReplicas }}
+  maxReplicas: {{ .maxReplicas }}
+  behavior:
+    scaleUp:
+        stabilizationWindowSeconds: {{ .scaleUpStabilizationWindowSeconds }}
+    scaleDown:
+        stabilizationWindowSeconds: {{ .scaleDownStabilizationWindowSeconds }}
   metrics:
-    {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
+  {{- with .targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
-    {{- end }}
-    {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
+  {{- end }}
+  {{- with .targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
-    {{- end }}
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
+  {{- end }}
+{{- end }}
 {{- end }}

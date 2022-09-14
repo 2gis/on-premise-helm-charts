@@ -1,4 +1,5 @@
-{{- if .Values.podDisruptionBudget.enabled }}
+{{- with .Values.pdb }}
+{{- if .enabled }}
 ---
 
 {{- if $.Capabilities.APIVersions.Has "policy/v1" }}
@@ -8,14 +9,18 @@ apiVersion: policy/v1beta1
 {{- end }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "search_api.fullname" . }}
+  name: {{ include "search_api.fullname" $ }}
   labels:
-    {{- include "search_api.labels" . | nindent 4 }}
+    {{- include "search_api.labels" $ | nindent 4 }}
 spec:
-  {{- if .Values.podDisruptionBudget.maxUnavailable }}
-  maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
+  {{- end }}
+  {{- if .maxUnavailable }}
+  maxUnavailable: {{ .maxUnavailable }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "search_api.selectorLabels" . | nindent 6 }}
+      {{- include "search_api.selectorLabels" $ | nindent 6 }}
+{{- end }}
 {{- end }}

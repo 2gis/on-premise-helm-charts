@@ -104,15 +104,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-| Name                                            | Description                                                                                                                                                          | Value   |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `autoscaling.enabled`                           | If HPA is enabled for the service.                                                                                                                                   | `false` |
-| `autoscaling.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
-| `autoscaling.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `100`   |
-| `autoscaling.scaleDownWindowsSeconds`           | Scale-down window.                                                                                                                                                   |         |
-| `autoscaling.scaleUpWindowSeconds`              | Scale-up window.                                                                                                                                                     |         |
-| `autoscaling.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
-| `autoscaling.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. |         |
+| Name                                      | Description                                                                                                                                                          | Value   |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `100`   |
+| `hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
+| `hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
+| `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
 
 ### Vertical scaling settings
@@ -127,19 +127,20 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                    | Description                                                                                                  | Value   |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
 | `vpa.enabled`           | If VPA is enabled for the service.                                                                           | `false` |
-| `vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). |         |
+| `vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). | `Auto`  |
+| `vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                   |         |
 | `vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         |         |
 | `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     |         |
 | `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           |         |
 
 
-### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                                 | Description                                          | Value |
-| ------------------------------------ | ---------------------------------------------------- | ----- |
-| `podDisruptionBudget.create`         | If PDB is enabled for the service.                   |       |
-| `podDisruptionBudget.minAvailable`   | How many pods must be available after the eviction.  |       |
-| `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. |       |
+| Name                 | Description                                          | Value   |
+| -------------------- | ---------------------------------------------------- | ------- |
+| `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
+| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`     |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
 
 
 ### Kafka settings for interacting with Distance Matrix Async Service
