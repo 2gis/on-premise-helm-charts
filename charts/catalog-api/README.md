@@ -59,17 +59,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`  |
 
 
-### Deployment Artifacts Storage settings
-
-| Name                     | Description                                                                                                                                                                                                                                              | Value |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`  |
-| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `""`  |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`  |
-
-
 ### API settings
 
 | Name           | Description                     | Value |
@@ -160,40 +149,41 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Kubernetes Importer job settings
 
-| Name                                     | Description                                                                                                                   | Value                              |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `importer`                               | **Common settings**                                                                                                           |                                    |
-| `importer.nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).           | `{}`                               |
-| `importer.workerNum`                     | Number of parallel import processes (workers).                                                                                | `3`                                |
-| `importer.initialDelaySeconds`           | Number of seconds after the container has started before liveness or readiness probes are initiated.                          | `1`                                |
-| `importer.image`                         | **Deployment settings**                                                                                                       |                                    |
-| `importer.image.repository`              | Repository                                                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`                     | Tag                                                                                                                           | `1.0.0`                            |
-| `importer.image.pullPolicy`              | Pull Policy                                                                                                                   | `IfNotPresent`                     |
-| `importer.resources`                     | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)** |                                    |
-| `importer.resources.requests.cpu`        | A CPU request.                                                                                                                | `256m`                             |
-| `importer.resources.requests.memory`     | A memory request.                                                                                                             | `512Mi`                            |
-| `importer.resources.limits.cpu`          | A CPU limit.                                                                                                                  | `2`                                |
-| `importer.resources.limits.memory`       | A memory limit.                                                                                                               | `2048Mi`                           |
-| `importer.db`                            | **Database settings**                                                                                                         |                                    |
-| `importer.db.host`                       | PostgreSQL rw host.                                                                                                           | `postgres.host`                    |
-| `importer.db.port`                       | PostgreSQL port.                                                                                                              | `5432`                             |
-| `importer.db.name`                       | PostgreSQL database name.                                                                                                     | `catalog`                          |
-| `importer.db.username`                   | PostgreSQL username with rw access.                                                                                           | `postgres`                         |
-| `importer.db.password`                   | PostgreSQL password.                                                                                                          | `secret`                           |
-| `importer.persistentVolume`              | **Persistent Volume settings**                                                                                                |                                    |
-| `importer.persistentVolume.enabled`      | If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service.          | `false`                            |
-| `importer.persistentVolume.accessModes`  | AccessModes.                                                                                                                  | `["ReadWriteOnce"]`                |
-| `importer.persistentVolume.storageClass` | StorageClass.                                                                                                                 | `topolvm-ext4`                     |
-| `importer.persistentVolume.size`         | Volume size.                                                                                                                  | `50Gi`                             |
+| Name                                         | Description                                                                                                                   | Value                              |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `importer`                                   | **Common settings**                                                                                                           |                                    |
+| `importer.nodeSelector`                      | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).           | `{}`                               |
+| `importer.workerNum`                         | Number of parallel import processes (workers).                                                                                | `3`                                |
+| `importer.initialDelaySeconds`               | Number of seconds after the container has started before liveness or readiness probes are initiated.                          | `1`                                |
+| `importer.image`                             | **Deployment settings**                                                                                                       |                                    |
+| `importer.image.repository`                  | Repository                                                                                                                    | `2gis-on-premise/catalog-importer` |
+| `importer.image.tag`                         | Tag                                                                                                                           | `1.0.0`                            |
+| `importer.image.pullPolicy`                  | Pull Policy                                                                                                                   | `IfNotPresent`                     |
+| `importer.resources`                         | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)** |                                    |
+| `importer.resources.requests.cpu`            | A CPU request.                                                                                                                | `256m`                             |
+| `importer.resources.requests.memory`         | A memory request.                                                                                                             | `512Mi`                            |
+| `importer.resources.limits.cpu`              | A CPU limit.                                                                                                                  | `2`                                |
+| `importer.resources.limits.memory`           | A memory limit.                                                                                                               | `2048Mi`                           |
+| `importer.db`                                | **Database settings**                                                                                                         |                                    |
+| `importer.db.host`                           | PostgreSQL rw host.                                                                                                           | `postgres.host`                    |
+| `importer.db.port`                           | PostgreSQL port.                                                                                                              | `5432`                             |
+| `importer.db.name`                           | PostgreSQL database name.                                                                                                     | `catalog`                          |
+| `importer.db.username`                       | PostgreSQL username with rw access.                                                                                           | `postgres`                         |
+| `importer.db.password`                       | PostgreSQL password.                                                                                                          | `secret`                           |
+| `importer.persistentVolume`                  | **Persistent Volume settings**                                                                                                |                                    |
+| `importer.persistentVolume.enabled`          | If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service.          | `false`                            |
+| `importer.persistentVolume.accessModes`      | AccessModes.                                                                                                                  | `["ReadWriteOnce"]`                |
+| `importer.persistentVolume.storageClass`     | StorageClass.                                                                                                                 | `topolvm-ext4`                     |
+| `importer.persistentVolume.size`             | Volume size.                                                                                                                  | `50Gi`                             |
 | `importer.cleaner`                           | **Cleaner scheme settings**                                                                                                   |                                    |
-| `importer.cleaner.enabled`                   | If clean schemes is enabled for the service.                                                                                  | `false`                            |
+| `importer.cleaner.enabled`                   | If clean schemes is enabled for the service.                                                                                  | `true`                             |
 | `importer.cleaner.versionLimit`              | Number of backup schemes.                                                                                                     | `2`                                |
 | `importer.cleaner.resources`                 | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)** |                                    |
 | `importer.cleaner.resources.requests.cpu`    | A CPU request.                                                                                                                | `50m`                              |
 | `importer.cleaner.resources.requests.memory` | A memory request.                                                                                                             | `128Mi`                            |
 | `importer.cleaner.resources.limits.cpu`      | A CPU limit.                                                                                                                  | `1000m`                            |
 | `importer.cleaner.resources.limits.memory`   | A memory limit.                                                                                                               | `512Mi`                            |
+
 
 ## Maintainers
 
