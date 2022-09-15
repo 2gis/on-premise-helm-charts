@@ -260,6 +260,9 @@ zookeeper:
       cpu: 200m
       memory: 512Mi
 
+  pdb:
+    create: true
+    maxUnavailable: 1
 
 # @section Limits
 
