@@ -9,11 +9,13 @@ metadata:
     {{- include "gis-platform-portal.labels" . | nindent 4 }}
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.portal.max_body_size }}
-  {{- with .Values.ingress.annotations }}
+  {{- if .Values.ingress.annotations }}
+    {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
-  ingressClassName: {{ .Values.ingress.className }}
+  ingressClassName: nginx
   {{- if .Values.ingress.tls }}
   tls:
     {{- range .Values.ingress.tls }}
