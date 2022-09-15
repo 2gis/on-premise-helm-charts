@@ -92,9 +92,18 @@ service:
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 # @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.tls[0].hosts TLS hosts for the Ingress service.
+# @param ingress.tls[0].secretName Secret name to use for the Ingress service.
 
 ingress:
   enabled: false
+  hosts:
+  - host: mapgl-js-api.host
+  tls:
+  - hosts:
+    - mapgl-js-api.host
+    secretName: mapgl-js-api
 
 
 # @section Limits
@@ -113,34 +122,43 @@ resources:
     memory: 64M
 
 
-# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-# @param podDisruptionBudget.enabled If PDB is enabled for the service.
-# @param podDisruptionBudget.maxUnavailable How many pods can be unavailable after the eviction.
+# @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
-podDisruptionBudget:
+pdb:
   enabled: false
+  minAvailable: ''
   maxUnavailable: 1
 
 
 # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
 # @param hpa.enabled If HPA is enabled for the service.
-# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
 # @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window.
 # @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
 hpa:
   enabled: false
-  maxReplicas: 2
   minReplicas: 1
+  maxReplicas: 2
+  scaleDownStabilizationWindowSeconds: ''
+  scaleUpStabilizationWindowSeconds: ''
   targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ''
 
 
 # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 # @param vpa.enabled If VPA is enabled for the service.
 # @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
 # @param vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
 # @param vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
 # @param vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
@@ -149,6 +167,7 @@ vpa:
   enabled: false
   updateMode: Auto
   minAllowed:
+    cpu: 100m
     memory: 100Mi
   maxAllowed:
     cpu: 200m

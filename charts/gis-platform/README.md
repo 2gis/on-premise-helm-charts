@@ -35,13 +35,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                  | Description                                                                                                              | Value   |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------- |
-| `ingress.enabled`     | If Ingress is enabled for the service.                                                                                   | `false` |
-| `ingress.className`   | Ingress class name.                                                                                                      | `nginx` |
-| `ingress.annotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                | `{}`    |
-| `ingress.hosts`       | List of hosts. Must be a list, where each item has `host` property. <br/> Defaults to `[{'host': 'gis-platform.host'}]`. |         |
-| `ingress.tls`         | TLS settings.                                                                                                            | `[]`    |
+| Name                    | Description                            | Value               |
+| ----------------------- | -------------------------------------- | ------------------- |
+| `ingress.enabled`       | If Ingress is enabled for the service. | `false`             |
+| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `gis-platform.host` |
 
 
 ### Docker registry settings
@@ -136,13 +133,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ### ZooKeeper settings
 
-| Name                            | Description                                                                                                                             | Value   |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `zookeeper.replicaCount`        | A replica count for the pod.                                                                                                            | `3`     |
-| `zookeeper.persistence.enabled` | If Kubernetes persistence volume should be enabled for ZooKeeper.                                                                       | `false` |
-| `zookeeper.pdb`                 | **Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings** |         |
-| `zookeeper.pdb.create`          | If PDB is enabled for the service.                                                                                                      | `true`  |
-| `zookeeper.pdb.maxUnavailable`  | How many pods can be unavailable after the eviction.                                                                                    | `1`     |
+| Name                            | Description                                                       | Value   |
+| ------------------------------- | ----------------------------------------------------------------- | ------- |
+| `zookeeper.replicaCount`        | A replica count for the pod.                                      | `3`     |
+| `zookeeper.persistence.enabled` | If Kubernetes persistence volume should be enabled for ZooKeeper. | `false` |
 
 
 ### Limits

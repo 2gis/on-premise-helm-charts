@@ -64,7 +64,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 | Name            | Description                                   | Value   |
 | --------------- | --------------------------------------------- | ------- |
-| `api.resources` | API container resources.                      | `{}`    |
 | `api.data_dir`  | Path to the directory storing search indexes. | `/data` |
 | `api.fcgi_port` | TCP port of the Search API.                   | `9090`  |
 | `api.logLevel`  | Log level.                                    | `Info`  |
@@ -79,7 +78,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `nginx.image.repository` | Docker Repository.                                     | `2gis-on-premise/search-nginx` |
 | `nginx.image.tag`        | Docker image tag.                                      | `1.21.6`                       |
 | `nginx.image.pullPolicy` | Kubernetes pull policy for the service's Docker image. | `IfNotPresent`                 |
-| `nginx.resources`        | NGINX container resources.                             | `{}`                           |
 | `nginx.http_port`        | HTTP port on which NGINX will be listening.            | `8080`                         |
 
 
@@ -102,29 +100,50 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `service.port`        | Service port.                                                                                                                  | `80`        |
 
 
-### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                                 | Description                                          | Value  |
-| ------------------------------------ | ---------------------------------------------------- | ------ |
-| `podDisruptionBudget.enabled`        | If PDB is enabled for the service.                   | `true` |
-| `podDisruptionBudget.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
+| Name                 | Description                                          | Value  |
+| -------------------- | ---------------------------------------------------- | ------ |
+| `pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
+| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
 
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-| Name                                 | Description                                                                                                                                                    | Value   |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `hpa.enabled`                        | If HPA is enabled for the service.                                                                                                                             | `false` |
-| `hpa.maxReplicas`                    | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                   | `2`     |
-| `hpa.minReplicas`                    | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                 | `1`     |
-| `hpa.targetCPUUtilizationPercentage` | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used. | `80`    |
+| Name                                      | Description                                                                                                                                                          | Value   |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
+| `hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
+| `hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
+| `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name              | Description                            | Value   |
-| ----------------- | -------------------------------------- | ------- |
-| `ingress.enabled` | If Ingress is enabled for the service. | `false` |
+| Name                    | Description                            | Value             |
+| ----------------------- | -------------------------------------- | ----------------- |
+| `ingress.enabled`       | If Ingress is enabled for the service. | `false`           |
+| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `search-api.host` |
+
+
+### Limits
+
+| Name                              | Description                      | Value |
+| --------------------------------- | -------------------------------- | ----- |
+| `api.resources`                   | **Limits for the API service**   | `{}`  |
+| `api.resources.requests.cpu`      | A CPU request, e.g., `100m`.     |       |
+| `api.resources.requests.memory`   | A memory request, e.g., `128Mi`. |       |
+| `api.resources.limits.cpu`        | A CPU limit, e.g., `100m`.       |       |
+| `api.resources.limits.memory`     | A memory limit, e.g., `128Mi`.   |       |
+| `nginx.resources`                 | **Limits for the NGINX service** | `{}`  |
+| `nginx.resources.requests.cpu`    | A CPU request, e.g., `100m`.     |       |
+| `nginx.resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
+| `nginx.resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
+| `nginx.resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
 
 
 ## Maintainers

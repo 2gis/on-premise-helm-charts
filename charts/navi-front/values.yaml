@@ -74,10 +74,11 @@ service:
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-# @extra ingress Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'navi-front.host'}]}`.
-# @skip ingress.hosts[0].host
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
 
 ingress:
+  enabled: false
   hosts:
   - host: navi-front.host
 
@@ -95,27 +96,31 @@ resources: {}
 
 # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-# @param autoscaling.enabled If HPA is enabled for the service.
-# @param autoscaling.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
-# @param autoscaling.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
-# @param autoscaling.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
-# @extra autoscaling.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.enabled If HPA is enabled for the service.
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window.
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
-autoscaling:
+hpa:
   enabled: false
   minReplicas: 1
   maxReplicas: 100
+  scaleDownStabilizationWindowSeconds: ''
+  scaleUpStabilizationWindowSeconds: ''
   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ''
 
 
-# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-# @param pdb.create If PDB is enabled for the service.
+# @param pdb.enabled If PDB is enabled for the service.
 # @param pdb.minAvailable How many pods must be available after the eviction.
 # @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
 pdb:
-  create: false
-  minAvailable: 1
-  maxUnavailable: 0
+  enabled: false
+  minAvailable: ''
+  maxUnavailable: 1

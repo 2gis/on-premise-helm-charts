@@ -5,7 +5,7 @@
 dgctlDockerRegistry: ''
 
 
-# @section Docker registry settings
+# @section Common settings
 
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param imagePullPolicy Pull policy.
@@ -81,9 +81,15 @@ admin:
     type: ClusterIP
     port: 80
 
-  # @param admin.ingress If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-  ingress: {}
+  # @param admin.ingress.enabled If Ingress is enabled for the service.
+  # @param admin.ingress.hosts[0].host Hostname for the Ingress service.
+
+  ingress:
+    enabled: false
+    hosts:
+    - host: keys-ui.host
 
 
 # @section API service settings
@@ -97,17 +103,6 @@ api:
   # @param api.replicas A replica count for the pod.
 
   replicas: 1
-
-  # @param api.hpa.enabled If [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) is enabled for the service.
-  # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
-  # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
-  # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
-
-  hpa:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 2
-    targetCPUUtilizationPercentage: 80
 
   resources:
     requests:
@@ -148,9 +143,35 @@ api:
     type: ClusterIP
     port: 80
 
-  # @param api.ingress If [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is enabled for the service.
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-  ingress: {}
+  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+
+  ingress:
+    enabled: false
+    hosts:
+    - host: keys-api.host
+
+
+  # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+  # @param api.hpa.enabled If HPA is enabled for the service.
+  # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+  # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+  # @param api.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+  # @param api.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
+  # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+  # @param api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    scaleDownStabilizationWindowSeconds: ''
+    scaleUpStabilizationWindowSeconds: ''
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: ''
 
 
 # @section Import service settings

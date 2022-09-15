@@ -84,9 +84,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name      | Description                                                                                                                                  | Value |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `ingress` | Configuration of the Ingress resource. Adapt it to your Ingress installation. <br/> Defaults to `{'hosts': [{'host': 'navi-castle.host'}]}`. |       |
+| Name                    | Description                            | Value              |
+| ----------------------- | -------------------------------------- | ------------------ |
+| `ingress.enabled`       | If Ingress is enabled for the service. | `false`            |
+| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `navi-castle.host` |
 
 
 ### Limits
@@ -97,17 +98,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
 | `resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
 | `resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
-
-
-### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
-
-| Name                                            | Description                                                                                                                                                          | Value   |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `autoscaling.enabled`                           | If HPA is enabled for the service.                                                                                                                                   | `false` |
-| `autoscaling.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
-| `autoscaling.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `100`   |
-| `autoscaling.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
-| `autoscaling.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. |         |
 
 
 ### Navi-Castle service settings
