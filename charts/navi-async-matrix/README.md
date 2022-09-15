@@ -108,7 +108,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name                 | Description                                          | Value  |
 | -------------------- | ---------------------------------------------------- | ------ |
 | `pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
-| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`    |
+| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
 
 

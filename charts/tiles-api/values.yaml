@@ -204,7 +204,7 @@ api:
 
   pdb:
     enabled: true
-    minAvailable: 1
+    minAvailable: ''
     maxUnavailable: 1
 
   # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings

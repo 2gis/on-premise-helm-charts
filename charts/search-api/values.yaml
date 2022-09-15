@@ -121,7 +121,7 @@ service:
 
 pdb:
   enabled: true
-  minAvailable: 1
+  minAvailable: ''
   maxUnavailable: 1
 
 

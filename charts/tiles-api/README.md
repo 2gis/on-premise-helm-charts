@@ -136,7 +136,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | Name                     | Description                                          | Value  |
 | ------------------------ | ---------------------------------------------------- | ------ |
 | `api.pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
-| `api.pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`    |
+| `api.pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
 | `api.pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
 
 

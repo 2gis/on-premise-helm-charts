@@ -130,7 +130,7 @@ resources:
 
 pdb:
   enabled: false
-  minAvailable: 1
+  minAvailable: ''
   maxUnavailable: 1
 
 
