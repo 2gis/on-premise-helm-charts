@@ -1,7 +1,44 @@
 # 2GIS On-Premise Changelog
 
-## [1.3.1]
-#### [Breaking-Changes](Breaking-Changes.md#131)
+## [1.3.3]
+#### [Breaking-Changes](Breaking-Changes.md#133)
+#### Images
+```
+catalog-api
+	- catalog:3.567.0
+	+ catalog-api:3.573.0
+	+ catalog-importer:1.0.3
+gis-platform
+	- gis_platform_portal:2022-06-10
+	+ gis_platform_portal:2022.9.15
+	- gis_platform_spcore:2022-06-10
+	+ gis_platform_spcore:2022.9.15
+keys
+	- keys-backend:1.30.1
+	+ keys-backend:1.34.0
+	- keys-ui:0.2.0
+	+ keys-ui:0.3.0
+mapgl-js-api
+	- mapgl:v1.28.1
+	+ mapgl:v1.30.1
+navi-back
+	- navi-back:6.10.1
+	+ navi-back:6.12.0
+navi-castle
+	- navi-castle:1.0.5
+	+ navi-castle:1.0.6.1
+search-api
+	- search-api:7.25.0
+	+ search-api:7.33.0
+tiles-api
+	- tiles-api-importer:v4.22.0
+	+ tiles-api-importer:v4.25.0
+	- tiles-api-proxy:v4.22.0
+	+ tiles-api-proxy:v4.25.0
+	- tiles-api:v4.22.0
+	+ tiles-api:v4.25.0
+
+```
 
 ## [1.3.0]
 #### Images

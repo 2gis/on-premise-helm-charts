@@ -6,8 +6,8 @@ keywords:
 - navi
 - back
 - backend
-version: 1.3.0
-appVersion: 6.10.1
+version: 1.3.3
+appVersion: 6.12.0
 maintainers:
 - name: 2gis
   url: https://github.com/2gis
