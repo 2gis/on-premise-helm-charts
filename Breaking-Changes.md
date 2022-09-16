@@ -1,8 +1,9 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [1.3.1]
+## [1.3.3]
 
 #### catalog-api
+- Rename value db to api.db
 - Rename `podDisruptionBudget` to `pdb`
 - For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 

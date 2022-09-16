@@ -43,11 +43,11 @@ pdb:
 # @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate.
 
 dgctlStorage:
-  host: ""
-  bucket: ""
-  accessKey: ""
-  secretKey: ""
-  manifest: ""
+  host: ''
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+  manifest: ''
 
 
 # @section API settings
@@ -65,8 +65,8 @@ api:
   # @param api.image.pullPolicy Pull Policy
 
   image:
-    repository: "2gis-on-premise/catalog-api"
-    tag: "3.567.0"
+    repository: 2gis-on-premise/catalog-api
+    tag: 3.573.0
     pullPolicy: IfNotPresent
 
 
@@ -198,8 +198,8 @@ importer:
   initialDelaySeconds: 1
 
   image:
-    repository: "2gis-on-premise/catalog-importer"
-    tag: "1.0.0"
+    repository: 2gis-on-premise/catalog-importer
+    tag: 1.0.3
     pullPolicy: IfNotPresent
 
   # @extra importer.db **Database settings**
@@ -227,7 +227,7 @@ importer:
   persistentVolume:
     enabled: false
     accessModes:
-      - ReadWriteOnce
+    - ReadWriteOnce
     storageClass: topolvm-ext4
     size: 50Gi
 
