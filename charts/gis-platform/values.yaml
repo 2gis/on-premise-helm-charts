@@ -241,6 +241,9 @@ portal:
 
 # @param zookeeper.replicaCount A replica count for the pod.
 # @param zookeeper.persistence.enabled If Kubernetes persistence volume should be enabled for ZooKeeper.
+# @extra zookeeper.pdb **Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings**
+# @param zookeeper.pdb.create If PDB is enabled for the service.
+# @param zookeeper.pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
 zookeeper:
   replicaCount: 3
