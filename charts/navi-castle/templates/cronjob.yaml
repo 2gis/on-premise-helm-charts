@@ -47,6 +47,7 @@ spec:
               - --config 
               - /opt/config_builder.conf
               - --service={{ $flavor }}
+              - --jobs={{ $.Values.castle.jobs | default 1 | int }}
               volumeMounts:
               - name: {{ include "castle.fullname" $ }}-builder-config
                 mountPath: /opt/config_builder.conf
