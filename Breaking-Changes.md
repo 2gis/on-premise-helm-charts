@@ -9,6 +9,10 @@
 #### keys
 - For the HPA section, switched from `autoscaling/v2beta2` to `autoscaling/v2`
 
+#### gis-platform
+- REMOVED `.Values.spcore.s3.preview_bucket`. Move its contents to `.Values.spcore.s3.bucket`
+- ADDED `.Values.spcore.s3.session_bucket`. Create it before updating
+
 #### mapgl-js-api
 - Rename `podDisruptionBudget` to `pdb`
 - For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`

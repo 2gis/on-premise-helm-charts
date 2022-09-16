@@ -104,14 +104,6 @@ spec:
               secretKeyRef:
                 name: {{ include "gis-platform.secret" . }}
                 key: db_connection_string
-          - name: SPCORE_s3Configuration__host
-            value: {{ .Values.spcore.s3.host | quote }}
-          - name: SPCORE_s3Configuration__region
-            value: {{ .Values.spcore.s3.region | quote }}
-          - name: SPCORE_s3Configuration__bucketName
-            value: {{ .Values.spcore.s3.bucket | quote }}
-          - name: SPCORE_s3Configuration__previewStorageBucketName
-            value: {{ .Values.spcore.s3.preview_bucket | quote }}
           - name: SPCORE_s3Configuration__accessKey
             valueFrom:
               secretKeyRef:

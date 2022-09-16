@@ -15,4 +15,4 @@ done
 
 envsubst < /app/SPCore.json.template > /app/SPCore.json
 
-/usr/bin/dotnet SPCore.App.Public.dll --updateDb=$UPDATE --resetCluster=$RESET --continue=true
+exec /usr/bin/dotnet SPCore.App.Public.dll --updateDb=$UPDATE --resetCluster=$RESET --continue=true

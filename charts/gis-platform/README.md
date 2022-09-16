@@ -46,9 +46,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | Name                         | Description                         | Value                                 |
 | ---------------------------- | ----------------------------------- | ------------------------------------- |
 | `spcore.image.repository`    | SPCore service image repository.    | `2gis-on-premise/gis_platform_spcore` |
-| `spcore.image.tag`           | SPCore service image tag.           | `2022-06-10`                          |
+| `spcore.image.tag`           | SPCore service image tag.           | `2022.9.15`                           |
 | `portal.image.repository`    | Portal service image repository.    | `2gis-on-premise/gis_platform_portal` |
-| `portal.image.tag`           | Portal service image tag.           | `2022-06-10`                          |
+| `portal.image.tag`           | Portal service image tag.           | `2022.9.15`                           |
 | `zookeeper.image.repository` | ZooKeeper service image repository. | `2gis-on-premise/zookeeper`           |
 | `zookeeper.image.tag`        | ZooKeeper service image tag.        | `3.7.0-debian-10-r265`                |
 
@@ -76,7 +76,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | `spcore.s3.host`                            | S3 endpoint. Format: `host:port`.                                                         | `s3.host`                  |
 | `spcore.s3.region`                          | S3 region.                                                                                | `US`                       |
 | `spcore.s3.bucket`                          | S3 bucket name.                                                                           | `spstatic`                 |
-| `spcore.s3.preview_bucket`                  | S3 bucket name for preview.                                                               | `sppreview`                |
+| `spcore.s3.session_bucket`                  | S3 bucket name for temporary session files.                                               | `spsession`                |
 | `spcore.pg`                                 | **Database access settings.**                                                             |                            |
 | `spcore.pg.host`                            | PostgreSQL host.                                                                          | `postgres.host`            |
 | `spcore.pg.port`                            | PostgreSQL port.                                                                          | `5432`                     |

@@ -4,6 +4,7 @@
   "maximumActiveRequests": 20,
   "pluginsPath": "plugins",
   "silentlyApplyMigrations": true,
+  "RequireUniqueEmail": true,
   "maxRenderTargets": {{- .Values.spcore.maxRenderTargets }},
   "staticPath": "/app/static",
   "previewStaticPath": "/app/static",
@@ -29,6 +30,13 @@
          "SuggestUrl": "${GIS_PLATFORM_CATALOG_URL}/3.0/suggests",
          "key": "${GIS_PLATFORM_CATALOG_KEY}"
        }
+  },
+  "s3Configuration": {
+    "host": "{{ .Values.spcore.s3.host }}",
+    "region": "{{ .Values.spcore.s3.region }}",
+    "bucketName": "{{ .Values.spcore.s3.bucket }}",
+    "sessionStorageBucketName": "{{ .Values.spcore.s3.session_bucket }}",
+    "provider": "aws"
   },
   "DefaultLimits": {
     "Tables": {{ .Values.spcore.defaultLimits.tables | int | quote }},

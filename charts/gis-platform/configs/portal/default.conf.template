@@ -71,6 +71,15 @@ server {
         alias /app/client/static/map/;
     }
 
+    location /shared/ {
+        alias /app/client/;
+        try_files $uri /map/index.html;
+    }
+
+    location /static/shared/ {
+        alias /app/client/static/map/;
+    }
+
     location /sp {
         return 302 $scheme://$http_host/sp/;
     }
