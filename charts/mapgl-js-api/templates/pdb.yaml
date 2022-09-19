@@ -9,9 +9,9 @@ apiVersion: policy/v1beta1
 {{- end }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "mapgl.fullname" . }}
+  name: {{ include "mapgl.fullname" $ }}
   labels:
-    {{- include "mapgl.labels" . | nindent 4 }}
+    {{- include "mapgl.labels" $ | nindent 4 }}
 spec:
   {{- if .minAvailable }}
   minAvailable: {{ .minAvailable }}
@@ -21,6 +21,6 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "mapgl.selectorLabels" . | nindent 6 }}
+      {{- include "mapgl.selectorLabels" $ | nindent 6 }}
 {{- end }}
 {{- end }}
