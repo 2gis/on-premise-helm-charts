@@ -46,9 +46,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | Name                         | Description                         | Value                                 |
 | ---------------------------- | ----------------------------------- | ------------------------------------- |
 | `spcore.image.repository`    | SPCore service image repository.    | `2gis-on-premise/gis_platform_spcore` |
-| `spcore.image.tag`           | SPCore service image tag.           | `2022.9.15`                           |
+| `spcore.image.tag`           | SPCore service image tag.           | `2022.9.29`                           |
 | `portal.image.repository`    | Portal service image repository.    | `2gis-on-premise/gis_platform_portal` |
-| `portal.image.tag`           | Portal service image tag.           | `2022.9.15`                           |
+| `portal.image.tag`           | Portal service image tag.           | `2022.9.29`                           |
 | `zookeeper.image.repository` | ZooKeeper service image repository. | `2gis-on-premise/zookeeper`           |
 | `zookeeper.image.tag`        | ZooKeeper service image tag.        | `3.7.0-debian-10-r265`                |
 
