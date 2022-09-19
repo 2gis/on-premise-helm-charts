@@ -222,6 +222,7 @@
       },
       "options": {
         "content": "layers",
+        "recommendedLayers": false,
         "allowDevView": true,
         "defaultLayersCondition": {
           "group": "public",
