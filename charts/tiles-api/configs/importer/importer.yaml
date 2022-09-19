@@ -21,7 +21,7 @@ cassandra:
 
   keyspaces:
     - tileset: {{ .Values.type }}
-      keyspace: dgis_tileserver_{{ .Values.type }}_{{ required "Valid .Values.cassandra.environment required" .Values.cassandra.environment }}_{{ include "tiles.manifestCode" . }}
+      keyspace: {{ include "tiles.keyspace" . }}
       default: true
       partition-size: 4
 

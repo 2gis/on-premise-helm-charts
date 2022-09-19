@@ -1,4 +1,4 @@
-{{- if .Values.importer.cleaner.enabled }}
+{{- if and .Values.importer.cleaner.enabled (not .Values.cassandra.keyspace) }}
 ---
 
 apiVersion: batch/v1
