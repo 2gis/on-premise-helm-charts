@@ -3,14 +3,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "search_api.fullname" . }}
+  name: {{ include "search_api.fullname" $ }}
   labels:
-    {{- include "search_api.labels" . | nindent 4 }}
+    {{- include "search_api.labels" $ | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "search_api.fullname" . }}
+    name: {{ include "search_api.fullname" $ }}
   minReplicas: {{ .minReplicas }}
   maxReplicas: {{ .maxReplicas }}
   behavior:

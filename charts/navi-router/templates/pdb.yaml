@@ -4,9 +4,9 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "router.fullname" . }}
+  name: {{ include "router.fullname" $ }}
   labels:
-    {{- include "router.labels" . | nindent 4 }}
+    {{- include "router.labels" $ | nindent 4 }}
 spec:
   {{- if .minAvailable }}
   minAvailable: {{ .minAvailable }}
@@ -15,6 +15,6 @@ spec:
   maxUnavailable: {{ .maxUnavailable }}
   {{- end }}
   selector:
-    matchLabels: {{- include "router.selectorLabels" . | nindent 6 }}
+    matchLabels: {{- include "router.selectorLabels" $ | nindent 6 }}
 {{- end }}
 {{- end }}

@@ -4,9 +4,9 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "naviback.fullname" . }}
+  name: {{ include "naviback.fullname" $ }}
   labels:
-    {{- include "naviback.labels" . | nindent 4 }}
+    {{- include "naviback.labels" $ | nindent 4 }}
 spec:
   {{- if .minAvailable }}
   minAvailable: {{ .minAvailable }}
@@ -16,6 +16,6 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      app: {{- include "naviback.selectorLabels" . | nindent 4 }}
+      app: {{- include "naviback.selectorLabels" $ | nindent 4 }}
 {{- end }}
 {{- end }}
