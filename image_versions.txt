@@ -28,9 +28,6 @@ navi-router
 search-api
 	search-api:7.33.0
 	search-nginx:1.21.6
-stat-receiver
-	bss-receiver-api:1.1.4
-	bss-receiver-streams:1.1.4
 tiles-api
 	tiles-api-importer:v4.25.0
 	tiles-api-proxy:v4.25.0
