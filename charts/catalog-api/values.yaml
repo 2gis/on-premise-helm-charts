@@ -198,8 +198,8 @@ importer:
   initialDelaySeconds: 1
 
   image:
-    repository: "2gis-on-premise/catalog-importer"
-    tag: "1.0.0"
+    repository: 2gis-on-premise/catalog-importer
+    tag: 1.0.4
     pullPolicy: IfNotPresent
 
   # @extra importer.db **Database settings**
@@ -209,6 +209,7 @@ importer:
   # @param importer.db.name PostgreSQL database name.
   # @param importer.db.username PostgreSQL username with rw access.
   # @param importer.db.password PostgreSQL password.
+  # @param importer.db.schemaSwitchEnabled Automatic switch PostgreSQL schema on releases.
 
   db:
     host: postgres.host
@@ -216,6 +217,7 @@ importer:
     name: catalog
     username: postgres
     password: secret
+    schemaSwitchEnabled: true
 
   # @extra importer.persistentVolume **Persistent Volume settings**
 
