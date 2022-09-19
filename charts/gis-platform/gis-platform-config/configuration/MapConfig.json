@@ -289,6 +289,7 @@
     "feedbackForm": false,
     "uniqueClassesLimit": 300,
     "labelInsidePosition": true,
-    "scaleSegmentation": false
+    "scaleSegmentation": false,
+    "shareSocials": []
   }
 }
