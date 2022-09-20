@@ -430,7 +430,9 @@ data:
               "ratio": 1000,
               "class": 5
             }
-          ]
+          ],
+          "dm_sources_limit": {{ .Values.mosesd.dm_sources_limit | int }},
+          "dm_targets_limit": {{ .Values.mosesd.dm_targets_limit | int }}
         }
       }
     }
