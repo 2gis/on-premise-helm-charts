@@ -15,7 +15,7 @@ credentials:
 
 cassandra:
   name: local
-  timeout: 10s
+  timeout: 90s
   num-retries: 2
   reconnect-interval: 30s
 
