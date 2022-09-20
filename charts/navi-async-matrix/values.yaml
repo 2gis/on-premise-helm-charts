@@ -81,14 +81,7 @@ updateStrategy:
 # @param resources.limits.cpu A CPU limit.
 # @param resources.limits.memory A memory limit.
 
-resources:
-  limits:
-    cpu: 1000m
-    memory: 1Gi
-  requests:
-    cpu: 1000m
-    memory: 1Gi
-
+resources: {}
 
 # @section Service settings
 
@@ -243,9 +236,31 @@ kafka:
 # @param s3.bucket S3 bucket name.
 # @param s3.keyId S3 access key for accessing the bucket.
 # @param s3.key S3 secret key for accessing the bucket.
+# @param s3.publicNetloc Announce proxy URL for S3 results instead of s3.url if not empty.
 
 s3:
   url: https://async-matrix-s3.host
   bucket: samplebucket
   keyId: sampleid
   key: samplekey
+  publicNetloc:
+
+# @section Business statistics settings
+
+# @param bss.enabled If BSS enabled.
+# @param.url BSS URL to send statistics to.
+# @param.version BSS protocol version.
+
+bss:
+  enabled: false
+  url: "https://example.com"
+  version: "0.1"
+
+# @section API keys service
+
+# @param keys.endpoint API keys service URL.
+# @param keys.dm_key API key to authorize at the service.
+
+keys:
+  endpoint: https://keys-api.host
+  dm_key: samplekey

@@ -6,6 +6,9 @@ metadata:
     {{- include "naviback.labels" . | nindent 4 }}
     rule: {{ .Values.naviback.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
+  {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount }}

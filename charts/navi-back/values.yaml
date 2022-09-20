@@ -17,6 +17,7 @@ dgctlDockerRegistry: ''
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param labels Custom labels to set to Deployment resource.
 
 replicaCount: 1
 imagePullSecrets: []
@@ -28,6 +29,7 @@ securityContext: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
+labels: {}
 
 
 # @section Deployment settings
@@ -48,10 +50,77 @@ image:
 # @extra naviback.eca_host Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @extra naviback.forecast_host URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @skip naviback.app_port
+# @param naviback.dm_sources_limit Size limit for source matrices.
+# @param naviback.dm_targets_limit Size limit for target matrices.
+# @param naviback.handlers_number Number of HTTP handlers.
+# @param naviback.max_process_time Maximum processing time limit in minutes.
+# @param naviback.response_timelimit Maximum response time limit in minutes.
+# @param naviback.request_timeout Maximum request time limit in minutes.
+# @param naviback.dump_result Dump results in logs.
+# @param naviback.dump_query Dump queries in logs.
+# @param naviback.dump_answer Dump answers in logs.
+# @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
+# @param naviback.indices List of dynamic indices kill switches.
 # @skip rules
 
 naviback:
   app_port: 8080
+  dm_sources_limit: 25
+  dm_targets_limit: 25
+  handlers_number: 20
+  max_process_time: 20
+  response_timelimit: 60
+  request_timeout: 60
+  dump_result: true
+  dump_query: true
+  dump_answer: false
+  logLevel: Info
+  indices:
+    carOptions:
+      enabled: true
+    countryCarOptions:
+      enabled: true
+    ctxOptions:
+      enabled: true
+    entrances:
+      enabled: true
+    etaCorrectionCores:
+      enabled: true
+    forecastedSpeeds:
+      enabled: true
+    forecastedSpeedsIndex:
+      enabled: true
+    onlineSpeeds:
+      enabled: true
+    onlineTaxiSpeeds:
+      enabled: true
+    passZones:
+      enabled: true
+    projectCarOptions:
+      enabled: true
+    restrictedTransportPlatforms:
+      enabled: true
+    restrictedTransportRoutes:
+      enabled: true
+    smatrix:
+      enabled: true
+    speedCams:
+      enabled: true
+    speedIndex:
+      enabled: true
+    taxiReferers:
+      enabled: true
+    taxiSpeedIndex:
+      enabled: true
+    tugc2gis:
+      enabled: true
+    tugc2gisIndex:
+      enabled: true
+    tugcUsers:
+      enabled: true
+    tugcUsersIndex:
+      enabled: true
+
 rules: []
 
 

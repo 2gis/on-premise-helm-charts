@@ -102,11 +102,11 @@ spec:
             - '0.0.0.0'
             - '--port'
             - '{{ .Values.dm.port | int }}'
+            - '--workers'
+            - '{{ .Values.dm.workerCount | int }}'
           env:
             - name: CONFIG_TYPE
               value: {{ .Values.dm.configType | quote }}
-            - name: DM_ASYNC_SERVICE_WORKER_COUNT
-              value: {{ .Values.dm.workerCount | quote }}
             - name: DM_ASYNC_SERVICE_CITIES_SETTING__LINK_TO_CITIES_FILE
               value: {{ .Values.dm.citiesUrl | quote }}
             - name: DM_ASYNC_SERVICE_CITIES_SETTING__CITIES_INFO_UPDATE_PERIOD
@@ -119,6 +119,10 @@ spec:
               value: {{ .Values.s3.url | quote }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__S3_BUCKET
               value: {{ .Values.s3.bucket | quote }}
+            {{- if .Values.s3.publicNetloc }}
+            - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC
+              value: {{ .Values.s3.publicNetloc | quote }}
+            {{- end }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_TASK_TOPIC
               value: {{ .Values.kafka.consumerTaskTopic | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CANCEL_TOPIC
@@ -147,6 +151,14 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: DM_ASYNC_SERVICE_KMS__URL
+              value: {{ .Values.keys.endpoint | quote }}
+            {{- if .Values.bss.enabled }}
+            - name: DM_ASYNC_SERVICE_BSS__URL
+              value: {{ .Values.bss.url | quote }}
+            - name: DM_ASYNC_SERVICE_BSS__VERSION
+              value: {{ .Values.bss.version | quote }}
+            {{- end }}
             # sensitive data
             - name: DM_ASYNC_SERVICE_DB_DSN
               valueFrom:
@@ -168,3 +180,8 @@ spec:
                 secretKeyRef:
                   name: {{ include "navi-async-matrix.fullname" . | quote }}
                   key: kafkaPassword
+            - name: DM_ASYNC_SERVICE_KMS__DM_ASYNC_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  key: dmApiKey
