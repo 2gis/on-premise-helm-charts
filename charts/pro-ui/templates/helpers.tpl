@@ -27,4 +27,6 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.ui.logLevel }}"
 - name: IS_ON_PREM
   value: "{{ .Values.ui.isOnPremise }}"
+- name: HOME
+  value: "/tmp"
 {{- end }}
