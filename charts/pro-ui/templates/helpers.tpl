@@ -3,11 +3,11 @@
 {{- end }}
 
 {{- define "pro.ui.name" -}}
-{{ include "pro.name" . }}-ui
+{{ include "pro.name" . }}
 {{- end }}
 
 {{- define "pro.ui.selectorLabels" -}}
-app.kubernetes.io/name: {{ .Chart.Name }}-ui
+app.kubernetes.io/name: {{ .Chart.Name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
