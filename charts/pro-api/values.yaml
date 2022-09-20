@@ -105,7 +105,7 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 0.5.0
+  tag: 0.2.8
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -227,7 +227,7 @@ appAssetPreparerName: pro-asset-preparer
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 0.5.0
+  tag: 0.2.8
   schedule: '0 18 * * *'
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -259,7 +259,7 @@ assetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 0.5.0
+  tag: 0.2.8
   schedule: '0 16 * * 6'
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
