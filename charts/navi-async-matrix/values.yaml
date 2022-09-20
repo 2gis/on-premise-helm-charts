@@ -76,10 +76,11 @@ updateStrategy:
 
 # @section Limits
 
-# @param resources.requests.cpu A CPU request.
-# @param resources.requests.memory A memory request.
-# @param resources.limits.cpu A CPU limit.
-# @param resources.limits.memory A memory limit.
+# @skip resources
+# @extra resources.requests.cpu A CPU request.
+# @extra resources.requests.memory A memory request.
+# @extra resources.limits.cpu A CPU limit.
+# @extra resources.limits.memory A memory limit.
 
 resources: {}
 
@@ -248,8 +249,8 @@ s3:
 # @section Business statistics settings
 
 # @param bss.enabled If BSS enabled.
-# @param.url BSS URL to send statistics to.
-# @param.version BSS protocol version.
+# @param bss.url BSS URL to send statistics to.
+# @param bss.version BSS protocol version.
 
 bss:
   enabled: false

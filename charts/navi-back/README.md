@@ -41,6 +41,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `nodeSelector`       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
 | `tolerations`        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
 | `affinity`           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
+| `labels`             | Custom labels to set to Deployment resource.                                                                                | `{}`  |
 
 
 ### Deployment settings
@@ -48,17 +49,28 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `6.10.1`                    |
+| `image.tag`        | Tag         | `6.12.0`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 
 ### Navi-Back application settings
 
-| Name                       | Description                                                                                                                                                                                               | Value |
-| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `naviback.app_castle_host` | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.                                                                                          |       |
-| `naviback.eca_host`        | Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.                       |       |
-| `naviback.forecast_host`   | URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster. |       |
+| Name                          | Description                                                                                                                                                                                               | Value   |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `naviback.app_castle_host`    | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.                                                                                          |         |
+| `naviback.eca_host`           | Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.                       |         |
+| `naviback.forecast_host`      | URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster. |         |
+| `naviback.dm_sources_limit`   | Size limit for source matrices.                                                                                                                                                                           | `25`    |
+| `naviback.dm_targets_limit`   | Size limit for target matrices.                                                                                                                                                                           | `25`    |
+| `naviback.handlers_number`    | Number of HTTP handlers.                                                                                                                                                                                  | `20`    |
+| `naviback.max_process_time`   | Maximum processing time limit in minutes.                                                                                                                                                                 | `20`    |
+| `naviback.response_timelimit` | Maximum response time limit in minutes.                                                                                                                                                                   | `60`    |
+| `naviback.request_timeout`    | Maximum request time limit in minutes.                                                                                                                                                                    | `60`    |
+| `naviback.dump_result`        | Dump results in logs.                                                                                                                                                                                     | `true`  |
+| `naviback.dump_query`         | Dump queries in logs.                                                                                                                                                                                     | `true`  |
+| `naviback.dump_answer`        | Dump answers in logs.                                                                                                                                                                                     | `false` |
+| `naviback.logLevel`           | Logging level, one of: Verbose, Info, Warning, Error, Fatal.                                                                                                                                              | `Info`  |
+| `naviback.indices`            | List of dynamic indices kill switches.                                                                                                                                                                    |         |
 
 
 ### Service account settings

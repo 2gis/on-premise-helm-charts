@@ -60,7 +60,29 @@ image:
 # @param naviback.dump_query Dump queries in logs.
 # @param naviback.dump_answer Dump answers in logs.
 # @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
-# @param naviback.indices List of dynamic indices kill switches.
+# @extra naviback.indices List of dynamic indices kill switches.
+# @skip naviback.indices.carOptions.enabled
+# @skip naviback.indices.countryCarOptions.enabled
+# @skip naviback.indices.ctxOptions.enabled
+# @skip naviback.indices.entrances.enabled
+# @skip naviback.indices.etaCorrectionCores.enabled
+# @skip naviback.indices.forecastedSpeeds.enabled
+# @skip naviback.indices.forecastedSpeedsIndex.enabled
+# @skip naviback.indices.onlineSpeeds.enabled
+# @skip naviback.indices.onlineTaxiSpeeds.enabled
+# @skip naviback.indices.passZones.enabled
+# @skip naviback.indices.projectCarOptions.enabled
+# @skip naviback.indices.restrictedTransportPlatforms.enabled
+# @skip naviback.indices.restrictedTransportRoutes.enabled
+# @skip naviback.indices.smatrix.enabled
+# @skip naviback.indices.speedCams.enabled
+# @skip naviback.indices.speedIndex.enabled
+# @skip naviback.indices.taxiReferers.enabled
+# @skip naviback.indices.taxiSpeedIndex.enabled
+# @skip naviback.indices.tugc2gis.enabled
+# @skip naviback.indices.tugc2gisIndex.enabled
+# @skip naviback.indices.tugcUsers.enabled
+# @skip naviback.indices.tugcUsersIndex.enabled
 # @skip rules
 
 naviback:
