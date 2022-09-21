@@ -31,7 +31,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "catalog.manifestCode" -}}
+{{- if .Values.importer.db.schemaSwitchEnabled }}
 {{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- else -}}
+onprem
+{{- end }}
 {{- end }}
 
 
@@ -143,6 +147,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "catalog.env.importer" -}}
 - name: IMPORTER_DB_CATALOG_SCHEMA
   value: "{{ include "catalog.manifestCode" . }}"
+- name: IMPORTER_DB_CATALOG_SCHEMA_SWITCH_ENABLED
+  value: "{{ .Values.importer.db.schemaSwitchEnabled }}"
 - name: IMPORTER_DB_CATALOG_HOST
   value: "{{ .Values.importer.db.host }}"
 - name: IMPORTER_DB_CATALOG_PORT

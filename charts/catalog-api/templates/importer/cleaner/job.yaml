@@ -1,4 +1,4 @@
-{{- if .Values.importer.cleaner.enabled }}
+{{- if .Values.importer.cleaner.enabled and .Values.importer.db.schemaSwitchEnabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
