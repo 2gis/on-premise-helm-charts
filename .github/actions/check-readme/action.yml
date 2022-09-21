@@ -1,0 +1,9 @@
+---
+
+name: "Check that readme files are up-to-date"
+Description: "Check that readme files are up-to-date"
+author: "2GIS"
+runs:
+  steps:
+    - run: "$GITHUB_ACTION_PATH/check-readme.sh"
+      shell: bash
