@@ -246,11 +246,9 @@ s3:
   key: samplekey
   publicNetloc:
 
-# @section Business statistics settings
-
-# @param bss.enabled If BSS enabled.
-# @param bss.url BSS URL to send statistics to.
-# @param bss.version BSS protocol version.
+# @skip bss.enabled
+# @skip bss.url
+# @skip bss.version
 
 bss:
   enabled: false

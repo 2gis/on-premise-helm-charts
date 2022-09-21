@@ -188,15 +188,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `s3.publicNetloc` | Announce proxy URL for S3 results instead of s3.url if not empty. | `nil`                          |
 
 
-### Business statistics settings
-
-| Name          | Description                    | Value                 |
-| ------------- | ------------------------------ | --------------------- |
-| `bss.enabled` | If BSS enabled.                | `false`               |
-| `bss.url`     | BSS URL to send statistics to. | `https://example.com` |
-| `bss.version` | BSS protocol version.          | `0.1`                 |
-
-
 ### API keys service
 
 | Name            | Description                          | Value                   |

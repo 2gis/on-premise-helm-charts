@@ -87,14 +87,14 @@ image:
 
 naviback:
   app_port: 8080
-  dm_sources_limit: 25
-  dm_targets_limit: 25
-  handlers_number: 20
-  max_process_time: 20
+  dm_sources_limit: 1000
+  dm_targets_limit: 1000
+  handlers_number: 1
+  max_process_time: 600
   response_timelimit: 60
   request_timeout: 60
-  dump_result: true
-  dump_query: true
+  dump_result: false
+  dump_query: false
   dump_answer: false
   logLevel: Info
   indices:
@@ -105,15 +105,15 @@ naviback:
     ctxOptions:
       enabled: true
     entrances:
-      enabled: true
+      enabled: false
     etaCorrectionCores:
-      enabled: true
+      enabled: false
     forecastedSpeeds:
-      enabled: true
+      enabled: false
     forecastedSpeedsIndex:
-      enabled: true
+      enabled: false
     onlineSpeeds:
-      enabled: true
+      enabled: false
     onlineTaxiSpeeds:
       enabled: true
     passZones:
@@ -125,23 +125,23 @@ naviback:
     restrictedTransportRoutes:
       enabled: true
     smatrix:
-      enabled: true
+      enabled: false
     speedCams:
-      enabled: true
+      enabled: false
     speedIndex:
-      enabled: true
+      enabled: false
     taxiReferers:
-      enabled: true
+      enabled: false
     taxiSpeedIndex:
       enabled: true
     tugc2gis:
-      enabled: true
+      enabled: false
     tugc2gisIndex:
-      enabled: true
+      enabled: false
     tugcUsers:
-      enabled: true
+      enabled: false
     tugcUsersIndex:
-      enabled: true
+      enabled: false
 
 rules: []
 

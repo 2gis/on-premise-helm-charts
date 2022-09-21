@@ -6,6 +6,9 @@
 - Resources limits are not set by default.
 - Mandatory dependency on API Keys service with a valid API key required.
 
+#### navi-back
+- Default values optimized for processing async-matrix.
+
 ## [1.3.3]
 
 #### catalog-api
