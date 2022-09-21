@@ -258,8 +258,8 @@ bss:
 # @section API keys service
 
 # @param keys.endpoint API keys service URL.
-# @param keys.dm_key API key to authorize at the service.
+# @param keys.dm_key API token to authorize at the service.
 
 keys:
-  endpoint: https://keys-api.host
+  endpoint: http://keys-api.host/service/v1/keys
   dm_key: samplekey
