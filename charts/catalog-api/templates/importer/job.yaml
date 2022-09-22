@@ -29,6 +29,7 @@ spec:
         - name: importer
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: [ "importer", "import" ]
           resources:
             {{- toYaml .Values.importer.resources | nindent 12 }}
           env:
