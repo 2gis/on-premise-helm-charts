@@ -10,7 +10,7 @@ data:
         "logger_name": "navi-back",
         "file_prefix": "../../../../",
         "enable_syslog": true,
-        "level": "Info",
+        "level": {{ .Values.naviback.logLevel | quote }},
         "disabled_tags_": [
           "http",
           "UploadData",
@@ -25,11 +25,11 @@ data:
       },
       "http": {
         "port": {{ .Values.naviback.app_port }},
-        "handlers_number": 20,
+        "handlers_number": {{ .Values.naviback.handlers_number }},
         "log_verbose": false,
-        "max_process_time": 20,
-        "response_timelimit": 60,
-        "request_timeout": 60,
+        "max_process_time": {{ .Values.naviback.max_process_time | default 20 | int }},
+        "response_timelimit": {{ .Values.naviback.response_timelimit | default 60 | int }},
+        "request_timeout": {{ .Values.naviback.request_timeout | default 60 | int }},
         "server": "0.0.0.0"
       },
       "context": {
@@ -68,6 +68,7 @@ data:
           }
         },
         {{- if ne .Values.naviback.type "ctx" }}
+        {{- if .Values.naviback.indices.speedIndex.enabled }}
         "speed_index" :
         {
             "update_period" : 20,
@@ -80,6 +81,8 @@ data:
                 "count": 60
             }
         },
+        {{- end }}{{- /* .Values.naviback.indices.speedIndex.enabled */}}
+        {{- if .Values.naviback.indices.forecastedSpeedsIndex.enabled }}
         "forecasted_speeds_index" :
         {
             "update_period" : 20,
@@ -92,6 +95,8 @@ data:
                 "count": 30
             }
         },
+        {{- end }}{{- /* .Values.naviback.indices.forecastedSpeedsIndex.enabled */}}
+        {{- if .Values.naviback.indices.forecastedSpeeds.enabled }}
         "forecasted_speeds" :
         {
             "update_period" : 0,
@@ -104,6 +109,8 @@ data:
                 "count": 30
             }
         },
+        {{- end }}{{- /* .Values.naviback.indices.forecastedSpeeds.enabled */}}
+        {{- if .Values.naviback.indices.etaCorrectionCores.enabled }}
         "eta_correction_cores" :
         {
             "update_period" : 0,
@@ -116,6 +123,8 @@ data:
                 "count": 60
             }
         },
+        {{- end }}{{- /* .Values.naviback.indices.etaCorrectionCores.enabled */}}
+        {{- if .Values.naviback.indices.taxiReferers.enabled }}
         "taxi_referers":
         {
             "update_period" : 3600,
@@ -128,7 +137,9 @@ data:
                 "count": 360
             }
         },
+        {{- end }}{{- /* .Values.naviback.indices.taxiReferers.enabled */}}
         {{- else }}
+        {{- if .Values.naviback.indices.restrictedTransportRoutes.enabled }}
         "restricted_transport_routes" :
         {
             "update_period" : 0,
@@ -141,6 +152,8 @@ data:
                "count": 10
             }
         },
+        {{- end }}{{- /* .Values.naviback.indices.restrictedTransportRoutes.enabled */}}
+        {{- if .Values.naviback.indices.restrictedTransportPlatforms.enabled }}
         "restricted_transport_platforms" :
         {
             "update_period" : 0,
@@ -153,7 +166,9 @@ data:
                 "count": 10
             }
         },
+        {{- end }}{{- /* .Values.naviback.indices.restrictedTransportPlatforms.enabled */}}
         {{- end }}
+        {{- if .Values.naviback.indices.ctxOptions.enabled }}
         "ctx_options": {
           "update_period": 0,
           "nodes": [
@@ -163,6 +178,8 @@ data:
             "count": 30
           }
         },
+        {{- end }}{{- /* .Values.naviback.indices.ctxOptions.enabled */}}
+        {{- if .Values.naviback.indices.carOptions.enabled }}
         "car_options": {
           "update_period": 0,
           "nodes": [
@@ -172,6 +189,8 @@ data:
             "count": 30
           }
         },
+        {{- end }}{{- /* .Values.naviback.indices.carOptions.enabled */}}
+        {{- if .Values.naviback.indices.countryCarOptions.enabled }}
         "country_car_options": {
           "update_period": 0,
           "nodes": [
@@ -181,6 +200,8 @@ data:
             "count": 30
           }
         },
+        {{- end }}{{- /* .Values.naviback.indices.countryCarOptions.enabled */}}
+        {{- if .Values.naviback.indices.projectCarOptions.enabled }}
         "project_car_options": {
           "update_period": 0,
           "nodes": [
@@ -190,6 +211,7 @@ data:
             "count": 30
           }
         },
+        {{- end }}{{- /* .Values.naviback.indices.projectCarOptions.enabled */}}
         "routing_resources": {
           "nodes": [
             "dir:///usr/share/2gis/moses2-routing-resources/"
@@ -216,6 +238,7 @@ data:
             "count": 30
           }
         },
+        {{- if .Values.naviback.indices.entrances.enabled }}
         "entrances": {
           "update_period": 0,
           "nodes": [
@@ -225,8 +248,10 @@ data:
             "count": 30
           }
         },
+        {{- end }}{{- /* .Values.naviback.indices.entrances.enabled */}}
         {{- if ne .Values.naviback.type "ctx" }}
 
+        {{- if .Values.naviback.indices.smatrix.enabled }}
         "smatrix": {
           "update_period": 0,
           "nodes": [
@@ -236,6 +261,8 @@ data:
             "count": 30
           }
         },
+        {{- end }}{{- /* .Values.naviback.indices.smatrix.enabled */}}
+        {{- if .Values.naviback.indices.speedCams.enabled }}
         "speed_cams": {
           "update_period": 0,
           "nodes": [
@@ -245,6 +272,8 @@ data:
             "count": 30
           }
         },
+        {{- end }}{{- /* .Values.naviback.indices.speedCams.enabled */}}
+        {{- if .Values.naviback.indices.tugcUsersIndex.enabled }}
         "tugc_users_index" :
         {
             "update_period" : 300,
@@ -257,6 +286,8 @@ data:
                 "count": 30
             }
         },
+        {{- end }}{{- /* .Values.naviback.indices.tugcUsersIndex.enabled */}}
+        {{- if .Values.naviback.indices.tugcUsers.enabled }}
         "tugc_users" :
         {
             "update_period" : 0,
@@ -269,6 +300,8 @@ data:
                 "count": 30
             }
         },
+        {{- end }}{{- /* .Values.naviback.indices.tugcUsers.enabled */}}
+        {{- if .Values.naviback.indices.tugc2gisIndex.enabled }}
         "tugc_2gis_index" :
         {
             "update_period" : 600,
@@ -281,6 +314,8 @@ data:
                 "count": 30
             }
         },
+        {{- end }}{{- /* .Values.naviback.indices.tugc2gisIndex.enabled */}}
+        {{- if .Values.naviback.indices.tugc2gis.enabled }}
         "tugc_2gis" :
         {
             "update_period" : 0,
@@ -293,6 +328,8 @@ data:
                 "count": 30
             }
         },
+        {{- end }}{{- /* .Values.naviback.indices.tugc2gis.enabled */}}
+        {{- if .Values.naviback.indices.onlineSpeeds.enabled }}
         "online_speeds" :
         {
             "update_period" : 0,
@@ -306,8 +343,10 @@ data:
                 "count": 30
             }
         },
+        {{- end }}{{- /* .Values.naviback.indices.onlineSpeeds.enabled */}}
         {{- end }}
         {{- if eq .Values.naviback.type "taxi" }}
+        {{- if .Values.naviback.indices.taxiSpeedIndex.enabled }}
             "taxi_speed_index": {
                 "update_period": 20,
                 "nodes": [
@@ -317,6 +356,8 @@ data:
                 "count": 60
                 }
                 },
+        {{- end }}{{- /* .Values.naviback.indices.taxiSpeedIndex.enabled */}}
+        {{- if .Values.naviback.indices.onlineTaxiSpeeds.enabled }}
                 "online_taxi_speeds" :
                 {
                   "update_period" : 0,
@@ -330,8 +371,10 @@ data:
                     "count": 60
                   }
                 },
+        {{- end }}{{- /* .Values.naviback.indices.onlineTaxiSpeeds.enabled */}}
         {{- end }}
         {{- if eq .Values.naviback.type "truck" }}
+        {{- if .Values.naviback.indices.passZones.enabled }}
             "pass_zones":
               {
                 "update_period": 0,
@@ -344,6 +387,7 @@ data:
                   "count": 60
                 }
               },
+        {{- end }}{{- /* .Values.naviback.indices.passZones.enabled */}}
         {{- end }}
         {{- if .Values.s3.enabled }}
           "s3": {
@@ -401,9 +445,9 @@ data:
           "carrouting_page_cache_size" : 8192,
           "carrouting_tile_cache_size" : 8192,
           "carrouting_bit_tile_cache_size" : 2048,
-          "dump_query" : true,
-          "dump_result" : true,
-          "dump_answer" : true,
+          "dump_query" : {{ mustToJson .Values.naviback.dump_query }},
+          "dump_result" : {{ mustToJson .Values.naviback.dump_result }},
+          "dump_answer" : {{ mustToJson .Values.naviback.dump_answer }},
           "use_memory_mapped_vfs" : true,
           "engine_update_period_sec" : 30,
           "reduce_edges_optimization_flag" : false,
@@ -430,7 +474,9 @@ data:
               "ratio": 1000,
               "class": 5
             }
-          ]
+          ],
+          "dm_sources_limit": {{ .Values.naviback.dm_sources_limit | int }},
+          "dm_targets_limit": {{ .Values.naviback.dm_targets_limit | int }}
         }
       }
     }

@@ -76,12 +76,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Limits
 
-| Name                        | Description       | Value   |
-| --------------------------- | ----------------- | ------- |
-| `resources.requests.cpu`    | A CPU request.    | `1000m` |
-| `resources.requests.memory` | A memory request. | `1Gi`   |
-| `resources.limits.cpu`      | A CPU limit.      | `1000m` |
-| `resources.limits.memory`   | A memory limit.   | `1Gi`   |
+| Name                        | Description       | Value |
+| --------------------------- | ----------------- | ----- |
+| `resources.requests.cpu`    | A CPU request.    |       |
+| `resources.requests.memory` | A memory request. |       |
+| `resources.limits.cpu`      | A CPU limit.      |       |
+| `resources.limits.memory`   | A memory limit.   |       |
 
 
 ### Service settings
@@ -179,12 +179,21 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### S3-compatible storage settings
 
-| Name        | Description                             | Value                          |
-| ----------- | --------------------------------------- | ------------------------------ |
-| `s3.url`    | S3 endpoint URL.                        | `https://async-matrix-s3.host` |
-| `s3.bucket` | S3 bucket name.                         | `samplebucket`                 |
-| `s3.keyId`  | S3 access key for accessing the bucket. | `sampleid`                     |
-| `s3.key`    | S3 secret key for accessing the bucket. | `samplekey`                    |
+| Name              | Description                                                       | Value                          |
+| ----------------- | ----------------------------------------------------------------- | ------------------------------ |
+| `s3.url`          | S3 endpoint URL.                                                  | `https://async-matrix-s3.host` |
+| `s3.bucket`       | S3 bucket name.                                                   | `samplebucket`                 |
+| `s3.keyId`        | S3 access key for accessing the bucket.                           | `sampleid`                     |
+| `s3.key`          | S3 secret key for accessing the bucket.                           | `samplekey`                    |
+| `s3.publicNetloc` | Announce proxy URL for S3 results instead of s3.url if not empty. | `nil`                          |
+
+
+### API keys service
+
+| Name            | Description                          | Value                   |
+| --------------- | ------------------------------------ | ----------------------- |
+| `keys.endpoint` | API keys service URL.                | `https://keys-api.host` |
+| `keys.dm_key`   | API key to authorize at the service. | `samplekey`             |
 
 
 ## Maintainers
