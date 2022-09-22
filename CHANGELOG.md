@@ -1,5 +1,34 @@
 # 2GIS On-Premise Changelog
 
+## [1.4.1]
+#### [Breaking-Changes](Breaking-Changes.md#141)
+#### Images
+```
+catalog-api
+	- catalog-importer:1.0.3
+	+ catalog-importer:1.0.5
+navi-async-matrix
+	- navi-async-matrix:1.0.0
+	+ navi-async-matrix:1.1.0
+navi-castle
+	- navi-front:1.21-ad06a0e0
+	+ navi-front:1.23.1
+navi-front
+	- navi-front:1.21-ad06a0e0
+	+ navi-front:1.23.1
+navi-router
+	- navi-router:1.0.7-049fb4cc
+	+ navi-router:6.6.0
+tiles-api
+	- tiles-api-importer:v4.25.0
+	+ tiles-api-importer:4.26.0
+	- tiles-api-proxy:v4.25.0
+	+ tiles-api-proxy:4.26.0
+	- tiles-api:v4.25.0
+	+ tiles-api:4.26.0
+
+```
+
 ## [1.4.0]
 #### Images
 ```
