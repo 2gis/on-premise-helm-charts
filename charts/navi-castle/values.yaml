@@ -125,7 +125,7 @@ nginx:
   port: 8080
   image:
     repository: 2gis-on-premise/navi-front
-    tag: 1.21-ad06a0e0
+    tag: 1.23.1
 
 
 # @section Cron settings

@@ -1,6 +1,6 @@
 catalog-api
 	catalog-api:3.573.0
-	catalog-importer:1.0.3
+	catalog-importer:1.0.5
 gis-platform
 	gis_platform_portal:2022.9.15
 	gis_platform_spcore:2022.9.15
@@ -12,19 +12,19 @@ keys
 mapgl-js-api
 	mapgl:v1.30.1
 navi-async-matrix
-	navi-async-matrix:1.0.0
+	navi-async-matrix:1.1.0
 navi-back
 	navi-back:6.12.0
 navi-castle
 	navi-castle:1.0.6.1
-	navi-front:1.21-ad06a0e0
+	navi-front:1.23.1
 navi-front
-	navi-front:1.21-ad06a0e0
+	navi-front:1.23.1
 navi-restrictions
 	navi-restrictions-api:1.0.0
 	navi-restrictions-syncer:1.0.1
 navi-router
-	navi-router:1.0.7-049fb4cc
+	navi-router:6.6.0
 search-api
 	search-api:7.33.0
 	search-nginx:1.21.6
@@ -32,8 +32,8 @@ stat-receiver
 	bss-receiver-api:1.1.4
 	bss-receiver-streams:1.1.4
 tiles-api
-	tiles-api-importer:v4.25.0
-	tiles-api-proxy:v4.25.0
-	tiles-api:v4.25.0
+	tiles-api-importer:4.26.0
+	tiles-api-proxy:4.26.0
+	tiles-api:4.26.0
 traffic-proxy
 	nginx:1.21.6
