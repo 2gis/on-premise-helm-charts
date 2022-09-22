@@ -3,7 +3,7 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "front.fullname" . }}-pdb
+  name: {{ include "front.fullname" $ }}-pdb
   namespace: {{ .Release.Namespace }}
 spec:
   {{- if .minAvailable }}
@@ -13,6 +13,6 @@ spec:
   maxUnavailable: {{ .maxUnavailable }}
   {{- end }}
   selector:
-    matchLabels: {{ include "front.selectorLabels" .  | nindent 6 }}
+    matchLabels: {{ include "front.selectorLabels" $  | nindent 6 }}
 {{- end }}
 {{- end }}

@@ -37,6 +37,14 @@ helm.sh/chart: {{ include "tiles.chart" . | quote }}
 {{- end -}}
 {{- end -}}
 
+{{- define "tiles.keyspace" -}}
+{{- if $.Values.cassandra.keyspace }}
+{{- $.Values.cassandra.keyspace }}
+{{- else -}}
+dgis_tileserver_{{ .Values.type }}_{{ required "Valid .Values.cassandra.environment required" .Values.cassandra.environment }}_{{ include "tiles.manifestCode" . }}
+{{- end -}}
+{{- end -}}
+
 {{- define "importer.hook-annotations"}}
 "helm.sh/hook": pre-install,pre-upgrade
 {{- end}}

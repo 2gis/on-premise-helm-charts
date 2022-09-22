@@ -15,13 +15,13 @@ credentials:
 
 cassandra:
   name: local
-  timeout: 10s
+  timeout: 90s
   num-retries: 2
   reconnect-interval: 30s
 
   keyspaces:
     - tileset: {{ .Values.type }}
-      keyspace: dgis_tileserver_{{ .Values.type }}_{{ required "Valid .Values.cassandra.environment required" .Values.cassandra.environment }}_{{ include "tiles.manifestCode" . }}
+      keyspace: {{ include "tiles.keyspace" . }}
       default: true
       partition-size: 4
 

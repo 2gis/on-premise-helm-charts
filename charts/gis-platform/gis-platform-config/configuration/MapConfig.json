@@ -222,7 +222,16 @@
       },
       "options": {
         "content": "layers",
-        "allowDevView": true
+        "allowDevView": true,
+        "defaultLayersCondition": {
+          "group": "public",
+          "limit": 1000,
+          "filter": "favorite",
+          "orderByFields": [
+            "-changedDate"
+          ],
+          "geometryFilter": []
+        }
       },
       "priority": 1,
       "modulePath": "LayerList/LayerList",
@@ -256,10 +265,31 @@
       "layoutOptions": {
         "area": "portal"
       }
+    },
+    {
+      "name": "selection-control",
+      "priority": 2,
+      "modulePath": "MapControls/SelectionControls",
+      "layoutOptions": {
+        "area": "mainControls"
+      }
+    },
+    {
+      "name": "zoom-selection",
+      "priority": 3,
+      "modulePath": "MapControls/ZoomSelection",
+      "layoutOptions": {
+        "area": "mainControls"
+      }
     }
   ],
   "settings": {
     "help": false,
-    "gotoPortal": false
+    "gotoPortal": false,
+    "feedbackForm": false,
+    "uniqueClassesLimit": 300,
+    "labelInsidePosition": true,
+    "scaleSegmentation": false,
+    "shareSocials": []
   }
 }

@@ -104,15 +104,17 @@ resources: {}
 # @param castle.castle_data_path Path to the data directory.
 # @param castle.restrictions_api_url Restrictions API base URL.
 # @param castle.restrictions_api_key Restrictions API key.
+# @param castle.jobs Number of parallel downloading jobs.
 
 castle:
   image:
     repository: 2gis-on-premise/navi-castle
     pullPolicy: IfNotPresent
-    tag: 1.0.5
+    tag: 1.0.6.1
   castle_data_path: /opt/castle/data/
   restrictions_api_url: http://restrictions-api.host
   restrictions_api_key: key
+  jobs: 1
 
 
 # @section Navi-Front settings

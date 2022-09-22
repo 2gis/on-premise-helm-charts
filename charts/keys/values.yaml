@@ -22,7 +22,7 @@ imagePullPolicy: IfNotPresent
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.30.1
+    tag: 1.34.0
 
 
 # @section Admin service settings
@@ -30,7 +30,7 @@ backend:
 admin:
   image:
     repository: 2gis-on-premise/keys-ui
-    tag: 0.2.0
+    tag: 0.3.0
 
   # @param admin.replicas A replica count for the pod.
 

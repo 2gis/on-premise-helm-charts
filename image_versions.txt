@@ -1,24 +1,22 @@
-bss-receiver
-	bss-receiver-api-on-premise:0.8.3
-	bss-receiver-streams-on-premise:0.8.3
 catalog-api
-	catalog:3.567.0
+	catalog-api:3.573.0
+	catalog-importer:1.0.3
 gis-platform
-	gis_platform_portal:2022-06-10
-	gis_platform_spcore:2022-06-10
+	gis_platform_portal:2022.9.15
+	gis_platform_spcore:2022.9.15
 	zookeeper:3.7.0-debian-10-r265
 keys
-	keys-backend:1.30.1
+	keys-backend:1.34.0
 	keys-redis:6.2.6-alpine3.15
-	keys-ui:0.2.0
+	keys-ui:0.3.0
 mapgl-js-api
-	mapgl:v1.28.1
+	mapgl:v1.30.1
 navi-async-matrix
 	navi-async-matrix:1.0.0
 navi-back
-	navi-back:6.10.1
+	navi-back:6.12.0
 navi-castle
-	navi-castle:1.0.5
+	navi-castle:1.0.6.1
 	navi-front:1.21-ad06a0e0
 navi-front
 	navi-front:1.21-ad06a0e0
@@ -27,12 +25,15 @@ navi-restrictions
 	navi-restrictions-syncer:1.0.1
 navi-router
 	navi-router:1.0.7-049fb4cc
+search-api
+	search-api:7.33.0
+	search-nginx:1.21.6
+stat-receiver
+	bss-receiver-api:1.1.4
+	bss-receiver-streams:1.1.4
+tiles-api
+	tiles-api-importer:v4.25.0
+	tiles-api-proxy:v4.25.0
+	tiles-api:v4.25.0
 traffic-proxy
 	nginx:1.21.6
-search-api
-	search-api:7.25.0
-	search-nginx:1.21.6
-tiles-api
-	tiles-api-importer:v4.22.0
-	tiles-api-proxy:v4.22.0
-	tiles-api:v4.22.0
