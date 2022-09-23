@@ -108,3 +108,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
     ',"upstream_response_length":"$upstream_response_length"'
 '}';
 {{- end }}
+
+{{- define "gis-platform-spcore.run_args" -}}
+    {{- $reset     := default false .Values.spcore.reset_cluster   -}}
+    {{- $update_db := default true  .Values.spcore.update_db       -}}
+    {{- $continue  := default true  .Values.spcore.continue        -}}
+    {{- $sync      := default false .Values.spcore.sync_parameters -}}
+    {{-
+        printf "\"-%s%s%s%s\""
+            (ternary "r" "" $reset)
+            (ternary "u" "" $update_db)
+            (ternary "c" "" $continue)
+            (ternary "s" "" $sync)
+    -}}
+{{- end -}}
