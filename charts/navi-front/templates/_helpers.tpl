@@ -67,49 +67,87 @@ Create locations for rules upstreams
 {{- define "front.getLocations" -}}
 {{- $locations := list -}}
 {{- $ns := print .Release.Namespace -}}
+{{- $found := 0 }}
+{{- $navigroup_set := default "0" $.Values.navigroup }}
 {{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
-    {{- range $indexl, $label := $service.metadata.labels -}}
-        {{- if eq $indexl "rule" -}}
-            {{- $locations = append $locations $label -}}
-            {{- printf "location /%s {" $label }}
-            {{- printf "rewrite ^/%s(.*)$ $1 break;" $label }}
-            {{- printf "add_header X-Region %s;" $service.metadata.name }}
-            {{- printf "proxy_pass http://%s$uri$is_args$args;" $service.metadata.name }}
-            {{- println "}" }}
+    {{- if kindIs "map" $service.metadata.labels }}
+        {{- if eq $navigroup_set "0" }}
+                {{- if and (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-back") (eq (get $service.metadata.labels "navigroup") "") }}
+                {{- if ( ne (get $service.metadata.labels "rule") "") }}
+                    {{- $rule := get $service.metadata.labels "rule" }}
+                    {{- printf "location /%s {" $rule }}
+                    {{- printf "rewrite ^/%s(.*)$ $1 break;" $rule }}
+                    {{- printf "add_header X-Region %s;" $service.metadata.name }}
+                    {{- printf "proxy_pass http://%s$uri$is_args$args;" $service.metadata.name }}
+                    {{- println "}" }}
+                {{- end }}
+                {{- end }}
+        {{- else }}
+            {{- if and (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-back") (eq (get $service.metadata.labels "navigroup") $.Values.navigroup ) }}
+                {{- if ( ne (get $service.metadata.labels "rule") "") }}
+                    {{- $rule := get $service.metadata.labels "rule" }}
+                    {{- printf "location /%s {" $rule }}
+                    {{- printf "rewrite ^/%s(.*)$ $1 break;" $rule }}
+                    {{- printf "add_header X-Region %s;" $service.metadata.name }}
+                    {{- printf "proxy_pass http://%s$uri$is_args$args;" $service.metadata.name }}
+                    {{- println "}" }}
+                {{- end }}
+            {{- end }}
         {{- end }}
     {{- end }}
 {{- end }}
 {{- end }}
 
 {{/*
-Create upstreams for running moses in the namespace
+Create upstreams for running navi-back in the namespace
 */}}
 {{- define "front.getUpstreams" -}}
 {{- $locations := list -}}
+{{- $location := "mosesd" -}}
 {{- $ns := print .Release.Namespace }}
+{{- $found := 0 }}
+{{- $navigroup_set := default "0" $.Values.navigroup }}
 {{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
-    {{- range $indexl, $label := $service.metadata.labels -}}
-        {{- if eq $indexl "rule" -}}
-            {{- $locations = append $locations $label -}}
-            {{- printf "upstream %s {" $service.metadata.name }}
-            {{- printf "server %s;" $service.metadata.name }}
-            {{- println "}" }}
+    {{- if kindIs "map" $service.metadata.labels }}
+        {{- if eq $navigroup_set "0" }}
+                {{- if and (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-back") (eq (get $service.metadata.labels "navigroup") "") }}
+                    {{- $location = $service.metadata.name -}}
+                    {{- printf "upstream %s {" $service.metadata.name }}
+                    {{- printf "server %s;" $service.metadata.name }}
+                    {{- println "}" }}
+                {{- end }}
+        {{- else }}
+            {{- if and (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-back") (eq (get $service.metadata.labels "navigroup") $.Values.navigroup ) }}
+                {{- $location = $service.metadata.name -}}
+                {{- printf "upstream %s {" $service.metadata.name }}
+                {{- printf "server %s;" $service.metadata.name }}
+                {{- println "}" }}
+            {{- end }}
         {{- end }}
     {{- end }}
 {{- end }}
 {{- end }}
 
 {{/*
-Create upstreams for running moses in the namespace
+Create upstream of running navi-router in the namespace
 */}}
 {{- define "front.getMrouterUpstream" -}}
 {{- $location := "navi-router" -}}
 {{- $ns := print .Release.Namespace -}}
+{{- $found := 0 }}
+{{- $navigroup_set := default "0" $.Values.navigroup }}
 {{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
-    {{- range $indexl, $label := $service.metadata.labels -}}
-        {{- if and (eq $indexl "app.kubernetes.io/name") (eq $label "navi-router")  -}}
-            {{- $location = $service.metadata.name -}}
-            {{- print $location -}}
+    {{- if kindIs "map" $service.metadata.labels }}
+        {{- if eq $navigroup_set "0" }}
+                {{- if and (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-router") (eq (get $service.metadata.labels "navigroup") "") }}
+                    {{- $location = $service.metadata.name -}}
+                    {{- print $location -}}
+                {{- end }}
+        {{- else }}
+            {{- if and (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-router") (eq (get $service.metadata.labels "navigroup") $.Values.navigroup ) }}
+                {{- $location = $service.metadata.name -}}
+                {{- print $location -}}
+            {{- end }}
         {{- end }}
     {{- end }}
 {{- end }}

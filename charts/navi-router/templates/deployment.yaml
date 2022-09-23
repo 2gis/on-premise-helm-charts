@@ -4,6 +4,7 @@ metadata:
   name: {{ include "router.fullname" . }}
   labels:
     {{- include "router.labels" . | nindent 4 }}
+    navigroup: {{ .Values.navigroup | default "" | quote }}
 spec:
   {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount }}
