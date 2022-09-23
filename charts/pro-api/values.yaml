@@ -130,7 +130,6 @@ s3:
 # @section 2GIS PRO API configuration
 
 # @param api.tempPath Path to directory used for temp data
-# @param api.host pro-api host address
 # @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
 # @skip api.diggerPassword
 # @skip api.diggerUserName
@@ -141,7 +140,6 @@ s3:
 
 api:
   tempPath: /tmp
-  host: ''
   diggerPassword: ''
   diggerUserName: ''
   allowAnyOrigin: false
@@ -158,8 +156,8 @@ auth:
 
 # @section PostgreSQL settings
 
-# @param postgres.connectionString Connection string to the PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;Pwd={0};`
-# @param postgres.connectionStringReadonly Connection string to the readonly node of PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;Pwd={0};`
+# @param postgres.connectionString Connection string to the PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;`
+# @param postgres.connectionStringReadonly Connection string to the readonly node of PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;`
 # @param postgres.password User password to connect to the PostgreSQL database.
 
 postgres:
@@ -169,7 +167,7 @@ postgres:
 
 # @section Keys Service settings
 
-# @param keys.url API URL of service for managing partners' keys to 2GIS services (keys.api).
+# @param keys.host API URL of service for managing partners' keys to 2GIS services (keys.api).
 # @param keys.token keys.api access token.
 
 keys:

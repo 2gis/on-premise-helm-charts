@@ -77,7 +77,7 @@
 | Name               | Description | Value                     |
 | ------------------ | ----------- | ------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/pro-api` |
-| `image.tag`        | Tag         | `0.5.0`                   |
+| `image.tag`        | Tag         | `0.2.8`                   |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
 
@@ -99,16 +99,24 @@
 | Name                 | Description                                                          | Value   |
 | -------------------- | -------------------------------------------------------------------- | ------- |
 | `api.tempPath`       | Path to directory used for temp data                                 | `/tmp`  |
-| `api.host`           | pro-api host address                                                 | `""`    |
 | `api.allowAnyOrigin` | Cors policy: allow any origin to perform requests to pro-api service | `false` |
 
 
 ### PostgreSQL settings
 
-| Name                        | Description                                                                                                       | Value |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
-| `postgres.connectionString` | Connection string to the PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;Pwd={0};` | `""`  |
-| `postgres.password`         | User password to connect to the PostgreSQL database.                                                              | `""`  |
+| Name                                | Description                                                                                                                | Value |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `postgres.connectionString`         | Connection string to the PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;`                  | `""`  |
+| `postgres.connectionStringReadonly` | Connection string to the readonly node of PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;` | `""`  |
+| `postgres.password`                 | User password to connect to the PostgreSQL database.                                                                       | `""`  |
+
+
+### Keys Service settings
+
+| Name         | Description                                                                 | Value |
+| ------------ | --------------------------------------------------------------------------- | ----- |
+| `keys.host`  | API URL of service for managing partners' keys to 2GIS services (keys.api). | `""`  |
+| `keys.token` | keys.api access token.                                                      | `""`  |
 
 
 ### ElasticSearch settings
@@ -148,12 +156,13 @@
 | Name                                       | Description                                                                                                                                              | Value                          |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag                                                                                                                                         | `0.5.0`                        |
+| `assetImporter.tag`                        | Docker image tag                                                                                                                                         | `0.2.8`                        |
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
 | `assetImporter.serviceAccount`             | Kubernetes service account                                                                                                                               | `runner`                       |
 | `assetImporter.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                           | `4`                            |
+| `assetImporter.enabled`                    | If assetImporter is enabled for the service.                                                                                                             | `true`                         |
 
 
 ### Limits

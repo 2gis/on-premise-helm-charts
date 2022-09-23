@@ -67,7 +67,7 @@ spec:
                       name: {{ include "pro-api.name" . }}-secret
                 {{ end }}
                 - name: API_URL
-                  value: "{{ .Values.api.host }}"
+                  value: http://{{ include "pro-api.name" . }}
                 {{ if .Values.assetImporter.files }}
                 - name: FILES
                   value: "{{ .Values.assetImporter.files}}"

@@ -11,7 +11,7 @@ spec:
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "pro-api.fullname" . }}
+    name: {{ include "pro-api.name" . }}
   updatePolicy:
     updateMode: {{ .Values.vpa.updateMode }}
   resourcePolicy:

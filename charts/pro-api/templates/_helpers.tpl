@@ -1,20 +1,4 @@
 {{- define "pro-api.name" -}}
-{{- default .Values.appName .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{- define "pro-api.asset-importer-name" -}}
-{{- default .Values.appAssetImporterName | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{- define "pro-api.user-asset-importer-name" -}}
-{{- default .Values.appUserAssetImporterName | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{- define "pro-api.asset-preparer-name" -}}
-{{- default .Values.appAssetPreparerName | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{- define "pro-api.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -24,6 +8,33 @@
 {{- else -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "pro-api.asset-importer-name" -}}
+{{- $name := default .Values.appAssetImporterName -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "pro-api.user-asset-importer-name" -}}
+{{- $name := default .Values.appUserAssetImporterName -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "pro-api.asset-preparer-name" -}}
+{{- $name := default .Values.appAssetPreparerName -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
