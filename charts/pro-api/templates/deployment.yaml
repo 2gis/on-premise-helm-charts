@@ -178,3 +178,10 @@ spec:
               value: "{{ .Values.auth.host }}"
             - name: USE_MOCK_AUTH
               value: "{{ .Values.api.useMockAuth }}"
+            {{ if .Values.api.token }}
+            - name: SERVICE_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: apiServiceToken
+                  name: {{ include "pro-api.name" . }}-secret
+            {{ end }}

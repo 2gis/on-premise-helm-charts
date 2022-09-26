@@ -96,10 +96,11 @@
 
 ### 2GIS PRO API configuration
 
-| Name                 | Description                                                          | Value   |
-| -------------------- | -------------------------------------------------------------------- | ------- |
-| `api.tempPath`       | Path to directory used for temp data                                 | `/tmp`  |
-| `api.allowAnyOrigin` | Cors policy: allow any origin to perform requests to pro-api service | `false` |
+| Name                 | Description                                                          | Value    |
+| -------------------- | -------------------------------------------------------------------- | -------- |
+| `api.serviceAccount` | Kubernetes service account                                           | `runner` |
+| `api.tempPath`       | Path to directory used for temp data                                 | `/tmp`   |
+| `api.allowAnyOrigin` | Cors policy: allow any origin to perform requests to pro-api service | `false`  |
 
 
 ### PostgreSQL settings
@@ -160,7 +161,6 @@
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
-| `assetImporter.serviceAccount`             | Kubernetes service account                                                                                                                               | `runner`                       |
 | `assetImporter.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                           | `4`                            |
 | `assetImporter.enabled`                    | If assetImporter is enabled for the service.                                                                                                             | `true`                         |
 

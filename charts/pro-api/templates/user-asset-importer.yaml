@@ -15,7 +15,7 @@ spec:
           nodeSelector:
             role: worker
           restartPolicy: Never
-          serviceAccountName: {{ .Values.assetImporter.serviceAccount }}
+          serviceAccountName: {{ include "pro-api.service-account-name" . }}
           volumes:
             - name: temp-volume
               emptyDir: {}
@@ -66,6 +66,11 @@ spec:
                 {{ end }}
                 - name: API_URL
                   value: http://{{ include "pro-api.name" . }}
-                - name: CREATE_ASSET
-                  value: "true"
+                {{ if .Values.api.token }}
+                - name: API_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiServiceToken
+                      name: {{ include "pro-api.name" . }}-secret
+                {{ end }}
 {{ end }}

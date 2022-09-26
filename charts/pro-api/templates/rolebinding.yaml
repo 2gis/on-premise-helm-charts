@@ -1,11 +1,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ .Values.assetImporter.serviceAccount }}-binding
+  name: {{ include "pro-api.service-account-name" . }}-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ .Values.assetImporter.serviceAccount }}-role
+  name: {{ include "pro-api.service-account-name" . }}-role
 subjects:
   - kind: ServiceAccount
-    name: {{ .Values.assetImporter.serviceAccount }}
+    name: {{ include "pro-api.service-account-name" . }}

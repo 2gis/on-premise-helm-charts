@@ -129,6 +129,7 @@ s3:
 
 # @section 2GIS PRO API configuration
 
+# @param api.serviceAccount  Kubernetes service account
 # @param api.tempPath Path to directory used for temp data
 # @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
 # @skip api.diggerPassword
@@ -137,8 +138,10 @@ s3:
 # @skip api.debug
 # @skip api.env
 # @skip api.useMockAuth
+# @skip api.token
 
 api:
+  serviceAccount: runner
   tempPath: /tmp
   diggerPassword: ''
   diggerUserName: ''
@@ -147,6 +150,7 @@ api:
   debug: false
   env: ''
   useMockAuth: true
+  token: ''
 
 # @skip auth
 # @skip auth.host
@@ -218,7 +222,6 @@ appAssetPreparerName: pro-asset-preparer
 # @param assetImporter.schedule Import job schedule.
 # @param assetImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
 # @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
-# @param assetImporter.serviceAccount  Kubernetes service account
 # @param assetImporter.maxParallelJobs How many import jobs can be run simultaneously
 # @param assetImporter.enabled If assetImporter is enabled for the service.
 # @skip assetImporter.files
@@ -229,7 +232,6 @@ assetImporter:
   schedule: '0 18 * * *'
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
-  serviceAccount: runner
   resources:
     requests:
       cpu: 700m

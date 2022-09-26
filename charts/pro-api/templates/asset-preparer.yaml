@@ -63,6 +63,13 @@ spec:
                 {{ end }}
                 - name: API_URL
                   value: http://{{ include "pro-api.name" . }}
+                {{ if .Values.api.token }}
+                - name: API_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiServiceToken
+                      name: {{ include "pro-api.name" . }}-secret
+                {{ end }}
                 {{ if .Values.assetPreparer.files }}
                 - name: FILES
                   value: "{{ .Values.assetPreparer.files}}"
