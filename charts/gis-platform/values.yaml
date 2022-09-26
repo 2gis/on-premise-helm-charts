@@ -164,7 +164,7 @@ spcore:
   startupProbe:
     initialDelaySeconds: 5
     periodSeconds: 10
-    failureThreshold: 30
+    failureThreshold: 100
 
   # @extra spcore.readinessProbe **Readiness probe settings.**
   # @param spcore.readinessProbe.initialDelaySeconds Seconds before the first probe.

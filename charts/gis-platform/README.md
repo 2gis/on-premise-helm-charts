@@ -103,7 +103,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | `spcore.startupProbe`                       | **Startup probe settings.**                                                               |                            |
 | `spcore.startupProbe.initialDelaySeconds`   | Seconds before the first probe.                                                           | `5`                        |
 | `spcore.startupProbe.periodSeconds`         | Probing period.                                                                           | `10`                       |
-| `spcore.startupProbe.failureThreshold`      | Probing failure threshold.                                                                | `30`                       |
+| `spcore.startupProbe.failureThreshold`      | Probing failure threshold.                                                                | `100`                      |
 | `spcore.readinessProbe`                     | **Readiness probe settings.**                                                             |                            |
 | `spcore.readinessProbe.initialDelaySeconds` | Seconds before the first probe.                                                           | `5`                        |
 | `spcore.readinessProbe.periodSeconds`       | Probing period.                                                                           | `5`                        |
