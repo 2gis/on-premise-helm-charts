@@ -93,6 +93,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | `spcore.catalog`                            | **Catalog settings.**                                                                     |                            |
 | `spcore.catalog.url`                        | Catalog service URL.                                                                      | `https://catalog-api.host` |
 | `spcore.catalog.key`                        | Catalog access key.                                                                       | `""`                       |
+| `spcore.catalog.type`                       | Additional geocoder filter                                                                | `""`                       |
+| `spcore.catalog.regionId`                   | Additional geocoder filter                                                                | `""`                       |
 | `spcore.navi`                               | **Navi settings.**                                                                        |                            |
 | `spcore.navi.url`                           | Navi service URL.                                                                         | `https://catalog-api.host` |
 | `spcore.defaultLimits`                      | **Default limits.**                                                                       |                            |

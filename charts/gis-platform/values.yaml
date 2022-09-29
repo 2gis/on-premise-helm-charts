@@ -133,10 +133,14 @@ spcore:
   # @extra spcore.catalog **Catalog settings.**
   # @param spcore.catalog.url Catalog service URL.
   # @param spcore.catalog.key Catalog access key.
+  # @param spcore.catalog.type Additional geocoder filter
+  # @param spcore.catalog.regionId Additional geocoder filter
 
   catalog:
     url: https://catalog-api.host
     key: ''
+    type: ''
+    regionId: ''
 
   # @extra spcore.navi **Navi settings.**
   # @param spcore.navi.url Navi service URL.
