@@ -45,7 +45,7 @@ ui:
   # @skip ui.isOnPremise
 
   logLevel: error
-  isOnPremise: True
+  isOnPremise: "True"
 
   # @section 2GIS Pro API settings
 
