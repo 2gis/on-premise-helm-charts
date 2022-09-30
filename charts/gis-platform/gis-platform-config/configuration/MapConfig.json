@@ -222,6 +222,7 @@
       },
       "options": {
         "content": "layers",
+        "recommendedLayers": false,
         "allowDevView": true,
         "defaultLayersCondition": {
           "group": "public",
@@ -272,6 +273,14 @@
       "modulePath": "MapControls/SelectionControls",
       "layoutOptions": {
         "area": "mainControls"
+      }
+    },
+    {
+      "name": "snapping",
+      "priority": 5,
+      "modulePath": "MapControls/Snapping",
+      "layoutOptions": {
+        "area": "topControls"
       }
     },
     {

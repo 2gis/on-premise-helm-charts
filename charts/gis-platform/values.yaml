@@ -64,7 +64,7 @@ spcore:
 
   image:
     repository: 2gis-on-premise/gis_platform_spcore
-    tag: 2022.9.27
+    tag: 2022.9.29
 
   resources:
     requests:
@@ -133,10 +133,14 @@ spcore:
   # @extra spcore.catalog **Catalog settings.**
   # @param spcore.catalog.url Catalog service URL.
   # @param spcore.catalog.key Catalog access key.
+  # @param spcore.catalog.type Additional geocoder filter
+  # @param spcore.catalog.regionId Additional geocoder filter
 
   catalog:
     url: https://catalog-api.host
     key: ''
+    type: ''
+    regionId: ''
 
   # @extra spcore.navi **Navi settings.**
   # @param spcore.navi.url Navi service URL.
@@ -164,7 +168,7 @@ spcore:
   startupProbe:
     initialDelaySeconds: 5
     periodSeconds: 10
-    failureThreshold: 30
+    failureThreshold: 100
 
   # @extra spcore.readinessProbe **Readiness probe settings.**
   # @param spcore.readinessProbe.initialDelaySeconds Seconds before the first probe.
@@ -204,7 +208,7 @@ portal:
 
   image:
     repository: 2gis-on-premise/gis_platform_portal
-    tag: 2022.9.27
+    tag: 2022.9.29
 
   resources:
     requests:

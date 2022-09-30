@@ -40,11 +40,7 @@ spec:
       containers:
         - name: {{ include "gis-platform-spcore.fullname" . }}
           command: ["/spcore-entrypoint.sh"]
-          {{- if .Values.spcore.reset_cluster }}
-          args: ["-ru"]
-          {{- else if .Values.spcore.update_db }}
-          args: ["-u"]
-          {{- end }}
+          args: [{{ include "gis-platform-spcore.run_args" . }}]
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.spcore.image.repository }}:{{ .Values.spcore.image.tag }}
           startupProbe:
             httpGet:
