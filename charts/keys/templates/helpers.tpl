@@ -150,10 +150,24 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.redis" -}}
+{{- if .Values.redis.useExternalRedis }}
+- name: ZUUL_REDIS_HOST
+  value: "{{ include "keys.redis.host" . }}"
+- name: ZUUL_REDIS_DB
+  value: "{{ include "keys.redis.db" . }}"
+{{- else  }}
 - name: ZUUL_REDIS_HOST
   value: "{{ include "keys.redis.name" . }}"
+{{- end  }}
 - name: ZUUL_REDIS_PORT
   value: "{{ .Values.redis.port }}"
+{{- if .Values.redis.password }}
+- name: ZUUL_REDIS_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.deploys.name" . }}
+      key: redisPassword
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.auth" -}}

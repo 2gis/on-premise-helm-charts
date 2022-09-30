@@ -138,17 +138,20 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Redis settings
 
-| Name                   | Description                                                                                                                 | Value             |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `redis.port`           | HTTP port for Redis to listen.                                                                                              | `6379`            |
-| `redis.configPath`     | Configuration file for Redis.                                                                                               | `/opt/redis.conf` |
-| `redis.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`              |
-| `redis.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`              |
-| `redis.podAnnotations` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`              |
-| `redis.podLabels`      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`              |
-| `redis.nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`              |
-| `redis.affinity`       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`              |
-| `redis.tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`              |
+| Name                     | Description                                                                                                                 | Value             |
+| -------------------------| --------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `redis.port`             | HTTP port for Redis to listen.                                                                                              | `6379`            |
+| `redis.password`         | Password for use in Redis. Empty string means no auth.                                                                      | `""`              |
+| `redis.useExternalRedis` | If you want to use an external Redis.                                                                                       | `false`           |
+| `redis.host`             | Redis hostname. Only if use external Redis.                                                                                 | `redis`           |
+| `redis.db`               | Redis database number. Only if use external Redis.                                                                          | `1`               |
+| `redis.annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`              |
+| `redis.labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`              |
+| `redis.podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`              |
+| `redis.podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`              |
+| `redis.nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`              |
+| `redis.affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`              |
+| `redis.tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`              |
 
 
 ### Database access settings
