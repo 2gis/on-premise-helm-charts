@@ -64,7 +64,7 @@ spcore:
 
   image:
     repository: 2gis-on-premise/gis_platform_spcore
-    tag: 2022.9.15
+    tag: 2022.9.27
 
   resources:
     requests:
@@ -204,7 +204,7 @@ portal:
 
   image:
     repository: 2gis-on-premise/gis_platform_portal
-    tag: 2022.9.15
+    tag: 2022.9.27
 
   resources:
     requests:

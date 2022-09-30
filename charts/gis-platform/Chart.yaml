@@ -4,8 +4,8 @@ description: GIS Platform
 
 type: application
 
-version: 1.4.1
-appVersion: 2022.9.15
+version: 1.4.2
+appVersion: 2022.9.27
 
 dependencies:
 - name: zookeeper
