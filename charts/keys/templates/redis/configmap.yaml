@@ -7,6 +7,10 @@ data:
     # must be smaller than .Values.redis.resources.limits.memory
     maxmemory 262144000
 
+    {{- if .Values.redis.password }}
+    requirepass {{ .Values.redis.password }}
+    {{- end }}
+
     logfile ""
     databases 1
     timeout 600

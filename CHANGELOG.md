@@ -1,5 +1,12 @@
 # 2GIS On-Premise Changelog
 
+## [1.4.2]
+#### Images
+```
+no changes
+```
+
+## [1.3.3]
 ## [1.4.1]
 #### [Breaking-Changes](Breaking-Changes.md#141)
 #### Images
