@@ -39,7 +39,7 @@ affinity: {}
 image:
   repository: 2gis-on-premise/navi-front
   pullPolicy: IfNotPresent
-  tag: 1.23.1
+  tag: 1.21-ad06a0e0
 
 
 # @section Navi-Front service settings
