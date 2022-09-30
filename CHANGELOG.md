@@ -1,5 +1,24 @@
 # 2GIS On-Premise Changelog
 
+## [1.4.2]
+#### Images
+```
+catalog-api
+	- catalog-api:3.573.0
+	+ catalog-api:3.574.0
+	- catalog-importer:1.0.5
+	+ catalog-importer:1.0.7
+gis-platform
+	- gis_platform_portal:2022.9.15
+	+ gis_platform_portal:2022.9.27
+	- gis_platform_spcore:2022.9.15
+	+ gis_platform_spcore:2022.9.27
+mapgl-js-api
+	- mapgl:v1.30.1
+	+ mapgl:v1.30.2
+
+```
+
 ## [1.4.1]
 #### [Breaking-Changes](Breaking-Changes.md#141)
 #### Images

@@ -1,16 +1,16 @@
 catalog-api
-	catalog-api:3.573.0
-	catalog-importer:1.0.5
+	catalog-api:3.574.0
+	catalog-importer:1.0.7
 gis-platform
-	gis_platform_portal:2022.9.15
-	gis_platform_spcore:2022.9.15
+	gis_platform_portal:2022.9.27
+	gis_platform_spcore:2022.9.27
 	zookeeper:3.7.0-debian-10-r265
 keys
 	keys-backend:1.34.0
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.3.0
 mapgl-js-api
-	mapgl:v1.30.1
+	mapgl:v1.30.2
 navi-async-matrix
 	navi-async-matrix:1.1.0
 navi-back
