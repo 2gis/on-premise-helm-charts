@@ -1,5 +1,22 @@
 # 2GIS On-Premise Changelog
 
+## [1.4.3]
+#### Images
+```
+gis-platform
+	- gis_platform_portal:2022.9.27
+	+ gis_platform_portal:2022.9.29
+	- gis_platform_spcore:2022.9.27
+	+ gis_platform_spcore:2022.9.29
+navi-castle
+	- navi-front:1.23.1
+	+ navi-front:1.21-ad06a0e0
+navi-front
+	- navi-front:1.23.1
+	+ navi-front:1.21-ad06a0e0
+
+```
+
 ## [1.4.2]
 #### Images
 ```
