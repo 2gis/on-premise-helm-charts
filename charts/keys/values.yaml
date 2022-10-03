@@ -279,7 +279,7 @@ redis:
   # @param redis.db Redis database number (external mode only).
 
   useExternalRedis: false
-  host: redis
+  host: redis.host
   db: 1
 
   # @param redis.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).

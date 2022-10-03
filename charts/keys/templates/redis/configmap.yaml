@@ -1,3 +1,4 @@
+{{- if not .Values.redis.useExternalRedis }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16,3 +17,4 @@ data:
     timeout 600
     tcp-keepalive 60
     port {{ .Values.redis.port }}
+{{- end }}
