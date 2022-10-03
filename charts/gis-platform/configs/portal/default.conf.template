@@ -171,6 +171,17 @@ server {
         proxy_read_timeout {{ .Values.portal.websocket.timeout }};
     }
 
+    location /sp/snapping {
+        proxy_pass http://spcore-upstream/snapping;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header Host $host;
+        proxy_connect_timeout {{ .Values.portal.websocket.timeout }};
+        proxy_send_timeout {{ .Values.portal.websocket.timeout }};
+        proxy_read_timeout {{ .Values.portal.websocket.timeout }};
+    }
+
     location /swagger/ {
         proxy_pass http://spcore-upstream/swagger/;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

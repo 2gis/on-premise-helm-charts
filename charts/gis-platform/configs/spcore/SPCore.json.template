@@ -28,6 +28,12 @@
          "geocodeUrl": "${GIS_PLATFORM_CATALOG_URL}/3.0/items/geocode",
          "geocodeByIdUrl": "${GIS_PLATFORM_CATALOG_URL}/3.0/items/byid",
          "SuggestUrl": "${GIS_PLATFORM_CATALOG_URL}/3.0/suggests",
+        {{- if .Values.spcore.catalog.type }}
+         "type": "{{ .Values.spcore.catalog.type }}",
+        {{- end }}
+        {{- if .Values.spcore.catalog.regionId }}
+         "regionId": {{ .Values.spcore.catalog.regionId }},
+        {{- end }}
          "key": "${GIS_PLATFORM_CATALOG_KEY}"
        }
   },
