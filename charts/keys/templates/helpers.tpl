@@ -152,9 +152,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.env.redis" -}}
 {{- if .Values.redis.useExternalRedis }}
 - name: ZUUL_REDIS_HOST
-  value: "{{ include "keys.redis.host" . }}"
+  value: "{{ .Values.redis.host }}"
 - name: ZUUL_REDIS_DB
-  value: "{{ include "keys.redis.db" . }}"
+  value: "{{ .Values.redis.db }}"
 {{- else  }}
 - name: ZUUL_REDIS_HOST
   value: "{{ include "keys.redis.name" . }}"
