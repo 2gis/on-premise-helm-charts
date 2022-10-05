@@ -17,7 +17,7 @@ spec:
     updateMode: {{ .updateMode }}
   resourcePolicy:
     containerPolicies:
-      - containerName: {{ include "router.name" }}
+      - containerName: {{ include "router.name" $ }}
         mode: Auto
         {{- with .minAllowed }}
         minAllowed:
