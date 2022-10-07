@@ -91,6 +91,10 @@ Usage:
 {{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": false," }}
 {{- end -}}
 
+{{- define "config.pedestrian" -}}
+{{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": false," }}
+{{- end -}}
+
 {{- define "config.pairs" -}}
 {{ print  "\"simple_network_car\" : true,\"simple_network_pedestrian\": true,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_car\" : true,\"attractor_pedestrian\": true,\"attractor_bicycle\": false,\"attractor_taxi\": true,\"reduce_edges_optimization_flag\": true," }}
 {{- end -}}
@@ -101,6 +105,10 @@ Usage:
 
 {{- define "config.bicycle" -}}
 {{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : true,\"simple_network_truck\" : false,\"attractor_pedestrian\": false,\"attractor_bicycle\": true,\"attractor_taxi\": false," }}
+{{- end -}}
+
+{{- define "config.freeroam" -}}
+{{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": false,\"reduce_edges_optimization_flag\": false," }}
 {{- end -}}
 
 {{- define "config.serversection" -}}
@@ -115,6 +123,9 @@ Usage:
 {{- end -}}
 {{- if eq .Values.naviback.type "ctx" -}}
    {{ include "config.ctx" $ }}
+{{- end -}}
+{{- if eq .Values.naviback.type "pedestrian" -}}
+   {{ include "config.pedestrian" $ }}
 {{- end -}}
 {{- if eq .Values.naviback.type "dm" -}}
    {{ include "config.dm" $ }}
