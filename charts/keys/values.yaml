@@ -265,18 +265,18 @@ redis:
       memory: 256Mi
 
   # @param redis.port HTTP port for Redis to listen.
-  # @param redis.configPath Configuration file for Redis.
+  # @param redis.configPath Path to Redis configuration file.
 
   port: 6379
   configPath: /opt/redis.conf
 
-  # @param redis.password Password for use in Redis.
+  # @param redis.password Redis password. Empty string if no authentication is required.
 
   password: ''
 
-  # @param redis.useExternalRedis If you want to use an external Redis.
-  # @param redis.host Redis hostname (external mode only).
-  # @param redis.db Redis database number (external mode only).
+  # @param redis.useExternalRedis If true, external Redis server will be used.
+  # @param redis.host External Redis hostname.
+  # @param redis.db External Redis database number.
 
   useExternalRedis: false
   host: redis.host

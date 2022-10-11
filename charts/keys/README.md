@@ -32,9 +32,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.30.1`                       |
+| `backend.image.tag`        | Backend service image tag.        | `1.34.0`                       |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.          | `0.2.0`                        |
+| `admin.image.tag`          | Admin service image tag.          | `0.3.0`                        |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
 | `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
 
@@ -139,12 +139,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 ### Redis settings
 
 | Name                     | Description                                                                                                                 | Value             |
-| -------------------------| --------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----------------- |
 | `redis.port`             | HTTP port for Redis to listen.                                                                                              | `6379`            |
-| `redis.password`         | Password for use in Redis. Empty string means no auth.                                                                      | `""`              |
-| `redis.useExternalRedis` | If you want to use an external Redis.                                                                                       | `false`           |
-| `redis.host`             | Redis hostname. Only if use external Redis.                                                                                 | `redis`           |
-| `redis.db`               | Redis database number. Only if use external Redis.                                                                          | `1`               |
+| `redis.configPath`       | Path to Redis configuration file.                                                                                           | `/opt/redis.conf` |
+| `redis.password`         | Redis password. Empty string if no authentication is required.                                                              | `""`              |
+| `redis.useExternalRedis` | If true, external Redis server will be used.                                                                                | `false`           |
+| `redis.host`             | External Redis hostname.                                                                                                    | `redis.host`      |
+| `redis.db`               | External Redis database number.                                                                                             | `1`               |
 | `redis.annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`              |
 | `redis.labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`              |
 | `redis.podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`              |
