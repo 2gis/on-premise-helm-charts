@@ -1,10 +1,5 @@
 # 2GIS On-Premise Changelog
 
-## [1.4.4]
-#### Images
-```
-no changes
-```
 
 ## [1.4.3]
 #### Images
