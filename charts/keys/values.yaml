@@ -270,6 +270,18 @@ redis:
   port: 6379
   configPath: /opt/redis.conf
 
+  # @param redis.password Password for use in Redis.
+
+  password: ''
+
+  # @param redis.useExternalRedis If you want to use an external Redis.
+  # @param redis.host Redis hostname (external mode only).
+  # @param redis.db Redis database number (external mode only).
+
+  useExternalRedis: false
+  host: redis.host
+  db: 1
+
   # @param redis.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param redis.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
