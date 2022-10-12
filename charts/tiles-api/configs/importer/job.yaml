@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{`{{.task_id}}`}}
+  name: {{ include "tiles.fullname" . }}-{{`{{.task_id}}`}}
   labels:
     task-id: {{`{{.task_id}}`}}
     import-id: {{`{{.import_id}}`}}
