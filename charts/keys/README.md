@@ -44,8 +44,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | Name                        | Description                                                                                                                    | Value                   |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `admin.replicas`            | A replica count for the pod.                                                                                                   | `1`                     |
-| `admin.apiUrl`              | Base URL for the admin API.                                                                                                    | `https://keys-api.host` |
-| `admin.appHost`             | Base URL for the admin web interface.                                                                                          | `https://keys-ui.host`  |
+| `admin.api`                 | Base URL for the admin API.                                                                                                    | `https://keys-api.host` |
+| `admin.host`                | Base URL for the admin web interface.                                                                                          | `https://keys-ui.host`  |
 | `admin.annotations`         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                      | `{}`                    |
 | `admin.labels`              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                | `{}`                    |
 | `admin.podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                  | `{}`                    |
@@ -157,20 +157,20 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Database access settings
 
-| Name             | Description                            | Value           |
-| ---------------- | -------------------------------------- | --------------- |
-| `db.ro`          | **Settings for the read-only access**  |                 |
-| `db.ro.host`     | PostgreSQL host.                       | `postgres.host` |
-| `db.ro.port`     | PostgreSQL port.                       | `5432`          |
-| `db.ro.name`     | PostgreSQL database name.              | `keys`          |
-| `db.ro.username` | PostgreSQL username.                   | `keys`          |
-| `db.ro.password` | PostgreSQL password.                   | `secret`        |
-| `db.rw`          | **Settings for the read-write access** |                 |
-| `db.rw.host`     | PostgreSQL host.                       | `postgres.host` |
-| `db.rw.port`     | PostgreSQL port.                       | `5432`          |
-| `db.rw.name`     | PostgreSQL database name.              | `keys`          |
-| `db.rw.username` | PostgreSQL username.                   | `keys`          |
-| `db.rw.password` | PostgreSQL password.                   | `secret`        |
+| Name                   | Description                            | Value           |
+| ---------------------- | -------------------------------------- | --------------- |
+| `postgres.ro`          | **Settings for the read-only access**  |                 |
+| `postgres.ro.host`     | PostgreSQL host.                       | `postgres.host` |
+| `postgres.ro.port`     | PostgreSQL port.                       | `5432`          |
+| `postgres.ro.name`     | PostgreSQL database name.              | `keys`          |
+| `postgres.ro.username` | PostgreSQL username.                   | `keys`          |
+| `postgres.ro.password` | PostgreSQL password.                   | `secret`        |
+| `postgres.rw`          | **Settings for the read-write access** |                 |
+| `postgres.rw.host`     | PostgreSQL host.                       | `postgres.host` |
+| `postgres.rw.port`     | PostgreSQL port.                       | `5432`          |
+| `postgres.rw.name`     | PostgreSQL database name.              | `keys`          |
+| `postgres.rw.username` | PostgreSQL username.                   | `keys`          |
+| `postgres.rw.password` | PostgreSQL password.                   | `secret`        |
 
 
 ### LDAP connection settings
