@@ -116,13 +116,13 @@ spec:
                 secretKeyRef:
                   key: catalogApi2gisKey
                   name: {{ include "pro-api.name" . }}-secret
-            {{ if .Values.navi.key }}
+            - name: ROUTING_API_2GIS_URL
+              value: {{ .Values.navi.host }}
             - name: ROUTING_API_2GIS_KEY
               valueFrom:
                 secretKeyRef:
                   key: routingApi2gisKey
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
             - name: ES_HOST
               value: "{{ .Values.elastic.host }}"
             - name: LOG_ES_QUERIES
@@ -142,21 +142,12 @@ spec:
                 secretKeyRef:
                   key: dbConnectionPwd
                   name: {{ include "pro-api.name" . }}-secret
-            - name: KEYS_SERVICE_URL
-              value: "{{ .Values.keys.host }}"
-            {{ if .Values.keys.token }}
-            - name: KEYS_SERVICE_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  key: keysServiceToken
-                  name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
             - name: S3Settings__Url
-              value: "{{ .Values.s3.host }}"
+              value: "{{ .Values.dgctlStorage.host }}"
+            - name: S3Settings__AssetDataBucket
+              value: "{{ .Values.dgctlStorage.bucket }}"
             - name: S3Settings__LayerDataBucket
               value: "{{ .Values.s3.layerDataBucket }}"
-            - name: S3Settings__AssetDataBucket
-              value: "{{ .Values.s3.assetDataBucket }}"
             - name: S3Settings__AccessKey
               valueFrom:
                 secretKeyRef:
@@ -183,5 +174,14 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: apiServiceToken
+                  name: {{ include "pro-api.name" . }}-secret
+            {{ end }}
+            - name: PERMISSIONS_API_URL
+              value: "{{ .Values.permissionsApi.host }}"
+            {{ if .Values.permissionsApi.key }}
+            - name: PERMISSIONS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: permissionsApiKey
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}

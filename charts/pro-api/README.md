@@ -57,7 +57,7 @@
 | `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)               | `{}`        |
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
 | `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `service.port`        | Tiles API service port.                                                                                                        | `80`        |
+| `service.port`        | PRO API service port.                                                                                                          | `80`        |
 
 
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
@@ -77,21 +77,16 @@
 | Name               | Description | Value                     |
 | ------------------ | ----------- | ------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/pro-api` |
-| `image.tag`        | Tag         | `0.2.8`                   |
+| `image.tag`        | Tag         | `0.5.0`                   |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
 
 ### 2GIS PRO Storage configuration
 
-| Name                      | Description                                                                                                                                                                                                                                              | Value                   |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `s3.host`                 | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`                    |
-| `s3.accessKey`            | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`                    |
-| `s3.secretKey`            | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`                    |
-| `s3.manifest`             | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `manifests/latest.json` |
-| `s3.assetDataBucket`      | S3 bucket with common assets, aggregations, and filters.                                                                                                                                                                                                 | `""`                    |
-| `s3.layerDataBucket`      | S3 bucket with prepared layer data.                                                                                                                                                                                                                      | `""`                    |
-| `s3.userAssetsDataBucket` | S3 bucket with user-created assets, aggregations, and filters                                                                                                                                                                                            | `""`                    |
+| Name                      | Description                                                   | Value |
+| ------------------------- | ------------------------------------------------------------- | ----- |
+| `s3.layerDataBucket`      | S3 bucket with prepared layer data.                           | `""`  |
+| `s3.userAssetsDataBucket` | S3 bucket with user-created assets, aggregations, and filters | `""`  |
 
 
 ### 2GIS PRO API configuration
@@ -120,11 +115,11 @@
 | `keys.token` | keys.api access token.                                                      | `""`  |
 
 
-### ElasticSearch settings
+### ElasticSearch settings (supported version 7.x)
 
 | Name                  | Description                                                                          | Value |
 | --------------------- | ------------------------------------------------------------------------------------ | ----- |
-| `elastic.host`        | ElasticSearch host address. Format: `http://{0}@HOST:PORT`                           | `""`  |
+| `elastic.host`        | ElasticSearch host address. Format: `http(s)://HOST:PORT`                            | `""`  |
 | `elastic.credentials` | User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD` | `""`  |
 
 
@@ -157,7 +152,7 @@
 | Name                                       | Description                                                                                                                                              | Value                          |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag                                                                                                                                         | `0.2.8`                        |
+| `assetImporter.tag`                        | Docker image tag                                                                                                                                         | `0.5.0`                        |
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
@@ -195,8 +190,14 @@
 2. Then execute command:<br/>
 `- helm upgrade "pro-api" --install --atomic --wait --wait-for-jobs --timeout 10m --values ./values-api.yaml`
 3. Check installation by executing request<br/>
-`https://2GIS_API_HOST/building/items?bounds=POLYGON%20%28%2854.605596%2024.429549%2C%2054.539606%2024.429549%2C%2054.539606%2024.413378%2C%2054.605596%2024.413378%2C%2054.605596%2024.429549%29%29`
-<br/>The response must contain a list of elements in json format, response http code = 200
+`https://2GIS_API_HOST/health/ready`
+4. Import data during first installation by executing commands<br/>
+`kubectl create job --from=cronjob/RELEASE_NAME-pro-asset-importer pro-asset-importer-manual`<br/>
+`kubectl create job --from=cronjob/RELEASE_NAME-pro-user-asset-importer pro-asset-importer-manual`
+5. Wait for the import process to finish. It can takes from several minutes to several hours depending on the amount of data.
+6. Check installation by executing request<br/>
+`https://2GIS_API_HOST/bounds?wkt=POLYGON((-170.507812 83.676943,-167.343750 -62.267922,213.398437 -63.391521,197.2265625 83.559716,-170.507812 83.676943))
+<br/>The response must contain bound of any territory in json format, response http code = 200
 
 ## Maintainers
 

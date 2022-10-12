@@ -39,9 +39,9 @@ spec:
                 - name: MAX_PARALLEL_JOBS
                   value: "{{ .Values.assetPreparer.maxParallelJobs }}"
                 - name: S3Settings__Url
-                  value: "{{ .Values.s3.host }}"
+                  value: "{{ .Values.dgctlStorage.host }}"
                 - name: S3Settings__AssetDataBucket
-                  value: "{{ .Values.s3.assetDataBucket }}"
+                  value: "{{ .Values.dgctlStorage.bucket }}"
                 - name: S3Settings__AccessKey
                   valueFrom:
                     secretKeyRef:
