@@ -1,5 +1,12 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.4.3]
+
+#### keys
+- Rename `db` to `postgres`
+- Rename `admin.apiUrl` to `admin.api`
+- Rename `admin.appHost` to `admin.host`
+
 ## [1.4.1]
 
 #### navi-async-matrix
