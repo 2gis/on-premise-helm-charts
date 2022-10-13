@@ -37,7 +37,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
 | `affinity`       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
 | `tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
-| `redeploy_label` | If this label is changed since the last deployment, the whole chart will be redeployed.                                     | `""`  |
+| `redeployLabel`  | If this label is changed since the last deployment, the whole chart will be redeployed.                                     | `""`  |
 
 
 ### Deployment Artifacts Storage settings
@@ -65,8 +65,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name            | Description                                   | Value   |
 | --------------- | --------------------------------------------- | ------- |
 | `api.resources` | API container resources.                      | `{}`    |
-| `api.data_dir`  | Path to the directory storing search indexes. | `/data` |
-| `api.fcgi_port` | TCP port of the Search API.                   | `9090`  |
+| `api.dataDir`   | Path to the directory storing search indexes. | `/data` |
+| `api.fcgiPort`  | TCP port of the Search API.                   | `9090`  |
 | `api.logLevel`  | Log level.                                    | `Info`  |
 | `api.logFormat` | Log format: `json` or `plaintext`.            | `json`  |
 | `api.configOpt` | Additional options (for debugging purposes).  | `[]`    |
@@ -80,7 +80,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `nginx.image.tag`        | Docker image tag.                                      | `1.21.6`                       |
 | `nginx.image.pullPolicy` | Kubernetes pull policy for the service's Docker image. | `IfNotPresent`                 |
 | `nginx.resources`        | NGINX container resources.                             | `{}`                           |
-| `nginx.http_port`        | HTTP port on which NGINX will be listening.            | `8080`                         |
+| `nginx.HTTPPort`         | HTTP port on which NGINX will be listening.            | `8080`                         |
 
 
 ### Strategy settings

@@ -147,15 +147,15 @@ api:
 
 # @section Search
 
-# @param search.url URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster.
+# @param search.host URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster.
 
 search:
-  url: http://search-api.host
+  host: http://search-api.host
 
 
 # @section Keys
 
-# @param keys.endpoint URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster.
+# @param keys.host URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster.
 # @param keys.requestTimeout Timeout for requests to the Keys API.
 # @param keys.serviceKeys.places Places API key (if available).
 # @param keys.serviceKeys.geocoder Geocoder API key (if available).
@@ -164,7 +164,7 @@ search:
 # @param keys.serviceKeys.regions Regions API key (if available).
 
 keys:
-  endpoint: https://keys-api.host
+  host: https://keys-api.host
   requestTimeout: 5s
   serviceKeys:
     places: ''

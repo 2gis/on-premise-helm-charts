@@ -16,15 +16,15 @@ data:
             <!-- json/plaintext -->
             <log_format>{{ .Values.api.logFormat }}</log_format>
 
-            <socket_path>:{{ .Values.api.fcgi_port }}</socket_path>
+            <socket_path>:{{ .Values.api.fcgiPort }}</socket_path>
             <socket_backlog_size>128</socket_backlog_size>
             <worker_threads>64</worker_threads>
 
             <status_path>/run/</status_path>
 
-            <index_path>{{ .Values.api.data_dir }}/indexes</index_path>
-            <ads_path>{{ .Values.api.data_dir }}/ads</ads_path>
-            <rtw_path>{{ .Values.api.data_dir }}/rtw</rtw_path>
+            <index_path>{{ .Values.api.dataDir }}/indexes</index_path>
+            <ads_path>{{ .Values.api.dataDir }}/ads</ads_path>
+            <rtw_path>{{ .Values.api.dataDir }}/rtw</rtw_path>
 
             <search_timeout>5000</search_timeout>
             <is_container>1</is_container>
@@ -63,10 +63,10 @@ data:
         error_log stderr;
 
         server {
-            listen {{ .Values.nginx.http_port }};
+            listen {{ .Values.nginx.HTTPPort }};
 
             location / {
-                    fastcgi_pass 127.0.0.1:{{ .Values.api.fcgi_port }};
+                    fastcgi_pass 127.0.0.1:{{ .Values.api.fcgiPort }};
                     fastcgi_keep_conn on;
                     fastcgi_param URI $request_uri;
                     include /etc/nginx/fastcgi_params;

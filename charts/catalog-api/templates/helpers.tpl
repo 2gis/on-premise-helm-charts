@@ -95,14 +95,14 @@ onprem
 
 {{- define "catalog.env.search" -}}
 - name: CATALOG_SAPPHIRE_URL
-  value: "{{ .Values.search.url }}"
+  value: "{{ .Values.search.host }}"
 {{- end }}
 
 {{- define "catalog.env.keys" -}}
 - name: CATALOG_KEYS_ENABLED
   value: "true"
 - name: CATALOG_KEYS_ENDPOINT
-  value: "{{ .Values.keys.endpoint }}"
+  value: "{{ .Values.keys.host }}"
 - name: CATALOG_KEYS_REQUEST_TIMEOUT
   value: "{{ .Values.keys.requestTimeout }}"
 - name: CATALOG_KEYS_SERVICE_CATALOG_KEY

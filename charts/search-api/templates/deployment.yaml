@@ -58,14 +58,14 @@ spec:
             - --secret-access-key=$(STORAGE_SECRET_KEY)
             - --bucket-name={{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}
             - --manifest={{ required "Valid .Values.dgctlStorage.manifest required!" .Values.dgctlStorage.manifest }}
-            - --output-dir-path={{ .Values.api.data_dir }}
+            - --output-dir-path={{ .Values.api.dataDir }}
           resources:
             {{- toYaml .Values.api.resources | nindent 12 }}
           volumeMounts:
             - name: {{ include "search_api.name" $ }}-configmap
               mountPath: /etc/2gis
             - name: search-api-data
-              mountPath: {{ .Values.api.data_dir }}
+              mountPath: {{ .Values.api.dataDir }}
       containers:
         - name: api
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
@@ -81,15 +81,15 @@ spec:
             - name: {{ include "search_api.name" $ }}-configmap
               mountPath: /etc/2gis
             - name: search-api-data
-              mountPath: {{ .Values.api.data_dir }}
+              mountPath: {{ .Values.api.dataDir }}
           env:
             - name: REDEPLOY_LABEL
-              value: "{{ .Values.redeploy_label }}"
+              value: "{{ .Values.redeployLabel }}"
         - name: nginx
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}
           imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
           command: ["nginx", "-c", "/etc/2gis/nginx.conf"]
-          {{- if (le .Values.nginx.http_port 1024.0) }}
+          {{- if (le .Values.nginx.HTTPPort 1024.0) }}
           securityContext:
             capabilities:
               add:
@@ -97,12 +97,12 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.nginx.http_port }}
+              containerPort: {{ .Values.nginx.HTTPPort }}
               protocol: TCP
           readinessProbe:
             httpGet:
               path: /v2/status
-              port: {{ .Values.nginx.http_port }}
+              port: {{ .Values.nginx.HTTPPort }}
             successThreshold: 1
             failureThreshold: 5
             timeoutSeconds: 5

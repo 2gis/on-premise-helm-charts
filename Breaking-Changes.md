@@ -5,6 +5,14 @@
 #### catalog-api
 - Rename `api.db` to `api.postgres`
 - Rename `importer.db` to `importer.postgres`
+- Rename `search.url` to `search.host`
+- Rename `keys.endpoint` to `keys.host`
+
+#### search-api
+- Rename `redeploy_label` to `redeployLabel`
+- Rename `api.data_dir` to `api.dataDir`
+- Rename `api.fcgi_port` to `api.fcgiPort`
+- Rename `nginx.http_port` to `nginx.HTTPPort`
 
 ## [1.4.1]
 

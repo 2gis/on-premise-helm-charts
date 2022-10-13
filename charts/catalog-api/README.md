@@ -129,16 +129,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Search
 
-| Name         | Description                                                                                                | Value                    |
-| ------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `search.url` | URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster. | `http://search-api.host` |
+| Name          | Description                                                                                                | Value                    |
+| ------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `search.host` | URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster. | `http://search-api.host` |
 
 
 ### Keys
 
 | Name                          | Description                                                                                              | Value                   |
 | ----------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `keys.endpoint`               | URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster. | `https://keys-api.host` |
+| `keys.host`                   | URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster. | `https://keys-api.host` |
 | `keys.requestTimeout`         | Timeout for requests to the Keys API.                                                                    | `5s`                    |
 | `keys.serviceKeys.places`     | Places API key (if available).                                                                           | `""`                    |
 | `keys.serviceKeys.geocoder`   | Geocoder API key (if available).                                                                         | `""`                    |
