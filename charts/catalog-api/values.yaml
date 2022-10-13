@@ -132,13 +132,13 @@ api:
 
   # @section Database settings
 
-  # @param api.db.host PostgreSQL rw/ro host.
-  # @param api.db.port PostgreSQL port.
-  # @param api.db.name PostgreSQL database name.
-  # @param api.db.username PostgreSQL username.
-  # @param api.db.password PostgreSQL password.
+  # @param api.postgres.host PostgreSQL rw/ro host.
+  # @param api.postgres.port PostgreSQL port.
+  # @param api.postgres.name PostgreSQL database name.
+  # @param api.postgres.username PostgreSQL username.
+  # @param api.postgres.password PostgreSQL password.
 
-  db:
+  postgres:
     host: postgres.host
     port: 5432
     name: catalog
@@ -182,9 +182,9 @@ keys:
 # @param importer.initialDelaySeconds Number of seconds after the container has started before liveness or readiness probes are initiated.
 
 # @extra importer.image **Deployment settings**
-# @param importer.image.repository Repository
-# @param importer.image.tag Tag
-# @param importer.image.pullPolicy Pull Policy
+# @param importer.image.repository Importer image repository
+# @param importer.image.tag Importer image tag
+# @param importer.image.pullPolicy Importer image Pull Policy
 
 # @extra importer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
 # @param importer.resources.requests.cpu A CPU request.
@@ -202,16 +202,16 @@ importer:
     tag: 1.0.7
     pullPolicy: IfNotPresent
 
-  # @extra importer.db **Database settings**
+  # @extra importer.postgres **Database settings**
 
-  # @param importer.db.host PostgreSQL rw host.
-  # @param importer.db.port PostgreSQL port.
-  # @param importer.db.name PostgreSQL database name.
-  # @param importer.db.username PostgreSQL username with rw access.
-  # @param importer.db.password PostgreSQL password.
-  # @param importer.db.schemaSwitchEnabled Automatic switch PostgreSQL schema on releases.
+  # @param importer.postgres.host PostgreSQL rw host.
+  # @param importer.postgres.port PostgreSQL port.
+  # @param importer.postgres.name PostgreSQL database name.
+  # @param importer.postgres.username PostgreSQL username with rw access.
+  # @param importer.postgres.password PostgreSQL password.
+  # @param importer.postgres.schemaSwitchEnabled If true, change the PostgreSQL schema automatically on release change.
 
-  db:
+  postgres:
     host: postgres.host
     port: 5432
     name: catalog

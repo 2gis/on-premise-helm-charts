@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.4.3]
+
+#### catalog-api
+- Rename `api.db` to `api.postgres`
+- Rename `importer.db` to `importer.postgres`
+
 ## [1.4.1]
 
 #### navi-async-matrix

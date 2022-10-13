@@ -71,7 +71,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description | Value                         |
 | ---------------------- | ----------- | ----------------------------- |
 | `api.image.repository` | Repository  | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag         | `3.567.0`                     |
+| `api.image.tag`        | Tag         | `3.574.0`                     |
 | `api.image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
 
@@ -118,13 +118,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Database settings
 
-| Name              | Description               | Value           |
-| ----------------- | ------------------------- | --------------- |
-| `api.db.host`     | PostgreSQL rw/ro host.    | `postgres.host` |
-| `api.db.port`     | PostgreSQL port.          | `5432`          |
-| `api.db.name`     | PostgreSQL database name. | `catalog`       |
-| `api.db.username` | PostgreSQL username.      | `postgres`      |
-| `api.db.password` | PostgreSQL password.      | `secret`        |
+| Name                    | Description               | Value           |
+| ----------------------- | ------------------------- | --------------- |
+| `api.postgres.host`     | PostgreSQL rw/ro host.    | `postgres.host` |
+| `api.postgres.port`     | PostgreSQL port.          | `5432`          |
+| `api.postgres.name`     | PostgreSQL database name. | `catalog`       |
+| `api.postgres.username` | PostgreSQL username.      | `postgres`      |
+| `api.postgres.password` | PostgreSQL password.      | `secret`        |
 
 
 ### Search
@@ -156,21 +156,21 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.workerNum`                         | Number of parallel import processes (workers).                                                                                | `3`                                |
 | `importer.initialDelaySeconds`               | Number of seconds after the container has started before liveness or readiness probes are initiated.                          | `1`                                |
 | `importer.image`                             | **Deployment settings**                                                                                                       |                                    |
-| `importer.image.repository`                  | Repository                                                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`                         | Tag                                                                                                                           | `1.0.4`                            |
-| `importer.image.pullPolicy`                  | Pull Policy                                                                                                                   | `IfNotPresent`                     |
+| `importer.image.repository`                  | Importer image repository                                                                                                     | `2gis-on-premise/catalog-importer` |
+| `importer.image.tag`                         | Importer image tag                                                                                                            | `1.0.7`                            |
+| `importer.image.pullPolicy`                  | Importer image Pull Policy                                                                                                    | `IfNotPresent`                     |
 | `importer.resources`                         | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)** |                                    |
 | `importer.resources.requests.cpu`            | A CPU request.                                                                                                                | `256m`                             |
 | `importer.resources.requests.memory`         | A memory request.                                                                                                             | `512Mi`                            |
 | `importer.resources.limits.cpu`              | A CPU limit.                                                                                                                  | `2`                                |
 | `importer.resources.limits.memory`           | A memory limit.                                                                                                               | `2048Mi`                           |
-| `importer.db`                                | **Database settings**                                                                                                         |                                    |
-| `importer.db.host`                           | PostgreSQL rw host.                                                                                                           | `postgres.host`                    |
-| `importer.db.port`                           | PostgreSQL port.                                                                                                              | `5432`                             |
-| `importer.db.name`                           | PostgreSQL database name.                                                                                                     | `catalog`                          |
-| `importer.db.username`                       | PostgreSQL username with rw access.                                                                                           | `postgres`                         |
-| `importer.db.password`                       | PostgreSQL password.                                                                                                          | `secret`                           |
-| `importer.db.schemaSwitchEnabled`            | Automatic switch PostgreSQL schema on releases.                                                                               | `true`                             |
+| `importer.postgres`                          | **Database settings**                                                                                                         |                                    |
+| `importer.postgres.host`                     | PostgreSQL rw host.                                                                                                           | `postgres.host`                    |
+| `importer.postgres.port`                     | PostgreSQL port.                                                                                                              | `5432`                             |
+| `importer.postgres.name`                     | PostgreSQL database name.                                                                                                     | `catalog`                          |
+| `importer.postgres.username`                 | PostgreSQL username with rw access.                                                                                           | `postgres`                         |
+| `importer.postgres.password`                 | PostgreSQL password.                                                                                                          | `secret`                           |
+| `importer.postgres.schemaSwitchEnabled`      | If true, change the PostgreSQL schema automatically on release change.                                                        | `true`                             |
 | `importer.persistentVolume`                  | **Persistent Volume settings**                                                                                                |                                    |
 | `importer.persistentVolume.enabled`          | If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service.          | `false`                            |
 | `importer.persistentVolume.accessModes`      | AccessModes.                                                                                                                  | `["ReadWriteOnce"]`                |

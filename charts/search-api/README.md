@@ -56,7 +56,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description | Value                        |
 | ---------------------- | ----------- | ---------------------------- |
 | `api.image.repository` | Repository  | `2gis-on-premise/search-api` |
-| `api.image.tag`        | Tag         | `7.25.0`                     |
+| `api.image.tag`        | Tag         | `7.33.0`                     |
 | `api.image.pullPolicy` | Pull Policy | `IfNotPresent`               |
 
 
@@ -64,6 +64,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 | Name            | Description                                   | Value   |
 | --------------- | --------------------------------------------- | ------- |
+| `api.resources` | API container resources.                      | `{}`    |
 | `api.data_dir`  | Path to the directory storing search indexes. | `/data` |
 | `api.fcgi_port` | TCP port of the Search API.                   | `9090`  |
 | `api.logLevel`  | Log level.                                    | `Info`  |
@@ -78,6 +79,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `nginx.image.repository` | Docker Repository.                                     | `2gis-on-premise/search-nginx` |
 | `nginx.image.tag`        | Docker image tag.                                      | `1.21.6`                       |
 | `nginx.image.pullPolicy` | Kubernetes pull policy for the service's Docker image. | `IfNotPresent`                 |
+| `nginx.resources`        | NGINX container resources.                             | `{}`                           |
 | `nginx.http_port`        | HTTP port on which NGINX will be listening.            | `8080`                         |
 
 

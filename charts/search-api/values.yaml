@@ -56,6 +56,7 @@ api:
 
   # @section API settings
 
+  # @param api.resources API container resources.
   # @param api.data_dir Path to the directory storing search indexes.
   # @param api.fcgi_port TCP port of the Search API.
   # @param api.logLevel Log level.
@@ -75,6 +76,7 @@ api:
 # @param nginx.image.repository Docker Repository.
 # @param nginx.image.tag Docker image tag.
 # @param nginx.image.pullPolicy Kubernetes pull policy for the service's Docker image.
+# @param nginx.resources NGINX container resources.
 # @param nginx.http_port HTTP port on which NGINX will be listening.
 
 nginx:
