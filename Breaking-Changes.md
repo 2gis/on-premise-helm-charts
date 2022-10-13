@@ -1,6 +1,6 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [1.4.3]
+## [1.4.4]
 
 #### catalog-api
 - Rename `api.db` to `api.postgres`
