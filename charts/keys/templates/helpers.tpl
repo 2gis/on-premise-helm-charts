@@ -104,21 +104,21 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.db" -}}
 - name: ZUUL_DB_RO_HOST
-  value: "{{ .Values.db.ro.host }}"
+  value: "{{ .Values.postgres.ro.host }}"
 - name: ZUUL_DB_RO_PORT
-  value: "{{ .Values.db.ro.port }}"
+  value: "{{ .Values.postgres.ro.port }}"
 - name: ZUUL_DB_RO_NAME
-  value: "{{ .Values.db.ro.name }}"
+  value: "{{ .Values.postgres.ro.name }}"
 - name: ZUUL_DB_RO_USERNAME
-  value: "{{ .Values.db.ro.username }}"
+  value: "{{ .Values.postgres.ro.username }}"
 - name: ZUUL_DB_RW_HOST
-  value: "{{ .Values.db.rw.host }}"
+  value: "{{ .Values.postgres.rw.host }}"
 - name: ZUUL_DB_RW_PORT
-  value: "{{ .Values.db.rw.port }}"
+  value: "{{ .Values.postgres.rw.port }}"
 - name: ZUUL_DB_RW_NAME
-  value: "{{ .Values.db.rw.name }}"
+  value: "{{ .Values.postgres.rw.name }}"
 - name: ZUUL_DB_RW_USERNAME
-  value: "{{ .Values.db.rw.username }}"
+  value: "{{ .Values.postgres.rw.username }}"
 {{- end }}
 
 {{- define "keys.env.db.deploys" -}}
@@ -211,7 +211,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.admin" -}}
 - name: APP_HOST
-  value: "{{ .Values.admin.appHost }}"
+  value: "{{ .Values.admin.host }}"
 - name: API_URL
-  value: "{{ .Values.admin.apiUrl }}"
+  value: "{{ .Values.admin.api }}"
 {{- end }}
