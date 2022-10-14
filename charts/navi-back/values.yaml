@@ -319,3 +319,6 @@ s3:
   bucket: samplebucket
   keyId: sampleid
   key: samplekey
+
+livenessProbeDelay: 60
+readinessProbeDelay: 75
