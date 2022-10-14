@@ -43,6 +43,7 @@ spec:
           env:
             {{- include "keys.env.db.deploys" . | nindent 12 }}
             {{- include "keys.env.tasker" . | nindent 12 }}
+            {{- include "keys.env.redis" . | nindent 12 }}
       {{- with .Values.tasker.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
