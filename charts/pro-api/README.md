@@ -77,7 +77,7 @@
 | Name               | Description | Value                     |
 | ------------------ | ----------- | ------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/pro-api` |
-| `image.tag`        | Tag         | `0.5.0`                   |
+| `image.tag`        | Tag         | `latest`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
 
@@ -141,10 +141,10 @@
 
 ### 2GIS PRO API Job settings
 
-| Name                       | Description                | Value                     |
-| -------------------------- | -------------------------- | ------------------------- |
-| `appAssetImporterName`     | Data Import job name.      | `pro-asset-importer`      |
-| `appUserAssetImporterName` | User Data Import job name. | `pro-user-asset-importer` |
+| Name                       | Description                | Value                 |
+| -------------------------- | -------------------------- | --------------------- |
+| `appAssetImporterName`     | Data Import job name.      | `asset-importer`      |
+| `appUserAssetImporterName` | User Data Import job name. | `user-asset-importer` |
 
 
 ### Import job settings
@@ -152,7 +152,7 @@
 | Name                                       | Description                                                                                                                                              | Value                          |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag                                                                                                                                         | `0.5.0`                        |
+| `assetImporter.tag`                        | Docker image tag                                                                                                                                         | `latest`                       |
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
@@ -192,8 +192,8 @@
 3. Check installation by executing request<br/>
 `https://2GIS_API_HOST/health/ready`
 4. Import data during first installation by executing commands<br/>
-`kubectl create job --from=cronjob/RELEASE_NAME-pro-asset-importer pro-asset-importer-manual`<br/>
-`kubectl create job --from=cronjob/RELEASE_NAME-pro-user-asset-importer pro-asset-importer-manual`
+`kubectl create job --from=cronjob/RELEASE_NAME-asset-importer asset-importer-manual`<br/>
+`kubectl create job --from=cronjob/RELEASE_NAME-user-asset-importer user-asset-importer-manual`
 5. Wait for the import process to finish. It can takes from several minutes to several hours depending on the amount of data.
 6. Check installation by executing request<br/>
 `https://2GIS_API_HOST/bounds?wkt=POLYGON((-170.507812 83.676943,-167.343750 -62.267922,213.398437 -63.391521,197.2265625 83.559716,-170.507812 83.676943))

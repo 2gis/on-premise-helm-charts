@@ -113,14 +113,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 0.3.21
+  tag: latest
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 0.3.21
+  tag: latest
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -216,9 +216,9 @@ navi:
 # @param appUserAssetImporterName User Data Import job name.
 # @skip appAssetPreparerName
 
-appAssetImporterName: pro-asset-importer
-appUserAssetImporterName: pro-user-asset-importer
-appAssetPreparerName: pro-asset-preparer
+appAssetImporterName: asset-importer
+appUserAssetImporterName: user-asset-importer
+appAssetPreparerName: asset-preparer
 
 # @skip permissionsPodSettings
 
@@ -263,7 +263,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 0.3.21
+  tag: latest
   schedule: '0 18 * * *'
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -294,7 +294,7 @@ assetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 0.3.21
+  tag: latest
   schedule: '0 16 * * 6'
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
