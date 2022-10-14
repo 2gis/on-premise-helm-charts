@@ -97,13 +97,13 @@ naviback:
   dump_query: false
   dump_answer: false
   logLevel: Info
-  indices:
+  indices:  # see DEVOPS-300
     carOptions:
-      enabled: true
+      enabled: false
     countryCarOptions:
-      enabled: true
+      enabled: false
     ctxOptions:
-      enabled: true
+      enabled: false
     entrances:
       enabled: false
     etaCorrectionCores:
@@ -115,15 +115,15 @@ naviback:
     onlineSpeeds:
       enabled: false
     onlineTaxiSpeeds:
-      enabled: true
+      enabled: false
     passZones:
-      enabled: true
+      enabled: false
     projectCarOptions:
-      enabled: true
+      enabled: false
     restrictedTransportPlatforms:
-      enabled: true
+      enabled: false
     restrictedTransportRoutes:
-      enabled: true
+      enabled: false
     smatrix:
       enabled: false
     speedCams:
@@ -133,7 +133,7 @@ naviback:
     taxiReferers:
       enabled: false
     taxiSpeedIndex:
-      enabled: true
+      enabled: false
     tugc2gis:
       enabled: false
     tugc2gisIndex:
