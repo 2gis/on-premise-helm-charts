@@ -1,2 +1,11 @@
 Release - {{ .Release.Name }}
 Namespace - {{ .Release.Namespace }}
+
+{{- if .Values.ingress.enabled }}
+You can check service using curl
+{{- range $host := .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}/health
+{{- end }}
+{{- else }}
+You should publish the service in your preferred way (ingress, balancer, etc).
+{{ end }}
