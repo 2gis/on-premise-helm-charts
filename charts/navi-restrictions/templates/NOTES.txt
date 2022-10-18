@@ -3,4 +3,11 @@ Restrictions backend consists of API and Sync CronJob released as follows:
 Release - {{ .Release.Name }}
 Namespace - {{ .Release.Namespace }}
 
-API service is optionally published through Ingress, Balancer, etc.
+{{- if .Values.api.ingress.enabled }}
+You can check service using curl
+{{- range $host := .Values.api.ingress.hosts }}
+  http{{ if $.Values.api.ingress.tls }}s{{ end }}://{{ $host.host }}
+{{- end }}
+{{- else }}
+You should publish the service in your preferred way (ingress, balancer, etc).
+{{ end }}

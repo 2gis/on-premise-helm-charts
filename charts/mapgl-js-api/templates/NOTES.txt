@@ -1,5 +1,10 @@
-MapGL service is released as "{{ .Release.Name }}" service at "{{ .Release.Namespace }}" namespace.
+MapGL service is released as "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace.
 
+{{- if .Values.ingress.enabled }}
+You can check service using browser
+{{- range $host := .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}/
+{{- end }}
+{{- else }}
 You should publish the service in your preferred way (ingress, balancer, etc).
-
-After deployment completes, service will be available at: //{{ .Values.env.MAPGL_HOST }}
+{{ end }}
