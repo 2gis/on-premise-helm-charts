@@ -37,15 +37,21 @@ ui:
 
   image:
     repository: 2gis-on-premise/pro-ui
-    tag: 0.0.1
+    tag: 1.0.0
 
   # @section UI service settings
 
-  # @param ui.logLevel Log messages importance.
+  # @skip ui.logLevel
   # @skip ui.isOnPremise
+  # @param ui.appTheme Branding inside the app: `2gis` or `urbi`.
+  # @param ui.appLocale Language in the app: `en_AE` or `ru_RU`.
+  # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).
 
   logLevel: error
-  isOnPremise: "True"
+  isOnPremise: "true"
+  appTheme: "urbi"
+  appLocale: "en_AE"
+  appInitialMapCenter: "[55.27, 25.2]"
 
   # @section 2GIS Pro API settings
 

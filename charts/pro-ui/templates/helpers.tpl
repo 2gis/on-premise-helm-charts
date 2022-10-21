@@ -27,6 +27,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.ui.logLevel }}"
 - name: IS_ON_PREM
   value: "{{ .Values.ui.isOnPremise }}"
+- name: APP_LOCALE
+  value: "{{ .Values.ui.appLocale }}"
+- name: APP_THEME
+  value: "{{ .Values.ui.appTheme }}"
+- name: APP_INITIAL_MAP_CENTER
+  value: "{{ .Values.ui.appInitialMapCenter }}"
 - name: HOME
   value: "/tmp"
 {{- end }}

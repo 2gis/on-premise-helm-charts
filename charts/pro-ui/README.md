@@ -34,31 +34,33 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name                  | Description                    | Value                    |
 | --------------------- | ------------------------------ | ------------------------ |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/pro-ui` |
-| `ui.image.tag`        | Tag                            | `0.0.1`                  |
+| `ui.image.tag`        | Tag                            | `1.0.0`                  |
 | `imagePullPolicy`     | Pull Policy                    | `IfNotPresent`           |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                     |
 
 
 ### UI service settings
 
-| Name          | Description              | Value   |
-| ------------- | ------------------------ | ------- |
-| `ui.logLevel` | Log messages importance. | `error` |
+| Name                     | Description                                                                                                                                      | Value           |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| `ui.appTheme`            | Branding inside the app: `2gis` or `urbi`.                                                                                                       | `urbi`          |
+| `ui.appLocale`           | Language in the app: `en_AE` or `ru_RU`.                                                                                                         | `en_AE`         |
+| `ui.appInitialMapCenter` | Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow). | `[55.27, 25.2]` |
 
 
 ### 2GIS Pro API settings
 
-| Name          | Description                    | Value          |
-| ------------- | ------------------------------ | -------------- |
-| `ui.api.host` | Base URL for the 2GIS Pro API. | `pro-api.host` |
+| Name          | Description                                                | Value                  |
+| ------------- | ---------------------------------------------------------- | ---------------------- |
+| `ui.api.host` | Base URL for the Pro API with protocol and trailing slash. | `http://pro-api.host/` |
 
 
 ### MapGL JS API settings
 
-| Name            | Description                                                                       | Value            |
-| --------------- | --------------------------------------------------------------------------------- | ---------------- |
-| `ui.mapgl.host` | Hostname for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service. | `mapgl-api.host` |
-| `ui.mapgl.key`  | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.     | `""`             |
+| Name            | Description                                                                                                                      | Value            |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `ui.mapgl.host` | FQDN (domain or ip) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol and trailing slash. | `mapgl-api.host` |
+| `ui.mapgl.key`  | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                                    | `""`             |
 
 
 ### Strategy settings
