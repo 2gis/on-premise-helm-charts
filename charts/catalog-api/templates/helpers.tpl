@@ -42,6 +42,8 @@ onprem
 {{- define "catalog.env.db" -}}
 - name: CATALOG_DB_SCHEMA
   value: "{{ include "catalog.manifestCode" . }},extensions"
+- name: CATALOG_DB_QUERY_TIMEOUT
+  value: "{{ .Values.api.db.queryTimeout }}"
 - name: CATALOG_DB_BRANCH_URL
   value: "jdbc:postgresql://{{ .Values.api.db.host }}:{{ .Values.api.db.port }}/{{ .Values.api.db.name }}"
 - name: CATALOG_DB_BRANCH_LOGIN
@@ -91,6 +93,11 @@ onprem
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
       key: apiDbPassword
+{{- end }}
+
+{{- define "catalog.env.preloaders" -}}
+- name: CATALOG_PRELOADERS_SETTINGS_AWAIT_TIMEOUT
+  value: "{{ .Values.api.preloaders.awaitTimeout }}"
 {{- end }}
 
 {{- define "catalog.env.search" -}}
