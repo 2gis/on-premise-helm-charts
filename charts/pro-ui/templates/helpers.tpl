@@ -27,6 +27,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.ui.logLevel }}"
 - name: IS_ON_PREM
   value: "{{ .Values.ui.isOnPremise }}"
+- name: SSO_AUTH
+  value: "{{ .Values.ui.ssoAuth }}"
 - name: APP_LOCALE
   value: "{{ .Values.ui.appLocale }}"
 - name: APP_THEME
