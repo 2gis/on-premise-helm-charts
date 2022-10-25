@@ -196,6 +196,8 @@ importer:
   nodeSelector: {}
   workerNum: 3
   initialDelaySeconds: 1
+  retryAttempt: 3
+  retryTimeout: 1s
 
   image:
     repository: 2gis-on-premise/catalog-importer

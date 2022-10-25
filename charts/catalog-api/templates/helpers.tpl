@@ -182,4 +182,8 @@ onprem
   value: "{{ .Values.importer.workerNum }}"
 - name: IMPORTER_NUMBER_SCHEMA_BACKUPS
   value: "{{ .Values.importer.cleaner.versionLimit }}"
+- name: IMPORTER_S3_RETRY_MAX_ATTEMPT
+  value: "{{ .Values.importer.retryAttempt }}"
+- name: IMPORTER_S3_RETRY_TIMEOUT
+  value: "{{ .Values.importer.retryTimeout }}"
 {{- end }}
