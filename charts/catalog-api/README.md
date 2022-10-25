@@ -71,7 +71,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description | Value                         |
 | ---------------------- | ----------- | ----------------------------- |
 | `api.image.repository` | Repository  | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag         | `3.567.0`                     |
+| `api.image.tag`        | Tag         | `3.574.0`                     |
 | `api.image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
 
@@ -155,9 +155,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.nodeSelector`                      | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).           | `{}`                               |
 | `importer.workerNum`                         | Number of parallel import processes (workers).                                                                                | `3`                                |
 | `importer.initialDelaySeconds`               | Number of seconds after the container has started before liveness or readiness probes are initiated.                          | `1`                                |
+| `importer.retryAttempt`                      | The maximum number of retries download before stopping.                                                                       | `3`                                |
+| `importer.retryTimeout`                      | Delay until the retry attempts.                                                                                               | `1s`                               |
 | `importer.image`                             | **Deployment settings**                                                                                                       |                                    |
 | `importer.image.repository`                  | Repository                                                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`                         | Tag                                                                                                                           | `1.0.4`                            |
+| `importer.image.tag`                         | Tag                                                                                                                           | `1.0.7`                            |
 | `importer.image.pullPolicy`                  | Pull Policy                                                                                                                   | `IfNotPresent`                     |
 | `importer.resources`                         | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)** |                                    |
 | `importer.resources.requests.cpu`            | A CPU request.                                                                                                                | `256m`                             |
