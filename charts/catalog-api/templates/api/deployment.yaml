@@ -50,6 +50,7 @@ spec:
             {{- toYaml .Values.api.resources | nindent 12 }}
           env:
             {{- include "catalog.env.db" . | nindent 12 }}
+            {{- include "catalog.env.preloaders" . | nindent 12 }}
             {{- include "catalog.env.search" . | nindent 12 }}
             {{- include "catalog.env.keys" . | nindent 12 }}
       {{- with .Values.nodeSelector }}

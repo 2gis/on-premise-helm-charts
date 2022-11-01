@@ -137,6 +137,7 @@ api:
   # @param api.db.name PostgreSQL database name.
   # @param api.db.username PostgreSQL username.
   # @param api.db.password PostgreSQL password.
+  # @param api.db.queryTimeout Max execution time PostgreSQL query timeout in seconds.
 
   db:
     host: postgres.host
@@ -144,6 +145,14 @@ api:
     name: catalog
     username: postgres
     password: secret
+    queryTimeout: 3
+
+  # @section Preloaders settings
+
+  # @param api.preloaders.awaitTimeout Preloaders await timeout.
+
+  preloaders:
+    awaitTimeout: 60s
 
 # @section Search
 

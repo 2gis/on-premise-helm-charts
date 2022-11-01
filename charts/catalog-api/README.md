@@ -71,7 +71,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description | Value                         |
 | ---------------------- | ----------- | ----------------------------- |
 | `api.image.repository` | Repository  | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag         | `3.567.0`                     |
+| `api.image.tag`        | Tag         | `3.574.0`                     |
 | `api.image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
 
@@ -118,13 +118,21 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Database settings
 
-| Name              | Description               | Value           |
-| ----------------- | ------------------------- | --------------- |
-| `api.db.host`     | PostgreSQL rw/ro host.    | `postgres.host` |
-| `api.db.port`     | PostgreSQL port.          | `5432`          |
-| `api.db.name`     | PostgreSQL database name. | `catalog`       |
-| `api.db.username` | PostgreSQL username.      | `postgres`      |
-| `api.db.password` | PostgreSQL password.      | `secret`        |
+| Name                  | Description                                             | Value           |
+| --------------------- | ------------------------------------------------------- | --------------- |
+| `api.db.host`         | PostgreSQL rw/ro host.                                  | `postgres.host` |
+| `api.db.port`         | PostgreSQL port.                                        | `5432`          |
+| `api.db.name`         | PostgreSQL database name.                               | `catalog`       |
+| `api.db.username`     | PostgreSQL username.                                    | `postgres`      |
+| `api.db.password`     | PostgreSQL password.                                    | `secret`        |
+| `api.db.queryTimeout` | Max execution time PostgreSQL query timeout in seconds. | `3`             |
+
+
+### Preloaders settings
+
+| Name                          | Description               | Value |
+| ----------------------------- | ------------------------- | ----- |
+| `api.preloaders.awaitTimeout` | Preloaders await timeout. | `60s` |
 
 
 ### Search
@@ -157,7 +165,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.initialDelaySeconds`               | Number of seconds after the container has started before liveness or readiness probes are initiated.                          | `1`                                |
 | `importer.image`                             | **Deployment settings**                                                                                                       |                                    |
 | `importer.image.repository`                  | Repository                                                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`                         | Tag                                                                                                                           | `1.0.4`                            |
+| `importer.image.tag`                         | Tag                                                                                                                           | `1.0.7`                            |
 | `importer.image.pullPolicy`                  | Pull Policy                                                                                                                   | `IfNotPresent`                     |
 | `importer.resources`                         | **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)** |                                    |
 | `importer.resources.requests.cpu`            | A CPU request.                                                                                                                | `256m`                             |
