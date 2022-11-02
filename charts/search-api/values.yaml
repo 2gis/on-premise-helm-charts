@@ -13,7 +13,7 @@ dgctlDockerRegistry: ''
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-# @param redeploy_label If this label is changed since the last deployment, the whole chart will be redeployed.
+# @param redeployLabel If this label is changed since the last deployment, the whole chart will be redeployed.
 
 podAnnotations: {}
 podLabels: {}
@@ -21,7 +21,7 @@ replicaCount: 1
 nodeSelector: {}
 affinity: {}
 tolerations: []
-redeploy_label: ''
+redeployLabel: ''
 
 
 # @section Deployment Artifacts Storage settings
@@ -46,7 +46,7 @@ api:
 
   # @param api.image.repository Repository
   # @param api.image.tag Tag
-  # @param api.image.pullPolicy Pull Policy
+  # @param api.image.pullPolicy: IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
 
   image:
     repository: 2gis-on-premise/search-api
@@ -56,15 +56,15 @@ api:
 
   # @section API settings
 
-  # @param api.data_dir Path to the directory storing search indexes.
-  # @param api.fcgi_port TCP port of the Search API.
+  # @param api.dataDir Path to the directory storing search indexes.
+  # @param api.fcgiPort TCP port of the Search API.
   # @param api.logLevel Log level.
   # @param api.logFormat Log format: `json` or `plaintext`.
   # @param api.configOpt Additional options (for debugging purposes).
 
   resources: {}
-  data_dir: /data
-  fcgi_port: 9090
+  dataDir: /data
+  fcgiPort: 9090
   logLevel: Info
   logFormat: json
   configOpt: []
@@ -74,8 +74,8 @@ api:
 
 # @param nginx.image.repository Docker Repository.
 # @param nginx.image.tag Docker image tag.
-# @param nginx.image.pullPolicy Kubernetes pull policy for the service's Docker image.
-# @param nginx.http_port HTTP port on which NGINX will be listening.
+# @param nginx.image.pullPolicy: IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param nginx.httpPort HTTP port on which NGINX will be listening.
 
 nginx:
   image:
@@ -83,12 +83,12 @@ nginx:
     tag: 1.21.6
     pullPolicy: IfNotPresent
   resources: {}
-  http_port: 8080
+  httpPort: 8080
 
 
 # @section Strategy settings
 
-# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate` [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
 # @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
 # @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
 
@@ -103,7 +103,7 @@ strategy:
 
 # @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.type: ClusterIP, NodePort, LoadBalancer, ExternalName [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 # @param service.port Service port.
 
 service:

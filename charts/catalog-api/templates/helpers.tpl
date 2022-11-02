@@ -31,7 +31,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "catalog.manifestCode" -}}
-{{- if .Values.importer.db.schemaSwitchEnabled }}
+{{- if .Values.importer.postgres.schemaSwitchEnabled }}
 {{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- else -}}
 onprem
@@ -39,15 +39,15 @@ onprem
 {{- end }}
 
 
-{{- define "catalog.env.db" -}}
+{{- define "catalog.env.postgres" -}}
 - name: CATALOG_DB_SCHEMA
   value: "{{ include "catalog.manifestCode" . }},extensions"
 - name: CATALOG_DB_QUERY_TIMEOUT
-  value: "{{ .Values.api.db.queryTimeout }}"
+  value: "{{ .Values.api.postgres.queryTimeout }}"
 - name: CATALOG_DB_BRANCH_URL
-  value: "jdbc:postgresql://{{ .Values.api.db.host }}:{{ .Values.api.db.port }}/{{ .Values.api.db.name }}"
+  value: "jdbc:postgresql://{{ .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ .Values.api.postgres.name }}"
 - name: CATALOG_DB_BRANCH_LOGIN
-  value: "{{ .Values.api.db.username }}"
+  value: "{{ .Values.api.postgres.username }}"
 - name: CATALOG_DB_BRANCH_PASS
   valueFrom:
     secretKeyRef:
@@ -55,9 +55,9 @@ onprem
       key: apiDbPassword
 
 - name: CATALOG_DB_REGION_URL
-  value: "jdbc:postgresql://{{ .Values.api.db.host }}:{{ .Values.api.db.port }}/{{ .Values.api.db.name }}"
+  value: "jdbc:postgresql://{{ .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ .Values.api.postgres.name }}"
 - name: CATALOG_DB_REGION_LOGIN
-  value: "{{ .Values.api.db.username }}"
+  value: "{{ .Values.api.postgres.username }}"
 - name: CATALOG_DB_REGION_PASS
   valueFrom:
     secretKeyRef:
@@ -65,9 +65,9 @@ onprem
       key: apiDbPassword
 
 - name: CATALOG_DB_API_KEY_URL
-  value: "jdbc:postgresql://{{ .Values.api.db.host }}:{{ .Values.api.db.port }}/{{ .Values.api.db.name }}"
+  value: "jdbc:postgresql://{{ .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ .Values.api.postgres.name }}"
 - name: CATALOG_DB_API_KEY_LOGIN
-  value: "{{ .Values.api.db.username }}"
+  value: "{{ .Values.api.postgres.username }}"
 - name: CATALOG_DB_API_KEY_PASS
   valueFrom:
     secretKeyRef:
@@ -75,9 +75,9 @@ onprem
       key: apiDbPassword
 
 - name: CATALOG_DB_RUBRIC_URL
-  value: "jdbc:postgresql://{{ .Values.api.db.host }}:{{ .Values.api.db.port }}/{{ .Values.api.db.name }}"
+  value: "jdbc:postgresql://{{ .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ .Values.api.postgres.name }}"
 - name: CATALOG_DB_RUBRIC_LOGIN
-  value: "{{ .Values.api.db.username }}"
+  value: "{{ .Values.api.postgres.username }}"
 - name: CATALOG_DB_RUBRIC_PASS
   valueFrom:
     secretKeyRef:
@@ -85,9 +85,9 @@ onprem
       key: apiDbPassword
 
 - name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_URL
-  value: "jdbc:postgresql://{{ .Values.api.db.host }}:{{ .Values.api.db.port }}/{{ .Values.api.db.name }}"
+  value: "jdbc:postgresql://{{ .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ .Values.api.postgres.name }}"
 - name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_LOGIN
-  value: "{{ .Values.api.db.username }}"
+  value: "{{ .Values.api.postgres.username }}"
 - name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_PASS
   valueFrom:
     secretKeyRef:
@@ -102,14 +102,14 @@ onprem
 
 {{- define "catalog.env.search" -}}
 - name: CATALOG_SAPPHIRE_URL
-  value: "{{ .Values.search.url }}"
+  value: "{{ .Values.search.host }}"
 {{- end }}
 
 {{- define "catalog.env.keys" -}}
 - name: CATALOG_KEYS_ENABLED
   value: "true"
 - name: CATALOG_KEYS_ENDPOINT
-  value: "{{ .Values.keys.endpoint }}"
+  value: "{{ .Values.keys.host }}"
 - name: CATALOG_KEYS_REQUEST_TIMEOUT
   value: "{{ .Values.keys.requestTimeout }}"
 - name: CATALOG_KEYS_SERVICE_CATALOG_KEY
@@ -155,15 +155,15 @@ onprem
 - name: IMPORTER_DB_CATALOG_SCHEMA
   value: "{{ include "catalog.manifestCode" . }}"
 - name: IMPORTER_DB_CATALOG_SCHEMA_SWITCH_ENABLED
-  value: "{{ .Values.importer.db.schemaSwitchEnabled }}"
+  value: "{{ .Values.importer.postgres.schemaSwitchEnabled }}"
 - name: IMPORTER_DB_CATALOG_HOST
-  value: "{{ .Values.importer.db.host }}"
+  value: "{{ .Values.importer.postgres.host }}"
 - name: IMPORTER_DB_CATALOG_PORT
-  value: "{{ .Values.importer.db.port }}"
+  value: "{{ .Values.importer.postgres.port }}"
 - name: IMPORTER_DB_CATALOG_NAME
-  value: "{{ .Values.importer.db.name }}"
+  value: "{{ .Values.importer.postgres.name }}"
 - name: IMPORTER_DB_CATALOG_USERNAME
-  value: "{{ .Values.importer.db.username }}"
+  value: "{{ .Values.importer.postgres.username }}"
 - name: IMPORTER_DB_CATALOG_PASSWORD
   valueFrom:
     secretKeyRef:
