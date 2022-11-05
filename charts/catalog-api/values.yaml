@@ -189,6 +189,8 @@ keys:
 # @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param importer.workerNum Number of parallel import processes (workers).
 # @param importer.initialDelaySeconds Number of seconds after the container has started before liveness or readiness probes are initiated.
+# @param importer.retry.maxAttempts The maximum number of retries download before stopping.
+# @param importer.retry.delay Delay until the retry attempts.
 
 # @extra importer.image **Deployment settings**
 # @param importer.image.repository Repository
@@ -205,6 +207,9 @@ importer:
   nodeSelector: {}
   workerNum: 3
   initialDelaySeconds: 1
+  retry:
+    maxAttempts: 3
+    delay: 1s
 
   image:
     repository: 2gis-on-premise/catalog-importer
