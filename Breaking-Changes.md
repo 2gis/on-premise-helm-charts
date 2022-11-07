@@ -1,5 +1,17 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [#.#.#]
+
+### navi-async-matrix, navi-back
+- Updated structure and defaults for Kafka configuration
+- Renamed `s3.url` to `s3.host`
+- Renamed `s3.keyId` to `s3.accessKey`
+- Renamed `s3.key` to `s3.secretKey`
+
+### navi-async-matrix
+- Renamed `keys.endpoint` to `keys.host`
+- Renamed `keys.dm_key` to `keys.token`
+
 ## [1.4.4]
 
 #### keys

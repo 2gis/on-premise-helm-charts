@@ -97,7 +97,7 @@ naviback:
   dump_query: false
   dump_answer: false
   logLevel: Info
-  indices:  # see DEVOPS-300
+  indices:
     carOptions:
       enabled: false
     countryCarOptions:
@@ -233,14 +233,6 @@ hpa:
   targetMemoryUtilizationPercentage: ''
 
 
-# @section Vertical scaling settings
-
-# @param verticalscaling.enabled If vertical scaling is enabled.
-
-verticalscaling:
-  enabled: false
-
-
 # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 # @param vpa.enabled If VPA is enabled for the service.
@@ -270,13 +262,11 @@ pdb:
 # @section Kafka settings for interacting with Distance Matrix Async Service
 
 # @param kafka.enabled If the Kafka is enabled.
-# @param kafka.server Kafka hostname or IP address.
-# @param kafka.port Kafka port.
 # @param kafka.groupId Navi-Back service group identifier.
-# @param kafka.user Username for accessing the Kafka server.
-# @param kafka.password Password for accessing the Kafka server.
-# @param kafka.mechanism Authentication mechanism.
-# @param kafka.protocol Kafka protocol.
+# @extra kafka.properties Properties as supported by librdkafka. Refer to inline comments for details.
+# @skip kafka.properties.bootstrap.servers
+# @skip kafka.properties.security.protocol
+# @param kafka.fileProperties As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
 # @extra kafka.distanceMatrix **Settings for interacting with Distance Matrix Async service.**
 # @param kafka.distanceMatrix.taskTopic Name of the topic for receiving new tasks from Distance Matrix Async API.
 # @param kafka.distanceMatrix.cancelTopic Name of the topic for canceling or receiving information about finished tasks.
@@ -288,37 +278,71 @@ pdb:
 
 kafka:
   enabled: false
-  server: async-matrix-api.host
-  port: 9092
-  groupId: test_id
-  user: kafkauser
-  password: kafkapassword
-  mechanism: SCRAM-SHA-512
-  protocol: SASL_SSL
+  groupId: navi_back
+  properties:
+    bootstrap.servers: async-matrix-api.host:9092
+    security.protocol: PLAINTEXT
+  fileProperties: {}
   distanceMatrix:
-    taskTopic: request_topic
+    taskTopic: task_topic
     cancelTopic: cancel_topic
-    statusTopic: service_message_bus
+    statusTopic: status_topic
     updateTaskStatusPeriodSec: 120
     messageExpiredPeriodSec: 3600
     requestDownloadTimeoutSec: 20
     responseUploadTimeoutSec: 40
 
+# Kafka properties for common use-cases:
+#
+# Note that <Set-by-CI from user.p12> means that actual content passed from
+# file user.p12 with --set-file (especially binary data), e.g.:
+#
+#   $ helm install navi-back . --set-file 'kafka.fileProperties.ssl\.keystore\.location=user.p12'
+#
+# 1. SSL authentication with key file protected with password 123:
+#
+#  properties:
+#    bootstrap.servers: async-matrix-api.host:9092
+#    security.protocol: SSL
+#    ssl.keystore.password: "123"
+#  fileProperties:
+#    ssl.ca.location: "<Set-by-CI from ca.crt>"
+#    ssl.certificate.location: "<Set-by-CI from user.crt>"
+#    ssl.key.location: "<Set-by-CI from user.pem>"
+#
+# 2. login/password SASL as test-username/123:
+#
+#  properties:
+#    bootstrap.servers: async-matrix-api.host:9092
+#    security.protocol: SASL_PLAINTEXT
+#    sasl.mechanism: SCRAM-SHA-512
+#    sasl.username: test-username
+#    sasl.password: "123"
+#
+# 3. Unauthenticated:
+#
+#  properties:
+#    bootstrap.servers: async-matrix-api.host:9092
+#    security.protocol: PLAINTEXT
+
 
 # @section S3-compatible storage settings for interacting with Distance Matrix Async Service
 
 # @param s3.enabled if S3 storage is enabled.
-# @param s3.url S3 endpoint URL.
+# @param s3.host S3 endpoint URL.
 # @param s3.bucket S3 bucket name.
-# @param s3.keyId S3 access key for accessing the bucket.
-# @param s3.key S3 secret key for accessing the bucket.
+# @param s3.accessKey S3 access key for accessing the bucket.
+# @param s3.secretKey S3 secret key for accessing the bucket.
 
 s3:
   enabled: false
-  url: async-matrix-s3.host:80
+  host: async-matrix-s3.host:80
   bucket: samplebucket
-  keyId: sampleid
-  key: samplekey
+  accessKey: sampleid
+  secretKey: samplekey
+
+# @param livenessProbeDelay initial delay for liveness probes
+# @param readinessProbeDelay initial delay for readiness probes
 
 livenessProbeDelay: 60
 readinessProbeDelay: 75

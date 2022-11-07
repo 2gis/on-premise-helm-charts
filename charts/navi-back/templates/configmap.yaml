@@ -392,23 +392,32 @@ data:
         {{- if .Values.s3.enabled }}
           "s3": {
             "distance_matrix": {
-              "endpoint": {{ .Values.s3.url | quote }},
+              "endpoint": {{ .Values.s3.host | quote }},
               "bucket": {{ .Values.s3.bucket | quote }},
-              "access_key": {{ .Values.s3.keyId | quote }},
-              "secret_key": {{ .Values.s3.key | quote }}
+              "access_key": {{ .Values.s3.accessKey | quote }},
+              "secret_key": {{ .Values.s3.secretKey | quote }}
             }
           },
         {{- end }}
         {{- if .Values.kafka.enabled }}
           "kafka": {
-            "server" : {{ .Values.kafka.server | quote }},
-            "port" : {{ .Values.kafka.port | int }},
-            "user": {{ .Values.kafka.user | quote }},
-            "password": {{ .Values.kafka.password | quote }},
-            "sasl_mechanism": {{ .Values.kafka.mechanism | quote }},
-            "security_protocol": {{ .Values.kafka.protocol | quote }},
             "task_group_id" : {{ .Values.kafka.groupId | quote }},
             "cancel_group_id": {{ .Values.kafka.groupId | quote }},
+            {{- /*
+                 Collect merged Kafka properties from these dictionaries:
+                   - kafka.properties: this is a simple key/value dictionary
+                   - kafka.fileProperties: this is a key/content dictionary given in values,
+                     content is sensitive and stored in Secret resource, they get
+                     mounted as files sonamed after key. While actual secret values are
+                     hidden this way, what actually goes here in environment properties is
+                     file names. This value substitution is implemented down here.
+                 */ -}}
+            {{- $kafkaProperties := dict -}}
+            {{- range $key, $_ := .Values.kafka.fileProperties -}}
+            {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
+            {{- end -}}
+            {{- $kafkaProperties := mustMerge $kafkaProperties .Values.kafka.properties -}}
+            "kafka_properties": {{ mustToPrettyJson $kafkaProperties | nindent 12 }},
             "distance_matrix": {
               "task_topic": {{ .Values.kafka.distanceMatrix.taskTopic | quote }},
               "cancel_topic":  {{ .Values.kafka.distanceMatrix.cancelTopic | quote }},

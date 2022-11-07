@@ -54,7 +54,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.0.0`                             |
+| `image.tag`        | Tag         | `1.1.0`                             |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 
@@ -161,39 +161,37 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Kafka settings
 
-| Name                          | Description                                                                                    | Value                        |
-| ----------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------- |
-| `kafka.bootstrap`             | URL of the Kafka server.                                                                       | `async-matrix-api.host:9092` |
-| `kafka.groupId`               | Distance Matrix Async API group identifier.                                                    | `test_id`                    |
-| `kafka.user`                  | Username for accessing the Kafka server.                                                       | `kafkauser`                  |
-| `kafka.password`              | Password for accessing the Kafka server.                                                       | `kafkapassword`              |
-| `kafka.mechanism`             | Authentication mechanism.                                                                      | `SCRAM-SHA-512`              |
-| `kafka.protocol`              | Kafka protocol.                                                                                | `SASL_SSL`                   |
-| `kafka.consumerTaskTopic`     | Name of the topic for sending new tasks to.                                                    | `service_message_bus`        |
-| `kafka.consumerCancelTopic`   | Name of the topic for canceling or receiving information about finished tasks.                 | `cancel_topic`               |
-| `kafka.topicRules`            | **Information about the topics that Distance Matrix Async API will use to send the requests.** |                              |
-| `kafka.topicRules[].topic`    | Name of the topic.                                                                             |                              |
-| `kafka.topicRules[].default`  | If this topic is used for projects by default.                                                 |                              |
-| `kafka.topicRules[].projects` | List of projects to use this topic for, e.g., `['dammam']`.                                    |                              |
+| Name                              | Description                                                                                                               | Value               |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `kafka.groupId`                   | Distance Matrix Async API group identifier.                                                                               | `navi_async_matrix` |
+| `kafka.statusTopic`               | Name of the topic for sending new tasks to.                                                                               | `status_topic`      |
+| `kafka.cancelTopic`               | Name of the topic for canceling or receiving information about finished tasks.                                            | `cancel_topic`      |
+| `kafka.properties`                | Properties as supported by kafka-python. Refer to inline comments for details.                                            |                     |
+| `kafka.sensitiveProperties`       | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                |
+| `kafka.fileProperties`            | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                |
+| `kafka.taskTopicRules`            | **Information about the topics that Distance Matrix Async API will use to send the requests.**                            |                     |
+| `kafka.taskTopicRules[].topic`    | Name of the topic.                                                                                                        |                     |
+| `kafka.taskTopicRules[].default`  | If this topic is used for projects by default.                                                                            |                     |
+| `kafka.taskTopicRules[].projects` | List of projects to use this topic for, e.g., `['dammam']`.                                                               |                     |
 
 
 ### S3-compatible storage settings
 
 | Name              | Description                                                       | Value                          |
 | ----------------- | ----------------------------------------------------------------- | ------------------------------ |
-| `s3.url`          | S3 endpoint URL.                                                  | `https://async-matrix-s3.host` |
+| `s3.host`         | S3 endpoint URL.                                                  | `https://async-matrix-s3.host` |
 | `s3.bucket`       | S3 bucket name.                                                   | `samplebucket`                 |
-| `s3.keyId`        | S3 access key for accessing the bucket.                           | `sampleid`                     |
-| `s3.key`          | S3 secret key for accessing the bucket.                           | `samplekey`                    |
+| `s3.accessKey`    | S3 access key for accessing the bucket.                           | `sampleid`                     |
+| `s3.secretKey`    | S3 secret key for accessing the bucket.                           | `samplekey`                    |
 | `s3.publicNetloc` | Announce proxy URL for S3 results instead of s3.url if not empty. | `nil`                          |
 
 
 ### API keys service
 
-| Name            | Description                          | Value                   |
-| --------------- | ------------------------------------ | ----------------------- |
-| `keys.endpoint` | API keys service URL.                | `https://keys-api.host` |
-| `keys.dm_key`   | API key to authorize at the service. | `samplekey`             |
+| Name         | Description                            | Value                                  |
+| ------------ | -------------------------------------- | -------------------------------------- |
+| `keys.host`  | API keys service URL.                  | `http://keys-api.host/service/v1/keys` |
+| `keys.token` | API token to authorize at the service. | `samplekey`                            |
 
 
 ## Maintainers

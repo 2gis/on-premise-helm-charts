@@ -41,6 +41,11 @@ spec:
       - name: {{ include "naviback.fullname" . }}-configmap
         configMap:
           name: {{ include "naviback.fullname" . }}-configmap
+      {{- if .Values.kafka.fileProperties }}
+      - name: {{ include "naviback.fullname" . }}-secret
+        secret:
+          secretName: {{ include "naviback.fullname" . }}-secret
+      {{- end }}
       containers:
         - name: {{ include "naviback.fullname" . }}
           securityContext:
@@ -58,6 +63,10 @@ spec:
           - name: {{ include "naviback.fullname" . }}-configmap
             mountPath: /etc/2gis/mosesd/rules.conf
             subPath: rules.conf
+          {{- if .Values.kafka.fileProperties }}
+          - name: {{ include "naviback.fullname" . }}-secret
+            mountPath: /etc/2gis/mosesd/secret/
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.naviback.app_port }}

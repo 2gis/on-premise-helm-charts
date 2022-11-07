@@ -27,5 +27,5 @@ charts/*:
 		--volume $(ROOT)/bitnami-config.json:/config.json:ro \
 		--volume $(ROOT)/$@/values.yaml:/values.yaml:ro \
 		--volume $(ROOT)/$@/README.md:/README.md:rw \
-		readme-generator-for-helm \
+		docker-hub.2gis.ru/on-premise/readme-generator-for-helm \
 		readme-generator --config=/config.json --values=/values.yaml --readme=/README.md
