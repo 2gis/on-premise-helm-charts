@@ -53,8 +53,8 @@ spec:
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: [ "/usr/sbin/2gis/mosesd/mosesd" ]
-          args: 
-           - --config 
+          args:
+           - --config
            - /etc/2gis/mosesd/navi-back.conf
           volumeMounts:
           - name: {{ include "naviback.fullname" . }}-configmap
@@ -69,7 +69,7 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.naviback.app_port }}
+              containerPort: {{ .Values.naviback.appPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -90,12 +90,17 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
+          {{ if ne .Values.naviback.type "schedule" }}
           - name: RULE
             value: {{ .Values.naviback.app_rule | default "" | quote  }}
+          {{- else -}}
+          - name: RULE
+            value: ""
+          {{ end }}
           - name: PROJECT
             value: {{ .Values.app_project | default "" | quote }}
           
-      terminationGracePeriodSeconds: {{ .Values.termination_grace_period_seconds | default 60 }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 60 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

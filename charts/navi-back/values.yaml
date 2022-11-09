@@ -46,19 +46,19 @@ image:
 
 # @section Navi-Back application settings
 
-# @extra naviback.app_castle_host URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
-# @extra naviback.eca_host Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
-# @extra naviback.forecast_host URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
-# @skip naviback.app_port
-# @param naviback.dm_sources_limit Size limit for source matrices.
-# @param naviback.dm_targets_limit Size limit for target matrices.
-# @param naviback.handlers_number Number of HTTP handlers.
-# @param naviback.max_process_time Maximum processing time limit in minutes.
-# @param naviback.response_timelimit Maximum response time limit in minutes.
-# @param naviback.request_timeout Maximum request time limit in minutes.
-# @param naviback.dump_result Dump results in logs.
-# @param naviback.dump_query Dump queries in logs.
-# @param naviback.dump_answer Dump answers in logs.
+# @extra naviback.appCastleHost URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @extra naviback.ecaHost Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @skip naviback.appPort
+# @param naviback.dmSourcesLimit Size limit for source matrices.
+# @param naviback.dmTargetsLimit Size limit for target matrices.
+# @param naviback.handlersNumber Number of HTTP handlers.
+# @param naviback.maxProcessTime Maximum processing time limit in minutes.
+# @param naviback.responseTimelimit Maximum response time limit in minutes.
+# @param naviback.requestTimeout Maximum request time limit in minutes.
+# @param naviback.dump.result Dump results in logs.
+# @param naviback.dump.query Dump queries in logs.
+# @param naviback.dump.answer Dump answers in logs.
 # @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
 # @extra naviback.indices List of dynamic indices kill switches.
 # @skip naviback.indices.carOptions.enabled
@@ -83,19 +83,21 @@ image:
 # @skip naviback.indices.tugc2gisIndex.enabled
 # @skip naviback.indices.tugcUsers.enabled
 # @skip naviback.indices.tugcUsersIndex.enabled
+# @extra naviback.additionalSections Optinal JSON block to be added to config file as-is.
 # @skip rules
 
 naviback:
-  app_port: 8080
-  dm_sources_limit: 1000
-  dm_targets_limit: 1000
-  handlers_number: 1
-  max_process_time: 600
-  response_timelimit: 60
-  request_timeout: 60
-  dump_result: false
-  dump_query: false
-  dump_answer: false
+  appPort: 8080
+  dmSourcesLimit: 1000
+  dmTargetsLimit: 1000
+  handlersNumber: 1
+  maxProcessTime: 600
+  responseTimelimit: 60
+  requestTimeout: 60
+  dump:
+    result: false
+    query: false
+    answer: false
   logLevel: Info
   indices:
     carOptions:

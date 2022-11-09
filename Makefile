@@ -2,10 +2,10 @@
 
 ROOT := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-# readme generator image
-GENERATOR = readme-generator-for-helm
+# readme generator image built in `prepare`
+# GENERATOR = readme-generator-for-helm
 # the pre-compiled one available internally
-# GENERATOR = docker-hub.2gis.ru/on-premise/readme-generator-for-helm
+GENERATOR = docker-hub.2gis.ru/on-premise/readme-generator-for-helm
 
 all:
 	@echo 'Building README for catalog-api...'        && make charts/catalog-api        && echo

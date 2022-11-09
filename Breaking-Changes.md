@@ -2,13 +2,32 @@
 
 ## [#.#.#]
 
-### navi-async-matrix, navi-back
+### navi-back
 - Updated structure and defaults for Kafka configuration
 - Renamed `s3.url` to `s3.host`
 - Renamed `s3.keyId` to `s3.accessKey`
 - Renamed `s3.key` to `s3.secretKey`
+- Renamed `naviback.app_port` to `naviback.appPort`
+- Renamed `naviback.handlers_number` to `naviback.handlersNumber`
+- Renamed `naviback.max_process_time` to `naviback.maxProcessTime`
+- Renamed `naviback.response_timelimit` to `naviback.responseTimelimit`
+- Renamed `naviback.request_timeout` to `naviback.requestTimeout`
+- Renamed `naviback.app_castle_host` to `naviback.appCastleHost`
+- Renamed `naviback.forecast_host` to `naviback.forecastHost`
+- Renamed `naviback.eca_host` to `naviback.ecaHost`
+- Renamed `naviback.additional_sections` to `naviback.additionalSections`
+- Renamed `naviback.dump_query` to `naviback.dump.query`
+- Renamed `naviback.dump_result` to `naviback.dump.result`
+- Renamed `naviback.dump_answer` to `naviback.dump.answer`
+- Renamed `naviback.dm_sources_limit` to `naviback.dmSourcesLimit`
+- Renamed `naviback.dm_targets_limit` to `naviback.dmTargetsLimit`
+- Renamed `naviback.termination_grace_period_seconds` to `naviback.terminationGracePeriodSeconds`
 
 ### navi-async-matrix
+- Updated structure and defaults for Kafka configuration
+- Renamed `s3.url` to `s3.host`
+- Renamed `s3.keyId` to `s3.accessKey`
+- Renamed `s3.key` to `s3.secretKey`
 - Renamed `keys.endpoint` to `keys.host`
 - Renamed `keys.dm_key` to `keys.token`
 
