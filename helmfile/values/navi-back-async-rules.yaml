@@ -1,0 +1,16 @@
+.projects: &projects
+  - kazan
+  - nabchelny
+  - almetevsk
+  - ru_tatarstan_republic_rwop
+
+# rules используется чтобы ограничить кол-во загружаемых проектов
+rules:
+- name: &name_rule some-projects-dma
+  moses_projects: *projects 
+  router_projects: *projects
+  queries: ["routing"]
+  routing: ["driving"]
+
+naviback:
+  app_rule: *name_rule

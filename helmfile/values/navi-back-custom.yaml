@@ -1,0 +1,18 @@
+replicaCount: 2
+
+navigroup: navi
+
+naviback:
+  app_castle_host: "http://change_me_castle_internatl_service.cluster.svc"
+  dm_sources_limit: 25 
+  dm_targets_limit: 25 
+
+resources: # change_me_ выставить соответсвующие ресурсы и лимиты
+  limits:
+    cpu: 8000m
+    memory: 16384Mi
+  requests:
+    cpu: 2000m
+    memory: 4096Mi
+
+rules: '[]'

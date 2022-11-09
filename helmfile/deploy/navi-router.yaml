@@ -1,0 +1,19 @@
+---
+bases:
+- ../base.yaml
+---
+releases:
+  - name: navi-router
+    chart: ../../charts/navi-router
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    version: "{{ .Values.version }}"
+    timeout: 1200
+    labels:
+      service: navi-router
+    values:
+      - ../values/dgctl.yaml
+      - ../values/navi-router.yaml
+    {{- if .Values.customProjectNavi }}
+      - ../values/navi-custom-rules.yaml # использовать проекты, описанные в rules.conf
+    {{ end }}

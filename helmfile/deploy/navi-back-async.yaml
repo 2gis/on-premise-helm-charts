@@ -1,0 +1,40 @@
+---
+bases:
+- ../base.yaml
+---
+releases:
+  - name: navi-back-async
+    chart:  ../../charts/navi-back
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    version: "{{ .Values.version }}"
+    timeout: 3600
+    labels:
+      service: navi-back-async
+    values: 
+      - ../values/dgctl.yaml
+      - ../values/kafka-and-s3.yaml
+      - ../values/navi-back-async.yaml
+    {{- if .Values.customProjectNavi }}
+      - ../values/navi-back-async-rules.yaml # использовать проекты, описанные в rules.conf
+    {{ end }}
+    {{- if or .Values.kafka.authCert .Values.kafka.authLogin }}
+    set:
+    {{- if .Values.kafka.authCert }} # kafka аутентификация по сертификату
+      - name: kafka.fileProperties.ssl\.ca\.location
+        file: ../ssl/{{ .Values.kafka.authCert.sslCA }}
+      - name: kafka.fileProperties.ssl\.certificate\.location
+        file: ../ssl/{{ .Values.kafka.authCert.sslCertificate }}
+      - name: kafka.fileProperties.ssl\.key\.location
+        file: ../ssl/{{ .Values.kafka.authCert.sslKey }}
+        {{- if .Values.kafka.authCert.sslPassword }}
+      - name: kafka.ssl\.keystore\.password
+        value: {{ .Values.kafka.authCert.sslPassword }}        
+        {{ end }}
+    {{ else }} # kafka аутентификация по логину и паролю
+      - name: kafka.properties.sasl\.username
+        value: {{ .Values.kafka.authLogin.username }}
+      - name: kafka.properties.sasl\.password
+        value: {{ .Values.kafka.authLogin.sslPassword }}
+    {{ end }}
+    {{ end }}

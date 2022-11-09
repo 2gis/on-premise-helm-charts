@@ -1,0 +1,36 @@
+.topics:
+  task_topic: &tt change_me_task_name
+  status_topic: &st change_me_status_name
+  canсel_topic: &ct change_me_cansel_name
+
+kafka:
+  enabled: true
+  groupId: navi_async_matrix
+  properties:
+    bootstrap.servers: change_me_hostname # в формате hostname:port
+    security.protocol: SSL # SSL, SASL_SSL, SASL_PLAINTEXT или PLAINTEXT
+  fileProperties: {}
+
+  # navi-back topics
+  distanceMatrix:
+    taskTopic: *tt
+    cancelTopic: *ct
+    statusTopic: *st
+    updateTaskStatusPeriodSec: 120
+    messageExpiredPeriodSec: 3600
+    requestDownloadTimeoutSec: 20
+    responseUploadTimeoutSec: 40
+
+  # navi-async-matrix topics
+  statusTopic: *st
+  cancelTopic: *ct
+  taskTopicRules:
+  - topic: *tt
+    default: true
+
+s3:
+  enabled: true
+  host: change_me_host_name
+  bucket: change_me_bucket_am
+  accessKey: change_me_key
+  secretKey: change_me_secret

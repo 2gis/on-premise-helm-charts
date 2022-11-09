@@ -1,0 +1,17 @@
+{
+  "type": "bicycle",
+  "points": [
+    {
+      "start": true,
+      "type": "walking",
+      "x": 49.131840,
+      "y": 55.769438
+    },
+    {
+      "start": false,
+      "type": "walking",
+      "x": 49.194839,
+      "y": 55.807755
+    }
+  ]
+}

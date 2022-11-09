@@ -1,0 +1,22 @@
+{
+	"locale": "ru",
+	"source":
+	{
+		"name": "Point A",
+		"point":
+		{
+			"lat": 55.769438,
+			"lon": 49.131840
+		}
+	},
+	"target":
+	{
+		"name": "Point B",
+		"point":
+		{
+			"lat": 55.807755,
+			"lon": 49.194839
+		}
+	},
+	"transport": ["bus", "tram"]
+}

@@ -1,0 +1,28 @@
+navigroup: navi
+
+router:
+  app_castle_host: change_me_castle_internatl_service.cluster.svc
+  additional_sections: |
+    "key_management_service":
+      {
+        "service_remote_address": "http://change_me_keys_internatl_service.cluster.svc/service/v1/keys",
+        "keys_refresh_interval_min": 5,
+        "keys_download_timeout_sec": 30,
+        "service_apis":
+          [
+            { "type": "directions", "token": "change_me_DIRECTIONS_API_KEY_AAAAAA-111111" },
+            { "type": "distance-matrix", "token": "change_me_DISTANCE_MATRIX_API_KEY_FFFFFF-666666" },
+            { "type": "isochrone", "token": "change_me_ISOCHRONE_API_KEY_HHHHHH-888888" },
+            { "type": "public-transport", "token" : "change_me_PUBLIC_TRANSPORT_API_KEY_DDDDDD-444444"}
+          ]
+      }
+
+replicaCount: 2
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 1024Mi
+  requests:
+    cpu: 500m
+    memory: 128Mi

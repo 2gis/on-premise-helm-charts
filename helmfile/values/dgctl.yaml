@@ -1,0 +1,7 @@
+dgctlDockerRegistry: 'change_me_registry_addr'
+dgctlStorage:
+  host: 'change_me_s3_host_name'
+  bucket: 'change_me_s3_bucket_name'
+  accessKey: 'change_me_key'
+  secretKey: 'change_me_secret'
+  manifest: 'manifests/change_me.json'

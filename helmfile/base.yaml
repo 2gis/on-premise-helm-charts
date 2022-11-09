@@ -1,0 +1,27 @@
+helmDefaults:
+  createNamespace: false
+  atomic: true
+  wait: true
+
+environments:
+  default:
+    values:
+      - version: 1.4.1 # change_me_actual_version
+        namespace: "change_me_your_namespace"
+        kubeContext: "change_me_your_context"
+        apiKey: "change_me_your_api_key"
+        ingress: 
+          enabled: true
+          domain: "change_me_your_ingress_domain" # домен ингресса ex: example.com
+          protocol: "change_me_your_protocol_ingress_domain" # протокол ингресса http или https
+          secretName: "change_me_your_secret_tls" # указать k8s secrets, содержащий сертификат для https, если будет использоваться https
+        customProjectNavi: false # true - деплой проектов из values/*-rules.yaml, false - деплой всех проектов
+        kafka: # методы аутентификации (login/password or ssl certificates)
+          authLogin: {}
+            # username: change_me_your_username
+            # password: change_me_your_password
+          authCert: # сертификаты и ключ нужно положить в директорию ssl и указать здесь имена файлов
+            sslCA: change_me_your_ca.crt
+            sslCertificate: change_me_your_certificate.crt
+            sslKey: change_me_your_key.crt
+            sslPassword: '' # укажите keystore password, если используется

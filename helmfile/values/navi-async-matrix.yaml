@@ -1,0 +1,23 @@
+replicaCount: 1
+
+dm:
+  citiesUrl: "http://change_me_castle_internatl_service.cluster.svc/cities.conf"
+  
+keys:
+  host: 'http://change_me_keys_internatl_service.cluster.svc/service/v1/keys'
+  token: change_me_token_Distance_Matrix_API
+
+db:
+  host: change_me_host.name
+  port: 5432
+  name: change_me_db_name
+  user: change_me_username
+  password: change_me_password
+
+resources: 
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 1000m
+    memory: 1Gi
