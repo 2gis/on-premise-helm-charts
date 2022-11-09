@@ -301,7 +301,7 @@ kafka:
 # @param s3.publicNetloc Announce proxy URL for S3 results instead of s3.url if not empty.
 
 s3:
-  host: https://async-matrix-s3.host
+  host: http://async-matrix-s3.host
   bucket: samplebucket
   accessKey: sampleid
   secretKey: samplekey

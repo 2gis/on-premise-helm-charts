@@ -336,7 +336,7 @@ kafka:
 
 s3:
   enabled: false
-  host: async-matrix-s3.host:80
+  host: http://async-matrix-s3.host
   bucket: samplebucket
   accessKey: sampleid
   secretKey: samplekey

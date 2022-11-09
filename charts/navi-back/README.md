@@ -169,15 +169,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### S3-compatible storage settings for interacting with Distance Matrix Async Service
 
-| Name                  | Description                             | Value                     |
-| --------------------- | --------------------------------------- | ------------------------- |
-| `s3.enabled`          | if S3 storage is enabled.               | `false`                   |
-| `s3.host`             | S3 endpoint URL.                        | `async-matrix-s3.host:80` |
-| `s3.bucket`           | S3 bucket name.                         | `samplebucket`            |
-| `s3.accessKey`        | S3 access key for accessing the bucket. | `sampleid`                |
-| `s3.secretKey`        | S3 secret key for accessing the bucket. | `samplekey`               |
-| `livenessProbeDelay`  | initial delay for liveness probes       | `60`                      |
-| `readinessProbeDelay` | initial delay for readiness probes      | `75`                      |
+| Name                  | Description                             | Value                         |
+| --------------------- | --------------------------------------- | ----------------------------- |
+| `s3.enabled`          | if S3 storage is enabled.               | `false`                       |
+| `s3.host`             | S3 endpoint URL.                        | `http://async-matrix-s3.host` |
+| `s3.bucket`           | S3 bucket name.                         | `samplebucket`                |
+| `s3.accessKey`        | S3 access key for accessing the bucket. | `sampleid`                    |
+| `s3.secretKey`        | S3 secret key for accessing the bucket. | `samplekey`                   |
+| `livenessProbeDelay`  | initial delay for liveness probes       | `60`                          |
+| `readinessProbeDelay` | initial delay for readiness probes      | `75`                          |
 
 
 ## Maintainers

@@ -177,13 +177,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### S3-compatible storage settings
 
-| Name              | Description                                                       | Value                          |
-| ----------------- | ----------------------------------------------------------------- | ------------------------------ |
-| `s3.host`         | S3 endpoint URL.                                                  | `https://async-matrix-s3.host` |
-| `s3.bucket`       | S3 bucket name.                                                   | `samplebucket`                 |
-| `s3.accessKey`    | S3 access key for accessing the bucket.                           | `sampleid`                     |
-| `s3.secretKey`    | S3 secret key for accessing the bucket.                           | `samplekey`                    |
-| `s3.publicNetloc` | Announce proxy URL for S3 results instead of s3.url if not empty. | `nil`                          |
+| Name              | Description                                                       | Value                         |
+| ----------------- | ----------------------------------------------------------------- | ----------------------------- |
+| `s3.host`         | S3 endpoint URL.                                                  | `http://async-matrix-s3.host` |
+| `s3.bucket`       | S3 bucket name.                                                   | `samplebucket`                |
+| `s3.accessKey`    | S3 access key for accessing the bucket.                           | `sampleid`                    |
+| `s3.secretKey`    | S3 secret key for accessing the bucket.                           | `samplekey`                   |
+| `s3.publicNetloc` | Announce proxy URL for S3 results instead of s3.url if not empty. | `nil`                         |
 
 
 ### API keys service
