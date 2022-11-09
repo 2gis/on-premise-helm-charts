@@ -19,6 +19,7 @@
 - Rename `api.db` to `api.postgres`
 - Rename `importer.db` to `importer.postgres`
 - Rename `search.url` to `search.host`
+- Rename `keys.serviceKeys` to `keys.tokens`
 
 ## [1.4.1]
 

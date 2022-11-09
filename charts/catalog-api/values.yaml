@@ -166,16 +166,16 @@ search:
 
 # @param keys.host URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster.
 # @param keys.requestTimeout Timeout for requests to the Keys API.
-# @param keys.serviceKeys.places Places API key (if available).
-# @param keys.serviceKeys.geocoder Geocoder API key (if available).
-# @param keys.serviceKeys.suggest Suggest API key (if available).
-# @param keys.serviceKeys.categories Categories API key (if available).
-# @param keys.serviceKeys.regions Regions API key (if available).
+# @param keys.tokens.places Places API key (if available).
+# @param keys.tokens.geocoder Geocoder API key (if available).
+# @param keys.tokens.suggest Suggest API key (if available).
+# @param keys.tokens.categories Categories API key (if available).
+# @param keys.tokens.regions Regions API key (if available).
 
 keys:
   host: http://keys-api.host
   requestTimeout: 5s
-  serviceKeys:
+  tokens:
     places: ''
     geocoder: ''
     suggest: ''

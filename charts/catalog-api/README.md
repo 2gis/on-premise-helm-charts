@@ -144,15 +144,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Keys
 
-| Name                          | Description                                                                                              | Value                  |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `keys.host`                   | URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster. | `http://keys-api.host` |
-| `keys.requestTimeout`         | Timeout for requests to the Keys API.                                                                    | `5s`                   |
-| `keys.serviceKeys.places`     | Places API key (if available).                                                                           | `""`                   |
-| `keys.serviceKeys.geocoder`   | Geocoder API key (if available).                                                                         | `""`                   |
-| `keys.serviceKeys.suggest`    | Suggest API key (if available).                                                                          | `""`                   |
-| `keys.serviceKeys.categories` | Categories API key (if available).                                                                       | `""`                   |
-| `keys.serviceKeys.regions`    | Regions API key (if available).                                                                          | `""`                   |
+| Name                     | Description                                                                                              | Value                  |
+| ------------------------ | -------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `keys.host`              | URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster. | `http://keys-api.host` |
+| `keys.requestTimeout`    | Timeout for requests to the Keys API.                                                                    | `5s`                   |
+| `keys.tokens.places`     | Places API key (if available).                                                                           | `""`                   |
+| `keys.tokens.geocoder`   | Geocoder API key (if available).                                                                         | `""`                   |
+| `keys.tokens.suggest`    | Suggest API key (if available).                                                                          | `""`                   |
+| `keys.tokens.categories` | Categories API key (if available).                                                                       | `""`                   |
+| `keys.tokens.regions`    | Regions API key (if available).                                                                          | `""`                   |
 
 
 ### Kubernetes Importer job settings
