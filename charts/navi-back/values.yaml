@@ -304,11 +304,11 @@ kafka:
 #  properties:
 #    bootstrap.servers: async-matrix-api.host:9092
 #    security.protocol: SSL
-#    ssl.keystore.password: "123"
+#    ssl.keystore.password: '123'
 #  fileProperties:
-#    ssl.ca.location: "<Set-by-CI from ca.crt>"
-#    ssl.certificate.location: "<Set-by-CI from user.crt>"
-#    ssl.key.location: "<Set-by-CI from user.pem>"
+#    ssl.ca.location: '<Set-by-CI from ca.crt>'
+#    ssl.certificate.location: '<Set-by-CI from user.crt>'
+#    ssl.key.location: '<Set-by-CI from user.pem>'
 #
 # 2. login/password SASL as test-username/123:
 #
@@ -317,7 +317,7 @@ kafka:
 #    security.protocol: SASL_PLAINTEXT
 #    sasl.mechanism: SCRAM-SHA-512
 #    sasl.username: test-username
-#    sasl.password: "123"
+#    sasl.password: '123'
 #
 # 3. Unauthenticated:
 #
