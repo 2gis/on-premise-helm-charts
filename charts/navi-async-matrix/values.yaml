@@ -224,9 +224,9 @@ kafka:
   taskTopicRules:
   - topic: task_topic
     default: true
-  #- topic: task_topic_moscow
-  #  projects:
-  #  - moscow
+  # - topic: task_topic_moscow
+  #   projects:
+  #   - moscow
 
 # More on Kafka properties.
 #
