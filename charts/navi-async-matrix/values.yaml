@@ -208,11 +208,9 @@ db:
 # @extra kafka.taskTopicRules **Information about the topics that Distance Matrix Async API will use to send the requests.**
 # @extra kafka.taskTopicRules[].topic Name of the topic.
 # @extra kafka.taskTopicRules[].default If this topic is used for projects by default.
-# @extra kafka.taskTopicRules[].projects List of projects to use this topic for, e.g., `['dammam']`.
+# @extra kafka.taskTopicRules[].projects List of projects to use this topic for, e.g., `['moscow']`.
 # @skip kafka.taskTopicRules[0].topic
 # @skip kafka.taskTopicRules[0].default
-# @skip kafka.taskTopicRules[1].topic
-# @skip kafka.taskTopicRules[1].projects
 
 kafka:
   groupId: navi_async_matrix
@@ -226,9 +224,9 @@ kafka:
   taskTopicRules:
   - topic: task_topic
     default: true
-  - topic: task_topic
-    projects:
-    - dammam
+  #- topic: task_topic_moscow
+  #  projects:
+  #  - moscow
 
 # More on Kafka properties.
 #

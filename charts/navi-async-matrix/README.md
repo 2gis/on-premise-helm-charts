@@ -172,7 +172,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `kafka.taskTopicRules`            | **Information about the topics that Distance Matrix Async API will use to send the requests.**                            |                     |
 | `kafka.taskTopicRules[].topic`    | Name of the topic.                                                                                                        |                     |
 | `kafka.taskTopicRules[].default`  | If this topic is used for projects by default.                                                                            |                     |
-| `kafka.taskTopicRules[].projects` | List of projects to use this topic for, e.g., `['dammam']`.                                                               |                     |
+| `kafka.taskTopicRules[].projects` | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                     |
 
 
 ### S3-compatible storage settings
