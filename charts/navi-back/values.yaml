@@ -280,7 +280,7 @@ kafka:
   enabled: false
   groupId: navi_back
   properties:
-    bootstrap.servers: async-matrix-api.host:9092
+    bootstrap.servers: kafka.host:9092
     security.protocol: PLAINTEXT
   fileProperties: {}
   distanceMatrix:
@@ -302,7 +302,7 @@ kafka:
 # 1. SSL authentication with key file protected with password 123:
 #
 #  properties:
-#    bootstrap.servers: async-matrix-api.host:9092
+#    bootstrap.servers: kafka.host:9092
 #    security.protocol: SSL
 #    ssl.keystore.password: '123'
 #  fileProperties:
@@ -313,7 +313,7 @@ kafka:
 # 2. login/password SASL as test-username/123:
 #
 #  properties:
-#    bootstrap.servers: async-matrix-api.host:9092
+#    bootstrap.servers: kafka.host:9092
 #    security.protocol: SASL_PLAINTEXT
 #    sasl.mechanism: SCRAM-SHA-512
 #    sasl.username: test-username
@@ -322,7 +322,7 @@ kafka:
 # 3. Unauthenticated:
 #
 #  properties:
-#    bootstrap.servers: async-matrix-api.host:9092
+#    bootstrap.servers: kafka.host:9092
 #    security.protocol: PLAINTEXT
 
 

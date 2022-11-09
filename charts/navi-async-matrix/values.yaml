@@ -217,7 +217,7 @@ kafka:
   statusTopic: status_topic
   cancelTopic: cancel_topic
   properties:
-    bootstrap.servers: async-matrix-api.host:9092
+    bootstrap.servers: kafka.host:9092
     security.protocol: PLAINTEXT
   sensitiveProperties: {}
   fileProperties: {}
@@ -260,7 +260,7 @@ kafka:
 # 1. SSL authentication with key file protected with password 'password':
 #
 #  properties:
-#    bootstrap.servers: async-matrix-api.host:9092
+#    bootstrap.servers: kafka.host:9092
 #    security.protocol: SSL
 #  sensitiveProperties:
 #    ssl.password: 'password'
@@ -272,7 +272,7 @@ kafka:
 # 2. login/password SASL as kafkauser/123:
 #
 #  properties:
-#    bootstrap.servers: async-matrix-api.host:9092
+#    bootstrap.servers: kafka.host:9092
 #    security.protocol: SASL_PLAINTEXT
 #    sasl.mechanism: SCRAM-SHA-512
 #    sasl.plain.username: user
@@ -282,7 +282,7 @@ kafka:
 # 3. Unauthenticated:
 #
 #  properties:
-#    bootstrap.servers: async-matrix-api.host:9092
+#    bootstrap.servers: kafka.host:9092
 #    security.protocol: PLAINTEXT
 #
 # Note that .p12 or .jks formats are not supported, they need to be
