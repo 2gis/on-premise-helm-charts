@@ -191,7 +191,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name         | Description                            | Value                                  |
 | ------------ | -------------------------------------- | -------------------------------------- |
 | `keys.host`  | API keys service URL.                  | `http://keys-api.host/service/v1/keys` |
-| `keys.token` | API token to authorize at the service. | `samplekey`                            |
+| `keys.token` | API token to authorize at the service. | `""`                                   |
 
 
 ## Maintainers

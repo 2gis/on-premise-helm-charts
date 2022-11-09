@@ -321,4 +321,4 @@ bss:
 
 keys:
   host: http://keys-api.host/service/v1/keys
-  token: samplekey
+  token: ''
