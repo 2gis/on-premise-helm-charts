@@ -48,17 +48,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                         |
 | ------------------ | ----------- | ----------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-router` |
-| `image.tag`        | Tag         | `1.0.7-049fb4cc`              |
+| `image.tag`        | Tag         | `6.6.0`                       |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
 
 ### Navi-Router service settings
 
-| Name                         | Description                                                                                                      | Value  |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------ |
-| `router.app_castle_host`     | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster. |        |
-| `router.app_port`            | Navi-Router service HTTP port.                                                                                   | `8080` |
-| `router.additional_sections` | Additional configurations sections for the Navi-Router service.                                                  | `""`   |
+| Name                        | Description                                                                                                      | Value  |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------ |
+| `router.appCastleHost`      | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster. |        |
+| `router.appPort`            | Navi-Router service HTTP port.                                                                                   | `8080` |
+| `router.additionalSections` | Additional configurations sections for the Navi-Router service.                                                  | `""`   |
 
 
 ### Service account settings

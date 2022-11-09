@@ -2,6 +2,11 @@
 
 ## [#.#.#]
 
+### navi-router
+- Renamed `router.app_port` to `router.appPort`
+- Renamed `router.app_castle_host` to `router.appCastleHost`
+- Renamed `router.additional_sections` to `router.additionalSections`
+
 ### navi-back
 - Updated structure and defaults for Kafka configuration
 - Renamed `s3.url` to `s3.host`
