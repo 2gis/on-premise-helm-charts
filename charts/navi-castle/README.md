@@ -33,7 +33,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | ------------------------- | ------------------------------------- | ----------------------------- |
 | `castle.image.repository` | Navi-Castle service image repository. | `2gis-on-premise/navi-castle` |
 | `castle.image.pullPolicy` | Navi-Castle service pull policy.      | `IfNotPresent`                |
-| `castle.image.tag`        | Navi-Castle service image tag.        | `1.0.5`                       |
+| `castle.image.tag`        | Navi-Castle service image tag.        | `1.0.6.1`                     |
 | `nginx.image.repository`  | Navi-Front image repository.          | `2gis-on-premise/navi-front`  |
 | `nginx.image.tag`         | Navi-Front image tag.                 | `1.21-ad06a0e0`               |
 
@@ -102,11 +102,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Castle service settings
 
-| Name                          | Description                 | Value                          |
-| ----------------------------- | --------------------------- | ------------------------------ |
-| `castle.castle_data_path`     | Path to the data directory. | `/opt/castle/data/`            |
-| `castle.restrictions_api_url` | Restrictions API base URL.  | `http://restrictions-api.host` |
-| `castle.restrictions_api_key` | Restrictions API key.       | `key`                          |
+| Name                        | Description                          | Value                          |
+| --------------------------- | ------------------------------------ | ------------------------------ |
+| `castle.castleDataPath`     | Path to the data directory.          | `/opt/castle/data/`            |
+| `castle.restrictionsApiUrl` | Restrictions API base URL.           | `http://restrictions-api.host` |
+| `castle.restrictionsApiKey` | Restrictions API key.                | `key`                          |
+| `castle.jobs`               | Number of parallel downloading jobs. | `1`                            |
 
 
 ### Navi-Front settings

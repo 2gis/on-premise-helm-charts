@@ -15,18 +15,18 @@ data:
     # owner for result files
     owner: 'root:root'
     # path to store city data
-    data_destination_dir: {{ .Values.castle.castle_data_path | quote }}
+    data_destination_dir: {{ .Values.castle.castleDataPath | quote }}
     # --------------------------------------------
     # CONFIGURATION BUILDER ONLY
     # BUILDING CITY CONFIGURATION FROM TEMPLATE
     # path to conf files and templates
-    work_dir: '{{ .Values.castle.castle_data_path }}'
+    work_dir: '{{ .Values.castle.castleDataPath }}'
     # path to store temporary configs
     tmp_dir: '/opt/castle/tmp/'
     templates:
     {
         # template file name in work_dir: 'full path to result destination'
-        'cities_template': '{{ .Values.castle.castle_data_path }}/cities.conf'
+        'cities_template': '{{ .Values.castle.castleDataPath }}/cities.conf'
     }
     cities_file: 'cities.conf'
     cities_zip_file: 'cities.conf.zip'
@@ -84,9 +84,9 @@ data:
 
         http:
         {
-            server: '{{ .Values.castle.restrictions_api_url }}',
+            server: '{{ .Values.castle.restrictionsApiUrl }}',
             base_dir: 'edges/',
-            api_key: '{{ .Values.castle.restrictions_api_key }}',
+            api_key: '{{ .Values.castle.restrictionsApiKey }}',
             timeout: 5  #sec
         },
 
