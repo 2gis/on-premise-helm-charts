@@ -37,7 +37,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
 | `affinity`       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
 | `tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
-| `redeploy_label` | If this label is changed since the last deployment, the whole chart will be redeployed.                                     | `""`  |
+| `redeployLabel`  | If this label is changed since the last deployment, the whole chart will be redeployed.                                     | `""`  |
 
 
 ### Deployment Artifacts Storage settings
@@ -53,19 +53,19 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Deployment settings
 
-| Name                   | Description | Value                        |
-| ---------------------- | ----------- | ---------------------------- |
-| `api.image.repository` | Repository  | `2gis-on-premise/search-api` |
-| `api.image.tag`        | Tag         | `7.25.0`                     |
-| `api.image.pullPolicy` | Pull Policy | `IfNotPresent`               |
+| Name                   | Description                                                                                                         | Value                        |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `api.image.repository` | Repository                                                                                                          | `2gis-on-premise/search-api` |
+| `api.image.tag`        | Tag                                                                                                                 | `7.33.0`                     |
+| `api.image.pullPolicy` | IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`               |
 
 
 ### API settings
 
 | Name            | Description                                   | Value   |
 | --------------- | --------------------------------------------- | ------- |
-| `api.data_dir`  | Path to the directory storing search indexes. | `/data` |
-| `api.fcgi_port` | TCP port of the Search API.                   | `9090`  |
+| `api.dataDir`   | Path to the directory storing search indexes. | `/data` |
+| `api.fcgiPort`  | TCP port of the Search API.                   | `9090`  |
 | `api.logLevel`  | Log level.                                    | `Info`  |
 | `api.logFormat` | Log format: `json` or `plaintext`.            | `json`  |
 | `api.configOpt` | Additional options (for debugging purposes).  | `[]`    |
@@ -73,31 +73,31 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### NGINX settings
 
-| Name                     | Description                                            | Value                          |
-| ------------------------ | ------------------------------------------------------ | ------------------------------ |
-| `nginx.image.repository` | Docker Repository.                                     | `2gis-on-premise/search-nginx` |
-| `nginx.image.tag`        | Docker image tag.                                      | `1.21.6`                       |
-| `nginx.image.pullPolicy` | Kubernetes pull policy for the service's Docker image. | `IfNotPresent`                 |
-| `nginx.http_port`        | HTTP port on which NGINX will be listening.            | `8080`                         |
+| Name                     | Description                                                                                                         | Value                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `nginx.image.repository` | Docker Repository.                                                                                                  | `2gis-on-premise/search-nginx` |
+| `nginx.image.tag`        | Docker image tag.                                                                                                   | `1.21.6`                       |
+| `nginx.image.pullPolicy` | IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                 |
+| `nginx.httpPort`         | HTTP port on which NGINX will be listening.                                                                         | `8080`                         |
 
 
 ### Strategy settings
 
 | Name                                    | Description                                                                                                                                                                                              | Value           |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
+| `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate` [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)                                           | `RollingUpdate` |
 | `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
 
 
 ### Service settings
 
-| Name                  | Description                                                                                                                    | Value       |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
-| `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
-| `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `service.port`        | Service port.                                                                                                                  | `80`        |
+| Name                  | Description                                                                                                                                                         | Value       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                   | `{}`        |
+| `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                             | `{}`        |
+| `service.type`        | ClusterIP, NodePort, LoadBalancer, ExternalName [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `service.port`        | Service port.                                                                                                                                                       | `80`        |
 
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
@@ -145,9 +145,3 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `nginx.resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
 | `nginx.resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
 
-
-## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| 2gis | <on-premise@2gis.com> | <https://github.com/2gis> |

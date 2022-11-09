@@ -46,7 +46,7 @@ api:
 
   # @param api.image.repository Repository
   # @param api.image.tag Tag
-  # @param api.image.pullPolicy: IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+  # @param api.image.pullPolicy IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
 
   image:
     repository: 2gis-on-premise/search-api
@@ -74,7 +74,7 @@ api:
 
 # @param nginx.image.repository Docker Repository.
 # @param nginx.image.tag Docker image tag.
-# @param nginx.image.pullPolicy: IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param nginx.image.pullPolicy IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
 # @param nginx.httpPort HTTP port on which NGINX will be listening.
 
 nginx:
@@ -103,7 +103,7 @@ strategy:
 
 # @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param service.type: ClusterIP, NodePort, LoadBalancer, ExternalName [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.type ClusterIP, NodePort, LoadBalancer, ExternalName [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 # @param service.port Service port.
 
 service:

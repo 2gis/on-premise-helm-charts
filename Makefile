@@ -2,6 +2,11 @@
 
 ROOT := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
+# readme generator image
+#GENERATOR = readme-generator-for-helm
+# the pre-compiled one available internally
+GENERATOR = docker-hub.2gis.ru/on-premise/readme-generator-for-helm
+
 all:
 	@echo 'Building README for catalog-api...'        && make charts/catalog-api        && echo
 	@echo 'Building README for gis-platform...'       && make charts/gis-platform       && echo
@@ -27,5 +32,5 @@ charts/*:
 		--volume $(ROOT)/bitnami-config.json:/config.json:ro \
 		--volume $(ROOT)/$@/values.yaml:/values.yaml:ro \
 		--volume $(ROOT)/$@/README.md:/README.md:rw \
-		readme-generator-for-helm \
+		$(GENERATOR) \
 		readme-generator --config=/config.json --values=/values.yaml --readme=/README.md

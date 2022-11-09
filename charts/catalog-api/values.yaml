@@ -62,7 +62,7 @@ api:
 
   # @param api.image.repository Repository
   # @param api.image.tag Tag
-  # @param api.image.pullPolicy: IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+  # @param api.image.pullPolicy IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
 
   image:
     repository: 2gis-on-premise/catalog-api
@@ -110,7 +110,7 @@ api:
 
   # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @param api.service.type: ClusterIP, NodePort, LoadBalancer, ExternalName [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param api.service.type ClusterIP, NodePort, LoadBalancer, ExternalName [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
   # @param api.service.port Service port.
 
   service:
@@ -173,7 +173,7 @@ search:
 # @param keys.serviceKeys.regions Regions API key (if available).
 
 keys:
-  host: https://keys-api.host
+  host: http://keys-api.host
   requestTimeout: 5s
   serviceKeys:
     places: ''
@@ -190,18 +190,12 @@ keys:
 # @param importer.workerNum Number of parallel import processes (workers).
 # @param importer.initialDelaySeconds Number of seconds after the container has started before liveness or readiness probes are initiated.
 
-# @extra importer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
-# @param importer.resources.requests.cpu A CPU request.
-# @param importer.resources.requests.memory A memory request.
-# @param importer.resources.limits.cpu A CPU limit.
-# @param importer.resources.limits.memory A memory limit.
-
 importer:
   nodeSelector: {}
   workerNum: 3
   initialDelaySeconds: 1
 
-  # @extra importer.image **Deployment settings**
+  # @section importer.image **Deployment settings**
   # @param importer.image.repository Repository
   # @param importer.image.tag Tag
   # @param importer.image.pullPolicy Pull Policy
@@ -211,7 +205,7 @@ importer:
     tag: 1.0.7
     pullPolicy: IfNotPresent
 
-  # @extra importer.db **Database settings**
+  # @section importer.db **Database settings**
 
   # @param importer.postgres.host PostgreSQL rw host.
   # @param importer.postgres.port PostgreSQL port.
@@ -228,11 +222,11 @@ importer:
     password: secret
     schemaSwitchEnabled: true
 
-  # @extra importer.persistentVolume **Persistent Volume settings**
+  # @section importer.persistentVolume **Persistent Volume settings**
 
   # @param importer.persistentVolume.enabled If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service.
-  # @param importer.persistentVolume.accessModes: ReadWriteOnce, ReadOnlyMany, ReadWriteMany, ReadWriteOncePod [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
-  # @param importer.persistentVolume.storageClass[Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+  # @param importer.persistentVolume.accessModes ReadWriteOnce, ReadOnlyMany, ReadWriteMany, ReadWriteOncePod [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
+  # @param importer.persistentVolume.storageClass Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)
   # @param importer.persistentVolume.size Volume size.
 
   persistentVolume:
@@ -242,6 +236,12 @@ importer:
     storageClass: topolvm-ext4
     size: 50Gi
 
+  # @section importer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+  # @param importer.resources.requests.cpu A CPU request.
+  # @param importer.resources.requests.memory A memory request.
+  # @param importer.resources.limits.cpu A CPU limit.
+  # @param importer.resources.limits.memory A memory limit.
+
   resources:
     requests:
       cpu: 256m
@@ -250,19 +250,20 @@ importer:
       cpu: 2
       memory: 2048Mi
 
-  # @extra importer.cleaner **Cleaner scheme settings**
+  # @section importer.cleaner **Cleaner scheme settings**
   # @param importer.cleaner.enabled If clean schemes is enabled for the service.
   # @param importer.cleaner.versionLimit Number of backup schemes.
 
-  # @extra importer.cleaner.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
-  # @param importer.cleaner.resources.requests.cpu A CPU request.
-  # @param importer.cleaner.resources.requests.memory A memory request.
-  # @param importer.cleaner.resources.limits.cpu A CPU limit.
-  # @param importer.cleaner.resources.limits.memory A memory limit.
 
   cleaner:
     enabled: true
     versionLimit: 2
+
+    # @section importer.cleaner.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+    # @param importer.cleaner.resources.requests.cpu A CPU request.
+    # @param importer.cleaner.resources.requests.memory A memory request.
+    # @param importer.cleaner.resources.limits.cpu A CPU limit.
+    # @param importer.cleaner.resources.limits.memory A memory limit.
 
     resources:
       requests:
