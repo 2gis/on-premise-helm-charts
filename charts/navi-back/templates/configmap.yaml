@@ -36,7 +36,7 @@ data:
         "variables": {
           "LOCAL_PATH": "/opt/castle",
           "LOCAL_ETC": "/etc/2gis/mosesd",
-          "REMOTE_PATH": "{{ .Values.naviback.appCastleHost }}",
+          "REMOTE_PATH": "{{ .Values.naviback.castleHost }}",
           "REMOTE_FORECAST" : "{{ .Values.naviback.forecastHost }}",
           "REMOTE_ECA" : "{{ .Values.naviback.ecaHost }}"
         },

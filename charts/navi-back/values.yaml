@@ -46,7 +46,6 @@ image:
 
 # @section Navi-Back application settings
 
-# @extra naviback.appCastleHost URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @extra naviback.ecaHost Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @skip naviback.appPort
@@ -60,6 +59,7 @@ image:
 # @param naviback.dump.query Dump queries in logs.
 # @param naviback.dump.answer Dump answers in logs.
 # @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
+# @param naviback.castleHost URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @extra naviback.indices List of dynamic indices kill switches.
 # @skip naviback.indices.carOptions.enabled
 # @skip naviback.indices.countryCarOptions.enabled
@@ -99,6 +99,7 @@ naviback:
     query: false
     answer: false
   logLevel: Info
+  castleHost: http://navi-castle.host
   indices:
     carOptions:
       enabled: false

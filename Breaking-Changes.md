@@ -22,7 +22,7 @@
 - Renamed `naviback.max_process_time` to `naviback.maxProcessTime`
 - Renamed `naviback.response_timelimit` to `naviback.responseTimelimit`
 - Renamed `naviback.request_timeout` to `naviback.requestTimeout`
-- Renamed `naviback.app_castle_host` to `naviback.appCastleHost`
+- Renamed `naviback.app_castle_host` to `naviback.castleHost`
 - Renamed `naviback.forecast_host` to `naviback.forecastHost`
 - Renamed `naviback.eca_host` to `naviback.ecaHost`
 - Renamed `naviback.additional_sections` to `naviback.additionalSections`
