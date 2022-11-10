@@ -437,8 +437,7 @@ data:
           {{ include "config.serversection" . }}
           {{- else }}
           "simple_network_car" : {{ (.Values.naviback.simpleNetwork).car | default "false" }},
-          "simple_network_pedestrian" : {{ (.Values.naviback.simpleNetwork).pedestrian | default "fals
-" }},
+          "simple_network_pedestrian" : {{ (.Values.naviback.simpleNetwork).pedestrian | default "false" }},
           "simple_network_taxi" : {{ (.Values.naviback.simpleNetwork).taxi | default "false" }},
           "simple_network_bicycle" : {{ (.Values.naviback.simpleNetwork).bicycle | default "false" }},
           "simple_network_truck" : {{ (.Values.naviback.simpleNetwork).truck | default "false" }},
