@@ -84,9 +84,9 @@ data:
 
         http:
         {
-            server: '{{ .Values.castle.restrictionsApiUrl }}',
+            server: '{{ .Values.castle.restrictions.host }}',
             base_dir: 'edges/',
-            api_key: '{{ .Values.castle.restrictionsApiKey }}',
+            api_key: '{{ .Values.castle.restrictions.key }}',
             timeout: 5  #sec
         },
 

@@ -102,8 +102,8 @@ resources: {}
 # @section Navi-Castle service settings
 
 # @param castle.castleDataPath Path to the data directory.
-# @param castle.restrictionsApiUrl Restrictions API base URL.
-# @param castle.restrictionsApiKey Restrictions API key.
+# @param castle.restrictions.host Restrictions API base URL.
+# @param castle.restrictions.key Restrictions API key.
 # @param castle.jobs Number of parallel downloading jobs.
 
 castle:
@@ -112,8 +112,9 @@ castle:
     pullPolicy: IfNotPresent
     tag: 1.0.6.1
   castleDataPath: /opt/castle/data/
-  restrictionsApiUrl: http://restrictions-api.host
-  restrictionsApiKey: key
+  restrictions:
+    host: http://restrictions-api.host
+    key: ''
   jobs: 1
 
 

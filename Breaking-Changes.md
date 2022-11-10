@@ -4,8 +4,8 @@
 
 ### navi-castle
 - Renamed `castle.castle_data_path` to `castle.castleDataPath`
-- Renamed `castle.restrictions_api_url` to `castle.restrictionsApiUrl`
-- Renamed `castle.restrictions_api_key` to `castle.restrictionsApiKey`
+- Renamed `castle.restrictions_api_url` to `castle.restrictions.host`
+- Renamed `castle.restrictions_api_key` to `castle.restrictions.key`
 
 ### navi-router
 - Renamed `router.app_port` to `router.appPort`

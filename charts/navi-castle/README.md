@@ -102,12 +102,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Castle service settings
 
-| Name                        | Description                          | Value                          |
-| --------------------------- | ------------------------------------ | ------------------------------ |
-| `castle.castleDataPath`     | Path to the data directory.          | `/opt/castle/data/`            |
-| `castle.restrictionsApiUrl` | Restrictions API base URL.           | `http://restrictions-api.host` |
-| `castle.restrictionsApiKey` | Restrictions API key.                | `key`                          |
-| `castle.jobs`               | Number of parallel downloading jobs. | `1`                            |
+| Name                       | Description                          | Value                          |
+| -------------------------- | ------------------------------------ | ------------------------------ |
+| `castle.castleDataPath`    | Path to the data directory.          | `/opt/castle/data/`            |
+| `castle.restrictions.host` | Restrictions API base URL.           | `http://restrictions-api.host` |
+| `castle.restrictions.key`  | Restrictions API key.                | `""`                           |
+| `castle.jobs`              | Number of parallel downloading jobs. | `1`                            |
 
 
 ### Navi-Front settings
