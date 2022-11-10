@@ -32,6 +32,17 @@
 - Renamed `naviback.dm_sources_limit` to `naviback.dmSourcesLimit`
 - Renamed `naviback.dm_targets_limit` to `naviback.dmTargetsLimit`
 - Renamed `naviback.termination_grace_period_seconds` to `naviback.terminationGracePeriodSeconds`
+- Renamed `naviback.simple_network_bicycle` to `naviback.simpleNetwork.bicycle`
+- Renamed `naviback.simple_network_car` to `naviback.simpleNetwork.car`
+- Renamed `naviback.simple_network_emergency` to `naviback.simpleNetwork.emergency`
+- Renamed `naviback.simple_network_pedestrian` to `naviback.simpleNetwork.pedestrian`
+- Renamed `naviback.simple_network_taxi` to `naviback.simpleNetwork.taxi`
+- Renamed `naviback.simple_network_truck` to `naviback.simpleNetwork.truck`
+- Renamed `naviback.attractor_bicycle` to `naviback.attractor.bicycle`
+- Renamed `naviback.attractor_car` to `naviback.attractor.car`
+- Renamed `naviback.attractor_pedestrian` to `naviback.attractor.pedestrian`
+- Renamed `naviback.attractor_taxi` to `naviback.attractor.taxi`
+- Renamed `naviback.reduce_edges_optimization_flag` to `naviback.reduceEdgesOptimizationFlag`
 
 ### navi-async-matrix
 - Updated structure and defaults for Kafka configuration

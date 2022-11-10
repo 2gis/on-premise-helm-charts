@@ -436,23 +436,24 @@ data:
           {{- if ne .Values.naviback.type "custom" }}
           {{ include "config.serversection" . }}
           {{- else }}
-          "simple_network_car" : {{ .Values.naviback.simple_network_car | default "false" }},
-          "simple_network_pedestrian" : {{ .Values.naviback.simple_network_pedestrian | default "false" }},
-          "simple_network_taxi" : {{ .Values.naviback.simple_network_taxi | default "false" }},
-          "simple_network_bicycle" : {{ .Values.naviback.simple_network_bicycle | default "false" }},
-          "simple_network_truck" : {{ .Values.naviback.simple_network_truck | default "false" }},
-          "attractor_car" : {{ .Values.naviback.attractor_car | default "false" }},
-          "attractor_pedestrian" : {{ .Values.naviback.attractor_pedestrian | default "false" }},
-          "attractor_bicycle" : {{ .Values.naviback.attractor_bicycle | default "false" }},
-          "attractor_taxi" : {{ .Values.naviback.attractor_taxi | default "false" }},
-          "reduce_edges_optimization_flag" : {{ .Values.naviback.reduce_edges_optimization_flag | default "false" }},
+          "simple_network_car" : {{ (.Values.naviback.simpleNetwork).car | default "false" }},
+          "simple_network_pedestrian" : {{ (.Values.naviback.simpleNetwork).pedestrian | default "fals
+" }},
+          "simple_network_taxi" : {{ (.Values.naviback.simpleNetwork).taxi | default "false" }},
+          "simple_network_bicycle" : {{ (.Values.naviback.simpleNetwork).bicycle | default "false" }},
+          "simple_network_truck" : {{ (.Values.naviback.simpleNetwork).truck | default "false" }},
+          "attractor_car" : {{ (.Values.naviback.attractor).car | default "false" }},
+          "attractor_pedestrian" : {{ (.Values.naviback.attractor).pedestrian | default "false" }},
+          "attractor_bicycle" : {{ (.Values.naviback.attractor).bicycle | default "false" }},
+          "attractor_taxi" : {{ (.Values.naviback.attractor).taxi | default "false" }},
+          "reduce_edges_optimization_flag" : {{ .Values.naviback.reduceEdgesOptimizationFlag | default "false" }},
           {{- end }}
           {{- if ((.Values.resources).limits).cpu }}
           "dist_matrix_thread_pool_size" : {{ include "config.setCpuNumber" . }},
           "simple_network_build_thread_pool_size" : {{ include "config.setCpuNumber" . }},
           {{- end }}
           "update_projects_limit" : 2,
-          "simple_network_emergency" : {{ .Values.naviback.simple_network_emergency | default "false" }},
+          "simple_network_emergency" : {{ (.Values.naviback.simpleNetwork).emergency | default "false" }},
           "carrouting_page_cache_size" : 8192,
           "carrouting_tile_cache_size" : 8192,
           "carrouting_bit_tile_cache_size" : 2048,

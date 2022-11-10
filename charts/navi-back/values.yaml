@@ -84,6 +84,17 @@ image:
 # @skip naviback.indices.tugcUsers.enabled
 # @skip naviback.indices.tugcUsersIndex.enabled
 # @extra naviback.additionalSections Optinal JSON block to be added to config file as-is.
+# @extra naviback.simpleNetwork.bicycle Enable simple network for bicycle routing
+# @extra naviback.simpleNetwork.car Enable simple network for auto routing
+# @param naviback.simpleNetwork.emergency Enable simple network for emergency vehicles routing
+# @extra naviback.simpleNetwork.pedestrian Enable simple network for pedestrian routing
+# @extra naviback.simpleNetwork.taxi Enable simple network for taxi routing
+# @extra naviback.simpleNetwork.truck Enable simple network for truck routing
+# @extra naviback.attractor.bicycle Enable enhanced attractor for bicycle routing
+# @extra naviback.attractor.car Enable enhanced attractor for auto routing
+# @extra naviback.attractor.pedestrian Enable enhanced attractor for pedestrian routing
+# @extra naviback.attractor.taxi Enable enhanced attractor for taxi routing
+# @extra naviback.reduceEdgesOptimizationFlag Enable optimizations for distance matrix queries processing
 # @skip rules
 
 naviback:
@@ -145,6 +156,8 @@ naviback:
       enabled: false
     tugcUsersIndex:
       enabled: false
+  simpleNetwork:
+    emergency: false
 
 rules: []
 
