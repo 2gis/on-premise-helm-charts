@@ -9,7 +9,7 @@
 
 ### navi-router
 - Renamed `router.app_port` to `router.appPort`
-- Renamed `router.app_castle_host` to `router.appCastleHost`
+- Renamed `router.app_castle_host` to `router.castleHost`
 - Renamed `router.additional_sections` to `router.additionalSections`
 
 ### navi-back

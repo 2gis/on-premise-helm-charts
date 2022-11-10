@@ -34,7 +34,7 @@ data:
       "context": {
         "variables": {
           "LOCAL_ETC": "/src/etc",
-          "REMOTE_PATH": "{{ required "A valid .Values.router.appCastleHost  entry required!" .Values.router.appCastleHost }}",
+          "REMOTE_PATH": "{{ required "A valid .Values.router.castleHost  entry required!" .Values.router.castleHost }}",
           "LOCAL_PATH": "/var/lib/2gis/castle/"
         },
         "cities": {
