@@ -1,17 +1,17 @@
 {
-  "type": "bicycle",
+  "type": "pedestrian",
   "points": [
     {
       "start": true,
       "type": "walking",
-      "x": 49.131840,
-      "y": 55.769438
+      "x": 37.5998,
+      "y": 55.7683
     },
     {
       "start": false,
       "type": "walking",
-      "x": 49.194839,
-      "y": 55.807755
+      "x": 37.6076,
+      "y": 55.7622
     }
   ]
 }

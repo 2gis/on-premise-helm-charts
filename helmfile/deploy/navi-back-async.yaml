@@ -15,9 +15,7 @@ releases:
       - ../values/dgctl.yaml
       - ../values/kafka-and-s3.yaml
       - ../values/navi-back-async.yaml
-    {{- if .Values.customProjectNavi }}
-      - ../values/navi-back-async-rules.yaml # использовать проекты, описанные в rules.conf
-    {{ end }}
+      - ../templates/navi-back-async-rules.gotmpl 
     {{- if or .Values.kafka.authCert .Values.kafka.authLogin }}
     set:
     {{- if .Values.kafka.authCert }} # kafka аутентификация по сертификату

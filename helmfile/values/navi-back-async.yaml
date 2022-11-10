@@ -1,18 +1,16 @@
 navigroup: async
-
+ 
 naviback:
-  dm_sources_limit: 1500  # ограничение на размер матриц
-  dm_targets_limit: 1500  # ограничение на размер матриц
-  reduce_edges_optimization_flag: true
-  app_castle_host: "http://change_me_castle_internatl_service.cluster.svc"
+  dmSourcesLimit: 12000  # ограничение на размер матриц
+  dmTargetsLimit: 12000  # ограничение на размер матриц
+  castleHost: http://navi-castle.host
   type: dm
-
-resources: #change_me выставляем требуемые ресурсы
+ 
+resources: #выставляем требуемые ресурсы
   limits:
-    cpu: 8000m
-    memory: 16384Mi
+    cpu: 4000m
+    memory: 100Gi
   requests:
     cpu: 4000m
-    memory: 8192Mi
-
-rules: '[]'
+    memory: 100Gi
+ 

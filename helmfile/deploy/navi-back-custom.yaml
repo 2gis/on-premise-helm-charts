@@ -3,15 +3,14 @@ bases:
 - ../base.yaml
 ---
 {{ $type := ""}}
-{{ $rule := ""}}
-{{ if eq ( requiredEnv "API" ) "directions_car" }} {{ $type = "carrouting" }} {{ $rule = "cr" }}
-{{ else if eq ( requiredEnv "API" ) "directions_ped" }} {{ $type = "pedestrian" }} {{ $rule = "pd" }}
-{{ else if eq ( requiredEnv "API" ) "directions_bic" }} {{ $type = "bicycle" }} {{ $rule = "bc" }}
-{{ else if eq ( requiredEnv "API" ) "directions_taxi" }} {{ $type = "taxi" }} {{ $rule = "tx" }}
-{{ else if eq ( requiredEnv "API" ) "distance_matrix" }} {{ $type = "dm" }} {{ $rule = "dm" }}
-{{ else if eq ( requiredEnv "API" ) "public_transport" }} {{ $type = "ctx" }} {{ $rule = "pt" }}
-{{ else if eq ( requiredEnv "API" ) "pairs" }} {{ $type = "pairs" }} {{ $rule = "pr" }}
-{{ else if eq ( requiredEnv "API" ) "truck" }} {{ $type = "truck" }} {{ $rule = "tr" }}
+{{ if eq ( requiredEnv "API" ) "directions-car" }} {{ $type = "carrouting" }}
+{{ else if eq ( requiredEnv "API" ) "directions-pedestrian" }} {{ $type = "pedestrian" }}
+{{ else if eq ( requiredEnv "API" ) "directions-bicycle" }} {{ $type = "bicycle" }}
+{{ else if eq ( requiredEnv "API" ) "directions-taxi" }} {{ $type = "taxi" }}
+{{ else if eq ( requiredEnv "API" ) "distance-matrix" }} {{ $type = "dm" }}
+{{ else if eq ( requiredEnv "API" ) "public-transport" }} {{ $type = "ctx" }}
+{{ else if eq ( requiredEnv "API" ) "pairs" }} {{ $type = "pairs" }}
+{{ else if eq ( requiredEnv "API" ) "truck" }} {{ $type = "truck" }}
 {{ else }}
 {{ fail "API env is wrong" }}
 {{ end }}
@@ -28,13 +27,9 @@ releases:
     values: 
       - ../values/dgctl.yaml
       - ../values/navi-back-custom.yaml
-    {{- if .Values.customProjectNavi }}
-      - ../values/navi-custom-rules.yaml # использовать проекты, описанные в rules.conf
-    {{ end }}
+      - ../templates/navi-custom-rules.gotmpl
     set:
       - name: naviback.app_rule
-        value: {{ $rule }}
+        value: {{ requiredEnv "API" }}
       - name: naviback.type
         value: {{ $type }}
-
-

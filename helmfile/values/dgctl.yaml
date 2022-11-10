@@ -1,7 +1,7 @@
-dgctlDockerRegistry: 'change_me_registry_addr'
+dgctlDockerRegistry: docker.storage.example.local
 dgctlStorage:
-  host: 'change_me_s3_host_name'
-  bucket: 'change_me_s3_bucket_name'
-  accessKey: 'change_me_key'
-  secretKey: 'change_me_secret'
-  manifest: 'manifests/change_me.json'
+  host: artifacts.example.com
+  bucket: onpremise-artifacts
+  accessKey: AKIAIOSFODNN7EXAMPLE
+  secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+  manifest: manifests/1640661259.json

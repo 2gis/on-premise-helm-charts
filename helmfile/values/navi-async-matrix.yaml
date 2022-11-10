@@ -1,23 +1,23 @@
 replicaCount: 1
-
+ 
 dm:
-  citiesUrl: "http://change_me_castle_internatl_service.cluster.svc/cities.conf"
-  
+  citiesUrl: http://navi-castle.host/cities.conf
+   
 keys:
-  host: 'http://change_me_keys_internatl_service.cluster.svc/service/v1/keys'
-  token: change_me_token_Distance_Matrix_API
-
+  host: http://keys.host/service/v1/keys
+  token: DISTANCE_MATRIX_TOKEN_FFFFFF-666666
+ 
 db:
-  host: change_me_host.name
+  host: navi-async-matrix-postgresql.storage.example.local
   port: 5432
-  name: change_me_db_name
-  user: change_me_username
-  password: change_me_password
-
-resources: 
+  name: onpremise_navi_async_matrix
+  user: navi-async-matrix-user
+  password: navi-async-matrix-password
+ 
+resources:
   limits:
-    cpu: 1000m
-    memory: 1Gi
+    cpu: 2000m
+    memory: 4Gi
   requests:
-    cpu: 1000m
-    memory: 1Gi
+    cpu: 2000m
+    memory: 4Gi

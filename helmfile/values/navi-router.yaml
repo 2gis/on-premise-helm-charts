@@ -1,19 +1,19 @@
 navigroup: navi
 
 router:
-  app_castle_host: change_me_castle_internatl_service.cluster.svc
-  additional_sections: |
+  castleHost: http://navi-castle.host
+  additionalSections: |
     "key_management_service":
       {
-        "service_remote_address": "http://change_me_keys_internatl_service.cluster.svc/service/v1/keys",
+        "service_remote_address": "http://keys.host/service/v1/keys",
         "keys_refresh_interval_min": 5,
         "keys_download_timeout_sec": 30,
         "service_apis":
           [
-            { "type": "directions", "token": "change_me_DIRECTIONS_API_KEY_AAAAAA-111111" },
-            { "type": "distance-matrix", "token": "change_me_DISTANCE_MATRIX_API_KEY_FFFFFF-666666" },
-            { "type": "isochrone", "token": "change_me_ISOCHRONE_API_KEY_HHHHHH-888888" },
-            { "type": "public-transport", "token" : "change_me_PUBLIC_TRANSPORT_API_KEY_DDDDDD-444444"}
+            { "type": "directions", "token": "DIRECTIONS_API_KEY_AAAAAA-111111" },
+            { "type": "distance-matrix", "token": "DISTANCE_MATRIX_API_KEY_FFFFFF-666666" },
+            { "type": "isochrone", "token": "ISOCHRONE_API_KEY_HHHHHH-888888" },
+            { "type": "public-transport", "token" : "PUBLIC_TRANSPORT_API_KEY_DDDDDD-444444"}
           ]
       }
 

@@ -14,6 +14,4 @@ releases:
     values:
       - ../values/dgctl.yaml
       - ../values/navi-router.yaml
-    {{- if .Values.customProjectNavi }}
-      - ../values/navi-custom-rules.yaml # использовать проекты, описанные в rules.conf
-    {{ end }}
+      - ../templates/navi-custom-rules.gotmpl

@@ -1,14 +1,14 @@
 .topics:
-  task_topic: &tt change_me_task_name
-  status_topic: &st change_me_status_name
-  canсel_topic: &ct change_me_cansel_name
-
+  task_topic: &tt task_topic
+  status_topic: &st status_topic
+  canсel_topic: &ct cancel_topic
+ 
 kafka:
   enabled: true
   groupId: navi_async_matrix
   properties:
-    bootstrap.servers: change_me_hostname # в формате hostname:port
-    security.protocol: SSL # SSL, SASL_SSL, SASL_PLAINTEXT или PLAINTEXT
+    bootstrap.servers: navi-back-kafka.storage.example.local:31560 # в формате hostname:port
+    security.protocol: PLAINTEXT # SSL, SASL_SSL, SASL_PLAINTEXT или PLAINTEXT
   fileProperties: {}
 
   # navi-back topics
@@ -30,7 +30,7 @@ kafka:
 
 s3:
   enabled: true
-  host: change_me_host_name
-  bucket: change_me_bucket_am
-  accessKey: change_me_key
-  secretKey: change_me_secret
+  host: artifacts.example.com
+  bucket: navi-async-matrix
+  accessKey: sampleaccessKey
+  secretKey: samplesecretKey

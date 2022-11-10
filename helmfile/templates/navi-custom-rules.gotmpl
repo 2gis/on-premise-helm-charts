@@ -1,48 +1,48 @@
 .project_list: &projects
-  - kazan
-  - nabchelny
-  - almetevsk
-  - ru_tatarstan_republic_rwop
+{{- if .Values.customProjectNavi }}
+  - moscow
+{{ else }}
+{{ readFile "../values/cities.yaml" }}
+{{ end }}
 
 .base_config: &base_config
   moses_projects: *projects
   router_projects: *projects
 
 rules:
-  - name: cr # авто
+  - name: directions-car # авто 
     << : *base_config
     queries: ["routing"]
     routing: ["driving"]
-  - name: pd # пешеходы
+  - name: directions-pedestrian # пешеходы 
     << : *base_config
     queries: ["routing"]
     routing: ["pedestrian"]
-  - name: bc # велосипедисты
+  - name: directions-bicycle # велосипедисты 
     << : *base_config
     queries: ["routing"]
     routing: ["bicycle"]
-  - name: tx # taxi
+  - name: directions-taxi # taxi 
     << : *base_config
     queries: ["routing"]
     routing: ["taxi"]
-  - name: dm # distance matrix
+  - name: distance-matrix # distance-matrix
     << : *base_config
     queries: ["get_dist_matrix"]
     routing: ["driving"]
-  - name: pt # общественный транспорт
+  - name: public-transport # общественный транспорт 
     << : *base_config
     queries: ["public_transport"]
     routing: ["public_transport"]
-  - name: tr # грузовики
+  - name: truck # грузовики truck
     << : *base_config
     queries: ["routing"]
     routing: ["truck"]
-  - name: pr # pairs
+  - name: pairs # pairs 
     << : *base_config
     queries: ["get_pairs"]
     routing: ["driving"]
-  - name: is # isochrone
+  - name: isochrone # isochrone
     << : *base_config
     queries: ["get_hull"]
     routing: ["driving"]
-

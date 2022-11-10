@@ -8,8 +8,8 @@ KEY=$2
 
 cd $SCRIPTPATH/points
 
-TASK_ID=`curl -s $URL/create_task/get_dist_matrix?key=$KEY --header 'Content-Type: application/json' -d @kazan_dm.json | jq -r '.task_id'`
-echo "Start test Kazan"
+TASK_ID=`curl -s $URL/create_task/get_dist_matrix?key=$KEY --header 'Content-Type: application/json' -d @moscow_dm.json | jq -r '.task_id'`
+echo "Start test Moscow"
 echo "Create task with ID" $TASK_ID
 
 function task_status() {

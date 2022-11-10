@@ -1,12 +1,13 @@
-.projects: &projects
-  - kazan
-  - nabchelny
-  - almetevsk
-  - ru_tatarstan_republic_rwop
+.project_list: &projects
+{{- if .Values.customProjectNavi }}
+  - moscow
+{{ else }}
+{{ readFile "../values/cities.yaml" }}
+{{ end }}
 
 # rules используется чтобы ограничить кол-во загружаемых проектов
 rules:
-- name: &name_rule some-projects-dma
+- name: &name_rule dma
   moses_projects: *projects 
   router_projects: *projects
   queries: ["routing"]
