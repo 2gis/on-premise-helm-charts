@@ -9,7 +9,7 @@ data:
         server_name _;
 
         location / {
-            root {{ .Values.castle.castle_data_path }};
+            root {{ .Values.castle.castleDataPath }};
             autoindex on;
         }
 

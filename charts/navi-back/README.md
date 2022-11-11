@@ -55,22 +55,34 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Back application settings
 
-| Name                          | Description                                                                                                                                                                                               | Value   |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `naviback.app_castle_host`    | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.                                                                                          |         |
-| `naviback.eca_host`           | Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.                       |         |
-| `naviback.forecast_host`      | URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster. |         |
-| `naviback.dm_sources_limit`   | Size limit for source matrices.                                                                                                                                                                           | `1000`  |
-| `naviback.dm_targets_limit`   | Size limit for target matrices.                                                                                                                                                                           | `1000`  |
-| `naviback.handlers_number`    | Number of HTTP handlers.                                                                                                                                                                                  | `1`     |
-| `naviback.max_process_time`   | Maximum processing time limit in minutes.                                                                                                                                                                 | `600`   |
-| `naviback.response_timelimit` | Maximum response time limit in minutes.                                                                                                                                                                   | `60`    |
-| `naviback.request_timeout`    | Maximum request time limit in minutes.                                                                                                                                                                    | `60`    |
-| `naviback.dump_result`        | Dump results in logs.                                                                                                                                                                                     | `false` |
-| `naviback.dump_query`         | Dump queries in logs.                                                                                                                                                                                     | `false` |
-| `naviback.dump_answer`        | Dump answers in logs.                                                                                                                                                                                     | `false` |
-| `naviback.logLevel`           | Logging level, one of: Verbose, Info, Warning, Error, Fatal.                                                                                                                                              | `Info`  |
-| `naviback.indices`            | List of dynamic indices kill switches.                                                                                                                                                                    |         |
+| Name                                   | Description                                                                                                                                                                                               | Value                     |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `naviback.ecaHost`                     | Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.                       |                           |
+| `naviback.forecastHost`                | URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster. |                           |
+| `naviback.dmSourcesLimit`              | Size limit for source matrices.                                                                                                                                                                           | `1000`                    |
+| `naviback.dmTargetsLimit`              | Size limit for target matrices.                                                                                                                                                                           | `1000`                    |
+| `naviback.handlersNumber`              | Number of HTTP handlers.                                                                                                                                                                                  | `1`                       |
+| `naviback.maxProcessTime`              | Maximum processing time limit in minutes.                                                                                                                                                                 | `600`                     |
+| `naviback.responseTimelimit`           | Maximum response time limit in minutes.                                                                                                                                                                   | `60`                      |
+| `naviback.requestTimeout`              | Maximum request time limit in minutes.                                                                                                                                                                    | `60`                      |
+| `naviback.dump.result`                 | Dump results in logs.                                                                                                                                                                                     | `false`                   |
+| `naviback.dump.query`                  | Dump queries in logs.                                                                                                                                                                                     | `false`                   |
+| `naviback.dump.answer`                 | Dump answers in logs.                                                                                                                                                                                     | `false`                   |
+| `naviback.logLevel`                    | Logging level, one of: Verbose, Info, Warning, Error, Fatal.                                                                                                                                              | `Info`                    |
+| `naviback.castleHost`                  | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.                                                                                          | `http://navi-castle.host` |
+| `naviback.indices`                     | List of dynamic indices kill switches.                                                                                                                                                                    |                           |
+| `naviback.additionalSections`          | Optinal JSON block to be added to config file as-is.                                                                                                                                                      |                           |
+| `naviback.simpleNetwork.bicycle`       | Enable simple network for bicycle routing                                                                                                                                                                 |                           |
+| `naviback.simpleNetwork.car`           | Enable simple network for auto routing                                                                                                                                                                    |                           |
+| `naviback.simpleNetwork.emergency`     | Enable simple network for emergency vehicles routing                                                                                                                                                      | `false`                   |
+| `naviback.simpleNetwork.pedestrian`    | Enable simple network for pedestrian routing                                                                                                                                                              |                           |
+| `naviback.simpleNetwork.taxi`          | Enable simple network for taxi routing                                                                                                                                                                    |                           |
+| `naviback.simpleNetwork.truck`         | Enable simple network for truck routing                                                                                                                                                                   |                           |
+| `naviback.attractor.bicycle`           | Enable enhanced attractor for bicycle routing                                                                                                                                                             |                           |
+| `naviback.attractor.car`               | Enable enhanced attractor for auto routing                                                                                                                                                                |                           |
+| `naviback.attractor.pedestrian`        | Enable enhanced attractor for pedestrian routing                                                                                                                                                          |                           |
+| `naviback.attractor.taxi`              | Enable enhanced attractor for taxi routing                                                                                                                                                                |                           |
+| `naviback.reduceEdgesOptimizationFlag` | Enable optimizations for distance matrix queries processing                                                                                                                                               |                           |
 
 
 ### Service account settings
@@ -128,13 +140,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
 
-### Vertical scaling settings
-
-| Name                      | Description                     | Value   |
-| ------------------------- | ------------------------------- | ------- |
-| `verticalscaling.enabled` | If vertical scaling is enabled. | `false` |
-
-
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 | Name                    | Description                                                                                                  | Value   |
@@ -158,35 +163,33 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kafka settings for interacting with Distance Matrix Async Service
 
-| Name                                             | Description                                                                    | Value                   |
-| ------------------------------------------------ | ------------------------------------------------------------------------------ | ----------------------- |
-| `kafka.enabled`                                  | If the Kafka is enabled.                                                       | `false`                 |
-| `kafka.server`                                   | Kafka hostname or IP address.                                                  | `async-matrix-api.host` |
-| `kafka.port`                                     | Kafka port.                                                                    | `9092`                  |
-| `kafka.groupId`                                  | Navi-Back service group identifier.                                            | `test_id`               |
-| `kafka.user`                                     | Username for accessing the Kafka server.                                       | `kafkauser`             |
-| `kafka.password`                                 | Password for accessing the Kafka server.                                       | `kafkapassword`         |
-| `kafka.mechanism`                                | Authentication mechanism.                                                      | `SCRAM-SHA-512`         |
-| `kafka.protocol`                                 | Kafka protocol.                                                                | `SASL_SSL`              |
-| `kafka.distanceMatrix`                           | **Settings for interacting with Distance Matrix Async service.**               |                         |
-| `kafka.distanceMatrix.taskTopic`                 | Name of the topic for receiving new tasks from Distance Matrix Async API.      | `request_topic`         |
-| `kafka.distanceMatrix.cancelTopic`               | Name of the topic for canceling or receiving information about finished tasks. | `cancel_topic`          |
-| `kafka.distanceMatrix.statusTopic`               | Name of the topic for receiving task status information.                       | `service_message_bus`   |
-| `kafka.distanceMatrix.updateTaskStatusPeriodSec` | Update period for task statuses.                                               | `120`                   |
-| `kafka.distanceMatrix.messageExpiredPeriodSec`   | Update period for task cancellations.                                          | `3600`                  |
-| `kafka.distanceMatrix.requestDownloadTimeoutSec` | Timeout for downloading request data.                                          | `20`                    |
-| `kafka.distanceMatrix.responseUploadTimeoutSec`  | Timeout for uploading response data.                                           | `40`                    |
+| Name                                             | Description                                                                                                               | Value          |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `kafka.enabled`                                  | If the Kafka is enabled.                                                                                                  | `false`        |
+| `kafka.groupId`                                  | Navi-Back service group identifier.                                                                                       | `navi_back`    |
+| `kafka.properties`                               | Properties as supported by librdkafka. Refer to inline comments for details.                                              |                |
+| `kafka.fileProperties`                           | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`           |
+| `kafka.distanceMatrix`                           | **Settings for interacting with Distance Matrix Async service.**                                                          |                |
+| `kafka.distanceMatrix.taskTopic`                 | Name of the topic for receiving new tasks from Distance Matrix Async API.                                                 | `task_topic`   |
+| `kafka.distanceMatrix.cancelTopic`               | Name of the topic for canceling or receiving information about finished tasks.                                            | `cancel_topic` |
+| `kafka.distanceMatrix.statusTopic`               | Name of the topic for receiving task status information.                                                                  | `status_topic` |
+| `kafka.distanceMatrix.updateTaskStatusPeriodSec` | Update period for task statuses.                                                                                          | `120`          |
+| `kafka.distanceMatrix.messageExpiredPeriodSec`   | Update period for task cancellations.                                                                                     | `3600`         |
+| `kafka.distanceMatrix.requestDownloadTimeoutSec` | Timeout for downloading request data.                                                                                     | `20`           |
+| `kafka.distanceMatrix.responseUploadTimeoutSec`  | Timeout for uploading response data.                                                                                      | `40`           |
 
 
 ### S3-compatible storage settings for interacting with Distance Matrix Async Service
 
-| Name         | Description                             | Value                     |
-| ------------ | --------------------------------------- | ------------------------- |
-| `s3.enabled` | if S3 storage is enabled.               | `false`                   |
-| `s3.url`     | S3 endpoint URL.                        | `async-matrix-s3.host:80` |
-| `s3.bucket`  | S3 bucket name.                         | `samplebucket`            |
-| `s3.keyId`   | S3 access key for accessing the bucket. | `sampleid`                |
-| `s3.key`     | S3 secret key for accessing the bucket. | `samplekey`               |
+| Name                  | Description                             | Value                         |
+| --------------------- | --------------------------------------- | ----------------------------- |
+| `s3.enabled`          | if S3 storage is enabled.               | `false`                       |
+| `s3.host`             | S3 endpoint URL.                        | `http://async-matrix-s3.host` |
+| `s3.bucket`           | S3 bucket name.                         | `samplebucket`                |
+| `s3.accessKey`        | S3 access key for accessing the bucket. | `sampleid`                    |
+| `s3.secretKey`        | S3 secret key for accessing the bucket. | `samplekey`                   |
+| `livenessProbeDelay`  | initial delay for liveness probes       | `60`                          |
+| `readinessProbeDelay` | initial delay for readiness probes      | `75`                          |
 
 
 ## Maintainers

@@ -46,20 +46,20 @@ image:
 
 # @section Navi-Back application settings
 
-# @extra naviback.app_castle_host URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
-# @extra naviback.eca_host Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
-# @extra naviback.forecast_host URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
-# @skip naviback.app_port
-# @param naviback.dm_sources_limit Size limit for source matrices.
-# @param naviback.dm_targets_limit Size limit for target matrices.
-# @param naviback.handlers_number Number of HTTP handlers.
-# @param naviback.max_process_time Maximum processing time limit in minutes.
-# @param naviback.response_timelimit Maximum response time limit in minutes.
-# @param naviback.request_timeout Maximum request time limit in minutes.
-# @param naviback.dump_result Dump results in logs.
-# @param naviback.dump_query Dump queries in logs.
-# @param naviback.dump_answer Dump answers in logs.
+# @extra naviback.ecaHost Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @skip naviback.appPort
+# @param naviback.dmSourcesLimit Size limit for source matrices.
+# @param naviback.dmTargetsLimit Size limit for target matrices.
+# @param naviback.handlersNumber Number of HTTP handlers.
+# @param naviback.maxProcessTime Maximum processing time limit in minutes.
+# @param naviback.responseTimelimit Maximum response time limit in minutes.
+# @param naviback.requestTimeout Maximum request time limit in minutes.
+# @param naviback.dump.result Dump results in logs.
+# @param naviback.dump.query Dump queries in logs.
+# @param naviback.dump.answer Dump answers in logs.
 # @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
+# @param naviback.castleHost URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @extra naviback.indices List of dynamic indices kill switches.
 # @skip naviback.indices.carOptions.enabled
 # @skip naviback.indices.countryCarOptions.enabled
@@ -83,21 +83,35 @@ image:
 # @skip naviback.indices.tugc2gisIndex.enabled
 # @skip naviback.indices.tugcUsers.enabled
 # @skip naviback.indices.tugcUsersIndex.enabled
+# @extra naviback.additionalSections Optinal JSON block to be added to config file as-is.
+# @extra naviback.simpleNetwork.bicycle Enable simple network for bicycle routing
+# @extra naviback.simpleNetwork.car Enable simple network for auto routing
+# @param naviback.simpleNetwork.emergency Enable simple network for emergency vehicles routing
+# @extra naviback.simpleNetwork.pedestrian Enable simple network for pedestrian routing
+# @extra naviback.simpleNetwork.taxi Enable simple network for taxi routing
+# @extra naviback.simpleNetwork.truck Enable simple network for truck routing
+# @extra naviback.attractor.bicycle Enable enhanced attractor for bicycle routing
+# @extra naviback.attractor.car Enable enhanced attractor for auto routing
+# @extra naviback.attractor.pedestrian Enable enhanced attractor for pedestrian routing
+# @extra naviback.attractor.taxi Enable enhanced attractor for taxi routing
+# @extra naviback.reduceEdgesOptimizationFlag Enable optimizations for distance matrix queries processing
 # @skip rules
 
 naviback:
-  app_port: 8080
-  dm_sources_limit: 1000
-  dm_targets_limit: 1000
-  handlers_number: 1
-  max_process_time: 600
-  response_timelimit: 60
-  request_timeout: 60
-  dump_result: false
-  dump_query: false
-  dump_answer: false
+  appPort: 8080
+  dmSourcesLimit: 1000
+  dmTargetsLimit: 1000
+  handlersNumber: 1
+  maxProcessTime: 600
+  responseTimelimit: 60
+  requestTimeout: 60
+  dump:
+    result: false
+    query: false
+    answer: false
   logLevel: Info
-  indices:  # see DEVOPS-300
+  castleHost: http://navi-castle.host
+  indices:
     carOptions:
       enabled: false
     countryCarOptions:
@@ -142,6 +156,8 @@ naviback:
       enabled: false
     tugcUsersIndex:
       enabled: false
+  simpleNetwork:
+    emergency: false
 
 rules: []
 
@@ -233,14 +249,6 @@ hpa:
   targetMemoryUtilizationPercentage: ''
 
 
-# @section Vertical scaling settings
-
-# @param verticalscaling.enabled If vertical scaling is enabled.
-
-verticalscaling:
-  enabled: false
-
-
 # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 # @param vpa.enabled If VPA is enabled for the service.
@@ -270,13 +278,11 @@ pdb:
 # @section Kafka settings for interacting with Distance Matrix Async Service
 
 # @param kafka.enabled If the Kafka is enabled.
-# @param kafka.server Kafka hostname or IP address.
-# @param kafka.port Kafka port.
 # @param kafka.groupId Navi-Back service group identifier.
-# @param kafka.user Username for accessing the Kafka server.
-# @param kafka.password Password for accessing the Kafka server.
-# @param kafka.mechanism Authentication mechanism.
-# @param kafka.protocol Kafka protocol.
+# @extra kafka.properties Properties as supported by librdkafka. Refer to inline comments for details.
+# @skip kafka.properties.bootstrap.servers
+# @skip kafka.properties.security.protocol
+# @param kafka.fileProperties As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
 # @extra kafka.distanceMatrix **Settings for interacting with Distance Matrix Async service.**
 # @param kafka.distanceMatrix.taskTopic Name of the topic for receiving new tasks from Distance Matrix Async API.
 # @param kafka.distanceMatrix.cancelTopic Name of the topic for canceling or receiving information about finished tasks.
@@ -288,37 +294,71 @@ pdb:
 
 kafka:
   enabled: false
-  server: async-matrix-api.host
-  port: 9092
-  groupId: test_id
-  user: kafkauser
-  password: kafkapassword
-  mechanism: SCRAM-SHA-512
-  protocol: SASL_SSL
+  groupId: navi_back
+  properties:
+    bootstrap.servers: kafka.host:9092
+    security.protocol: PLAINTEXT
+  fileProperties: {}
   distanceMatrix:
-    taskTopic: request_topic
+    taskTopic: task_topic
     cancelTopic: cancel_topic
-    statusTopic: service_message_bus
+    statusTopic: status_topic
     updateTaskStatusPeriodSec: 120
     messageExpiredPeriodSec: 3600
     requestDownloadTimeoutSec: 20
     responseUploadTimeoutSec: 40
 
+# Kafka properties for common use-cases:
+#
+# Note that <Set-by-CI from user.p12> means that actual content passed from
+# file user.p12 with --set-file (especially binary data), e.g.:
+#
+#   $ helm install navi-back . --set-file 'kafka.fileProperties.ssl\.keystore\.location=user.p12'
+#
+# 1. SSL authentication with key file protected with password 123:
+#
+#  properties:
+#    bootstrap.servers: kafka.host:9092
+#    security.protocol: SSL
+#    ssl.keystore.password: '123'
+#  fileProperties:
+#    ssl.ca.location: '<Set-by-CI from ca.crt>'
+#    ssl.certificate.location: '<Set-by-CI from user.crt>'
+#    ssl.key.location: '<Set-by-CI from user.pem>'
+#
+# 2. login/password SASL as test-username/123:
+#
+#  properties:
+#    bootstrap.servers: kafka.host:9092
+#    security.protocol: SASL_PLAINTEXT
+#    sasl.mechanism: SCRAM-SHA-512
+#    sasl.username: test-username
+#    sasl.password: '123'
+#
+# 3. Unauthenticated:
+#
+#  properties:
+#    bootstrap.servers: kafka.host:9092
+#    security.protocol: PLAINTEXT
+
 
 # @section S3-compatible storage settings for interacting with Distance Matrix Async Service
 
 # @param s3.enabled if S3 storage is enabled.
-# @param s3.url S3 endpoint URL.
+# @param s3.host S3 endpoint URL.
 # @param s3.bucket S3 bucket name.
-# @param s3.keyId S3 access key for accessing the bucket.
-# @param s3.key S3 secret key for accessing the bucket.
+# @param s3.accessKey S3 access key for accessing the bucket.
+# @param s3.secretKey S3 secret key for accessing the bucket.
 
 s3:
   enabled: false
-  url: async-matrix-s3.host:80
+  host: http://async-matrix-s3.host
   bucket: samplebucket
-  keyId: sampleid
-  key: samplekey
+  accessKey: sampleid
+  secretKey: samplekey
+
+# @param livenessProbeDelay initial delay for liveness probes
+# @param readinessProbeDelay initial delay for readiness probes
 
 livenessProbeDelay: 60
 readinessProbeDelay: 75

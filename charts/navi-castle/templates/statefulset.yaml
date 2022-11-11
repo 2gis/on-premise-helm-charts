@@ -61,14 +61,14 @@ spec:
             mountPath: /opt/config_builder.conf
             subPath: config_builder.conf
           - name: {{ include "castle.fullname" $ }}-builder-config
-            mountPath: {{ $.Values.castle.castle_data_path }}/cities_template
+            mountPath: {{ $.Values.castle.castleDataPath }}/cities_template
             subPath: cities_template
           {{- if $.Values.persistentVolume.enabled }}
           - name: {{ include "castle.fullname" $ }}-pvc
-            mountPath: {{ $.Values.castle.castle_data_path }}
+            mountPath: {{ $.Values.castle.castleDataPath }}
           {{- else }}
           - name: {{ include "castle.fullname" $ }}-data
-            mountPath: {{ $.Values.castle.castle_data_path }}
+            mountPath: {{ $.Values.castle.castleDataPath }}
           {{- end }}
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
@@ -85,10 +85,10 @@ spec:
             subPath: castle.conf
           {{- if .Values.persistentVolume.enabled }}
           - name: {{ include "castle.fullname" . }}-pvc
-            mountPath: {{ .Values.castle.castle_data_path }}
+            mountPath: {{ .Values.castle.castleDataPath }}
           {{- else }}
           - name: {{ include "castle.fullname" . }}-data
-            mountPath: {{ .Values.castle.castle_data_path }}
+            mountPath: {{ .Values.castle.castleDataPath }}
           {{- end }}
           ports:
             - name: http
@@ -130,13 +130,13 @@ spec:
             mountPath: /opt/config_builder.conf
             subPath: config_builder.conf
           - name: {{ include "castle.fullname" $ }}-builder-config
-            mountPath: {{ $.Values.castle.castle_data_path }}/cities_template
+            mountPath: {{ $.Values.castle.castleDataPath }}/cities_template
             subPath: cities_template
           - name: {{ include "castle.fullname" $ }}-builder-config
             mountPath: /opt/update_services
             subPath: update_services
           - name: {{ include "castle.fullname" $ }}-data
-            mountPath: {{ $.Values.castle.castle_data_path }}
+            mountPath: {{ $.Values.castle.castleDataPath }}
         {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

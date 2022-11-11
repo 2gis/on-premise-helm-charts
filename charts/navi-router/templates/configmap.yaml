@@ -34,7 +34,7 @@ data:
       "context": {
         "variables": {
           "LOCAL_ETC": "/src/etc",
-          "REMOTE_PATH": "{{ required "A valid .Values.app_castle_host  entry required!" .Values.router.app_castle_host }}",
+          "REMOTE_PATH": "{{ required "A valid .Values.router.castleHost  entry required!" .Values.router.castleHost }}",
           "LOCAL_PATH": "/var/lib/2gis/castle/"
         },
         "cities": {
@@ -58,12 +58,11 @@ data:
         "server_info": {
           "server_id": "{{ include "router.fullname" . }}"
         }
-        {{ if .Values.router.additional_sections }}
+        {{ if .Values.router.additionalSections }}
         {{ println "," }}
-         {{- include "tplvalues.render" ( dict "value" .Values.router.additional_sections "context" $) | nindent 8 }}
+         {{- include "tplvalues.render" ( dict "value" .Values.router.additionalSections "context" $) | nindent 8 }}
         {{ end }}
       }
     }
   rules.conf: |-
     {{- include "rules.renderRules" . }}
-

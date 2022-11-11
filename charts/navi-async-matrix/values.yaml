@@ -197,53 +197,112 @@ db:
 
 # @section Kafka settings
 
-# @param kafka.bootstrap URL of the Kafka server.
 # @param kafka.groupId Distance Matrix Async API group identifier.
-# @param kafka.user Username for accessing the Kafka server.
-# @param kafka.password Password for accessing the Kafka server.
-# @param kafka.mechanism Authentication mechanism.
-# @param kafka.protocol Kafka protocol.
-# @param kafka.consumerTaskTopic Name of the topic for sending new tasks to.
-# @param kafka.consumerCancelTopic Name of the topic for canceling or receiving information about finished tasks.
-# @extra kafka.topicRules **Information about the topics that Distance Matrix Async API will use to send the requests.**
-# @extra kafka.topicRules[].topic Name of the topic.
-# @extra kafka.topicRules[].default If this topic is used for projects by default.
-# @extra kafka.topicRules[].projects List of projects to use this topic for, e.g., `['dammam']`.
-# @skip kafka.topicRules[0].topic
-# @skip kafka.topicRules[0].default
-# @skip kafka.topicRules[1].topic
-# @skip kafka.topicRules[1].projects
+# @param kafka.statusTopic Name of the topic for sending new tasks to.
+# @param kafka.cancelTopic Name of the topic for canceling or receiving information about finished tasks.
+# @extra kafka.properties Properties as supported by kafka-python. Refer to inline comments for details.
+# @skip kafka.properties.bootstrap.servers
+# @skip kafka.properties.security.protocol
+# @param kafka.sensitiveProperties As kafka.properties, but kept in Secrets. Refer to inlines comments for details.
+# @param kafka.fileProperties As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
+# @extra kafka.taskTopicRules **Information about the topics that Distance Matrix Async API will use to send the requests.**
+# @extra kafka.taskTopicRules[].topic Name of the topic.
+# @extra kafka.taskTopicRules[].default If this topic is used for projects by default.
+# @extra kafka.taskTopicRules[].projects List of projects to use this topic for, e.g., `['moscow']`.
+# @skip kafka.taskTopicRules[0].topic
+# @skip kafka.taskTopicRules[0].default
 
 kafka:
-  bootstrap: async-matrix-api.host:9092
-  groupId: test_id
-  user: kafkauser
-  password: kafkapassword
-  mechanism: SCRAM-SHA-512
-  protocol: SASL_SSL
-  consumerTaskTopic: service_message_bus
-  consumerCancelTopic: cancel_topic
-  topicRules:
-  - topic: task_request_topic
+  groupId: navi_async_matrix
+  statusTopic: status_topic
+  cancelTopic: cancel_topic
+  properties:
+    bootstrap.servers: kafka.host:9092
+    security.protocol: PLAINTEXT
+  sensitiveProperties: {}
+  fileProperties: {}
+  taskTopicRules:
+  - topic: task_topic
     default: true
-  - topic: task_request_topic
-    projects:
-    - dammam
+  # - topic: task_topic_moscow
+  #   projects:
+  #   - moscow
+
+# More on Kafka properties.
+#
+# kafka.properties, kafka.sensitiveProperties and kafka.fileProperties are sections to specify
+# Kafka properties as supported by kafka-python:
+# https://buildmedia.readthedocs.org/media/pdf/kafka-python/master/kafka-python.pdf
+#
+# Properties are case-insensitive, '.' and '_' can be used interchangeably, i.e.
+# the following ones mean the same thing:
+# - bootstrap.servers
+# - bootstrap_servers
+# - BOOTstrap.SERVErs
+# Even though kafka-python native word splitter is '_', there '.' is rather used for similiarity
+# with corresponding settings in navi-back.
+#
+# Both kafka.properties and kafka.sensitiveProperties pass values through to the application,
+# the difference is that kafka.properties are openly disclosed in Pod specification, while
+# kafka.sensitiveProperties is kept in Secrets and never disclosed.
+#
+# kafka.fileProperties keep their values in Secrets the same way as kafka.sensitiveProperties,
+# but these secrets get mounted in application container as files. Application gets pathnames
+# to these files instead of actual values.
+#
+# Kafka properties for common use-cases:
+#
+# Note that <Set-by-CI from user.p12> means that actual content passed from
+# file user.p12 with --set-file (especially binary data), e.g.:
+#
+#   $ helm install navi-back . --set-file 'kafka.fileProperties.ssl\.keystore\.location=user.p12'
+#
+# 1. SSL authentication with key file protected with password 'password':
+#
+#  properties:
+#    bootstrap.servers: kafka.host:9092
+#    security.protocol: SSL
+#  sensitiveProperties:
+#    ssl.password: 'password'
+#  fileProperties:
+#    ssl.cafile: '<Set-by-CI from ca.crt>'
+#    ssl.certfile: '<Set-by-CI from user.crt>'
+#    ssl.keyfile: '<Set-by-CI from user.pem>'
+#
+# 2. login/password SASL as kafkauser/123:
+#
+#  properties:
+#    bootstrap.servers: kafka.host:9092
+#    security.protocol: SASL_PLAINTEXT
+#    sasl.mechanism: SCRAM-SHA-512
+#    sasl.plain.username: user
+#  sensitiveProperties:
+#    sasl.plain.password: 'password'
+#
+# 3. Unauthenticated:
+#
+#  properties:
+#    bootstrap.servers: kafka.host:9092
+#    security.protocol: PLAINTEXT
+#
+# Note that .p12 or .jks formats are not supported, they need to be
+# converted to PEM/RSA with openssl or other utility:
+#   https://github.com/dpkp/kafka-python/issues/2052
 
 
 # @section S3-compatible storage settings
 
-# @param s3.url S3 endpoint URL.
+# @param s3.host S3 endpoint URL.
 # @param s3.bucket S3 bucket name.
-# @param s3.keyId S3 access key for accessing the bucket.
-# @param s3.key S3 secret key for accessing the bucket.
+# @param s3.accessKey S3 access key for accessing the bucket.
+# @param s3.secretKey S3 secret key for accessing the bucket.
 # @param s3.publicNetloc Announce proxy URL for S3 results instead of s3.url if not empty.
 
 s3:
-  url: https://async-matrix-s3.host
+  host: http://async-matrix-s3.host
   bucket: samplebucket
-  keyId: sampleid
-  key: samplekey
+  accessKey: sampleid
+  secretKey: samplekey
   publicNetloc:
 
 # @skip bss.enabled
@@ -257,9 +316,9 @@ bss:
 
 # @section API keys service
 
-# @param keys.endpoint API keys service URL.
-# @param keys.dm_key API token to authorize at the service.
+# @param keys.host API keys service URL.
+# @param keys.token API token to authorize at the service.
 
 keys:
-  endpoint: http://keys-api.host/service/v1/keys
-  dm_key: samplekey
+  host: http://keys-api.host/service/v1/keys
+  token: ''
