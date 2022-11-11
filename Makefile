@@ -2,8 +2,8 @@
 
 ROOT := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-# readme generator image
-#GENERATOR = readme-generator-for-helm
+# readme generator image built in `prepare`
+# GENERATOR = readme-generator-for-helm
 # the pre-compiled one available internally
 GENERATOR = docker-hub.2gis.ru/on-premise/readme-generator-for-helm
 

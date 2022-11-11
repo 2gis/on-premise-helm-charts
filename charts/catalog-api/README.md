@@ -223,3 +223,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.cleaner.resources.limits.cpu`      | A CPU limit.      | `1000m` |
 | `importer.cleaner.resources.limits.memory`   | A memory limit.   | `512Mi` |
 
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| 2gis | <on-premise@2gis.com> | <https://github.com/2gis> |

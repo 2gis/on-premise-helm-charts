@@ -24,21 +24,21 @@ data:
         "pid_file": "/var/run/2gis/navi-back.pid"
       },
       "http": {
-        "port": {{ .Values.naviback.app_port }},
-        "handlers_number": {{ .Values.naviback.handlers_number }},
+        "port": {{ .Values.naviback.appPort }},
+        "handlers_number": {{ .Values.naviback.handlersNumber }},
         "log_verbose": false,
-        "max_process_time": {{ .Values.naviback.max_process_time | default 20 | int }},
-        "response_timelimit": {{ .Values.naviback.response_timelimit | default 60 | int }},
-        "request_timeout": {{ .Values.naviback.request_timeout | default 60 | int }},
+        "max_process_time": {{ .Values.naviback.maxProcessTime | default 20 | int }},
+        "response_timelimit": {{ .Values.naviback.responseTimelimit | default 60 | int }},
+        "request_timeout": {{ .Values.naviback.requestTimeout | default 60 | int }},
         "server": "0.0.0.0"
       },
       "context": {
         "variables": {
           "LOCAL_PATH": "/opt/castle",
           "LOCAL_ETC": "/etc/2gis/mosesd",
-          "REMOTE_PATH": "{{ .Values.naviback.app_castle_host }}",
-          "REMOTE_FORECAST" : "{{ .Values.naviback.forecast_host }}",
-          "REMOTE_ECA" : "{{ .Values.naviback.eca_host }}"
+          "REMOTE_PATH": "{{ .Values.naviback.castleHost }}",
+          "REMOTE_FORECAST" : "{{ .Values.naviback.forecastHost }}",
+          "REMOTE_ECA" : "{{ .Values.naviback.ecaHost }}"
         },
       "rules": {
         "update_period" : 0,
@@ -392,23 +392,32 @@ data:
         {{- if .Values.s3.enabled }}
           "s3": {
             "distance_matrix": {
-              "endpoint": {{ .Values.s3.url | quote }},
+              "endpoint": {{ .Values.s3.host | quote }},
               "bucket": {{ .Values.s3.bucket | quote }},
-              "access_key": {{ .Values.s3.keyId | quote }},
-              "secret_key": {{ .Values.s3.key | quote }}
+              "access_key": {{ .Values.s3.accessKey | quote }},
+              "secret_key": {{ .Values.s3.secretKey | quote }}
             }
           },
         {{- end }}
         {{- if .Values.kafka.enabled }}
           "kafka": {
-            "server" : {{ .Values.kafka.server | quote }},
-            "port" : {{ .Values.kafka.port | int }},
-            "user": {{ .Values.kafka.user | quote }},
-            "password": {{ .Values.kafka.password | quote }},
-            "sasl_mechanism": {{ .Values.kafka.mechanism | quote }},
-            "security_protocol": {{ .Values.kafka.protocol | quote }},
             "task_group_id" : {{ .Values.kafka.groupId | quote }},
             "cancel_group_id": {{ .Values.kafka.groupId | quote }},
+            {{- /*
+                 Collect merged Kafka properties from these dictionaries:
+                   - kafka.properties: this is a simple key/value dictionary
+                   - kafka.fileProperties: this is a key/content dictionary given in values,
+                     content is sensitive and stored in Secret resource, they get
+                     mounted as files sonamed after key. While actual secret values are
+                     hidden this way, what actually goes here in environment properties is
+                     file names. This value substitution is implemented down here.
+                 */ -}}
+            {{- $kafkaProperties := dict -}}
+            {{- range $key, $_ := .Values.kafka.fileProperties -}}
+            {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
+            {{- end -}}
+            {{- $kafkaProperties := mustMerge $kafkaProperties .Values.kafka.properties -}}
+            "kafka_properties": {{ mustToPrettyJson $kafkaProperties | nindent 12 }},
             "distance_matrix": {
               "task_topic": {{ .Values.kafka.distanceMatrix.taskTopic | quote }},
               "cancel_topic":  {{ .Values.kafka.distanceMatrix.cancelTopic | quote }},
@@ -420,37 +429,39 @@ data:
             }
           },
         {{- end }}
-        {{- if .Values.naviback.additional_sections }}
-          {{- include "tplvalues.render" ( dict "value" .Values.naviback.additional_sections "context" $) | nindent 8 }}
+        {{- if .Values.naviback.additionalSections }}
+          {{- include "tplvalues.render" ( dict "value" .Values.naviback.additionalSections "context" $) | nindent 8 }}
         {{- end }}
         "server_info": {
           {{- if ne .Values.naviback.type "custom" }}
           {{ include "config.serversection" . }}
           {{- else }}
-          "simple_network_car" : {{ .Values.naviback.simple_network_car | default "false" }},
-          "simple_network_pedestrian" : {{ .Values.naviback.simple_network_pedestrian | default "false" }},
-          "simple_network_taxi" : {{ .Values.naviback.simple_network_taxi | default "false" }},
-          "simple_network_bicycle" : {{ .Values.naviback.simple_network_bicycle | default "false" }},
-          "simple_network_truck" : {{ .Values.naviback.simple_network_truck | default "false" }},
-          "attractor_car" : {{ .Values.naviback.attractor_car | default "false" }},
-          "attractor_pedestrian" : {{ .Values.naviback.attractor_pedestrian | default "false" }},
-          "attractor_bicycle" : {{ .Values.naviback.attractor_bicycle | default "false" }},
-          "attractor_taxi" : {{ .Values.naviback.attractor_taxi | default "false" }},
-          "reduce_edges_optimization_flag" : {{ .Values.naviback.reduce_edges_optimization_flag | default "false" }},
+          "simple_network_car" : {{ (.Values.naviback.simpleNetwork).car | default "false" }},
+          "simple_network_pedestrian" : {{ (.Values.naviback.simpleNetwork).pedestrian | default "false" }},
+          "simple_network_taxi" : {{ (.Values.naviback.simpleNetwork).taxi | default "false" }},
+          "simple_network_bicycle" : {{ (.Values.naviback.simpleNetwork).bicycle | default "false" }},
+          "simple_network_truck" : {{ (.Values.naviback.simpleNetwork).truck | default "false" }},
+          "attractor_car" : {{ (.Values.naviback.attractor).car | default "false" }},
+          "attractor_pedestrian" : {{ (.Values.naviback.attractor).pedestrian | default "false" }},
+          "attractor_bicycle" : {{ (.Values.naviback.attractor).bicycle | default "false" }},
+          "attractor_taxi" : {{ (.Values.naviback.attractor).taxi | default "false" }},
+          "reduce_edges_optimization_flag" : {{ .Values.naviback.reduceEdgesOptimizationFlag | default "false" }},
           {{- end }}
           {{- if ((.Values.resources).limits).cpu }}
-          "dist_matrix_thread_pool_size" : {{ include "config.setDistMatrixPool" . }},
+          "dist_matrix_thread_pool_size" : {{ include "config.setCpuNumber" . }},
+          "simple_network_build_thread_pool_size" : {{ include "config.setCpuNumber" . }},
           {{- end }}
-          "simple_network_emergency" : {{ .Values.naviback.simple_network_emergency | default "false" }},
+          "update_projects_limit" : 2,
+          "simple_network_emergency" : {{ (.Values.naviback.simpleNetwork).emergency | default "false" }},
           "carrouting_page_cache_size" : 8192,
           "carrouting_tile_cache_size" : 8192,
           "carrouting_bit_tile_cache_size" : 2048,
-          "dump_query" : {{ mustToJson .Values.naviback.dump_query }},
-          "dump_result" : {{ mustToJson .Values.naviback.dump_result }},
-          "dump_answer" : {{ mustToJson .Values.naviback.dump_answer }},
+          "dump_query" : {{ mustToJson (.Values.naviback.dump).query }},
+          "dump_result" : {{ mustToJson (.Values.naviback.dump).result }},
+          "dump_answer" : {{ mustToJson (.Values.naviback.dump).answer }},
+          "max_parallel_workers" : 2,
           "use_memory_mapped_vfs" : true,
           "engine_update_period_sec" : 30,
-          "reduce_edges_optimization_flag" : false,
           {{- if .Values.naviback.server_id }}
           "server_id" : "{{- include "tplvalues.render" ( dict "value" .Values.naviback.server_id "context" .) }}",
           {{- else }}
@@ -475,8 +486,25 @@ data:
               "class": 5
             }
           ],
-          "dm_sources_limit": {{ .Values.naviback.dm_sources_limit | int }},
-          "dm_targets_limit": {{ .Values.naviback.dm_targets_limit | int }}
+          "dm_sources_limit": {{ .Values.naviback.dmSourcesLimit | int }},
+          "dm_targets_limit": {{ .Values.naviback.dmTargetsLimit | int }},
+          "traffic_color_options": {
+            "from_0_to_5_km": {
+              "green_jam_ratio": 50,
+              "yellow_jam_minutes": 10,
+              "deep_red_jam_minutes": 20
+            },
+            "from_5_to_10_km": {
+              "green_jam_ratio": 40,
+              "yellow_jam_minutes": 15,
+              "deep_red_jam_minutes": 25
+            },
+            "from_10_km": {
+              "green_jam_ratio": 30,
+              "yellow_jam_minutes": 20,
+              "deep_red_jam_minutes": 30
+            }
+          }
         }
       }
     }

@@ -13,10 +13,14 @@ spec:
   minReplicas: {{ .Values.hpa.minReplicas }}
   maxReplicas: {{ .Values.hpa.maxReplicas }}
   behavior:
+    {{- if .Values.hpa.scaleUp }}
     scaleUp:
-        stabilizationWindowSeconds: {{ .Values.hpa.scaleUpStabilizationWindowSeconds }}
+      {{- include "tplvalues.render" ( dict "value" .Values.hpa.scaleUp "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.hpa.scaleDown }}
     scaleDown:
-        stabilizationWindowSeconds: {{ .Values.hpa.scaleDownStabilizationWindowSeconds }}
+      {{- include "tplvalues.render" ( dict "value" .Values.hpa.scaleDown "context" $) | nindent 8 }}
+    {{- end }}
   metrics:
     {{- if .Values.hpa.targetCPUUtilizationPercentage }}
     - type: Resource

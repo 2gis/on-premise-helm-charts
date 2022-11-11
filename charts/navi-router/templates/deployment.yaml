@@ -52,7 +52,7 @@ spec:
             subPath: rules.conf
           ports:
             - name: http
-              containerPort: {{ .Values.router.app_port }}
+              containerPort: {{ .Values.router.appPort }}
               protocol: TCP
           livenessProbe:
             httpGet:

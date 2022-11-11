@@ -62,7 +62,6 @@ Create the name of the service account to use
 {{- end }}
 
 
-{{/* vim: set filetype=mustache: */}}
 {{/*
 Renders a value that contains template.
 Usage:
@@ -76,7 +75,6 @@ Usage:
     {{- end }}
 {{- end -}}
 
-{{/* vim: set filetype=mustache: */}}
 {{/*
 Renders a value or file that contains rules.
 Usage:
@@ -92,3 +90,5 @@ Usage:
         {{- fail "Rules value is not set or rules file is empty" }}
     {{- end -}}
 {{- end -}}
+
+{{/* vim: set filetype=mustache: */}}
