@@ -30,11 +30,6 @@ for i in $UPSTREAM; do
     echo 
     echo `curl -s $URL/get_dist_matrix/2.0?key=$KEY --header 'Content-Type: application/json' -d @moscow_dm.json`
     echo 
-  elif [[ "$i" == "isochrone" ]];then
-    echo "Create routing for Isochrone API:"
-    echo 
-    echo `curl -s $URL/get_hull?key=$KEY --header 'Content-Type: application/json' -d @moscow_is.json`
-    echo 
   elif [[ "$i" == "directions-pedestrian" ]];then
     echo "Create routing for Directions API pedestrian:"
     echo 
@@ -49,6 +44,25 @@ for i in $UPSTREAM; do
     echo "Create routing for Directions API taxi:"
     echo 
     echo `curl -s $URL/carrouting/6.0.1/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_tx.json`
+    echo 
+  elif [[ "$i" == "directions-truck" ]];then
+    echo "Create routing for Directions API taxi:"
+    echo 
+    echo `curl -s $URL/truck/6.0.0/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_tr.json`
+    echo 
+  elif [[ "$i" == "isochrone-car" ]];then
+    echo "Create routing for Isochrone API:"
+    echo 
+    echo `curl -s $URL/get_hull?key=$KEY --header 'Content-Type: application/json' -d @moscow_is_cr.json`
+    echo 
+  elif [[ "$i" == "directions-pairs" ]];then
+    echo "Create routing for Directions-pairs car:"
+    echo 
+    echo `curl -s $URL/get_pairs/1.0/car?key=$KEY --header 'Content-Type: application/json' -d @moscow_pr.json`
+    echo 
+    echo "Create routing for Directions-pairs pedestrian:"
+    echo 
+    echo `curl -s $URL/get_pairs/1.0/pedestrian?key=$KEY --header 'Content-Type: application/json' -d @moscow_pr.json`
     echo 
   fi
 done

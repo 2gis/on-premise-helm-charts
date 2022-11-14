@@ -1,0 +1,15 @@
+{
+  "points": [
+      {
+          "type": "walking",
+          "x": 37.5998,
+          "y": 55.7683
+      },
+      {
+          "type": "walking",
+          "x": 37.6076,
+          "y": 55.7622
+      }
+  ],
+  "type": "truck_jam"
+}

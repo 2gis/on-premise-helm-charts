@@ -3,7 +3,7 @@ replicaCount: 2
 navigroup: navi
 
 naviback:
-  castleHost: "http://navi-castle.host"
+  castleHost: http://navi-castle.host
   dmSourcesLimit: 25 
   dmTargetsLimit: 25 
 

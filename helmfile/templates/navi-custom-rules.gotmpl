@@ -34,15 +34,15 @@ rules:
     << : *base_config
     queries: ["public_transport"]
     routing: ["public_transport"]
-  - name: truck # грузовики truck
+  - name: directions-truck # грузовики truck
     << : *base_config
     queries: ["routing"]
     routing: ["truck"]
-  - name: pairs # pairs 
+  - name: directions-pairs # pairs 
     << : *base_config
     queries: ["get_pairs"]
     routing: ["driving"]
-  - name: isochrone # isochrone
+  - name: isochrone-car # isochrone
     << : *base_config
     queries: ["get_hull"]
     routing: ["driving"]
