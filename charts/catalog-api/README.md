@@ -68,11 +68,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Deployment settings
 
-| Name                   | Description                                                                                                         | Value                         |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `api.image.repository` | Repository                                                                                                          | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag                                                                                                                 | `3.574.0`                     |
-| `api.image.pullPolicy` | IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
+| Name                   | Description                                                                                         | Value                         |
+| ---------------------- | --------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `api.image.repository` | Repository                                                                                          | `2gis-on-premise/catalog-api` |
+| `api.image.tag`        | Tag                                                                                                 | `3.574.0`                     |
+| `api.image.pullPolicy` | Pull Policy [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
 
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
@@ -188,12 +188,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### importer.persistentVolume **Persistent Volume settings**
 
-| Name                                     | Description                                                                                                                                              | Value               |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `importer.persistentVolume.enabled`      | If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service.                                     | `false`             |
-| `importer.persistentVolume.accessModes`  | ReadWriteOnce, ReadOnlyMany, ReadWriteMany, ReadWriteOncePod [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) | `["ReadWriteOnce"]` |
-| `importer.persistentVolume.storageClass` | Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)                                                               | `topolvm-ext4`      |
-| `importer.persistentVolume.size`         | Volume size.                                                                                                                                             | `50Gi`              |
+| Name                                     | Description                                                                                                          | Value               |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `importer.persistentVolume.enabled`      | If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service. | `false`             |
+| `importer.persistentVolume.accessModes`  | Access Mode [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)              | `["ReadWriteOnce"]` |
+| `importer.persistentVolume.storageClass` | Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)                           | `topolvm-ext4`      |
+| `importer.persistentVolume.size`         | Volume size.                                                                                                         | `50Gi`              |
 
 
 ### importer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
