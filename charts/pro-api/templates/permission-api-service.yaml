@@ -1,0 +1,25 @@
+{{ if .Values.permissionsApi.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pro-api.name" . }}-permissions
+  {{- if .Values.permissionApiService.annotations }}
+  annotations:
+    {{- toYaml .Values.permissionApiService.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "pro-api.permissionLabels" . | nindent 4 }}
+  {{- if .Values.permissionApiService.labels }}
+    {{- toYaml .Values.permissionApiService.labels | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.permissionApiService.type }}
+  ports:
+    - port: {{ .Values.permissionApiService.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      appProtocol: http
+  selector:
+    {{- include "pro-api.permissionsSelectorLabels" . | nindent 4 }}
+{{- end }}
