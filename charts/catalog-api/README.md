@@ -32,11 +32,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name               | Description                                                                                                                                          | Value |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                  | `{}`  |
-| `affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                          | `{}`  |
+| `affinity`         | Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                   | `{}`  |
 | `tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                    | `[]`  |
 | `podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                         | `{}`  |
 | `podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                  | `{}`  |
-| `imagePullSecrets` | Kubernetes secrets for [pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/). | `[]`  |
+| `imagePullSecrets` | Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/). | `[]`  |
 
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
@@ -66,13 +66,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.replicas` | Number of replicas of API pods. | `1`   |
 
 
-### Deployment settings
+### api.image **Deployment settings**
 
-| Name                   | Description                                                                                         | Value                         |
-| ---------------------- | --------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `api.image.repository` | Repository                                                                                          | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag                                                                                                 | `3.574.0`                     |
-| `api.image.pullPolicy` | Pull Policy [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
+| Name                   | Description                                                                                   | Value                         |
+| ---------------------- | --------------------------------------------------------------------------------------------- | ----------------------------- |
+| `api.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-api` |
+| `api.image.tag`        | Tag                                                                                           | `3.574.0`                     |
+| `api.image.pullPolicy` | Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
 
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
@@ -88,7 +88,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
 
-### Limits [Resource Management for Pods and Containers] (https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+### Limits [Resource Management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
 
 | Name                            | Description       | Value    |
 | ------------------------------- | ----------------- | -------- |
@@ -144,15 +144,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Keys
 
-| Name                     | Description                                                                                              | Value                  |
-| ------------------------ | -------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `keys.host`              | URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster. | `http://keys-api.host` |
-| `keys.requestTimeout`    | Timeout for requests to the Keys API.                                                                    | `5s`                   |
-| `keys.tokens.places`     | Places API key (if available).                                                                           | `""`                   |
-| `keys.tokens.geocoder`   | Geocoder API key (if available).                                                                         | `""`                   |
-| `keys.tokens.suggest`    | Suggest API key (if available).                                                                          | `""`                   |
-| `keys.tokens.categories` | Categories API key (if available).                                                                       | `""`                   |
-| `keys.tokens.regions`    | Regions API key (if available).                                                                          | `""`                   |
+| Name                     | Description                                                                                                                              | Value                  |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `keys.host`              | URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster.                                 | `http://keys-api.host` |
+| `keys.requestTimeout`    | Timeout for requests to the Keys API.                                                                                                    | `5s`                   |
+| `keys.tokens.places`     | Places API key (if available) [Service tokens](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--1._Before_installing) | `""`                   |
+| `keys.tokens.geocoder`   | Geocoder API key (if available).                                                                                                         | `""`                   |
+| `keys.tokens.suggest`    | Suggest API key (if available).                                                                                                          | `""`                   |
+| `keys.tokens.categories` | Categories API key (if available).                                                                                                       | `""`                   |
+| `keys.tokens.regions`    | Regions API key (if available).                                                                                                          | `""`                   |
 
 
 ### Kubernetes Importer job settings
@@ -163,18 +163,20 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`  |
 | `importer.workerNum`           | Number of parallel import processes (workers).                                                                      | `3`   |
 | `importer.initialDelaySeconds` | Number of seconds after the container has started before liveness or readiness probes are initiated.                | `1`   |
+| `importer.retry.maxAttempts`   | The maximum number of retries download before stopping.                                                             | `3`   |
+| `importer.retry.delay`         | Delay until the retry attempts.                                                                                     | `1s`  |
 
 
 ### importer.image **Deployment settings**
 
-| Name                        | Description | Value                              |
-| --------------------------- | ----------- | ---------------------------------- |
-| `importer.image.repository` | Repository  | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`        | Tag         | `1.0.7`                            |
-| `importer.image.pullPolicy` | Pull Policy | `IfNotPresent`                     |
+| Name                        | Description                                                                                   | Value                              |
+| --------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `importer.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-importer` |
+| `importer.image.tag`        | Tag                                                                                           | `1.0.7`                            |
+| `importer.image.pullPolicy` | Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                     |
 
 
-### importer.db **Database settings**
+### importer.postgres **Database settings**
 
 | Name                                    | Description                                     | Value           |
 | --------------------------------------- | ----------------------------------------------- | --------------- |
@@ -191,7 +193,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                                     | Description                                                                                                          | Value               |
 | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `importer.persistentVolume.enabled`      | If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service. | `false`             |
-| `importer.persistentVolume.accessModes`  | Access Mode [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)              | `["ReadWriteOnce"]` |
+| `importer.persistentVolume.accessModes`  | Persistent Volume [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)        | `["ReadWriteOnce"]` |
 | `importer.persistentVolume.storageClass` | Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)                           | `topolvm-ext4`      |
 | `importer.persistentVolume.size`         | Volume size.                                                                                                         | `50Gi`              |
 
@@ -226,6 +228,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ## Maintainers
 
-| Name | Email | Url |
-| ---- | ------ | --- |
+| Name | Email                 | Url                       |
+| ---- | --------------------- | ------------------------- |
 | 2gis | <on-premise@2gis.com> | <https://github.com/2gis> |

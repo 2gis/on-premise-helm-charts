@@ -11,7 +11,7 @@ dgctlDockerRegistry: ''
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 # @param replicaCount A replica count for the pod.
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param affinity Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param redeployLabel If this label is changed since the last deployment, the whole chart will be redeployed.
 
@@ -46,7 +46,7 @@ api:
 
   # @param api.image.repository Repository
   # @param api.image.tag Tag
-  # @param api.image.pullPolicy IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+  # @param api.image.pullPolicy Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
 
   image:
     repository: 2gis-on-premise/search-api
@@ -74,7 +74,7 @@ api:
 
 # @param nginx.image.repository Docker Repository.
 # @param nginx.image.tag Docker image tag.
-# @param nginx.image.pullPolicy IfNotPresent, Always, Never [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param nginx.image.pullPolicy Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
 # @param nginx.httpPort HTTP port on which NGINX will be listening.
 
 nginx:
