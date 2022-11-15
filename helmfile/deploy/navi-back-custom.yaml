@@ -3,14 +3,16 @@ bases:
 - ../base.yaml
 ---
 {{ $type := ""}}
+{{ $cpu := "10" }}
+{{ $memory := "80Gi" }}
 {{ if eq ( requiredEnv "API" ) "directions-car" }} {{ $type = "carrouting" }}
 {{ else if eq ( requiredEnv "API" ) "directions-pedestrian" }} {{ $type = "pedestrian" }}
 {{ else if eq ( requiredEnv "API" ) "directions-bicycle" }} {{ $type = "bicycle" }}
 {{ else if eq ( requiredEnv "API" ) "directions-taxi" }} {{ $type = "taxi" }}
 {{ else if eq ( requiredEnv "API" ) "directions-pairs" }} {{ $type = "pairs" }}
 {{ else if eq ( requiredEnv "API" ) "directions-truck" }} {{ $type = "truck" }}
-{{ else if eq ( requiredEnv "API" ) "distance-matrix" }} {{ $type = "dm" }}
-{{ else if eq ( requiredEnv "API" ) "public-transport" }} {{ $type = "ctx" }}
+{{ else if eq ( requiredEnv "API" ) "distance-matrix" }} {{ $type = "dm" }} {{ $cpu = "25" }} {{ $memory = "100Gi" }}
+{{ else if eq ( requiredEnv "API" ) "public-transport" }} {{ $type = "ctx" }} {{ $memory = "55Gi" }}
 {{ else if eq ( requiredEnv "API" ) "isochrone-car" }} {{ $type = "carrouting" }}
 {{ else }}
 {{ fail "API env is wrong" }}
@@ -34,3 +36,7 @@ releases:
         value: {{ requiredEnv "API" }}
       - name: naviback.type
         value: {{ $type }}
+      - name: resources.limits.cpu
+        value: {{ $cpu }}
+      - name: resources.limits.memory
+        value: {{ $memory }}

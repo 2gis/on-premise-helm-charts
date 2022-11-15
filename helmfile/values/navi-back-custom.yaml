@@ -9,8 +9,9 @@ naviback:
 
 resources: #выставить соответсвующие ресурсы и лимиты
   limits:
-    cpu: 8000m
-    memory: 16384Mi
+    cpu: 10
+    memory: 80Gi
   requests:
-    cpu: 2000m
-    memory: 4096Mi
+    cpu: 8
+    memory: 50Gi
+
