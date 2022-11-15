@@ -100,12 +100,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Service settings
 
-| Name                      | Description                                                                                                                                                        | Value       |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `api.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                                   | `{}`        |
-| `api.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                                                             | `{}`        |
-| `api.service.type`        | ClusterIP, NodePort, LoadBalancer, ExternalName [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) | `ClusterIP` |
-| `api.service.port`        | Service port                                                                                                                                                       | `80`        |
+| Name                      | Description                                                                                                                   | Value       |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `api.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)              | `{}`        |
+| `api.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                        | `{}`        |
+| `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) | `ClusterIP` |
+| `api.service.port`        | Service port                                                                                                                  | `80`        |
 
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
@@ -135,24 +135,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.preloaders.awaitTimeout` | Preloaders await timeout | `60s` |
 
 
-### Search
+### Search settings
 
 | Name          | Description                                                                                               | Value                    |
 | ------------- | --------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `search.host` | URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster | `http://search-api.host` |
 
 
-### Keys
+### Keys settings
 
-| Name                     | Description                                                                                                                              | Value                  |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `keys.host`              | URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster                                  | `http://keys-api.host` |
-| `keys.requestTimeout`    | Timeout for requests to the Keys API                                                                                                     | `5s`                   |
-| `keys.tokens.places`     | Places API key (if available) [Service tokens](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--1._Before_installing) | `""`                   |
-| `keys.tokens.geocoder`   | Geocoder API key (if available)                                                                                                          | `""`                   |
-| `keys.tokens.suggest`    | Suggest API key (if available)                                                                                                           | `""`                   |
-| `keys.tokens.categories` | Categories API key (if available)                                                                                                        | `""`                   |
-| `keys.tokens.regions`    | Regions API key (if available)                                                                                                           | `""`                   |
+| Name                     | Description                                                                                             | Value                  |
+| ------------------------ | ------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `keys.host`              | URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster | `http://keys-api.host` |
+| `keys.requestTimeout`    | Timeout for requests to the Keys API                                                                    | `5s`                   |
+| `keys.tokens.places`     | Places API key (if available)                                                                           | `""`                   |
+| `keys.tokens.geocoder`   | Geocoder API key (if available)                                                                         | `""`                   |
+| `keys.tokens.suggest`    | Suggest API key (if available)                                                                          | `""`                   |
+| `keys.tokens.categories` | Categories API key (if available)                                                                       | `""`                   |
+| `keys.tokens.regions`    | Regions API key (if available)                                                                          | `""`                   |
 
 
 ### Kubernetes Importer job settings

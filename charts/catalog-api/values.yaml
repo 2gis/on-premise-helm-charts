@@ -110,7 +110,7 @@ api:
 
   # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
-  # @param api.service.type ClusterIP, NodePort, LoadBalancer, ExternalName [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
+  # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
   # @param api.service.port Service port
 
   service:
@@ -154,7 +154,7 @@ api:
   preloaders:
     awaitTimeout: 60s
 
-# @section Search
+# @section Search settings
 
 # @param search.host URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster
 
@@ -162,11 +162,11 @@ search:
   host: http://search-api.host
 
 
-# @section Keys
+# @section Keys settings
 
 # @param keys.host URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster
 # @param keys.requestTimeout Timeout for requests to the Keys API
-# @param keys.tokens.places Places API key (if available) [Service tokens](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--1._Before_installing)
+# @param keys.tokens.places Places API key (if available)
 # @param keys.tokens.geocoder Geocoder API key (if available)
 # @param keys.tokens.suggest Suggest API key (if available)
 # @param keys.tokens.categories Categories API key (if available)
