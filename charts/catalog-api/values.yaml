@@ -62,7 +62,7 @@ api:
 
   # @param api.image.repository Repository
   # @param api.image.tag Tag
-  # @param api.image.pullPolicy Pull Policy [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+  # @param api.image.pullPolicy Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
 
   image:
     repository: 2gis-on-premise/catalog-api
@@ -90,7 +90,7 @@ api:
     targetMemoryUtilizationPercentage: ''
 
 
-  # @section Limits [Resource Management for Pods and Containers] (https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+  # @section Limits [Resource Management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
 
   # @param api.resources.requests.cpu A CPU request.
   # @param api.resources.requests.memory A memory request.
@@ -203,7 +203,7 @@ importer:
   # @section importer.image **Deployment settings**
   # @param importer.image.repository Repository
   # @param importer.image.tag Tag
-  # @param importer.image.pullPolicy Pull Policy
+  # @param importer.image.pullPolicy Image Pull Policy
 
   image:
     repository: 2gis-on-premise/catalog-importer
@@ -230,7 +230,7 @@ importer:
   # @section importer.persistentVolume **Persistent Volume settings**
 
   # @param importer.persistentVolume.enabled If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service.
-  # @param importer.persistentVolume.accessModes Access Mode [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
+  # @param importer.persistentVolume.accessModes Persistent Volume [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
   # @param importer.persistentVolume.storageClass Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)
   # @param importer.persistentVolume.size Volume size.
 
