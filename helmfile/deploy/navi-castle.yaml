@@ -12,5 +12,5 @@ releases:
     labels:
       service: navi-castle
     values:
-      - ../values/dgctl.yaml
+      - ../templates/dgctl.gotmpl
       - ../values/navi-castle.yaml

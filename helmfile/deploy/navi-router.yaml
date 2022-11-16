@@ -12,6 +12,6 @@ releases:
     labels:
       service: navi-router
     values:
-      - ../values/dgctl.yaml
+      - ../templates/dgctl.gotmpl
       - ../values/navi-router.yaml
       - ../templates/navi-custom-rules.gotmpl

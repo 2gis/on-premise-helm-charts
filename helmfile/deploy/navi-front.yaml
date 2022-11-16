@@ -11,7 +11,7 @@ releases:
     labels:
       service: '{{`{{ .Release.Name }}`}}'
     values: 
-      - ../values/dgctl.yaml
+      - ../templates/dgctl.gotmpl
       - ../values/navi-front.yaml
     {{- if .Values.ingress.enabled }}
       - ../templates/ingress.gotmpl

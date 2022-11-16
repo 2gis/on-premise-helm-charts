@@ -12,12 +12,18 @@ releases:
     labels:
       service: navi-back-async
     values: 
-      - ../values/dgctl.yaml
+      - ../templates/dgctl.gotmpl
       - ../values/kafka-and-s3.yaml
       - ../values/navi-back-async.yaml
       - ../templates/navi-back-async-rules.gotmpl 
-    {{- if or .Values.kafka.authCert .Values.kafka.authLogin }}
     set:
+      - name: s3.host
+        value: http://{{ .Values.s3.host }}
+      - name: s3.accessKey
+        value: {{ .Values.s3.accessKey }}
+      - name: s3.secretKey
+        value: {{ .Values.s3.secretKey }}
+    {{- if or .Values.kafka.authCert .Values.kafka.authLogin }}    
     {{- if .Values.kafka.authCert }} # kafka аутентификация по сертификату
       - name: kafka.fileProperties.ssl\.ca\.location
         file: ../ssl/{{ .Values.kafka.authCert.sslCA }}
@@ -25,10 +31,10 @@ releases:
         file: ../ssl/{{ .Values.kafka.authCert.sslCertificate }}
       - name: kafka.fileProperties.ssl\.key\.location
         file: ../ssl/{{ .Values.kafka.authCert.sslKey }}
-        {{- if .Values.kafka.authCert.sslPassword }}
+      {{- if .Values.kafka.authCert.sslPassword }}
       - name: kafka.ssl\.keystore\.password
         value: {{ .Values.kafka.authCert.sslPassword }}        
-        {{ end }}
+      {{ end }}
     {{ else }} # kafka аутентификация по логину и паролю
       - name: kafka.properties.sasl\.username
         value: {{ .Values.kafka.authLogin.username }}

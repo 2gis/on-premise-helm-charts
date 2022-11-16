@@ -43,9 +43,9 @@ for service in $UPSTREAM; do
         echo 
         ;;
     "public-transport")
-        echo "Create routing for Directions API pedestrian:"
+        echo "Create routing for Public Transport API:"
         echo 
-        echo `curl -s $URL/carrouting/6.0.1/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_pd.json`
+        echo `curl -s $URL/public_transport/2.0?key=$KEY --header 'Content-Type: application/json' -d @moscow_pt.json`
         echo 
         ;;
     "directions-taxi")

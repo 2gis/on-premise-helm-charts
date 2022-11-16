@@ -1,0 +1,7 @@
+dgctlDockerRegistry: {{ .Values.dockerRegistry }}
+dgctlStorage:
+  host: {{ .Values.s3.host }}
+  bucket: {{ .Values.s3.bucket }}
+  accessKey: {{ .Values.s3.accessKey }}
+  secretKey: {{ .Values.s3.secretKey }}
+  manifest: {{ .Values.manifest }}

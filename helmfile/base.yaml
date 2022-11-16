@@ -7,9 +7,16 @@ environments:
   default:
     values:
       - version: 1.4.4 # актуальная версия релиза
+        manifest: manifests/1668413921.json # укажите манифест, полученный при скачивании данных dgctl
         namespace: 2gis-on-premise # namespace k8s для деплоя сервисов 2gis
         kubeContext: dev-cluster # имя контекста k8s для доступа к кластеру
         apiKey: API_KEY # API-ключ для доступа к сервисам поиска. Подробнее см. в документации сервиса API Keys.
+        dockerRegistry: docker.storage.example.local
+        s3:
+          host: artifacts.example.com
+          bucket: onpremise-artifacts # бакет, куда загружены данные утилитой dgctl
+          accessKey: AKIAIOSFODNN7EXAMPLE
+          secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
         ingress:
           enabled: true # включение ингресса
           domain: example.com # домен ингресса

@@ -11,14 +11,20 @@ releases:
     labels:
       service: navi-async-matrix
     values: 
-      - ../values/dgctl.yaml
+      - ../templates/dgctl.gotmpl
       - ../values/kafka-and-s3.yaml
       - ../values/navi-async-matrix.yaml
     {{- if .Values.ingress.enabled }}
       - ../templates/ingress.gotmpl
     {{ end }}
-    {{- if or .Values.kafka.authCert .Values.kafka.authLogin }}
     set:
+      - name: s3.host
+        value: http://{{ .Values.s3.host }}
+      - name: s3.accessKey
+        value: {{ .Values.s3.accessKey }}
+      - name: s3.secretKey
+        value: {{ .Values.s3.secretKey }}
+    {{- if or .Values.kafka.authCert .Values.kafka.authLogin }}
     {{- if .Values.kafka.authCert }}  # kafka аутентификация по сертификату
       - name: kafka.fileProperties.ssl\.cafile
         file: ../ssl/{{ .Values.kafka.authCert.sslCA }}

@@ -28,7 +28,7 @@ releases:
     labels:
       service: '{{`{{ .Release.Name }}`}}'
     values: 
-      - ../values/dgctl.yaml
+      - ../templates/dgctl.gotmpl
       - ../values/navi-back-custom.yaml
       - ../templates/navi-custom-rules.gotmpl
     set:
