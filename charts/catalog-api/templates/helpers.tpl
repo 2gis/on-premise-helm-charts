@@ -114,35 +114,35 @@ onprem
   value: "{{ .Values.keys.requestTimeout }}"
 - name: CATALOG_KEYS_SERVICE_CATALOG_KEY
   value: ""
-{{- if .Values.keys.serviceKeys.places }}
+{{- if .Values.keys.tokens.places }}
 - name: CATALOG_KEYS_SERVICE_PLACES_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServicePlaces
 {{- end }}
-{{- if .Values.keys.serviceKeys.geocoder }}
+{{- if .Values.keys.tokens.geocoder }}
 - name: CATALOG_KEYS_SERVICE_GEOCODER_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServiceGeocoder
 {{- end }}
-{{- if .Values.keys.serviceKeys.suggest }}
+{{- if .Values.keys.tokens.suggest }}
 - name: CATALOG_KEYS_SERVICE_SUGGEST_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServiceSuggest
 {{- end }}
-{{- if .Values.keys.serviceKeys.categories }}
+{{- if .Values.keys.tokens.categories }}
 - name: CATALOG_KEYS_SERVICE_CATEGORIES_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServiceCategories
 {{- end }}
-{{- if .Values.keys.serviceKeys.regions }}
+{{- if .Values.keys.tokens.regions }}
 - name: CATALOG_KEYS_SERVICE_REGIONS_KEY
   valueFrom:
     secretKeyRef:
