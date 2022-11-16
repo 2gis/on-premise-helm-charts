@@ -3,10 +3,10 @@ navigroup: async
 naviback:
   dmSourcesLimit: 12000  # ограничение на размер матриц
   dmTargetsLimit: 12000  # ограничение на размер матриц
-  castleHost: http://navi-castle.host
+  castleHost: navi-castle.svc # #имя сервиса navi-castle в k8s
   type: dm
  
-resources: #выставляем требуемые ресурсы
+resources:
   limits:
     cpu: 20
     memory: 100Gi

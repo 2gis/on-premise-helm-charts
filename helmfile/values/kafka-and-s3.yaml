@@ -30,7 +30,7 @@ kafka:
 
 s3:
   enabled: true
-  host: artifacts.example.com
+  host: http://artifacts.example.com
   bucket: navi-async-matrix
   accessKey: sampleaccessKey
   secretKey: samplesecretKey

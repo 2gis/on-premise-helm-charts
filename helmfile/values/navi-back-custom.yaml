@@ -3,11 +3,11 @@ replicaCount: 2
 navigroup: navi
 
 naviback:
-  castleHost: http://navi-castle.host
+  castleHost: navi-castle.svc # #имя сервиса navi-castle в k8s
   dmSourcesLimit: 25 
   dmTargetsLimit: 25 
 
-resources: #выставить соответсвующие ресурсы и лимиты
+resources: 
   limits:
     cpu: 10
     memory: 80Gi

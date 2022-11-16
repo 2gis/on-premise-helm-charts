@@ -1,5 +1,7 @@
 #!/bin/bash
 set -e
+set -u 
+set -o pipefail
 
 URL=$1
 KEY=$2
@@ -14,55 +16,55 @@ UPSTREAM=`helm ls | grep navi-back | awk '{print $1}' | awk -F 'back-' '{print $
 # Pairs Directions API - to do нет токена в api key
 # Truck Directions API - to do нет токена в api key
 
-for i in $UPSTREAM; do          
-  if [[ "$i" == "directions-bicycle" ]];then
-    echo "Create routing for Directions API bicycle:"
-    echo 
-    echo `curl -s $URL/carrouting/6.0.1/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_bc.json`
-    echo 
-  elif [[ "$i" == "directions-car" ]];then
-    echo "Create routing for Directions API car:"
-    echo 
-    echo `curl -s $URL/carrouting/6.0.1/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_cr.json`
-    echo 
-  elif [[ "$i" == "distance-matrix" ]];then
-    echo "Create routing for Distance Matrix API:"
-    echo 
-    echo `curl -s $URL/get_dist_matrix/2.0?key=$KEY --header 'Content-Type: application/json' -d @moscow_dm.json`
-    echo 
-  elif [[ "$i" == "directions-pedestrian" ]];then
-    echo "Create routing for Directions API pedestrian:"
-    echo 
-    echo `curl -s $URL/carrouting/6.0.1/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_pd.json`
-    echo 
-  elif [[ "$i" == "public-transport" ]];then
-    echo "Create routing for Public Transport API:"
-    echo 
-    echo `curl -s $URL/public_transport/2.0?key=$KEY --header 'Content-Type: application/json' -d @moscow_pt.json`
-    echo 
-  elif [[ "$i" == "directions-taxi" ]];then
-    echo "Create routing for Directions API taxi:"
-    echo 
-    echo `curl -s $URL/carrouting/6.0.1/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_tx.json`
-    echo 
-  elif [[ "$i" == "directions-truck" ]];then
-    echo "Create routing for Directions API taxi:"
-    echo 
-    echo `curl -s $URL/truck/6.0.0/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_tr.json`
-    echo 
-  elif [[ "$i" == "isochrone-car" ]];then
-    echo "Create routing for Isochrone API:"
-    echo 
-    echo `curl -s $URL/get_hull?key=$KEY --header 'Content-Type: application/json' -d @moscow_is_cr.json`
-    echo 
-  elif [[ "$i" == "directions-pairs" ]];then
-    echo "Create routing for Directions-pairs car:"
-    echo 
-    echo `curl -s $URL/get_pairs/1.0/car?key=$KEY --header 'Content-Type: application/json' -d @moscow_pr.json`
-    echo 
-    echo "Create routing for Directions-pairs pedestrian:"
-    echo 
-    echo `curl -s $URL/get_pairs/1.0/pedestrian?key=$KEY --header 'Content-Type: application/json' -d @moscow_pr.json`
-    echo 
-  fi
+for service in $UPSTREAM; do
+  case $service in
+    "directions-bicycle")
+        echo "Create routing for Directions API bicycle:"
+        echo 
+        echo `curl -s $URL/carrouting/6.0.1/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_bc.json`
+        echo 
+        ;;
+    "directions-car")
+        echo "Create routing for Directions API car:"
+        echo 
+        echo `curl -s $URL/carrouting/6.0.1/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_сr.json`
+        echo 
+        ;;
+    "distance-matrix")
+        echo "Create routing for Distance Matrix API:"
+        echo 
+        echo `curl -s $URL/get_dist_matrix/2.0?key=$KEY --header 'Content-Type: application/json' -d @moscow_dm.json`
+        echo 
+        ;;
+    "directions-pedestrian")
+        echo "Create routing for Directions API pedestrian:"
+        echo 
+        echo `curl -s $URL/carrouting/6.0.1/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_pd.json`
+        echo 
+        ;;
+    "public-transport")
+        echo "Create routing for Directions API pedestrian:"
+        echo 
+        echo `curl -s $URL/carrouting/6.0.1/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_pd.json`
+        echo 
+        ;;
+    "directions-taxi")
+        echo "Create routing for Directions API taxi:"
+        echo 
+        echo `curl -s $URL/carrouting/6.0.1/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_tx.json`
+        echo 
+        ;;
+    "directions-emergency")
+        echo "Create routing for Directions API emergency:"
+        echo 
+        echo `curl -s $URL/carrouting/6.0.1/global?key=$KEY --header 'Content-Type: application/json' -d @moscow_em.json`
+        echo 
+        ;;
+    "isochrone-car")
+        echo "Create routing for Isochrone API car:"
+        echo 
+        echo `curl -s $URL/get_hull?key=$KEY --header 'Content-Type: application/json' -d @moscow_is_cr.json`
+        echo 
+        ;;      
+  esac          
 done
