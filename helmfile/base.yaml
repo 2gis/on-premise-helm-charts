@@ -12,7 +12,7 @@ environments:
         kubeContext: dev-cluster # имя контекста k8s для доступа к кластеру
         apiKey: API_KEY # API-ключ для доступа к сервисам поиска. Подробнее см. в документации сервиса API Keys.
         dockerRegistry: docker.storage.example.local
-        imagePullSecrets: "" #указать k8s secrets, если требуется авторизация на doker registry
+        imagePullSecrets: secret_registry #указать k8s secrets, если требуется авторизация на doker registry
         s3:
           citiesUrl: http://artifacts.example.com
           bucket: onpremise-artifacts # бакет, куда загружены данные утилитой dgctl
