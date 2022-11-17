@@ -98,37 +98,37 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 
 {{- define "keys.env.tasker" -}}
-- name: ZUUL_TASKER_DELAY
+- name: KEYS_TASKER_DELAY
   value: "{{ .Values.tasker.delay }}"
 {{- end }}
 
 {{- define "keys.env.db" -}}
-- name: ZUUL_DB_RO_HOST
+- name: KEYS_DB_RO_HOST
   value: "{{ .Values.postgres.ro.host }}"
-- name: ZUUL_DB_RO_PORT
+- name: KEYS_DB_RO_PORT
   value: "{{ .Values.postgres.ro.port }}"
-- name: ZUUL_DB_RO_NAME
+- name: KEYS_DB_RO_NAME
   value: "{{ .Values.postgres.ro.name }}"
-- name: ZUUL_DB_RO_USERNAME
+- name: KEYS_DB_RO_USERNAME
   value: "{{ .Values.postgres.ro.username }}"
-- name: ZUUL_DB_RW_HOST
+- name: KEYS_DB_RW_HOST
   value: "{{ .Values.postgres.rw.host }}"
-- name: ZUUL_DB_RW_PORT
+- name: KEYS_DB_RW_PORT
   value: "{{ .Values.postgres.rw.port }}"
-- name: ZUUL_DB_RW_NAME
+- name: KEYS_DB_RW_NAME
   value: "{{ .Values.postgres.rw.name }}"
-- name: ZUUL_DB_RW_USERNAME
+- name: KEYS_DB_RW_USERNAME
   value: "{{ .Values.postgres.rw.username }}"
 {{- end }}
 
 {{- define "keys.env.db.deploys" -}}
 {{ include "keys.env.db" . }}
-- name: ZUUL_DB_RO_PASSWORD
+- name: KEYS_DB_RO_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "keys.secret.deploys.name" . }}
       key: dbROPassword
-- name: ZUUL_DB_RW_PASSWORD
+- name: KEYS_DB_RW_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "keys.secret.deploys.name" . }}
@@ -137,12 +137,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.db.jobs" -}}
 {{ include "keys.env.db" . }}
-- name: ZUUL_DB_RO_PASSWORD
+- name: KEYS_DB_RO_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "keys.secret.jobs.name" . }}
       key: dbROPassword
-- name: ZUUL_DB_RW_PASSWORD
+- name: KEYS_DB_RW_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "keys.secret.jobs.name" . }}
@@ -151,18 +151,18 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.redis" -}}
 {{- if .Values.redis.useExternalRedis }}
-- name: ZUUL_REDIS_HOST
+- name: KEYS_REDIS_HOST
   value: "{{ .Values.redis.host }}"
-- name: ZUUL_REDIS_DB
+- name: KEYS_REDIS_DB
   value: "{{ .Values.redis.db }}"
 {{- else  }}
-- name: ZUUL_REDIS_HOST
+- name: KEYS_REDIS_HOST
   value: "{{ include "keys.redis.name" . }}"
 {{- end  }}
-- name: ZUUL_REDIS_PORT
+- name: KEYS_REDIS_PORT
   value: "{{ .Values.redis.port }}"
 {{- if .Values.redis.password }}
-- name: ZUUL_REDIS_PASSWORD
+- name: KEYS_REDIS_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "keys.secret.deploys.name" . }}
@@ -172,40 +172,40 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.auth" -}}
 {{- if .Values.api.adminUsers }}
-- name: ZUUL_ADMIN_USERS
+- name: KEYS_ADMIN_USERS
   valueFrom:
     secretKeyRef:
       name: {{ include "keys.secret.deploys.name" . }}
       key: apiAdminUsers
 {{- end }}
-- name: ZUUL_LDAP_HOST
+- name: KEYS_LDAP_HOST
   value: "{{ .Values.ldap.host }}"
-- name: ZUUL_LDAP_PORT
+- name: KEYS_LDAP_PORT
   value: "{{ .Values.ldap.port }}"
-- name: ZUUL_LDAP_USE_STARTTLS
+- name: KEYS_LDAP_USE_STARTTLS
   value: "{{ .Values.ldap.useStartTLS }}"
-- name: ZUUL_LDAP_USE_LDAPS
+- name: KEYS_LDAP_USE_LDAPS
   value: "{{ .Values.ldap.useLDAPS }}"
-- name: ZUUL_LDAP_SKIP_SERVER_CERTIFICATE_VERIFY
+- name: KEYS_LDAP_SKIP_SERVER_CERTIFICATE_VERIFY
   value: "{{ .Values.ldap.skipServerCertificateVerify }}"
-- name: ZUUL_LDAP_SERVER_NAME
+- name: KEYS_LDAP_SERVER_NAME
   value: "{{ .Values.ldap.serverName }}"
-- name: ZUUL_LDAP_CLIENT_CERTIFICATE_PATH
+- name: KEYS_LDAP_CLIENT_CERTIFICATE_PATH
   value: "{{ .Values.ldap.clientCertificatePath }}"
-- name: ZUUL_LDAP_CLIENT_KEY_PATH
+- name: KEYS_LDAP_CLIENT_KEY_PATH
   value: "{{ .Values.ldap.clientKeyPath }}"
-- name: ZUUL_LDAP_ROOT_CERTIFICATE_AUTHORITIES_PATH
+- name: KEYS_LDAP_ROOT_CERTIFICATE_AUTHORITIES_PATH
   value: "{{ .Values.ldap.rootCertificateAuthoritiesPath }}"
-- name: ZUUL_LDAP_BIND_DN
+- name: KEYS_LDAP_BIND_DN
   value: "{{ .Values.ldap.bind.dn }}"
-- name: ZUUL_LDAP_BIND_PASSWORD
+- name: KEYS_LDAP_BIND_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "keys.secret.deploys.name" . }}
       key: ldapBindPassword
-- name: ZUUL_LDAP_SEARCH_BASE_DN
+- name: KEYS_LDAP_SEARCH_BASE_DN
   value: "{{ .Values.ldap.search.baseDN }}"
-- name: ZUUL_LDAP_SEARCH_FILTER
+- name: KEYS_LDAP_SEARCH_FILTER
   value: "{{ .Values.ldap.search.filter }}"
 {{- end }}
 
