@@ -42,9 +42,9 @@ API=directions-taxi helmfile -f deploy/navi-back-custom.yaml sync
 API=directions-truck helmfile -f deploy/navi-back-custom.yaml sync
 ```
 
-### Деплой бэкенда Directions API Pairs 
+### Деплой бэкенда Pairs Directions API
 ```
-API=directions-pairs helmfile -f deploy/navi-back-custom.yaml sync
+API=pairs-directions helmfile -f deploy/navi-back-custom.yaml sync
 ```
 
 ### Деплой бэкенда Public Transport
