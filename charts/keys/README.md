@@ -32,9 +32,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.30.1`                       |
+| `backend.image.tag`        | Backend service image tag.        | `1.34.0`                       |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.          | `0.2.0`                        |
+| `admin.image.tag`          | Admin service image tag.          | `0.3.0`                        |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
 | `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
 
@@ -44,8 +44,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | Name                        | Description                                                                                                                    | Value                   |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `admin.replicas`            | A replica count for the pod.                                                                                                   | `1`                     |
-| `admin.apiUrl`              | Base URL for the admin API.                                                                                                    | `https://keys-api.host` |
-| `admin.appHost`             | Base URL for the admin web interface.                                                                                          | `https://keys-ui.host`  |
+| `admin.api`                 | Base URL for the admin API.                                                                                                    | `https://keys-api.host` |
+| `admin.host`                | Base URL for the admin web interface.                                                                                          | `https://keys-ui.host`  |
 | `admin.annotations`         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                      | `{}`                    |
 | `admin.labels`              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                | `{}`                    |
 | `admin.podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                  | `{}`                    |
@@ -138,35 +138,39 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Redis settings
 
-| Name                   | Description                                                                                                                 | Value             |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `redis.port`           | HTTP port for Redis to listen.                                                                                              | `6379`            |
-| `redis.configPath`     | Configuration file for Redis.                                                                                               | `/opt/redis.conf` |
-| `redis.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`              |
-| `redis.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`              |
-| `redis.podAnnotations` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`              |
-| `redis.podLabels`      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`              |
-| `redis.nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`              |
-| `redis.affinity`       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`              |
-| `redis.tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`              |
+| Name                     | Description                                                                                                                 | Value             |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `redis.port`             | HTTP port for Redis to listen.                                                                                              | `6379`            |
+| `redis.configPath`       | Path to Redis configuration file.                                                                                           | `/opt/redis.conf` |
+| `redis.password`         | Redis password. Empty string if no authentication is required.                                                              | `""`              |
+| `redis.useExternalRedis` | If true, external Redis server will be used.                                                                                | `false`           |
+| `redis.host`             | External Redis hostname.                                                                                                    | `redis.host`      |
+| `redis.db`               | External Redis database number.                                                                                             | `1`               |
+| `redis.annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`              |
+| `redis.labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`              |
+| `redis.podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`              |
+| `redis.podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`              |
+| `redis.nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`              |
+| `redis.affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`              |
+| `redis.tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`              |
 
 
 ### Database access settings
 
-| Name             | Description                            | Value           |
-| ---------------- | -------------------------------------- | --------------- |
-| `db.ro`          | **Settings for the read-only access**  |                 |
-| `db.ro.host`     | PostgreSQL host.                       | `postgres.host` |
-| `db.ro.port`     | PostgreSQL port.                       | `5432`          |
-| `db.ro.name`     | PostgreSQL database name.              | `keys`          |
-| `db.ro.username` | PostgreSQL username.                   | `keys`          |
-| `db.ro.password` | PostgreSQL password.                   | `secret`        |
-| `db.rw`          | **Settings for the read-write access** |                 |
-| `db.rw.host`     | PostgreSQL host.                       | `postgres.host` |
-| `db.rw.port`     | PostgreSQL port.                       | `5432`          |
-| `db.rw.name`     | PostgreSQL database name.              | `keys`          |
-| `db.rw.username` | PostgreSQL username.                   | `keys`          |
-| `db.rw.password` | PostgreSQL password.                   | `secret`        |
+| Name                   | Description                            | Value           |
+| ---------------------- | -------------------------------------- | --------------- |
+| `postgres.ro`          | **Settings for the read-only access**  |                 |
+| `postgres.ro.host`     | PostgreSQL host.                       | `postgres.host` |
+| `postgres.ro.port`     | PostgreSQL port.                       | `5432`          |
+| `postgres.ro.name`     | PostgreSQL database name.              | `keys`          |
+| `postgres.ro.username` | PostgreSQL username.                   | `keys`          |
+| `postgres.ro.password` | PostgreSQL password.                   | `secret`        |
+| `postgres.rw`          | **Settings for the read-write access** |                 |
+| `postgres.rw.host`     | PostgreSQL host.                       | `postgres.host` |
+| `postgres.rw.port`     | PostgreSQL port.                       | `5432`          |
+| `postgres.rw.name`     | PostgreSQL database name.              | `keys`          |
+| `postgres.rw.username` | PostgreSQL username.                   | `keys`          |
+| `postgres.rw.password` | PostgreSQL password.                   | `secret`        |
 
 
 ### LDAP connection settings

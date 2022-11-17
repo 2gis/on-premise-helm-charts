@@ -1,0 +1,132 @@
+{{ if .Values.permissionsApi.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pro-api.name" . }}-permissions
+  {{- with .Values.permissionsPodSettings.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    {{- include "pro-api.permissionLabels" . | nindent 4 }}
+  {{- with .Values.permissionsPodSettings.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.permissionsPodSettings.replicaCount }}
+  revisionHistoryLimit: {{ .Values.permissionsPodSettings.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "pro-api.permissionsSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.permissionsPodSettings.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pro-api.permissionLabels" . | nindent 8 }}
+      {{- with .Values.permissionsPodSettings.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.permissionsPodSettings.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.permissionsPodSettings.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.permissionsPodSettings.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.permissionsPodSettings.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.permissionsPodSettings.priorityClassName }}
+      priorityClassName: {{ .Values.permissionsPodSettings.priorityClassName }}
+      {{- end }}
+      {{- with .Values.permissionsPodSettings.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.permissionsPodSettings.terminationGracePeriodSeconds }}
+      volumes:
+        - name: temp-volume
+          emptyDir: {}
+      containers:
+        - name: {{ .Chart.Name }}-permissions
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.permissionsApiImage.repository }}:{{ .Values.permissionsApiImage.tag }}
+          imagePullPolicy: {{ .Values.permissionsApiImage.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "{{ .Values.api.tempPath }}"
+              name: temp-volume
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            failureThreshold: 5
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.permissionsPodSettings.resources | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5"]
+          env:
+            - name: DEBUG
+              value: "{{ .Values.api.debug }}"
+            - name: ALLOW_ANY_ORIGIN
+              value: "{{ .Values.api.allowAnyOrigin }}"
+            - name: DB_CONNECTION_STRING
+              value: "{{ .Values.postgres.connectionString }}"
+            - name: DB_CONNECTION_PWD
+              valueFrom:
+                secretKeyRef:
+                  key: dbConnectionPwd
+                  name: {{ include "pro-api.name" . }}-secret
+            - name: USE_MOCK_AUTH
+              value: "{{ .Values.api.useMockAuth }}"
+            - name: PERMISSIONS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: permissionsApiKey
+                  name: {{ include "pro-api.name" . }}-secret
+            - name: KEYS_SERVICE_URL
+              value: "{{ .Values.keys.host }}"
+            {{ if .Values.keys.token }}
+            - name: KEYS_SERVICE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: keysServiceToken
+                  name: {{ include "pro-api.name" . }}-secret
+            {{ end }}
+{{- end }}

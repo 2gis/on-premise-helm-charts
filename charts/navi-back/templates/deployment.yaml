@@ -41,6 +41,11 @@ spec:
       - name: {{ include "naviback.fullname" . }}-configmap
         configMap:
           name: {{ include "naviback.fullname" . }}-configmap
+      {{- if .Values.kafka.fileProperties }}
+      - name: {{ include "naviback.fullname" . }}-secret
+        secret:
+          secretName: {{ include "naviback.fullname" . }}-secret
+      {{- end }}
       containers:
         - name: {{ include "naviback.fullname" . }}
           securityContext:
@@ -48,8 +53,8 @@ spec:
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: [ "/usr/sbin/2gis/mosesd/mosesd" ]
-          args: 
-           - --config 
+          args:
+           - --config
            - /etc/2gis/mosesd/navi-back.conf
           volumeMounts:
           - name: {{ include "naviback.fullname" . }}-configmap
@@ -58,15 +63,19 @@ spec:
           - name: {{ include "naviback.fullname" . }}-configmap
             mountPath: /etc/2gis/mosesd/rules.conf
             subPath: rules.conf
+          {{- if .Values.kafka.fileProperties }}
+          - name: {{ include "naviback.fullname" . }}-secret
+            mountPath: /etc/2gis/mosesd/secret/
+          {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.naviback.app_port }}
+              containerPort: {{ .Values.naviback.appPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /heartbeat
               port: http
-            initialDelaySeconds: 60
+            initialDelaySeconds: {{ .Values.livenessProbeDelay }}
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 2
@@ -74,19 +83,24 @@ spec:
             httpGet:
               path: /successfulwork
               port: http
-            initialDelaySeconds: 75
+            initialDelaySeconds: {{ .Values.readinessProbeDelay }}
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 2
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
+          {{ if ne .Values.naviback.type "schedule" }}
           - name: RULE
             value: {{ .Values.naviback.app_rule | default "" | quote  }}
+          {{- else -}}
+          - name: RULE
+            value: ""
+          {{ end }}
           - name: PROJECT
             value: {{ .Values.app_project | default "" | quote }}
           
-      terminationGracePeriodSeconds: {{ .Values.termination_grace_period_seconds | default 60 }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 60 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

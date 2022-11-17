@@ -1,3 +1,4 @@
+{{- if not .Values.redis.useExternalRedis }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,8 +8,13 @@ data:
     # must be smaller than .Values.redis.resources.limits.memory
     maxmemory 262144000
 
+    {{- if .Values.redis.password }}
+    requirepass {{ .Values.redis.password }}
+    {{- end }}
+
     logfile ""
     databases 1
     timeout 600
     tcp-keepalive 60
     port {{ .Values.redis.port }}
+{{- end }}

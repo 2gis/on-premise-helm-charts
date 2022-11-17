@@ -14,10 +14,10 @@ spec:
     kind: Deployment
     name: {{ include "naviback.fullname" $ }}
   updatePolicy:
-    updateMode: {{ .updateMode }}
+    updateMode: {{ default "Auto" .updateMode }}
   resourcePolicy:
     containerPolicies:
-      - containerName: {{ include "naviback.name" }}
+      - containerName: {{ include "naviback.fullname" $ }}
         mode: Auto
         {{- with .minAllowed }}
         minAllowed:

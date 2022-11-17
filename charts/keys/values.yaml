@@ -44,11 +44,11 @@ admin:
       cpu: 1
       memory: 384Mi
 
-  # @param admin.apiUrl Base URL for the admin API.
-  # @param admin.appHost Base URL for the admin web interface.
+  # @param admin.api Base URL for the admin API.
+  # @param admin.host Base URL for the admin web interface.
 
-  apiUrl: https://keys-api.host
-  appHost: https://keys-ui.host
+  api: https://keys-api.host
+  host: https://keys-ui.host
 
   # @param admin.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param admin.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -265,10 +265,22 @@ redis:
       memory: 256Mi
 
   # @param redis.port HTTP port for Redis to listen.
-  # @param redis.configPath Configuration file for Redis.
+  # @param redis.configPath Path to Redis configuration file.
 
   port: 6379
   configPath: /opt/redis.conf
+
+  # @param redis.password Redis password. Empty string if no authentication is required.
+
+  password: ''
+
+  # @param redis.useExternalRedis If true, external Redis server will be used.
+  # @param redis.host External Redis hostname.
+  # @param redis.db External Redis database number.
+
+  useExternalRedis: false
+  host: redis.host
+  db: 1
 
   # @param redis.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param redis.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -293,15 +305,15 @@ redis:
 
 # @section Database access settings
 
-db:
+postgres:
 
-  # @extra db.ro **Settings for the read-only access**
+  # @extra postgres.ro **Settings for the read-only access**
 
-  # @param db.ro.host PostgreSQL host.
-  # @param db.ro.port PostgreSQL port.
-  # @param db.ro.name PostgreSQL database name.
-  # @param db.ro.username PostgreSQL username.
-  # @param db.ro.password PostgreSQL password.
+  # @param postgres.ro.host PostgreSQL host.
+  # @param postgres.ro.port PostgreSQL port.
+  # @param postgres.ro.name PostgreSQL database name.
+  # @param postgres.ro.username PostgreSQL username.
+  # @param postgres.ro.password PostgreSQL password.
 
   ro:
     host: postgres.host
@@ -310,13 +322,13 @@ db:
     username: keys
     password: secret
 
-  # @extra db.rw **Settings for the read-write access**
+  # @extra postgres.rw **Settings for the read-write access**
 
-  # @param db.rw.host PostgreSQL host.
-  # @param db.rw.port PostgreSQL port.
-  # @param db.rw.name PostgreSQL database name.
-  # @param db.rw.username PostgreSQL username.
-  # @param db.rw.password PostgreSQL password.
+  # @param postgres.rw.host PostgreSQL host.
+  # @param postgres.rw.port PostgreSQL port.
+  # @param postgres.rw.name PostgreSQL database name.
+  # @param postgres.rw.username PostgreSQL username.
+  # @param postgres.rw.password PostgreSQL password.
 
   rw:
     host: postgres.host

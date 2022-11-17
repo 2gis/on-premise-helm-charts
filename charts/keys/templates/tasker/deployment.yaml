@@ -37,12 +37,13 @@ spec:
         - name: tasker
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          command: [ "zuul-tasker" ]
+          command: [ "keys-tasker" ]
           resources:
             {{- toYaml .Values.tasker.resources | nindent 12 }}
           env:
             {{- include "keys.env.db.deploys" . | nindent 12 }}
             {{- include "keys.env.tasker" . | nindent 12 }}
+            {{- include "keys.env.redis" . | nindent 12 }}
       {{- with .Values.tasker.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

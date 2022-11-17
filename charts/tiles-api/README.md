@@ -50,14 +50,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 ### Apache Cassandra Data Storage settings
 
 | Name                                | Description                                                                                                                                                         | Value          |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+|-------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|
 | `cassandra`                         | **Common settings**                                                                                                                                                 |                |
 | `cassandra.environment`             | Environment name (`prod`, `stage`, etc).<br>Support for differently named environments allows hosting multiple Tiles API deployments on a single Cassandra cluster. | `""`           |
 | `cassandra.hosts`                   | An array of the one of more IP adresses or hostnames of the Apache Cassandra installation.                                                                          | `[]`           |
 | `cassandra.replicaFactor`           | Apache Cassandra [replication factor](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html).                    | `3`            |
 | `cassandra.consistencyLevelRead`    | Apache Cassandra [read consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels).           | `LOCAL_QUORUM` |
 | `cassandra.consistencyLevelWrite`   | Apache Cassandra [write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels).           | `LOCAL_QUORUM` |
-| `cassandra.keyspace`                | Custom user defined keyspace. If the parameter is set, the database cleaning and maintenance processes are skipped                                                  | `""`           |
+| `cassandra.keyspace`                | Custom user defined keyspace. If the parameter is set, the database cleaning and maintenance processes are skipped.                                                 | `""`           |
+| `cassandra.timeout`                 | Timeout for connect attempts to the database.                                                                                                                       | `90s`          |
 | `cassandra.credentials`             | **Credentials for accessing Apache Cassandra**                                                                                                                      |                |
 | `cassandra.credentials.user`        | User name to connect to the database.                                                                                                                               | `cassandra`    |
 | `cassandra.credentials.password`    | User password to connect to the database.                                                                                                                           | `cassandra`    |

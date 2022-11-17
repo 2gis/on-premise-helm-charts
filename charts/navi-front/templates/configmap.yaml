@@ -35,6 +35,15 @@ data:
         {{ if .Values.hullLocation }}
         {{ include "tplvalues.render" ( dict "value" .Values.hullLocation "context" $ ) | indent 4 }} 
         {{ else  }}
+
+        location ^~ /get_dist_matrix {
+            js_content bundle.geo_coding;
+        }
+
+        location ^~ /public_transport {
+            js_content bundle.geo_coding;
+        } 
+        
         location ^~ /get_hull {
             js_content bundle.geo_coding;
         }
@@ -43,7 +52,7 @@ data:
         location /geocoding {
             rewrite ^/geocoding(.*)$ $1 break;
             proxy_pass http://{{ include "front.getMrouterUpstream" .}};
-        }       
+        }      
 
         location /healthcheck {
             return 200 "Ok!";

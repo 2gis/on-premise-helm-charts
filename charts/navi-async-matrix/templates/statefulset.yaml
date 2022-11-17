@@ -69,6 +69,12 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- if .Values.kafka.fileProperties }}
+      volumes:
+        - name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
+          secret:
+            secretName: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
@@ -104,6 +110,11 @@ spec:
             - '{{ .Values.dm.port | int }}'
             - '--workers'
             - '{{ .Values.dm.workerCount | int }}'
+          {{- if .Values.kafka.fileProperties }}
+          volumeMounts:
+          - name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/
+          {{- end }}
           env:
             - name: CONFIG_TYPE
               value: {{ .Values.dm.configType | quote }}
@@ -114,9 +125,9 @@ spec:
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_USE_MINIO
               value: 'true'
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__AWS_ACCESS_KEY_ID
-              value: {{ .Values.s3.keyId | quote }}
+              value: {{ .Values.s3.accessKey | quote }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__S3_ENDPOINT_URL
-              value: {{ .Values.s3.url | quote }}
+              value: {{ .Values.s3.host | quote }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__S3_BUCKET
               value: {{ .Values.s3.bucket | quote }}
             {{- if .Values.s3.publicNetloc }}
@@ -124,35 +135,39 @@ spec:
               value: {{ .Values.s3.publicNetloc | quote }}
             {{- end }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_TASK_TOPIC
-              value: {{ .Values.kafka.consumerTaskTopic | quote }}
+              value: {{ .Values.kafka.statusTopic | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CANCEL_TOPIC
-              value: {{ .Values.kafka.consumerCancelTopic | quote }}
+              value: {{ .Values.kafka.cancelTopic | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__GROUP_ID
               value: {{ .Values.kafka.groupId | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__BOOTSTRAP_SERVERS
-              value: {{ .Values.kafka.bootstrap | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__BOOTSTRAP_SERVERS
-              value: {{ .Values.kafka.bootstrap | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__SECURITY_PROTOCOL
-              value: {{ .Values.kafka.protocol | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__SECURITY_PROTOCOL
-              value: {{ .Values.kafka.protocol | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__SASL_MECHANISM
-              value: {{ .Values.kafka.mechanism | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__SASL_MECHANISM
-              value: {{ .Values.kafka.mechanism | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__SASL_PLAIN_USERNAME
-              value: {{ .Values.kafka.user | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__SASL_PLAIN_USERNAME
-              value: {{ .Values.kafka.user | quote }}
             - name: DM_ASYNC_SERVICE_TOPIC_RULES
-              value: {{ .Values.kafka.topicRules | mustToJson | quote }}
+              value: {{ .Values.kafka.taskTopicRules | mustToJson | quote }}
+            {{- /*
+                 Collect merged Kafka properties from these dictionaries:
+                   - kafka.properties: this is a simple key/value dictionary
+                   - kafka.fileProperties: this is a key/content dictionary given in values,
+                     content is sensitive and stored in Secret resource, they get
+                     mounted as files sonamed after key. While actual secret values are
+                     hidden this way, what actually goes here in environment properties is
+                     file names. This value substitution is implemented down here.
+                 */ -}}
+            {{- $kafkaProperties := dict -}}
+            {{- range $key, $_ := .Values.kafka.fileProperties -}}
+            {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/secret/%s" $key) -}}
+            {{- end -}}
+            {{- $kafkaProperties := mustMerge $kafkaProperties .Values.kafka.properties -}}
+            {{- range $prop, $val := $kafkaProperties }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__{{ $prop | upper | replace "." "_" }}
+              value: {{ $val | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__{{ $prop | upper | replace "." "_" }}
+              value: {{ $val | quote }}
+            {{- end }}
             - name: DM_ASYNC_SERVICE_NODE_ID
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
             - name: DM_ASYNC_SERVICE_KMS__URL
-              value: {{ .Values.keys.endpoint | quote }}
+              value: {{ .Values.keys.host | quote }}
             {{- if .Values.bss.enabled }}
             - name: DM_ASYNC_SERVICE_BSS__URL
               value: {{ .Values.bss.url | quote }}
@@ -170,16 +185,18 @@ spec:
                 secretKeyRef:
                   name: {{ include "navi-async-matrix.fullname" . | quote }}
                   key: s3key
-            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__SASL_PLAIN_PASSWORD
+            {{- range $prop, $val := .Values.kafka.sensitiveProperties }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__{{ $prop | upper | replace "." "_" }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "navi-async-matrix.fullname" . | quote }}
-                  key: kafkaPassword
-            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__SASL_PLAIN_PASSWORD
+                  name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" $) | quote }}
+                  key: {{ $prop | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__{{ $prop | upper | replace "." "_" }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "navi-async-matrix.fullname" . | quote }}
-                  key: kafkaPassword
+                  name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" $) | quote }}
+                  key: {{ $prop | quote }}
+            {{- end }}
             - name: DM_ASYNC_SERVICE_KMS__DM_ASYNC_TOKEN
               valueFrom:
                 secretKeyRef:

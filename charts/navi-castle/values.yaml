@@ -101,9 +101,9 @@ resources: {}
 
 # @section Navi-Castle service settings
 
-# @param castle.castle_data_path Path to the data directory.
-# @param castle.restrictions_api_url Restrictions API base URL.
-# @param castle.restrictions_api_key Restrictions API key.
+# @param castle.castleDataPath Path to the data directory.
+# @param castle.restrictions.host Restrictions API base URL.
+# @param castle.restrictions.key Restrictions API key.
 # @param castle.jobs Number of parallel downloading jobs.
 
 castle:
@@ -111,9 +111,10 @@ castle:
     repository: 2gis-on-premise/navi-castle
     pullPolicy: IfNotPresent
     tag: 1.0.6.1
-  castle_data_path: /opt/castle/data/
-  restrictions_api_url: http://restrictions-api.host
-  restrictions_api_key: key
+  castleDataPath: /opt/castle/data/
+  restrictions:
+    host: http://restrictions-api.host
+    key: ''
   jobs: 1
 
 
@@ -125,7 +126,7 @@ nginx:
   port: 8080
   image:
     repository: 2gis-on-premise/navi-front
-    tag: 1.23.1
+    tag: 1.21-ad06a0e0
 
 
 # @section Cron settings

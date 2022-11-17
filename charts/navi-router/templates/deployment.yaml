@@ -4,6 +4,7 @@ metadata:
   name: {{ include "router.fullname" . }}
   labels:
     {{- include "router.labels" . | nindent 4 }}
+    navigroup: {{ .Values.navigroup | default "" | quote }}
 spec:
   {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -51,7 +52,7 @@ spec:
             subPath: rules.conf
           ports:
             - name: http
-              containerPort: {{ .Values.router.app_port }}
+              containerPort: {{ .Values.router.appPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
