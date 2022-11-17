@@ -12,3 +12,8 @@ dgctlStorage:
   accessKey: {{ .Values.s3.accessKey }}
   secretKey: {{ .Values.s3.secretKey }}
   manifest: {{ .Values.manifest }}
+
+{{- if .Values.imagePullSecrets  }}
+imagePullSecrets:
+- name: {{ .Values.imagePullSecrets }}
+{{ end }}
