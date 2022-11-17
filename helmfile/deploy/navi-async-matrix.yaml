@@ -1,0 +1,52 @@
+---
+bases:
+- ../base.yaml
+---
+releases:
+  - name: navi-async-matrix
+    chart:  ../../charts/navi-async-matrix
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    version: "{{ .Values.version }}"
+    labels:
+      service: navi-async-matrix
+    values: 
+      - ../templates/dgctl.gotmpl
+      - ../values/kafka-and-s3.yaml
+      - ../values/navi-async-matrix.yaml
+    {{- if .Values.ingress.enabled }}
+      - ../templates/ingress.gotmpl
+    {{ end }}
+    set:
+      - name: s3.host
+        value: {{ .Values.s3.citiesUrl }}
+      - name: s3.accessKey
+        value: {{ .Values.s3.accessKey }}
+      - name: s3.secretKey
+        value: {{ .Values.s3.secretKey }}
+    {{- if or .Values.kafka.authCert .Values.kafka.authLogin }}
+    {{- if .Values.kafka.authCert }}  # kafka аутентификация по сертификату
+      - name: kafka.fileProperties.ssl\.cafile
+        file: ../ssl/{{ .Values.kafka.authCert.sslCA }}
+      - name: kafka.fileProperties.ssl\.certfile 
+        file: ../ssl/{{ .Values.kafka.authCert.sslCertificate }}
+      - name: kafka.fileProperties.ssl\.keyfile 
+        file: ../ssl/{{ .Values.kafka.authCert.sslKey }}
+        {{- if .Values.kafka.authCert.sslPassword }}
+      - name: kafka.sensitiveProperties.ssl\.password
+        value: {{ .Values.kafka.authCert.sslPassword }}        
+        {{ end }}
+    {{ else }} # kafka аутентификация по логину и паролю
+      - name: kafka.properties.sasl\.plain\.username
+        value: {{ .Values.kafka.authLogin.username }}
+      - name: kafka.sensitiveProperties.ssl\.plain\.password
+        value: {{ .Values.kafka.authLogin.password }}
+    {{ end }}
+    {{ end }}
+    {{- if .Values.ingress.enabled }}
+    hooks: 
+    - events: ["postsync"]
+      showlogs: true
+      command: "../tests/navi-async-service.sh"
+      args: ["{{ .Values.ingress.protocol }}://navi-async-matrix.{{ .Values.ingress.domain }}", "{{ .Values.apiKey }}"]
+    {{ end }}
