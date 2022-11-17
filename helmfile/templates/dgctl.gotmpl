@@ -1,6 +1,6 @@
 dgctlDockerRegistry: {{ .Values.dockerRegistry }}
 dgctlStorage:
-  host: {{ .Values.s3.host }}
+  host: {{ .Values.s3.citiesUrl }}
   bucket: {{ .Values.s3.bucket }}
   accessKey: {{ .Values.s3.accessKey }}
   secretKey: {{ .Values.s3.secretKey }}

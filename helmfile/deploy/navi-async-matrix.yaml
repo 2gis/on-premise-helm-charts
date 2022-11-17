@@ -19,7 +19,7 @@ releases:
     {{ end }}
     set:
       - name: s3.host
-        value: http://{{ .Values.s3.host }}
+        value: {{ .Values.s3.citiesUrl }}
       - name: s3.accessKey
         value: {{ .Values.s3.accessKey }}
       - name: s3.secretKey
