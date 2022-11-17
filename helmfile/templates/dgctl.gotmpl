@@ -1,6 +1,13 @@
+{{ $host := .Values.s3.citiesUrl }}
+{{ $protocol := trunc 5 .Values.s3.citiesUrl }}
+{{ if eq $protocol "https" }} 
+{{ $host = trimPrefix "https://" .Values.s3.citiesUrl }}
+{{ else }}
+{{ $host = trimPrefix "http://" .Values.s3.citiesUrl }}
+{{ end }}
 dgctlDockerRegistry: {{ .Values.dockerRegistry }}
 dgctlStorage:
-  host: {{ .Values.s3.citiesUrl }}
+  host: {{ $host }}
   bucket: {{ .Values.s3.bucket }}
   accessKey: {{ .Values.s3.accessKey }}
   secretKey: {{ .Values.s3.secretKey }}
