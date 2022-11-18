@@ -49,11 +49,11 @@ ui:
   # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., `"[55.27, 25.2]"` stands for Dubai, `"[37.64, 55.74]"` — for Moscow).
 
   logLevel: error
-  isOnPremise: "true"
-  ssoAuth: "false"
-  appTheme: "urbi"
-  appLocale: "en_AE"
-  appInitialMapCenter: "[55.27, 25.2]"
+  isOnPremise: 'true'
+  ssoAuth: 'false'
+  appTheme: urbi
+  appLocale: en_AE
+  appInitialMapCenter: '[55.27, 25.2]'
 
   # @section 2GIS Pro API settings
 

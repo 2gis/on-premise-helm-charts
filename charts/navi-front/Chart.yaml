@@ -5,8 +5,8 @@ type: application
 keywords:
 - navi
 - front
-version: 1.4.3
-appVersion: 1.21-ad06a0e0
+version: 1.4.5
+appVersion: 1.21.2
 maintainers:
 - name: 2gis
   url: https://github.com/2gis

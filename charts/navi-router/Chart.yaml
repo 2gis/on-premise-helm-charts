@@ -5,8 +5,8 @@ type: application
 keywords:
 - navi
 - router
-version: 1.4.3
-appVersion: 6.6.0
+version: 1.4.5
+appVersion: 6.6.1
 maintainers:
 - name: 2gis
   url: https://github.com/2gis

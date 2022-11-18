@@ -19,8 +19,12 @@ function task_status() {
 }
 
 function task_response() {
-  LINK=`curl -s $URL/result/get_dist_matrix/$TASK_ID?key=$KEY | jq -r '.result_link'`
-  curl -s $LINK
+  LINK=`curl -s https://$IHOST/result/get_dist_matrix/$TASK_ID?key=$KEY | jq -r '.result_link'`
+  if [[ $LINK == "" ]] ;then
+    echo "response.json not found on s3, check settings s3 on navi-back-async" && exit 1
+  else
+    curl -s $LINK
+  fi
 }
 
 echo "Task status" `task_status`

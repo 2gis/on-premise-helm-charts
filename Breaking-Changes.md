@@ -1,6 +1,6 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [#.#.#]
+## [1.4.5]
 
 ### navi-castle
 - Renamed `castle.castle_data_path` to `castle.castleDataPath`
@@ -13,7 +13,6 @@
 - Renamed `router.additional_sections` to `router.additionalSections`
 
 ### navi-back
-- Updated structure and defaults for Kafka configuration
 - Renamed `s3.url` to `s3.host`
 - Renamed `s3.keyId` to `s3.accessKey`
 - Renamed `s3.key` to `s3.secretKey`
@@ -45,14 +44,11 @@
 - Renamed `naviback.reduce_edges_optimization_flag` to `naviback.reduceEdgesOptimizationFlag`
 
 ### navi-async-matrix
-- Updated structure and defaults for Kafka configuration
 - Renamed `s3.url` to `s3.host`
 - Renamed `s3.keyId` to `s3.accessKey`
 - Renamed `s3.key` to `s3.secretKey`
 - Renamed `keys.endpoint` to `keys.host`
 - Renamed `keys.dm_key` to `keys.token`
-
-## [1.4.4]
 
 #### keys
 - Rename `db` to `postgres`
