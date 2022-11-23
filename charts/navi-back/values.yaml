@@ -41,7 +41,7 @@ labels: {}
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 6.12.0
+  tag: 6.16.0
 
 
 # @section Navi-Back application settings

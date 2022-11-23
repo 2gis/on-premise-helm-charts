@@ -39,7 +39,7 @@ releases:
     {{ else }} # kafka аутентификация по логину и паролю
       - name: kafka.properties.sasl\.plain\.username
         value: {{ .Values.kafka.authLogin.username }}
-      - name: kafka.sensitiveProperties.ssl\.plain\.password
+      - name: kafka.sensitiveProperties.sasl\.plain\.password
         value: {{ .Values.kafka.authLogin.password }}
     {{ end }}
     {{ end }}

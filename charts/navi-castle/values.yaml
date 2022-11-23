@@ -110,7 +110,7 @@ castle:
   image:
     repository: 2gis-on-premise/navi-castle
     pullPolicy: IfNotPresent
-    tag: 1.0.6.1
+    tag: 1.0.7
   castleDataPath: /opt/castle/data/
   restrictions:
     host: http://restrictions-api.host
@@ -126,7 +126,7 @@ nginx:
   port: 8080
   image:
     repository: 2gis-on-premise/navi-front
-    tag: 1.21-ad06a0e0
+    tag: 1.21.2
 
 
 # @section Cron settings

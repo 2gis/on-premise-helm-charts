@@ -13,7 +13,7 @@ dgctlStorage:
   secretKey: {{ .Values.s3.secretKey }}
   manifest: {{ .Values.manifest }}
 
-{{- if .Values.imagePullSecrets  }}
+{{- with .Values.imagePullSecrets }}
 imagePullSecrets:
-- name: {{ .Values.imagePullSecrets }}
-{{ end }}
+  {{- toYaml . | nindent 8 }}
+{{- end }}

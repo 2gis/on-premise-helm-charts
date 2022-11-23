@@ -14,3 +14,5 @@ resources:
     cpu: 20
     memory: 100Gi
  
+serviceAccount:
+  create: false

@@ -27,3 +27,6 @@ resources:
   requests:
     cpu: 500m
     memory: 128Mi
+
+serviceAccount:
+  create: false
