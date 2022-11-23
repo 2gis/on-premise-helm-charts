@@ -13,6 +13,8 @@ cd $SCRIPTPATH/points
 #UPSTREAM=`kubectl describe cm $NAVI_FRONT-configmap | grep upstream | awk '{print $2}'| rev | cut -c -2 | rev`
 UPSTREAM=`helm ls | grep navi-back | awk '{print $1}' | awk -F 'back-' '{print $2}'` # для партнера из-за openshift
 
+sleep 5
+
 # Pairs Directions API - to do нет токена в api key
 # Truck Directions API - to do нет токена в api key
 
