@@ -33,5 +33,14 @@ cassandra-clusters:
     consistency-level-write: {{ .consistencyLevelWrite }}
     {{- end }}
 
+license:
+  {{- with .Values.license }}
+  service-host: {{ required "Valid .Values.license.serviceHost required!" .serviceHost }}
+  retry-period: {{ .retryPeriod }}
+  warn-text: {{ .warningText }}
+  err-text: {{ .errorText }}
+  sales-manager: {{ .salesManager }}
+  {{- end }}
+
 log-level: info
 log-format: json

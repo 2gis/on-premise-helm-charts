@@ -339,3 +339,20 @@ importer:
       limits:
         cpu: 1000m
         memory: 512Mi
+
+# @section Licensing settings
+
+# @extra license **Common settings**
+
+# @param license.serviceHost Address of the pasportool licensing service.
+# @param license.retryPeriod Duration how often tiles server should try to update license status if it is failing to get it.
+# @param license.warningText Warning message on raster tiles for 'soft' block. Should contain '%d' for the number of days until the 'hard' block and '%s' for the sales manager contact information.
+# @param license.errorText Error message on raster tiles for 'hard' block. Should contain '%s' for the sales manager contact information.
+# @param license.salesManager Sales manager contact information that will be used in warning and error messages on raster tiles for all kinds of blocks.
+
+license:
+  serviceHost: ''
+  retryPeriod: 30s
+  warningText: License expiring in %d days.\nPlease contact your sales manager.\n%s
+  errorText: License expired.\nPlease contact your sales manager.\n%s
+  salesManager: on-premise@2gis.com
