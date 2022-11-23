@@ -2,17 +2,17 @@
 
 ## [1.4.5]
 
-### navi-castle
+#### navi-castle
 - Renamed `castle.castle_data_path` to `castle.castleDataPath`
 - Renamed `castle.restrictions_api_url` to `castle.restrictions.host`
 - Renamed `castle.restrictions_api_key` to `castle.restrictions.key`
 
-### navi-router
+#### navi-router
 - Renamed `router.app_port` to `router.appPort`
 - Renamed `router.app_castle_host` to `router.castleHost`
 - Renamed `router.additional_sections` to `router.additionalSections`
 
-### navi-back
+#### navi-back
 - Renamed `s3.url` to `s3.host`
 - Renamed `s3.keyId` to `s3.accessKey`
 - Renamed `s3.key` to `s3.secretKey`
@@ -43,7 +43,7 @@
 - Renamed `naviback.attractor_taxi` to `naviback.attractor.taxi`
 - Renamed `naviback.reduce_edges_optimization_flag` to `naviback.reduceEdgesOptimizationFlag`
 
-### navi-async-matrix
+#### navi-async-matrix
 - Renamed `s3.url` to `s3.host`
 - Renamed `s3.keyId` to `s3.accessKey`
 - Renamed `s3.key` to `s3.secretKey`
