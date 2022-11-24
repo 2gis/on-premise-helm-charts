@@ -9,7 +9,7 @@ data:
   config.yaml: |
     {{- with .Values.license }}
     license:
-      path: {{ .path }}
+      path: {{ required "A valid $.Values.license.path entry is required" .path }}
       update-period: {{ .updatePeriod }}
       retry-period: {{ .retryPeriod }}
       warning-period: {{ .softBlockPeriod }}
@@ -23,6 +23,4 @@ data:
       s3:
         host: {{ .host }}
         bucket: {{ .bucket }}
-        access-key: {{ .accessKey }}
-        secret-key: {{ .secretKey }}
     {{- end -}}

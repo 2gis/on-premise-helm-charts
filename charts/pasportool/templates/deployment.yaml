@@ -55,6 +55,16 @@ spec:
           env:
             - name: CONFIG_PATH
               value: /config/config.yaml
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pasportool.name" $ }}
+                  key: s3AccessKey
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pasportool.name" $ }}
+                  key: s3SecretKey
           resources:
             {{- toYaml .resources | nindent 12 }}
       volumes:
