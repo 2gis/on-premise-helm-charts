@@ -61,9 +61,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### API settings
 
-| Name           | Description                    | Value |
-| -------------- | ------------------------------ | ----- |
-| `api.replicas` | Number of replicas of API pods | `1`   |
+| Name           | Description                    | Value  |
+| -------------- | ------------------------------ | ------ |
+| `api.replicas` | Number of replicas of API pods | `1`    |
+| `api.logLevel` | Log level                      | `info` |
 
 
 ### api.image **Deployment settings**
@@ -71,7 +72,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description                                                                                   | Value                         |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ----------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag                                                                                           | `3.574.0`                     |
+| `api.image.tag`        | Tag                                                                                           | `3.580.0`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
 
 
@@ -172,7 +173,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                        | Description                                                                                   | Value                              |
 | --------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `importer.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`        | Tag                                                                                           | `1.0.7`                            |
+| `importer.image.tag`        | Tag                                                                                           | `1.0.9`                            |
 | `importer.image.pullPolicy` | Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                     |
 
 

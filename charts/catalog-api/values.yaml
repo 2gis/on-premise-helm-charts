@@ -53,10 +53,11 @@ dgctlStorage:
 # @section API settings
 
 # @param api.replicas Number of replicas of API pods
+# @param api.logLevel Log level
 
 api:
   replicas: 1
-
+  logLevel: info
 
   # @section api.image **Deployment settings**
 
