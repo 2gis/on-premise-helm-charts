@@ -1,0 +1,49 @@
+{{- with .Values.ingress -}}
+{{- if .enabled -}}
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "pasportool.name" $ }}
+  {{- if not (empty .annotations) }}
+  annotations:
+    {{- toYaml .annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "pasportool.labels" $ | nindent 4 }}
+    {{- if not (empty .labels) }}
+    {{- toYaml .labels | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if .className }}
+  ingressClassName: {{ .className }}
+  {{- end }}
+  {{- if not (empty .tls) }}
+  tls:
+    {{- range .tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . | quote }}
+      {{- end }}
+      secretName: {{ required "A valid $.Values.ingress.secretName entry is required" .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "pasportool.name" $ }}
+                port:
+                  number: {{ $.Values.service.port }}
+          {{- end }}
+    {{- end }}
+
+{{- end -}}
+{{- end -}}

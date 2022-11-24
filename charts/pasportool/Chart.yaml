@@ -1,0 +1,12 @@
+apiVersion: v2
+name: pasportool
+type: application
+description: A Helm chart for Kubernetes to deploy pasportool licensing service
+
+version: 1.4.3
+appVersion: 1.0.0
+
+maintainers:
+  - name: 2gis
+    url: https://github.com/2gis
+    email: on-premise@2gis.com
