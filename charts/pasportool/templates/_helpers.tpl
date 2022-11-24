@@ -3,7 +3,7 @@
 {{- end }}
 
 {{ define "pasportool.name" -}}
-{{ $.Chart.Name | trunc 32 | trimSuffix "-" }}
+{{ $.Release.Name | trunc 32 | trimSuffix "-" }}
 {{- end }}
 
 {{ define "pasportool.selectorLabels" -}}
