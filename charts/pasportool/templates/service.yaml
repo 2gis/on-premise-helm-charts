@@ -1,4 +1,4 @@
-{{- with .Values.service -}}
+{{- with .Values.pasportool.service -}}
 
 ---
 apiVersion: v1
@@ -19,7 +19,7 @@ spec:
     {{- include "pasportool.selectorLabels" $ | nindent 4 }}
   type: {{ .type }}
   ports:
-    - port: {{ .port }}
+    - port: {{ .port | default 80 }}
       name: http
       targetPort: http
 

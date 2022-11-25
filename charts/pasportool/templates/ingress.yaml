@@ -1,4 +1,4 @@
-{{- with .Values.ingress -}}
+{{- with .Values.pasportool.ingress -}}
 {{- if .enabled -}}
 
 ---
@@ -41,7 +41,7 @@ spec:
               service:
                 name: {{ include "pasportool.name" $ }}
                 port:
-                  number: {{ $.Values.service.port }}
+                  name: http
           {{- end }}
     {{- end }}
 

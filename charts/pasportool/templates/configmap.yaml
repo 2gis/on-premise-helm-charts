@@ -1,3 +1,5 @@
+{{- with .Values -}}
+
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -7,20 +9,20 @@ metadata:
     {{- include "pasportool.labels" $ | nindent 4 }}
 data:
   config.yaml: |
-    {{- with .Values.license }}
     license:
-      path: {{ required "A valid $.Values.license.path entry is required" .path }}
+      path: {{ required "A valid $.Values.licensePath entry is required" .licensePath }}
       update-period: {{ .updatePeriod }}
       retry-period: {{ .retryPeriod }}
       warning-period: {{ .softBlockPeriod }}
-    {{- end }}
     server:
       host: 0.0.0.0
       port: 80
-    {{- with .Values.storage }}
+    {{- with .dgctlStorage }}
     storage:
       type: s3
       s3:
-        host: {{ .host }}
-        bucket: {{ .bucket }}
-    {{- end -}}
+        host: {{ required "A valid $.Values.dgctlStorage.host entry is required" .host }}
+        bucket: {{ required "A valid $.Values.dgctlStorage.bucket entry is required" .bucket }}
+    {{- end }}
+
+{{- end -}}
