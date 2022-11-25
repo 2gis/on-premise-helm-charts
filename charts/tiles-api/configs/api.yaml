@@ -34,13 +34,11 @@ cassandra-clusters:
     {{- end }}
 
 license:
-  {{- with .Values.license }}
-  service-host: {{ required "Valid .Values.license.serviceHost required!" .serviceHost }}
-  retry-period: {{ .retryPeriod }}
-  warn-text: {{ .warningText }}
-  err-text: {{ .errorText }}
-  sales-manager: {{ .salesManager }}
-  {{- end }}
+  service-host: {{ required "Valid .Values.license.url required!" .Values.license.url }}
+  retry-period: {{ .Values.license.retryPeriod }}
+  warn-text: {{ .Values.warningText }}
+  err-text: {{ .Values.errorText }}
+  sales-manager: {{ .Values.salesManager }}
 
 log-level: info
 log-format: json
