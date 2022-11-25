@@ -21,21 +21,27 @@ spec:
   {{- end }}
   {{- if not (empty .tls) }}
   tls:
-    {{- range .tls }}
+    {{- range $idx_tls := .tls }}
+    {{ $tls_path := printf "$.Values.pasportool.ingress.tls[%d]" $idx_tls }}
     - hosts:
-      {{- range .hosts }}
-        - {{ . | quote }}
+      {{- $hosts := required (print "A valid " $tls_path ".hosts entry is required") .hosts}}
+      {{- range $idx_host := .hosts }}
+        - {{ required (printf "A valid %s.hosts[%d] entry is required" $tls_path $idx_host) . | quote }}
       {{- end }}
-      secretName: {{ required "A valid $.Values.ingress.secretName entry is required" .secretName }}
+      secretName: {{ required (print "A valid " $tls_path ".secretName entry is required") .secretName }}
     {{- end }}
   {{- end }}
   rules:
-    {{- range .hosts }}
-    - host: {{ .host | quote }}
+    {{- $hosts := required "A valid $.Values.pasportool.ingress.hosts entry is required" .hosts}}
+    {{- range $idx_host := $hosts }}
+    {{- $host_path := printf "$.Values.pasportool.ingress.hosts[%d]" $idx_host }}
+    - host: {{ required (print "A valid " $host_path ".host entry is required") .host | quote }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
+          {{- $paths := required (print "A valid " $host_path ".paths entry is required") .paths }}
+          {{- range $idx_path := $paths }}
+          {{- $path_path := printf "%s.paths[%d]" $host_path $idx_path }}
+          - path: {{ required (print "A valid " $path_path ".path entry is required") .path }}
             pathType: Prefix
             backend:
               service:

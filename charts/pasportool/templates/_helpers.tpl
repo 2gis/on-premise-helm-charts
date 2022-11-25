@@ -17,3 +17,7 @@ app.kubernetes.io/version: {{ $.Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ $.Release.Service | quote }}
 helm.sh/chart: {{ include "pasportool.chart" $ | quote }}
 {{- end }}
+
+{{ define "pasportool.required" -}}
+required (printf "A valid %s entry is required" .m) .e
+{{- end }}

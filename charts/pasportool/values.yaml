@@ -103,4 +103,4 @@ pasportool:
   ingress:
     enabled: false
     hosts:
-      - host: ''
+      - host: 'pasportool.ingress.host'
