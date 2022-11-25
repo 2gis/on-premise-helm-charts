@@ -3,7 +3,7 @@ name: pasportool
 type: application
 description: A Helm chart for Kubernetes to deploy pasportool licensing service
 
-version: 1.4.3
+version: 1.4.5
 appVersion: 1.0.0
 
 maintainers:
