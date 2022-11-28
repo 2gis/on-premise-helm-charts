@@ -39,7 +39,7 @@ spec:
           image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .repository }}:{{ .tag }}"
           imagePullPolicy: {{ .pullPolicy }}
           {{- end }}
-          command: ["/pasportool"]
+          command: ["/license"]
           ports:
             - containerPort: {{ .license.appPort }}
               name: http
