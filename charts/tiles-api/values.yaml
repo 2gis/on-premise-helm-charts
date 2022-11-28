@@ -269,7 +269,7 @@ api:
 
 importer:
   enabled: true
-  serviceAccountOverride: ""
+  serviceAccountOverride: ''
 
   # @extra importer.image **Docker image settings**
   # @param importer.image.repository Docker Repository.
