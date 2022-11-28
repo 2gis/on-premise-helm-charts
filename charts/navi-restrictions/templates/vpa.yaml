@@ -17,7 +17,7 @@ spec:
     updateMode: {{ .updateMode }}
   resourcePolicy:
     containerPolicies:
-      - containerName: {{ include "navi-restrictions.name" }}
+      - containerName: {{ include "navi-restrictions.name" $ }}
         mode: Auto
         {{- with .minAllowed }}
         minAllowed:

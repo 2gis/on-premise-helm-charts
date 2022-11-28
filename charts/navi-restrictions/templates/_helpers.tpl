@@ -26,7 +26,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 
 {{- define "navi-restrictions.labels" -}}
 helm.sh/chart: {{ include "navi-restrictions.chart" . }}
-{{ include "navi-restrictions.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
