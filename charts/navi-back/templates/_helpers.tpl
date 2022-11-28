@@ -92,11 +92,11 @@ Usage:
 {{- end -}}
 
 {{- define "config.pedestrian" -}}
-{{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": false," }}
+{{ print  "\"simple_network_pedestrian\": true,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_pedestrian\": true,\"attractor_bicycle\": false,\"attractor_taxi\": false," }}
 {{- end -}}
 
 {{- define "config.pairs" -}}
-{{ print  "\"simple_network_car\" : true,\"simple_network_pedestrian\": true,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_car\" : true,\"attractor_pedestrian\": true,\"attractor_bicycle\": false,\"attractor_taxi\": true,\"reduce_edges_optimization_flag\": true," }}
+{{ print  "\"simple_network_car\" : true,\"simple_network_pedestrian\": true,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_car\" : true,\"attractor_pedestrian\": true,\"attractor_bicycle\": false,\"attractor_taxi\": false," }}
 {{- end -}}
 
 {{- define "config.dm" -}}
@@ -124,6 +124,9 @@ Usage:
 {{- if eq .Values.naviback.type "ctx" -}}
    {{ include "config.ctx" $ }}
 {{- end -}}
+{{- if eq .Values.naviback.type "schedule" -}}
+   {{ include "config.ctx" $ }}
+{{- end -}}
 {{- if eq .Values.naviback.type "pedestrian" -}}
    {{ include "config.pedestrian" $ }}
 {{- end -}}
@@ -136,9 +139,12 @@ Usage:
 {{- if eq .Values.naviback.type "bicycle" -}}
    {{ include "config.bicycle" $ }}
 {{- end -}}
+{{- if eq .Values.naviback.type "freeroam" -}}
+   {{ include "config.freeroam" $ }}
+{{- end -}}
 {{- end -}}
 
-{{- define "config.setDistMatrixPool" }}
+{{- define "config.setCpuNumber" }}
 {{- $cpu_divider := 1 }}
 {{- $num_threads := 0 }}
 {{- $resources := regexSplit "m" (toString .Values.resources.limits.cpu) -1 }}

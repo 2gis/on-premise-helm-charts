@@ -1,0 +1,84 @@
+{{ if .Values.assetPreparer.enabled }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "pro-api.asset-preparer-name" . }}
+spec:
+  concurrencyPolicy: Forbid
+  schedule: {{ .Values.assetPreparer.schedule }}
+  successfulJobsHistoryLimit: {{ .Values.assetPreparer.successfulJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      backoffLimit: {{ .Values.assetPreparer.backoffLimit }}
+      template:
+        spec:
+          nodeSelector:
+            role: worker
+          restartPolicy: Never
+          volumes:
+            - name: temp-volume
+              emptyDir: {}
+          containers:
+            - name: {{ include "pro-api.asset-importer-name" . }}
+              image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.assetPreparer.repository }}:{{ .Values.assetPreparer.tag }}
+              imagePullPolicy: IfNotPresent
+              resources:
+                {{- toYaml .Values.assetPreparer.resources | nindent 16 }}
+              volumeMounts:
+                - mountPath: "{{ .Values.api.tempPath }}"
+                  name: temp-volume
+              env:
+                - name: JOB_NAME
+                  value: {{ include "pro-api.asset-preparer-name" . }}
+                - name: TEMP_PATH
+                  value: "{{ .Values.api.tempPath }}"
+                - name: ENV
+                  value: "{{ .Values.api.env }}"
+                - name: MODE
+                  value: "PrepareDemand"
+                - name: MAX_PARALLEL_JOBS
+                  value: "{{ .Values.assetPreparer.maxParallelJobs }}"
+                - name: S3Settings__Url
+                  value: "{{ .Values.dgctlStorage.host }}"
+                - name: S3Settings__AssetDataBucket
+                  value: "{{ .Values.dgctlStorage.bucket }}"
+                - name: S3Settings__AccessKey
+                  valueFrom:
+                    secretKeyRef:
+                      key: s3AccessKey
+                      name: {{ include "pro-api.name" . }}-secret
+                - name: S3Settings__SecretKey
+                  valueFrom:
+                    secretKeyRef:
+                      key: s3SecretKey
+                      name: {{ include "pro-api.name" . }}-secret
+                - name: ES_HOST
+                  value: "{{ .Values.elastic.host }}"
+                {{ if .Values.elastic.credentials }}
+                - name: ES_CREDENTIALS
+                  valueFrom:
+                    secretKeyRef:
+                      key: esCredentials
+                      name: {{ include "pro-api.name" . }}-secret
+                {{ end }}
+                - name: API_URL
+                  value: http://{{ include "pro-api.name" . }}
+                {{ if .Values.api.token }}
+                - name: API_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: apiServiceToken
+                      name: {{ include "pro-api.name" . }}-secret
+                {{ end }}
+                {{ if .Values.assetPreparer.files }}
+                - name: FILES
+                  value: "{{ .Values.assetPreparer.files}}"
+                {{ end }}
+                - name: Digger__UserName
+                  value: "{{ .Values.api.diggerUserName}}"
+                - name: Digger__Password
+                  valueFrom:
+                    secretKeyRef:
+                      key: diggerPassword
+                      name: {{ include "pro-api.name" . }}-secret
+{{ end }}

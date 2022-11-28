@@ -1,0 +1,36 @@
+helmDefaults:
+  createNamespace: false
+  atomic: true
+  wait: true
+ 
+environments:
+  default:
+    values:
+      - version: 1.4.5 # актуальная версия релиза
+        manifest: manifests/1668658760.json # укажите манифест, полученный при скачивании данных dgctl
+        namespace: 2gis-on-premise # namespace k8s для деплоя сервисов 2gis
+        kubeContext: dev-cluster # имя контекста k8s для доступа к кластеру
+        apiKey: API_KEY # API-ключ для доступа к сервисам поиска. Подробнее см. в документации сервиса API Keys.
+        dockerRegistry: docker.storage.example.local
+        imagePullSecrets: [] #указать k8s secrets, если требуется авторизация на doker registry
+          #- name: secret_regestry
+        s3:
+          citiesUrl: http://artifacts.example.com
+          bucket: onpremise-artifacts # бакет, куда загружены данные утилитой dgctl
+          accessKey: AKIAIOSFODNN7EXAMPLE
+          secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+        ingress:
+          enabled: true # включение ингресса
+          domain: example.com # домен ингресса
+          protocol: https # протокол ингресса http или https
+          secretName: secret_tls # указать k8s secrets, содержащий сертификат для https, если будет использоваться https
+        customProjectNavi: false # true - тестовый деплой Москвы, false - деплой всех проектов
+        kafka: # методы аутентификации (login/password or ssl certificates)
+          authLogin: {}
+            # username:  kafka-user
+            # password:  kafka-password
+          authCert: # сертификаты и ключ нужно положить в директорию ssl и указать здесь имена файлов
+            sslCA: CAcert.crt
+            sslCertificate: Cert.crt
+            sslKey: Key.crt
+            sslPassword: '' # укажите keystore password, если используется

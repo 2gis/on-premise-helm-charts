@@ -1,0 +1,16 @@
+---
+bases:
+- ../base.yaml
+---
+releases:
+  - name: navi-castle
+    chart: ../../charts/navi-castle
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    version: "{{ .Values.version }}"
+    timeout: 1200
+    labels:
+      service: navi-castle
+    values:
+      - ../templates/dgctl.gotmpl
+      - ../values/navi-castle.yaml

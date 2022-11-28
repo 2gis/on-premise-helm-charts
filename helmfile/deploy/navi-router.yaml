@@ -1,0 +1,17 @@
+---
+bases:
+- ../base.yaml
+---
+releases:
+  - name: navi-router
+    chart: ../../charts/navi-router
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    version: "{{ .Values.version }}"
+    timeout: 1200
+    labels:
+      service: navi-router
+    values:
+      - ../templates/dgctl.gotmpl
+      - ../values/navi-router.yaml
+      - ../templates/navi-custom-rules.gotmpl

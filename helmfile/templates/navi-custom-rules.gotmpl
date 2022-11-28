@@ -1,0 +1,48 @@
+.project_list: &projects
+{{- if .Values.customProjectNavi }}
+  - moscow
+{{ else }}
+{{ readFile "../values/cities.yaml" }}
+{{ end }}
+
+.base_config: &base_config
+  moses_projects: *projects
+  router_projects: *projects
+
+rules:
+  - name: directions-car # авто 
+    << : *base_config
+    queries: ["routing"]
+    routing: ["driving"]
+  - name: directions-pedestrian # пешеходы 
+    << : *base_config
+    queries: ["routing"]
+    routing: ["pedestrian"]
+  - name: directions-bicycle # велосипедисты 
+    << : *base_config
+    queries: ["routing"]
+    routing: ["bicycle"]
+  - name: directions-taxi # taxi 
+    << : *base_config
+    queries: ["routing"]
+    routing: ["taxi"]
+  - name: distance-matrix # distance-matrix
+    << : *base_config
+    queries: ["get_dist_matrix"]
+    routing: ["driving"]
+  - name: public-transport # общественный транспорт 
+    << : *base_config
+    queries: ["public_transport"]
+    routing: ["public_transport"]
+  - name: directions-truck # грузовики truck
+    << : *base_config
+    queries: ["routing"]
+    routing: ["truck"]
+  - name: pairs-directions # pairs 
+    << : *base_config
+    queries: ["get_pairs"]
+    routing: ["driving"]
+  - name: isochrone-car # isochrone
+    << : *base_config
+    queries: ["get_hull"]
+    routing: ["driving"]

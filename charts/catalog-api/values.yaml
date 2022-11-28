@@ -1,18 +1,18 @@
 # @section Docker Registry settings
 
-# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+# @param dgctlDockerRegistry Docker Registry host where On-Premise services' images reside. Format: `host:port`
 
 dgctlDockerRegistry: ''
 
 
 # @section Common settings
 
-# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
-# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param affinity Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
-# @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param imagePullSecrets Kubernetes secrets for [pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/).
+# @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param imagePullSecrets Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 nodeSelector: {}
 affinity: {}
@@ -24,9 +24,9 @@ imagePullSecrets: []
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-# @param pdb.enabled If PDB is enabled for the service.
-# @param pdb.minAvailable How many pods must be available after the eviction.
-# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+# @param pdb.enabled If PDB is enabled for the service
+# @param pdb.minAvailable How many pods must be available after the eviction
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction
 
 pdb:
   enabled: false
@@ -36,11 +36,11 @@ pdb:
 
 # @section Deployment Artifacts Storage settings
 
-# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
-# @param dgctlStorage.bucket S3 bucket name.
-# @param dgctlStorage.accessKey S3 access key for accessing the bucket.
-# @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
-# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate.
+# @param dgctlStorage.host S3 host. Format: `host:port`
+# @param dgctlStorage.bucket S3 bucket name
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate
 
 dgctlStorage:
   host: ''
@@ -52,33 +52,33 @@ dgctlStorage:
 
 # @section API settings
 
-# @param api.replicas Number of replicas of API pods.
+# @param api.replicas Number of replicas of API pods
 
 api:
   replicas: 1
 
 
-  # @section Deployment settings
+  # @section api.image **Deployment settings**
 
   # @param api.image.repository Repository
   # @param api.image.tag Tag
-  # @param api.image.pullPolicy Pull Policy
+  # @param api.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
 
   image:
     repository: 2gis-on-premise/catalog-api
-    tag: 3.574.0
+    tag: 3.580.0
     pullPolicy: IfNotPresent
 
 
   # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-  # @param api.hpa.enabled If HPA is enabled for the service.
-  # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
-  # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
-  # @param api.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
-  # @param api.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
-  # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
-  # @param api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+  # @param api.hpa.enabled If HPA is enabled for the service
+  # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down
+  # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up
+  # @param api.hpa.scaleDownStabilizationWindowSeconds Scale-down window
+  # @param api.hpa.scaleUpStabilizationWindowSeconds Scale-up window
+  # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used
+  # @param api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used
 
   hpa:
     enabled: false
@@ -90,12 +90,12 @@ api:
     targetMemoryUtilizationPercentage: ''
 
 
-  # @section Limits
+  # @section api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings
 
-  # @param api.resources.requests.cpu A CPU request.
-  # @param api.resources.requests.memory A memory request.
-  # @param api.resources.limits.cpu A CPU limit.
-  # @param api.resources.limits.memory A memory limit.
+  # @param api.resources.requests.cpu A CPU request
+  # @param api.resources.requests.memory A memory request
+  # @param api.resources.limits.cpu A CPU limit
+  # @param api.resources.limits.memory A memory limit
 
   resources:
     requests:
@@ -109,9 +109,9 @@ api:
   # @section Service settings
 
   # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
-  # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-  # @param api.service.port Service port.
+  # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+  # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
+  # @param api.service.port Service port
 
   service:
     annotations: {}
@@ -122,8 +122,8 @@ api:
 
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-  # @param api.ingress.enabled If Ingress is enabled for the service.
-  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param api.ingress.enabled If Ingress is enabled for the service
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service
 
   ingress:
     enabled: false
@@ -132,41 +132,50 @@ api:
 
   # @section Database settings
 
-  # @param api.db.host PostgreSQL rw/ro host.
-  # @param api.db.port PostgreSQL port.
-  # @param api.db.name PostgreSQL database name.
-  # @param api.db.username PostgreSQL username.
-  # @param api.db.password PostgreSQL password.
+  # @param api.postgres.host PostgreSQL rw/ro host
+  # @param api.postgres.port PostgreSQL port
+  # @param api.postgres.name PostgreSQL database name
+  # @param api.postgres.username PostgreSQL username
+  # @param api.postgres.password PostgreSQL password
+  # @param api.postgres.queryTimeout Max execution time PostgreSQL query timeout in seconds
 
-  db:
+  postgres:
     host: postgres.host
     port: 5432
     name: catalog
     username: postgres
     password: secret
+    queryTimeout: 3
 
-# @section Search
+  # @section Preloaders settings
 
-# @param search.url URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster.
+  # @param api.preloaders.awaitTimeout Preloaders await timeout
+
+  preloaders:
+    awaitTimeout: 60s
+
+# @section Search settings
+
+# @param search.host URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster
 
 search:
-  url: http://search-api.host
+  host: http://search-api.host
 
 
-# @section Keys
+# @section Keys settings
 
-# @param keys.endpoint URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster.
-# @param keys.requestTimeout Timeout for requests to the Keys API.
-# @param keys.serviceKeys.places Places API key (if available).
-# @param keys.serviceKeys.geocoder Geocoder API key (if available).
-# @param keys.serviceKeys.suggest Suggest API key (if available).
-# @param keys.serviceKeys.categories Categories API key (if available).
-# @param keys.serviceKeys.regions Regions API key (if available).
+# @param keys.host URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster
+# @param keys.requestTimeout Timeout for requests to the Keys API
+# @param keys.tokens.places Places API key (if available)
+# @param keys.tokens.geocoder Geocoder API key (if available)
+# @param keys.tokens.suggest Suggest API key (if available)
+# @param keys.tokens.categories Categories API key (if available)
+# @param keys.tokens.regions Regions API key (if available)
 
 keys:
-  endpoint: https://keys-api.host
+  host: http://keys-api.host
   requestTimeout: 5s
-  serviceKeys:
+  tokens:
     places: ''
     geocoder: ''
     suggest: ''
@@ -177,41 +186,41 @@ keys:
 # @section Kubernetes Importer job settings
 
 # @extra importer **Common settings**
-# @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-# @param importer.workerNum Number of parallel import processes (workers).
-# @param importer.initialDelaySeconds Number of seconds after the container has started before liveness or readiness probes are initiated.
-
-# @extra importer.image **Deployment settings**
-# @param importer.image.repository Repository
-# @param importer.image.tag Tag
-# @param importer.image.pullPolicy Pull Policy
-
-# @extra importer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
-# @param importer.resources.requests.cpu A CPU request.
-# @param importer.resources.requests.memory A memory request.
-# @param importer.resources.limits.cpu A CPU limit.
-# @param importer.resources.limits.memory A memory limit.
+# @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param importer.workerNum Number of parallel import processes (workers)
+# @param importer.initialDelaySeconds Number of seconds after the container has started before liveness or readiness probes are initiated
+# @param importer.retry.maxAttempts The maximum number of retries download before stopping
+# @param importer.retry.delay Delay until the retry attempts
 
 importer:
   nodeSelector: {}
   workerNum: 3
   initialDelaySeconds: 1
+  retry:
+    maxAttempts: 3
+    delay: 1s
+
+  # @section importer.image **Deployment settings**
+
+  # @param importer.image.repository Repository
+  # @param importer.image.tag Tag
+  # @param importer.image.pullPolicy Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
 
   image:
     repository: 2gis-on-premise/catalog-importer
-    tag: 1.0.7
+    tag: 1.0.9
     pullPolicy: IfNotPresent
 
-  # @extra importer.db **Database settings**
+  # @section importer.postgres **Database settings**
 
-  # @param importer.db.host PostgreSQL rw host.
-  # @param importer.db.port PostgreSQL port.
-  # @param importer.db.name PostgreSQL database name.
-  # @param importer.db.username PostgreSQL username with rw access.
-  # @param importer.db.password PostgreSQL password.
-  # @param importer.db.schemaSwitchEnabled Automatic switch PostgreSQL schema on releases.
+  # @param importer.postgres.host PostgreSQL rw host
+  # @param importer.postgres.port PostgreSQL port
+  # @param importer.postgres.name PostgreSQL database name
+  # @param importer.postgres.username PostgreSQL username with rw access
+  # @param importer.postgres.password PostgreSQL password
+  # @param importer.postgres.schemaSwitchEnabled Automatic switch PostgreSQL schema on releases
 
-  db:
+  postgres:
     host: postgres.host
     port: 5432
     name: catalog
@@ -219,12 +228,12 @@ importer:
     password: secret
     schemaSwitchEnabled: true
 
-  # @extra importer.persistentVolume **Persistent Volume settings**
+  # @section importer.persistentVolume **Persistent Volume settings**
 
-  # @param importer.persistentVolume.enabled If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service.
-  # @param importer.persistentVolume.accessModes AccessModes.
-  # @param importer.persistentVolume.storageClass StorageClass.
-  # @param importer.persistentVolume.size Volume size.
+  # @param importer.persistentVolume.enabled If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service
+  # @param importer.persistentVolume.accessModes Persistent Volume [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
+  # @param importer.persistentVolume.storageClass Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+  # @param importer.persistentVolume.size Volume size
 
   persistentVolume:
     enabled: false
@@ -232,6 +241,12 @@ importer:
     - ReadWriteOnce
     storageClass: topolvm-ext4
     size: 50Gi
+
+  # @section importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
+  # @param importer.resources.requests.cpu A CPU request
+  # @param importer.resources.requests.memory A memory request
+  # @param importer.resources.limits.cpu A CPU limit
+  # @param importer.resources.limits.memory A memory limit
 
   resources:
     requests:
@@ -241,19 +256,20 @@ importer:
       cpu: 2
       memory: 2048Mi
 
-  # @extra importer.cleaner **Cleaner scheme settings**
-  # @param importer.cleaner.enabled If clean schemes is enabled for the service.
-  # @param importer.cleaner.versionLimit Number of backup schemes.
+  # @section importer.cleaner **Cleaner scheme settings**
+  # @param importer.cleaner.enabled If clean schemes is enabled for the service
+  # @param importer.cleaner.versionLimit Number of backup schemes
 
-  # @extra importer.cleaner.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
-  # @param importer.cleaner.resources.requests.cpu A CPU request.
-  # @param importer.cleaner.resources.requests.memory A memory request.
-  # @param importer.cleaner.resources.limits.cpu A CPU limit.
-  # @param importer.cleaner.resources.limits.memory A memory limit.
 
   cleaner:
     enabled: true
     versionLimit: 2
+
+    # @section importer.cleaner.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
+    # @param importer.cleaner.resources.requests.cpu A CPU request
+    # @param importer.cleaner.resources.requests.memory A memory request
+    # @param importer.cleaner.resources.limits.cpu A CPU limit
+    # @param importer.cleaner.resources.limits.memory A memory limit
 
     resources:
       requests:

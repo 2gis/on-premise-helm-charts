@@ -1,0 +1,23 @@
+replicaCount: 1
+ 
+dm:
+  citiesUrl: http://navi-castle.host/cities.conf
+   
+keys:
+  host: http://keys.host/service/v1/keys
+  token: DISTANCE_MATRIX_TOKEN_FFFFFF-666666
+ 
+db:
+  host: navi-async-matrix-postgresql.storage.example.local
+  port: 5432
+  name: onpremise_navi_async_matrix
+  user: navi-async-matrix-user
+  password: navi-async-matrix-password
+ 
+resources:
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+  requests:
+    cpu: 2000m
+    memory: 4Gi

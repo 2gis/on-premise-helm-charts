@@ -1,0 +1,42 @@
+---
+bases:
+- ../base.yaml
+---
+{{ $type := ""}}
+{{ $cpu := "10" }}
+{{ $memory := "80Gi" }}
+{{ if eq ( requiredEnv "API" ) "directions-car" }} {{ $type = "carrouting" }}
+{{ else if eq ( requiredEnv "API" ) "directions-pedestrian" }} {{ $type = "pedestrian" }}
+{{ else if eq ( requiredEnv "API" ) "directions-bicycle" }} {{ $type = "bicycle" }}
+{{ else if eq ( requiredEnv "API" ) "directions-taxi" }} {{ $type = "taxi" }}
+{{ else if eq ( requiredEnv "API" ) "pairs-directions" }} {{ $type = "pairs" }}
+{{ else if eq ( requiredEnv "API" ) "directions-truck" }} {{ $type = "truck" }}
+{{ else if eq ( requiredEnv "API" ) "distance-matrix" }} {{ $type = "dm" }} {{ $cpu = "25" }} {{ $memory = "100Gi" }}
+{{ else if eq ( requiredEnv "API" ) "public-transport" }} {{ $type = "ctx" }} {{ $memory = "55Gi" }}
+{{ else if eq ( requiredEnv "API" ) "isochrone-car" }} {{ $type = "carrouting" }}
+{{ else }}
+{{ fail "API env is wrong" }}
+{{ end }}
+
+releases:
+  - name: navi-back-{{ $rule }}
+    chart:  ../../charts/navi-back
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    version: "{{ .Values.version }}"
+    timeout: 3600
+    labels:
+      service: '{{`{{ .Release.Name }}`}}'
+    values: 
+      - ../templates/dgctl.gotmpl
+      - ../values/navi-back-custom.yaml
+      - ../templates/navi-custom-rules.gotmpl
+    set:
+      - name: naviback.app_rule
+        value: {{ requiredEnv "API" }}
+      - name: naviback.type
+        value: {{ $type }}
+      - name: resources.limits.cpu
+        value: {{ $cpu }}
+      - name: resources.limits.memory
+        value: {{ $memory }}

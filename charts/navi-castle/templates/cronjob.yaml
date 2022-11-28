@@ -53,10 +53,10 @@ spec:
                 mountPath: /opt/config_builder.conf
                 subPath: config_builder.conf
               - name: {{ include "castle.fullname" $ }}-builder-config
-                mountPath: {{ $.Values.castle.castle_data_path }}/cities_template
+                mountPath: {{ $.Values.castle.castleDataPath }}/cities_template
                 subPath: cities_template       
               - name: {{ include "castle.fullname" $ }}-pvc
-                mountPath: {{ $.Values.castle.castle_data_path }}
+                mountPath: {{ $.Values.castle.castleDataPath }}
               resources:
                 {{- toYaml $.Values.resources | nindent 16 }}
 {{- end -}} # if

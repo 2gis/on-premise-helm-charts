@@ -1,0 +1,19 @@
+Keys service is released as "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace.
+
+{{ if .Values.admin.ingress.enabled }}
+You can check admin using browser
+{{- range $host := .Values.admin.ingress.hosts }}
+  http{{ if $.Values.admin.ingress.tls }}s{{ end }}://{{ $host.host }}
+{{- end }}
+{{- else }}
+You should publish admin service in your preferred way (ingress, balancer, etc).
+{{ end }}
+
+{{ if .Values.api.ingress.enabled }}
+You can check service using curl
+{{- range $host := .Values.api.ingress.hosts }}
+  http{{ if $.Values.api.ingress.tls }}s{{ end }}://{{ $host.host }}/healthcheck
+{{- end }}
+{{- else }}
+You can publish api service in your preferred way (ingress, balancer, etc).
+{{ end }}
