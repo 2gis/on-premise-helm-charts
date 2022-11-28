@@ -21,10 +21,12 @@ spec:
       {{- include "license.selectorLabels" $ | nindent 6 }}
   template:
     metadata:
-      {{- if not (empty .podAnnotations) }}
       annotations:
+        checksum/config: {{ include "license.checksum" (dict "root" $ "path" "/configmap.yaml") }}
+        checksum/secret: {{ include "license.checksum" (dict "root" $ "path" "/secret.yaml") }}
+        {{- if not (empty .podAnnotations) }}
         {{- toYaml .podAnnotations | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "license.labels" $ | nindent 8 }}
         {{- if not (empty .podLabels) }}

@@ -24,32 +24,40 @@ See the [documentation](https://docs.2gis.com/en/on-premise/) to learn about:
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
 
+### Deployment Artifacts Storage settings
+
+| Name                     | Description                             | Value |
+| ------------------------ | --------------------------------------- | ----- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.       | `""`  |
+| `dgctlStorage.bucket`    | S3 bucket name.                         | `""`  |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. | `""`  |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. | `""`  |
+
+
 ### Common settings
 
-| Name                  | Description                                                                                                                 | Value |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`        | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
-| `fullnameOverride`    | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
-| `annotations`         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
-| `labels`              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
-| `replicaCount`        | A replica count for the pod.                                                                                                | `1`   |
-| `podAnnotations`      | Kubernetes pod [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
-| `podLabels`           | Kubernetes pod [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
-| `livenessProbeDelay`  | Initial delay for liveness probes.                                                                                          | `60`  |
-| `readinessProbeDelay` | Initial delay for readiness probes.                                                                                         | `75`  |
-| `nodeSelector`        | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`  |
-| `tolerations`         | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`  |
-| `affinity`            | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
-| `imagePullSecrets`    | Kubernetes image pull secrets.                                                                                              | `[]`  |
+| Name               | Description                                                                                                                 | Value |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `nameOverride`     | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
+| `fullnameOverride` | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
+| `annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
+| `labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
+| `replicaCount`     | A replica count for the pod.                                                                                                | `1`   |
+| `podAnnotations`   | Kubernetes pod [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
+| `podLabels`        | Kubernetes pod [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
+| `nodeSelector`     | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`  |
+| `tolerations`      | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`  |
+| `affinity`         | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
+| `imagePullSecrets` | Kubernetes image pull secrets.                                                                                              | `[]`  |
 
 
 ### Deployment settings
 
-| Name               | Description  | Value                       |
-| ------------------ | ------------ | --------------------------- |
-| `image.repository` | Repository.  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag.         | `6.16.0`                    |
-| `image.pullPolicy` | Pull Policy. | `IfNotPresent`              |
+| Name               | Description  | Value                     |
+| ------------------ | ------------ | ------------------------- |
+| `image.repository` | Repository.  | `2gis-on-premise/license` |
+| `image.tag`        | Tag.         | `1.0.0`                   |
+| `image.pullPolicy` | Pull Policy. | `IfNotPresent`            |
 
 
 ### License service application settings
@@ -88,14 +96,4 @@ See the [documentation](https://docs.2gis.com/en/on-premise/) to learn about:
 | `resources.requests.memory` | A memory request. | `128Mi` |
 | `resources.limits.cpu`      | A CPU limit.      | `1`     |
 | `resources.limits.memory`   | A memory limit.   | `512Mi` |
-
-
-### Deployment Artifacts Storage settings
-
-| Name                     | Description                             | Value |
-| ------------------------ | --------------------------------------- | ----- |
-| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.       | `""`  |
-| `dgctlStorage.bucket`    | S3 bucket name.                         | `""`  |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. | `""`  |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. | `""`  |
 

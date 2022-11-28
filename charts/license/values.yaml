@@ -4,6 +4,19 @@
 
 dgctlDockerRegistry: ''
 
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
+# @param dgctlStorage.bucket S3 bucket name.
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket.
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
+
+dgctlStorage:
+  host: ''
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+
 # @section Common settings
 
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
@@ -15,8 +28,6 @@ dgctlDockerRegistry: ''
 # @param replicaCount A replica count for the pod.
 # @param podAnnotations Kubernetes pod [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podLabels Kubernetes pod [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param livenessProbeDelay Initial delay for liveness probes.
-# @param readinessProbeDelay Initial delay for readiness probes.
 
 # @param nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -33,8 +44,6 @@ labels: {}
 replicaCount: 1
 podAnnotations: {}
 podLabels: {}
-livenessProbeDelay: 60
-readinessProbeDelay: 75
 
 nodeSelector: {}
 tolerations: []
@@ -106,16 +115,3 @@ resources:
   requests:
     cpu: 50m
     memory: 128Mi
-
-# @section Deployment Artifacts Storage settings
-
-# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
-# @param dgctlStorage.bucket S3 bucket name.
-# @param dgctlStorage.accessKey S3 access key for accessing the bucket.
-# @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
-
-dgctlStorage:
-  host: ''
-  bucket: ''
-  accessKey: ''
-  secretKey: ''
