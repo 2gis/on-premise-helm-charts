@@ -1,24 +1,24 @@
-{{- with .Values.pasportool -}}
+{{- with .Values -}}
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "pasportool.name" $ }}
+  name: {{ include "license.fullname" $ }}
   {{- if not (empty .annotations) }}
   annotations:
     {{- toYaml .annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "pasportool.labels" $ | nindent 4 }}
+    {{- include "license.labels" $ | nindent 4 }}
     {{- if not (empty .labels) }}
     {{- toYaml .labels | nindent 4 }}
     {{- end }}
 spec:
-  replicas: {{ .replicas }}
+  replicas: {{ .replicaCount }}
   selector:
     matchLabels:
-      {{- include "pasportool.selectorLabels" $ | nindent 6 }}
+      {{- include "license.selectorLabels" $ | nindent 6 }}
   template:
     metadata:
       {{- if not (empty .podAnnotations) }}
@@ -26,20 +26,20 @@ spec:
         {{- toYaml .podAnnotations | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "pasportool.labels" $ | nindent 8 }}
+        {{- include "license.labels" $ | nindent 8 }}
         {{- if not (empty .podLabels) }}
         {{- toYaml .podLabels | nindent 8 }}
         {{- end }}
     spec:
       containers:
-        - name: pasportool
+        - name: license
           {{- with .image }}
           image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .repository }}:{{ .tag }}"
-          imagePullPolicy: {{ $.Values.imagePullPolicy }}
+          imagePullPolicy: {{ .pullPolicy }}
           {{- end }}
           command: ["/pasportool"]
           ports:
-            - containerPort: 8080
+            - containerPort: {{ .license.appPort }}
               name: http
           readinessProbe:
             httpGet:
@@ -58,19 +58,19 @@ spec:
             - name: S3_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "pasportool.name" $ }}
+                  name: {{ include "license.fullname" $ }}
                   key: s3AccessKey
             - name: S3_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "pasportool.name" $ }}
+                  name: {{ include "license.fullname" $ }}
                   key: s3SecretKey
           resources:
             {{- toYaml .resources | nindent 12 }}
       volumes:
         - name: config
           configMap:
-            name: {{ include "pasportool.name" $ }}
+            name: {{ include "license.fullname" $ }}
       {{- if not (empty .nodeSelector) }}
       nodeSelector:
         {{- toYaml .nodeSelector | nindent 8 }}
@@ -83,9 +83,9 @@ spec:
       tolerations:
         {{- toYaml .tolerations | nindent 8 }}
       {{- end }}
-      {{- if not (empty $.Values.imagePullSecrets) }}
+      {{- if not (empty .imagePullSecrets) }}
       imagePullSecrets:
-        {{- toYaml $.Values.imagePullSecrets | nindent 8 }}
+        {{- toYaml .imagePullSecrets | nindent 8 }}
       {{- end }}
 
 {{- end -}}

@@ -4,19 +4,20 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "pasportool.name" $ }}
+  name: {{ include "license.fullname" $ }}
   labels:
-    {{- include "pasportool.labels" $ | nindent 4 }}
+    {{- include "license.labels" $ | nindent 4 }}
 data:
   config.yaml: |
+    {{- with .license }}
     license:
-      path: {{ required "A valid $.Values.licensePath entry is required" .licensePath }}
+      path: {{ required "A valid $.Values.license.path entry is required" .path }}
       update-period: {{ .updatePeriod }}
       retry-period: {{ .retryPeriod }}
       warning-period: {{ .softBlockPeriod }}
     server:
-      host: 0.0.0.0
-      port: 8080
+      port: {{ .appPort }}
+    {{- end }}
     {{- with .dgctlStorage }}
     storage:
       type: s3

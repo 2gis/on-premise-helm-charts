@@ -1,17 +1,17 @@
-{{- with .Values.pasportool.ingress -}}
+{{- with .Values.ingress -}}
 {{- if .enabled -}}
 
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "pasportool.name" $ }}
+  name: {{ include "license.fullname" $ }}
   {{- if not (empty .annotations) }}
   annotations:
     {{- toYaml .annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "pasportool.labels" $ | nindent 4 }}
+    {{- include "license.labels" $ | nindent 4 }}
     {{- if not (empty .labels) }}
     {{- toYaml .labels | nindent 4 }}
     {{- end }}
@@ -22,7 +22,7 @@ spec:
   {{- if not (empty .tls) }}
   tls:
     {{- range $idx_tls := .tls }}
-    {{ $tls_path := printf "$.Values.pasportool.ingress.tls[%d]" $idx_tls }}
+    {{ $tls_path := printf "$.Values.ingress.tls[%d]" $idx_tls }}
     - hosts:
       {{- $hosts := required (print "A valid " $tls_path ".hosts entry is required") .hosts}}
       {{- range $idx_host := .hosts }}
@@ -32,9 +32,9 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- $hosts := required "A valid $.Values.pasportool.ingress.hosts entry is required" .hosts}}
+    {{- $hosts := required "A valid $.Values.ingress.hosts entry is required" .hosts}}
     {{- range $idx_host := $hosts }}
-    {{- $host_path := printf "$.Values.pasportool.ingress.hosts[%d]" $idx_host }}
+    {{- $host_path := printf "$.Values.ingress.hosts[%d]" $idx_host }}
     - host: {{ required (print "A valid " $host_path ".host entry is required") .host | quote }}
       http:
         paths:
@@ -45,7 +45,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "pasportool.name" $ }}
+                name: {{ include "license.fullname" $ }}
                 port:
                   name: http
           {{- end }}

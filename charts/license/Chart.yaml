@@ -1,7 +1,7 @@
 apiVersion: v2
-name: pasportool
+name: license
 type: application
-description: A Helm chart for Kubernetes to deploy pasportool licensing service
+description: A Helm chart for Kubernetes to deploy License service
 
 version: 1.4.5
 appVersion: 1.0.0
