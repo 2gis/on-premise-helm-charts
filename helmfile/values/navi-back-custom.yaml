@@ -14,6 +14,3 @@ resources:
   requests:
     cpu: 8
     memory: 50Gi
-
-serviceAccount:
-  create: false
