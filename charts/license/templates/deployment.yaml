@@ -47,10 +47,16 @@ spec:
             httpGet:
               port: http
               path: /healthcheck
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 5
           livenessProbe:
             httpGet:
               port: http
               path: /healthcheck
+            initialDelaySeconds: 60
+            timeoutSeconds: 40
+            failureThreshold: 3
           volumeMounts:
             - mountPath: /config
               name: config
