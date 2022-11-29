@@ -1,0 +1,99 @@
+{{- with .Values -}}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "license.fullname" $ }}
+  {{- if not (empty .annotations) }}
+  annotations:
+    {{- toYaml .annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "license.labels" $ | nindent 4 }}
+    {{- if not (empty .labels) }}
+    {{- toYaml .labels | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "license.selectorLabels" $ | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include "license.checksum" (dict "root" $ "path" "/configmap.yaml") }}
+        checksum/secret: {{ include "license.checksum" (dict "root" $ "path" "/secret.yaml") }}
+        {{- if not (empty .podAnnotations) }}
+        {{- toYaml .podAnnotations | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "license.labels" $ | nindent 8 }}
+        {{- if not (empty .podLabels) }}
+        {{- toYaml .podLabels | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+        - name: license
+          {{- with .image }}
+          image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .repository }}:{{ .tag }}"
+          imagePullPolicy: {{ .pullPolicy }}
+          {{- end }}
+          command: ["/license"]
+          ports:
+            - containerPort: {{ .license.appPort }}
+              name: http
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /healthcheck
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /healthcheck
+            initialDelaySeconds: 60
+            timeoutSeconds: 40
+            failureThreshold: 3
+          volumeMounts:
+            - mountPath: /config
+              name: config
+          env:
+            - name: CONFIG_PATH
+              value: /config/config.yaml
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "license.fullname" $ }}
+                  key: s3AccessKey
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "license.fullname" $ }}
+                  key: s3SecretKey
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "license.fullname" $ }}
+      {{- if not (empty .nodeSelector) }}
+      nodeSelector:
+        {{- toYaml .nodeSelector | nindent 8 }}
+      {{- end }}
+      {{- if not (empty .affinity) }}
+      affinity:
+        {{- toYaml .affinity | nindent 8 }}
+      {{- end }}
+      {{- if not (empty .tolerations) }}
+      tolerations:
+        {{- toYaml .tolerations | nindent 8 }}
+      {{- end }}
+      {{- if not (empty .imagePullSecrets) }}
+      imagePullSecrets:
+        {{- toYaml .imagePullSecrets | nindent 8 }}
+      {{- end }}
+
+{{- end -}}

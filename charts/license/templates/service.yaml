@@ -1,0 +1,26 @@
+{{- with .Values.service -}}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "license.fullname" $ }}
+  {{- if not (empty .annotations) }}
+  annotations:
+    {{- toYaml .annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "license.labels" $ | nindent 4 }}
+    {{- if not (empty .labels) }}
+    {{- toYaml .labels | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    {{- include "license.selectorLabels" $ | nindent 4 }}
+  type: {{ .type }}
+  ports:
+    - port: {{ .port }}
+      name: http
+      targetPort: http
+
+{{- end -}}
