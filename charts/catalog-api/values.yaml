@@ -36,11 +36,11 @@ pdb:
 
 # @section Deployment Artifacts Storage settings
 
-# @param dgctlStorage.host S3 host. Format: `host:port`
-# @param dgctlStorage.bucket S3 bucket name
-# @param dgctlStorage.accessKey S3 access key for accessing the bucket
-# @param dgctlStorage.secretKey S3 secret key for accessing the bucket
-# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate
+# @param dgctlStorage.host S3 host. Format: `host:port`. **required**
+# @param dgctlStorage.bucket S3 bucket name. **required**
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket. **required**
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **required**
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **required**
 
 dgctlStorage:
   host: ''
@@ -132,19 +132,19 @@ api:
 
   # @section Database settings
 
-  # @param api.postgres.host PostgreSQL rw/ro host
+  # @param api.postgres.host PostgreSQL rw/ro hostname or ip. **required**
   # @param api.postgres.port PostgreSQL port
-  # @param api.postgres.name PostgreSQL database name
-  # @param api.postgres.username PostgreSQL username
-  # @param api.postgres.password PostgreSQL password
+  # @param api.postgres.name PostgreSQL database name. **required**
+  # @param api.postgres.username PostgreSQL username. **required**
+  # @param api.postgres.password PostgreSQL password. **required**
   # @param api.postgres.queryTimeout Max execution time PostgreSQL query timeout in seconds
 
   postgres:
-    host: postgres.host
+    host: ''
     port: 5432
-    name: catalog
-    username: postgres
-    password: secret
+    name: ''
+    username: ''
+    password: ''
     queryTimeout: 3
 
   # @section Preloaders settings
@@ -156,24 +156,24 @@ api:
 
 # @section Search settings
 
-# @param search.host URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster
+# @param search.url URL of the Search service, ex: http://{search-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **required**
 
 search:
-  host: http://search-api.host
+  url: ''
 
 
 # @section Keys settings
 
-# @param keys.host URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster
+# @param keys.url URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **required**
 # @param keys.requestTimeout Timeout for requests to the Keys API
-# @param keys.tokens.places Places API key (if available)
-# @param keys.tokens.geocoder Geocoder API key (if available)
-# @param keys.tokens.suggest Suggest API key (if available)
-# @param keys.tokens.categories Categories API key (if available)
-# @param keys.tokens.regions Regions API key (if available)
+# @param keys.tokens.places Places API key
+# @param keys.tokens.geocoder Geocoder API key
+# @param keys.tokens.suggest Suggest API key
+# @param keys.tokens.categories Categories API key
+# @param keys.tokens.regions Regions API key
 
 keys:
-  host: http://keys-api.host
+  url: ''
   requestTimeout: 5s
   tokens:
     places: ''
@@ -213,19 +213,19 @@ importer:
 
   # @section importer.postgres **Database settings**
 
-  # @param importer.postgres.host PostgreSQL rw host
+  # @param importer.postgres.host PostgreSQL rw hostname or ip. **required**
   # @param importer.postgres.port PostgreSQL port
-  # @param importer.postgres.name PostgreSQL database name
-  # @param importer.postgres.username PostgreSQL username with rw access
-  # @param importer.postgres.password PostgreSQL password
+  # @param importer.postgres.name PostgreSQL database name. **required**
+  # @param importer.postgres.username PostgreSQL username with rw access. **required**
+  # @param importer.postgres.password PostgreSQL password. **required**
   # @param importer.postgres.schemaSwitchEnabled Automatic switch PostgreSQL schema on releases
 
   postgres:
-    host: postgres.host
+    host: ''
     port: 5432
-    name: catalog
-    username: postgres
-    password: secret
+    name: ''
+    username: ''
+    password: ''
     schemaSwitchEnabled: true
 
   # @section importer.persistentVolume **Persistent Volume settings**

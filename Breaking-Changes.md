@@ -1,4 +1,8 @@
 # 2GIS On-Premise Breaking-Changes
+## [1.4.X]
+#### catalog-api
+- Rename `search.host` to `search.url`
+- Rename `keys.host` to `keys.url`
 
 ## [1.4.5]
 
