@@ -45,9 +45,9 @@ onprem
 - name: CATALOG_DB_QUERY_TIMEOUT
   value: "{{ .Values.api.postgres.queryTimeout }}"
 - name: CATALOG_DB_BRANCH_URL
-  value: "jdbc:postgresql://{{ .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ .Values.api.postgres.name }}"
+  value: "jdbc:postgresql://{{ required "A valid .Values.api.postgres.host entry required" .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ required "A valid .Values.api.postgres.name entry required" .Values.api.postgres.name }}"
 - name: CATALOG_DB_BRANCH_LOGIN
-  value: "{{ .Values.api.postgres.username }}"
+  value: "{{ required "A valid .Values.api.postgres.username entry required" .Values.api.postgres.username }}"
 - name: CATALOG_DB_BRANCH_PASS
   valueFrom:
     secretKeyRef:
@@ -102,14 +102,14 @@ onprem
 
 {{- define "catalog.env.search" -}}
 - name: CATALOG_SAPPHIRE_URL
-  value: "{{ .Values.search.host }}"
+  value: "{{ required "A valid .Values.search.url entry required" .Values.search.url }}"
 {{- end }}
 
 {{- define "catalog.env.keys" -}}
 - name: CATALOG_KEYS_ENABLED
   value: "true"
 - name: CATALOG_KEYS_ENDPOINT
-  value: "{{ .Values.keys.host }}"
+  value: "{{ required "A valid .Values.keys.url entry required" .Values.keys.url }}"
 - name: CATALOG_KEYS_REQUEST_TIMEOUT
   value: "{{ .Values.keys.requestTimeout }}"
 - name: CATALOG_KEYS_SERVICE_CATALOG_KEY
@@ -157,13 +157,13 @@ onprem
 - name: IMPORTER_DB_CATALOG_SCHEMA_SWITCH_ENABLED
   value: "{{ .Values.importer.postgres.schemaSwitchEnabled }}"
 - name: IMPORTER_DB_CATALOG_HOST
-  value: "{{ .Values.importer.postgres.host }}"
+  value: "{{ required "A valid .Values.importer.postgres.host entry required" .Values.importer.postgres.host }}"
 - name: IMPORTER_DB_CATALOG_PORT
   value: "{{ .Values.importer.postgres.port }}"
 - name: IMPORTER_DB_CATALOG_NAME
-  value: "{{ .Values.importer.postgres.name }}"
+  value: "{{ required "A valid .Values.importer.postgres.name entry required" .Values.importer.postgres.name }}"
 - name: IMPORTER_DB_CATALOG_USERNAME
-  value: "{{ .Values.importer.postgres.username }}"
+  value: "{{ required "A valid .Values.importer.postgres.username entry required" .Values.importer.postgres.username }}"
 - name: IMPORTER_DB_CATALOG_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -184,7 +184,7 @@ onprem
       name: {{ include "catalog.secret.jobs.name" . }}
       key: dgctlStorageSecretKey
 - name: IMPORTER_MANIFEST_PATH
-  value: "{{ .Values.dgctlStorage.manifest }}"
+  value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
 - name: IMPORTER_WORKER_POOL_SIZE
   value: "{{ .Values.importer.workerNum }}"
 - name: IMPORTER_NUMBER_SCHEMA_BACKUPS

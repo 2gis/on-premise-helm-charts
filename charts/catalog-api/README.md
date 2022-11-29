@@ -50,13 +50,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                                                             | Value |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `dgctlStorage.host`      | S3 host. Format: `host:port`                                                                                                                                                                                                                            | `""`  |
-| `dgctlStorage.bucket`    | S3 bucket name                                                                                                                                                                                                                                          | `""`  |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket                                                                                                                                                                                                                  | `""`  |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket                                                                                                                                                                                                                  | `""`  |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate | `""`  |
+| Name                     | Description                                                                                                                                                                                                                                                           | Value |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `dgctlStorage.host`      | S3 host. Format: `host:port`. **Required**                                                                                                                                                                                                                            | `""`  |
+| `dgctlStorage.bucket`    | S3 bucket name. **Required**                                                                                                                                                                                                                                          | `""`  |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`  |
 
 
 ### API settings
@@ -71,7 +71,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description                                                                                   | Value                         |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ----------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag                                                                                           | `3.574.0`                     |
+| `api.image.tag`        | Tag                                                                                           | `3.580.0`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
 
 
@@ -118,14 +118,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Database settings
 
-| Name                        | Description                                            | Value           |
-| --------------------------- | ------------------------------------------------------ | --------------- |
-| `api.postgres.host`         | PostgreSQL rw/ro host                                  | `postgres.host` |
-| `api.postgres.port`         | PostgreSQL port                                        | `5432`          |
-| `api.postgres.name`         | PostgreSQL database name                               | `catalog`       |
-| `api.postgres.username`     | PostgreSQL username                                    | `postgres`      |
-| `api.postgres.password`     | PostgreSQL password                                    | `secret`        |
-| `api.postgres.queryTimeout` | Max execution time PostgreSQL query timeout in seconds | `3`             |
+| Name                        | Description                                            | Value  |
+| --------------------------- | ------------------------------------------------------ | ------ |
+| `api.postgres.host`         | PostgreSQL rw/ro hostname or ip. **Required**          | `""`   |
+| `api.postgres.port`         | PostgreSQL port                                        | `5432` |
+| `api.postgres.name`         | PostgreSQL database name. **Required**                 | `""`   |
+| `api.postgres.username`     | PostgreSQL username. **Required**                      | `""`   |
+| `api.postgres.password`     | PostgreSQL password. **Required**                      | `""`   |
+| `api.postgres.queryTimeout` | Max execution time PostgreSQL query timeout in seconds | `3`    |
 
 
 ### Preloaders settings
@@ -137,22 +137,22 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Search settings
 
-| Name          | Description                                                                                               | Value                    |
-| ------------- | --------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `search.host` | URL of the Search service. This URL should be accessible from all the pods within your Kubernetes cluster | `http://search-api.host` |
+| Name         | Description                                                                                                                                          | Value |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `search.url` | URL of the Search service, ex: http://{search-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`  |
 
 
 ### Keys settings
 
-| Name                     | Description                                                                                             | Value                  |
-| ------------------------ | ------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `keys.host`              | URL of the Keys service. This URL should be accessible from all the pods within your Kubernetes cluster | `http://keys-api.host` |
-| `keys.requestTimeout`    | Timeout for requests to the Keys API                                                                    | `5s`                   |
-| `keys.tokens.places`     | Places API key (if available)                                                                           | `""`                   |
-| `keys.tokens.geocoder`   | Geocoder API key (if available)                                                                         | `""`                   |
-| `keys.tokens.suggest`    | Suggest API key (if available)                                                                          | `""`                   |
-| `keys.tokens.categories` | Categories API key (if available)                                                                       | `""`                   |
-| `keys.tokens.regions`    | Regions API key (if available)                                                                          | `""`                   |
+| Name                     | Description                                                                                                                                      | Value |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `keys.url`               | URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`  |
+| `keys.requestTimeout`    | Timeout for requests to the Keys API                                                                                                             | `5s`  |
+| `keys.tokens.places`     | Places API key                                                                                                                                   | `""`  |
+| `keys.tokens.geocoder`   | Geocoder API key                                                                                                                                 | `""`  |
+| `keys.tokens.suggest`    | Suggest API key                                                                                                                                  | `""`  |
+| `keys.tokens.categories` | Categories API key                                                                                                                               | `""`  |
+| `keys.tokens.regions`    | Regions API key                                                                                                                                  | `""`  |
 
 
 ### Kubernetes Importer job settings
@@ -172,20 +172,20 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                        | Description                                                                                   | Value                              |
 | --------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `importer.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`        | Tag                                                                                           | `1.0.7`                            |
+| `importer.image.tag`        | Tag                                                                                           | `1.0.9`                            |
 | `importer.image.pullPolicy` | Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                     |
 
 
 ### importer.postgres **Database settings**
 
-| Name                                    | Description                                    | Value           |
-| --------------------------------------- | ---------------------------------------------- | --------------- |
-| `importer.postgres.host`                | PostgreSQL rw host                             | `postgres.host` |
-| `importer.postgres.port`                | PostgreSQL port                                | `5432`          |
-| `importer.postgres.name`                | PostgreSQL database name                       | `catalog`       |
-| `importer.postgres.username`            | PostgreSQL username with rw access             | `postgres`      |
-| `importer.postgres.password`            | PostgreSQL password                            | `secret`        |
-| `importer.postgres.schemaSwitchEnabled` | Automatic switch PostgreSQL schema on releases | `true`          |
+| Name                                    | Description                                      | Value  |
+| --------------------------------------- | ------------------------------------------------ | ------ |
+| `importer.postgres.host`                | PostgreSQL rw hostname or ip. **Required**       | `""`   |
+| `importer.postgres.port`                | PostgreSQL port                                  | `5432` |
+| `importer.postgres.name`                | PostgreSQL database name. **Required**           | `""`   |
+| `importer.postgres.username`            | PostgreSQL username with rw access. **Required** | `""`   |
+| `importer.postgres.password`            | PostgreSQL password. **Required**                | `""`   |
+| `importer.postgres.schemaSwitchEnabled` | Automatic switch PostgreSQL schema on releases   | `true` |
 
 
 ### importer.persistentVolume **Persistent Volume settings**

@@ -18,11 +18,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "pro.env.ui" -}}
 - name: URBI_API_URL
-  value: "{{ .Values.ui.api.host }}"
+  value: "{{ required "A valid .Values.ui.api.url entry required" .Values.ui.api.url }}"
 - name: MAPGL_HOST
-  value: "{{ .Values.ui.mapgl.host }}"
+  value: "{{ required "A valid .Values.ui.mapgl.host entry required" .Values.ui.mapgl.host }}"
 - name: MAPGL_KEY
-  value: "{{ .Values.ui.mapgl.key }}"
+  value: "{{ required "A valid .Values.ui.mapgl.key entry required" .Values.ui.mapgl.key }}"
 - name: LOG_LEVEL
   value: "{{ .Values.ui.logLevel }}"
 - name: IS_ON_PREM

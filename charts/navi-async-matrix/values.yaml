@@ -168,31 +168,31 @@ vpa:
 # @param dm.port Distance Matrix Async API HTTP port.
 # @param dm.configType Configuration type. Must always be `env`.
 # @param dm.workerCount Number of Distance Matrix Async workers.
-# @param dm.citiesUrl URL of the information about cities provided by the Navi-Castle service.
+# @param dm.citiesUrl URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required**
 # @param dm.citiesUpdatePeriod Period (in seconds) between requesting data from `citiesUrl`.
 
 dm:
   port: 8000
   configType: env
   workerCount: 4
-  citiesUrl: http://navi-castle.host/cities.conf
+  citiesUrl: ''
   citiesUpdatePeriod: 3600
 
 
 # @section Database settings
 
-# @param db.host PostgreSQL host.
+# @param db.host PostgreSQL hostname or ip. **Required**
 # @param db.port PostgreSQL port.
-# @param db.name PostgreSQL database name.
-# @param db.user PostgreSQL username.
-# @param db.password PostgreSQL password. Must be specified in overrides.
+# @param db.name PostgreSQL database name. **Required**
+# @param db.user PostgreSQL username. **Required**
+# @param db.password PostgreSQL password. **Required**
 
 db:
-  host: localhost
+  host: ''
   port: 5432
-  name: dm
-  user: dbuser
-  password: dbpassword
+  name: ''
+  user: ''
+  password: ''
 
 
 # @section Kafka settings
@@ -217,7 +217,7 @@ kafka:
   statusTopic: status_topic
   cancelTopic: cancel_topic
   properties:
-    bootstrap.servers: kafka.host:9092
+    bootstrap.servers: ''
     security.protocol: PLAINTEXT
   sensitiveProperties: {}
   fileProperties: {}
@@ -292,17 +292,17 @@ kafka:
 
 # @section S3-compatible storage settings
 
-# @param s3.host S3 endpoint URL.
-# @param s3.bucket S3 bucket name.
-# @param s3.accessKey S3 access key for accessing the bucket.
-# @param s3.secretKey S3 secret key for accessing the bucket.
+# @param s3.host S3 endpoint URL, ex: http://async-matrix-s3.host. **Required**
+# @param s3.bucket S3 bucket name. **Required**
+# @param s3.accessKey S3 access key for accessing the bucket. **Required**
+# @param s3.secretKey S3 secret key for accessing the bucket. **Required**
 # @param s3.publicNetloc Announce proxy URL for S3 results instead of s3.url if not empty.
 
 s3:
-  host: http://async-matrix-s3.host
-  bucket: samplebucket
-  accessKey: sampleid
-  secretKey: samplekey
+  host: ''
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
   publicNetloc:
 
 # @skip bss.enabled
@@ -316,9 +316,9 @@ bss:
 
 # @section API keys service
 
-# @param keys.host API keys service URL.
-# @param keys.token API token to authorize at the service.
+# @param keys.url API keys service URL, ex: http://keys-api.svc/service/v1/keys. **Required**
+# @param keys.token API token to authorize at the service. **Required**
 
 keys:
-  host: http://keys-api.host/service/v1/keys
+  url: ''
   token: ''

@@ -44,11 +44,11 @@ admin:
       cpu: 1
       memory: 384Mi
 
-  # @param admin.api Base URL for the admin API.
-  # @param admin.host Base URL for the admin web interface.
+  # @skip admin.apiOverride
+  # @param admin.host Base URL for the admin web interface, ex: https://keys-ui.ingress.host
 
-  api: https://keys-api.host
-  host: https://keys-ui.host
+  apiOverride: ''
+  host: ''
 
   # @param admin.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param admin.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -275,11 +275,11 @@ redis:
   password: ''
 
   # @param redis.useExternalRedis If true, external Redis server will be used.
-  # @param redis.host External Redis hostname.
+  # @param redis.host External Redis hostname or ip.
   # @param redis.db External Redis database number.
 
   useExternalRedis: false
-  host: redis.host
+  host: ''
   db: 1
 
   # @param redis.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -309,33 +309,33 @@ postgres:
 
   # @extra postgres.ro **Settings for the read-only access**
 
-  # @param postgres.ro.host PostgreSQL host.
+  # @param postgres.ro.host PostgreSQL hostname or ip. **Required**
   # @param postgres.ro.port PostgreSQL port.
-  # @param postgres.ro.name PostgreSQL database name.
-  # @param postgres.ro.username PostgreSQL username.
-  # @param postgres.ro.password PostgreSQL password.
+  # @param postgres.ro.name PostgreSQL database name. **Required**
+  # @param postgres.ro.username PostgreSQL username. **Required**
+  # @param postgres.ro.password PostgreSQL password. **Required**
 
   ro:
-    host: postgres.host
+    host: ''
     port: 5432
-    name: keys
-    username: keys
-    password: secret
+    name: ''
+    username: ''
+    password: ''
 
   # @extra postgres.rw **Settings for the read-write access**
 
-  # @param postgres.rw.host PostgreSQL host.
+  # @param postgres.rw.host PostgreSQL hostname or ip. **Required**
   # @param postgres.rw.port PostgreSQL port.
-  # @param postgres.rw.name PostgreSQL database name.
-  # @param postgres.rw.username PostgreSQL username.
-  # @param postgres.rw.password PostgreSQL password.
+  # @param postgres.rw.name PostgreSQL database name. **Required**
+  # @param postgres.rw.username PostgreSQL username. **Required**
+  # @param postgres.rw.password PostgreSQL password. **Required**
 
   rw:
-    host: postgres.host
+    host: ''
     port: 5432
-    name: keys
-    username: keys
-    password: secret
+    name: ''
+    username: ''
+    password: ''
 
 
 # @section LDAP connection settings
@@ -351,7 +351,7 @@ postgres:
 # @param ldap.rootCertificateAuthoritiesPath Path to the Root CA certificate.
 
 ldap:
-  host: ldap.host
+  host: ''
   port: 3268
 
   useStartTLS: false

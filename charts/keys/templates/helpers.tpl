@@ -104,21 +104,21 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.db" -}}
 - name: KEYS_DB_RO_HOST
-  value: "{{ .Values.postgres.ro.host }}"
+  value: "{{ required "A valid .Values.postgres.ro.host required" .Values.postgres.ro.host }}"
 - name: KEYS_DB_RO_PORT
   value: "{{ .Values.postgres.ro.port }}"
 - name: KEYS_DB_RO_NAME
-  value: "{{ .Values.postgres.ro.name }}"
+  value: "{{ required "A valid .Values.postgres.ro.name required" .Values.postgres.ro.name }}"
 - name: KEYS_DB_RO_USERNAME
-  value: "{{ .Values.postgres.ro.username }}"
+  value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username }}"
 - name: KEYS_DB_RW_HOST
-  value: "{{ .Values.postgres.rw.host }}"
+  value: "{{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host }}"
 - name: KEYS_DB_RW_PORT
   value: "{{ .Values.postgres.rw.port }}"
 - name: KEYS_DB_RW_NAME
-  value: "{{ .Values.postgres.rw.name }}"
+  value: "{{ required "A valid .Values.postgres.rw.name required" .Values.postgres.rw.name }}"
 - name: KEYS_DB_RW_USERNAME
-  value: "{{ .Values.postgres.rw.username }}"
+  value: "{{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username }}"
 {{- end }}
 
 {{- define "keys.env.db.deploys" -}}
@@ -213,5 +213,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: APP_HOST
   value: "{{ .Values.admin.host }}"
 - name: API_URL
-  value: "{{ .Values.admin.api }}"
+{{- if .Values.admin.apiOverride }}
+  value: "{{ .Values.admin.apiOverride }}"
+{{- else }}
+  value: "http://{{ include "keys.api.name" . }}"
+{{- end }}
 {{- end }}

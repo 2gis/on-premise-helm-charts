@@ -45,13 +45,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/traffic-proxy) to le
 
 ### Proxy server settings
 
-| Name                  | Description                                        | Value                            |
-| --------------------- | -------------------------------------------------- | -------------------------------- |
-| `proxy.host`          | URL for the proxy server to serve.                 | `https://traffic-proxy-api.host` |
-| `proxy.listen`        | Port for the proxy server to listen.               | `8080`                           |
-| `proxy.cache.enabled` | If caching should be enabled for the proxy server. | `true`                           |
-| `proxy.cache.age`     | Cache vailidity period.                            | `1m`                             |
-| `proxy.cache.size`    | Maximum cache size.                                | `32m`                            |
+| Name                  | Description                                                                             | Value  |
+| --------------------- | --------------------------------------------------------------------------------------- | ------ |
+| `proxy.host`          | URL for the proxy server to serve, ex: https://traffic0.edromaps.2gis.com. **Required** | `""`   |
+| `proxy.listen`        | Port for the proxy server to listen.                                                    | `8080` |
+| `proxy.cache.enabled` | If caching should be enabled for the proxy server.                                      | `true` |
+| `proxy.cache.age`     | Cache validity period.                                                                  | `1m`   |
+| `proxy.cache.size`    | Maximum cache size.                                                                     | `32m`  |
 
 
 ### Deployment settings

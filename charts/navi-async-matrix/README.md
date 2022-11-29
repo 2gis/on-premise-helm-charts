@@ -54,7 +54,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.1.0`                             |
+| `image.tag`        | Tag         | `1.2.0`                             |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 
@@ -139,24 +139,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Distance Matrix Async API settings
 
-| Name                    | Description                                                              | Value                                 |
-| ----------------------- | ------------------------------------------------------------------------ | ------------------------------------- |
-| `dm.port`               | Distance Matrix Async API HTTP port.                                     | `8000`                                |
-| `dm.configType`         | Configuration type. Must always be `env`.                                | `env`                                 |
-| `dm.workerCount`        | Number of Distance Matrix Async workers.                                 | `4`                                   |
-| `dm.citiesUrl`          | URL of the information about cities provided by the Navi-Castle service. | `http://navi-castle.host/cities.conf` |
-| `dm.citiesUpdatePeriod` | Period (in seconds) between requesting data from `citiesUrl`.            | `3600`                                |
+| Name                    | Description                                                                                                                   | Value  |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `dm.port`               | Distance Matrix Async API HTTP port.                                                                                          | `8000` |
+| `dm.configType`         | Configuration type. Must always be `env`.                                                                                     | `env`  |
+| `dm.workerCount`        | Number of Distance Matrix Async workers.                                                                                      | `4`    |
+| `dm.citiesUrl`          | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`   |
+| `dm.citiesUpdatePeriod` | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600` |
 
 
 ### Database settings
 
-| Name          | Description                                          | Value        |
-| ------------- | ---------------------------------------------------- | ------------ |
-| `db.host`     | PostgreSQL host.                                     | `localhost`  |
-| `db.port`     | PostgreSQL port.                                     | `5432`       |
-| `db.name`     | PostgreSQL database name.                            | `dm`         |
-| `db.user`     | PostgreSQL username.                                 | `dbuser`     |
-| `db.password` | PostgreSQL password. Must be specified in overrides. | `dbpassword` |
+| Name          | Description                             | Value  |
+| ------------- | --------------------------------------- | ------ |
+| `db.host`     | PostgreSQL hostname or ip. **Required** | `""`   |
+| `db.port`     | PostgreSQL port.                        | `5432` |
+| `db.name`     | PostgreSQL database name. **Required**  | `""`   |
+| `db.user`     | PostgreSQL username. **Required**       | `""`   |
+| `db.password` | PostgreSQL password. **Required**       | `""`   |
 
 
 ### Kafka settings
@@ -177,21 +177,21 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### S3-compatible storage settings
 
-| Name              | Description                                                       | Value                         |
-| ----------------- | ----------------------------------------------------------------- | ----------------------------- |
-| `s3.host`         | S3 endpoint URL.                                                  | `http://async-matrix-s3.host` |
-| `s3.bucket`       | S3 bucket name.                                                   | `samplebucket`                |
-| `s3.accessKey`    | S3 access key for accessing the bucket.                           | `sampleid`                    |
-| `s3.secretKey`    | S3 secret key for accessing the bucket.                           | `samplekey`                   |
-| `s3.publicNetloc` | Announce proxy URL for S3 results instead of s3.url if not empty. | `nil`                         |
+| Name              | Description                                                       | Value |
+| ----------------- | ----------------------------------------------------------------- | ----- |
+| `s3.host`         | S3 endpoint URL, ex: http://async-matrix-s3.host. **Required**    | `""`  |
+| `s3.bucket`       | S3 bucket name. **Required**                                      | `""`  |
+| `s3.accessKey`    | S3 access key for accessing the bucket. **Required**              | `""`  |
+| `s3.secretKey`    | S3 secret key for accessing the bucket. **Required**              | `""`  |
+| `s3.publicNetloc` | Announce proxy URL for S3 results instead of s3.url if not empty. | `nil` |
 
 
 ### API keys service
 
-| Name         | Description                            | Value                                  |
-| ------------ | -------------------------------------- | -------------------------------------- |
-| `keys.host`  | API keys service URL.                  | `http://keys-api.host/service/v1/keys` |
-| `keys.token` | API token to authorize at the service. | `""`                                   |
+| Name         | Description                                                                 | Value |
+| ------------ | --------------------------------------------------------------------------- | ----- |
+| `keys.url`   | API keys service URL, ex: http://keys-api.svc/service/v1/keys. **Required** | `""`  |
+| `keys.token` | API token to authorize at the service. **Required**                         | `""`  |
 
 
 ## Maintainers

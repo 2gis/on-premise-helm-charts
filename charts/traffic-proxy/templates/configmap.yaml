@@ -62,9 +62,9 @@ data:
           location / {
             {{ if .Values.proxy.upstreams }}
               proxy_pass         {{ .Values.proxy.protocol }}://backend;
-              proxy_set_header   Host {{ .Values.proxy.host }};
+              proxy_set_header   Host {{ required "A valid .Values.proxy.host required" .Values.proxy.host }};
             {{ else }}
-              proxy_pass         {{ .Values.proxy.host }};
+              proxy_pass         {{ required "A valid .Values.proxy.host required" .Values.proxy.host }};
             {{ end }}
               proxy_set_header   Upgrade $http_upgrade;
               proxy_set_header   Connection keep-alive;

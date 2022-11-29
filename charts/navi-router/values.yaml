@@ -46,12 +46,12 @@ image:
 
 # @param router.appPort Navi-Router service HTTP port.
 # @param router.additionalSections Additional configurations sections for the Navi-Router service.
-# @param router.castleHost URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @param router.castleHost URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 
 router:
   appPort: 8080
   additionalSections: ''
-  castleHost: http://navi-castle.host
+  castleHost: ''
 
 
 # @section Service account settings

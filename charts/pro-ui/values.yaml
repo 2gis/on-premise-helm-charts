@@ -57,10 +57,10 @@ ui:
 
   # @section 2GIS Pro API settings
 
-  # @param ui.api.host Base URL for the Pro API with protocol and trailing slash.
+  # @param ui.api.url Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/.
 
   api:
-    host: http://pro-api.host/
+    url: ''
 
   # @section MapGL JS API settings
 
