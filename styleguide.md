@@ -101,7 +101,10 @@ make charts/navi-back
 - Настройки, связанные с подключением к другим сервисам On-Premise, должны группироваться в блоки, названные 
 в соответствии с сервисом. Адрес сервиса должен указываться в настройке `url`. 
 Ключ для авторизации должен указываться в настройке `key`. Приложение, желательно, должно уметь обрабатывать url 
-в виде hostname, scheme://hostname, scheme://hostname:port. Примеры:
+в виде hostname, scheme://hostname, scheme://hostname:port. Если url является шаблоном, то это можно отразить в названии, 
+например `url_template: http://service-name.svc/{project}/{date_str}_{hour}.json`
+
+Примеры:
 
   ```yaml
   keys:
@@ -112,14 +115,13 @@ make charts/navi-back
 
   ```yaml
   catalog:
-    url: http://catalog-api.svc
+    url: http://catalog-api.ingress
     key: ''
   ```
 
   ```yaml
   navi:
-    url: http://navi-front.ingress
-    key: ''
+    url_template: http://restrictions.svc/{project}/{date_str}_{hour}.json
   ```
 
 ## Дефолтные значения
@@ -147,7 +149,7 @@ host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStora
 Поскольку в разных случаях нужно использовать урлы к сервисам либо внутри k8s, либо снаружи (ingess),
 то этот факт нужно отразить в документации параметра. Например, нужно использовать один из шаблонов:
 - `http://{service-name}.svc` или `{service-name}.svc` - если нужен внутренний адрес сервиса
-- `http(s)://{service-name}.ingress` - если нужен внешний адрес сервиса
+- `http(s)://{service-name}.ingress.host` - если нужен внешний адрес сервиса
 - `{service-name}.host` - если сервис может находится где угодно
 
 Примеры:
@@ -156,7 +158,7 @@ host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStora
 search:
   url: ''
 
-# @param env.MAPGL_TILES_API. Ex: https://tiles-api.ingress. Domain name of the Tiles API service.
+# @param env.MAPGL_TILES_API. Ex: http(s)://tiles-api.ingress. Domain name of the Tiles API service.
 env:
   MAPGL_TILES_API: ''
 
