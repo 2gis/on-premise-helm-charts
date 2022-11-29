@@ -36,8 +36,10 @@ cassandra-clusters:
 license:
   service-host: {{ required "Valid .Values.license.url required!" .Values.license.url }}
   retry-period: {{ .Values.license.retryPeriod }}
-  warn-text: {{ .Values.warningText }}
-  err-text: {{ .Values.errorText }}
+  warn-text: |
+      {{- .Values.warningText | replace "\\n" "\n" | trim | nindent 6 }}
+  err-text: |
+      {{- .Values.errorText | replace "\\n" "\n" | trim | nindent 6 }}
   sales-manager: {{ .Values.salesManager }}
 
 log-level: info
