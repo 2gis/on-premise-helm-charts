@@ -261,6 +261,7 @@ api:
 # @extra importer **Common settings**
 
 # @param importer.enabled If Importer job is enabled.
+# @param importer.serviceAccountOverride A custom service account for creating import/cleaning processes. If not defined it will be created automatically.
 # @param importer.workerNum Number of parallel import processes (workers).
 # @param importer.writerNum Number of write processes per import process (worker).
 
@@ -275,6 +276,7 @@ api:
 
 importer:
   enabled: true
+  serviceAccountOverride: ''
 
   # @extra importer.image **Docker image settings**
   # @param importer.image.repository Docker Repository.
@@ -286,6 +288,7 @@ importer:
     repository: 2gis-on-premise/tiles-api-importer
     tag: 4.31.0
     pullPolicy: IfNotPresent
+
 
   resources:
     requests:

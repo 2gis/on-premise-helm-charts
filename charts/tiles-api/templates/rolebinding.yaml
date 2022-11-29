@@ -11,7 +11,7 @@ metadata:
 
 subjects:
 - kind: ServiceAccount
-  name: {{ include "tiles.fullname" . }}
+  name: {{ include "importer.serviceAccount" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

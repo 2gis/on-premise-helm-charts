@@ -53,3 +53,11 @@ dgis_tileserver_{{ .Values.type }}_{{ required "Valid .Values.cassandra.environm
 {{- include "importer.hook-annotations" . }}
 "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 {{- end}}
+
+{{- define "importer.serviceAccount" -}}
+{{- if empty $.Values.importer.serviceAccountOverride }}
+{{- include "tiles.fullname" . }}
+{{- else }}
+{{- $.Values.importer.serviceAccountOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}

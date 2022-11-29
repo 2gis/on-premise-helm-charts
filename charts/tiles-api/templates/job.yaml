@@ -17,7 +17,7 @@ spec:
     metadata:
       name: {{ include "tiles.fullname" . }}-importer
     spec:
-      serviceAccountName: {{ include "tiles.fullname" . }}
+      serviceAccountName: {{ include "importer.serviceAccount" . }}
 
       volumes:
         - name: tmp-volume
