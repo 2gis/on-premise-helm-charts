@@ -72,7 +72,7 @@ image:
 # @skip license.appPort
 
 license:
-  path: ''
+  path: 'license'
   updatePeriod: 1h
   retryPeriod: 30s
   softBlockPeriod: 2w

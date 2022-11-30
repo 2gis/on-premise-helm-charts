@@ -11,7 +11,7 @@ data:
   config.yaml: |
     {{- with .license }}
     license:
-      path: {{ required "A valid $.Values.license.path entry is required" .path }}
+      path: {{ .path }}
       update-period: {{ .updatePeriod }}
       retry-period: {{ .retryPeriod }}
       warning-period: {{ .softBlockPeriod }}
