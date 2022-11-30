@@ -60,6 +60,7 @@ api:
   # @param api.fcgiPort TCP port of the Search API
   # @param api.logLevel Log level
   # @param api.logFormat Log format: `json` or `plaintext`
+  # @param api.timeout Search timeout (in milliseconds)
   # @param api.configOpt Additional options (for debugging purposes)
 
   resources: {}
@@ -67,6 +68,7 @@ api:
   fcgiPort: 9090
   logLevel: Info
   logFormat: json
+  timeout: 5000
   configOpt: []
 
 
