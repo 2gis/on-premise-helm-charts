@@ -43,19 +43,24 @@ spec:
           ports:
             - containerPort: {{ .license.appPort }}
               name: http
-          readinessProbe:
+          startupProbe:
+            {{- $startupInitialDelaySeconds := 10 }}
+            {{- $startupPeriodSeconds := include "license.durationToSeconds" (dict "duration" $.Values.license.retryPeriod) }}
+            {{- $startupFailureThreshold := 3 }}
             httpGet:
               port: http
               path: /healthcheck
-            initialDelaySeconds: 10
+            initialDelaySeconds: {{ $startupInitialDelaySeconds }}
+            periodSeconds: {{ $startupPeriodSeconds }}
             timeoutSeconds: 10
-            failureThreshold: 5
+            failureThreshold: {{ $startupFailureThreshold }}
           livenessProbe:
             httpGet:
               port: http
               path: /healthcheck
-            initialDelaySeconds: 60
-            timeoutSeconds: 40
+            initialDelaySeconds: {{ add $startupInitialDelaySeconds (mul $startupPeriodSeconds $startupFailureThreshold) }}
+            periodSeconds: 40
+            timeoutSeconds: 10
             failureThreshold: 3
           volumeMounts:
             - mountPath: /config

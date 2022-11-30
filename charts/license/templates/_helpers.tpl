@@ -57,3 +57,12 @@ Checksum for configmap or secret
 {{- $ := .root -}}
 {{ (include (print $.Template.BasePath .path) $ | fromYaml).data | toYaml | sha256sum }}
 {{- end }}
+
+{{/*
+Converts duration (1h2m3s) to integer seconds, accepts { duration: <duration> }
+*/}}
+{{- define "license.durationToSeconds" -}}
+{{- $now := now -}}
+{{- $add := $now | dateModify .duration -}}
+{{ sub ($add | unixEpoch) ($now | unixEpoch) }}
+{{- end -}}
