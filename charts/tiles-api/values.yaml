@@ -32,8 +32,8 @@ serviceName: tiles-api-webgl
 name: tiles-api
 type: web
 
-warningText: License expiring in %d days.\nPlease contact your sales manager.\n%s
-errorText: License expired.\nPlease contact your sales manager.\n%s
+warningText: License expiring in %d days.\nPlease contact your account manager.\n%s
+errorText: License expired.\nPlease contact your account manager.\n%s
 salesManager: on-premise@2gis.com
 
 # @section Apache Cassandra Data Storage settings
