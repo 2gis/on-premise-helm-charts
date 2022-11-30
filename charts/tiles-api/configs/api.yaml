@@ -40,7 +40,7 @@ license:
       {{- .Values.warningText | replace "\\n" "\n" | trim | nindent 6 }}
   err-text: |
       {{- .Values.errorText | replace "\\n" "\n" | trim | nindent 6 }}
-  sales-manager: {{ .Values.salesManager }}
+  sales-manager: {{ .Values.emailManager }}
 
 log-level: info
 log-format: json
