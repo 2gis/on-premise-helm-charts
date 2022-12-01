@@ -99,7 +99,7 @@ service:
 ingress:
   enabled: false
   hosts:
-    - host: ''
+  - host: ''
 
 # @section Limits
 
