@@ -102,7 +102,7 @@ make charts/navi-back
 в соответствии с сервисом. Адрес сервиса должен указываться в настройке `url`. 
 Ключ для авторизации должен указываться в настройке `key`. Приложение, желательно, должно уметь обрабатывать url 
 в виде hostname, scheme://hostname, scheme://hostname:port. Если url является шаблоном, то это можно отразить в названии, 
-например `url_template: http://service-name.svc/{project}/{date_str}_{hour}.json`
+например `urlTemplate: http://service-name.svc/{project}/{date_str}_{hour}.json`
 
 Примеры:
 
@@ -121,7 +121,7 @@ make charts/navi-back
 
   ```yaml
   navi:
-    url_template: http://restrictions.svc/{project}/{date_str}_{hour}.json
+    urlTemplate: http://restrictions.svc/{project}/{date_str}_{hour}.json
   ```
 
 ## Дефолтные значения
