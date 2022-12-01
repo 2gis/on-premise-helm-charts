@@ -53,12 +53,12 @@ image:
 
 env:
   MAPGL_DEMO_KEY: empty
-  MAPGL_HOST: mapgl-api.host
-  MAPGL_TILES_API: tiles-api.host
-  MAPGL_TRAFFICSERVER: traffic-proxy.host
-  MAPGL_FLOORSSERVER: floors.api.2gis.ru
-  MAPGL_KEYSERVER: keys-api.host
-  MAPGL_RTLPLUGIN: https://mapgl-api.host/api/js/plugins/rtl-v1.0.0.js
+  MAPGL_HOST: https://mapgl-api.ingress.host
+  MAPGL_TILES_API: https://tiles-api.ingress.host
+  MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
+  MAPGL_FLOORSSERVER: https://floors.api.2gis.ru
+  MAPGL_KEYSERVER: https://keys-api.ingress.host
+  MAPGL_RTLPLUGIN: https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js
   MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
 
 
@@ -93,17 +93,11 @@ service:
 
 # @param ingress.enabled If Ingress is enabled for the service.
 # @param ingress.hosts[0].host Hostname for the Ingress service.
-# @param ingress.tls[0].hosts TLS hosts for the Ingress service.
-# @param ingress.tls[0].secretName Secret name to use for the Ingress service.
 
 ingress:
   enabled: false
   hosts:
   - host: mapgl-js-api.host
-  tls:
-  - hosts:
-    - mapgl-js-api.host
-    secretName: mapgl-js-api
 
 
 # @section Limits

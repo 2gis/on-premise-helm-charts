@@ -47,7 +47,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | Name               | Description | Value                   |
 | ------------------ | ----------- | ----------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/mapgl` |
-| `image.tag`        | Tag         | `v1.28.1`               |
+| `image.tag`        | Tag         | `1.32.1`                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
 
 
@@ -55,11 +55,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 | Name                      | Description                                            | Value                                                                                             |
 | ------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| `env.MAPGL_HOST`          | Domain name for MapGL JS API service.                  | `mapgl-api.host`                                                                                  |
-| `env.MAPGL_TILES_API`     | Domain name of the Tiles API service.                  | `tiles-api.host`                                                                                  |
-| `env.MAPGL_TRAFFICSERVER` | Domain name of the Traffic Proxy service.              | `traffic-proxy.host`                                                                              |
-| `env.MAPGL_KEYSERVER`     | Domain name of the API Keys service.                   | `keys-api.host`                                                                                   |
-| `env.MAPGL_RTLPLUGIN`     | URL of the plugin for right-to-left languages support. | `https://mapgl-api.host/api/js/plugins/rtl-v1.0.0.js`                                             |
+| `env.MAPGL_HOST`          | Domain name for MapGL JS API service.                  | `https://mapgl-api.ingress.host`                                                                  |
+| `env.MAPGL_TILES_API`     | Domain name of the Tiles API service.                  | `https://tiles-api.ingress.host`                                                                  |
+| `env.MAPGL_TRAFFICSERVER` | Domain name of the Traffic Proxy service.              | `https://traffic-proxy.ingress.host`                                                              |
+| `env.MAPGL_KEYSERVER`     | Domain name of the API Keys service.                   | `https://keys-api.ingress.host`                                                                   |
+| `env.MAPGL_RTLPLUGIN`     | URL of the plugin for right-to-left languages support. | `https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js`                                     |
 | `env.MAPGL_RTLPLUGINHASH` | SHA512 hash of the RTL plugin.                         | `sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==` |
 
 
@@ -84,12 +84,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                        | Description                                 | Value                   |
-| --------------------------- | ------------------------------------------- | ----------------------- |
-| `ingress.enabled`           | If Ingress is enabled for the service.      | `false`                 |
-| `ingress.hosts[0].host`     | Hostname for the Ingress service.           | `mapgl-js-api.host`     |
-| `ingress.tls[0].hosts`      | TLS hosts for the Ingress service.          | `["mapgl-js-api.host"]` |
-| `ingress.tls[0].secretName` | Secret name to use for the Ingress service. | `mapgl-js-api`          |
+| Name                    | Description                            | Value               |
+| ----------------------- | -------------------------------------- | ------------------- |
+| `ingress.enabled`       | If Ingress is enabled for the service. | `false`             |
+| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `mapgl-js-api.host` |
 
 
 ### Limits

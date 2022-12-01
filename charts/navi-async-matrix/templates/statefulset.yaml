@@ -119,17 +119,17 @@ spec:
             - name: CONFIG_TYPE
               value: {{ .Values.dm.configType | quote }}
             - name: DM_ASYNC_SERVICE_CITIES_SETTING__LINK_TO_CITIES_FILE
-              value: {{ .Values.dm.citiesUrl | quote }}
+              value: {{ required "A valid .Values.dm.citiesUrl entry required" .Values.dm.citiesUrl | quote }}
             - name: DM_ASYNC_SERVICE_CITIES_SETTING__CITIES_INFO_UPDATE_PERIOD
               value: {{ .Values.dm.citiesUpdatePeriod | quote }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_USE_MINIO
               value: 'true'
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__AWS_ACCESS_KEY_ID
-              value: {{ .Values.s3.accessKey | quote }}
+              value: {{ required "A valid .Values.s3.accessKey entry required" .Values.s3.accessKey | quote }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__S3_ENDPOINT_URL
-              value: {{ .Values.s3.host | quote }}
+              value: {{ required "A valid .Values.s3.host entry required" .Values.s3.host | quote }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__S3_BUCKET
-              value: {{ .Values.s3.bucket | quote }}
+              value: {{ required "A valid .Values.s3.bucket entry required" .Values.s3.bucket | quote }}
             {{- if .Values.s3.publicNetloc }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC
               value: {{ .Values.s3.publicNetloc | quote }}
@@ -167,7 +167,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: DM_ASYNC_SERVICE_KMS__URL
-              value: {{ .Values.keys.host | quote }}
+              value: {{ .Values.keys.url | quote }}
             {{- if .Values.bss.enabled }}
             - name: DM_ASYNC_SERVICE_BSS__URL
               value: {{ .Values.bss.url | quote }}

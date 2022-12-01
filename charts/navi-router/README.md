@@ -48,26 +48,26 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                         |
 | ------------------ | ----------- | ----------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-router` |
-| `image.tag`        | Tag         | `6.6.0`                       |
+| `image.tag`        | Tag         | `6.6.1`                       |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
 
 ### Navi-Router service settings
 
-| Name                        | Description                                                                                                      | Value                     |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `router.appPort`            | Navi-Router service HTTP port.                                                                                   | `8080`                    |
-| `router.additionalSections` | Additional configurations sections for the Navi-Router service.                                                  | `""`                      |
-| `router.castleHost`         | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster. | `http://navi-castle.host` |
+| Name                        | Description                                                                                                                                  | Value  |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `router.appPort`            | Navi-Router service HTTP port.                                                                                                               | `8080` |
+| `router.additionalSections` | Additional configurations sections for the Navi-Router service.                                                                              | `""`   |
+| `router.castleHost`         | URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster. | `""`   |
 
 
 ### Service account settings
 
-| Name                         | Description                                                                                                             | Value  |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `true` |
-| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`   |
-| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
+| Name                         | Description                                                                                                             | Value   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
+| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
+| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
 
 ### Strategy settings

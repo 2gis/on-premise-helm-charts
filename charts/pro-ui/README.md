@@ -34,7 +34,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name                  | Description                    | Value                    |
 | --------------------- | ------------------------------ | ------------------------ |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/pro-ui` |
-| `ui.image.tag`        | Tag                            | `1.0.0`                  |
+| `ui.image.tag`        | Tag                            | `0.1.0`                  |
 | `imagePullPolicy`     | Pull Policy                    | `IfNotPresent`           |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                     |
 
@@ -51,16 +51,16 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### 2GIS Pro API settings
 
-| Name          | Description                                                | Value                  |
-| ------------- | ---------------------------------------------------------- | ---------------------- |
-| `ui.api.host` | Base URL for the Pro API with protocol and trailing slash. | `http://pro-api.host/` |
+| Name         | Description                                                                                  | Value |
+| ------------ | -------------------------------------------------------------------------------------------- | ----- |
+| `ui.api.url` | Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/. | `""`  |
 
 
 ### MapGL JS API settings
 
 | Name            | Description                                                                                                                      | Value            |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `ui.mapgl.host` | FQDN (domain or ip) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol and trailing slash. | `mapgl-api.host` |
+| `ui.mapgl.host` | FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol and trailing slash. | `mapgl-api.host` |
 | `ui.mapgl.key`  | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                                    | `""`             |
 
 

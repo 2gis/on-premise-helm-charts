@@ -87,8 +87,8 @@ cassandra:
 
 # @extra proxy.access **API Keys service access settings**
 # @param proxy.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
-# @param proxy.access.host API Keys endpoint hostname.
-# @param proxy.access.token Service key for Keys API.
+# @param proxy.access.url API Keys endpoint url, ex: http://keys-api.svc. **Required**
+# @param proxy.access.token Service key for Keys API. **Required**
 # @param proxy.access.syncPeriod Proxy sync period.
 
 proxy:
@@ -110,7 +110,7 @@ proxy:
 
   access:
     enabled: false
-    host: http://keys-api.host
+    url: ''
     token: ''
     syncPeriod: 2m
 

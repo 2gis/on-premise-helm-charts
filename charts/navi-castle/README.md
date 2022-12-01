@@ -33,9 +33,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | ------------------------- | ------------------------------------- | ----------------------------- |
 | `castle.image.repository` | Navi-Castle service image repository. | `2gis-on-premise/navi-castle` |
 | `castle.image.pullPolicy` | Navi-Castle service pull policy.      | `IfNotPresent`                |
-| `castle.image.tag`        | Navi-Castle service image tag.        | `1.0.6.1`                     |
+| `castle.image.tag`        | Navi-Castle service image tag.        | `1.0.7`                       |
 | `nginx.image.repository`  | Navi-Front image repository.          | `2gis-on-premise/navi-front`  |
-| `nginx.image.tag`         | Navi-Front image tag.                 | `1.21-ad06a0e0`               |
+| `nginx.image.tag`         | Navi-Front image tag.                 | `1.21.2`                      |
 
 
 ### Deployment Artifacts Storage settings
@@ -67,11 +67,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Service account settings
 
-| Name                         | Description                                                                                                             | Value  |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `true` |
-| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`   |
-| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
+| Name                         | Description                                                                                                             | Value   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
+| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
+| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
 
 ### Service settings

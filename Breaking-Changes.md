@@ -1,4 +1,20 @@
 # 2GIS On-Premise Breaking-Changes
+## [1.4.7]
+#### catalog-api
+- Rename `search.host` to `search.url`
+- Rename `keys.host` to `keys.url`
+
+#### keys
+- Remove `admin.api`
+
+#### tiles-api
+- Rename `proxy.access.host` to `proxy.access.url`
+
+#### navi-async-matrix
+- Renamed `keys.host` to `keys.url`
+
+#### pro-ui
+- Renamed `api.host` to `api.url`
 
 ## [1.4.5]
 

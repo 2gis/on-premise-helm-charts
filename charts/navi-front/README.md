@@ -48,7 +48,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                        |
 | ------------------ | ----------- | ---------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-front` |
-| `image.tag`        | Tag         | `1.21-ad06a0e0`              |
+| `image.tag`        | Tag         | `1.21.2`                     |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`               |
 
 
@@ -61,11 +61,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Service account settings
 
-| Name                         | Description                                                                                                             | Value  |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `true` |
-| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`   |
-| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
+| Name                         | Description                                                                                                             | Value   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
+| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
+| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
 
 ### Service settings

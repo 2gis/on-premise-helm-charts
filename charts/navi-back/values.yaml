@@ -59,7 +59,7 @@ image:
 # @param naviback.dump.query Dump queries in logs.
 # @param naviback.dump.answer Dump answers in logs.
 # @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
-# @param naviback.castleHost URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @param naviback.castleHost URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @extra naviback.indices List of dynamic indices kill switches.
 # @skip naviback.indices.carOptions.enabled
 # @skip naviback.indices.countryCarOptions.enabled
@@ -110,7 +110,7 @@ naviback:
     query: false
     answer: false
   logLevel: Info
-  castleHost: http://navi-castle.host
+  castleHost: ''
   indices:
     carOptions:
       enabled: false
@@ -345,17 +345,17 @@ kafka:
 # @section S3-compatible storage settings for interacting with Distance Matrix Async Service
 
 # @param s3.enabled if S3 storage is enabled.
-# @param s3.host S3 endpoint URL.
+# @param s3.host S3 endpoint URL, ex: http://async-matrix-s3.host
 # @param s3.bucket S3 bucket name.
 # @param s3.accessKey S3 access key for accessing the bucket.
 # @param s3.secretKey S3 secret key for accessing the bucket.
 
 s3:
   enabled: false
-  host: http://async-matrix-s3.host
-  bucket: samplebucket
-  accessKey: sampleid
-  secretKey: samplekey
+  host: ''
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
 
 # @param livenessProbeDelay initial delay for liveness probes
 # @param readinessProbeDelay initial delay for readiness probes

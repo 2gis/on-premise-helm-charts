@@ -49,49 +49,49 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `6.12.0`                    |
+| `image.tag`        | Tag         | `6.16.0`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 
 ### Navi-Back application settings
 
-| Name                                   | Description                                                                                                                                                                                               | Value                     |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `naviback.ecaHost`                     | Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.                       |                           |
-| `naviback.forecastHost`                | URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster. |                           |
-| `naviback.dmSourcesLimit`              | Size limit for source matrices.                                                                                                                                                                           | `1000`                    |
-| `naviback.dmTargetsLimit`              | Size limit for target matrices.                                                                                                                                                                           | `1000`                    |
-| `naviback.handlersNumber`              | Number of HTTP handlers.                                                                                                                                                                                  | `1`                       |
-| `naviback.maxProcessTime`              | Maximum processing time limit in minutes.                                                                                                                                                                 | `600`                     |
-| `naviback.responseTimelimit`           | Maximum response time limit in minutes.                                                                                                                                                                   | `60`                      |
-| `naviback.requestTimeout`              | Maximum request time limit in minutes.                                                                                                                                                                    | `60`                      |
-| `naviback.dump.result`                 | Dump results in logs.                                                                                                                                                                                     | `false`                   |
-| `naviback.dump.query`                  | Dump queries in logs.                                                                                                                                                                                     | `false`                   |
-| `naviback.dump.answer`                 | Dump answers in logs.                                                                                                                                                                                     | `false`                   |
-| `naviback.logLevel`                    | Logging level, one of: Verbose, Info, Warning, Error, Fatal.                                                                                                                                              | `Info`                    |
-| `naviback.castleHost`                  | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.                                                                                          | `http://navi-castle.host` |
-| `naviback.indices`                     | List of dynamic indices kill switches.                                                                                                                                                                    |                           |
-| `naviback.additionalSections`          | Optinal JSON block to be added to config file as-is.                                                                                                                                                      |                           |
-| `naviback.simpleNetwork.bicycle`       | Enable simple network for bicycle routing                                                                                                                                                                 |                           |
-| `naviback.simpleNetwork.car`           | Enable simple network for auto routing                                                                                                                                                                    |                           |
-| `naviback.simpleNetwork.emergency`     | Enable simple network for emergency vehicles routing                                                                                                                                                      | `false`                   |
-| `naviback.simpleNetwork.pedestrian`    | Enable simple network for pedestrian routing                                                                                                                                                              |                           |
-| `naviback.simpleNetwork.taxi`          | Enable simple network for taxi routing                                                                                                                                                                    |                           |
-| `naviback.simpleNetwork.truck`         | Enable simple network for truck routing                                                                                                                                                                   |                           |
-| `naviback.attractor.bicycle`           | Enable enhanced attractor for bicycle routing                                                                                                                                                             |                           |
-| `naviback.attractor.car`               | Enable enhanced attractor for auto routing                                                                                                                                                                |                           |
-| `naviback.attractor.pedestrian`        | Enable enhanced attractor for pedestrian routing                                                                                                                                                          |                           |
-| `naviback.attractor.taxi`              | Enable enhanced attractor for taxi routing                                                                                                                                                                |                           |
-| `naviback.reduceEdgesOptimizationFlag` | Enable optimizations for distance matrix queries processing                                                                                                                                               |                           |
+| Name                                   | Description                                                                                                                                                                                               | Value   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `naviback.ecaHost`                     | Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.                       |         |
+| `naviback.forecastHost`                | URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster. |         |
+| `naviback.dmSourcesLimit`              | Size limit for source matrices.                                                                                                                                                                           | `1000`  |
+| `naviback.dmTargetsLimit`              | Size limit for target matrices.                                                                                                                                                                           | `1000`  |
+| `naviback.handlersNumber`              | Number of HTTP handlers.                                                                                                                                                                                  | `1`     |
+| `naviback.maxProcessTime`              | Maximum processing time limit in minutes.                                                                                                                                                                 | `600`   |
+| `naviback.responseTimelimit`           | Maximum response time limit in minutes.                                                                                                                                                                   | `60`    |
+| `naviback.requestTimeout`              | Maximum request time limit in minutes.                                                                                                                                                                    | `60`    |
+| `naviback.dump.result`                 | Dump results in logs.                                                                                                                                                                                     | `false` |
+| `naviback.dump.query`                  | Dump queries in logs.                                                                                                                                                                                     | `false` |
+| `naviback.dump.answer`                 | Dump answers in logs.                                                                                                                                                                                     | `false` |
+| `naviback.logLevel`                    | Logging level, one of: Verbose, Info, Warning, Error, Fatal.                                                                                                                                              | `Info`  |
+| `naviback.castleHost`                  | URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster.                                                              | `""`    |
+| `naviback.indices`                     | List of dynamic indices kill switches.                                                                                                                                                                    |         |
+| `naviback.additionalSections`          | Optinal JSON block to be added to config file as-is.                                                                                                                                                      |         |
+| `naviback.simpleNetwork.bicycle`       | Enable simple network for bicycle routing                                                                                                                                                                 |         |
+| `naviback.simpleNetwork.car`           | Enable simple network for auto routing                                                                                                                                                                    |         |
+| `naviback.simpleNetwork.emergency`     | Enable simple network for emergency vehicles routing                                                                                                                                                      | `false` |
+| `naviback.simpleNetwork.pedestrian`    | Enable simple network for pedestrian routing                                                                                                                                                              |         |
+| `naviback.simpleNetwork.taxi`          | Enable simple network for taxi routing                                                                                                                                                                    |         |
+| `naviback.simpleNetwork.truck`         | Enable simple network for truck routing                                                                                                                                                                   |         |
+| `naviback.attractor.bicycle`           | Enable enhanced attractor for bicycle routing                                                                                                                                                             |         |
+| `naviback.attractor.car`               | Enable enhanced attractor for auto routing                                                                                                                                                                |         |
+| `naviback.attractor.pedestrian`        | Enable enhanced attractor for pedestrian routing                                                                                                                                                          |         |
+| `naviback.attractor.taxi`              | Enable enhanced attractor for taxi routing                                                                                                                                                                |         |
+| `naviback.reduceEdgesOptimizationFlag` | Enable optimizations for distance matrix queries processing                                                                                                                                               |         |
 
 
 ### Service account settings
 
-| Name                         | Description                                                                                                             | Value  |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `true` |
-| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`   |
-| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
+| Name                         | Description                                                                                                             | Value   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
+| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
+| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
 
 ### Service settings
@@ -181,15 +181,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### S3-compatible storage settings for interacting with Distance Matrix Async Service
 
-| Name                  | Description                             | Value                         |
-| --------------------- | --------------------------------------- | ----------------------------- |
-| `s3.enabled`          | if S3 storage is enabled.               | `false`                       |
-| `s3.host`             | S3 endpoint URL.                        | `http://async-matrix-s3.host` |
-| `s3.bucket`           | S3 bucket name.                         | `samplebucket`                |
-| `s3.accessKey`        | S3 access key for accessing the bucket. | `sampleid`                    |
-| `s3.secretKey`        | S3 secret key for accessing the bucket. | `samplekey`                   |
-| `livenessProbeDelay`  | initial delay for liveness probes       | `60`                          |
-| `readinessProbeDelay` | initial delay for readiness probes      | `75`                          |
+| Name                  | Description                                      | Value   |
+| --------------------- | ------------------------------------------------ | ------- |
+| `s3.enabled`          | if S3 storage is enabled.                        | `false` |
+| `s3.host`             | S3 endpoint URL, ex: http://async-matrix-s3.host | `""`    |
+| `s3.bucket`           | S3 bucket name.                                  | `""`    |
+| `s3.accessKey`        | S3 access key for accessing the bucket.          | `""`    |
+| `s3.secretKey`        | S3 secret key for accessing the bucket.          | `""`    |
+| `livenessProbeDelay`  | initial delay for liveness probes                | `60`    |
+| `readinessProbeDelay` | initial delay for readiness probes               | `75`    |
 
 
 ## Maintainers

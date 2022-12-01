@@ -15,7 +15,7 @@ proxy:
 access:
   enabled: {{ .access.enabled }}
   sync-period: {{ .access.syncPeriod }}
-  host: {{ .access.host }}
+  host: {{ .access.url }}
   token: {{ .access.token }}
 
 storage:
