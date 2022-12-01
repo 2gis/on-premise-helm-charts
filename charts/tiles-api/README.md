@@ -213,7 +213,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 | Name                  | Description                                                                                     | Value |
 | --------------------- | ----------------------------------------------------------------------------------------------- | ----- |
-| `license.url`         | Address of the License service. Ex.: {service-name}.svc                                         | `""`  |
+| `license.url`         | Address of the License service. Ex: http(s)://license.svc                                       | `""`  |
 | `license.retryPeriod` | Duration how often tiles server should try to update license status if it is failing to get it. | `30s` |
 
 
