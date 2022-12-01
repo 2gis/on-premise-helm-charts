@@ -9,8 +9,6 @@ keys
 	keys-backend:1.39.0
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.3.0
-license
-	license:1.0.0
 mapgl-js-api
 	mapgl:1.32.1
 navi-async-matrix
