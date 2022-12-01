@@ -132,7 +132,7 @@ api:
 
   # @section Database settings
 
-  # @param api.postgres.host PostgreSQL rw/ro hostname or ip. **Required**
+  # @param api.postgres.host PostgreSQL rw/ro hostname or IP. **Required**
   # @param api.postgres.port PostgreSQL port
   # @param api.postgres.name PostgreSQL database name. **Required**
   # @param api.postgres.username PostgreSQL username. **Required**
@@ -213,7 +213,7 @@ importer:
 
   # @section importer.postgres **Database settings**
 
-  # @param importer.postgres.host PostgreSQL rw hostname or ip. **Required**
+  # @param importer.postgres.host PostgreSQL rw hostname or IP. **Required**
   # @param importer.postgres.port PostgreSQL port
   # @param importer.postgres.name PostgreSQL database name. **Required**
   # @param importer.postgres.username PostgreSQL username with rw access. **Required**

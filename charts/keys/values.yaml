@@ -275,7 +275,7 @@ redis:
   password: ''
 
   # @param redis.useExternalRedis If true, external Redis server will be used.
-  # @param redis.host External Redis hostname or ip.
+  # @param redis.host External Redis hostname or IP.
   # @param redis.db External Redis database number.
 
   useExternalRedis: false
@@ -309,7 +309,7 @@ postgres:
 
   # @extra postgres.ro **Settings for the read-only access**
 
-  # @param postgres.ro.host PostgreSQL hostname or ip. **Required**
+  # @param postgres.ro.host PostgreSQL hostname or IP. **Required**
   # @param postgres.ro.port PostgreSQL port.
   # @param postgres.ro.name PostgreSQL database name. **Required**
   # @param postgres.ro.username PostgreSQL username. **Required**
@@ -324,7 +324,7 @@ postgres:
 
   # @extra postgres.rw **Settings for the read-write access**
 
-  # @param postgres.rw.host PostgreSQL hostname or ip. **Required**
+  # @param postgres.rw.host PostgreSQL hostname or IP. **Required**
   # @param postgres.rw.port PostgreSQL port.
   # @param postgres.rw.name PostgreSQL database name. **Required**
   # @param postgres.rw.username PostgreSQL username. **Required**

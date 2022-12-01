@@ -120,7 +120,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 | Name                        | Description                                            | Value  |
 | --------------------------- | ------------------------------------------------------ | ------ |
-| `api.postgres.host`         | PostgreSQL rw/ro hostname or ip. **Required**          | `""`   |
+| `api.postgres.host`         | PostgreSQL rw/ro hostname or IP. **Required**          | `""`   |
 | `api.postgres.port`         | PostgreSQL port                                        | `5432` |
 | `api.postgres.name`         | PostgreSQL database name. **Required**                 | `""`   |
 | `api.postgres.username`     | PostgreSQL username. **Required**                      | `""`   |
@@ -180,7 +180,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 | Name                                    | Description                                      | Value  |
 | --------------------------------------- | ------------------------------------------------ | ------ |
-| `importer.postgres.host`                | PostgreSQL rw hostname or ip. **Required**       | `""`   |
+| `importer.postgres.host`                | PostgreSQL rw hostname or IP. **Required**       | `""`   |
 | `importer.postgres.port`                | PostgreSQL port                                  | `5432` |
 | `importer.postgres.name`                | PostgreSQL database name. **Required**           | `""`   |
 | `importer.postgres.username`            | PostgreSQL username with rw access. **Required** | `""`   |

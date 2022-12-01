@@ -60,7 +60,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 | Name            | Description                                                                                                                      | Value            |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `ui.mapgl.host` | FQDN (domain or ip) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol and trailing slash. | `mapgl-api.host` |
+| `ui.mapgl.host` | FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol and trailing slash. | `mapgl-api.host` |
 | `ui.mapgl.key`  | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                                    | `""`             |
 
 

@@ -181,7 +181,7 @@ dm:
 
 # @section Database settings
 
-# @param db.host PostgreSQL hostname or ip. **Required**
+# @param db.host PostgreSQL hostname or IP. **Required**
 # @param db.port PostgreSQL port.
 # @param db.name PostgreSQL database name. **Required**
 # @param db.user PostgreSQL username. **Required**

@@ -143,7 +143,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `redis.configPath`       | Path to Redis configuration file.                                                                                           | `/opt/redis.conf` |
 | `redis.password`         | Redis password. Empty string if no authentication is required.                                                              | `""`              |
 | `redis.useExternalRedis` | If true, external Redis server will be used.                                                                                | `false`           |
-| `redis.host`             | External Redis hostname or ip.                                                                                              | `""`              |
+| `redis.host`             | External Redis hostname or IP.                                                                                              | `""`              |
 | `redis.db`               | External Redis database number.                                                                                             | `1`               |
 | `redis.annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`              |
 | `redis.labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`              |
@@ -159,13 +159,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | Name                   | Description                             | Value  |
 | ---------------------- | --------------------------------------- | ------ |
 | `postgres.ro`          | **Settings for the read-only access**   |        |
-| `postgres.ro.host`     | PostgreSQL hostname or ip. **Required** | `""`   |
+| `postgres.ro.host`     | PostgreSQL hostname or IP. **Required** | `""`   |
 | `postgres.ro.port`     | PostgreSQL port.                        | `5432` |
 | `postgres.ro.name`     | PostgreSQL database name. **Required**  | `""`   |
 | `postgres.ro.username` | PostgreSQL username. **Required**       | `""`   |
 | `postgres.ro.password` | PostgreSQL password. **Required**       | `""`   |
 | `postgres.rw`          | **Settings for the read-write access**  |        |
-| `postgres.rw.host`     | PostgreSQL hostname or ip. **Required** | `""`   |
+| `postgres.rw.host`     | PostgreSQL hostname or IP. **Required** | `""`   |
 | `postgres.rw.port`     | PostgreSQL port.                        | `5432` |
 | `postgres.rw.name`     | PostgreSQL database name. **Required**  | `""`   |
 | `postgres.rw.username` | PostgreSQL username. **Required**       | `""`   |

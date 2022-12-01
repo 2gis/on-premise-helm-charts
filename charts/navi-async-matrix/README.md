@@ -152,7 +152,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 | Name          | Description                             | Value  |
 | ------------- | --------------------------------------- | ------ |
-| `db.host`     | PostgreSQL hostname or ip. **Required** | `""`   |
+| `db.host`     | PostgreSQL hostname or IP. **Required** | `""`   |
 | `db.port`     | PostgreSQL port.                        | `5432` |
 | `db.name`     | PostgreSQL database name. **Required**  | `""`   |
 | `db.user`     | PostgreSQL username. **Required**       | `""`   |
