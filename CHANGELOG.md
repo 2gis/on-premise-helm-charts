@@ -1,5 +1,21 @@
 # 2GIS On-Premise Changelog
 
+## [1.4.7]
+#### Images
+```
+license
+	- license:1.0.0
+	+ license:1.0.1
+tiles-api
+	- tiles-api-importer:4.31.0
+	+ tiles-api-importer:4.32.0
+	- tiles-api-proxy:4.31.0
+	+ tiles-api-proxy:4.32.0
+	- tiles-api:4.31.0
+	+ tiles-api:4.32.0
+
+```
+
 ## [1.4.6]
 #### Images
 ```
