@@ -59,7 +59,7 @@ imagePullSecrets: []
 
 image:
   repository: 2gis-on-premise/license
-  tag: 1.0.0
+  tag: 1.0.1
   pullPolicy: IfNotPresent
 
 # @section License service application settings
@@ -96,7 +96,7 @@ service:
 ingress:
   enabled: false
   hosts:
-    - host: ''
+  - host: ''
 
 # @section Limits
 

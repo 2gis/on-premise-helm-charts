@@ -9,6 +9,8 @@ keys
 	keys-backend:1.39.0
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.3.0
+license
+	license:1.0.1
 mapgl-js-api
 	mapgl:1.32.1
 navi-async-matrix
@@ -39,8 +41,8 @@ stat-receiver
 	bss-receiver-api:1.1.4
 	bss-receiver-streams:1.1.4
 tiles-api
-	tiles-api-importer:4.31.0
-	tiles-api-proxy:4.31.0
-	tiles-api:4.31.0
+	tiles-api-importer:4.32.0
+	tiles-api-proxy:4.32.0
+	tiles-api:4.32.0
 traffic-proxy
 	nginx:1.21.6
