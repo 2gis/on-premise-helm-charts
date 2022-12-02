@@ -24,17 +24,17 @@ dgctlStorage:
 # @param serviceName Name of the service.<br>It depends on the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture): <ul><li>`tiles-api-webgl` for Tiles API with vector tiles support</li><li>`tiles-api-raster` for Tiles API with raster tiles support</li><ul>
 # @param name Name of the deployment.
 # @param type Type of the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture):<ul><li>`web` for Tiles API with vector tiles support</li><li>`raster` for Tiles API with raster tiles support</li><ul>
-# @param warningText Warning message on raster tiles for 'soft' block. Should contain '%d' for the number of days until the 'hard' block and '%s' for the sales manager contact information.
-# @param errorText Error message on raster tiles for 'hard' block. Should contain '%s' for the sales manager contact information.
-# @param salesManager Sales manager contact information that will be used in warning and error messages on raster tiles for all kinds of blocks.
+# @param warningText Warning message on raster tiles for 'soft' block. Should contain '%d' for the number of days until the 'hard' block and '%s' for the account manager contact information.
+# @param errorText Error message on raster tiles for 'hard' block. Should contain '%s' for the account manager contact information.
+# @param emailManager Account manager contact information that will be used in warning and error messages on raster tiles for all kinds of blocks.
 
 serviceName: tiles-api-webgl
 name: tiles-api
 type: web
 
-warningText: License expiring in %d days.\nPlease contact your sales manager.\n%s
-errorText: License expired.\nPlease contact your sales manager.\n%s
-salesManager: on-premise@2gis.com
+warningText: License expiring in %d days.\nPlease contact your account manager.\n%s
+errorText: License expired.\nPlease contact your account manager.\n%s
+emailManager: on-premise@2gis.com
 
 # @section Apache Cassandra Data Storage settings
 
@@ -352,7 +352,7 @@ importer:
 
 # @section License service settings
 
-# @param license.url Address of the License service. Ex.: {service-name}.svc
+# @param license.url Address of the License service. Ex: http(s)://license.svc
 # @param license.retryPeriod Duration how often tiles server should try to update license status if it is failing to get it.
 
 license:
