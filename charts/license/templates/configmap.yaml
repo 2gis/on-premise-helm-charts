@@ -11,7 +11,7 @@ data:
   config.yaml: |
     {{- with .license }}
     license:
-      path: {{ .path }}
+      path: license
       update-period: {{ .updatePeriod }}
       retry-period: {{ .retryPeriod }}
       warning-period: {{ .softBlockPeriod }}
