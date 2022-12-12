@@ -65,6 +65,8 @@ spec:
               value: {{`{{.action_type}}`}}
             - name: WORKER_SEGMENT_URL
               value: {{`{{.segment_url}}`}}
+            - name: WORKER_PUBLISH_DATE
+              value: {{`{{.publish_date}}`}}
             - name: CONFIG_PATH
               value: /config/importer.yaml
 
