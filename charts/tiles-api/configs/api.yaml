@@ -18,10 +18,20 @@ cassandra-clusters:
     reconnect-interval: 30s
 
     keyspaces:
-      - tileset: {{ .Values.type }}
-        keyspace: {{ include "tiles.keyspace" . }}
-        default: true
+      {{- $default := true }}
+      {{- range $type, $enabled := $.Values.types }}
+      {{- if $enabled }}
+      {{- range $k_type, $keyspace := $.Values.cassandra.keyspaces }}
+      {{- if eq $type $k_type }}
+      - tileset: {{ $type }}
+        keyspace: {{ include "tiles.keyspace" (merge (dict "keyspace" $keyspace "type" $type) $) }}
+        default: {{ $default }}
+        {{- $default = false }}
         partition-size: 4
+      {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
 
     {{- with .Values.cassandra }}
     hosts:

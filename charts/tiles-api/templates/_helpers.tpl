@@ -38,21 +38,30 @@ helm.sh/chart: {{ include "tiles.chart" . | quote }}
 {{- end -}}
 
 {{- define "tiles.keyspace" -}}
-{{- if $.Values.cassandra.keyspace }}
-{{- $.Values.cassandra.keyspace }}
+{{- if .keyspace }}
+{{- .keyspace }}
 {{- else -}}
-dgis_tileserver_{{ .Values.type }}_{{ required "Valid .Values.cassandra.environment required" .Values.cassandra.environment }}_{{ include "tiles.manifestCode" . }}
+dgis_tileserver_{{ .type }}_{{ required "Valid .Values.cassandra.environment required" $.Values.cassandra.environment }}_{{ include "tiles.manifestCode" $ }}
 {{- end -}}
 {{- end -}}
 
-{{- define "importer.hook-annotations"}}
+{{- define "importer.serviceName" -}}
+{{- if eq . "web" -}}
+tiles-api-webgl
+{{- else if eq . "raster" -}}
+tiles-api-raster
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "importer.hook-annotations" -}}
 "helm.sh/hook": pre-install,pre-upgrade
-{{- end}}
+{{- end -}}
 
-{{- define "importer.removable-hook-annotations"}}
+{{- define "importer.removable-hook-annotations" -}}
 {{- include "importer.hook-annotations" . }}
 "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
-{{- end}}
+{{- end -}}
 
 {{- define "importer.serviceAccount" -}}
 {{- if empty $.Values.importer.serviceAccountOverride }}
