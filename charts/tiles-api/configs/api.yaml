@@ -21,15 +21,12 @@ cassandra-clusters:
       {{- $default := true }}
       {{- range $type, $enabled := $.Values.types }}
       {{- if $enabled }}
-      {{- range $k_type, $keyspace := $.Values.cassandra.keyspaces }}
-      {{- if eq $type $k_type }}
+      {{- $keyspace := get $.Values.cassandra.keyspaces $type }}
       - tileset: {{ $type }}
         keyspace: {{ include "tiles.keyspace" (merge (dict "keyspace" $keyspace "type" $type) $) }}
         default: {{ $default }}
         {{- $default = false }}
         partition-size: 4
-      {{- end }}
-      {{- end }}
       {{- end }}
       {{- end }}
 

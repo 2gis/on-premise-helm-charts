@@ -1,7 +1,6 @@
 {{- range $type, $enabled := $.Values.types}}
 {{- if $enabled }}
-{{- range $k_type, $keyspace := $.Values.cassandra.keyspaces }}
-{{- if eq $type $k_type }}
+{{- $keyspace := get $.Values.cassandra.keyspaces $type }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -37,7 +36,5 @@ data:
 
   job.yaml: |
     {{- (tpl ($.Files.Get "configs/importer/job.yaml") (merge (dict "type" $type) $)) | nindent 4 }}
-{{- end }}
-{{- end }}
 {{- end }}
 {{- end }}

@@ -1,8 +1,8 @@
 {{- if $.Values.importer.cleaner.enabled }}
 {{- range $type, $enabled := $.Values.types}}
 {{- if $enabled }}
-{{- range $k_type, $keyspace := $.Values.cassandra.keyspaces }}
-{{- if and (eq $type $k_type) (not $keyspace) }}
+{{- $keyspace := get $.Values.cassandra.keyspaces $type }}
+{{- if (not $keyspace) }}
 ---
 
 apiVersion: batch/v1
@@ -71,7 +71,6 @@ spec:
             - name: CONFIG_PATH
               value: /config/importer.yaml
       restartPolicy: Never
-{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
