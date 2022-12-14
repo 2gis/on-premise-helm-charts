@@ -1,14 +1,12 @@
 {{- if $.Values.importer.cleaner.enabled }}
-{{- range $type, $enabled := $.Values.types}}
-{{- if $enabled }}
-{{- $keyspace := get $.Values.cassandra.keyspaces $type }}
-{{- if (not $keyspace) }}
+{{- range $_, $type := $.Values.types}}
+{{- if and (not $type.importAndCleanerDisabled) (not $type.keyspace) }}
 ---
 
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "tiles.fullname" $ }}-{{ $type }}-cleaner-job
+  name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-cleaner-job
   labels:
     {{- include "tiles.labels" $ | nindent 4 }}
   annotations:
@@ -19,7 +17,7 @@ spec:
   backoffLimit: 0
   template:
     metadata:
-      name: {{ include "tiles.fullname" $ }}-{{ $type }}-cleaner
+      name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-cleaner
     spec:
       serviceAccountName: {{ include "importer.serviceAccount" $ }}
 
@@ -29,7 +27,7 @@ spec:
 
         - name: config-volume
           configMap:
-            name: {{ include "tiles.fullname" $ }}-{{ $type }}-import
+            name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-import
 
       {{- with $.Values.importer.nodeSelector }}
       nodeSelector:
@@ -71,7 +69,6 @@ spec:
             - name: CONFIG_PATH
               value: /config/importer.yaml
       restartPolicy: Never
-{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

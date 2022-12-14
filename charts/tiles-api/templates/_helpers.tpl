@@ -41,7 +41,7 @@ helm.sh/chart: {{ include "tiles.chart" . | quote }}
 {{- if .keyspace }}
 {{- .keyspace }}
 {{- else -}}
-dgis_tileserver_{{ .type }}_{{ required "Valid .Values.cassandra.environment required" $.Values.cassandra.environment }}_{{ include "tiles.manifestCode" $ }}
+dgis_tileserver_{{ .kind }}_{{ required "Valid .Values.cassandra.environment required" $.Values.cassandra.environment }}_{{ include "tiles.manifestCode" $ }}
 {{- end -}}
 {{- end -}}
 
@@ -50,6 +50,8 @@ dgis_tileserver_{{ .type }}_{{ required "Valid .Values.cassandra.environment req
 tiles-api-webgl
 {{- else if eq . "raster" -}}
 tiles-api-raster
+{{- else if eq . "native" -}}
+tiles-api-mobile-sdk
 {{- else -}}
 {{- end -}}
 {{- end -}}

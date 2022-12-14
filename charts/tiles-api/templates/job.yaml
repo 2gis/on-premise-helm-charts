@@ -1,12 +1,12 @@
 {{- if $.Values.importer.enabled }}
-{{- range $type, $enabled := $.Values.types}}
-{{- if $enabled }}
+{{- range $_, $type := $.Values.types }}
+{{- if (not $type.importAndCleanerDisabled) }}
 ---
 
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name:  {{ include "tiles.fullname" $ }}-{{ $type }}-importer-job
+  name:  {{ include "tiles.fullname" $ }}-{{ $type.kind }}-importer-job
   labels:
     {{- include "tiles.labels" $ | nindent 4 }}
   annotations:
@@ -17,7 +17,7 @@ spec:
   backoffLimit: 0
   template:
     metadata:
-      name: {{ include "tiles.fullname" $ }}-{{ $type }}-importer
+      name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-importer
     spec:
       serviceAccountName: {{ include "importer.serviceAccount" $ }}
 
@@ -27,7 +27,7 @@ spec:
 
         - name: config-volume
           configMap:
-            name: {{ include "tiles.fullname" $ }}-{{ $type }}-import
+            name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-import
 
       {{- with $.Values.importer.nodeSelector }}
       nodeSelector:
