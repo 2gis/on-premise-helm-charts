@@ -149,6 +149,13 @@ onprem
       name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServiceRegions
 {{- end }}
+{{- if .Values.keys.tokens.markers }}
+- name: CATALOG_KEYS_SERVICE_MARKERS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "catalog.secret.deploys.name" . }}
+      key: keysServiceMarkers
+{{- end }}
 {{- end }}
 
 {{- define "catalog.env.importer" -}}
