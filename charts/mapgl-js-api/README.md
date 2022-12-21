@@ -47,7 +47,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | Name               | Description | Value                   |
 | ------------------ | ----------- | ----------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/mapgl` |
-| `image.tag`        | Tag         | `1.32.1`                |
+| `image.tag`        | Tag         | `1.33.1`                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
 
 
