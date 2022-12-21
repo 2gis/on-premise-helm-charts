@@ -20,7 +20,7 @@ cassandra-clusters:
     keyspaces:
       {{- $default := true }}
       {{- range $_, $type := $.Values.types }}
-      - tileset: {{ $type.name }}
+      - tileset: {{ $type.name | default $type.kind }}
         keyspace: {{ include "tiles.keyspace" (merge $type $) }}
         default: {{ $default }}
         {{- $default = false }}
