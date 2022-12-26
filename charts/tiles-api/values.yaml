@@ -38,7 +38,7 @@ errorText: License expired.\nPlease contact your account manager.\n%s
 emailManager: on-premise@2gis.com
 
 types:
-  - kind: web
+  - kind: ''
     name: ''
     keyspace: ''
     importAndCleanerDisabled: false
