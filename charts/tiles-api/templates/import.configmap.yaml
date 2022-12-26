@@ -1,4 +1,5 @@
-{{- range $index, $type := $.Values.types }}
+{{- range $index, $type := (required "Valid $.Values.types required" $.Values.types) }}
+{{- if (not $type.importAndCleanerDisabled) }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -35,4 +36,5 @@ data:
 
   job.yaml: |
     {{- (tpl ($.Files.Get "configs/importer/job.yaml") (merge $type $)) | nindent 4 }}
+{{- end }}
 {{- end }}
