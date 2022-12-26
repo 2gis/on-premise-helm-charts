@@ -45,6 +45,10 @@ dgis_tileserver_{{ .kind }}_{{ required "Valid .Values.cassandra.environment req
 {{- end -}}
 {{- end -}}
 
+{{- define "tiles.checksum" -}}
+{{ (include (print $.Template.BasePath .path) $ | fromYaml).data | toYaml | sha256sum }}
+{{- end }}
+
 {{- define "importer.serviceName" -}}
 {{- if eq . "web" -}}
 tiles-api-webgl
