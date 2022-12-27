@@ -4,7 +4,7 @@ description: Geo API for getting geo data
 
 type: application
 
-version: 1.5.1
+version: 1.5.2
 appVersion: 0.3.21
 
 maintainers:
