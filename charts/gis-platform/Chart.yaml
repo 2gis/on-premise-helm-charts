@@ -9,8 +9,8 @@ appVersion: 2022.9.29
 
 dependencies:
 - name: zookeeper
-  version: ~8.0.1
-  repository: file://charts/zookeeper
+  version: 1.5.2
+  repository: https://2gis.github.io/on-premise-helm-charts
 
 maintainers:
 - name: 2gis
