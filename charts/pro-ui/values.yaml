@@ -2,7 +2,7 @@
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
-dgctlDockerRegistry: ''
+dgctlDockerRegistry: ""
 
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
@@ -49,27 +49,33 @@ ui:
   # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., `"[55.27, 25.2]"` stands for Dubai, `"[37.64, 55.74]"` — for Moscow).
 
   logLevel: error
-  isOnPremise: 'true'
-  ssoAuth: 'false'
+  isOnPremise: "true"
+  ssoAuth: "false"
   appTheme: urbi
   appLocale: en_AE
-  appInitialMapCenter: '[55.27, 25.2]'
+  appInitialMapCenter: "[55.27, 25.2]"
 
   # @section 2GIS Pro API settings
 
   # @param ui.api.url Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/.
 
   api:
-    url: ''
+    url: ""
 
   # @section MapGL JS API settings
 
   # @param ui.mapgl.host FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol and trailing slash.
   # @param ui.mapgl.key A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.
+  # @param ui.mapgl.styleUri FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) file without protocol and trailing slash.
+  # @param ui.mapgl.styleIconsUri FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons without protocol and trailing slash.
+  # @param ui.mapgl.styleFontsUri FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts without protocol and trailing slash.
 
   mapgl:
     host: mapgl-api.host
-    key: ''
+    key: ""
+    styleUri: "mapgl-api.host/style"
+    styleIconsUri: "mapgl-api.host/style/icons"
+    styleFontsUri: "mapgl-api.host/style/fonts"
 
   # @section Strategy settings
 
@@ -104,7 +110,7 @@ ui:
   ingress:
     enabled: false
     hosts:
-    - host: pro-ui.host
+      - host: pro-ui.host
 
   # @section Limits
 
