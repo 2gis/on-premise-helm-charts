@@ -1,5 +1,14 @@
 # 2GIS On-Premise Changelog
 
+## [1.5.1]
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.32.1
+	+ mapgl:1.33.1
+
+```
+
 ## [1.5.0]
 #### Images
 ```

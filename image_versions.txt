@@ -12,7 +12,7 @@ keys
 license
 	license:1.0.1
 mapgl-js-api
-	mapgl:1.32.1
+	mapgl:1.33.1
 navi-async-matrix
 	navi-async-matrix:1.2.0
 navi-back

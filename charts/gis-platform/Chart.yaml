@@ -4,13 +4,13 @@ description: GIS Platform
 
 type: application
 
-version: 1.5.0
+version: 1.5.1
 appVersion: 2022.9.29
 
 dependencies:
 - name: zookeeper
   version: ~8.0.1
-  repository: https://charts.bitnami.com/bitnami
+  repository: file://charts/zookeeper
 
 maintainers:
 - name: 2gis
