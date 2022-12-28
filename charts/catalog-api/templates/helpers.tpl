@@ -38,6 +38,10 @@ onprem
 {{- end }}
 {{- end }}
 
+{{- define "catalog.env.settings" -}}
+- name: CATALOG_LOGBACK_LEVEL
+  value: "{{ .Values.api.logLevel }}"
+{{- end }}
 
 {{- define "catalog.env.postgres" -}}
 - name: CATALOG_DB_SCHEMA

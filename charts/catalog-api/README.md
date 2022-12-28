@@ -61,9 +61,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### API settings
 
-| Name           | Description                    | Value |
-| -------------- | ------------------------------ | ----- |
-| `api.replicas` | Number of replicas of API pods | `1`   |
+| Name           | Description                    | Value  |
+| -------------- | ------------------------------ | ------ |
+| `api.replicas` | Number of replicas of API pods | `1`    |
+| `api.logLevel` | Log level                      | `info` |
 
 
 ### api.image **Deployment settings**
