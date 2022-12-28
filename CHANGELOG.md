@@ -1,5 +1,28 @@
 # 2GIS On-Premise Changelog
 
+## [1.5.3]
+#### [Breaking-Changes](Breaking-Changes.md#153)
+#### Images
+```
+catalog-api
+	- catalog-api:3.580.0
+	+ catalog-api:3.583.0
+keys
+	- keys-backend:1.39.0
+	+ keys-backend:1.40.0
+search-api
+	- search-api:7.37.0
+	+ search-api:7.41.0
+tiles-api
+	- tiles-api-importer:4.32.0
+	+ tiles-api-importer:4.34.0
+	- tiles-api-proxy:4.32.0
+	+ tiles-api-proxy:4.34.0
+	- tiles-api:4.32.0
+	+ tiles-api:4.34.0
+
+```
+
 ## [1.5.2]
 #### Images
 ```

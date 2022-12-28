@@ -1,4 +1,31 @@
 # 2GIS On-Premise Breaking-Changes
+## [1.5.3]
+#### tiles-api
+- Rename
+```
+serviceName: tiles-api-webgl
+type: web
+```
+to
+```
+types:
+  - kind: web
+```
+- Rename
+```
+serviceName: tiles-api-raster
+type: raster
+```
+to
+```
+types:
+  - kind: raster
+```
+
+#### navi-restrictions
+- Rename `api_key` to `api.api_key`
+
+
 ## [1.4.7]
 #### catalog-api
 - Rename `search.host` to `search.url`
@@ -16,11 +43,6 @@
 #### pro-ui
 - Renamed `api.host` to `api.url`
 
-## [#.#.#]
-
-#### navi-restrictions
-
-- Renamed `api_key` to `api.api_key`
 
 ## [1.4.5]
 

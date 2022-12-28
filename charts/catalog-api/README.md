@@ -72,7 +72,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description                                                                                   | Value                         |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ----------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag                                                                                           | `3.580.0`                     |
+| `api.image.tag`        | Tag                                                                                           | `3.583.0`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
 
 
