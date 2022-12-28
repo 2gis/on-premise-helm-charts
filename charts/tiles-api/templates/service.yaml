@@ -11,6 +11,7 @@ metadata:
   {{- end }}
   labels:
     {{- include "tiles.labels" $ | nindent 4 }}
+    {{- include "tiles.api.label" $ | nindent 4 }}
     {{- if .labels }}
     {{- toYaml .labels | nindent 4 }}
     {{- end }}
@@ -31,5 +32,6 @@ spec:
 
   selector:
     {{- include "tiles.selectorLabels" $ | nindent 4 }}
+    {{- include "tiles.api.label" $ | nindent 4 }}
 
 {{- end }}

@@ -6,6 +6,7 @@ metadata:
   name: {{ include "tiles.fullname" . }}
   labels:
     {{- include "tiles.labels" . | nindent 4 }}
+    {{- include "tiles.api.label" $ | nindent 4 }}
     {{- if $.Values.api.labels }}
     {{- toYaml $.Values.api.labels | nindent 4 }}
     {{- end }}
@@ -22,6 +23,7 @@ spec:
   selector:
     matchLabels:
       {{- include "tiles.selectorLabels" . | nindent 6 }}
+      {{- include "tiles.api.label" $ | nindent 6 }}
 
   {{- with .Values.api.strategy }}
   strategy:
@@ -32,6 +34,7 @@ spec:
     metadata:
       labels:
         {{- include "tiles.selectorLabels" . | nindent 8 }}
+        {{- include "tiles.api.label" $ | nindent 8 }}
         {{- with .Values.api.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

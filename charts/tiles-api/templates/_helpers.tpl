@@ -14,7 +14,11 @@ app.kubernetes.io/version: {{ $.Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 helm.sh/chart: {{ include "tiles.chart" . | quote }}
-{{- end }}
+{{- end -}}
+
+{{- define "tiles.api.label" -}}
+app.kubernetes.io/component: api
+{{- end -}}
 
 {{- define "tiles.manifestCode" -}}
 {{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
@@ -49,6 +53,12 @@ dgis_tileserver_{{ .kind }}_{{ required "Valid .Values.cassandra.environment req
 {{ (include (print $.Template.BasePath .path) $ | fromYaml).data | toYaml | sha256sum }}
 {{- end }}
 
+{{/* Importer */}}
+
+{{- define "tiles.importer.label" -}}
+app.kubernetes.io/component: importer
+{{- end -}}
+
 {{- define "importer.serviceName" -}}
 {{- if eq . "web" -}}
 tiles-api-webgl
@@ -76,3 +86,9 @@ tiles-api-mobile-sdk
 {{- $.Values.importer.serviceAccountOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{- end }}
+
+{{/* Cleaner */}}
+
+{{- define "tiles.cleaner.label" -}}
+app.kubernetes.io/component: cleaner
+{{- end -}}

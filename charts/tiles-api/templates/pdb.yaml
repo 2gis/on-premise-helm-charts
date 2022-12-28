@@ -13,6 +13,7 @@ metadata:
   name: {{ include "tiles.fullname" $ }}
   labels:
     {{- include "tiles.labels" $ | nindent 4 }}
+    {{- include "tiles.api.label" $ | nindent 4 }}
 spec:
   {{- if .minAvailable }}
   minAvailable: {{ .minAvailable }}
@@ -23,6 +24,7 @@ spec:
   selector:
     matchLabels:
       {{- include "tiles.selectorLabels" $ | nindent 6 }}
+      {{- include "tiles.api.label" $ | nindent 6 }}
 
 {{- end }}
 {{- end }}
