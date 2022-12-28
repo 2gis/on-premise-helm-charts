@@ -34,6 +34,7 @@ spec:
       {{- end }}
       labels:
         {{- include "navi-restrictions.labels" . | nindent 8 }}
+        {{- include "navi-restrictions.selectorLabels" . | nindent 8 }}
       {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}

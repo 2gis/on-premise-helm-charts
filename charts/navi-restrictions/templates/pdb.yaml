@@ -18,9 +18,5 @@ spec:
   selector:
     matchLabels:
       {{- include "navi-restrictions.selectorLabels" $ | nindent 6 }}
-    matchExpressions:
-    # skip CronJobs
-    - key: job-name
-      operator: DoesNotExist
 {{- end }}
 {{- end }}

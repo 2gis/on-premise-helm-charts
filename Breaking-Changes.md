@@ -16,6 +16,12 @@
 #### pro-ui
 - Renamed `api.host` to `api.url`
 
+## [#.#.#]
+
+#### navi-restrictions
+
+- Renamed `api_key` to `api.api_key`
+
 ## [1.4.5]
 
 #### navi-castle
