@@ -1,12 +1,12 @@
 catalog-api
-	catalog-api:3.580.0
+	catalog-api:3.583.0
 	catalog-importer:1.0.9
 gis-platform
 	gis_platform_portal:2022.9.29
 	gis_platform_spcore:2022.9.29
 	zookeeper:3.7.0-debian-10-r265
 keys
-	keys-backend:1.39.0
+	keys-backend:1.40.0
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.3.0
 license
@@ -35,14 +35,14 @@ pro-api
 pro-ui
 	pro-ui:0.1.0
 search-api
-	search-api:7.37.0
+	search-api:7.41.0
 	search-nginx:1.21.6
 stat-receiver
 	bss-receiver-api:1.1.4
 	bss-receiver-streams:1.1.4
 tiles-api
-	tiles-api-importer:4.32.0
-	tiles-api-proxy:4.32.0
-	tiles-api:4.32.0
+	tiles-api-importer:4.34.0
+	tiles-api-proxy:4.34.0
+	tiles-api:4.34.0
 traffic-proxy
 	nginx:1.21.6
