@@ -7,7 +7,7 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 > All On-Premise services are beta, and under development.
 
 <!--- FIXME: add documentation with link --->
-See the [documentation](https://docs.2gis.com/en/on-premise/) to learn about:
+See the [documentation](https://docs.2gis.com/en/on-premise/overview) to learn about:
 
 - Architecture of the service.
 
