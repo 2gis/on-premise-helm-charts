@@ -171,6 +171,7 @@ search:
 # @param keys.tokens.suggest Suggest API key
 # @param keys.tokens.categories Categories API key
 # @param keys.tokens.regions Regions API key
+# @param keys.tokens.markers Markers API key
 
 keys:
   url: ''
@@ -181,6 +182,7 @@ keys:
     suggest: ''
     categories: ''
     regions: ''
+    markers: ''
 
 
 # @section Kubernetes Importer job settings

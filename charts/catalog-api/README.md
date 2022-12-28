@@ -153,6 +153,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `keys.tokens.suggest`    | Suggest API key                                                                                                                                  | `""`  |
 | `keys.tokens.categories` | Categories API key                                                                                                                               | `""`  |
 | `keys.tokens.regions`    | Regions API key                                                                                                                                  | `""`  |
+| `keys.tokens.markers`    | Markers API key                                                                                                                                  | `""`  |
 
 
 ### Kubernetes Importer job settings
