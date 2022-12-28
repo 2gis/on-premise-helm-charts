@@ -58,13 +58,13 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### MapGL JS API settings
 
-| Name                     | Description                                                                                                                                 | Value                        |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `ui.mapgl.host`          | FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol and trailing slash.            | `mapgl-api.host`             |
-| `ui.mapgl.key`           | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                                               | `""`                         |
-| `ui.mapgl.styleUri`      | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) file without protocol and trailing slash.  | `mapgl-api.host/style`       |
-| `ui.mapgl.styleIconsUri` | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons without protocol and trailing slash. | `mapgl-api.host/style/icons` |
-| `ui.mapgl.styleFontsUri` | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts without protocol and trailing slash. | `mapgl-api.host/style/fonts` |
+| Name                     | Description                                                                                                              | Value                        |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| `ui.mapgl.host`          | FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol.            | `mapgl-api.host`             |
+| `ui.mapgl.key`           | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                            | `""`                         |
+| `ui.mapgl.styleUri`      | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) file without protocol.  | `mapgl-api.host/style`       |
+| `ui.mapgl.styleIconsUri` | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons without protocol. | `mapgl-api.host/style/icons` |
+| `ui.mapgl.styleFontsUri` | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts without protocol. | `mapgl-api.host/style/fonts` |
 
 
 ### Strategy settings
