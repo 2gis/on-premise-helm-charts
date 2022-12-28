@@ -21,20 +21,27 @@ dgctlStorage:
 
 # @section Tiles API configuration
 
-# @param serviceName Name of the service.<br>It depends on the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture): <ul><li>`tiles-api-webgl` for Tiles API with vector tiles support</li><li>`tiles-api-raster` for Tiles API with raster tiles support</li><ul>
 # @param name Name of the deployment.
-# @param type Type of the [deployment configuration](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture):<ul><li>`web` for Tiles API with vector tiles support</li><li>`raster` for Tiles API with raster tiles support</li><ul>
 # @param warningText Warning message on raster tiles for 'soft' block. Should contain '%d' for the number of days until the 'hard' block and '%s' for the account manager contact information.
 # @param errorText Error message on raster tiles for 'hard' block. Should contain '%s' for the account manager contact information.
 # @param emailManager Account manager contact information that will be used in warning and error messages on raster tiles for all kinds of blocks.
 
-serviceName: tiles-api-webgl
-name: tiles-api
-type: web
+# @extra types **Tiles [types](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture) enabled in Tiles API**
+# @param types[0].kind Kind of tiles, should be one of: web, raster, native.
+# @param types[0].name Name for the tileset. If empty, the value from the kind is used.
+# @param types[0].keyspace Custom user defined keyspace. If the parameter is set, the database cleaning and maintenance processes are skipped.
+# @param types[0].importAndCleanerDisabled If import and cleaner tasks are disabled for this tileset.
 
+name: tiles-api
 warningText: License expiring in %d days.\nPlease contact your account manager.\n%s
 errorText: License expired.\nPlease contact your account manager.\n%s
 emailManager: on-premise@2gis.com
+
+types:
+  - kind: ''
+    name: ''
+    keyspace: ''
+    importAndCleanerDisabled: false
 
 # @section Apache Cassandra Data Storage settings
 
@@ -44,7 +51,6 @@ emailManager: on-premise@2gis.com
 # @param cassandra.replicaFactor Apache Cassandra [replication factor](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html).
 # @param cassandra.consistencyLevelRead Apache Cassandra [read consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels).
 # @param cassandra.consistencyLevelWrite Apache Cassandra [write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels).
-# @param cassandra.keyspace Custom user defined keyspace. If the parameter is set, the database cleaning and maintenance processes are skipped.
 # @param cassandra.timeout Timeout for connect attempts to the database.
 
 # @extra cassandra.credentials **Credentials for accessing Apache Cassandra**
@@ -55,7 +61,6 @@ emailManager: on-premise@2gis.com
 
 cassandra:
   environment: ''
-  keyspace: ''
   timeout: 90s
   hosts: []
   credentials:

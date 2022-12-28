@@ -1,23 +1,25 @@
-{{- if .Values.importer.enabled }}
+{{- if $.Values.importer.enabled }}
+{{- range $_, $type := $.Values.types }}
+{{- if (not $type.importAndCleanerDisabled) }}
 ---
 
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name:  {{ include "tiles.fullname" . }}-importer-job
+  name:  {{ include "tiles.fullname" $ }}-{{ $type.kind }}-importer-job
   labels:
-    {{- include "tiles.labels" . | nindent 4 }}
+    {{- include "tiles.labels" $ | nindent 4 }}
   annotations:
-    {{- include "importer.removable-hook-annotations" . | nindent 4 }}
+    {{- include "importer.removable-hook-annotations" $ | nindent 4 }}
     "helm.sh/hook-weight": "2" # after cleaning
 
 spec:
   backoffLimit: 0
   template:
     metadata:
-      name: {{ include "tiles.fullname" . }}-importer
+      name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-importer
     spec:
-      serviceAccountName: {{ include "importer.serviceAccount" . }}
+      serviceAccountName: {{ include "importer.serviceAccount" $ }}
 
       volumes:
         - name: tmp-volume
@@ -25,19 +27,19 @@ spec:
 
         - name: config-volume
           configMap:
-            name: {{ include "tiles.fullname" . }}-import
+            name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-import
 
-      {{- with .Values.importer.nodeSelector }}
+      {{- with $.Values.importer.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.importer.tolerations }}
+      {{- with $.Values.importer.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.importer.imagePullSecrets }}
+      {{- with $.Values.importer.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -46,7 +48,7 @@ spec:
         - name: importer
 
           {{- with $.Values.importer }}
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}
+          image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
           imagePullPolicy: {{ .image.pullPolicy }}
           command: ["/selfimporter", "scheduler"]
 
@@ -79,4 +81,6 @@ spec:
           {{- end}}
 
       restartPolicy: Never
+{{- end }}
+{{- end }}
 {{- end }}

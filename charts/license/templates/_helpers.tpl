@@ -54,7 +54,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Checksum for configmap or secret
 */}}
 {{- define "license.checksum" -}}
-{{- $ := .root -}}
 {{ (include (print $.Template.BasePath .path) $ | fromYaml).data | toYaml | sha256sum }}
 {{- end }}
 

@@ -1,13 +1,40 @@
+{{- range $index, $type := (required "Valid $.Values.types required" $.Values.types) }}
+{{- if (not $type.importAndCleanerDisabled) }}
 ---
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "tiles.fullname" . }}-import
+  name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-import
   labels:
-    {{- include "tiles.labels" . | nindent 4 }}
+    {{- include "tiles.labels" $ | nindent 4 }}
   annotations:
-    {{- include "importer.removable-hook-annotations" . | nindent 4 }}
+    {{- include "importer.removable-hook-annotations" $ | nindent 4 }}
 
 data:
-  {{ (tpl (.Files.Glob "configs/importer/*").AsConfig $) | nindent 2 }}
+  importer.yaml: |
+    {{- $serviceName := include "importer.serviceName" $type.kind }}
+    service-name: {{ required (printf "Valid .Values.types[%d].kind required" $index) $serviceName }}
+    data-type: {{ $type.kind }}
+    cassandra:
+      name: local
+      num-retries: 2
+      reconnect-interval: 30s
+      keyspaces:
+        - tileset: {{ $type.name | default $type.kind }}
+          keyspace: {{ include "tiles.keyspace" (merge $type $) }}
+          default: true
+          partition-size: 4
+      {{- with $.Values.cassandra }}
+      timeout: {{ .timeout }}
+      hosts:
+        {{- toYaml .hosts | nindent 8 }}
+      replication-factor: {{ .replicaFactor }}
+      consistency-level-read: {{ .consistencyLevelRead }}
+      consistency-level-write: {{ .consistencyLevelWrite }}
+      {{- end }}
+    {{- (tpl ($.Files.Get "configs/importer/importer.yaml") $) | nindent 4 }}
+
+  job.yaml: |
+    {{- (tpl ($.Files.Get "configs/importer/job.yaml") (merge $type $)) | nindent 4 }}
+{{- end }}
+{{- end }}

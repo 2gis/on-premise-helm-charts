@@ -1,11 +1,11 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "tiles.fullname" . }}-{{`{{.task_id}}`}}
+  name: {{ include "tiles.fullname" . }}-{{ .kind }}-{{`{{.task_id}}`}}
   labels:
     task-id: {{`{{.task_id}}`}}
     import-id: {{`{{.import_id}}`}}
-    {{- include "tiles.labels" . | nindent 6 }}
+    {{- include "tiles.labels" . | nindent 4 }}
 
 spec:
   backoffLimit: 0
@@ -15,7 +15,7 @@ spec:
       labels:
         task-id: {{`{{.task_id}}`}}
         import-id: {{`{{.import_id}}`}}
-        {{- include "tiles.labels" . | nindent 10 }}
+        {{- include "tiles.labels" . | nindent 8 }}
 
     spec:
       volumes:
@@ -24,11 +24,11 @@ spec:
 
         - name: config-volume
           configMap:
-            name: {{ include "tiles.fullname" . }}-import
+            name: {{ include "tiles.fullname" . }}-{{ .kind }}-import
 
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 10 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
 
       {{- with .Values.importer.tolerations }}
@@ -55,7 +55,7 @@ spec:
 
           {{- with .Values.importer.workerResources }}
           resources:
-            {{- toYaml . | nindent 16 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
 
           env:
