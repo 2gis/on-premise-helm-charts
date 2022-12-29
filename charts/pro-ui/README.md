@@ -14,7 +14,6 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name                | Description                                                                                                                 | Value |
@@ -28,7 +27,6 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
 | `ui.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
 
-
 ### Deployment settings
 
 | Name                  | Description                    | Value                    |
@@ -37,7 +35,6 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.image.tag`        | Tag                            | `0.1.0`                  |
 | `imagePullPolicy`     | Pull Policy                    | `IfNotPresent`           |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                     |
-
 
 ### UI service settings
 
@@ -48,24 +45,21 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.appLocale`           | Language in the app. Possible values: `"en_AE"` or `"ru_RU"`.                                                                                            | `en_AE`         |
 | `ui.appInitialMapCenter` | Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., `"[55.27, 25.2]"` stands for Dubai, `"[37.64, 55.74]"` — for Moscow). | `[55.27, 25.2]` |
 
-
 ### 2GIS Pro API settings
 
 | Name         | Description                                                                                  | Value |
 | ------------ | -------------------------------------------------------------------------------------------- | ----- |
 | `ui.api.url` | Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/. | `""`  |
 
-
 ### MapGL JS API settings
 
-| Name                     | Description                                                                                                              | Value                        |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
-| `ui.mapgl.host`          | FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol.            | `mapgl-api.host`             |
-| `ui.mapgl.key`           | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                            | `""`                         |
-| `ui.mapgl.styleUri`      | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) file without protocol.  | `mapgl-api.host/style`       |
-| `ui.mapgl.styleIconsUri` | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons without protocol. | `mapgl-api.host/style/icons` |
-| `ui.mapgl.styleFontsUri` | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts without protocol. | `mapgl-api.host/style/fonts` |
-
+| Name                     | Description                                                                                                              | Value                                |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
+| `ui.mapgl.host`          | FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol.            | `mapgl-api.host`                     |
+| `ui.mapgl.key`           | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                            | `""`                                 |
+| `ui.mapgl.styleUrl`      | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) file without protocol.  | `mapgl-api.ingress.host/style`       |
+| `ui.mapgl.styleIconsUrl` | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons without protocol. | `mapgl-api.ingress.host/style/icons` |
+| `ui.mapgl.styleFontsUrl` | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts without protocol. | `mapgl-api.ingress.host/style/fonts` |
 
 ### Strategy settings
 
@@ -73,8 +67,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `ui.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
 | `ui.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
-| `ui.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
-
+| `ui.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable dUrlng the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
 
 ### Service settings
 
@@ -85,14 +78,12 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `ui.service.port`        | Service port.                                                                                                                  | `3000`      |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                       | Description                            | Value         |
 | -------------------------- | -------------------------------------- | ------------- |
 | `ui.ingress.enabled`       | If Ingress is enabled for the service. | `false`       |
 | `ui.ingress.hosts[0].host` | Hostname for the Ingress service.      | `pro-ui.host` |
-
 
 ### Limits
 
@@ -103,9 +94,8 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.resources.limits.cpu`      | A CPU limit.      | `1`     |
 | `ui.resources.limits.memory`   | A memory limit.   | `384Mi` |
 
-
 ## Maintainers
 
-| Name | Email | Url |
-| ---- | ------ | --- |
+| Name | Email                 | Url                       |
+| ---- | --------------------- | ------------------------- |
 | 2gis | <on-premise@2gis.com> | <https://github.com/2gis> |

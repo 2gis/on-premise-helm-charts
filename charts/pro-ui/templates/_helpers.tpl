@@ -26,9 +26,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: MAPGL_STYLE_URI
   value: "{{ required "A valid .Values.ui.mapgl.styleUri entry required" .Values.ui.mapgl.styleUri }}"
 - name: MAPGL_STYLE_ICONS_URI
-  value: "{{ .Values.ui.mapgl.styleIconsUri }}"
+  value: "{{ required "A valid .Values.ui.mapgl.styleIconsUri entry required" .Values.ui.mapgl.styleIconsUri }}"
 - name: MAPGL_STYLE_FONTS_URI
-  value: "{{ .Values.ui.mapgl.styleFontsUri }}"
+  value: "{{ required "A valid .Values.ui.mapgl.styleFontsUri entry required" .Values.ui.mapgl.styleFontsUri }}"
 - name: LOG_LEVEL
   value: "{{ .Values.ui.logLevel }}"
 - name: IS_ON_PREM
