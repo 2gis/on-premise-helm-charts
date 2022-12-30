@@ -9,6 +9,7 @@ metadata:
   name:  {{ include "tiles.fullname" $ }}-{{ $type.kind }}-importer-job
   labels:
     {{- include "tiles.labels" $ | nindent 4 }}
+    {{- include "tiles.importer.label" $ | nindent 4 }}
   annotations:
     {{- include "importer.removable-hook-annotations" $ | nindent 4 }}
     "helm.sh/hook-weight": "2" # after cleaning
@@ -18,6 +19,9 @@ spec:
   template:
     metadata:
       name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-importer
+      labels:
+        {{- include "tiles.selectorLabels" $ | nindent 8 }}
+        {{- include "tiles.importer.label" $ | nindent 8 }}
     spec:
       serviceAccountName: {{ include "importer.serviceAccount" $ }}
 

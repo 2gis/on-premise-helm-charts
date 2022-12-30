@@ -6,6 +6,7 @@ metadata:
     task-id: {{`{{.task_id}}`}}
     import-id: {{`{{.import_id}}`}}
     {{- include "tiles.labels" . | nindent 4 }}
+    {{- include "tiles.importer.label" . | nindent 4 }}
 
 spec:
   backoffLimit: 0
@@ -15,7 +16,8 @@ spec:
       labels:
         task-id: {{`{{.task_id}}`}}
         import-id: {{`{{.import_id}}`}}
-        {{- include "tiles.labels" . | nindent 8 }}
+        {{- include "tiles.selectorLabels" . | nindent 8 }}
+        {{- include "tiles.importer.label" . | nindent 8 }}
 
     spec:
       volumes:
