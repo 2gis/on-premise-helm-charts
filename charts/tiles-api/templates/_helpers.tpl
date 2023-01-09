@@ -61,7 +61,7 @@ app.kubernetes.io/component: importer
 
 {{- define "importer.serviceName" -}}
 {{- if eq . "web" -}}
-tiles-api-webgl
+tiles-api-vector
 {{- else if eq . "raster" -}}
 tiles-api-raster
 {{- else if eq . "native" -}}
