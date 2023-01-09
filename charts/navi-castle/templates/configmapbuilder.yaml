@@ -44,7 +44,7 @@ data:
     manifest:
     {
         pattern: '{{ default "/manifests/" .Values.dgctlStorage.manifest }}',
-        service: 'routing',
+        service: 'navi',
     }
     # --------------------------------------------
     # DATA PACKAGE
