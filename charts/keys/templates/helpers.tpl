@@ -109,12 +109,16 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.postgres.ro.port }}"
 - name: KEYS_DB_RO_NAME
   value: "{{ required "A valid .Values.postgres.ro.name required" .Values.postgres.ro.name }}"
+- name: KEYS_DB_RO_CONNECTION_TIMEOUT
+  value: "{{ .Values.postgres.ro.timeout }}"
 - name: KEYS_DB_RO_USERNAME
   value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username }}"
 - name: KEYS_DB_RW_HOST
   value: "{{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host }}"
 - name: KEYS_DB_RW_PORT
   value: "{{ .Values.postgres.rw.port }}"
+- name: KEYS_DB_RW_CONNECTION_TIMEOUT
+  value: "{{ .Values.postgres.rw.timeout }}"
 - name: KEYS_DB_RW_NAME
   value: "{{ required "A valid .Values.postgres.rw.name required" .Values.postgres.rw.name }}"
 - name: KEYS_DB_RW_USERNAME
