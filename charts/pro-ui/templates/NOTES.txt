@@ -3,7 +3,7 @@ Pro UI service is released as "{{ .Release.Name }}" at "{{ .Release.Namespace }}
 {{- if .Values.ui.ingress.enabled }}
 You can check service using curl
 {{- range $host := .Values.ui.ingress.hosts }}
-  http{{ if $.Values.ui.ingress.tls }}s{{ end }}://{{ $host.host }}/v2/status
+  http{{ if $.Values.ui.ingress.tls }}s{{ end }}://{{ $host.host }}/
 {{- end }}
 {{- else }}
 You should publish the service in your preferred way (ingress, balancer, etc).
