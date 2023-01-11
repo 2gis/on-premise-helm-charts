@@ -161,12 +161,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `postgres.ro`          | **Settings for the read-only access**   |        |
 | `postgres.ro.host`     | PostgreSQL hostname or IP. **Required** | `""`   |
 | `postgres.ro.port`     | PostgreSQL port.                        | `5432` |
+| `postgres.ro.timeout`  | PostgreSQL client connection timeout.   | `3s`   |
 | `postgres.ro.name`     | PostgreSQL database name. **Required**  | `""`   |
 | `postgres.ro.username` | PostgreSQL username. **Required**       | `""`   |
 | `postgres.ro.password` | PostgreSQL password. **Required**       | `""`   |
 | `postgres.rw`          | **Settings for the read-write access**  |        |
 | `postgres.rw.host`     | PostgreSQL hostname or IP. **Required** | `""`   |
 | `postgres.rw.port`     | PostgreSQL port.                        | `5432` |
+| `postgres.rw.timeout`  | PostgreSQL client connection timeout.   | `3s`   |
 | `postgres.rw.name`     | PostgreSQL database name. **Required**  | `""`   |
 | `postgres.rw.username` | PostgreSQL username. **Required**       | `""`   |
 | `postgres.rw.password` | PostgreSQL password. **Required**       | `""`   |
