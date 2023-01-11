@@ -58,10 +58,13 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### MapGL JS API settings
 
-| Name            | Description                                                                                                                      | Value            |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `ui.mapgl.host` | FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol and trailing slash. | `mapgl-api.host` |
-| `ui.mapgl.key`  | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                                    | `""`             |
+| Name                     | Description                                                                                                                                                     | Value            |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `ui.mapgl.host`          | FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol.                                                   | `mapgl-api.host` |
+| `ui.mapgl.key`           | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                                                                   | `""`             |
+| `ui.mapgl.styleUrl`      | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) file without protocol. Ex: '//mapgl.ingress.host/style'        | `""`             |
+| `ui.mapgl.styleIconsUrl` | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons without protocol. Ex: '//mapgl.ingress.host/style/icons' | `""`             |
+| `ui.mapgl.styleFontsUrl` | FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts without protocol. Ex: '//mapgl.ingress.host/style/fonts' | `""`             |
 
 
 ### Strategy settings
@@ -103,6 +106,6 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ## Maintainers
 
-| Name | Email | Url |
-| ---- | ------ | --- |
+| Name | Email                 | Url                       |
+| ---- | --------------------- | ------------------------- |
 | 2gis | <on-premise@2gis.com> | <https://github.com/2gis> |
