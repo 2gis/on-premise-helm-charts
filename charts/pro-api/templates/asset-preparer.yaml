@@ -35,13 +35,15 @@ spec:
                 - name: ENV
                   value: "{{ .Values.api.env }}"
                 - name: MODE
-                  value: "PrepareDemand"
+                  value: "PrepareData"
                 - name: MAX_PARALLEL_JOBS
                   value: "{{ .Values.assetPreparer.maxParallelJobs }}"
                 - name: S3Settings__Url
                   value: "{{ .Values.dgctlStorage.host }}"
                 - name: S3Settings__AssetDataBucket
                   value: "{{ .Values.dgctlStorage.bucket }}"
+                - name: S3Settings__UserAssetDataBucket
+                  value: "{{ .Values.s3.userAssetsDataBucket }}"
                 - name: S3Settings__AccessKey
                   valueFrom:
                     secretKeyRef:

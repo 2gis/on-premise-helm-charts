@@ -37,11 +37,15 @@ spec:
                   value: "{{ .Values.api.env }}"
                 - name: MODE
                   value: "Schedule"
+                - name: ASSET_TYPE
+                  value: "user"
                 - name: MAX_PARALLEL_JOBS
                   value: "{{ .Values.assetImporter.maxParallelJobs }}"
                 - name: S3Settings__Url
                   value: "{{ .Values.dgctlStorage.host }}"
                 - name: S3Settings__AssetDataBucket
+                  value: "{{ .Values.dgctlStorage.bucket }}"
+                - name: S3Settings__UserAssetDataBucket
                   value: "{{ .Values.s3.userAssetsDataBucket }}"
                 - name: S3Settings__LayerDataBucket
                   value: "{{ .Values.s3.layerDataBucket }}"
@@ -66,6 +70,8 @@ spec:
                 {{ end }}
                 - name: API_URL
                   value: http://{{ include "pro-api.name" . }}
+                - name: IMAGE_PROXY_URL
+                  value: "{{ .Values.assetImporter.imageProxyUrl }}"
                 {{ if .Values.api.token }}
                 - name: API_TOKEN
                   valueFrom:

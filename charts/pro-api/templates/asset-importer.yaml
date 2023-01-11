@@ -45,6 +45,8 @@ spec:
                   value: "{{ .Values.dgctlStorage.host }}"
                 - name: S3Settings__AssetDataBucket
                   value: "{{ .Values.dgctlStorage.bucket }}"
+                - name: S3Settings__UserAssetDataBucket
+                  value: "{{ .Values.s3.userAssetsDataBucket }}"
                 - name: S3Settings__LayerDataBucket
                   value: "{{ .Values.s3.layerDataBucket }}"
                 - name: S3Settings__AccessKey
