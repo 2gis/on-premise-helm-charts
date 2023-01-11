@@ -66,9 +66,9 @@ ui:
 
   # @param ui.mapgl.host FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol.
   # @param ui.mapgl.key A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.
-  # @param ui.mapgl.styleUrl FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) file without protocol.
-  # @param ui.mapgl.styleIconsUrl FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons without protocol.
-  # @param ui.mapgl.styleFontsUrl FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts without protocol.
+  # @param ui.mapgl.styleUrl FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) file without protocol. Ex: '//mapgl.ingress.host/style'
+  # @param ui.mapgl.styleIconsUrl FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons without protocol. Ex: '//mapgl.ingress.host/style/icons'
+  # @param ui.mapgl.styleFontsUrl FQDN (domain or IP) for the [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts without protocol. Ex: '//mapgl.ingress.host/style/fonts'
 
   mapgl:
     host: mapgl-api.host
