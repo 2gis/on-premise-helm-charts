@@ -24,6 +24,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         prometheus.io/path: "/metrics"
         prometheus.io/port: {{ .Values.api.service.targetPort | quote }}
         {{- if .Values.prometheusEnabled }}
