@@ -36,3 +36,33 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- define "imagePullSecret" }}
 {{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .registry (printf "%s:%s" .username .password | b64enc) | b64enc }}
 {{- end }}
+
+{{/*
+Return the target Kubernetes version
+*/}}
+{{- define "capabilities.kubeVersion" -}}
+{{- if .Values.global }}
+    {{- if .Values.global.kubeVersion }}
+    {{- .Values.global.kubeVersion -}}
+    {{- else }}
+    {{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
+    {{- end -}}
+{{- else }}
+{{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for Horizontal Pod Autoscaler.
+*/}}
+{{- define "capabilities.hpa.apiVersion" -}}
+{{- if semverCompare "<1.23-0" (include "capabilities.kubeVersion" .) -}}
+{{- if .beta2 -}}
+{{- print "autoscaling/v2beta2" -}}
+{{- else -}}
+{{- print "autoscaling/v2beta1" -}}
+{{- end -}}
+{{- else -}}
+{{- print "autoscaling/v2" -}}
+{{- end -}}
+{{- end -}}
