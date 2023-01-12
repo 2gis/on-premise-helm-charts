@@ -3,7 +3,7 @@
 {{- range $_, $flavor := tuple "import" "restriction" }}
 {{- if index $.Values.cron.enabled $flavor }}
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ include "castle.fullname" $ }}-cronjob-{{ $flavor }}-{{ $i }}

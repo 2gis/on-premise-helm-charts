@@ -1,6 +1,6 @@
 {{- with .Values.hpa }}
 {{- if .enabled }}
-apiVersion: autoscaling/v2
+apiVersion: {{ include "capabilities.hpa.apiVersion" $ }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "router.fullname" $ }}
