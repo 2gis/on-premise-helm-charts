@@ -115,7 +115,7 @@ make charts/navi-back
 
   ```yaml
   catalog:
-    url: http://catalog-api.ingress
+    url: http://catalog-api.ingress.host
     key: ''
   ```
 
@@ -158,7 +158,7 @@ host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStora
 search:
   url: ''
 
-# @param env.MAPGL_TILES_API. Ex: http(s)://tiles-api.ingress. Domain name of the Tiles API service.
+# @param env.MAPGL_TILES_API. Ex: http(s)://tiles-api.ingress.host. Domain name of the Tiles API service.
 env:
   MAPGL_TILES_API: ''
 
