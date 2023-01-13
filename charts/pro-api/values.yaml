@@ -113,13 +113,21 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.0.17
+  tag: 1.0.19
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# @param curlImage.repository Docker Repository Image.
+# @param curlImage.tag Docker image tag.
+# @param curlImage.pullPolicy Pull policy
+curlImage:
+  repository: 2gis-on-premise/pro-curl
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -158,10 +166,10 @@ api:
   token: ''
 
 # @skip auth
-# @skip auth.host
+# @skip auth.url
 
 auth:
-  host: ''
+  url: ''
 
 # @section PostgreSQL settings
 
@@ -175,12 +183,11 @@ postgres:
   password: ''
 
 # @section Keys Service settings
-
-# @param keys.host API URL of service for managing partners' keys to 2GIS services (keys.api).
-# @param keys.token keys.api access token.
+# @param keys.url API URL of service for managing partners' keys to 2GIS services (keys.api). **Required**
+# @param keys.token keys.api access token. **Required**
 
 keys:
-  host: ''
+  url: ''
   token: ''
 
 # @section ElasticSearch settings (supported version 7.x)
@@ -192,29 +199,40 @@ elastic:
   host: ''
   credentials: ''
 
+# @section Redis settings (supported version 6.x)
+
+# @param redis.host Redis host address. **Required**
+# @param redis.port Redis port. **Required**
+# @skip redis.enabled
+
+redis:
+  host: ''
+  port: 6379
+  enabled: true
+  
 # @section Catalog API settings
 
-# @param catalog.host Host for [Catalog API](https://docs.2gis.com/en/on-premise/search).
+# @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search).
 # @param catalog.key Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).
 
 catalog:
-  host: http://catalog-api.host
+  url: http://catalog-api.svc
   key: ''
 
 # @section Navigation API settings
 
-# @param navi.host Host for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
 # @param navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
 
 navi:
-  host: http://navi-back.host
+  url: http://navi-back.svc
   key: ''
 
 # @section Search API settings
 
-# @param search.host Host for [Search API](https://docs.2gis.com/en/on-premise/search)
+# @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search)
 search:
-  host: http://search-api.host
+  url: http://search-api.svc
 
 # @section 2GIS PRO API Job settings
 
@@ -259,7 +277,7 @@ permissionsApi:
 # @section Import job settings
 
 # @param assetImporter.repository Docker Repository Image.
-# @param assetImporter.tag Docker image tag
+# @param assetImporter.tag Docker image tag.
 # @param assetImporter.schedule Import job schedule.
 # @param assetImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
 # @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
@@ -271,7 +289,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.0.17
+  tag: latest
   schedule: '0 18 * * *'
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -304,7 +322,7 @@ assetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.0.17
+  tag: 1.0.19
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

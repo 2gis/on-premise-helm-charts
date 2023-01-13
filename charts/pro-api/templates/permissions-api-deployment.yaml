@@ -106,8 +106,10 @@ spec:
               value: "{{ .Values.api.debug }}"
             - name: ALLOW_ANY_ORIGIN
               value: "{{ .Values.api.allowAnyOrigin }}"
+            - name: ENV
+              value: "{{ .Values.api.env }}"
             - name: DB_CONNECTION_STRING
-              value: "{{ .Values.postgres.connectionString }}"
+              value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
             - name: DB_CONNECTION_STRING_READONLY
               value: "{{ .Values.postgres.connectionStringReadonly }}"
             - name: DB_CONNECTION_PWD
@@ -123,7 +125,7 @@ spec:
                   key: permissionsApiKey
                   name: {{ include "pro-api.name" . }}-secret
             - name: KEYS_SERVICE_URL
-              value: "{{ .Values.keys.host }}"
+              value: "{{ .Values.keys.url }}"
             {{ if .Values.keys.token }}
             - name: KEYS_SERVICE_TOKEN
               valueFrom:
@@ -131,4 +133,10 @@ spec:
                   key: keysServiceToken
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}
+            - name: Redis__Host
+              value: "{{ .Values.redis.host }}"
+            - name: Redis__Port
+              value: "{{ .Values.redis.port }}"
+            - name: Redis__Enabled
+              value: "{{ .Values.redis.enabled }}"
 {{- end }}

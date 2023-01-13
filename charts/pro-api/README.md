@@ -74,11 +74,14 @@
 
 ### Deployment settings
 
-| Name               | Description | Value                     |
-| ------------------ | ----------- | ------------------------- |
-| `image.repository` | Repository  | `2gis-on-premise/pro-api` |
-| `image.tag`        | Tag         | `1.0.17`                  |
-| `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
+| Name                   | Description              | Value                      |
+| ---------------------- | ------------------------ | -------------------------- |
+| `image.repository`     | Repository               | `2gis-on-premise/pro-api`  |
+| `image.tag`            | Tag                      | `1.0.19`                   |
+| `image.pullPolicy`     | Pull Policy              | `IfNotPresent`             |
+| `curlImage.repository` | Docker Repository Image. | `2gis-on-premise/pro-curl` |
+| `curlImage.tag`        | Docker image tag.        | `latest`                   |
+| `curlImage.pullPolicy` | Pull policy              | `IfNotPresent`             |
 
 
 ### 2GIS PRO Storage configuration
@@ -109,10 +112,10 @@
 
 ### Keys Service settings
 
-| Name         | Description                                                                 | Value |
-| ------------ | --------------------------------------------------------------------------- | ----- |
-| `keys.host`  | API URL of service for managing partners' keys to 2GIS services (keys.api). | `""`  |
-| `keys.token` | keys.api access token.                                                      | `""`  |
+| Name         | Description                                                                              | Value |
+| ------------ | ---------------------------------------------------------------------------------------- | ----- |
+| `keys.url`   | API URL of service for managing partners' keys to 2GIS services (keys.api). **Required** | `""`  |
+| `keys.token` | keys.api access token. **Required**                                                      | `""`  |
 
 
 ### ElasticSearch settings (supported version 7.x)
@@ -123,27 +126,35 @@
 | `elastic.credentials` | User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD` | `""`  |
 
 
+### Redis settings (supported version 6.x)
+
+| Name         | Description                      | Value  |
+| ------------ | -------------------------------- | ------ |
+| `redis.host` | Redis host address. **Required** | `""`   |
+| `redis.port` | Redis port. **Required**         | `6379` |
+
+
 ### Catalog API settings
 
-| Name           | Description                                                              | Value                     |
-| -------------- | ------------------------------------------------------------------------ | ------------------------- |
-| `catalog.host` | Host for [Catalog API](https://docs.2gis.com/en/on-premise/search).      | `http://catalog-api.host` |
-| `catalog.key`  | Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search). | `""`                      |
+| Name          | Description                                                              | Value                    |
+| ------------- | ------------------------------------------------------------------------ | ------------------------ |
+| `catalog.url` | URL for [Catalog API](https://docs.2gis.com/en/on-premise/search).       | `http://catalog-api.svc` |
+| `catalog.key` | Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search). | `""`                     |
 
 
 ### Navigation API settings
 
-| Name        | Description                                                                              | Value                   |
-| ----------- | ---------------------------------------------------------------------------------------- | ----------------------- |
-| `navi.host` | Host for [Navigation API](https://docs.2gis.com/en/on-premise/search).                   | `http://navi-back.host` |
-| `navi.key`  | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). | `""`                    |
+| Name       | Description                                                                              | Value                  |
+| ---------- | ---------------------------------------------------------------------------------------- | ---------------------- |
+| `navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).       | `http://navi-back.svc` |
+| `navi.key` | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). | `""`                   |
 
 
 ### Search API settings
 
-| Name          | Description                                                       | Value                    |
-| ------------- | ----------------------------------------------------------------- | ------------------------ |
-| `search.host` | Host for [Search API](https://docs.2gis.com/en/on-premise/search) | `http://search-api.host` |
+| Name         | Description                                                      | Value                   |
+| ------------ | ---------------------------------------------------------------- | ----------------------- |
+| `search.url` | URL for [Search API](https://docs.2gis.com/en/on-premise/search) | `http://search-api.svc` |
 
 
 ### 2GIS PRO API Job settings
@@ -159,7 +170,7 @@
 | Name                                       | Description                                                                                                                                              | Value                          |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag                                                                                                                                         | `1.0.17`                       |
+| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `latest`                       |
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
@@ -198,13 +209,13 @@
 2. Then execute command:<br/>
 `- helm upgrade "pro-api" --install --atomic --wait --wait-for-jobs --timeout 10m --values ./values-api.yaml`
 3. Check installation by executing request<br/>
-`https://2GIS_API_HOST/health/ready`
-4. Import data during first installation by executing commands<br/>
-`kubectl create job --from=cronjob/RELEASE_NAME-asset-importer asset-importer-manual`<br/>
-`kubectl create job --from=cronjob/RELEASE_NAME-user-asset-importer user-asset-importer-manual`
-5. Wait for the import process to finish. It can takes from several minutes to several hours depending on the amount of data.
-6. Check installation by executing request<br/>
-`https://2GIS_API_HOST/bounds?wkt=POLYGON((-170.507812 83.676943,-167.343750 -62.267922,213.398437 -63.391521,197.2265625 83.559716,-170.507812 83.676943))
+`https://pro-api.host/health/ready`
+4. If this is the initial installation of the service, wait for a while for the data import process to complete.<br/>
+This may take from several minutes to several hours depending on the number of territories available and your environment.
+To check import progress you can use request<br/>
+`https://pro-api.host/tasks/working`
+5. Check installation by executing request<br/>
+`https://pro-api.host/bounds?wkt=POLYGON((-170.507812 83.676943,-167.343750 -62.267922,213.398437 -63.391521,197.2265625 83.559716,-170.507812 83.676943))`
 <br/>The response must contain bound of any territory in json format, response http code = 200
 
 ## Maintainers

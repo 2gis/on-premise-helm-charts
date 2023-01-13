@@ -16,8 +16,8 @@ spec:
       serviceAccountName: {{ include "pro-api.service-account-name" . }}
       containers:
         - name: {{ include "pro-api.asset-importer-name" . }}-starter
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/pro-curl:latest
-          imagePullPolicy: IfNotPresent
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.curlImage.repository }}:{{ .Values.curlImage.tag }}
+          imagePullPolicy: {{ .Values.curlImage.pullPolicy }}
           resources:
             requests:
               cpu: 50m
