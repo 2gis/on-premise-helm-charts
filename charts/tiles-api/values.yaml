@@ -291,7 +291,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.35.1
+    tag: 4.35.0
     pullPolicy: IfNotPresent
 
 
