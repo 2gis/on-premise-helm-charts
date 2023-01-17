@@ -1,4 +1,4 @@
-# @section Docker Registry settings
+﻿# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -113,7 +113,7 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 0.3.21
+  tag: 1.0.17
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
@@ -203,12 +203,18 @@ catalog:
 
 # @section Navigation API settings
 
-# @param navi.host Host for [Navigation API](https://docs.2gis.com/en/on-premise/search).
+# @param navi.host Host for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
 # @param navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
 
 navi:
   host: http://navi-back.host
   key: ''
+
+# @section Search API settings
+
+# @param search.host Host for [Search API](https://docs.2gis.com/en/on-premise/search)
+search:
+  host: http://search-api.host
 
 # @section 2GIS PRO API Job settings
 
@@ -237,10 +243,10 @@ permissionsPodSettings:
   revisionHistoryLimit: 3
   resources:
     requests:
-      cpu: 150m
+      cpu: 300m
       memory: 256M
     limits:
-      cpu: 500
+      cpu: 500m
       memory: 512M
 
 # @skip permissionsApi
@@ -259,24 +265,28 @@ permissionsApi:
 # @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
 # @param assetImporter.maxParallelJobs How many import jobs can be run simultaneously
 # @param assetImporter.enabled If assetImporter is enabled for the service.
+# @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
 # @skip assetImporter.files
+# @skip assetImporter.imageProxyUrl
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 0.3.21
-  schedule: 0 18 * * *
+  tag: 1.0.17
+  schedule: '0 18 * * *'
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   resources:
     requests:
       cpu: 700m
-      memory: 256M
+      memory: 768M
     limits:
       cpu: 1000m
-      memory: 1024M
+      memory: 1280M
   maxParallelJobs: 4
   enabled: true
+  startOnDeploy: true
   files: ''
+  imageProxyUrl: ''
 
 # Data prepare job settings
 
@@ -294,7 +304,7 @@ assetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 0.3.21
+  tag: 1.0.17
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

@@ -1,0 +1,36 @@
+{{ if .Values.assetImporter.startOnDeploy }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "pro-api.asset-importer-name" . }}-starter
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  backoffLimit: {{ .Values.assetImporter.backoffLimit }}
+  template:
+    spec:
+      nodeSelector:
+        role: worker
+      restartPolicy: OnFailure
+      serviceAccountName: {{ include "pro-api.service-account-name" . }}
+      containers:
+        - name: {{ include "pro-api.asset-importer-name" . }}-starter
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/pro-curl:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128M
+            limits:
+              cpu: 100m
+              memory: 256M
+          args:
+            - curl
+            - -f
+            - -d
+            - "{}"
+            - -H
+            - 'Content-Type: application/json'
+            - http://{{ include "pro-api.name" . }}/tasks/import
+{{ end }}

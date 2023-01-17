@@ -71,7 +71,7 @@ spec:
               name: temp-volume
           livenessProbe:
             httpGet:
-              path: /health
+              path: /health/live
               port: http
             failureThreshold: 5
             initialDelaySeconds: 5
@@ -80,19 +80,19 @@ spec:
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
-              path: /health
+              path: /health/ready
               port: http
             failureThreshold: 3
-            initialDelaySeconds: 5
+            initialDelaySeconds: 15
             periodSeconds: 5
             successThreshold: 1
             timeoutSeconds: 5
           startupProbe:
             httpGet:
-              path: /health
+              path: /health/live
               port: http
             failureThreshold: 3
-            initialDelaySeconds: 5
+            initialDelaySeconds: 15
             periodSeconds: 5
             successThreshold: 1
             timeoutSeconds: 5
@@ -109,6 +109,8 @@ spec:
               value: "{{ .Values.api.allowAnyOrigin }}"
             - name: DB_CONNECTION_STRING
               value: "{{ .Values.postgres.connectionString }}"
+            - name: DB_CONNECTION_STRING_READONLY
+              value: "{{ .Values.postgres.connectionStringReadonly }}"
             - name: DB_CONNECTION_PWD
               valueFrom:
                 secretKeyRef:

@@ -32,13 +32,13 @@
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                                                              | Value                   |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`                    |
-| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `""`                    |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`                    |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`                    |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `manifests/latest.json` |
+| Name                     | Description                                                                                                                                                                                                                                                           | Value |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                                        | `""`  |
+| `dgctlStorage.bucket`    | S3 bucket name. **Required**                                                                                                                                                                                                                                          | `""`  |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`  |
 
 
 ### Strategy settings
@@ -77,16 +77,16 @@
 | Name               | Description | Value                     |
 | ------------------ | ----------- | ------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/pro-api` |
-| `image.tag`        | Tag         | `latest`                  |
+| `image.tag`        | Tag         | `1.0.17`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
 
 ### 2GIS PRO Storage configuration
 
-| Name                      | Description                                                   | Value |
-| ------------------------- | ------------------------------------------------------------- | ----- |
-| `s3.layerDataBucket`      | S3 bucket with prepared layer data.                           | `""`  |
-| `s3.userAssetsDataBucket` | S3 bucket with user-created assets, aggregations, and filters | `""`  |
+| Name                      | Description                                                                 | Value |
+| ------------------------- | --------------------------------------------------------------------------- | ----- |
+| `s3.layerDataBucket`      | S3 bucket with prepared layer data. **Required**                            | `""`  |
+| `s3.userAssetsDataBucket` | S3 bucket with user-created assets, aggregations, and filters. **Required** | `""`  |
 
 
 ### 2GIS PRO API configuration
@@ -139,6 +139,13 @@
 | `navi.key`  | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). | `""`                    |
 
 
+### Search API settings
+
+| Name          | Description                                                       | Value                    |
+| ------------- | ----------------------------------------------------------------- | ------------------------ |
+| `search.host` | Host for [Search API](https://docs.2gis.com/en/on-premise/search) | `http://search-api.host` |
+
+
 ### 2GIS PRO API Job settings
 
 | Name                       | Description                | Value                 |
@@ -152,12 +159,13 @@
 | Name                                       | Description                                                                                                                                              | Value                          |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag                                                                                                                                         | `latest`                       |
+| `assetImporter.tag`                        | Docker image tag                                                                                                                                         | `1.0.17`                       |
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
 | `assetImporter.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                           | `4`                            |
 | `assetImporter.enabled`                    | If assetImporter is enabled for the service.                                                                                                             | `true`                         |
+| `assetImporter.startOnDeploy`              | Indicates that asset import should start when service installed or updated                                                                               | `true`                         |
 
 
 ### Limits
@@ -171,9 +179,9 @@
 | `resources.limits.memory`                 | A memory limit.                        | `1024M` |
 | `assetImporter.resources`                 | **Limits for the import job**          |         |
 | `assetImporter.resources.requests.cpu`    | A CPU request.                         | `700m`  |
-| `assetImporter.resources.requests.memory` | A memory request.                      | `256M`  |
+| `assetImporter.resources.requests.memory` | A memory request.                      | `768M`  |
 | `assetImporter.resources.limits.cpu`      | A CPU limit.                           | `1000m` |
-| `assetImporter.resources.limits.memory`   | A memory limit.                        | `1024M` |
+| `assetImporter.resources.limits.memory`   | A memory limit.                        | `1280M` |
 
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
