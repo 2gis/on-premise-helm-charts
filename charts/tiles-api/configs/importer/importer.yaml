@@ -30,5 +30,5 @@ worker:
   temp-dir: /tmp
   writer-num: {{ .Values.importer.writerNum }}
 
-log-level: info
-log-format: text
+log-level: {{ .Values.importer.logLevel | default "info" }}
+log-format: {{ .Values.importer.logFormat | default "json" }}

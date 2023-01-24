@@ -267,6 +267,8 @@ api:
 
 # @param importer.enabled If Importer job is enabled.
 # @param importer.serviceAccountOverride A custom service account for creating import/cleaning processes. If not defined it will be created automatically.
+# @param importer.logLevel Importer logging level. Allowed options: info|warn|debug|error. If not defined, info level will be used.
+# @param importer.logFormat Importer logging format. Allowed options: text|json. If not defined, json format will be used.
 # @param importer.workerNum Number of parallel import processes (workers).
 # @param importer.writerNum Number of write processes per import process (worker).
 
@@ -282,6 +284,8 @@ api:
 importer:
   enabled: true
   serviceAccountOverride: ''
+  logLevel: info
+  logFormat: json
 
   # @extra importer.image **Docker image settings**
   # @param importer.image.repository Docker Repository.
