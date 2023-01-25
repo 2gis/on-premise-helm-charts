@@ -25,6 +25,8 @@ dgctlStorage:
 # @param warningText Warning message on raster tiles for 'soft' block. Should contain '%d' for the number of days until the 'hard' block and '%s' for the account manager contact information.
 # @param errorText Error message on raster tiles for 'hard' block. Should contain '%s' for the account manager contact information.
 # @param emailManager Account manager contact information that will be used in warning and error messages on raster tiles for all kinds of blocks.
+# @param logLevel Logging level for 'api', 'proxy', 'importer' (can be overridden by {service}.logLevelOverride option). Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
+# @param logFormat Logging format for 'api', 'proxy', 'importer' (can be overridden by {service}.logFormatOverride option). Allowed options: text|json. If not defined, 'json' format will be used.
 
 # @extra types **Tiles [types](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture) enabled in Tiles API**
 # @param types[0].kind Kind of tiles, should be one of: web, raster, native.
@@ -36,6 +38,9 @@ name: tiles-api
 warningText: License expiring in %d days.\nPlease contact your account manager.\n%s
 errorText: License expired.\nPlease contact your account manager.\n%s
 emailManager: on-premise@2gis.com
+
+logLevel: info
+logFormat: json
 
 types:
 - kind: ''
@@ -76,6 +81,8 @@ cassandra:
 # @section API Keys proxy settings
 
 # @extra proxy **Common settings**
+# @param proxy.logLevelOverride A custom proxy logging level. Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
+# @param proxy.logFormatOverride A custom proxy logging format. Allowed options: text|json. If not defined, 'json' format will be used.
 # @param proxy.containerPort Port the proxy listens on.
 # @param proxy.timeout Proxy timeout, in seconds.
 
@@ -97,6 +104,9 @@ cassandra:
 # @param proxy.access.syncPeriod Proxy sync period.
 
 proxy:
+  logLevelOverride: info
+  logFormatOverride: json
+
   image:
     repository: 2gis-on-premise/tiles-api-proxy
     tag: 4.34.0
@@ -125,7 +135,8 @@ proxy:
 
 # @param api.terminationGracePeriodSeconds Duration in seconds the Tiles API service pod needs to terminate gracefully.
 # @param api.containerPort Tiles API container port.
-
+# @param api.logLevelOverride A custom api logging level. Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
+# @param api.logFormatOverride A custom api logging format. Allowed options: text|json. If not defined, 'json' format will be used.
 # @param api.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 # @param api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param api.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -144,6 +155,8 @@ proxy:
 # @param api.resources.limits.memory A memory limit.
 
 api:
+  logLevelOverride: info
+  logFormatOverride: json
 
   # @extra api.image **Docker image settings**
   # @param api.image.repository Docker Repository.
@@ -267,8 +280,8 @@ api:
 
 # @param importer.enabled If Importer job is enabled.
 # @param importer.serviceAccountOverride A custom service account for creating import/cleaning processes. If not defined it will be created automatically.
-# @param importer.logLevel Importer logging level. Allowed options: info|warn|debug|error. If not defined, info level will be used.
-# @param importer.logFormat Importer logging format. Allowed options: text|json. If not defined, json format will be used.
+# @param importer.logLevelOverride A custom importer logging level. Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
+# @param importer.logFormatOverride A custom importer logging format. Allowed options: text|json. If not defined, 'json' format will be used.
 # @param importer.workerNum Number of parallel import processes (workers).
 # @param importer.writerNum Number of write processes per import process (worker).
 
@@ -284,8 +297,8 @@ api:
 importer:
   enabled: true
   serviceAccountOverride: ''
-  logLevel: info
-  logFormat: json
+  logLevelOverride: info
+  logFormatOverride: json
 
   # @extra importer.image **Docker image settings**
   # @param importer.image.repository Docker Repository.
