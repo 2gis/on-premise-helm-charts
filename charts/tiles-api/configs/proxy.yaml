@@ -2,26 +2,8 @@
 host: 0.0.0.0
 port:  {{ .containerPort }}
 
-{{- $logLevel := .logLevelOverride }}
-{{- if $logLevel }}
-  {{- $logLevel = .logLevelOverride }}
-{{ else if $.Values.logLevel }}
-  {{- $logLevel = $.Values.logLevel }}
-{{ else }}
-  {{- $logLevel = "info" }}
-{{ end }}
-
-{{- $logFormat := .logFormatOverride }}
-{{- if $logFormat }}
-  {{- $logFormat = .logFormatOverride }}
-{{ else if $.Values.logFormat }}
-  {{- $logFormat = $.Values.logFormat }}
-{{ else }}
-  {{- $logFormat = "json" }}
-{{ end -}}
-
-log-level: {{ $logLevel }}
-log-format: {{ $logFormat }}
+log-level: {{ .logLevelOverride | default $.Values.logLevel | default "info" }}
+log-format: {{ .logFormatOverride | default $.Values.logFormat | default "json" }}
 
 proxy:
   timeout: {{ .timeout }}
