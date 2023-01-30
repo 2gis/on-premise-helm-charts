@@ -24,11 +24,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: MAPGL_KEY
   value: "{{ required "A valid .Values.ui.mapgl.key entry required" .Values.ui.mapgl.key }}"
 - name: MAPGL_STYLE_URL
-  value: "{{ required "A valid .Values.ui.mapgl.styleUrl entry required" .Values.ui.mapgl.styleUrl }}"
+  value: "{{ .Values.ui.mapgl.styleUrl }}"
 - name: MAPGL_STYLE_ICONS_URL
-  value: "{{ required "A valid .Values.ui.mapgl.styleIconsUrl entry required" .Values.ui.mapgl.styleIconsUrl }}"
+  value: "{{ .Values.ui.mapgl.styleIconsUrl }}"
 - name: MAPGL_STYLE_FONTS_URL
-  value: "{{ required "A valid .Values.ui.mapgl.styleFontsUrl entry required" .Values.ui.mapgl.styleFontsUrl }}"
+  value: "{{ .Values.ui.mapgl.styleFontsUrl }}"
 - name: LOG_LEVEL
   value: "{{ .Values.ui.logLevel }}"
 - name: IS_ON_PREM
