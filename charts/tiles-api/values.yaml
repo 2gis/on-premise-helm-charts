@@ -104,9 +104,6 @@ cassandra:
 # @param proxy.access.syncPeriod Proxy sync period.
 
 proxy:
-  logLevelOverride: info
-  logFormatOverride: json
-
   image:
     repository: 2gis-on-premise/tiles-api-proxy
     tag: 4.34.0
@@ -155,9 +152,6 @@ proxy:
 # @param api.resources.limits.memory A memory limit.
 
 api:
-  logLevelOverride: info
-  logFormatOverride: json
-
   # @extra api.image **Docker image settings**
   # @param api.image.repository Docker Repository.
   # @param api.image.tag Docker image tag.
@@ -297,8 +291,6 @@ api:
 importer:
   enabled: true
   serviceAccountOverride: ''
-  logLevelOverride: info
-  logFormatOverride: json
 
   # @extra importer.image **Docker image settings**
   # @param importer.image.repository Docker Repository.
