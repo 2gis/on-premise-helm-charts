@@ -12,8 +12,10 @@ spec:
       backoffLimit: {{ .Values.assetPreparer.backoffLimit }}
       template:
         spec:
+          {{- with .Values.assetPreparer.nodeSelector }}
           nodeSelector:
-            role: worker
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           restartPolicy: Never
           volumes:
             - name: temp-volume

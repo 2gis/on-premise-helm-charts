@@ -10,8 +10,10 @@ spec:
   backoffLimit: {{ .Values.assetImporter.backoffLimit }}
   template:
     spec:
+      {{- with .Values.assetImporter.nodeSelector }}
       nodeSelector:
-        role: worker
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       restartPolicy: OnFailure
       serviceAccountName: {{ include "pro-api.service-account-name" . }}
       containers:

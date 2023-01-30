@@ -281,6 +281,7 @@ permissionsApi:
 # @param assetImporter.schedule Import job schedule.
 # @param assetImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
 # @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
+# @param assetImporter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param assetImporter.maxParallelJobs How many import jobs can be run simultaneously
 # @param assetImporter.enabled If assetImporter is enabled for the service.
 # @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
@@ -289,10 +290,11 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: latest
+  tag: 1.0.19
   schedule: '0 18 * * *'
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
+  nodeSelector: {}
   resources:
     requests:
       cpu: 700m
@@ -306,19 +308,7 @@ assetImporter:
   files: ''
   imageProxyUrl: ''
 
-# Data prepare job settings
-
-# @skip assetPreparer.repository
-# @skip assetPreparer.tag
-# @skip assetPreparer.schedule
-# @skip assetPreparer.backoffLimit
-# @skip assetPreparer.successfulJobsHistoryLimit
-# @skip assetPreparer.resources.requests.cpu
-# @skip assetPreparer.resources.requests.memory
-# @skip assetPreparer.resources.limits.cpu
-# @skip assetPreparer.resources.limits.memory
-# @skip assetPreparer.enabled
-# @skip assetPreparer.maxParallelJobs
+# @skip assetPreparer
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
@@ -326,6 +316,7 @@ assetPreparer:
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
+  nodeSelector: {}
   resources:
     requests:
       cpu: 300m
