@@ -3,7 +3,7 @@ replicaCount: 2
 navigroup: navi
 
 naviback:
-  castleHost: navi-castle.svc # #имя сервиса navi-castle в k8s
+  castleHost: navi-castle # #имя сервиса navi-castle в k8s
   dmSourcesLimit: 25 
   dmTargetsLimit: 25 
 
