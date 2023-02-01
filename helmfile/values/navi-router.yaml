@@ -1,7 +1,7 @@
 navigroup: navi
 
 router:
-  castleHost: http://navi-castle.host
+  castleHost: navi-castle #имя сервиса navi-castle в k8s
   # How to get service tokens see https://docs.2gis.com/en/on-premise/deployment/keys#nav-lvl1--4._Fetch_the_service_tokens
   additionalSections: |
     "key_management_service":
