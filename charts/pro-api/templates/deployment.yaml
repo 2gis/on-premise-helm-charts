@@ -136,6 +136,8 @@ spec:
               value: "{{ .Values.api.allowAnyOrigin }}"
             - name: ENV
               value: "{{ .Values.api.env }}"
+            - name: Common__FilterByZoneCodes
+              value: "{{ .Values.api.filterByZoneCodes }}"
             - name: DB_CONNECTION_STRING
               value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
             {{ if .Values.postgres.connectionStringReadonly }}
@@ -207,3 +209,5 @@ spec:
               value: "{{ .Values.redis.port }}"
             - name: Redis__Enabled
               value: "{{ .Values.redis.enabled }}"
+            - name: Common__LoggingFormat
+              value: "{{ .Values.api.loggingFormat }}"

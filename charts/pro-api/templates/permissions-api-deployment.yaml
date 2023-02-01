@@ -139,4 +139,6 @@ spec:
               value: "{{ .Values.redis.port }}"
             - name: Redis__Enabled
               value: "{{ .Values.redis.enabled }}"
+            - name: Common__LoggingFormat
+              value: "{{ .Values.api.loggingFormat }}"
 {{- end }}

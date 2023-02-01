@@ -113,7 +113,7 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.0.19
+  tag: 1.0.23
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
@@ -128,7 +128,7 @@ permissionsApiImage:
 # @param curlImage.pullPolicy Pull policy
 curlImage:
   repository: 2gis-on-premise/pro-curl
-  tag: latest
+  tag: 1.0.23
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -145,6 +145,7 @@ s3:
 # @param api.serviceAccount  Kubernetes service account
 # @param api.tempPath Path to directory used for temp data
 # @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
+# @param api.loggingFormat Possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - just text
 # @skip api.diggerPassword
 # @skip api.diggerUserName
 # @skip api.logEsQueries
@@ -152,6 +153,7 @@ s3:
 # @skip api.env
 # @skip api.useMockAuth
 # @skip api.token
+# @skip api.filterByZoneCodes
 
 api:
   serviceAccount: runner
@@ -164,6 +166,8 @@ api:
   env: ''
   useMockAuth: true
   token: ''
+  filterByZoneCodes: false
+  loggingFormat: 'simple'
 
 # @skip auth
 # @skip auth.url
@@ -290,7 +294,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.0.19
+  tag: 1.0.23
   schedule: '0 18 * * *'
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -312,7 +316,7 @@ assetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.0.19
+  tag: 1.0.23
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
