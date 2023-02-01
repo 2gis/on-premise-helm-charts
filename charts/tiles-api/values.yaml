@@ -104,6 +104,9 @@ cassandra:
 # @param proxy.access.syncPeriod Proxy sync period.
 
 proxy:
+  logLevelOverride:
+  logFormatOverride:
+
   image:
     repository: 2gis-on-premise/tiles-api-proxy
     tag: 4.34.0
@@ -165,6 +168,9 @@ api:
 
   terminationGracePeriodSeconds: 30
   containerPort: 8000
+
+  logLevelOverride:
+  logFormatOverride:
 
   labels: {}
   annotations: {}
@@ -291,6 +297,8 @@ api:
 importer:
   enabled: true
   serviceAccountOverride: ''
+  logLevelOverride:
+  logFormatOverride:
 
   # @extra importer.image **Docker image settings**
   # @param importer.image.repository Docker Repository.
