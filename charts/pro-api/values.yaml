@@ -128,7 +128,7 @@ permissionsApiImage:
 # @param curlImage.pullPolicy Pull policy
 curlImage:
   repository: 2gis-on-premise/pro-curl
-  tag: 1.0.23
+  tag: 1.0.17
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -167,7 +167,7 @@ api:
   useMockAuth: true
   token: ''
   filterByZoneCodes: false
-  loggingFormat: 'simple'
+  loggingFormat: simple
 
 # @skip auth
 # @skip auth.url
@@ -296,7 +296,7 @@ permissionsApi:
 assetImporter:
   repository: 2gis-on-premise/pro-importer
   tag: 1.0.23
-  schedule: '0 18 * * *'
+  schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   nodeSelector: {}
