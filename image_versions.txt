@@ -28,12 +28,13 @@ navi-restrictions
 navi-router
 	navi-router:6.6.1
 pro-api
-	pro-api:1.0.17
-	pro-importer:1.0.17
-	pro-importer:1.0.17
+	pro-api:1.0.23
+	pro-curl:1.0.17
+	pro-importer:1.0.23
+	pro-importer:1.0.23
 	pro-permissions-api:latest
 pro-ui
-	pro-ui:0.1.2
+	pro-ui:0.1.5
 search-api
 	search-api:7.42.1
 	search-nginx:1.21.6
