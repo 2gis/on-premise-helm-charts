@@ -213,7 +213,7 @@ redis:
   host: ''
   port: 6379
   enabled: true
-  
+
 # @section Catalog API settings
 
 # @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search).
