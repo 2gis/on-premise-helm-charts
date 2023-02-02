@@ -1,4 +1,4 @@
-﻿# @section Docker Registry settings
+# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -237,6 +237,7 @@ navi:
 # @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search)
 search:
   url: http://search-api.svc
+
 
 # @section 2GIS PRO API Job settings
 

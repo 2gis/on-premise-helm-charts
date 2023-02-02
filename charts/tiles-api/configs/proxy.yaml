@@ -2,8 +2,8 @@
 host: 0.0.0.0
 port:  {{ .containerPort }}
 
-log-level: info
-log-format: json
+log-level: {{ .logLevelOverride | default $.Values.logLevel | default "info" }}
+log-format: {{ .logFormatOverride | default $.Values.logFormat | default "json" }}
 
 proxy:
   timeout: {{ .timeout }}

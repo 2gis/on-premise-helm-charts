@@ -320,7 +320,7 @@ kafka:
 #  properties:
 #    bootstrap.servers: kafka.host:9092
 #    security.protocol: SSL
-#    ssl.keystore.password: '123'
+#    ssl.key.password: '123'
 #  fileProperties:
 #    ssl.ca.location: '<Set-by-CI from ca.crt>'
 #    ssl.certificate.location: '<Set-by-CI from user.crt>'

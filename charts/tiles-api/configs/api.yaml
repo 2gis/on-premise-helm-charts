@@ -46,5 +46,5 @@ license:
       {{- .Values.errorText | replace "\\n" "\n" | trim | nindent 6 }}
   sales-manager: {{ .Values.emailManager }}
 
-log-level: info
-log-format: json
+log-level: {{ .Values.api.logLevelOverride | default .Values.logLevel | default "info" }}
+log-format: {{ .Values.api.logFormatOverride | default .Values.logFormat | default "json" }}

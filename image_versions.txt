@@ -1,12 +1,12 @@
 catalog-api
-	catalog-api:3.583.0
+	catalog-api:3.584.0
 	catalog-importer:1.0.9
 gis-platform
 	gis_platform_portal:2022.9.29
 	gis_platform_spcore:2022.9.29
 	zookeeper:3.7.0-debian-10-r265
 keys
-	keys-backend:1.40.0
+	keys-backend:1.41.0
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.3.0
 license
@@ -28,14 +28,14 @@ navi-restrictions
 navi-router
 	navi-router:6.6.1
 pro-api
-	pro-api:0.3.21
-	pro-importer:0.3.21
-	pro-importer:0.3.21
+	pro-api:1.0.17
+	pro-importer:1.0.17
+	pro-importer:1.0.17
 	pro-permissions-api:latest
 pro-ui
-	pro-ui:0.1.0
+	pro-ui:0.1.2
 search-api
-	search-api:7.41.0
+	search-api:7.42.1
 	search-nginx:1.21.6
 stat-receiver
 	bss-receiver-api:1.1.4

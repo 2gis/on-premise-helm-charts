@@ -84,6 +84,7 @@
 | `curlImage.pullPolicy` | Pull policy              | `IfNotPresent`             |
 
 
+
 ### 2GIS PRO Storage configuration
 
 | Name                      | Description                                                                 | Value |
@@ -156,6 +157,13 @@
 | Name         | Description                                                      | Value                   |
 | ------------ | ---------------------------------------------------------------- | ----------------------- |
 | `search.url` | URL for [Search API](https://docs.2gis.com/en/on-premise/search) | `http://search-api.svc` |
+
+
+### Search API settings
+
+| Name          | Description                                                       | Value                    |
+| ------------- | ----------------------------------------------------------------- | ------------------------ |
+| `search.host` | Host for [Search API](https://docs.2gis.com/en/on-premise/search) | `http://search-api.host` |
 
 
 ### 2GIS PRO API Job settings

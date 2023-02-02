@@ -32,7 +32,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.40.0`                       |
+| `backend.image.tag`        | Backend service image tag.        | `1.41.0`                       |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
 | `admin.image.tag`          | Admin service image tag.          | `0.3.0`                        |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
@@ -161,12 +161,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `postgres.ro`          | **Settings for the read-only access**   |        |
 | `postgres.ro.host`     | PostgreSQL hostname or IP. **Required** | `""`   |
 | `postgres.ro.port`     | PostgreSQL port.                        | `5432` |
+| `postgres.ro.timeout`  | PostgreSQL client connection timeout.   | `3s`   |
 | `postgres.ro.name`     | PostgreSQL database name. **Required**  | `""`   |
 | `postgres.ro.username` | PostgreSQL username. **Required**       | `""`   |
 | `postgres.ro.password` | PostgreSQL password. **Required**       | `""`   |
 | `postgres.rw`          | **Settings for the read-write access**  |        |
 | `postgres.rw.host`     | PostgreSQL hostname or IP. **Required** | `""`   |
 | `postgres.rw.port`     | PostgreSQL port.                        | `5432` |
+| `postgres.rw.timeout`  | PostgreSQL client connection timeout.   | `3s`   |
 | `postgres.rw.name`     | PostgreSQL database name. **Required**  | `""`   |
 | `postgres.rw.username` | PostgreSQL username. **Required**       | `""`   |
 | `postgres.rw.password` | PostgreSQL password. **Required**       | `""`   |

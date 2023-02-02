@@ -22,7 +22,7 @@ imagePullPolicy: IfNotPresent
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.40.0
+    tag: 1.41.0
 
 
 # @section Admin service settings
@@ -311,6 +311,7 @@ postgres:
 
   # @param postgres.ro.host PostgreSQL hostname or IP. **Required**
   # @param postgres.ro.port PostgreSQL port.
+  # @param postgres.ro.timeout PostgreSQL client connection timeout.
   # @param postgres.ro.name PostgreSQL database name. **Required**
   # @param postgres.ro.username PostgreSQL username. **Required**
   # @param postgres.ro.password PostgreSQL password. **Required**
@@ -318,6 +319,7 @@ postgres:
   ro:
     host: ''
     port: 5432
+    timeout: 3s
     name: ''
     username: ''
     password: ''
@@ -326,6 +328,7 @@ postgres:
 
   # @param postgres.rw.host PostgreSQL hostname or IP. **Required**
   # @param postgres.rw.port PostgreSQL port.
+  # @param postgres.rw.timeout PostgreSQL client connection timeout.
   # @param postgres.rw.name PostgreSQL database name. **Required**
   # @param postgres.rw.username PostgreSQL username. **Required**
   # @param postgres.rw.password PostgreSQL password. **Required**
@@ -333,6 +336,7 @@ postgres:
   rw:
     host: ''
     port: 5432
+    timeout: 3s
     name: ''
     username: ''
     password: ''

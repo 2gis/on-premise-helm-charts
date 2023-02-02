@@ -24,25 +24,36 @@ releases:
         value: {{ .Values.s3.accessKey }}
       - name: s3.secretKey
         value: {{ .Values.s3.secretKey }}
-    {{- if or .Values.kafka.authCert .Values.kafka.authLogin }}
-    {{- if .Values.kafka.authCert }}  # kafka аутентификация по сертификату
+{{- if or .Values.kafka.authCert .Values.kafka.authLogin }}
+  {{- if .Values.kafka.authCert }}  # kafka аутентификация по сертификату
+    {{- if .Values.kafka.authCert.pathCert }} #windows 
+      - name: kafka.fileProperties.ssl\.cafile
+        file: {{ .Values.kafka.authCert.pathCert }}\\{{ .Values.kafka.authCert.sslCA }}
+      - name: kafka.fileProperties.ssl\.certfile 
+        file: {{ .Values.kafka.authCert.pathCert }}\\{{ .Values.kafka.authCert.sslCertificate }}
+      - name: kafka.fileProperties.ssl\.keyfile 
+        file: {{ .Values.kafka.authCert.pathCert }}\\{{ .Values.kafka.authCert.sslKey }}
+    {{ else }}
       - name: kafka.fileProperties.ssl\.cafile
         file: ../ssl/{{ .Values.kafka.authCert.sslCA }}
       - name: kafka.fileProperties.ssl\.certfile 
         file: ../ssl/{{ .Values.kafka.authCert.sslCertificate }}
       - name: kafka.fileProperties.ssl\.keyfile 
         file: ../ssl/{{ .Values.kafka.authCert.sslKey }}
-        {{- if .Values.kafka.authCert.sslPassword }}
+    {{ end }}
+      - name: kafka.properties.ssl\.check\.hostname 
+        value: ''
+    {{- if .Values.kafka.authCert.sslPassword }}
       - name: kafka.sensitiveProperties.ssl\.password
         value: {{ .Values.kafka.authCert.sslPassword }}        
-        {{ end }}
-    {{ else }} # kafka аутентификация по логину и паролю
+    {{ end }}
+  {{ else }} # kafka аутентификация по логину и паролю
       - name: kafka.properties.sasl\.plain\.username
         value: {{ .Values.kafka.authLogin.username }}
       - name: kafka.sensitiveProperties.sasl\.plain\.password
         value: {{ .Values.kafka.authLogin.password }}
-    {{ end }}
-    {{ end }}
+  {{ end }}
+{{ end }}
     {{- if .Values.ingress.enabled }}
     hooks: 
     - events: ["postsync"]

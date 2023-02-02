@@ -262,6 +262,7 @@ kafka:
 #  properties:
 #    bootstrap.servers: kafka.host:9092
 #    security.protocol: SSL
+#    ssl.check.hostname: ''
 #  sensitiveProperties:
 #    ssl.password: 'password'
 #  fileProperties:
