@@ -12,8 +12,10 @@ spec:
       backoffLimit: {{ .Values.assetImporter.backoffLimit }}
       template:
         spec:
+          {{- with .Values.assetImporter.nodeSelector }}
           nodeSelector:
-            role: worker
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           restartPolicy: Never
           serviceAccountName: {{ include "pro-api.service-account-name" . }}
           volumes:

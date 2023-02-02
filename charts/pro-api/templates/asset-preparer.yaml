@@ -12,8 +12,10 @@ spec:
       backoffLimit: {{ .Values.assetPreparer.backoffLimit }}
       template:
         spec:
+          {{- with .Values.assetPreparer.nodeSelector }}
           nodeSelector:
-            role: worker
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           restartPolicy: Never
           volumes:
             - name: temp-volume
@@ -39,11 +41,11 @@ spec:
                 - name: MAX_PARALLEL_JOBS
                   value: "{{ .Values.assetPreparer.maxParallelJobs }}"
                 - name: S3Settings__Url
-                  value: "{{ .Values.dgctlStorage.host }}"
+                  value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
                 - name: S3Settings__AssetDataBucket
-                  value: "{{ .Values.dgctlStorage.bucket }}"
+                  value: {{ required "A valid .Values.dgctlStorage.bucket entry required" $.Values.dgctlStorage.bucket }}
                 - name: S3Settings__UserAssetDataBucket
-                  value: "{{ .Values.s3.userAssetsDataBucket }}"
+                  value: {{ required "A valid .Values.s3.userAssetsDataBucket entry required" $.Values.s3.userAssetsDataBucket }}
                 - name: S3Settings__AccessKey
                   valueFrom:
                     secretKeyRef:
@@ -55,7 +57,7 @@ spec:
                       key: s3SecretKey
                       name: {{ include "pro-api.name" . }}-secret
                 - name: ES_HOST
-                  value: "{{ .Values.elastic.host }}"
+                  value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
                 {{ if .Values.elastic.credentials }}
                 - name: ES_CREDENTIALS
                   valueFrom:

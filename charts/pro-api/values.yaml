@@ -113,7 +113,7 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.0.17
+  tag: 1.0.23
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
@@ -121,6 +121,14 @@ image:
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
   tag: latest
+  pullPolicy: IfNotPresent
+
+# @param curlImage.repository Docker Repository Image.
+# @param curlImage.tag Docker image tag.
+# @param curlImage.pullPolicy Pull policy
+curlImage:
+  repository: 2gis-on-premise/pro-curl
+  tag: 1.0.23
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -137,6 +145,7 @@ s3:
 # @param api.serviceAccount  Kubernetes service account
 # @param api.tempPath Path to directory used for temp data
 # @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
+# @param api.loggingFormat Possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - just text
 # @skip api.diggerPassword
 # @skip api.diggerUserName
 # @skip api.logEsQueries
@@ -144,6 +153,7 @@ s3:
 # @skip api.env
 # @skip api.useMockAuth
 # @skip api.token
+# @skip api.filterByZoneCodes
 
 api:
   serviceAccount: runner
@@ -156,12 +166,14 @@ api:
   env: ''
   useMockAuth: true
   token: ''
+  filterByZoneCodes: false
+  loggingFormat: 'simple'
 
 # @skip auth
-# @skip auth.host
+# @skip auth.url
 
 auth:
-  host: ''
+  url: ''
 
 # @section PostgreSQL settings
 
@@ -175,12 +187,11 @@ postgres:
   password: ''
 
 # @section Keys Service settings
-
-# @param keys.host API URL of service for managing partners' keys to 2GIS services (keys.api).
-# @param keys.token keys.api access token.
+# @param keys.url API URL of service for managing partners' keys to 2GIS services (keys.api). **Required**
+# @param keys.token keys.api access token. **Required**
 
 keys:
-  host: ''
+  url: ''
   token: ''
 
 # @section ElasticSearch settings (supported version 7.x)
@@ -192,29 +203,41 @@ elastic:
   host: ''
   credentials: ''
 
+# @section Redis settings (supported version 6.x)
+
+# @param redis.host Redis host address. **Required**
+# @param redis.port Redis port. **Required**
+# @skip redis.enabled
+
+redis:
+  host: ''
+  port: 6379
+  enabled: true
+
 # @section Catalog API settings
 
-# @param catalog.host Host for [Catalog API](https://docs.2gis.com/en/on-premise/search).
+# @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search).
 # @param catalog.key Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).
 
 catalog:
-  host: http://catalog-api.host
+  url: http://catalog-api.svc
   key: ''
 
 # @section Navigation API settings
 
-# @param navi.host Host for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
 # @param navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
 
 navi:
-  host: http://navi-back.host
+  url: http://navi-back.svc
   key: ''
 
 # @section Search API settings
 
-# @param search.host Host for [Search API](https://docs.2gis.com/en/on-premise/search)
+# @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search)
 search:
-  host: http://search-api.host
+  url: http://search-api.svc
+
 
 # @section 2GIS PRO API Job settings
 
@@ -259,10 +282,11 @@ permissionsApi:
 # @section Import job settings
 
 # @param assetImporter.repository Docker Repository Image.
-# @param assetImporter.tag Docker image tag
+# @param assetImporter.tag Docker image tag.
 # @param assetImporter.schedule Import job schedule.
 # @param assetImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
 # @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
+# @param assetImporter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param assetImporter.maxParallelJobs How many import jobs can be run simultaneously
 # @param assetImporter.enabled If assetImporter is enabled for the service.
 # @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
@@ -271,10 +295,11 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.0.17
-  schedule: 0 18 * * *
+  tag: 1.0.23
+  schedule: '0 18 * * *'
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
+  nodeSelector: {}
   resources:
     requests:
       cpu: 700m
@@ -288,26 +313,15 @@ assetImporter:
   files: ''
   imageProxyUrl: ''
 
-# Data prepare job settings
-
-# @skip assetPreparer.repository
-# @skip assetPreparer.tag
-# @skip assetPreparer.schedule
-# @skip assetPreparer.backoffLimit
-# @skip assetPreparer.successfulJobsHistoryLimit
-# @skip assetPreparer.resources.requests.cpu
-# @skip assetPreparer.resources.requests.memory
-# @skip assetPreparer.resources.limits.cpu
-# @skip assetPreparer.resources.limits.memory
-# @skip assetPreparer.enabled
-# @skip assetPreparer.maxParallelJobs
+# @skip assetPreparer
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.0.17
+  tag: 1.0.23
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
+  nodeSelector: {}
   resources:
     requests:
       cpu: 300m

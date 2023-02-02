@@ -10,14 +10,16 @@ spec:
   backoffLimit: {{ .Values.assetImporter.backoffLimit }}
   template:
     spec:
+      {{- with .Values.assetImporter.nodeSelector }}
       nodeSelector:
-        role: worker
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       restartPolicy: OnFailure
       serviceAccountName: {{ include "pro-api.service-account-name" . }}
       containers:
         - name: {{ include "pro-api.asset-importer-name" . }}-starter
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/2gis-on-premise/pro-curl:1.0.17
-          imagePullPolicy: IfNotPresent
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.curlImage.repository }}:{{ .Values.curlImage.tag }}
+          imagePullPolicy: {{ .Values.curlImage.pullPolicy }}
           resources:
             requests:
               cpu: 50m
