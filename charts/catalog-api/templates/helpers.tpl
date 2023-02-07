@@ -162,6 +162,13 @@ onprem
 {{- end }}
 {{- end }}
 
+{{- define "catalog.env.license" -}}
+- name: CATALOG_PASPORTOOL_ENDPOINT
+  value: "{{ required "A valid .Values.license.url entry required" .Values.license.url }}"
+- name: CATALOG_PASPORTOOL_REQUEST_TIMEOUT
+  value: "{{ .Values.license.requestTimeout }}"
+{{- end }}
+
 {{- define "catalog.env.importer" -}}
 - name: IMPORTER_DB_CATALOG_SCHEMA
   value: "{{ include "catalog.manifestCode" . }}"
