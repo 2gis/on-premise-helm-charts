@@ -2,7 +2,7 @@
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
-dgctlDockerRegistry: ''
+dgctlDockerRegistry: 'host:3000'
 
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
@@ -60,7 +60,7 @@ ui:
   # @param ui.api.url Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/.
 
   api:
-    url: ''
+    url: 'https://pro-back.4geo.info/'
 
   # @section MapGL JS API settings
 
@@ -110,7 +110,7 @@ ui:
   ingress:
     enabled: false
     hosts:
-    - host: pro-ui.host
+      - host: pro-ui.host
 
   # @section Limits
 

@@ -1,0 +1,610 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "default": {},
+  "title": "Root Schema",
+  "required": ["dgctlDockerRegistry", "imagePullPolicy", "imagePullSecrets", "ui"],
+  "properties": {
+    "dgctlDockerRegistry": {
+      "type": "string",
+      "default": "Any docker registry name",
+      "pattern": "^.+:\\d+$",
+      "title": "Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`",
+      "examples": [""]
+    },
+    "imagePullPolicy": {
+      "type": "string",
+      "pattern": "^(Always|Never|IfNotPresent)$",
+      "default": "IfNotPresent",
+      "title": "The imagePullPolicy Schema",
+      "examples": ["IfNotPresent"]
+    },
+    "imagePullSecrets": {
+      "type": "array",
+      "default": [],
+      "title": "The imagePullSecrets Schema",
+      "items": {},
+      "examples": [[]]
+    },
+    "ui": {
+      "type": "object",
+      "default": {},
+      "title": "The ui Schema",
+      "required": [
+        "replicas",
+        "nodeSelector",
+        "affinity",
+        "tolerations",
+        "podAnnotations",
+        "podLabels",
+        "annotations",
+        "labels",
+        "image",
+        "logLevel",
+        "isOnPremise",
+        "ssoAuth",
+        "appTheme",
+        "appLocale",
+        "appInitialMapCenter",
+        "api",
+        "mapgl",
+        "strategy",
+        "service",
+        "ingress",
+        "resources"
+      ],
+      "properties": {
+        "replicas": {
+          "type": "integer",
+          "default": 0,
+          "title": "The replicas Schema",
+          "examples": [1]
+        },
+        "nodeSelector": {
+          "type": "object",
+          "default": {},
+          "title": "The nodeSelector Schema",
+          "required": [],
+          "properties": {},
+          "examples": [{}]
+        },
+        "affinity": {
+          "type": "object",
+          "default": {},
+          "title": "The affinity Schema",
+          "required": [],
+          "properties": {},
+          "examples": [{}]
+        },
+        "tolerations": {
+          "type": "array",
+          "default": [],
+          "title": "The tolerations Schema",
+          "items": {},
+          "examples": [[]]
+        },
+        "podAnnotations": {
+          "type": "object",
+          "default": {},
+          "title": "The podAnnotations Schema",
+          "required": [],
+          "properties": {},
+          "examples": [{}]
+        },
+        "podLabels": {
+          "type": "object",
+          "default": {},
+          "title": "The podLabels Schema",
+          "required": [],
+          "properties": {},
+          "examples": [{}]
+        },
+        "annotations": {
+          "type": "object",
+          "default": {},
+          "title": "The annotations Schema",
+          "required": [],
+          "properties": {},
+          "examples": [{}]
+        },
+        "labels": {
+          "type": "object",
+          "default": {},
+          "title": "The labels Schema",
+          "required": [],
+          "properties": {},
+          "examples": [{}]
+        },
+        "image": {
+          "type": "object",
+          "default": {},
+          "title": "The image Schema",
+          "required": ["repository", "tag"],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "default": "",
+              "title": "The repository Schema",
+              "examples": ["2gis-on-premise/pro-ui"]
+            },
+            "tag": {
+              "type": "string",
+              "default": "",
+              "title": "The tag Schema",
+              "examples": ["0.1.5"]
+            }
+          },
+          "examples": [
+            {
+              "repository": "2gis-on-premise/pro-ui",
+              "tag": "0.1.5"
+            }
+          ]
+        },
+        "logLevel": {
+          "type": "string",
+          "pattern": "^error$",
+          "default": "error",
+          "title": "The logLevel Schema",
+          "examples": ["error"]
+        },
+        "isOnPremise": {
+          "type": "string",
+          "pattern": "^(false|true)$",
+          "default": "true",
+          "title": "The isOnPremise Schema",
+          "examples": ["true", "false"]
+        },
+        "ssoAuth": {
+          "type": "string",
+          "pattern": "^(false|true)$",
+          "default": "false",
+          "title": "The ssoAuth Schema",
+          "examples": ["false", "true"]
+        },
+        "appTheme": {
+          "type": "string",
+          "pattern": "^(urbi|2gis)$",
+          "default": "urbi",
+          "title": "The appTheme Schema",
+          "examples": ["urbi", "2gis"]
+        },
+        "appLocale": {
+          "type": "string",
+          "pattern": "^(en_AE|ru_RU)$",
+          "default": "en_AE",
+          "title": "The appLocale Schema",
+          "examples": ["en_AE", "ru_RU"]
+        },
+        "appInitialMapCenter": {
+          "type": "string",
+          "default": "[46.71, 24.72]",
+          "title": "The appInitialMapCenter Schema",
+          "examples": ["[46.71, 24.72]", "[37.64, 55.74]"]
+        },
+        "api": {
+          "type": "object",
+          "default": {},
+          "title": "The api Schema",
+          "required": ["url"],
+          "properties": {
+            "url": {
+              "type": "string",
+              "pattern": "^.*/$",
+              "default": "",
+              "title": "The url Schema",
+              "examples": ["https://pro-back.4geo.info/"]
+            }
+          },
+          "examples": [
+            {
+              "url": "https://pro-back.4geo.info/"
+            }
+          ]
+        },
+        "mapgl": {
+          "type": "object",
+          "default": {},
+          "title": "The mapgl Schema",
+          "required": ["host", "key", "styleUrl", "styleIconsUrl", "styleFontsUrl"],
+          "properties": {
+            "host": {
+              "type": "string",
+              "default": "",
+              "title": "The host Schema",
+              "examples": ["pro-js.4geo.info"]
+            },
+            "key": {
+              "type": "string",
+              "default": "",
+              "title": "The key Schema",
+              "examples": ["5eea1dd3-8913-4cda-82a0-496108e5794c"]
+            },
+            "styleUrl": {
+              "type": "string",
+              "default": "",
+              "title": "The styleUrl Schema",
+              "examples": [""]
+            },
+            "styleIconsUrl": {
+              "type": "string",
+              "default": "",
+              "title": "The styleIconsUrl Schema",
+              "examples": [""]
+            },
+            "styleFontsUrl": {
+              "type": "string",
+              "default": "",
+              "title": "The styleFontsUrl Schema",
+              "examples": [""]
+            }
+          },
+          "examples": [
+            {
+              "host": "pro-js.4geo.info",
+              "key": "e33e75a9-0818-4bfd-8147-84ca82543865",
+              "styleUrl": "",
+              "styleIconsUrl": "",
+              "styleFontsUrl": ""
+            }
+          ]
+        },
+        "strategy": {
+          "type": "object",
+          "default": {},
+          "title": "The strategy Schema",
+          "required": ["type", "rollingUpdate"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "default": "RollingUpdate",
+              "title": "The type Schema",
+              "examples": ["RollingUpdate"]
+            },
+            "rollingUpdate": {
+              "type": "object",
+              "default": {},
+              "title": "The rollingUpdate Schema",
+              "required": ["maxUnavailable", "maxSurge"],
+              "properties": {
+                "maxUnavailable": {
+                  "type": "integer",
+                  "default": 0,
+                  "title": "The maxUnavailable Schema",
+                  "examples": [0]
+                },
+                "maxSurge": {
+                  "type": "integer",
+                  "default": 0,
+                  "title": "The maxSurge Schema",
+                  "examples": [1]
+                }
+              },
+              "examples": [
+                {
+                  "maxUnavailable": 0,
+                  "maxSurge": 1
+                }
+              ]
+            }
+          },
+          "examples": [
+            {
+              "type": "RollingUpdate",
+              "rollingUpdate": {
+                "maxUnavailable": 0,
+                "maxSurge": 1
+              }
+            }
+          ]
+        },
+        "service": {
+          "type": "object",
+          "default": {},
+          "title": "The service Schema",
+          "required": ["annotations", "labels", "type", "port"],
+          "properties": {
+            "annotations": {
+              "type": "object",
+              "default": {},
+              "title": "The annotations Schema",
+              "required": [],
+              "properties": {},
+              "examples": [{}]
+            },
+            "labels": {
+              "type": "object",
+              "default": {},
+              "title": "The labels Schema",
+              "required": [],
+              "properties": {},
+              "examples": [{}]
+            },
+            "type": {
+              "type": "string",
+              "default": "",
+              "title": "The type Schema",
+              "examples": ["ClusterIP"]
+            },
+            "port": {
+              "type": "integer",
+              "default": 0,
+              "title": "The port Schema",
+              "examples": [3000]
+            }
+          },
+          "examples": [
+            {
+              "annotations": {},
+              "labels": {},
+              "type": "ClusterIP",
+              "port": 3000
+            }
+          ]
+        },
+        "ingress": {
+          "type": "object",
+          "default": {},
+          "title": "The ingress Schema",
+          "required": ["enabled", "hosts"],
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false,
+              "title": "The enabled Schema",
+              "examples": [false, true]
+            },
+            "hosts": {
+              "type": "array",
+              "default": [],
+              "title": "The hosts Schema",
+              "items": {
+                "type": "object",
+                "default": {},
+                "title": "A Schema",
+                "required": ["host"],
+                "properties": {
+                  "host": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The host Schema",
+                    "examples": ["pro-ui.host"]
+                  }
+                },
+                "examples": [
+                  {
+                    "host": "pro-ui.host"
+                  }
+                ]
+              },
+              "examples": [
+                [
+                  {
+                    "host": "pro-ui.host"
+                  }
+                ]
+              ]
+            }
+          },
+          "examples": [
+            {
+              "enabled": false,
+              "hosts": [
+                {
+                  "host": "pro-ui.host"
+                }
+              ]
+            }
+          ]
+        },
+        "resources": {
+          "type": "object",
+          "default": {},
+          "title": "The resources Schema",
+          "required": ["requests", "limits"],
+          "properties": {
+            "requests": {
+              "type": "object",
+              "default": {},
+              "title": "The requests Schema",
+              "required": ["cpu", "memory"],
+              "properties": {
+                "cpu": {
+                  "type": "string",
+                  "pattern": "^\\d+m$",
+                  "default": "300m",
+                  "title": "The cpu Schema",
+                  "examples": ["300m"]
+                },
+                "memory": {
+                  "type": "string",
+                  "pattern": "^\\d+Mi$",
+                  "default": "256Mi",
+                  "title": "The memory Schema",
+                  "examples": ["256Mi"]
+                }
+              },
+              "examples": [
+                {
+                  "cpu": "300m",
+                  "memory": "256Mi"
+                }
+              ]
+            },
+            "limits": {
+              "type": "object",
+              "default": {},
+              "title": "The limits Schema",
+              "required": ["cpu", "memory"],
+              "properties": {
+                "cpu": {
+                  "type": "integer",
+                  "default": 0,
+                  "title": "The cpu Schema",
+                  "examples": [1]
+                },
+                "memory": {
+                  "type": "string",
+                  "pattern": "^\\d+Mi$",
+                  "default": "384Mi",
+                  "title": "The memory Schema",
+                  "examples": ["384Mi"]
+                }
+              },
+              "examples": [
+                {
+                  "cpu": 1,
+                  "memory": "384Mi"
+                }
+              ]
+            }
+          },
+          "examples": [
+            {
+              "requests": {
+                "cpu": "300m",
+                "memory": "256Mi"
+              },
+              "limits": {
+                "cpu": 1,
+                "memory": "384Mi"
+              }
+            }
+          ]
+        }
+      },
+      "examples": [
+        {
+          "replicas": 1,
+          "nodeSelector": {},
+          "affinity": {},
+          "tolerations": [],
+          "podAnnotations": {},
+          "podLabels": {},
+          "annotations": {},
+          "labels": {},
+          "image": {
+            "repository": "2gis-on-premise/pro-ui",
+            "tag": "0.1.5"
+          },
+          "logLevel": "error",
+          "isOnPremise": "true",
+          "ssoAuth": "false",
+          "appTheme": "urbi",
+          "appLocale": "en_AE",
+          "appInitialMapCenter": "[46.71, 24.72]",
+          "api": {
+            "url": "https://pro-back.4geo.info/"
+          },
+          "mapgl": {
+            "host": "pro-js.4geo.info",
+            "key": "e33e75a9-0818-4bfd-8147-84ca82543865",
+            "styleUrl": "",
+            "styleIconsUrl": "",
+            "styleFontsUrl": ""
+          },
+          "strategy": {
+            "type": "RollingUpdate",
+            "rollingUpdate": {
+              "maxUnavailable": 0,
+              "maxSurge": 1
+            }
+          },
+          "service": {
+            "annotations": {},
+            "labels": {},
+            "type": "ClusterIP",
+            "port": 3000
+          },
+          "ingress": {
+            "enabled": false,
+            "hosts": [
+              {
+                "host": "pro-ui.host"
+              }
+            ]
+          },
+          "resources": {
+            "requests": {
+              "cpu": "300m",
+              "memory": "256Mi"
+            },
+            "limits": {
+              "cpu": 1,
+              "memory": "384Mi"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "examples": [
+    {
+      "dgctlDockerRegistry": "",
+      "imagePullPolicy": "IfNotPresent",
+      "imagePullSecrets": [],
+      "ui": {
+        "replicas": 1,
+        "nodeSelector": {},
+        "affinity": {},
+        "tolerations": [],
+        "podAnnotations": {},
+        "podLabels": {},
+        "annotations": {},
+        "labels": {},
+        "image": {
+          "repository": "2gis-on-premise/pro-ui",
+          "tag": "0.1.5"
+        },
+        "logLevel": "error",
+        "isOnPremise": "true",
+        "ssoAuth": "false",
+        "appTheme": "urbi",
+        "appLocale": "en_AE",
+        "appInitialMapCenter": "[46.71, 24.72]",
+        "api": {
+          "url": "https://pro-back.4geo.info/"
+        },
+        "mapgl": {
+          "host": "pro-js.4geo.info",
+          "key": "e33e75a9-0818-4bfd-8147-84ca82543865",
+          "styleUrl": "",
+          "styleIconsUrl": "",
+          "styleFontsUrl": ""
+        },
+        "strategy": {
+          "type": "RollingUpdate",
+          "rollingUpdate": {
+            "maxUnavailable": 0,
+            "maxSurge": 1
+          }
+        },
+        "service": {
+          "annotations": {},
+          "labels": {},
+          "type": "ClusterIP",
+          "port": 3000
+        },
+        "ingress": {
+          "enabled": false,
+          "hosts": [
+            {
+              "host": "pro-ui.host"
+            }
+          ]
+        },
+        "resources": {
+          "requests": {
+            "cpu": "300m",
+            "memory": "256Mi"
+          },
+          "limits": {
+            "cpu": 1,
+            "memory": "384Mi"
+          }
+        }
+      }
+    }
+  ]
+}
