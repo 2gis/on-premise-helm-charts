@@ -1,16 +1,23 @@
+replicaCount: 1
+
 navigroup: async
- 
+
 naviback:
+  castleHost: navi-castle # #имя сервиса navi-castle в k8s
   dmSourcesLimit: 12000  # ограничение на размер матриц
   dmTargetsLimit: 12000  # ограничение на размер матриц
-  castleHost: navi-castle # имя сервиса navi-castle в k8s
+  app_rule: dma 
   type: dm
- 
+
 resources:
   limits:
-    cpu: 20
-    memory: 100Gi
+    cpu: 4
+    memory: 8Gi
   requests:
-    cpu: 20
-    memory: 100Gi
- 
+    cpu: 2
+    memory: 4Gi
+
+rules:
+  - name: dma
+    queries: ["routing"]
+    routing: ["driving"]

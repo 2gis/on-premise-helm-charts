@@ -1,12 +1,9 @@
-navigroup: navi
-
 router:
-  castleHost: navi-castle #имя сервиса navi-castle в k8s
-  # How to get service tokens see https://docs.2gis.com/en/on-premise/deployment/keys#nav-lvl1--4._Fetch_the_service_tokens
+# How to get service tokens see https://docs.2gis.com/en/on-premise/deployment/keys#nav-lvl1--4._Fetch_the_service_tokens
   additionalSections: |
     "key_management_service":
       {
-        "service_remote_address": "http://keys.host/service/v1/keys",
+        "service_remote_address": "http://keys-api/service/v1/keys",
         "keys_refresh_interval_min": 5,
         "keys_download_timeout_sec": 30,
         "service_apis":
@@ -17,13 +14,3 @@ router:
             { "type": "public-transport", "token" : "PUBLIC_TRANSPORT_API_TOKEN"}
           ]
       }
-
-replicaCount: 2
-
-resources:
-  limits:
-    cpu: 2000m
-    memory: 1024Mi
-  requests:
-    cpu: 500m
-    memory: 128Mi

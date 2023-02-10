@@ -2,13 +2,13 @@
   task_topic: &tt task_topic
   status_topic: &st status_topic
   canсel_topic: &ct cancel_topic
- 
+
 kafka:
   enabled: true
   groupId: navi_async_matrix
   properties:
     bootstrap.servers: navi-back-kafka.storage.example.local:31560 # в формате hostname:port
-    security.protocol: PLAINTEXT # SSL, SASL_SSL, SASL_PLAINTEXT или PLAINTEXT
+    security.protocol: SSL
   fileProperties: {}
 
   # navi-back topics

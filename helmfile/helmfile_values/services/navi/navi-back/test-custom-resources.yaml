@@ -1,0 +1,57 @@
+#ресурсы для разных типов навигации
+carrouting: #directions-car, isochrone
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 2
+    memory: 4Gi
+pedestrian: #directions-pedestrian
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 2
+    memory: 4Gi
+bicycle: #directions-bicycle
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 2
+    memory: 4Gi
+taxi: #directions-taxi
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 2
+    memory: 4Gi
+pairs: #pairs-directions
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 2
+    memory: 4Gi
+truck: #directions-truck
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 2
+    memory: 4Gi
+dm: #distance-matrix
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 2
+    memory: 4Gi
+ctx: #public-transport
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 2
+    memory: 4Gi
