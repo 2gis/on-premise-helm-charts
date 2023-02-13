@@ -54,7 +54,6 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### API service settings
 
 | Name                     | Description                                                                                                                    | Value                              |
@@ -71,7 +70,6 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | `api.service.port`       | Service port.                                                                                                                  | `80`                               |
 | `api.service.targetPort` | Port inside the container.                                                                                                     | `8080`                             |
 
-
 ### Streams service settings
 
 | Name                       | Description                        | Value                                  |
@@ -86,7 +84,6 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | `streams.image.tag`        | Tag                                | `1.1.4`                                |
 | `streams.image.pullPolicy` | Pull Policy                        | `IfNotPresent`                         |
 
-
 ### Kafka service settings
 
 | Name              | Description                                                                                                                                                                                          | Value |
@@ -94,14 +91,12 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | `kafka.security`  | SASL configuration for Kafka clients (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config)).                                                                        | `{}`  |
 | `kafka.sasl.jaas` | JAAS login context parameters for SASL connections in the format used by JAAS configuration files (see [the documentation](https://kafka.apache.org/documentation/#brokerconfigs_sasl.jaas.config)). | `{}`  |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                    | Description                            | Value                |
 | ----------------------- | -------------------------------------- | -------------------- |
 | `ingress.enabled`       | If Ingress is enabled for the service. | `false`              |
 | `ingress.hosts[0].host` | Hostname for the Ingress service.      | `stat-receiver.host` |
-
 
 ### Limits
 

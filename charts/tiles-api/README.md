@@ -26,7 +26,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Deployment Artifacts Storage settings
 
 | Name                     | Description                                                                                                                                                                                                                                              | Value |
@@ -36,7 +35,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
 | `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
 | `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`  |
-
 
 ### Tiles API configuration
 
@@ -54,7 +52,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `types[0].keyspace`                 | Custom user defined keyspace. If the parameter is set, the database cleaning and maintenance processes are skipped.                                                                       | `""`                                                                     |
 | `types[0].importAndCleanerDisabled` | If import and cleaner tasks are disabled for this tileset.                                                                                                                                | `false`                                                                  |
 
-
 ### Apache Cassandra Data Storage settings
 
 | Name                                | Description                                                                                                                                                         | Value          |
@@ -71,7 +68,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `cassandra.credentials.password`    | User password to connect to the database.                                                                                                                           | `cassandra`    |
 | `cassandra.credentials.jmxUser`     | JMX user name to be used by the Kubernetes Importer Job's cleaner process.                                                                                          | `cassandra`    |
 | `cassandra.credentials.jmxPassword` | JMX password to be used by the Kubernetes Importer Job's cleaner process.                                                                                           | `cassandra`    |
-
 
 ### API Keys proxy settings
 
@@ -96,7 +92,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `proxy.access.url`                | API Keys endpoint url, ex: http://keys-api.svc. **Required**                                                                  | `""`                              |
 | `proxy.access.token`              | Service key for Keys API. **Required**                                                                                        | `""`                              |
 | `proxy.access.syncPeriod`         | Proxy sync period.                                                                                                            | `2m`                              |
-
 
 ### Tiles API settings
 
@@ -135,14 +130,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `api.service.annotations`                   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                        | `{}`                        |
 | `api.service.labels`                        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                  | `{}`                        |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                        | Description                            | Value            |
 | --------------------------- | -------------------------------------- | ---------------- |
 | `api.ingress.enabled`       | If Ingress is enabled for the service. | `false`          |
 | `api.ingress.hosts[0].host` | Hostname for the Ingress service.      | `tiles-api.host` |
-
 
 ### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
@@ -151,7 +144,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `api.pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
 | `api.pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
 | `api.pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -165,7 +157,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `50`    |
 | `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
-
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 | Name                        | Description                                                                                                  | Value   |
@@ -176,7 +167,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `api.vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         | `128Mi` |
 | `api.vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `1`     |
 | `api.vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `512Mi` |
-
 
 ### Kubernetes Importer job settings
 
@@ -217,7 +207,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `importer.workerResources.requests.memory`   | A memory request.                                                                                                                                                                                                                                                                                                                    | `512Mi`                              |
 | `importer.workerResources.limits.cpu`        | A CPU limit.                                                                                                                                                                                                                                                                                                                         | `2`                                  |
 | `importer.workerResources.limits.memory`     | A memory limit.                                                                                                                                                                                                                                                                                                                      | `2048Mi`                             |
-
 
 ### License service settings
 

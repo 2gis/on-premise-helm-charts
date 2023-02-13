@@ -24,7 +24,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name                       | Description                       | Value                          |
@@ -37,7 +36,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `admin.image.tag`          | Admin service image tag.          | `0.3.0`                        |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
 | `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
-
 
 ### Admin service settings
 
@@ -57,14 +55,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `admin.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `admin.service.port`        | Service port.                                                                                                                  | `80`        |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                          | Description                            | Value          |
 | ----------------------------- | -------------------------------------- | -------------- |
 | `admin.ingress.enabled`       | If Ingress is enabled for the service. | `false`        |
 | `admin.ingress.hosts[0].host` | Hostname for the Ingress service.      | `keys-ui.host` |
-
 
 ### API service settings
 
@@ -84,14 +80,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `api.service.port`        | Service port.                                                                                                                  | `80`        |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                        | Description                            | Value           |
 | --------------------------- | -------------------------------------- | --------------- |
 | `api.ingress.enabled`       | If Ingress is enabled for the service. | `false`         |
 | `api.ingress.hosts[0].host` | Hostname for the Ingress service.      | `keys-api.host` |
-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -105,13 +99,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
 | `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
-
 ### Import service settings
 
 | Name                  | Description                                                                                                         | Value |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
 | `import.nodeSelector` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`  |
-
 
 ### Migrate service settings
 
@@ -119,7 +111,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
 | `migrate.initialDelaySeconds` | Delay in seconds at the service startup.                                                                            | `0`   |
 | `migrate.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`  |
-
 
 ### Tasker service settings
 
@@ -133,7 +124,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `tasker.nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
 | `tasker.affinity`       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
 | `tasker.tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`  |
-
 
 ### Redis settings
 
@@ -152,7 +142,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `redis.nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`              |
 | `redis.affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`              |
 | `redis.tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`              |
-
 
 ### Database access settings
 
@@ -173,7 +162,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `postgres.rw.username` | PostgreSQL username. **Required**       | `""`   |
 | `postgres.rw.password` | PostgreSQL password. **Required**       | `""`   |
 
-
 ### LDAP connection settings
 
 | Name                                  | Description                                        | Value                                      |
@@ -193,7 +181,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `ldap.search`                         | **LDAP search settings**                           |                                            |
 | `ldap.search.baseDN`                  | LDAP base distinguished name.                      | `dc=2gis`                                  |
 | `ldap.search.filter`                  | LDAP search filter.                                | `(&(objectClass=user)(sAMAccountName=%s))` |
-
 
 ### Limits
 
