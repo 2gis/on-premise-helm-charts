@@ -13,7 +13,6 @@
     },
     "imagePullPolicy": {
       "type": "string",
-      "pattern": "^(Always|Never|IfNotPresent)$",
       "default": "IfNotPresent",
       "title": "The imagePullPolicy Schema"
     },
@@ -311,13 +310,11 @@
               "properties": {
                 "cpu": {
                   "type": "string",
-                  "pattern": "^\\d+\\w?$",
                   "default": "300m",
                   "title": "The cpu Schema"
                 },
                 "memory": {
                   "type": "string",
-                  "pattern": "^\\d+\\w?\\w?$",
                   "default": "256Mi",
                   "title": "The memory Schema"
                 }
@@ -336,7 +333,6 @@
                 },
                 "memory": {
                   "type": "string",
-                  "pattern": "^\\d+\\w?\\w?$",
                   "default": "384Mi",
                   "title": "The memory Schema"
                 }
