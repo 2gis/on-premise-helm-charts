@@ -2,7 +2,7 @@
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
-dgctlDockerRegistry: 'host:3000'
+dgctlDockerRegistry: ''
 
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
