@@ -320,7 +320,7 @@ releases:
         file: {{ $path_values }}/ssl/{{ .Values.kafka.authCert.sslKey }} 
     {{ end }}     
     {{- if .Values.kafka.authCert.sslPassword }}
-      - name: kafka.ssl\.key\.password
+      - name: kafka.properties.ssl\.key\.password
         value: {{ .Values.kafka.authCert.sslPassword }}        
     {{ end }} 
   {{ else }} # kafka аутентификация по логину и паролю
