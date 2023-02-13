@@ -124,31 +124,31 @@
         },
         "logLevel": {
           "type": "string",
-          "pattern": "^error$",
+          "enum": ["error"],
           "default": "error",
           "title": "The logLevel Schema"
         },
         "isOnPremise": {
           "type": "string",
-          "pattern": "^(false|true)$",
+          "enum": ["true", "false"],
           "default": "true",
           "title": "The isOnPremise Schema"
         },
         "ssoAuth": {
           "type": "string",
-          "pattern": "^(false|true)$",
+          "enum": ["true", "false"],
           "default": "false",
           "title": "The ssoAuth Schema"
         },
         "appTheme": {
           "type": "string",
-          "pattern": "^(urbi|2gis)$",
+          "enum": ["urbi", "2gis"],
           "default": "urbi",
           "title": "The appTheme Schema"
         },
         "appLocale": {
           "type": "string",
-          "pattern": "^(en_AE|ru_RU)$",
+          "enum": ["en_AE", "ru_RU"],
           "default": "en_AE",
           "title": "The appLocale Schema"
         },
