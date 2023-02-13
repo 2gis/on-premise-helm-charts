@@ -26,6 +26,7 @@
       "type": "object",
       "default": {},
       "title": "The ui Schema",
+      "additionalProperties": false,
       "required": [
         "replicas",
         "nodeSelector",
