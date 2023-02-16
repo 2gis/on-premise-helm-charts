@@ -6,37 +6,9 @@
   "title": "Root Schema",
   "required": ["dgctlDockerRegistry", "imagePullPolicy", "imagePullSecrets", "ui"],
   "properties": {
-    "dgctlDockerRegistry": {
-      "type": "string",
-      "default": "Any docker registry name",
-      "title": "Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`"
-    },
-    "imagePullPolicy": {
-      "type": "string",
-      "default": "IfNotPresent",
-      "title": "The imagePullPolicy Schema"
-    },
-    "imagePullSecrets": {
-      "type": "array",
-      "default": [],
-      "title": "The imagePullSecrets Schema",
-      "items": {}
-    },
     "ui": {
       "type": "object",
-      "default": {},
-      "title": "The ui Schema",
-      "additionalProperties": false,
       "required": [
-        "replicas",
-        "nodeSelector",
-        "affinity",
-        "tolerations",
-        "podAnnotations",
-        "podLabels",
-        "annotations",
-        "labels",
-        "image",
         "logLevel",
         "isOnPremise",
         "ssoAuth",
@@ -44,304 +16,62 @@
         "appLocale",
         "appInitialMapCenter",
         "api",
-        "mapgl",
-        "strategy",
-        "service",
-        "ingress",
-        "resources"
+        "mapgl"
       ],
       "properties": {
-        "replicas": {
-          "type": "integer",
-          "default": 0,
-          "title": "The replicas Schema"
-        },
-        "nodeSelector": {
-          "type": "object",
-          "default": {},
-          "title": "The nodeSelector Schema",
-          "required": [],
-          "properties": {}
-        },
-        "affinity": {
-          "type": "object",
-          "default": {},
-          "title": "The affinity Schema",
-          "required": [],
-          "properties": {}
-        },
-        "tolerations": {
-          "type": "array",
-          "default": [],
-          "title": "The tolerations Schema",
-          "items": {}
-        },
-        "podAnnotations": {
-          "type": "object",
-          "default": {},
-          "title": "The podAnnotations Schema",
-          "required": [],
-          "properties": {}
-        },
-        "podLabels": {
-          "type": "object",
-          "default": {},
-          "title": "The podLabels Schema",
-          "required": [],
-          "properties": {}
-        },
-        "annotations": {
-          "type": "object",
-          "default": {},
-          "title": "The annotations Schema",
-          "required": [],
-          "properties": {}
-        },
-        "labels": {
-          "type": "object",
-          "default": {},
-          "title": "The labels Schema",
-          "required": [],
-          "properties": {}
-        },
-        "image": {
-          "type": "object",
-          "default": {},
-          "additionalProperties": false,
-          "title": "The image Schema",
-          "required": ["repository", "tag"],
-          "properties": {
-            "repository": {
-              "type": "string",
-              "default": "",
-              "title": "The repository Schema"
-            },
-            "tag": {
-              "type": "string",
-              "default": "",
-              "title": "The tag Schema"
-            }
-          }
-        },
         "logLevel": {
           "type": "string",
-          "enum": ["error"],
-          "default": "error",
-          "title": "The logLevel Schema"
+          "enum": ["error"]
         },
         "isOnPremise": {
           "type": "string",
-          "enum": ["true", "false"],
-          "default": "true",
-          "title": "The isOnPremise Schema"
+          "enum": ["true", "false"]
         },
         "ssoAuth": {
           "type": "string",
-          "enum": ["true", "false"],
-          "default": "false",
-          "title": "The ssoAuth Schema"
+          "enum": ["true", "false"]
         },
         "appTheme": {
           "type": "string",
-          "enum": ["urbi", "2gis"],
-          "default": "urbi",
-          "title": "The appTheme Schema"
+          "enum": ["urbi", "2gis"]
         },
         "appLocale": {
           "type": "string",
-          "enum": ["en_AE", "ru_RU"],
-          "default": "en_AE",
-          "title": "The appLocale Schema"
+          "enum": ["en_AE", "ru_RU"]
         },
         "appInitialMapCenter": {
-          "type": "string",
-          "default": "[46.71, 24.72]",
-          "title": "The appInitialMapCenter Schema"
+          "type": "string"
         },
         "api": {
           "type": "object",
-          "default": {},
           "additionalProperties": false,
-          "title": "The api Schema",
           "required": ["url"],
           "properties": {
             "url": {
               "type": "string",
-              "pattern": "^(https?://.+/)?$",
-              "default": "",
-              "title": "The url Schema"
+              "pattern": "^(https?://.+/)?$"
             }
           }
         },
         "mapgl": {
           "type": "object",
-          "default": {},
-          "title": "The mapgl Schema",
           "required": ["host", "key"],
           "additionalProperties": false,
           "properties": {
             "host": {
-              "type": "string",
-              "default": "",
-              "title": "The host Schema"
+              "type": "string"
             },
             "key": {
-              "type": "string",
-              "default": "",
-              "title": "The key Schema"
+              "type": "string"
             },
             "styleUrl": {
-              "type": "string",
-              "default": "",
-              "title": "The styleUrl Schema"
+              "type": "string"
             },
             "styleIconsUrl": {
-              "type": "string",
-              "default": "",
-              "title": "The styleIconsUrl Schema"
+              "type": "string"
             },
             "styleFontsUrl": {
-              "type": "string",
-              "default": "",
-              "title": "The styleFontsUrl Schema"
-            }
-          }
-        },
-        "strategy": {
-          "type": "object",
-          "default": {},
-          "title": "The strategy Schema",
-          "properties": {
-            "type": {
-              "type": "string",
-              "default": "RollingUpdate",
-              "title": "The type Schema"
-            },
-            "rollingUpdate": {
-              "type": "object",
-              "default": {},
-              "title": "The rollingUpdate Schema",
-              "required": ["maxUnavailable", "maxSurge"],
-              "properties": {
-                "maxUnavailable": {
-                  "type": "integer",
-                  "default": 0,
-                  "title": "The maxUnavailable Schema"
-                },
-                "maxSurge": {
-                  "type": "integer",
-                  "default": 0,
-                  "title": "The maxSurge Schema"
-                }
-              }
-            }
-          }
-        },
-        "service": {
-          "type": "object",
-          "default": {},
-          "title": "The service Schema",
-          "required": ["annotations", "labels", "type", "port"],
-          "properties": {
-            "annotations": {
-              "type": "object",
-              "default": {},
-              "title": "The annotations Schema",
-              "required": [],
-              "properties": {}
-            },
-            "labels": {
-              "type": "object",
-              "default": {},
-              "title": "The labels Schema",
-              "required": [],
-              "properties": {}
-            },
-            "type": {
-              "type": "string",
-              "default": "",
-              "title": "The type Schema"
-            },
-            "port": {
-              "type": "integer",
-              "default": 0,
-              "title": "The port Schema"
-            }
-          }
-        },
-        "ingress": {
-          "type": "object",
-          "default": {},
-          "title": "The ingress Schema",
-          "required": ["enabled", "hosts"],
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "default": false,
-              "title": "The enabled Schema"
-            },
-            "hosts": {
-              "type": "array",
-              "default": [],
-              "title": "The hosts Schema",
-              "items": {
-                "type": "object",
-                "default": {},
-                "title": "A Schema",
-                "required": ["host"],
-                "properties": {
-                  "host": {
-                    "type": "string",
-                    "default": "",
-                    "title": "The host Schema"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "resources": {
-          "type": "object",
-          "default": {},
-          "additionalProperties": false,
-          "title": "The resources Schema",
-          "required": ["requests", "limits"],
-          "properties": {
-            "requests": {
-              "type": "object",
-              "default": {},
-              "title": "The requests Schema",
-              "required": ["cpu", "memory"],
-              "properties": {
-                "cpu": {
-                  "type": "string",
-                  "default": "300m",
-                  "title": "The cpu Schema"
-                },
-                "memory": {
-                  "type": "string",
-                  "default": "256Mi",
-                  "title": "The memory Schema"
-                }
-              }
-            },
-            "limits": {
-              "type": "object",
-              "default": {},
-              "title": "The limits Schema",
-              "required": ["cpu", "memory"],
-              "properties": {
-                "cpu": {
-                  "type": "integer",
-                  "default": 0,
-                  "title": "The cpu Schema"
-                },
-                "memory": {
-                  "type": "string",
-                  "default": "384Mi",
-                  "title": "The memory Schema"
-                }
-              }
+              "type": "string"
             }
           }
         }
