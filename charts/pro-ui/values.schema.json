@@ -107,6 +107,7 @@
         "image": {
           "type": "object",
           "default": {},
+          "additionalProperties": false,
           "title": "The image Schema",
           "required": ["repository", "tag"],
           "properties": {
@@ -160,11 +161,13 @@
         "api": {
           "type": "object",
           "default": {},
+          "additionalProperties": false,
           "title": "The api Schema",
           "required": ["url"],
           "properties": {
             "url": {
               "type": "string",
+              "pattern": "^(https?://.+/)?$",
               "default": "",
               "title": "The url Schema"
             }
@@ -174,7 +177,8 @@
           "type": "object",
           "default": {},
           "title": "The mapgl Schema",
-          "required": ["host", "key", "styleUrl", "styleIconsUrl", "styleFontsUrl"],
+          "required": ["host", "key"],
+          "additionalProperties": false,
           "properties": {
             "host": {
               "type": "string",
@@ -207,7 +211,6 @@
           "type": "object",
           "default": {},
           "title": "The strategy Schema",
-          "required": ["type", "rollingUpdate"],
           "properties": {
             "type": {
               "type": "string",
@@ -300,6 +303,7 @@
         "resources": {
           "type": "object",
           "default": {},
+          "additionalProperties": false,
           "title": "The resources Schema",
           "required": ["requests", "limits"],
           "properties": {

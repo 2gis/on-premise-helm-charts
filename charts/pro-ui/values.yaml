@@ -60,7 +60,7 @@ ui:
   # @param ui.api.url Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/.
 
   api:
-    url: 'pro-back.host'
+    url: ''
 
   # @section MapGL JS API settings
 
