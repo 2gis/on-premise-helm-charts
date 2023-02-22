@@ -7,7 +7,7 @@ SCRIPTPATH=$(dirname `readlink -f "$0"`)
 
 URL=$1
 KEY=$2
-
+i=0
 cd $SCRIPTPATH/points
 
 TASK_ID=`curl -s $URL/create_task/get_dist_matrix?key=$KEY --header 'Content-Type: application/json' -d @moscow_dm.json | jq -r '.task_id'`
@@ -19,7 +19,7 @@ function task_status() {
 }
 
 function task_response() {
-  LINK=`curl -s https://$IHOST/result/get_dist_matrix/$TASK_ID?key=$KEY | jq -r '.result_link'`
+  LINK=`curl -s $URL/result/get_dist_matrix/$TASK_ID?key=$KEY | jq -r '.result_link'`
   if [[ $LINK == "" ]] ;then
     echo "response.json not found on s3, check settings s3 on navi-back-async" && exit 1
   else
@@ -38,7 +38,7 @@ echo "Task status" `task_status`
 while [[ `task_status` != "TASK_DONE" && "$i" -lt "5" ]]; do
   i=$[ $i + 1 ]
   echo "Wait..."
-  sleep 5
+  sleep 10
 done
 
 if [[ "$i" -ge "5" ]] || [[ `task_status` != "TASK_DONE" ]];then
