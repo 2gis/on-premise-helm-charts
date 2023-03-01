@@ -15,16 +15,20 @@ input-bss-topic = "{{ required "A valid .Values.topicsPrefix entry required" .Va
 
 kafka = {
   servers = {{ required "A valid .Values.kafka.servers entry required" .Values.kafka.servers | quote }}
-  client-id = "bss.receiver.api"
+  client-id = "{{ .Values.topicsPrefix }}api"
   properties = {
     {{- if .Values.kafka.sasl.mechanism }}
     "sasl.mechanism" = {{ .Values.kafka.sasl.mechanism }}
     {{- end }}
-    {{- if .Values.kafka.security.protocol }}
-    "security.protocol" = {{ .Values.kafka.security.protocol }}
+    {{- if .Values.kafka.securityProtocol }}
+    "security.protocol" = {{ .Values.kafka.securityProtocol }}
     {{- end }}
-    {{- if .Values.kafka.sasl.jaas.config }}
-    "sasl.jaas.config" = {{ .Values.kafka.sasl.jaas.config | quote }}
+    {{- if .Values.kafka.sasl.enabled }}
+    "sasl.jaas.config" = ${JAAS_CONFIG}
+    {{- end }}
+    {{- if .Values.kafka.keystore.enabled }}
+    "ssl.keystore.location" = /run/kafka-keystore/{{ .Values.kafka.keystore.storeFieldName }}
+    "ssl.keystore.password" = ${KEYSTORE_PASSWORD}
     {{- end }}
     "max.request.size" = "31457280"
     "compression.type" = "gzip"

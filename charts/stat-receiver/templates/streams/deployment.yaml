@@ -30,6 +30,7 @@ spec:
         {{- end }}
       annotations:
         checksum/config: {{ (include (print $.Template.BasePath "/streams/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
     spec:
       containers:
       - name: streams
@@ -39,14 +40,58 @@ spec:
         ports:
           - containerPort: {{ .Values.streams.metricsPort }}
           - containerPort: {{ .Values.streams.jmxPort }}
+        readinessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.streams.metricsPort }}
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
         resources:
           {{- toYaml .Values.streams.resources | nindent 12 }}
         volumeMounts:
         - name: config-volume
           mountPath: /app/config
+        - name: data-volume
+          mountPath: /app/rocksdb
+        {{- if .Values.kafka.truststore.enabled }}
+        - name: kafka-truststore
+          readOnly: true
+          mountPath: /run/kafka-truststore
+        {{- end }}
+        {{- if .Values.kafka.keystore.enabled }}
+        - name: kafka-keystore
+          readOnly: true
+          mountPath: /run/kafka-keystore
+        {{- end }}
         env:
+        {{- if .Values.kafka.sasl.enabled }}
+          - name: JAAS_CONFIG
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.kafka.sasl.secretName }}
+                key: {{ .Values.kafka.sasl.jaasFieldName }}
+        {{- end }}
+        {{- if .Values.kafka.truststore.enabled }}
+          - name: TRUSTSTORE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.kafka.truststore.secretName }}
+                key: {{ .Values.kafka.truststore.storePasswordFieldName }}
+        {{- end }}
+        {{- if .Values.kafka.keystore.enabled }}
+          - name: KEYSTORE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.kafka.keystore.secretName }}
+                key: {{ .Values.kafka.keystore.storePasswordFieldName }}
+        {{- end }}
           - name: JAVA_OPTS
-            value: {{ .Values.streams.jvmXmx | quote }}
+            value: >-
+              {{ .Values.streams.jvmXmx }}
+              {{- if .Values.kafka.truststore.enabled }}
+              -Djavax.net.ssl.trustStore=/run/kafka-truststore/{{ .Values.kafka.truststore.storeFieldName }}
+              -Djavax.net.ssl.trustStorePassword=$(TRUSTSTORE_PASSWORD)
+              {{- end }}
           - name: METRICS_PORT
             value: {{ .Values.streams.metricsPort | quote  }}
           - name: JMX_PORT
@@ -55,3 +100,16 @@ spec:
         - name: config-volume
           configMap:
             name: {{ include "bss-receiver-streams.name" . }}
+        - name: data-volume
+          emptyDir:
+            sizeLimit: {{ .Values.streams.storageSize }}
+        {{- if .Values.kafka.truststore.enabled }}
+        - name: kafka-truststore
+          secret:
+            secretName: {{ .Values.kafka.truststore.secretName }}
+        {{- end }}
+        {{- if .Values.kafka.keystore.enabled }}
+        - name: kafka-keystore
+          secret:
+            secretName: {{ .Values.kafka.keystore.secretName }}
+        {{- end }}

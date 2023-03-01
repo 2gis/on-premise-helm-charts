@@ -38,8 +38,9 @@ streams = {
   }
 
   kafka-streams = {
-    "application.id" = "bss.receiver.streams"
-    "group.instance.id" = "bss.receiver.streams"
+    "application.id" = "{{ .Values.topicsPrefix }}streams"
+    "group.instance.id" = "{{ .Values.topicsPrefix }}streams"
+    "client.id" = "{{ .Values.topicsPrefix }}streams"
     "session.timeout.ms" = 300000
     "transaction.timeout.ms" = 180000
     "processing.guarantee" = "exactly_once"
@@ -52,15 +53,18 @@ streams = {
     "rocksdb.shared.block.cache.size" = 536870912 # 512Mb
     "bootstrap.servers" = {{ required "A valid .Values.kafka.servers entry required" .Values.kafka.servers | quote }}
     {{- if .Values.kafka.sasl.mechanism }}
-    "sasl.mechanism" = {{ .Values.kafka.sasl.mechanism }}
+    "sasl.mechanism" = {{ .Values.kafka.saslMechanism }}
     {{- end }}
-    {{- if .Values.kafka.security.protocol }}
-    "security.protocol" = {{ .Values.kafka.security.protocol }}
+    {{- if .Values.kafka.securityProtocol }}
+    "security.protocol" = {{ .Values.kafka.securityProtocol }}
     {{- end }}
-    {{- if .Values.kafka.sasl.jaas.config }}
-    "sasl.jaas.config" = {{ .Values.kafka.sasl.jaas.config | quote }}
+    {{- if .Values.kafka.sasl.enabled }}
+    "sasl.jaas.config" = ${JAAS_CONFIG}
     {{- end }}
-    "client.id" = "bss.receiver.streams"
+    {{- if .Values.kafka.keystore.enabled }}
+    "ssl.keystore.location" = /run/kafka-keystore/{{ .Values.kafka.keystore.storeFieldName }}
+    "ssl.keystore.password" = ${KEYSTORE_PASSWORD}
+    {{- end }}
     "metrics.recording.level" = DEBUG
     "max.request.size" = 10485760
     "linger.ms" = 100

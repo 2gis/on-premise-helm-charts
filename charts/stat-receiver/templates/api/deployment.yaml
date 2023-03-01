@@ -30,6 +30,7 @@ spec:
         {{- end }}
       annotations:
         checksum/config: {{ (include (print $.Template.BasePath "/api/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
     spec:
       containers:
       - name: api
@@ -47,15 +48,60 @@ spec:
         resources:
           {{- toYaml .Values.api.resources | nindent 12 }}
         env:
+        {{- if .Values.kafka.sasl.enabled }}
+        - name: JAAS_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.kafka.sasl.secretName }}
+              key: {{ .Values.kafka.sasl.jaasFieldName }}
+        {{- end }}
+        {{- if .Values.kafka.truststore.enabled }}
+        - name: TRUSTSTORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.kafka.truststore.secretName }}
+              key: {{ .Values.kafka.truststore.storePasswordFieldName }}
+        {{- end }}
+        {{- if .Values.kafka.keystore.enabled }}
+        - name: KEYSTORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.kafka.keystore.secretName }}
+              key: {{ .Values.kafka.keystore.storePasswordFieldName }}
+        {{- end }}
         - name: JAVA_D_OPTIONS
           value: >-
             -Dconfig.file=/app/config/application.conf
             -Dlogback.configurationFile=/app/config/logback.xml
+            {{- if .Values.kafka.truststore.enabled }}
+            -Djavax.net.ssl.trustStore=/run/kafka-truststore/{{ .Values.kafka.truststore.storeFieldName }}
+            -Djavax.net.ssl.trustStorePassword=$(TRUSTSTORE_PASSWORD)
+            {{- end }}
             {{ .Values.api.jvmXmx }}
         volumeMounts:
         - name: config-volume
           mountPath: /app/config
+        {{- if .Values.kafka.truststore.enabled }}
+        - name: kafka-truststore
+          readOnly: true
+          mountPath: /run/kafka-truststore
+        {{- end }}
+        {{- if .Values.kafka.keystore.enabled }}
+        - name: kafka-keystore
+          readOnly: true
+          mountPath: /run/kafka-keystore
+        {{- end }}
       volumes:
         - name: config-volume
           configMap:
             name: {{ include "bss-receiver-api.name" . }}
+        {{- if .Values.kafka.truststore.enabled }}
+        - name: kafka-truststore
+          secret:
+            secretName: {{ .Values.kafka.truststore.secretName }}
+        {{- end }}
+        {{- if .Values.kafka.keystore.enabled }}
+        - name: kafka-keystore
+          secret:
+            secretName: {{ .Values.kafka.keystore.secretName }}
+        {{- end }}
