@@ -9,14 +9,19 @@ SUBDIRS := $(wildcard charts/*)
 # readme generator image built in `prepare`
 # GENERATOR = readme-generator-for-helm
 # the pre-compiled one available internally
-GENERATOR = docker-hub.2gis.ru/on-premise/readme-generator-for-helm
+GENERATOR_DEFAULT := readme-generator-for-helm:latest
+GENERATOR ?= $(GENERATOR_DEFAULT)
+GENERATOR_TAG := $(shell docker images -q $(GENERATOR))
 
 all: $(SUBDIRS)
 
 prepare:
-	docker build --tag readme-generator-for-helm .
+	@[ -z $(GENERATOR_TAG) ] \
+	&& [ $(GENERATOR) = $(GENERATOR_DEFAULT) ] \
+	&& docker build --tag readme-generator-for-helm . \
+	|| echo "\nUsing $(GENERATOR) with ID $(GENERATOR_TAG)"
 
-charts/*:
+charts/*: prepare
 	@echo ""
 	@echo "Building README for $@..."
 	@docker run --rm -it \
