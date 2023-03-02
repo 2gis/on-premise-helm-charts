@@ -26,7 +26,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | --------------------- | -------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port` | `""`  |
 
-
 ### Common settings
 
 | Name             | Description                                                                                                        | Value |
@@ -39,7 +38,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings   | `[]`  |
 | `redeployLabel`  | If this label is changed since the last deployment, the whole chart will be redeployed                             | `""`  |
 
-
 ### Deployment Artifacts Storage settings
 
 | Name                     | Description                                                                                                                                                                                                                                             | Value |
@@ -50,7 +48,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `dgctlStorage.secretKey` | S3 secret key for accessing the bucket                                                                                                                                                                                                                  | `""`  |
 | `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate | `""`  |
 
-
 ### Deployment settings
 
 | Name                   | Description                                                                                   | Value                        |
@@ -58,7 +55,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/search-api` |
 | `api.image.tag`        | Tag                                                                                           | `7.42.1`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`               |
-
 
 ### API settings
 
@@ -71,7 +67,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.timeout`   | Search timeout (in milliseconds)             | `5000`  |
 | `api.configOpt` | Additional options (for debugging purposes)  | `[]`    |
 
-
 ### NGINX settings
 
 | Name                     | Description                                                                                   | Value                          |
@@ -81,7 +76,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `nginx.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                 |
 | `nginx.httpPort`         | HTTP port on which NGINX will be listening                                                    | `8080`                         |
 
-
 ### Strategy settings
 
 | Name                                    | Description                                                                                                                                                                                             | Value           |
@@ -89,7 +83,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate` [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)                                          | `RollingUpdate` |
 | `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) | `0`             |
 | `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process                     | `1`             |
-
 
 ### Service settings
 
@@ -100,7 +93,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) | `ClusterIP` |
 | `service.port`        | Service port                                                                                                                  | `80`        |
 
-
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                 | Description                                         | Value  |
@@ -108,7 +100,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `pdb.enabled`        | If PDB is enabled for the service                   | `true` |
 | `pdb.minAvailable`   | How many pods must be available after the eviction  | `""`   |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction | `1`    |
-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -122,14 +113,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used       | `80`    |
 | `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used | `""`    |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                    | Description                           | Value             |
 | ----------------------- | ------------------------------------- | ----------------- |
 | `ingress.enabled`       | If Ingress is enabled for the service | `false`           |
 | `ingress.hosts[0].host` | Hostname for the Ingress service      | `search-api.host` |
-
 
 ### api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings
 

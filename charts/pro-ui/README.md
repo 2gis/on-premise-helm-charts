@@ -14,7 +14,6 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name                | Description                                                                                                                 | Value |
@@ -28,16 +27,14 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
 | `ui.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
 
-
 ### Deployment settings
 
 | Name                  | Description                    | Value                    |
 | --------------------- | ------------------------------ | ------------------------ |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/pro-ui` |
-| `ui.image.tag`        | Tag                            | `0.1.2`                  |
+| `ui.image.tag`        | Tag                            | `0.1.5`                  |
 | `imagePullPolicy`     | Pull Policy                    | `IfNotPresent`           |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                     |
-
 
 ### UI service settings
 
@@ -48,13 +45,11 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.appLocale`           | Language in the app. Possible values: `"en_AE"` or `"ru_RU"`.                                                                                            | `en_AE`         |
 | `ui.appInitialMapCenter` | Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., `"[55.27, 25.2]"` stands for Dubai, `"[37.64, 55.74]"` — for Moscow). | `[55.27, 25.2]` |
 
-
 ### 2GIS Pro API settings
 
 | Name         | Description                                                                                  | Value |
 | ------------ | -------------------------------------------------------------------------------------------- | ----- |
 | `ui.api.url` | Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/. | `""`  |
-
 
 ### MapGL JS API settings
 
@@ -66,7 +61,6 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.mapgl.styleIconsUrl` | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons folder, e.g., '//mapgl.ingress.host/style/icons'  | `""`             |
 | `ui.mapgl.styleFontsUrl` | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'  | `""`             |
 
-
 ### Strategy settings
 
 | Name                                       | Description                                                                                                                                                                                              | Value           |
@@ -74,7 +68,6 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
 | `ui.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `ui.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
-
 
 ### Service settings
 
@@ -85,14 +78,12 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `ui.service.port`        | Service port.                                                                                                                  | `3000`      |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                       | Description                            | Value         |
 | -------------------------- | -------------------------------------- | ------------- |
 | `ui.ingress.enabled`       | If Ingress is enabled for the service. | `false`       |
 | `ui.ingress.hosts[0].host` | Hostname for the Ingress service.      | `pro-ui.host` |
-
 
 ### Limits
 

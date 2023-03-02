@@ -26,7 +26,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name                 | Description                                                                                                                 | Value |
@@ -43,7 +42,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `affinity`           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
 | `labels`             | Custom labels to set to Deployment resource.                                                                                | `{}`  |
 
-
 ### Deployment settings
 
 | Name               | Description | Value                       |
@@ -51,7 +49,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
 | `image.tag`        | Tag         | `6.16.0`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
-
 
 ### Navi-Back application settings
 
@@ -84,7 +81,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.attractor.taxi`              | Enable enhanced attractor for taxi routing                                                                                                                                                                |         |
 | `naviback.reduceEdgesOptimizationFlag` | Enable optimizations for distance matrix queries processing                                                                                                                                               |         |
 
-
 ### Service account settings
 
 | Name                         | Description                                                                                                             | Value   |
@@ -92,7 +88,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
-
 
 ### Service settings
 
@@ -103,14 +98,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `nil`       |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                    | Description                            | Value            |
 | ----------------------- | -------------------------------------- | ---------------- |
 | `ingress.enabled`       | If Ingress is enabled for the service. | `false`          |
 | `ingress.hosts[0].host` | Hostname for the Ingress service.      | `navi-back.host` |
-
 
 ### Limits
 
@@ -126,7 +119,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `testResources.limits.cpu`      | A CPU limit.                    | `100m`   |
 | `testResources.limits.memory`   | A memory limit.                 | `100Mi`  |
 
-
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
 | Name                                      | Description                                                                                                                                                          | Value   |
@@ -139,7 +131,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
 | `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
-
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 | Name                    | Description                                                                                                  | Value   |
@@ -151,7 +142,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     |         |
 | `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           |         |
 
-
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                 | Description                                          | Value   |
@@ -159,7 +149,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
 | `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
-
 
 ### Kafka settings for interacting with Distance Matrix Async Service
 
@@ -177,7 +166,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `kafka.distanceMatrix.messageExpiredPeriodSec`   | Update period for task cancellations.                                                                                     | `3600`         |
 | `kafka.distanceMatrix.requestDownloadTimeoutSec` | Timeout for downloading request data.                                                                                     | `20`           |
 | `kafka.distanceMatrix.responseUploadTimeoutSec`  | Timeout for uploading response data.                                                                                      | `40`           |
-
 
 ### S3-compatible storage settings for interacting with Distance Matrix Async Service
 
