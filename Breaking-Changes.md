@@ -1,4 +1,16 @@
 # 2GIS On-Premise Breaking-Changes
+
+## [1.6.3]
+#### gis-platform
+Before updating:
+
+- Disable `allowDirectAccess` option on layers `admin.2gis` and `admin.2gis_traffic`
+- Set `subDomains` option to `[]` (empty array) in `admin.2gis_traffic`
+
+Those options did not work in previous releases, and were set to incorrect defaults.
+
+You can do this in admin web interface or by running `configure.sh -c -p`
+
 ## [1.6.0]
 #### catalog-api
 - Rename

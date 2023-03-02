@@ -5,6 +5,7 @@
   "pluginsPath": "plugins",
   "silentlyApplyMigrations": true,
   "RequireUniqueEmail": true,
+  "AutoConfirmEmail": true,
   "maxRenderTargets": {{- .Values.spcore.maxRenderTargets }},
   "staticPath": "/app/static",
   "previewStaticPath": "/app/static",

@@ -97,7 +97,7 @@
     
   ],
   "copyrightText": "",
-  "allowDirectAccess": true,
+  "allowDirectAccess": false,
   "tileCacheLimit": 0,
   "RequestTimeout": 0,
   "name": "admin.2gis",
