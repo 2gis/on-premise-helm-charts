@@ -1,18 +1,8 @@
 {
     "urlFormat": "https://{0}.maps.2gis.com/dammam/traffic/{1}/{2}/{3}/speed/0/?1640062200",
     "subDomains": [
-        "traffic0",
-        "traffic1",
-        "traffic2",
-        "traffic3",
-        "traffic4",
-        "traffic5",
-        "traffic6",
-        "traffic7",
-        "traffic8",
-        "traffic9"
     ],
-    "allowDirectAccess": true,
+    "allowDirectAccess": false,
     "tileCacheLimit": 0,
     "RequestTimeout": 0,
     "name": "admin.2gis_traffic",

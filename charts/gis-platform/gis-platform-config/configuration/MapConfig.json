@@ -51,15 +51,6 @@
       "options": {
         "items": [
           {
-            "name": "print",
-            "route": {
-              "type": "PRINT"
-            },
-            "title": "Экспортировать картинку",
-            "imageName": "print",
-            "description": "Сохраняет в виде картинки выделенную область карты и дополнительные элементы"
-          },
-          {
             "name": "buffer",
             "title": "Буферные зоны",
             "imageName": "buffer",
@@ -180,6 +171,17 @@
       }
     },
     {
+      "name": "style-editor",
+      "route": "STYLE_EDITOR",
+      "preload": true,
+      "priority": 3,
+      "modulePath": "StyleEditor/StyleEditor",
+      "layoutOptions": {
+        "area": "panel",
+        "resizable": true
+      }
+    },
+    {
       "name": "project-panel",
       "route": "MAIN",
       "priority": 1,
@@ -190,11 +192,10 @@
     },
     {
       "name": "print",
-      "route": "PRINT",
-      "priority": 3,
-      "modulePath": "Print/Print",
+      "priority": 5,
+      "modulePath": "../../Print/Print",
       "layoutOptions": {
-        "area": "panel"
+        "area": "topControls"
       }
     },
     {
@@ -298,7 +299,382 @@
     "feedbackForm": false,
     "uniqueClassesLimit": 300,
     "labelInsidePosition": true,
-    "scaleSegmentation": false,
-    "shareSocials": []
+    "scaleSegmentation": true,
+    "shareSocials": [],
+    "showCOGProperty": false,
+    "allowedWMSLayers": 4,
+    "expressAnalytics": {
+      "uniqueValuesCount": 20
+    },
+    "defaultScaleRange": [
+      0,
+      18
+    ],
+    "importMaxFileSize": 52428800,
+    "uploadMaxFileSize": 52428800,
+    "dataFilterPlayButton": false,
+    "labelVisiblePosition": false,
+    "geoLocationResolution": 19.10925707128906,
+    "allowedAttributesIndexesCount": 2,
+    "colorScales": [
+      {
+        "colorGroupName": "Последовательные",
+        "colorGroupScales": [
+          {
+            "colorScaleName": "Желто-сереневая",
+            "colorScaleParams": [
+              "rgba(255, 251, 200, 1)",
+              "rgba(255, 199, 79, 1)",
+              "rgba(255, 120, 41, 1)",
+              "rgba(219, 3, 157, 1)",
+              "rgba(10, 0, 180, 1)"
+            ]
+          },
+          {
+            "colorScaleName": "Четвёртый",
+            "colorScaleParams": [
+              "rgba(255, 255, 217, 1)",
+              "rgba(65, 182, 196, 1)",
+              "rgba(8, 29, 88, 1)"
+            ]
+          },
+          {
+            "colorScaleName": "Пятый",
+            "colorScaleParams": [
+              "rgba(255, 255, 204, 1)",
+              "rgba(253, 141, 60, 1)",
+              "rgba(128, 0, 38, 1)"
+            ]
+          },
+          {
+            "colorScaleName": "Шестой",
+            "colorScaleParams": [
+              "rgba(255, 247, 243, 1)",
+              "rgba(247, 104, 161, 1)",
+              "rgba(73, 0, 106, 1)"
+            ]
+          },
+          {
+            "colorScaleName": "Сереневая",
+            "colorScaleParams": [
+              "#FACCFFFF",
+              "#DCB0FFFF",
+              "#BE93FDFF",
+              "#A178DFFF",
+              "#845EC2FF"
+            ]
+          },
+          {
+            "colorScaleName": "Красная",
+            "colorScaleParams": [
+              "#750000ff",
+              "#7d1407ff",
+              "#84220dff",
+              "#8c2d13ff",
+              "#933819ff",
+              "#9b431fff",
+              "#a24d25ff",
+              "#aa572cff",
+              "#b16133ff",
+              "#b86b3bff",
+              "#bf7542ff",
+              "#c67f4aff",
+              "#ce8952ff",
+              "#d5935bff",
+              "#dc9d64ff",
+              "#e3a76dff",
+              "#eab176ff",
+              "#f1bb7fff",
+              "#f8c689ff",
+              "#ffd093ff"
+            ]
+          },
+          {
+            "colorScaleName": "Красная",
+            "colorScaleParams": [
+              "#5e3500",
+              "#663d06",
+              "#6d460d",
+              "#754e14",
+              "#7d571b",
+              "#846022",
+              "#8c6928",
+              "#93722f",
+              "#9b7b37",
+              "#a2853e",
+              "#a98e45",
+              "#b1984d",
+              "#b8a155",
+              "#bfab5d",
+              "#c6b565",
+              "#cdbf6e",
+              "#d4c976",
+              "#dbd37f",
+              "#e2de88",
+              "#e9e891"
+            ]
+          },
+          {
+            "colorScaleName": "Красная",
+            "colorScaleParams": [
+              "#418203",
+              "#4c8812",
+              "#568f1d",
+              "#609526",
+              "#699b2f",
+              "#73a238",
+              "#7ca840",
+              "#86ae48",
+              "#8fb551",
+              "#98bb59",
+              "#a2c262",
+              "#abc96a",
+              "#b4cf73",
+              "#bdd67b",
+              "#c6dd84",
+              "#cfe38d",
+              "#d8ea96",
+              "#e1f19f",
+              "#eaf8a8",
+              "#f3ffb1"
+            ]
+          },
+          {
+            "colorScaleName": "Красная",
+            "colorScaleParams": [
+              "#006e41",
+              "#157546",
+              "#237c4c",
+              "#2f8451",
+              "#3a8b56",
+              "#44935c",
+              "#4e9a62",
+              "#57a267",
+              "#61a96d",
+              "#6ab173",
+              "#74b879",
+              "#7dc07f",
+              "#87c885",
+              "#90d08b",
+              "#9ad791",
+              "#a4df97",
+              "#ade79e",
+              "#b7efa4",
+              "#c1f7aa",
+              "#cbffb1"
+            ]
+          },
+          {
+            "colorScaleName": "Красная",
+            "colorScaleParams": [
+              "#00518a",
+              "#005a92",
+              "#006399",
+              "#006da0",
+              "#0076a6",
+              "#007fac",
+              "#0089b1",
+              "#0092b7",
+              "#079bbb",
+              "#1ea5c0",
+              "#2faec4",
+              "#3eb7c8",
+              "#4cc0cb",
+              "#5ac9cf",
+              "#69d2d2",
+              "#77dbd6",
+              "#85e4d9",
+              "#94eddd",
+              "#a2f6e0",
+              "#b1ffe4"
+            ]
+          },
+          {
+            "colorScaleName": "Красная",
+            "colorScaleParams": [
+              "#06008a",
+              "#051493",
+              "#06229b",
+              "#092ea4",
+              "#0f3aab",
+              "#1645b3",
+              "#1e50ba",
+              "#275ac1",
+              "#3065c7",
+              "#3a6fcd",
+              "#447ad3",
+              "#4e85d9",
+              "#598fde",
+              "#649ae3",
+              "#70a4e8",
+              "#7caeed",
+              "#89b9f2",
+              "#96c3f6",
+              "#a3cefb",
+              "#b1d8ff"
+            ]
+          },
+          {
+            "colorScaleName": "Красная",
+            "colorScaleParams": [
+              "#420074",
+              "#47107c",
+              "#4c1d84",
+              "#51278b",
+              "#563193",
+              "#5b3a9b",
+              "#6044a2",
+              "#654daa",
+              "#6a56b1",
+              "#705fb9",
+              "#7668c0",
+              "#7c71c7",
+              "#827ace",
+              "#8883d6",
+              "#8e8cdd",
+              "#9595e4",
+              "#9b9eeb",
+              "#a2a8f1",
+              "#aab1f8",
+              "#b1baff"
+            ]
+          },
+          {
+            "colorScaleName": "Красная",
+            "colorScaleParams": [
+              "#74005a",
+              "#7a1162",
+              "#7f1e6b",
+              "#852873",
+              "#8a327c",
+              "#903b85",
+              "#95438d",
+              "#9b4c96",
+              "#a0549f",
+              "#a55da8",
+              "#aa65b0",
+              "#b06db9",
+              "#b576c2",
+              "#ba7ecb",
+              "#bf87d3",
+              "#c48fdc",
+              "#c997e5",
+              "#cfa0ee",
+              "#d4a8f6",
+              "#d9b1ff"
+            ]
+          }
+        ]
+      },
+      {
+        "colorGroupName": "Расходящиеся",
+        "colorGroupScales": [
+          {
+            "colorScaleName": "На вкус и цвет",
+            "colorScaleParams": [
+              "#845EC2FF",
+              "#B93DAFFF",
+              "#D73222FF"
+            ]
+          },
+          {
+            "colorScaleName": "Второй",
+            "colorScaleParams": [
+              "rgba(0, 150, 64, 1)",
+              "rgba(166, 217, 106, 1)",
+              "rgba(255, 255, 191, 1)",
+              "rgba(253, 174, 97, 1)",
+              "rgba(213, 11, 0, 1)"
+            ]
+          },
+          {
+            "colorScaleName": "Третий",
+            "colorScaleParams": [
+              "rgba(33, 102, 172, 1)",
+              "rgba(146, 197, 222, 1)",
+              "rgba(247, 247, 247, 1)",
+              "rgba(244, 165, 130, 1)",
+              "rgba(178, 24, 43, 1)"
+            ]
+          },
+          {
+            "colorScaleName": "Бледно-белый",
+            "colorScaleParams": [
+              "#845EC2FF",
+              "#296073FF",
+              "#3596B5FF",
+              "#ADC5CFFF"
+            ]
+          },
+          {
+            "colorScaleName": "Бледно-белый",
+            "colorScaleParams": [
+              "#d16ba5ff",
+              "#c777b9ff",
+              "#ba83caff",
+              "#aa8fd8ff",
+              "#9a9ae1ff",
+              "#8aa7ecff",
+              "#79b3f4ff",
+              "#69bff8ff",
+              "#52cffeff",
+              "#41dfffff",
+              "#46eefaff",
+              "#5ffbf1ff"
+            ]
+          }
+        ]
+      },
+      {
+        "colorGroupName": "Разные цвета",
+        "colorGroupScales": [
+          {
+            "colorScaleName": "Седьмой",
+            "colorScaleParams": [
+              "rgb(243, 156, 18)",
+              "rgb(46, 204, 113)",
+              "rgb(52, 152, 219)",
+              "rgb(142, 68, 173)",
+              "rgb(251, 154, 153)",
+              "rgb(227, 26, 28)",
+              "rgb(41, 128, 185)",
+              "rgb(255, 127, 0)",
+              "rgb(231, 76, 60)",
+              "rgb(155, 89, 182)",
+              "rgb(255, 255, 153)",
+              "rgb(192, 57, 43)"
+            ]
+          },
+          {
+            "colorScaleName": "Седьмой",
+            "colorScaleParams": [
+              "#334234",
+              "#231b13",
+              "#ba597c",
+              "#b70713",
+              "#f9e77f",
+              "#360eea",
+              "#07b0ff",
+              "#78b275",
+              "#442b75",
+              "#2d012c",
+              "#7f4f74",
+              "#ef4aa8",
+              "#877a7e",
+              "#c3d35b",
+              "#99acc6",
+              "#44257a",
+              "#537546",
+              "#d62c35",
+              "#332b0f",
+              "#2a252b"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "connection": {
+    "url": "/sp/"
   }
 }

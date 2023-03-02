@@ -87,7 +87,6 @@
             }
         ]
     },
-    "allowDirectAccess": true,
     "tileCacheLimit": 0,
     "RequestTimeout": 0,
     "name": "admin.satellite_imagery",
