@@ -136,12 +136,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
 | `keys.url`               | URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`  |
 | `keys.requestTimeout`    | Timeout for requests to the Keys API                                                                                                             | `5s`  |
-| `keys.tokens.places`     | Places API key                                                                                                                                   | `""`  |
-| `keys.tokens.geocoder`   | Geocoder API key                                                                                                                                 | `""`  |
-| `keys.tokens.suggest`    | Suggest API key                                                                                                                                  | `""`  |
-| `keys.tokens.categories` | Categories API key                                                                                                                               | `""`  |
-| `keys.tokens.regions`    | Regions API key                                                                                                                                  | `""`  |
-| `keys.tokens.markers`    | Markers API key                                                                                                                                  | `""`  |
+| `keys.token`             | Key Service API key                                                                                                                              | `""`  |
 
 ### License settings
 
