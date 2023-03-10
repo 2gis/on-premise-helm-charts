@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "default": {},
+  "title": "Root Schema",
+  "required": ["dgctlDockerRegistry", "imagePullPolicy", "imagePullSecrets", "ui"],
+  "properties": {
+    "ui": {
+      "type": "object",
+      "required": [
+        "logLevel",
+        "isOnPremise",
+        "ssoAuth",
+        "appTheme",
+        "appLocale",
+        "appInitialMapCenter",
+        "api",
+        "mapgl"
+      ],
+      "properties": {
+        "logLevel": {
+          "type": "string",
+          "enum": ["error"]
+        },
+        "isOnPremise": {
+          "type": "string",
+          "enum": ["true", "false"]
+        },
+        "ssoAuth": {
+          "type": "string",
+          "enum": ["true", "false"]
+        },
+        "appTheme": {
+          "type": "string",
+          "enum": ["urbi", "2gis"]
+        },
+        "appLocale": {
+          "type": "string",
+          "enum": ["en_AE", "ru_RU"]
+        },
+        "appInitialMapCenter": {
+          "type": "string"
+        },
+        "api": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["url"],
+          "properties": {
+            "url": {
+              "type": "string",
+              "pattern": "^(https?://.+/)?$"
+            }
+          }
+        },
+        "mapgl": {
+          "type": "object",
+          "required": ["host", "key"],
+          "additionalProperties": false,
+          "properties": {
+            "host": {
+              "type": "string"
+            },
+            "key": {
+              "type": "string"
+            },
+            "styleUrl": {
+              "type": "string"
+            },
+            "styleIconsUrl": {
+              "type": "string"
+            },
+            "styleFontsUrl": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

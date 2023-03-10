@@ -54,46 +54,66 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### API service settings
 
-| Name                     | Description                                                                                                                    | Value                              |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
-| `api`                    | **Common settings**                                                                                                            |                                    |
-| `api.replicas`           | A replica count for the pod.                                                                                                   | `1`                                |
-| `api.jvmXmx`             | Memory allocation options for JVM.                                                                                             | `-Xmx1500m`                        |
-| `api.image`              | **Deployment settings**                                                                                                        |                                    |
-| `api.image.repository`   | Repository                                                                                                                     | `2gis-on-premise/bss-receiver-api` |
-| `api.image.tag`          | Tag                                                                                                                            | `1.1.4`                            |
-| `api.image.pullPolicy`   | Pull Policy                                                                                                                    | `IfNotPresent`                     |
-| `api.service`            | **Service settings**                                                                                                           |                                    |
-| `api.service.type`       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`                        |
-| `api.service.port`       | Service port.                                                                                                                  | `80`                               |
-| `api.service.targetPort` | Port inside the container.                                                                                                     | `8080`                             |
-
+| Name                     | Description                                                                                                                    | Value                               |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
+| `api`                    | **Common settings**                                                                                                            |                                     |
+| `api.replicas`           | A replica count for the pod.                                                                                                   | `1`                                 |
+| `api.jvmXmx`             | Memory allocation options for JVM.                                                                                             | `-Xmx1500m`                         |
+| `api.image`              | **Deployment settings**                                                                                                        |                                     |
+| `api.image.repository`   | Repository                                                                                                                     | `2gis-on-premise/stat-receiver-api` |
+| `api.image.tag`          | Tag                                                                                                                            | `1.11.1`                            |
+| `api.image.pullPolicy`   | Pull Policy                                                                                                                    | `IfNotPresent`                      |
+| `api.service`            | **Service settings**                                                                                                           |                                     |
+| `api.service.type`       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`                         |
+| `api.service.port`       | Service port.                                                                                                                  | `80`                                |
+| `api.service.targetPort` | Port inside the container.                                                                                                     | `8080`                              |
 
 ### Streams service settings
 
-| Name                       | Description                        | Value                                  |
-| -------------------------- | ---------------------------------- | -------------------------------------- |
-| `streams`                  | **Common settings**                |                                        |
-| `streams.replicas`         | A replica count for the pod.       | `1`                                    |
-| `streams.jvmXmx`           | Memory allocation options for JVM. | `-Xmx2G -XX:+UseParallelGC`            |
-| `streams.jmxPort`          | Port for JMX protocol.             | `9010`                                 |
-| `streams.metricsPort`      | Port for metrics.                  | `8080`                                 |
-| `streams.image`            | **Deployment settings**            |                                        |
-| `streams.image.repository` | Repository                         | `2gis-on-premise/bss-receiver-streams` |
-| `streams.image.tag`        | Tag                                | `1.1.4`                                |
-| `streams.image.pullPolicy` | Pull Policy                        | `IfNotPresent`                         |
-
+| Name                       | Description                                       | Value                                   |
+| -------------------------- | ------------------------------------------------- | --------------------------------------- |
+| `streams`                  | **Common settings**                               |                                         |
+| `streams.replicas`         | A replica count for the pod.                      | `1`                                     |
+| `streams.jvmXmx`           | Memory allocation options for JVM.                | `-Xmx2G -XX:+UseParallelGC`             |
+| `streams.jmxPort`          | Port for JMX protocol.                            | `9010`                                  |
+| `streams.metricsPort`      | Port for metrics.                                 | `8081`                                  |
+| `streams.storageSize`      | Size of ephemeral disk that holds temporary files | `500Mi`                                 |
+| `streams.image`            | **Deployment settings**                           |                                         |
+| `streams.image.repository` | Repository                                        | `2gis-on-premise/stat-receiver-streams` |
+| `streams.image.tag`        | Tag                                               | `1.11.1`                                |
+| `streams.image.pullPolicy` | Pull Policy                                       | `IfNotPresent`                          |
 
 ### Kafka service settings
 
-| Name              | Description                                                                                                                                                                                          | Value |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `kafka.security`  | SASL configuration for Kafka clients (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config)).                                                                        | `{}`  |
-| `kafka.sasl.jaas` | JAAS login context parameters for SASL connections in the format used by JAAS configuration files (see [the documentation](https://kafka.apache.org/documentation/#brokerconfigs_sasl.jaas.config)). | `{}`  |
-
+| Name                                      | Description                                                                                                                                                                                         | Value              |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `kafka.servers`                           | Kafka bootstrap connection string                                                                                                                                                                   | `""`               |
+| `kafka.securityProtocol`                  | Protocol used to communicate with brokers. Valid values are: `PLAINTEXT`, `SSL`, `SASL_PLAINTEXT`, `SASL_SSL`                                                                                       | `PLAINTEXT`        |
+| `kafka.truststore`                        | **Trust store configuration for SSL connections**                                                                                                                                                   |                    |
+| `kafka.truststore.enabled`                |                                                                                                                                                                                                     | `false`            |
+| `kafka.truststore.secretName`             | Kubernetes secret that holds trust store data                                                                                                                                                       | `""`               |
+| `kafka.truststore.storeFieldName`         | Name of the secret's key that holds trust store file                                                                                                                                                | `ca.p12`           |
+| `kafka.truststore.storePasswordFieldName` | Name of the secret's key that holds password to the trust store file                                                                                                                                | `ca.password`      |
+| `kafka.truststore.createSecret`           | Enable to manage trust store secret with helm                                                                                                                                                       | `false`            |
+| `kafka.truststore.storeData`              | base64-encoded PKCS12 or JKS trust store file                                                                                                                                                       | `""`               |
+| `kafka.truststore.storePassword`          | Password to trust store file                                                                                                                                                                        | `""`               |
+| `kafka.keystore`                          | **Configuration for SSL authentication**                                                                                                                                                            |                    |
+| `kafka.keystore.enabled`                  |                                                                                                                                                                                                     | `false`            |
+| `kafka.keystore.secretName`               | Kubernetes secret that holds key store data                                                                                                                                                         | `""`               |
+| `kafka.keystore.storeFieldName`           | Name of the secret's key that holds key store file                                                                                                                                                  | `user.p12`         |
+| `kafka.keystore.storePasswordFieldName`   | Name of the secret's key that holds password to the key store file                                                                                                                                  | `user.password`    |
+| `kafka.keystore.createSecret`             | Enable to manage key store secret with helm                                                                                                                                                         | `false`            |
+| `kafka.keystore.storeData`                | base64-encoded PKCS12 or JKS key store file                                                                                                                                                         | `""`               |
+| `kafka.keystore.storePassword`            | Password to key store file                                                                                                                                                                          | `""`               |
+| `kafka.sasl`                              | **Configuration for sasl authenthication**                                                                                                                                                          |                    |
+| `kafka.sasl.enabled`                      |                                                                                                                                                                                                     | `false`            |
+| `kafka.sasl.createSecret`                 | Enable to manage password secret with helm                                                                                                                                                          | `false`            |
+| `kafka.sasl.secretName`                   | Kubernetes secret that holds password data                                                                                                                                                          | `""`               |
+| `kafka.sasl.jaasFieldName`                | Name of the secret's key that holds JAAS configuration                                                                                                                                              | `sasl.jaas.config` |
+| `kafka.sasl.jaas`                         | JAAS login context parameters for SASL connections in the format used by JAAS configuration files (see [the documentation](https://kafka.apache.org/documentation/#brokerconfigs_sasl.jaas.config)) | `""`               |
+| `kafka.sasl.mechanism`                    | SASL mechanism used for client connections. This may be any mechanism for which a security provider is available                                                                                    | `""`               |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -101,7 +121,6 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | ----------------------- | -------------------------------------- | -------------------- |
 | `ingress.enabled`       | If Ingress is enabled for the service. | `false`              |
 | `ingress.hosts[0].host` | Hostname for the Ingress service.      | `stat-receiver.host` |
-
 
 ### Limits
 

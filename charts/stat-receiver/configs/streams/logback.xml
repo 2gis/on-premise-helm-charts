@@ -1,0 +1,18 @@
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+        <maxDepthPerThrowable>30</maxDepthPerThrowable>
+        <maxLength>28672</maxLength> <!-- 28Kb for stacktrace, because full json ELK limit is 32Kb-->
+        <shortenedClassNameLength>20</shortenedClassNameLength>
+        <exclude>scala\.concurrent\.Future.*</exclude>
+        <exclude>scala\.concurrent\.forkjoin..*</exclude>
+        <rootCauseFirst>true</rootCauseFirst>
+      </throwableConverter>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="STDOUT" />
+  </root>
+</configuration>

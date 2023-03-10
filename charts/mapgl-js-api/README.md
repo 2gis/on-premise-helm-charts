@@ -26,7 +26,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name               | Description                                                                                                                 | Value |
@@ -41,7 +40,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
 | `podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
 
-
 ### Deployment settings
 
 | Name               | Description | Value                   |
@@ -49,7 +47,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `image.repository` | Repository  | `2gis-on-premise/mapgl` |
 | `image.tag`        | Tag         | `1.33.1`                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
-
 
 ### Environment variables
 
@@ -62,7 +59,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `env.MAPGL_RTLPLUGIN`     | URL of the plugin for right-to-left languages support. | `https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js`                                     |
 | `env.MAPGL_RTLPLUGINHASH` | SHA512 hash of the RTL plugin.                         | `sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==` |
 
-
 ### Strategy settings
 
 | Name                                    | Description                                                                                                                                                                                              | Value           |
@@ -70,7 +66,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
 | `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
-
 
 ### Service settings
 
@@ -81,14 +76,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `service.port`        | Service port.                                                                                                                  | `80`        |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                    | Description                            | Value               |
 | ----------------------- | -------------------------------------- | ------------------- |
 | `ingress.enabled`       | If Ingress is enabled for the service. | `false`             |
 | `ingress.hosts[0].host` | Hostname for the Ingress service.      | `mapgl-js-api.host` |
-
 
 ### Limits
 
@@ -99,7 +92,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `resources.limits.cpu`      | A CPU limit.      | `100m` |
 | `resources.limits.memory`   | A memory limit.   | `64M`  |
 
-
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                 | Description                                          | Value   |
@@ -107,7 +99,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
 | `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -120,7 +111,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
 | `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
 | `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
-
 
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 

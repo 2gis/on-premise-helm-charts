@@ -23,7 +23,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/overview) to learn a
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Deployment Artifacts Storage settings
 
 | Name                     | Description                             | Value |
@@ -32,7 +31,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/overview) to learn a
 | `dgctlStorage.bucket`    | S3 bucket name.                         | `""`  |
 | `dgctlStorage.accessKey` | S3 access key for accessing the bucket. | `""`  |
 | `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. | `""`  |
-
 
 ### Common settings
 
@@ -50,15 +48,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/overview) to learn a
 | `affinity`         | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
 | `imagePullSecrets` | Kubernetes image pull secrets.                                                                                              | `[]`  |
 
-
 ### Deployment settings
 
 | Name               | Description  | Value                     |
 | ------------------ | ------------ | ------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/license` |
-| `image.tag`        | Tag.         | `1.0.0`                   |
+| `image.tag`        | Tag.         | `1.0.1`                   |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`            |
-
 
 ### License service application settings
 
@@ -67,7 +63,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/overview) to learn a
 | `license.updatePeriod`    | Duration how often service should fetch new license from storage. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration].                      | `1h`  |
 | `license.retryPeriod`     | Duration how often service should try to fetch license from storage if previous attempts were failing.                                                                                         | `30s` |
 | `license.softBlockPeriod` | Duration until the license expiration time when license service should respond with 'soft' block status. For this duration additional time units 'd' for days and 'w' for weeks are supported. | `2w`  |
-
 
 ### Service settings
 
@@ -78,14 +73,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/overview) to learn a
 | `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                    | Description                                                    | Value   |
 | ----------------------- | -------------------------------------------------------------- | ------- |
 | `ingress.enabled`       | If Ingress is enabled for the service.                         | `false` |
 | `ingress.hosts[0].host` | Hostname for the Ingress service. Ex.: 'license.ingress.host'. | `""`    |
-
 
 ### Limits
 

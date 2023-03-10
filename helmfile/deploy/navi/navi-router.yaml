@@ -1,0 +1,29 @@
+---
+bases:
+- {{ env "HELMFILE_VALUES" | default "../../../../helmfile_values" }}/base.yaml
+---
+{{ if eq .Values.remoteCharts true }}
+repositories:
+- name: 2gis-on-premise
+  url: https://2gis.github.io/on-premise-helm-charts
+{{ end }}
+---
+{{ $path_values:= env "HELMFILE_VALUES" | default "../../../../helmfile_values" }}
+releases:
+  - name: navi-router
+    {{- if eq .Values.remoteCharts true }}
+    chart: 2gis-on-premise/navi-router
+    {{- else}}    
+    chart: ../../../charts/navi-router
+    {{- end }}  
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    version: "{{ .Values.version }}"
+    timeout: 1200
+    labels:
+      chart: navi-router
+    values:
+      - {{ $path_values }}/templates/dgctl.gotmpl
+      - {{ $path_values }}/services/navi/navi-back/_common.gotmpl
+      - {{ $path_values }}/services/navi/navi-router/_common.gotmpl
+      - {{ $path_values }}/templates/optionalEnv.gotmpl

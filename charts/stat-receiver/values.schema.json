@@ -1,0 +1,144 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "id": "values.schema.json",
+    "type": "object",
+    "properties": {
+        "dgctlDockerRegistry": {
+            "anyOf": [
+                { "$ref": "#/definitions/empty_string" },
+                { "$ref": "#/definitions/ip_or_host" }
+            ]
+        },
+        "initializeTopics": { "type": "boolean" },
+        "topicsPrefix":     { "type": "string" },
+        "api": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "replicas":  { "type": "integer", "minimum": 0 },
+                "jvmXmx":    { "type": "string" },
+                "image":     { "$ref": "#/definitions/image" },
+                "resources": { "$ref": "#/definitions/k8s_resources" },
+                "service": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "type":         { "type": "string", "enum": ["ClusterIP", "NodePort"] },
+                        "port":         { "$ref": "#/definitions/port" },
+                        "targetPort":   { "$ref": "#/definitions/port" }
+                    }
+                }
+            }
+        },
+        "streams": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "replicas":        { "type": "integer", "minimum": 0 },
+                "jvmXmx":          { "type": "string" },
+                "jmxPort":         { "$ref": "#/definitions/port" },
+                "metricsPort":     { "$ref": "#/definitions/port" },
+                "image":           { "$ref": "#/definitions/image" },
+                "resources":       { "$ref": "#/definitions/k8s_resources" },
+                "storageSize":     { "$ref": "#/definitions/k8s_quantity" }
+            }
+        },
+        "kafka": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "servers":          { "type": "string" },
+                "securityProtocol": { "type": "string", "enum": ["PLAINTEXT", "SSL", "SASL_PLAINTEXT", "SASL_SSL"] },
+                "truststore":       { "$ref": "#/definitions/trust_or_key_store" },
+                "keystore":         { "$ref": "#/definitions/trust_or_key_store" },
+                "sasl":             { "type": "object",
+                                      "oneOf": [
+                                        { "properties": {
+                                            "enabled": { "type": "boolean", "enum": [false] }
+                                          }
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                              "enabled":       { "type": "boolean", "enum": [true] },
+                                              "createSecret":  { "type": "boolean" },
+                                              "secretName":    { "$ref": "#/definitions/non_empty_string" },
+                                              "jaasFieldName": { "$ref": "#/definitions/non_empty_string" },
+                                              "jaas":          { "type": "string" },
+                                              "mechanism":     { "$ref": "#/definitions/non_empty_string" }
+                                          }
+                                        }
+                                      ]
+                                    }
+            }
+        }
+    },
+    "definitions": {
+        "empty_string":     { "type":"string", "maxLength": 0 },
+        "non_empty_string": { "type": "string", "minLength": 1},
+        "port":             { "type": "integer", "minimum": 0, "maximum": 65536 },
+        "ip_or_host": {
+            "type": "string",
+            "anyOf": [
+                { "format": "ipv4" },
+                { "format": "ipv6" },
+                { "format": "hostname" }
+            ]
+        },
+        "image": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "repository":      { "type": "string" },
+                "tag":             { "type": "string" },
+                "pullPolicy": { "type": "string", "enum": ["IfNotPresent", "Always", "Never"] }
+            }
+        },
+        "k8s_resources": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [ "requests", "limits" ],
+            "properties": {
+                "requests": { "$ref": "#/definitions/k8s_resource" },
+                "limits":   { "$ref": "#/definitions/k8s_resource" }
+            }
+        },
+        "k8s_resource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [ "cpu", "memory" ],
+            "properties": {
+                "cpu":    { "$ref": "#/definitions/k8s_quantity" },
+                "memory": { "$ref": "#/definitions/k8s_quantity" }
+            }
+        },
+        "k8s_quantity": {
+            "anyOf": [
+                { "type": "number", "minimum": 0 },
+                { "type": "string", "pattern": "^[0-9]+([.][0-9]+)?([mkMGT]i?)?$"}
+            ]
+        },
+        "trust_or_key_store": {
+            "type": "object",
+            "oneOf": [
+                {
+                    "properties": {
+                        "enabled": { "type": "boolean", "enum": [false]}
+                    }
+                },
+                {
+                    "additionalProperties": false,
+                    "properties": {
+                        "enabled":                { "type": "boolean", "enum": [true] },
+                        "secretName":             { "$ref": "#/definitions/non_empty_string"},
+                        "storeFieldName":         { "$ref": "#/definitions/non_empty_string" },
+                        "storePasswordFieldName": { "$ref": "#/definitions/non_empty_string" },
+                        "createSecret":           { "type": "boolean" },
+                        "storeData":              { "type": "string" },
+                        "storePassword":          { "type": "string" }
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,77 @@
+{{- /* vi: ft=helm
+*/}}
+include classpath("application")
+
+streams = {
+  topology = {
+    blacklist.enabled = false
+
+    deduplication = {
+      in-memory = true
+
+      retention = {
+        period = 1 hour
+        window = 10 minutes
+      }
+    }
+
+    schema-loader = {
+      v-1-schemas-path = "file:///app/schema/v1/"
+      v-2-schemas-path = "file:///app/schema/v2/"
+      v-3-schemas-path = "file:///app/schema/v3/0/"
+    }
+
+    initialize-topics = {{ required "A valid .Values.initializeTopics entry required" .Values.initializeTopics }}
+    topics-manager.prefix = {{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}
+
+    input-topics = [
+      "{{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}input"
+    ]
+    invalid-message-topic = "{{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}invalid-messages"
+    unknown-type-topic = "{{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}unknown-type"
+
+    types-topics = [
+      { topic = "{{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}type.401", type = 401 }
+    ]
+
+    segment-info-index.data-path = "file:///app/segment_info/"
+  }
+
+  kafka-streams = {
+    "application.id" = "{{ .Values.topicsPrefix }}streams"
+    "group.instance.id" = "{{ .Values.topicsPrefix }}streams"
+    "client.id" = "{{ .Values.topicsPrefix }}streams"
+    "session.timeout.ms" = 300000
+    "transaction.timeout.ms" = 180000
+    "processing.guarantee" = "exactly_once"
+    "commit.interval.ms" = 5000
+    "replication.factor" = 3
+    "num.stream.threads" = 1
+    "state.dir" = "/app/rocksdb"
+    "cache.max.bytes.buffering" = 268435456 # 256Mb
+    "rocksdb.info.log.level" = ERROR_LEVEL
+    "rocksdb.shared.block.cache.size" = 536870912 # 512Mb
+    "bootstrap.servers" = {{ required "A valid .Values.kafka.servers entry required" .Values.kafka.servers | quote }}
+    {{- if .Values.kafka.sasl.mechanism }}
+    "sasl.mechanism" = {{ .Values.kafka.saslMechanism }}
+    {{- end }}
+    {{- if .Values.kafka.securityProtocol }}
+    "security.protocol" = {{ .Values.kafka.securityProtocol }}
+    {{- end }}
+    {{- if .Values.kafka.sasl.enabled }}
+    "sasl.jaas.config" = ${JAAS_CONFIG}
+    {{- end }}
+    {{- if .Values.kafka.keystore.enabled }}
+    "ssl.keystore.location" = /run/kafka-keystore/{{ .Values.kafka.keystore.storeFieldName }}
+    "ssl.keystore.password" = ${KEYSTORE_PASSWORD}
+    {{- end }}
+    "metrics.recording.level" = DEBUG
+    "max.request.size" = 10485760
+    "linger.ms" = 100
+    "acks" = "all"
+    "compression.type" = "gzip"
+    "batch.size" = 65536
+    "rocksdb.config.setter" = "casino.bss.receiver.streams.StreamsRocksDBConfigSetter"
+    "windowstore.changelog.additional.retention.ms" = 0
+  }
+}

@@ -25,3 +25,9 @@ app.kubernetes.io/instance: {{ printf "%s-streams" .Release.Name }}
 {{ include "bss-receiver-streams.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
+
+{{- define "stat-receiver-secret.labels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}
+app.kubernetes.io/instance: {{ printf "%s-secret" .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}

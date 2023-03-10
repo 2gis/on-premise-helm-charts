@@ -1,0 +1,36 @@
+{{- /* vi: ft=helm
+*/}}
+include classpath("application")
+
+schema-loader = {
+  v-1-schemas-path = "file:///app/schema/v1/"
+  v-2-schemas-path = "file:///app/schema/v2/"
+  v-3-schemas-path = "file:///app/schema/v3/0/"
+}
+
+initialize-topics = {{ required "A valid .Values.initializeTopics entry required" .Values.initializeTopics }}
+topics-manager.prefix = {{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}
+
+input-bss-topic = "{{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}input"
+
+kafka = {
+  servers = {{ required "A valid .Values.kafka.servers entry required" .Values.kafka.servers | quote }}
+  client-id = "{{ .Values.topicsPrefix }}api"
+  properties = {
+    {{- if .Values.kafka.sasl.mechanism }}
+    "sasl.mechanism" = {{ .Values.kafka.sasl.mechanism }}
+    {{- end }}
+    {{- if .Values.kafka.securityProtocol }}
+    "security.protocol" = {{ .Values.kafka.securityProtocol }}
+    {{- end }}
+    {{- if .Values.kafka.sasl.enabled }}
+    "sasl.jaas.config" = ${JAAS_CONFIG}
+    {{- end }}
+    {{- if .Values.kafka.keystore.enabled }}
+    "ssl.keystore.location" = /run/kafka-keystore/{{ .Values.kafka.keystore.storeFieldName }}
+    "ssl.keystore.password" = ${KEYSTORE_PASSWORD}
+    {{- end }}
+    "max.request.size" = "31457280"
+    "compression.type" = "gzip"
+  }
+}

@@ -26,4 +26,12 @@
   options:
     retention.ms: {{ retention }}
     cleanup.policy: delete
+
+- topic: "{{ topic-name-prefix }}streams-unique-message-batches-changelog"
+  partitions: {{ partitions }}
+  replica-factor: {{ replica-factor }}
+  options:
+    retention.ms: {{ retention }}
+    cleanup.policy: compact,delete
+    message.timestamp.type: CreateTime
 ```

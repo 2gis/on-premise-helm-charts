@@ -1,0 +1,14 @@
+navigroup: navi
+
+router:
+  castleHost: navi-castle #имя сервиса navi-castle в k8s
+
+replicaCount: 2
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 1024Mi
+  requests:
+    cpu: 500m
+    memory: 128Mi
