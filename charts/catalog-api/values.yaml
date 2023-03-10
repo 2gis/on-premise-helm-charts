@@ -186,6 +186,16 @@ keys:
     markers: ''
 
 
+# @section License settings
+
+# @param license.url URL of the License service. Ex: http(s)://license.svc **Required**
+# @param license.requestTimeout Timeout for requests to the License service
+
+license:
+  url: ''
+  requestTimeout: 1s
+
+
 # @section Kubernetes Importer job settings
 
 # @extra importer **Common settings**

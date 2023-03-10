@@ -143,6 +143,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `keys.tokens.regions`    | Regions API key                                                                                                                                  | `""`  |
 | `keys.tokens.markers`    | Markers API key                                                                                                                                  | `""`  |
 
+### License settings
+
+| Name                        | Description                                                                                                                                         | Value |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `license.url`               | URL of the License service, ex: http(s)://license.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`  |
+| `license.requestTimeout`    | Timeout for requests to the License service                                                                                                         | `1s`  |
+
 ### Kubernetes Importer job settings
 
 | Name                           | Description                                                                                                        | Value |
