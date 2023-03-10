@@ -54,6 +54,11 @@ spec:
         - configMap:
             name: {{ include "tiles.fullname" . }}-api
           name: config-volume
+        {{- if $.Values.cassandra.ssl.enabled }}
+        - configMap:
+            name: {{ include "tiles.fullname" . }}-cassandra-ssl
+          name: cassandra-ssl
+        {{- end }}
 
       {{- with .Values.api.nodeSelector }}
       nodeSelector:
@@ -123,6 +128,10 @@ spec:
           volumeMounts:
             - mountPath: "/config"
               name: config-volume
+            {{- if $.Values.cassandra.ssl.enabled }}
+            - mountPath: "/cassandra-ssl"
+              name: cassandra-ssl
+            {{- end }}
 
           {{- with .Values.api.resources }}
           resources:

@@ -68,6 +68,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `cassandra.credentials.password`    | User password to connect to the database.                                                                                                                           | `cassandra`    |
 | `cassandra.credentials.jmxUser`     | JMX user name to be used by the Kubernetes Importer Job's cleaner process.                                                                                          | `cassandra`    |
 | `cassandra.credentials.jmxPassword` | JMX password to be used by the Kubernetes Importer Job's cleaner process.                                                                                           | `cassandra`    |
+| `cassandra.ssl`                     | **SSL configuration for accessing Apache Cassandra**                                                                                                                |                |
+| `cassandra.ssl.enabled`             | If Apache Cassandra uses SSL for client connections.                                                                                                                | `false`        |
+| `cassandra.ssl.caCrt`               | Apache Cassandra CA certificate.                                                                                                                                    | `""`           |
 
 ### API Keys proxy settings
 

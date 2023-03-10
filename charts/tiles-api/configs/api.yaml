@@ -11,6 +11,11 @@ cassandra-credentials:
   user: {{ .Values.cassandra.credentials.user }}
   password: {{ .Values.cassandra.credentials.password }}
 
+{{- if $.Values.cassandra.ssl.enabled }}
+cassandra-ssl:
+  ca-path: "/cassandra-ssl/ca.crt"
+{{- end }}
+
 cassandra-clusters:
   - name: kubernetes
     timeout: {{ .Values.cassandra.timeout }}

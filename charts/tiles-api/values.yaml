@@ -64,6 +64,10 @@ types:
 # @param cassandra.credentials.jmxUser JMX user name to be used by the Kubernetes Importer Job's cleaner process.
 # @param cassandra.credentials.jmxPassword JMX password to be used by the Kubernetes Importer Job's cleaner process.
 
+# @extra cassandra.ssl **SSL configuration for accessing Apache Cassandra**
+# @param cassandra.ssl.enabled If Apache Cassandra uses SSL for client connections.
+# @param cassandra.ssl.caCrt Apache Cassandra CA certificate.
+
 cassandra:
   environment: ''
   timeout: 90s
@@ -73,6 +77,9 @@ cassandra:
     password: cassandra
     jmxUser: cassandra
     jmxPassword: cassandra
+  ssl:
+    enabled: false
+    caCrt: ''
 
   replicaFactor: 3
   consistencyLevelRead: LOCAL_QUORUM
