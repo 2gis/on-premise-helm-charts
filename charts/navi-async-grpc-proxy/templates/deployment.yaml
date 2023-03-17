@@ -73,7 +73,7 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           env:
             - name: DM_ASYNC_HOST
-              value: {{ .Values.dm.host | quote }}
+              value: {{ .Values.dm.url | quote }}
             - name: DM_ASYNC_PORT
               value: {{ .Values.dm.port | quote }}
             - name: GRPC_PORT

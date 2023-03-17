@@ -150,11 +150,11 @@ pdb:
 
 # @section Settings for navi-async-matrix service connection
 
-# @param dm.host async-matrix host name with schema
+# @param dm.url async-matrix host name with schema
 # @param dm.port async-matrix port
 
 dm:
-  host: http://navi-async-matrix.host
+  url: http://navi-async-matrix.host
   port: 80
 
 # @param livenessProbeDelay initial delay for liveness probes
