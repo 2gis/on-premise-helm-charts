@@ -1,4 +1,4 @@
-{{ if .Values.assetImporter.enabled }}
+﻿{{ if .Values.assetImporter.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -51,6 +51,8 @@ spec:
                   value: {{ required "A valid .Values.s3.userAssetsDataBucket entry required" $.Values.s3.userAssetsDataBucket }}
                 - name: S3Settings__LayerDataBucket
                   value: {{ required "A valid .Values.s3.layerDataBucket entry required" $.Values.s3.layerDataBucket }}
+                - name: S3Settings__SnapshotBucket
+                  value: {{ required "A valid .Values.s3.snapshotBucket entry required" $.Values.s3.snapshotBucket }}
                 - name: S3Settings__AccessKey
                   valueFrom:
                     secretKeyRef:
@@ -63,24 +65,37 @@ spec:
                       name: {{ include "pro-api.name" . }}-secret
                 - name: ES_HOST
                   value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
-                {{ if .Values.elastic.credentials }}
+                {{- if .Values.elastic.credentials }}
                 - name: ES_CREDENTIALS
                   valueFrom:
                     secretKeyRef:
                       key: esCredentials
                       name: {{ include "pro-api.name" . }}-secret
-                {{ end }}
+                {{- end }}
+                - name: ES_INDEX_PREFIX
+                  value: "{{ .Values.elastic.indexPrefix }}"
                 - name: API_URL
                   value: http://{{ include "pro-api.name" . }}
-                {{ if .Values.api.token }}
+                {{- if .Values.api.token }}
                 - name: API_TOKEN
                   valueFrom:
                     secretKeyRef:
                       key: apiServiceToken
                       name: {{ include "pro-api.name" . }}-secret
-                {{ end }}
-                {{ if .Values.assetImporter.files }}
+                {{- end }}
+                {{- if .Values.assetImporter.files }}
                 - name: FILES
                   value: "{{ .Values.assetImporter.files}}"
-                {{ end }}
+                {{- end }}
+                - name: DB_CONNECTION_STRING
+                  value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
+                - name: DB_CONNECTION_PWD
+                  valueFrom:
+                    secretKeyRef:
+                      key: dbConnectionPwd
+                      name: {{ include "pro-api.name" . }}-secret
+                - name: Common__Logging__Format
+                  value: "{{ .Values.api.logging.format }}"
+                - name: Common__Logging__Targets
+                  value: "{{ .Values.api.logging.targets }}"
 {{ end }}
