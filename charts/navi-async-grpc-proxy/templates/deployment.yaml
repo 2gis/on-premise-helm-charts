@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "navi-async-grpc-proxy.fullname" . }}
+  labels:
+    {{- include "navi-async-grpc-proxy.labels" . | nindent 4 }}
+  {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.hpa.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- include "tplvalues.render" ( dict "value" .Values.strategy "context" $) | nindent 6 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "navi-async-grpc-proxy.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}    
+      {{- end }}
+      labels:
+        {{- include "navi-async-grpc-proxy.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "navi-async-grpc-proxy.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ include "navi-async-grpc-proxy.fullname" . }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: grpc
+              containerPort: {{ .Values.app.containerPort }}
+              protocol: TCP
+            - name: health
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: health
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: health
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          lifecycle:
+            # wait for the endpoint removal process
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5"]
+          env:
+            - name: DM_ASYNC_HOST
+              value: {{ .Values.dm.host | quote }}
+            - name: DM_ASYNC_PORT
+              value: {{ .Values.dm.port | quote }}
+            - name: GRPC_PORT
+              value: {{ .Values.app.containerPort | quote }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 60 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

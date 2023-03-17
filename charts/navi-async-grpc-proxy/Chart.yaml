@@ -1,0 +1,12 @@
+apiVersion: v2
+name: navi-async-grpc-proxy
+description: Deployment for Navi async-grpc-proxy service
+type: application
+keywords:
+  - navi
+  - dm-async-matrix
+  - async-grpc-proxy
+version: 0.0.1
+maintainers:
+  - name: navi
+    email: devops-navi@2gis.ru

@@ -1,0 +1,21 @@
+{{- with .Values.pdb }}
+{{- if .enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "navi-async-grpc-proxy.fullname" $ }}
+  labels:
+    {{- include "navi-async-grpc-proxy.labels" $ | nindent 4 }}
+spec:
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
+  {{- end }}
+  {{- if .maxUnavailable }}
+  maxUnavailable: {{ .maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "navi-async-grpc-proxy.selectorLabels" $ | nindent 6 }}
+{{- end }}
+{{- end }}
