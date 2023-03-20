@@ -11,7 +11,7 @@ keys.token
 ```
 #### navi-router
 
-- For zero downtime update navi-router first, then update keys
+- For zero downtime, update navi-router first, then update keys
 
 ## [1.5.3]
 #### tiles-api
