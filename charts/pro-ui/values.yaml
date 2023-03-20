@@ -110,7 +110,7 @@ ui:
   ingress:
     enabled: false
     hosts:
-      - host: pro-ui.host
+    - host: pro-ui.host
 
   # @section Limits
 

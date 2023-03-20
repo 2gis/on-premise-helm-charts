@@ -115,20 +115,20 @@ streams:
 
 kafka:
   servers: ''
-  securityProtocol: 'PLAINTEXT'
+  securityProtocol: PLAINTEXT
   truststore:
     enabled: false
     secretName: ''
-    storeFieldName: 'ca.p12'
-    storePasswordFieldName: 'ca.password'
+    storeFieldName: ca.p12
+    storePasswordFieldName: ca.password
     createSecret: false
     storeData: ''
     storePassword: ''
   keystore:
     enabled: false
     secretName: ''
-    storeFieldName: 'user.p12'
-    storePasswordFieldName: 'user.password'
+    storeFieldName: user.p12
+    storePasswordFieldName: user.password
     createSecret: false
     storeData: ''
     storePassword: ''
@@ -137,7 +137,7 @@ kafka:
     createSecret: false
     secretName: ''
     mechanism: ''
-    jaasFieldName: 'sasl.jaas.config'
+    jaasFieldName: sasl.jaas.config
     jaas: ''
 
 

@@ -1,4 +1,18 @@
 # 2GIS On-Premise Breaking-Changes
+## [1.6.0]
+#### catalog-api
+- Rename
+```
+keys.tokens
+```
+to
+```
+keys.token
+```
+#### navi-router
+
+- For zero downtime update navi-router first, then update keys
+
 ## [1.5.3]
 #### tiles-api
 - Rename
