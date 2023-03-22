@@ -125,8 +125,6 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 | --------------------- | ---------------------------------- | ------------------------------- |
 | `dm.url`              | async-matrix host name with schema | `http://navi-async-matrix.host` |
 | `dm.port`             | async-matrix port                  | `80`                            |
-| `livenessProbeDelay`  | initial delay for liveness probes  | `60`                            |
-| `readinessProbeDelay` | initial delay for readiness probes | `75`                            |
 
 
 ## Пример деплоя
