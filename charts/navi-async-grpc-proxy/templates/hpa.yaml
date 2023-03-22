@@ -1,5 +1,15 @@
 {{- if .Values.hpa.enabled }}
+
+{{- if semverCompare "<1.23-0" (include "capabilities.kubeVersion" .) }}
+  {{- if .beta2 }}
+apiVersion: autoscaling/v2beta2
+  {{- else }}
+apiVersion: autoscaling/v2beta1
+  {{- end }}
+{{- else }}
 apiVersion: autoscaling/v2
+{{- end }}
+
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "navi-async-grpc-proxy.fullname" . }}
