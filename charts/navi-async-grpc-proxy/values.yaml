@@ -163,9 +163,3 @@ pdb:
 dm:
   url: http://navi-async-matrix.host
   port: 80
-
-# @param livenessProbeDelay initial delay for liveness probes
-# @param readinessProbeDelay initial delay for readiness probes
-
-livenessProbeDelay: 60
-readinessProbeDelay: 75
