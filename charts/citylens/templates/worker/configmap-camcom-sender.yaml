@@ -40,9 +40,6 @@ data:
         aws_secret_access_key: {{ .secretAccessKey }}
         endpoint_url: {{ .endpoint | squote }}
     {{- end }}
-    tracks_uploader:
-      api: {{ .Values.tracksUploader.api | squote }}
-      source: {{ .Values.tracksUploader.source | squote }}
     enabled_modules:
       header_links:
       {{- toYaml .Values.headerLinks | nindent 8}}

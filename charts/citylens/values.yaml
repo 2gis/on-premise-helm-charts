@@ -66,7 +66,7 @@ web:
   image:
     repository: ''
     pullPolicy: IfNotPresent
-    tag: 'v1.0.4'
+    tag: '1.0.5'
 
   replicas: 1
 
@@ -187,7 +187,7 @@ worker:
   image:
     repository: ''
     pullPolicy: IfNotPresent
-    tag: 'v1.0.4'
+    tag: '1.0.5'
   
   resources:
     requests:
@@ -245,17 +245,11 @@ dashboardDomain: ''
 
 locale: ''
 
-tracksUploader:
-  api: ''
-  source: ''
-
-
 headerLinks:
   - 'drivers'
   - 'tracks'
   - 'reload_statuses'
   - 'help'
-  - 'reload_track'  # default
 
 reporters:
   - 'pro'
