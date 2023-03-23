@@ -3,9 +3,7 @@
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
 dgctlDockerRegistry: ''
-
 api:
-
   image:
     repository: ''
     pullPolicy: IfNotPresent
@@ -44,17 +42,13 @@ api:
 
   annotations: {}
   labels: {}
-
   podAnnotations: {}
   podLabels: {}
-
   nodeSelector: {}
   affinity: {}
   tolerations: {}
 
-
 web:
-
   image:
     repository: ''
     pullPolicy: IfNotPresent
@@ -91,48 +85,36 @@ web:
 
   annotations: {}
   labels: {}
-
   podAnnotations: {}
   podLabels: {}
-
   nodeSelector: {}
   affinity: {}
   tolerations: {}
 
 worker:
-
   framesSaver:
 
     replicas: 4
 
     annotations: {}
     labels: {}
-
     podAnnotations: {}
     podLabels: {}
-
     nodeSelector: {}
     affinity: {}
     tolerations: {}
 
-
   camcomSender:
-
     enabled: false
 
     replicas: 1
-
     annotations: {}
     labels: {}
-
     podAnnotations: {}
     podLabels: {}
-
     nodeSelector: {}
     affinity: {}
     tolerations: {}
-
-
 
   predictionsSaver:
 
@@ -140,10 +122,8 @@ worker:
 
     annotations: {}
     labels: {}
-
     podAnnotations: {}
     podLabels: {}
-
     nodeSelector: {}
     affinity: {}
     tolerations: {}
@@ -154,10 +134,8 @@ worker:
 
     annotations: {}
     labels: {}
-
     podAnnotations: {}
     podLabels: {}
-
     nodeSelector: {}
     affinity: {}
     tolerations: {}
@@ -168,10 +146,8 @@ worker:
 
     annotations: {}
     labels: {}
-
     podAnnotations: {}
     podLabels: {}
-
     nodeSelector: {}
     affinity: {}
     tolerations: {} 
@@ -223,7 +199,6 @@ kafka:
     tracksGroupId: ''
     predictionGroupId: ''
     camcomSenderGroupId: ''
-
 
 s3:
   endpoint: ''
