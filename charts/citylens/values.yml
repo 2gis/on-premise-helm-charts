@@ -1,0 +1,264 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+api:
+
+  image:
+    repository: ''
+    pullPolicy: IfNotPresent
+    tag: 'v1.0.2'
+
+  replicas: 4
+
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+    targetPort: 8000
+
+  ingress:
+    enabled: true
+    className: ''
+    annotations: 
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    tls:
+      - hosts:
+          host: ''
+        secretName: ''
+    hosts:
+    - host: ''
+      paths:
+      - path: '/'
+
+  kafka:
+    topics:
+      frames: ''
+      tracks: ''
+      camcom: ''
+      logs: ''
+
+
+  annotations: {}
+  labels: {}
+
+  podAnnotations: {}
+  podLabels: {}
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
+
+web:
+
+  image:
+    repository: ''
+    pullPolicy: IfNotPresent
+    tag: 'v1.0.4'
+
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+    targetPort: 5000
+
+  ingress:
+    enabled: true
+    className: ''
+    tls:
+    - hosts:
+        host: ''
+      secretName: ''
+    hosts:
+    - host: ''
+      paths:
+      - path: '/'
+
+  annotations: {}
+  labels: {}
+
+  podAnnotations: {}
+  podLabels: {}
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
+worker:
+
+  framesSaver:
+
+    replicas: 4
+
+    annotations: {}
+    labels: {}
+
+    podAnnotations: {}
+    podLabels: {}
+
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+
+  camcomSender:
+
+    enabled: false
+
+    replicas: 1
+
+    annotations: {}
+    labels: {}
+
+    podAnnotations: {}
+    podLabels: {}
+
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+
+
+  predictionsSaver:
+
+    replicas: 1
+
+    annotations: {}
+    labels: {}
+
+    podAnnotations: {}
+    podLabels: {}
+
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+  reporterPro:
+
+    replicas: 1
+
+    annotations: {}
+    labels: {}
+
+    podAnnotations: {}
+    podLabels: {}
+
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+  trackMetadataSaver:
+
+    replicas: 1
+
+    annotations: {}
+    labels: {}
+
+    podAnnotations: {}
+    podLabels: {}
+
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {} 
+
+  image:
+    repository: ''
+    pullPolicy: IfNotPresent
+    tag: 'v1.0.4'
+  
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+
+migrations:
+
+  enabled: true
+
+  image:
+    repository: ''
+    pullPolicy: IfNotPresent
+    tag: 'v1.0.0'
+  resources:
+    requests:
+      cpu: 100m
+      memory: 1Gi
+    limits:
+      cpu: 200m
+      memory: 2Gi
+
+  nodeSelector: {}
+
+kafka:
+
+  bootstrapServer: ''
+  username: ''
+  password: ''
+  topics:
+    frames: 
+      - ''
+    tracks: ''
+    prediction: 
+      - ''
+    pro: ''
+    framesGroupId: ''
+    tracksGroupId: ''
+    predictionGroupId: ''
+    camcomSenderGroupId: ''
+
+s3:
+  endpoint: ''
+  accessKey: ''
+  secretAccessKey: ''
+  bucketPrefix: ''
+
+postgres:
+  dbUrl: ''
+
+dashboardDomain: ''
+
+locale: ''
+
+tracksUploader:
+  api: ''
+  source: ''
+
+
+headerLinks:
+  - 'drivers'
+  - 'tracks'
+  - 'reload_statuses'
+  - 'help'
+  - 'reload_track'  # default
+
+reporters:
+  - 'pro'
+
+predictors:
+  - 'camcom'

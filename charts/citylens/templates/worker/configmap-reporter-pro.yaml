@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "citylens.reporter-pro.name" . }}-configmap
+data:
+  dashboard_config.yaml: |
+    dashboard_domain: {{ .Values.dashboardDomain | squote }}
+    default_locale: {{ .Values.locale | squote }}
+    db_connections:
+      postgres: {{ .Values.postgres.dbUrl }}
+    kafka:
+    {{- with .Values.kafka }}
+      bootstrap_servers: {{ .bootstrapServer }}
+      security:
+        security_protocol: 'SASL_PLAINTEXT'
+        sasl_mechanism: 'SCRAM-SHA-512'
+        sasl_plain_username: {{ .username | squote }}
+        sasl_plain_password: {{ .password }}
+      frames_topics:
+      {{- range .topics.frames }}
+        - {{ . | squote }}
+      {{- end }}
+      tracks_topic: {{ .topics.tracks | squote }}
+      prediction_topics:
+      {{- range .topics.frames }}
+        - {{ . | squote }}
+      {{- end }}
+      pro_topic: {{ .topics.pro | squote }}
+      frames_group_id: {{ .topics.framesGroupId | squote }}
+      tracks_group_id: {{ .topics.tracksGroupId | squote }}
+      prediction_group_id: {{ .topics.predictionGroupId | squote }}
+      camcom_sender_group_id: {{ .topics.camcomSenderGroupId | squote }}
+    {{- end }}
+    s3:
+    {{- with .Values.s3 }}
+      bucket_prefix: {{ .bucketPrefix | squote }}
+      client_params:
+        aws_access_key_id: {{ .accessKey }}
+        aws_secret_access_key: {{ .secretAccessKey }}
+        endpoint_url: {{ .endpoint | squote }}
+    {{- end }}
+    tracks_uploader:
+      api: {{ .Values.tracksUploader.api | squote }}
+      source: {{ .Values.tracksUploader.source | squote }}
+    enabled_modules:
+      header_links:
+      {{- toYaml .Values.headerLinks | nindent 8}}
+      header_help_url: https://docs.google.com/document/d/1DMNMFarAAuNp08ln47aUx0dhmvZF1Fpzcu8thyn-KdQ/edit#
+      reporters:
+      {{- toYaml .Values.reporters | nindent 8}}
+      predictors:
+      {{- toYaml .Values.predictors | nindent 8}}

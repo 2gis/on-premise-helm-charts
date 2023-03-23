@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "citylens.api.name" . }}-configmap
+data:
+  api_config.yaml: |
+    kafka:
+      bootstrap_servers: {{ .Values.kafka.bootstrapServer }}
+      security:
+        security_protocol: 'SASL_PLAINTEXT'
+        sasl_mechanism: 'SCRAM-SHA-512'
+        sasl_plain_username: {{ .Values.kafka.username }}
+        sasl_plain_password: {{ .Values.kafka.password }}
+    topics:
+      frames: {{ .Values.api.kafka.topics.frames }}
+      tracks: {{ .Values.api.kafka.topics.tracks }}
+      logs: {{ .Values.api.kafka.topics.logs }}
+      camcom: {{ .Values.api.kafka.topics.camcom }}
+    database:
+      postgres: {{ .Values.postgres.dbUrl | replace "postgresql://" "postgresql+asyncpg://" }}

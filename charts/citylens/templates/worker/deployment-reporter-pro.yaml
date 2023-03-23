@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "citylens.reporter-pro.name" . }}
+  {{- if .Values.worker.reporterPro.annotations }}
+  annotations:
+    {{- toYaml .Values.worker.reporterPro.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "citylens.reporter-pro.labels" . | nindent 4 }}
+  {{- if .Values.worker.reporterPro.labels }}
+    {{- toYaml .Values.worker.reporterPro.labels | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.worker.reporterPro.replicas }}
+  selector:
+    matchLabels:
+      {{- include "citylens.reporter-pro.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      {{- with .Values.worker.reporterPro.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "citylens.reporter-pro.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "citylens.reporter-pro.name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+          command: [ "/bin/sh", "-c" ]
+          args: [ "flask reporter run-pro" ]
+          env:
+            - name: CONFIG_PATH
+              value: /opt/worker/config/dashboard_config.yaml
+            - name: DASHBOARD_DB_URL
+              value: {{ .Values.postgres.dbUrl }}
+            - name: S3_ACCESS_KEY
+              value: {{ .Values.s3.accessKey }}
+            - name: S3_SECRET_ACCESS_KEY
+              value: {{ .Values.s3.secretAccessKey }}
+            - name: KAFKA_PASSWORD
+              value: {{ .Values.kafka.password }}
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/worker/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "citylens.reporter-pro.name" . }}-configmap
+      {{- with .Values.worker.reporterPro.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.reporterPro.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.reporterPro.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
