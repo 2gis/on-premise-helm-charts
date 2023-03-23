@@ -29,7 +29,7 @@ api:
   ingress:
     enabled: true
     className: ''
-    annotations: 
+    annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: "0"
     tls:
       - hosts:
@@ -150,13 +150,13 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {} 
+    tolerations: {}
 
   image:
     repository: ''
     pullPolicy: IfNotPresent
     tag: '1.0.5'
-  
+
   resources:
     requests:
       cpu: 1000m
