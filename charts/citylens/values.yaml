@@ -42,14 +42,6 @@ api:
       paths:
       - path: '/'
 
-  kafka:
-    topics:
-      frames: ''
-      tracks: ''
-      camcom: ''
-      logs: ''
-
-
   annotations: {}
   labels: {}
 
@@ -221,16 +213,17 @@ kafka:
   username: ''
   password: ''
   topics:
-    frames: 
-      - ''
+    frames: ''
     tracks: ''
-    prediction: 
-      - ''
+    prediction: ''
     pro: ''
+    camcom: ''
+    logs: ''
     framesGroupId: ''
     tracksGroupId: ''
     predictionGroupId: ''
     camcomSenderGroupId: ''
+
 
 s3:
   endpoint: ''

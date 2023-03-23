@@ -12,9 +12,9 @@ data:
         sasl_plain_username: {{ .Values.kafka.username }}
         sasl_plain_password: {{ .Values.kafka.password }}
     topics:
-      frames: {{ .Values.api.kafka.topics.frames }}
-      tracks: {{ .Values.api.kafka.topics.tracks }}
-      logs: {{ .Values.api.kafka.topics.logs }}
-      camcom: {{ .Values.api.kafka.topics.camcom }}
+      frames: {{ .Values.kafka.topics.frames }}
+      tracks: {{ .Values.kafka.topics.tracks }}
+      logs: {{ .Values.kafka.topics.logs }}
+      camcom: {{ .Values.kafka.topics.camcom }}
     database:
       postgres: {{ .Values.postgres.dbUrl | replace "postgresql://" "postgresql+asyncpg://" }}
