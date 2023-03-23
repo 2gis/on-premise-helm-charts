@@ -52,7 +52,7 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 
 | Name                         | Description                                                                                                             | Value  |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `true` |
+| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`   |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
 
