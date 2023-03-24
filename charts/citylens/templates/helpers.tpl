@@ -2,7 +2,7 @@
 Expand the name of the chart.
 */}}
 {{- define "citylens.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- .Release.Name | trunc 32 | trimSuffix "-" }}
 {{- end }}
 
 {{- define "citylens.api.name" -}}
