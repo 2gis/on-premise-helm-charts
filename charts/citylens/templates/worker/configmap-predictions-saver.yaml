@@ -7,15 +7,17 @@ data:
     dashboard_domain: {{ .Values.dashboardDomain | squote }}
     default_locale: {{ .Values.locale | squote }}
     db_connections:
-      postgres: {{ .Values.postgres.dbUrl }}
+    {{- with .Values.postgres }}
+      postgres: 'postgresql://{{ .username }}:{{ .password }}@{{ .host }}:{{ .port }}/{{ .database }}'
+    {{- end }}
     kafka:
     {{- with .Values.kafka }}
-      bootstrap_servers: {{ .bootstrapServer }}
+      bootstrap_servers: {{ .bootstrapServer | squote }}
       security:
         security_protocol: 'SASL_PLAINTEXT'
         sasl_mechanism: 'SCRAM-SHA-512'
         sasl_plain_username: {{ .username | squote }}
-        sasl_plain_password: {{ .password }}
+        sasl_plain_password: {{ .password | squote }}
       frames_topics: {{ .topics.frames | squote }}
       tracks_topic: {{ .topics.tracks | squote }}
       prediction_topics: {{ .topics.prediction | squote }}
@@ -29,14 +31,14 @@ data:
     {{- with .Values.s3 }}
       bucket_prefix: {{ .bucketPrefix | squote }}
       client_params:
-        aws_access_key_id: {{ .accessKey }}
-        aws_secret_access_key: {{ .secretAccessKey }}
+        aws_access_key_id: {{ .accessKey | squote }}
+        aws_secret_access_key: {{ .secretAccessKey | squote }}
         endpoint_url: {{ .endpoint | squote }}
     {{- end }}
     enabled_modules:
       header_links:
       {{- toYaml .Values.headerLinks | nindent 8}}
-      header_help_url: https://docs.google.com/document/d/1DMNMFarAAuNp08ln47aUx0dhmvZF1Fpzcu8thyn-KdQ/edit#
+      header_help_url: 'https://docs.google.com/document/d/1ypaEpklxfc9S5e7FdG2sWBT-WfIR_uZGvQp8X3Xrr0c'
       reporters:
       {{- toYaml .Values.reporters | nindent 8}}
       predictors:

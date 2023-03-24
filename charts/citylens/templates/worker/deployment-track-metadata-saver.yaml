@@ -40,7 +40,9 @@ spec:
             - name: CONFIG_PATH
               value: /opt/worker/config/dashboard_config.yaml
             - name: DASHBOARD_DB_URL
-              value: {{ .Values.postgres.dbUrl }}
+            {{- with .Values.postgres }}
+              value: postgresql://{{ .username }}:{{ .password }}@{{ .host }}:{{ .port }}/{{ .database }}
+            {{- end }}
             - name: S3_ACCESS_KEY
               value: {{ .Values.s3.accessKey }}
             - name: S3_SECRET_ACCESS_KEY

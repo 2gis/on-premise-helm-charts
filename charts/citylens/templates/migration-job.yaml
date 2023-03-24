@@ -24,10 +24,12 @@ spec:
           imagePullPolicy: {{ .Values.migrations.image.pullPolicy }}
           args: [ "upgrade", "head" ]
           resources:
-            {{- toYaml .resources | nindent 12 }}
+            {{- toYaml .Values.migrations.resources | nindent 12 }}
           env:
             - name: DATABASE_URL
-              value: {{ .Values.postgres.dbUrl }}
+            {{- with .Values.postgres }}
+              value: postgresql://{{ .username }}:{{ .password }}@{{ .host }}:{{ .port }}/{{ .database }}
+            {{- end }}
       {{- with .Values.migrations.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

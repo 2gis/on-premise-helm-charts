@@ -17,4 +17,6 @@ data:
       logs: {{ .Values.kafka.topics.logs }}
       camcom: {{ .Values.kafka.topics.camcom }}
     database:
-      postgres: {{ .Values.postgres.dbUrl | replace "postgresql://" "postgresql+asyncpg://" }}
+    {{- with .Values.postgres }}
+      postgres: 'postgresql+asyncpg://{{ .username }}:{{ .password }}@{{ .host }}:{{ .port }}/{{ .database }}'
+    {{- end }}
