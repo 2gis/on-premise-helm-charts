@@ -20,16 +20,14 @@ spec:
       restartPolicy: Never
       containers:
         - name: migrate
-      {{- with .Values.migrations }}
-          image: {{ .image.repository }}:{{ .image.tag }}
-          imagePullPolicy: {{ .image.pullPolicy }}
+          image:  {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.migrations.image.repository }}:{{ .Values.migrations.image.tag }}
+          imagePullPolicy: {{ .Values.migrations.image.pullPolicy }}
           args: [ "upgrade", "head" ]
           resources:
             {{- toYaml .resources | nindent 12 }}
           env:
             - name: DATABASE_URL
-              value: {{ $.Values.postgres.dbUrl }}
-      {{- end }}
+              value: {{ .Values.postgres.dbUrl }}
       {{- with .Values.migrations.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
