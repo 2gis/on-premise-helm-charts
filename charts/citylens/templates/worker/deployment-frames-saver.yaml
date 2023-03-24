@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: {{ include "citylens.frames-saver.name" . }}
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}
           imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
           command: [ "/bin/sh", "-c" ]
           args: [ "flask downloader download_frames_ftp" ]
