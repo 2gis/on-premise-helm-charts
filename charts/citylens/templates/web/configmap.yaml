@@ -12,12 +12,12 @@ data:
     {{- end }}
     kafka:
     {{- with .Values.kafka }}
-      bootstrap_servers: {{ .bootstrapServer }}
+      bootstrap_servers: {{ .bootstrapServer | squote }}
       security:
         security_protocol: 'SASL_PLAINTEXT'
         sasl_mechanism: 'SCRAM-SHA-512'
         sasl_plain_username: {{ .username | squote }}
-        sasl_plain_password: {{ .password }}
+        sasl_plain_password: {{ .password | squote}}
       frames_topics: {{ .topics.frames | squote }}
       tracks_topic: {{ .topics.tracks | squote }}
       prediction_topics: {{ .topics.prediction | squote }}
@@ -30,8 +30,8 @@ data:
     {{- with .Values.s3 }}
       bucket_prefix: {{ .bucketPrefix | squote }}
       client_params:
-        aws_access_key_id: {{ .accessKey }}
-        aws_secret_access_key: {{ .secretAccessKey }}
+        aws_access_key_id: {{ .accessKey | squote }}
+        aws_secret_access_key: {{ .secretAccessKey | squote }}
         endpoint_url: {{ .endpoint | squote }}
     {{- end }}
     enabled_modules:

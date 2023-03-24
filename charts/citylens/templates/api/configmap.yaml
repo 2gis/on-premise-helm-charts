@@ -5,17 +5,19 @@ metadata:
 data:
   api_config.yaml: |
     kafka:
-      bootstrap_servers: {{ .Values.kafka.bootstrapServer }}
+    {{- with .Values.kafka }}
+      bootstrap_servers: {{ .bootstrapServer | squote }}
       security:
         security_protocol: 'SASL_PLAINTEXT'
         sasl_mechanism: 'SCRAM-SHA-512'
-        sasl_plain_username: {{ .Values.kafka.username }}
-        sasl_plain_password: {{ .Values.kafka.password }}
+        sasl_plain_username: {{ .username | squote }}
+        sasl_plain_password: {{ .password | squote }}
     topics:
-      frames: {{ .Values.kafka.topics.frames }}
-      tracks: {{ .Values.kafka.topics.tracks }}
-      logs: {{ .Values.kafka.topics.logs }}
-      camcom: {{ .Values.kafka.topics.camcom }}
+      frames: {{ .topics.frames | squote }}
+      tracks: {{ .topics.tracks | squote }}
+      logs: {{ .topics.logs | squote }}
+      camcom: {{ .topics.camcom | squote }}
+    {{- end }}
     database:
     {{- with .Values.postgres }}
       postgres: 'postgresql+asyncpg://{{ .username }}:{{ .password }}@{{ .host }}:{{ .port }}/{{ .database }}'
