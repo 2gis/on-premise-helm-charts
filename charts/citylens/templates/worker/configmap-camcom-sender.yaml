@@ -32,14 +32,14 @@ data:
     {{- with .Values.s3 }}
       bucket_prefix: {{ .bucketPrefix | squote }}
       client_params:
-        aws_access_key_id: {{ .accessKey }}
-        aws_secret_access_key: {{ .secretAccessKey }}
+        aws_access_key_id: {{ .accessKey | squote }}
+        aws_secret_access_key: {{ .secretAccessKey | squote }}
         endpoint_url: {{ .endpoint | squote }}
     {{- end }}
     enabled_modules:
       header_links:
       {{- toYaml .Values.headerLinks | nindent 8}}
-      header_help_url: https://docs.google.com/document/d/1DMNMFarAAuNp08ln47aUx0dhmvZF1Fpzcu8thyn-KdQ/edit#
+      header_help_url: 'https://docs.google.com/document/d/1ypaEpklxfc9S5e7FdG2sWBT-WfIR_uZGvQp8X3Xrr0c'
       reporters:
       {{- toYaml .Values.reporters | nindent 8}}
       predictors:

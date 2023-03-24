@@ -37,7 +37,7 @@ data:
     enabled_modules:
       header_links:
       {{- toYaml .Values.headerLinks | nindent 8}}
-      header_help_url: https://docs.google.com/document/d/1DMNMFarAAuNp08ln47aUx0dhmvZF1Fpzcu8thyn-KdQ/edit#
+      header_help_url: 'https://docs.google.com/document/d/1ypaEpklxfc9S5e7FdG2sWBT-WfIR_uZGvQp8X3Xrr0c'
       reporters:
       {{- toYaml .Values.reporters | nindent 8}}
       predictors:
