@@ -33,8 +33,8 @@ spec:
     spec:
       containers:
         - name: {{ include "citylens.camcom-sender.name" . }}
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}
-          imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
+          imagePullPolicy: {{ .Values.web.image.pullPolicy }}
           command: [ "/bin/sh", "-c" ]
           args: [ "flask sender camcom_predictor" ]
           env:
