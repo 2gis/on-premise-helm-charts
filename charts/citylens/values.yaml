@@ -216,7 +216,6 @@ locale: ''
 headerLinks:
   - 'drivers'
   - 'tracks'
-  - 'reload_statuses'
   - 'help'
 
 reporters:
