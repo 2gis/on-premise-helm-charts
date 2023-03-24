@@ -139,6 +139,10 @@ api:
   # @param api.postgres.username PostgreSQL username. **Required**
   # @param api.postgres.password PostgreSQL password. **Required**
   # @param api.postgres.queryTimeout Max execution time PostgreSQL query timeout in seconds
+  # @param api.postgres.poolSize.api PostgreSQL connection pool size for API
+  # @param api.postgres.poolSize.preloaders.region PostgreSQL connection pool size for preloader regions
+  # @param api.postgres.poolSize.preloaders.rubric PostgreSQL connection pool size for preloader rubrics
+  # @param api.postgres.poolSize.preloaders.additionalAttribute PostgreSQL connection pool size for preloader additional attributes
 
   postgres:
     host: ''
@@ -147,6 +151,12 @@ api:
     username: ''
     password: ''
     queryTimeout: 3
+    poolSize:
+      api: 32
+      preloaders:
+        region: 2
+        rubric: 3
+        additionalAttribute: 3
 
   # @section Preloaders settings
 
@@ -158,10 +168,11 @@ api:
 # @section Search settings
 
 # @param search.url URL of the Search service, ex: http://{search-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required**
+# @param search.connectTimeout Timeout for connect to the Search service
 
 search:
   url: ''
-
+  connectTimeout: 300ms
 
 # @section Keys settings
 

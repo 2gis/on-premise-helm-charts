@@ -48,6 +48,14 @@ onprem
   value: "{{ include "catalog.manifestCode" . }},extensions"
 - name: CATALOG_DB_QUERY_TIMEOUT
   value: "{{ .Values.api.postgres.queryTimeout }}"
+- name: CATALOG_DB_BRANCH_POOL_SIZE
+  value: "{{ .Values.api.postgres.poolSize.api }}"
+- name: CATALOG_DB_REGION_POOL_SIZE
+  value: "{{ .Values.api.postgres.poolSize.preloaders.region }}"
+- name: CATALOG_DB_RUBRIC_POOL_SIZE
+  value: "{{ .Values.api.postgres.poolSize.preloaders.rubric }}"
+- name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_POOL_SIZE
+  value: "{{ .Values.api.postgres.poolSize.preloaders.additionalAttribute }}"
 - name: CATALOG_DB_BRANCH_URL
   value: "jdbc:postgresql://{{ required "A valid .Values.api.postgres.host entry required" .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ required "A valid .Values.api.postgres.name entry required" .Values.api.postgres.name }}"
 - name: CATALOG_DB_BRANCH_LOGIN
@@ -107,6 +115,8 @@ onprem
 {{- define "catalog.env.search" -}}
 - name: CATALOG_SAPPHIRE_URL
   value: "{{ required "A valid .Values.search.url entry required" .Values.search.url }}"
+- name: CATALOG_SAPPHIRE_CONNECTION_TIMEOUT
+  value: "{{ .Values.search.connectTimeout }}"
 {{- end }}
 
 {{- define "catalog.env.keys" -}}
