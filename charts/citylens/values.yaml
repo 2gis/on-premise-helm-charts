@@ -31,14 +31,15 @@ api:
     className: ''
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    tls:
-      - hosts:
-          host: ''
-        secretName: ''
     hosts:
-    - host: ''
+    - host: 'citylens.host'
       paths:
       - path: '/'
+        pathType: Prefix
+    tls: []
+      #- hosts:
+      #    host: ''
+      #  secretName: ''
 
   annotations: {}
   labels: {}
@@ -74,14 +75,17 @@ web:
   ingress:
     enabled: true
     className: ''
-    tls:
-    - hosts:
-        host: ''
-      secretName: ''
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
     hosts:
-    - host: ''
+    - host: 'citylens.host'
       paths:
       - path: '/'
+        pathType: Prefix
+    tls: []
+      #- hosts:
+      #    host: ''
+      #  secretName: ''
 
   annotations: {}
   labels: {}
