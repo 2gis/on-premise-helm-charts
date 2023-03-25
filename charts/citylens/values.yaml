@@ -37,7 +37,7 @@ api:
       - path: '/'
         pathType: Prefix
     tls: []
-      #- hosts:
+      # - hosts:
       #    host: ''
       #  secretName: ''
 
@@ -83,7 +83,7 @@ web:
       - path: '/'
         pathType: Prefix
     tls: []
-      #- hosts:
+      # - hosts:
       #    host: ''
       #  secretName: ''
 
@@ -206,11 +206,11 @@ s3:
   bucketPrefix: ''
 
 postgres:
-    host: ''
-    port: 5432
-    database: ''
-    username: ''
-    password: ''
+  host: ''
+  port: 5432
+  database: ''
+  username: ''
+  password: ''
 
 dashboardDomain: ''
 
