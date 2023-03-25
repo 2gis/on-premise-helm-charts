@@ -57,7 +57,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: {{ include "citylens.predictions-saver.name" . }}-configmap
+            name: {{ include "citylens.web.name" . }}-configmap
       {{- with .Values.worker.predictionsSaver.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

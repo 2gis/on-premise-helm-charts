@@ -156,11 +156,6 @@ worker:
     affinity: {}
     tolerations: {}
 
-  image:
-    repository: '2gis-on-premise/citylens-web'
-    pullPolicy: IfNotPresent
-    tag: '1.0.5'
-
   resources:
     requests:
       cpu: 1000m

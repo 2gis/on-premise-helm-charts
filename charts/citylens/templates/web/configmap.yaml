@@ -17,10 +17,11 @@ data:
         security_protocol: 'SASL_PLAINTEXT'
         sasl_mechanism: 'SCRAM-SHA-512'
         sasl_plain_username: {{ .username | squote }}
-        sasl_plain_password: {{ .password | squote}}
+        sasl_plain_password: {{ .password | squote }}
       frames_topics: {{ .topics.frames | squote }}
       tracks_topic: {{ .topics.tracks | squote }}
       prediction_topics: {{ .topics.prediction | squote }}
+      pro_topic: {{ .topics.pro | squote }}
       frames_group_id: {{ .topics.framesGroupId | squote }}
       tracks_group_id: {{ .topics.tracksGroupId | squote }}
       prediction_group_id: {{ .topics.predictionGroupId | squote }}

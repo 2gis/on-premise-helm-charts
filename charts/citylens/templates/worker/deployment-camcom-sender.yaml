@@ -58,7 +58,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: {{ include "citylens.camcom-sender.name" . }}-configmap
+            name: {{ include "citylens.web.name" . }}-configmap
       {{- with .Values.worker.camcomSender.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
