@@ -24,8 +24,9 @@ spec:
       maxUnavailable: 0
   template:
     metadata:
-      {{- with .Values.worker.camcomSender.podAnnotations }}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
+      {{- with .Values.worker.camcomSender.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:

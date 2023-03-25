@@ -23,8 +23,9 @@ spec:
       maxUnavailable: 0
   template:
     metadata:
-      {{- with .Values.api.podAnnotations }}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/api/configmap.yaml") . | sha256sum }}
+      {{- with .Values.api.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
