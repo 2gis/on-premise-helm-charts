@@ -41,8 +41,6 @@ spec:
           env:
             - name: API_CONFIG_PATH
               value: /opt/api/config/api_config.yaml
-            - name: KAFKA_PASSWORD
-              value: {{ .Values.kafka.password }}
           resources:
             {{- toYaml .Values.api.resources | nindent 12 }}
           volumeMounts:
