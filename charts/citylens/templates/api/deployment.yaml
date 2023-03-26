@@ -38,6 +38,17 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.api.service.targetPort }}
+          readinessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            failureThreshold: 5
           env:
             - name: API_CONFIG_PATH
               value: /opt/api/config/api_config.yaml

@@ -38,6 +38,17 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.web.service.targetPort }}
+          readinessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            failureThreshold: 5
           env:
             - name: CONFIG_PATH
               value: /opt/api/config/dashboard_config.yaml
