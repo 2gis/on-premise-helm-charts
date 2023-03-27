@@ -52,7 +52,7 @@ dgctlDockerRegistry: ''
 
 api:
   image:
-    repository: '2gis-on-premise/citylens-api'
+    repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
     tag: '1.0.5'
 
@@ -79,9 +79,9 @@ api:
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: "0"
     hosts:
-    - host: 'citylens.host'
+    - host: citylens.host
       paths:
-      - path: '/'
+      - path: /
         pathType: Prefix
     tls: []
       # - hosts:
@@ -144,7 +144,7 @@ api:
 
 web:
   image:
-    repository: '2gis-on-premise/citylens-web'
+    repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
     tag: '1.0.7'
 
@@ -171,9 +171,9 @@ web:
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: "0"
     hosts:
-    - host: 'citylens.host'
+    - host: citylens.host
       paths:
-      - path: '/'
+      - path: /
         pathType: Prefix
     tls: []
       # - hosts:
@@ -354,9 +354,9 @@ migrations:
   enabled: true
 
   image:
-    repository: '2gis-on-premise/citylens-database'
+    repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 'v1.0.0'
+    tag: '1.0.0'
 
   resources:
     requests:
@@ -438,12 +438,11 @@ postgres:
 
 dashboardDomain: ''
 
-locale: 'en'
+locale: en
 
 headerLinks:
   - 'drivers'
   - 'tracks'
-  - 'help'
 
 reporters:
   - 'pro'
