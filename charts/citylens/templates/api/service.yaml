@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "citylens.api.name" . }}-service
+  {{- if .Values.api.service.annotations }}
+  annotations:
+    {{- toYaml .Values.api.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "citylens.api.labels" . | nindent 4 }}
+  {{- if .Values.api.service.labels }}
+    {{- toYaml .Values.api.service.labels | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.api.service.type }}
+  ports:
+    - port: {{ .Values.api.service.port }}
+      name: http
+      targetPort: http
+  selector:
+    {{- include "citylens.api.selectorLabels" . | nindent 4 }}

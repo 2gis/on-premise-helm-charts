@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "citylens.predictions-saver.name" . }}
+  {{- if .Values.worker.predictionsSaver.annotations }}
+  annotations:
+    {{- toYaml .Values.worker.predictionsSaver.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "citylens.predictions-saver.labels" . | nindent 4 }}
+  {{- if .Values.worker.predictionsSaver.labels }}
+    {{- toYaml .Values.worker.predictionsSaver.labels | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.worker.predictionsSaver.replicas }}
+  selector:
+    matchLabels:
+      {{- include "citylens.predictions-saver.labels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
+      {{- with .Values.worker.predictionsSaver.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "citylens.predictions-saver.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "citylens.predictions-saver.name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
+          imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+          command: [ "/bin/sh", "-c" ]
+          args: [ "flask downloader download_predictions" ]
+          env:
+            - name: CONFIG_PATH
+              value: /opt/worker/config/dashboard_config.yaml
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/worker/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "citylens.web.name" . }}-configmap
+      {{- with .Values.worker.predictionsSaver.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.predictionsSaver.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.predictionsSaver.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

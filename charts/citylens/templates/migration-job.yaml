@@ -1,0 +1,37 @@
+{{- if .Values.migrations.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "citylens.name" . }}-db-migration-job
+  labels:
+    {{- include "citylens.migration.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-10"
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "citylens.name" . }}-migrate
+      labels:
+        {{- include "citylens.migration.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image:  {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.migrations.image.repository }}:{{ .Values.migrations.image.tag }}
+          imagePullPolicy: {{ .Values.migrations.image.pullPolicy }}
+          args: [ "upgrade", "head" ]
+          resources:
+            {{- toYaml .Values.migrations.resources | nindent 12 }}
+          env:
+            - name: DATABASE_URL
+            {{- with .Values.postgres }}
+              value: postgresql://{{ .username }}:{{ .password }}@{{ .host }}:{{ .port }}/{{ .database }}
+            {{- end }}
+      {{- with .Values.migrations.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

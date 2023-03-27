@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "citylens.api.name" . }}-configmap
+data:
+  api_config.yaml: |
+    kafka:
+    {{- with .Values.kafka }}
+      bootstrap_servers: {{  required "A valid .Values.kafka.bootstrap.servers entry required" .bootstrapServer | squote }}
+      security:
+        security_protocol: 'SASL_PLAINTEXT'
+        sasl_mechanism: 'SCRAM-SHA-512'
+        sasl_plain_username: {{ required "A valid .Values.kafka.username entry required" .username | squote }}
+        sasl_plain_password: {{ required "A valid .Values.kafka.password entry required" .password | squote }}
+    topics:
+      frames: {{ required "A valid .Values.kafka.topics.frames entry required" .topics.frames | squote }}
+      tracks: {{ required "A valid .Values.kafka.topics.tracks entry required" .topics.tracks | squote }}
+      logs: {{ required "A valid .Values.kafka.topics.logs entry required" .topics.logs | squote }}
+      camcom: {{ required "A valid .Values.kafka.topics.camcom entry required" .topics.camcom | squote }}
+    {{- end }}
+    database:
+    {{- with .Values.postgres }}
+      postgres: 'postgresql+asyncpg://{{ required "A valid .Values.postgres.username entry required" .username }}:{{ required "A valid .Values.postgres.password entry required" .password }}@{{ required "A valid .Values.postgres.host entry required" .host }}:{{ required "A valid .Values.postgres.port entry required" .port }}/{{ required "A valid .Values.postgres.database entry required" .database }}'
+    {{- end }}
