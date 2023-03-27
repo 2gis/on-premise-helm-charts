@@ -15,7 +15,7 @@ spec:
   replicas: {{ .Values.worker.predictionsSaver.replicas }}
   selector:
     matchLabels:
-      {{- include "citylens.predictions-saver.labels" . | nindent 6 }}
+      {{- include "citylens.predictions-saver.selectorLabels" . | nindent 6 }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
