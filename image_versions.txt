@@ -1,6 +1,10 @@
 catalog-api
-	catalog-api:3.588.0
+	catalog-api:3.589.1
 	catalog-importer:1.0.9
+citylens
+	citylens-api:1.0.5
+	citylens-database:1.0.0
+	citylens-web:1.0.7
 gis-platform
 	gis_platform_portal:2022.9.29
 	gis_platform_spcore:2022.9.29
@@ -28,13 +32,12 @@ navi-restrictions
 navi-router
 	navi-router:6.10.0
 pro-api
-	pro-api:1.0.23
-	pro-curl:1.0.17
-	pro-importer:1.0.23
-	pro-importer:1.0.23
+	pro-api:1.0.35
+	pro-importer:1.0.35
+	pro-importer:1.0.35
 	pro-permissions-api:latest
 pro-ui
-	pro-ui:0.1.5
+	pro-ui:0.2.0
 search-api
 	search-api:7.45.0
 	search-nginx:1.21.6

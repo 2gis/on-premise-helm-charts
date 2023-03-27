@@ -220,7 +220,7 @@ See the [documentation]() to learn about:
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `v1.0.0`                            |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.0.0`                             |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |
@@ -267,10 +267,10 @@ See the [documentation]() to learn about:
 
 ### Custom settings
 
-| Name              | Description                                | Value                         |
-| ----------------- | ------------------------------------------ | ----------------------------- |
-| `dashboardDomain` | Link to Citylens web address. **Required** | `""`                          |
-| `locale`          | Locale language (en by default).           | `en`                          |
-| `headerLinks`     | List of links.                             | `["drivers","tracks","help"]` |
-| `reporters`       | List of reporters.                         | `["pro"]`                     |
-| `predictors`      | List of predictors.                        | `["camcom"]`                  |
+| Name              | Description                                | Value                  |
+| ----------------- | ------------------------------------------ | ---------------------- |
+| `dashboardDomain` | Link to Citylens web address. **Required** | `""`                   |
+| `locale`          | Locale language (en by default).           | `en`                   |
+| `headerLinks`     | List of links.                             | `["drivers","tracks"]` |
+| `reporters`       | List of reporters.                         | `["pro"]`              |
+| `predictors`      | List of predictors.                        | `["camcom"]`           |

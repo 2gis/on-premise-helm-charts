@@ -1,5 +1,25 @@
 # 2GIS On-Premise Changelog
 
+## [1.6.1]
+#### Images
+```
+catalog-api
+	- catalog-api:3.588.0
+	+ catalog-api:3.589.1
+pro-api
+	- pro-api:1.0.23
+	+ pro-api:1.0.35
+	- pro-curl:1.0.17
+	- pro-importer:1.0.23
+	+ pro-importer:1.0.35
+	- pro-importer:1.0.23
+	+ pro-importer:1.0.35
+pro-ui
+	- pro-ui:0.1.5
+	+ pro-ui:0.2.0
+
+```
+
 ## [1.6.0]
 #### Images
 ```

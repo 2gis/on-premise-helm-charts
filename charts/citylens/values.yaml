@@ -77,7 +77,7 @@ api:
     enabled: true
     className: ''
     annotations:
-      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      nginx.ingress.kubernetes.io/proxy-body-size: '0'
     hosts:
     - host: citylens.host
       paths:
@@ -169,7 +169,7 @@ web:
     enabled: true
     className: ''
     annotations:
-      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      nginx.ingress.kubernetes.io/proxy-body-size: '0'
     hosts:
     - host: citylens.host
       paths:
@@ -441,11 +441,11 @@ dashboardDomain: ''
 locale: en
 
 headerLinks:
-  - 'drivers'
-  - 'tracks'
+- drivers
+- tracks
 
 reporters:
-  - 'pro'
+- pro
 
 predictors:
-  - 'camcom'
+- camcom
