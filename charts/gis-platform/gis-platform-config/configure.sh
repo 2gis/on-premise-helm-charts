@@ -116,7 +116,7 @@ function dump_configuration {
 #---------------
 
 function config_diff() {
-#    dump_configuration
+    dump_configuration
     for layer in layer/*.json; do
         name=$(cat $layer | jq --raw-output .name)
         diff -urBb $layer $TMPDIR/layer_$name.json
