@@ -35,6 +35,10 @@ data:
     {{- (tpl ($.Files.Get "configs/importer/importer.yaml") $) | nindent 4 }}
 
   job.yaml: |
-    {{- (tpl ($.Files.Get "configs/importer/job.yaml") (merge $type $)) | nindent 4 }}
+    {{- $backoffLimit := sub .Values.importer.workerNumAttempts 1 }}
+    {{- if lt $backoffLimit 0 }}
+    {{- required "$Values.importer.workerNumAttempts should be >= 1" nil }}
+    {{- end }}
+    {{- (tpl ($.Files.Get "configs/importer/job.yaml") (merge (dict "backoffLimit" $backoffLimit) $type $)) | nindent 4 }}
 {{- end }}
 {{- end }}

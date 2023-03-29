@@ -284,6 +284,7 @@ api:
 # @param importer.logFormatOverride A custom importer logging format. Allowed options: text|json. If not defined, 'json' format will be used.
 # @param importer.workerNum Number of parallel import processes (workers).
 # @param importer.writerNum Number of write processes per import process (worker).
+# @param importer.workerNumAttempts Number of attempts for import process (worker) if it is failing.
 
 # @param importer.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
@@ -322,6 +323,7 @@ importer:
 
   workerNum: 6
   writerNum: 8
+  workerNumAttempts: 3
 
   # @extra importer.cleaner **Cassandra keyspace lifecycle management and Cleaner settings**
   # @param importer.forceImport If enabled, then the Importer job will delete existing keyspace and do import, otherwise import will be skipped.
