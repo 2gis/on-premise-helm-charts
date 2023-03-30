@@ -37,14 +37,23 @@ spec:
             - containerPort: 80
           resources:
             {{- toYaml .Values.portal.resources | nindent 12 }}
+          {{- if (default true .Values.portal.nginx_workers_autotune) }}
+          env:
+            - name: NGINX_ENTRYPOINT_WORKER_PROCESSES_AUTOTUNE
+              value: "1"
+          {{- end }}
           volumeMounts:
             - name: {{ include "gis-platform-portal.name" . }}-configmap
               mountPath: /etc/nginx/templates/default.conf.template
               subPath: default.conf.template
             - name: {{ include "gis-platform-portal.name" . }}-configmap
-              mountPath: /etc/nginx/nginx.conf
+              mountPath: /etc/nginx/nginx.conf.template
               subPath: nginx.conf
+            - name: {{ include "gis-platform-portal.name" . }}-configmap
+              mountPath: /docker-entrypoint.d/25-copy-nginx-conf-template.sh
+              subPath: 25-copy-nginx-conf-template.sh
       volumes:
         - name: {{ include "gis-platform-portal.name" . }}-configmap
           configMap:
             name: {{ include "gis-platform-portal.fullname" . }}
+            defaultMode: 0755
