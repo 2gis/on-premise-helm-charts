@@ -65,7 +65,7 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           env:
             - name: DM_ASYNC_HOST
-              value: {{ .Values.dm.url | quote }}
+              value: {{ required "A valid .Values.dm.url entry required" .Values.dm.url | quote }}
             - name: DM_ASYNC_PORT
               value: {{ .Values.dm.port | quote }}
             - name: GRPC_PORT

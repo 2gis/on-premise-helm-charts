@@ -157,9 +157,9 @@ pdb:
 
 # @section Settings for navi-async-matrix service connection
 
-# @param dm.url async-matrix host name with schema
+# @param dm.url async-matrix host name with schema, ex: http://navi-async-matrix.host
 # @param dm.port async-matrix port
 
 dm:
-  url: http://navi-async-matrix.host
+  url: ''
   port: 80
