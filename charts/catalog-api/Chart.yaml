@@ -3,7 +3,7 @@ name: catalog-api
 type: application
 description: A Helm chart for Kubernetes to deploy Catalog APIs
 
-version: 1.6.2
+version: 1.6.3
 appVersion: 3.589.1
 
 maintainers:
