@@ -9,7 +9,7 @@ metadata:
     {{- include "tiles.importer.label" . | nindent 4 }}
 
 spec:
-  backoffLimit: 0
+  backoffLimit: {{ .backoffLimit }}
   template:
     metadata:
       name: {{`{{.task_type}}`}}
