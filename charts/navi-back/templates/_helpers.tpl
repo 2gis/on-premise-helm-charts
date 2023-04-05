@@ -75,86 +75,23 @@ Usage:
     {{- end }}
 {{- end -}}
 
-{{- define "config.carrouting" -}}
-{{ print "\"simple_network_car\" : true, \"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_car\" : true,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": false," }}
-{{- end -}}
-
-{{- define "config.taxi" -}}
-{{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : true,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": true," }}
-{{- end -}}
-
-{{- define "config.truck" -}}
-{{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : true,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": false," }}
-{{- end -}}
-
-{{- define "config.ctx" -}}
-{{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": false," }}
-{{- end -}}
-
-{{- define "config.pedestrian" -}}
-{{ print  "\"simple_network_pedestrian\": true,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_pedestrian\": true,\"attractor_bicycle\": false,\"attractor_taxi\": false," }}
-{{- end -}}
-
-{{- define "config.pairs" -}}
-{{ print  "\"simple_network_car\" : true,\"simple_network_pedestrian\": true,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_car\" : true,\"attractor_pedestrian\": true,\"attractor_bicycle\": false,\"attractor_taxi\": false," }}
-{{- end -}}
-
-{{- define "config.dm" -}}
-{{ print  "\"simple_network_car\" : true,\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_car\" : true,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": false,\"reduce_edges_optimization_flag\": true," }}
-{{- end -}}
-
-{{- define "config.bicycle" -}}
-{{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : true,\"simple_network_truck\" : false,\"attractor_pedestrian\": false,\"attractor_bicycle\": true,\"attractor_taxi\": false," }}
-{{- end -}}
-
-{{- define "config.freeroam" -}}
-{{ print  "\"simple_network_pedestrian\": false,\"simple_network_taxi\" : false,\"simple_network_bicycle\" : false,\"simple_network_truck\" : false,\"attractor_pedestrian\": false,\"attractor_bicycle\": false,\"attractor_taxi\": false,\"reduce_edges_optimization_flag\": false," }}
-{{- end -}}
-
-{{- define "config.serversection" -}}
-{{- if eq .Values.naviback.type "carrouting" -}}
-   {{ include "config.carrouting" $ }}
-{{- end -}}
-{{- if eq .Values.naviback.type "taxi" -}}
-   {{ include "config.taxi" $ }}
-{{- end -}}
-{{- if eq .Values.naviback.type "truck" -}}
-   {{ include "config.truck" $ }}
-{{- end -}}
-{{- if eq .Values.naviback.type "ctx" -}}
-   {{ include "config.ctx" $ }}
-{{- end -}}
-{{- if eq .Values.naviback.type "schedule" -}}
-   {{ include "config.ctx" $ }}
-{{- end -}}
-{{- if eq .Values.naviback.type "pedestrian" -}}
-   {{ include "config.pedestrian" $ }}
-{{- end -}}
-{{- if eq .Values.naviback.type "dm" -}}
-   {{ include "config.dm" $ }}
-{{- end -}}
-{{- if eq .Values.naviback.type "pairs" -}}
-   {{ include "config.pairs" $ }}
-{{- end }}
-{{- if eq .Values.naviback.type "bicycle" -}}
-   {{ include "config.bicycle" $ }}
-{{- end -}}
-{{- if eq .Values.naviback.type "freeroam" -}}
-   {{ include "config.freeroam" $ }}
-{{- end -}}
-{{- end -}}
-
+{{/*
+Get count of CPU from limits.
+Usage:
+{{ include "config.setCpuNumber" $ }}
+*/}}
 {{- define "config.setCpuNumber" }}
 {{- $cpu_divider := 1 }}
 {{- $num_threads := 0 }}
 {{- $resources := regexSplit "m" (toString .Values.resources.limits.cpu) -1 }}
 {{- if eq (len $resources) 2 }}
- {{- $cpu_divider = 1000 }} 
+ {{- $cpu_divider = 1000 }}
 {{- end }}
 {{- $cpu_value := index $resources 0 }}
-{{- $num_threads = ceil (divf $cpu_value $cpu_divider) }} 
+{{- $num_threads = ceil (divf $cpu_value $cpu_divider) }}
 {{- print $num_threads }}
 {{- end -}}
+
 
 {{/*
 Renders a value or file that contains rules.
@@ -162,14 +99,279 @@ Usage:
 {{ include "rules.renderRules" }}
 */}}
 {{- define "rules.renderRules" -}}
-    {{- $rules_file_content := .Files.Get "rules.conf" }}
-    {{- if .Values.rules -}}
-        {{- .Values.rules | toPrettyJson | nindent 6 }}
-    {{- else if $rules_file_content  }}
-        {{- $rules_file_content |  nindent 6}}
-    {{- else }}
-        {{- fail "Rules value is not set or rules file is empty" }}
+    {{- $rules := list -}}
+    {{- if ( and .Values.rules (kindIs "slice" .Values.rules )) -}}
+        {{- $rules = .Values.rules -}}
     {{- end -}}
+      {{ $rules | toPrettyJson | nindent 6 -}}
+{{- end -}}
+
+
+{{/*
+Check if value exists in rule routing section
+Usage:
+{{ include "rules.inRoutingSection" ( dict "routingValue" "<value>" "context" $) }}
+*/}}
+{{- define "rules.inRoutingSection" -}}
+   {{- $found := false -}}
+   {{- if $.context.Values.rules -}}
+      {{- range $.context.Values.rules -}}
+         {{- if eq .name $.context.Values.naviback.app_rule -}}
+            {{- if (has $.routingValue .routing) -}}
+               {{- $found = true -}}
+            {{- end -}}
+         {{- end -}}
+      {{- end -}}
+   {{- end -}}
+   {{- ternary "true" "" $found -}}
+{{- end -}}
+
+
+{{/*
+Check if value exists in rule queries section
+Usage:
+{{ include "rules.inQueriesSection" ( dict "queriesValue" "<value>" "context" $) }}
+*/}}
+{{- define "rules.inQueriesSection" -}}
+   {{- $found := false -}}
+   {{- if $.context.Values.rules -}}
+      {{- range $.context.Values.rules -}}
+         {{- if eq .name $.context.Values.naviback.app_rule -}}
+            {{- if (has $.queriesValue .queries) -}}
+               {{- $found = true -}}
+            {{- end -}}
+         {{- end -}}
+      {{- end -}}
+   {{- end -}}
+   {{- ternary "true" "" $found -}}
+{{- end -}}
+
+
+{{/*
+Set simple_network_car parameter in server config section
+Usage:
+{{ include "config.setSimpleNetworkCar" $ }}
+*/}}
+{{- define "config.setSimpleNetworkCar" -}}
+   {{-  ternary
+      $.Values.naviback.simpleNetwork.car
+      (or (include "rules.inRoutingSection" (dict "routingValue" "driving" "context" $))
+      (include "rules.inQueriesSection" (dict "queriesValue" "map_matching" "context" $)))
+      (hasKey $.Values.naviback.simpleNetwork "car")
+   -}}
+{{- end -}}
+
+
+{{/*
+Set simple_network_pedestrian parameter in server config section
+Usage:
+{{ include "config.setSimpleNetworkPedestrian" $ }}
+*/}}
+{{- define "config.setSimpleNetworkPedestrian" -}}
+   {{-  ternary
+      $.Values.naviback.simpleNetwork.pedestrian
+      (or (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" $))
+      (include "rules.inRoutingSection" (dict "routingValue" "pedestrian" "context" $)))
+      (hasKey $.Values.naviback.simpleNetwork "pedestrian")
+   -}}
+{{- end -}}
+
+
+{{/*
+Set simple_network_taxi parameter in server config section
+Usage:
+{{ include "config.setSimpleNetworkTaxi" $ }}
+*/}}
+{{- define "config.setSimpleNetworkTaxi" -}}
+   {{-  ternary
+      $.Values.naviback.simpleNetwork.taxi
+      (include "rules.inRoutingSection" (dict "routingValue" "taxi" "context" $))
+      (hasKey $.Values.naviback.simpleNetwork "taxi")
+   -}}
+{{- end -}}
+
+
+{{/*
+Set simple_network_bicycle parameter in server config section
+Usage:
+{{ include "config.setSimpleNetworkBicycle" $ }}
+*/}}
+{{- define "config.setSimpleNetworkBicycle" -}}
+   {{-  ternary
+      $.Values.naviback.simpleNetwork.bicycle
+      (or (include "rules.inRoutingSection" (dict "routingValue" "bicycle" "context" $))
+      (include "rules.inRoutingSection" (dict "routingValue" "scooter" "context" $)))
+      (or (hasKey $.Values.naviback.simpleNetwork "bicycle") (hasKey $.Values.naviback.simpleNetwork "scooter"))
+   -}}
+{{- end -}}
+
+
+{{/*
+Set simple_network_truck parameter in server config section
+Usage:
+{{ include "config.setSimpleNetworkTruck" $ }}
+*/}}
+{{- define "config.setSimpleNetworkTruck" -}}
+   {{-  ternary
+      $.Values.naviback.simpleNetwork.truck
+      (include "rules.inRoutingSection" (dict "routingValue" "truck" "context" $))
+      (hasKey $.Values.naviback.simpleNetwork "truck")
+   -}}
+{{- end -}}
+
+
+{{/*
+Set simple_network_emergency parameter in server config section
+Usage:
+{{ include "config.setSimpleNetworkEmergency" $ }}
+*/}}
+{{- define "config.setSimpleNetworkEmergency" -}}
+   {{-  ternary
+      $.Values.naviback.simpleNetwork.emergency
+      (include "rules.inRoutingSection" (dict "routingValue" "emergency" "context" $))
+      (hasKey $.Values.naviback.simpleNetwork "emergency")
+   -}}
+{{- end -}}
+
+
+{{/*
+Set attractor_car parameter in server config section
+Usage:
+{{ include "config.setAttractorCar" $ }}
+*/}}
+{{- define "config.setAttractorCar" -}}
+   {{-  ternary
+      $.Values.naviback.attractor.car
+      (include "rules.inRoutingSection" (dict "routingValue" "driving" "context" $))
+      (hasKey $.Values.naviback.attractor "car")
+   -}}
+{{- end -}}
+
+
+{{/*
+Set attractor_pedestrian parameter in server config section
+Usage:
+{{ include "config.setAttractorPedestrian" $ }}
+*/}}
+{{- define "config.setAttractorPedestrian" -}}
+   {{-  ternary
+      $.Values.naviback.attractor.pedestrian
+      (or (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" $))
+      (include "rules.inRoutingSection" (dict "routingValue" "pedestrian" "context" $)))
+      (hasKey $.Values.naviback.attractor "pedestrian")
+   -}}
+{{- end -}}
+
+
+{{/*
+Set attractor_taxi parameter in server config section
+Usage:
+{{ include "config.setAttractorTaxi" $ }}
+*/}}
+{{- define "config.setAttractorTaxi" -}}
+   {{-  ternary
+      $.Values.naviback.attractor.taxi
+      (include "rules.inRoutingSection" (dict "routingValue" "taxi" "context" $))
+      (hasKey $.Values.naviback.attractor "taxi")
+   -}}
+{{- end -}}
+
+
+{{/*
+Set attractor_truck parameter in server config section
+Usage:
+{{ include "config.setAttractorTruck" $ }}
+*/}}
+{{- define "config.setAttractorTruck" -}}
+   {{-  ternary
+      $.Values.naviback.attractor.truck
+      (include "rules.inRoutingSection" (dict "routingValue" "truck" "context" $))
+      (hasKey $.Values.naviback.attractor "truck")
+   -}}
+{{- end -}}
+
+
+{{/*
+Set attractor_bicycle parameter in server config section
+Usage:
+{{ include "config.setAttractorBicycle" $ }}
+*/}}
+{{- define "config.setAttractorBicycle" -}}
+   {{-  ternary
+      $.Values.naviback.attractor.bicycle
+      (or (include "rules.inRoutingSection" (dict "routingValue" "bicycle" "context" $))
+      (include "rules.inRoutingSection" (dict "routingValue" "scooter" "context" $)))
+      (or (hasKey $.Values.naviback.attractor "bicycle") (hasKey $.Values.naviback.attractor "scooter"))
+   -}}
+{{- end -}}
+
+
+{{/*
+Set reduce_edges_optimization_flag to True if queries contains get_dist_matrix value
+Usage:
+{{ include "config.setReduceEdgesOptimizationFlag" $ }}
+*/}}
+{{- define "config.setReduceEdgesOptimizationFlag" -}}
+   {{-  ternary
+      $.Values.naviback.reduceEdgesOptimizationFlag
+      (include "rules.inQueriesSection" (dict "queriesValue" "get_dist_matrix" "context" $))
+      ($.Values.naviback.reduceEdgesOptimizationFlag | default false )
+   -}}
+{{- end -}}
+
+
+{{/*
+Check if instance is running in truck mode
+Usage:
+{{ include "config.isTruck" $ }}
+*/}}
+{{- define "config.isTruck" -}}
+   {{- $is_enabled_routing := ( eq "true" (include "rules.inRoutingSection" (dict "routingValue" "truck" "context" $))) -}}
+   {{- ternary "true" "" $is_enabled_routing -}}
+{{- end -}}
+
+
+{{/*
+Check if instance is running in ctx mode
+Usage:
+{{ include "config.isCTX" $ }}
+*/}}
+{{- define "config.isCTX" -}}
+   {{- $is_enabled_routing := ( eq "true" (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" $))) -}}
+   {{- $is_enabled_query := ( eq "true" (include "rules.inQueriesSection" (dict "queriesValue" "ctx" "context" $))) -}}
+   {{- ternary "true" "" (or $is_enabled_routing $is_enabled_query) -}}
+{{- end -}}
+
+
+{{/*
+Check if instance is running in taxi mode
+Usage:
+{{ include "config.isTaxi" $ }}
+*/}}
+{{- define "config.isTaxi" -}}
+   {{- $is_enabled_routing := ( eq "true" (include "rules.inRoutingSection" (dict "routingValue" "taxi" "context" $))) -}}
+   {{- ternary "true" "" $is_enabled_routing -}}
+{{- end -}}
+
+{{/*
+Check if map matching is enabled
+Usage:
+{{ include "config.isMapMatching" $ }}
+*/}}
+{{- define "config.isMapMatching" -}}
+   {{- include "rules.inQueriesSection" (dict "queriesValue" "map_matching" "context" $) -}}
+{{- end -}}
+
+{{/*
+Set engine_update_period_sec value in config server section
+For pedestrain and bicycle routing type this value will be set in 0
+Usage:
+{{ include "config.setEngineUpdatePeriod" $ }}
+*/}}
+{{- define "config.setEngineUpdatePeriod" -}}
+   {{- if (or (include "config.setSimpleNetworkPedestrian" $) (include "config.setSimpleNetworkBicycle" $)) -}}
+      {{- 0 | int -}}
+   {{- end -}}
 {{- end -}}
 
 {{/*

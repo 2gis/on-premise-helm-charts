@@ -59,6 +59,7 @@ image:
 # @param naviback.dump.query Dump queries in logs.
 # @param naviback.dump.answer Dump answers in logs.
 # @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
+# @param naviback.indexFilename Name of index file.
 # @param naviback.castleHost URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @extra naviback.indices List of dynamic indices kill switches.
 # @skip naviback.indices.carOptions.enabled
@@ -95,6 +96,7 @@ image:
 # @extra naviback.attractor.pedestrian Enable enhanced attractor for pedestrian routing
 # @extra naviback.attractor.taxi Enable enhanced attractor for taxi routing
 # @extra naviback.reduceEdgesOptimizationFlag Enable optimizations for distance matrix queries processing
+# @extra naviback.behindSplitter Current instance is behind splitter or not
 # @skip rules
 
 naviback:
@@ -105,15 +107,21 @@ naviback:
   maxProcessTime: 600
   responseTimelimit: 60
   requestTimeout: 60
+  timeoutLimitSec: 1200
+  timeoutIncrementSec: 140
+  totalRetryDurationSec: 2400
+  initialRetryIntervalSec: 2
   dump:
     result: false
     query: false
     answer: false
   logLevel: Info
+  indexFilename: index.json.zip
   castleHost: ''
   indices:
     carOptions:
       enabled: false
+      filename: carrouting.json
     countryCarOptions:
       enabled: false
     ctxOptions:
@@ -158,6 +166,8 @@ naviback:
       enabled: false
   simpleNetwork:
     emergency: false
+  attractor: {}
+  behindSplitter: false
 
 rules: []
 
