@@ -62,92 +62,107 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+Create upstream nginx entry for found navi-back service
+*/}}
+{{- define "front.renderUpstream" -}}
+    {{- $service := . -}}
+    {{- $upstream := $service.metadata.name -}}
+    {{- printf "upstream %s {\n" $upstream }}
+    {{- printf "\tserver %s;\n" $upstream }}
+    {{- println "}" }}
+{{- end -}}
+
+{{/*
+Create location nginx entry for foun navi-back service
+Render location only if rule is not empty string
+*/}}
+{{- define "front.renderLocation" -}}
+    {{- $service := . -}}
+    {{- $rule := get $service.metadata.labels "rule" }}
+    {{- if (ne $rule "") -}}
+        {{- printf "location /%s {\n" $rule }}
+        {{- printf "\trewrite ^/%s(.*)$ $1 break;\n" $rule | indent 4 }}
+        {{- printf "\tadd_header X-Region %s;\n" $service.metadata.name | indent 4 }}
+        {{- printf "\tproxy_pass http://%s$uri$is_args$args;\n" $service.metadata.name | indent 4 }}
+        {{- println "}" }}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Checking that the back service is valid
+*/}}
+{{- define "front.isValidBackService" -}}
+    {{- $service := .service -}}
+    {{- $is_valid := false -}}
+    {{- $navigroup := default "" .context.Values.navigroup -}}
+    {{/* Supported back implementations: navi-back, mock, splitter */}} 
+    {{- if 
+    and
+    (has (get $service.metadata.labels "app.kubernetes.io/name") (list "navi-back" "mock" "splitter"))
+    (eq (get $service.metadata.labels "navigroup") $navigroup) 
+    (not (get $service.metadata.labels "behindSplitter"))
+    -}}
+        {{- $is_valid = true -}}
+    {{- end -}}
+    {{- ternary "true" "" $is_valid -}}
+{{- end -}}
+
+{{/*
+Checking that the router service is valid
+*/}}
+{{- define "front.isValidRouterService" -}}
+    {{- $service := .service -}}
+    {{- $is_valid := false -}}
+    {{- $navigroup := default "" .context.Values.navigroup -}}
+    {{- if
+    and
+    (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-router")
+    (eq (get $service.metadata.labels "navigroup") $navigroup) -}}
+        {{- $is_valid = true -}}
+    {{- end -}}
+    {{- ternary "true" "" $is_valid -}}
+{{- end -}}
+
+
+{{/*
 Create locations for rules upstreams
 */}}
-{{- define "front.getLocations" -}}
-{{- $locations := list -}}
+{{- define "front.createLocations" -}}
 {{- $ns := print .Release.Namespace -}}
-{{- $found := 0 }}
-{{- $navigroup_set := default "0" $.Values.navigroup }}
 {{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
     {{- if kindIs "map" $service.metadata.labels }}
-        {{- if eq $navigroup_set "0" }}
-                {{- if and (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-back") (eq (get $service.metadata.labels "navigroup") "") }}
-                {{- if ( ne (get $service.metadata.labels "rule") "") }}
-                    {{- $rule := get $service.metadata.labels "rule" }}
-                    {{- printf "location /%s {" $rule }}
-                    {{- printf "rewrite ^/%s(.*)$ $1 break;" $rule }}
-                    {{- printf "add_header X-Region %s;" $service.metadata.name }}
-                    {{- printf "proxy_pass http://%s$uri$is_args$args;" $service.metadata.name }}
-                    {{- println "}" }}
-                {{- end }}
-                {{- end }}
-        {{- else }}
-            {{- if and (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-back") (eq (get $service.metadata.labels "navigroup") $.Values.navigroup ) }}
-                {{- if ( ne (get $service.metadata.labels "rule") "") }}
-                    {{- $rule := get $service.metadata.labels "rule" }}
-                    {{- printf "location /%s {" $rule }}
-                    {{- printf "rewrite ^/%s(.*)$ $1 break;" $rule }}
-                    {{- printf "add_header X-Region %s;" $service.metadata.name }}
-                    {{- printf "proxy_pass http://%s$uri$is_args$args;" $service.metadata.name }}
-                    {{- println "}" }}
-                {{- end }}
-            {{- end }}
+        {{- if (include "front.isValidBackService" ( dict "service" $service "context" $)) }}
+            {{- include "front.renderLocation" $service -}}
         {{- end }}
     {{- end }}
 {{- end }}
 {{- end }}
 
 {{/*
-Create upstreams for running navi-back in the namespace
+Create upstreams for running navi-back instances in the namespace
 */}}
-{{- define "front.getUpstreams" -}}
-{{- $locations := list -}}
-{{- $location := "mosesd" -}}
+{{- define "front.createUpstreams" -}}
 {{- $ns := print .Release.Namespace }}
-{{- $found := 0 }}
-{{- $navigroup_set := default "0" $.Values.navigroup }}
 {{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
     {{- if kindIs "map" $service.metadata.labels }}
-        {{- if eq $navigroup_set "0" }}
-                {{- if and (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-back") (eq (get $service.metadata.labels "navigroup") "") }}
-                    {{- $location = $service.metadata.name -}}
-                    {{- printf "upstream %s {" $service.metadata.name }}
-                    {{- printf "server %s;" $service.metadata.name }}
-                    {{- println "}" }}
-                {{- end }}
-        {{- else }}
-            {{- if and (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-back") (eq (get $service.metadata.labels "navigroup") $.Values.navigroup ) }}
-                {{- $location = $service.metadata.name -}}
-                {{- printf "upstream %s {" $service.metadata.name }}
-                {{- printf "server %s;" $service.metadata.name }}
-                {{- println "}" }}
-            {{- end }}
+        {{- if (include "front.isValidBackService" ( dict "service" $service "context" $)) }}
+            {{- include "front.renderUpstream" $service }}
         {{- end }}
     {{- end }}
 {{- end }}
 {{- end }}
 
 {{/*
-Create upstream of running navi-router in the namespace
+Create upstreams for running navi-router in the namespace
 */}}
-{{- define "front.getMrouterUpstream" -}}
-{{- $location := "navi-router" -}}
+{{- define "front.createRouterUpstream" -}}
+{{- $location := "router" -}}
 {{- $ns := print .Release.Namespace -}}
-{{- $found := 0 }}
-{{- $navigroup_set := default "0" $.Values.navigroup }}
 {{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
     {{- if kindIs "map" $service.metadata.labels }}
-        {{- if eq $navigroup_set "0" }}
-                {{- if and (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-router") (eq (get $service.metadata.labels "navigroup") "") }}
-                    {{- $location = $service.metadata.name -}}
-                    {{- print $location -}}
-                {{- end }}
-        {{- else }}
-            {{- if and (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-router") (eq (get $service.metadata.labels "navigroup") $.Values.navigroup ) }}
-                {{- $location = $service.metadata.name -}}
-                {{- print $location -}}
-            {{- end }}
+        {{- if (include "front.isValidRouterService" ( dict "service" $service "context" $)) }}
+            {{- $location = $service.metadata.name -}}
+            {{- print $location -}}
         {{- end }}
     {{- end }}
 {{- end }}
