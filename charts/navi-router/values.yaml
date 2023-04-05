@@ -45,13 +45,36 @@ image:
 # @section Navi-Router service settings
 
 # @param router.appPort Navi-Router service HTTP port.
+# @param router.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`
 # @param router.additionalSections Additional configurations sections for the Navi-Router service.
 # @param router.castleHost URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @param router.keyManagementService.enabled Disable or enable key management service
+# @param router.keyManagementService.host Address if key management service server
+# @param router.keyManagementService.refreshIntervalSec Keys refresh interval in seconds
+# @param router.keyManagementService.downloadTimeoutSec Keys download timeout in seconds
+# @param router.keyManagementService.apis Used API types and their tokens. Format: `type: token`
 
 router:
   appPort: 8080
+  logLevel: "Warning"
   additionalSections: ''
   castleHost: ''
+  keyManagementService:
+    enabled: false
+    host: http://keys.api.example.com
+    refreshIntervalSec: 30
+    downloadTimeoutSec: 30
+    apis:
+      # directions: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
+      # distance-matrix: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
+      # pairs-directions: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
+      # truck-directions: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
+      # public-transport: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
+      # isochrone: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
+      # map-matching : "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
+      # ppnot: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
+      # combo-routes: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
+      # free-roam: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
 
 
 # @section Service account settings
