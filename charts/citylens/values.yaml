@@ -265,12 +265,12 @@ worker:
 
     apiKey: ''
     endpointUrl: ''
-    requestTimeout: '1.0'
+    requestTimeout: 1
     requestRateLimit:
       calls: 1000
       period: 60
     requestRetries: 3
-    requestRetriesBackoff: '1.0'
+    requestRetriesBackoff: 1
 
     annotations: {}
     labels: {}

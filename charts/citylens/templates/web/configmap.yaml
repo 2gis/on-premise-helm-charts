@@ -40,12 +40,12 @@ data:
     {{- with .Values.worker.camcomSender }}
       api_key: {{ .apiKey }}
       endpoint_url: {{ .endpointUrl | squote }}
-      request_timeout: {{ .requestTimeout | squote }}
+      request_timeout: {{ .requestTimeout }}
       request_rate_limit:
         calls: {{ .requestRateLimit.calls }}
         period: {{ .requestRateLimit.period }}
       request_retries: {{ .requestRetries }}
-      request_retries_backoff: {{ .requestRetriesBackoff | squote }}
+      request_retries_backoff: {{ .requestRetriesBackoff }}
     {{- end }}
     {{- end }}
     enabled_modules:
