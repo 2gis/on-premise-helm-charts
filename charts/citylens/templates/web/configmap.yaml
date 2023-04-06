@@ -35,6 +35,19 @@ data:
         aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
         endpoint_url: {{ required "A valid .Values.s3.endpoint entry required" .endpoint | squote }}
     {{- end }}
+    {{- if .Values.worker.camcomSender.enabled }}
+    camcom:
+    {{- with .Values.worker.camcomSender }}
+      api_key: {{ .apiKey }}
+      endpoint_url: {{ .endpointUrl | squote }}
+      request_timeout: {{ .requestTimeout }}
+      request_rate_limit:
+        calls: {{ .requestRateLimit.calls }}
+        period: {{ .requestRateLimit.period }}
+      request_retries: {{ .requestRetries }}
+      request_retries_backoff: {{ .requestRetriesBackoff }}
+    {{- end }}
+    {{- end }}
     enabled_modules:
       header_links:
       {{- toYaml .Values.headerLinks | nindent 8}}

@@ -238,6 +238,16 @@ worker:
 
 # @param worker.camcomSender.replicas A replica count for the pod.
 
+# @param worker.camcomSender.apiKey A key for Camcom's API access
+# @param worker.camcomSender.endpointUrl Camcom endpoint URL
+
+# @param worker.camcomSender.requestTimeout Camcom request timeout
+# @param worker.camcomSender.requestRateLimit.calls Camcom calls rate limit
+# @param worker.camcomSender.requestRateLimit.period Camcom period rate limit
+# @param worker.camcomSender.requestRetries Camcom request retries
+# @param worker.camcomSender.requestRetriesBackoff request retries backoff
+
+
 # @param worker.camcomSender.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.camcomSender.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 # @param worker.camcomSender.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -252,6 +262,16 @@ worker:
     enabled: false
 
     replicas: 1
+
+    apiKey: ''
+    endpointUrl: ''
+    requestTimeout: 1
+    requestRateLimit:
+      calls: 1000
+      period: 60
+    requestRetries: 3
+    requestRetriesBackoff: 1
+
     annotations: {}
     labels: {}
     podAnnotations: {}
