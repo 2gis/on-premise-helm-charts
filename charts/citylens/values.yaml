@@ -242,8 +242,8 @@ worker:
 # @param worker.camcomSender.endpointUrl Camcom endpoint URL
 
 # @param worker.camcomSender.requestTimeout Camcom request timeout
-# @param worker.camcomSender.requestRateLimit.calls Camcom calls rate limit 
-# @param worker.camcomSender.requestRateLimit.period Camcom period rate limit 
+# @param worker.camcomSender.requestRateLimit.calls Camcom calls rate limit
+# @param worker.camcomSender.requestRateLimit.period Camcom period rate limit
 # @param worker.camcomSender.requestRetries Camcom request retries
 # @param worker.camcomSender.requestRetriesBackoff request retries backoff
 
