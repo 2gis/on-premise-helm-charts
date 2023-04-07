@@ -5,8 +5,8 @@ description: Geo API for getting geo data
 type: application
 
 
-version: 1.6.3
-appVersion: 1.0.38
+version: 1.6.4
+appVersion: 1.0.39
 
 maintainers:
 - name: 2gis

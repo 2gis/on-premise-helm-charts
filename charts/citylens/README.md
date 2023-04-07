@@ -169,11 +169,11 @@ See the [documentation]() to learn about:
 | `worker.camcomSender.replicas`                | A replica count for the pod.                                                                                                | `1`     |
 | `worker.camcomSender.apiKey`                  | A key for Camcom's API access                                                                                               | `""`    |
 | `worker.camcomSender.endpointUrl`             | Camcom endpoint URL                                                                                                         | `""`    |
-| `worker.camcomSender.requestTimeout`          | Camcom request timeout                                                                                                      | `1.0`   |
+| `worker.camcomSender.requestTimeout`          | Camcom request timeout                                                                                                      | `1`     |
 | `worker.camcomSender.requestRateLimit.calls`  | Camcom calls rate limit                                                                                                     | `1000`  |
 | `worker.camcomSender.requestRateLimit.period` | Camcom period rate limit                                                                                                    | `60`    |
 | `worker.camcomSender.requestRetries`          | Camcom request retries                                                                                                      | `3`     |
-| `worker.camcomSender.requestRetriesBackoff`   | request retries backoff                                                                                                     | `1.0`   |
+| `worker.camcomSender.requestRetriesBackoff`   | request retries backoff                                                                                                     | `1`     |
 | `worker.camcomSender.annotations`             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`    |
 | `worker.camcomSender.labels`                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`    |
 | `worker.camcomSender.podAnnotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`    |
