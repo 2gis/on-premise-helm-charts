@@ -16,7 +16,7 @@ keys
 license
 	license:1.0.1
 mapgl-js-api
-	mapgl:1.35.0
+	mapgl:1.35.1
 navi-async-matrix
 	navi-async-matrix:1.2.0
 navi-back
@@ -32,12 +32,12 @@ navi-restrictions
 navi-router
 	navi-router:6.10.0
 pro-api
-	pro-api:1.0.38
-	pro-importer:1.0.38
-	pro-importer:1.0.38
+	pro-api:1.0.39
+	pro-importer:1.0.39
+	pro-importer:1.0.39
 	pro-permissions-api:latest
 pro-ui
-	pro-ui:0.2.0
+	pro-ui:0.2.1
 search-api
 	search-api:7.45.0
 	search-nginx:1.21.6

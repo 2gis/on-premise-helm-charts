@@ -1,5 +1,24 @@
 # 2GIS On-Premise Changelog
 
+## [1.6.4]
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.35.0
+	+ mapgl:1.35.1
+pro-api
+	- pro-api:1.0.38
+	+ pro-api:1.0.39
+	- pro-importer:1.0.38
+	+ pro-importer:1.0.39
+	- pro-importer:1.0.38
+	+ pro-importer:1.0.39
+pro-ui
+	- pro-ui:0.2.0
+	+ pro-ui:0.2.1
+
+```
+
 ## [1.6.3]
 #### Images
 ```
