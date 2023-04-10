@@ -171,6 +171,7 @@ Usage:
    {{-  ternary
       $.Values.naviback.simpleNetwork.pedestrian
       (or (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" $))
+      (include "rules.inRoutingSection" (dict "routingValue" "public_transport" "context" $))
       (include "rules.inRoutingSection" (dict "routingValue" "pedestrian" "context" $)))
       (hasKey $.Values.naviback.simpleNetwork "pedestrian")
    -}}
@@ -257,6 +258,7 @@ Usage:
    {{-  ternary
       $.Values.naviback.attractor.pedestrian
       (or (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" $))
+      (include "rules.inRoutingSection" (dict "routingValue" "public_transport" "context" $))
       (include "rules.inRoutingSection" (dict "routingValue" "pedestrian" "context" $)))
       (hasKey $.Values.naviback.attractor "pedestrian")
    -}}
@@ -337,8 +339,8 @@ Usage:
 {{ include "config.isCTX" $ }}
 */}}
 {{- define "config.isCTX" -}}
-   {{- $is_enabled_routing := ( eq "true" (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" $))) -}}
-   {{- $is_enabled_query := ( eq "true" (include "rules.inQueriesSection" (dict "queriesValue" "ctx" "context" $))) -}}
+   {{- $is_enabled_routing := ( or (eq "true" (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" $))) (eq "true" (include "rules.inRoutingSection" (dict "routingValue" "public_transport" "context" $)))) -}}
+   {{- $is_enabled_query := ( or (eq "true" (include "rules.inQueriesSection" (dict "queriesValue" "ctx" "context" $))) (eq "true" (include "rules.inQueriesSection" (dict "queriesValue" "public_transport" "context" $)))) -}}
    {{- ternary "true" "" (or $is_enabled_routing $is_enabled_query) -}}
 {{- end -}}
 
