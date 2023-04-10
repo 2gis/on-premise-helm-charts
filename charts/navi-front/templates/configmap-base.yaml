@@ -39,6 +39,10 @@ data:
             js_content bundle.geo_coding;
         }
 
+        location ^~ /get_dist_matrix_ctx {
+            js_content bundle.geo_coding;
+        }
+
         location ^~ /public_transport {
             js_content bundle.geo_coding;
         } 
