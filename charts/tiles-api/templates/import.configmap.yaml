@@ -14,7 +14,6 @@ data:
   importer.yaml: |
     {{- $serviceName := include "importer.serviceName" $type.kind }}
     service-name: {{ required (printf "Valid .Values.types[%d].kind required" $index) $serviceName }}
-    data-type: {{ $type.kind }}
     cassandra:
       name: local
       num-retries: 2
