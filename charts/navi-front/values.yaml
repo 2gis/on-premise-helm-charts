@@ -45,9 +45,14 @@ image:
 # @section Navi-Front service settings
 
 # @param front.port Navi-Front service HTTP port.
+# @param front.router.discover Enable/disable router autodiscovery.
+# @param front.router.host Set router address if autodiscovery is disabled.
 
 front:
   port: 8080
+  router:
+    discover: true
+    host: localhost
 
 
 # @section Service account settings

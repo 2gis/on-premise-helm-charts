@@ -10,7 +10,7 @@ data:
         "logger_name": "router",
         "file_prefix": "../../../../",
         "enable_syslog": true,
-        "level": "Warning",
+        "level": {{ .Values.router.logLevel | default "Warning"  | quote }},
         "disabled_tags_": [
           "http",
           "UploadData",
@@ -58,6 +58,29 @@ data:
         "server_info": {
           "server_id": "{{ include "router.fullname" . }}"
         }
+        {{- with .Values.router.keyManagementService }}
+        {{- if .enabled }}
+        {{ println "," }}
+        "key_management_service" :
+        {
+          "service_remote_address" : {{ .host | quote }},
+          "keys_refresh_interval_sec" : {{ .refreshIntervalSec | int }},
+          "keys_download_timeout_sec" : {{ .downloadTimeoutSec | int }},
+          "service_apis" :
+          [
+              {{- $first := true }}
+              {{- range $type, $token := .apis }}
+              {{- if $first }}
+                  {{- $first = false }}
+              {{- else }}
+                  {{- print "," }}
+              {{- end }}
+              {"type" : {{ $type | quote }}, "token" : {{ $token | quote }} }
+              {{- end }}
+          ]
+        }
+        {{- end }}
+        {{- end }}
         {{ if .Values.router.additionalSections }}
         {{ println "," }}
          {{- include "tplvalues.render" ( dict "value" .Values.router.additionalSections "context" $) | nindent 8 }}
