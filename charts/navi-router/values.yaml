@@ -65,16 +65,16 @@ router:
     refreshIntervalSec: 30
     downloadTimeoutSec: 30
     apis:
-      # directions: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
-      # distance-matrix: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
-      # pairs-directions: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
-      # truck-directions: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
-      # public-transport: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
-      # isochrone: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
-      # map-matching : "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
-      # ppnot: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
-      # combo-routes: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
-      # free-roam: "aaaaaaaaa-bbbb-cccc-dddd-eeeeeeee"
+      # directions: "DIRECTIONS_TOKEN"
+      # distance-matrix: "DISTANCE_MATRIX_TOKEN"
+      # pairs-directions: "PAIRS_DIRECTIONS_TOKEN"
+      # truck-directions: "TRUCK_DIRECTIONS_TOKEN"
+      # public-transport: "PUBLIC_TRANSPORT_TOKEN"
+      # isochrone: "ISOCHRONE_TOKEN"
+      # map-matching : "MAP_MATCHING_TOKEN"
+      # ppnot: "PPNOT_TOKEN"
+      # combo-routes: "COMBO_ROUTES_TOKEN"
+      # free-roam: "FREE_ROAM_TOKEN"
 
 
 # @section Service account settings
