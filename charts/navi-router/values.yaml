@@ -56,7 +56,7 @@ image:
 
 router:
   appPort: 8080
-  logLevel: "Warning"
+  logLevel: Warning
   additionalSections: ''
   castleHost: ''
   keyManagementService:

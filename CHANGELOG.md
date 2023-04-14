@@ -1,5 +1,18 @@
 # 2GIS On-Premise Changelog
 
+## [1.6.5]
+#### Images
+```
+pro-api
+	- pro-api:1.0.39
+	+ pro-api:1.0.41
+	- pro-importer:1.0.39
+	+ pro-importer:1.0.41
+	- pro-importer:1.0.39
+	+ pro-importer:1.0.41
+
+```
+
 ## [1.6.4]
 #### Images
 ```

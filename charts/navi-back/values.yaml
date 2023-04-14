@@ -55,6 +55,10 @@ image:
 # @param naviback.maxProcessTime Maximum processing time limit in minutes.
 # @param naviback.responseTimelimit Maximum response time limit in minutes.
 # @param naviback.requestTimeout Maximum request time limit in minutes.
+# @param naviback.timeoutLimitSec Maximum downloading time can be reached after failures.
+# @param naviback.timeoutIncrementSec Downloading time increment after failures.
+# @param naviback.totalRetryDurationSec Downloading timeout with all failure retries.
+# @param naviback.initialRetryIntervalSec Initial timeout for a failure retry.
 # @param naviback.dump.result Dump results in logs.
 # @param naviback.dump.query Dump queries in logs.
 # @param naviback.dump.answer Dump answers in logs.
@@ -63,6 +67,7 @@ image:
 # @param naviback.castleHost URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @extra naviback.indices List of dynamic indices kill switches.
 # @skip naviback.indices.carOptions.enabled
+# @skip naviback.indices.carOptions.filename
 # @skip naviback.indices.countryCarOptions.enabled
 # @skip naviback.indices.ctxOptions.enabled
 # @skip naviback.indices.entrances.enabled
@@ -91,12 +96,15 @@ image:
 # @extra naviback.simpleNetwork.pedestrian Enable simple network for pedestrian routing
 # @extra naviback.simpleNetwork.taxi Enable simple network for taxi routing
 # @extra naviback.simpleNetwork.truck Enable simple network for truck routing
+# @skip naviback.attractor
 # @extra naviback.attractor.bicycle Enable enhanced attractor for bicycle routing
 # @extra naviback.attractor.car Enable enhanced attractor for auto routing
 # @extra naviback.attractor.pedestrian Enable enhanced attractor for pedestrian routing
 # @extra naviback.attractor.taxi Enable enhanced attractor for taxi routing
+# @extra naviback.attractor.truck Enable enhanced attractor for truck routing
+# @extra naviback.attractor.scooter Enable enhanced attractor for scooters routing
 # @extra naviback.reduceEdgesOptimizationFlag Enable optimizations for distance matrix queries processing
-# @extra naviback.behindSplitter Current instance is behind splitter or not
+# @param naviback.behindSplitter Current instance is behind splitter or not
 # @skip rules
 
 naviback:

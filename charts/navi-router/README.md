@@ -51,11 +51,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Router service settings
 
-| Name                        | Description                                                                                                                                  | Value  |
-| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `router.appPort`            | Navi-Router service HTTP port.                                                                                                               | `8080` |
-| `router.additionalSections` | Additional configurations sections for the Navi-Router service.                                                                              | `""`   |
-| `router.castleHost`         | URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster. | `""`   |
+| Name                                             | Description                                                                                                                                  | Value                         |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `router.appPort`                                 | Navi-Router service HTTP port.                                                                                                               | `8080`                        |
+| `router.logLevel`                                | Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`                                                              | `Warning`                     |
+| `router.additionalSections`                      | Additional configurations sections for the Navi-Router service.                                                                              | `""`                          |
+| `router.castleHost`                              | URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster. | `""`                          |
+| `router.keyManagementService.enabled`            | Disable or enable key management service                                                                                                     | `false`                       |
+| `router.keyManagementService.host`               | Address if key management service server                                                                                                     | `http://keys.api.example.com` |
+| `router.keyManagementService.refreshIntervalSec` | Keys refresh interval in seconds                                                                                                             | `30`                          |
+| `router.keyManagementService.downloadTimeoutSec` | Keys download timeout in seconds                                                                                                             | `30`                          |
+| `router.keyManagementService.apis`               | Used API types and their tokens. Format: `type: token`                                                                                       | `nil`                         |
 
 ### Service account settings
 
