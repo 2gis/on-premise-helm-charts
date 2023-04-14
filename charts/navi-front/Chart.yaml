@@ -5,7 +5,7 @@ type: application
 keywords:
 - navi
 - front
-version: 1.6.4
+version: 1.6.5
 appVersion: 1.21.2
 maintainers:
 - name: 2gis

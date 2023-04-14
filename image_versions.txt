@@ -32,9 +32,9 @@ navi-restrictions
 navi-router
 	navi-router:6.10.0
 pro-api
-	pro-api:1.0.39
-	pro-importer:1.0.39
-	pro-importer:1.0.39
+	pro-api:1.0.41
+	pro-importer:1.0.41
+	pro-importer:1.0.41
 	pro-permissions-api:latest
 pro-ui
 	pro-ui:0.2.1
