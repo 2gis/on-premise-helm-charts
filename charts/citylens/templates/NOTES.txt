@@ -1,0 +1,19 @@
+Citylens service is released as "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace.
+
+{{ if .Values.api.ingress.enabled }}
+You can check api service using browser
+{{- range $host := .Values.api.ingress.hosts }}
+  http{{ if $.Values.api.ingress.tls }}s{{ end }}://{{ $host.host }}
+{{- end }}
+{{- else }}
+You should publish api service in your preferred way (ingress, balancer, etc).
+{{ end }}
+
+{{ if .Values.web.ingress.enabled }}
+You can check web service using browser
+{{- range $host := .Values.web.ingress.hosts }}
+  http{{ if $.Values.web.ingress.tls }}s{{ end }}://{{ $host.host }}
+{{- end }}
+{{- else }}
+You can publish web service in your preferred way (ingress, balancer, etc).
+{{ end }}

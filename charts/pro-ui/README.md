@@ -32,7 +32,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name                  | Description                    | Value                    |
 | --------------------- | ------------------------------ | ------------------------ |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/pro-ui` |
-| `ui.image.tag`        | Tag                            | `0.1.5`                  |
+| `ui.image.tag`        | Tag                            | `0.2.1`                  |
 | `imagePullPolicy`     | Pull Policy                    | `IfNotPresent`           |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                     |
 

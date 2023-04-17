@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }} 
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
       {{- with .Values.permissionsPodSettings.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -140,6 +140,37 @@ spec:
               value: "{{ .Values.redis.port }}"
             - name: Redis__Enabled
               value: "{{ .Values.redis.enabled }}"
-            - name: Common__LoggingFormat
-              value: "{{ .Values.api.loggingFormat }}"
+            - name: Redis__Username
+              value: {{ $.Values.redis.username }}
+            {{ if .Values.redis.password }}
+            - name: Redis__Password  
+              valueFrom:
+                secretKeyRef:
+                  key: redisPassword
+                  name: {{ include "pro-api.name" . }}-secret
+            {{ end }}
+            - name: Common__Logging__Format
+              value: "{{ .Values.api.logging.format }}"
+            - name: Common__Logging__Targets
+              value: "{{ .Values.api.logging.targets }}"
+            - name: Kafka__BootstrapServers
+              value: {{ $.Values.kafka.bootstrapServers }}
+            - name: Kafka__SecurityProtocol
+              value: {{ $.Values.kafka.securityProtocol }}
+            - name: Kafka__SaslMechanism
+              value: {{ $.Values.kafka.sasl.mechanism }}
+            - name: Kafka__SaslUsername
+              value: {{ $.Values.kafka.sasl.username }}
+            {{ if .Values.kafka.sasl.password }}
+            - name: Kafka__SaslPassword
+              valueFrom:
+                secretKeyRef:
+                  key: kafkaSaslPassword
+                  name: {{ include "pro-api.name" . }}-secret
+            {{ end }}
+            - name: Kafka__PermissionsTopicSettings__Name
+              value: "{{ $.Values.kafka.permissionsTopic.name }}"
+            - name: Kafka__PermissionsTopicSettings__ReaderGroupId
+              value: "{{ $.Values.kafka.permissionsTopic.readerGroupId }}"
+
 {{- end }}

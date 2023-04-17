@@ -116,50 +116,18 @@ onprem
   value: "{{ required "A valid .Values.keys.url entry required" .Values.keys.url }}"
 - name: CATALOG_KEYS_REQUEST_TIMEOUT
   value: "{{ .Values.keys.requestTimeout }}"
-- name: CATALOG_KEYS_SERVICE_CATALOG_KEY
-  value: ""
-{{- if .Values.keys.tokens.places }}
-- name: CATALOG_KEYS_SERVICE_PLACES_KEY
+- name: CATALOG_KEYS_SERVICE_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
-      key: keysServicePlaces
+      key: keysServiceToken
 {{- end }}
-{{- if .Values.keys.tokens.geocoder }}
-- name: CATALOG_KEYS_SERVICE_GEOCODER_KEY
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "catalog.secret.deploys.name" . }}
-      key: keysServiceGeocoder
-{{- end }}
-{{- if .Values.keys.tokens.suggest }}
-- name: CATALOG_KEYS_SERVICE_SUGGEST_KEY
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "catalog.secret.deploys.name" . }}
-      key: keysServiceSuggest
-{{- end }}
-{{- if .Values.keys.tokens.categories }}
-- name: CATALOG_KEYS_SERVICE_CATEGORIES_KEY
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "catalog.secret.deploys.name" . }}
-      key: keysServiceCategories
-{{- end }}
-{{- if .Values.keys.tokens.regions }}
-- name: CATALOG_KEYS_SERVICE_REGIONS_KEY
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "catalog.secret.deploys.name" . }}
-      key: keysServiceRegions
-{{- end }}
-{{- if .Values.keys.tokens.markers }}
-- name: CATALOG_KEYS_SERVICE_MARKERS_KEY
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "catalog.secret.deploys.name" . }}
-      key: keysServiceMarkers
-{{- end }}
+
+{{- define "catalog.env.license" -}}
+- name: CATALOG_PASPORTOOL_ENDPOINT
+  value: "{{ required "A valid .Values.license.url entry required" .Values.license.url }}"
+- name: CATALOG_PASPORTOOL_REQUEST_TIMEOUT
+  value: "{{ .Values.license.requestTimeout }}"
 {{- end }}
 
 {{- define "catalog.env.importer" -}}

@@ -68,14 +68,11 @@
 
 ### Deployment settings
 
-| Name                   | Description              | Value                      |
-| ---------------------- | ------------------------ | -------------------------- |
-| `image.repository`     | Repository               | `2gis-on-premise/pro-api`  |
-| `image.tag`            | Tag                      | `1.0.23`                   |
-| `image.pullPolicy`     | Pull Policy              | `IfNotPresent`             |
-| `curlImage.repository` | Docker Repository Image. | `2gis-on-premise/pro-curl` |
-| `curlImage.tag`        | Docker image tag.        | `1.0.17`                   |
-| `curlImage.pullPolicy` | Pull policy              | `IfNotPresent`             |
+| Name               | Description | Value                     |
+| ------------------ | ----------- | ------------------------- |
+| `image.repository` | Repository  | `2gis-on-premise/pro-api` |
+| `image.tag`        | Tag         | `1.0.41`                  |
+| `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
 ### 2GIS PRO Storage configuration
 
@@ -83,15 +80,18 @@
 | ------------------------- | --------------------------------------------------------------------------- | ----- |
 | `s3.layerDataBucket`      | S3 bucket with prepared layer data. **Required**                            | `""`  |
 | `s3.userAssetsDataBucket` | S3 bucket with user-created assets, aggregations, and filters. **Required** | `""`  |
+| `s3.snapshotBucket`       | S3 bucket for storing snapshots of inclemental data updates. **Required**   | `""`  |
 
 ### 2GIS PRO API configuration
 
-| Name                 | Description                                                                                                    | Value    |
-| -------------------- | -------------------------------------------------------------------------------------------------------------- | -------- |
-| `api.serviceAccount` | Kubernetes service account                                                                                     | `runner` |
-| `api.tempPath`       | Path to directory used for temp data                                                                           | `/tmp`   |
-| `api.allowAnyOrigin` | Cors policy: allow any origin to perform requests to pro-api service                                           | `false`  |
-| `api.loggingFormat`  | Possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - just text | `simple` |
+| Name                  | Description                                                                                                                                             | Value    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `api.serviceAccount`  | Kubernetes service account                                                                                                                              | `runner` |
+| `api.tempPath`        | Path to directory used for temp data                                                                                                                    | `/tmp`   |
+| `api.allowAnyOrigin`  | Cors policy: allow any origin to perform requests to pro-api service                                                                                    | `false`  |
+| `api.logging`         | Logging settings                                                                                                                                        |          |
+| `api.logging.format`  | Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text                     | `simple` |
+| `api.logging.targets` | Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify). | `""`     |
 
 ### PostgreSQL settings
 
@@ -117,10 +117,35 @@
 
 ### Redis settings (supported version 6.x)
 
-| Name         | Description                      | Value  |
-| ------------ | -------------------------------- | ------ |
-| `redis.host` | Redis host address. **Required** | `""`   |
-| `redis.port` | Redis port. **Required**         | `6379` |
+| Name             | Description                       | Value  |
+| ---------------- | --------------------------------- | ------ |
+| `redis.host`     | Redis host address. **Required**  | `""`   |
+| `redis.port`     | Redis port. **Required**          | `6379` |
+| `redis.username` | Username used to connect to Redis | `""`   |
+| `redis.password` | Password used to connect to Redis | `""`   |
+
+### Kafka settings (supported version 2.7)
+
+| Name                                   | Description                                                                                                     | Value           |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------- |
+| `kafka.bootstrapServers`               | Kafka bootstrap servers. Format: 'host1:port1,host2:port2'                                                      | `""`            |
+| `kafka.securityProtocol`               | Kafka security protocol. Supported options: SaslPlaintext.                                                      | `SaslPlaintext` |
+| `kafka.sasl`                           | **Kafka sasl settings** (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config)) |                 |
+| `kafka.sasl.mechanism`                 | Kafka sasl mechanism. Supported options: ScramSha512.                                                           | `ScramSha512`   |
+| `kafka.sasl.username`                  | Kafka sasl username.                                                                                            | `""`            |
+| `kafka.sasl.password`                  | Kafka sasl password.                                                                                            | `""`            |
+| `kafka.assetTopicsReaderGroupId`       | Kafka consumer group for reading streaming assets data.                                                         | `""`            |
+| `kafka.importTasksTopic`               | Kafka topic settings to run import tasks.                                                                       |                 |
+| `kafka.importTasksTopic.name`          | Kafka topic name.                                                                                               | `""`            |
+| `kafka.importTasksTopic.readerGroupId` | Kafka consumer group for reading importing tasks.                                                               | `""`            |
+| `kafka.refreshAssetsIntervalMinutes`   | Refresh interval for reading streaming assets settings in minutes.                                              | `60`            |
+
+### Import background jobs settings
+
+| Name                                      | Description                                                      | Value   |
+| ----------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `backgroundJobs.enableUserAssetsImporter` | If user data importer job is enabled for the service.            | `true`  |
+| `backgroundJobs.enableAssetsStreaming`    | If the streaming data processing job is enabled for the service. | `false` |
 
 ### Catalog API settings
 
@@ -154,7 +179,7 @@
 | Name                                       | Description                                                                                                                                              | Value                          |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.0.23`                       |
+| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.0.41`                       |
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
@@ -162,6 +187,7 @@
 | `assetImporter.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                           | `4`                            |
 | `assetImporter.enabled`                    | If assetImporter is enabled for the service.                                                                                                             | `true`                         |
 | `assetImporter.startOnDeploy`              | Indicates that asset import should start when service installed or updated                                                                               | `true`                         |
+| `assetImporter.imageProxyUrl`              | (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                                                          | `""`                           |
 
 ### Limits
 

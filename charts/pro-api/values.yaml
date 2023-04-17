@@ -113,7 +113,7 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.0.23
+  tag: 1.0.41
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
@@ -123,29 +123,25 @@ permissionsApiImage:
   tag: latest
   pullPolicy: IfNotPresent
 
-# @param curlImage.repository Docker Repository Image.
-# @param curlImage.tag Docker image tag.
-# @param curlImage.pullPolicy Pull policy
-curlImage:
-  repository: 2gis-on-premise/pro-curl
-  tag: 1.0.17
-  pullPolicy: IfNotPresent
-
 # @section 2GIS PRO Storage configuration
 
 # @param s3.layerDataBucket S3 bucket with prepared layer data. **Required**
 # @param s3.userAssetsDataBucket S3 bucket with user-created assets, aggregations, and filters. **Required**
+# @param s3.snapshotBucket S3 bucket for storing snapshots of inclemental data updates. **Required**
 
 s3:
   layerDataBucket: ''
   userAssetsDataBucket: ''
+  snapshotBucket: ''
 
 # @section 2GIS PRO API configuration
 
 # @param api.serviceAccount  Kubernetes service account
 # @param api.tempPath Path to directory used for temp data
 # @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
-# @param api.loggingFormat Possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - just text
+# @extra api.logging Logging settings
+# @param api.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
+# @param api.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
 # @skip api.diggerPassword
 # @skip api.diggerUserName
 # @skip api.logEsQueries
@@ -167,7 +163,9 @@ api:
   useMockAuth: true
   token: ''
   filterByZoneCodes: false
-  loggingFormat: simple
+  logging:
+    format: simple
+    targets: ''
 
 # @skip auth
 # @skip auth.url
@@ -198,21 +196,67 @@ keys:
 
 # @param elastic.host ElasticSearch host address. Format: `http(s)://HOST:PORT`
 # @param elastic.credentials User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD`
+# @skip elastic.indexPrefix
 
 elastic:
   host: ''
   credentials: ''
+  indexPrefix: ''
 
 # @section Redis settings (supported version 6.x)
 
 # @param redis.host Redis host address. **Required**
 # @param redis.port Redis port. **Required**
 # @skip redis.enabled
+# @param redis.username Username used to connect to Redis
+# @param redis.password Password used to connect to Redis
 
 redis:
   host: ''
   port: 6379
   enabled: true
+  username: ''
+  password: ''
+
+# @section Kafka settings (supported version 2.7)
+# @param kafka.bootstrapServers Kafka bootstrap servers. Format: 'host1:port1,host2:port2'
+# @param kafka.securityProtocol Kafka security protocol. Supported options: SaslPlaintext.
+# @extra kafka.sasl **Kafka sasl settings** (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config))
+# @param kafka.sasl.mechanism Kafka sasl mechanism. Supported options: ScramSha512.
+# @param kafka.sasl.username Kafka sasl username.
+# @param kafka.sasl.password Kafka sasl password.
+# @param kafka.assetTopicsReaderGroupId Kafka consumer group for reading streaming assets data.
+# @extra kafka.importTasksTopic Kafka topic settings to run import tasks.
+# @param kafka.importTasksTopic.name Kafka topic name.
+# @param kafka.importTasksTopic.readerGroupId Kafka consumer group for reading importing tasks.
+# @skip kafka.importTasksTopic.partitionNumber
+# @skip kafka.permissionsTopic
+# @param kafka.refreshAssetsIntervalMinutes Refresh interval for reading streaming assets settings in minutes.
+
+kafka:
+  bootstrapServers: ''
+  securityProtocol: SaslPlaintext
+  sasl:
+    mechanism: ScramSha512
+    username: ''
+    password: ''
+  assetTopicsReaderGroupId: ''
+  importTasksTopic:
+    name: ''
+    readerGroupId: ''
+    partitionNumber: ''
+  permissionsTopic:
+    name: ''
+    readerGroupId: ''
+    partitionNumber: ''
+  refreshAssetsIntervalMinutes: 60
+
+# @section Import background jobs settings
+# @param backgroundJobs.enableUserAssetsImporter If user data importer job is enabled for the service.
+# @param backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
+backgroundJobs:
+  enableUserAssetsImporter: true
+  enableAssetsStreaming: false
 
 # @section Catalog API settings
 
@@ -237,7 +281,6 @@ navi:
 # @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search)
 search:
   url: http://search-api.svc
-
 
 # @section 2GIS PRO API Job settings
 
@@ -290,12 +333,12 @@ permissionsApi:
 # @param assetImporter.maxParallelJobs How many import jobs can be run simultaneously
 # @param assetImporter.enabled If assetImporter is enabled for the service.
 # @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
+# @param assetImporter.imageProxyUrl (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
 # @skip assetImporter.files
-# @skip assetImporter.imageProxyUrl
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.0.23
+  tag: 1.0.41
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -317,7 +360,7 @@ assetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.0.23
+  tag: 1.0.41
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

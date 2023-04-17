@@ -1,0 +1,471 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port` **Required**
+
+dgctlDockerRegistry: ''
+
+# @section Citylens API service settings
+
+# @section Image settings
+
+# @param api.image.repository Repository.
+# @param api.image.tag Tag.
+# @param api.image.pullPolicy Pull Policy.
+
+# @section Resources settings
+
+# @param api.replicas A replica count for the pod.
+
+# @param api.resources.requests.cpu A CPU request.
+# @param api.resources.requests.memory A memory request.
+# @param api.resources.limits.cpu A CPU limit.
+# @param api.resources.limits.memory A memory limit.
+
+# @section Service settings
+
+# @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param api.service.port Service port.
+# @param api.service.targetPort Service target port.
+# @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param api.ingress.enabled If Ingress is enabled for the service.
+# @param api.ingress.className Resource that contains additional configuration including the name of the controller that should implement the class.
+# @param api.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size Proxy-body-size parameter (default 1MB).
+# @param api.ingress.hosts[0].host Hostname for the Ingress service. Ex.: 'citylens.api'.
+# @param api.ingress.hosts[0].paths[0].path Endpoint of host.
+# @param api.ingress.hosts[0].paths[0].pathType Path type of endpoint.
+# @param api.ingress.tls Tls settings for https.
+
+# @section Metadata settings
+
+# @param api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param api.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param api.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param api.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param api.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param api.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param api.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+api:
+  image:
+    repository: 2gis-on-premise/citylens-api
+    pullPolicy: IfNotPresent
+    tag: 1.0.5
+
+  replicas: 4
+
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+    targetPort: 8000
+
+  ingress:
+    enabled: true
+    className: ''
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: '0'
+    hosts:
+    - host: citylens.host
+      paths:
+      - path: /
+        pathType: Prefix
+    tls: []
+      # - hosts:
+      #    host: ''
+      #  secretName: ''
+
+  annotations: {}
+  labels: {}
+  podAnnotations: {}
+  podLabels: {}
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
+# @section Citylens web service settings
+
+# @section Image settings
+
+# @param web.image.repository Repository.
+# @param web.image.tag Tag.
+# @param web.image.pullPolicy Pull Policy.
+
+# @section Resources settings
+
+# @param web.replicas A replica count for the pod.
+
+# @param web.resources.requests.cpu A CPU request.
+# @param web.resources.requests.memory A memory request.
+# @param web.resources.limits.cpu A CPU limit.
+# @param web.resources.limits.memory A memory limit.
+
+# @section Service settings
+
+# @param web.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param web.service.port Service port.
+# @param web.service.targetPort Service target port.
+# @param web.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param web.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param web.ingress.enabled If Ingress is enabled for the service.
+# @param web.ingress.className Resource that contains additional configuration including the name of the controller that should implement the class.
+# @param web.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size Proxy-body-size parameter (default 1MB).
+# @param web.ingress.hosts[0].host Hostname for the Ingress service. Ex.: 'citylens.web'.
+# @param web.ingress.hosts[0].paths[0].path Endpoint of host.
+# @param web.ingress.hosts[0].paths[0].pathType Path type of endpoint.
+# @param web.ingress.tls Tls settings for https.
+
+# @section Metadata settings
+
+# @param web.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param web.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param web.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param web.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param web.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param web.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param web.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+web:
+  image:
+    repository: 2gis-on-premise/citylens-web
+    pullPolicy: IfNotPresent
+    tag: 1.0.7
+
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+    targetPort: 5000
+
+  ingress:
+    enabled: true
+    className: ''
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: '0'
+    hosts:
+    - host: citylens.host
+      paths:
+      - path: /
+        pathType: Prefix
+    tls: []
+      # - hosts:
+      #    host: ''
+      #  secretName: ''
+
+  annotations: {}
+  labels: {}
+  podAnnotations: {}
+  podLabels: {}
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
+# @section Citylens workers service settings
+
+# @section Resources settings
+
+# @param worker.resources.requests.cpu A CPU request.
+# @param worker.resources.requests.memory A memory request.
+# @param worker.resources.limits.cpu A CPU limit.
+# @param worker.resources.limits.memory A memory limit.
+
+worker:
+
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+
+# @section Citylens Frames Saver worker's settings
+
+# @param worker.framesSaver.replicas A replica count for the pod.
+
+# @param worker.framesSaver.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.framesSaver.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.framesSaver.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.framesSaver.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.framesSaver.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.framesSaver.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.framesSaver.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  framesSaver:
+
+    replicas: 4
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+# @section Citylens Camcom sender worker's settings
+
+# @param worker.camcomSender.enabled If Camcom Sender worker is enabled for the service.
+
+# @param worker.camcomSender.replicas A replica count for the pod.
+
+# @param worker.camcomSender.apiKey A key for Camcom's API access
+# @param worker.camcomSender.endpointUrl Camcom endpoint URL
+
+# @param worker.camcomSender.requestTimeout Camcom request timeout
+# @param worker.camcomSender.requestRateLimit.calls Camcom calls rate limit
+# @param worker.camcomSender.requestRateLimit.period Camcom period rate limit
+# @param worker.camcomSender.requestRetries Camcom request retries
+# @param worker.camcomSender.requestRetriesBackoff request retries backoff
+
+
+# @param worker.camcomSender.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.camcomSender.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.camcomSender.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.camcomSender.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.camcomSender.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.camcomSender.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.camcomSender.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  camcomSender:
+
+    enabled: false
+
+    replicas: 1
+
+    apiKey: ''
+    endpointUrl: ''
+    requestTimeout: 1
+    requestRateLimit:
+      calls: 1000
+      period: 60
+    requestRetries: 3
+    requestRetriesBackoff: 1
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+# @section Citylens Predictions Saver worker's settings
+
+# @param worker.predictionsSaver.replicas A replica count for the pod.
+
+# @param worker.predictionsSaver.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.predictionsSaver.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.predictionsSaver.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.predictionsSaver.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.predictionsSaver.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.predictionsSaver.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.predictionsSaver.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  predictionsSaver:
+
+    replicas: 1
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+# @section Citylens Reporter Pro worker's settings
+
+# @param worker.reporterPro.replicas A replica count for the pod.
+
+# @param worker.reporterPro.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.reporterPro.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.reporterPro.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.reporterPro.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.reporterPro.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.reporterPro.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.reporterPro.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  reporterPro:
+
+    replicas: 1
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+# @section Citylens Track Metadata Saver worker's settings
+
+# @param worker.trackMetadataSaver.replicas A replica count for the pod.
+
+# @param worker.trackMetadataSaver.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.trackMetadataSaver.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.trackMetadataSaver.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.trackMetadataSaver.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.trackMetadataSaver.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.trackMetadataSaver.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.trackMetadataSaver.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  trackMetadataSaver:
+
+    replicas: 1
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+# @section Migration job settings
+
+# @param migrations.enabled If migrations needed.
+
+# @param migrations.image.repository Repository.
+# @param migrations.image.tag Tag.
+# @param migrations.image.pullPolicy Pull Policy
+
+# @param migrations.resources.requests.cpu A CPU request.
+# @param migrations.resources.requests.memory A memory request.
+# @param migrations.resources.limits.cpu A CPU limit.
+# @param migrations.resources.limits.memory A memory limit.
+# @param migrations.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+
+migrations:
+
+  enabled: true
+
+  image:
+    repository: 2gis-on-premise/citylens-database
+    pullPolicy: IfNotPresent
+    tag: 1.0.0
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 1Gi
+    limits:
+      cpu: 200m
+      memory: 2Gi
+
+  nodeSelector: {}
+
+# @section Kafka settings
+
+# @param kafka.bootstrapServer A Kafka broker endpoint. **Required**
+# @param kafka.username A Kafka username for connection. **Required**
+# @param kafka.password A Kafka password for connection. **Required**
+# @param kafka.topics.frames List of topics for Frames saver worker. **Required**
+# @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
+# @param kafka.topics.prediction List of topics for Predictions saver worker. **Required**
+# @param kafka.topics.pro List of topics for Reporter pro worker. **Required**
+# @param kafka.topics.camcom List of topics for Camcom worker. **Required**
+# @param kafka.topics.logs List of topics for API logs. **Required**
+# @param kafka.topics.framesGroupId Frames saver workers's group ID. **Required**
+# @param kafka.topics.tracksGroupId Tracks metadata workers's group ID. **Required**
+# @param kafka.topics.predictionGroupId Predictions saver workers's group ID. **Required**
+# @param kafka.topics.camcomSenderGroupId Camcom saver workers's group ID. **Required**
+
+kafka:
+
+  bootstrapServer: ''
+  username: ''
+  password: ''
+  topics:
+    frames: ''
+    tracks: ''
+    prediction: ''
+    pro: ''
+    camcom: ''
+    logs: ''
+    framesGroupId: ''
+    tracksGroupId: ''
+    predictionGroupId: ''
+    camcomSenderGroupId: ''
+
+# @section S3 settings
+# @param s3.endpoint S3 endpoint. Format: `host:port` or `url`. **Required**
+# @param s3.accessKey S3 access key for accessing the bucket. **Required**
+# @param s3.secretAccessKey S3 secret key for accessing the bucket. **Required**
+# @param s3.bucketPrefix S3 bucket name. **Required**
+
+s3:
+  endpoint: ''
+  accessKey: ''
+  secretAccessKey: ''
+  bucketPrefix: ''
+
+# @section postgres **Database settings**
+
+# @param postgres.host PostgreSQL rw hostname or IP. **Required**
+# @param postgres.port PostgreSQL port. **Required**
+# @param postgres.database PostgreSQL database name. **Required**
+# @param postgres.username PostgreSQL username with rw access. **Required**
+# @param postgres.password PostgreSQL password. **Required**
+
+postgres:
+  host: ''
+  port: 5432
+  database: ''
+  username: ''
+  password: ''
+
+# @section Custom settings
+
+# @param dashboardDomain Link to Citylens web address. **Required**
+# @param locale Locale language (en by default).
+# @param headerLinks List of links.
+# @param reporters List of reporters.
+# @param predictors List of predictors.
+
+dashboardDomain: ''
+
+locale: en
+
+headerLinks:
+- drivers
+- tracks
+
+reporters:
+- pro
+
+predictors:
+- camcom

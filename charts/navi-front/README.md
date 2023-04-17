@@ -51,9 +51,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Front service settings
 
-| Name         | Description                   | Value  |
-| ------------ | ----------------------------- | ------ |
-| `front.port` | Navi-Front service HTTP port. | `8080` |
+| Name                    | Description                                      | Value       |
+| ----------------------- | ------------------------------------------------ | ----------- |
+| `front.port`            | Navi-Front service HTTP port.                    | `8080`      |
+| `front.router.discover` | Enable/disable router autodiscovery.             | `true`      |
+| `front.router.host`     | Set router address if autodiscovery is disabled. | `localhost` |
 
 ### Service account settings
 

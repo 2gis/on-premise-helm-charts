@@ -67,7 +67,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description                                                                                   | Value                         |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ----------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag                                                                                           | `3.584.0`                     |
+| `api.image.tag`        | Tag                                                                                           | `3.589.1`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
@@ -132,16 +132,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Keys settings
 
-| Name                     | Description                                                                                                                                      | Value |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| `keys.url`               | URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`  |
-| `keys.requestTimeout`    | Timeout for requests to the Keys API                                                                                                             | `5s`  |
-| `keys.tokens.places`     | Places API key                                                                                                                                   | `""`  |
-| `keys.tokens.geocoder`   | Geocoder API key                                                                                                                                 | `""`  |
-| `keys.tokens.suggest`    | Suggest API key                                                                                                                                  | `""`  |
-| `keys.tokens.categories` | Categories API key                                                                                                                               | `""`  |
-| `keys.tokens.regions`    | Regions API key                                                                                                                                  | `""`  |
-| `keys.tokens.markers`    | Markers API key                                                                                                                                  | `""`  |
+| Name                  | Description                                                                                                                                      | Value |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `keys.url`            | URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`  |
+| `keys.requestTimeout` | Timeout for requests to the Keys API                                                                                                             | `5s`  |
+| `keys.token`          | Keys service API key                                                                                                                             | `""`  |
+
+### License settings
+
+| Name                     | Description                                                        | Value |
+| ------------------------ | ------------------------------------------------------------------ | ----- |
+| `license.url`            | URL of the License service. Ex: http(s)://license.svc **Required** | `""`  |
+| `license.requestTimeout` | Timeout for requests to the License service                        | `1s`  |
 
 ### Kubernetes Importer job settings
 

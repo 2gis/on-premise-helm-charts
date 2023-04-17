@@ -67,7 +67,7 @@ api:
 
   image:
     repository: 2gis-on-premise/catalog-api
-    tag: 3.584.0
+    tag: 3.589.1
     pullPolicy: IfNotPresent
 
 
@@ -167,23 +167,21 @@ search:
 
 # @param keys.url URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required**
 # @param keys.requestTimeout Timeout for requests to the Keys API
-# @param keys.tokens.places Places API key
-# @param keys.tokens.geocoder Geocoder API key
-# @param keys.tokens.suggest Suggest API key
-# @param keys.tokens.categories Categories API key
-# @param keys.tokens.regions Regions API key
-# @param keys.tokens.markers Markers API key
+# @param keys.token Keys service API key
 
 keys:
   url: ''
   requestTimeout: 5s
-  tokens:
-    places: ''
-    geocoder: ''
-    suggest: ''
-    categories: ''
-    regions: ''
-    markers: ''
+  token: ''
+
+# @section License settings
+
+# @param license.url URL of the License service. Ex: http(s)://license.svc **Required**
+# @param license.requestTimeout Timeout for requests to the License service
+
+license:
+  url: ''
+  requestTimeout: 1s
 
 
 # @section Kubernetes Importer job settings

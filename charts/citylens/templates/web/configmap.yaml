@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "citylens.web.name" . }}-configmap
+data:
+  dashboard_config.yaml: |
+    dashboard_domain: {{ required "A valid .Values.dashboardDomain. entry required" .Values.dashboardDomain | squote }}
+    default_locale: {{ .Values.locale | squote }}
+    db_connections:
+    {{- with .Values.postgres }}
+      postgres: 'postgresql://{{ required "A valid .Values.postgres.username entry required" .username }}:{{ required "A valid .Values.postgres.password entry required" .password }}@{{ required "A valid .Values.postgres.host entry required" .host }}:{{ required "A valid .Values.postgres.port entry required" .port }}/{{ required "A valid .Values.postgres.database entry required" .database }}'
+    {{- end }}
+    kafka:
+    {{- with .Values.kafka }}
+      bootstrap_servers: {{  required "A valid .Values.kafka.bootstrap.servers entry required" .bootstrapServer | squote }}
+      security:
+        security_protocol: 'SASL_PLAINTEXT'
+        sasl_mechanism: 'SCRAM-SHA-512'
+        sasl_plain_username: {{ required "A valid .Values.kafka.username entry required" .username | squote }}
+        sasl_plain_password: {{ required "A valid .Values.kafka.password entry required" .password | squote }}
+      frames_topics: {{ required "A valid .Values.kafka.topics.frames entry required" .topics.frames | squote }}
+      tracks_topic: {{ required "A valid .Values.kafka.topics.tracks entry required" .topics.tracks | squote }}
+      prediction_topics: {{ required "A valid .Values.kafka.topics.prediction entry required" .topics.prediction | squote }}
+      pro_topic: {{ required "A valid .Values.kafka.topics.pro entry required" .topics.pro | squote }}
+      frames_group_id: {{ required "A valid .Values.kafka.topics.framesGroupId entry required" .topics.framesGroupId | squote }}
+      tracks_group_id: {{ required "A valid .Values.kafka.topics.tracksGroupId entry required" .topics.tracksGroupId | squote }}
+      prediction_group_id: {{ required "A valid .Values.kafka.topics.predictionGroupId entry required" .topics.predictionGroupId | squote }}
+      camcom_sender_group_id: {{ required "A valid .Values.kafka.topics.camcomSenderGroupId entry required" .topics.camcomSenderGroupId | squote }}
+    {{- end }}
+    s3:
+    {{- with .Values.s3 }}
+      bucket_prefix: {{ required "A valid .Values.s3.bucketPrefix entry required" .bucketPrefix | squote }}
+      client_params:
+        aws_access_key_id: {{ required "A valid .Values.s3.accessKey entry required" .accessKey | squote }}
+        aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
+        endpoint_url: {{ required "A valid .Values.s3.endpoint entry required" .endpoint | squote }}
+    {{- end }}
+    {{- if .Values.worker.camcomSender.enabled }}
+    camcom:
+    {{- with .Values.worker.camcomSender }}
+      api_key: {{ .apiKey }}
+      endpoint_url: {{ .endpointUrl | squote }}
+      request_timeout: {{ .requestTimeout }}
+      request_rate_limit:
+        calls: {{ .requestRateLimit.calls }}
+        period: {{ .requestRateLimit.period }}
+      request_retries: {{ .requestRetries }}
+      request_retries_backoff: {{ .requestRetriesBackoff }}
+    {{- end }}
+    {{- end }}
+    enabled_modules:
+      header_links:
+      {{- toYaml .Values.headerLinks | nindent 8}}
+      header_help_url: 'https://docs.google.com/document/d/1ypaEpklxfc9S5e7FdG2sWBT-WfIR_uZGvQp8X3Xrr0c'
+      reporters:
+      {{- toYaml .Values.reporters | nindent 8}}
+      predictors:
+      {{- toYaml .Values.predictors | nindent 8}}

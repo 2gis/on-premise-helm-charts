@@ -91,16 +91,15 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-          {{ if ne .Values.naviback.type "schedule" }}
           - name: RULE
             value: {{ .Values.naviback.app_rule | default "" | quote  }}
-          {{- else -}}
-          - name: RULE
-            value: ""
-          {{ end }}
           - name: PROJECT
             value: {{ .Values.app_project | default "" | quote }}
-          
+          lifecycle:
+            # wait for the endpoint removal process
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5"]
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 60 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

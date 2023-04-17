@@ -24,7 +24,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }} 
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -109,8 +109,14 @@ spec:
           env:
             - name: DEBUG
               value: "{{ .Values.api.debug }}"
-            - name: JOB_NAME
+            - name: Import__EnableUserAssetsImporter
+              value: "{{ .Values.backgroundJobs.enableUserAssetsImporter }}"
+            - name: Import__EnableAssetsStreaming
+              value: "{{ .Values.backgroundJobs.enableAssetsStreaming }}"
+            - name: Import__CommonAssetsJobName
               value: {{ include "pro-api.asset-importer-name" . }}
+            - name: Import__UserAssetsJobName
+              value: {{ include "pro-api.user-asset-importer-name" . }}
             - name: TEMP_PATH
               value: "{{ .Values.api.tempPath }}"
             - name: CATALOG_API_2GIS_URL
@@ -131,6 +137,15 @@ spec:
               value: {{ .Values.search.url }}
             - name: ES_HOST
               value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
+            - name: ES_INDEX_PREFIX
+              value: "{{ .Values.elastic.indexPrefix }}"
+            {{ if .Values.elastic.credentials }}
+            - name: ES_CREDENTIALS
+              valueFrom:
+                secretKeyRef:
+                  key: esCredentials
+                  name: {{ include "pro-api.name" . }}-secret
+            {{ end }}
             - name: LOG_ES_QUERIES
               value: "{{ .Values.api.logEsQueries }}"
             - name: ALLOW_ANY_ORIGIN
@@ -158,6 +173,8 @@ spec:
               value: {{ required "A valid .Values.s3.userAssetsDataBucket entry required" $.Values.s3.userAssetsDataBucket }}
             - name: S3Settings__LayerDataBucket
               value: {{ required "A valid .Values.s3.layerDataBucket entry required" $.Values.s3.layerDataBucket }}
+            - name: S3Settings__SnapshotBucket
+              value: {{ required "A valid .Values.s3.snapshotBucket entry required" $.Values.s3.snapshotBucket }}
             - name: S3Settings__AccessKey
               valueFrom:
                 secretKeyRef:
@@ -168,13 +185,31 @@ spec:
                 secretKeyRef:
                   key: s3SecretKey
                   name: {{ include "pro-api.name" . }}-secret
-            {{ if .Values.elastic.credentials }}
-            - name: ES_CREDENTIALS
+            - name: Kafka__BootstrapServers
+              value: {{ $.Values.kafka.bootstrapServers }}
+            - name: Kafka__SecurityProtocol
+              value: {{ $.Values.kafka.securityProtocol }}
+            - name: Kafka__SaslMechanism
+              value: {{ $.Values.kafka.sasl.mechanism }}
+            - name: Kafka__SaslUsername
+              value: {{ $.Values.kafka.sasl.username }}
+            {{ if .Values.kafka.sasl.password }}
+            - name: Kafka__SaslPassword
               valueFrom:
                 secretKeyRef:
-                  key: esCredentials
+                  key: kafkaSaslPassword
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}
+            - name: Kafka__AssetTopicsReaderGroupId
+              value: {{ $.Values.kafka.assetTopicsReaderGroupId }}
+            - name: Kafka__RefreshAssetsIntervalMinutes
+              value: "{{ $.Values.kafka.refreshAssetsIntervalMinutes }}"
+            - name: Kafka__ImportTasksTopicSettings__Name
+              value: {{ $.Values.kafka.importTasksTopic.name }}
+            - name: Kafka__ImportTasksTopicSettings__ReaderGroupId
+              value: {{ $.Values.kafka.importTasksTopic.readerGroupId }}
+            - name: Kafka__ImportTasksTopicSettings__PartitionNumber
+              value: "{{ $.Values.kafka.importTasksTopic.partitionNumber }}"
             - name: AUTH_ENDPOINT
               value: "{{ .Values.auth.url }}"
             - name: USE_MOCK_AUTH
@@ -210,5 +245,16 @@ spec:
               value: "{{ .Values.redis.port }}"
             - name: Redis__Enabled
               value: "{{ .Values.redis.enabled }}"
-            - name: Common__LoggingFormat
-              value: "{{ .Values.api.loggingFormat }}"
+            - name: Redis__Username
+              value: {{ $.Values.redis.username }}
+            {{ if .Values.redis.password }}
+            - name: Redis__Password  
+              valueFrom:
+                secretKeyRef:
+                  key: redisPassword
+                  name: {{ include "pro-api.name" . }}-secret
+            {{ end }}
+            - name: Common__Logging__Format
+              value: "{{ .Values.api.logging.format }}"
+            - name: Common__Logging__Targets
+              value: "{{ .Values.api.logging.targets }}"

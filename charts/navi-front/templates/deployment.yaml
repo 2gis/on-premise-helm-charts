@@ -14,8 +14,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        checksum/configextra: {{ include (print $.Template.BasePath "/extra-config-nginx.yaml") . | sha256sum }}
+        checksum/configBase: {{ include (print $.Template.BasePath "/configmap-base.yaml") . | sha256sum }}
+        checksum/configExtra: {{ include (print $.Template.BasePath "/configmap-extra.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}    
       {{- end }}
@@ -30,13 +30,13 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes: 
-      - name: {{ include "front.fullname" . }}-configmap
+      - name: {{ include "front.fullname" . }}-base
         configMap:
-          name: {{ include "front.fullname" . }}-configmap
+          name: {{ include "front.fullname" . }}-base
       {{- if or .Values.serverBlock .Values.locationsBlock }}
-      - name: nginx-extra-path
+      - name: {{ include "front.fullname" . }}-extra
         configMap:
-          name: {{ include "front.fullname" . }}-extra-config
+          name: {{ include "front.fullname" . }}-extra
           items:
           {{- if or .Values.serverBlock }}
             - key: server-block.conf
@@ -54,17 +54,21 @@ spec:
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
-          - name: {{ include "front.fullname" . }}-configmap
+          - name: {{ include "front.fullname" . }}-base
             mountPath: /etc/nginx/conf.d/front.conf
             subPath: front.conf
           {{- if or .Values.serverBlock .Values.locationsBlock }}
-          - name: nginx-extra-path
+          - name: {{ include "front.fullname" . }}-extra
             mountPath: /etc/nginx/conf.d/extra
           {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.front.port | default 8080 }}
               protocol: TCP
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5; /usr/sbin/nginx -s quit; while killall -0 nginx; do sleep 1; done"]
           livenessProbe:
             httpGet:
               path: /healthcheck
