@@ -22,8 +22,7 @@ imagePullPolicy: IfNotPresent
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.44.0
-
+    tag: 1.45.0
 
 # @section Admin service settings
 
