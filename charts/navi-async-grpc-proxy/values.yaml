@@ -107,12 +107,12 @@ ingress:
 # @extra resources.limits.memory A memory limit.
 
 resources:
-   limits:
-      cpu: 1
-      memory: 1Gi
-   requests:
-      cpu: 100m
-      memory: 256Mi
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 100m
+    memory: 256Mi
 
 # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
