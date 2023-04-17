@@ -58,18 +58,18 @@ spec:
             httpGet:
               path: /heartbeat
               port: http
-            initialDelaySeconds: 60
+            initialDelaySeconds: 20
             periodSeconds: 5
             timeoutSeconds: 3
-            failureThreshold: 2
+            failureThreshold: 5
           readinessProbe:
             httpGet:
               path: /successfulwork
               port: http
-            initialDelaySeconds: 75
+            initialDelaySeconds: 10
             periodSeconds: 5
             timeoutSeconds: 3
-            failureThreshold: 2
+            failureThreshold: 3
           resources:
             {{- toYaml .Values.resources | nindent 12 }}   
       terminationGracePeriodSeconds: {{ .Values.termination_grace_period_seconds | default 60 }}

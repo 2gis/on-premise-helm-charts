@@ -24,7 +24,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name                | Description                         | Value               |
@@ -32,14 +31,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | `external_hostname` | Service hostname.                   | `gis-platform.host` |
 | `external_proto`    | Protocol to use: `http` or `https`. | `https`             |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                    | Description                            | Value               |
 | ----------------------- | -------------------------------------- | ------------------- |
 | `ingress.enabled`       | If Ingress is enabled for the service. | `false`             |
 | `ingress.hosts[0].host` | Hostname for the Ingress service.      | `gis-platform.host` |
-
 
 ### Docker registry settings
 
@@ -51,7 +48,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | `portal.image.tag`           | Portal service image tag.           | `2022.9.29`                           |
 | `zookeeper.image.repository` | ZooKeeper service image repository. | `2gis-on-premise/zookeeper`           |
 | `zookeeper.image.tag`        | ZooKeeper service image tag.        | `3.7.0-debian-10-r265`                |
-
 
 ### SPCore service settings
 
@@ -111,7 +107,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | `spcore.readinessProbe.periodSeconds`       | Probing period.                                                                           | `5`                        |
 | `spcore.readinessProbe.failureThreshold`    | Probing failure threshold.                                                                | `3`                        |
 
-
 ### Portal settings
 
 | Name                                   | Description                                                                                                                    | Value                                                                                |
@@ -132,7 +127,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | `portal.s3proxy.enabled`               | If S3 proxy should be enabled.                                                                                                 | `false`                                                                              |
 | `portal.s3proxy.scheme`                | Protocol to use: `http` or `https`.                                                                                            | `http`                                                                               |
 
-
 ### ZooKeeper settings
 
 | Name                            | Description                                                                                                                             | Value   |
@@ -142,7 +136,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | `zookeeper.pdb`                 | **Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings** |         |
 | `zookeeper.pdb.create`          | If PDB is enabled for the service.                                                                                                      | `true`  |
 | `zookeeper.pdb.maxUnavailable`  | How many pods can be unavailable after the eviction.                                                                                    | `1`     |
-
 
 ### Limits
 

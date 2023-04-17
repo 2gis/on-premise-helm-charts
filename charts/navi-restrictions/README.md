@@ -26,7 +26,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name                            | Description                                                                                                                 | Value  |
@@ -46,7 +45,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).           | `120`  |
 | `prometheusEnabled`             | If Prometheus scrape is enabled.                                                                                            | `true` |
 
-
 ### Docker registry settings
 
 | Name                    | Description                      | Value                                      |
@@ -58,7 +56,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `cron.image.pullPolicy` | Syncer service pull policy.      | `IfNotPresent`                             |
 | `cron.image.tag`        | Syncer service image tag.        | `1.0.1`                                    |
 
-
 ### Service account settings
 
 | Name                         | Description                                                                                                             | Value   |
@@ -66,7 +63,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
-
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
@@ -76,7 +72,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
 
-
 ### Strategy settings
 
 | Name                                    | Description                                                                                                                                                                                              | Value           |
@@ -84,7 +79,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
 | `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
-
 
 ### API service settings
 
@@ -102,14 +96,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `api.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`                                   |
 | `api.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`                                   |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                        | Description                            | Value                    |
 | --------------------------- | -------------------------------------- | ------------------------ |
 | `api.ingress.enabled`       | If Ingress is enabled for the service. | `false`                  |
 | `api.ingress.hosts[0].host` | Hostname for the Ingress service.      | `navi-restrictions.host` |
-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -123,7 +115,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
 | `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
-
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 | Name                        | Description                                                                                                  | Value    |
@@ -135,7 +126,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `api.vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `2000m`  |
 | `api.vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `1024Mi` |
 
-
 ### Database settings
 
 | Name          | Description                                          | Value          |
@@ -145,7 +135,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `db.name`     | PostgreSQL database name.                            | `restrictions` |
 | `db.user`     | PostgreSQL username.                                 | `dbuser`       |
 | `db.password` | PostgreSQL password. Must be specified in overrides. | `dbpassword`   |
-
 
 ### Cron job settings
 
@@ -160,7 +149,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `cron.edge_attributes_url_template` | URL template for getting an edge's details.                               | `http://navi-back.host/edge?edge_id={edge_id}&offset=200&routing=carrouting` |
 | `cron.projects`                     | List of projects to get data for.                                         | `["moscow"]`                                                                 |
 | `cron.max_attributes_fetcher_rps`   | Maximum amount oif requests to `edge_attributes_url_template` per second. | `25`                                                                         |
-
 
 ### Limits
 

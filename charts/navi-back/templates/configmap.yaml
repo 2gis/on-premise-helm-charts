@@ -24,13 +24,18 @@ data:
         "pid_file": "/var/run/2gis/navi-back.pid"
       },
       "http": {
+        "server": "0.0.0.0",
         "port": {{ .Values.naviback.appPort }},
         "handlers_number": {{ .Values.naviback.handlersNumber }},
         "log_verbose": false,
         "max_process_time": {{ .Values.naviback.maxProcessTime | default 20 | int }},
         "response_timelimit": {{ .Values.naviback.responseTimelimit | default 60 | int }},
         "request_timeout": {{ .Values.naviback.requestTimeout | default 60 | int }},
-        "server": "0.0.0.0"
+        "timeout_limit_sec": {{ .Values.naviback.timeoutLimitSec | default 1200 | int }},
+        "timeout_increment_sec": {{ .Values.naviback.timeoutIncrementSec | default 140 | int }},
+        "total_retry_duration_sec": {{ .Values.naviback.totalRetryDurationSec | default 2400 | int }},
+        "initial_retry_interval_sec": {{ .Values.naviback.initialRetryIntervalSec | default 2 | int }},
+        "retry_policy": "linear"
       },
       "context": {
         "variables": {
@@ -60,14 +65,15 @@ data:
         },
         "index": {
           "update_period": 600,
+          "content": "index.json",
           "nodes": [
-            "http://{REMOTE_PATH}/index.json.zip"
+            "http://{REMOTE_PATH}/{{ .Values.naviback.indexFilename }}"
           ],
           "timeout_seconds": {
             "count": 30
           }
         },
-        {{- if ne .Values.naviback.type "ctx" }}
+        {{- if not (include "config.isCTX" $) }}
         {{- if .Values.naviback.indices.speedIndex.enabled }}
         "speed_index" :
         {
@@ -249,7 +255,7 @@ data:
           }
         },
         {{- end }}{{- /* .Values.naviback.indices.entrances.enabled */}}
-        {{- if ne .Values.naviback.type "ctx" }}
+        {{- if not (include "config.isCTX" $) }}
 
         {{- if .Values.naviback.indices.smatrix.enabled }}
         "smatrix": {
@@ -345,7 +351,7 @@ data:
         },
         {{- end }}{{- /* .Values.naviback.indices.onlineSpeeds.enabled */}}
         {{- end }}
-        {{- if eq .Values.naviback.type "taxi" }}
+        {{- if (include "config.isTaxi" $) }}
         {{- if .Values.naviback.indices.taxiSpeedIndex.enabled }}
             "taxi_speed_index": {
                 "update_period": 20,
@@ -373,7 +379,7 @@ data:
                 },
         {{- end }}{{- /* .Values.naviback.indices.onlineTaxiSpeeds.enabled */}}
         {{- end }}
-        {{- if eq .Values.naviback.type "truck" }}
+        {{- if (include "config.isTruck" $) }}
         {{- if .Values.naviback.indices.passZones.enabled }}
             "pass_zones":
               {
@@ -389,6 +395,26 @@ data:
               },
         {{- end }}{{- /* .Values.naviback.indices.passZones.enabled */}}
         {{- end }}
+        "edge_transition_probability": {
+              "update_period": 0,
+              "nodes": [
+                  "http://{REMOTE_PATH}/"
+              ],
+              "timeout_seconds": {
+                  "count": 60
+              },
+            "cache_path": "file://{LOCAL_PATH}/{project_name}/edge_transition_probability.json"
+        },
+            "turn_penalties": {
+              "update_period": 0,
+              "nodes": [
+                  "http://{REMOTE_PATH}/"
+              ],
+              "timeout_seconds": {
+                  "count": 60
+              },
+            "cache_path": "file://{LOCAL_PATH}/{project_name}/turn_penalties.json"
+        },
         {{- if .Values.s3.enabled }}
           "s3": {
             "distance_matrix": {
@@ -398,6 +424,20 @@ data:
               "secret_key": {{ .Values.s3.secretKey | quote }}
             }
           },
+        {{- end }}
+        {{- if (include "config.isMapMatching" $) }}
+        "map_matching" :
+        {
+          "fmm":
+            {
+              "k": "24",
+              "radius": "4000",
+              "gps_error": "3000",
+              "vmax": "40",
+              "factor": "1.5",
+              "reverse_tolerance": "0.1"
+            }
+        },
         {{- end }}
         {{- if .Values.kafka.enabled }}
           "kafka": {
@@ -433,26 +473,23 @@ data:
           {{- include "tplvalues.render" ( dict "value" .Values.naviback.additionalSections "context" $) | nindent 8 }}
         {{- end }}
         "server_info": {
-          {{- if ne .Values.naviback.type "custom" }}
-          {{ include "config.serversection" . }}
-          {{- else }}
-          "simple_network_car" : {{ (.Values.naviback.simpleNetwork).car | default "false" }},
-          "simple_network_pedestrian" : {{ (.Values.naviback.simpleNetwork).pedestrian | default "false" }},
-          "simple_network_taxi" : {{ (.Values.naviback.simpleNetwork).taxi | default "false" }},
-          "simple_network_bicycle" : {{ (.Values.naviback.simpleNetwork).bicycle | default "false" }},
-          "simple_network_truck" : {{ (.Values.naviback.simpleNetwork).truck | default "false" }},
-          "attractor_car" : {{ (.Values.naviback.attractor).car | default "false" }},
-          "attractor_pedestrian" : {{ (.Values.naviback.attractor).pedestrian | default "false" }},
-          "attractor_bicycle" : {{ (.Values.naviback.attractor).bicycle | default "false" }},
-          "attractor_taxi" : {{ (.Values.naviback.attractor).taxi | default "false" }},
-          "reduce_edges_optimization_flag" : {{ .Values.naviback.reduceEdgesOptimizationFlag | default "false" }},
-          {{- end }}
+          "simple_network_car" : {{ include "config.setSimpleNetworkCar" $ | default false -}},
+          "simple_network_pedestrian" : {{ include "config.setSimpleNetworkPedestrian" $ | default false -}},
+          "simple_network_taxi" : {{ include "config.setSimpleNetworkTaxi" $ | default false -}},
+          "simple_network_bicycle" : {{ include "config.setSimpleNetworkBicycle" $ | default false -}},
+          "simple_network_truck" : {{ include "config.setSimpleNetworkTruck" $ | default false -}},
+          "simple_network_emergency" : {{ include "config.setSimpleNetworkEmergency" $ | default false -}},
+          "attractor_car" : {{ include "config.setAttractorCar" $ | default false -}},
+          "attractor_pedestrian" : {{ include "config.setAttractorPedestrian" $ | default false -}},
+          "attractor_bicycle" : {{ include "config.setAttractorBicycle" $ | default false -}},
+          "attractor_taxi" : {{ include "config.setAttractorTaxi" $ | default false -}},
+          "attractor_truck" : {{ include "config.setAttractorTruck" $ | default false -}},
+          "reduce_edges_optimization_flag" : {{ include "config.setReduceEdgesOptimizationFlag" $ | default false -}},
           {{- if ((.Values.resources).limits).cpu }}
           "dist_matrix_thread_pool_size" : {{ include "config.setCpuNumber" . }},
           "simple_network_build_thread_pool_size" : {{ include "config.setCpuNumber" . }},
           {{- end }}
           "update_projects_limit" : 2,
-          "simple_network_emergency" : {{ (.Values.naviback.simpleNetwork).emergency | default "false" }},
           "carrouting_page_cache_size" : 8192,
           "carrouting_tile_cache_size" : 8192,
           "carrouting_bit_tile_cache_size" : 2048,
@@ -461,7 +498,7 @@ data:
           "dump_answer" : {{ mustToJson (.Values.naviback.dump).answer }},
           "max_parallel_workers" : 2,
           "use_memory_mapped_vfs" : true,
-          "engine_update_period_sec" : 30,
+          "engine_update_period_sec" : {{ include "config.setEngineUpdatePeriod" $ | default 30 }},
           {{- if .Values.naviback.server_id }}
           "server_id" : "{{- include "tplvalues.render" ( dict "value" .Values.naviback.server_id "context" .) }}",
           {{- else }}
@@ -488,6 +525,11 @@ data:
           ],
           "dm_sources_limit": {{ .Values.naviback.dmSourcesLimit | int }},
           "dm_targets_limit": {{ .Values.naviback.dmTargetsLimit | int }},
+          "carrouting_options": {
+            "distance_matrix_options": {
+              "enable_passable_barriers": {{ .Values.naviback.enablePassableBarriers | default false | mustToJson }}
+            }
+          },
           "traffic_color_options": {
             "from_0_to_5_km": {
               "green_jam_ratio": 50,
@@ -505,6 +547,9 @@ data:
               "deep_red_jam_minutes": 30
             }
           }
+          {{- if .Values.naviback.serverAdditionalSections -}}
+            ,{{- include "tplvalues.render" ( dict "value" .Values.naviback.serverAdditionalSections "context" $) | nindent 10 }}
+          {{- end }}
         }
       }
     }

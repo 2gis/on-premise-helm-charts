@@ -1,0 +1,12 @@
+apiVersion: v2
+name: citylens
+type: application
+description: A Helm chart for Kubernetes to deploy Citylens service
+
+version: 1.6.5
+appVersion: 1.0.5
+
+maintainers:
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

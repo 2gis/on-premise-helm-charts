@@ -46,6 +46,8 @@ spec:
                   value: {{ required "A valid .Values.dgctlStorage.bucket entry required" $.Values.dgctlStorage.bucket }}
                 - name: S3Settings__UserAssetDataBucket
                   value: {{ required "A valid .Values.s3.userAssetsDataBucket entry required" $.Values.s3.userAssetsDataBucket }}
+                - name: S3Settings__SnapshotBucket
+                  value: {{ required "A valid .Values.s3.snapshotBucket entry required" $.Values.s3.snapshotBucket }}
                 - name: S3Settings__AccessKey
                   valueFrom:
                     secretKeyRef:
@@ -65,6 +67,8 @@ spec:
                       key: esCredentials
                       name: {{ include "pro-api.name" . }}-secret
                 {{ end }}
+                - name: ES_INDEX_PREFIX
+                  value: "{{ .Values.elastic.indexPrefix }}"
                 - name: API_URL
                   value: http://{{ include "pro-api.name" . }}
                 {{ if .Values.api.token }}
@@ -78,6 +82,10 @@ spec:
                 - name: FILES
                   value: "{{ .Values.assetPreparer.files}}"
                 {{ end }}
+                - name: Common__Logging__Format
+                  value: "{{ .Values.api.logging.format }}"
+                - name: Common__Logging__Targets
+                  value: "{{ .Values.api.logging.targets }}"
                 - name: Digger__UserName
                   value: "{{ .Values.api.diggerUserName}}"
                 - name: Digger__Password

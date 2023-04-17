@@ -10,6 +10,9 @@ metadata:
     rule: {{ .Values.naviback.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
     type: {{ .Values.naviback.type | quote  }}
+    {{- if .Values.naviback.behindSplitter }}
+    behindSplitter: "true"
+    {{- end }}
   {{- if .Values.service.annotations }}
   annotations:
    {{- include "tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}

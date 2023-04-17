@@ -1,18 +1,22 @@
 catalog-api
-	catalog-api:3.584.0
+	catalog-api:3.589.1
 	catalog-importer:1.0.9
+citylens
+	citylens-api:1.0.5
+	citylens-database:1.0.0
+	citylens-web:1.0.7
 gis-platform
 	gis_platform_portal:2022.9.29
 	gis_platform_spcore:2022.9.29
 	zookeeper:3.7.0-debian-10-r265
 keys
-	keys-backend:1.41.0
+	keys-backend:1.44.0
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.3.0
 license
 	license:1.0.1
 mapgl-js-api
-	mapgl:1.33.1
+	mapgl:1.35.1
 navi-async-matrix
 	navi-async-matrix:1.2.0
 navi-back
@@ -26,24 +30,23 @@ navi-restrictions
 	navi-restrictions-api:1.0.0
 	navi-restrictions-syncer:1.0.1
 navi-router
-	navi-router:6.6.1
+	navi-router:6.10.0
 pro-api
-	pro-api:1.0.23
-	pro-curl:1.0.17
-	pro-importer:1.0.23
-	pro-importer:1.0.23
+	pro-api:1.0.41
+	pro-importer:1.0.41
+	pro-importer:1.0.41
 	pro-permissions-api:latest
 pro-ui
-	pro-ui:0.1.5
+	pro-ui:0.2.1
 search-api
-	search-api:7.42.1
+	search-api:7.45.0
 	search-nginx:1.21.6
 stat-receiver
-	bss-receiver-api:1.1.4
-	bss-receiver-streams:1.1.4
+	stat-receiver-api:1.11.1
+	stat-receiver-streams:1.11.1
 tiles-api
-	tiles-api-importer:4.34.0
-	tiles-api-proxy:4.34.0
-	tiles-api:4.34.0
+	tiles-api-importer:4.39.0
+	tiles-api-proxy:4.39.0
+	tiles-api:4.39.0
 traffic-proxy
 	nginx:1.21.6

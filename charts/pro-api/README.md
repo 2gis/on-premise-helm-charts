@@ -8,7 +8,6 @@
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name                            | Description                                                                                                                                    | Value     |
@@ -29,7 +28,6 @@
 | `labels`                        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`      |
 | `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`       |
 
-
 ### Deployment Artifacts Storage settings
 
 | Name                     | Description                                                                                                                                                                                                                                                           | Value |
@@ -40,7 +38,6 @@
 | `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`  |
 | `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`  |
 
-
 ### Strategy settings
 
 | Name                                    | Description                                                                                                                                                                                              | Value           |
@@ -48,7 +45,6 @@
 | `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
 | `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
-
 
 ### Service settings
 
@@ -58,7 +54,6 @@
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
 | `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `service.port`        | PRO API service port.                                                                                                          | `80`        |
-
 
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
@@ -71,19 +66,13 @@
 | `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `1`     |
 | `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `1024M` |
 
-
 ### Deployment settings
 
-| Name                   | Description              | Value                      |
-| ---------------------- | ------------------------ | -------------------------- |
-| `image.repository`     | Repository               | `2gis-on-premise/pro-api`  |
-| `image.tag`            | Tag                      | `1.0.23`                   |
-| `image.pullPolicy`     | Pull Policy              | `IfNotPresent`             |
-| `curlImage.repository` | Docker Repository Image. | `2gis-on-premise/pro-curl` |
-| `curlImage.tag`        | Docker image tag.        | `1.0.23`                   |
-| `curlImage.pullPolicy` | Pull policy              | `IfNotPresent`             |
-
-
+| Name               | Description | Value                     |
+| ------------------ | ----------- | ------------------------- |
+| `image.repository` | Repository  | `2gis-on-premise/pro-api` |
+| `image.tag`        | Tag         | `1.0.41`                  |
+| `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
 ### 2GIS PRO Storage configuration
 
@@ -91,17 +80,18 @@
 | ------------------------- | --------------------------------------------------------------------------- | ----- |
 | `s3.layerDataBucket`      | S3 bucket with prepared layer data. **Required**                            | `""`  |
 | `s3.userAssetsDataBucket` | S3 bucket with user-created assets, aggregations, and filters. **Required** | `""`  |
-
+| `s3.snapshotBucket`       | S3 bucket for storing snapshots of inclemental data updates. **Required**   | `""`  |
 
 ### 2GIS PRO API configuration
 
-| Name                 | Description                                                                                                    | Value    |
-| -------------------- | -------------------------------------------------------------------------------------------------------------- | -------- |
-| `api.serviceAccount` | Kubernetes service account                                                                                     | `runner` |
-| `api.tempPath`       | Path to directory used for temp data                                                                           | `/tmp`   |
-| `api.allowAnyOrigin` | Cors policy: allow any origin to perform requests to pro-api service                                           | `false`  |
-| `api.loggingFormat`  | Possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - just text | `simple` |
-
+| Name                  | Description                                                                                                                                             | Value    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `api.serviceAccount`  | Kubernetes service account                                                                                                                              | `runner` |
+| `api.tempPath`        | Path to directory used for temp data                                                                                                                    | `/tmp`   |
+| `api.allowAnyOrigin`  | Cors policy: allow any origin to perform requests to pro-api service                                                                                    | `false`  |
+| `api.logging`         | Logging settings                                                                                                                                        |          |
+| `api.logging.format`  | Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text                     | `simple` |
+| `api.logging.targets` | Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify). | `""`     |
 
 ### PostgreSQL settings
 
@@ -111,14 +101,12 @@
 | `postgres.connectionStringReadonly` | Connection string to the readonly node of PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;` | `""`  |
 | `postgres.password`                 | User password to connect to the PostgreSQL database.                                                                       | `""`  |
 
-
 ### Keys Service settings
 
 | Name         | Description                                                                              | Value |
 | ------------ | ---------------------------------------------------------------------------------------- | ----- |
 | `keys.url`   | API URL of service for managing partners' keys to 2GIS services (keys.api). **Required** | `""`  |
 | `keys.token` | keys.api access token. **Required**                                                      | `""`  |
-
 
 ### ElasticSearch settings (supported version 7.x)
 
@@ -127,14 +115,37 @@
 | `elastic.host`        | ElasticSearch host address. Format: `http(s)://HOST:PORT`                            | `""`  |
 | `elastic.credentials` | User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD` | `""`  |
 
-
 ### Redis settings (supported version 6.x)
 
-| Name         | Description                      | Value  |
-| ------------ | -------------------------------- | ------ |
-| `redis.host` | Redis host address. **Required** | `""`   |
-| `redis.port` | Redis port. **Required**         | `6379` |
+| Name             | Description                       | Value  |
+| ---------------- | --------------------------------- | ------ |
+| `redis.host`     | Redis host address. **Required**  | `""`   |
+| `redis.port`     | Redis port. **Required**          | `6379` |
+| `redis.username` | Username used to connect to Redis | `""`   |
+| `redis.password` | Password used to connect to Redis | `""`   |
 
+### Kafka settings (supported version 2.7)
+
+| Name                                   | Description                                                                                                     | Value           |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------- |
+| `kafka.bootstrapServers`               | Kafka bootstrap servers. Format: 'host1:port1,host2:port2'                                                      | `""`            |
+| `kafka.securityProtocol`               | Kafka security protocol. Supported options: SaslPlaintext.                                                      | `SaslPlaintext` |
+| `kafka.sasl`                           | **Kafka sasl settings** (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config)) |                 |
+| `kafka.sasl.mechanism`                 | Kafka sasl mechanism. Supported options: ScramSha512.                                                           | `ScramSha512`   |
+| `kafka.sasl.username`                  | Kafka sasl username.                                                                                            | `""`            |
+| `kafka.sasl.password`                  | Kafka sasl password.                                                                                            | `""`            |
+| `kafka.assetTopicsReaderGroupId`       | Kafka consumer group for reading streaming assets data.                                                         | `""`            |
+| `kafka.importTasksTopic`               | Kafka topic settings to run import tasks.                                                                       |                 |
+| `kafka.importTasksTopic.name`          | Kafka topic name.                                                                                               | `""`            |
+| `kafka.importTasksTopic.readerGroupId` | Kafka consumer group for reading importing tasks.                                                               | `""`            |
+| `kafka.refreshAssetsIntervalMinutes`   | Refresh interval for reading streaming assets settings in minutes.                                              | `60`            |
+
+### Import background jobs settings
+
+| Name                                      | Description                                                      | Value   |
+| ----------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `backgroundJobs.enableUserAssetsImporter` | If user data importer job is enabled for the service.            | `true`  |
+| `backgroundJobs.enableAssetsStreaming`    | If the streaming data processing job is enabled for the service. | `false` |
 
 ### Catalog API settings
 
@@ -143,7 +154,6 @@
 | `catalog.url` | URL for [Catalog API](https://docs.2gis.com/en/on-premise/search).       | `http://catalog-api.svc` |
 | `catalog.key` | Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search). | `""`                     |
 
-
 ### Navigation API settings
 
 | Name       | Description                                                                              | Value                  |
@@ -151,20 +161,11 @@
 | `navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).       | `http://navi-back.svc` |
 | `navi.key` | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). | `""`                   |
 
-
 ### Search API settings
 
 | Name         | Description                                                      | Value                   |
 | ------------ | ---------------------------------------------------------------- | ----------------------- |
 | `search.url` | URL for [Search API](https://docs.2gis.com/en/on-premise/search) | `http://search-api.svc` |
-
-
-### Search API settings
-
-| Name          | Description                                                       | Value                    |
-| ------------- | ----------------------------------------------------------------- | ------------------------ |
-| `search.host` | Host for [Search API](https://docs.2gis.com/en/on-premise/search) | `http://search-api.host` |
-
 
 ### 2GIS PRO API Job settings
 
@@ -173,13 +174,12 @@
 | `appAssetImporterName`     | Data Import job name.      | `asset-importer`      |
 | `appUserAssetImporterName` | User Data Import job name. | `user-asset-importer` |
 
-
 ### Import job settings
 
 | Name                                       | Description                                                                                                                                              | Value                          |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.0.23`                       |
+| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.0.41`                       |
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
@@ -187,7 +187,7 @@
 | `assetImporter.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                           | `4`                            |
 | `assetImporter.enabled`                    | If assetImporter is enabled for the service.                                                                                                             | `true`                         |
 | `assetImporter.startOnDeploy`              | Indicates that asset import should start when service installed or updated                                                                               | `true`                         |
-
+| `assetImporter.imageProxyUrl`              | (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                                                          | `""`                           |
 
 ### Limits
 
@@ -203,7 +203,6 @@
 | `assetImporter.resources.requests.memory` | A memory request.                      | `768M`  |
 | `assetImporter.resources.limits.cpu`      | A CPU limit.                           | `1000m` |
 | `assetImporter.resources.limits.memory`   | A memory limit.                        | `1280M` |
-
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 

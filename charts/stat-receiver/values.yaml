@@ -4,7 +4,6 @@
 
 dgctlDockerRegistry: ''
 
-
 # @section API service settings
 
 api:
@@ -16,15 +15,14 @@ api:
   replicas: 1
   jvmXmx: -Xmx1500m
 
-
   # @extra api.image **Deployment settings**
   # @param api.image.repository Repository
   # @param api.image.tag Tag
   # @param api.image.pullPolicy Pull Policy
 
   image:
-    repository: 2gis-on-premise/bss-receiver-api
-    tag: 1.1.4
+    repository: 2gis-on-premise/stat-receiver-api
+    tag: 1.11.1
     pullPolicy: IfNotPresent
 
 
@@ -60,8 +58,10 @@ streams:
   replicas: 1
   jvmXmx: -Xmx2G -XX:+UseParallelGC
   jmxPort: 9010
-  metricsPort: 8080
+  metricsPort: 8081
 
+  # @param streams.storageSize Size of ephemeral disk that holds temporary files
+  storageSize: 500Mi
 
   # @extra streams.image **Deployment settings**
   # @param streams.image.repository Repository
@@ -69,8 +69,8 @@ streams:
   # @param streams.image.pullPolicy Pull Policy
 
   image:
-    repository: 2gis-on-premise/bss-receiver-streams
-    tag: 1.1.4
+    repository: 2gis-on-premise/stat-receiver-streams
+    tag: 1.11.1
     pullPolicy: IfNotPresent
 
   resources:
@@ -84,13 +84,61 @@ streams:
 
 # @section Kafka service settings
 
-# @param kafka.security  SASL configuration for Kafka clients (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config)).
-# @param kafka.sasl.jaas JAAS login context parameters for SASL connections in the format used by JAAS configuration files (see [the documentation](https://kafka.apache.org/documentation/#brokerconfigs_sasl.jaas.config)).
+# @param kafka.servers Kafka bootstrap connection string
+# @param kafka.securityProtocol Protocol used to communicate with brokers. Valid values are: `PLAINTEXT`, `SSL`, `SASL_PLAINTEXT`, `SASL_SSL`
+
+# @extra kafka.truststore **Trust store configuration for SSL connections**
+# @param kafka.truststore.enabled
+# @param kafka.truststore.secretName Kubernetes secret that holds trust store data
+# @param kafka.truststore.storeFieldName Name of the secret's key that holds trust store file
+# @param kafka.truststore.storePasswordFieldName Name of the secret's key that holds password to the trust store file
+# @param kafka.truststore.createSecret Enable to manage trust store secret with helm
+# @param kafka.truststore.storeData base64-encoded PKCS12 or JKS trust store file
+# @param kafka.truststore.storePassword Password to trust store file
+
+# @extra kafka.keystore **Configuration for SSL authentication**
+# @param kafka.keystore.enabled
+# @param kafka.keystore.secretName Kubernetes secret that holds key store data
+# @param kafka.keystore.storeFieldName Name of the secret's key that holds key store file
+# @param kafka.keystore.storePasswordFieldName Name of the secret's key that holds password to the key store file
+# @param kafka.keystore.createSecret Enable to manage key store secret with helm
+# @param kafka.keystore.storeData base64-encoded PKCS12 or JKS key store file
+# @param kafka.keystore.storePassword Password to key store file
+
+# @extra kafka.sasl **Configuration for sasl authenthication**
+# @param kafka.sasl.enabled
+# @param kafka.sasl.createSecret Enable to manage password secret with helm
+# @param kafka.sasl.secretName Kubernetes secret that holds password data
+# @param kafka.sasl.jaasFieldName Name of the secret's key that holds JAAS configuration
+# @param kafka.sasl.jaas JAAS login context parameters for SASL connections in the format used by JAAS configuration files (see [the documentation](https://kafka.apache.org/documentation/#brokerconfigs_sasl.jaas.config))
+# @param kafka.sasl.mechanism SASL mechanism used for client connections. This may be any mechanism for which a security provider is available
 
 kafka:
-  security: {}
+  servers: ''
+  securityProtocol: PLAINTEXT
+  truststore:
+    enabled: false
+    secretName: ''
+    storeFieldName: ca.p12
+    storePasswordFieldName: ca.password
+    createSecret: false
+    storeData: ''
+    storePassword: ''
+  keystore:
+    enabled: false
+    secretName: ''
+    storeFieldName: user.p12
+    storePasswordFieldName: user.password
+    createSecret: false
+    storeData: ''
+    storePassword: ''
   sasl:
-    jaas: {}
+    enabled: false
+    createSecret: false
+    secretName: ''
+    mechanism: ''
+    jaasFieldName: sasl.jaas.config
+    jaas: ''
 
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings

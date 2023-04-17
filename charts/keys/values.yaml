@@ -24,7 +24,6 @@ backend:
     repository: 2gis-on-premise/keys-backend
     tag: 1.45.0
 
-
 # @section Admin service settings
 
 admin:
