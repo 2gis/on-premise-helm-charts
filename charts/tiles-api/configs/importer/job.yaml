@@ -28,6 +28,12 @@ spec:
           configMap:
             name: {{ include "tiles.fullname" . }}-{{ .kind }}-import
 
+        {{- if $.Values.cassandra.ssl.enabled }}
+        - name: cassandra-ssl
+          configMap:
+            name: {{ include "tiles.fullname" . }}-cassandra-ssl
+        {{- end }}
+
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -54,6 +60,11 @@ spec:
 
             - mountPath: "/config"
               name: config-volume
+
+            {{- if $.Values.cassandra.ssl.enabled }}
+            - mountPath: "/cassandra-ssl"
+              name: cassandra-ssl
+            {{- end }}
 
           {{- with .Values.importer.workerResources }}
           resources:

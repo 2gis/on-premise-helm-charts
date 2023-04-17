@@ -11,6 +11,11 @@ credentials:
   jmx-user: {{ .Values.cassandra.credentials.jmxUser }}
   jmx-password: {{ .Values.cassandra.credentials.jmxPassword }}
 
+{{- if $.Values.cassandra.ssl.enabled }}
+ssl:
+  ca-path: "/cassandra-ssl/ca.crt"
+{{- end }}
+
 storage:
   host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
   bucket: {{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}
