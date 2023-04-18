@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "navi-async-grpc-proxy.fullname" . }}
+  labels:
+    {{- include "navi-async-grpc-proxy.labels" . | nindent 4 }}
+    {{- if .Values.service.labels }}
+    {{- include "tplvalues.render" ( dict "value" .Values.service.labels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.service.annotations }}
+  annotations:
+   {{- include "tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+  selector:
+    {{- include "navi-async-grpc-proxy.selectorLabels" . | nindent 4 }}

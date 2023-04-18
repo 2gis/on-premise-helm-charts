@@ -1,0 +1,170 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: docker-hub.2gis.ru
+
+
+# @section Common settings
+
+# @param replicaCount A replica count for the pod.
+# @param revisionHistoryLimit Number of replica sets to keep for deployment rollbacks
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param labels Custom labels to set to Deployment resource.
+
+replicaCount: 1
+revisionHistoryLimit: 1
+imagePullSecrets: []
+nameOverride: ''
+fullnameOverride: ''
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+labels: {}
+
+
+# @section Deployment settings
+
+# @param image.repository Repository
+# @param image.tag Tag
+# @param image.pullPolicy Pull Policy
+
+image:
+  repository: 2gis-on-premise/async-grpc-proxy
+  pullPolicy: IfNotPresent
+  tag: latest
+
+
+# @section async-grpc-proxy application settings
+
+# @param app.containerPort Container port which application listens on.
+
+app:
+  containerPort: 7000
+
+
+# @section Service account settings
+
+# @param serviceAccount.create Specifies whether a service account should be created.
+# @param serviceAccount.annotations Annotations to add to the service account.
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ''
+
+
+# @section Service settings
+
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.port Service port.
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+service:
+  type: ClusterIP
+  port: 7000
+  annotations: {}
+  labels:
+
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
+
+ingress:
+  enabled: false
+  hosts:
+  - host: navi-async-grpc-proxy.host
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - host.example
+  #   secretName: secret.tls
+
+
+# @section Limits
+
+# @skip resources
+# @extra resources.requests.cpu A CPU request.
+# @extra resources.requests.memory A memory request.
+# @extra resources.limits.cpu A CPU limit.
+# @extra resources.limits.memory A memory limit.
+
+resources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+# @param hpa.enabled If HPA is enabled for the service.
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window.
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  scaleDownStabilizationWindowSeconds: ''
+  scaleUpStabilizationWindowSeconds: ''
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ''
+
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+# @param vpa.enabled If VPA is enabled for the service.
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @extra vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @extra vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @extra vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @extra vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+
+vpa:
+  enabled: false
+  updateMode: Auto
+
+
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+pdb:
+  enabled: false
+  minAvailable: ''
+  maxUnavailable: 1
+
+
+# @section Settings for navi-async-matrix service connection
+
+# @param dm.url async-matrix host name with schema, ex: http://navi-async-matrix.host
+# @param dm.port async-matrix port
+
+dm:
+  url: ''
+  port: 80

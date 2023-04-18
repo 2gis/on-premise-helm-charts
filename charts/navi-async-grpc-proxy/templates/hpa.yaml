@@ -1,0 +1,49 @@
+{{- if .Values.hpa.enabled }}
+
+{{- if semverCompare "<1.23-0" (include "capabilities.kubeVersion" .) }}
+  {{- if .beta2 }}
+apiVersion: autoscaling/v2beta2
+  {{- else }}
+apiVersion: autoscaling/v2beta1
+  {{- end }}
+{{- else }}
+apiVersion: autoscaling/v2
+{{- end }}
+
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "navi-async-grpc-proxy.fullname" . }}
+  labels:
+    {{- include "navi-async-grpc-proxy.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "navi-async-grpc-proxy.fullname" . }}
+  minReplicas: {{ .Values.hpa.minReplicas }}
+  maxReplicas: {{ .Values.hpa.maxReplicas }}
+  behavior:
+    {{- if .Values.hpa.scaleUp }}
+    scaleUp:
+      {{- include "tplvalues.render" ( dict "value" .Values.hpa.scaleUp "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.hpa.scaleDown }}
+    scaleDown:
+      {{- include "tplvalues.render" ( dict "value" .Values.hpa.scaleDown "context" $) | nindent 8 }}
+    {{- end }}
+  metrics:
+    {{- if .Values.hpa.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.hpa.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.hpa.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.hpa.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}
