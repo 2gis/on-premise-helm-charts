@@ -1,0 +1,19 @@
+apiVersion: v2
+name: navi-splitter
+annotations:
+  category: Navigation
+description: Splitter is tool for splitting distance matrix and pairs queries
+type: application
+keywords:
+  - navi
+  - splitter
+  - navi-back
+  - dm
+  - distance matrix
+home: https://github.com/2gis/on-premise-helm-charts
+maintainers:
+  - name: 2gis
+    url: https://github.com/2gis
+    email: on-premise@2gis.com
+version: 0.1.0
+appVersion: "0.0.1"

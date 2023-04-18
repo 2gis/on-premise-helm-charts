@@ -1,0 +1,107 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "splitter.fullname" . }}
+  labels:
+    {{- include "splitter.labels" . | nindent 4 }}
+    rule: {{ .Values.splitter.app_rule | default "" | quote  }}
+    navigroup: {{ .Values.navigroup | default "" | quote }}
+  {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.hpa.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- if .Values.updateStrategy }}
+  strategy:
+    {{- include "tplvalues.render" ( dict "value" .Values.updateStrategy "context" $) | nindent 6 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "splitter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "splitter.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "splitter.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          command:
+            - /app
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PORT
+              value: {{ .Values.appPort | default "8080" | quote }}
+            - name: CTX_URL
+              value: {{ (.Values.splitter).ctxUrl | default "/" | quote }}
+            - name: CTX_TIMEOUT
+              value: {{ (.Values.splitter).ctxTimeout | default "60s" | quote }}
+            - name: LOG_LEVEL
+              value: {{ (.Values.splitter).logLevel | default "info" | quote }}
+            - name: SUBREQUEST_RETRY_N
+              value: {{ (.Values.splitter).subrequestRetryN | default 5 | quote }}
+            - name: READ_TIMEOUT
+              value: {{ (.Values.splitter).readTimeout | default "10s" | quote }}
+            - name: WRITE_TIMEOUT
+              value: {{ (.Values.splitter).writeTimeout | default "10s" | quote }}
+            - name: IDLE_TIMEOUT
+              value: {{ (.Values.splitter).idleTimeout | default "60s"  | quote}}
+            - name: GOMAXPROCS
+              value: {{ (.Values.splitter).goMaxProcs | default 1  | quote }}
+            - name: STATISTIC_HOST
+              value: {{ (.Values.splitter).statHost | default "-" | quote }}
+            - name: STATISTIC_THREAD_POOL_SIZE
+              value: {{ (.Values.splitter).statThreadPoolSize | default 16 | quote }}
+            - name: STATISTIC_TYPE
+              value: {{ (.Values.splitter).statType | default 401 | quote }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.appPort | default "8080" }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
