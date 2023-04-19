@@ -11,6 +11,7 @@ dgctlDockerRegistry: docker-hub.2gis.ru
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
 # @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param navigroup Name of navigation deploy group.
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
 # @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
@@ -25,6 +26,7 @@ revisionHistoryLimit: 1
 imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
+navigroup: ''
 podAnnotations: {}
 podSecurityContext: {}
 securityContext: {}
@@ -47,6 +49,7 @@ image:
 # @section Splitter application settings
 
 # @param splitter.logLevel Logging level.
+# @param splitter.app_rule Rule name of navi-back host.
 # @param splitter.goMaxProcs Number of golang processes.
 # @param splitter.appPort Application port.
 # @param splitter.ctxUrl URL of get_dist_matrix_ctx host.
@@ -60,6 +63,7 @@ image:
 
 splitter:
   logLevel: 'info'
+  app_rule: ''
   goMaxProcs: 1
   appPort: 8080
   ctxUrl: '/'

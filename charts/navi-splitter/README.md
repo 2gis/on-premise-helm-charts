@@ -36,6 +36,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `imagePullSecrets`     | Kubernetes image pull secrets.                                                                                              | `[]`  |
 | `nameOverride`         | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
 | `fullnameOverride`     | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
+| `navigroup`            | Name of navigation deploy group.                                                                                            | `""`  |
 | `podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
 | `podSecurityContext`   | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).              | `{}`  |
 | `securityContext`      | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                  | `{}`  |
@@ -57,6 +58,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                          | Description                          | Value  |
 | ----------------------------- | ------------------------------------ | ------ |
 | `splitter.logLevel`           | Logging level.                       | `info` |
+| `splitter.app_rule`           | Rule name of navi-back host.         | `""`   |
 | `splitter.goMaxProcs`         | Number of golang processes.          | `1`    |
 | `splitter.appPort`            | Application port.                    | `8080` |
 | `splitter.ctxUrl`             | URL of get_dist_matrix_ctx host.     | `/`    |
