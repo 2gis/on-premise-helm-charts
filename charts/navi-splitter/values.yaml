@@ -52,7 +52,7 @@ image:
 # @param splitter.app_rule Rule name of navi-back host.
 # @param splitter.goMaxProcs Number of golang processes.
 # @param splitter.appPort Application port.
-# @param splitter.ctxUrl URL of get_dist_matrix_ctx host.
+# @param splitter.ctxUrl URL of get_dist_matrix_ctx host. Format: `http(s)://HOST:PORT/ctx/2.0/?source=distance_matrix.
 # @param splitter.ctxTimeout get_dist_matrix_ctx request timeout.
 # @param splitter.subrequestRetryN Number of retries to host.
 # @param splitter.writeTimeout Write timeout.
@@ -62,17 +62,17 @@ image:
 # @param splitter.statThreadPoolSize Number of statistic sender threads
 
 splitter:
-  logLevel: 'info'
+  logLevel: info
   app_rule: ''
   goMaxProcs: 1
   appPort: 8080
-  ctxUrl: '/'
-  ctxTimeout: '60s'
+  ctxUrl: ''
+  ctxTimeout: 60s
   subrequestRetryN: 5
-  readTimeout: '10s'
-  writeTimeout: '10s'
-  idleTimeout: '60s'
-  statHost: '-'
+  readTimeout: 10s
+  writeTimeout: 10s
+  idleTimeout: 60s
+  statHost: ''
   statThreadPoolSize: 16
 
 
@@ -83,7 +83,7 @@ splitter:
 # @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
 
 serviceAccount:
-  create: true
+  create: false
   annotations: {}
   name: ''
 
@@ -109,8 +109,7 @@ service:
 ingress:
   enabled: false
   hosts:
-  - host: splitter.host
-
+  - host: navi-splitter.host
 
 # @section Limits
 
@@ -126,7 +125,13 @@ ingress:
 # @extra testResources.limits.cpu A CPU limit.
 # @extra testResources.limits.memory A memory limit.
 
-resources: {}
+resources:
+  requests:
+    cpu: 0.5
+    memory: 512Mi
+  limits:
+    cpu: 1
+    memory: 1Gi
 
 testResources: {}
 

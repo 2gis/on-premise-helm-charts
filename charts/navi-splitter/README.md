@@ -55,28 +55,28 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Splitter application settings
 
-| Name                          | Description                          | Value  |
-| ----------------------------- | ------------------------------------ | ------ |
-| `splitter.logLevel`           | Logging level.                       | `info` |
-| `splitter.app_rule`           | Rule name of navi-back host.         | `""`   |
-| `splitter.goMaxProcs`         | Number of golang processes.          | `1`    |
-| `splitter.appPort`            | Application port.                    | `8080` |
-| `splitter.ctxUrl`             | URL of get_dist_matrix_ctx host.     | `/`    |
-| `splitter.ctxTimeout`         | get_dist_matrix_ctx request timeout. | `60s`  |
-| `splitter.subrequestRetryN`   | Number of retries to host.           | `5`    |
-| `splitter.writeTimeout`       | Write timeout.                       | `10s`  |
-| `splitter.readTimeout`        | Read timeout.                        | `10s`  |
-| `splitter.idleTimeout`        | Idle timeout.                        | `60s`  |
-| `splitter.statHost`           | Statistic receiver host              | `-`    |
-| `splitter.statThreadPoolSize` | Number of statistic sender threads   | `16`   |
+| Name                          | Description                                                                                    | Value  |
+| ----------------------------- | ---------------------------------------------------------------------------------------------- | ------ |
+| `splitter.logLevel`           | Logging level.                                                                                 | `info` |
+| `splitter.app_rule`           | Rule name of navi-back host.                                                                   | `""`   |
+| `splitter.goMaxProcs`         | Number of golang processes.                                                                    | `1`    |
+| `splitter.appPort`            | Application port.                                                                              | `8080` |
+| `splitter.ctxUrl`             | URL of get_dist_matrix_ctx host. Format: `http(s)://HOST:PORT/ctx/2.0/?source=distance_matrix. | `""`   |
+| `splitter.ctxTimeout`         | get_dist_matrix_ctx request timeout.                                                           | `60s`  |
+| `splitter.subrequestRetryN`   | Number of retries to host.                                                                     | `5`    |
+| `splitter.writeTimeout`       | Write timeout.                                                                                 | `10s`  |
+| `splitter.readTimeout`        | Read timeout.                                                                                  | `10s`  |
+| `splitter.idleTimeout`        | Idle timeout.                                                                                  | `60s`  |
+| `splitter.statHost`           | Statistic receiver host                                                                        | `""`   |
+| `splitter.statThreadPoolSize` | Number of statistic sender threads                                                             | `16`   |
 
 ### Service account settings
 
-| Name                         | Description                                                                                                             | Value  |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `true` |
-| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`   |
-| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
+| Name                         | Description                                                                                                             | Value   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
+| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
+| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
 ### Service settings
 
@@ -89,10 +89,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value           |
-| ----------------------- | -------------------------------------- | --------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`         |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `splitter.host` |
+| Name                    | Description                            | Value                |
+| ----------------------- | -------------------------------------- | -------------------- |
+| `ingress.enabled`       | If Ingress is enabled for the service. | `false`              |
+| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `navi-splitter.host` |
 
 ### Limits
 

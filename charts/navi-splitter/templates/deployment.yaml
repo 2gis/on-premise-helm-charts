@@ -49,7 +49,7 @@ spec:
             - name: PORT
               value: {{ .Values.appPort | default "8080" | quote }}
             - name: CTX_URL
-              value: {{ (.Values.splitter).ctxUrl | default "/" | quote }}
+              value: {{ required "A valid .Values.splitter.ctxUrl required!" (.Values.splitter).ctxUrl | quote }}
             - name: CTX_TIMEOUT
               value: {{ (.Values.splitter).ctxTimeout | default "60s" | quote }}
             - name: LOG_LEVEL
