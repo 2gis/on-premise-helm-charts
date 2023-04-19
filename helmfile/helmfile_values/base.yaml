@@ -26,7 +26,7 @@ environments:
         domain: example.com # домен ингресса
         protocol: https # протокол ингресса http или https
         secretName: secret_tls # указать k8s secrets, содержащий сертификат для https, если будет использоваться https
-      naviCustomResources: true # ресурсы и лимиты выставляются для каждого типа навигации в файле navi-custom-resources.yaml
+      naviCustomResources: true # ресурсы и лимиты выставляются для каждого типа бека навигации в файле navi-custom-resources.yaml
       kafka: # методы аутентификации (login/password or ssl certificates)
         authLogin: {}
           # username:  kafka-user

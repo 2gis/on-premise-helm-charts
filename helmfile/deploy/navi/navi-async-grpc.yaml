@@ -1,0 +1,29 @@
+---
+bases:
+- {{ env "HELMFILE_VALUES" | default "../../../../helmfile_values" }}/base.yaml
+---
+{{ if eq .Values.remoteCharts true }}
+repositories:
+- name: 2gis-on-premise
+  url: https://2gis.github.io/on-premise-helm-charts
+{{ end }}
+---
+{{ $path_values:= env "HELMFILE_VALUES" | default "../../../../helmfile_values" }}
+releases:
+  - name: navi-async-grpc-proxy
+    {{- if eq .Values.remoteCharts true }}
+    chart: 2gis-on-premise/navi-async-grpc-proxy
+    {{- else}}    
+    chart: ../../../charts/navi-async-grpc-proxy
+    {{- end }}  
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    version: "{{ .Values.version }}"
+    labels:
+      chart: navi-async-grpc-proxy
+    values: 
+      - {{ $path_values }}/services/navi/navi-async-grpc-proxy/_common.gotmpl
+      - {{ $path_values }}/templates/optionalEnv.gotmpl
+    {{- if .Values.ingress.enabled }}
+      - {{ $path_values }}/templates/ingress.gotmpl
+    {{ end }}

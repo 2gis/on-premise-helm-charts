@@ -1,6 +1,13 @@
+# 2GIS On-Premise Helmfile Changelog
+
+## [1.7.0]
+#### navi-router - перемещена секция key_management_service
+```
 router:
-# How to get service tokens see https://docs.2gis.com/en/on-premise/deployment/keys#nav-lvl1--4._Fetch_the_service_tokens
+  logLevel: Warning
   keyManagementService:
+    enabled: true
+    host: http://keys.api.example.com
     apis:
       directions: "DIRECTIONS_TOKEN"
       distance-matrix: "DISTANCE_MATRIX_TOKEN"
@@ -12,3 +19,6 @@ router:
       ppnot: "PPNOT_TOKEN"
       combo-routes: "COMBO_ROUTES_TOKEN"
       free-roam: "FREE_ROAM_TOKEN"
+
+```
+#### Добавлен деплой [grpc proxy](README.md) для ассинхронных матриц
