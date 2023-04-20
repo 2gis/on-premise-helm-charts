@@ -98,7 +98,7 @@ Checking that the back service is valid
     {{/* Supported back implementations: navi-back, mock, splitter */}} 
     {{- if 
     and
-    (has (get $service.metadata.labels "app.kubernetes.io/name") (list "navi-back" "mock" "splitter"))
+    (has (get $service.metadata.labels "app.kubernetes.io/name") (list "navi-back" "mock" "splitter" "navi-splitter"))
     (eq (get $service.metadata.labels "navigroup") $navigroup) 
     (not (get $service.metadata.labels "behindSplitter"))
     -}}
