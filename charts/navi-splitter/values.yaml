@@ -105,11 +105,21 @@ service:
 
 # @param ingress.enabled If Ingress is enabled for the service.
 # @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration
 
 ingress:
   enabled: false
   hosts:
   - host: navi-splitter.host
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - host.example
+  #   secretName: secret.tls
 
 # @section Limits
 
