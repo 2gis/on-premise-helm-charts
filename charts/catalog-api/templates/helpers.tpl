@@ -179,9 +179,13 @@ onprem
 - name: IMPORTER_NUMBER_SCHEMA_BACKUPS
   value: "{{ .Values.importer.cleaner.versionLimit }}"
 - name: IMPORTER_S3_RETRY_MAX_ATTEMPTS
-  value: "{{ .Values.importer.retry.maxAttempts }}"
+  value: "{{ .Values.importer.retry.download.maxAttempts }}"
 - name: IMPORTER_S3_RETRY_DELAY
-  value: "{{ .Values.importer.retry.delay }}"
+  value: "{{ .Values.importer.retry.download.delay }}"
+- name: IMPORTER_PSQL_RETRY_MAX_ATTEMPTS
+  value: "{{ .Values.importer.retry.execute.maxAttempts }}"
+- name: IMPORTER_PSQL_RETRY_DELAY
+  value: "{{ .Values.importer.retry.execute.delay }}"
 {{- end }}
 
 {{/*

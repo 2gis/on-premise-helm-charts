@@ -201,16 +201,22 @@ license:
 # @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 # @param importer.workerNum Number of parallel import processes (workers)
 # @param importer.initialDelaySeconds Number of seconds after the container has started before liveness or readiness probes are initiated
-# @param importer.retry.maxAttempts The maximum number of retries download before stopping
-# @param importer.retry.delay Delay until the retry attempts
+# @param importer.retry.download.maxAttempts The maximum number of retries download before stopping
+# @param importer.retry.download.delay Delay until the retry attempts download
+# @param importer.retry.execute.maxAttempts The maximum number of retries execute psql command before stopping
+# @param importer.retry.execute.delay Delay until the retry attempts execute
 
 importer:
   nodeSelector: {}
   workerNum: 3
   initialDelaySeconds: 1
   retry:
-    maxAttempts: 3
-    delay: 1s
+    download:
+      maxAttempts: 3
+      delay: 1s
+    execute:
+      maxAttempts: 3
+      delay: 1s
 
   # @section importer.image **Deployment settings**
 

@@ -167,14 +167,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Kubernetes Importer job settings
 
-| Name                           | Description                                                                                                        | Value |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ----- |
-| `importer`                     | **Common settings**                                                                                                |       |
-| `importer.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) | `{}`  |
-| `importer.workerNum`           | Number of parallel import processes (workers)                                                                      | `3`   |
-| `importer.initialDelaySeconds` | Number of seconds after the container has started before liveness or readiness probes are initiated                | `1`   |
-| `importer.retry.maxAttempts`   | The maximum number of retries download before stopping                                                             | `3`   |
-| `importer.retry.delay`         | Delay until the retry attempts                                                                                     | `1s`  |
+| Name                                  | Description                                                                                                        | Value |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----- |
+| `importer`                            | **Common settings**                                                                                                |       |
+| `importer.nodeSelector`               | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) | `{}`  |
+| `importer.workerNum`                  | Number of parallel import processes (workers)                                                                      | `3`   |
+| `importer.initialDelaySeconds`        | Number of seconds after the container has started before liveness or readiness probes are initiated                | `1`   |
+| `importer.retry.download.maxAttempts` | The maximum number of retries download before stopping                                                             | `3`   |
+| `importer.retry.download.delay`       | Delay until the retry attempts download                                                                            | `1s`  |
+| `importer.retry.execute.maxAttempts`  | The maximum number of retries execute psql command before stopping                                                 | `3`   |
+| `importer.retry.execute.delay`        | Delay until the retry attempts execute                                                                             | `1s`  |
 
 
 ### importer.image **Deployment settings**
