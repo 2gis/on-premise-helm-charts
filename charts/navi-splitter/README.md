@@ -23,9 +23,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Docker Registry settings
 
-| Name                  | Description                                                                             | Value                |
-| --------------------- | --------------------------------------------------------------------------------------- | -------------------- |
-| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `docker-hub.2gis.ru` |
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
 ### Common settings
 

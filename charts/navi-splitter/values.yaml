@@ -2,7 +2,7 @@
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
-dgctlDockerRegistry: docker-hub.2gis.ru
+dgctlDockerRegistry: ''
 
 # @section Common settings
 
