@@ -32,7 +32,7 @@ templates:
       - {{ $path_values }}/services/navi/navi-back/_common.gotmpl
       - {{ $path_values }}/templates/optionalEnv.gotmpl
 releases:
-  {{ $API := "directions-car" }}
+  {{ $API := "directions-car" }}{{ $type := "carrouting"}}
   - name: navi-back-{{ $API }}
     <<: *default
     labels:
@@ -41,7 +41,11 @@ releases:
     set:
       - name: naviback.app_rule
         value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.carrouting.replicaCount }}      
       - name: resources.limits.cpu
         value: {{ .Values.carrouting.limits.cpu }}
       - name: resources.limits.memory
@@ -52,7 +56,7 @@ releases:
         value: {{ .Values.carrouting.requests.memory }}
       {{- end }}
 
-  {{ $API := "directions-pedestrian" }}
+  {{ $API := "directions-pedestrian" }}{{ $type := "pedestrian"}}
   - name: navi-back-{{ $API }}
     <<: *default
     labels:
@@ -61,7 +65,11 @@ releases:
     set:
       - name: naviback.app_rule
         value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.pedestrian.replicaCount }} 
       - name: resources.limits.cpu
         value: {{ .Values.pedestrian.limits.cpu }}
       - name: resources.limits.memory
@@ -72,7 +80,7 @@ releases:
         value: {{ .Values.pedestrian.requests.memory }}
       {{- end }}
 
-  {{ $API := "directions-bicycle" }}
+  {{ $API := "directions-bicycle" }}{{ $type := "bicycle"}}
   - name: navi-back-{{ $API }}
     <<: *default
     labels:
@@ -81,7 +89,11 @@ releases:
     set:
       - name: naviback.app_rule
         value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.bicycle.replicaCount }} 
       - name: resources.limits.cpu
         value: {{ .Values.bicycle.limits.cpu }}
       - name: resources.limits.memory
@@ -92,7 +104,7 @@ releases:
         value: {{ .Values.bicycle.requests.memory }}
       {{- end }}
 
-  {{ $API := "directions-taxi" }}
+  {{ $API := "directions-taxi" }}{{ $type := "taxi"}}
   - name: navi-back-{{ $API }}
     <<: *default
     labels:
@@ -101,7 +113,11 @@ releases:
     set:
       - name: naviback.app_rule
         value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.taxi.replicaCount }} 
       - name: resources.limits.cpu
         value: {{ .Values.taxi.limits.cpu }}
       - name: resources.limits.memory
@@ -112,7 +128,7 @@ releases:
         value: {{ .Values.taxi.requests.memory }}
       {{- end }}
 
-  {{ $API := "directions-emergency" }}
+  {{ $API := "directions-emergency" }}{{ $type := "carrouting"}}
   - name: navi-back-{{ $API }}
     <<: *default
     labels:
@@ -121,20 +137,24 @@ releases:
     set:
       - name: naviback.app_rule
         value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }}
       - name: naviback.simpleNetwork.emergency
         value: true  
       {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.emergency.replicaCount }} 
       - name: resources.limits.cpu
-        value: {{ .Values.carrouting.limits.cpu }}
+        value: {{ .Values.emergency.limits.cpu }}
       - name: resources.limits.memory
-        value: {{ .Values.carrouting.limits.memory }}
+        value: {{ .Values.emergency.limits.memory }}
       - name: resources.requests.cpu
-        value: {{ .Values.carrouting.requests.cpu }}
+        value: {{ .Values.emergency.requests.cpu }}
       - name: resources.requests.memory
-        value: {{ .Values.carrouting.requests.memory }}
+        value: {{ .Values.emergency.requests.memory }}
       {{- end }}    
 
-  {{ $API := "distance-matrix" }}
+  {{ $API := "distance-matrix" }}{{ $type := "dm"}}
   - name: navi-back-{{ $API }}
     <<: *default
     labels:
@@ -142,8 +162,12 @@ releases:
       chart: navi-back
     set:
       - name: naviback.app_rule
-        value: {{ $API }} 
+        value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }}  
       {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.dm.replicaCount }} 
       - name: resources.limits.cpu
         value: {{ .Values.dm.limits.cpu }}
       - name: resources.limits.memory
@@ -154,7 +178,7 @@ releases:
         value: {{ .Values.dm.requests.memory }}
       {{- end }} 
 
-  {{ $API := "public-transport" }}
+  {{ $API := "public-transport" }}{{ $type := "ctx"}}
   - name: navi-back-{{ $API }}
     <<: *default
     labels:
@@ -162,8 +186,12 @@ releases:
       chart: navi-back
     set:
       - name: naviback.app_rule
-        value: {{ $API }}  
+        value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }}  
       {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.ctx.replicaCount }} 
       - name: resources.limits.cpu
         value: {{ .Values.ctx.limits.cpu }}
       - name: resources.limits.memory
@@ -174,7 +202,7 @@ releases:
         value: {{ .Values.ctx.requests.memory }}
       {{- end }} 
 
-  {{ $API := "pairs-directions" }}
+  {{ $API := "pairs-directions" }}{{ $type := "pairs"}}
   - name: navi-back-{{ $API }}
     <<: *default
     labels:
@@ -183,7 +211,11 @@ releases:
     set:
       - name: naviback.app_rule
         value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }}   
       {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.pairs.replicaCount }} 
       - name: resources.limits.cpu
         value: {{ .Values.pairs.limits.cpu }}
       - name: resources.limits.memory
@@ -194,7 +226,7 @@ releases:
         value: {{ .Values.pairs.requests.memory }}
       {{- end }} 
 
-  {{ $API := "directions-truck" }}
+  {{ $API := "directions-truck" }}{{ $type := "truck"}}
   - name: navi-back-{{ $API }}
     <<: *default
     labels:
@@ -202,8 +234,12 @@ releases:
       chart: navi-back
     set:
       - name: naviback.app_rule
-        value: {{ $API }} 
+        value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }}  
       {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.truck.replicaCount }} 
       - name: resources.limits.cpu
         value: {{ .Values.truck.limits.cpu }}
       - name: resources.limits.memory
@@ -214,7 +250,7 @@ releases:
         value: {{ .Values.truck.requests.memory }}
       {{- end }} 
 
-  {{ $API := "isochrone-car" }}
+  {{ $API := "isochrone-car" }}{{ $type := "carrouting"}}
   - name: navi-back-{{ $API }}
     <<: *default
     labels:
@@ -223,7 +259,11 @@ releases:
     set:
       - name: naviback.app_rule
         value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }} 
       {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.carrouting.replicaCount }} 
       - name: resources.limits.cpu
         value: {{ .Values.carrouting.limits.cpu }}
       - name: resources.limits.memory
@@ -234,7 +274,7 @@ releases:
         value: {{ .Values.carrouting.requests.memory }}
       {{- end }}    
 
-  {{ $API := "isochrone-pedestrian" }}
+  {{ $API := "isochrone-pedestrian" }}{{ $type := "pedestrian"}}
   - name: navi-back-{{ $API }}
     <<: *default
     labels:
@@ -243,7 +283,11 @@ releases:
     set:
       - name: naviback.app_rule
         value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }}   
       {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.pedestrian.replicaCount }} 
       - name: resources.limits.cpu
         value: {{ .Values.pedestrian.limits.cpu }}
       - name: resources.limits.memory
@@ -254,8 +298,33 @@ releases:
         value: {{ .Values.pedestrian.requests.memory }}
       {{- end }}
 
+  {{ $API := "distance-matrix-ctx"}}{{ $type := "dm"}}
+  - name: navi-back-{{ $API }}
+    <<: *default
+    labels:
+      service: {{ $API }}
+      chart: navi-back
+    set:
+      - name: naviback.app_rule
+        value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }}  
+      - name: naviback.behindSplitter
+        value: true
+      {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.matrixCtx.replicaCount }} 
+      - name: resources.limits.cpu
+        value: {{ .Values.matrixCtx.limits.cpu }}
+      - name: resources.limits.memory
+        value: {{ .Values.matrixCtx.limits.memory }}
+      - name: resources.requests.cpu
+        value: {{ .Values.matrixCtx.requests.cpu }}
+      - name: resources.requests.memory
+        value: {{ .Values.matrixCtx.requests.memory }}
+      {{- end }}
 
-  {{ $API := "async" }}
+  {{ $API := "async" }}{{ $type := "dm"}}
   - name: navi-back-{{ $API }}
     <<: *default
     labels:
@@ -269,6 +338,8 @@ releases:
     set:
       - name: naviback.app_rule
         value: dma
+      - name: naviback.type
+        value: {{ $type }}   
       - name: s3.host
         value: {{ .Values.s3.citiesUrl }}
       - name: s3.accessKey

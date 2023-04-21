@@ -1,5 +1,6 @@
 #ресурсы для разных типов навигации
 carrouting: #directions-car, isochrone
+  replicaCount: 1
   limits:
     cpu: 4
     memory: 8Gi
@@ -7,6 +8,7 @@ carrouting: #directions-car, isochrone
     cpu: 2
     memory: 4Gi
 pedestrian: #directions-pedestrian
+  replicaCount: 1
   limits:
     cpu: 4
     memory: 8Gi
@@ -14,6 +16,7 @@ pedestrian: #directions-pedestrian
     cpu: 2
     memory: 4Gi
 bicycle: #directions-bicycle
+  replicaCount: 1
   limits:
     cpu: 4
     memory: 8Gi
@@ -21,6 +24,7 @@ bicycle: #directions-bicycle
     cpu: 2
     memory: 4Gi
 taxi: #directions-taxi
+  replicaCount: 1
   limits:
     cpu: 4
     memory: 8Gi
@@ -28,6 +32,7 @@ taxi: #directions-taxi
     cpu: 2
     memory: 4Gi
 pairs: #pairs-directions
+  replicaCount: 1
   limits:
     cpu: 4
     memory: 8Gi
@@ -35,6 +40,7 @@ pairs: #pairs-directions
     cpu: 2
     memory: 4Gi
 truck: #directions-truck
+  replicaCount: 1
   limits:
     cpu: 4
     memory: 8Gi
@@ -42,6 +48,7 @@ truck: #directions-truck
     cpu: 2
     memory: 4Gi
 dm: #distance-matrix
+  replicaCount: 1
   limits:
     cpu: 4
     memory: 8Gi
@@ -49,6 +56,23 @@ dm: #distance-matrix
     cpu: 2
     memory: 4Gi
 ctx: #public-transport
+  replicaCount: 1
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 2
+    memory: 4Gi
+emergency: #directions-emergency
+  replicaCount: 1
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 2
+    memory: 4Gi
+matrixCtx: #distance-matrix-ctx
+  replicaCount: 1
   limits:
     cpu: 4
     memory: 8Gi

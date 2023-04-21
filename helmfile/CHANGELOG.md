@@ -1,7 +1,7 @@
 # 2GIS On-Premise Helmfile Changelog
 
 ## [1.7.0]
-#### navi-router - перемещена секция key_management_service
+#### navi-router - перемещена секция key_management_service в *helmfile_values/services/navi/navi-router/test.yaml*
 ```
 router:
   logLevel: Warning
@@ -22,3 +22,15 @@ router:
 
 ```
 #### Добавлен деплой [grpc proxy](README.md) для ассинхронных матриц
+- добавлены values *helmfile_values/services/navi/navi-async-grpc-proxy*
+
+#### Добавлен деплой [бэкенда Distance Matrix API Public Transport (до 10х10)](README.md)
+- для бэкендов добавлены replicaCount в *helmfile_values/services/navi/navi-back/test-custom-resources.yaml*
+- добавлены новые rules в helmfile_values/services/navi/navi-back/_common.gotmpl
+```
+  - name: distance-matrix-ctx # матрицы общественного транспорта
+    queries: ["get_dist_matrix"]
+    routing: ["ctx"]
+```
+#### Добавлен деплой [splitter для Distance Matrix API Public Transport (до 10х10)](README.md) 
+- добавлены values *helmfile_values/services/navi/navi-splitter*
