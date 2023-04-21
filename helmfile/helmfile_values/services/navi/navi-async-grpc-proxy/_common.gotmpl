@@ -1,0 +1,10 @@
+replicaCount: 1
+ 
+dm:
+  url: http://navi-async-matrix
+
+{{- if .Values.ingress.enabled }}
+ingress:
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+{{- end}}

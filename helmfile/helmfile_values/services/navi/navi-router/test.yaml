@@ -1,16 +1,14 @@
 router:
 # How to get service tokens see https://docs.2gis.com/en/on-premise/deployment/keys#nav-lvl1--4._Fetch_the_service_tokens
-  additionalSections: |
-    "key_management_service":
-      {
-        "service_remote_address": "http://keys-api/service/v1/keys",
-        "keys_refresh_interval_min": 5,
-        "keys_download_timeout_sec": 30,
-        "service_apis":
-          [
-            { "type": "directions", "token": "DIRECTIONS_API_TOKEN" },
-            { "type": "distance-matrix", "token": "DISTANCE_MATRIX_API_TOKEN" },
-            { "type": "isochrone", "token": "ISOCHRONE_API_TOKEN" },
-            { "type": "public-transport", "token" : "PUBLIC_TRANSPORT_API_TOKEN"}
-          ]
-      }
+  keyManagementService:
+    apis:
+      directions: "DIRECTIONS_TOKEN"
+      distance-matrix: "DISTANCE_MATRIX_TOKEN"
+      pairs-directions: "PAIRS_DIRECTIONS_TOKEN"
+      truck-directions: "TRUCK_DIRECTIONS_TOKEN"
+      public-transport: "PUBLIC_TRANSPORT_TOKEN"
+      isochrone: "ISOCHRONE_TOKEN"
+      map-matching : "MAP_MATCHING_TOKEN"
+      ppnot: "PPNOT_TOKEN"
+      combo-routes: "COMBO_ROUTES_TOKEN"
+      free-roam: "FREE_ROAM_TOKEN"

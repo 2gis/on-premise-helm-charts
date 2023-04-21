@@ -1,7 +1,11 @@
 navigroup: navi
 
 router:
-  castleHost: navi-castle #имя сервиса navi-castle в k8s
+  logLevel: Warning
+  castleHost: navi-castle
+  keyManagementService:
+    enabled: true
+    host: http://keys-api/service/v1/keys
 
 replicaCount: 2
 
