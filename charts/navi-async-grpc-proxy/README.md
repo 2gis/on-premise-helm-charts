@@ -9,10 +9,9 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 
 ### Docker Registry settings
 
-| Name                  | Description                                                                             | Value                |
-| --------------------- | --------------------------------------------------------------------------------------- | -------------------- |
-| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `docker-hub.2gis.ru` |
-
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
 ### Common settings
 
@@ -31,15 +30,13 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 | `affinity`             | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
 | `labels`               | Custom labels to set to Deployment resource.                                                                                | `{}`  |
 
-
 ### Deployment settings
 
-| Name               | Description | Value                   |
-| ------------------ | ----------- | ----------------------- |
-| `image.repository` | Repository  | `navi/async-grpc-proxy` |
-| `image.tag`        | Tag         | `latest`                |
-| `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
-
+| Name               | Description | Value                              |
+| ------------------ | ----------- | ---------------------------------- |
+| `image.repository` | Repository  | `2gis-on-premise/async-grpc-proxy` |
+| `image.tag`        | Tag         | `0.0.2`                            |
+| `image.pullPolicy` | Pull Policy | `IfNotPresent`                     |
 
 ### async-grpc-proxy application settings
 
@@ -47,15 +44,13 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 | ------------------- | -------------------------------------------- | ------ |
 | `app.containerPort` | Container port which application listens on. | `7000` |
 
-
 ### Service account settings
 
-| Name                         | Description                                                                                                             | Value  |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
+| Name                         | Description                                                                                                             | Value   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- |
 | `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
-| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`   |
-| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
-
+| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
+| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
 ### Service settings
 
@@ -66,14 +61,15 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 | `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `nil`       |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value                        |
-| ----------------------- | -------------------------------------- | ---------------------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`                      |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `navi-async-grpc-proxy.host` |
-
+| Name                                 | Description                               | Value                        |
+| ------------------------------------ | ----------------------------------------- | ---------------------------- |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                      |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `navi-async-grpc-proxy.host` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                          |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                     |
+| `ingress.tls`                        | TLS configuration                         | `[]`                         |
 
 ### Limits
 
@@ -83,7 +79,6 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 | `resources.requests.memory` | A memory request. |       |
 | `resources.limits.cpu`      | A CPU limit.      |       |
 | `resources.limits.memory`   | A memory limit.   |       |
-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -97,7 +92,6 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 | `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
 | `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
-
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 | Name                    | Description                                                                                                  | Value   |
@@ -109,7 +103,6 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 | `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     |         |
 | `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           |         |
 
-
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                 | Description                                          | Value   |
@@ -118,13 +111,12 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 | `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
 
-
 ### Settings for navi-async-matrix service connection
 
-| Name                  | Description                        | Value                           |
-| --------------------- | ---------------------------------- | ------------------------------- |
-| `dm.url`              | async-matrix host name with schema | `http://navi-async-matrix.host` |
-| `dm.port`             | async-matrix port                  | `80`                            |
+| Name      | Description                                                           | Value |
+| --------- | --------------------------------------------------------------------- | ----- |
+| `dm.url`  | async-matrix host name with schema, ex: http://navi-async-matrix.host | `""`  |
+| `dm.port` | async-matrix port                                                     | `80`  |
 
 
 ## Пример деплоя

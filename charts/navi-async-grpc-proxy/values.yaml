@@ -2,7 +2,7 @@
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
-dgctlDockerRegistry: docker-hub.2gis.ru
+dgctlDockerRegistry: ''
 
 
 # @section Common settings
@@ -43,7 +43,7 @@ labels: {}
 image:
   repository: 2gis-on-premise/async-grpc-proxy
   pullPolicy: IfNotPresent
-  tag: latest
+  tag: 0.0.2
 
 
 # @section async-grpc-proxy application settings
@@ -84,6 +84,9 @@ service:
 
 # @param ingress.enabled If Ingress is enabled for the service.
 # @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration
 
 ingress:
   enabled: false

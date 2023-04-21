@@ -47,11 +47,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Deployment settings
 
-| Name               | Description | Value           |
-| ------------------ | ----------- | --------------- |
-| `image.repository` | Repository  | `2gis/splitter` |
-| `image.tag`        | Tag         | `master`        |
-| `image.pullPolicy` | Pull Policy | `IfNotPresent`  |
+| Name               | Description | Value                           |
+| ------------------ | ----------- | ------------------------------- |
+| `image.repository` | Repository  | `2gis-on-premise/navi-splitter` |
+| `image.tag`        | Tag         | `1.0.1`                         |
+| `image.pullPolicy` | Pull Policy | `IfNotPresent`                  |
 
 ### Splitter application settings
 

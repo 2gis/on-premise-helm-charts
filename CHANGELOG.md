@@ -1,5 +1,39 @@
 # 2GIS On-Premise Changelog
 
+## [1.7.0]
+#### Images
+```
+catalog-api
+	- catalog-api:3.589.1
+	+ catalog-api:3.591.0
+keys
+	- keys-backend:1.44.0
+	+ keys-backend:1.48.0
+mapgl-js-api
+	- mapgl:1.35.1
+	+ mapgl:1.36.0
+navi-async-matrix
+	- navi-async-matrix:1.2.0
+	+ navi-async-matrix:1.3.3
+navi-back
+	- navi-back:6.16.0
+	+ navi-back:7.3.1
+navi-router
+	- navi-router:6.10.0
+	+ navi-router:6.11.0
+search-api
+	- search-api:7.45.0
+	+ search-api:7.46.0
+tiles-api
+	- tiles-api-importer:4.39.0
+	+ tiles-api-importer:4.43.1
+	- tiles-api-proxy:4.39.0
+	+ tiles-api-proxy:4.43.1
+	- tiles-api:4.39.0
+	+ tiles-api:4.43.1
+
+```
+
 ## [1.6.5]
 #### Images
 ```

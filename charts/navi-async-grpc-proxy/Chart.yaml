@@ -3,10 +3,11 @@ name: navi-async-grpc-proxy
 description: Deployment for Navi async-grpc-proxy service
 type: application
 keywords:
-  - navi
-  - dm-async-matrix
-  - async-grpc-proxy
-version: 1.0.0
+- navi
+- dm-async-matrix
+- async-grpc-proxy
+version: 1.7.0
+appVersion: 0.0.2
 maintainers:
 - name: 2gis
   url: https://github.com/2gis
