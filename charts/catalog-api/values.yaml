@@ -205,6 +205,25 @@ license:
   url: ''
   requestTimeout: 1s
 
+# @section BSS settings
+
+# @param bss.enabled If BSS is enabled
+# @param bss.url URL of the BSS service. Ex: http(s)://bss.svc **Required**
+# @param bss.requestTimeout Timeout for requests to the BSS service
+# @param bss.buffer.lifetime Lifetime BSS buffer
+# @param bss.buffer.retryCount The maximum number of retries send bss messages
+# @param bss.buffer.sendTimeout Timeout before sending message
+# @param bss.buffer.sendLimit Maximum number of messages in the buffer before sending
+
+bss:
+  enabled: false
+  url: ''
+  requestTimeout: 1s
+  buffer:
+    lifetime: 5s
+    retryCount: 2
+    sendTimeout: 2s
+    sendLimit: 256
 
 # @section Kubernetes Importer job settings
 

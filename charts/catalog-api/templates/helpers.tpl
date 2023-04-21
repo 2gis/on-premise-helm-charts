@@ -140,6 +140,23 @@ onprem
   value: "{{ .Values.license.requestTimeout }}"
 {{- end }}
 
+{{- define "catalog.env.bss" -}}
+- name: CATALOG_BSS_ENABLED
+  value: "{{ .Values.bss.enabled }}"
+- name: CATALOG_BSS_ENDPOINT
+  value: "{{ required "A valid .Values.bss.url entry required" .Values.bss.url }}"
+- name: CATALOG_BSS_REQUEST_TIMEOUT
+  value: "{{ .Values.bss.requestTimeout }}"
+- name: CATALOG_BSS_BUFFER_LIFETIME
+  value: "{{ .Values.bss.buffer.lifetime }}"
+- name: CATALOG_BSS_BUFFER_RETRY_COUNT
+  value: "{{ .Values.bss.buffer.retryCount }}"
+- name: CATALOG_BSS_BUFFER_SEND_TIMEOUT
+  value: "{{ .Values.bss.buffer.sendTimeout }}"
+- name: CATALOG_BSS_BUFFER_SEND_LIMIT
+  value: "{{ .Values.bss.buffer.sendLimit }}"
+{{- end }}
+
 {{- define "catalog.env.importer" -}}
 - name: IMPORTER_DB_CATALOG_SCHEMA
   value: "{{ include "catalog.manifestCode" . }}"

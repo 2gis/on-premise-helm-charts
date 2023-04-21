@@ -26,6 +26,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | --------------------- | ---------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry host where On-Premise services' images reside. Format: `host:port` | `""`  |
 
+
 ### Common settings
 
 | Name               | Description                                                                                                                                         | Value |
@@ -37,6 +38,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                                                  | `{}`  |
 | `imagePullSecrets` | Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) | `[]`  |
 
+
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                 | Description                                         | Value   |
@@ -44,6 +46,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `pdb.enabled`        | If PDB is enabled for the service                   | `false` |
 | `pdb.minAvailable`   | How many pods must be available after the eviction  | `""`    |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction | `1`     |
+
 
 ### Deployment Artifacts Storage settings
 
@@ -70,6 +73,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.replicas` | Number of replicas of API pods | `1`    |
 | `api.logLevel` | Log level                      | `info` |
 
+
 ### api.image **Deployment settings**
 
 | Name                   | Description                                                                                   | Value                         |
@@ -77,6 +81,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-api` |
 | `api.image.tag`        | Tag                                                                                           | `3.597.0`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
+
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -90,6 +95,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used       | `80`    |
 | `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used | `""`    |
 
+
 ### api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings
 
 | Name                            | Description      | Value    |
@@ -98,6 +104,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.resources.requests.memory` | A memory request | `6000Mi` |
 | `api.resources.limits.cpu`      | A CPU limit      | `4`      |
 | `api.resources.limits.memory`   | A memory limit   | `6500Mi` |
+
 
 ### Service settings
 
@@ -108,12 +115,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) | `ClusterIP` |
 | `api.service.port`        | Service port                                                                                                                  | `80`        |
 
+
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                        | Description                           | Value              |
 | --------------------------- | ------------------------------------- | ------------------ |
 | `api.ingress.enabled`       | If Ingress is enabled for the service | `false`            |
 | `api.ingress.hosts[0].host` | Hostname for the Ingress service      | `catalog-api.host` |
+
 
 ### Database settings
 
@@ -130,11 +139,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.postgres.poolSize.preloaders.rubric`              | PostgreSQL connection pool size for preloader rubrics               | `3`    |
 | `api.postgres.poolSize.preloaders.additionalAttribute` | PostgreSQL connection pool size for preloader additional attributes | `3`    |
 
+
 ### Preloaders settings
 
 | Name                          | Description              | Value |
 | ----------------------------- | ------------------------ | ----- |
 | `api.preloaders.awaitTimeout` | Preloaders await timeout | `60s` |
+
 
 ### Search settings
 
@@ -142,6 +153,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `search.url`            | URL of the Search service, ex: http://{search-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`    |
 | `search.connectTimeout` | Timeout for connect to the Search service                                                                                                            | `300ms` |
+
 
 ### Keys settings
 
@@ -151,12 +163,27 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `keys.requestTimeout` | Timeout for requests to the Keys API                                                                                                             | `5s`  |
 | `keys.token`          | Keys service API key                                                                                                                             | `""`  |
 
+
 ### License settings
 
 | Name                     | Description                                                        | Value |
 | ------------------------ | ------------------------------------------------------------------ | ----- |
 | `license.url`            | URL of the License service. Ex: http(s)://license.svc **Required** | `""`  |
 | `license.requestTimeout` | Timeout for requests to the License service                        | `1s`  |
+
+
+### BSS settings
+
+| Name                     | Description                                                | Value   |
+| ------------------------ | ---------------------------------------------------------- | ------- |
+| `bss.enabled`            | If BSS is enabled                                          | `false` |
+| `bss.url`                | URL of the BSS service. Ex: http(s)://bss.svc **Required** | `""`    |
+| `bss.requestTimeout`     | Timeout for requests to the BSS service                    | `1s`    |
+| `bss.buffer.lifetime`    | Lifetime BSS buffer                                        | `5s`    |
+| `bss.buffer.retryCount`  | The maximum number of retries send bss messages            | `2`     |
+| `bss.buffer.sendTimeout` | Timeout before sending message                             | `2s`    |
+| `bss.buffer.sendLimit`   | Maximum number of messages in the buffer before sending    | `256`   |
+
 
 ### Kubernetes Importer job settings
 
@@ -171,6 +198,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.retry.execute.maxAttempts`  | The maximum number of retries execute psql command before stopping                                                 | `3`   |
 | `importer.retry.execute.delay`        | Delay until the retry attempts execute                                                                             | `1s`  |
 
+
 ### importer.image **Deployment settings**
 
 | Name                        | Description                                                                                   | Value                              |
@@ -178,6 +206,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-importer` |
 | `importer.image.tag`        | Tag                                                                                           | `1.0.10`                           |
 | `importer.image.pullPolicy` | Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                     |
+
 
 ### importer.postgres **Database settings**
 
@@ -190,6 +219,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.postgres.password`            | PostgreSQL password. **Required**                | `""`   |
 | `importer.postgres.schemaSwitchEnabled` | Automatic switch PostgreSQL schema on releases   | `true` |
 
+
 ### importer.persistentVolume **Persistent Volume settings**
 
 | Name                                     | Description                                                                                                         | Value               |
@@ -198,6 +228,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.persistentVolume.accessModes`  | Persistent Volume [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)       | `["ReadWriteOnce"]` |
 | `importer.persistentVolume.storageClass` | Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)                          | `topolvm-ext4`      |
 | `importer.persistentVolume.size`         | Volume size                                                                                                         | `50Gi`              |
+
 
 ### importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
@@ -208,12 +239,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.resources.limits.cpu`      | A CPU limit      | `2`      |
 | `importer.resources.limits.memory`   | A memory limit   | `2048Mi` |
 
+
 ### importer.cleaner **Cleaner scheme settings**
 
 | Name                            | Description                                 | Value  |
 | ------------------------------- | ------------------------------------------- | ------ |
 | `importer.cleaner.enabled`      | If clean schemes is enabled for the service | `true` |
 | `importer.cleaner.versionLimit` | Number of backup schemes                    | `2`    |
+
 
 ### importer.cleaner.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
