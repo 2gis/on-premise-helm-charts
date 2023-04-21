@@ -39,7 +39,7 @@ affinity: {}
 image:
   repository: 2gis-on-premise/navi-router
   pullPolicy: IfNotPresent
-  tag: 6.10.0
+  tag: 6.11.0
 
 
 # @section Navi-Router service settings
