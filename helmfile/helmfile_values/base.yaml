@@ -7,7 +7,7 @@ helmDefaults:
 environments:
   test:
     values:
-    - version: 1.5.0 # актуальная версия релиза
+    - version: 1.7.0 # актуальная версия релиза
       remoteCharts: false
       manifest: manifests/1675328936.json # укажите манифест, полученный при скачивании данных dgctl
       namespace: 2gis-on-premise # namespace k8s для деплоя сервисов 2gis
@@ -41,7 +41,7 @@ environments:
 
   prod:
     values:
-    - version: 1.5.0 
+    - version: 1.7.0 
       remoteCharts: true
       manifest: manifests/1675328936.json 
       namespace: 2gis-on-premise 
