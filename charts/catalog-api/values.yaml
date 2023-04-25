@@ -210,10 +210,10 @@ license:
 # @param bss.enabled If BSS is enabled
 # @param bss.url URL of the BSS service. Ex: http(s)://bss.svc **Required**
 # @param bss.requestTimeout Timeout for requests to the BSS service
-# @param bss.buffer.lifetime Lifetime BSS buffer
-# @param bss.buffer.retryCount The maximum number of retries send bss messages
-# @param bss.buffer.sendTimeout Timeout before sending message
-# @param bss.buffer.sendLimit Maximum number of messages in the buffer before sending
+# @param bss.buffer.lifetime Lifetime of BSS buffer
+# @param bss.buffer.retryCount The maximum number of attempts to send BSS messages
+# @param bss.buffer.sendTimeout Timeout between sending BSS messages
+# @param bss.buffer.sendLimit The maximum number of messages in the buffer before they are sent to the BSS
 
 bss:
   enabled: false
