@@ -144,7 +144,7 @@ onprem
 - name: CATALOG_BSS_ENABLED
   value: "{{ .Values.bss.enabled }}"
 - name: CATALOG_BSS_ENDPOINT
-  value: "{{ required "A valid .Values.bss.url entry required" .Values.bss.url }}"
+  value: "{{ .Values.bss.url }}"
 - name: CATALOG_BSS_REQUEST_TIMEOUT
   value: "{{ .Values.bss.requestTimeout }}"
 - name: CATALOG_BSS_BUFFER_LIFETIME

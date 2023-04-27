@@ -174,15 +174,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### BSS settings
 
-| Name                     | Description                                                | Value   |
-| ------------------------ | ---------------------------------------------------------- | ------- |
-| `bss.enabled`            | If BSS is enabled                                          | `false` |
-| `bss.url`                | URL of the BSS service. Ex: http(s)://bss.svc **Required** | `""`    |
-| `bss.requestTimeout`     | Timeout for requests to the BSS service                    | `1s`    |
-| `bss.buffer.lifetime`    | Lifetime BSS buffer                                        | `5s`    |
-| `bss.buffer.retryCount`  | The maximum number of retries send bss messages            | `2`     |
-| `bss.buffer.sendTimeout` | Timeout before sending message                             | `2s`    |
-| `bss.buffer.sendLimit`   | Maximum number of messages in the buffer before sending    | `256`   |
+| Name                     | Description                                                                  | Value   |
+| ------------------------ | ---------------------------------------------------------------------------- | ------- |
+| `bss.enabled`            | If BSS is enabled                                                            | `false` |
+| `bss.url`                | URL of the BSS service. Ex: http(s)://bss.svc                                | `""`    |
+| `bss.requestTimeout`     | Timeout for requests to the BSS service                                      | `1s`    |
+| `bss.buffer.lifetime`    | Lifetime of BSS buffer                                                       | `5s`    |
+| `bss.buffer.retryCount`  | The maximum number of attempts to send BSS messages                          | `2`     |
+| `bss.buffer.sendTimeout` | Timeout between sending BSS messages                                         | `2s`    |
+| `bss.buffer.sendLimit`   | The maximum number of messages in the buffer before they are sent to the BSS | `256`   |
 
 
 ### Kubernetes Importer job settings
