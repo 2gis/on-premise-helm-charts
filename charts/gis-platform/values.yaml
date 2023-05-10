@@ -7,11 +7,11 @@ dgctlDockerRegistry: ''
 
 # @section Common settings
 
-# @param external_hostname Service hostname.
-# @param external_proto Protocol to use: `http` or `https`.
+# @param externalHostname Service hostname.
+# @param externalProto Protocol to use: `http` or `https`.
 
-external_hostname: gis-platform.host
-external_proto: https
+externalHostname: gis-platform.host
+externalProto: https
 
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
@@ -39,26 +39,28 @@ ingress:
 
 # @param spcore.replicaCount A replica count for the pod.
 # @param spcore.service Service settings.
-# @param spcore.debug_mode If the debug mode is enabled.
-# @param spcore.reset_cluster If true, the cluster will be reset when applying this configuration.
-# @param spcore.update_db If true, the database schema and data will be updated when applying this configuration.
+# @param spcore.debugMode If the debug mode is enabled.
+# @param spcore.resetCluster If true, the cluster will be reset when applying this configuration.
+# @param spcore.updateDb If true, the database schema and data will be updated when applying this configuration.
 # @param spcore.terminationGracePeriodSeconds Wait for up to this amount of seconds for a running instance of the service to shut down.
-# @param spcore.cloud_port Cloud port.
-# @param spcore.http_port SPCore service HTTP port.
+# @param spcore.cloudPort Cloud port.
+# @param spcore.httpPort SPCore service HTTP port.
 # @param spcore.maxRenderTargets Maximum number of targets to render simultaneously.
 # @param spcore.loglevel Log level.
+# @param spcore.syncParameters
 
 spcore:
   replicaCount: 1
 
   service: {}
-  debug_mode: false
-  reset_cluster: false
-  update_db: true
+  debugMode: false
+  resetCluster: false
+  updateDb: true
   terminationGracePeriodSeconds: 60
+  syncParameters: false
 
-  cloud_port: 5050
-  http_port: 5051
+  cloudPort: 5050
+  httpPort: 5051
   maxRenderTargets: 1000
   loglevel: Info
 
@@ -75,38 +77,38 @@ spcore:
       memory: 4096Mi
 
   # @extra spcore.cors **CORS settings.**
-  # @param spcore.cors.allow_everyone If true, requests from any origin will be allowed.
-  # @param spcore.cors.origins List of allowed origins (if `allow_everyone` is false).
+  # @param spcore.cors.allowEveryone If true, requests from any origin will be allowed.
+  # @param spcore.cors.origins List of allowed origins (if `allowEveryone` is false).
 
   cors:
-    allow_everyone: false
+    allowEveryone: false
     origins: []
 
   # @extra spcore.s3 **S3-compatible storage settings.**
-  # @param spcore.s3.access_key S3 access key for accessing the bucket.
-  # @param spcore.s3.secret_key S3 secret key for accessing the bucket.
+  # @param spcore.s3.accessKey S3 access key for accessing the bucket.
+  # @param spcore.s3.secretKey S3 secret key for accessing the bucket.
   # @param spcore.s3.host S3 endpoint. Format: `host:port`.
   # @param spcore.s3.region S3 region.
   # @param spcore.s3.bucket S3 bucket name.
-  # @param spcore.s3.session_bucket S3 bucket name for temporary session files.
+  # @param spcore.s3.sessionBucket S3 bucket name for temporary session files.
 
   s3:
-    access_key: ''
-    secret_key: ''
+    accessKey: ''
+    secretKey: ''
     host: s3.host
     region: US
     bucket: spstatic
-    session_bucket: spsession
+    sessionBucket: spsession
 
-  # @extra spcore.pg **Database access settings.**
-  # @param spcore.pg.host PostgreSQL host.
-  # @param spcore.pg.port PostgreSQL port.
-  # @param spcore.pg.user PostgreSQL username.
-  # @param spcore.pg.password PostgreSQL password.
-  # @param spcore.pg.dbname PostgreSQL database name.
-  # @param spcore.pg.poolsize PostgreSQL connection pool size.
+  # @extra spcore.postgres **Database access settings.**
+  # @param spcore.postgres.host PostgreSQL host.
+  # @param spcore.postgres.port PostgreSQL port.
+  # @param spcore.postgres.user PostgreSQL username.
+  # @param spcore.postgres.password PostgreSQL password.
+  # @param spcore.postgres.dbname PostgreSQL database name.
+  # @param spcore.postgres.poolsize PostgreSQL connection pool size.
 
-  pg:
+  postgres:
     host: postgres.host
     port: 5432
     user: gisadmin
@@ -123,12 +125,12 @@ spcore:
     password: '123456'
 
   # @extra spcore.jwt **JSON Web Token (JWT) settings.**
-  # @param spcore.jwt.token_key JWT default user token.
-  # @param spcore.jwt.token_admin JWT admin user token.
+  # @param spcore.jwt.tokenKey JWT default user token.
+  # @param spcore.jwt.tokenAdmin JWT admin user token.
 
   jwt:
-    token_key: supersecrettoken
-    token_admin: supersecrettoken
+    tokenKey: supersecrettoken
+    tokenAdmin: supersecrettoken
 
   # @extra spcore.catalog **Catalog settings.**
   # @param spcore.catalog.url Catalog service URL.
@@ -185,14 +187,14 @@ spcore:
 
 # @param portal.replicaCount A replica count for the pod.
 # @param portal.terminationGracePeriodSeconds Wait for up to this amount of seconds for a running instance of the service to shut down.
-# @param portal.max_body_size Maximum HTTP request body size.
-# @param portal.gzip_enabled If GZip compression should be enabled for the HTTP requests and responses.
+# @param portal.maxBodySize Maximum HTTP request body size.
+# @param portal.gzipEnabled If GZip compression should be enabled for the HTTP requests and responses.
 
 portal:
   replicaCount: 1
   terminationGracePeriodSeconds: 60
-  max_body_size: 100m
-  gzip_enabled: true
+  maxBodySize: 100m
+  gzipEnabled: true
 
   # @param portal.service.type Kubernetes [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
   # @param portal.service.port Service port.

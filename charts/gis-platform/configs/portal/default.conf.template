@@ -1,5 +1,5 @@
 upstream spcore-upstream {
-    server {{ include "gis-platform-spcore.fullname" . }}:{{ .Values.spcore.http_port }};
+    server {{ include "gis-platform-spcore.fullname" . }}:{{ .Values.spcore.httpPort }};
 }
 {{- if .Values.portal.s3proxy.enabled }}
 upstream s3-upstream {
@@ -12,7 +12,7 @@ map $http_upgrade $connection_upgrade {
     ''      close;
 }
 
-{{- if .Values.spcore.cors.allow_everyone }}
+{{- if .Values.spcore.cors.allowEveryone }}
 map $http_origin $cors_origin {
     default $http_origin;
     ''      '*';
@@ -33,7 +33,7 @@ map $request_uri $cache_disabled {
 
 server {
     listen 8000;
-    client_max_body_size {{ .Values.portal.max_body_size }};
+    client_max_body_size {{ .Values.portal.maxBodySize }};
 
     location / {
         alias /app/portal/;
@@ -96,7 +96,7 @@ server {
     location ~ ^/sp/layers/admin.satellite_imagery/tile/(.*)$ {
         proxy_pass {{ .Values.portal.s3proxy.scheme }}://s3-upstream/{{ .Values.spcore.s3.bucket }}/localTiles_admin.satellite_imagery/$1.png;
         proxy_set_header Host {{ .Values.spcore.s3.host }};
-        {{- if .Values.spcore.cors.allow_everyone }}
+        {{- if .Values.spcore.cors.allowEveryone }}
         # CORS block
         if ($request_method = OPTIONS) {
             add_header Content-Length 0;
@@ -123,7 +123,7 @@ server {
 
     {{- end }}
     location /sp/ {
-        {{- if .Values.spcore.cors.allow_everyone }}
+        {{- if .Values.spcore.cors.allowEveryone }}
         # CORS block
         if ($request_method = OPTIONS) {
             add_header Content-Length 0;

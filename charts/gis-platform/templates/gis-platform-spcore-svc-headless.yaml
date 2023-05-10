@@ -18,5 +18,5 @@ spec:
     {{- include "gis-platform-spcore.selectorLabels" . | nindent 4 }}
   ports:
   - name: spcore-internal
-    port: {{ .Values.spcore.cloud_port }}
-    targetPort: {{ .Values.spcore.cloud_port }}
+    port: {{ .Values.spcore.cloudPort }}
+    targetPort: {{ .Values.spcore.cloudPort }}

@@ -4,7 +4,7 @@ kind: StatefulSet
 metadata:
   name: {{ include "gis-platform-spcore.fullname" . }}
 spec:
-{{- if .Values.spcore.reset_cluster }}
+{{- if .Values.spcore.resetCluster }}
   replicas: 1
 {{- else }}
   replicas: {{ .Values.spcore.replicaCount }}
@@ -45,7 +45,7 @@ spec:
           startupProbe:
             httpGet:
               path: /
-              port: {{ .Values.spcore.http_port }}
+              port: {{ .Values.spcore.httpPort }}
               scheme: HTTP
             initialDelaySeconds: {{ .Values.spcore.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.spcore.startupProbe.periodSeconds }}
@@ -53,14 +53,14 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.spcore.http_port }}
+              port: {{ .Values.spcore.httpPort }}
               scheme: HTTP
             initialDelaySeconds: {{ .Values.spcore.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.spcore.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.spcore.readinessProbe.failureThreshold }}
           ports:
-          - containerPort: {{ .Values.spcore.cloud_port }}
-          - containerPort: {{ .Values.spcore.http_port }}
+          - containerPort: {{ .Values.spcore.cloudPort }}
+          - containerPort: {{ .Values.spcore.httpPort }}
           resources:
             {{- toYaml .Values.spcore.resources | nindent 12 }}
           env:
@@ -78,7 +78,7 @@ spec:
               fieldRef:
                 fieldPath: metadata.name
           - name: SPCORE_host
-            value: "{{ .Values.external_proto }}://{{ .Values.external_hostname }}"
+            value: "{{ .Values.externalProto }}://{{ .Values.externalHostname }}"
           - name: SPCORE_jwtConfiguration__adminAccessToken
             valueFrom:
               secretKeyRef:
@@ -90,11 +90,11 @@ spec:
                 name: {{ include "gis-platform.secret" . }}
                 key: jwt_token_key
           - name: SPCORE_debugMode
-            value: {{ .Values.spcore.debug_mode | quote }}
+            value: {{ .Values.spcore.debugMode | quote }}
           - name: SPCORE_cloudConnectorPort
-            value: {{ .Values.spcore.cloud_port | quote }}
+            value: {{ .Values.spcore.cloudPort | quote }}
           - name: SPCORE_httpPort
-            value: {{ .Values.spcore.http_port | quote }}
+            value: {{ .Values.spcore.httpPort | quote }}
           - name: SPCORE_dbConnectionString
             valueFrom:
               secretKeyRef:

@@ -22,7 +22,7 @@ http {
     #tcp_nopush     on;
 
     keepalive_timeout  65;
-{{- if .Values.portal.gzip_enabled }}
+{{- if .Values.portal.gzipEnabled }}
 
     gzip on;
     gzip_types application/json;
