@@ -50,6 +50,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `image.tag`        | Tag         | `7.3.1`                     |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
+### License settings
+
+| Name          | Description                                                        | Value |
+| ------------- | ------------------------------------------------------------------ | ----- |
+| `license.url` | URL of the License service. Ex: http(s)://license.svc **Required** | `""`  |
+
 ### Navi-Back application settings
 
 | Name                                   | Description                                                                                                                                                                                               | Value            |

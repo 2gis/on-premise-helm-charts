@@ -44,6 +44,14 @@ image:
   tag: 7.3.1
 
 
+# @section License settings
+
+# @param license.url URL of the License service. Ex: http(s)://license.svc **Required**
+
+license:
+  url: ''
+
+
 # @section Navi-Back application settings
 
 # @extra naviback.ecaHost Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.

@@ -469,6 +469,9 @@ data:
             }
           },
         {{- end }}
+        {{- $licenseUrl := .Values.license.url | required "Valid .Values.license.url required!" }}
+        "pasportool_client":
+          {{- toPrettyJson .Values.license | nindent 8 -}},
         {{- if .Values.naviback.additionalSections }}
           {{- include "tplvalues.render" ( dict "value" .Values.naviback.additionalSections "context" $) | nindent 8 }}
         {{- end }}
