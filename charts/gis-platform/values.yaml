@@ -47,7 +47,7 @@ ingress:
 # @param spcore.httpPort SPCore service HTTP port.
 # @param spcore.maxRenderTargets Maximum number of targets to render simultaneously.
 # @param spcore.loglevel Log level.
-# @param spcore.syncParameters
+# @skip spcore.syncParameters
 
 spcore:
   replicaCount: 1

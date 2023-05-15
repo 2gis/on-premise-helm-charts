@@ -26,10 +26,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ### Common settings
 
-| Name                | Description                         | Value               |
-| ------------------- | ----------------------------------- | ------------------- |
-| `external_hostname` | Service hostname.                   | `gis-platform.host` |
-| `external_proto`    | Protocol to use: `http` or `https`. | `https`             |
+| Name               | Description                         | Value               |
+| ------------------ | ----------------------------------- | ------------------- |
+| `externalHostname` | Service hostname.                   | `gis-platform.host` |
+| `externalProto`    | Protocol to use: `http` or `https`. | `https`             |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -55,37 +55,37 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | ------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------- |
 | `spcore.replicaCount`                       | A replica count for the pod.                                                              | `1`                        |
 | `spcore.service`                            | Service settings.                                                                         | `{}`                       |
-| `spcore.debug_mode`                         | If the debug mode is enabled.                                                             | `false`                    |
-| `spcore.reset_cluster`                      | If true, the cluster will be reset when applying this configuration.                      | `false`                    |
-| `spcore.update_db`                          | If true, the database schema and data will be updated when applying this configuration.   | `true`                     |
+| `spcore.debugMode`                          | If the debug mode is enabled.                                                             | `false`                    |
+| `spcore.resetCluster`                       | If true, the cluster will be reset when applying this configuration.                      | `false`                    |
+| `spcore.updateDb`                           | If true, the database schema and data will be updated when applying this configuration.   | `true`                     |
 | `spcore.terminationGracePeriodSeconds`      | Wait for up to this amount of seconds for a running instance of the service to shut down. | `60`                       |
-| `spcore.cloud_port`                         | Cloud port.                                                                               | `5050`                     |
-| `spcore.http_port`                          | SPCore service HTTP port.                                                                 | `5051`                     |
+| `spcore.cloudPort`                          | Cloud port.                                                                               | `5050`                     |
+| `spcore.httpPort`                           | SPCore service HTTP port.                                                                 | `5051`                     |
 | `spcore.maxRenderTargets`                   | Maximum number of targets to render simultaneously.                                       | `1000`                     |
 | `spcore.loglevel`                           | Log level.                                                                                | `Info`                     |
 | `spcore.cors`                               | **CORS settings.**                                                                        |                            |
-| `spcore.cors.allow_everyone`                | If true, requests from any origin will be allowed.                                        | `false`                    |
-| `spcore.cors.origins`                       | List of allowed origins (if `allow_everyone` is false).                                   | `[]`                       |
+| `spcore.cors.allowEveryone`                 | If true, requests from any origin will be allowed.                                        | `false`                    |
+| `spcore.cors.origins`                       | List of allowed origins (if `allowEveryone` is false).                                    | `[]`                       |
 | `spcore.s3`                                 | **S3-compatible storage settings.**                                                       |                            |
-| `spcore.s3.access_key`                      | S3 access key for accessing the bucket.                                                   | `""`                       |
-| `spcore.s3.secret_key`                      | S3 secret key for accessing the bucket.                                                   | `""`                       |
+| `spcore.s3.accessKey`                       | S3 access key for accessing the bucket.                                                   | `""`                       |
+| `spcore.s3.secretKey`                       | S3 secret key for accessing the bucket.                                                   | `""`                       |
 | `spcore.s3.host`                            | S3 endpoint. Format: `host:port`.                                                         | `s3.host`                  |
 | `spcore.s3.region`                          | S3 region.                                                                                | `US`                       |
 | `spcore.s3.bucket`                          | S3 bucket name.                                                                           | `spstatic`                 |
-| `spcore.s3.session_bucket`                  | S3 bucket name for temporary session files.                                               | `spsession`                |
-| `spcore.pg`                                 | **Database access settings.**                                                             |                            |
-| `spcore.pg.host`                            | PostgreSQL host.                                                                          | `postgres.host`            |
-| `spcore.pg.port`                            | PostgreSQL port.                                                                          | `5432`                     |
-| `spcore.pg.user`                            | PostgreSQL username.                                                                      | `gisadmin`                 |
-| `spcore.pg.password`                        | PostgreSQL password.                                                                      | `dbpass`                   |
-| `spcore.pg.dbname`                          | PostgreSQL database name.                                                                 | `gis-platform`             |
-| `spcore.pg.poolsize`                        | PostgreSQL connection pool size.                                                          | `25`                       |
+| `spcore.s3.sessionBucket`                   | S3 bucket name for temporary session files.                                               | `spsession`                |
+| `spcore.postgres`                           | **Database access settings.**                                                             |                            |
+| `spcore.postgres.host`                      | PostgreSQL host.                                                                          | `postgres.host`            |
+| `spcore.postgres.port`                      | PostgreSQL port.                                                                          | `5432`                     |
+| `spcore.postgres.user`                      | PostgreSQL username.                                                                      | `gisadmin`                 |
+| `spcore.postgres.password`                  | PostgreSQL password.                                                                      | `dbpass`                   |
+| `spcore.postgres.dbname`                    | PostgreSQL database name.                                                                 | `gis-platform`             |
+| `spcore.postgres.poolsize`                  | PostgreSQL connection pool size.                                                          | `25`                       |
 | `spcore.admin`                              | **Admin access settings.**                                                                |                            |
 | `spcore.admin.email`                        | Admin email                                                                               | `admin@example.com`        |
 | `spcore.admin.password`                     | Admin password                                                                            | `123456`                   |
 | `spcore.jwt`                                | **JSON Web Token (JWT) settings.**                                                        |                            |
-| `spcore.jwt.token_key`                      | JWT default user token.                                                                   | `supersecrettoken`         |
-| `spcore.jwt.token_admin`                    | JWT admin user token.                                                                     | `supersecrettoken`         |
+| `spcore.jwt.tokenKey`                       | JWT default user token.                                                                   | `supersecrettoken`         |
+| `spcore.jwt.tokenAdmin`                     | JWT admin user token.                                                                     | `supersecrettoken`         |
 | `spcore.catalog`                            | **Catalog settings.**                                                                     |                            |
 | `spcore.catalog.url`                        | Catalog service URL.                                                                      | `https://catalog-api.host` |
 | `spcore.catalog.key`                        | Catalog access key.                                                                       | `""`                       |
@@ -113,8 +113,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
 | `portal.replicaCount`                  | A replica count for the pod.                                                                                                   | `1`                                                                                  |
 | `portal.terminationGracePeriodSeconds` | Wait for up to this amount of seconds for a running instance of the service to shut down.                                      | `60`                                                                                 |
-| `portal.max_body_size`                 | Maximum HTTP request body size.                                                                                                | `100m`                                                                               |
-| `portal.gzip_enabled`                  | If GZip compression should be enabled for the HTTP requests and responses.                                                     | `true`                                                                               |
+| `portal.maxBodySize`                   | Maximum HTTP request body size.                                                                                                | `100m`                                                                               |
+| `portal.gzipEnabled`                   | If GZip compression should be enabled for the HTTP requests and responses.                                                     | `true`                                                                               |
 | `portal.service.type`                  | Kubernetes [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`                                                                          |
 | `portal.service.port`                  | Service port.                                                                                                                  | `80`                                                                                 |
 | `portal.websocket.timeout`             | WebSocket timeout in seconds.                                                                                                  | `604800`                                                                             |
