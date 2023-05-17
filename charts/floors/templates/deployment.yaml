@@ -69,6 +69,8 @@ spec:
               exec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           volumeMounts:
+            - name: {{ include "floors.name" . }}-pv
+              mountPath: "/var/floorsConvertedData"
         - name: {{ .Chart.Name }}-nginx
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}
           imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
@@ -102,8 +104,12 @@ spec:
               exec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           volumeMounts:
+      {{- if .Values.persistentVolume.enabled }}
       volumes:
-        {{- toYaml .Values.volumes | nindent 8 }}
+        - name: {{ include "floors.name" . }}-pv
+          persistentVolumeClaim:
+            claimName: {{ include "floors.name" . }}
+      {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}

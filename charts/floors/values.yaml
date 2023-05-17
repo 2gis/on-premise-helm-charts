@@ -133,7 +133,7 @@ nginx:
 # @param persistentVolume.size Volume size.
 
 persistentVolume:
-  enabled: false
+  enabled: true
   accessModes:
   - ReadWriteOnce
   storageClass: ceph-csi-rbd
