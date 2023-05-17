@@ -78,7 +78,7 @@ spec:
               fieldRef:
                 fieldPath: metadata.name
           - name: SPCORE_host
-            value: "{{ .Values.externalProto }}://{{ .Values.externalHostname }}"
+            value: "{{ .Values.protocol }}://{{ .Values.host }}"
           - name: SPCORE_jwtConfiguration__adminAccessToken
             valueFrom:
               secretKeyRef:
@@ -90,7 +90,7 @@ spec:
                 name: {{ include "gis-platform.secret" . }}
                 key: jwt_token_key
           - name: SPCORE_debugMode
-            value: {{ .Values.spcore.debugMode | quote }}
+            value: {{ .Values.spcore.debug | quote }}
           - name: SPCORE_cloudConnectorPort
             value: {{ .Values.spcore.cloudPort | quote }}
           - name: SPCORE_httpPort

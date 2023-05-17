@@ -7,11 +7,11 @@ dgctlDockerRegistry: ''
 
 # @section Common settings
 
-# @param externalHostname Service hostname.
-# @param externalProto Protocol to use: `http` or `https`.
+# @param host Service hostname.
+# @param protocol Protocol to use: `http` or `https`.
 
-externalHostname: gis-platform.host
-externalProto: https
+host: gis-platform.host
+protocol: https
 
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
@@ -39,7 +39,7 @@ ingress:
 
 # @param spcore.replicaCount A replica count for the pod.
 # @param spcore.service Service settings.
-# @param spcore.debugMode If the debug mode is enabled.
+# @param spcore.debug If the debug mode is enabled.
 # @param spcore.resetCluster If true, the cluster will be reset when applying this configuration.
 # @param spcore.updateDb If true, the database schema and data will be updated when applying this configuration.
 # @param spcore.terminationGracePeriodSeconds Wait for up to this amount of seconds for a running instance of the service to shut down.
@@ -53,7 +53,7 @@ spcore:
   replicaCount: 1
 
   service: {}
-  debugMode: false
+  debug: false
   resetCluster: false
   updateDb: true
   terminationGracePeriodSeconds: 60
@@ -103,17 +103,17 @@ spcore:
   # @extra spcore.postgres **Database access settings.**
   # @param spcore.postgres.host PostgreSQL host.
   # @param spcore.postgres.port PostgreSQL port.
-  # @param spcore.postgres.user PostgreSQL username.
+  # @param spcore.postgres.username PostgreSQL username.
   # @param spcore.postgres.password PostgreSQL password.
-  # @param spcore.postgres.dbname PostgreSQL database name.
+  # @param spcore.postgres.name PostgreSQL database name.
   # @param spcore.postgres.poolsize PostgreSQL connection pool size.
 
   postgres:
     host: postgres.host
     port: 5432
-    user: gisadmin
+    username: gisadmin
     password: dbpass
-    dbname: gis-platform
+    name: gis-platform
     poolsize: 25
 
   # @extra spcore.admin **Admin access settings.**
@@ -162,7 +162,7 @@ spcore:
     projects: 1000
     features: 1000000
 
-  # @extra spcore.startupProbe **Startup probe settings.**
+  # @extra spcore.startupProbe **Startup probe [settings](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) .**
   # @param spcore.startupProbe.initialDelaySeconds Seconds before the first probe.
   # @param spcore.startupProbe.periodSeconds Probing period.
   # @param spcore.startupProbe.failureThreshold Probing failure threshold.
@@ -172,7 +172,7 @@ spcore:
     periodSeconds: 10
     failureThreshold: 100
 
-  # @extra spcore.readinessProbe **Readiness probe settings.**
+  # @extra spcore.readinessProbe **Readiness probe [settings](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) .**
   # @param spcore.readinessProbe.initialDelaySeconds Seconds before the first probe.
   # @param spcore.readinessProbe.periodSeconds Probing period.
   # @param spcore.readinessProbe.failureThreshold Probing failure threshold.
@@ -188,13 +188,14 @@ spcore:
 # @param portal.replicaCount A replica count for the pod.
 # @param portal.terminationGracePeriodSeconds Wait for up to this amount of seconds for a running instance of the service to shut down.
 # @param portal.maxBodySize Maximum HTTP request body size.
-# @param portal.gzipEnabled If GZip compression should be enabled for the HTTP requests and responses.
+# @param portal.gzip.enabled If GZip compression should be enabled for the HTTP requests and responses.
 
 portal:
   replicaCount: 1
   terminationGracePeriodSeconds: 60
   maxBodySize: 100m
-  gzipEnabled: true
+  gzip:
+    enabled: true
 
   # @param portal.service.type Kubernetes [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
   # @param portal.service.port Service port.
