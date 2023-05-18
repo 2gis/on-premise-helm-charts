@@ -26,10 +26,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ### Common settings
 
-| Name       | Description                         | Value               |
-| ---------- | ----------------------------------- | ------------------- |
-| `host`     | Service hostname.                   | `gis-platform.host` |
-| `protocol` | Protocol to use: `http` or `https`. | `https`             |
+| Name  | Description                                                                 | Value |
+| ----- | --------------------------------------------------------------------------- | ----- |
+| `url` | URL for the GIS platform ex: https://gis-platform.ingress.host **Required** | `""`  |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -59,38 +58,38 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | `spcore.resetCluster`                       | If true, the cluster will be reset when applying this configuration.                                | `false`                    |
 | `spcore.updateDb`                           | If true, the database schema and data will be updated when applying this configuration.             | `true`                     |
 | `spcore.terminationGracePeriodSeconds`      | Wait for up to this amount of seconds for a running instance of the service to shut down.           | `60`                       |
-| `spcore.cloudPort`                          | Cloud port.                                                                                         | `5050`                     |
-| `spcore.httpPort`                           | SPCore service HTTP port.                                                                           | `5051`                     |
+| `spcore.nodePort`                           | Port for communication between services cross the nodes in cluster mode                             | `5050`                     |
+| `spcore.appPort`                            | SPCore service HTTP port.                                                                           | `5051`                     |
 | `spcore.maxRenderTargets`                   | Maximum number of targets to render simultaneously.                                                 | `1000`                     |
 | `spcore.loglevel`                           | Log level.                                                                                          | `Info`                     |
 | `spcore.cors`                               | **CORS settings.**                                                                                  |                            |
 | `spcore.cors.allowEveryone`                 | If true, requests from any origin will be allowed.                                                  | `false`                    |
 | `spcore.cors.origins`                       | List of allowed origins (if `allowEveryone` is false).                                              | `[]`                       |
 | `spcore.s3`                                 | **S3-compatible storage settings.**                                                                 |                            |
-| `spcore.s3.accessKey`                       | S3 access key for accessing the bucket.                                                             | `""`                       |
-| `spcore.s3.secretKey`                       | S3 secret key for accessing the bucket.                                                             | `""`                       |
-| `spcore.s3.host`                            | S3 endpoint. Format: `host:port`.                                                                   | `s3.host`                  |
+| `spcore.s3.accessKey`                       | S3 access key for accessing the bucket **Required**                                                 | `""`                       |
+| `spcore.s3.secretKey`                       | S3 secret key for accessing the bucket **Required**                                                 | `""`                       |
+| `spcore.s3.host`                            | S3 endpoint. Format: `host:port`.                                                                   | `""`                       |
 | `spcore.s3.region`                          | S3 region.                                                                                          | `US`                       |
-| `spcore.s3.bucket`                          | S3 bucket name.                                                                                     | `spstatic`                 |
-| `spcore.s3.sessionBucket`                   | S3 bucket name for temporary session files.                                                         | `spsession`                |
+| `spcore.s3.bucket`                          | S3 bucket name **Required**                                                                         | `""`                       |
+| `spcore.s3.sessionBucket`                   | S3 bucket name for temporary session files **Required**                                             | `""`                       |
 | `spcore.postgres`                           | **Database access settings.**                                                                       |                            |
-| `spcore.postgres.host`                      | PostgreSQL host.                                                                                    | `postgres.host`            |
+| `spcore.postgres.host`                      | PostgreSQL host **Required**                                                                        | `""`                       |
 | `spcore.postgres.port`                      | PostgreSQL port.                                                                                    | `5432`                     |
-| `spcore.postgres.username`                  | PostgreSQL username.                                                                                | `gisadmin`                 |
-| `spcore.postgres.password`                  | PostgreSQL password.                                                                                | `dbpass`                   |
-| `spcore.postgres.name`                      | PostgreSQL database name.                                                                           | `gis-platform`             |
+| `spcore.postgres.username`                  | PostgreSQL username **Required**                                                                    | `""`                       |
+| `spcore.postgres.password`                  | PostgreSQL password **Required**                                                                    | `""`                       |
+| `spcore.postgres.name`                      | PostgreSQL database name **Required**                                                               | `""`                       |
 | `spcore.postgres.poolsize`                  | PostgreSQL connection pool size.                                                                    | `25`                       |
 | `spcore.admin`                              | **Admin access settings.**                                                                          |                            |
-| `spcore.admin.email`                        | Admin email                                                                                         | `admin@example.com`        |
-| `spcore.admin.password`                     | Admin password                                                                                      | `123456`                   |
+| `spcore.admin.email`                        | Admin email **Required**                                                                            | `admin@example.com`        |
+| `spcore.admin.password`                     | Admin password **Required**                                                                         | `123456`                   |
 | `spcore.jwt`                                | **JSON Web Token (JWT) settings.**                                                                  |                            |
-| `spcore.jwt.tokenKey`                       | JWT default user token.                                                                             | `supersecrettoken`         |
-| `spcore.jwt.tokenAdmin`                     | JWT admin user token.                                                                               | `supersecrettoken`         |
+| `spcore.jwt.tokenKey`                       | JWT default user token **Required**                                                                 | `""`                       |
+| `spcore.jwt.tokenAdmin`                     | JWT admin user token **Required**                                                                   | `""`                       |
 | `spcore.catalog`                            | **Catalog settings.**                                                                               |                            |
-| `spcore.catalog.url`                        | Catalog service URL.                                                                                | `https://catalog-api.host` |
-| `spcore.catalog.key`                        | Catalog access key.                                                                                 | `""`                       |
+| `spcore.catalog.url`                        | Catalog service URL **Required**                                                                    | `""`                       |
+| `spcore.catalog.key`                        | Catalog access key **Required**                                                                     | `""`                       |
 | `spcore.catalog.type`                       | Additional geocoder filter                                                                          | `""`                       |
-| `spcore.catalog.regionId`                   | Additional geocoder filter                                                                          | `""`                       |
+| `spcore.catalog.regionId`                   | Additional geocoder filter **Required**                                                             | `""`                       |
 | `spcore.navi`                               | **Navi settings.**                                                                                  |                            |
 | `spcore.navi.url`                           | Navi service URL.                                                                                   | `https://catalog-api.host` |
 | `spcore.defaultLimits`                      | **Default limits.**                                                                                 |                            |

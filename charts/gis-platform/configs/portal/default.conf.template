@@ -1,5 +1,5 @@
 upstream spcore-upstream {
-    server {{ include "gis-platform-spcore.fullname" . }}:{{ .Values.spcore.httpPort }};
+    server {{ include "gis-platform-spcore.fullname" . }}:{{ .Values.spcore.appPort }};
 }
 {{- if .Values.portal.s3proxy.enabled }}
 upstream s3-upstream {

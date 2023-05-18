@@ -7,11 +7,9 @@ dgctlDockerRegistry: ''
 
 # @section Common settings
 
-# @param host Service hostname.
-# @param protocol Protocol to use: `http` or `https`.
+# @param url URL for the GIS platform ex: https://gis-platform.ingress.host **Required**
 
-host: gis-platform.host
-protocol: https
+url: ''
 
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
@@ -43,8 +41,8 @@ ingress:
 # @param spcore.resetCluster If true, the cluster will be reset when applying this configuration.
 # @param spcore.updateDb If true, the database schema and data will be updated when applying this configuration.
 # @param spcore.terminationGracePeriodSeconds Wait for up to this amount of seconds for a running instance of the service to shut down.
-# @param spcore.cloudPort Cloud port.
-# @param spcore.httpPort SPCore service HTTP port.
+# @param spcore.nodePort Port for communication between services cross the nodes in cluster mode
+# @param spcore.appPort SPCore service HTTP port.
 # @param spcore.maxRenderTargets Maximum number of targets to render simultaneously.
 # @param spcore.loglevel Log level.
 # @skip spcore.syncParameters
@@ -59,8 +57,8 @@ spcore:
   terminationGracePeriodSeconds: 60
   syncParameters: false
 
-  cloudPort: 5050
-  httpPort: 5051
+  nodePort: 5050
+  appPort: 5051
   maxRenderTargets: 1000
   loglevel: Info
 
@@ -85,61 +83,61 @@ spcore:
     origins: []
 
   # @extra spcore.s3 **S3-compatible storage settings.**
-  # @param spcore.s3.accessKey S3 access key for accessing the bucket.
-  # @param spcore.s3.secretKey S3 secret key for accessing the bucket.
+  # @param spcore.s3.accessKey S3 access key for accessing the bucket **Required**
+  # @param spcore.s3.secretKey S3 secret key for accessing the bucket **Required**
   # @param spcore.s3.host S3 endpoint. Format: `host:port`.
   # @param spcore.s3.region S3 region.
-  # @param spcore.s3.bucket S3 bucket name.
-  # @param spcore.s3.sessionBucket S3 bucket name for temporary session files.
+  # @param spcore.s3.bucket S3 bucket name **Required**
+  # @param spcore.s3.sessionBucket S3 bucket name for temporary session files **Required**
 
   s3:
     accessKey: ''
     secretKey: ''
-    host: s3.host
+    host: ''
     region: US
-    bucket: spstatic
-    sessionBucket: spsession
+    bucket: ''
+    sessionBucket: ''
 
   # @extra spcore.postgres **Database access settings.**
-  # @param spcore.postgres.host PostgreSQL host.
+  # @param spcore.postgres.host PostgreSQL host **Required**
   # @param spcore.postgres.port PostgreSQL port.
-  # @param spcore.postgres.username PostgreSQL username.
-  # @param spcore.postgres.password PostgreSQL password.
-  # @param spcore.postgres.name PostgreSQL database name.
+  # @param spcore.postgres.username PostgreSQL username **Required**
+  # @param spcore.postgres.password PostgreSQL password **Required**
+  # @param spcore.postgres.name PostgreSQL database name **Required**
   # @param spcore.postgres.poolsize PostgreSQL connection pool size.
 
   postgres:
-    host: postgres.host
+    host: ''
     port: 5432
-    username: gisadmin
-    password: dbpass
-    name: gis-platform
+    username: ''
+    password: ''
+    name: ''
     poolsize: 25
 
   # @extra spcore.admin **Admin access settings.**
-  # @param spcore.admin.email Admin email
-  # @param spcore.admin.password Admin password
+  # @param spcore.admin.email Admin email **Required**
+  # @param spcore.admin.password Admin password **Required**
 
   admin:
     email: admin@example.com
     password: '123456'
 
   # @extra spcore.jwt **JSON Web Token (JWT) settings.**
-  # @param spcore.jwt.tokenKey JWT default user token.
-  # @param spcore.jwt.tokenAdmin JWT admin user token.
+  # @param spcore.jwt.tokenKey JWT default user token **Required**
+  # @param spcore.jwt.tokenAdmin JWT admin user token **Required**
 
   jwt:
-    tokenKey: supersecrettoken
-    tokenAdmin: supersecrettoken
+    tokenKey: ''
+    tokenAdmin: ''
 
   # @extra spcore.catalog **Catalog settings.**
-  # @param spcore.catalog.url Catalog service URL.
-  # @param spcore.catalog.key Catalog access key.
+  # @param spcore.catalog.url Catalog service URL **Required**
+  # @param spcore.catalog.key Catalog access key **Required**
   # @param spcore.catalog.type Additional geocoder filter
-  # @param spcore.catalog.regionId Additional geocoder filter
+  # @param spcore.catalog.regionId Additional geocoder filter **Required**
 
   catalog:
-    url: https://catalog-api.host
+    url: ''
     key: ''
     type: ''
     regionId: ''

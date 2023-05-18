@@ -45,7 +45,7 @@ spec:
           startupProbe:
             httpGet:
               path: /
-              port: {{ .Values.spcore.httpPort }}
+              port: {{ .Values.spcore.appPort }}
               scheme: HTTP
             initialDelaySeconds: {{ .Values.spcore.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.spcore.startupProbe.periodSeconds }}
@@ -53,14 +53,14 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.spcore.httpPort }}
+              port: {{ .Values.spcore.appPort }}
               scheme: HTTP
             initialDelaySeconds: {{ .Values.spcore.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.spcore.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.spcore.readinessProbe.failureThreshold }}
           ports:
-          - containerPort: {{ .Values.spcore.cloudPort }}
-          - containerPort: {{ .Values.spcore.httpPort }}
+          - containerPort: {{ .Values.spcore.nodePort }}
+          - containerPort: {{ .Values.spcore.appPort }}
           resources:
             {{- toYaml .Values.spcore.resources | nindent 12 }}
           env:
@@ -78,7 +78,7 @@ spec:
               fieldRef:
                 fieldPath: metadata.name
           - name: SPCORE_host
-            value: "{{ .Values.protocol }}://{{ .Values.host }}"
+            value: "{{ .Values.url }}"
           - name: SPCORE_jwtConfiguration__adminAccessToken
             valueFrom:
               secretKeyRef:
@@ -92,9 +92,9 @@ spec:
           - name: SPCORE_debugMode
             value: {{ .Values.spcore.debug | quote }}
           - name: SPCORE_cloudConnectorPort
-            value: {{ .Values.spcore.cloudPort | quote }}
+            value: {{ .Values.spcore.nodePort | quote }}
           - name: SPCORE_httpPort
-            value: {{ .Values.spcore.httpPort | quote }}
+            value: {{ .Values.spcore.appPort | quote }}
           - name: SPCORE_dbConnectionString
             valueFrom:
               secretKeyRef:

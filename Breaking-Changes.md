@@ -1,13 +1,12 @@
 # 2GIS On-Premise Breaking-Changes
 ## [1.7.1]
 #### gis-platform
-- Rename `external_hostname` to `host`
-- Rename `external_proto` to `protocol`
+- Rename `external_proto` and `external_hostname` to `url`
 - Rename `spcore.debug_mode` to `spcore.debug`
 - Rename `spcore.reset_cluster` to `spcore.resetCluster`
 - Rename `spcore.update_db` to `spcore.updateDb`
-- Rename `spcore.cloud_port` to `spcore.cloudPort`
-- Rename `spcore.http_port` to `spcore.httpPort`
+- Rename `spcore.cloud_port` to `spcore.nodePort`
+- Rename `spcore.http_port` to `spcore.appPort`
 - Rename `spcore.sync_parameters` to `spcore.syncParameters`
 - Rename `spcore.cors.allow_everyone` to `spcore.cors.allowEveryone`
 - Rename `spcore.s3.access_key` to `spcore.s3.accessKey`
