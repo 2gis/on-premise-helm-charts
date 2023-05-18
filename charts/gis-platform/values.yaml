@@ -85,7 +85,7 @@ spcore:
   # @extra spcore.s3 **S3-compatible storage settings.**
   # @param spcore.s3.accessKey S3 access key for accessing the bucket **Required**
   # @param spcore.s3.secretKey S3 secret key for accessing the bucket **Required**
-  # @param spcore.s3.host S3 endpoint. Format: `host:port`.
+  # @param spcore.s3.host S3 endpoint. Format: `host:port`. **Required**
   # @param spcore.s3.region S3 region.
   # @param spcore.s3.bucket S3 bucket name **Required**
   # @param spcore.s3.sessionBucket S3 bucket name for temporary session files **Required**
@@ -127,14 +127,14 @@ spcore:
   # @param spcore.jwt.tokenAdmin JWT admin user token **Required**
 
   jwt:
-    tokenKey: ''
-    tokenAdmin: ''
+    tokenKey: supersecrettoken
+    tokenAdmin: supersecrettoken
 
   # @extra spcore.catalog **Catalog settings.**
   # @param spcore.catalog.url Catalog service URL **Required**
   # @param spcore.catalog.key Catalog access key **Required**
   # @param spcore.catalog.type Additional geocoder filter
-  # @param spcore.catalog.regionId Additional geocoder filter **Required**
+  # @param spcore.catalog.regionId Additional geocoder filter
 
   catalog:
     url: ''

@@ -38,10 +38,10 @@
        }
   },
   "s3Configuration": {
-    "host": "{{ .Values.spcore.s3.host }}",
+    "host": "{{ required "A valid .Values.spcore.s3.host entry required" .Values.spcore.s3.host }}",
     "region": "{{ .Values.spcore.s3.region }}",
-    "bucketName": "{{ .Values.spcore.s3.bucket }}",
-    "sessionStorageBucketName": "{{ .Values.spcore.s3.sessionBucket }}",
+    "bucketName": "{{ required "A valid .Values.spcore.s3.bucket entry required" .Values.spcore.s3.bucket }}",
+    "sessionStorageBucketName": "{{ required "A valid .Values.spcore.s3.sessionBucket entry required" .Values.spcore.s3.sessionBucket }}",
     "provider": "aws"
   },
   "DefaultLimits": {

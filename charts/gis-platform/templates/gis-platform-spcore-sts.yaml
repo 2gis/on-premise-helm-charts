@@ -65,7 +65,7 @@ spec:
             {{- toYaml .Values.spcore.resources | nindent 12 }}
           env:
           - name: GIS_PLATFORM_CATALOG_URL
-            value: {{ .Values.spcore.catalog.url }}
+            value: {{ required "A valid .Values.spcore.catalog.url entry required" .Values.spcore.catalog.url }}
           - name: GIS_PLATFORM_NAVI_URL
             value: {{ .Values.spcore.navi.url }}
           - name: GIS_PLATFORM_CATALOG_KEY
@@ -78,7 +78,7 @@ spec:
               fieldRef:
                 fieldPath: metadata.name
           - name: SPCORE_host
-            value: "{{ .Values.url }}"
+            value: {{ required "A valid .Values.url entry required" .Values.url }}
           - name: SPCORE_jwtConfiguration__adminAccessToken
             valueFrom:
               secretKeyRef:
@@ -113,7 +113,7 @@ spec:
           - name: SPCORE_zkConnectionAddress
             value: {{ include "gis-platform.zookeeper_connection_string" . | quote }}
           - name: SPCORE_SuEmail
-            value: {{ .Values.spcore.admin.email | quote }}
+            value: {{ required "A valid .Values.spcore.admin.email entry required" .Values.spcore.admin.email | quote }}
           - name: SPCORE_SuPassword
             valueFrom:
               secretKeyRef:
