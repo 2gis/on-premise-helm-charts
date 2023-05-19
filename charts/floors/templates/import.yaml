@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "floors.fullname" . }}
+  labels:
+    {{- include "floors.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "2"
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "floors.fullname" . }}
+      labels:
+        {{- include "floors.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      {{- if .Values.importer.initialDelaySeconds }}
+      initContainers:
+        - name: delay
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag }}
+          command: [ "sh", "-c", "sleep {{ .Values.importer.initialDelaySeconds }}" ]
+          resources:
+            {{- toYaml .Values.importer.resources | nindent 12 }}
+      {{- end }}
+      containers:
+        - name: importer
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: ['sh', '-c']
+          args:
+            - export URL="https://s3.2gis.one/floors-convert/prod/onprem-2023-05-16_04-23-02.tar.gz" &&
+              cd /var/floorsConvertedData/ &&
+              rm -rf * &&
+              echo loading $URL &&
+              wget --no-verbose $URL -O a.tar.gz &&
+              echo untaring... &&
+              tar -xzf a.tar.gz &&
+              for i in onprem/*; do echo "extracting $i..."; tar xf $i; echo "rm $i"; rm $i; done &&
+              echo clearing... &&
+              rm -fr a.tar.gz onprem &&
+              echo done
+          resources:
+            {{- toYaml .Values.importer.resources | nindent 12 }}
+          {{- if .Values.persistentVolume.enabled }}
+          volumeMounts:
+            - name: {{ include "floors.fullname" . }}-pv
+              mountPath: /var/floorsConvertedData
+          {{- end }}
+      {{- if .Values.persistentVolume.enabled }}
+      volumes:
+        - name: {{ include "floors.fullname" . }}-pv
+          persistentVolumeClaim:
+            claimName: {{ include "floors.fullname" . }}
+      {{- end }}

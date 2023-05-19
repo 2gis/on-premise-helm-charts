@@ -133,8 +133,8 @@ nginx:
 # @param persistentVolume.size Volume size.
 
 persistentVolume:
-  enabled: true
+  enabled: false
   accessModes:
   - ReadWriteOnce
-  storageClass: ceph-csi-rbd
+  storageClass: ""
   size: 5Gi
