@@ -1,3 +1,4 @@
+{{- if .Values.import.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -17,18 +18,10 @@ spec:
         {{- include "floors.labels" . | nindent 8 }}
     spec:
       restartPolicy: Never
-      {{- if .Values.importer.initialDelaySeconds }}
-      initContainers:
-        - name: delay
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag }}
-          command: [ "sh", "-c", "sleep {{ .Values.importer.initialDelaySeconds }}" ]
-          resources:
-            {{- toYaml .Values.importer.resources | nindent 12 }}
-      {{- end }}
       containers:
-        - name: importer
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag }}
-          imagePullPolicy: {{ .Values.imagePullPolicy }}
+        - name: import
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.import.image.repository }}:{{ .Values.import.image.tag }}
+          imagePullPolicy: {{ .Values.import.imagePullPolicy }}
           command: ['sh', '-c']
           args:
             - export URL="https://s3.2gis.one/floors-convert/prod/onprem-2023-05-16_04-23-02.tar.gz" &&
@@ -43,7 +36,7 @@ spec:
               rm -fr a.tar.gz onprem &&
               echo done
           resources:
-            {{- toYaml .Values.importer.resources | nindent 12 }}
+            {{- toYaml .Values.import.resources | nindent 12 }}
           {{- if .Values.persistentVolume.enabled }}
           volumeMounts:
             - name: {{ include "floors.fullname" . }}-pv
@@ -55,3 +48,4 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "floors.fullname" . }}
       {{- end }}
+{{- end }}

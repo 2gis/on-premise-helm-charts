@@ -125,6 +125,32 @@ nginx:
     pullPolicy: IfNotPresent
     tag: 0.0.2
 
+# @section Floors API data import settings
+
+# @param import.enabled If import task should be enabled
+# @param import.image.repository Import task image repository.
+# @param import.image.tag Import task image tag.
+# @param import.image.pullPolicy Import task pull policy.
+# @skip import.resources
+# @extra import.resources.requests.cpu A CPU request, e.g., `100m`.
+# @extra import.resources.requests.memory A memory request, e.g., `128Mi`.
+# @extra import.resources.limits.cpu A CPU limit, e.g., `100m`.
+# @extra import.resources.limits.memory A memory limit, e.g., `128Mi`.
+
+import:
+  enabled: false
+  image:
+    repository: 2gis-on-premise/floors-nginx
+    pullPolicy: IfNotPresent
+    tag: 0.0.2
+  # resources:
+  #   requests:
+  #     cpu: 30m
+  #     memory: 128M
+  #   limits:
+  #     cpu: 60m
+  #     memory: 256M
+
 # @section Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
 
 # @param persistentVolume.enabled If Kubernetes persistence volume should be enabled for ZooKeeper.
