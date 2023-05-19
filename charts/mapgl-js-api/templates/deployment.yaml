@@ -46,6 +46,8 @@ spec:
               value: "{{ .Values.env.MAPGL_DEMO_KEY }}" 
             - name: MAPGL_TILESERVER
               value: "{{ .Values.env.MAPGL_TILES_API }}"
+            - name: MAPGL_TILESET
+              value: "{{ .Values.env.MAPGL_TILESET }}"
             - name: MAPGL_TRAFFICSERVER
               value: "{{ .Values.env.MAPGL_TRAFFICSERVER }}"
             - name: MAPGL_FLOORSSERVER
