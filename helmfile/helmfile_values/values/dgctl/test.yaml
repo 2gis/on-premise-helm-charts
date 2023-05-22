@@ -1,0 +1,11 @@
+dgctlDockerRegistry: docker-hub.example.ru
+
+dgctlStorage:
+  host: artifacts.example.com
+  bucket: onpremise-artifacts
+  accessKey: AKIAIOSFODNN7EXAMPLE
+  secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+  manifest: manifests/1671100009.json
+
+imagePullSecrets: [] #указать k8s secrets, если требуется авторизация на doker registry
+#  - name: secret_regestry

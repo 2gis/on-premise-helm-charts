@@ -1,0 +1,33 @@
+---
+bases:
+- {{ env "HELMFILE_VALUES" | default "../../../helmfile_values" }}/base.yaml
+---
+{{ if eq .Values.remoteCharts true }}
+repositories:
+- name: 2gis-on-premise
+  url: https://2gis.github.io/on-premise-helm-charts
+{{ end }}
+---
+{{ $path_values:= env "HELMFILE_VALUES" | default "../../../helmfile_values" }}
+releases:
+  - name: keys
+    {{- if eq .Values.remoteCharts true }}
+    chart: 2gis-on-premise/keys
+    {{- else}}    
+    chart: ../../charts/keys
+    {{- end }} 
+    {{- if (not (eq "UNDEFINED" .Values.namespace)) }}
+    namespace: {{ .Values.namespace  }}
+    {{- end }}
+    {{- if (not (eq "UNDEFINED" .Values.kubeContext)) }}
+    kubeContext: {{ .Values.kubeContext }}
+    {{- end }}
+    version: "{{ .Values.chartVersion }}"
+    labels:
+      chart: keys
+    values: 
+      - {{ $path_values }}/values/dgctl/{{ .Environment.Name }}.yaml
+      - {{ $path_values }}/values/keys/{{ .Environment.Name }}.yaml
+    {{- if .Values.ingress.enabled }}
+      - {{ $path_values }}/templates/keys.ingress.gotmpl
+    {{- end }} 

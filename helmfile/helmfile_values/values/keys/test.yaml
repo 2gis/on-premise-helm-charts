@@ -1,0 +1,41 @@
+postgres:
+  ro:
+    host: keys-postgresql.storage.example.local
+    port: 5432
+    name: onpremise_keys
+    username: keys_superuser_ro
+    password: KEYS_Db_RO_User_Password_5678
+  rw:
+    host: keys-postgresql.storage.example.local
+    port: 5432
+    name: onpremise_keys
+    username: keys_superuser_rw
+    password: KEYS_Db_Owner_Password_1234
+
+api:
+  replicas: 2
+  adminUsers: "admin:admin_password"
+
+admin:
+  replicas: 2
+  host: "https://keys-admin.example.com/"
+
+migrate:
+  initialDelaySeconds: 3
+
+# ldap:
+#   host: ''
+#   port: 3268
+#   useStartTLS: false
+#   useLDAPS: false
+#   skipServerCertificateVerify: false
+#   serverName: ''
+#   clientCertificatePath: ''
+#   clientKeyPath: ''
+#   rootCertificateAuthoritiesPath: ''
+#   bind:
+#     dn: user
+#     password: secret
+#   search:
+#     baseDN: dc=2gis
+#     filter: (&(objectClass=user)(sAMAccountName=%s))

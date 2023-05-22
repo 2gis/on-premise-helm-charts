@@ -1,0 +1,19 @@
+admin:
+  ingress: 
+    className: nginx
+    enabled: true
+    hosts:
+    - host: {{ .Release.Name }}-admin.{{ .Values.ingress.domain }}
+      paths:
+      - path: /
+        pathType: Prefix
+    {{- if eq .Values.ingress.protocol "https" }}
+    tls:
+    - hosts:
+      - {{ .Release.Name }}-admin.{{ .Values.ingress.domain }}
+      {{- if .Values.ingress.secretName  }}
+      secretName: {{ .Values.ingress.secretName }}
+      {{ else }}
+      {{- fail "Not specified secret for https, check value secretName" }}
+      {{ end }}
+    {{ end }}
