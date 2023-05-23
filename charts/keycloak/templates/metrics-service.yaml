@@ -1,0 +1,25 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-metrics" (include "keycloak.fullname" .) }}
+  namespace: {{ include "keycloak.names.namespace" . | quote }}
+  labels: {{- include "keycloak.labels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+  {{- if .Values.metrics.service.annotations }}
+  annotations:
+    {{- if .Values.metrics.service.annotations }}
+    {{- include "keycloak.tplvalues.render" ( dict "value" .Values.metrics.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.port }}
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/component: keycloak
+    {{- include "keycloak.selectorLabels" . | nindent 4 }}
+{{- end }}

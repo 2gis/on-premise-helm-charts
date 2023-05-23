@@ -1,0 +1,12 @@
+{{- if .Values.keycloakConfigCli.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "keycloak.fullname" . }}-realm
+  namespace: {{ include "keycloak.names.namespace" . | quote }}
+  labels: {{- include "keycloak.labels" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak
+data:
+  realm.json: |-
+    {{- tpl (.Files.Get "configs/realm.tpl") . | nindent 4 }}
+{{- end }}

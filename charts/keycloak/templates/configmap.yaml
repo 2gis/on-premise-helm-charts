@@ -1,0 +1,12 @@
+{{- if (include "keycloak.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-configuration" (include "keycloak.fullname" .) }}
+  namespace: {{ include "keycloak.names.namespace" . | quote }}
+  labels: {{- include "keycloak.labels" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak
+data:
+  keycloak.conf: |-
+    {{- .Values.configuration | nindent 4 }}
+{{- end }}
