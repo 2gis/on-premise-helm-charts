@@ -11,10 +11,10 @@
       "required": [
         "logLevel",
         "isOnPremise",
-        "ssoAuth",
         "appTheme",
         "appLocale",
         "appInitialMapCenter",
+        "auth",
         "api",
         "mapgl"
       ],
@@ -24,10 +24,6 @@
           "enum": ["error"]
         },
         "isOnPremise": {
-          "type": "string",
-          "enum": ["true", "false"]
-        },
-        "ssoAuth": {
           "type": "string",
           "enum": ["true", "false"]
         },
@@ -41,6 +37,57 @@
         },
         "appInitialMapCenter": {
           "type": "string"
+        },
+        "auth": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sso",
+            "secure",
+            "safeHosts",
+            "codeUrl",
+            "clientId",
+            "clientSecret",
+            "oAuthProvider",
+            "identityProviderUrl",
+            "oAuthApiUrl",
+            "userDataApiUrl"
+          ],
+          "properties": {
+            "sso": {
+              "type": "string",
+              "enum": ["true", "false"]
+            },
+            "secure": {
+              "type": "string",
+              "enum": ["true", "false"]
+            },
+            "safeHosts": {
+              "type": "string"
+            },
+            "codeUrl": {
+              "type": "string"
+            },
+            "clientId": {
+              "type": "string"
+            },
+            "clientSecret": {
+              "type": "string"
+            },
+            "oAuthProvider": {
+              "type": "string",
+              "enum": ["keycloak", "ugc"]
+            },
+            "identityProviderUrl": {
+              "type": "string"
+            },
+            "oAuthApiUrl": {
+              "type": "string"
+            },
+            "userDataApiUrl": {
+              "type": "string"
+            }
+          }
         },
         "api": {
           "type": "object",

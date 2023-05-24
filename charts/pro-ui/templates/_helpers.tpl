@@ -34,7 +34,25 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: IS_ON_PREM
   value: "{{ .Values.ui.isOnPremise }}"
 - name: SSO_AUTH
-  value: "{{ .Values.ui.ssoAuth }}"
+  value: "{{ .Values.ui.auth.sso }}"
+- name: AUTH_SAFE_HOSTS
+  value: "{{ .Values.ui.auth.safeHosts }}"
+- name: AUTH_SECURE
+  value: "{{ .Values.ui.auth.secure }}"
+- name: AUTH_CODE_URL
+  value: "{{ .Values.ui.auth.codeUrl }}"
+- name: AUTH_CLIENT_ID
+  value: "{{ .Values.ui.auth.clientId }}"
+- name: AUTH_CLIENT_SECRET
+  value: "{{ .Values.ui.auth.clientSecret }}"
+- name: O_AUTH_PROVIDER
+  value: "{{ .Values.ui.auth.oAuthProvider }}"
+- name: AUTH_IDENTITY_PROVIDER_URL
+  value: "{{ .Values.ui.auth.identityProviderUrl }}"
+- name: O_AUTH_API_URL
+  value: "{{ .Values.ui.auth.oAuthApiUrl }}"
+- name: USER_DATA_API_URL
+  value: "{{ .Values.ui.auth.userDataApiUrl }}"
 - name: APP_LOCALE
   value: "{{ .Values.ui.appLocale }}"
 - name: APP_THEME

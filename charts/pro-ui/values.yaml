@@ -43,17 +43,37 @@ ui:
 
   # @skip ui.logLevel
   # @skip ui.isOnPremise
-  # @param ui.ssoAuth Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.
   # @param ui.appTheme Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
   # @param ui.appLocale Language in the app. Possible values: `"en_AE"` or `"ru_RU"`.
   # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., `"[55.27, 25.2]"` stands for Dubai, `"[37.64, 55.74]"` — for Moscow).
 
   logLevel: error
   isOnPremise: 'true'
-  ssoAuth: 'false'
   appTheme: urbi
   appLocale: en_AE
-  appInitialMapCenter: '[55.27, 25.2]'
+  appInitialMapCenter: '[46.71, 24.72]'
+
+  # @param ui.auth.sso Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.
+  # @param ui.auth.secure Flag to turn on/off the https for auth. Possible values: `"true"` or `"false"`.
+  # @param ui.auth.safeHosts a string with regExp, which checks incoming authCodeUrl
+  # @param ui.auth.codeUrl an URL, which is used to exchange code to token: host/api/auth/code
+  # @param ui.auth.clientId a client_id from keycloack
+  # @param ui.auth.clientSecret a client_secret from keycloack
+  # @param ui.auth.oAuthProvider a provider name. Possible values: "keycloak" | "ugc"
+  # @param ui.auth.identityProviderUrl a provider base URL
+  # @param ui.auth.oAuthApiUrl an oAuth provider base URL
+  # @param ui.auth.userDataApiUrl an user data provider URL
+  auth:
+    sso: 'false'
+    secure: 'true'
+    safeHosts: '.*'
+    codeUrl: ''
+    clientId: ''
+    clientSecret: ''
+    oAuthProvider: 'keycloak'
+    identityProviderUrl: ''
+    oAuthApiUrl: ''
+    userDataApiUrl: ''
 
   # @section 2GIS Pro API settings
 
@@ -110,7 +130,7 @@ ui:
   ingress:
     enabled: false
     hosts:
-    - host: pro-ui.host
+      - host: pro-ui.host
 
   # @section Limits
 
