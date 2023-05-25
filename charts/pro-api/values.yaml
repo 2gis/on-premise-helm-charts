@@ -1,4 +1,4 @@
-# @section Docker Registry settings
+﻿# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -113,7 +113,7 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.0.41
+  tag: 1.1.14
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
@@ -147,9 +147,9 @@ s3:
 # @skip api.logEsQueries
 # @skip api.debug
 # @skip api.env
-# @skip api.useMockAuth
 # @skip api.token
 # @skip api.filterByZoneCodes
+# @skip api.esDataCentersCount
 
 api:
   serviceAccount: runner
@@ -160,18 +160,28 @@ api:
   logEsQueries: false
   debug: false
   env: ''
-  useMockAuth: true
-  token: ''
   filterByZoneCodes: false
+  esDataCentersCount: 1
   logging:
     format: simple
     targets: ''
 
-# @skip auth
-# @skip auth.url
+# @section Auth configuration
+
+# @param auth.type Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol
+# @param auth.url API URL of authentication service.
+# @param auth.userInfoEndpoint The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo)
+# @param auth.apiKey Secret API Key to perform authorized service actions. Must be set if type not 'none'.
+# @param auth.permissionsApiKey Secret Permissions API Key to perform authorized service actions. Must be set if type not 'none'.
+# @skip auth.autoRegisterUsers
 
 auth:
+  type: 'none'
   url: ''
+  userInfoEndpoint: ''
+  apiKey: ''
+  permissionsApiKey: ''
+  autoRegisterUsers: true
 
 # @section PostgreSQL settings
 
@@ -229,7 +239,6 @@ redis:
 # @extra kafka.importTasksTopic Kafka topic settings to run import tasks.
 # @param kafka.importTasksTopic.name Kafka topic name.
 # @param kafka.importTasksTopic.readerGroupId Kafka consumer group for reading importing tasks.
-# @skip kafka.importTasksTopic.partitionNumber
 # @skip kafka.permissionsTopic
 # @param kafka.refreshAssetsIntervalMinutes Refresh interval for reading streaming assets settings in minutes.
 
@@ -244,11 +253,9 @@ kafka:
   importTasksTopic:
     name: ''
     readerGroupId: ''
-    partitionNumber: ''
   permissionsTopic:
     name: ''
     readerGroupId: ''
-    partitionNumber: ''
   refreshAssetsIntervalMinutes: 60
 
 # @section Import background jobs settings
@@ -315,10 +322,11 @@ permissionsPodSettings:
       cpu: 500m
       memory: 512M
 
-# @skip permissionsApi
+# @section 2GIS PRO Permissions API configuration
+# @skip permissionsApi.host
+# @param permissionsApi.enabled If permissionsApi is enabled for the service.
 
 permissionsApi:
-  key: ''
   host: ''
   enabled: false
 
@@ -338,7 +346,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.0.41
+  tag: 1.1.14
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -349,18 +357,22 @@ assetImporter:
       memory: 768M
     limits:
       cpu: 1000m
-      memory: 1280M
-  maxParallelJobs: 4
+      memory: 2048M
+  maxParallelJobs: 1
   enabled: true
   startOnDeploy: true
   files: ''
   imageProxyUrl: ''
 
+# @skip userAssetImporter
+userAssetImporter:
+  enabled: true
+
 # @skip assetPreparer
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.0.41
+  tag: 1.1.14
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

@@ -11,6 +11,15 @@
 {{- end -}}
 {{- end -}}
 
+{{- define "pro-api.permissions-url" -}}
+{{- if .Values.permissionsApi.host -}}
+{{- .Values.permissionsApi.host -}}
+{{- else -}}
+{{- "http://" -}}
+{{ include "pro-api.name" . }}-permissions
+{{- end -}}
+{{- end -}}
+
 {{- define "pro-api.asset-importer-name" -}}
 {{- $name := default .Values.appAssetImporterName -}}
 {{- if contains $name .Release.Name -}}

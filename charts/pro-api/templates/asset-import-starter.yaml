@@ -74,11 +74,11 @@ spec:
               value: "{{ .Values.elastic.indexPrefix }}"
             - name: API_URL
               value: http://{{ include "pro-api.name" . }}
-            {{- if .Values.api.token }}
+            {{- if .Values.auth.apiKey }}
             - name: API_TOKEN
               valueFrom:
                 secretKeyRef:
-                  key: apiServiceToken
+                  key: apiKey
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
             {{- if .Values.assetImporter.files }}

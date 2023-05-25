@@ -208,23 +208,25 @@ spec:
               value: {{ $.Values.kafka.importTasksTopic.name }}
             - name: Kafka__ImportTasksTopicSettings__ReaderGroupId
               value: {{ $.Values.kafka.importTasksTopic.readerGroupId }}
-            - name: Kafka__ImportTasksTopicSettings__PartitionNumber
-              value: "{{ $.Values.kafka.importTasksTopic.partitionNumber }}"
-            - name: AUTH_ENDPOINT
+            - name: Auth__Type
+              value: "{{ .Values.auth.type }}"
+            - name: Auth__Url
               value: "{{ .Values.auth.url }}"
-            - name: USE_MOCK_AUTH
-              value: "{{ .Values.api.useMockAuth }}"
-            {{ if .Values.api.token }}
-            - name: SERVICE_ACCESS_TOKEN
+            - name: Auth__UserInfoEndpoint
+              value: "{{ .Values.auth.userInfoEndpoint }}"
+            - name: Auth__AutoRegisterUsers
+              value: "{{ .Values.auth.autoRegisterUsers }}"
+            {{ if .Values.auth.apiKey }}
+            - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
-                  key: apiServiceToken
+                  key: apiKey
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}
-            - name: PERMISSIONS_API_URL
-              value: "{{ .Values.permissionsApi.host }}"
-            {{ if .Values.permissionsApi.key }}
-            - name: PERMISSIONS_API_KEY
+            - name: Auth__PermissionsApiUrl
+              value: {{ include "pro-api.permissions-url" . }}
+            {{ if .Values.auth.permissionsApiKey }}
+            - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
