@@ -32,10 +32,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value               |
-| ----------------------- | -------------------------------------- | ------------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`             |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `gis-platform.host` |
+| Name                                 | Description                               | Value               |
+| ------------------------------------ | ----------------------------------------- | ------------------- |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`             |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `gis-platform.host` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                 |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`            |
+| `ingress.tls`                        | TLS configuration                         | `[]`                |
 
 ### Docker registry settings
 
