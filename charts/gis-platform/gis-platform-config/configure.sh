@@ -73,8 +73,8 @@ function configure() {
       exit 1
   fi
 
-  create_or_update_layer "RemoteTileService" "$(jq --arg url "${tiles_api_url}" '.urlFormat=$url' layer/2gis.json)"
-  create_or_update_layer "RemoteTileService" "$(jq --arg url "${traffic_url}" '.urlFormat=$url' layer/2gis_traffic.json)"
+  create_or_update_layer "RemoteTileService" "$(cat layer/2gis.json | jq --arg url "${tiles_api_url}" '.urlFormat=$url')"
+  create_or_update_layer "RemoteTileService" "$(cat layer/2gis_traffic.json | jq --arg url "${traffic_url}" '.urlFormat=$url')"
   create_or_update_layer "LocalTileService" "$(cat layer/satellite_imagery.json)"
 
   echo "Configuring Map"
@@ -84,15 +84,15 @@ function configure() {
   echo "Configuring Admin panel"
   $CURL -XPOST -H 'Content-Type: application/json' -d @configuration/AdminConfig.json "$GIS_PLATFORM_URL/sp/settings?urlPath=/admin"
   echo "Configuring map sharing"
-  jq --arg url "${GIS_PLATFORM_URL#http*://}" '.connection.ws_url=$url+"/sp/ws/"' configuration/SharedConfig.json | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/settings?urlPath=/shared"
+  cat configuration/SharedConfig.json | jq --arg url "${GIS_PLATFORM_URL#http*://}" '.connection.ws_url=$url+"/sp/ws/"' | $CURL -XPOST -H 'Content-Type: application/json' -d @- "$GIS_PLATFORM_URL/sp/settings?urlPath=/shared"
 
-  layer_names=$(jq --slurp --compact-output '[ .[].name ]' layer/*.json)
+  layer_names=$(cat layer/*.json | jq --slurp --compact-output '[ .[].name ]')
   echo "Share all basemaps: $layer_names"
   $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$layer_names" "$GIS_PLATFORM_URL/sp/resources/layers/shareAll"
 
   echo "Setting autoshared list for all basemaps"
   for layer in layer/*.json; do
-      data=$(jq --compact-output '{name: .name, type: "layer"}' $layer)
+      data=$(cat $layer | jq --compact-output '{name: .name, type: "layer"}')
       $CURL -XPOST -H 'Content-Type: application/json-patch+json' -d "$data" "$GIS_PLATFORM_URL/sp/autosharedList"
   done
 }
@@ -101,7 +101,7 @@ function configure() {
 
 function dump_configuration {
     for layer in layer/*.json; do
-        name=$(jq --raw-output .name $layer)
+        name=$(cat $layer | jq --raw-output .name)
         echo "Fetching layer $name"
         get_layer_config $name | jq . > "$TMPDIR/layer_${name}.json"
     done
@@ -116,9 +116,9 @@ function dump_configuration {
 #---------------
 
 function config_diff() {
-#    dump_configuration
+    dump_configuration
     for layer in layer/*.json; do
-        name=$(jq --raw-output .name $layer)
+        name=$(cat $layer | jq --raw-output .name)
         diff -urBb $layer $TMPDIR/layer_$name.json
     done
     for config in configuration/*.json; do

@@ -70,14 +70,14 @@ spcore:
 
   image:
     repository: 2gis-on-premise/gis_platform_spcore
-    tag: 2022.9.29
+    tag: 2023.3.29
 
   resources:
     requests:
-      cpu: 800m
+      cpu: 1
       memory: 4096Mi
     limits:
-      cpu: 800m
+      cpu: 2
       memory: 4096Mi
 
   # @extra spcore.cors **CORS settings.**
@@ -215,7 +215,7 @@ portal:
 
   image:
     repository: 2gis-on-premise/gis_platform_portal
-    tag: 2022.9.29
+    tag: 2023.3.29
 
   resources:
     requests:

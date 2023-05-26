@@ -11,3 +11,5 @@ data:
     {{- tpl (.Files.Get "configs/portal/nginx.conf.template") . | nindent 4 }}
   default.conf.template: |-
     {{- tpl (.Files.Get "configs/portal/default.conf.template") . | nindent 4 }}
+  25-copy-nginx-conf-template.sh: |-
+    {{- .Files.Get "configs/portal/25-copy-nginx-conf-template.sh" | nindent 4 }}

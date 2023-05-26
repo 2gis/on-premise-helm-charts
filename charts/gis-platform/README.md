@@ -45,9 +45,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | Name                         | Description                         | Value                                 |
 | ---------------------------- | ----------------------------------- | ------------------------------------- |
 | `spcore.image.repository`    | SPCore service image repository.    | `2gis-on-premise/gis_platform_spcore` |
-| `spcore.image.tag`           | SPCore service image tag.           | `2022.9.29`                           |
+| `spcore.image.tag`           | SPCore service image tag.           | `2023.3.29`                           |
 | `portal.image.repository`    | Portal service image repository.    | `2gis-on-premise/gis_platform_portal` |
-| `portal.image.tag`           | Portal service image tag.           | `2022.9.29`                           |
+| `portal.image.tag`           | Portal service image tag.           | `2023.3.29`                           |
 | `zookeeper.image.repository` | ZooKeeper service image repository. | `2gis-on-premise/zookeeper`           |
 | `zookeeper.image.tag`        | ZooKeeper service image tag.        | `3.7.0-debian-10-r265`                |
 
@@ -144,9 +144,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | Name                                  | Description                          | Value    |
 | ------------------------------------- | ------------------------------------ | -------- |
 | `spcore.resources`                    | **Limits for the SPCore service**    |          |
-| `spcore.resources.requests.cpu`       | A CPU request.                       | `800m`   |
+| `spcore.resources.requests.cpu`       | A CPU request.                       | `1`      |
 | `spcore.resources.requests.memory`    | A memory request.                    | `4096Mi` |
-| `spcore.resources.limits.cpu`         | A CPU limit.                         | `800m`   |
+| `spcore.resources.limits.cpu`         | A CPU limit.                         | `2`      |
 | `spcore.resources.limits.memory`      | A memory limit.                      | `4096Mi` |
 | `portal.resources`                    | **Limits for the Portal service**    |          |
 | `portal.resources.requests.cpu`       | A CPU request.                       | `100m`   |
