@@ -54,6 +54,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | ------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
 | `env.MAPGL_HOST`          | Domain name for MapGL JS API service.                  | `https://mapgl-api.ingress.host`                                                                  |
 | `env.MAPGL_TILES_API`     | Domain name of the Tiles API service.                  | `https://tiles-api.ingress.host`                                                                  |
+| `env.MAPGL_TILESET`       | Tileset of the Tiles API service to use.               | `web`                                                                                             |
 | `env.MAPGL_TRAFFICSERVER` | Domain name of the Traffic Proxy service.              | `https://traffic-proxy.ingress.host`                                                              |
 | `env.MAPGL_KEYSERVER`     | Domain name of the API Keys service.                   | `https://keys-api.ingress.host`                                                                   |
 | `env.MAPGL_RTLPLUGIN`     | URL of the plugin for right-to-left languages support. | `https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js`                                     |
