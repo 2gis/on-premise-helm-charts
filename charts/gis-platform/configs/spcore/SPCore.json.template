@@ -9,7 +9,7 @@
   "staticPath": "/app/static",
   "previewStaticPath": "/app/static",
   "apiServerPath": "/sp",
-  {{- if and (not .Values.spcore.cors.allow_everyone) (.Values.spcore.cors.origins) }}
+  {{- if and (not .Values.spcore.cors.allowEveryone) (.Values.spcore.cors.origins) }}
   "corsOrigins": {{ .Values.spcore.cors.origins | toJson }},
   {{- end }}
   "jwtConfiguration": {
@@ -38,10 +38,10 @@
        }
   },
   "s3Configuration": {
-    "host": "{{ .Values.spcore.s3.host }}",
+    "host": "{{ required "A valid .Values.spcore.s3.host entry required" .Values.spcore.s3.host }}",
     "region": "{{ .Values.spcore.s3.region }}",
-    "bucketName": "{{ .Values.spcore.s3.bucket }}",
-    "sessionStorageBucketName": "{{ .Values.spcore.s3.session_bucket }}",
+    "bucketName": "{{ required "A valid .Values.spcore.s3.bucket entry required" .Values.spcore.s3.bucket }}",
+    "sessionStorageBucketName": "{{ required "A valid .Values.spcore.s3.sessionBucket entry required" .Values.spcore.s3.sessionBucket }}",
     "provider": "aws"
   },
   "DefaultLimits": {

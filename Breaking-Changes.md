@@ -1,4 +1,25 @@
 # 2GIS On-Premise Breaking-Changes
+## [1.7.1]
+#### gis-platform
+- Rename `external_proto` and `external_hostname` to `url`
+- Rename `spcore.debug_mode` to `spcore.debug`
+- Rename `spcore.reset_cluster` to `spcore.resetCluster`
+- Rename `spcore.update_db` to `spcore.updateDb`
+- Rename `spcore.cloud_port` to `spcore.nodePort`
+- Rename `spcore.http_port` to `spcore.appPort`
+- Rename `spcore.sync_parameters` to `spcore.syncParameters`
+- Rename `spcore.cors.allow_everyone` to `spcore.cors.allowEveryone`
+- Rename `spcore.s3.access_key` to `spcore.s3.accessKey`
+- Rename `spcore.s3.secret_key` to `spcore.s3.secretKey`
+- Rename `spcore.s3.session_bucket` to `spcore.s3.sessionBucket`
+- Rename `spcore.pg` to `spcore.postgres`
+- Rename `spcore.pg.user` to `spcore.postgres.username`
+- Rename `spcore.pg.dbname` to `spcore.postgres.name`
+- Rename `spcore.jwt.token_key` to `spcore.jwt.tokenKey`
+- Rename `spcore.jwt.token_admin` to `spcore.jwt.tokenAdmin`
+- Rename `portal.max_body_size` to `portal.maxBodySize`
+- Rename `portal.gzip_enabled` to `portal.gzip.enabled`
+
 ## [1.6.0]
 #### catalog-api
 - Rename

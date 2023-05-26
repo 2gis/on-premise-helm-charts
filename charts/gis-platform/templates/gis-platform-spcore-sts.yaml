@@ -4,7 +4,7 @@ kind: StatefulSet
 metadata:
   name: {{ include "gis-platform-spcore.fullname" . }}
 spec:
-{{- if .Values.spcore.reset_cluster }}
+{{- if .Values.spcore.resetCluster }}
   replicas: 1
 {{- else }}
   replicas: {{ .Values.spcore.replicaCount }}
@@ -45,7 +45,7 @@ spec:
           startupProbe:
             httpGet:
               path: /
-              port: {{ .Values.spcore.http_port }}
+              port: {{ .Values.spcore.appPort }}
               scheme: HTTP
             initialDelaySeconds: {{ .Values.spcore.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.spcore.startupProbe.periodSeconds }}
@@ -53,19 +53,19 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.spcore.http_port }}
+              port: {{ .Values.spcore.appPort }}
               scheme: HTTP
             initialDelaySeconds: {{ .Values.spcore.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.spcore.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.spcore.readinessProbe.failureThreshold }}
           ports:
-          - containerPort: {{ .Values.spcore.cloud_port }}
-          - containerPort: {{ .Values.spcore.http_port }}
+          - containerPort: {{ .Values.spcore.nodePort }}
+          - containerPort: {{ .Values.spcore.appPort }}
           resources:
             {{- toYaml .Values.spcore.resources | nindent 12 }}
           env:
           - name: GIS_PLATFORM_CATALOG_URL
-            value: {{ .Values.spcore.catalog.url }}
+            value: {{ required "A valid .Values.spcore.catalog.url entry required" .Values.spcore.catalog.url }}
           - name: GIS_PLATFORM_NAVI_URL
             value: {{ .Values.spcore.navi.url }}
           - name: GIS_PLATFORM_CATALOG_KEY
@@ -78,7 +78,7 @@ spec:
               fieldRef:
                 fieldPath: metadata.name
           - name: SPCORE_host
-            value: "{{ .Values.external_proto }}://{{ .Values.external_hostname }}"
+            value: {{ required "A valid .Values.url entry required" .Values.url }}
           - name: SPCORE_jwtConfiguration__adminAccessToken
             valueFrom:
               secretKeyRef:
@@ -90,11 +90,11 @@ spec:
                 name: {{ include "gis-platform.secret" . }}
                 key: jwt_token_key
           - name: SPCORE_debugMode
-            value: {{ .Values.spcore.debug_mode | quote }}
+            value: {{ .Values.spcore.debug | quote }}
           - name: SPCORE_cloudConnectorPort
-            value: {{ .Values.spcore.cloud_port | quote }}
+            value: {{ .Values.spcore.nodePort | quote }}
           - name: SPCORE_httpPort
-            value: {{ .Values.spcore.http_port | quote }}
+            value: {{ .Values.spcore.appPort | quote }}
           - name: SPCORE_dbConnectionString
             valueFrom:
               secretKeyRef:
@@ -113,7 +113,7 @@ spec:
           - name: SPCORE_zkConnectionAddress
             value: {{ include "gis-platform.zookeeper_connection_string" . | quote }}
           - name: SPCORE_SuEmail
-            value: {{ .Values.spcore.admin.email | quote }}
+            value: {{ required "A valid .Values.spcore.admin.email entry required" .Values.spcore.admin.email | quote }}
           - name: SPCORE_SuPassword
             valueFrom:
               secretKeyRef:

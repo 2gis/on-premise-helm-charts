@@ -110,10 +110,10 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{- define "gis-platform-spcore.run_args" -}}
-    {{- $reset     := default false .Values.spcore.reset_cluster   -}}
-    {{- $update_db := default true  .Values.spcore.update_db       -}}
+    {{- $reset     := default false .Values.spcore.resetCluster   -}}
+    {{- $update_db := default true  .Values.spcore.updateDb       -}}
     {{- $continue  := default true  .Values.spcore.continue        -}}
-    {{- $sync      := default false .Values.spcore.sync_parameters -}}
+    {{- $sync      := default false .Values.spcore.syncParameters -}}
     {{-
         printf "\"-%s%s%s%s\""
             (ternary "r" "" $reset)

@@ -16,5 +16,5 @@ spec:
     {{- include "gis-platform-spcore.selectorLabels" . | nindent 4 }}
   ports:
   - name: spcore
-    port: {{ .Values.spcore.http_port }}
-    targetPort: {{ .Values.spcore.http_port }}
+    port: {{ .Values.spcore.appPort }}
+    targetPort: {{ .Values.spcore.appPort }}

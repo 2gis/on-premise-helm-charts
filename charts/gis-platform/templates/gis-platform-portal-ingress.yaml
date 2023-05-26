@@ -8,7 +8,7 @@ metadata:
   labels:
     {{- include "gis-platform-portal.labels" . | nindent 4 }}
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.portal.max_body_size }}
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.portal.maxBodySize }}
   {{- if .Values.ingress.annotations }}
     {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
