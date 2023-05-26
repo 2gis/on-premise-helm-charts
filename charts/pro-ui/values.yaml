@@ -37,7 +37,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/pro-ui
-    tag: 0.2.1
+    tag: 1.0.0
 
   # @section UI service settings
 
@@ -51,7 +51,7 @@ ui:
   isOnPremise: 'true'
   appTheme: urbi
   appLocale: en_AE
-  appInitialMapCenter: '[46.71, 24.72]'
+  appInitialMapCenter: '[55.27, 25.2]'
 
   # @param ui.auth.sso Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.
   # @param ui.auth.secure Flag to turn on/off the https for auth. Possible values: `"true"` or `"false"`.
