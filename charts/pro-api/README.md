@@ -107,10 +107,10 @@
 | Name                     | Description                                                                                                                                                                                         | Value  |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `auth.type`              | Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol | `none` |
-| `auth.url`               | API URL of authentication service.                                                                                                                                                                  | `""`   |
-| `auth.userInfoEndpoint`  | The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo)                                                                                                             | `""`   |
-| `auth.apiKey`            | Secret API Key to perform authorized service actions. Must be set if type not 'none'.                                                                                                               | `""`   |
-| `auth.permissionsApiKey` | Secret Permissions API Key to perform authorized service actions. Must be set if type not 'none'.                                                                                                   | `""`   |
+| `auth.url`               | API URL of authentication service. Example: `http(s)://keycloak.ingress.host`                                                                                                                       | `""`   |
+| `auth.userInfoEndpoint`  | The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/pro/protocol/openid-connect/userinfo`                                                     | `""`   |
+| `auth.apiKey`            | Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`                                                | `""`   |
+| `auth.permissionsApiKey` | Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`                                    | `""`   |
 
 
 ### PostgreSQL settings
