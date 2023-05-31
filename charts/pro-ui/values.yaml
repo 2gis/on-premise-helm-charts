@@ -57,11 +57,14 @@ ui:
   # @param ui.auth.secure Flag to turn on/off the https for auth. Possible values: `"true"` or `"false"`.
   # @param ui.auth.safeHosts a string with regExp, which checks incoming authCodeUrl
   # @param ui.auth.codeUrl an URL, which is used to exchange code to token: host/api/auth/code
+  # Ex: http(s)://pro-ui.ingress.host/api/auth/code
   # @param ui.auth.clientId a client_id from keycloack
   # @param ui.auth.clientSecret a client_secret from keycloack
   # @param ui.auth.oAuthProvider a provider name. Possible values: "keycloak" | "ugc"
   # @param ui.auth.identityProviderUrl a provider base URL
+  # Ex.: http(s)://keycloak.ingress.host/realms/pro/protocol/openid-connect/auth
   # @param ui.auth.oAuthApiUrl an oAuth provider base URL
+  # Ex.: http(s)://keycloak.ingress.host/realms/pro/protocol/openid-connect/
   # @param ui.auth.userDataApiUrl an user data provider URL
   auth:
     sso: 'false'
