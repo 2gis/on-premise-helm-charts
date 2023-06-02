@@ -44,14 +44,14 @@ ui:
   # @skip ui.logLevel
   # @skip ui.isOnPremise
   # @param ui.appTheme Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
-  # @param ui.appLocale Language in the app. Possible values: `"en_AE"` or `"ru_RU"`.
-  # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., `"[55.27, 25.2]"` stands for Dubai, `"[37.64, 55.74]"` — for Moscow).
+  # @param ui.appLocale Language in the app. Possible values: `"ar_AE"`, `"en_AE"` or `"ru_RU"`.
+  # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).
 
   logLevel: error
-  isOnPremise: 'true'
+  isOnPremise: true
   appTheme: urbi
   appLocale: en_AE
-  appInitialMapCenter: '[55.27, 25.2]'
+  appInitialMapCenter: [46.71, 24.72]
 
   # @param ui.auth.sso Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.
   # @param ui.auth.secure Flag to turn on/off the https for auth. Possible values: `"true"` or `"false"`.
@@ -67,13 +67,13 @@ ui:
   # Ex.: http(s)://keycloak.ingress.host/realms/pro/protocol/openid-connect/
   # @param ui.auth.userDataApiUrl an user data provider URL
   auth:
-    sso: 'false'
-    secure: 'true'
-    safeHosts: '.*'
+    sso: false
+    secure: true
+    safeHosts: .*
     codeUrl: ''
     clientId: ''
     clientSecret: ''
-    oAuthProvider: 'keycloak'
+    oAuthProvider: keycloak
     identityProviderUrl: ''
     oAuthApiUrl: ''
     userDataApiUrl: ''
@@ -94,7 +94,7 @@ ui:
   # @param ui.mapgl.styleFontsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'
 
   mapgl:
-    host: mapgl-api.host
+    host: pro-js.4geo.info
     key: ''
     styleUrl: ''
     styleIconsUrl: ''

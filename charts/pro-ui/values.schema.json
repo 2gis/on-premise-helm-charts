@@ -24,8 +24,7 @@
           "enum": ["error"]
         },
         "isOnPremise": {
-          "type": "string",
-          "enum": ["true", "false"]
+          "type": "boolean"
         },
         "appTheme": {
           "type": "string",
@@ -33,10 +32,10 @@
         },
         "appLocale": {
           "type": "string",
-          "enum": ["en_AE", "ru_RU"]
+          "enum": ["ar_AE", "en_AE", "ru_RU"]
         },
         "appInitialMapCenter": {
-          "type": "string"
+          "type": "array"
         },
         "auth": {
           "type": "object",
@@ -55,12 +54,10 @@
           ],
           "properties": {
             "sso": {
-              "type": "string",
-              "enum": ["true", "false"]
+              "type": "boolean"
             },
             "secure": {
-              "type": "string",
-              "enum": ["true", "false"]
+              "type": "boolean"
             },
             "safeHosts": {
               "type": "string"
