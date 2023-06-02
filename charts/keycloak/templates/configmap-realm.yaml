@@ -7,6 +7,10 @@ metadata:
   labels: {{- include "keycloak.labels" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
 data:
-  realm.json: |-
-    {{- tpl (.Files.Get "configs/realm.tpl") . | nindent 4 }}
+  pro.json: |-
+    {{- tpl (.Files.Get "configs/pro.tpl") . | nindent 4 }}
+  citylens.json: |-
+    {{- tpl (.Files.Get "configs/citylens.tpl") . | nindent 4 }}
+  citylens-web.json: |-
+    {{- tpl (.Files.Get "configs/citylens-web.tpl") . | nindent 4 }}
 {{- end }}

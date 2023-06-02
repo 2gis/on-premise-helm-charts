@@ -40,7 +40,7 @@ data:
   {{- if .Values.cache.stackFile }}
   KEYCLOAK_CACHE_CONFIG_FILE: {{ .Values.cache.stackFile | quote }} 
   {{- end }}
-  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "keycloak.fullname" .) (include "keycloak.names.namespace" .) .Values.clusterDomain | quote }}
+  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc" (include "keycloak.fullname" .) (include "keycloak.names.namespace" .) | quote }}
   {{- else }}
   KEYCLOAK_CACHE_TYPE: "local"
   {{- end }}

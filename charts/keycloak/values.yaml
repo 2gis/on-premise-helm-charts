@@ -27,7 +27,6 @@ dgctlDockerRegistry: docker.io
 #   options:
 #   - name: ndots
 #     value: "4"
-# @param clusterDomain Default Kubernetes cluster domain
 # @param extraDeploy Array of extra objects to deploy with the release
 # @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
 # @param diagnosticMode.command Command to override all containers in the the statefulset
@@ -40,7 +39,6 @@ namespaceOverride: ''
 enableServiceLinks: true
 dnsPolicy: ''
 dnsConfig: {}
-clusterDomain: cluster.local
 extraDeploy: []
 diagnosticMode:
   enabled: false
@@ -58,7 +56,7 @@ diagnosticMode:
 # @param image.debug Specify if debug logs should be enabled
 
 image:
-  repository: 2gis-on-premise/keycloak
+  repository: on-premise/keycloak
   tag: 21.1.1-debian-11-r4
   pullPolicy: IfNotPresent
   pullSecrets: []
@@ -275,7 +273,7 @@ containerPorts:
   https: 8443
   infinispan: 7800
 extraContainerPorts: []
-podSecurityContext:
+podSecurityContext: 
   enabled: true
   fsGroup: 1001
 containerSecurityContext:
@@ -483,9 +481,10 @@ rbac:
 # @param hpa.targetMemory Target Memory utilization percentage
 
 pdb:
-  create: false
-  minAvailable: 1
-  maxUnavailable: ''
+  create: true
+  minAvailable: ''
+  maxUnavailable: 1
+
 hpa:
   enabled: false
   minReplicas: 1
@@ -650,7 +649,7 @@ metrics:
 keycloakConfigCli:
   enabled: true
   image:
-    repository: 2gis-on-premise/keycloak-config-cli
+    repository: on-premise/keycloak-config-cli
     tag: 5.6.1-debian-11-r18
     pullPolicy: IfNotPresent
     pullSecrets: []
