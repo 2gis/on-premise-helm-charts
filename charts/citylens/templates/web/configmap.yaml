@@ -52,6 +52,7 @@ data:
       api: {{ .Values.worker.tracksUploader.api | squote }}
       source: {{ .Values.worker.tracksUploader.source | squote }}
       topic: {{ .Values.worker.tracksUploader.topic | squote }}
+    {{- end }}
     {{- if .Values.worker.camcomSender.enabled }}
     camcom:
     {{- with .Values.worker.camcomSender }}
@@ -84,4 +85,4 @@ data:
         {{- end }}
       {{- end }}
       predictors:
-        {{ .Values.predictors | nindent 8 }}
+        {{- toYaml .Values.predictors | nindent 8 }}

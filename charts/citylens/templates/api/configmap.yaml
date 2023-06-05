@@ -27,6 +27,7 @@ data:
       enabled: {{ .enabled }}
       public_key: {{ .publicKey | quote }}
       algorithm: {{ .algorithm | quote }}
+    {{- end }}
     show_docs: {{ .Values.api.showDocs }}
     log_level: {{ .Values.api.logLevel }}
-    {{- end }}
+

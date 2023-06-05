@@ -550,10 +550,10 @@ headerLinks:
 - tracks
 
 reporters:
-- name: pro
-  predictors: [camcom]
-  topic: ''
+  - name: pro
+    predictors: [camcom]
+    topic: ''
 
 predictors:
-- name: camcom
-  topic: ''
+  - name: [camcom]
+    topic: ''
