@@ -76,9 +76,26 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if .Values.initContainers }}
-        {{- include "keycloak.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-        {{- end }}
+        - name: theme-provider
+          image: docker-hub.2gis.ru/on-premise/keycloak-themes:0.0.1
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+          args:
+            - -c
+            - |
+              echo "Copying theme..."
+              cp -R /themes/theme/custom* /custom
+          volumeMounts:
+            - name: theme
+              mountPath: /custom
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100M
+            limits:
+              cpu: 200m
+              memory: 200M
       containers:
         - name: keycloak
           {{- with .Values.image }}
@@ -212,6 +229,10 @@ spec:
             {{- end }}
 
 
+            - name: theme
+              mountPath: /opt/bitnami/keycloak/themes/
+
+
 
 
 
@@ -238,6 +259,8 @@ spec:
         {{- include "keycloak.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: theme
+          emptyDir: {}
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: keycloak-config
           configMap:
