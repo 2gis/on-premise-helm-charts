@@ -22,3 +22,11 @@ data:
     {{- with .Values.postgres }}
       postgres: 'postgresql+asyncpg://{{ required "A valid .Values.postgres.username entry required" .username }}:{{ required "A valid .Values.postgres.password entry required" .password }}@{{ required "A valid .Values.postgres.host entry required" .host }}:{{ required "A valid .Values.postgres.port entry required" .port }}/{{ required "A valid .Values.postgres.database entry required" .database }}'
     {{- end }}
+    {{- with .Values.api.auth }}
+    auth:
+      enabled: {{ .enabled }}
+      public_key: {{ .publicKey | quote }}
+      algorithm: {{ .algorithm | quote }}
+    show_docs: {{ .Values.api.showDocs }}
+    log_level: {{ .Values.api.logLevel }}
+    {{- end }}

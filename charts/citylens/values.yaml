@@ -88,6 +88,15 @@ api:
       #    host: ''
       #  secretName: ''
 
+  auth:
+    enabled: true
+    public_key: ''
+    algorithm: ''
+
+  showDocs: false
+
+  logLevel: INFO
+
   annotations: {}
   labels: {}
   podAnnotations: {}
@@ -179,6 +188,15 @@ web:
       # - hosts:
       #    host: ''
       #  secretName: ''
+
+  auth:
+    enabled: false
+    realm: ''
+    authServerUrl: ''
+    clientId: ''
+    clientSecret: ''
+
+  logLevel: WARNING
 
   annotations: {}
   labels: {}
@@ -355,6 +373,74 @@ worker:
     affinity: {}
     tolerations: {}
 
+
+# @section Citylens Tracks Uploader worker's settings
+
+# @param worker.camcomSender.enabled If Tracks Uploader worker is enabled for the service.
+
+# @param worker.tracksUploader.replicas A replica count for the pod.
+
+# @param worker.tracksUploader.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.tracksUploader.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.tracksUploader.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.tracksUploader.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.tracksUploader.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.tracksUploader.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.tracksUploader.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  tracksUploader:
+
+    enabled: true
+
+    replicas: 1
+
+    api: ''
+    source: ''
+    topic: ''
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+
+# @section Citylens Tracks Downloader worker's settings
+
+# @param worker.camcomSender.enabled If Tracks Downloader worker is enabled for the service.
+
+# @param worker.tracksDownloader.replicas A replica count for the pod.
+
+# @param worker.tracksDownloader.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.tracksDownloader.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.tracksDownloader.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.tracksDownloader.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.tracksDownloader.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.tracksDownloader.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.tracksDownloader.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  tracksDownloader:
+
+    enabled: true
+
+    replicas: 1
+
+    api: ''
+    source: ''
+    topic: ''
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
 # @section Migration job settings
 
 # @param migrations.enabled If migrations needed.
@@ -416,10 +502,9 @@ kafka:
     pro: ''
     camcom: ''
     logs: ''
-    framesGroupId: ''
-    tracksGroupId: ''
-    predictionGroupId: ''
-    camcomSenderGroupId: ''
+    metadata: ''
+  consumerGroups: 
+    prefix: ''
 
 # @section S3 settings
 # @param s3.endpoint S3 endpoint. Format: `host:port` or `url`. **Required**
@@ -465,7 +550,10 @@ headerLinks:
 - tracks
 
 reporters:
-- pro
+- name: pro
+  predictors: [camcom]
+  topic: ''
 
 predictors:
-- camcom
+- name: camcom
+  topic: ''

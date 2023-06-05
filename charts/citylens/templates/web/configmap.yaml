@@ -3,9 +3,27 @@ kind: ConfigMap
 metadata:
   name: {{ include "citylens.web.name" . }}-configmap
 data:
+  {{- if .Values.web.auth.enabled }}
+  {{- with .Values.web.auth }}
+  keycloak.json: |
+    {
+      "realm": {{ .realm | quote }},
+      "auth-server-url": {{ .authServerUrl | quote }},
+      "resource": {{ .clientId | quote }},
+      "credentials": {
+        "secret": {{ .clientSecret | quote }}
+      },
+      "ssl-required": "external",
+      "verify-token-audience": true,
+      "confidential-port": 0,
+      "policy-enforcer": {}
+    }
+  {{- end }}
+  {{- end }}
   dashboard_config.yaml: |
     dashboard_domain: {{ required "A valid .Values.dashboardDomain. entry required" .Values.dashboardDomain | squote }}
     default_locale: {{ .Values.locale | squote }}
+    log_level: {{ .Values.web.logLevel | squote }}
     db_connections:
     {{- with .Values.postgres }}
       postgres: 'postgresql://{{ required "A valid .Values.postgres.username entry required" .username }}:{{ required "A valid .Values.postgres.password entry required" .password }}@{{ required "A valid .Values.postgres.host entry required" .host }}:{{ required "A valid .Values.postgres.port entry required" .port }}/{{ required "A valid .Values.postgres.database entry required" .database }}'
@@ -18,14 +36,8 @@ data:
         sasl_mechanism: 'SCRAM-SHA-512'
         sasl_plain_username: {{ required "A valid .Values.kafka.username entry required" .username | squote }}
         sasl_plain_password: {{ required "A valid .Values.kafka.password entry required" .password | squote }}
-      frames_topics: {{ required "A valid .Values.kafka.topics.frames entry required" .topics.frames | squote }}
-      tracks_topic: {{ required "A valid .Values.kafka.topics.tracks entry required" .topics.tracks | squote }}
-      prediction_topics: {{ required "A valid .Values.kafka.topics.prediction entry required" .topics.prediction | squote }}
-      pro_topic: {{ required "A valid .Values.kafka.topics.pro entry required" .topics.pro | squote }}
-      frames_group_id: {{ required "A valid .Values.kafka.topics.framesGroupId entry required" .topics.framesGroupId | squote }}
-      tracks_group_id: {{ required "A valid .Values.kafka.topics.tracksGroupId entry required" .topics.tracksGroupId | squote }}
-      prediction_group_id: {{ required "A valid .Values.kafka.topics.predictionGroupId entry required" .topics.predictionGroupId | squote }}
-      camcom_sender_group_id: {{ required "A valid .Values.kafka.topics.camcomSenderGroupId entry required" .topics.camcomSenderGroupId | squote }}
+      consumer_groups:
+        {{- toYaml .consumerGroups.prefix | nindent 8 }}
     {{- end }}
     s3:
     {{- with .Values.s3 }}
@@ -35,6 +47,11 @@ data:
         aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
         endpoint_url: {{ required "A valid .Values.s3.endpoint entry required" .endpoint | squote }}
     {{- end }}
+    {{- if .Values.worker.tracksUploader.enabled }}
+    tracks_uploader:
+      api: {{ .Values.worker.tracksUploader.api | squote }}
+      source: {{ .Values.worker.tracksUploader.source | squote }}
+      topic: {{ .Values.worker.tracksUploader.topic | squote }}
     {{- if .Values.worker.camcomSender.enabled }}
     camcom:
     {{- with .Values.worker.camcomSender }}
@@ -50,9 +67,21 @@ data:
     {{- end }}
     enabled_modules:
       header_links:
-      {{- toYaml .Values.headerLinks | nindent 8}}
+      {{- toYaml .Values.web.headerLinks | nindent 8 }}
       header_help_url: 'https://docs.google.com/document/d/1ypaEpklxfc9S5e7FdG2sWBT-WfIR_uZGvQp8X3Xrr0c'
+      track_downloader:
+        frames_topics:
+          {{ .Values.kafka.topics.frames }}
+        metadata_topics:
+          {{ .Values.kafka.topics.metadata }}
       reporters:
-      {{- toYaml .Values.reporters | nindent 8}}
+      {{- range .Values.reporters }}
+        - name: {{ .name }}
+          predictors:
+            {{- toYaml .predictors | nindent 12 }}
+        {{- if .topic }}
+          topic: {{ .topic }}
+        {{- end }}
+      {{- end }}
       predictors:
-      {{- toYaml .Values.predictors | nindent 8}}
+        {{ .Values.predictors | nindent 8 }}
