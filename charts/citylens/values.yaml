@@ -503,7 +503,7 @@ kafka:
     camcom: ''
     logs: ''
     metadata: ''
-  consumerGroups: 
+  consumerGroups:
     prefix: ''
 
 # @section S3 settings
