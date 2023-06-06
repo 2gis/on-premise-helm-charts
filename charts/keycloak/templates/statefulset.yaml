@@ -77,15 +77,17 @@ spec:
       {{- end }}
       initContainers:
         - name: theme-provider
-          image: docker-hub.2gis.ru/on-premise/keycloak-themes:0.0.1
-          imagePullPolicy: IfNotPresent
+          {{- with .Values.keycloakThemes.image }}
+          image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .repository }}:{{ .tag }}"
+          imagePullPolicy: {{ .pullPolicy }}
+          {{- end }}
           command:
             - sh
           args:
             - -c
             - |
               echo "Copying theme..."
-              cp -R /themes/theme/custom* /custom
+              cp -R /themes/* /custom
           volumeMounts:
             - name: theme
               mountPath: /custom
@@ -227,17 +229,8 @@ spec:
               mountPath: /bitnami/keycloak/conf/keycloak.conf
               subPath: keycloak.conf
             {{- end }}
-
-
             - name: theme
-              mountPath: /opt/bitnami/keycloak/themes/
-
-
-
-
-
-
-
+              mountPath: /opt/bitnami/keycloak/themes
             {{- if .Values.tls.enabled }}
             - name: certificates
               mountPath: /opt/bitnami/keycloak/certs
@@ -266,15 +259,6 @@ spec:
           configMap:
             name: {{ include "keycloak.configmapName" . }}
         {{- end }}
-
-
-
-
-
-
-
-
-
         {{- if .Values.tls.enabled }}
         - name: certificates
           secret:
