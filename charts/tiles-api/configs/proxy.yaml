@@ -17,6 +17,11 @@ access:
   sync-period: {{ .access.syncPeriod }}
   host: {{ .access.url }}
   token: {{ .access.token }}
+  bss:
+    enabled: {{ .access.bss.enabled }}
+    {{- if .access.bss.enabled }}
+    host: {{ required "Valid .Values.proxy.access.bss.url required!" .access.bss.url }}
+    {{- end }}
 
 storage:
   enabled: false
