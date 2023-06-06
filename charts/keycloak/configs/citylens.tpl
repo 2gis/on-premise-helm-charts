@@ -1,5 +1,5 @@
 {
-  "realm": "citylens",
+  "realm": "CityLens_app",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
@@ -45,7 +45,7 @@
   "roles": {
     "realm": [
       {
-        "name": "default-roles-citylens",
+        "name": "default-roles-citylens_app",
         "description": "${role_default-roles}",
         "composite": true,
         "composites": {
@@ -289,15 +289,6 @@
           "attributes": {}
         }
       ],
-      "citylens-web-client": [
-        {
-          "name": "uma_protection",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "78714ef7-cc97-4f45-8775-6aa6a648f9c7",
-          "attributes": {}
-        }
-      ],
       "account": [
         {
           "name": "view-profile",
@@ -380,18 +371,9 @@
       ]
     }
   },
-  "groups": [
-    {
-      "name": "pro-group",
-      "path": "/pro-group",
-      "attributes": {},
-      "realmRoles": [],
-      "clientRoles": {},
-      "subGroups": []
-    }
-  ],
+  "groups": [],
   "defaultRole": {
-    "name": "default-roles-citylens",
+    "name": "default-roles-citylens_app",
     "description": "${role_default-roles}",
     "composite": true,
     "clientRole": false,
@@ -408,9 +390,9 @@
   "otpPolicyPeriod": 30,
   "otpPolicyCodeReusable": false,
   "otpSupportedApplications": [
+    "totpAppGoogleName",
     "totpAppFreeOTPName",
-    "totpAppMicrosoftAuthenticatorName",
-    "totpAppGoogleName"
+    "totpAppMicrosoftAuthenticatorName"
   ],
   "webAuthnPolicyRpEntityName": "keycloak",
   "webAuthnPolicySignatureAlgorithms": [
@@ -436,28 +418,6 @@
   "webAuthnPolicyPasswordlessCreateTimeout": 0,
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
-  "users": [
-    {
-      "createdTimestamp": 1684830005367,
-      "username": "service-account-citylens-web-client",
-      "enabled": true,
-      "totp": false,
-      "emailVerified": false,
-      "serviceAccountClientId": "citylens-web-client",
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "realmRoles": [
-        "default-roles-citylens"
-      ],
-      "clientRoles": {
-        "citylens-web-client": [
-          "uma_protection"
-        ]
-      },
-      "notBefore": 0,
-      "groups": []
-    }
-  ],
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -482,13 +442,13 @@
       "clientId": "account",
       "name": "${client_account}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/citylens/account/",
+      "baseUrl": "/realms/CityLens_app/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/realms/citylens/account/*"
+        "/realms/CityLens_app/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -525,13 +485,13 @@
       "clientId": "account-console",
       "name": "${client_account-console}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/citylens/account/",
+      "baseUrl": "/realms/CityLens_app/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/realms/citylens/account/*"
+        "/realms/CityLens_app/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -702,144 +662,6 @@
       ]
     },
     {
-      "clientId": "citylens-web-client",
-      "name": "citylens-web-client",
-      "description": "",
-      "rootUrl": "",
-      "adminUrl": "",
-      "baseUrl": "",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "secret": "",
-      "redirectUris": [
-        "*"
-      ],
-      "webOrigins": [
-        "*"
-      ],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": true,
-      "authorizationServicesEnabled": true,
-      "publicClient": false,
-      "frontchannelLogout": true,
-      "protocol": "openid-connect",
-      "attributes": {
-        "oidc.ciba.grant.enabled": "false",
-        "oauth2.device.authorization.grant.enabled": "false",
-        "client.secret.creation.time": "1684732723",
-        "backchannel.logout.session.required": "true",
-        "backchannel.logout.revoke.offline.tokens": "false"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": -1,
-      "protocolMappers": [
-        {
-          "name": "Client Host",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "clientHost",
-            "userinfo.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "clientHost",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "Client IP Address",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "clientAddress",
-            "userinfo.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "clientAddress",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "Client ID",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "client_id",
-            "userinfo.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "client_id",
-            "jsonType.label": "String"
-          }
-        }
-      ],
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "roles",
-        "profile",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "microprofile-jwt"
-      ],
-      "authorizationSettings": {
-        "allowRemoteResourceManagement": true,
-        "policyEnforcementMode": "ENFORCING",
-        "resources": [
-          {
-            "name": "Default Resource",
-            "type": "urn:citylens-web-client:resources:default",
-            "ownerManagedAccess": false,
-            "attributes": {},
-            "_id": "1c2c568c-6d4d-4ea2-a0f1-b8adcb264a58",
-            "uris": [
-              "/*"
-            ]
-          }
-        ],
-        "policies": [
-          {
-            "name": "Default Policy",
-            "description": "A policy that grants access only for users within this realm",
-            "type": "js",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {
-              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-            }
-          },
-          {
-            "name": "Default Permission",
-            "description": "A permission that applies to the default resource type",
-            "type": "resource",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "defaultResourceType": "urn:citylens-web-client:resources:default",
-              "applyPolicies": "[\"Default Policy\"]"
-            }
-          }
-        ],
-        "scopes": [],
-        "decisionStrategy": "UNANIMOUS"
-      }
-    },
-    {
       "clientId": "realm-management",
       "name": "${client_realm-management}",
       "surrogateAuthRequired": false,
@@ -880,13 +702,13 @@
       "clientId": "security-admin-console",
       "name": "${client_security-admin-console}",
       "rootUrl": "${authAdminUrl}",
-      "baseUrl": "/admin/citylens/console/",
+      "baseUrl": "/admin/CityLens_app/console/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/admin/citylens/console/*"
+        "/admin/CityLens_app/console/*"
       ],
       "webOrigins": [
         "+"
@@ -1482,17 +1304,6 @@
         }
       },
       {
-        "name": "Max Clients Limit",
-        "providerId": "max-clients",
-        "subType": "anonymous",
-        "subComponents": {},
-        "config": {
-          "max-clients": [
-            "200"
-          ]
-        }
-      },
-      {
         "name": "Allowed Client Scopes",
         "providerId": "allowed-client-templates",
         "subType": "anonymous",
@@ -1502,13 +1313,6 @@
             "true"
           ]
         }
-      },
-      {
-        "name": "Consent Required",
-        "providerId": "consent-required",
-        "subType": "anonymous",
-        "subComponents": {},
-        "config": {}
       },
       {
         "name": "Allowed Client Scopes",
@@ -1524,6 +1328,24 @@
       {
         "name": "Full Scope Disabled",
         "providerId": "scope",
+        "subType": "anonymous",
+        "subComponents": {},
+        "config": {}
+      },
+      {
+        "name": "Max Clients Limit",
+        "providerId": "max-clients",
+        "subType": "anonymous",
+        "subComponents": {},
+        "config": {
+          "max-clients": [
+            "200"
+          ]
+        }
+      },
+      {
+        "name": "Consent Required",
+        "providerId": "consent-required",
         "subType": "anonymous",
         "subComponents": {},
         "config": {}
@@ -1565,33 +1387,17 @@
         }
       }
     ],
-    "org.keycloak.keys.KeyProvider": [
+    "org.keycloak.userprofile.UserProfileProvider": [
       {
-        "name": "rsa-enc-generated",
-        "providerId": "rsa-enc-generated",
+        "providerId": "declarative-user-profile",
         "subComponents": {},
-        "config": {
-          "priority": [
-            "100"
-          ],
-          "algorithm": [
-            "RSA-OAEP"
-          ]
-        }
-      },
+        "config": {}
+      }
+    ],
+    "org.keycloak.keys.KeyProvider": [
       {
         "name": "aes-generated",
         "providerId": "aes-generated",
-        "subComponents": {},
-        "config": {
-          "priority": [
-            "100"
-          ]
-        }
-      },
-      {
-        "name": "rsa-generated",
-        "providerId": "rsa-generated",
         "subComponents": {},
         "config": {
           "priority": [
@@ -1609,6 +1415,29 @@
           ],
           "algorithm": [
             "HS256"
+          ]
+        }
+      },
+      {
+        "name": "rsa-enc-generated",
+        "providerId": "rsa-enc-generated",
+        "subComponents": {},
+        "config": {
+          "priority": [
+            "100"
+          ],
+          "algorithm": [
+            "RSA-OAEP"
+          ]
+        }
+      },
+      {
+        "name": "rsa-generated",
+        "providerId": "rsa-generated",
+        "subComponents": {},
+        "config": {
+          "priority": [
+            "100"
           ]
         }
       }
@@ -2282,34 +2111,32 @@
   "dockerAuthenticationFlow": "docker auth",
   "attributes": {
     "cibaBackchannelTokenDeliveryMode": "poll",
-    "de.adorsys.keycloak.config.import-checksum-default": "9de9f74d646385107894ab12ce3ae926fd7c3d3775067c522a326960d1fcc207",
+    "de.adorsys.keycloak.config.import-checksum-default": "353b7684e683b5d5408b444727416a8a75a58e73d1d4e371608a032b0d11e6d9",
     "de.adorsys.keycloak.config.state-default-resources-client-pro-client-0": "[\"Default Resource\"]",
     "de.adorsys.keycloak.config.state-default-roles-client-pro-client-0": "[\"uma_protection\"]",
     "clientOfflineSessionIdleTimeout": "0",
-    "de.adorsys.keycloak.config.state-default-roles-client-realm-management-0": "[\"view-realm\",\"view-authorization\",\"view-users\",\"realm-admin\",\"view-identity-providers\",\"query-groups\",\"impersonation\",\"manage-realm\",\"create-client\",\"manage-events\",\"manage-authorization\",\"view-events\",\"manage-clients\",\"query-clients\",\"manage-users\"",
-    "de.adorsys.keycloak.config.state-default-roles-client-realm-management-1": ",\"manage-identity-providers\",\"query-realms\",\"query-users\",\"view-clients\"]",
+    "de.adorsys.keycloak.config.state-default-roles-client-realm-management-0": "[\"impersonation\",\"manage-users\",\"view-realm\",\"manage-events\",\"manage-realm\",\"view-identity-providers\",\"manage-clients\",\"query-groups\",\"manage-authorization\",\"manage-identity-providers\",\"create-client\",\"view-authorization\",\"view-users\",\"query-clients\"",
+    "de.adorsys.keycloak.config.state-default-roles-client-realm-management-1": ",\"query-users\",\"query-realms\",\"view-events\",\"view-clients\",\"realm-admin\"]",
     "cibaExpiresIn": "120",
     "de.adorsys.keycloak.config.state-default-roles-client-admin-cli-0": "[]",
     "de.adorsys.keycloak.config.state-default-roles-client-security-admin-console-0": "[]",
-    "de.adorsys.keycloak.config.state-default-roles-client-citylens-web-client-0": "[\"uma_protection\"]",
-    "de.adorsys.keycloak.config.state-default-components-1": "nc-generated\"]",
-    "de.adorsys.keycloak.config.state-default-components-0": "[\"Full Scope Disabled\",\"Consent Required\",\"Max Clients Limit\",\"Allowed Client Scopes\",\"Allowed Client Scopes\",\"Trusted Hosts\",\"Allowed Protocol Mapper Types\",\"Allowed Protocol Mapper Types\",null,\"hmac-generated\",\"aes-generated\",\"rsa-generated\",\"rsa-e",
+    "de.adorsys.keycloak.config.state-default-components-1": "nerated\"]",
+    "de.adorsys.keycloak.config.state-default-components-0": "[\"Trusted Hosts\",\"Max Clients Limit\",\"Allowed Client Scopes\",\"Consent Required\",\"Allowed Client Scopes\",\"Full Scope Disabled\",\"Allowed Protocol Mapper Types\",\"Allowed Protocol Mapper Types\",\"rsa-enc-generated\",\"aes-generated\",\"rsa-generated\",\"hmac-ge",
     "cibaAuthRequestedUserHint": "login_hint",
     "de.adorsys.keycloak.config.state-default-roles-client-broker-0": "[\"read-token\"]",
     "oauth2DevicePollingInterval": "5",
     "clientOfflineSessionMaxLifespan": "0",
     "clientSessionIdleTimeout": "0",
-    "de.adorsys.keycloak.config.state-default-resources-client-citylens-web-client-0": "[\"Default Resource\"]",
     "de.adorsys.keycloak.config.state-default-roles-client-citylens-0": "[]",
-    "de.adorsys.keycloak.config.state-default-roles-realm-0": "[\"uma_authorization\",\"offline_access\",\"default-roles-citylens\"]",
+    "de.adorsys.keycloak.config.state-default-roles-realm-0": "[\"default-roles-citylens_app\",\"offline_access\",\"uma_authorization\"]",
     "cibaInterval": "5",
     "realmReusableOtpCode": "false",
     "oauth2DeviceCodeLifespan": "600",
     "de.adorsys.keycloak.config.state-default-required-actions-0": "[\"CONFIGURE_TOTP\",\"TERMS_AND_CONDITIONS\",\"UPDATE_PASSWORD\",\"UPDATE_PROFILE\",\"VERIFY_EMAIL\",\"delete_account\",\"webauthn-register\",\"webauthn-register-passwordless\",\"update_user_locale\"]",
     "parRequestUriLifespan": "60",
     "clientSessionMaxLifespan": "0",
-    "de.adorsys.keycloak.config.state-default-clients-0": "[\"account\",\"account-console\",\"admin-cli\",\"broker\",\"citylens\",\"citylens-web-client\",\"pro-client\",\"realm-management\",\"security-admin-console\"]",
-    "de.adorsys.keycloak.config.state-default-roles-client-account-0": "[\"view-consent\",\"manage-account\",\"view-applications\",\"view-groups\",\"delete-account\",\"manage-account-links\",\"manage-consent\",\"view-profile\"]"
+    "de.adorsys.keycloak.config.state-default-clients-0": "[\"account\",\"account-console\",\"admin-cli\",\"broker\",\"citylens\",\"realm-management\",\"security-admin-console\"]",
+    "de.adorsys.keycloak.config.state-default-roles-client-account-0": "[\"view-profile\",\"view-consent\",\"manage-account-links\",\"delete-account\",\"manage-consent\",\"view-groups\",\"view-applications\",\"manage-account\"]"
   },
   "keycloakVersion": "21.1.1",
   "userManagedAccessAllowed": false,
@@ -2318,5 +2145,26 @@
   },
   "clientPolicies": {
     "policies": []
-  }
+  },
+  {{- if .Values.defaultUser.enabled }}
+  "users": [
+    {
+      "username": "{{ required "A valid .Values.defaultUser.name entry required" .Values.defaultUser.name }}",
+      "email":  "{{ required "A valid .Values.defaultUser.email entry required" .Values.defaultUser.email }}",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "{{ required "A valid .Values.defaultUser.password entry required" .Values.defaultUser.password }}"
+        }
+      ],
+      "clientRoles": {
+        "account": [ "manage-account" ]
+      }
+    }
+  ]
+  {{- else }}
+  "users": []
+  {{- end }}
 }
+

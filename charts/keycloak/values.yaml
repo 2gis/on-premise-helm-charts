@@ -285,10 +285,10 @@ containerSecurityContext:
 
 resources:
   limits:
-    cpu: 2
+    cpu: 4
     memory: 4000Mi
   requests:
-    cpu: 1
+    cpu: 2
     memory: 2000Mi
 
 livenessProbe:
@@ -740,5 +740,16 @@ logging:
 keycloakThemes:
   image:
     repository: on-premise/keycloak-themes
-    tag: 0.0.6
+    tag: 0.0.8
     pullPolicy: IfNotPresent
+
+# @section Keycloak default user for access on-premise services
+# @param defaultUser.enabled Switch to enable or disable the defaultUser
+# @param defaultUser.name User name
+# @param defaultUser.email User email
+# @param defaultUser.password User password
+defaultUser:
+  enabled: false
+  name: ''
+  email: ''
+  password: ''

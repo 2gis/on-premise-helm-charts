@@ -1,5 +1,5 @@
 {
-  "realm": "pro",
+  "realm": "URBI_Pro",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
@@ -61,7 +61,7 @@
         "attributes": {}
       },
       {
-        "name": "default-roles-pro",
+        "name": "default-roles-urbi_pro",
         "description": "${role_default-roles}",
         "composite": true,
         "composites": {
@@ -286,7 +286,6 @@
       ],
       "security-admin-console": [],
       "admin-cli": [],
-      "citylens": [],
       "account-console": [],
       "broker": [
         {
@@ -295,15 +294,6 @@
           "composite": false,
           "clientRole": true,
           "containerId": "76eae7e8-1af3-4bf8-b178-7f383be69011",
-          "attributes": {}
-        }
-      ],
-      "citylens-web-client": [
-        {
-          "name": "uma_protection",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "a4e07894-dc58-4aa8-8fe1-fc1c5dd4d2e1",
           "attributes": {}
         }
       ],
@@ -389,18 +379,9 @@
       ]
     }
   },
-  "groups": [
-    {
-      "name": "pro-group",
-      "path": "/pro-group",
-      "attributes": {},
-      "realmRoles": [],
-      "clientRoles": {},
-      "subGroups": []
-    }
-  ],
+  "groups": [],
   "defaultRole": {
-    "name": "default-roles-pro",
+    "name": "default-roles-urbi_pro",
     "description": "${role_default-roles}",
     "composite": true,
     "clientRole": false,
@@ -417,9 +398,9 @@
   "otpPolicyPeriod": 30,
   "otpPolicyCodeReusable": false,
   "otpSupportedApplications": [
+    "totpAppGoogleName",
     "totpAppFreeOTPName",
-    "totpAppMicrosoftAuthenticatorName",
-    "totpAppGoogleName"
+    "totpAppMicrosoftAuthenticatorName"
   ],
   "webAuthnPolicyRpEntityName": "keycloak",
   "webAuthnPolicySignatureAlgorithms": [
@@ -447,26 +428,6 @@
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "users": [
     {
-      "createdTimestamp": 1684732723385,
-      "username": "service-account-citylens-web-client",
-      "enabled": true,
-      "totp": false,
-      "emailVerified": false,
-      "serviceAccountClientId": "citylens-web-client",
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "realmRoles": [
-        "default-roles-pro"
-      ],
-      "clientRoles": {
-        "citylens-web-client": [
-          "uma_protection"
-        ]
-      },
-      "notBefore": 0,
-      "groups": []
-    },
-    {
       "createdTimestamp": 1684384087758,
       "username": "service-account-pro-client",
       "enabled": true,
@@ -476,7 +437,7 @@
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
-        "default-roles-pro"
+        "default-roles-urbi_pro"
       ],
       "clientRoles": {
         "pro-client": [
@@ -511,13 +472,13 @@
       "clientId": "account",
       "name": "${client_account}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/pro/account/",
+      "baseUrl": "/realms/URBI_Pro/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/realms/pro/account/*"
+        "/realms/URBI_Pro/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -554,13 +515,13 @@
       "clientId": "account-console",
       "name": "${client_account-console}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/pro/account/",
+      "baseUrl": "/realms/URBI_Pro/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/realms/pro/account/*"
+        "/realms/URBI_Pro/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -678,194 +639,6 @@
       ]
     },
     {
-      "clientId": "citylens",
-      "name": "citylens",
-      "description": "",
-      "rootUrl": "",
-      "adminUrl": "",
-      "baseUrl": "",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "secret": "",
-      "redirectUris": [
-        "",
-        "http://localhost:3000/auth/code"
-      ],
-      "webOrigins": [
-        "http://localhost:3000"
-      ],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": true,
-      "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": false,
-      "publicClient": false,
-      "frontchannelLogout": true,
-      "protocol": "openid-connect",
-      "attributes": {
-        "oidc.ciba.grant.enabled": "false",
-        "oauth2.device.authorization.grant.enabled": "false",
-        "client.secret.creation.time": "1684735950",
-        "backchannel.logout.session.required": "true",
-        "backchannel.logout.revoke.offline.tokens": "false"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": -1,
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "roles",
-        "profile",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "microprofile-jwt"
-      ]
-    },
-    {
-      "clientId": "citylens-web-client",
-      "name": "citylens-web-client",
-      "description": "",
-      "rootUrl": "",
-      "adminUrl": "",
-      "baseUrl": "",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
-      "redirectUris": [
-        "*"
-      ],
-      "webOrigins": [
-        "*"
-      ],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": true,
-      "authorizationServicesEnabled": true,
-      "publicClient": false,
-      "frontchannelLogout": true,
-      "protocol": "openid-connect",
-      "attributes": {
-        "oidc.ciba.grant.enabled": "false",
-        "oauth2.device.authorization.grant.enabled": "false",
-        "client.secret.creation.time": "1684732723",
-        "backchannel.logout.session.required": "true",
-        "backchannel.logout.revoke.offline.tokens": "false"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": -1,
-      "protocolMappers": [
-        {
-          "name": "Client Host",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "clientHost",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "clientHost",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "Client IP Address",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "clientAddress",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "clientAddress",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "Client ID",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "client_id",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "client_id",
-            "jsonType.label": "String"
-          }
-        }
-      ],
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "roles",
-        "profile",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "microprofile-jwt"
-      ],
-      "authorizationSettings": {
-        "allowRemoteResourceManagement": true,
-        "policyEnforcementMode": "ENFORCING",
-        "resources": [
-          {
-            "name": "Default Resource",
-            "type": "urn:citylens-web-client:resources:default",
-            "ownerManagedAccess": false,
-            "attributes": {},
-            "_id": "9459aea8-ec64-4960-baf3-e8732b541d0d",
-            "uris": [
-              "/*"
-            ]
-          }
-        ],
-        "policies": [
-          {
-            "name": "Default Policy",
-            "description": "A policy that grants access only for users within this realm",
-            "type": "js",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {
-              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-            }
-          },
-          {
-            "name": "Default Permission",
-            "description": "A permission that applies to the default resource type",
-            "type": "resource",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "defaultResourceType": "urn:citylens-web-client:resources:default",
-              "applyPolicies": "[\"Default Policy\"]"
-            }
-          }
-        ],
-        "scopes": [],
-        "decisionStrategy": "UNANIMOUS"
-      }
-    },
-    {
       "clientId": "pro-client",
       "name": "pro-client",
       "description": "",
@@ -876,7 +649,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "",
       "redirectUris": [
         "*"
       ],
@@ -1054,13 +827,13 @@
       "clientId": "security-admin-console",
       "name": "${client_security-admin-console}",
       "rootUrl": "${authAdminUrl}",
-      "baseUrl": "/admin/pro/console/",
+      "baseUrl": "/admin/URBI_Pro/console/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/admin/pro/console/*"
+        "/admin/URBI_Pro/console/*"
       ],
       "webOrigins": [
         "+"
@@ -2477,7 +2250,7 @@
     "clientOfflineSessionMaxLifespan": "0",
     "clientSessionIdleTimeout": "0",
     "actionTokenGeneratedByUserLifespan-reset-credentials": "",
-    "de.adorsys.keycloak.config.state-default-roles-realm-0": "[\"default-roles-pro\",\"offline_access\",\"uma_authorization\"]",
+    "de.adorsys.keycloak.config.state-default-roles-realm-0": "[\"default-roles-urbi_pro\",\"offline_access\",\"uma_authorization\"]",
     "cibaInterval": "5",
     "realmReusableOtpCode": "false",
     "oauth2DeviceCodeLifespan": "600",
@@ -2494,5 +2267,25 @@
   },
   "clientPolicies": {
     "policies": []
-  }
+  },
+  {{- if .Values.defaultUser.enabled }}
+  "users": [
+    {
+      "username": "{{ required "A valid .Values.defaultUser.name entry required" .Values.defaultUser.name }}",
+      "email":  "{{ required "A valid .Values.defaultUser.email entry required" .Values.defaultUser.email }}",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "{{ required "A valid .Values.defaultUser.password entry required" .Values.defaultUser.password }}"
+        }
+      ],
+      "clientRoles": {
+        "account": [ "manage-account" ]
+      }
+    }
+  ]
+  {{- else }}
+  "users": []
+  {{- end }}
 }
