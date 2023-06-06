@@ -11,10 +11,10 @@
       "required": [
         "logLevel",
         "isOnPremise",
-        "ssoAuth",
         "appTheme",
         "appLocale",
         "appInitialMapCenter",
+        "auth",
         "api",
         "mapgl"
       ],
@@ -24,12 +24,7 @@
           "enum": ["error"]
         },
         "isOnPremise": {
-          "type": "string",
-          "enum": ["true", "false"]
-        },
-        "ssoAuth": {
-          "type": "string",
-          "enum": ["true", "false"]
+          "type": "boolean"
         },
         "appTheme": {
           "type": "string",
@@ -37,10 +32,59 @@
         },
         "appLocale": {
           "type": "string",
-          "enum": ["en_AE", "ru_RU"]
+          "enum": ["ar_AE", "en_AE", "ru_RU"]
         },
         "appInitialMapCenter": {
-          "type": "string"
+          "type": "array"
+        },
+        "auth": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sso",
+            "secure",
+            "safeHosts",
+            "codeUrl",
+            "clientId",
+            "clientSecret",
+            "oAuthProvider",
+            "identityProviderUrl",
+            "oAuthApiUrl",
+            "userDataApiUrl"
+          ],
+          "properties": {
+            "sso": {
+              "type": "boolean"
+            },
+            "secure": {
+              "type": "boolean"
+            },
+            "safeHosts": {
+              "type": "string"
+            },
+            "codeUrl": {
+              "type": "string"
+            },
+            "clientId": {
+              "type": "string"
+            },
+            "clientSecret": {
+              "type": "string"
+            },
+            "oAuthProvider": {
+              "type": "string",
+              "enum": ["keycloak", "ugc"]
+            },
+            "identityProviderUrl": {
+              "type": "string"
+            },
+            "oAuthApiUrl": {
+              "type": "string"
+            },
+            "userDataApiUrl": {
+              "type": "string"
+            }
+          }
         },
         "api": {
           "type": "object",

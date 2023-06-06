@@ -34,7 +34,27 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: IS_ON_PREM
   value: "{{ .Values.ui.isOnPremise }}"
 - name: SSO_AUTH
-  value: "{{ .Values.ui.ssoAuth }}"
+  value: "{{ required "A valid .Values.ui.auth.sso entry required" .Values.ui.auth.sso }}"
+{{ if .Values.ui.auth.sso }}
+- name: AUTH_SAFE_HOSTS
+  value: "{{ required "A valid .Values.ui.auth.safeHosts entry required" .Values.ui.auth.safeHosts }}"
+- name: AUTH_SECURE
+  value: "{{ required "A valid .Values.ui.auth.secure entry required" .Values.ui.auth.secure }}"
+- name: AUTH_CODE_URL
+  value: "{{ required "A valid .Values.ui.auth.codeUrl entry required" .Values.ui.auth.codeUrl }}"
+- name: AUTH_CLIENT_ID
+  value: "{{ required "A valid .Values.ui.auth.clientId entry required" .Values.ui.auth.clientId }}"
+- name: AUTH_CLIENT_SECRET
+  value: "{{ required "A valid .Values.ui.auth.clientSecret entry required" .Values.ui.auth.clientSecret }}"
+- name: O_AUTH_PROVIDER
+  value: "{{ required "A valid .Values.ui.auth.oAuthProvider entry required" .Values.ui.auth.oAuthProvider }}"
+- name: AUTH_IDENTITY_PROVIDER_URL
+  value: "{{ required "A valid .Values.ui.auth.identityProviderUrl entry required" .Values.ui.auth.identityProviderUrl }}"
+- name: O_AUTH_API_URL
+  value: "{{ required "A valid .Values.ui.auth.oAuthApiUrl entry required" .Values.ui.auth.oAuthApiUrl }}"
+- name: USER_DATA_API_URL
+  value: "{{ .Values.ui.auth.userDataApiUrl }}"
+{{ end }}
 - name: APP_LOCALE
   value: "{{ .Values.ui.appLocale }}"
 - name: APP_THEME
