@@ -16,7 +16,11 @@ data:
       frames: {{ required "A valid .Values.kafka.topics.frames entry required" .topics.frames | squote }}
       tracks: {{ required "A valid .Values.kafka.topics.tracks entry required" .topics.tracks | squote }}
       logs: {{ required "A valid .Values.kafka.topics.logs entry required" .topics.logs | squote }}
-      camcom: {{ required "A valid .Values.kafka.topics.camcom entry required" .topics.camcom | squote }}
+      {{- range .predictors }}
+      {{- if eq .name "camcom" }}
+      camcom: {{ required "A valid .topic entry required" .topic| squote }}
+      {{- end }}
+      {{- end }}
     {{- end }}
     database:
     {{- with .Values.postgres }}
@@ -30,4 +34,3 @@ data:
     {{- end }}
     show_docs: {{ .Values.api.showDocs }}
     log_level: {{ .Values.api.logLevel }}
-

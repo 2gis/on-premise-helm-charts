@@ -90,7 +90,7 @@ api:
 
   auth:
     enabled: true
-    public_key: ''
+    public_key: ""
     algorithm: ''
 
   showDocs: false
@@ -397,41 +397,6 @@ worker:
 
     api: ''
     source: ''
-    topic: ''
-
-    annotations: {}
-    labels: {}
-    podAnnotations: {}
-    podLabels: {}
-    nodeSelector: {}
-    affinity: {}
-    tolerations: {}
-
-
-# @section Citylens Tracks Downloader worker's settings
-
-# @param worker.camcomSender.enabled If Tracks Downloader worker is enabled for the service.
-
-# @param worker.tracksDownloader.replicas A replica count for the pod.
-
-# @param worker.tracksDownloader.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param worker.tracksDownloader.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param worker.tracksDownloader.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param worker.tracksDownloader.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-
-# @param worker.tracksDownloader.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-# @param worker.tracksDownloader.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-# @param worker.tracksDownloader.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
-
-  tracksDownloader:
-
-    enabled: true
-
-    replicas: 1
-
-    api: ''
-    source: ''
-    topic: ''
 
     annotations: {}
     labels: {}
@@ -498,13 +463,14 @@ kafka:
   topics:
     frames: ''
     tracks: ''
-    prediction: ''
     pro: ''
-    camcom: ''
     logs: ''
-    metadata: ''
+    uploader: ''
   consumerGroups:
     prefix: ''
+  predictors:
+    - name: camcom
+      topic: ''
 
 # @section S3 settings
 # @param s3.endpoint S3 endpoint. Format: `host:port` or `url`. **Required**
@@ -552,8 +518,3 @@ headerLinks:
 reporters:
   - name: pro
     predictors: [camcom]
-    topic: ''
-
-predictors:
-  - name: [camcom]
-    topic: ''

@@ -37,7 +37,7 @@ data:
         sasl_plain_username: {{ required "A valid .Values.kafka.username entry required" .username | squote }}
         sasl_plain_password: {{ required "A valid .Values.kafka.password entry required" .password | squote }}
       consumer_groups:
-        {{- toYaml .consumerGroups.prefix | nindent 8 }}
+        {{- toYaml .consumerGroups | nindent 8 }}
     {{- end }}
     s3:
     {{- with .Values.s3 }}
@@ -47,12 +47,10 @@ data:
         aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
         endpoint_url: {{ required "A valid .Values.s3.endpoint entry required" .endpoint | squote }}
     {{- end }}
-    {{- if .Values.worker.tracksUploader.enabled }}
     tracks_uploader:
       api: {{ .Values.worker.tracksUploader.api | squote }}
       source: {{ .Values.worker.tracksUploader.source | squote }}
-      topic: {{ .Values.worker.tracksUploader.topic | squote }}
-    {{- end }}
+      topic: {{ .Values.kafka.topics.uploader | squote }}
     {{- if .Values.worker.camcomSender.enabled }}
     camcom:
     {{- with .Values.worker.camcomSender }}
@@ -68,21 +66,19 @@ data:
     {{- end }}
     enabled_modules:
       header_links:
-      {{- toYaml .Values.web.headerLinks | nindent 8 }}
+        {{- toYaml .Values.headerLinks | nindent 8 }}
       header_help_url: 'https://docs.google.com/document/d/1ypaEpklxfc9S5e7FdG2sWBT-WfIR_uZGvQp8X3Xrr0c'
       track_downloader:
-        frames_topics:
-          {{ .Values.kafka.topics.frames }}
-        metadata_topics:
-          {{ .Values.kafka.topics.metadata }}
+        frames_topics: {{ .Values.kafka.topics.frames }}
+        metadata_topics: {{ .Values.kafka.topics.tracks }}
       reporters:
       {{- range .Values.reporters }}
         - name: {{ .name }}
           predictors:
             {{- toYaml .predictors | nindent 12 }}
-        {{- if .topic }}
-          topic: {{ .topic }}
+      {{- if eq .name "pro" }}
+          topic: {{ $.Values.kafka.topics.pro }}
         {{- end }}
       {{- end }}
       predictors:
-        {{- toYaml .Values.predictors | nindent 8 }}
+        {{- toYaml .Values.kafka.predictors | nindent 8 }}
