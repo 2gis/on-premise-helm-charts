@@ -90,7 +90,7 @@ api:
 
   auth:
     enabled: true
-    public_key: ""
+    publicKey: ""
     algorithm: ''
 
   showDocs: false
