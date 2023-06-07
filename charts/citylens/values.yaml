@@ -155,7 +155,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.0.9
+    tag: 1.0.10
 
   replicas: 1
 
