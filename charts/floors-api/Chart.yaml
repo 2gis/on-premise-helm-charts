@@ -4,7 +4,7 @@ description: Helm for floors service
 type: application
 
 version: 1.0.0
-appVersion: 0.0.2
+appVersion: 0.0.6
 
 maintainers:
 - name: 2gis

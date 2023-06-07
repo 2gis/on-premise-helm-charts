@@ -22,26 +22,22 @@ spec:
         - name: import
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.import.image.repository }}:{{ .Values.import.image.tag }}
           imagePullPolicy: {{ .Values.import.imagePullPolicy }}
-          command: ['sh', '-c']
-          args:
-            - export URL="https://s3.2gis.one/floors-convert/prod/onprem-2023-05-16_04-23-02.tar.gz" &&
-              cd /var/floorsConvertedData/ &&
-              rm -rf * &&
-              echo loading $URL &&
-              wget --no-verbose $URL -O a.tar.gz &&
-              echo untaring... &&
-              tar -xzf a.tar.gz &&
-              for i in onprem/*; do echo "extracting $i..."; tar xf $i; echo "rm $i"; rm $i; done &&
-              echo clearing... &&
-              rm -fr a.tar.gz onprem &&
-              echo done
-          resources:
-            {{- toYaml .Values.import.resources | nindent 12 }}
-          {{- if .Values.persistentVolume.enabled }}
+          env:
+            - name: IMPORTER_S3_ENDPOINT
+              value: "{{ .Values.dgctlStorage.host }}"
+            - name: IMPORTER_S3_BUCKET
+              value: "{{ .Values.dgctlStorage.bucket }}"
+            - name: IMPORTER_S3_ACCESS_KEY
+              value: "{{ .Values.dgctlStorage.accessKey }}"
+            - name: IMPORTER_S3_SECRET_KEY
+              value: "{{ .Values.dgctlStorage.secretKey }}"
+            - name: IMPORTER_S3_MANIFEST
+              value: "{{ .Values.dgctlStorage.manifest }}"
           volumeMounts:
             - name: {{ include "floors.fullname" . }}-pv
-              mountPath: /var/floorsConvertedData
-          {{- end }}
+              mountPath: "/var/floorsConvertedData"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
       {{- if .Values.persistentVolume.enabled }}
       volumes:
         - name: {{ include "floors.fullname" . }}-pv
