@@ -1,4 +1,4 @@
-﻿{{ if .Values.assetImporter.enabled }}
+﻿{{ if .Values.userAssetImporter.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -78,11 +78,11 @@ spec:
                   value: http://{{ include "pro-api.name" . }}
                 - name: IMAGE_PROXY_URL
                   value: "{{ .Values.assetImporter.imageProxyUrl }}"
-                {{ if .Values.api.token }}
+                {{ if .Values.auth.apiKey }}
                 - name: API_TOKEN
                   valueFrom:
                     secretKeyRef:
-                      key: apiServiceToken
+                      key: apiKey
                       name: {{ include "pro-api.name" . }}-secret
                 {{ end }}
                 - name: Common__Logging__Format
