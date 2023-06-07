@@ -54,7 +54,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.0.5
+    tag: 1.0.9
 
   replicas: 4
 
@@ -155,7 +155,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.0.7
+    tag: 1.0.9
 
   replicas: 1
 
@@ -427,7 +427,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.0.0
+    tag: 1.0.9
 
   resources:
     requests:
@@ -514,6 +514,7 @@ locale: en
 headerLinks:
 - drivers
 - tracks
+- map
 
 reporters:
   - name: pro

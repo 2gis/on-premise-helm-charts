@@ -52,6 +52,10 @@ spec:
           env:
             - name: CONFIG_PATH
               value: /opt/api/config/dashboard_config.yaml
+            {{- if .Values.web.auth.enabled }}
+            - name: KEYCLOAK_SETTINGS
+              value: /opt/api/config/keycloak.json
+            {{- end }}
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
           volumeMounts:
