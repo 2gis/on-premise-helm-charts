@@ -64,6 +64,16 @@ data:
       request_retries_backoff: {{ .requestRetriesBackoff }}
     {{- end }}
     {{- end }}
+    map:
+      mapgl:
+        host: {{ .Values.map.mapgl.host | squote }}
+        key: {{ .Values.map.mapgl.key | squote }}
+      projects:
+      {{- range .Values.map.projects }}
+        - name: {{ .name }}
+          coords: [{{ join "," .coords }}]
+      {{- end }}
+      initial_project: {{ .Values.map.initialProject | squote }}
     enabled_modules:
       header_links:
         {{- toYaml .Values.headerLinks | nindent 8 }}

@@ -511,6 +511,15 @@ dashboardDomain: ''
 
 locale: en
 
+map:
+  mapgl:
+    host: ''
+    key: ''
+  projects:
+    - name: ''
+      coords: []
+  initialProject: ''
+
 headerLinks:
 - drivers
 - tracks
