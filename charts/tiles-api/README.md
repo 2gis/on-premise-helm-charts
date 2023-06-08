@@ -97,7 +97,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `proxy.access.syncPeriod`         | Proxy sync period.                                                                                                            | `2m`                              |
 | `proxy.access.bss`                | **BSS statistics receiver settings**                                                                                          |                                   |
 | `proxy.access.bss.enabled`        | If statistics receiver is enabled.                                                                                            | `false`                           |
-| `proxy.access.bss.url`            | BSS statistics receiver endpoint url. **Required**                                                                            | `""`                              |
+| `proxy.access.bss.url`            | BSS statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**                                              | `""`                              |
 
 ### Tiles API settings
 

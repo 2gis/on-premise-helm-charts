@@ -112,7 +112,7 @@ cassandra:
 
 # @extra proxy.access.bss **BSS statistics receiver settings**
 # @param proxy.access.bss.enabled If statistics receiver is enabled.
-# @param proxy.access.bss.url BSS statistics receiver endpoint url. **Required**
+# @param proxy.access.bss.url BSS statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
 
 proxy:
   logLevelOverride:
