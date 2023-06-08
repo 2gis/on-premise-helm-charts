@@ -39,6 +39,17 @@ dgctlDockerRegistry: ''
 # @param api.ingress.hosts[0].paths[0].pathType Path type of endpoint.
 # @param api.ingress.tls Tls settings for https.
 
+# @section Auth settings for authentication
+
+# @param api.auth.enabled If authentication is needed.
+# @param api.auth.publicKey Public Key for authentication.
+# @param api.auth.algorithm Authentication algorithm type.
+
+# @section Custom settings
+
+# @param api.showDocs Show documentation link if needed.
+# @param api.logLevel Log level.
+
 # @section Metadata settings
 
 # @param api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -139,6 +150,18 @@ api:
 # @param web.ingress.hosts[0].paths[0].path Endpoint of host.
 # @param web.ingress.hosts[0].paths[0].pathType Path type of endpoint.
 # @param web.ingress.tls Tls settings for https.
+
+# @section Auth settings for authentication
+
+# @param web.auth.enabled If authentication is needed.
+# @param web.auth.realm Authenitcation realm.
+# @param web.auth.authServerUrl Server hostname, without scheme.
+# @param web.auth.clientId Client Id Parameter.
+# @param web.auth.clientSecret Client Secret Parameter.
+
+# @section Custom settings
+
+# @param web.logLevel Log level.
 
 # @section Metadata settings
 
@@ -376,9 +399,12 @@ worker:
 
 # @section Citylens Tracks Uploader worker's settings
 
-# @param worker.camcomSender.enabled If Tracks Uploader worker is enabled for the service.
+# @param worker.tracksUploader.enabled If Tracks Uploader worker is enabled for the service.
 
 # @param worker.tracksUploader.replicas A replica count for the pod.
+
+# @param worker.tracksUploader.api API address.
+# @param worker.tracksUploader.source Source.
 
 # @param worker.tracksUploader.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.tracksUploader.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -445,15 +471,14 @@ migrations:
 # @param kafka.username A Kafka username for connection. **Required**
 # @param kafka.password A Kafka password for connection. **Required**
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
-# @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
-# @param kafka.topics.prediction List of topics for Predictions saver worker. **Required**
+# @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**2
 # @param kafka.topics.pro List of topics for Reporter pro worker. **Required**
 # @param kafka.topics.camcom List of topics for Camcom worker. **Required**
+# @param kafka.topics.uploader List of topics for Uploader worker. **Required**
 # @param kafka.topics.logs List of topics for API logs. **Required**
-# @param kafka.topics.framesGroupId Frames saver workers's group ID. **Required**
-# @param kafka.topics.tracksGroupId Tracks metadata workers's group ID. **Required**
-# @param kafka.topics.predictionGroupId Predictions saver workers's group ID. **Required**
-# @param kafka.topics.camcomSenderGroupId Camcom saver workers's group ID. **Required**
+# @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
+# @param kafka.predictors[0].name Name of predictor **Required**
+# @param kafka.predictors[0].topic Topic used by predictor **Required**
 
 kafka:
 
@@ -465,6 +490,7 @@ kafka:
     tracks: ''
     pro: ''
     logs: ''
+    camcom: ''
     uploader: ''
   consumerGroups:
     prefix: ''
@@ -499,17 +525,13 @@ postgres:
   username: ''
   password: ''
 
-# @section Custom settings
+# @section Map settings
 
-# @param dashboardDomain Link to Citylens web address. **Required**
-# @param locale Locale language (en by default).
-# @param headerLinks List of links.
-# @param reporters List of reporters.
-# @param predictors List of predictors.
-
-dashboardDomain: ''
-
-locale: en
+# @param map.mapgl.host Hostname of mapgl server. **Required**
+# @param map.mapgl.key Key of mapgl server. **Required**
+# @param map.projects[0].name Name of project **Required**
+# @param map.projects[0].coords Coordinates of area **Required**
+# @param map.initialProject Default project shown on Map **Required**
 
 map:
   mapgl:
@@ -519,6 +541,18 @@ map:
     - name: ''
       coords: []
   initialProject: ''
+
+# @section Custom settings
+
+# @param dashboardDomain Link to Citylens web address. **Required**
+# @param locale Locale language (en by default).
+# @param headerLinks List of links.
+# @param reporters[0].name Reporter name.
+# @param reporters[0].predictors Predictor used by reporter.
+
+dashboardDomain: ''
+
+locale: en
 
 headerLinks:
 - drivers
