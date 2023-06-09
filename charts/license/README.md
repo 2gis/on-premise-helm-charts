@@ -6,8 +6,7 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 >
 > All On-Premise services are beta, and under development.
 
-<!--- FIXME: add documentation with link --->
-See the [documentation](https://docs.2gis.com/en/on-premise/overview) to learn about:
+See the [documentation](https://docs.2gis.com/en/on-premise/architecture/services/license) to learn about:
 
 - Architecture of the service.
 
@@ -48,12 +47,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/overview) to learn a
 | `affinity`         | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
 | `imagePullSecrets` | Kubernetes image pull secrets.                                                                                              | `[]`  |
 
-### Deployment settings
+### StatefulSet settings
 
 | Name               | Description  | Value                     |
 | ------------------ | ------------ | ------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/license` |
-| `image.tag`        | Tag.         | `1.0.1`                   |
+| `image.tag`        | Tag.         | `2.0.0`                   |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`            |
 
 ### License service application settings
@@ -69,7 +68,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/overview) to learn a
 | Name                  | Description                                                                                                                    | Value       |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `service.port`        | Service port.                                                                                                                  | `80`        |
+| `service.statusPort`  | Service port for status page and api/v1 (HTTP).                                                                                | `80`        |
+| `service.apiPort`     | Service port for api/v2 (HTTPS).                                                                                               | `443`       |
 | `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
 
@@ -88,4 +88,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/overview) to learn a
 | `resources.requests.memory` | A memory request. | `128Mi` |
 | `resources.limits.cpu`      | A CPU limit.      | `1`     |
 | `resources.limits.memory`   | A memory limit.   | `512Mi` |
+
+### Persistence
+
+| Name                           | Description                                                                  | Value  |
+| ------------------------------ | ---------------------------------------------------------------------------- | ------ |
+| `persistence.storage`          | Storage size for the persistence PersistentVolumes, should be at least 10Mi. | `10Mi` |
+| `persistence.storageClassName` | Storage class name for the persistence PersistentVolumes.                    | `""`   |
 

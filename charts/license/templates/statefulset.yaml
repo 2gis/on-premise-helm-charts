@@ -2,7 +2,7 @@
 
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "license.fullname" $ }}
   {{- if not (empty .annotations) }}
@@ -15,7 +15,7 @@ metadata:
     {{- toYaml .labels | nindent 4 }}
     {{- end }}
 spec:
-  replicas: {{ .replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       {{- include "license.selectorLabels" $ | nindent 6 }}
@@ -39,16 +39,18 @@ spec:
           image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .repository }}:{{ .tag }}"
           imagePullPolicy: {{ .pullPolicy }}
           {{- end }}
-          command: ["/license"]
+          command: ["/bin/license"]
           ports:
-            - containerPort: {{ .license.appPort }}
-              name: http
+            - containerPort: {{ .license.statusPort }}
+              name: status
+            - containerPort: {{ .license.apiPort }}
+              name: api
           startupProbe:
             {{- $startupInitialDelaySeconds := 10 }}
             {{- $startupPeriodSeconds := include "license.durationToSeconds" (dict "duration" $.Values.license.retryPeriod) }}
             {{- $startupFailureThreshold := 3 }}
             httpGet:
-              port: http
+              port: status
               path: /healthcheck
             initialDelaySeconds: {{ $startupInitialDelaySeconds }}
             periodSeconds: {{ $startupPeriodSeconds }}
@@ -56,7 +58,7 @@ spec:
             failureThreshold: {{ $startupFailureThreshold }}
           livenessProbe:
             httpGet:
-              port: http
+              port: status
               path: /healthcheck
             initialDelaySeconds: {{ add $startupInitialDelaySeconds (mul $startupPeriodSeconds $startupFailureThreshold) }}
             periodSeconds: 40
@@ -65,9 +67,15 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: config
+            - mountPath: /persistence
+              name: persistence
           env:
             - name: CONFIG_PATH
               value: /config/config.yaml
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             - name: S3_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
@@ -100,5 +108,21 @@ spec:
       imagePullSecrets:
         {{- toYaml .imagePullSecrets | nindent 8 }}
       {{- end }}
+  {{- with .persistence }}
+  volumeClaimTemplates:
+    - metadata:
+        name: persistence
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        volumeMode: Filesystem
+        resources:
+          requests:
+            storage: {{ .storage }}
+        storageClassName: {{ .storageClassName }}
+  {{- end }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Delete
+    whenScaled: Delete
 
 {{- end -}}

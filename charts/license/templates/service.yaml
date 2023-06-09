@@ -19,8 +19,11 @@ spec:
     {{- include "license.selectorLabels" $ | nindent 4 }}
   type: {{ .type }}
   ports:
-    - port: {{ .port }}
-      name: http
-      targetPort: http
+    - port: {{ .statusPort }}
+      name: status
+      targetPort: status
+    - port: {{ .apiPort }}
+      name: api
+      targetPort: api
 
 {{- end -}}
