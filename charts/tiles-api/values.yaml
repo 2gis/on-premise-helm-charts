@@ -110,6 +110,10 @@ cassandra:
 # @param proxy.access.token Service key for Keys API. **Required**
 # @param proxy.access.syncPeriod Proxy sync period.
 
+# @extra proxy.access.bss **BSS statistics receiver settings**
+# @param proxy.access.bss.enabled If statistics receiver is enabled.
+# @param proxy.access.bss.url BSS statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
+
 proxy:
   logLevelOverride:
   logFormatOverride:
@@ -135,6 +139,9 @@ proxy:
     url: ''
     token: ''
     syncPeriod: 2m
+    bss:
+      enabled: false
+      url: ''
 
 # @section Tiles API settings
 
