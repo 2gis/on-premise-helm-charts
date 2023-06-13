@@ -42,7 +42,7 @@ dgctlDockerRegistry: ''
 # @section Auth settings for authentication
 
 # @param api.auth.enabled If authentication is needed.
-# @param api.auth.publicKey Public Key for authentication.
+# @param api.auth.publicKey Public Key for authentication. Visit `http(s)://keycloak.ingress.host/realms/CityLens_app/` to obtain a Public Key.
 # @param api.auth.algorithm Authentication algorithm type.
 
 # @section Custom settings
@@ -101,8 +101,8 @@ api:
 
   auth:
     enabled: true
-    publicKey: ""
-    algorithm: ''
+    publicKey: ''
+    algorithm: RS256
 
   showDocs: false
 
@@ -154,10 +154,10 @@ api:
 # @section Auth settings for authentication
 
 # @param web.auth.enabled If authentication is needed.
-# @param web.auth.realm Authenitcation realm.
-# @param web.auth.authServerUrl Server hostname, without scheme.
-# @param web.auth.clientId Client Id Parameter.
-# @param web.auth.clientSecret Client Secret Parameter.
+# @param web.auth.realm Authenitcation realm, example: Inspection_Portal_backend
+# @param web.auth.authServerUrl API URL of authentication service. Example: `http(s)://keycloak.ingress.host`
+# @param web.auth.clientId Client id from keycloak, example: citylens-web-client
+# @param web.auth.clientSecret Client Secret from keycloak.
 
 # @section Custom settings
 
@@ -529,9 +529,9 @@ postgres:
 
 # @param map.mapgl.host Hostname of mapgl server. **Required**
 # @param map.mapgl.key Key of mapgl server. **Required**
-# @param map.projects[0].name Name of project **Required**
-# @param map.projects[0].coords Coordinates of area **Required**
-# @param map.initialProject Default project shown on Map **Required**
+# @param map.projects[0].name Name of project.
+# @param map.projects[0].coords Coordinates of area.
+# @param map.initialProject Default project shown on Map.
 
 map:
   mapgl:

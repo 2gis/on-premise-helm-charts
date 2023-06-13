@@ -29,7 +29,9 @@ data:
     {{- with .Values.api.auth }}
     auth:
       enabled: {{ .enabled }}
-      public_key: {{ .publicKey | quote }}
+      {{- if .enabled }}
+      public_key: "-----BEGIN PUBLIC KEY-----\r\n{{ required "A valid .Values.api.auth.publicKey entry required" .publicKey }}\r\n-----END PUBLIC KEY-----"
+      {{- end }}
       algorithm: {{ .algorithm | quote }}
     {{- end }}
     show_docs: {{ .Values.api.showDocs }}

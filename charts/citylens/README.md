@@ -71,11 +71,11 @@ See the [documentation]() to learn about:
 
 ### Auth settings for authentication
 
-| Name                 | Description                    | Value  |
-| -------------------- | ------------------------------ | ------ |
-| `api.auth.enabled`   | If authentication is needed.   | `true` |
-| `api.auth.publicKey` | Public Key for authentication. | `""`   |
-| `api.auth.algorithm` | Authentication algorithm type. | `""`   |
+| Name                 | Description                                                                                                         | Value   |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `api.auth.enabled`   | If authentication is needed.                                                                                        | `true`  |
+| `api.auth.publicKey` | Public Key for authentication. Visit `http(s)://keycloak.ingress.host/realms/CityLens_app/` to obtain a Public Key. | `""`    |
+| `api.auth.algorithm` | Authentication algorithm type.                                                                                      | `RS256` |
 
 ### Custom settings
 
@@ -141,13 +141,13 @@ See the [documentation]() to learn about:
 
 ### Auth settings for authentication
 
-| Name                     | Description                      | Value   |
-| ------------------------ | -------------------------------- | ------- |
-| `web.auth.enabled`       | If authentication is needed.     | `false` |
-| `web.auth.realm`         | Authenitcation realm.            | `""`    |
-| `web.auth.authServerUrl` | Server hostname, without scheme. | `""`    |
-| `web.auth.clientId`      | Client Id Parameter.             | `""`    |
-| `web.auth.clientSecret`  | Client Secret Parameter.         | `""`    |
+| Name                     | Description                                                                   | Value   |
+| ------------------------ | ----------------------------------------------------------------------------- | ------- |
+| `web.auth.enabled`       | If authentication is needed.                                                  | `false` |
+| `web.auth.realm`         | Authenitcation realm, example: Inspection_Portal_backend                      | `""`    |
+| `web.auth.authServerUrl` | API URL of authentication service. Example: `http(s)://keycloak.ingress.host` | `""`    |
+| `web.auth.clientId`      | Client id from keycloak, example: citylens-web-client                         | `""`    |
+| `web.auth.clientSecret`  | Client Secret from keycloak.                                                  | `""`    |
 
 ### Custom settings
 
@@ -320,13 +320,13 @@ See the [documentation]() to learn about:
 
 ### Map settings
 
-| Name                     | Description                               | Value |
-| ------------------------ | ----------------------------------------- | ----- |
-| `map.mapgl.host`         | Hostname of mapgl server. **Required**    | `""`  |
-| `map.mapgl.key`          | Key of mapgl server. **Required**         | `""`  |
-| `map.projects[0].name`   | Name of project **Required**              | `""`  |
-| `map.projects[0].coords` | Coordinates of area **Required**          | `[]`  |
-| `map.initialProject`     | Default project shown on Map **Required** | `""`  |
+| Name                     | Description                            | Value |
+| ------------------------ | -------------------------------------- | ----- |
+| `map.mapgl.host`         | Hostname of mapgl server. **Required** | `""`  |
+| `map.mapgl.key`          | Key of mapgl server. **Required**      | `""`  |
+| `map.projects[0].name`   | Name of project.                       | `""`  |
+| `map.projects[0].coords` | Coordinates of area.                   | `[]`  |
+| `map.initialProject`     | Default project shown on Map.          | `""`  |
 
 ### Custom settings
 
