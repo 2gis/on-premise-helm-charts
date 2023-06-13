@@ -619,7 +619,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "",
+      "secret": "qcOeqhy2fSuVQcbaSsl7TjLy68VX6KoV",
       "redirectUris": [
         "",
         "http://localhost:3000/auth/code"
