@@ -67,7 +67,7 @@ data:
     map:
       mapgl:
         host: {{ required "A valid .Values.map.mapgl.host entry required" .Values.map.mapgl.host | squote }}
-        key: {{ required "A valid .Values.map.mapgl.key entry required".Values.map.mapgl.key | squote }}
+        key: {{ required "A valid .Values.map.mapgl.key entry required" .Values.map.mapgl.key | squote }}
       projects:
       {{- range .Values.map.projects }}
         - name: {{ .name }}
