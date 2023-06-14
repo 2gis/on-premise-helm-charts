@@ -56,7 +56,7 @@ diagnosticMode:
 # @param image.debug Specify if debug logs should be enabled
 
 image:
-  repository: on-premise/keycloak
+  repository: 2gis-on-premise/keycloak
   tag: 21.1.1-debian-11-r4
   pullPolicy: IfNotPresent
   pullSecrets: []
@@ -651,7 +651,7 @@ metrics:
 keycloakConfigCli:
   enabled: true
   image:
-    repository: on-premise/keycloak-config-cli
+    repository: 2gis-on-premise/keycloak-config-cli
     tag: 5.6.1-debian-11-r18
     pullPolicy: IfNotPresent
     pullSecrets: []
@@ -665,10 +665,10 @@ keycloakConfigCli:
 
   resources:
     requests:
-      cpu: 300m
+      cpu: 500m
       memory: 256M
     limits:
-      cpu: 500m
+      cpu: 1
       memory: 512M
 
   containerSecurityContext:
@@ -739,7 +739,7 @@ logging:
 # @param keycloakThemes.image.pullPolicy keycloak-themes container [image pull policy](https://kubernetes.io/docs/user-guide/images/#pre-pulling-images)
 keycloakThemes:
   image:
-    repository: on-premise/keycloak-themes
+    repository: 2gis-on-premise/keycloak-themes
     tag: 0.0.8
     pullPolicy: IfNotPresent
 
