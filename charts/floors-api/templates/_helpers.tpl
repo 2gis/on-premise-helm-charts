@@ -15,6 +15,11 @@
 {{- end -}}
 {{- end -}}
 
+{{- define "floors.importer.fullname" -}}
+{{ include "floors.fullname" . }}-{{ .Release.Revision }}
+{{- end -}}
+
+
 {{- define "floors.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

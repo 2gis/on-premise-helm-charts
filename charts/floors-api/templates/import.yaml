@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "floors.fullname" . }}
+  name: {{ include "floors.importer.fullname" . }}
   labels:
     {{- include "floors.labels" . | nindent 4 }}
   annotations:
@@ -13,7 +13,7 @@ spec:
   backoffLimit: 0
   template:
     metadata:
-      name: {{ include "floors.fullname" . }}
+      name: {{ include "floors.importer.fullname" . }}
       labels:
         {{- include "floors.labels" . | nindent 8 }}
     spec:
@@ -34,14 +34,14 @@ spec:
             - name: IMPORTER_S3_MANIFEST
               value: "{{ .Values.dgctlStorage.manifest }}"
           volumeMounts:
-            - name: {{ include "floors.fullname" . }}-pv
+            - name: {{ include "floors.importer.fullname" . }}-pv
               mountPath: "/var/floorsConvertedData"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- if .Values.persistentVolume.enabled }}
       volumes:
-        - name: {{ include "floors.fullname" . }}-pv
+        - name: {{ include "floors.importer.fullname" . }}-pv
           persistentVolumeClaim:
-            claimName: {{ include "floors.fullname" . }}
+            claimName: {{ include "floors.importer.fullname" . }}
       {{- end }}
 {{- end }}

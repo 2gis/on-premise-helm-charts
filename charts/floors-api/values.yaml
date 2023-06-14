@@ -30,7 +30,6 @@ dgctlStorage:
   secretKey: ''
   manifest: ''
 
-
 # @section Common settings
 
 # @param replicaCount A replica count for the pod.
@@ -143,13 +142,6 @@ import:
     repository: 2gis-on-premise/floors-nginx
     pullPolicy: IfNotPresent
     tag: 0.0.2
-  resources:
-    requests:
-      cpu: 30m
-      memory: 128M
-    limits:
-      cpu: 60m
-    memory: 256M
 
 # @section Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
 
