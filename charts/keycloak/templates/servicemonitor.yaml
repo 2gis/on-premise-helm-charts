@@ -1,0 +1,48 @@
+{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "keycloak.fullname" . }}
+  namespace: {{ default (include "keycloak.names.namespace" .) .Values.metrics.serviceMonitor.namespace }}
+  labels: {{- include "keycloak.labels" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak
+    {{- if .Values.metrics.serviceMonitor.labels }}
+    {{- include "keycloak.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if .Values.metrics.serviceMonitor.jobLabel }}
+  jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
+  {{- end }}
+  endpoints:
+    {{- $defaultEndpoint := pick .Values.metrics.serviceMonitor "port" "interval" "scrapeTimeout" "relabelings" "metricRelabelings" "honorLabels" }}
+    {{- $endpoints := ternary (.Values.metrics.serviceMonitor.endpoints) (list (dict "path" .Values.metrics.serviceMonitor.path)) (empty .Values.metrics.serviceMonitor.path) }}
+    {{- range $endpoints }}
+    {{- $endpoint := merge . $defaultEndpoint }}
+    - port: {{ $endpoint.port }}
+      path: {{ include "keycloak.tplvalues.render" ( dict "value" $endpoint.path "context" $) }}
+      {{- if $endpoint.interval }}
+      interval: {{ $endpoint.interval }}
+      {{- end }}
+      {{- if $endpoint.scrapeTimeout }}
+      scrapeTimeout: {{ $endpoint.scrapeTimeout }}
+      {{- end }}
+      {{- if $endpoint.relabelings }}
+      relabelings: {{- include "keycloak.tplvalues.render" ( dict "value" $endpoint.relabelings "context" $) | nindent 6 }}
+      {{- end }}
+      {{- if $endpoint.metricRelabelings }}
+      metricRelabelings: {{- include "keycloak.tplvalues.render" ( dict "value" $endpoint.metricRelabelings "context" $) | nindent 6 }}
+      {{- end }}
+      {{- if $endpoint.honorLabels }}
+      honorLabels: {{ $endpoint.honorLabels }}
+      {{- end }}
+    {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ include "keycloak.names.namespace" . | quote }}
+  selector:
+    matchLabels: {{- include "keycloak.selectorLabels" . | nindent 6 }}
+      {{- if .Values.metrics.serviceMonitor.selector }}
+      {{- include "keycloak.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+      app.kubernetes.io/component: metrics
+{{- end }}

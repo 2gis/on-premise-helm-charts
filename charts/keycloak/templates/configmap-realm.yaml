@@ -1,0 +1,16 @@
+{{- if .Values.keycloakConfigCli.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "keycloak.fullname" . }}-realm
+  namespace: {{ include "keycloak.names.namespace" . | quote }}
+  labels: {{- include "keycloak.labels" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak
+data:
+  pro.json: |-
+    {{- tpl (.Files.Get "configs/pro.tpl") . | nindent 4 }}
+  citylens.json: |-
+    {{- tpl (.Files.Get "configs/citylens.tpl") . | nindent 4 }}
+  citylens-web.json: |-
+    {{- tpl (.Files.Get "configs/citylens-web.tpl") . | nindent 4 }}
+{{- end }}

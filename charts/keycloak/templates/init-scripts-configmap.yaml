@@ -1,0 +1,11 @@
+{{- if and .Values.initdbScripts (not .Values.initdbScriptsConfigMap) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-init-scripts" (include "keycloak.fullname" .) }}
+  namespace: {{ include "keycloak.names.namespace" . | quote }}
+  labels: {{- include "keycloak.labels" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak
+data:
+{{- include "keycloak.tplvalues.render" (dict "value" .Values.initdbScripts "context" .) | nindent 2 }}
+{{ end }}
