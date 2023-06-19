@@ -171,9 +171,9 @@ initdbScripts: {}
 initdbScriptsConfigMap: ''
 command: []
 args: []
-extraEnvVars:
-  - name: KC_SPI_THEME_WELCOME_THEME
-    value: urbi
+extraEnvVars: []
+# - name: JAVA_OPTS
+#   value: -server -Xms64m -Xmx1024m
 extraEnvVarsCM: ''
 extraEnvVarsSecret: ''
 
