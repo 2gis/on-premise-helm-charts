@@ -139,7 +139,7 @@ nginx:
 import:
   enabled: false
   image:
-    repository: 2gis-on-premise/floors-nginx
+    repository: 2gis-on-premise/floors-importer
     pullPolicy: IfNotPresent
     tag: 0.0.2
 
