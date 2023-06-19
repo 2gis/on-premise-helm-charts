@@ -16,9 +16,23 @@ data:
       frames: {{ required "A valid .Values.kafka.topics.frames entry required" .topics.frames | squote }}
       tracks: {{ required "A valid .Values.kafka.topics.tracks entry required" .topics.tracks | squote }}
       logs: {{ required "A valid .Values.kafka.topics.logs entry required" .topics.logs | squote }}
-      camcom: {{ required "A valid .Values.kafka.topics.camcom entry required" .topics.camcom | squote }}
+      {{- range .predictors }}
+      {{- if eq .name "camcom" }}
+      camcom: {{ required "A valid .topic entry required" .topic| squote }}
+      {{- end }}
+      {{- end }}
     {{- end }}
     database:
     {{- with .Values.postgres }}
       postgres: 'postgresql+asyncpg://{{ required "A valid .Values.postgres.username entry required" .username }}:{{ required "A valid .Values.postgres.password entry required" .password }}@{{ required "A valid .Values.postgres.host entry required" .host }}:{{ required "A valid .Values.postgres.port entry required" .port }}/{{ required "A valid .Values.postgres.database entry required" .database }}'
     {{- end }}
+    {{- with .Values.api.auth }}
+    auth:
+      enabled: {{ .enabled }}
+      {{- if .enabled }}
+      public_key: "-----BEGIN PUBLIC KEY-----\r\n{{ required "A valid .Values.api.auth.publicKey entry required" .publicKey }}\r\n-----END PUBLIC KEY-----"
+      {{- end }}
+      algorithm: {{ .algorithm | quote }}
+    {{- end }}
+    show_docs: {{ .Values.api.showDocs }}
+    log_level: {{ .Values.api.logLevel }}

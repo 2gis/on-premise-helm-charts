@@ -34,7 +34,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.0.5`                        |
+| `api.image.tag`        | Tag.         | `1.0.9`                        |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -69,6 +69,21 @@ See the [documentation]() to learn about:
 | `api.ingress.hosts[0].paths[0].pathType`                              | Path type of endpoint.                                                                                                | `Prefix`                                              |
 | `api.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                                                  |
 
+### Auth settings for authentication
+
+| Name                 | Description                                                                                                         | Value   |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `api.auth.enabled`   | If authentication is needed.                                                                                        | `true`  |
+| `api.auth.publicKey` | Public Key for authentication. Visit `http(s)://keycloak.ingress.host/realms/CityLens_app/` to obtain a Public Key. | `""`    |
+| `api.auth.algorithm` | Authentication algorithm type.                                                                                      | `RS256` |
+
+### Custom settings
+
+| Name           | Description                        | Value   |
+| -------------- | ---------------------------------- | ------- |
+| `api.showDocs` | Show documentation link if needed. | `false` |
+| `api.logLevel` | Log level.                         | `INFO`  |
+
 ### Metadata settings
 
 | Name                 | Description                                                                                                                 | Value |
@@ -89,7 +104,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.0.7`                        |
+| `web.image.tag`        | Tag.         | `1.0.10`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -123,6 +138,22 @@ See the [documentation]() to learn about:
 | `web.ingress.hosts[0].paths[0].path`                                  | Endpoint of host.                                                                                                     | `/`                                                   |
 | `web.ingress.hosts[0].paths[0].pathType`                              | Path type of endpoint.                                                                                                | `Prefix`                                              |
 | `web.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                                                  |
+
+### Auth settings for authentication
+
+| Name                     | Description                                                                   | Value   |
+| ------------------------ | ----------------------------------------------------------------------------- | ------- |
+| `web.auth.enabled`       | If authentication is needed.                                                  | `false` |
+| `web.auth.realm`         | Authenitcation realm, example: Inspection_Portal_backend                      | `""`    |
+| `web.auth.authServerUrl` | API URL of authentication service. Example: `http(s)://keycloak.ingress.host` | `""`    |
+| `web.auth.clientId`      | Client id from keycloak, example: citylens-web-client                         | `""`    |
+| `web.auth.clientSecret`  | Client Secret from keycloak.                                                  | `""`    |
+
+### Custom settings
+
+| Name           | Description | Value     |
+| -------------- | ----------- | --------- |
+| `web.logLevel` | Log level.  | `WARNING` |
 
 ### Metadata settings
 
@@ -221,13 +252,29 @@ See the [documentation]() to learn about:
 | `worker.trackMetadataSaver.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`  |
 | `worker.trackMetadataSaver.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
 
+### Citylens Tracks Uploader worker's settings
+
+| Name                                   | Description                                                                                                                 | Value  |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `worker.tracksUploader.enabled`        | If Tracks Uploader worker is enabled for the service.                                                                       | `true` |
+| `worker.tracksUploader.replicas`       | A replica count for the pod.                                                                                                | `1`    |
+| `worker.tracksUploader.api`            | API address.                                                                                                                | `""`   |
+| `worker.tracksUploader.source`         | Source.                                                                                                                     | `""`   |
+| `worker.tracksUploader.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
+| `worker.tracksUploader.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
+| `worker.tracksUploader.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
+| `worker.tracksUploader.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
+| `worker.tracksUploader.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`   |
+| `worker.tracksUploader.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`   |
+| `worker.tracksUploader.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`   |
+
 ### Migration job settings
 
 | Name                                   | Description                                                                                                             | Value                               |
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.0.0`                             |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.0.9`                             |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |
@@ -237,21 +284,20 @@ See the [documentation]() to learn about:
 
 ### Kafka settings
 
-| Name                               | Description                                               | Value |
-| ---------------------------------- | --------------------------------------------------------- | ----- |
-| `kafka.bootstrapServer`            | A Kafka broker endpoint. **Required**                     | `""`  |
-| `kafka.username`                   | A Kafka username for connection. **Required**             | `""`  |
-| `kafka.password`                   | A Kafka password for connection. **Required**             | `""`  |
-| `kafka.topics.frames`              | List of topics for Frames saver worker. **Required**      | `""`  |
-| `kafka.topics.tracks`              | List of topics for Tracks metadata worker. **Required**   | `""`  |
-| `kafka.topics.prediction`          | List of topics for Predictions saver worker. **Required** | `""`  |
-| `kafka.topics.pro`                 | List of topics for Reporter pro worker. **Required**      | `""`  |
-| `kafka.topics.camcom`              | List of topics for Camcom worker. **Required**            | `""`  |
-| `kafka.topics.logs`                | List of topics for API logs. **Required**                 | `""`  |
-| `kafka.topics.framesGroupId`       | Frames saver workers's group ID. **Required**             | `""`  |
-| `kafka.topics.tracksGroupId`       | Tracks metadata workers's group ID. **Required**          | `""`  |
-| `kafka.topics.predictionGroupId`   | Predictions saver workers's group ID. **Required**        | `""`  |
-| `kafka.topics.camcomSenderGroupId` | Camcom saver workers's group ID. **Required**             | `""`  |
+| Name                          | Description                                              | Value    |
+| ----------------------------- | -------------------------------------------------------- | -------- |
+| `kafka.bootstrapServer`       | A Kafka broker endpoint. **Required**                    | `""`     |
+| `kafka.username`              | A Kafka username for connection. **Required**            | `""`     |
+| `kafka.password`              | A Kafka password for connection. **Required**            | `""`     |
+| `kafka.topics.frames`         | List of topics for Frames saver worker. **Required**     | `""`     |
+| `kafka.topics.tracks`         | List of topics for Tracks metadata worker. **Required**2 | `""`     |
+| `kafka.topics.pro`            | List of topics for Reporter pro worker. **Required**     | `""`     |
+| `kafka.topics.camcom`         | List of topics for Camcom worker. **Required**           | `""`     |
+| `kafka.topics.uploader`       | List of topics for Uploader worker. **Required**         | `""`     |
+| `kafka.topics.logs`           | List of topics for API logs. **Required**                | `""`     |
+| `kafka.consumerGroups.prefix` | Kafka topics prefix. **Required**                        | `""`     |
+| `kafka.predictors[0].name`    | Name of predictor **Required**                           | `camcom` |
+| `kafka.predictors[0].topic`   | Topic used by predictor **Required**                     | `""`     |
 
 ### S3 settings
 
@@ -272,12 +318,22 @@ See the [documentation]() to learn about:
 | `postgres.username` | PostgreSQL username with rw access. **Required** | `""`   |
 | `postgres.password` | PostgreSQL password. **Required**                | `""`   |
 
+### Map settings
+
+| Name                     | Description                            | Value |
+| ------------------------ | -------------------------------------- | ----- |
+| `map.mapgl.host`         | Hostname of mapgl server. **Required** | `""`  |
+| `map.mapgl.key`          | Key of mapgl server. **Required**      | `""`  |
+| `map.projects[0].name`   | Name of project.                       | `""`  |
+| `map.projects[0].coords` | Coordinates of area.                   | `[]`  |
+| `map.initialProject`     | Default project shown on Map.          | `""`  |
+
 ### Custom settings
 
-| Name              | Description                                | Value                  |
-| ----------------- | ------------------------------------------ | ---------------------- |
-| `dashboardDomain` | Link to Citylens web address. **Required** | `""`                   |
-| `locale`          | Locale language (en by default).           | `en`                   |
-| `headerLinks`     | List of links.                             | `["drivers","tracks"]` |
-| `reporters`       | List of reporters.                         | `["pro"]`              |
-| `predictors`      | List of predictors.                        | `["camcom"]`           |
+| Name                      | Description                                | Value                        |
+| ------------------------- | ------------------------------------------ | ---------------------------- |
+| `dashboardDomain`         | Link to Citylens web address. **Required** | `""`                         |
+| `locale`                  | Locale language (en by default).           | `en`                         |
+| `headerLinks`             | List of links.                             | `["drivers","tracks","map"]` |
+| `reporters[0].name`       | Reporter name.                             | `pro`                        |
+| `reporters[0].predictors` | Predictor used by reporter.                | `["camcom"]`                 |

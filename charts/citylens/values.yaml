@@ -39,6 +39,17 @@ dgctlDockerRegistry: ''
 # @param api.ingress.hosts[0].paths[0].pathType Path type of endpoint.
 # @param api.ingress.tls Tls settings for https.
 
+# @section Auth settings for authentication
+
+# @param api.auth.enabled If authentication is needed.
+# @param api.auth.publicKey Public Key for authentication. Visit `http(s)://keycloak.ingress.host/realms/CityLens_app/` to obtain a Public Key.
+# @param api.auth.algorithm Authentication algorithm type.
+
+# @section Custom settings
+
+# @param api.showDocs Show documentation link if needed.
+# @param api.logLevel Log level.
+
 # @section Metadata settings
 
 # @param api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -54,7 +65,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.0.5
+    tag: 1.0.9
 
   replicas: 4
 
@@ -87,6 +98,15 @@ api:
       # - hosts:
       #    host: ''
       #  secretName: ''
+
+  auth:
+    enabled: true
+    publicKey: ''
+    algorithm: RS256
+
+  showDocs: false
+
+  logLevel: INFO
 
   annotations: {}
   labels: {}
@@ -131,6 +151,18 @@ api:
 # @param web.ingress.hosts[0].paths[0].pathType Path type of endpoint.
 # @param web.ingress.tls Tls settings for https.
 
+# @section Auth settings for authentication
+
+# @param web.auth.enabled If authentication is needed.
+# @param web.auth.realm Authenitcation realm, example: Inspection_Portal_backend
+# @param web.auth.authServerUrl API URL of authentication service. Example: `http(s)://keycloak.ingress.host`
+# @param web.auth.clientId Client id from keycloak, example: citylens-web-client
+# @param web.auth.clientSecret Client Secret from keycloak.
+
+# @section Custom settings
+
+# @param web.logLevel Log level.
+
 # @section Metadata settings
 
 # @param web.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -146,7 +178,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.0.7
+    tag: 1.0.11
 
   replicas: 1
 
@@ -179,6 +211,15 @@ web:
       # - hosts:
       #    host: ''
       #  secretName: ''
+
+  auth:
+    enabled: false
+    realm: ''
+    authServerUrl: ''
+    clientId: ''
+    clientSecret: ''
+
+  logLevel: WARNING
 
   annotations: {}
   labels: {}
@@ -355,6 +396,42 @@ worker:
     affinity: {}
     tolerations: {}
 
+
+# @section Citylens Tracks Uploader worker's settings
+
+# @param worker.tracksUploader.enabled If Tracks Uploader worker is enabled for the service.
+
+# @param worker.tracksUploader.replicas A replica count for the pod.
+
+# @param worker.tracksUploader.api API address.
+# @param worker.tracksUploader.source Source.
+
+# @param worker.tracksUploader.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.tracksUploader.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.tracksUploader.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.tracksUploader.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.tracksUploader.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.tracksUploader.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.tracksUploader.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  tracksUploader:
+
+    enabled: true
+
+    replicas: 1
+
+    api: ''
+    source: ''
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
 # @section Migration job settings
 
 # @param migrations.enabled If migrations needed.
@@ -376,7 +453,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.0.0
+    tag: 1.0.9
 
   resources:
     requests:
@@ -394,15 +471,14 @@ migrations:
 # @param kafka.username A Kafka username for connection. **Required**
 # @param kafka.password A Kafka password for connection. **Required**
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
-# @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
-# @param kafka.topics.prediction List of topics for Predictions saver worker. **Required**
+# @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**2
 # @param kafka.topics.pro List of topics for Reporter pro worker. **Required**
 # @param kafka.topics.camcom List of topics for Camcom worker. **Required**
+# @param kafka.topics.uploader List of topics for Uploader worker. **Required**
 # @param kafka.topics.logs List of topics for API logs. **Required**
-# @param kafka.topics.framesGroupId Frames saver workers's group ID. **Required**
-# @param kafka.topics.tracksGroupId Tracks metadata workers's group ID. **Required**
-# @param kafka.topics.predictionGroupId Predictions saver workers's group ID. **Required**
-# @param kafka.topics.camcomSenderGroupId Camcom saver workers's group ID. **Required**
+# @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
+# @param kafka.predictors[0].name Name of predictor **Required**
+# @param kafka.predictors[0].topic Topic used by predictor **Required**
 
 kafka:
 
@@ -412,14 +488,15 @@ kafka:
   topics:
     frames: ''
     tracks: ''
-    prediction: ''
     pro: ''
-    camcom: ''
     logs: ''
-    framesGroupId: ''
-    tracksGroupId: ''
-    predictionGroupId: ''
-    camcomSenderGroupId: ''
+    camcom: ''
+    uploader: ''
+  consumerGroups:
+    prefix: ''
+  predictors:
+    - name: camcom
+      topic: ''
 
 # @section S3 settings
 # @param s3.endpoint S3 endpoint. Format: `host:port` or `url`. **Required**
@@ -448,13 +525,30 @@ postgres:
   username: ''
   password: ''
 
+# @section Map settings
+
+# @param map.mapgl.host Hostname of mapgl server. **Required**
+# @param map.mapgl.key Key of mapgl server. **Required**
+# @param map.projects[0].name Name of project.
+# @param map.projects[0].coords Coordinates of area.
+# @param map.initialProject Default project shown on Map.
+
+map:
+  mapgl:
+    host: ''
+    key: ''
+  projects:
+    - name: ''
+      coords: []
+  initialProject: ''
+
 # @section Custom settings
 
 # @param dashboardDomain Link to Citylens web address. **Required**
 # @param locale Locale language (en by default).
 # @param headerLinks List of links.
-# @param reporters List of reporters.
-# @param predictors List of predictors.
+# @param reporters[0].name Reporter name.
+# @param reporters[0].predictors Predictor used by reporter.
 
 dashboardDomain: ''
 
@@ -463,9 +557,8 @@ locale: en
 headerLinks:
 - drivers
 - tracks
+- map
 
 reporters:
-- pro
-
-predictors:
-- camcom
+  - name: pro
+    predictors: [camcom]
