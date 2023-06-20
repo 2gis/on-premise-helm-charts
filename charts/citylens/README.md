@@ -104,7 +104,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.0.10`                       |
+| `web.image.tag`        | Tag.         | `1.0.11`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings

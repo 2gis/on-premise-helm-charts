@@ -1,5 +1,5 @@
 # 2GIS On-Premise Breaking-Changes
-## [1.7.1]
+## [1.7.5]
 #### gis-platform
 - Rename `external_proto` and `external_hostname` to `url`
 - Rename `spcore.debug_mode` to `spcore.debug`
@@ -19,6 +19,21 @@
 - Rename `spcore.jwt.token_admin` to `spcore.jwt.tokenAdmin`
 - Rename `portal.max_body_size` to `portal.maxBodySize`
 - Rename `portal.gzip_enabled` to `portal.gzip.enabled`
+
+#### citylens
+- Remove `kafka.topics.prediction`
+- Remove `kafka.topics.framesGroupId`
+- Remove `kafka.topics.tracksGroupId`
+- Remove `kafka.topics.predictionGroupId`
+- Remove `kafka.topics.camcomSenderGroupId`
+- Add `kafka.predictors`
+```
+kafka:
+  predictors:
+  - name: ''
+    topic: ''
+```
+- Add `kafka.consumerGroups.prefix`
 
 ## [1.6.0]
 #### catalog-api

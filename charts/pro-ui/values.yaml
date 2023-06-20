@@ -51,7 +51,7 @@ ui:
   isOnPremise: true
   appTheme: urbi
   appLocale: en_AE
-  appInitialMapCenter: [46.71, 24.72]
+  appInitialMapCenter: '[46.71, 24.72]'
 
   # @param ui.auth.sso Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.
   # @param ui.auth.secure Flag to turn on/off the https for auth. Possible values: `"true"` or `"false"`.
@@ -62,9 +62,9 @@ ui:
   # @param ui.auth.clientSecret a client_secret from keycloack
   # @param ui.auth.oAuthProvider a provider name. Possible values: "keycloak" | "ugc"
   # @param ui.auth.identityProviderUrl a provider base URL
-  # Ex.: http(s)://keycloak.ingress.host/realms/pro/protocol/openid-connect/auth
+  # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/auth
   # @param ui.auth.oAuthApiUrl an oAuth provider base URL
-  # Ex.: http(s)://keycloak.ingress.host/realms/pro/protocol/openid-connect/
+  # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/
   # @param ui.auth.userDataApiUrl an user data provider URL
   auth:
     sso: false
@@ -133,7 +133,7 @@ ui:
   ingress:
     enabled: false
     hosts:
-      - host: pro-ui.host
+    - host: pro-ui.host
 
   # @section Limits
 
