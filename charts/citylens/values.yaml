@@ -495,8 +495,8 @@ kafka:
   consumerGroups:
     prefix: ''
   predictors:
-    - name: camcom
-      topic: ''
+  - name: camcom
+    topic: ''
 
 # @section S3 settings
 # @param s3.endpoint S3 endpoint. Format: `host:port` or `url`. **Required**
@@ -538,8 +538,8 @@ map:
     host: ''
     key: ''
   projects:
-    - name: ''
-      coords: []
+  - name: ''
+    coords: []
   initialProject: ''
 
 # @section Custom settings
@@ -560,5 +560,5 @@ headerLinks:
 - map
 
 reporters:
-  - name: pro
-    predictors: [camcom]
+- name: pro
+  predictors: [camcom]

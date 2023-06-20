@@ -36,7 +36,7 @@ podLabels: {}
 
 image:
   repository: 2gis-on-premise/mapgl
-  tag: 1.36.0
+  tag: 1.36.1
   pullPolicy: IfNotPresent
 
 
@@ -56,7 +56,7 @@ env:
   MAPGL_DEMO_KEY: empty
   MAPGL_HOST: https://mapgl-api.ingress.host
   MAPGL_TILES_API: https://tiles-api.ingress.host
-  MAPGL_TILESET: 'web'
+  MAPGL_TILESET: web
   MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
   MAPGL_FLOORSSERVER: https://floors.api.2gis.ru
   MAPGL_KEYSERVER: https://keys-api.ingress.host

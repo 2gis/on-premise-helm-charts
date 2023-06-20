@@ -24,26 +24,25 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keycloak) to learn a
 
 ### Docker Registry settings
 
-| Name                  | Description                                                                             | Value       |
-| --------------------- | --------------------------------------------------------------------------------------- | ----------- |
-| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `docker.io` |
+| Name                  | Description                                                                             | Value |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
 ### Common parameters
 
-| Name                     | Description                                                                                                                                                            | Value           |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                                                                                   | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname                                                                                                                     | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                                         | `""`            |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                                        | `""`            |
-| `enableServiceLinks`     | If set to false, disable Kubernetes [service links](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) in the pod spec | `true`          |
-| `dnsPolicy`              | DNS Policy for pod                                                                                                                                                     | `""`            |
-| `dnsConfig`              | DNS Configuration pod                                                                                                                                                  | `{}`            |
-| `clusterDomain`          | Default Kubernetes cluster domain                                                                                                                                      | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                                      | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                                                | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the the statefulset                                                                                                              | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the the statefulset                                                                                                                 | `["infinity"]`  |
+| Name                     | Description                                                                                                                                                            | Value          |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                                                                                   | `""`           |
+| `nameOverride`           | String to partially override common.names.fullname                                                                                                                     | `""`           |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                                         | `""`           |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                                        | `""`           |
+| `enableServiceLinks`     | If set to false, disable Kubernetes [service links](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) in the pod spec | `true`         |
+| `dnsPolicy`              | DNS Policy for pod                                                                                                                                                     | `""`           |
+| `dnsConfig`              | DNS Configuration pod                                                                                                                                                  | `{}`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                                      | `[]`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                                                | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the the statefulset                                                                                                              | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the the statefulset                                                                                                                 | `["infinity"]` |
 
 ### Keycloak parameters
 
@@ -58,8 +57,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keycloak) to learn a
 | `auth.adminPassword`             | Keycloak administrator password for the new user                                                                                                                                                                      | `""`                          |
 | `auth.existingSecret`            | Existing secret containing Keycloak admin password                                                                                                                                                                    | `""`                          |
 | `auth.passwordSecretKey`         | Key where the Keycloak admin password is being stored inside the existing secret.                                                                                                                                     | `""`                          |
-| `tls.enabled`                    | Enable [TLS encryption](https://github.com/bitnami/containers/tree/main/bitnami/keycloak#tls-encryption). Required for HTTPs traffic.                                                                                 | `false`                       |
-| `tls.autoGenerated`              | Generate automatically self-signed TLS certificates. Currently only supports PEM certificates                                                                                                                         | `false`                       |
+| `tls.enabled`                    | Enable [TLS encryption](https://github.com/bitnami/containers/tree/main/bitnami/keycloak#tls-encryption). Required for HTTPs traffic.                                                                                 | `true`                        |
+| `tls.autoGenerated`              | Generate automatically self-signed TLS certificates. Currently only supports PEM certificates                                                                                                                         | `true`                        |
 | `tls.existingSecret`             | Existing secret containing the TLS certificates per Keycloak replica                                                                                                                                                  | `""`                          |
 | `tls.usePem`                     | Use PEM certificates as input instead of PKS12/JKS stores                                                                                                                                                             | `false`                       |
 | `tls.truststoreFilename`         | Truststore filename inside the existing secret                                                                                                                                                                        | `keycloak.truststore.jks`     |
@@ -72,7 +71,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keycloak) to learn a
 | `spi.truststoreFilename`         | Truststore filename inside the existing secret                                                                                                                                                                        | `keycloak-spi.truststore.jks` |
 | `spi.passwordsSecret`            | Secret containing the SPI Truststore passwords.                                                                                                                                                                       | `""`                          |
 | `spi.hostnameVerificationPolicy` | Verify the hostname of the server’s certificate. Allowed values: "ANY", "WILDCARD", "STRICT".                                                                                                                         | `""`                          |
-| `production`                     | Run Keycloak in production mode. TLS configuration is required except when using proxy=edge.                                                                                                                          | `false`                       |
+| `production`                     | Run Keycloak in production mode. TLS configuration is required except when using proxy=edge.                                                                                                                          | `true`                        |
 | `proxy`                          | reverse [Proxy](https://www.keycloak.org/server/reverseproxy) mode edge, reencrypt, passthrough or none                                                                                                               | `passthrough`                 |
 | `httpRelativePath`               | Set the [path](https://www.keycloak.org/migration/migrating-to-quarkus#_default_context_path_changed) relative to '/' for serving resources. Useful if you are migrating from older version which were using '/auth/' | `/`                           |
 | `configuration`                  | Keycloak Configuration. Auto-generated based on other parameters when not specified                                                                                                                                   | `""`                          |
@@ -100,9 +99,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keycloak) to learn a
 | `containerSecurityContext.enabled`      | Enabled Keycloak containers' [Security Context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container)   | `true`          |
 | `containerSecurityContext.runAsUser`    | Set Keycloak container's Security Context runAsUser                                                                                                                    | `1001`          |
 | `containerSecurityContext.runAsNonRoot` | Set Keycloak container's Security Context runAsNonRoot                                                                                                                 | `true`          |
-| `resources.requests.cpu`                | A CPU request.                                                                                                                                                         | `1`             |
+| `resources.requests.cpu`                | A CPU request.                                                                                                                                                         | `2`             |
 | `resources.requests.memory`             | A memory request.                                                                                                                                                      | `2000Mi`        |
-| `resources.limits.cpu`                  | A CPU limit.                                                                                                                                                           | `2`             |
+| `resources.limits.cpu`                  | A CPU limit.                                                                                                                                                           | `4`             |
 | `resources.limits.memory`               | A memory limit.                                                                                                                                                        | `4000Mi`        |
 | `livenessProbe.enabled`                 | Enable [livenessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on Keycloak containers  | `true`          |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                                                                | `300`           |
@@ -201,9 +200,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keycloak) to learn a
 
 | Name                 | Description                                                                                                        | Value   |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------ | ------- |
-| `pdb.create`         | Enable/disable a [Pod Disruption Budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) creation | `false` |
-| `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled                                                     | `1`     |
-| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable                                                     | `""`    |
+| `pdb.create`         | Enable/disable a [Pod Disruption Budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) creation | `true`  |
+| `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled                                                     | `""`    |
+| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable                                                     | `1`     |
 | `hpa.enabled`        | Enable hpa for Keycloak                                                                                            | `false` |
 | `hpa.minReplicas`    | Minimum number of Keycloak replicas                                                                                | `1`     |
 | `hpa.maxReplicas`    | Maximum number of Keycloak replicas                                                                                | `11`    |
@@ -248,9 +247,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keycloak) to learn a
 | `keycloakConfigCli.command`                               | Command for running the container (set to default if not set). Use array form                                                             | `[]`                                  |
 | `keycloakConfigCli.args`                                  | Args for running the container (set to default if not set). Use array form                                                                | `[]`                                  |
 | `keycloakConfigCli.hostAliases`                           | Job pod host aliases                                                                                                                      | `[]`                                  |
-| `keycloakConfigCli.resources.requests.cpu`                | A CPU request.                                                                                                                            | `300m`                                |
+| `keycloakConfigCli.resources.requests.cpu`                | A CPU request.                                                                                                                            | `500m`                                |
 | `keycloakConfigCli.resources.requests.memory`             | A memory request.                                                                                                                         | `256M`                                |
-| `keycloakConfigCli.resources.limits.cpu`                  | A CPU limit.                                                                                                                              | `500m`                                |
+| `keycloakConfigCli.resources.limits.cpu`                  | A CPU limit.                                                                                                                              | `1`                                   |
 | `keycloakConfigCli.resources.limits.memory`               | A memory limit.                                                                                                                           | `512M`                                |
 | `keycloakConfigCli.containerSecurityContext.enabled`      | Enabled keycloak-config-cli containers' Security Context                                                                                  | `true`                                |
 | `keycloakConfigCli.containerSecurityContext.runAsUser`    | Set keycloak-config-cli container's Security Context runAsUser                                                                            | `1001`                                |
@@ -292,7 +291,19 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keycloak) to learn a
 
 ### Keycloak Logging parameters
 
-| Name             | Description                                                                                                | Value     |
-| ---------------- | ---------------------------------------------------------------------------------------------------------- | --------- |
-| `logging.output` | Alternates between the default [log](https://www.keycloak.org/server/logging) output format or json format | `default` |
-| `logging.level`  | Allowed values as documented: FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL, OFF                             | `INFO`    |
+| Name                              | Description                                                                                                     | Value                             |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `logging.output`                  | Alternates between the default [log](https://www.keycloak.org/server/logging) output format or json format      | `default`                         |
+| `logging.level`                   | Allowed values as documented: FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL, OFF                                  | `INFO`                            |
+| `keycloakThemes.image.repository` | keycloak-themes container image repository                                                                      | `2gis-on-premise/keycloak-themes` |
+| `keycloakThemes.image.tag`        | keycloak-themes container image tag                                                                             | `0.0.8`                           |
+| `keycloakThemes.image.pullPolicy` | keycloak-themes container [image pull policy](https://kubernetes.io/docs/user-guide/images/#pre-pulling-images) | `IfNotPresent`                    |
+
+### Keycloak default user for access on-premise services
+
+| Name                   | Description                                 | Value   |
+| ---------------------- | ------------------------------------------- | ------- |
+| `defaultUser.enabled`  | Switch to enable or disable the defaultUser | `false` |
+| `defaultUser.name`     | User name                                   | `""`    |
+| `defaultUser.email`    | User email                                  | `""`    |
+| `defaultUser.password` | User password                               | `""`    |

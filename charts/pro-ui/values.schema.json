@@ -35,7 +35,7 @@
           "enum": ["ar_AE", "en_AE", "ru_RU"]
         },
         "appInitialMapCenter": {
-          "type": "array"
+          "type": "string"
         },
         "auth": {
           "type": "object",

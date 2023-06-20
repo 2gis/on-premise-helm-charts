@@ -30,7 +30,7 @@ dgtt:
 
   image:
     repository: 2gis-on-premise/dgtt
-    tag: 0.1.10-57bd80c874
+    tag: 0.2.23-8ce6252d54
     pullPolicy: IfNotPresent
 
   # @skip dgtt.resources.requests.cpu

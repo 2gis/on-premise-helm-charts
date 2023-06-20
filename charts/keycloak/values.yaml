@@ -43,9 +43,9 @@ extraDeploy: []
 diagnosticMode:
   enabled: false
   command:
-    - sleep
+  - sleep
   args:
-    - infinity
+  - infinity
 
 # @section Keycloak parameters
 
@@ -129,7 +129,7 @@ spi:
 
 production: true
 proxy: passthrough
-httpRelativePath: "/"
+httpRelativePath: /
 
 # Keycloak Service Discovery settings
 # ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#cluster-configuration
@@ -322,7 +322,7 @@ lifecycleHooks: {}
 hostAliases: []
 podLabels: {}
 podAnnotations: {}
-podAffinityPreset: ""
+podAffinityPreset: ''
 podAntiAffinityPreset: soft
 
 nodeAffinityPreset:
@@ -547,8 +547,8 @@ metrics:
     enabled: false
     port: http
     endpoints:
-      - path: '{{ include "keycloak.httpPath" . }}metrics'
-      - path: '{{ include "keycloak.httpPath" . }}realms/master/metrics'
+    - path: '{{ include "keycloak.httpPath" . }}metrics'
+    - path: '{{ include "keycloak.httpPath" . }}realms/master/metrics'
     path: ''
     namespace: ''
     interval: 30s
@@ -656,8 +656,8 @@ keycloakConfigCli:
     pullPolicy: IfNotPresent
     pullSecrets: []
   annotations:
-    helm.sh/hook: 'post-install,post-upgrade,post-rollback'
-    helm.sh/hook-delete-policy: 'hook-succeeded,before-hook-creation'
+    helm.sh/hook: post-install,post-upgrade,post-rollback
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
     helm.sh/hook-weight: '5'
   command: []
   args: []

@@ -67,7 +67,7 @@ api:
 
   image:
     repository: 2gis-on-premise/catalog-api
-    tag: 3.591.0
+    tag: 3.593.5
     pullPolicy: IfNotPresent
 
 
@@ -226,7 +226,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/catalog-importer
-    tag: 1.0.9
+    tag: 1.0.10
     pullPolicy: IfNotPresent
 
   # @section importer.postgres **Database settings**
