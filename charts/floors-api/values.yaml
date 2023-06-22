@@ -115,7 +115,7 @@ nodejs:
 
 # @section Floors nginx settings
 
-# @param nginx.port HTTP port on which Navi-Front will be listening.
+# @param nginx.port HTTP port on which Floors API will be listening.
 
 nginx:
   port: 8080
