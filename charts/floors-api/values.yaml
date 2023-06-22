@@ -137,7 +137,7 @@ nginx:
 # @extra import.resources.limits.memory A memory limit, e.g., `128Mi`.
 
 import:
-  enabled: false
+  enabled: true
   image:
     repository: 2gis-on-premise/floors-importer
     pullPolicy: IfNotPresent
