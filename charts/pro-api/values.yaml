@@ -1,4 +1,4 @@
-# @section Docker Registry settings
+﻿# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -113,25 +113,27 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.1.21
+  tag: 1.1.26
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.1.21
+  tag: 1.1.26
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
 
-# @param s3.layerDataBucket S3 bucket with prepared layer data. **Required**
+# @param s3.assetsDataBucket S3 bucket with base urbi assets, aggregations, and filters. **Required**
 # @param s3.userAssetsDataBucket S3 bucket with user-created assets, aggregations, and filters. **Required**
+# @param s3.layerDataBucket S3 bucket with prepared layer data. **Required**
 # @param s3.snapshotBucket S3 bucket for storing snapshots of inclemental data updates. **Required**
 
 s3:
-  layerDataBucket: ''
+  assetsDataBucket: ''
   userAssetsDataBucket: ''
+  layerDataBucket: ''
   snapshotBucket: ''
 
 # @section 2GIS PRO API configuration
@@ -173,6 +175,7 @@ api:
 # @param auth.userInfoEndpoint The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`
 # @param auth.apiKey Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`
 # @param auth.permissionsApiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`
+# @param auth.turnOffCertValidation Turn off certificate validation for auth.url
 # @skip auth.autoRegisterUsers
 
 auth:
@@ -182,6 +185,7 @@ auth:
   apiKey: ''
   permissionsApiKey: ''
   autoRegisterUsers: true
+  turnOffCertValidation: false
 
 # @section PostgreSQL settings
 
@@ -346,7 +350,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.21
+  tag: 1.1.26
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -357,7 +361,7 @@ assetImporter:
       memory: 768M
     limits:
       cpu: 1000m
-      memory: 2048M
+      memory: 2560M
   maxParallelJobs: 1
   enabled: true
   startOnDeploy: true
@@ -372,7 +376,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.21
+  tag: 1.1.26
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

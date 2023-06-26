@@ -8,6 +8,7 @@
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
+
 ### Common settings
 
 | Name                            | Description                                                                                                                                    | Value     |
@@ -28,6 +29,7 @@
 | `labels`                        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`      |
 | `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`       |
 
+
 ### Deployment Artifacts Storage settings
 
 | Name                     | Description                                                                                                                                                                                                                                                           | Value |
@@ -38,6 +40,7 @@
 | `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`  |
 | `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`  |
 
+
 ### Strategy settings
 
 | Name                                    | Description                                                                                                                                                                                              | Value           |
@@ -45,6 +48,7 @@
 | `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
 | `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
+
 
 ### Service settings
 
@@ -54,6 +58,7 @@
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
 | `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `service.port`        | PRO API service port.                                                                                                          | `80`        |
+
 
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
@@ -66,6 +71,7 @@
 | `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `1`     |
 | `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `1024M` |
 
+
 ### Deployment settings
 
 | Name               | Description | Value                     |
@@ -74,13 +80,16 @@
 | `image.tag`        | Tag         | `1.1.21`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
+
 ### 2GIS PRO Storage configuration
 
 | Name                      | Description                                                                 | Value |
 | ------------------------- | --------------------------------------------------------------------------- | ----- |
-| `s3.layerDataBucket`      | S3 bucket with prepared layer data. **Required**                            | `""`  |
+| `s3.assetsDataBucket`     | S3 bucket with base urbi assets, aggregations, and filters. **Required**    | `""`  |
 | `s3.userAssetsDataBucket` | S3 bucket with user-created assets, aggregations, and filters. **Required** | `""`  |
+| `s3.layerDataBucket`      | S3 bucket with prepared layer data. **Required**                            | `""`  |
 | `s3.snapshotBucket`       | S3 bucket for storing snapshots of inclemental data updates. **Required**   | `""`  |
+
 
 ### 2GIS PRO API configuration
 
@@ -93,15 +102,18 @@
 | `api.logging.format`  | Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text                     | `simple` |
 | `api.logging.targets` | Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify). | `""`     |
 
+
 ### Auth configuration
 
-| Name                     | Description                                                                                                                                                                                         | Value  |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `auth.type`              | Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol | `none` |
-| `auth.url`               | API URL of authentication service. Example: `http(s)://keycloak.ingress.host`                                                                                                                       | `""`   |
-| `auth.userInfoEndpoint`  | The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`                                                | `""`   |
-| `auth.apiKey`            | Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`                                                | `""`   |
-| `auth.permissionsApiKey` | Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`                                    | `""`   |
+| Name                         | Description                                                                                                                                                                                         | Value   |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `auth.type`                  | Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol | `none`  |
+| `auth.url`                   | API URL of authentication service. Example: `http(s)://keycloak.ingress.host`                                                                                                                       | `""`    |
+| `auth.userInfoEndpoint`      | The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`                                                | `""`    |
+| `auth.apiKey`                | Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`                                                | `""`    |
+| `auth.permissionsApiKey`     | Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`                                    | `""`    |
+| `auth.turnOffCertValidation` | Turn off certificate validation for auth.url                                                                                                                                                        | `false` |
+
 
 ### PostgreSQL settings
 
@@ -111,6 +123,7 @@
 | `postgres.connectionStringReadonly` | Connection string to the readonly node of PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;` | `""`  |
 | `postgres.password`                 | User password to connect to the PostgreSQL database.                                                                       | `""`  |
 
+
 ### Keys Service settings
 
 | Name         | Description                                                                              | Value |
@@ -118,12 +131,14 @@
 | `keys.url`   | API URL of service for managing partners' keys to 2GIS services (keys.api). **Required** | `""`  |
 | `keys.token` | keys.api access token. **Required**                                                      | `""`  |
 
+
 ### ElasticSearch settings (supported version 7.x)
 
 | Name                  | Description                                                                          | Value |
 | --------------------- | ------------------------------------------------------------------------------------ | ----- |
 | `elastic.host`        | ElasticSearch host address. Format: `http(s)://HOST:PORT`                            | `""`  |
 | `elastic.credentials` | User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD` | `""`  |
+
 
 ### Redis settings (supported version 6.x)
 
@@ -133,6 +148,7 @@
 | `redis.port`     | Redis port. **Required**          | `6379` |
 | `redis.username` | Username used to connect to Redis | `""`   |
 | `redis.password` | Password used to connect to Redis | `""`   |
+
 
 ### Kafka settings (supported version 2.7)
 
@@ -150,12 +166,14 @@
 | `kafka.importTasksTopic.readerGroupId` | Kafka consumer group for reading importing tasks.                                                               | `""`            |
 | `kafka.refreshAssetsIntervalMinutes`   | Refresh interval for reading streaming assets settings in minutes.                                              | `60`            |
 
+
 ### Import background jobs settings
 
 | Name                                      | Description                                                      | Value   |
 | ----------------------------------------- | ---------------------------------------------------------------- | ------- |
 | `backgroundJobs.enableUserAssetsImporter` | If user data importer job is enabled for the service.            | `true`  |
 | `backgroundJobs.enableAssetsStreaming`    | If the streaming data processing job is enabled for the service. | `false` |
+
 
 ### Catalog API settings
 
@@ -164,6 +182,7 @@
 | `catalog.url` | URL for [Catalog API](https://docs.2gis.com/en/on-premise/search).       | `http://catalog-api.svc` |
 | `catalog.key` | Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search). | `""`                     |
 
+
 ### Navigation API settings
 
 | Name       | Description                                                                              | Value                  |
@@ -171,11 +190,13 @@
 | `navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).       | `http://navi-back.svc` |
 | `navi.key` | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). | `""`                   |
 
+
 ### Search API settings
 
 | Name         | Description                                                      | Value                   |
 | ------------ | ---------------------------------------------------------------- | ----------------------- |
 | `search.url` | URL for [Search API](https://docs.2gis.com/en/on-premise/search) | `http://search-api.svc` |
+
 
 ### 2GIS PRO API Job settings
 
@@ -184,11 +205,13 @@
 | `appAssetImporterName`     | Data Import job name.      | `asset-importer`      |
 | `appUserAssetImporterName` | User Data Import job name. | `user-asset-importer` |
 
+
 ### 2GIS PRO Permissions API configuration
 
 | Name                     | Description                                   | Value   |
 | ------------------------ | --------------------------------------------- | ------- |
 | `permissionsApi.enabled` | If permissionsApi is enabled for the service. | `false` |
+
 
 ### Import job settings
 
@@ -205,6 +228,7 @@
 | `assetImporter.startOnDeploy`              | Indicates that asset import should start when service installed or updated                                                                               | `true`                         |
 | `assetImporter.imageProxyUrl`              | (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                                                          | `""`                           |
 
+
 ### Limits
 
 | Name                                      | Description                            | Value   |
@@ -218,7 +242,8 @@
 | `assetImporter.resources.requests.cpu`    | A CPU request.                         | `700m`  |
 | `assetImporter.resources.requests.memory` | A memory request.                      | `768M`  |
 | `assetImporter.resources.limits.cpu`      | A CPU limit.                           | `1000m` |
-| `assetImporter.resources.limits.memory`   | A memory limit.                        | `2048M` |
+| `assetImporter.resources.limits.memory`   | A memory limit.                        | `2560M` |
+
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
