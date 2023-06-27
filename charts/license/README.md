@@ -91,8 +91,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 
 ### Persistence
 
-| Name                           | Description                                                                  | Value  |
-| ------------------------------ | ---------------------------------------------------------------------------- | ------ |
-| `persistence.storage`          | Storage size for the persistence PersistentVolumes, should be at least 10Mi. | `10Mi` |
-| `persistence.storageClassName` | Storage class name for the persistence PersistentVolumes.                    | `""`   |
+| Name                              | Description                                                                                            | Value  |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------ | ------ |
+| `persistence.type`                | Type of storage used for persistence, should be one of: 's3' - for S3 storage, 'fs' - for PVC storage. | `s3`   |
+| `persistence.fs`                  | **PVC setting for the 'fs' persistence type**                                                          |        |
+| `persistence.fs.storage`          | Storage size, should be at least 10Mi.                                                                 | `10Mi` |
+| `persistence.fs.storageClassName` | Storage class name.                                                                                    | `""`   |
+| `persistence.s3`                  | **S3 setting for the 's3' persistence type**                                                           |        |
+| `persistence.s3.host`             | S3 endpoint. Format: `host:port`.                                                                      | `""`   |
+| `persistence.s3.bucket`           | S3 bucket name.                                                                                        | `""`   |
+| `persistence.s3.root`             | Root directory in S3 bucket.                                                                           | `""`   |
+| `persistence.s3.accessKey`        | S3 access key for accessing the bucket.                                                                | `""`   |
+| `persistence.s3.secretKey`        | S3 secret key for accessing the bucket.                                                                | `""`   |
 

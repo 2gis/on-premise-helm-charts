@@ -67,8 +67,10 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: config
+            {{- if eq .persistence.type "fs" }}
             - mountPath: /persistence
               name: persistence
+            {{- end }}
           env:
             - name: CONFIG_PATH
               value: /config/config.yaml
@@ -76,16 +78,28 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-            - name: S3_ACCESS_KEY
+            - name: STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "license.fullname" $ }}
                   key: s3AccessKey
-            - name: S3_SECRET_KEY
+            - name: STORAGE_SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "license.fullname" $ }}
                   key: s3SecretKey
+            {{- if eq .persistence.type "s3"}}
+            - name: PERSISTENCE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "license.fullname" $ }}
+                  key: persistenceS3AccessKey
+            - name: PERSISTENCE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "license.fullname" $ }}
+                  key: persistenceS3SecretKey
+            {{- end }}
           resources:
             {{- toYaml .resources | nindent 12 }}
       volumes:
@@ -108,7 +122,8 @@ spec:
       imagePullSecrets:
         {{- toYaml .imagePullSecrets | nindent 8 }}
       {{- end }}
-  {{- with .persistence }}
+  {{- if eq .persistence.type "fs" }}
+  {{- with .persistence.fs }}
   volumeClaimTemplates:
     - metadata:
         name: persistence
@@ -120,9 +135,10 @@ spec:
           requests:
             storage: {{ .storage }}
         storageClassName: {{ .storageClassName }}
-  {{- end }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: Delete
     whenScaled: Delete
+  {{- end }}
+  {{- end }}
 
 {{- end -}}
