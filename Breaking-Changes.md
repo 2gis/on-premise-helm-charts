@@ -1,4 +1,8 @@
 # 2GIS On-Premise Breaking-Changes
+## [1.X.X]
+#### pro-api
+- Added new setting s3.assetsDataBucket. dgclStorage.bucket and buckets for the service app are completely separate now.
+
 ## [1.7.5]
 #### gis-platform
 - Rename `external_proto` and `external_hostname` to `url`

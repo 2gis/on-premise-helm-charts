@@ -46,7 +46,7 @@ spec:
                 - name: S3Settings__Url
                   value: "{{ .Values.dgctlStorage.host }}"
                 - name: S3Settings__AssetDataBucket
-                  value: "{{ .Values.dgctlStorage.bucket }}"
+                  value: {{ required "A valid .Values.s3.assetsDataBucket entry required" $.Values.s3.assetsDataBucket }}
                 - name: S3Settings__UserAssetDataBucket
                   value: "{{ .Values.s3.userAssetsDataBucket }}"
                 - name: S3Settings__LayerDataBucket
@@ -89,4 +89,6 @@ spec:
                   value: "{{ .Values.api.logging.format }}"
                 - name: Common__Logging__Targets
                   value: "{{ .Values.api.logging.targets }}"
+                - name: Common__SuppressImportFailure
+                  value: "true"                  
 {{ end }}
