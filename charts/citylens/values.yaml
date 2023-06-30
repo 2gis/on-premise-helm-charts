@@ -154,10 +154,11 @@ api:
 # @section Auth settings for authentication
 
 # @param web.auth.enabled If authentication is needed.
-# @param web.auth.realm Authenitcation realm, example: Inspection_Portal_backend
-# @param web.auth.authServerUrl API URL of authentication service. Example: `http(s)://keycloak.ingress.host`
-# @param web.auth.clientId Client id from keycloak, example: citylens-web-client
-# @param web.auth.clientSecret Client Secret from keycloak.
+# @param web.auth.realm Authenitcation realm, example: Inspection_Portal_backend **Required**
+# @param web.auth.authServerUrl API URL of authentication service. Example: `http(s)://keycloak.ingress.host` **Required**
+# @param web.auth.clientId Client id from keycloak, example: citylens-web-client **Required**
+# @param web.auth.clientSecret Client Secret from keycloak. **Required**
+# @param web.auth.sslVerify Enable\Disable SSL check. **Required**
 
 # @section Custom settings
 
@@ -218,6 +219,7 @@ web:
     authServerUrl: ''
     clientId: ''
     clientSecret: ''
+    verifySsl: ''
 
   logLevel: WARNING
 
