@@ -43,7 +43,7 @@ dgtt:
 | Name                    | Description                                                                                   | Value                  |
 | ----------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
 | `dgtt.image.repository` | Repository                                                                                    | `2gis-on-premise/dgtt` |
-| `dgtt.image.tag`        | Tag                                                                                           | `0.2.23-8ce6252d54`    |
+| `dgtt.image.tag`        | Tag                                                                                           | `0.2.24-f76cd4232f`    |
 | `dgtt.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`         |
 | `dgtt.config`           | yaml config                                                                                   | `""`                   |
 

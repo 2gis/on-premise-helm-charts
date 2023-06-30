@@ -104,7 +104,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.0.11`                       |
+| `web.image.tag`        | Tag.         | `1.0.13`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -141,13 +141,14 @@ See the [documentation]() to learn about:
 
 ### Auth settings for authentication
 
-| Name                     | Description                                                                   | Value   |
-| ------------------------ | ----------------------------------------------------------------------------- | ------- |
-| `web.auth.enabled`       | If authentication is needed.                                                  | `false` |
-| `web.auth.realm`         | Authenitcation realm, example: Inspection_Portal_backend                      | `""`    |
-| `web.auth.authServerUrl` | API URL of authentication service. Example: `http(s)://keycloak.ingress.host` | `""`    |
-| `web.auth.clientId`      | Client id from keycloak, example: citylens-web-client                         | `""`    |
-| `web.auth.clientSecret`  | Client Secret from keycloak.                                                  | `""`    |
+| Name                     | Description                                                                                | Value   |
+| ------------------------ | ------------------------------------------------------------------------------------------ | ------- |
+| `web.auth.enabled`       | If authentication is needed.                                                               | `false` |
+| `web.auth.realm`         | Authenitcation realm, example: Inspection_Portal_backend **Required**                      | `""`    |
+| `web.auth.authServerUrl` | API URL of authentication service. Example: `http(s)://keycloak.ingress.host` **Required** | `""`    |
+| `web.auth.clientId`      | Client id from keycloak, example: citylens-web-client **Required**                         | `""`    |
+| `web.auth.clientSecret`  | Client Secret from keycloak. **Required**                                                  | `""`    |
+| `web.auth.verifySsl`     | Enable\Disable SSL check.                                                                  | `true`  |
 
 ### Custom settings
 
