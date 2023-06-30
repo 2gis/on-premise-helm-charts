@@ -22,7 +22,7 @@ imagePullPolicy: IfNotPresent
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.53.0
+    tag: 1.55.0
 
 # @section Admin service settings
 
@@ -98,6 +98,10 @@ api:
   # @param api.adminUsers Usernames and passwords of admin users. Format: `username1:password1,username2:password2`.
 
   adminUsers: ''
+
+  # @param api.adminSessionTTL TTL of the admin users sessions. Duration string is a sequence of decimal numbers with optional fraction and unit suffix, like `100ms`, `2.3h` or `4h35m`. Valid time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
+
+  adminSessionTTL: 336h
 
   # @param api.replicas A replica count for the pod.
 

@@ -182,6 +182,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       name: {{ include "keys.secret.deploys.name" . }}
       key: apiAdminUsers
 {{- end }}
+- name: KEYS_ADMIN_SESSION_TTL
+  value: "{{ .Values.api.adminSessionTTL }}"
 - name: KEYS_LDAP_HOST
   value: "{{ .Values.ldap.host }}"
 - name: KEYS_LDAP_PORT
