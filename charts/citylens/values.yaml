@@ -158,7 +158,7 @@ api:
 # @param web.auth.authServerUrl API URL of authentication service. Example: `http(s)://keycloak.ingress.host` **Required**
 # @param web.auth.clientId Client id from keycloak, example: citylens-web-client **Required**
 # @param web.auth.clientSecret Client Secret from keycloak. **Required**
-# @param web.auth.sslVerify Enable\Disable SSL check. **Required**
+# @param web.auth.sslVerify Enable\Disable SSL check.
 
 # @section Custom settings
 
