@@ -10,7 +10,7 @@ data:
       "realm": {{ required "A valid .Values.web.auth.realm entry required" .realm | quote }},
       "auth-server-url": {{ required "A valid .Values.web.auth.authServerUrl entry required" .authServerUrl | quote }},
       "resource": {{ required "A valid .Values.web.auth.clientId entry required" .clientId | quote }},
-      "verify-ssl": {{ required "A valid .Values.web.auth.verifySsl entry required" .verifySsl | quote }},
+      "verify-ssl": {{ .verifySsl | quote }},
       "credentials": {
         "secret": {{ required "A valid .Values.web.auth.clientSecret entry required" .clientSecret | quote }}
       }

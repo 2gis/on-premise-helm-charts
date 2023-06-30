@@ -219,7 +219,7 @@ web:
     authServerUrl: ''
     clientId: ''
     clientSecret: ''
-    verifySsl: ''
+    verifySsl: True
 
   logLevel: WARNING
 
