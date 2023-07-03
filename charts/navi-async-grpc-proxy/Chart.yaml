@@ -6,7 +6,7 @@ keywords:
 - navi
 - dm-async-matrix
 - async-grpc-proxy
-version: 1.7.6
+version: 1.7.7
 appVersion: 0.0.2
 maintainers:
 - name: 2gis
