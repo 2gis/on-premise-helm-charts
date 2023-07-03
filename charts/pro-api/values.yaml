@@ -1,4 +1,4 @@
-﻿# @section Docker Registry settings
+# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -113,14 +113,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.1.26
+  tag: 1.1.28
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.1.26
+  tag: 1.1.28
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -350,7 +350,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.26
+  tag: 1.1.28
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -376,7 +376,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.26
+  tag: 1.1.28
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

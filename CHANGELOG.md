@@ -1,5 +1,33 @@
 # 2GIS On-Premise Changelog
 
+## [1.7.6]
+#### [Breaking-Changes](Breaking-Changes.md#176)
+#### Images
+```
+citylens
+	- citylens-web:1.0.11
+	+ citylens-web:1.0.13
+dgtt
+	- dgtt:0.2.23-8ce6252d54
+	+ dgtt:0.2.24-f76cd4232f
+keys
+	- keys-backend:1.53.0
+	+ keys-backend:1.55.0
+pro-api
+	- pro-api:1.1.21
+	+ pro-api:1.1.28
+	- pro-importer:1.1.21
+	+ pro-importer:1.1.28
+	- pro-importer:1.1.21
+	+ pro-importer:1.1.28
+	- pro-permissions-api:1.1.21
+	+ pro-permissions-api:1.1.28
+search-api
+	- search-api:7.55.0
+	+ search-api:7.57.0
+
+```
+
 ## [1.7.5]
 #### [Breaking-Changes](Breaking-Changes.md#175)
 #### Images

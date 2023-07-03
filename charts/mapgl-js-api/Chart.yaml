@@ -4,7 +4,7 @@ description: Basic WebGL map chart template for 2GIS On-Premise
 
 type: application
 
-version: 1.7.5
+version: 1.7.6
 appVersion: 1.36.1
 
 maintainers:

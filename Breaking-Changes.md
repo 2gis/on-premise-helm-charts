@@ -1,5 +1,5 @@
 # 2GIS On-Premise Breaking-Changes
-## [1.X.X]
+## [1.7.6]
 #### pro-api
 - Added new setting s3.assetsDataBucket. dgclStorage.bucket and buckets for the service app are completely separate now.
 

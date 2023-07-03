@@ -3,7 +3,7 @@ name: keys
 type: application
 description: A Helm chart for Kubernetes to deploy API Keys service
 
-version: 1.7.5
+version: 1.7.6
 appVersion: 1.55.0
 
 maintainers:
