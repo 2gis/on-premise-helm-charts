@@ -1,5 +1,8 @@
 # 2GIS On-Premise Changelog
 
+## [1.7.7]
+* hotfix
+
 ## [1.7.6]
 #### [Breaking-Changes](Breaking-Changes.md#176)
 #### Images
