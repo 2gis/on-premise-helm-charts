@@ -85,11 +85,11 @@ ui:
 
   # @section Search API settings
 
-  # @param ui.search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search).
-  # @param ui.search.key Access key to [Search API](https://docs.2gis.com/en/on-premise/search).
+  # @param ui.catalog.url URL for [Search API](https://docs.2gis.com/en/on-premise/search).
+  # @param ui.catalog.key Access key to [Search API](https://docs.2gis.com/en/on-premise/search).
 
-  search:
-    url: http://catalog-api.svc
+  catalog:
+    url: ""
     key: ""
 
   # @section Navigation API settings
@@ -98,7 +98,7 @@ ui:
   # @param ui.navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
 
   navi:
-    url: http://navi-back.svc
+    url: ""
     key: ""
 
   # @section Strategy settings

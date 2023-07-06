@@ -55,16 +55,17 @@ spec:
             - name: DEFAULT_LOCALE
               value: {{ .Values.ui.defaultLocale | quote }}
             - name: BRAND
-              value: {{ .Values.ui.brand | quote }}
+              value: {{ required ".Values.ui.brand is required" .Values.ui.brand | quote }}
             - name: PAGES
               value: {{ .Values.ui.pages | quote }}
-            - name: SEARCH_API_URL
-              value: {{ .Values.ui.search.url | quote }}
-            - name: SEARCH_API_KEY
+            - name: CATALOG_API_URL
+              value: {{ .Values.ui.catalog.url | quote }}
+            - name: CATALOG_API_KEY
               valueFrom:
                 secretKeyRef:
-                  key: searchApiKey
+                  key: catalogApiKey
                   name: {{ include "gefest.ui.name" . }}-secret
+                  optional: true
             - name: NAVI_API_URL
               value: {{ .Values.ui.navi.url | quote }}
             - name: NAVI_API_KEY
@@ -72,6 +73,7 @@ spec:
                 secretKeyRef:
                   key: naviApiKey
                   name: {{ include "gefest.ui.name" . }}-secret
+                  optional: true
             - name: MAPGL_URL
               value: {{ .Values.ui.mapgl.url | quote }}
             - name: MAPGL_SCRIPT_PATH
@@ -85,7 +87,7 @@ spec:
               value: {{ .Values.ui.mapgl.initCenter | quote }}
             - name: MAPGL_STATUS
               value: {{ .Values.ui.status.mapgl | quote }}
-            - name: SEARCH_API_STATUS
+            - name: SEARCH_STATUS
               value: {{ .Values.ui.status.search | quote }}
             - name: NAVI_API_STATUS
               value: {{ .Values.ui.status.navi | quote }}

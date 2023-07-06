@@ -66,17 +66,17 @@ Use this Helm chart to deploy Gefest service, which is a part of 2GIS's [On-Prem
 
 ### Search API settings
 
-| Name            | Description                                                             | Value                    |
-| --------------- | ----------------------------------------------------------------------- | ------------------------ |
-| `ui.search.url` | URL for [Search API](https://docs.2gis.com/en/on-premise/search).       | `http://catalog-api.svc` |
-| `ui.search.key` | Access key to [Search API](https://docs.2gis.com/en/on-premise/search). | `""`                     |
+| Name             | Description                                                             | Value |
+| ---------------- | ----------------------------------------------------------------------- | ----- |
+| `ui.catalog.url` | URL for [Search API](https://docs.2gis.com/en/on-premise/search).       | `""`  |
+| `ui.catalog.key` | Access key to [Search API](https://docs.2gis.com/en/on-premise/search). | `""`  |
 
 ### Navigation API settings
 
-| Name          | Description                                                                              | Value                  |
-| ------------- | ---------------------------------------------------------------------------------------- | ---------------------- |
-| `ui.navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).       | `http://navi-back.svc` |
-| `ui.navi.key` | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). | `""`                   |
+| Name          | Description                                                                              | Value |
+| ------------- | ---------------------------------------------------------------------------------------- | ----- |
+| `ui.navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).       | `""`  |
+| `ui.navi.key` | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). | `""`  |
 
 ### Strategy settings
 
