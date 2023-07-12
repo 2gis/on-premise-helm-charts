@@ -46,12 +46,14 @@ ui:
   # @param ui.appTheme Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
   # @param ui.appLocale Language in the app. Possible values: `"ar_AE"`, `"en_AE"` or `"ru_RU"`.
   # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).
+  # @param ui.supportDocumentationLink Product online documentation link. Ex.: 'https://docs.urbi.ae/en/pro/start'
 
   logLevel: error
   isOnPremise: true
   appTheme: urbi
   appLocale: en_AE
   appInitialMapCenter: '[46.71, 24.72]'
+  supportDocumentationLink: ''
 
   # @param ui.auth.sso Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.
   # @param ui.auth.secure Flag to turn on/off the https for auth. Possible values: `"true"` or `"false"`.
