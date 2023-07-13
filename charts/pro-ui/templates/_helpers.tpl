@@ -61,6 +61,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.ui.appTheme }}"
 - name: APP_INITIAL_MAP_CENTER
   value: "{{ .Values.ui.appInitialMapCenter }}"
+- name: SUPPORT_DOCUMENTATION_LINK
+  value: "{{ .Values.ui.supportDocumentationLink }}"
 - name: HOME
   value: "/tmp"
 {{- end }}
