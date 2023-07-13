@@ -125,6 +125,14 @@ spec:
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
 
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: {{ .Values.api.containerPort }}
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+            failureThreshold: 6
+
           volumeMounts:
             - mountPath: "/config"
               name: config-volume
