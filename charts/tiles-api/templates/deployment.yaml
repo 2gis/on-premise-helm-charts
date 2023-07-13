@@ -151,8 +151,6 @@ spec:
               value: "true"
             - name: JAEGER_SERVICE_NAME
               value: "tiles"
-            - name: PEERS_IGNORE
-              value: "true"
             - name: CONFIG_FILE_PATH
               value: "/config/api.yaml"
             - name: API_PORT
