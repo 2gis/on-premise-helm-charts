@@ -120,17 +120,27 @@ onprem
 {{- end }}
 
 {{- define "catalog.env.keys" -}}
-- name: CATALOG_KEYS_ENABLED
-  value: "true"
 - name: CATALOG_KEYS_ENDPOINT
   value: "{{ required "A valid .Values.keys.url entry required" .Values.keys.url }}"
-- name: CATALOG_KEYS_REQUEST_TIMEOUT
-  value: "{{ .Values.keys.requestTimeout }}"
 - name: CATALOG_KEYS_SERVICE_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServiceToken
+- name: CATALOG_KEYS_CONNECTING_TIMEOUT
+  value: "{{ .Values.keys.connectingTimeout }}"
+- name: CATALOG_KEYS_IDLE_TIMEOUT
+  value: "{{ .Values.keys.idleTimeout }}"
+- name: CATALOG_KEYS_MAX_RETRIES
+  value: "{{ .Values.keys.maxRetries }}"
+- name: CATALOG_KEYS_CONNECTION_LIFETIME
+  value: "{{ .Values.keys.connectionLifetime }}"
+- name: CATALOG_KEYS_BASE_CONNECTION_BACKOFF
+  value: "{{ .Values.keys.baseConnectionBackoff }}"
+- name: CATALOG_KEYS_MAX_CONNECTION_BACKOFF
+  value: "{{ .Values.keys.maxConnectionBackoff }}"
+- name: CATALOG_KEYS_RESPONSE_TIMEOUT
+  value: "{{ .Values.keys.responseTimeout }}"
 {{- end }}
 
 {{- define "catalog.env.license" -}}
