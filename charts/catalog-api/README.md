@@ -137,17 +137,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Keys settings
 
-| Name                         | Description                                                                                                                                      | Value |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| `keys.url`                   | URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`  |
-| `keys.token`                 | Keys service API key                                                                                                                             | `""`  |
-| `keys.connectingTimeout`     | The time period within which the TCP connecting process must be completed                                                                        | `1s`  |
-| `keys.idleTimeout`           | The time after which an idle connection will be automatically closed                                                                             | `1s`  |
-| `keys.maxRetries`            | The maximum number of times failed requests are attempted again, (if the request can be safely retried) before giving up and returning an error  | `0`   |
-| `keys.connectionLifetime`    | The maximum duration for a connection to be kept alive                                                                                           | `20s` |
-| `keys.baseConnectionBackoff` | The minimum duration to backoff new connection attempts after the previous connection attempt failed                                             | `1s`  |
-| `keys.maxConnectionBackoff`  | Maximum backoff duration between failed connection attempts                                                                                      | `20s` |
-| `keys.responseTimeout`       | The time period after the response was dispatched                                                                                                | `5s`  |
+| Name                                | Description                                                                                                                                      | Value |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `keys.url`                          | URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`  |
+| `keys.token`                        | Keys service API key                                                                                                                             | `""`  |
+| `keys.client.connectingTimeout`     | The time period within which the TCP connecting process must be completed                                                                        | `1s`  |
+| `keys.client.idleTimeout`           | The time after which an idle connection will be automatically closed                                                                             | `1s`  |
+| `keys.client.maxRetries`            | The maximum number of times failed requests are attempted again, (if the request can be safely retried) before giving up and returning an error  | `0`   |
+| `keys.client.connectionLifetime`    | The maximum duration for a connection to be kept alive                                                                                           | `20s` |
+| `keys.client.baseConnectionBackoff` | The minimum duration to backoff new connection attempts after the previous connection attempt failed                                             | `1s`  |
+| `keys.client.maxConnectionBackoff`  | Maximum backoff duration between failed connection attempts                                                                                      | `20s` |
+| `keys.client.responseTimeout`       | The time period after the response was dispatched                                                                                                | `5s`  |
 
 ### License settings
 

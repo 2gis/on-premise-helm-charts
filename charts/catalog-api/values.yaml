@@ -178,24 +178,25 @@ search:
 
 # @param keys.url URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required**
 # @param keys.token Keys service API key
-# @param keys.connectingTimeout The time period within which the TCP connecting process must be completed
-# @param keys.idleTimeout The time after which an idle connection will be automatically closed
-# @param keys.maxRetries The maximum number of times failed requests are attempted again, (if the request can be safely retried) before giving up and returning an error
-# @param keys.connectionLifetime The maximum duration for a connection to be kept alive
-# @param keys.baseConnectionBackoff The minimum duration to backoff new connection attempts after the previous connection attempt failed
-# @param keys.maxConnectionBackoff Maximum backoff duration between failed connection attempts
-# @param keys.responseTimeout The time period after the response was dispatched
+# @param keys.client.connectingTimeout The time period within which the TCP connecting process must be completed
+# @param keys.client.idleTimeout The time after which an idle connection will be automatically closed
+# @param keys.client.maxRetries The maximum number of times failed requests are attempted again, (if the request can be safely retried) before giving up and returning an error
+# @param keys.client.connectionLifetime The maximum duration for a connection to be kept alive
+# @param keys.client.baseConnectionBackoff The minimum duration to backoff new connection attempts after the previous connection attempt failed
+# @param keys.client.maxConnectionBackoff Maximum backoff duration between failed connection attempts
+# @param keys.client.responseTimeout The time period after the response was dispatched
 
 keys:
   url: ''
   token: ''
-  connectingTimeout: 1s
-  idleTimeout: 1s
-  maxRetries: 0
-  connectionLifetime: 20s
-  baseConnectionBackoff: 1s
-  maxConnectionBackoff: 20s
-  responseTimeout: 5s
+  client:
+    connectingTimeout: 1s
+    idleTimeout: 1s
+    maxRetries: 0
+    connectionLifetime: 20s
+    baseConnectionBackoff: 1s
+    maxConnectionBackoff: 20s
+    responseTimeout: 5s
 
 # @section License settings
 
