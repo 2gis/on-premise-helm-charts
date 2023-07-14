@@ -1,7 +1,7 @@
 apiVersion: v2
-name: gefest
+name: platform
 type: application
-description: A Helm chart for Kubernetes to deploy Gefest
+description: A Helm chart for Kubernetes to deploy Platform
 
 version: 1.0.0
 appVersion: latest

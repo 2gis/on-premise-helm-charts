@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "gefest.ui.name" . }}
+  name: {{ include "platform.ui.name" . }}
   labels:
-    {{- include "gefest.ui.labels" . | nindent 4 }}
+    {{- include "platform.ui.labels" . | nindent 4 }}
   {{- with .Values.ui.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -31,7 +31,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "gefest.ui.name" $ }}
+                name: {{ include "platform.ui.name" $ }}
                 port:
                   number: {{ $.Values.ui.service.port }}
           {{- end }}

@@ -1,4 +1,4 @@
-Gefest UI service is released as "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace.
+Platform UI service is released as "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace.
 
 {{ if .Values.ui.ingress.enabled }}
 You can check the service using a browser

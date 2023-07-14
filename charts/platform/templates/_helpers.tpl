@@ -1,18 +1,18 @@
-{{- define "gefest.name" -}}
+{{- define "platform.name" -}}
 {{- .Release.Name | trunc 32 | trimSuffix "-" }}
 {{- end }}
 
-{{- define "gefest.ui.name" -}}
-{{ include "gefest.name" . }}
+{{- define "platform.ui.name" -}}
+{{ include "platform.name" . }}
 {{- end }}
 
-{{- define "gefest.ui.selectorLabels" -}}
+{{- define "platform.ui.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{- define "gefest.ui.labels" -}}
-{{ include "gefest.ui.selectorLabels" . }}
+{{- define "platform.ui.labels" -}}
+{{ include "platform.ui.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 date: "{{ now | unixEpoch }}"
 {{- end }}

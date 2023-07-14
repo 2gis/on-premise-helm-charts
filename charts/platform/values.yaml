@@ -36,7 +36,7 @@ ui:
   # @param imagePullSecrets Kubernetes image pull secrets.
 
   image:
-    repository: "on-premise/gefest-ui"
+    repository: "on-premise/platform-ui"
     tag: 0.1.0
 
   # @section UI service settings

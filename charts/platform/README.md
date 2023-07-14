@@ -1,6 +1,6 @@
-# Gefest service
+# Platform service
 
-Use this Helm chart to deploy Gefest service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
+Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
 
 > **Note:**
 >
@@ -30,11 +30,11 @@ Use this Helm chart to deploy Gefest service, which is a part of 2GIS's [On-Prem
 
 ### Deployment settings
 
-| Name                  | Description                    | Value                  |
-| --------------------- | ------------------------------ | ---------------------- |
-| `ui.image.repository` | Repository                     | `on-premise/gefest-ui` |
-| `ui.image.tag`        | Tag                            | `0.1.0`                |
-| `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                   |
+| Name                  | Description                    | Value                    |
+| --------------------- | ------------------------------ | ------------------------ |
+| `ui.image.repository` | Repository                     | `on-premise/platform-ui` |
+| `ui.image.tag`        | Tag                            | `0.1.0`                  |
+| `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                     |
 
 ### UI service settings
 

@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "gefest.ui.name" . }}
+  name: {{ include "platform.ui.name" . }}
   {{- with .Values.ui.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "gefest.ui.labels" . | nindent 4 }}
+    {{- include "platform.ui.labels" . | nindent 4 }}
     {{- with .Values.ui.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -19,7 +19,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "gefest.ui.selectorLabels" . | nindent 6 }}
+      {{- include "platform.ui.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.ui.podAnnotations }}
@@ -27,13 +27,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "gefest.ui.labels" . | nindent 8 }}
+        {{- include "platform.ui.labels" . | nindent 8 }}
         {{- with .Values.ui.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
       containers:
-        - name: {{ include "gefest.ui.name" . }}
+        - name: {{ include "platform.ui.name" . }}
         {{ if eq .Values.dgctlDockerRegistry "local" }}
           image: {{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag }}
         {{ else }}
