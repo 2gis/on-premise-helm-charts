@@ -133,8 +133,8 @@ onprem
   value: "{{ .Values.keys.client.idleTimeout }}"
 - name: CATALOG_KEYS_MAX_RETRIES
   value: "{{ .Values.keys.client.maxRetries }}"
-- name: CATALOG_KEYS_CONNECTION_LIFETIME
-  value: "{{ .Values.keys.client.connectionLifetime }}"
+- name: CATALOG_KEYS_MAX_CONNECTION_LIFETIME
+  value: "{{ .Values.keys.client.maxConnectionLifetime }}"
 - name: CATALOG_KEYS_BASE_CONNECTION_BACKOFF
   value: "{{ .Values.keys.client.baseConnectionBackoff }}"
 - name: CATALOG_KEYS_MAX_CONNECTION_BACKOFF
