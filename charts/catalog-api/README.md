@@ -26,7 +26,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | --------------------- | ---------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry host where On-Premise services' images reside. Format: `host:port` | `""`  |
 
-
 ### Common settings
 
 | Name               | Description                                                                                                                                         | Value |
@@ -38,7 +37,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                                                  | `{}`  |
 | `imagePullSecrets` | Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) | `[]`  |
 
-
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                 | Description                                         | Value   |
@@ -46,7 +44,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `pdb.enabled`        | If PDB is enabled for the service                   | `false` |
 | `pdb.minAvailable`   | How many pods must be available after the eviction  | `""`    |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction | `1`     |
-
 
 ### Deployment Artifacts Storage settings
 
@@ -73,7 +70,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.replicas` | Number of replicas of API pods | `1`    |
 | `api.logLevel` | Log level                      | `info` |
 
-
 ### api.image **Deployment settings**
 
 | Name                   | Description                                                                                   | Value                         |
@@ -81,7 +77,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-api` |
 | `api.image.tag`        | Tag                                                                                           | `3.597.0`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -95,7 +90,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used       | `80`    |
 | `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used | `""`    |
 
-
 ### api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings
 
 | Name                            | Description      | Value    |
@@ -104,7 +98,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.resources.requests.memory` | A memory request | `6000Mi` |
 | `api.resources.limits.cpu`      | A CPU limit      | `4`      |
 | `api.resources.limits.memory`   | A memory limit   | `6500Mi` |
-
 
 ### Service settings
 
@@ -115,14 +108,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) | `ClusterIP` |
 | `api.service.port`        | Service port                                                                                                                  | `80`        |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                        | Description                           | Value              |
 | --------------------------- | ------------------------------------- | ------------------ |
 | `api.ingress.enabled`       | If Ingress is enabled for the service | `false`            |
 | `api.ingress.hosts[0].host` | Hostname for the Ingress service      | `catalog-api.host` |
-
 
 ### Database settings
 
@@ -139,13 +130,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.postgres.poolSize.preloaders.rubric`              | PostgreSQL connection pool size for preloader rubrics               | `3`    |
 | `api.postgres.poolSize.preloaders.additionalAttribute` | PostgreSQL connection pool size for preloader additional attributes | `3`    |
 
-
 ### Preloaders settings
 
 | Name                          | Description              | Value |
 | ----------------------------- | ------------------------ | ----- |
 | `api.preloaders.awaitTimeout` | Preloaders await timeout | `60s` |
-
 
 ### Search settings
 
@@ -153,7 +142,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `search.url`            | URL of the Search service, ex: http://{search-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`    |
 | `search.connectTimeout` | Timeout for connect to the Search service                                                                                                            | `300ms` |
-
 
 ### Keys settings
 
@@ -163,7 +151,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `keys.requestTimeout` | Timeout for requests to the Keys API                                                                                                             | `5s`  |
 | `keys.token`          | Keys service API key                                                                                                                             | `""`  |
 
-
 ### License settings
 
 | Name                     | Description                                                        | Value |
@@ -171,19 +158,28 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `license.url`            | URL of the License service. Ex: http(s)://license.svc **Required** | `""`  |
 | `license.requestTimeout` | Timeout for requests to the License service                        | `1s`  |
 
+### Stat Receiver settings
 
-### BSS settings
-
-| Name                     | Description                                                                  | Value   |
-| ------------------------ | ---------------------------------------------------------------------------- | ------- |
-| `bss.enabled`            | If BSS is enabled                                                            | `false` |
-| `bss.url`                | URL of the BSS service. Ex: http(s)://bss.svc                                | `""`    |
-| `bss.requestTimeout`     | Timeout for requests to the BSS service                                      | `1s`    |
-| `bss.buffer.lifetime`    | Lifetime of BSS buffer                                                       | `5s`    |
-| `bss.buffer.retryCount`  | The maximum number of attempts to send BSS messages                          | `2`     |
-| `bss.buffer.sendTimeout` | Timeout between sending BSS messages                                         | `2s`    |
-| `bss.buffer.sendLimit`   | The maximum number of messages in the buffer before they are sent to the BSS | `256`   |
-
+| Name                                        | Description                                                                                                                                     | Value   |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `statReceiver.enabled`                      | If Stat Receiver is enabled                                                                                                                     | `false` |
+| `statReceiver.url`                          | URL of the Stat Receiver service. Ex: http(s)://stat-receiver.svc                                                                               | `""`    |
+| `statReceiver.buffer.lifetime`              | Lifetime of Stat buffer                                                                                                                         | `5s`    |
+| `statReceiver.buffer.retryCount`            | The maximum number of attempts to send Stat messages                                                                                            | `2`     |
+| `statReceiver.buffer.sendTimeout`           | Timeout between sending Stat messages                                                                                                           | `2s`    |
+| `statReceiver.buffer.sendLimit`             | The maximum number of messages in the buffer before they are sent to the Stat                                                                   | `256`   |
+| `statReceiver.client.connectingTimeout`     | The time period within which the TCP connecting process must be completed                                                                       | `500ms` |
+| `statReceiver.client.idleTimeout`           | The time after which an idle connection will be automatically closed                                                                            | `250ms` |
+| `statReceiver.client.minConnections`        | The minimum number of parallel connections that a pool should keep alive ("hot")                                                                | `1`     |
+| `statReceiver.client.maxConnections`        | The maximum number of parallel connections that a connection pool to a single host endpoint is allowed to establish. Must be greater than zero  | `2`     |
+| `statReceiver.client.maxOpenRequests`       | The maximum number of open requests accepted into the pool across all  materializations of any of its client flows                              | `4`     |
+| `statReceiver.client.maxRetries`            | The maximum number of times failed requests are attempted again, (if the request can be safely retried) before giving up and returning an error | `4`     |
+| `statReceiver.client.maxConnectionLifetime` | The maximum duration for a connection to be kept alive                                                                                          | `5m`    |
+| `statReceiver.client.baseConnectionBackoff` | The minimum duration to backoff new connection attempts after the previous connection attempt failed                                            | `500ms` |
+| `statReceiver.client.maxConnectionBackoff`  | Maximum backoff duration between failed connection attempts                                                                                     | `10s`   |
+| `statReceiver.client.responseTimeout`       | The time period after the response was dispatched                                                                                               | `250ms` |
+| `statReceiver.dispatcher.fixedPoolSize`     | Fixed number of threads used                                                                                                                    | `1`     |
+| `statReceiver.dispatcher.throughput`        | Throughput defines the maximum number of messages to be processed per actor before the thread jumps to the next actor                           | `4`     |
 
 ### Kubernetes Importer job settings
 
@@ -198,7 +194,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.retry.execute.maxAttempts`  | The maximum number of retries execute psql command before stopping                                                 | `3`   |
 | `importer.retry.execute.delay`        | Delay until the retry attempts execute                                                                             | `1s`  |
 
-
 ### importer.image **Deployment settings**
 
 | Name                        | Description                                                                                   | Value                              |
@@ -206,7 +201,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-importer` |
 | `importer.image.tag`        | Tag                                                                                           | `1.0.10`                           |
 | `importer.image.pullPolicy` | Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                     |
-
 
 ### importer.postgres **Database settings**
 
@@ -219,7 +213,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.postgres.password`            | PostgreSQL password. **Required**                | `""`   |
 | `importer.postgres.schemaSwitchEnabled` | Automatic switch PostgreSQL schema on releases   | `true` |
 
-
 ### importer.persistentVolume **Persistent Volume settings**
 
 | Name                                     | Description                                                                                                         | Value               |
@@ -228,7 +221,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.persistentVolume.accessModes`  | Persistent Volume [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)       | `["ReadWriteOnce"]` |
 | `importer.persistentVolume.storageClass` | Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)                          | `topolvm-ext4`      |
 | `importer.persistentVolume.size`         | Volume size                                                                                                         | `50Gi`              |
-
 
 ### importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
@@ -239,14 +231,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.resources.limits.cpu`      | A CPU limit      | `2`      |
 | `importer.resources.limits.memory`   | A memory limit   | `2048Mi` |
 
-
 ### importer.cleaner **Cleaner scheme settings**
 
 | Name                            | Description                                 | Value  |
 | ------------------------------- | ------------------------------------------- | ------ |
 | `importer.cleaner.enabled`      | If clean schemes is enabled for the service | `true` |
 | `importer.cleaner.versionLimit` | Number of backup schemes                    | `2`    |
-
 
 ### importer.cleaner.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
