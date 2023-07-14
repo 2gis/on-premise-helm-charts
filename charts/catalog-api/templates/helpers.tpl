@@ -140,45 +140,45 @@ onprem
   value: "{{ .Values.license.requestTimeout }}"
 {{- end }}
 
-{{- define "catalog.env.statReceiver" -}}
+{{- define "catalog.env.bss" -}}
 - name: CATALOG_BSS_ENABLED
-  value: "{{ .Values.statReceiver.enabled }}"
+  value: "{{ .Values.bss.enabled }}"
 - name: CATALOG_BSS_ENDPOINT
-  value: "{{ .Values.statReceiver.url }}"
+  value: "{{ .Values.bss.url }}"
 - name: CATALOG_BSS_BUFFER_LIFETIME
-  value: "{{ .Values.statReceiver.buffer.lifetime }}"
+  value: "{{ .Values.bss.buffer.lifetime }}"
 - name: CATALOG_BSS_BUFFER_RETRY_COUNT
-  value: "{{ .Values.statReceiver.buffer.retryCount }}"
+  value: "{{ .Values.bss.buffer.retryCount }}"
 - name: CATALOG_BSS_BUFFER_SEND_TIMEOUT
-  value: "{{ .Values.statReceiver.buffer.sendTimeout }}"
+  value: "{{ .Values.bss.buffer.sendTimeout }}"
 - name: CATALOG_BSS_BUFFER_SEND_LIMIT
-  value: "{{ .Values.statReceiver.buffer.sendLimit }}"
+  value: "{{ .Values.bss.buffer.sendLimit }}"
 - name: CATALOG_BSS_CONNECTING_TIMEOUT
-  value: "{{ .Values.statReceiver.client.connectingTimeout }}"
+  value: "{{ .Values.bss.client.connectingTimeout }}"
 - name: CATALOG_BSS_IDLE_TIMEOUT
-  value: "{{ .Values.statReceiver.client.Idle_timeout }}"
+  value: "{{ .Values.bss.client.Idle_timeout }}"
 - name: CATALOG_BSS_MIN_CONNECTIONS
-  value: "{{ .Values.statReceiver.client.minConnections }}"
+  value: "{{ .Values.bss.client.minConnections }}"
 - name: CATALOG_BSS_MAX_CONNECTIONS
-  value: "{{ .Values.statReceiver.client.maxConnections }}"
+  value: "{{ .Values.bss.client.maxConnections }}"
 - name: CATALOG_BSS_MAX_OPEN_REQUESTS
-  value: "{{ .Values.statReceiver.client.maxOpenRequests }}"
+  value: "{{ .Values.bss.client.maxOpenRequests }}"
 - name: CATALOG_BSS_OPEN_REQUESTS
-  value: "{{ .Values.statReceiver.client.maxOpenRequests }}"
+  value: "{{ .Values.bss.client.maxOpenRequests }}"
 - name: CATALOG_BSS_MAX_RETRIES
-  value: "{{ .Values.statReceiver.client.maxRetries }}"
+  value: "{{ .Values.bss.client.maxRetries }}"
 - name: CATALOG_BSS_CONNECTION_LIFETIME
-  value: "{{ .Values.statReceiver.client.maxConnectionLifetime }}"
+  value: "{{ .Values.bss.client.maxConnectionLifetime }}"
 - name: CATALOG_BSS_BASE_CONNECTION_BACKOFF
-  value: "{{ .Values.statReceiver.client.baseConnectionBackoff }}"
+  value: "{{ .Values.bss.client.baseConnectionBackoff }}"
 - name: CATALOG_BSS_MAX_CONNECTION_BACKOFF
-  value: "{{ .Values.statReceiver.client.maxConnectionBackoff }}"
+  value: "{{ .Values.bss.client.maxConnectionBackoff }}"
 - name: CATALOG_BSS_RESPONSE_TIMEOUT
-  value: "{{ .Values.statReceiver.client.responseTimeout }}"
+  value: "{{ .Values.bss.client.responseTimeout }}"
 - name: CATALOG_BSS_DISPATCHER_FIXED_POOL_SIZE
-  value: "{{ .Values.statReceiver.dispatcher.fixedPoolSize }}"
+  value: "{{ .Values.bss.dispatcher.fixedPoolSize }}"
 - name: CATALOG_BSS_DISPATCHER_THROUGHPUT
-  value: "{{ .Values.statReceiver.dispatcherThroughput }}"
+  value: "{{ .Values.bss.dispatcherThroughput }}"
 {{- end }}
 
 {{- define "catalog.env.importer" -}}
