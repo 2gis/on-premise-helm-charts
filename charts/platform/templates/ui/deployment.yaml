@@ -57,7 +57,7 @@ spec:
             - name: BRAND
               value: {{ required ".Values.ui.brand is required" .Values.ui.brand | quote }}
             - name: PAGES
-              value: {{ .Values.ui.pages | quote }}
+              value: {{ required ".Values.ui.pages is required" .Values.ui.pages | quote }}
             - name: CATALOG_API_URL
               value: {{ .Values.ui.catalog.url | quote }}
             - name: CATALOG_API_KEY
