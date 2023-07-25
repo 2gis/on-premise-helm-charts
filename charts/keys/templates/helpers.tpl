@@ -226,6 +226,17 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 {{- end }}
 
+{{- define "keys.env.predef" -}}
+{{ range $service, $key := .Values.predefined.service.keys }}
+- name: KEYS_PREDEF_SERVICE_KEY_{{ $service | upper }}
+  value: {{ $key }}
+{{ end }}      
+{{ range $service, $key := .Values.predefined.service.aliases }}
+- name: KEYS_PREDEF_SERVICE_ALIAS_{{ $service | upper }}
+  value: {{ $key }}
+{{ end }}      
+{{- end }}
+
 {{/*
 Return the target Kubernetes version
 */}}

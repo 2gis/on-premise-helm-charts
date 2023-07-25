@@ -43,14 +43,14 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.appTheme`                 | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                  | `urbi`           |
 | `ui.appLocale`                | Language in the app. Possible values: `"ar_AE"`, `"en_AE"` or `"ru_RU"`.                                                                         | `en_AE`          |
 | `ui.appInitialMapCenter`      | Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow). | `[46.71, 24.72]` |
-| `ui.supportDocumentationLink`      | Product online documentation link | `'https://docs.urbi.ae/en/pro/start'` |
+| `ui.supportDocumentationLink` | Product online documentation link. Ex.: 'https://docs.urbi.ae/en/pro/start'                                                                      | `""`             |
 | `ui.auth.sso`                 | Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.                                                                   | `false`          |
 | `ui.auth.secure`              | Flag to turn on/off the https for auth. Possible values: `"true"` or `"false"`.                                                                  | `true`           |
 | `ui.auth.safeHosts`           | a string with regExp, which checks incoming authCodeUrl                                                                                          | `.*`             |
 | `ui.auth.codeUrl`             | an URL, which is used to exchange code to token: host/api/auth/code                                                                              | `""`             |
 | `ui.auth.clientId`            | a client_id from keycloack                                                                                                                       | `""`             |
 | `ui.auth.clientSecret`        | a client_secret from keycloack                                                                                                                   | `""`             |
-| `ui.auth.oAuthProvider`       | a provider name. Possible values: "keycloak"                                                                                                     | "ugc"                                                                                             | `keycloak`       |
+| `ui.auth.oAuthProvider`       | a provider name. Possible values: "keycloak" | "ugc"                                                                                             | `keycloak`       |
 | `ui.auth.identityProviderUrl` | a provider base URL                                                                                                                              | `""`             |
 | `ui.auth.oAuthApiUrl`         | an oAuth provider base URL                                                                                                                       | `""`             |
 | `ui.auth.userDataApiUrl`      | an user data provider URL                                                                                                                        | `""`             |
