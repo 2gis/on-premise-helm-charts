@@ -394,5 +394,6 @@ importer:
 # @param license.retryPeriod Duration how often tiles server should try to update license status if it is failing to get it.
 
 license:
+  enable: ''
   url: ''
   retryPeriod: 30s
