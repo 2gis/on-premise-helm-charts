@@ -102,14 +102,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "twins.env.api"}}
 {{ include "twins.env.db.deploys" . }}
 - name: TWINS_AUTH_ENDPOINT
-  value: "{{ required "A valid .Values.api.auth.endpoint required" .Values.api.auth.endpoint }}"
+  value: "{{ required "A valid .Values.api.keys.url required" .Values.api.keys.url }}"
 - name: TWINS_AUTH_SERVICE_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "twins.secret.deploys.name" . }}
-      key: authServiceKey
+      key: keysToken
 - name: TWINS_AUTH_CLIENT_TIMEOUT
-  value: "{{ .Values.api.auth.clientTimeout }}"
+  value: "{{ .Values.api.keys.requestTimeout }}"
 {{- end }}
 
 {{/*
