@@ -9,7 +9,7 @@ dgctlDockerRegistry: ''
 
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param image.repository Twins API service image repository.
-# @param image.tag Backend service image tag.
+# @param image.tag Twins API service image tag.
 # @param image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
 
 imagePullSecrets: []
@@ -23,8 +23,6 @@ image:
 
 api:
 
-  # @section Kubernetes Strategy settings
-
   # @param api.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
   # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
   # @param api.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
@@ -35,7 +33,6 @@ api:
       maxUnavailable: 0
       maxSurge: 1
 
-  # @extra api.auth.access **API Keys service access settings**
   # @param api.auth.endpoint API Keys endpoint url, ex: http://keys-api.svc. **Required**
   # @param api.auth.serviceKey Service key for Keys API. **Required**
   # @param api.auth.clientTimeout Timeout for Keys API requests.
@@ -87,8 +84,6 @@ api:
     type: ClusterIP
     port: 80
 
-  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
-
   # @param api.ingress.enabled If Ingress is enabled for the service.
   # @param api.ingress.hosts[0].host Hostname for the Ingress service.
 
@@ -97,8 +92,6 @@ api:
     hosts:
     - host: twins-api.host
 
-
-  # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
   # @param api.hpa.enabled If HPA is enabled for the service.
   # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
