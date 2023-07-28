@@ -38,7 +38,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
-{{- define "keys.migrate.labels" -}}
+{{- define "twins.migrate.labels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-migrate
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -102,14 +102,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "twins.env.api"}}
 {{ include "twins.env.db.deploys" . }}
 - name: TWINS_AUTH_ENDPOINT
-  value: "{{ required "A valid .Values.auth.endpoint required" .Values.auth.endpoint }}"
+  value: "{{ required "A valid .Values.api.auth.endpoint required" .Values.api.auth.endpoint }}"
 - name: TWINS_AUTH_SERVICE_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "twins.secret.deploys.name" . }}
       key: authServiceKey
 - name: TWINS_AUTH_CLIENT_TIMEOUT
-  value: "{{ .Values.auth.clientTimeout }}"
+  value: "{{ .Values.api.auth.clientTimeout }}"
 {{- end }}
 
 {{/*

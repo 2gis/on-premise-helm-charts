@@ -17,7 +17,6 @@ spec:
   {{- end }}
   strategy:
     {{- toYaml .Values.strategy | nindent 4 }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "twins.api.selectorLabels" . | nindent 6 }}
