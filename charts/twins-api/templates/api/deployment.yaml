@@ -22,10 +22,11 @@ spec:
       {{- include "twins.api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.api.podAnnotations }}
       annotations:
+        checksum/config: {{ (include (print $.Template.BasePath "/secret-deploys.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- with .Values.api.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "twins.api.labels" . | nindent 8 }}
         {{- with .Values.api.podLabels }}
