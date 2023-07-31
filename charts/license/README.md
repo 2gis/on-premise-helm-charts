@@ -33,19 +33,19 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 
 ### Common settings
 
-| Name               | Description                                                                                                                 | Value |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`     | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
-| `fullnameOverride` | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
-| `annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
-| `labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
-| `replicaCount`     | A replica count for the pod.                                                                                                | `1`   |
-| `podAnnotations`   | Kubernetes pod [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
-| `podLabels`        | Kubernetes pod [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
-| `nodeSelector`     | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`  |
-| `tolerations`      | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`  |
-| `affinity`         | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
-| `imagePullSecrets` | Kubernetes image pull secrets.                                                                                              | `[]`  |
+| Name                     | Description                                                                                                                                                                                                                                   | Value |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `nameOverride`           | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                                                                                       | `""`  |
+| `fullnameOverride`       | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                                                                                                   | `""`  |
+| `annotations`            | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                                                     | `{}`  |
+| `labels`                 | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                                               | `{}`  |
+| `podAnnotations`         | Kubernetes pod [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                                                 | `{}`  |
+| `podLabels`              | Kubernetes pod [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                                           | `{}`  |
+| `serviceAccountOverride` | Kubernetes pod [service account](https://kubernetes.io/docs/concepts/security/service-accounts/). Should include rule for watching pods in current namespace. If not defined it will be created automatically. Not needed for license type 1. | `""`  |
+| `nodeSelector`           | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                                                       | `{}`  |
+| `tolerations`            | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                                                         | `[]`  |
+| `affinity`               | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                                                                                                   | `{}`  |
+| `imagePullSecrets`       | Kubernetes image pull secrets.                                                                                                                                                                                                                | `[]`  |
 
 ### StatefulSet settings
 
@@ -84,7 +84,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 
 | Name                        | Description       | Value   |
 | --------------------------- | ----------------- | ------- |
-| `resources.requests.cpu`    | A CPU request.    | `50m`   |
+| `resources.requests.cpu`    | A CPU request.    | `500m`  |
 | `resources.requests.memory` | A memory request. | `128Mi` |
 | `resources.limits.cpu`      | A CPU limit.      | `1`     |
 | `resources.limits.memory`   | A memory limit.   | `512Mi` |
@@ -103,4 +103,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | `persistence.s3.root`             | Root directory in S3 bucket.                                                                           | `""`   |
 | `persistence.s3.accessKey`        | S3 access key for accessing the bucket.                                                                | `""`   |
 | `persistence.s3.secretKey`        | S3 secret key for accessing the bucket.                                                                | `""`   |
+
+### TPM-related settings for license type 2
+
+| Name                           | Description                                                                                                                                                               | Value   |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `tpm.securityContext`          | Main container [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/). Should enable access to the host TPM device (/dev/tpmrm0). | `{}`    |
+| `tpm.mountTPMDevice`           | If TPM device should be mounted to the main container. Required if no TPM device plugin is used. Additionally, requires privileged access for the main container.         | `false` |
+| `tpm.pvcBind`                  | **Kubernetes PVC used to bind pod to the kubernetes node; not needed if FS persistence is used**                                                                          |         |
+| `tpm.pvcBind.enable`           | If PVC should be used to bind pod to the kubernetes node.                                                                                                                 | `false` |
+| `tpm.pvcBind.storageClassName` | Storage class name.                                                                                                                                                       | `""`    |
 

@@ -25,9 +25,10 @@ dgctlStorage:
 # @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
-# @param replicaCount A replica count for the pod.
 # @param podAnnotations Kubernetes pod [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podLabels Kubernetes pod [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param serviceAccountOverride Kubernetes pod [service account](https://kubernetes.io/docs/concepts/security/service-accounts/). Should include rule for watching pods in current namespace. If not defined it will be created automatically. Not needed for license type 1.
 
 # @param nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -41,9 +42,10 @@ fullnameOverride: ''
 annotations: {}
 labels: {}
 
-replicaCount: 1
 podAnnotations: {}
 podLabels: {}
+
+serviceAccountOverride: ''
 
 nodeSelector: {}
 tolerations: []
@@ -114,7 +116,7 @@ resources:
     cpu: 1
     memory: 512Mi
   requests:
-    cpu: 50m
+    cpu: 500m
     memory: 128Mi
 
 # @section Persistence
@@ -143,3 +145,18 @@ persistence:
     root: ''
     accessKey: ''
     secretKey: ''
+
+# @section TPM-related settings for license type 2
+
+# @param tpm.securityContext Main container [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/). Should enable access to the host TPM device (/dev/tpmrm0).
+# @param tpm.mountTPMDevice If TPM device should be mounted to the main container. Required if no TPM device plugin is used. Additionally, requires privileged access for the main container.
+# @extra tpm.pvcBind **Kubernetes PVC used to bind pod to the kubernetes node; not needed if FS persistence is used**
+# @param tpm.pvcBind.enable If PVC should be used to bind pod to the kubernetes node.
+# @param tpm.pvcBind.storageClassName Storage class name.
+
+tpm:
+  securityContext: {}
+  mountTPMDevice: false
+  pvcBind:
+    enable: false
+    storageClassName: ''
