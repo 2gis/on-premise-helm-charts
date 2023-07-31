@@ -224,6 +224,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- else }}
   value: "http://{{ include "keys.api.name" . }}"
 {{- end }}
+- name: BADGE_TITLE
+  value: "{{ .Values.admin.badge.title }}"
+- name: BADGE_TITLE_COLOR
+  value: "{{ .Values.admin.badge.titleColor }}"
+- name: BADGE_BACKGROUND_COLOR
+  value: "{{ .Values.admin.badge.backgroundColor }}"
 {{- end }}
 
 {{/*

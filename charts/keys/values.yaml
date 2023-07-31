@@ -29,7 +29,7 @@ backend:
 admin:
   image:
     repository: 2gis-on-premise/keys-ui
-    tag: 0.3.0
+    tag: 0.5.0
 
   # @param admin.replicas A replica count for the pod.
 
@@ -45,9 +45,16 @@ admin:
 
   # @skip admin.apiOverride
   # @param admin.host Base URL for the admin web interface, ex: https://keys-ui.ingress.host
+  # @param admin.badge.title A name to describe an application installation.
+  # @param admin.badge.titleColor A font color for admin.badge.title. Any css color value is valid, e.g. "#000".
+  # @param admin.badge.backgroundColor A background color for admin.badge.title. Any css color value is valid, e.g. "#00F018".
 
   apiOverride: ''
   host: ''
+  badge:
+    title: ''
+    titleColor: ''
+    backgroundColor: ''
 
   # @param admin.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param admin.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
