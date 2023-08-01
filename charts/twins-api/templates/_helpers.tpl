@@ -3,7 +3,7 @@
 {{- end }}
 
 {{- define "twins.api.name" -}}
-{{ include "twins.name" . }}-api
+{{ include "twins.name" . }}
 {{- end }}
 
 {{- define "twins.migrate.name" -}}
@@ -29,7 +29,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "twins.api.selectorLabels" -}}
-app.kubernetes.io/name: {{ .Chart.Name }}-api
+app.kubernetes.io/name: {{ .Chart.Name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 

@@ -93,7 +93,7 @@ api:
     hosts:
     - host: twins-api.host
       paths:
-        - path: '/'
+      - path: /
 
 
   # @param api.hpa.enabled If HPA is enabled for the service.

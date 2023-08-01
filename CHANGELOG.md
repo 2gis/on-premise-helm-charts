@@ -1,5 +1,17 @@
 # 2GIS On-Premise Changelog
 
+## [1.8.0]
+#### Images
+```
+catalog-api
+	- catalog-api:3.593.5
+	+ catalog-api:3.595.0
+keys
+	- keys-backend:1.55.0
+	+ keys-backend:1.59.0
+
+```
+
 ## [1.7.7]
 * hotfix
 
