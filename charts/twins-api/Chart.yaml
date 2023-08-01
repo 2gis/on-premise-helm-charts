@@ -1,5 +1,5 @@
 apiVersion: v2
-name: twins
+name: twins-api
 type: application
 description: A Helm chart for Kubernetes to deploy API Twins service
 
