@@ -1,10 +1,10 @@
 apiVersion: v2
-name: keys
+name: twins
 type: application
-description: A Helm chart for Kubernetes to deploy API Keys service
+description: A Helm chart for Kubernetes to deploy API Twins service
 
 version: 1.7.7
-appVersion: 1.59.0
+appVersion: 1.6.0
 
 maintainers:
 - name: 2gis

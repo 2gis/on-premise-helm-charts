@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "twins.migrate.name" . }}-migrate
+  labels:
+    {{- include "twins.migrate.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-10"
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "twins.migrate.name" . }}
+      labels:
+        {{- include "twins.migrate.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      {{- if .Values.migrate.initialDelaySeconds }}
+      initContainers:
+        - name: delay
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          command: [ "sh", "-c", "sleep {{ .Values.migrate.initialDelaySeconds }}" ]
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+      {{- end }}
+      containers:
+        - name: migrate
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "twins-migrate" ]
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+          env:
+            {{- include "twins.env.db.jobs" . | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
