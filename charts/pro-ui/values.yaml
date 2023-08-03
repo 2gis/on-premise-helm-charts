@@ -37,7 +37,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/pro-ui
-    tag: 1.0.1
+    tag: 1.1.0
 
   # @section UI service settings
 
@@ -94,6 +94,7 @@ ui:
   # @param ui.mapgl.styleUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) `style.json` folder, e.g., '//mapgl.ingress.host/style'
   # @param ui.mapgl.styleIconsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons folder, e.g., '//mapgl.ingress.host/style/icons'
   # @param ui.mapgl.styleFontsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'
+  # @param ui.mapgl.styleModlesUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) models folder, e.g., '//mapgl.ingress.host/style/models'
 
   mapgl:
     host: mapgl-api.host
@@ -101,6 +102,7 @@ ui:
     styleUrl: ''
     styleIconsUrl: ''
     styleFontsUrl: ''
+    styleModelsUrl: ''
 
   # @section Strategy settings
 
@@ -135,7 +137,7 @@ ui:
   ingress:
     enabled: false
     hosts:
-    - host: pro-ui.host
+      - host: pro-ui.host
 
   # @section Limits
 
