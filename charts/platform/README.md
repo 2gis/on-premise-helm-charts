@@ -33,7 +33,7 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | Name                  | Description                    | Value                    |
 | --------------------- | ------------------------------ | ------------------------ |
 | `ui.image.repository` | Repository                     | `on-premise/platform-ui` |
-| `ui.image.tag`        | Tag                            | `0.2.0`                  |
+| `ui.image.tag`        | Tag                            | `0.3.0`                  |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                     |
 
 ### UI service settings
