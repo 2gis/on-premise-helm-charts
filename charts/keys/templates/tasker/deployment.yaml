@@ -13,11 +13,10 @@ metadata:
     {{- end }}
 spec:
   replicas: 1
+  {{- if .Values.tasker.strategy }}
   strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-    type: RollingUpdate
+    {{- toYaml .Values.tasker.strategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "keys.tasker.selectorLabels" . | nindent 6 }}
