@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 3.7.0
+appVersion: 3.7.0-debian-10-r265
 dependencies:
 - name: common
   repository: https://charts.bitnami.com/bitnami

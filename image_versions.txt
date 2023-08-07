@@ -2,9 +2,9 @@ catalog-api
 	catalog-api:3.580.0
 	catalog-importer:1.0.9
 gis-platform
-	gis_platform_portal:2022.9.29
-	gis_platform_spcore:2022.9.29
-	zookeeper:3.7.0-debian-10-r265
+ 	gis_platform_portal:2023.8.3-0
+ 	gis_platform_spcore:2023.8.3-0
+ 	zookeeper:3.7.0-debian-10-r265
 keys
 	keys-backend:1.39.0
 	keys-redis:6.2.6-alpine3.15
