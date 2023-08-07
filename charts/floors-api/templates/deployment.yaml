@@ -40,6 +40,8 @@ spec:
         - name: import
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.import.image.repository }}:{{ .Values.import.image.tag }}
           imagePullPolicy: {{ .Values.import.imagePullPolicy }}
+          securityContext: 
+            {{- toYaml .Values.securityContext | nindent 12 }}
           env:
             - name: IMPORTER_S3_ENDPOINT
               value: "{{ .Values.dgctlStorage.host }}"
@@ -60,6 +62,8 @@ spec:
         - name: {{ .Chart.Name }}-nodejs
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nodejs.image.repository }}:{{ .Values.nodejs.image.tag }}
           imagePullPolicy: {{ .Values.nodejs.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
           env:
           ports:
             - name: nodejs-http
@@ -98,6 +102,7 @@ spec:
           command: ["nginx", "-c", "/etc/2gis/nginx.conf"]
           {{- if (le .Values.nginx.httpPort 1024.0) }}
           securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
             capabilities:
               add:
                 - NET_BIND_SERVICE
