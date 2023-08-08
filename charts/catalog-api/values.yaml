@@ -21,6 +21,9 @@ podAnnotations: {}
 podLabels: {}
 imagePullSecrets: []
 
+log:
+  volume: /var/log/catalog/
+  name: app.log
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 

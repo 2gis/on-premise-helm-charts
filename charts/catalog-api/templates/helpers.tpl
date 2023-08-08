@@ -217,3 +217,7 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- print "autoscaling/v2" -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "logPath" -}}
+{{ .Values.log.volume | trimSuffix "/" }}/{{ .Values.log.name }}
+{{- end -}}

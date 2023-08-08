@@ -29,18 +29,25 @@ spec:
         - name: importer
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          command: [ "importer", "import" ]
+          command:
+          - "sh"
+          - "-c"
+          - "importer import > {{ include "logPath" . }} 2>&1"
           resources:
             {{- toYaml .Values.importer.resources | nindent 12 }}
           env:
             {{- include "catalog.env.importer" . | nindent 12 }}
-          {{- if .Values.importer.persistentVolume.enabled }}
           volumeMounts:
+            - name: log-dir
+              mountPath: {{ .Values.log.volume }}
+          {{- if .Values.importer.persistentVolume.enabled }}
             - name: {{ include "catalog.importer.name" . }}-pv
               mountPath: "/tmp"
           {{- end }}
-      {{- if .Values.importer.persistentVolume.enabled }}
       volumes:
+        - name: log-dir
+          emptyDir: {}
+      {{- if .Values.importer.persistentVolume.enabled }}
         - name: {{ include "catalog.importer.name" . }}-pv
           persistentVolumeClaim:
             claimName: {{ include "catalog.importer.name" . }}

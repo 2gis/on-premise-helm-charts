@@ -39,6 +39,10 @@ spec:
         - name: {{ .Chart.Name }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          command:
+            - "sh"
+            - "-c"
+            - "/docker-entrypoint.sh > {{ include "logPath" . }} 2>&1"
           ports:
             - name: http
               containerPort: 5000
@@ -55,6 +59,9 @@ spec:
             {{- include "catalog.env.search" . | nindent 12 }}
             {{- include "catalog.env.keys" . | nindent 12 }}
             {{- include "catalog.env.license" . | nindent 12 }}
+          volumeMounts:
+            - name: log-dir
+              mountPath: {{ .Values.log.volume }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -71,3 +78,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: log-dir
+          emptyDir: {}
