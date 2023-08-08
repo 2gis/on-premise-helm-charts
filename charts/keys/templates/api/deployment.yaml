@@ -15,10 +15,8 @@ spec:
   {{- if not .Values.api.hpa.enabled }}
   replicas: {{ .Values.api.replicas }}
   {{- end }}
-  {{- if .Values.api.strategy }}
   strategy:
     {{- toYaml .Values.api.strategy | nindent 4 }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "keys.api.selectorLabels" . | nindent 6 }}

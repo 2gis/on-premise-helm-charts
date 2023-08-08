@@ -13,10 +13,8 @@ metadata:
     {{- end }}
 spec:
   replicas: {{ .Values.admin.replicas }}
-  {{- if .Values.admin.strategy }}
   strategy:
     {{- toYaml .Values.admin.strategy | nindent 4 }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "keys.admin.selectorLabels" . | nindent 6 }}
