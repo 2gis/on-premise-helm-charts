@@ -1,4 +1,8 @@
 # 2GIS On-Premise Breaking-Changes
+## [NEW_VERSION_HERE]
+#### pro-api
+- Added new required setting api.licensePartner. Now pro-api only works with a valid license file, which can be requested from your sales manager. The license file must be placed in the s3.assetsDataBucket.
+
 ## [1.7.6]
 #### pro-api
 - Added new setting s3.assetsDataBucket. dgclStorage.bucket and buckets for the service app are completely separate now.
