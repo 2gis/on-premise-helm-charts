@@ -96,13 +96,13 @@ ingress:
 # @extra resources.limits.cpu A CPU limit, e.g., `100m`.
 # @extra resources.limits.memory A memory limit, e.g., `128Mi`.
 
-# resources:
-#   requests:
-#     cpu: 30m
-#     memory: 128M
-#   limits:
-#     cpu: 60m
-#     memory: 256M
+resources:
+  requests:
+    cpu: 30m
+    memory: 128M
+  limits:
+    cpu: 60m
+    memory: 256M
 
 # @section Floors backend settings
 
