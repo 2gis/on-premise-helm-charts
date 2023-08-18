@@ -24,12 +24,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                             | Value |
-| ------------------------ | --------------------------------------- | ----- |
-| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.       | `""`  |
-| `dgctlStorage.bucket`    | S3 bucket name.                         | `""`  |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. | `""`  |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. | `""`  |
+| Name                     | Description                                  | Value |
+| ------------------------ | -------------------------------------------- | ----- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `[scheme://]host:port`. | `""`  |
+| `dgctlStorage.bucket`    | S3 bucket name.                              | `""`  |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket.      | `""`  |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.      | `""`  |
 
 ### Common settings
 
@@ -98,7 +98,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | `persistence.fs.storage`          | Storage size, should be at least 10Mi.                                                                 | `10Mi` |
 | `persistence.fs.storageClassName` | Storage class name.                                                                                    | `""`   |
 | `persistence.s3`                  | **S3 setting for the 's3' persistence type**                                                           |        |
-| `persistence.s3.host`             | S3 endpoint. Format: `host:port`.                                                                      | `""`   |
+| `persistence.s3.host`             | S3 endpoint. Format: `[scheme://]host:port`.                                                           | `""`   |
 | `persistence.s3.bucket`           | S3 bucket name.                                                                                        | `""`   |
 | `persistence.s3.root`             | Root directory in S3 bucket.                                                                           | `""`   |
 | `persistence.s3.accessKey`        | S3 access key for accessing the bucket.                                                                | `""`   |
