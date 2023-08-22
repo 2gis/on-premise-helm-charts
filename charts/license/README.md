@@ -59,6 +59,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 
 | Name                      | Description                                                                                                                                                                                    | Value |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `license.type`            | License type. Should be auto generated with `dgctl pull --generate-values`.                                                                                                                    | `""`  |
 | `license.updatePeriod`    | Duration how often service should fetch new license from storage. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration].                      | `1h`  |
 | `license.retryPeriod`     | Duration how often service should try to fetch license from storage if previous attempts were failing.                                                                                         | `30s` |
 | `license.softBlockPeriod` | Duration until the license expiration time when license service should respond with 'soft' block status. For this duration additional time units 'd' for days and 'w' for weeks are supported. | `2w`  |
