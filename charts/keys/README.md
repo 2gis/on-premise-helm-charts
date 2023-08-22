@@ -24,7 +24,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name                       | Description                       | Value                          |
@@ -38,28 +37,27 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
 | `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
 
-
 ### Admin service settings
 
-| Name                                          | Description                                                                                                                                                                                              | Value           |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `admin.replicas`                              | A replica count for the pod.                                                                                                                                                                             | `1`             |
-| `admin.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
-| `admin.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
-| `admin.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
-| `admin.host`                                  | Base URL for the admin web interface, ex: https://keys-ui.ingress.host                                                                                                                                   | `""`            |
-| `admin.annotations`                           | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                | `{}`            |
-| `admin.labels`                                | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                          | `{}`            |
-| `admin.podAnnotations`                        | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                            | `{}`            |
-| `admin.podLabels`                             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`            |
-| `admin.nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
-| `admin.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
-| `admin.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `{}`            |
-| `admin.service.annotations`                   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                        | `{}`            |
-| `admin.service.labels`                        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                  | `{}`            |
-| `admin.service.type`                          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                           | `ClusterIP`     |
-| `admin.service.port`                          | Service port.                                                                                                                                                                                            | `80`            |
 
+| Name                          | Description                                                                                                                    | Value       |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `admin.replicas`              | A replica count for the pod.                                                                                                   | `1`         |
+| `admin.host`                  | Base URL for the admin web interface, ex: https://keys-ui.ingress.host                                                         | `""`        |
+| `admin.badge.title`           | A name to describe an application installation.                                                                                | `""`        |
+| `admin.badge.titleColor`      | A font color for admin.badge.title. Any css color value is valid, e.g. "#000".                                                 | `""`        |
+| `admin.badge.backgroundColor` | A background color for admin.badge.title. Any css color value is valid, e.g. "#00F018".                                        | `""`        |
+| `admin.annotations`           | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                      | `{}`        |
+| `admin.labels`                | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                | `{}`        |
+| `admin.podAnnotations`        | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                  | `{}`        |
+| `admin.podLabels`             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                            | `{}`        |
+| `admin.nodeSelector`          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).            | `{}`        |
+| `admin.affinity`              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).    | `{}`        |
+| `admin.tolerations`           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.              | `{}`        |
+| `admin.service.annotations`   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
+| `admin.service.labels`        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
+| `admin.service.type`          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `admin.service.port`          | Service port.                                                                                                                  | `80`        |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -67,7 +65,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | ----------------------------- | -------------------------------------- | -------------- |
 | `admin.ingress.enabled`       | If Ingress is enabled for the service. | `false`        |
 | `admin.ingress.hosts[0].host` | Hostname for the Ingress service.      | `keys-ui.host` |
-
 
 ### API service settings
 
@@ -91,14 +88,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.service.type`                          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                                             | `ClusterIP`     |
 | `api.service.port`                          | Service port.                                                                                                                                                                                                              | `80`            |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                        | Description                            | Value           |
 | --------------------------- | -------------------------------------- | --------------- |
 | `api.ingress.enabled`       | If Ingress is enabled for the service. | `false`         |
 | `api.ingress.hosts[0].host` | Hostname for the Ingress service.      | `keys-api.host` |
-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -112,13 +107,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
 | `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
-
 ### Import service settings
 
 | Name                  | Description                                                                                                         | Value |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
 | `import.nodeSelector` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`  |
-
 
 ### Migrate service settings
 
@@ -126,7 +119,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
 | `migrate.initialDelaySeconds` | Delay in seconds at the service startup.                                                                            | `0`   |
 | `migrate.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`  |
-
 
 ### Tasker service settings
 
@@ -143,7 +135,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `tasker.nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
 | `tasker.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
 | `tasker.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `{}`            |
-
 
 ### Redis settings
 
@@ -163,26 +154,26 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `redis.affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`              |
 | `redis.tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`              |
 
-
 ### Database access settings
 
-| Name                   | Description                             | Value  |
-| ---------------------- | --------------------------------------- | ------ |
-| `postgres.ro`          | **Settings for the read-only access**   |        |
-| `postgres.ro.host`     | PostgreSQL hostname or IP. **Required** | `""`   |
-| `postgres.ro.port`     | PostgreSQL port.                        | `5432` |
-| `postgres.ro.timeout`  | PostgreSQL client connection timeout.   | `3s`   |
-| `postgres.ro.name`     | PostgreSQL database name. **Required**  | `""`   |
-| `postgres.ro.username` | PostgreSQL username. **Required**       | `""`   |
-| `postgres.ro.password` | PostgreSQL password. **Required**       | `""`   |
-| `postgres.rw`          | **Settings for the read-write access**  |        |
-| `postgres.rw.host`     | PostgreSQL hostname or IP. **Required** | `""`   |
-| `postgres.rw.port`     | PostgreSQL port.                        | `5432` |
-| `postgres.rw.timeout`  | PostgreSQL client connection timeout.   | `3s`   |
-| `postgres.rw.name`     | PostgreSQL database name. **Required**  | `""`   |
-| `postgres.rw.username` | PostgreSQL username. **Required**       | `""`   |
-| `postgres.rw.password` | PostgreSQL password. **Required**       | `""`   |
-
+| Name                   | Description                                                                         | Value  |
+| ---------------------- | ----------------------------------------------------------------------------------- | ------ |
+| `postgres.ro`          | **Settings for the read-only access**                                               |        |
+| `postgres.ro.host`     | PostgreSQL hostname or IP. **Required**                                             | `""`   |
+| `postgres.ro.port`     | PostgreSQL port.                                                                    | `5432` |
+| `postgres.ro.timeout`  | PostgreSQL client connection timeout.                                               | `3s`   |
+| `postgres.ro.name`     | PostgreSQL database name. **Required**                                              | `""`   |
+| `postgres.ro.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`   |
+| `postgres.ro.username` | PostgreSQL username. **Required**                                                   | `""`   |
+| `postgres.ro.password` | PostgreSQL password. **Required**                                                   | `""`   |
+| `postgres.rw`          | **Settings for the read-write access**                                              |        |
+| `postgres.rw.host`     | PostgreSQL hostname or IP. **Required**                                             | `""`   |
+| `postgres.rw.port`     | PostgreSQL port.                                                                    | `5432` |
+| `postgres.rw.timeout`  | PostgreSQL client connection timeout.                                               | `3s`   |
+| `postgres.rw.name`     | PostgreSQL database name. **Required**                                              | `""`   |
+| `postgres.rw.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`   |
+| `postgres.rw.username` | PostgreSQL username. **Required**                                                   | `""`   |
+| `postgres.rw.password` | PostgreSQL password. **Required**                                                   | `""`   |
 
 ### LDAP connection settings
 
@@ -203,7 +194,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `ldap.search`                         | **LDAP search settings**                           |                                            |
 | `ldap.search.baseDN`                  | LDAP base distinguished name.                      | `dc=2gis`                                  |
 | `ldap.search.filter`                  | LDAP search filter.                                | `(&(objectClass=user)(sAMAccountName=%s))` |
-
 
 ### Limits
 

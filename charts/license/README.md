@@ -100,10 +100,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | `persistence.fs.storageClassName` | Storage class name.                                                                                    | `""`   |
 | `persistence.s3`                  | **S3 setting for the 's3' persistence type**                                                           |        |
 | `persistence.s3.host`             | S3 endpoint. Format: `[scheme://]host:port`.                                                           | `""`   |
+| `persistence.s3.host`             | S3 endpoint. Format: `host:port`.                                                                      | `""`   |
 | `persistence.s3.bucket`           | S3 bucket name.                                                                                        | `""`   |
 | `persistence.s3.root`             | Root directory in S3 bucket.                                                                           | `""`   |
 | `persistence.s3.accessKey`        | S3 access key for accessing the bucket.                                                                | `""`   |
 | `persistence.s3.secretKey`        | S3 secret key for accessing the bucket.                                                                | `""`   |
+
 
 ### TPM-related settings for license type 2
 
@@ -114,4 +116,3 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | `tpm.pvcBind`                  | **Kubernetes PVC used to bind pod to the kubernetes node; not needed if FS persistence is used**                                                                          |         |
 | `tpm.pvcBind.enable`           | If PVC should be used to bind pod to the kubernetes node.                                                                                                                 | `false` |
 | `tpm.pvcBind.storageClassName` | Storage class name.                                                                                                                                                       | `""`    |
-

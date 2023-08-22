@@ -171,5 +171,4 @@ spec:
             storage: 1Mi
         storageClassName: {{ .tpm.pvcBind.storageClassName }}
     {{- end }}
-
 {{- end -}}

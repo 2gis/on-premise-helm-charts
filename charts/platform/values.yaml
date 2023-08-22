@@ -1,8 +1,9 @@
 # @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+# @param imagePullPolicy Pull Policy
 
-dgctlDockerRegistry: ''
+dgctlDockerRegistry: ""
 
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
@@ -10,7 +11,7 @@ imagePullSecrets: []
 ui:
   # @section Common settings
 
-  # @param ui.replicas A replica count for the pod.
+  # @param ui.replicas A replica count for a pod.
   # @param ui.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param ui.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param ui.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -32,76 +33,73 @@ ui:
 
   # @param ui.image.repository Repository
   # @param ui.image.tag Tag
-  # @param imagePullPolicy Pull Policy
   # @param imagePullSecrets Kubernetes image pull secrets.
 
   image:
-    repository: 2gis-on-premise/pro-ui
-    tag: 1.0.1
+    repository: "2gis-on-premise/platform-ui"
+    tag: 0.3.0
 
   # @section UI service settings
 
-  # @skip ui.logLevel
-  # @skip ui.isOnPremise
-  # @param ui.appTheme Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
-  # @param ui.appLocale Language in the app. Possible values: `"ar_AE"`, `"en_AE"` or `"ru_RU"`.
-  # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).
-  # @param ui.supportDocumentationLink Product online documentation link. Ex.: 'https://docs.urbi.ae/en/pro/start'
+  # @param ui.appPort Service port.
 
-  logLevel: error
-  isOnPremise: true
-  appTheme: urbi
-  appLocale: en_AE
-  appInitialMapCenter: '[46.71, 24.72]'
-  supportDocumentationLink: ''
+  appPort: 3000
 
-  # @param ui.auth.sso Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.
-  # @param ui.auth.secure Flag to turn on/off the https for auth. Possible values: `"true"` or `"false"`.
-  # @param ui.auth.safeHosts a string with regExp, which checks incoming authCodeUrl
-  # @param ui.auth.codeUrl an URL, which is used to exchange code to token: host/api/auth/code
-  # Ex: http(s)://pro-ui.ingress.host/api/auth/code
-  # @param ui.auth.clientId a client_id from keycloack
-  # @param ui.auth.clientSecret a client_secret from keycloack
-  # @param ui.auth.oAuthProvider a provider name. Possible values: "keycloak" | "ugc"
-  # @param ui.auth.identityProviderUrl a provider base URL
-  # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/auth
-  # @param ui.auth.oAuthApiUrl an oAuth provider base URL
-  # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/
-  # @param ui.auth.userDataApiUrl an user data provider URL
-  # @param ui.auth.turnOffCertValidation Flag to turn off certificate validation. Possible values: `"true"` or `"false"`.
-  auth:
-    sso: false
-    secure: true
-    safeHosts: .*
-    codeUrl: ''
-    clientId: ''
-    clientSecret: ''
-    oAuthProvider: keycloak
-    identityProviderUrl: ''
-    oAuthApiUrl: ''
-    userDataApiUrl: ''
-    turnOffCertValidation: false
-  # @section 2GIS Pro API settings
+  # @param ui.brand Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
+  # @skip ui.defaultLocale
+  # @param ui.pages A list of pages available in application. Values must be written with a comma. Possible values: `"status"`, `"playground"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
 
-  # @param ui.api.url Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/.
+  brand: ""
+  defaultLocale: "en"
+  pages: ""
 
-  api:
-    url: ''
+  # @section Statuses for services. A value is a string containing pairs of label and healthcheck URL for a service. Pairs must be divided with a comma. Each pair must be connected with a symbol "=", e.g. `mapgl: 'MapGL JS=https://example.com/healthcheck'`. URL must be an absolute. You can specify only one URL, e.g. `mapgl: 'https://example.com/healthcheck'`.
+
+  # @param ui.status.mapgl Status list within MapGL service.
+  # @param ui.status.search Status list within Search service.
+  # @param ui.status.navi Status list within Navigation service.
+  # @param ui.status.pro Status list within Pro UI and Pro API services.
+  # @param ui.status.gisPlatform Status list within GIS Platform service.
+  # @param ui.status.keys Status list within Keys service.
+
+  status:
+    mapgl: ""
+    search: ""
+    navi: ""
+    pro: ""
+    gisPlatform: ""
+    keys: ""
 
   # @section MapGL JS API settings
 
-  # @param ui.mapgl.host FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol.
+  # @param ui.mapgl.url URL to [MapGL JS API](https://docs.2gis.com/en/on-premise/map) host.
+  # @param ui.mapgl.scriptPath URL path to [MapGL JS API](https://docs.2gis.com/en/on-premise/map) init script relative to `ui.mapgl.url`.
   # @param ui.mapgl.key A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.
-  # @param ui.mapgl.styleUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) `style.json` folder, e.g., '//mapgl.ingress.host/style'
-  # @param ui.mapgl.styleIconsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons folder, e.g., '//mapgl.ingress.host/style/icons'
-  # @param ui.mapgl.styleFontsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'
+  # @param ui.mapgl.initCenter Optional default map coordinates. Contains of two numbers in an array: `[lon,lat]` (e.g., `"[55.27,25.2]"` stands for Dubai, `"[37.64,55.74]"` — for Moscow).
 
   mapgl:
-    host: mapgl-api.host
-    key: ''
-    styleUrl: ''
-    styleIconsUrl: ''
-    styleFontsUrl: ''
+    url: ""
+    scriptPath: "/api.js"
+    key: ""
+    initCenter: ""
+
+  # @section Search API settings
+
+  # @param ui.catalog.url URL for [Search API](https://docs.2gis.com/en/on-premise/search).
+  # @param ui.catalog.key Access key to [Search API](https://docs.2gis.com/en/on-premise/search).
+
+  catalog:
+    url: ""
+    key: ""
+
+  # @section Navigation API settings
+
+  # @param ui.navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+  # @param ui.navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+
+  navi:
+    url: ""
+    key: ""
 
   # @section Strategy settings
 
@@ -126,7 +124,7 @@ ui:
     annotations: {}
     labels: {}
     type: ClusterIP
-    port: 3000
+    port: 80
 
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -136,7 +134,7 @@ ui:
   ingress:
     enabled: false
     hosts:
-    - host: pro-ui.host
+      - host: ""
 
   # @section Limits
 
@@ -148,7 +146,7 @@ ui:
   resources:
     requests:
       cpu: 300m
-      memory: 256Mi
+      memory: 384M
     limits:
-      cpu: 1
-      memory: 384Mi
+      cpu: 1100m
+      memory: 512M
