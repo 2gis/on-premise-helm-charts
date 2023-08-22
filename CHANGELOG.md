@@ -1,6 +1,6 @@
 # 2GIS On-Premise Changelog
 
-## [1.9.0]
+## [1.9.1]
 #### Images
 ```
 catalog-api
@@ -20,7 +20,7 @@ keys
 	+ keys-ui:0.5.0
 license
 	- license:1.0.1
-	+ license:2.1.0
+	+ license:2.1.1
 mapgl-js-api
 	- mapgl:1.36.1
 	+ mapgl:1.38.1

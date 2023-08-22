@@ -24,7 +24,7 @@ keys
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.5.0
 license
-	license:2.1.0
+	license:2.1.1
 mapgl-js-api
 	mapgl:1.38.1
 navi-async-grpc-proxy
