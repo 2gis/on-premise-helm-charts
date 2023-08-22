@@ -1,5 +1,5 @@
 catalog-api
-	catalog-api:3.593.5
+	catalog-api:3.595.0
 	catalog-importer:1.0.10
 citylens
 	citylens-api:1.0.9
@@ -16,7 +16,7 @@ keycloak
 	keycloak-themes:0.0.8
 	keycloak:21.1.1-debian-11-r4
 keys
-	keys-backend:1.55.0
+	keys-backend:1.59.0
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.3.0
 license
@@ -60,3 +60,5 @@ tiles-api
 	tiles-api:4.45.0
 traffic-proxy
 	nginx:1.21.6
+twins-api
+	twins-api:1.6.0

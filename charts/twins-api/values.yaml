@@ -1,0 +1,193 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+
+# @section Common settings
+
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param image.repository Twins API service image repository.
+# @param image.tag Twins API service image tag.
+# @param image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+
+imagePullSecrets: []
+
+image:
+  repository: 2gis-on-premise/twins-api
+  tag: 1.6.0
+  pullPolicy: IfNotPresent
+
+# @section API service settings
+
+api:
+
+  # @param api.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param api.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  # @param api.keys.url URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required**
+  # @param api.keys.token Keys service API key **Required**
+  # @param api.keys.requestTimeout Timeout for requests to the Keys API.
+  keys:
+    url: ''
+    token: ''
+    requestTimeout: 5s
+
+  # @param api.replicas A replica count for the pod.
+
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 256Mi
+
+  # @param api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  annotations: {}
+  labels: {}
+
+  # @param api.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  podAnnotations: {}
+  podLabels: {}
+
+  # @param api.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param api.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param api.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
+  # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param api.service.port Service port.
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+
+  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].path Path for the Ingress service.
+
+  ingress:
+    enabled: false
+    hosts:
+    - host: twins-api.host
+      paths:
+      - path: /
+
+
+  # @param api.hpa.enabled If HPA is enabled for the service.
+  # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+  # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+  # @param api.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+  # @param api.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
+  # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+  # @param api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    scaleDownStabilizationWindowSeconds: ''
+    scaleUpStabilizationWindowSeconds: ''
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: ''
+
+
+# @section Migrate service settings
+
+migrate:
+
+  # @param migrate.initialDelaySeconds Delay in seconds at the service startup.
+
+  initialDelaySeconds: 0
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+  # @param migrate.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+
+  nodeSelector: {}
+
+
+# @section Database access settings
+
+postgres:
+
+  # @extra postgres.ro **Settings for the read-only access**
+
+  # @param postgres.ro.host PostgreSQL hostname or IP. **Required**
+  # @param postgres.ro.port PostgreSQL port.
+  # @param postgres.ro.timeout PostgreSQL client connection timeout.
+  # @param postgres.ro.name PostgreSQL database name. **Required**
+  # @param postgres.ro.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
+  # @param postgres.ro.username PostgreSQL username. **Required**
+  # @param postgres.ro.password PostgreSQL password. **Required**
+
+  ro:
+    host: ''
+    port: 5432
+    timeout: 3s
+    name: ''
+    schema: ''
+    username: ''
+    password: ''
+
+  # @extra postgres.rw **Settings for the read-write access**
+
+  # @param postgres.rw.host PostgreSQL hostname or IP. **Required**
+  # @param postgres.rw.port PostgreSQL port.
+  # @param postgres.rw.timeout PostgreSQL client connection timeout.
+  # @param postgres.rw.name PostgreSQL database name. **Required**
+  # @param postgres.rw.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
+  # @param postgres.rw.username PostgreSQL username. **Required**
+  # @param postgres.rw.password PostgreSQL password. **Required**
+
+  rw:
+    host: ''
+    port: 5432
+    timeout: 3s
+    name: ''
+    schema: ''
+    username: ''
+    password: ''
+
+
+# @section Limits
+
+# @extra api.resources **Limits for the API service**
+# @param api.resources.requests.cpu A CPU request.
+# @param api.resources.requests.memory A memory request.
+# @param api.resources.limits.cpu A CPU limit.
+# @param api.resources.limits.memory A memory limit.
+
+# @extra migrate.resources **Limits for the Migrate service**
+# @param migrate.resources.requests.cpu A CPU request.
+# @param migrate.resources.requests.memory A memory request.
+# @param migrate.resources.limits.cpu A CPU limit.
+# @param migrate.resources.limits.memory A memory limit.
