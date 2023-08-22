@@ -15,8 +15,9 @@ metadata:
     {{- toYaml .labels | nindent 4 }}
     {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ include "license.replicaCount" $ }}
   serviceName: {{ include "license.fullname" $ }}
+  podManagementPolicy: Parallel
   selector:
     matchLabels:
       {{- include "license.selectorLabels" $ | nindent 6 }}
@@ -34,6 +35,9 @@ spec:
         {{- toYaml .podLabels | nindent 8 }}
         {{- end }}
     spec:
+      {{- if ne (include "license.type" $) "1" }}
+      serviceAccountName: {{ include "license.serviceAccount" $ }}
+      {{- end }}
       containers:
         - name: license
           {{- with .image }}
@@ -68,6 +72,10 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: config
+            {{- if and (eq (include "license.type" $) "2") .tpm.mountTPMDevice }}
+            - mountPath: /dev/tpmrm0
+              name: tpm-device
+            {{- end }}
             {{- if eq .persistence.type "fs" }}
             - mountPath: /persistence
               name: persistence
@@ -79,6 +87,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
@@ -103,10 +115,19 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .resources | nindent 12 }}
+          {{- if and (eq (include "license.type" $) "2") (not (empty .tpm.securityContext)) }}
+          securityContext:
+            {{- toYaml .tpm.securityContext | nindent 12 }}
+          {{- end }}
       volumes:
         - name: config
           configMap:
             name: {{ include "license.fullname" $ }}
+        {{- if and (eq (include "license.type" $) "2") .tpm.mountTPMDevice }}
+        - name: tpm-device
+          hostPath:
+            path: /dev/tpmrm0
+        {{- end }}
       {{- if not (empty .nodeSelector) }}
       nodeSelector:
         {{- toYaml .nodeSelector | nindent 8 }}
@@ -123,9 +144,9 @@ spec:
       imagePullSecrets:
         {{- toYaml .imagePullSecrets | nindent 8 }}
       {{- end }}
-  {{- if eq .persistence.type "fs" }}
-  {{- with .persistence.fs }}
   volumeClaimTemplates:
+    {{- if eq .persistence.type "fs" }}
+    {{- with .persistence.fs }}
     - metadata:
         name: persistence
       spec:
@@ -136,10 +157,18 @@ spec:
           requests:
             storage: {{ .storage }}
         storageClassName: {{ .storageClassName }}
-  persistentVolumeClaimRetentionPolicy:
-    whenDeleted: Delete
-    whenScaled: Delete
-  {{- end }}
-  {{- end }}
-
+    {{- end }}
+    {{- end }}
+    {{- if and (eq (include "license.type" $) "2") (.tpm.pvcBind.enable) }}
+    - metadata:
+        name: tpm-node-bind
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        volumeMode: Filesystem
+        resources:
+          requests:
+            storage: 1Mi
+        storageClassName: {{ .tpm.pvcBind.storageClassName }}
+    {{- end }}
 {{- end -}}

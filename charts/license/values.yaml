@@ -6,7 +6,7 @@ dgctlDockerRegistry: ''
 
 # @section Deployment Artifacts Storage settings
 
-# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
+# @param dgctlStorage.host S3 endpoint. Format: `[scheme://]host:port`.
 # @param dgctlStorage.bucket S3 bucket name.
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket.
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
@@ -25,9 +25,10 @@ dgctlStorage:
 # @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
-# @param replicaCount A replica count for the pod.
 # @param podAnnotations Kubernetes pod [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podLabels Kubernetes pod [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param serviceAccountOverride Kubernetes pod [service account](https://kubernetes.io/docs/concepts/security/service-accounts/). Should include rule for watching pods in current namespace. If not defined it will be created automatically. Not needed for license type 1.
 
 # @param nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -41,9 +42,10 @@ fullnameOverride: ''
 annotations: {}
 labels: {}
 
-replicaCount: 1
 podAnnotations: {}
 podLabels: {}
+
+serviceAccountOverride: ''
 
 nodeSelector: {}
 tolerations: []
@@ -64,6 +66,7 @@ image:
 
 # @section License service application settings
 
+# @param license.type License type. Should be auto generated with `dgctl pull --generate-values`.
 # @param license.updatePeriod Duration how often service should fetch new license from storage. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration].
 # @param license.retryPeriod Duration how often service should try to fetch license from storage if previous attempts were failing.
 # @param license.softBlockPeriod Duration until the license expiration time when license service should respond with 'soft' block status. For this duration additional time units 'd' for days and 'w' for weeks are supported.
@@ -71,6 +74,7 @@ image:
 # @skip license.apiPort
 
 license:
+  type: ''
   updatePeriod: 1h
   retryPeriod: 30s
   softBlockPeriod: 2w
@@ -114,7 +118,7 @@ resources:
     cpu: 1
     memory: 512Mi
   requests:
-    cpu: 50m
+    cpu: 500m
     memory: 128Mi
 
 # @section Persistence
@@ -126,7 +130,7 @@ resources:
 # @param persistence.fs.storageClassName Storage class name.
 
 # @extra persistence.s3 **S3 setting for the 's3' persistence type**
-# @param persistence.s3.host S3 endpoint. Format: `host:port`.
+# @param persistence.s3.host S3 endpoint. Format: `[scheme://]host:port`.
 # @param persistence.s3.bucket S3 bucket name.
 # @param persistence.s3.root Root directory in S3 bucket.
 # @param persistence.s3.accessKey S3 access key for accessing the bucket.
@@ -143,3 +147,18 @@ persistence:
     root: ''
     accessKey: ''
     secretKey: ''
+
+# @section TPM-related settings for license type 2
+
+# @param tpm.securityContext Main container [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/). Should enable access to the host TPM device (/dev/tpmrm0).
+# @param tpm.mountTPMDevice If TPM device should be mounted to the main container. Required if no TPM device plugin is used. Additionally, requires privileged access for the main container.
+# @extra tpm.pvcBind **Kubernetes PVC used to bind pod to the kubernetes node; not needed if FS persistence is used**
+# @param tpm.pvcBind.enable If PVC should be used to bind pod to the kubernetes node.
+# @param tpm.pvcBind.storageClassName Storage class name.
+
+tpm:
+  securityContext: {}
+  mountTPMDevice: false
+  pvcBind:
+    enable: false
+    storageClassName: ''
