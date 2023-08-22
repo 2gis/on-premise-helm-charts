@@ -1,12 +1,16 @@
 catalog-api
-	catalog-api:3.595.0
+	catalog-api:3.596.0
 	catalog-importer:1.0.10
 citylens
 	citylens-api:1.0.9
 	citylens-database:1.0.9
 	citylens-web:1.0.13
 dgtt
-	dgtt:0.2.24-f76cd4232f
+	dgtt:0.2.27-b188673e09
+floors-api
+	floors-importer:1.0.3
+	floors-nodejs:1.0.3
+	nginx:1.21.6
 gis-platform
 	gis_platform_portal:2022.9.29
 	gis_platform_spcore:2022.9.29
@@ -16,13 +20,13 @@ keycloak
 	keycloak-themes:0.0.8
 	keycloak:21.1.1-debian-11-r4
 keys
-	keys-backend:1.59.0
+	keys-backend:1.61.2
 	keys-redis:6.2.6-alpine3.15
-	keys-ui:0.3.0
+	keys-ui:0.5.0
 license
-	license:1.0.1
+	license:2.1.0
 mapgl-js-api
-	mapgl:1.36.1
+	mapgl:1.38.1
 navi-async-grpc-proxy
 	async-grpc-proxy:0.0.2
 navi-async-matrix
@@ -41,6 +45,8 @@ navi-router
 	navi-router:6.11.0
 navi-splitter
 	navi-splitter:1.0.1
+platform
+	platform-ui:0.3.0
 pro-api
 	pro-api:1.1.28
 	pro-importer:1.1.28
@@ -49,15 +55,15 @@ pro-api
 pro-ui
 	pro-ui:1.0.1
 search-api
-	search-api:7.57.0
+	search-api:7.62.0
 	search-nginx:1.21.6
 stat-receiver
 	stat-receiver-api:1.11.1
 	stat-receiver-streams:1.11.1
 tiles-api
-	tiles-api-importer:4.45.0
-	tiles-api-proxy:4.45.0
-	tiles-api:4.45.0
+	tiles-api-importer:4.47.0
+	tiles-api-proxy:4.47.0
+	tiles-api:4.47.0
 traffic-proxy
 	nginx:1.21.6
 twins-api

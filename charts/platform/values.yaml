@@ -3,7 +3,7 @@
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 # @param imagePullPolicy Pull Policy
 
-dgctlDockerRegistry: ""
+dgctlDockerRegistry: ''
 
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
@@ -36,7 +36,7 @@ ui:
   # @param imagePullSecrets Kubernetes image pull secrets.
 
   image:
-    repository: "2gis-on-premise/platform-ui"
+    repository: 2gis-on-premise/platform-ui
     tag: 0.3.0
 
   # @section UI service settings
@@ -49,9 +49,9 @@ ui:
   # @skip ui.defaultLocale
   # @param ui.pages A list of pages available in application. Values must be written with a comma. Possible values: `"status"`, `"playground"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
 
-  brand: ""
-  defaultLocale: "en"
-  pages: ""
+  brand: ''
+  defaultLocale: en
+  pages: ''
 
   # @section Statuses for services. A value is a string containing pairs of label and healthcheck URL for a service. Pairs must be divided with a comma. Each pair must be connected with a symbol "=", e.g. `mapgl: 'MapGL JS=https://example.com/healthcheck'`. URL must be an absolute. You can specify only one URL, e.g. `mapgl: 'https://example.com/healthcheck'`.
 
@@ -63,12 +63,12 @@ ui:
   # @param ui.status.keys Status list within Keys service.
 
   status:
-    mapgl: ""
-    search: ""
-    navi: ""
-    pro: ""
-    gisPlatform: ""
-    keys: ""
+    mapgl: ''
+    search: ''
+    navi: ''
+    pro: ''
+    gisPlatform: ''
+    keys: ''
 
   # @section MapGL JS API settings
 
@@ -78,10 +78,10 @@ ui:
   # @param ui.mapgl.initCenter Optional default map coordinates. Contains of two numbers in an array: `[lon,lat]` (e.g., `"[55.27,25.2]"` stands for Dubai, `"[37.64,55.74]"` — for Moscow).
 
   mapgl:
-    url: ""
-    scriptPath: "/api.js"
-    key: ""
-    initCenter: ""
+    url: ''
+    scriptPath: /api.js
+    key: ''
+    initCenter: ''
 
   # @section Search API settings
 
@@ -89,8 +89,8 @@ ui:
   # @param ui.catalog.key Access key to [Search API](https://docs.2gis.com/en/on-premise/search).
 
   catalog:
-    url: ""
-    key: ""
+    url: ''
+    key: ''
 
   # @section Navigation API settings
 
@@ -98,8 +98,8 @@ ui:
   # @param ui.navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
 
   navi:
-    url: ""
-    key: ""
+    url: ''
+    key: ''
 
   # @section Strategy settings
 
@@ -134,7 +134,7 @@ ui:
   ingress:
     enabled: false
     hosts:
-      - host: ""
+    - host: ''
 
   # @section Limits
 

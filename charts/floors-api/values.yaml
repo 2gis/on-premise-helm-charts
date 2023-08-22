@@ -95,13 +95,18 @@ ingress:
 # @extra resources.requests.memory A memory request, e.g., `128Mi`.
 # @extra resources.limits.cpu A CPU limit, e.g., `100m`.
 # @extra resources.limits.memory A memory limit, e.g., `128Mi`.
+# @skip nginx.resources
+# @extra nginx.resources.requests.cpu A CPU request, e.g., `100m`.
+# @extra nginx.resources.requests.memory A memory request, e.g., `128Mi`.
+# @extra nginx.resources.limits.cpu A CPU limit, e.g., `100m`.
+# @extra nginx.resources.limits.memory A memory limit, e.g., `128Mi`.
 
 resources:
   requests:
-    cpu: 30m
+    cpu: 100m
     memory: 128M
   limits:
-    cpu: 60m
+    cpu: 500m
     memory: 256M
 
 # @section Floors backend settings
@@ -115,7 +120,7 @@ nodejs:
 
 # @section Floors nginx settings
 
-# @param nginx.port HTTP port on which Floors API will be listening.
+# @param nginx.httpPort HTTP port on which Floors API will be listening.
 
 nginx:
   httpPort: 8080
@@ -123,7 +128,13 @@ nginx:
     repository: 2gis-on-premise/nginx
     tag: 1.21.6
     pullPolicy: IfNotPresent
-  resources: {}
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128M
+    limits:
+      cpu: 500m
+      memory: 256M
 
 # @section Floors API data import settings
 

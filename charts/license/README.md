@@ -52,7 +52,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | Name               | Description  | Value                     |
 | ------------------ | ------------ | ------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/license` |
-| `image.tag`        | Tag.         | `2.0.0`                   |
+| `image.tag`        | Tag.         | `2.1.0`                   |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`            |
 
 ### License service application settings

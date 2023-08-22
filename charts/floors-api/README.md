@@ -18,10 +18,10 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 | ------------------------- | -------------------------------- | ------------------------------- |
 | `nodejs.image.repository` | Floors backend image repository. | `2gis-on-premise/floors-nodejs` |
 | `nodejs.image.pullPolicy` | Floors backend pull policy.      | `IfNotPresent`                  |
-| `nodejs.image.tag`        | Floors backend image tag.        | `0.0.2`                         |
-| `nginx.image.repository`  | Floors nginx image repository.   | `2gis-on-premise/floors-nginx`  |
+| `nodejs.image.tag`        | Floors backend image tag.        | `1.0.3`                         |
+| `nginx.image.repository`  | Floors nginx image repository.   | `2gis-on-premise/nginx`         |
 | `nginx.image.pullPolicy`  | Floors nginx pull policy.        | `IfNotPresent`                  |
-| `nginx.image.tag`         | Floors nginx image tag.          | `0.0.2`                         |
+| `nginx.image.tag`         | Floors nginx image tag.          | `1.21.6`                        |
 
 ### Deployment Artifacts Storage settings
 
@@ -72,27 +72,35 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 
 ### Limits
 
-| Name                        | Description                      | Value |
-| --------------------------- | -------------------------------- | ----- |
-| `resources.requests.cpu`    | A CPU request, e.g., `100m`.     |       |
-| `resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
-| `resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
-| `resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
+| Name                              | Description                      | Value |
+| --------------------------------- | -------------------------------- | ----- |
+| `resources.requests.cpu`          | A CPU request, e.g., `100m`.     |       |
+| `resources.requests.memory`       | A memory request, e.g., `128Mi`. |       |
+| `resources.limits.cpu`            | A CPU limit, e.g., `100m`.       |       |
+| `resources.limits.memory`         | A memory limit, e.g., `128Mi`.   |       |
+| `nginx.resources.requests.cpu`    | A CPU request, e.g., `100m`.     |       |
+| `nginx.resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
+| `nginx.resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
+| `nginx.resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
 
 ### Floors backend settings
 
 
 ### Floors nginx settings
 
-| Name         | Description                                      | Value  |
-| ------------ | ------------------------------------------------ | ------ |
-| `nginx.port` | HTTP port on which Navi-Front will be listening. | `8080` |
+| Name             | Description                                      | Value  |
+| ---------------- | ------------------------------------------------ | ------ |
+| `nginx.httpPort` | HTTP port on which Floors API will be listening. | `8080` |
 
-### Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
+### Floors API data import settings
 
-| Name                            | Description                                                                           | Value               |
-| ------------------------------- | ------------------------------------------------------------------------------------- | ------------------- |
-| `persistentVolume.enabled`      | If Kubernetes persistence volume should be enabled for ZooKeeper.                     | `false`             |
-| `persistentVolume.accessModes`  | Volume access mode.                                                                   | `["ReadWriteOnce"]` |
-| `persistentVolume.storageClass` | Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/). | `ceph-csi-rbd`      |
-| `persistentVolume.size`         | Volume size.                                                                          | `5Gi`               |
+| Name                               | Description                      | Value                             |
+| ---------------------------------- | -------------------------------- | --------------------------------- |
+| `import.enabled`                   | If import task should be enabled | `true`                            |
+| `import.image.repository`          | Import task image repository.    | `2gis-on-premise/floors-importer` |
+| `import.image.tag`                 | Import task image tag.           | `1.0.3`                           |
+| `import.image.pullPolicy`          | Import task pull policy.         | `IfNotPresent`                    |
+| `import.resources.requests.cpu`    | A CPU request, e.g., `100m`.     |                                   |
+| `import.resources.requests.memory` | A memory request, e.g., `128Mi`. |                                   |
+| `import.resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |                                   |
+| `import.resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |                                   |
