@@ -353,6 +353,7 @@ postgres:
   # @param postgres.ro.port PostgreSQL port.
   # @param postgres.ro.timeout PostgreSQL client connection timeout.
   # @param postgres.ro.name PostgreSQL database name. **Required**
+  # @param postgres.ro.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
   # @param postgres.ro.username PostgreSQL username. **Required**
   # @param postgres.ro.password PostgreSQL password. **Required**
 
@@ -361,6 +362,7 @@ postgres:
     port: 5432
     timeout: 3s
     name: ''
+    schema: ''
     username: ''
     password: ''
 
@@ -370,6 +372,7 @@ postgres:
   # @param postgres.rw.port PostgreSQL port.
   # @param postgres.rw.timeout PostgreSQL client connection timeout.
   # @param postgres.rw.name PostgreSQL database name. **Required**
+  # @param postgres.rw.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
   # @param postgres.rw.username PostgreSQL username. **Required**
   # @param postgres.rw.password PostgreSQL password. **Required**
 
@@ -378,6 +381,7 @@ postgres:
     port: 5432
     timeout: 3s
     name: ''
+    schema: ''
     username: ''
     password: ''
 
