@@ -41,7 +41,7 @@ spec:
               service:
                 name: {{ include "license.fullname" $ }}
                 port:
-                  name: http
+                  name: status
           {{- end }}
     {{- end }}
 

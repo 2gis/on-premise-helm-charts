@@ -16,7 +16,8 @@ data:
       retry-period: {{ .retryPeriod }}
       warning-period: {{ .softBlockPeriod }}
     server:
-      port: {{ .appPort }}
+      http-port: {{ .statusPort }}
+      https-port: {{ .apiPort }}
     {{- end }}
     {{- with .dgctlStorage }}
     storage:
@@ -24,6 +25,21 @@ data:
       s3:
         host: {{ required "A valid $.Values.dgctlStorage.host entry is required" .host }}
         bucket: {{ required "A valid $.Values.dgctlStorage.bucket entry is required" .bucket }}
+    {{- end }}
+    {{- with .persistence }}
+    persistence:
+      type: {{ .type }}
+      {{- if eq .type "fs" }}
+      fs:
+        root: /persistence
+      {{- else if eq .type "s3" }}
+      s3:
+        host: {{ .s3.host }}
+        bucket: {{ .s3.bucket }}
+        root: {{ .s3.root }}
+      {{- else }}
+      {{- required "$.persistence.type should be one of: ['fs', 's3']" ""}}
+      {{- end }}
     {{- end }}
 
 {{- end -}}
