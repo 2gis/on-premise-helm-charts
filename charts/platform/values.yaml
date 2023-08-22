@@ -1,0 +1,152 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+# @param imagePullPolicy Pull Policy
+
+dgctlDockerRegistry: ""
+
+imagePullPolicy: IfNotPresent
+imagePullSecrets: []
+
+ui:
+  # @section Common settings
+
+  # @param ui.replicas A replica count for a pod.
+  # @param ui.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param ui.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param ui.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  # @param ui.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param ui.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param ui.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param ui.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  replicas: 1
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  podAnnotations: {}
+  podLabels: {}
+  annotations: {}
+  labels: {}
+
+  # @section Deployment settings
+
+  # @param ui.image.repository Repository
+  # @param ui.image.tag Tag
+  # @param imagePullSecrets Kubernetes image pull secrets.
+
+  image:
+    repository: "2gis-on-premise/platform-ui"
+    tag: 0.3.0
+
+  # @section UI service settings
+
+  # @param ui.appPort Service port.
+
+  appPort: 3000
+
+  # @param ui.brand Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
+  # @skip ui.defaultLocale
+  # @param ui.pages A list of pages available in application. Values must be written with a comma. Possible values: `"status"`, `"playground"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
+
+  brand: ""
+  defaultLocale: "en"
+  pages: ""
+
+  # @section Statuses for services. A value is a string containing pairs of label and healthcheck URL for a service. Pairs must be divided with a comma. Each pair must be connected with a symbol "=", e.g. `mapgl: 'MapGL JS=https://example.com/healthcheck'`. URL must be an absolute. You can specify only one URL, e.g. `mapgl: 'https://example.com/healthcheck'`.
+
+  # @param ui.status.mapgl Status list within MapGL service.
+  # @param ui.status.search Status list within Search service.
+  # @param ui.status.navi Status list within Navigation service.
+  # @param ui.status.pro Status list within Pro UI and Pro API services.
+  # @param ui.status.gisPlatform Status list within GIS Platform service.
+  # @param ui.status.keys Status list within Keys service.
+
+  status:
+    mapgl: ""
+    search: ""
+    navi: ""
+    pro: ""
+    gisPlatform: ""
+    keys: ""
+
+  # @section MapGL JS API settings
+
+  # @param ui.mapgl.url URL to [MapGL JS API](https://docs.2gis.com/en/on-premise/map) host.
+  # @param ui.mapgl.scriptPath URL path to [MapGL JS API](https://docs.2gis.com/en/on-premise/map) init script relative to `ui.mapgl.url`.
+  # @param ui.mapgl.key A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.
+  # @param ui.mapgl.initCenter Optional default map coordinates. Contains of two numbers in an array: `[lon,lat]` (e.g., `"[55.27,25.2]"` stands for Dubai, `"[37.64,55.74]"` — for Moscow).
+
+  mapgl:
+    url: ""
+    scriptPath: "/api.js"
+    key: ""
+    initCenter: ""
+
+  # @section Search API settings
+
+  # @param ui.catalog.url URL for [Search API](https://docs.2gis.com/en/on-premise/search).
+  # @param ui.catalog.key Access key to [Search API](https://docs.2gis.com/en/on-premise/search).
+
+  catalog:
+    url: ""
+    key: ""
+
+  # @section Navigation API settings
+
+  # @param ui.navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+  # @param ui.navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+
+  navi:
+    url: ""
+    key: ""
+
+  # @section Strategy settings
+
+  # @param ui.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param ui.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param ui.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  # @section Service settings
+
+  # @param ui.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param ui.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param ui.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param ui.service.port Service port.
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+  # @param ui.ingress.enabled If Ingress is enabled for the service.
+  # @param ui.ingress.hosts[0].host Hostname for the Ingress service.
+
+  ingress:
+    enabled: false
+    hosts:
+      - host: ""
+
+  # @section Limits
+
+  # @param ui.resources.requests.cpu A CPU request.
+  # @param ui.resources.requests.memory A memory request.
+  # @param ui.resources.limits.cpu A CPU limit.
+  # @param ui.resources.limits.memory A memory limit.
+
+  resources:
+    requests:
+      cpu: 300m
+      memory: 384M
+    limits:
+      cpu: 1100m
+      memory: 512M
