@@ -1,4 +1,22 @@
 # 2GIS On-Premise Breaking-Changes
+## [1.9.1]
+#### license
+- Added `license.type`
+- Added `persistence`
+```
+persistence:
+  type: s3
+  fs:
+    storage: 10Mi
+    storageClassName: ''
+  s3:
+    host: ''
+    bucket: ''
+    root: ''
+    accessKey: ''
+    secretKey: ''
+```
+
 ## [1.7.6]
 #### pro-api
 - Added new setting s3.assetsDataBucket. dgclStorage.bucket and buckets for the service app are completely separate now.
