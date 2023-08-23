@@ -1,8 +1,8 @@
 # 2GIS On-Premise Breaking-Changes
 ## [1.9.1]
 #### license
-- Add `license.type`
-- Add `persistence`
+- Added `license.type`
+- Added `persistence`
 ```
 persistence:
   type: s3
