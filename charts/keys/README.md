@@ -31,33 +31,35 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.59.0`                       |
+| `backend.image.tag`        | Backend service image tag.        | `1.61.2`                       |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.          | `0.3.0`                        |
+| `admin.image.tag`          | Admin service image tag.          | `0.5.0`                        |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
 | `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
 
 ### Admin service settings
 
-
-| Name                          | Description                                                                                                                    | Value       |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `admin.replicas`              | A replica count for the pod.                                                                                                   | `1`         |
-| `admin.host`                  | Base URL for the admin web interface, ex: https://keys-ui.ingress.host                                                         | `""`        |
-| `admin.badge.title`           | A name to describe an application installation.                                                                                | `""`        |
-| `admin.badge.titleColor`      | A font color for admin.badge.title. Any css color value is valid, e.g. "#000".                                                 | `""`        |
-| `admin.badge.backgroundColor` | A background color for admin.badge.title. Any css color value is valid, e.g. "#00F018".                                        | `""`        |
-| `admin.annotations`           | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                      | `{}`        |
-| `admin.labels`                | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                | `{}`        |
-| `admin.podAnnotations`        | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                  | `{}`        |
-| `admin.podLabels`             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                            | `{}`        |
-| `admin.nodeSelector`          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).            | `{}`        |
-| `admin.affinity`              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).    | `{}`        |
-| `admin.tolerations`           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.              | `{}`        |
-| `admin.service.annotations`   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
-| `admin.service.labels`        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
-| `admin.service.type`          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `admin.service.port`          | Service port.                                                                                                                  | `80`        |
+| Name                                          | Description                                                                                                                                                                                              | Value           |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `admin.replicas`                              | A replica count for the pod.                                                                                                                                                                             | `1`             |
+| `admin.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
+| `admin.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
+| `admin.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
+| `admin.host`                                  | Base URL for the admin web interface, ex: https://keys-ui.ingress.host                                                                                                                                   | `""`            |
+| `admin.badge.title`                           | A name to describe an application installation.                                                                                                                                                          | `""`            |
+| `admin.badge.titleColor`                      | A font color for admin.badge.title. Any css color value is valid, e.g. "#000".                                                                                                                           | `""`            |
+| `admin.badge.backgroundColor`                 | A background color for admin.badge.title. Any css color value is valid, e.g. "#00F018".                                                                                                                  | `""`            |
+| `admin.annotations`                           | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                | `{}`            |
+| `admin.labels`                                | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                          | `{}`            |
+| `admin.podAnnotations`                        | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                            | `{}`            |
+| `admin.podLabels`                             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`            |
+| `admin.nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
+| `admin.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
+| `admin.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `{}`            |
+| `admin.service.annotations`                   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                        | `{}`            |
+| `admin.service.labels`                        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                  | `{}`            |
+| `admin.service.type`                          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                           | `ClusterIP`     |
+| `admin.service.port`                          | Service port.                                                                                                                                                                                            | `80`            |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 

@@ -1,5 +1,44 @@
 # 2GIS On-Premise Changelog
 
+## [1.9.1]
+#### Images
+```
+catalog-api
+	- catalog-api:3.595.0
+	+ catalog-api:3.596.0
+dgtt
+	- dgtt:0.2.24-f76cd4232f
+	+ dgtt:0.2.27-b188673e09
+floors-api
+	+ floors-importer:1.0.3
+	+ floors-nodejs:1.0.3
+	+ nginx:1.21.6
+keys
+	- keys-backend:1.59.0
+	+ keys-backend:1.61.2
+	- keys-ui:0.3.0
+	+ keys-ui:0.5.0
+license
+	- license:1.0.1
+	+ license:2.1.1
+mapgl-js-api
+	- mapgl:1.36.1
+	+ mapgl:1.38.1
+platform
+	+ platform-ui:0.3.0
+search-api
+	- search-api:7.57.0
+	+ search-api:7.62.0
+tiles-api
+	- tiles-api-importer:4.45.0
+	+ tiles-api-importer:4.47.0
+	- tiles-api-proxy:4.45.0
+	+ tiles-api-proxy:4.47.0
+	- tiles-api:4.45.0
+	+ tiles-api:4.47.0
+
+```
+
 ## [1.8.0]
 #### Images
 ```
