@@ -58,6 +58,7 @@ spec:
             - --access-key-id=$(STORAGE_ACCESS_KEY)
             - --secret-access-key=$(STORAGE_SECRET_KEY)
             - --bucket-name={{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}
+            - --region={{ .Values.dgctlStorage.region }}
             - --manifest={{ required "Valid .Values.dgctlStorage.manifest required!" .Values.dgctlStorage.manifest }}
             - --output-dir-path={{ .Values.api.dataDir }}
             {{- if .Values.dgctlStorage.secure }}
