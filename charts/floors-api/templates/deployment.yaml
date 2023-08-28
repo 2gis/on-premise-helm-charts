@@ -53,6 +53,12 @@ spec:
               value: "{{ .Values.dgctlStorage.secretKey }}"
             - name: IMPORTER_S3_MANIFEST
               value: "{{ .Values.dgctlStorage.manifest }}"
+            - name: IMPORTER_S3_USE_PATH_STYLE
+              value: "{{ .Values.dgctlStorage.usePathStyle }}"
+            - name: IMPORTER_S3_REGION
+              value: "{{ .Values.dgctlStorage.region }}"
+            - name: IMPORTER_S3_SECURE
+              value: "{{ .Values.dgctlStorage.secure }}"
           volumeMounts:
             - name: {{ include "floors.fullname" $ }}-data
               mountPath: "/var/floorsConvertedData"
