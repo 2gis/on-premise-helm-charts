@@ -37,7 +37,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/pro-ui
-    tag: 1.0.1
+    tag: 1.1.0
 
   # @section UI service settings
 
@@ -47,6 +47,7 @@ ui:
   # @param ui.appLocale Language in the app. Possible values: `"ar_AE"`, `"en_AE"` or `"ru_RU"`.
   # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).
   # @param ui.supportDocumentationLink Product online documentation link. Ex.: 'https://docs.urbi.ae/en/pro/start'
+  # @param ui.featureCarsDemoIsEnabled A boolean value for enabling cars demo.
 
   logLevel: error
   isOnPremise: true
@@ -54,6 +55,7 @@ ui:
   appLocale: en_AE
   appInitialMapCenter: '[46.71, 24.72]'
   supportDocumentationLink: ''
+  featureCarsDemoIsEnabled: false
 
   # @param ui.auth.sso Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.
   # @param ui.auth.secure Flag to turn on/off the https for auth. Possible values: `"true"` or `"false"`.
@@ -136,7 +138,7 @@ ui:
   ingress:
     enabled: false
     hosts:
-    - host: pro-ui.host
+      - host: pro-ui.host
 
   # @section Limits
 
