@@ -24,7 +24,7 @@ dgctlDockerRegistry: ''
 # @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).
 # @param prometheusEnabled If Prometheus scrape is enabled.
 
-replicaCount: 1
+replicaCount: 2
 imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
@@ -51,7 +51,7 @@ prometheusEnabled: true
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  tag: 1.3.3
+  tag: 1.6.0
 
 
 # @section Service account settings
@@ -172,9 +172,9 @@ vpa:
 # @param dm.citiesUpdatePeriod Period (in seconds) between requesting data from `citiesUrl`.
 
 dm:
+  host: '0.0.0.0'
   port: 8000
   configType: env
-  workerCount: 4
   citiesUrl: ''
   citiesUpdatePeriod: 3600
 
@@ -193,6 +193,7 @@ db:
   name: ''
   user: ''
   password: ''
+  schema: public
 
 
 # @section Kafka settings

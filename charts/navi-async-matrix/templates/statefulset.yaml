@@ -98,21 +98,16 @@ spec:
           # exposing Pod's ordinal is not yet achieved:
           # https://github.com/kubernetes/kubernetes/issues/30427
           # here is a workaround for that
-          command:
-            - uvicorn
-            - src.main:app
-            - '--host'
-            - '0.0.0.0'
-            - '--port'
-            - '{{ .Values.dm.port | int }}'
-            - '--workers'
-            - '{{ .Values.dm.workerCount | int }}'
           {{- if .Values.kafka.fileProperties }}
           volumeMounts:
           - name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /etc/2gis/secret/
           {{- end }}
           env:
+            - name: DM_ASYNC_SERVICE_HOST
+              value: {{ .Values.dm.host | quote }}
+            - name: DM_ASYNC_SERVICE_PORT
+              value: {{ .Values.dm.port | quote }}
             - name: CONFIG_TYPE
               value: {{ .Values.dm.configType | quote }}
             - name: DM_ASYNC_SERVICE_CITIES_SETTING__LINK_TO_CITIES_FILE
@@ -172,6 +167,8 @@ spec:
               value: {{ .Values.bss.version | quote }}
             {{- end }}
             # sensitive data
+            - name: DM_ASYNC_SERVICE_DB_SCHEMA
+              value: {{ .Values.db.schema | quote }}
             - name: DM_ASYNC_SERVICE_DB_DSN
               valueFrom:
                 secretKeyRef:
