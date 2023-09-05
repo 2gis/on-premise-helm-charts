@@ -82,5 +82,15 @@ spec:
               value: {{`{{.publish_date}}`}}
             - name: CONFIG_PATH
               value: /config/importer.yaml
+            - name: CASSANDRA_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}
+                  key: cassandraUser
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}
+                  key: cassandraPassword
 
       restartPolicy: Never

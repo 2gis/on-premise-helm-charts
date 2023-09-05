@@ -92,6 +92,26 @@ spec:
                 secretKeyRef:
                   name: {{ include "tiles.fullname" $ }}
                   key: s3SecretKey
+            - name: CASSANDRA_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}
+                  key: cassandraUser
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}
+                  key: cassandraPassword
+            - name: CASSANDRA_JMX_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}
+                  key: cassandraJmxUser
+            - name: CASSANDRA_JMX_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}
+                  key: cassandraJmxPassword
 
           {{- end}}
 
