@@ -68,6 +68,7 @@ ui:
   # @param ui.auth.oAuthApiUrl an oAuth provider base URL
   # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/
   # @param ui.auth.userDataApiUrl an user data provider URL
+  # @param ui.auth.turnOffCertValidation Flag to turn off certificate validation. Possible values: `"true"` or `"false"`.
   auth:
     sso: false
     secure: true
@@ -79,7 +80,7 @@ ui:
     identityProviderUrl: ''
     oAuthApiUrl: ''
     userDataApiUrl: ''
-
+    turnOffCertValidation: false
   # @section 2GIS Pro API settings
 
   # @param ui.api.url Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/.

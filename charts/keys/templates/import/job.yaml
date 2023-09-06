@@ -26,6 +26,7 @@ spec:
             {{- toYaml .Values.import.resources | nindent 12 }}
           env:
             {{- include "keys.env.db.jobs" . | nindent 12 }}
+            {{- include "keys.env.predef" . | nindent 12 }}
       {{- with .Values.import.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

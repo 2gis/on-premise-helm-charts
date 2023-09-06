@@ -25,10 +25,14 @@ cassandra-clusters:
     keyspaces:
       {{- $default := true }}
       {{- range $_, $type := $.Values.types }}
-      - tileset: {{ $type.name | default $type.kind }}
+      - tileset: {{ $type.name | default (include "tiles.kind" $type) }}
         keyspace: {{ include "tiles.keyspace" (merge $type $) }}
+        {{- if $type.subtype }}
+        type: ald
+        {{- else if $default }}
         default: {{ $default }}
         {{- $default = false }}
+        {{- end }}
         partition-size: 4
       {{- end }}
 
@@ -43,6 +47,9 @@ cassandra-clusters:
     {{- end }}
 
 license:
+  {{- if $.Values.license.enable }}
+  enable: {{ $.Values.license.enable }}
+  {{- end }}
   service-host: {{ required "Valid .Values.license.url required!" .Values.license.url }}
   retry-period: {{ .Values.license.retryPeriod }}
   warn-text: |

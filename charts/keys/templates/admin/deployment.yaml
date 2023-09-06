@@ -14,10 +14,7 @@ metadata:
 spec:
   replicas: {{ .Values.admin.replicas }}
   strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-    type: RollingUpdate
+    {{- toYaml .Values.admin.strategy | nindent 4 }}
   selector:
     matchLabels:
       {{- include "keys.admin.selectorLabels" . | nindent 6 }}
