@@ -18,6 +18,7 @@ ssl:
 
 storage:
   host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
+  secure: {{ .Values.dgctlStorage.secure }}
   bucket: {{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}
   url-lifetime-period: 60m
 
