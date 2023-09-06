@@ -46,6 +46,7 @@ image:
 # @param env.MAPGL_HOST Domain name for MapGL JS API service.
 # @param env.MAPGL_TILES_API Domain name of the Tiles API service.
 # @param env.MAPGL_TILESET Tileset of the Tiles API service to use.
+# @param env.MAPGL_IMMERSIVE_TILESET Additional immersive tileset of the Tiles API service to use.
 # @param env.MAPGL_TRAFFICSERVER Domain name of the Traffic Proxy service.
 # @param env.MAPGL_FLOORSSERVER Domain name of the Floors API service.
 # @param env.MAPGL_KEYSERVER Domain name of the API Keys service.
@@ -57,6 +58,7 @@ env:
   MAPGL_HOST: https://mapgl-api.ingress.host
   MAPGL_TILES_API: https://tiles-api.ingress.host
   MAPGL_TILESET: web
+  MAPGL_IMMERSIVE_TILESET: web_immersive
   MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
   MAPGL_FLOORSSERVER: https://floors-api.ingress.host
   MAPGL_KEYSERVER: https://keys-api.ingress.host
