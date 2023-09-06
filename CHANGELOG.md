@@ -1,6 +1,7 @@
 # 2GIS On-Premise Changelog
 
 ## [1.10.0]
+#### [Breaking-Changes](Breaking-Changes.md#1100)
 #### Images
 ```
 catalog-api
