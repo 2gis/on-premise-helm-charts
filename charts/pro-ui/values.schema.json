@@ -124,6 +124,9 @@
             },
             "styleFontsUrl": {
               "type": "string"
+            },
+            "styleModelsUrl": {
+              "type": "string"
             }
           }
         }
