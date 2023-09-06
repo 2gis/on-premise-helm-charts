@@ -6,7 +6,7 @@ type: application
 
 
 version: 1.9.1
-appVersion: 1.1.28
+appVersion: 1.1.39
 
 maintainers:
 - name: 2gis

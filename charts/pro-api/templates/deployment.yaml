@@ -95,10 +95,9 @@ spec:
             httpGet:
               path: /health/live
               port: http
-            failureThreshold: 3
+            failureThreshold: 20
             initialDelaySeconds: 5
             periodSeconds: 5
-            successThreshold: 1
             timeoutSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -117,6 +116,8 @@ spec:
               value: {{ include "pro-api.asset-importer-name" . }}
             - name: Import__UserAssetsJobName
               value: {{ include "pro-api.user-asset-importer-name" . }}
+            - name: Import__ExternalLinksProxyUrl
+              value: "{{ .Values.assetImporter.externalLinksProxyUrl }}"
             - name: TEMP_PATH
               value: "{{ .Values.api.tempPath }}"
             - name: CATALOG_API_2GIS_URL
@@ -234,6 +235,12 @@ spec:
                   key: permissionsApiKey
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}
+            {{- range $i, $s := .Values.auth.shareKeys }}
+            - name: Auth__ShareKeys__{{$i}}
+              value: "{{ $s }}"
+            {{- end }}
+            - name: License__Partner
+              value: {{ required "A valid .Values.api.licensePartner entry required" $.Values.api.licensePartner }}
             - name: KEYS_SERVICE_URL
               value: "{{ .Values.keys.url }}"
             {{ if .Values.keys.token }}
@@ -262,3 +269,9 @@ spec:
               value: "{{ .Values.api.logging.format }}"
             - name: Common__Logging__Targets
               value: "{{ .Values.api.logging.targets }}"
+            - name: Common__EsDataCentersCount
+              value: "{{ .Values.api.esDataCentersCount }}"
+            - name: RateLimiter__RequestsLimit
+              value: "{{ .Values.api.rateLimiter.requestsLimit }}"
+            - name: RateLimiter__WindowSizeInSeconds
+              value: "{{ .Values.api.rateLimiter.windowSizeInSeconds }}"
