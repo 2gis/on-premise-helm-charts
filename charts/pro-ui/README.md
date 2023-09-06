@@ -32,7 +32,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name                  | Description                    | Value                    |
 | --------------------- | ------------------------------ | ------------------------ |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/pro-ui` |
-| `ui.image.tag`        | Tag                            | `1.1.0`                  |
+| `ui.image.tag`        | Tag                            | `1.0.2`                  |
 | `imagePullPolicy`     | Pull Policy                    | `IfNotPresent`           |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                     |
 
@@ -55,7 +55,6 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.auth.oAuthApiUrl`           | an oAuth provider base URL                                                                                                                       | `""`             |
 | `ui.auth.userDataApiUrl`        | an user data provider URL                                                                                                                        | `""`             |
 | `ui.auth.turnOffCertValidation` | Flag to turn off certificate validation. Possible values: `"true"` or `"false"`.                                                                 | `false`          |
-
 
 ### 2GIS Pro API settings
 
