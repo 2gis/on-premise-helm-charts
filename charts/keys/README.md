@@ -197,6 +197,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `ldap.search.baseDN`                  | LDAP base distinguished name.                      | `dc=2gis`                                  |
 | `ldap.search.filter`                  | LDAP search filter.                                | `(&(objectClass=user)(sAMAccountName=%s))` |
 
+### Predefined keys
+
+| Name                         | Description                     | Value |
+| ---------------------------- | ------------------------------- | ----- |
+| `predefined.service`         | Predefined service keys.        |       |
+| `predefined.service.keys`    | Keys map as: service -> key.    | `{}`  |
+| `predefined.service.aliases` | Aliases map as: service -> key. | `{}`  |
+
 ### Limits
 
 | Name                                | Description                        | Value   |

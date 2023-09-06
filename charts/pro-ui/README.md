@@ -56,6 +56,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.auth.userDataApiUrl`        | an user data provider URL                                                                                                                        | `""`             |
 | `ui.auth.turnOffCertValidation` | Flag to turn off certificate validation. Possible values: `"true"` or `"false"`.                                                                 | `false`          |
 
+
 ### 2GIS Pro API settings
 
 | Name         | Description                                                                                  | Value |
