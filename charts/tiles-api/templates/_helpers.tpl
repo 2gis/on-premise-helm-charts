@@ -41,11 +41,19 @@ app.kubernetes.io/component: api
 {{- end -}}
 {{- end -}}
 
+{{- define "tiles.kind" -}}
+{{- if .subtype }}
+{{- .kind }}_{{ .subtype }}
+{{- else }}
+{{- .kind }}
+{{- end }}
+{{- end }}
+
 {{- define "tiles.keyspace" -}}
 {{- if .keyspace }}
 {{- .keyspace }}
 {{- else -}}
-dgis_tileserver_{{ .kind }}_{{ required "Valid .Values.cassandra.environment required" $.Values.cassandra.environment }}_{{ include "tiles.manifestCode" $ }}
+dgis_tileserver_{{ include "tiles.kind" . }}_{{ required "Valid .Values.cassandra.environment required" $.Values.cassandra.environment }}_{{ include "tiles.manifestCode" $ }}
 {{- end -}}
 {{- end -}}
 
@@ -67,6 +75,17 @@ tiles-api-raster
 {{- else if eq . "native" -}}
 tiles-api-mobile-sdk
 {{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "importer.types" -}}
+{{- if .subtype -}}
+- {{ .subtype }}
+{{- else if eq .kind "raster" -}}
+- tiles
+{{- else -}}
+- vtiles
+- poiicons
 {{- end -}}
 {{- end -}}
 
