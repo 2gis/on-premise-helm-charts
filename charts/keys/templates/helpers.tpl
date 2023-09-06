@@ -109,6 +109,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.postgres.ro.port }}"
 - name: KEYS_DB_RO_NAME
   value: "{{ required "A valid .Values.postgres.ro.name required" .Values.postgres.ro.name }}"
+- name: KEYS_DB_RO_SCHEMA
+  value: "{{ .Values.postgres.ro.schema }}"
 - name: KEYS_DB_RO_CONNECTION_TIMEOUT
   value: "{{ .Values.postgres.ro.timeout }}"
 - name: KEYS_DB_RO_USERNAME
@@ -121,6 +123,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.postgres.rw.timeout }}"
 - name: KEYS_DB_RW_NAME
   value: "{{ required "A valid .Values.postgres.rw.name required" .Values.postgres.rw.name }}"
+- name: KEYS_DB_RW_SCHEMA
+  value: "{{ .Values.postgres.rw.schema }}"
 - name: KEYS_DB_RW_USERNAME
   value: "{{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username }}"
 {{- end }}
@@ -224,6 +228,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- else }}
   value: "http://{{ include "keys.api.name" . }}"
 {{- end }}
+- name: BADGE_TITLE
+  value: "{{ .Values.admin.badge.title }}"
+- name: BADGE_TITLE_COLOR
+  value: "{{ .Values.admin.badge.titleColor }}"
+- name: BADGE_BACKGROUND_COLOR
+  value: "{{ .Values.admin.badge.backgroundColor }}"
 {{- end }}
 
 {{/*

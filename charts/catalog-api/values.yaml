@@ -49,6 +49,17 @@ dgctlStorage:
   secretKey: ''
   manifest: ''
 
+# @section Strategy settings
+
+# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
 
 # @section API settings
 
@@ -67,7 +78,7 @@ api:
 
   image:
     repository: 2gis-on-premise/catalog-api
-    tag: 3.595.0
+    tag: 3.596.0
     pullPolicy: IfNotPresent
 
 

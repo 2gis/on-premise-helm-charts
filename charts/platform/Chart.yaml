@@ -1,0 +1,12 @@
+apiVersion: v2
+name: platform
+type: application
+description: A Helm chart for Kubernetes to deploy Platform
+
+version: 1.9.1
+appVersion: 0.3.0
+
+maintainers:
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

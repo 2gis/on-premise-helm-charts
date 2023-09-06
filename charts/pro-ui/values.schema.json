@@ -54,7 +54,8 @@
             "oAuthProvider",
             "identityProviderUrl",
             "oAuthApiUrl",
-            "userDataApiUrl"
+            "userDataApiUrl",
+            "turnOffCertValidation"
           ],
           "properties": {
             "sso": {
@@ -87,6 +88,9 @@
             },
             "userDataApiUrl": {
               "type": "string"
+            },
+            "turnOffCertValidation": {
+              "type": "boolean"
             }
           }
         },
