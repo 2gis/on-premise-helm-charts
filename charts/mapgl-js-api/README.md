@@ -45,21 +45,22 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | Name               | Description | Value                   |
 | ------------------ | ----------- | ----------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/mapgl` |
-| `image.tag`        | Tag         | `1.38.1`                |
+| `image.tag`        | Tag         | `1.39.0`                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
 
 ### Environment variables
 
-| Name                      | Description                                            | Value                                                                                             |
-| ------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| `env.MAPGL_HOST`          | Domain name for MapGL JS API service.                  | `https://mapgl-api.ingress.host`                                                                  |
-| `env.MAPGL_TILES_API`     | Domain name of the Tiles API service.                  | `https://tiles-api.ingress.host`                                                                  |
-| `env.MAPGL_TILESET`       | Tileset of the Tiles API service to use.               | `web`                                                                                             |
-| `env.MAPGL_TRAFFICSERVER` | Domain name of the Traffic Proxy service.              | `https://traffic-proxy.ingress.host`                                                              |
-| `env.MAPGL_FLOORSSERVER`  | Domain name of the Floors API service.                 | `https://floors-api.ingress.host`                                                                 |
-| `env.MAPGL_KEYSERVER`     | Domain name of the API Keys service.                   | `https://keys-api.ingress.host`                                                                   |
-| `env.MAPGL_RTLPLUGIN`     | URL of the plugin for right-to-left languages support. | `https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js`                                     |
-| `env.MAPGL_RTLPLUGINHASH` | SHA512 hash of the RTL plugin.                         | `sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==` |
+| Name                          | Description                                                   | Value                                                                                             |
+| ----------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `env.MAPGL_HOST`              | Domain name for MapGL JS API service.                         | `https://mapgl-api.ingress.host`                                                                  |
+| `env.MAPGL_TILES_API`         | Domain name of the Tiles API service.                         | `https://tiles-api.ingress.host`                                                                  |
+| `env.MAPGL_TILESET`           | Tileset of the Tiles API service to use.                      | `web`                                                                                             |
+| `env.MAPGL_IMMERSIVE_TILESET` | Additional immersive tileset of the Tiles API service to use. | `web_immersive`                                                                                   |
+| `env.MAPGL_TRAFFICSERVER`     | Domain name of the Traffic Proxy service.                     | `https://traffic-proxy.ingress.host`                                                              |
+| `env.MAPGL_FLOORSSERVER`      | Domain name of the Floors API service.                        | `https://floors-api.ingress.host`                                                                 |
+| `env.MAPGL_KEYSERVER`         | Domain name of the API Keys service.                          | `https://keys-api.ingress.host`                                                                   |
+| `env.MAPGL_RTLPLUGIN`         | URL of the plugin for right-to-left languages support.        | `https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js`                                     |
+| `env.MAPGL_RTLPLUGINHASH`     | SHA512 hash of the RTL plugin.                                | `sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==` |
 
 ### Strategy settings
 
