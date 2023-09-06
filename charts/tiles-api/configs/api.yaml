@@ -43,6 +43,9 @@ cassandra-clusters:
     {{- end }}
 
 license:
+  {{- if $.Values.license.enable }}
+  enable: {{ $.Values.license.enable }}
+  {{- end }}
   service-host: {{ required "Valid .Values.license.url required!" .Values.license.url }}
   retry-period: {{ .Values.license.retryPeriod }}
   warn-text: |

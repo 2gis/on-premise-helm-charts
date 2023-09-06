@@ -2,7 +2,7 @@
 
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "license.fullname" $ }}
   {{- if not (empty .annotations) }}
@@ -15,7 +15,9 @@ metadata:
     {{- toYaml .labels | nindent 4 }}
     {{- end }}
 spec:
-  replicas: {{ .replicaCount }}
+  replicas: {{ include "license.replicaCount" $ }}
+  serviceName: {{ include "license.fullname" $ }}
+  podManagementPolicy: Parallel
   selector:
     matchLabels:
       {{- include "license.selectorLabels" $ | nindent 6 }}
@@ -33,22 +35,27 @@ spec:
         {{- toYaml .podLabels | nindent 8 }}
         {{- end }}
     spec:
+      {{- if ne (include "license.type" $) "1" }}
+      serviceAccountName: {{ include "license.serviceAccount" $ }}
+      {{- end }}
       containers:
         - name: license
           {{- with .image }}
           image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .repository }}:{{ .tag }}"
           imagePullPolicy: {{ .pullPolicy }}
           {{- end }}
-          command: ["/license"]
+          command: ["/bin/license"]
           ports:
-            - containerPort: {{ .license.appPort }}
-              name: http
+            - containerPort: {{ .license.statusPort }}
+              name: status
+            - containerPort: {{ .license.apiPort }}
+              name: api
           startupProbe:
             {{- $startupInitialDelaySeconds := 10 }}
             {{- $startupPeriodSeconds := include "license.durationToSeconds" (dict "duration" $.Values.license.retryPeriod) }}
             {{- $startupFailureThreshold := 3 }}
             httpGet:
-              port: http
+              port: status
               path: /healthcheck
             initialDelaySeconds: {{ $startupInitialDelaySeconds }}
             periodSeconds: {{ $startupPeriodSeconds }}
@@ -56,7 +63,7 @@ spec:
             failureThreshold: {{ $startupFailureThreshold }}
           livenessProbe:
             httpGet:
-              port: http
+              port: status
               path: /healthcheck
             initialDelaySeconds: {{ add $startupInitialDelaySeconds (mul $startupPeriodSeconds $startupFailureThreshold) }}
             periodSeconds: 40
@@ -65,25 +72,62 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: config
+            {{- if and (eq (include "license.type" $) "2") .tpm.mountTPMDevice }}
+            - mountPath: /dev/tpmrm0
+              name: tpm-device
+            {{- end }}
+            {{- if eq .persistence.type "fs" }}
+            - mountPath: /persistence
+              name: persistence
+            {{- end }}
           env:
             - name: CONFIG_PATH
               value: /config/config.yaml
-            - name: S3_ACCESS_KEY
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "license.fullname" $ }}
                   key: s3AccessKey
-            - name: S3_SECRET_KEY
+            - name: STORAGE_SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "license.fullname" $ }}
                   key: s3SecretKey
+            {{- if eq .persistence.type "s3"}}
+            - name: PERSISTENCE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "license.fullname" $ }}
+                  key: persistenceS3AccessKey
+            - name: PERSISTENCE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "license.fullname" $ }}
+                  key: persistenceS3SecretKey
+            {{- end }}
           resources:
             {{- toYaml .resources | nindent 12 }}
+          {{- if and (eq (include "license.type" $) "2") (not (empty .tpm.securityContext)) }}
+          securityContext:
+            {{- toYaml .tpm.securityContext | nindent 12 }}
+          {{- end }}
       volumes:
         - name: config
           configMap:
             name: {{ include "license.fullname" $ }}
+        {{- if and (eq (include "license.type" $) "2") .tpm.mountTPMDevice }}
+        - name: tpm-device
+          hostPath:
+            path: /dev/tpmrm0
+        {{- end }}
       {{- if not (empty .nodeSelector) }}
       nodeSelector:
         {{- toYaml .nodeSelector | nindent 8 }}
@@ -100,5 +144,31 @@ spec:
       imagePullSecrets:
         {{- toYaml .imagePullSecrets | nindent 8 }}
       {{- end }}
-
+  volumeClaimTemplates:
+    {{- if eq .persistence.type "fs" }}
+    {{- with .persistence.fs }}
+    - metadata:
+        name: persistence
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        volumeMode: Filesystem
+        resources:
+          requests:
+            storage: {{ .storage }}
+        storageClassName: {{ .storageClassName }}
+    {{- end }}
+    {{- end }}
+    {{- if and (eq (include "license.type" $) "2") (.tpm.pvcBind.enable) }}
+    - metadata:
+        name: tpm-node-bind
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        volumeMode: Filesystem
+        resources:
+          requests:
+            storage: 1Mi
+        storageClassName: {{ .tpm.pvcBind.storageClassName }}
+    {{- end }}
 {{- end -}}

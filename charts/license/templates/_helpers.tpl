@@ -51,6 +51,35 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+License type
+*/}}
+{{- define "license.type" -}}
+{{ required "A valid $.Values.license.type from DGCTL-generated values is required" .Values.license.type | int }}
+{{- end }}
+
+{{/*
+StatefulSet replicas count
+*/}}
+{{- define "license.replicaCount" -}}
+{{- if eq (include "license.type" .) "1" -}}
+1
+{{- else if eq (include "license.type" .) "2" -}}
+2
+{{- end }}
+{{- end }}
+
+{{/*
+Service account name
+*/}}
+{{- define "license.serviceAccount" -}}
+{{- if empty $.Values.serviceAccountOverride }}
+{{- include "license.fullname" . }}
+{{- else }}
+{{- $.Values.serviceAccountOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+
+{{/*
 Checksum for configmap or secret
 */}}
 {{- define "license.checksum" -}}
