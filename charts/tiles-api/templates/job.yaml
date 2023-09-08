@@ -85,32 +85,32 @@ spec:
             - name: STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}
+                  name: {{ include "tiles.fullname" $ }}-import
                   key: s3AccessKey
             - name: STORAGE_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}
+                  name: {{ include "tiles.fullname" $ }}-import
                   key: s3SecretKey
             - name: CASSANDRA_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}
+                  name: {{ include "tiles.fullname" $ }}-import
                   key: cassandraUser
             - name: CASSANDRA_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}
+                  name: {{ include "tiles.fullname" $ }}-import
                   key: cassandraPassword
             - name: CASSANDRA_JMX_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}
+                  name: {{ include "tiles.fullname" $ }}-import
                   key: cassandraJmxUser
             - name: CASSANDRA_JMX_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}
+                  name: {{ include "tiles.fullname" $ }}-import
                   key: cassandraJmxPassword
 
           {{- end}}

@@ -85,12 +85,12 @@ spec:
             - name: CASSANDRA_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}
+                  name: {{ include "tiles.fullname" $ }}-import
                   key: cassandraUser
             - name: CASSANDRA_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}
+                  name: {{ include "tiles.fullname" $ }}-import
                   key: cassandraPassword
 
       restartPolicy: Never

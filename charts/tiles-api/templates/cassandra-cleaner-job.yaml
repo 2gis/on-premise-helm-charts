@@ -83,15 +83,25 @@ spec:
           env:
             - name: CONFIG_PATH
               value: /config/importer.yaml
+            - name: CASSANDRA_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-import
+                  key: cassandraUser
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-import
+                  key: cassandraPassword
             - name: CASSANDRA_JMX_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}
+                  name: {{ include "tiles.fullname" $ }}-import
                   key: cassandraJmxUser
             - name: CASSANDRA_JMX_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}
+                  name: {{ include "tiles.fullname" $ }}-import
                   key: cassandraJmxPassword
 
       restartPolicy: Never
