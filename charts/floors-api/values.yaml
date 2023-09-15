@@ -115,7 +115,7 @@ nodejs:
   image:
     repository: 2gis-on-premise/floors-nodejs
     pullPolicy: IfNotPresent
-    tag: 1.0.3
+    tag: 1.0.4
 
 
 # @section Floors nginx settings
@@ -153,4 +153,4 @@ import:
   image:
     repository: 2gis-on-premise/floors-importer
     pullPolicy: IfNotPresent
-    tag: 1.0.3
+    tag: 1.0.4
