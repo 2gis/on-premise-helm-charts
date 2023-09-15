@@ -4,15 +4,13 @@ metadata:
   name: {{ include "front.fullname" . }}-base
 data:
   front.conf: |-
-    
     js_import bundle.js;
 
-{{ include "front.createUpstreams" . | indent 4}}
-    
+{{ include "front.createUpstreams" . | indent 4 }}
+
     {{- if .Values.serverBlock }}
     include /etc/nginx/conf.d/extra/server-block.conf;
     {{- end }}
-     
 
     server {
         listen                      {{ .Values.front.port }};
@@ -22,32 +20,12 @@ data:
             log_not_found           off;
             access_log              off;
         }
-        
-        {{ if .Values.carroutingLocation }}
-        {{ include "tplvalues.render" ( dict "value" .Values.carroutingLocation "context" $ ) | indent 4 }} 
-        {{ else  }}
+
+        {{- if .Values.carroutingLocation }}
+{{ include "tplvalues.render" ( dict "value" .Values.carroutingLocation "context" $ ) | indent 8 }}
+        {{- else }}
+
         location ^~ /carrouting {
-            js_content bundle.geo_coding;
-        }
-        {{- end }}
-
-        {{ if .Values.hullLocation }}
-        {{ include "tplvalues.render" ( dict "value" .Values.hullLocation "context" $ ) | indent 4 }} 
-        {{ else  }}
-
-        location ^~ /get_dist_matrix {
-            js_content bundle.geo_coding;
-        }
-
-        location ^~ /get_dist_matrix_ctx {
-            js_content bundle.geo_coding;
-        }
-
-        location ^~ /public_transport {
-            js_content bundle.geo_coding;
-        } 
-        
-        location ^~ /get_hull {
             js_content bundle.geo_coding;
         }
         {{- end }}
@@ -55,15 +33,16 @@ data:
         location /geocoding {
             rewrite ^/geocoding(.*)$ $1 break;
             proxy_pass http://{{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }};
-        }      
+        }
 
         location /healthcheck {
             return 200 "Ok!";
         }
-        
+
         {{- if .Values.locationsBlock }}
         include /etc/nginx/conf.d/extra/locations-block.conf;
         {{- end }}
 
-    {{ include "front.createLocations" . | indent 4 }}
+{{ include "front.createLocations" . | indent 8 }}
+
     }
