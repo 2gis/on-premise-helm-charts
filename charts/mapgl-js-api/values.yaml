@@ -112,8 +112,8 @@ ingress:
       path: /
       pathType: Prefix
   tls: []
-  #- hosts:
-  #  - mapgl-js-api.example.com
+  #  hosts:
+  #    mapgl-js-api.example.com
   #  secretName: secret.tls
 
 
