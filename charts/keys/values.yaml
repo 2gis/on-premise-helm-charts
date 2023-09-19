@@ -99,13 +99,25 @@ admin:
 
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
+  # @param admin.ingress.className Name of the Ingress controller class.
   # @param admin.ingress.enabled If Ingress is enabled for the service.
-  # @param admin.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param admin.ingress.hosts.host Hostname for the Ingress service.
+  # @param admin.ingress.hosts.paths.path Path of the host for the Ingress service.
+  # @param admin.ingress.hosts.paths.pathType Type of the path for the Ingress service.
+  # @param admin.ingress.tls TLS configuration
 
   ingress:
-    enabled: false
+    className: nginx
+    enabled: true
     hosts:
-    - host: keys-ui.host
+      host: keys-ui.example.com
+      paths:
+        path: /
+        pathType: Prefix
+    tls: []
+    #  hosts:
+    #    keys-ui.example.com
+    #  secretName: secret.tls
 
 
 # @section API service settings

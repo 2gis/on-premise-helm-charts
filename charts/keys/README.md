@@ -63,10 +63,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                          | Description                            | Value          |
-| ----------------------------- | -------------------------------------- | -------------- |
-| `admin.ingress.enabled`       | If Ingress is enabled for the service. | `false`        |
-| `admin.ingress.hosts[0].host` | Hostname for the Ingress service.      | `keys-ui.host` |
+| Name                                 | Description                               | Value                 |
+| ------------------------------------ | ----------------------------------------- | --------------------- |
+| `admin.ingress.className`            | Name of the Ingress controller class.     | `nginx`               |
+| `admin.ingress.enabled`              | If Ingress is enabled for the service.    | `true`                |
+| `admin.ingress.hosts.host`           | Hostname for the Ingress service.         | `keys-ui.example.com` |
+| `admin.ingress.hosts.paths.path`     | Path of the host for the Ingress service. | `/`                   |
+| `admin.ingress.hosts.paths.pathType` | Type of the path for the Ingress service. | `Prefix`              |
+| `admin.ingress.tls`                  | TLS configuration                         | `[]`                  |
 
 ### API service settings
 
