@@ -65,10 +65,14 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value         |
-| ----------------------- | -------------------------------------- | ------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`       |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `floors.host` |
+| Name                           | Description                               | Value                |
+| ------------------------------ | ----------------------------------------- | -------------------- |
+| `ingress.className`            | Name of the Ingress controller class.     | `nginx`              |
+| `ingress.enabled`              | If Ingress is enabled for the service.    | `true`               |
+| `ingress.hosts.host`           | Hostname for the Ingress service.         | `floors.example.com` |
+| `ingress.hosts.paths.path`     | Path of the host for the Ingress service. | `/`                  |
+| `ingress.hosts.paths.pathType` | Type of the path for the Ingress service. | `Prefix`             |
+| `ingress.tls`                  | TLS configuration                         | `[]`                 |
 
 ### Limits
 
