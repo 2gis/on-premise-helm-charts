@@ -102,13 +102,25 @@ service:
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
+# @param ingress.className Name of the Ingress controller class.
 # @param ingress.enabled If Ingress is enabled for the service.
-# @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts.host Hostname for the Ingress service.
+# @param ingress.hosts.paths.path Path of the host for the Ingress service.
+# @param ingress.hosts.paths.pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration
 
 ingress:
-  enabled: false
+  className: nginx
+  enabled: true
   hosts:
-  - host: navi-async-matrix.host
+    host: navi-async-matrix.example.com
+    paths:
+      path: /
+      pathType: Prefix
+  tls: []
+  #  hosts:
+  #    navi-async-matrix.example.com
+  #  secretName: secret.tls
 
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
