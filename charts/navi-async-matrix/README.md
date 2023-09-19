@@ -138,14 +138,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Database settings
 
-| Name          | Description                             		| Value    |
-| ------------- | ----------------------------------------------------- | -------- |
-| `db.host`     | PostgreSQL hostname or IP. **Required** 		| `""`     |
-| `db.port`     | PostgreSQL port.                        		| `5432`   |
-| `db.name`     | PostgreSQL database name. **Required**  		| `""`     |
-| `db.user`     | PostgreSQL username. **Required**       		| `""`     |
-| `db.password` | PostgreSQL password. **Required**       		| `""`     |
-| `db.schema`   | PostgreSQL schema. Must be specified in overrides.	| `public` |
+| Name          | Description                             																					| Value    |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `db.host`     | PostgreSQL hostname or IP. **Required** 																					| `""`     |
+| `db.port`     | PostgreSQL port.                        																					| `5432`   |
+| `db.name`     | PostgreSQL database name. **Required**  																					| `""`     |
+| `db.user`     | PostgreSQL username. **Required**       																					| `""`     |
+| `db.password` | PostgreSQL password. **Required**       																					| `""`     |
+| `db.schema`   | PostgreSQL schema. Must be specified in overrides. If the database name changes, a new database with the specified schema will be created. Otherwise, the database will be recreated with a new schema.	| `public` |
 
 ### Kafka settings
 
