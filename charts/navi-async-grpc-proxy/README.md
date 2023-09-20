@@ -65,8 +65,8 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 
 | Name                           | Description                               | Value                               |
 | ------------------------------ | ----------------------------------------- | ----------------------------------- |
-| `ingress.className`            | Name of the Ingress controller class.     | `nginx`                             |
 | `ingress.enabled`              | If Ingress is enabled for the service.    | `true`                              |
+| `ingress.className`            | Name of the Ingress controller class.     | `nginx`                             |
 | `ingress.hosts.host`           | Hostname for the Ingress service.         | `navi-async-grpc-proxy.example.com` |
 | `ingress.hosts.paths.path`     | Path of the host for the Ingress service. | `/`                                 |
 | `ingress.hosts.paths.pathType` | Type of the path for the Ingress service. | `Prefix`                            |

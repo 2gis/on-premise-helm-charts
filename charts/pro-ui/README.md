@@ -94,8 +94,8 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 | Name                              | Description                               | Value                |
 | --------------------------------- | ----------------------------------------- | -------------------- |
-| `ui.ingress.className`            | Name of the Ingress controller class.     | `nginx`              |
 | `ui.ingress.enabled`              | If Ingress is enabled for the service.    | `true`               |
+| `ui.ingress.className`            | Name of the Ingress controller class.     | `nginx`              |
 | `ui.ingress.hosts.host`           | Hostname for the Ingress service.         | `pro-ui.example.com` |
 | `ui.ingress.hosts.paths.path`     | Path of the host for the Ingress service. | `/`                  |
 | `ui.ingress.hosts.paths.pathType` | Type of the path for the Ingress service. | `Prefix`             |

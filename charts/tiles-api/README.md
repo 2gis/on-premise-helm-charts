@@ -142,8 +142,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 | Name                               | Description                               | Value                   |
 | ---------------------------------- | ----------------------------------------- | ----------------------- |
-| `api.ingress.className`            | Name of the Ingress controller class.     | `nginx`                 |
 | `api.ingress.enabled`              | If Ingress is enabled for the service.    | `true`                  |
+| `api.ingress.className`            | Name of the Ingress controller class.     | `nginx`                 |
 | `api.ingress.hosts.host`           | Hostname for the Ingress service.         | `tiles-api.example.com` |
 | `api.ingress.hosts.paths.path`     | Path of the host for the Ingress service. | `/`                     |
 | `api.ingress.hosts.paths.pathType` | Type of the path for the Ingress service. | `Prefix`                |
