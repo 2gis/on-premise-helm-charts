@@ -177,6 +177,7 @@ dm:
   configType: env
   citiesUrl: ''
   citiesUpdatePeriod: 3600
+  taskSplitSize: 5000
   archiver:
     enabled: true
     fetchLogs: false
