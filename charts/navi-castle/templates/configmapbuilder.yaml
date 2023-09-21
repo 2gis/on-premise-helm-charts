@@ -40,6 +40,8 @@ data:
     login: '{{ required "Valid .Values.dgctlStorage.accessKey required!" .Values.dgctlStorage.accessKey }}',
     pwd: '{{ required "Valid .Values.dgctlStorage.secretKey required!" .Values.dgctlStorage.secretKey }}',
     header: 'Last-Modified',
+    secure: '{{ required "Valid .Values.dgctlStorage.secure required!" .Values.dgctlStorage.secure }}',
+    region: '{{ required "Valid .Values.dgctlStorage.region required!" .Values.dgctlStorage.region }}',
     }
     manifest:
     {

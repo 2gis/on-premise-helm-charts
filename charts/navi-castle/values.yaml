@@ -28,6 +28,8 @@ dgctlStorage:
   accessKey: ''
   secretKey: ''
   manifest: ''
+  secure: True
+  region: ''
 
 
 # @section Common settings
