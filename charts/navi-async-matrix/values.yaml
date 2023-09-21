@@ -217,6 +217,7 @@ kafka:
   groupId: navi_async_matrix
   statusTopic: status_topic
   cancelTopic: cancel_topic
+  archiveTopic: archive_topic
   properties:
     bootstrap.servers: ''
     security.protocol: PLAINTEXT
