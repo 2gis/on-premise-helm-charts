@@ -4,13 +4,15 @@ metadata:
   name: {{ include "front.fullname" . }}-base
 data:
   front.conf: |-
+
     js_import bundle.js;
 
-{{ include "front.createUpstreams" . | indent 4 }}
+{{ include "front.createUpstreams" . | indent 4}}
 
     {{- if .Values.serverBlock }}
     include /etc/nginx/conf.d/extra/server-block.conf;
     {{- end }}
+
 
     server {
         listen                      {{ .Values.front.port }};
@@ -21,11 +23,31 @@ data:
             access_log              off;
         }
 
-        {{- if .Values.carroutingLocation }}
-{{ include "tplvalues.render" ( dict "value" .Values.carroutingLocation "context" $ ) | indent 8 }}
-        {{- else }}
-
+        {{ if .Values.carroutingLocation }}
+        {{ include "tplvalues.render" ( dict "value" .Values.carroutingLocation "context" $ ) | indent 4 }}
+        {{ else  }}
         location ^~ /carrouting {
+            js_content bundle.geo_coding;
+        }
+        {{- end }}
+
+        {{ if .Values.hullLocation }}
+        {{ include "tplvalues.render" ( dict "value" .Values.hullLocation "context" $ ) | indent 4 }}
+        {{ else  }}
+
+        location ^~ /get_dist_matrix {
+            js_content bundle.geo_coding;
+        }
+
+        location ^~ /get_dist_matrix_ctx {
+            js_content bundle.geo_coding;
+        }
+
+        location ^~ /public_transport {
+            js_content bundle.geo_coding;
+        }
+
+        location ^~ /get_hull {
             js_content bundle.geo_coding;
         }
         {{- end }}
@@ -43,6 +65,5 @@ data:
         include /etc/nginx/conf.d/extra/locations-block.conf;
         {{- end }}
 
-{{ include "front.createLocations" . | indent 8 }}
-
+    {{ include "front.createLocations" . | indent 4 }}
     }
