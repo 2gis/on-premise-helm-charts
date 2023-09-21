@@ -154,6 +154,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `kafka.groupId`                   | Distance Matrix Async API group identifier.                                                                               | `navi_async_matrix` |
 | `kafka.statusTopic`               | Name of the topic for sending new tasks to.                                                                               | `status_topic`      |
 | `kafka.cancelTopic`               | Name of the topic for canceling or receiving information about finished tasks.                                            | `cancel_topic`      |
+| `kafka.archiveTopic`              | Name of the topic for archiving tasks.                                                                                    | `archive_topic`     |
 | `kafka.properties`                | Properties as supported by kafka-python. Refer to inline comments for details.                                            |                     |
 | `kafka.sensitiveProperties`       | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                |
 | `kafka.fileProperties`            | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                |
