@@ -1,0 +1,90 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "navi-async-matrix.fullname" . }}-configmap
+data:
+  archive_pod_manifest.json: |
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": null,
+        "labels": {{ mustToJson .Values.dm.archiver.labels }},
+        "annotations": {{ mustToJson .Values.dm.archiver.annotations }}
+      },
+      "spec": {
+        {{- if .Values.kafka.fileProperties }}
+        "volumes": [
+          {
+            "name": {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | mustToJson }},
+            "secret": {
+              "secretName": {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | mustToJson }}
+            }
+          }
+        ],
+        {{- end }}
+        "serviceAccountName": {{ include "navi-async-matrix.serviceAccountName" . | mustToJson }},
+        "containers": [
+          {
+            "name": null,
+            "image": "{{ .Values.dgctlDockerRegistry }}/{{ .Values.dm.archiver.image.repository }}:{{ .Values.dm.archiver.image.tag }}",
+            "resources": {{ .Values.dm.archiver.resources | mustToJson }},
+            {{- if .Values.kafka.fileProperties }}
+            "volumeMounts": [
+              {
+                "name": {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | mustToJson }},
+                "mountPath": "/app/secret/"
+              }
+            ],
+            {{- end }}
+            "env": [
+              {
+                "name": "CONFIG_TYPE",
+                "value" :"env"
+              },
+              {
+                "name": "KAFKA_PRODUCER_SETTING__TOPIC",
+                "value": {{ .Values.kafka.archiveTopic | mustToJson }}
+              },
+            {{- $kafkaPropertiesEnv := include "navi-async-matrix.kafkaPropertiesEnv" (dict
+                  "kafka" .Values.kafka
+                  "secretname" (print
+                      (include "navi-async-matrix.fullname" .)
+                      "-kafka"
+                    )
+                  "mountpoint" "/app/secret"
+                  "prefix" "KAFKA_PRODUCER_SETTING__CONFIG__"
+                ) | fromYaml -}}
+            {{- include "navi-async-matrix.partialListToJson" $kafkaPropertiesEnv | nindent 14 -}}
+              {
+                "name": "S3_ENDPOINT_URL",
+                "value": {{ .Values.s3.host | mustToJson }}
+              },
+              {
+                "name": "S3_BUCKET",
+                "value": {{ .Values.s3.bucket | mustToJson }}
+              },
+              {
+                "name": "S3_ACCESS_KEY",
+                "value": {{ .Values.s3.accessKey | mustToJson }}
+              },
+              {
+                "name": "S3_SECRET_KEY",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": {{ include "navi-async-matrix.fullname" . | mustToJson }},
+                    "key": "s3key"
+                  }
+                }
+              },
+              {
+                "name": "S3_USE_MINIO",
+                "value" :"true"
+              }
+            ]
+          }
+        ],
+        "restartPolicy": "Never"
+      }
+    }
