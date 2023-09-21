@@ -177,6 +177,17 @@ dm:
   configType: env
   citiesUrl: ''
   citiesUpdatePeriod: 3600
+  archiver:
+    enabled: true
+    fetchLogs: false
+    image:
+      repository: on-premise/archiver-async-service
+      pullPolicy: IfNotPresent
+      tag: 1.1.0
+    resources:
+      limits:
+        cpu: 2
+        memory: 6Gi
 
 
 # @section Database settings
