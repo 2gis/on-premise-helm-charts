@@ -158,28 +158,28 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `license.url`            | URL of the License service. Ex: http(s)://license.svc **Required** | `""`  |
 | `license.requestTimeout` | Timeout for requests to the License service                        | `1s`  |
 
-### BSS settings
+### Statistic settings
 
-| Name                               | Description                                                                                                                                     | Value   |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `bss.enabled`                      | If BSS is enabled                                                                                                                               | `false` |
-| `bss.url`                          | URL of the BSS service. Ex: http(s)://bss.svc                                                                                                   | `""`    |
-| `bss.buffer.lifetime`              | Lifetime of BSS buffer                                                                                                                          | `5s`    |
-| `bss.buffer.retryCount`            | The maximum number of attempts to send Stat messages                                                                                            | `2`     |
-| `bss.buffer.sendTimeout`           | Timeout between sending BSS messages                                                                                                            | `2s`    |
-| `bss.buffer.sendLimit`             | The maximum number of messages in the buffer before they are sent to the BSS                                                                    | `256`   |
-| `bss.client.connectingTimeout`     | The time period within which the TCP connecting process must be completed                                                                       | `500ms` |
-| `bss.client.idleTimeout`           | The time after which an idle connection will be automatically closed                                                                            | `250ms` |
-| `bss.client.minConnections`        | The minimum number of parallel connections that a pool should keep alive ("hot")                                                                | `1`     |
-| `bss.client.maxConnections`        | The maximum number of parallel connections that a connection pool to a single host endpoint is allowed to establish. Must be greater than zero  | `2`     |
-| `bss.client.maxOpenRequests`       | The maximum number of open requests accepted into the pool across all  materializations of any of its client flows                              | `4`     |
-| `bss.client.maxRetries`            | The maximum number of times failed requests are attempted again, (if the request can be safely retried) before giving up and returning an error | `4`     |
-| `bss.client.maxConnectionLifetime` | The maximum duration for a connection to be kept alive                                                                                          | `5m`    |
-| `bss.client.baseConnectionBackoff` | The minimum duration to backoff new connection attempts after the previous connection attempt failed                                            | `500ms` |
-| `bss.client.maxConnectionBackoff`  | Maximum backoff duration between failed connection attempts                                                                                     | `10s`   |
-| `bss.client.responseTimeout`       | The time period after the response was dispatched                                                                                               | `250ms` |
-| `bss.dispatcher.fixedPoolSize`     | Fixed number of threads used                                                                                                                    | `1`     |
-| `bss.dispatcher.throughput`        | Throughput defines the maximum number of messages to be processed per actor before the thread jumps to the next actor                           | `4`     |
+| Name                                | Description                                                                                                                                     | Value   |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `stat.enabled`                      | If statistic is enabled                                                                                                                         | `false` |
+| `stat.url`                          | URL of the statistic service. Ex: http(s)://stat.svc                                                                                            | `""`    |
+| `stat.buffer.lifetime`              | Lifetime of Statistic buffer                                                                                                                    | `5s`    |
+| `stat.buffer.retryCount`            | The maximum number of attempts to send Stat messages                                                                                            | `2`     |
+| `stat.buffer.sendTimeout`           | Timeout between sending statistic messages                                                                                                      | `2s`    |
+| `stat.buffer.sendLimit`             | The maximum number of messages in the buffer before they are sent to the Statistic                                                              | `256`   |
+| `stat.client.connectingTimeout`     | The time period within which the TCP connecting process must be completed                                                                       | `500ms` |
+| `stat.client.idleTimeout`           | The time after which an idle connection will be automatically closed                                                                            | `250ms` |
+| `stat.client.minConnections`        | The minimum number of parallel connections that a pool should keep alive ("hot")                                                                | `1`     |
+| `stat.client.maxConnections`        | The maximum number of parallel connections that a connection pool to a single host endpoint is allowed to establish. Must be greater than zero  | `2`     |
+| `stat.client.maxOpenRequests`       | The maximum number of open requests accepted into the pool across all  materializations of any of its client flows                              | `4`     |
+| `stat.client.maxRetries`            | The maximum number of times failed requests are attempted again, (if the request can be safely retried) before giving up and returning an error | `4`     |
+| `stat.client.maxConnectionLifetime` | The maximum duration for a connection to be kept alive                                                                                          | `5m`    |
+| `stat.client.baseConnectionBackoff` | The minimum duration to backoff new connection attempts after the previous connection attempt failed                                            | `500ms` |
+| `stat.client.maxConnectionBackoff`  | Maximum backoff duration between failed connection attempts                                                                                     | `10s`   |
+| `stat.client.responseTimeout`       | The time period after the response was dispatched                                                                                               | `250ms` |
+| `stat.dispatcher.fixedPoolSize`     | Fixed number of threads used                                                                                                                    | `1`     |
+| `stat.dispatcher.throughput`        | Throughput defines the maximum number of messages to be processed per actor before the thread jumps to the next actor                           | `4`     |
 
 ### Kubernetes Importer job settings
 

@@ -205,28 +205,28 @@ license:
   url: ''
   requestTimeout: 1s
 
-# @section BSS settings
+# @section Statistic settings
 
-# @param bss.enabled If BSS is enabled
-# @param bss.url URL of the BSS service. Ex: http(s)://bss.svc
-# @param bss.buffer.lifetime Lifetime of BSS buffer
-# @param bss.buffer.retryCount The maximum number of attempts to send Stat messages
-# @param bss.buffer.sendTimeout Timeout between sending BSS messages
-# @param bss.buffer.sendLimit The maximum number of messages in the buffer before they are sent to the BSS
-# @param bss.client.connectingTimeout The time period within which the TCP connecting process must be completed
-# @param bss.client.idleTimeout The time after which an idle connection will be automatically closed
-# @param bss.client.minConnections The minimum number of parallel connections that a pool should keep alive ("hot")
-# @param bss.client.maxConnections The maximum number of parallel connections that a connection pool to a single host endpoint is allowed to establish. Must be greater than zero
-# @param bss.client.maxOpenRequests The maximum number of open requests accepted into the pool across all  materializations of any of its client flows
-# @param bss.client.maxRetries The maximum number of times failed requests are attempted again, (if the request can be safely retried) before giving up and returning an error
-# @param bss.client.maxConnectionLifetime The maximum duration for a connection to be kept alive
-# @param bss.client.baseConnectionBackoff The minimum duration to backoff new connection attempts after the previous connection attempt failed
-# @param bss.client.maxConnectionBackoff Maximum backoff duration between failed connection attempts
-# @param bss.client.responseTimeout The time period after the response was dispatched
-# @param bss.dispatcher.fixedPoolSize Fixed number of threads used
-# @param bss.dispatcher.throughput Throughput defines the maximum number of messages to be processed per actor before the thread jumps to the next actor
+# @param stat.enabled If statistic is enabled
+# @param stat.url URL of the statistic service. Ex: http(s)://stat.svc
+# @param stat.buffer.lifetime Lifetime of Statistic buffer
+# @param stat.buffer.retryCount The maximum number of attempts to send Stat messages
+# @param stat.buffer.sendTimeout Timeout between sending statistic messages
+# @param stat.buffer.sendLimit The maximum number of messages in the buffer before they are sent to the Statistic
+# @param stat.client.connectingTimeout The time period within which the TCP connecting process must be completed
+# @param stat.client.idleTimeout The time after which an idle connection will be automatically closed
+# @param stat.client.minConnections The minimum number of parallel connections that a pool should keep alive ("hot")
+# @param stat.client.maxConnections The maximum number of parallel connections that a connection pool to a single host endpoint is allowed to establish. Must be greater than zero
+# @param stat.client.maxOpenRequests The maximum number of open requests accepted into the pool across all  materializations of any of its client flows
+# @param stat.client.maxRetries The maximum number of times failed requests are attempted again, (if the request can be safely retried) before giving up and returning an error
+# @param stat.client.maxConnectionLifetime The maximum duration for a connection to be kept alive
+# @param stat.client.baseConnectionBackoff The minimum duration to backoff new connection attempts after the previous connection attempt failed
+# @param stat.client.maxConnectionBackoff Maximum backoff duration between failed connection attempts
+# @param stat.client.responseTimeout The time period after the response was dispatched
+# @param stat.dispatcher.fixedPoolSize Fixed number of threads used
+# @param stat.dispatcher.throughput Throughput defines the maximum number of messages to be processed per actor before the thread jumps to the next actor
 
-bss:
+stat:
   enabled: false
   url: ''
   buffer:
