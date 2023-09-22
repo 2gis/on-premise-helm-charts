@@ -34,7 +34,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `castle.image.pullPolicy` | Navi-Castle service pull policy.      | `IfNotPresent`                |
 | `castle.image.tag`        | Navi-Castle service image tag.        | `1.0.7`                       |
 | `nginx.image.repository`  | Navi-Front image repository.          | `2gis-on-premise/navi-front`  |
-| `nginx.image.tag`         | Navi-Front image tag.                 | `1.21.2`                      |
+| `nginx.image.tag`         | Navi-Front image tag.                 | `1.24.1`                      |
 
 ### Deployment Artifacts Storage settings
 
