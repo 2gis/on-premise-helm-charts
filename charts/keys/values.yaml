@@ -101,22 +101,22 @@ admin:
 
   # @param admin.ingress.enabled If Ingress is enabled for the service.
   # @param admin.ingress.className Name of the Ingress controller class.
-  # @param admin.ingress.hosts.host Hostname for the Ingress service.
-  # @param admin.ingress.hosts.paths.path Path of the host for the Ingress service.
-  # @param admin.ingress.hosts.paths.pathType Type of the path for the Ingress service.
+  # @param admin.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param admin.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+  # @param admin.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
   # @param admin.ingress.tls TLS configuration
 
   ingress:
-    enabled: true
+    enabled: false
     className: nginx
     hosts:
-      host: keys-ui.example.com
+    - host: keys-ui.example.com
       paths:
-        path: /
+      - path: /
         pathType: Prefix
     tls: []
-    #  hosts:
-    #    keys-ui.example.com
+    #- hosts:
+    #  - keys-ui.example.com
     #  secretName: secret.tls
 
 

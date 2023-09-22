@@ -408,22 +408,22 @@ service:
 
 # @param ingress.enabled If Ingress is enabled for the service.
 # @param ingress.className Name of the Ingress controller class.
-# @param ingress.hosts.host Hostname for the Ingress service.
-# @param ingress.hosts.paths.path Path of the host for the Ingress service.
-# @param ingress.hosts.paths.pathType Type of the path for the Ingress service.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
 # @param ingress.tls TLS configuration
 
 ingress:
-  enabled: true
+  enabled: false
   className: nginx
   hosts:
-    host: keycloak.example.com
+  - host: keycloak.example.com
     paths:
-      path: /
+    - path: /
       pathType: Prefix
   tls: []
-  #  hosts:
-  #    keycloak.example.com
+  #- hosts:
+  #  - keycloak.example.com
   #  secretName: secret.tls
 
 # @section [Network Policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) configuration

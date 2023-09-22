@@ -132,22 +132,22 @@ api:
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
   # @param api.ingress.className Name of the Ingress controller class.
-  # @param api.ingress.hosts.host Hostname for the Ingress service.
-  # @param api.ingress.hosts.paths.path Path of the host for the Ingress service.
-  # @param api.ingress.hosts.paths.pathType Type of the path for the Ingress service.
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
   # @param api.ingress.tls TLS configuration
   
   ingress:
-    enabled: true
+    enabled: false
     className: nginx
     hosts:
-      host: navi-restrictions.example.com
+    - host: navi-restrictions.example.com
       paths:
-        path: /
+      - path: /
         pathType: Prefix
     tls: []
-    #  hosts:
-    #    navi-restrictions.example.com
+    #- hosts:
+    #  - navi-restrictions.example.com
     #  secretName: secret.tls
 
   # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
