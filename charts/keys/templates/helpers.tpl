@@ -247,6 +247,23 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{ end }}      
 {{- end }}
 
+{{- define "keys.env.dgctlStorage" -}}
+- name: KEYS_S3_ENDPOINT
+  value: "{{ .Values.dgctlStorage.host }}"
+- name: KEYS_S3_BUCKET
+  value: "{{ .Values.dgctlStorage.bucket }}"
+- name: KEYS_S3_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.jobs.name" . }}
+      key: dgctlStorageAccessKey
+- name: KEYS_S3_SECRET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.jobs.name" . }}
+      key: dgctlStorageSecretKey
+{{- end }}
+
 {{/*
 Return the target Kubernetes version
 */}}
