@@ -35,7 +35,7 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 | Name               | Description | Value                              |
 | ------------------ | ----------- | ---------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/async-grpc-proxy` |
-| `image.tag`        | Tag         | `0.0.2`                            |
+| `image.tag`        | Tag         | `1.0.0`                            |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                     |
 
 ### async-grpc-proxy application settings

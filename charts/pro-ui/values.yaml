@@ -39,7 +39,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/pro-ui
-    tag: 1.0.2
+    tag: 1.1.0
 
   # @section UI service settings
 
@@ -140,7 +140,7 @@ ui:
   ingress:
     enabled: false
     hosts:
-      - host: pro-ui.host
+    - host: pro-ui.host
 
   # @section Limits
 

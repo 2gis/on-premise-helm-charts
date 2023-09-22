@@ -1,5 +1,59 @@
 # 2GIS On-Premise Changelog
 
+## [1.11.0]
+#### Images
+```
+catalog-api
+	- catalog-api:3.597.0
+	+ catalog-api:3.598.4
+floors-api
+	- floors-importer:1.0.3
+	+ floors-importer:1.0.4
+	- floors-nodejs:1.0.3
+	+ floors-nodejs:1.0.4
+keys
+	- keys-backend:1.62.1
+	+ keys-backend:1.63.0
+navi-async-grpc-proxy
+	- async-grpc-proxy:0.0.2
+	+ async-grpc-proxy:1.0.0
+navi-back
+	- navi-back:7.3.1
+	+ navi-back:7.10.0
+navi-castle
+	- navi-front:1.21.2
+	+ navi-front:1.24.1
+navi-front
+	- navi-front:1.21.2
+	+ navi-front:1.24.1
+navi-router
+	- navi-router:6.11.0
+	+ navi-router:6.16.0
+pro-api
+	- pro-api:1.1.39
+	+ pro-api:1.1.49
+	- pro-importer:1.1.39
+	+ pro-importer:1.1.49
+	- pro-importer:1.1.39
+	+ pro-importer:1.1.49
+	- pro-permissions-api:1.1.39
+	+ pro-permissions-api:1.1.49
+pro-ui
+	- pro-ui:1.0.2
+	+ pro-ui:1.1.0
+search-api
+	- search-api:7.62.0
+	+ search-api:7.64.0
+tiles-api
+	- tiles-api-importer:4.48.1
+	+ tiles-api-importer:4.48.2
+	- tiles-api-proxy:4.48.1
+	+ tiles-api-proxy:4.48.2
+	- tiles-api:4.48.1
+	+ tiles-api:4.48.2
+
+```
+
 ## [1.10.0]
 #### [Breaking-Changes](Breaking-Changes.md#1100)
 #### Images
