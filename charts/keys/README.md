@@ -209,6 +209,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `predefined.service.keys`    | Keys map as: service -> key.    | `{}`  |
 | `predefined.service.aliases` | Aliases map as: service -> key. | `{}`  |
 
+### Deployment Artifacts Storage settings
+
+| Name                     | Description                             | Value  |
+| ------------------------ | --------------------------------------- | ------ |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.       | `""`   |
+| `dgctlStorage.bucket`    | S3 bucket name.                         | `keys` |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. | `""`   |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. | `""`   |
+
 ### Limits
 
 | Name                                | Description                        | Value   |
