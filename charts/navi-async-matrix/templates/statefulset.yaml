@@ -68,6 +68,10 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- if .Values.kafka.fileProperties }}
       volumes:
+        - name: {{ printf "%s-manifest" (include "navi-async-matrix.fullname" .) | quote }}
+          configMap:
+            name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
+      {{- if .Values.kafka.fileProperties }}
         - name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
           secret:
             secretName: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
@@ -100,6 +104,9 @@ spec:
           # here is a workaround for that
           {{- if .Values.kafka.fileProperties }}
           volumeMounts:
+          - name: {{ printf "%s-manifest" (include "navi-async-matrix.fullname" .) | quote }}
+            mountPath: /app/src/composite_task_result_archiver/manifests/archive_pod_manifest.json
+            subPath: archive_pod_manifest.json
           - name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /etc/2gis/secret/
           {{- end }}
