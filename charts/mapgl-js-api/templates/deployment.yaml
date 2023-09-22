@@ -41,9 +41,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: PUBLIC_HOST
-              value: "{{ .Values.env.MAPGL_HOST }}" 
+              value: "{{ .Values.env.MAPGL_HOST }}"
             - name: DEMO_KEY
-              value: "{{ .Values.env.MAPGL_DEMO_KEY }}" 
+              value: "{{ .Values.env.MAPGL_DEMO_KEY }}"
             - name: MAPGL_TILESERVER
               value: "{{ .Values.env.MAPGL_TILES_API }}"
             - name: MAPGL_TILESET
