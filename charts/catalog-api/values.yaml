@@ -188,13 +188,26 @@ search:
 # @section Keys settings
 
 # @param keys.url URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required**
-# @param keys.requestTimeout Timeout for requests to the Keys API
 # @param keys.token Keys service API key
+# @param keys.client.connectingTimeout The time period within which the TCP connecting process must be completed
+# @param keys.client.idleTimeout The time after which an idle connection will be automatically closed
+# @param keys.client.maxRetries The maximum number of times failed requests are attempted again, (if the request can be safely retried) before giving up and returning an error
+# @param keys.client.maxConnectionLifetime The maximum duration for a connection to be kept alive
+# @param keys.client.baseConnectionBackoff The minimum duration to backoff new connection attempts after the previous connection attempt failed
+# @param keys.client.maxConnectionBackoff Maximum backoff duration between failed connection attempts
+# @param keys.client.responseTimeout The time period after the response was dispatched
 
 keys:
   url: ''
-  requestTimeout: 5s
   token: ''
+  client:
+    connectingTimeout: 1s
+    idleTimeout: 1s
+    maxRetries: 0
+    maxConnectionLifetime: 20s
+    baseConnectionBackoff: 1s
+    maxConnectionBackoff: 20s
+    responseTimeout: 5s
 
 # @section License settings
 
