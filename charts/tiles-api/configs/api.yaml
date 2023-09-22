@@ -25,10 +25,14 @@ cassandra-clusters:
     keyspaces:
       {{- $default := true }}
       {{- range $_, $type := $.Values.types }}
-      - tileset: {{ $type.name | default $type.kind }}
+      - tileset: {{ $type.name | default (include "tiles.kind" $type) }}
         keyspace: {{ include "tiles.keyspace" (merge $type $) }}
+        {{- if $type.subtype }}
+        type: ald
+        {{- else if $default }}
         default: {{ $default }}
         {{- $default = false }}
+        {{- end }}
         partition-size: 4
       {{- end }}
 

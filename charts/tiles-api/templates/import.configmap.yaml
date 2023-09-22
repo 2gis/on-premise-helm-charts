@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-import
+  name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-import
   labels:
     {{- include "tiles.labels" $ | nindent 4 }}
   annotations:
@@ -14,13 +14,17 @@ data:
   importer.yaml: |
     {{- $serviceName := include "importer.serviceName" $type.kind }}
     service-name: {{ required (printf "Valid .Values.types[%d].kind required" $index) $serviceName }}
+    types: {{ include "importer.types" $type | nindent 6 }}
     cassandra:
       name: local
       num-retries: 2
       reconnect-interval: 30s
       keyspaces:
-        - tileset: {{ $type.name | default $type.kind }}
+        - tileset: {{ $type.name | default (include "tiles.kind" $type) }}
           keyspace: {{ include "tiles.keyspace" (merge $type $) }}
+          {{- if $type.subtype }}
+          type: ald
+          {{- end }}
           default: true
           partition-size: 4
       {{- with $.Values.cassandra }}

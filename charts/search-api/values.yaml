@@ -31,6 +31,8 @@ redeployLabel: ''
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket
 # @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate
+# @param dgctlStorage.secure If S3 uses https.
+# @param dgctlStorage.region S3 region
 
 dgctlStorage:
   host: ''
@@ -38,6 +40,8 @@ dgctlStorage:
   accessKey: ''
   secretKey: ''
   manifest: ''
+  region: ''
+  secure: false
 
 
 api:
@@ -50,7 +54,7 @@ api:
 
   image:
     repository: 2gis-on-premise/search-api
-    tag: 7.62.0
+    tag: 7.63.1-s3region
     pullPolicy: IfNotPresent
 
 

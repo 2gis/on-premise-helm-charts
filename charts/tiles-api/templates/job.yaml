@@ -6,7 +6,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name:  {{ include "tiles.fullname" $ }}-{{ $type.kind }}-importer-job
+  name:  {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-importer-job
   labels:
     {{- include "tiles.labels" $ | nindent 4 }}
     {{- include "tiles.importer.label" $ | nindent 4 }}
@@ -18,7 +18,7 @@ spec:
   backoffLimit: 0
   template:
     metadata:
-      name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-importer
+      name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-importer
       labels:
         {{- include "tiles.selectorLabels" $ | nindent 8 }}
         {{- include "tiles.importer.label" $ | nindent 8 }}
@@ -31,7 +31,7 @@ spec:
 
         - name: config-volume
           configMap:
-            name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-import
+            name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-import
 
         {{- if $.Values.cassandra.ssl.enabled }}
         - name: cassandra-ssl

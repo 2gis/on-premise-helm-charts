@@ -24,6 +24,7 @@ data:
       type: s3
       s3:
         host: {{ required "A valid $.Values.dgctlStorage.host entry is required" .host }}
+        secure: {{ .secure }}
         bucket: {{ required "A valid $.Values.dgctlStorage.bucket entry is required" .bucket }}
     {{- end }}
     {{- with .persistence }}
@@ -35,6 +36,7 @@ data:
       {{- else if eq .type "s3" }}
       s3:
         host: {{ .s3.host }}
+        secure: {{ .s3.secure }}
         bucket: {{ .s3.bucket }}
         root: {{ .s3.root }}
       {{- else }}

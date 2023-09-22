@@ -7,6 +7,7 @@ dgctlDockerRegistry: ''
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`.
+# @param dgctlStorage.secure If S3 uses https.
 # @param dgctlStorage.bucket S3 bucket name.
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket.
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
@@ -14,6 +15,7 @@ dgctlDockerRegistry: ''
 
 dgctlStorage:
   host: ''
+  secure: false
   bucket: ''
   accessKey: ''
   secretKey: ''
@@ -30,6 +32,7 @@ dgctlStorage:
 
 # @extra types **Tiles [types](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture) enabled in Tiles API**
 # @param types[0].kind Kind of tiles, should be one of: web, raster, native.
+# @param types[0].subtype Subtype of the additional tiles data. Should be empty for the regular tiles.
 # @param types[0].name Name for the tileset. If empty, the value from the kind is used.
 # @param types[0].keyspace Custom user defined keyspace. If the parameter is set, the database cleaning and maintenance processes are skipped.
 # @param types[0].importAndCleanerDisabled If import and cleaner tasks are disabled for this tileset.
@@ -44,6 +47,7 @@ logFormat: json
 
 types:
 - kind: ''
+  subtype: ''
   name: ''
   keyspace: ''
   importAndCleanerDisabled: false
@@ -120,7 +124,7 @@ proxy:
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.47.0
+    tag: 4.48.1
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -177,7 +181,7 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.47.0
+    tag: 4.48.1
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
@@ -323,7 +327,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.47.0
+    tag: 4.48.1
     pullPolicy: IfNotPresent
 
 

@@ -31,7 +31,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.61.2`                       |
+| `backend.image.tag`        | Backend service image tag.        | `1.62.1`                       |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
 | `admin.image.tag`          | Admin service image tag.          | `0.5.0`                        |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
@@ -196,6 +196,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `ldap.search`                         | **LDAP search settings**                           |                                            |
 | `ldap.search.baseDN`                  | LDAP base distinguished name.                      | `dc=2gis`                                  |
 | `ldap.search.filter`                  | LDAP search filter.                                | `(&(objectClass=user)(sAMAccountName=%s))` |
+
+### Predefined keys
+
+| Name                         | Description                     | Value |
+| ---------------------------- | ------------------------------- | ----- |
+| `predefined.service`         | Predefined service keys.        |       |
+| `predefined.service.keys`    | Keys map as: service -> key.    | `{}`  |
+| `predefined.service.aliases` | Aliases map as: service -> key. | `{}`  |
 
 ### Limits
 

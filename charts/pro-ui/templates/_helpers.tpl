@@ -29,6 +29,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.ui.mapgl.styleIconsUrl }}"
 - name: MAPGL_STYLE_FONTS_URL
   value: "{{ .Values.ui.mapgl.styleFontsUrl }}"
+- name: MAPGL_STYLE_MODELS_URL
+  value: "{{ .Values.ui.mapgl.styleModelsUrl }}"
 - name: LOG_LEVEL
   value: "{{ .Values.ui.logLevel }}"
 - name: IS_ON_PREM

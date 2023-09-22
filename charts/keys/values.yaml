@@ -22,7 +22,7 @@ imagePullPolicy: IfNotPresent
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.61.2
+    tag: 1.62.1
 
 # @section Admin service settings
 
@@ -425,6 +425,20 @@ ldap:
   search:
     baseDN: dc=2gis
     filter: (&(objectClass=user)(sAMAccountName=%s))
+
+
+# @section Predefined keys
+
+predefined:
+
+  # @extra predefined.service Predefined service keys.
+
+  # @param predefined.service.keys Keys map as: service -> key.
+  # @param predefined.service.aliases Aliases map as: service -> key.
+
+  service:
+    keys: {}
+    aliases: {}
 
 
 # @section Limits

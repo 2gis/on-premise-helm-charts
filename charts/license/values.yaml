@@ -6,13 +6,15 @@ dgctlDockerRegistry: ''
 
 # @section Deployment Artifacts Storage settings
 
-# @param dgctlStorage.host S3 endpoint. Format: `[scheme://]host:port`.
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
+# @param dgctlStorage.secure If S3 uses https.
 # @param dgctlStorage.bucket S3 bucket name.
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket.
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
 
 dgctlStorage:
   host: ''
+  secure: false
   bucket: ''
   accessKey: ''
   secretKey: ''
@@ -61,7 +63,7 @@ imagePullSecrets: []
 
 image:
   repository: 2gis-on-premise/license
-  tag: 2.1.1
+  tag: 2.1.2
   pullPolicy: IfNotPresent
 
 # @section License service application settings
@@ -130,7 +132,8 @@ resources:
 # @param persistence.fs.storageClassName Storage class name.
 
 # @extra persistence.s3 **S3 setting for the 's3' persistence type**
-# @param persistence.s3.host S3 endpoint. Format: `[scheme://]host:port`.
+# @param persistence.s3.host S3 endpoint. Format: `host:port`.
+# @param persistence.s3.secure If S3 uses https.
 # @param persistence.s3.bucket S3 bucket name.
 # @param persistence.s3.root Root directory in S3 bucket.
 # @param persistence.s3.accessKey S3 access key for accessing the bucket.
@@ -143,6 +146,7 @@ persistence:
     storageClassName: ''
   s3:
     host: ''
+    secure: false
     bucket: ''
     root: ''
     accessKey: ''

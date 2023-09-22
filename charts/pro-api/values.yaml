@@ -113,14 +113,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.1.28
+  tag: 1.1.39
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.1.28
+  tag: 1.1.39
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -141,9 +141,13 @@ s3:
 # @param api.serviceAccount  Kubernetes service account
 # @param api.tempPath Path to directory used for temp data
 # @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
+# @param api.licensePartner Name of a partner for license verification. **Required**
 # @extra api.logging Logging settings
 # @param api.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
 # @param api.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
+# @extra api.rateLimiter rate limiter settings
+# @param api.rateLimiter.requestsLimit max number of requests from one user during time window (0 means rate limiter is disabled)
+# @param api.rateLimiter.windowSizeInSeconds the size of time windows to count and limit incoming requests
 # @skip api.diggerPassword
 # @skip api.diggerUserName
 # @skip api.logEsQueries
@@ -164,9 +168,13 @@ api:
   env: ''
   filterByZoneCodes: false
   esDataCentersCount: 1
+  licensePartner: ''
   logging:
     format: simple
     targets: ''
+  rateLimiter:
+    requestsLimit: 0
+    windowSizeInSeconds: 1
 
 # @section Auth configuration
 
@@ -176,6 +184,7 @@ api:
 # @param auth.apiKey Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`
 # @param auth.permissionsApiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`
 # @param auth.turnOffCertValidation Turn off certificate validation for auth.url
+# @param auth.shareKeys Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`
 # @skip auth.autoRegisterUsers
 
 auth:
@@ -186,6 +195,7 @@ auth:
   permissionsApiKey: ''
   autoRegisterUsers: true
   turnOffCertValidation: false
+  shareKeys: []
 
 # @section PostgreSQL settings
 
@@ -323,7 +333,7 @@ permissionsPodSettings:
       cpu: 300m
       memory: 256M
     limits:
-      cpu: 500m
+      cpu: 1
       memory: 512M
 
 # @section 2GIS PRO Permissions API configuration
@@ -345,12 +355,14 @@ permissionsApi:
 # @param assetImporter.maxParallelJobs How many import jobs can be run simultaneously
 # @param assetImporter.enabled If assetImporter is enabled for the service.
 # @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
-# @param assetImporter.imageProxyUrl (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
+# @param assetImporter.imageProxyUrl URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
+# @param assetImporter.externalLinksProxyUrl URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
 # @skip assetImporter.files
+# @skip assetImporter.esMetricsEnabled
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.28
+  tag: 1.1.39
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -367,6 +379,8 @@ assetImporter:
   startOnDeploy: true
   files: ''
   imageProxyUrl: ''
+  externalLinksProxyUrl: ''
+  esMetricsEnabled: false
 
 # @skip userAssetImporter
 userAssetImporter:
@@ -376,7 +390,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.28
+  tag: 1.1.39
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
