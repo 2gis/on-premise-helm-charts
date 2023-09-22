@@ -1,5 +1,103 @@
 # 2GIS On-Premise Changelog
 
+## [1.10.0]
+#### [Breaking-Changes](Breaking-Changes.md#1100)
+#### Images
+```
+catalog-api
+	- catalog-api:3.596.0
+	+ catalog-api:3.597.0
+gis-platform
+	- gis_platform_portal:2022.9.29
+	+ gis_platform_portal:2023.8.3-0
+	- gis_platform_spcore:2022.9.29
+	+ gis_platform_spcore:2023.8.3-0
+keys
+	- keys-backend:1.61.2
+	+ keys-backend:1.62.1
+license
+	- license:2.1.1
+	+ license:2.1.2
+mapgl-js-api
+	- mapgl:1.38.1
+	+ mapgl:1.39.0
+platform
+	- platform-ui:0.3.0
+	+ platform-ui:0.4.0
+pro-api
+	- pro-api:1.1.28
+	+ pro-api:1.1.39
+	- pro-importer:1.1.28
+	+ pro-importer:1.1.39
+	- pro-importer:1.1.28
+	+ pro-importer:1.1.39
+	- pro-permissions-api:1.1.28
+	+ pro-permissions-api:1.1.39
+pro-ui
+	- pro-ui:1.0.1
+	+ pro-ui:1.0.2
+tiles-api
+	- tiles-api-importer:4.47.0
+	+ tiles-api-importer:4.48.1
+	- tiles-api-proxy:4.47.0
+	+ tiles-api-proxy:4.48.1
+	- tiles-api:4.47.0
+	+ tiles-api:4.48.1
+
+```
+
+## [1.9.1]
+#### [Breaking-Changes](Breaking-Changes.md#191)
+#### Images
+```
+catalog-api
+	- catalog-api:3.595.0
+	+ catalog-api:3.596.0
+dgtt
+	- dgtt:0.2.24-f76cd4232f
+	+ dgtt:0.2.27-b188673e09
+floors-api
+	+ floors-importer:1.0.3
+	+ floors-nodejs:1.0.3
+	+ nginx:1.21.6
+keys
+	- keys-backend:1.59.0
+	+ keys-backend:1.61.2
+	- keys-ui:0.3.0
+	+ keys-ui:0.5.0
+license
+	- license:1.0.1
+	+ license:2.1.1
+mapgl-js-api
+	- mapgl:1.36.1
+	+ mapgl:1.38.1
+platform
+	+ platform-ui:0.3.0
+search-api
+	- search-api:7.57.0
+	+ search-api:7.62.0
+tiles-api
+	- tiles-api-importer:4.45.0
+	+ tiles-api-importer:4.47.0
+	- tiles-api-proxy:4.45.0
+	+ tiles-api-proxy:4.47.0
+	- tiles-api:4.45.0
+	+ tiles-api:4.47.0
+
+```
+
+## [1.8.0]
+#### Images
+```
+catalog-api
+	- catalog-api:3.593.5
+	+ catalog-api:3.595.0
+keys
+	- keys-backend:1.55.0
+	+ keys-backend:1.59.0
+
+```
+
 ## [1.7.7]
 * hotfix
 

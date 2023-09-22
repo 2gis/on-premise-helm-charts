@@ -22,18 +22,28 @@ imagePullPolicy: IfNotPresent
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.55.0
+    tag: 1.62.1
 
 # @section Admin service settings
 
 admin:
   image:
     repository: 2gis-on-premise/keys-ui
-    tag: 0.3.0
+    tag: 0.5.0
 
   # @param admin.replicas A replica count for the pod.
 
   replicas: 1
+
+  # @param admin.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param admin.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param admin.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
 
   resources:
     requests:
@@ -45,9 +55,16 @@ admin:
 
   # @skip admin.apiOverride
   # @param admin.host Base URL for the admin web interface, ex: https://keys-ui.ingress.host
+  # @param admin.badge.title A name to describe an application installation.
+  # @param admin.badge.titleColor A font color for admin.badge.title. Any css color value is valid, e.g. "#000".
+  # @param admin.badge.backgroundColor A background color for admin.badge.title. Any css color value is valid, e.g. "#00F018".
 
   apiOverride: ''
   host: ''
+  badge:
+    title: ''
+    titleColor: ''
+    backgroundColor: ''
 
   # @param admin.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param admin.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -106,6 +123,16 @@ api:
   # @param api.replicas A replica count for the pod.
 
   replicas: 1
+
+  # @param api.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param api.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
 
   resources:
     requests:
@@ -231,6 +258,16 @@ tasker:
 
   delay: 30s
 
+  # @param tasker.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param tasker.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param tasker.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
   # @param tasker.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param tasker.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
@@ -316,6 +353,7 @@ postgres:
   # @param postgres.ro.port PostgreSQL port.
   # @param postgres.ro.timeout PostgreSQL client connection timeout.
   # @param postgres.ro.name PostgreSQL database name. **Required**
+  # @param postgres.ro.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
   # @param postgres.ro.username PostgreSQL username. **Required**
   # @param postgres.ro.password PostgreSQL password. **Required**
 
@@ -324,6 +362,7 @@ postgres:
     port: 5432
     timeout: 3s
     name: ''
+    schema: ''
     username: ''
     password: ''
 
@@ -333,6 +372,7 @@ postgres:
   # @param postgres.rw.port PostgreSQL port.
   # @param postgres.rw.timeout PostgreSQL client connection timeout.
   # @param postgres.rw.name PostgreSQL database name. **Required**
+  # @param postgres.rw.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
   # @param postgres.rw.username PostgreSQL username. **Required**
   # @param postgres.rw.password PostgreSQL password. **Required**
 
@@ -341,6 +381,7 @@ postgres:
     port: 5432
     timeout: 3s
     name: ''
+    schema: ''
     username: ''
     password: ''
 
@@ -384,6 +425,20 @@ ldap:
   search:
     baseDN: dc=2gis
     filter: (&(objectClass=user)(sAMAccountName=%s))
+
+
+# @section Predefined keys
+
+predefined:
+
+  # @extra predefined.service Predefined service keys.
+
+  # @param predefined.service.keys Keys map as: service -> key.
+  # @param predefined.service.aliases Aliases map as: service -> key.
+
+  service:
+    keys: {}
+    aliases: {}
 
 
 # @section Limits

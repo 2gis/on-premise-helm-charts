@@ -100,4 +100,6 @@ spec:
                   value: "{{ .Values.api.logging.format }}"
                 - name: Common__Logging__Targets
                   value: "{{ .Values.api.logging.targets }}"
+                - name: Common__EsMetricsEnabled
+                  value: "{{ .Values.assetImporter.esMetricsEnabled }}"
 {{ end }}

@@ -41,7 +41,7 @@ spec:
 
       annotations:
         checksum/config: {{ include "tiles.checksum" (merge (dict "path" "/api.configmap.yaml") $) }}
-        checksum/secret: {{ include "tiles.checksum" (merge (dict "path" "/secret.yaml") $) }}
+        checksum/secret: {{ include "tiles.checksum" (merge (dict "path" "/api.secret.yaml") $) }}
         manifest/code: {{ include "tiles.manifestCode" . | sha256sum }}
       {{- with .Values.api.podAnnotations }}
         {{- toYaml . | nindent 8 }}
@@ -155,3 +155,13 @@ spec:
               value: "/config/api.yaml"
             - name: API_PORT
               value: "{{ .Values.api.containerPort }}"
+            - name: CASSANDRA_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-api
+                  key: cassandraUser
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-api
+                  key: cassandraPassword

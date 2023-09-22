@@ -29,6 +29,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.ui.mapgl.styleIconsUrl }}"
 - name: MAPGL_STYLE_FONTS_URL
   value: "{{ .Values.ui.mapgl.styleFontsUrl }}"
+- name: MAPGL_STYLE_MODELS_URL
+  value: "{{ .Values.ui.mapgl.styleModelsUrl }}"
 - name: LOG_LEVEL
   value: "{{ .Values.ui.logLevel }}"
 - name: IS_ON_PREM
@@ -36,6 +38,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: SSO_AUTH
   value: "{{ required "A valid .Values.ui.auth.sso entry required" .Values.ui.auth.sso }}"
 {{ if .Values.ui.auth.sso }}
+  {{- if .Values.ui.auth.turnOffCertValidation -}}
+- name: NODE_TLS_REJECT_UNAUTHORIZED
+  value: "0"
+  {{- end }}
 - name: AUTH_SAFE_HOSTS
   value: "{{ required "A valid .Values.ui.auth.safeHosts entry required" .Values.ui.auth.safeHosts }}"
 - name: AUTH_SECURE

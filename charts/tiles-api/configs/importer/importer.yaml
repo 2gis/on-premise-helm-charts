@@ -5,12 +5,6 @@ force-import: {{ .Values.importer.forceImport }}
 clear-snapshots: {{ .Values.importer.clearSnapshots }}
 cassandra-hosts-clock-time-check-limit: {{ .Values.importer.cassandraHostsClockTimeCheckLimit }}
 
-credentials:
-  user: {{ .Values.cassandra.credentials.user }}
-  password: {{ .Values.cassandra.credentials.password }}
-  jmx-user: {{ .Values.cassandra.credentials.jmxUser }}
-  jmx-password: {{ .Values.cassandra.credentials.jmxPassword }}
-
 {{- if $.Values.cassandra.ssl.enabled }}
 ssl:
   ca-path: "/cassandra-ssl/ca.crt"
@@ -18,6 +12,7 @@ ssl:
 
 storage:
   host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
+  secure: {{ .Values.dgctlStorage.secure }}
   bucket: {{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}
   url-lifetime-period: 60m
 

@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "platform.ui.name" . }}
+  {{- with .Values.ui.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "platform.ui.labels" . | nindent 4 }}
+    {{- with .Values.ui.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.ui.replicas }}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- toYaml .Values.strategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "platform.ui.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.ui.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "platform.ui.labels" . | nindent 8 }}
+        {{- with .Values.ui.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+        - name: {{ include "platform.ui.name" . }}
+        {{ if eq .Values.dgctlDockerRegistry "local" }}
+          image: {{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag }}
+        {{ else }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry is required" .Values.dgctlDockerRegistry }}/{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag }}
+        {{ end }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.ui.appPort }}
+          readinessProbe:
+            httpGet:
+              path: /api/healthcheck
+              port: {{ .Values.ui.appPort }}
+            initialDelaySeconds: 5
+            timeoutSeconds: 30
+          resources:
+            {{- toYaml .Values.ui.resources | nindent 12 }}
+          env:
+            - name: DEFAULT_LOCALE
+              value: {{ .Values.ui.defaultLocale | quote }}
+            - name: BRAND
+              value: {{ required ".Values.ui.brand is required" .Values.ui.brand | quote }}
+            - name: PAGES
+              value: {{ required ".Values.ui.pages is required" .Values.ui.pages | quote }}
+            - name: CATALOG_API_URL
+              value: {{ .Values.ui.catalog.url | quote }}
+            - name: CATALOG_API_KEY
+              value: {{ .Values.ui.catalog.key | quote }}
+            - name: NAVI_API_URL
+              value: {{ .Values.ui.navi.url | quote }}
+            - name: NAVI_API_KEY
+              value: {{ .Values.ui.navi.key | quote }}
+            - name: MAPGL_URL
+              value: {{ .Values.ui.mapgl.url | quote }}
+            - name: MAPGL_SCRIPT_PATH
+              value: {{ .Values.ui.mapgl.scriptPath | quote }}
+            - name: MAPGL_KEY
+              value: {{ required "A valid .Values.ui.mapgl.key is required!" .Values.ui.mapgl.key | quote }}
+            - name: MAPGL_INIT_CENTER
+              value: {{ .Values.ui.mapgl.initCenter | quote }}
+            - name: MAPGL_STATUS
+              value: {{ .Values.ui.status.mapgl | quote }}
+            - name: SEARCH_STATUS
+              value: {{ .Values.ui.status.search | quote }}
+            - name: NAVI_API_STATUS
+              value: {{ .Values.ui.status.navi | quote }}
+            - name: PRO_STATUS
+              value: {{ .Values.ui.status.pro | quote }}
+            - name: GIS_PLATFORM_STATUS
+              value: {{ .Values.ui.status.gisPlatform | quote }}
+            - name: KEYS_STATUS
+              value: {{ .Values.ui.status.keys | quote }}
+            - name: SOME_SECRET
+              value: ""
+            - name: HOME
+              value: "/tmp"
+      {{- with .Values.ui.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.ui.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.ui.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -36,7 +36,7 @@ podLabels: {}
 
 image:
   repository: 2gis-on-premise/mapgl
-  tag: 1.36.1
+  tag: 1.39.0
   pullPolicy: IfNotPresent
 
 
@@ -46,8 +46,9 @@ image:
 # @param env.MAPGL_HOST Domain name for MapGL JS API service.
 # @param env.MAPGL_TILES_API Domain name of the Tiles API service.
 # @param env.MAPGL_TILESET Tileset of the Tiles API service to use.
+# @param env.MAPGL_IMMERSIVE_TILESET Additional immersive tileset of the Tiles API service to use.
 # @param env.MAPGL_TRAFFICSERVER Domain name of the Traffic Proxy service.
-# @skip env.MAPGL_FLOORSSERVER
+# @param env.MAPGL_FLOORSSERVER Domain name of the Floors API service.
 # @param env.MAPGL_KEYSERVER Domain name of the API Keys service.
 # @param env.MAPGL_RTLPLUGIN URL of the plugin for right-to-left languages support.
 # @param env.MAPGL_RTLPLUGINHASH SHA512 hash of the RTL plugin.
@@ -57,11 +58,13 @@ env:
   MAPGL_HOST: https://mapgl-api.ingress.host
   MAPGL_TILES_API: https://tiles-api.ingress.host
   MAPGL_TILESET: web
+  MAPGL_IMMERSIVE_TILESET: web_immersive
   MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
-  MAPGL_FLOORSSERVER: https://floors.api.2gis.ru
+  MAPGL_FLOORSSERVER: https://floors-api.ingress.host
   MAPGL_KEYSERVER: https://keys-api.ingress.host
   MAPGL_RTLPLUGIN: https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js
-  MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
+  MAPGL_RTLPLUGINHASH:
+    sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
 
 
 # @section Strategy settings

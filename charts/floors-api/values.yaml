@@ -1,0 +1,156 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+
+# @section Deployment settings
+
+# @param nodejs.image.repository Floors backend image repository.
+# @param nodejs.image.pullPolicy Floors backend pull policy.
+# @param nodejs.image.tag Floors backend image tag.
+# @param nginx.image.repository Floors nginx image repository.
+# @param nginx.image.pullPolicy Floors nginx pull policy.
+# @param nginx.image.tag Floors nginx image tag.
+
+
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
+# @param dgctlStorage.bucket S3 bucket name.
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket.
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate.
+
+dgctlStorage:
+  host: ''
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+  manifest: ''
+
+# @section Common settings
+
+# @param replicaCount A replica count for the pod.
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+
+replicaCount: 1
+imagePullSecrets: []
+nameOverride: ''
+fullnameOverride: ''
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+
+# @section Service account settings
+
+# @param serviceAccount.create Specifies whether a service account should be created.
+# @param serviceAccount.annotations Annotations to add to the service account.
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ''
+
+
+# @section Service settings
+
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.port Service port.
+
+service:
+  type: ClusterIP
+  port: 80
+
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
+
+ingress:
+  enabled: false
+  hosts:
+  - host: floors.host
+
+
+# @section Limits
+
+# @skip resources
+# @extra resources.requests.cpu A CPU request, e.g., `100m`.
+# @extra resources.requests.memory A memory request, e.g., `128Mi`.
+# @extra resources.limits.cpu A CPU limit, e.g., `100m`.
+# @extra resources.limits.memory A memory limit, e.g., `128Mi`.
+# @skip nginx.resources
+# @extra nginx.resources.requests.cpu A CPU request, e.g., `100m`.
+# @extra nginx.resources.requests.memory A memory request, e.g., `128Mi`.
+# @extra nginx.resources.limits.cpu A CPU limit, e.g., `100m`.
+# @extra nginx.resources.limits.memory A memory limit, e.g., `128Mi`.
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128M
+  limits:
+    cpu: 500m
+    memory: 256M
+
+# @section Floors backend settings
+
+nodejs:
+  image:
+    repository: 2gis-on-premise/floors-nodejs
+    pullPolicy: IfNotPresent
+    tag: 1.0.4
+
+
+# @section Floors nginx settings
+
+# @param nginx.httpPort HTTP port on which Floors API will be listening.
+
+nginx:
+  httpPort: 8080
+  image:
+    repository: 2gis-on-premise/nginx
+    tag: 1.21.6
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128M
+    limits:
+      cpu: 500m
+      memory: 256M
+
+# @section Floors API data import settings
+
+# @param import.enabled If import task should be enabled
+# @param import.image.repository Import task image repository.
+# @param import.image.tag Import task image tag.
+# @param import.image.pullPolicy Import task pull policy.
+# @skip import.resources
+# @extra import.resources.requests.cpu A CPU request, e.g., `100m`.
+# @extra import.resources.requests.memory A memory request, e.g., `128Mi`.
+# @extra import.resources.limits.cpu A CPU limit, e.g., `100m`.
+# @extra import.resources.limits.memory A memory limit, e.g., `128Mi`.
+
+import:
+  enabled: true
+  image:
+    repository: 2gis-on-premise/floors-importer
+    pullPolicy: IfNotPresent
+    tag: 1.0.4

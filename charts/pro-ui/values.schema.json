@@ -17,7 +17,8 @@
         "supportDocumentationLink",
         "auth",
         "api",
-        "mapgl"
+        "mapgl",
+        "healthcheckPath"
       ],
       "properties": {
         "logLevel": {
@@ -41,6 +42,9 @@
         "supportDocumentationLink": {
           "type": "string"
         },
+        "healthcheckPath": {
+          "type": "string"
+        },
         "auth": {
           "type": "object",
           "additionalProperties": false,
@@ -54,7 +58,8 @@
             "oAuthProvider",
             "identityProviderUrl",
             "oAuthApiUrl",
-            "userDataApiUrl"
+            "userDataApiUrl",
+            "turnOffCertValidation"
           ],
           "properties": {
             "sso": {
@@ -87,6 +92,9 @@
             },
             "userDataApiUrl": {
               "type": "string"
+            },
+            "turnOffCertValidation": {
+              "type": "boolean"
             }
           }
         },
@@ -119,6 +127,9 @@
               "type": "string"
             },
             "styleFontsUrl": {
+              "type": "string"
+            },
+            "styleModelsUrl": {
               "type": "string"
             }
           }

@@ -3,8 +3,8 @@ name: catalog-api
 type: application
 description: A Helm chart for Kubernetes to deploy Catalog APIs
 
-version: 1.7.7
-appVersion: 3.593.5
+version: 1.10.0
+appVersion: 3.597.0
 
 maintainers:
 - name: 2gis

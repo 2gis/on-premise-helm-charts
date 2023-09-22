@@ -18,6 +18,7 @@ ui:
   # @param ui.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param ui.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param ui.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param ui.healthcheckPath Kubernetes [live/ready probes path](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Possible values: `/api/healthcheck/app` (checks current app healthcheck only), `/api/healthcheck/integration` (checks healthchecks of current app and all integrations).
 
   replicas: 1
   nodeSelector: {}
@@ -27,6 +28,7 @@ ui:
   podLabels: {}
   annotations: {}
   labels: {}
+  healthcheckPath: /api/healthcheck/app
 
   # @section Deployment settings
 
@@ -37,7 +39,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/pro-ui
-    tag: 1.0.1
+    tag: 1.0.2
 
   # @section UI service settings
 
@@ -68,6 +70,7 @@ ui:
   # @param ui.auth.oAuthApiUrl an oAuth provider base URL
   # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/
   # @param ui.auth.userDataApiUrl an user data provider URL
+  # @param ui.auth.turnOffCertValidation Flag to turn off certificate validation. Possible values: `"true"` or `"false"`.
   auth:
     sso: false
     secure: true
@@ -79,7 +82,7 @@ ui:
     identityProviderUrl: ''
     oAuthApiUrl: ''
     userDataApiUrl: ''
-
+    turnOffCertValidation: false
   # @section 2GIS Pro API settings
 
   # @param ui.api.url Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/.
@@ -94,6 +97,7 @@ ui:
   # @param ui.mapgl.styleUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) `style.json` folder, e.g., '//mapgl.ingress.host/style'
   # @param ui.mapgl.styleIconsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons folder, e.g., '//mapgl.ingress.host/style/icons'
   # @param ui.mapgl.styleFontsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'
+  # @param ui.mapgl.styleModelsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) models folder, e.g., '//mapgl.ingress.host/style/models'
 
   mapgl:
     host: mapgl-api.host
@@ -101,6 +105,7 @@ ui:
     styleUrl: ''
     styleIconsUrl: ''
     styleFontsUrl: ''
+    styleModelsUrl: ''
 
   # @section Strategy settings
 
@@ -135,7 +140,7 @@ ui:
   ingress:
     enabled: false
     hosts:
-    - host: pro-ui.host
+      - host: pro-ui.host
 
   # @section Limits
 

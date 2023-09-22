@@ -40,20 +40,22 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                                                             | Value |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`                                                                                                                                                                                                                        | `""`  |
-| `dgctlStorage.bucket`    | S3 bucket name                                                                                                                                                                                                                                          | `""`  |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket                                                                                                                                                                                                                  | `""`  |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket                                                                                                                                                                                                                  | `""`  |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate | `""`  |
+| Name                     | Description                                                                                                                                                                                                                                             | Value   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`                                                                                                                                                                                                                        | `""`    |
+| `dgctlStorage.bucket`    | S3 bucket name                                                                                                                                                                                                                                          | `""`    |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket                                                                                                                                                                                                                  | `""`    |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket                                                                                                                                                                                                                  | `""`    |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate | `""`    |
+| `dgctlStorage.secure`    | If S3 uses https.                                                                                                                                                                                                                                       | `false` |
+| `dgctlStorage.region`    | S3 region                                                                                                                                                                                                                                               | `""`    |
 
 ### Deployment settings
 
 | Name                   | Description                                                                                   | Value                        |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ---------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/search-api` |
-| `api.image.tag`        | Tag                                                                                           | `7.57.0`                     |
+| `api.image.tag`        | Tag                                                                                           | `7.63.1-s3region`            |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`               |
 
 ### API settings
