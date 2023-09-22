@@ -394,7 +394,7 @@ importer:
 
 # @section License service settings
 
-# @param license.url Address of the License service. Ex: http(s)://license.svc
+# @param license.url Address of the License service. Ex: https://license.svc
 # @param license.retryPeriod Duration how often tiles server should try to update license status if it is failing to get it.
 
 license:
