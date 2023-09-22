@@ -182,6 +182,7 @@ dm:
   citiesUrl: ''
   citiesUpdatePeriod: 3600
   taskSplitSize: 5000
+  compositeTaskTimeoutSec: 3600
   archiver:
     enabled: true
     fetchLogs: false
