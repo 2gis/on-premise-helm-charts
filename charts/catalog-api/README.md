@@ -117,18 +117,23 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Database settings
 
-| Name                                                   | Description                                                         | Value  |
-| ------------------------------------------------------ | ------------------------------------------------------------------- | ------ |
-| `api.postgres.host`                                    | PostgreSQL rw/ro hostname or IP. **Required**                       | `""`   |
-| `api.postgres.port`                                    | PostgreSQL port                                                     | `5432` |
-| `api.postgres.name`                                    | PostgreSQL database name. **Required**                              | `""`   |
-| `api.postgres.username`                                | PostgreSQL username. **Required**                                   | `""`   |
-| `api.postgres.password`                                | PostgreSQL password. **Required**                                   | `""`   |
-| `api.postgres.queryTimeout`                            | Max execution time PostgreSQL query timeout in seconds              | `3`    |
-| `api.postgres.poolSize.api`                            | PostgreSQL connection pool size for API                             | `32`   |
-| `api.postgres.poolSize.preloaders.region`              | PostgreSQL connection pool size for preloader regions               | `2`    |
-| `api.postgres.poolSize.preloaders.rubric`              | PostgreSQL connection pool size for preloader rubrics               | `3`    |
-| `api.postgres.poolSize.preloaders.additionalAttribute` | PostgreSQL connection pool size for preloader additional attributes | `3`    |
+| Name                                                   | Description                                                         | Value                        |
+| ------------------------------------------------------ | ------------------------------------------------------------------- | ---------------------------- |
+| `api.postgres.host`                                    | PostgreSQL rw/ro hostname or IP. **Required**                       | `""`                         |
+| `api.postgres.port`                                    | PostgreSQL port                                                     | `5432`                       |
+| `api.postgres.name`                                    | PostgreSQL database name. **Required**                              | `""`                         |
+| `api.postgres.username`                                | PostgreSQL username. **Required**                                   | `""`                         |
+| `api.postgres.password`                                | PostgreSQL password. **Required**                                   | `""`                         |
+| `api.postgres.queryTimeout`                            | Max execution time PostgreSQL query timeout in seconds              | `3`                          |
+| `api.postgres.poolSize.api`                            | PostgreSQL connection pool size for API                             | `32`                         |
+| `api.postgres.poolSize.preloaders.region`              | PostgreSQL connection pool size for preloader regions               | `2`                          |
+| `api.postgres.poolSize.preloaders.rubric`              | PostgreSQL connection pool size for preloader rubrics               | `3`                          |
+| `api.postgres.poolSize.preloaders.additionalAttribute` | PostgreSQL connection pool size for preloader additional attributes | `3`                          |
+| `api.postgres.ssl.enabled`                             | Use SSL to connect to PostgreSQL                                    | `false`                      |
+| `api.postgres.ssl.mode`                                | SSL connection mode                                                 | `verify-full`                |
+| `api.postgres.ssl.clientCert`                          | Client certificate file path                                        | `./path/to/client-cert.pem`  |
+| `api.postgres.ssl.clientKey`                           | Client key file path                                                | `./path/to/client-key.pkcs8` |
+| `api.postgres.ssl.caCert`                              | CA certificate file path                                            | `./path/to/server-ca.pem`    |
 
 ### Preloaders settings
 

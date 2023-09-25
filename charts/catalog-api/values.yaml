@@ -154,6 +154,11 @@ api:
   # @param api.postgres.poolSize.preloaders.region PostgreSQL connection pool size for preloader regions
   # @param api.postgres.poolSize.preloaders.rubric PostgreSQL connection pool size for preloader rubrics
   # @param api.postgres.poolSize.preloaders.additionalAttribute PostgreSQL connection pool size for preloader additional attributes
+  # @param api.postgres.ssl.enabled Use SSL to connect to PostgreSQL
+  # @param api.postgres.ssl.mode SSL connection mode
+  # @param api.postgres.ssl.clientCert Client certificate file path
+  # @param api.postgres.ssl.clientKey Client key file path
+  # @param api.postgres.ssl.serverCert Server root certificate file path
 
   postgres:
     host: ''
@@ -168,6 +173,12 @@ api:
         region: 2
         rubric: 3
         additionalAttribute: 3
+    ssl:
+      enabled: false
+      mode: verify-full
+      clientCert: ./path/to/client-cert.pem
+      clientKey: ./path/to/client-key.pkcs8
+      serverCert: ./path/to/server-cert.pem
 
   # @section Preloaders settings
 

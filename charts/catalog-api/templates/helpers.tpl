@@ -44,6 +44,17 @@ onprem
 {{- end }}
 
 {{- define "catalog.env.postgres" -}}
+- name: CATALOG_DB_SSL_ENABLED
+  value: "{{ .Values.api.postgres.ssl.enabled }}"
+- name: CATALOG_DB_SSL_MODE
+  value: "{{ .Values.api.postgres.ssl.mode }}"
+- name: CATALOG_DB_SSL_CLIENTCERT_PATH
+  value: "{{ .Values.api.postgres.ssl.clientCert }}"
+- name: CATALOG_DB_SSL_CLIENTKEY_PATH
+  value: "{{ .Values.api.postgres.ssl.clientKey }}"
+- name: CATALOG_DB_SSL_SERVERCERT_PATH
+  value: "{{ .Values.api.postgres.ssl.serverCert }}"
+
 - name: CATALOG_DB_SCHEMA
   value: "{{ include "catalog.manifestCode" . }},extensions"
 - name: CATALOG_DB_QUERY_TIMEOUT
