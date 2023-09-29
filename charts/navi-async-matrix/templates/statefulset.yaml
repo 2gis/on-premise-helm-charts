@@ -27,7 +27,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
-        checksum/config: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
         prometheus.io/path: "/metrics"
         prometheus.io/port: {{ .Values.dm.port | quote }}
         {{- if .Values.prometheusEnabled }}
