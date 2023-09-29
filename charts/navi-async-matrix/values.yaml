@@ -177,6 +177,7 @@ vpa:
 
 # @param dm.port Distance Matrix Async API HTTP port.
 # @param dm.configType Configuration type. Must always be `env`.
+# @param dm.logLevel Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.
 # @param dm.workerCount Number of Distance Matrix Async workers.
 # @param dm.citiesUrl URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required**
 # @param dm.citiesUpdatePeriod Period (in seconds) between requesting data from `citiesUrl`.
@@ -191,6 +192,7 @@ dm:
   host: '0.0.0.0'
   port: 8000
   configType: env
+  logLevel: INFO
   workerCount: 4
   citiesUrl: ''
   citiesUpdatePeriod: 3600
@@ -219,6 +221,10 @@ dm:
 # @param db.user PostgreSQL username. **Required**
 # @param db.password PostgreSQL password. **Required**
 # @param db.schema PostgreSQL schema.
+# @param db.sslRootCert Root certificate file.
+# @param db.sslCert Certificate of postgresql server.
+# @param db.sslKey Key of postgresql server.
+# @param db.sslMode Level of protection.
 
 db:
   host: ''
@@ -227,6 +233,10 @@ db:
   user: ''
   password: ''
   schema: public
+  sslRootCert: ""
+  sslCert: ""
+  sslKey: ""
+  sslMode: verify-full
 
 
 # @section Kafka settings

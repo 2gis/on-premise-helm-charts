@@ -26,8 +26,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/config: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
         prometheus.io/path: "/metrics"
         prometheus.io/port: {{ .Values.dm.port | quote }}
         {{- if .Values.prometheusEnabled }}
@@ -76,6 +76,36 @@ spec:
           secret:
             secretName: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
       {{- end }}
+      {{- if and .Values.db.sslRootCert .Values.db.sslCert .Values.db.sslKey .Values.db.sslMode }}
+        - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
+          secret:
+            secretName: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+        - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+          emptyDir: {}
+      {{- end }}
+      initContainers:
+        {{- if and .Values.db.sslRootCert .Values.db.sslCert .Values.db.sslKey .Values.db.sslMode }}
+        - name: copy-certs
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              cp /tmp/certs/* /etc/2gis/secret/psql/
+              chmod 600 /etc/2gis/secret/psql/client.key
+          volumeMounts:
+            - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
+              mountPath: /tmp/certs
+            - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+              mountPath: /etc/2gis/secret/psql
+        {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
@@ -110,6 +140,10 @@ spec:
           - name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /etc/2gis/secret/
           {{- end }}
+          {{- if and .Values.db.sslRootCert .Values.db.sslCert .Values.db.sslKey .Values.db.sslMode }}
+          - name: {{ printf "%s-psql" (include "navi-async-matrix.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/psql
+          {{- end }}
           env:
             - name: DM_ASYNC_SERVICE_HOST
               value: {{ .Values.dm.host | quote }}
@@ -129,6 +163,8 @@ spec:
               value: {{ required "A valid .Values.s3.host entry required" .Values.s3.host | quote }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__S3_BUCKET
               value: {{ required "A valid .Values.s3.bucket entry required" .Values.s3.bucket | quote }}
+            - name: DM_ASYNC_SERVICE_LOGGER_SETTING__LEVEL
+              value: {{ .Values.dm.logLevel | quote }}
             {{- if .Values.s3.publicNetloc }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC
               value: {{ .Values.s3.publicNetloc | quote }}

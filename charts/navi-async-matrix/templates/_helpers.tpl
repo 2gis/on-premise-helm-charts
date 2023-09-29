@@ -44,6 +44,13 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{- define "navi-async-matrix.dbDsnParams" -}}
+{{- if and .Values.db.sslRootCert .Values.db.sslCert .Values.db.sslKey .Values.db.sslMode }}
+{{- printf "?sslcert=/etc/2gis/secret/psql/client.crt&sslkey=/etc/2gis/secret/psql/client.key&sslrootcert=/etc/2gis/secret/psql/ca.crt&sslmode=%s"
+               .Values.db.sslMode -}}
+{{- end }}
+{{- end }}
+
 {{- /*
      Collect merged Kafka properties from these dictionaries:
        - kafka.properties: this is a simple key/value dictionary
@@ -145,6 +152,22 @@ Create the name of the service account to use
     {{- . | mustToPrettyJson }},
     {{- println }}
   {{- end }}
+{{- end }}
+
+{{- /*
+Name for psql intermediate volume for copy secrets and change permissions
+*/ -}}
+
+{{- define "navi-async-matrix.fullname-psql-raw" -}}
+{{- printf "%s-psql-raw" (include "navi-async-matrix.fullname" .) -}}
+{{- end }}
+
+{{- /*
+Name for psql secret and volume
+*/ -}}
+
+{{- define "navi-async-matrix.fullname-psql" -}}
+{{- printf "%s-psql" (include "navi-async-matrix.fullname" .) -}}
 {{- end }}
 
 {{/*
