@@ -158,24 +158,32 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Database access settings
 
-| Name                   | Description                                                                         | Value  |
-| ---------------------- | ----------------------------------------------------------------------------------- | ------ |
-| `postgres.ro`          | **Settings for the read-only access**                                               |        |
-| `postgres.ro.host`     | PostgreSQL hostname or IP. **Required**                                             | `""`   |
-| `postgres.ro.port`     | PostgreSQL port.                                                                    | `5432` |
-| `postgres.ro.timeout`  | PostgreSQL client connection timeout.                                               | `3s`   |
-| `postgres.ro.name`     | PostgreSQL database name. **Required**                                              | `""`   |
-| `postgres.ro.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`   |
-| `postgres.ro.username` | PostgreSQL username. **Required**                                                   | `""`   |
-| `postgres.ro.password` | PostgreSQL password. **Required**                                                   | `""`   |
-| `postgres.rw`          | **Settings for the read-write access**                                              |        |
-| `postgres.rw.host`     | PostgreSQL hostname or IP. **Required**                                             | `""`   |
-| `postgres.rw.port`     | PostgreSQL port.                                                                    | `5432` |
-| `postgres.rw.timeout`  | PostgreSQL client connection timeout.                                               | `3s`   |
-| `postgres.rw.name`     | PostgreSQL database name. **Required**                                              | `""`   |
-| `postgres.rw.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`   |
-| `postgres.rw.username` | PostgreSQL username. **Required**                                                   | `""`   |
-| `postgres.rw.password` | PostgreSQL password. **Required**                                                   | `""`   |
+| Name                         | Description                                                                         | Value                        |
+| ---------------------------- | ----------------------------------------------------------------------------------- | ---------------------------- |
+| `postgres.ro`                | **Settings for the read-only access**                                               |                              |
+| `postgres.ro.host`           | PostgreSQL hostname or IP. **Required**                                             | `""`                         |
+| `postgres.ro.port`           | PostgreSQL port.                                                                    | `5432`                       |
+| `postgres.ro.timeout`        | PostgreSQL client connection timeout.                                               | `3s`                         |
+| `postgres.ro.name`           | PostgreSQL database name. **Required**                                              | `""`                         |
+| `postgres.ro.schema`         | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`                         |
+| `postgres.ro.username`       | PostgreSQL username. **Required**                                                   | `""`                         |
+| `postgres.ro.password`       | PostgreSQL password. **Required**                                                   | `""`                         |
+| `postgres.ro.ssl.mode`       | SSL connection mode                                                                 | `disable`                    |
+| `postgres.ro.ssl.clientCert` | Client certificate file path                                                        | `./path/to/client-cert.pem`  |
+| `postgres.ro.ssl.clientKey`  | Client key file path                                                                | `./path/to/client-key.pkcs8` |
+| `postgres.ro.ssl.serverCert` | Server root certificate file path                                                   | `./path/to/server-cert.pem`  |
+| `postgres.rw`                | **Settings for the read-write access**                                              |                              |
+| `postgres.rw.host`           | PostgreSQL hostname or IP. **Required**                                             | `""`                         |
+| `postgres.rw.port`           | PostgreSQL port.                                                                    | `5432`                       |
+| `postgres.rw.timeout`        | PostgreSQL client connection timeout.                                               | `3s`                         |
+| `postgres.rw.name`           | PostgreSQL database name. **Required**                                              | `""`                         |
+| `postgres.rw.schema`         | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`                         |
+| `postgres.rw.username`       | PostgreSQL username. **Required**                                                   | `""`                         |
+| `postgres.rw.password`       | PostgreSQL password. **Required**                                                   | `""`                         |
+| `postgres.rw.ssl.mode`       | SSL connection mode                                                                 | `disable`                    |
+| `postgres.rw.ssl.clientCert` | Client certificate file path                                                        | `./path/to/client-cert.pem`  |
+| `postgres.rw.ssl.clientKey`  | Client key file path                                                                | `./path/to/client-key.pkcs8` |
+| `postgres.rw.ssl.serverCert` | Server root certificate file path                                                   | `./path/to/server-cert.pem`  |
 
 ### LDAP connection settings
 

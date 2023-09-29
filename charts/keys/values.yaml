@@ -356,6 +356,10 @@ postgres:
   # @param postgres.ro.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
   # @param postgres.ro.username PostgreSQL username. **Required**
   # @param postgres.ro.password PostgreSQL password. **Required**
+  # @param postgres.ro.ssl.mode SSL connection mode
+  # @param postgres.ro.ssl.clientCert Client certificate file path
+  # @param postgres.ro.ssl.clientKey Client key file path
+  # @param postgres.ro.ssl.serverCert Server root certificate file path
 
   ro:
     host: ''
@@ -365,6 +369,11 @@ postgres:
     schema: ''
     username: ''
     password: ''
+    ssl:
+      mode: disable
+      clientCert: ./path/to/client-cert.pem
+      clientKey: ./path/to/client-key.pkcs8
+      serverCert: ./path/to/server-cert.pem
 
   # @extra postgres.rw **Settings for the read-write access**
 
@@ -375,6 +384,10 @@ postgres:
   # @param postgres.rw.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
   # @param postgres.rw.username PostgreSQL username. **Required**
   # @param postgres.rw.password PostgreSQL password. **Required**
+  # @param postgres.rw.ssl.mode SSL connection mode
+  # @param postgres.rw.ssl.clientCert Client certificate file path
+  # @param postgres.rw.ssl.clientKey Client key file path
+  # @param postgres.rw.ssl.serverCert Server root certificate file path
 
   rw:
     host: ''
@@ -384,7 +397,11 @@ postgres:
     schema: ''
     username: ''
     password: ''
-
+    ssl:
+      mode: disable
+      clientCert: ./path/to/client-cert.pem
+      clientKey: ./path/to/client-key.pkcs8
+      serverCert: ./path/to/server-cert.pem
 
 # @section LDAP connection settings
 

@@ -115,6 +115,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.postgres.ro.timeout }}"
 - name: KEYS_DB_RO_USERNAME
   value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username }}"
+- name: KEYS_DB_RO_SSL_MODE
+  value: "{{ .Values.postgres.ro.ssl.mode }}"
+- name: KEYS_DB_RO_SSL_CLIENTCERT_PATH
+  value: "{{ .Values.postgres.ro.ssl.clientCert }}"
+- name: KEYS_DB_RO_SSL_CLIENTKEY_PATH
+  value: "{{ .Values.postgres.ro.ssl.clientKey }}"
+- name: KEYS_DB_RO_SSL_SERVERCERT_PATH
+  value: "{{ .Values.postgres.ro.ssl.serverCert }}"
 - name: KEYS_DB_RW_HOST
   value: "{{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host }}"
 - name: KEYS_DB_RW_PORT
@@ -127,6 +135,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.postgres.rw.schema }}"
 - name: KEYS_DB_RW_USERNAME
   value: "{{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username }}"
+- name: KEYS_DB_RW_SSL_MODE
+  value: "{{ .Values.postgres.rw.ssl.mode }}"
+- name: KEYS_DB_RW_SSL_CLIENTCERT_PATH
+  value: "{{ .Values.postgres.rw.ssl.clientCert }}"
+- name: KEYS_DB_RW_SSL_CLIENTKEY_PATH
+  value: "{{ .Values.postgres.rw.ssl.clientKey }}"
+- name: KEYS_DB_RW_SSL_SERVERCERT_PATH
+  value: "{{ .Values.postgres.rw.ssl.serverCert }}"
 {{- end }}
 
 {{- define "keys.env.db.deploys" -}}
