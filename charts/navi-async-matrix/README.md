@@ -30,7 +30,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 | Name                            | Description                                                                                                                 | Value  |
 | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `replicaCount`                  | A replica count for the pod.                                                                                                | `1`    |
+| `replicaCount`                  | A replica count for the pod.                                                                                                | `2`    |
 | `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                              | `[]`   |
 | `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`   |
 | `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`   |
@@ -52,7 +52,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.3.3`                             |
+| `image.tag`        | Tag         | `1.6.0`                             |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings
@@ -62,6 +62,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+
+### RBAC parameter
+
+| Name               | Description                                     | Value   |
+| ------------------ | ----------------------------------------------- | ------- |
+| `rbac.create`      | Whether to create and use RBAC resources or not | `false` |
+| `rbac.annotations` | Role and RoleBinding annotations                | `{}`    |
+| `rbac.labels`      | Role and RoleBinding additional labels          | `{}`    |
 
 ### Strategy settings
 
@@ -128,24 +136,26 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Distance Matrix Async API settings
 
-| Name                    | Description                                                                                                                   | Value      |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `dm.host`               | Distance Matrix Async API HTTP host.                                                                                          | `0.0.0.0`  |
-| `dm.port`               | Distance Matrix Async API HTTP port.                                                                                          | `8000`     |
-| `dm.configType`         | Configuration type. Must always be `env`.                                                                                     | `env`      |
-| `dm.citiesUrl`          | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`       |
-| `dm.citiesUpdatePeriod` | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600`     |
+| Name                         | Description                                                                                                                   | Value  |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `dm.port`                    | Distance Matrix Async API HTTP port.                                                                                          | `8000` |
+| `dm.configType`              | Configuration type. Must always be `env`.                                                                                     | `env`  |
+| `dm.workerCount`             | Number of Distance Matrix Async workers.                                                                                      | `4`    |
+| `dm.citiesUrl`               | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`   |
+| `dm.citiesUpdatePeriod`      | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600` |
+| `dm.taskSplitSize`           | Minimum size of matrix to get split in archiver job.                                                                          | `5000` |
+| `dm.compositeTaskTimeoutSec` | Timeout for executing split tasks.                                                                                            | `3600` |
 
 ### Database settings
 
-| Name          | Description                             																					| Value    |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `db.host`     | PostgreSQL hostname or IP. **Required** 																					| `""`     |
-| `db.port`     | PostgreSQL port.                        																					| `5432`   |
-| `db.name`     | PostgreSQL database name. **Required**  																					| `""`     |
-| `db.user`     | PostgreSQL username. **Required**       																					| `""`     |
-| `db.password` | PostgreSQL password. **Required**       																					| `""`     |
-| `db.schema`   | PostgreSQL schema. Must be specified in overrides. If the database name changes, a new database with the specified schema will be created. Otherwise, the database will be recreated with a new schema.	| `public` |
+| Name          | Description                             | Value    |
+| ------------- | --------------------------------------- | -------- |
+| `db.host`     | PostgreSQL hostname or IP. **Required** | `""`     |
+| `db.port`     | PostgreSQL port.                        | `5432`   |
+| `db.name`     | PostgreSQL database name. **Required**  | `""`     |
+| `db.user`     | PostgreSQL username. **Required**       | `""`     |
+| `db.password` | PostgreSQL password. **Required**       | `""`     |
+| `db.schema`   | PostgreSQL schema.                      | `public` |
 
 ### Kafka settings
 
