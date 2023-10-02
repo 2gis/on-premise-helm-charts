@@ -30,7 +30,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 | Name                            | Description                                                                                                                 | Value  |
 | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `replicaCount`                  | A replica count for the pod.                                                                                                | `2`    |
+| `replicaCount`                  | A replica count for the pod.                                                                                                | `1`    |
 | `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                              | `[]`   |
 | `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`   |
 | `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`   |
@@ -52,7 +52,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.6.0`                             |
+| `image.tag`        | Tag         | `1.6.1`                             |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings
@@ -140,6 +140,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `dm.port`                    | Distance Matrix Async API HTTP port.                                                                                          | `8000` |
 | `dm.configType`              | Configuration type. Must always be `env`.                                                                                     | `env`  |
+| `dm.logLevel`                | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                 | `INFO` |
 | `dm.workerCount`             | Number of Distance Matrix Async workers.                                                                                      | `4`    |
 | `dm.citiesUrl`               | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`   |
 | `dm.citiesUpdatePeriod`      | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600` |
@@ -148,14 +149,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Database settings
 
-| Name          | Description                             | Value    |
-| ------------- | --------------------------------------- | -------- |
-| `db.host`     | PostgreSQL hostname or IP. **Required** | `""`     |
-| `db.port`     | PostgreSQL port.                        | `5432`   |
-| `db.name`     | PostgreSQL database name. **Required**  | `""`     |
-| `db.user`     | PostgreSQL username. **Required**       | `""`     |
-| `db.password` | PostgreSQL password. **Required**       | `""`     |
-| `db.schema`   | PostgreSQL schema.                      | `public` |
+| Name             | Description                             | Value         |
+| ---------------- | --------------------------------------- | ------------- |
+| `db.host`        | PostgreSQL hostname or IP. **Required** | `""`          |
+| `db.port`        | PostgreSQL port.                        | `5432`        |
+| `db.name`        | PostgreSQL database name. **Required**  | `""`          |
+| `db.user`        | PostgreSQL username. **Required**       | `""`          |
+| `db.password`    | PostgreSQL password. **Required**       | `""`          |
+| `db.schema`      | PostgreSQL schema.                      | `public`      |
+| `db.sslRootCert` | Root certificate file.                  | `""`          |
+| `db.sslCert`     | Certificate of postgresql server.       | `""`          |
+| `db.sslKey`      | Key of postgresql server.               | `""`          |
+| `db.sslMode`     | Level of protection.                    | `verify-full` |
 
 ### Kafka settings
 
