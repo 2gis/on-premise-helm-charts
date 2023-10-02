@@ -65,10 +65,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.ui.appLocale }}"
 - name: APP_THEME
   value: "{{ .Values.ui.appTheme }}"
+- name: FEATURE_CARS_DEMO_IS_ENABLED
+  value: "{{ .Values.ui.featureCarsDemoIsEnabled }}"
 - name: APP_INITIAL_MAP_CENTER
   value: "{{ .Values.ui.appInitialMapCenter }}"
 - name: SUPPORT_DOCUMENTATION_LINK
   value: "{{ .Values.ui.supportDocumentationLink }}"
+- name: IMMERSIVE_MODELS
+  value: "{{ .Values.ui.immersiveModels }}"
 - name: HOME
   value: "/tmp"
 {{- end }}

@@ -36,10 +36,16 @@
           "type": "string",
           "enum": ["ar_AE", "en_AE", "ru_RU"]
         },
+        "featureCarsDemoIsEnabled": {
+          "type": "boolean"
+        },
         "appInitialMapCenter": {
           "type": "string"
         },
         "supportDocumentationLink": {
+          "type": "string"
+        },
+        "immersiveModels": {
           "type": "string"
         },
         "healthcheckPath": {
