@@ -65,17 +65,6 @@ serviceAccount:
   annotations: {}
   name: ''
 
-# @section RBAC parameter
-
-# @param rbac.create Whether to create and use RBAC resources or not
-# @param rbac.annotations Role and RoleBinding annotations
-# @param rbac.labels Role and RoleBinding additional labels
-
-rbac:
-  create: false
-  annotations: {}
-  labels: {}
-
 # @section Strategy settings
 
 # @param updateStrategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
@@ -181,8 +170,8 @@ vpa:
 # @param dm.workerCount Number of Distance Matrix Async workers.
 # @param dm.citiesUrl URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required**
 # @param dm.citiesUpdatePeriod Period (in seconds) between requesting data from `citiesUrl`.
-# @param dm.taskSplitSize Minimum size of matrix to get split in archiver job.
-# @param dm.compositeTaskTimeoutSec Timeout for executing split tasks.
+# @skip dm.taskSplitSize
+# @skip dm.compositeTaskTimeoutSec
 # @skip dm.host
 # @skip dm.archiver
 # @skip dm.labels
@@ -200,15 +189,6 @@ dm:
   compositeTaskTimeoutSec: 3600
   archiver:
     enabled: false
-    fetchLogs: false
-    image:
-      repository: on-premise/archiver-async-service
-      pullPolicy: IfNotPresent
-      tag: 1.1.0
-    resources:
-      limits:
-        cpu: 2
-        memory: 6Gi
   labels: {}
   annotations: {}
 
@@ -244,7 +224,7 @@ db:
 # @param kafka.groupId Distance Matrix Async API group identifier.
 # @param kafka.statusTopic Name of the topic for sending new tasks to.
 # @param kafka.cancelTopic Name of the topic for canceling or receiving information about finished tasks.
-# @param kafka.archiveTopic Name of the topic for archiving tasks.
+# @skip kafka.archiveTopic
 # @extra kafka.properties Properties as supported by kafka-python. Refer to inline comments for details.
 # @skip kafka.properties.bootstrap.servers
 # @skip kafka.properties.security.protocol

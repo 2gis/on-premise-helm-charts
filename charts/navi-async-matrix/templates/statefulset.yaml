@@ -179,9 +179,9 @@ spec:
             - name: DM_ASYNC_SERVICE_TOPIC_RULES
               {{- /* topicRules is a structure, hence mustToJson */}}
               value: {{ .Values.kafka.taskTopicRules | mustToJson | quote }}
+            {{- if .Values.dm.archiver.enabled }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ARCHIVE_RESPONSE_TOPIC
               value: {{ .Values.kafka.archiveTopic | quote }}
-            {{- if .Values.dm.archiver.enabled }}
             - name: DM_ASYNC_SERVICE_DEBUG_MODE
               value: {{ .Values.dm.archiver.fetchLogs | ternary "true" "false" | quote }}
             - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__NAMESPACE

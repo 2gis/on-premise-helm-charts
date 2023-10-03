@@ -63,14 +63,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
-### RBAC parameter
-
-| Name               | Description                                     | Value   |
-| ------------------ | ----------------------------------------------- | ------- |
-| `rbac.create`      | Whether to create and use RBAC resources or not | `false` |
-| `rbac.annotations` | Role and RoleBinding annotations                | `{}`    |
-| `rbac.labels`      | Role and RoleBinding additional labels          | `{}`    |
-
 ### Strategy settings
 
 | Name                  | Description                                                          | Value           |
@@ -136,16 +128,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Distance Matrix Async API settings
 
-| Name                         | Description                                                                                                                   | Value  |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `dm.port`                    | Distance Matrix Async API HTTP port.                                                                                          | `8000` |
-| `dm.configType`              | Configuration type. Must always be `env`.                                                                                     | `env`  |
-| `dm.logLevel`                | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                 | `INFO` |
-| `dm.workerCount`             | Number of Distance Matrix Async workers.                                                                                      | `4`    |
-| `dm.citiesUrl`               | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`   |
-| `dm.citiesUpdatePeriod`      | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600` |
-| `dm.taskSplitSize`           | Minimum size of matrix to get split in archiver job.                                                                          | `5000` |
-| `dm.compositeTaskTimeoutSec` | Timeout for executing split tasks.                                                                                            | `3600` |
+| Name                    | Description                                                                                                                   | Value  |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `dm.port`               | Distance Matrix Async API HTTP port.                                                                                          | `8000` |
+| `dm.configType`         | Configuration type. Must always be `env`.                                                                                     | `env`  |
+| `dm.logLevel`           | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                 | `INFO` |
+| `dm.workerCount`        | Number of Distance Matrix Async workers.                                                                                      | `4`    |
+| `dm.citiesUrl`          | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`   |
+| `dm.citiesUpdatePeriod` | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600` |
 
 ### Database settings
 
@@ -169,7 +159,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `kafka.groupId`                   | Distance Matrix Async API group identifier.                                                                               | `navi_async_matrix` |
 | `kafka.statusTopic`               | Name of the topic for sending new tasks to.                                                                               | `status_topic`      |
 | `kafka.cancelTopic`               | Name of the topic for canceling or receiving information about finished tasks.                                            | `cancel_topic`      |
-| `kafka.archiveTopic`              | Name of the topic for archiving tasks.                                                                                    | `archive_topic`     |
 | `kafka.properties`                | Properties as supported by kafka-python. Refer to inline comments for details.                                            |                     |
 | `kafka.sensitiveProperties`       | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                |
 | `kafka.fileProperties`            | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                |
