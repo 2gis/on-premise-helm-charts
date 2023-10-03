@@ -57,6 +57,18 @@ dgis_tileserver_{{ include "tiles.kind" . }}_{{ required "Valid .Values.cassandr
 {{- end -}}
 {{- end -}}
 
+{{- define "tiles.type" -}}
+{{- if .subtype -}}
+ald
+{{- else if has .kind (list "web" "native") -}}
+vector
+{{- else if eq .kind "raster" -}}
+raster
+{{- else if eq .kind "mapbox" -}}
+mapbox
+{{- end -}}
+{{- end -}}
+
 {{- define "tiles.checksum" -}}
 {{ (include (print $.Template.BasePath .path) $ | fromYaml).data | toYaml | sha256sum }}
 {{- end }}

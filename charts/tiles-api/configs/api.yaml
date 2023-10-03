@@ -22,9 +22,8 @@ cassandra-clusters:
       {{- range $_, $type := $.Values.types }}
       - tileset: {{ $type.name | default (include "tiles.kind" $type) }}
         keyspace: {{ include "tiles.keyspace" (merge $type $) }}
-        {{- if $type.subtype }}
-        type: ald
-        {{- else if $default }}
+        type: {{ include "tiles.type" $type }}
+        {{- if and $default (not $type.subtype) }}
         default: {{ $default }}
         {{- $default = false }}
         {{- end }}

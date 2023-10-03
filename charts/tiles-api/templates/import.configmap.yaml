@@ -22,9 +22,7 @@ data:
       keyspaces:
         - tileset: {{ $type.name | default (include "tiles.kind" $type) }}
           keyspace: {{ include "tiles.keyspace" (merge $type $) }}
-          {{- if $type.subtype }}
-          type: ald
-          {{- end }}
+          type: {{ include "tiles.type" $type }}
           default: true
           partition-size: 4
       {{- with $.Values.cassandra }}
