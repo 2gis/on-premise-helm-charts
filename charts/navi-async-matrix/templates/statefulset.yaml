@@ -198,26 +198,6 @@ spec:
             - name: DM_ASYNC_SERVICE_COMPOSITE_TASK_TIMEOUT_IN_SECONDS
               value: {{ .Values.dm.compositeTaskTimeoutSec | quote }}
             {{- end }}{{- /* .Values.dm.archiver.enabled */}}
-            {{- /*
-                 Collect merged Kafka properties from these dictionaries:
-                   - kafka.properties: this is a simple key/value dictionary
-                   - kafka.fileProperties: this is a key/content dictionary given in values,
-                     content is sensitive and stored in Secret resource, they get
-                     mounted as files sonamed after key. While actual secret values are
-                     hidden this way, what actually goes here in environment properties is
-                     file names. This value substitution is implemented down here.
-                 */ -}}
-            {{- $kafkaProperties := dict -}}
-            {{- range $key, $_ := .Values.kafka.fileProperties -}}
-            {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/secret/%s" $key) -}}
-            {{- end -}}
-            {{- $kafkaProperties := mustMerge $kafkaProperties .Values.kafka.properties -}}
-            {{- range $prop, $val := $kafkaProperties }}
-            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__{{ $prop | upper | replace "." "_" }}
-              value: {{ $val | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__{{ $prop | upper | replace "." "_" }}
-              value: {{ $val | quote }}
-            {{- end }}
             - name: DM_ASYNC_SERVICE_NODE_ID
               valueFrom:
                 fieldRef:
@@ -258,18 +238,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "navi-async-matrix.fullname" . | quote }}
                   key: s3key
-            {{- range $prop, $val := .Values.kafka.sensitiveProperties }}
-            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__{{ $prop | upper | replace "." "_" }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" $) | quote }}
-                  key: {{ $prop | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__{{ $prop | upper | replace "." "_" }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" $) | quote }}
-                  key: {{ $prop | quote }}
-            {{- end }}
             - name: DM_ASYNC_SERVICE_KMS__DM_ASYNC_TOKEN
               valueFrom:
                 secretKeyRef:
