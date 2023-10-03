@@ -31,7 +31,7 @@ dgctlStorage:
 # @param logFormat Logging format for 'api', 'proxy', 'importer' (can be overridden by {service}.logFormatOverride option). Allowed options: text|json. If not defined, 'json' format will be used.
 
 # @extra types **Tiles [types](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture) enabled in Tiles API**
-# @param types[0].kind Kind of tiles, should be one of: web, raster, native.
+# @param types[0].kind Kind of tiles, should be one of: web, raster, native, mapbox.
 # @param types[0].subtype Subtype of the additional tiles data. Should be empty for the regular tiles.
 # @param types[0].name Name for the tileset. If empty, the value from the kind is used.
 # @param types[0].keyspace Custom user defined keyspace. If the parameter is set, the database cleaning and maintenance processes are skipped.
