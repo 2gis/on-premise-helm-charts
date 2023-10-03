@@ -69,7 +69,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       volumes:
       {{- if .Values.dm.archiver.enabled }}
-        - name: {{ printf "%s-manifest" (include "navi-async-matrix.fullname" .) | quote }}
+        - name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
           configMap:
             name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
       {{- end }}
@@ -133,7 +133,7 @@ spec:
           readinessProbe: *healthProbe
           volumeMounts:
           {{- if .Values.dm.archiver.enabled }}
-          - name: {{ printf "%s-manifest" (include "navi-async-matrix.fullname" .) | quote }}
+          - name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /app/src/composite_task_result_archiver/manifests/archive_pod_manifest.json
             subPath: archive_pod_manifest.json
           {{- end }}
