@@ -13,9 +13,9 @@ spec:
     name: {{ include "navi-async-matrix.fullname" $ }}
   minReplicas: {{ .minReplicas }}
   maxReplicas: {{ .maxReplicas }}
-  {{- if .Values.hpa.behavior }}
+  {{- if .behavior }}
   behavior:
-    {{- toYaml .Values.hpa.behavior | nindent 4 }}
+    {{- toYaml .behavior | nindent 4 }}
   {{- end }}
   metrics:
   {{- with .targetCPUUtilizationPercentage }}
