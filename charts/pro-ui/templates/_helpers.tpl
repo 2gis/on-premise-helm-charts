@@ -70,7 +70,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: SUPPORT_DOCUMENTATION_LINK
   value: "{{ .Values.ui.supportDocumentationLink }}"
 - name: IMMERSIVE_MODELS
-  value: "{{ .Values.ui.immersiveModels }}"
+  value: {{ .Values.ui.immersiveModels | quote }}
 - name: HOME
   value: "/tmp"
 {{- end }}
