@@ -100,7 +100,7 @@ tiles-api-mapbox
 {{- else if eq .kind "raster" -}}
 - tiles
 {{- else if eq .kind "mapbox" -}}
-- vtiles
+- mapbox
 {{- end -}}
 {{- end -}}
 
