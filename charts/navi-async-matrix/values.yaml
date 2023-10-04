@@ -51,7 +51,7 @@ prometheusEnabled: true
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  tag: 1.6.1
+  tag: 1.6.2
 
 
 # @section Service account settings
