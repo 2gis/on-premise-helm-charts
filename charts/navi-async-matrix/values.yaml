@@ -200,10 +200,10 @@ dm:
 # @param db.password PostgreSQL password. **Required**
 # @param db.schema PostgreSQL schema.
 # @param db.tls.enabled If tls connection to postgresql is enabled.
-# @param db.tls.sslRootCert Root certificate file.
-# @param db.tls.sslCert Certificate of postgresql server.
-# @param db.tls.sslKey Key of postgresql server.
-# @param db.tls.sslMode Level of protection.
+# @param db.tls.rootCert Root certificate file.
+# @param db.tls.cert Certificate of postgresql server.
+# @param db.tls.key Key of postgresql server.
+# @param db.tls.mode Level of protection.
 
 db:
   host: ''
@@ -214,10 +214,10 @@ db:
   schema: public
   tls:
     enabled: false
-    sslRootCert: ""
-    sslCert: ""
-    sslKey: ""
-    sslMode: verify-full
+    rootCert: ""
+    cert: ""
+    key: ""
+    mode: verify-full
 
 
 # @section Kafka settings

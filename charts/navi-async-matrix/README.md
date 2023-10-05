@@ -138,19 +138,19 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Database settings
 
-| Name                 | Description                                 | Value         |
-| -------------------- | ------------------------------------------- | ------------- |
-| `db.host`            | PostgreSQL hostname or IP. **Required**     | `""`          |
-| `db.port`            | PostgreSQL port.                            | `5432`        |
-| `db.name`            | PostgreSQL database name. **Required**      | `""`          |
-| `db.user`            | PostgreSQL username. **Required**           | `""`          |
-| `db.password`        | PostgreSQL password. **Required**           | `""`          |
-| `db.schema`          | PostgreSQL schema.                          | `public`      |
-| `db.tls.enabled`     | If tls connection to postgresql is enabled. | `false`       |
-| `db.tls.sslRootCert` | Root certificate file.                      | `""`          |
-| `db.tls.sslCert`     | Certificate of postgresql server.           | `""`          |
-| `db.tls.sslKey`      | Key of postgresql server.                   | `""`          |
-| `db.tls.sslMode`     | Level of protection.                        | `verify-full` |
+| Name              | Description                                 | Value         |
+| ----------------- | ------------------------------------------- | ------------- |
+| `db.host`         | PostgreSQL hostname or IP. **Required**     | `""`          |
+| `db.port`         | PostgreSQL port.                            | `5432`        |
+| `db.name`         | PostgreSQL database name. **Required**      | `""`          |
+| `db.user`         | PostgreSQL username. **Required**           | `""`          |
+| `db.password`     | PostgreSQL password. **Required**           | `""`          |
+| `db.schema`       | PostgreSQL schema.                          | `public`      |
+| `db.tls.enabled`  | If tls connection to postgresql is enabled. | `false`       |
+| `db.tls.rootCert` | Root certificate file.                      | `""`          |
+| `db.tls.cert`     | Certificate of postgresql server.           | `""`          |
+| `db.tls.key`      | Key of postgresql server.                   | `""`          |
+| `db.tls.mode`     | Level of protection.                        | `verify-full` |
 
 ### Kafka settings
 
