@@ -45,9 +45,9 @@ Create the name of the service account to use
 {{- end }}
 
 {{- define "navi-async-matrix.dbDsnParams" -}}
-{{- if and .Values.db.sslRootCert .Values.db.sslCert .Values.db.sslKey .Values.db.sslMode }}
+{{- if and .Values.db.tls.enabled }}
 {{- printf "?sslcert=/etc/2gis/secret/psql/client.crt&sslkey=/etc/2gis/secret/psql/client.key&sslrootcert=/etc/2gis/secret/psql/ca.crt&sslmode=%s"
-               .Values.db.sslMode -}}
+               ( required "A valid db.tls.sslMode entry required" .Values.db.tls.sslMode) -}}
 {{- end }}
 {{- end }}
 

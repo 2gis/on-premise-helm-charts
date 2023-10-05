@@ -78,7 +78,7 @@ spec:
           secret:
             secretName: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
       {{- end }}
-      {{- if and .Values.db.sslRootCert .Values.db.sslCert .Values.db.sslKey .Values.db.sslMode }}
+      {{- if .Values.db.tls.enabled }}
         - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
           secret:
             secretName: {{ include "navi-async-matrix.fullname-psql" . | quote }}
@@ -86,7 +86,7 @@ spec:
           emptyDir: {}
       {{- end }}
       initContainers:
-        {{- if and .Values.db.sslRootCert .Values.db.sslCert .Values.db.sslKey .Values.db.sslMode }}
+        {{- if .Values.db.tls.enabled }}
         - name: copy-certs
           image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -141,7 +141,7 @@ spec:
           - name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /etc/2gis/secret/
           {{- end }}
-          {{- if and .Values.db.sslRootCert .Values.db.sslCert .Values.db.sslKey .Values.db.sslMode }}
+          {{- if .Values.db.tls.enabled }}
           - name: {{ printf "%s-psql" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /etc/2gis/secret/psql
           {{- end }}
