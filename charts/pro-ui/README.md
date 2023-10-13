@@ -16,16 +16,16 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### Common settings
 
-| Name                 | Description                                                                                                                                                                                                                                                                                                          | Value                  |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `ui.replicas`        | A replica count for the pod.                                                                                                                                                                                                                                                                                         | `1`                    |
-| `ui.nodeSelector`    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                                                                                                                                  | `{}`                   |
-| `ui.affinity`        | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                                                                                                                                          | `{}`                   |
-| `ui.tolerations`     | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                                                                                                                                    | `[]`                   |
-| `ui.podAnnotations`  | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                                                                                                                        | `{}`                   |
-| `ui.podLabels`       | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                                                                                                                  | `{}`                   |
-| `ui.annotations`     | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                                                                                                                            | `{}`                   |
-| `ui.labels`          | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                                                                                                                      | `{}`                   |
+| Name                | Description                                                                                                                 | Value |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ui.replicas`       | A replica count for the pod.                                                                                                | `1`   |
+| `ui.nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
+| `ui.affinity`       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
+| `ui.tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
+| `ui.podAnnotations` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
+| `ui.podLabels`      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
+| `ui.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
+| `ui.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
 
 ### Deployment settings
 

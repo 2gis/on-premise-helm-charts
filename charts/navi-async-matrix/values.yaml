@@ -188,7 +188,7 @@ vpa:
 # @skip dm.annotations
 
 dm:
-  host: '0.0.0.0'
+  host: 0.0.0.0
   port: 8000
   configType: env
   logLevel: INFO
@@ -226,9 +226,9 @@ db:
   schema: public
   tls:
     enabled: false
-    rootCert: ""
-    cert: ""
-    key: ""
+    rootCert: ''
+    cert: ''
+    key: ''
     mode: verify-full
 
 
