@@ -119,9 +119,9 @@ ingress:
     - path: /
       pathType: Prefix
   tls: []
-  #- hosts:
-  #  - navi-splitter.example.com
-  #  secretName: secret.tls
+  # - hosts:
+  #   - navi-splitter.example.com
+  #   secretName: secret.tls
 
 # @section Limits
 

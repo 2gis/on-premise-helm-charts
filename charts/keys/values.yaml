@@ -115,9 +115,9 @@ admin:
       - path: /
         pathType: Prefix
     tls: []
-    #- hosts:
-    #  - keys-ui.example.com
-    #  secretName: secret.tls
+    # - hosts:
+    #   - keys-ui.example.com
+    #   secretName: secret.tls
 
 
 # @section API service settings

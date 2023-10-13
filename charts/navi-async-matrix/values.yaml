@@ -118,9 +118,9 @@ ingress:
     - path: /
       pathType: Prefix
   tls: []
-  #- hosts:
-  #  - navi-async-matrix.example.com
-  #  secretName: secret.tls
+  # - hosts:
+  #   - navi-async-matrix.example.com
+  #   secretName: secret.tls
 
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings

@@ -30,7 +30,7 @@ ingress:
     - path: /
       pathType: Prefix
   tls: []
-  #- hosts:
+  # - hosts:
   #  - gis-platform.example.com
   #  secretName: secret.tls
 

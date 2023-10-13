@@ -251,9 +251,9 @@ api:
       - path: /
         pathType: Prefix
     tls: []
-    #- hosts:
-    #  - tiles-api.example.com
-    #  secretName: secret.tls
+    # - hosts:
+    #   - tiles-api.example.com
+    #   secretName: secret.tls
 
   # @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 

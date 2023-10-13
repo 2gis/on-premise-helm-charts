@@ -149,9 +149,9 @@ ui:
       - path: /
         pathType: Prefix
     tls: []
-    #- hosts:
-    #  - pro-ui.example.com
-    #  secretName: secret.tls
+    # - hosts:
+    #   - pro-ui.example.com
+    #   secretName: secret.tls
 
   # @section Limits
 

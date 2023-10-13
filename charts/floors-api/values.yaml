@@ -95,7 +95,7 @@ ingress:
     - path: /
       pathType: Prefix
   tls: []
-  #- hosts:
+  # - hosts:
   #  - floors.example.com
   #  secretName: secret.tls
 

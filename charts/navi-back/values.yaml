@@ -224,9 +224,9 @@ ingress:
     - path: /
       pathType: Prefix
   tls: []
-  #- hosts:
-  #  - navi-back.example.com
-  #  secretName: secret.tls
+  # - hosts:
+  #   - navi-back.example.com
+  #   secretName: secret.tls
 
 
 # @section Limits

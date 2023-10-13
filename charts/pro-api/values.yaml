@@ -445,6 +445,6 @@ ingress:
     - path: /
       pathType: Prefix
   tls: []
-  #- hosts:
-  #  - pro-api.example.com
-  #  secretName: secret.tls
+  # - hosts:
+  #   - pro-api.example.com
+  #   secretName: secret.tls

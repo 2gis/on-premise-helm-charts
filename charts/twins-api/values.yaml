@@ -100,9 +100,9 @@ api:
       - path: /
         pathType: Prefix
     tls: []
-    #- hosts:
-    #  - twins-api.example.com
-    #  secretName: secret.tls
+    # - hosts:
+    #   - twins-api.example.com
+    #   secretName: secret.tls
 
 
   # @param api.hpa.enabled If HPA is enabled for the service.

@@ -98,9 +98,9 @@ ingress:
     - path: /
       pathType: Prefix
   tls: []
-  #- hosts:
-  #  - navi-async-grpc-proxy.example.com
-  #  secretName: secret.tls
+  # - hosts:
+  #   - navi-async-grpc-proxy.example.com
+  #   secretName: secret.tls
 
 
 # @section Limits

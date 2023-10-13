@@ -165,9 +165,9 @@ ingress:
     - path: /
       pathType: Prefix
   tls: []
-  #- hosts:
-  #  - search-api.example.com
-  #  secretName: secret.tls
+  # - hosts:
+  #   - search-api.example.com
+  #   secretName: secret.tls
 
 
 # @section api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings

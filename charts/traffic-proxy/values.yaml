@@ -106,9 +106,9 @@ ingress:
     - path: /
       pathType: Prefix
   tls: []
-  #- hosts:
-  #  - traffic-proxy-api.example.com
-  #  secretName: secret.tls
+  # - hosts:
+  #   - traffic-proxy-api.example.com
+  #   secretName: secret.tls
 
 
 # @section Limits

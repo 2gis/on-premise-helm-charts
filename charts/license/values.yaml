@@ -116,9 +116,9 @@ ingress:
     - path: /
       pathType: Prefix
   tls: []
-  #- hosts:
-  #  - license.example.com
-  #  secretName: secret.tls
+  # - hosts:
+  #   - license.example.com
+  #   secretName: secret.tls
 
 # @section Limits
 

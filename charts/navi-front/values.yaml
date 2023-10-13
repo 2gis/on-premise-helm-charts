@@ -95,9 +95,9 @@ ingress:
     - path: /
       pathType: Prefix
   tls: []
-  #- hosts:
-  #  - navi-front.example.com
-  #  secretName: secret.tls
+  # - hosts:
+  #   - navi-front.example.com
+  #   secretName: secret.tls
 
 
 # @section Limits

@@ -422,9 +422,9 @@ ingress:
     - path: /
       pathType: Prefix
   tls: []
-  #- hosts:
-  #  - keycloak.example.com
-  #  secretName: secret.tls
+  # - hosts:
+  #   - keycloak.example.com
+  #   secretName: secret.tls
 
 # @section [Network Policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) configuration
 # @param networkPolicy.enabled Enable the default NetworkPolicy policy
