@@ -150,9 +150,9 @@ api:
       - path: /
         pathType: Prefix
     tls: []
-    #- hosts:
-    #  - catalog-api.example.com
-    #  secretName: secret.tls
+    # - hosts:
+    #   - catalog-api.example.com
+    #   secretName: secret.tls
 
   # @section Database settings
 
