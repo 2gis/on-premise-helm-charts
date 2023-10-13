@@ -123,5 +123,5 @@ https://gitlab.2gis.ru/traffic/async-grpc-proxy
 ## Пример деплоя
 
 ```
-helm install --wait test-grpc-proxy . --image.tag=v1.0.0 --set dm.host=http://navi-async-matrix.host 
+helm install --wait test-grpc-proxy . --image.tag=v1.0.0 --set dm.host=http://navi-async-matrix.host
 ```
