@@ -2,7 +2,7 @@
 apiVersion: {{ include "capabilities.hpa.apiVersion" $ }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "naviback.fullname" . }}-hpa
+  name: {{ include "naviback.fullname" . }}
   labels:
     {{- include "naviback.labels" . | nindent 4 }}
 spec:
