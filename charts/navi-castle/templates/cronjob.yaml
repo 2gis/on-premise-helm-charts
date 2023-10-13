@@ -1,6 +1,6 @@
 {{- if .Values.persistentVolume.enabled }}
 {{- range $i, $e := until ( .Values.replicaCount | int ) }}
-{{- range $_, $flavor := tuple "import" "restriction" }}
+{{- range $_, $flavor := tuple "import" "restriction" "restrictionImport" }}
 {{- if index $.Values.cron.enabled $flavor }}
 ---
 apiVersion: batch/v1
@@ -46,8 +46,7 @@ spec:
               args:
               - --config
               - /opt/config_builder.conf
-              - --service={{ $flavor }}
-              - --jobs={{ $.Values.castle.jobs | default 1 | int }}
+              - --service={{ include "castle.serviceParameter" ( dict "flavor" $flavor ) | quote }}
               volumeMounts:
               - name: {{ include "castle.fullname" $ }}-builder-config
                 mountPath: /opt/config_builder.conf

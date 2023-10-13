@@ -44,34 +44,23 @@ data:
     manifest:
     {
         pattern: '{{ default "/manifests/" .Values.dgctlStorage.manifest }}',
-        service: 'navi',
+        service: ['navi','navi-restrictions'],
+        mapping: {
+            'navi': 'import_package',
+            'navi-restrictions': 'import_restriction'
+        }
     }
     # --------------------------------------------
     # DATA PACKAGE
 
-    imports:
-    {
-        remote_name: '%path%',
-        remote_dir: '',
+    {{- /* Guard incompatible services enabling */}}
+    {{- with .Values.cron.enabled }}
+      {{- if (and .restriction .restrictionImport) }}
+        {{- fail "Only one of restriction and restrictionImport can be active at once." }}
+      {{- end }}{{- /* if */}}
+    {{- end }}{{- /* with */}}
 
-        package: '%project%.2gis',
-        package_info:
-        {
-            local_name: '%issue-month%_%timestamp%.2gis',
-            local_dir: 'packages/%project%',
-        },
-
-        restriction: '%project%-restriction.json',
-        restriction_info:
-        {
-            local_name: '%current-date%_%hour%.json',
-            local_dir: 'restrictions_json/%project%'
-        },
-
-        unpack: 'tar',
-        meta: '%project%.json'
-    }
-
+    {{- if .Values.cron.enabled.restriction }}
     restriction:
     {
         remote_name: '',
@@ -92,6 +81,40 @@ data:
 
         store_period: 'week'
     }
+    {{- end }}{{- /* .Values.cron.enabled.restriction */}}
+
+    {{- if .Values.cron.enabled.restrictionImport }}
+    import_restriction:
+    {
+        remote_name: '',
+        remote_dir: '',
+
+        local_name: '%current-date%_%hour%.json',
+        local_dir: 'restrictions_json/%project%'
+
+        unpack: 'tar',
+        meta: '%project%.json'
+        content: '%project%-restriction.json',
+        item: 'restriction',
+        store_period: 'week'
+    }
+    {{- end }}{{- /* .Values.cron.enabled.restrictionImport */}}
+
+    {{- if .Values.cron.enabled.import }}
+    import_package:
+    {
+        remote_name: '',
+        remote_dir: '',
+        local_name: '%issue-month%_%timestamp%.2gis',
+        local_dir: 'packages/%project%',
+
+        unpack: 'tar',
+        meta: '%project%.json',
+        content: '%project%.2gis',
+        item: 'package',
+        store_period: 'month'
+    }
+    {{- end }}{{- /* .Values.cron.enabled.import */}}
 
   cities_template: |-
     [
@@ -109,7 +132,7 @@ data:
     ]
 
   update_services: |
-    {{- range $_, $flavor := tuple "import" "restriction" }}
+    {{- range $_, $flavor := tuple "import" "restriction" "restrictionImport" }}
     {{- if index $.Values.cron.enabled $flavor }}
     {{ index $.Values.cron.schedule $flavor }} /opt/configuration_builder --config /opt/config_builder.conf --service={{ $flavor }} --jobs={{ $.Values.castle.jobs | default 1 | int }}
     {{- end }}

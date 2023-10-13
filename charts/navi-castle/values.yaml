@@ -42,6 +42,7 @@ dgctlStorage:
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param terminationGracePeriodSeconds Maximum time allowed for graceful shutdown.
 
 replicaCount: 1
 imagePullSecrets: []
@@ -53,6 +54,7 @@ securityContext: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
+terminationGracePeriodSeconds: 60
 
 
 # @section Service account settings
@@ -99,7 +101,6 @@ ingress:
   #    navi-castle.example.com
   #  secretName: secret.tls
 
-
 # @section Limits
 
 # @param resources [nullable] Container resources requirements structure.
@@ -114,6 +115,7 @@ resources: {}
 # @section Navi-Castle service settings
 
 # @param castle.castleDataPath Path to the data directory.
+# @extra castle.restrictions Section ignored if castle.restriction.enabled=false
 # @param castle.restrictions.host Restrictions API base URL.
 # @param castle.restrictions.key Restrictions API key.
 # @param castle.jobs Number of parallel downloading jobs.
@@ -144,9 +146,11 @@ nginx:
 # @section Cron settings
 
 # @param cron.enabled.import If the `import` cron job is enabled.
-# @param cron.enabled.restriction If the `restriction` cron job is enabled.
+# @param cron.enabled.restriction If restrictions API enabled, incompatible with `restrictionImport`.
+# @param cron.enabled.restrictionImport If restrictions import enabled, incompatible with `restriction`.
 # @param cron.schedule.import Cron job schedule for `import`.
 # @param cron.schedule.restriction Cron job schedule for `restriction`.
+# @param cron.schedule.restrictionImport Cron job schedule for `restrictionImport`.
 # @param cron.concurrencyPolicy Cron job concurrency policy: `Allow` or `Forbid`.
 # @param cron.successfulJobsHistoryLimit How many completed and failed jobs should be kept.
 
@@ -154,9 +158,11 @@ cron:
   enabled:
     import: false
     restriction: false
+    restrictionImport: false
   schedule:
     import: 11 * * * *
     restriction: '*/5 * * * *'
+    restrictionImport: '*/5 * * * *'
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
 
