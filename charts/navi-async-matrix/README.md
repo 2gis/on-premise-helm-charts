@@ -52,7 +52,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.3.3`                             |
+| `image.tag`        | Tag         | `1.6.2`                             |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings
@@ -105,15 +105,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-| Name                                      | Description                                                                                                                                                          | Value   |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
-| `hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
-| `hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
-| `hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
-| `hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
-| `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
-| `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+| Name                                    | Description                                                                                                                                                          | Value   |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `hpa.enabled`                           | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `hpa.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `hpa.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
+| `hpa.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `hpa.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+| `hpa.behavior`                          | HPA Behavior                                                                                                                                                         | `{}`    |
 
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
@@ -132,19 +131,26 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `dm.port`               | Distance Matrix Async API HTTP port.                                                                                          | `8000` |
 | `dm.configType`         | Configuration type. Must always be `env`.                                                                                     | `env`  |
+| `dm.logLevel`           | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                 | `INFO` |
 | `dm.workerCount`        | Number of Distance Matrix Async workers.                                                                                      | `4`    |
 | `dm.citiesUrl`          | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`   |
 | `dm.citiesUpdatePeriod` | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600` |
 
 ### Database settings
 
-| Name          | Description                             | Value  |
-| ------------- | --------------------------------------- | ------ |
-| `db.host`     | PostgreSQL hostname or IP. **Required** | `""`   |
-| `db.port`     | PostgreSQL port.                        | `5432` |
-| `db.name`     | PostgreSQL database name. **Required**  | `""`   |
-| `db.user`     | PostgreSQL username. **Required**       | `""`   |
-| `db.password` | PostgreSQL password. **Required**       | `""`   |
+| Name              | Description                                 | Value         |
+| ----------------- | ------------------------------------------- | ------------- |
+| `db.host`         | PostgreSQL hostname or IP. **Required**     | `""`          |
+| `db.port`         | PostgreSQL port.                            | `5432`        |
+| `db.name`         | PostgreSQL database name. **Required**      | `""`          |
+| `db.user`         | PostgreSQL username. **Required**           | `""`          |
+| `db.password`     | PostgreSQL password. **Required**           | `""`          |
+| `db.schema`       | PostgreSQL schema.                          | `public`      |
+| `db.tls.enabled`  | If tls connection to postgresql is enabled. | `false`       |
+| `db.tls.rootCert` | Root certificate file.                      | `""`          |
+| `db.tls.cert`     | Certificate of postgresql server.           | `""`          |
+| `db.tls.key`      | Key of postgresql server.                   | `""`          |
+| `db.tls.mode`     | Level of protection.                        | `verify-full` |
 
 ### Kafka settings
 
