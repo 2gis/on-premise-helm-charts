@@ -63,7 +63,7 @@ env:
   MAPGL_FLOORSSERVER: https://floors-api.ingress.host
   MAPGL_KEYSERVER: https://keys-api.ingress.host
   MAPGL_RTLPLUGIN: https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js
-  MAPGL_RTLPLUGINHASH: 
+  MAPGL_RTLPLUGINHASH:
     sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
 
 
