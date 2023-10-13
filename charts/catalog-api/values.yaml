@@ -78,7 +78,7 @@ api:
 
   image:
     repository: 2gis-on-premise/catalog-api
-    tag: 3.598.4
+    tag: 3.600.0
     pullPolicy: IfNotPresent
 
 

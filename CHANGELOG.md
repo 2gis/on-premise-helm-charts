@@ -1,5 +1,18 @@
 # 2GIS On-Premise Changelog
 
+## [1.12.0] (2023-10-13)
+#### [Breaking-Changes](Breaking-Changes.md#1200)
+#### Images
+```
+catalog-api
+	- catalog-api:3.598.4
+	+ catalog-api:3.600.0
+navi-async-matrix
+	- navi-async-matrix:1.3.3
+	+ navi-async-matrix:1.6.2
+
+```
+
 ## [1.11.0] (2023-09-22)
 #### Images
 ```
