@@ -26,7 +26,6 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.podLabels`       | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                                                                                                                  | `{}`                   |
 | `ui.annotations`     | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                                                                                                                            | `{}`                   |
 | `ui.labels`          | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                                                                                                                      | `{}`                   |
-| `ui.healthcheckPath` | Kubernetes [live/ready probes path](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Possible values: `/api/healthcheck/app` (checks current app healthcheck only), `/api/healthcheck/integration` (checks healthchecks of current app and all integrations). | `/api/healthcheck/app` |
 
 ### Deployment settings
 

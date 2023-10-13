@@ -18,7 +18,6 @@ ui:
   # @param ui.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param ui.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param ui.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @param ui.healthcheckPath Kubernetes [live/ready probes path](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Possible values: `/api/healthcheck/app` (checks current app healthcheck only), `/api/healthcheck/integration` (checks healthchecks of current app and all integrations).
 
   replicas: 1
   nodeSelector: {}
@@ -28,7 +27,6 @@ ui:
   podLabels: {}
   annotations: {}
   labels: {}
-  healthcheckPath: /api/healthcheck/app
 
   # @section Deployment settings
 
