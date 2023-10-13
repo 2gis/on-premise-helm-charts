@@ -134,13 +134,25 @@ api:
 
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-  # @param api.ingress.enabled If Ingress is enabled for the service
-  # @param api.ingress.hosts[0].host Hostname for the Ingress service
+  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.className Name of the Ingress controller class.
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+  # @param api.ingress.tls TLS configuration
 
   ingress:
     enabled: false
+    className: nginx
     hosts:
-    - host: catalog-api.host
+    - host: catalog-api.example.com
+      paths:
+      - path: /
+        pathType: Prefix
+    tls: []
+    # - hosts:
+    #   - catalog-api.example.com
+    #   secretName: secret.tls
 
   # @section Database settings
 

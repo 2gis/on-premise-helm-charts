@@ -98,10 +98,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                        | Description                            | Value                    |
-| --------------------------- | -------------------------------------- | ------------------------ |
-| `api.ingress.enabled`       | If Ingress is enabled for the service. | `false`                  |
-| `api.ingress.hosts[0].host` | Hostname for the Ingress service.      | `navi-restrictions.host` |
+| Name                                     | Description                               | Value                           |
+| ---------------------------------------- | ----------------------------------------- | ------------------------------- |
+| `api.ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                         |
+| `api.ingress.className`                  | Name of the Ingress controller class.     | `nginx`                         |
+| `api.ingress.hosts[0].host`              | Hostname for the Ingress service.         | `navi-restrictions.example.com` |
+| `api.ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                             |
+| `api.ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                        |
+| `api.ingress.tls`                        | TLS configuration                         | `[]`                            |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 

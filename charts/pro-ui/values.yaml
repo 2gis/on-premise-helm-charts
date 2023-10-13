@@ -133,12 +133,25 @@ ui:
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
   # @param ui.ingress.enabled If Ingress is enabled for the service.
+  # @param ui.ingress.className Name of the Ingress controller class.
   # @param ui.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param ui.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+  # @param ui.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+  # @param ui.ingress.tls TLS configuration
+
 
   ingress:
     enabled: false
+    className: nginx
     hosts:
-    - host: pro-ui.host
+    - host: pro-ui.example.com
+      paths:
+      - path: /
+        pathType: Prefix
+    tls: []
+    # - hosts:
+    #   - pro-ui.example.com
+    #   secretName: secret.tls
 
   # @section Limits
 
