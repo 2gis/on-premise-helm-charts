@@ -48,7 +48,7 @@ spec:
       initContainers:
         {{- range $_, $flavor := tuple "import" "restriction" "restrictionImport" }}
         {{- if index $.Values.cron.enabled $flavor }}
-        - name: castle-{{ $flavor }}-init
+        - name: castle-{{ $flavor | kebabcase }}-init
           image: {{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}
           command: [ "/opt/configuration_builder" ]
           args: 

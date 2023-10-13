@@ -6,7 +6,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "castle.fullname" $ }}-cronjob-{{ $flavor }}-{{ $i }}
+  name: {{ include "castle.fullname" $ }}-cronjob-{{ $flavor | kebabcase }}-{{ $i }}
   labels:
     {{- include "castle.labels" $ | nindent 4 }}
 spec:
