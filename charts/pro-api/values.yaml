@@ -1,4 +1,4 @@
-# @section Docker Registry settings
+﻿# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -113,14 +113,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.1.49
+  tag: 1.1.57
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.1.49
+  tag: 1.1.57
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -253,6 +253,8 @@ redis:
 # @extra kafka.importTasksTopic Kafka topic settings to run import tasks.
 # @param kafka.importTasksTopic.name Kafka topic name.
 # @param kafka.importTasksTopic.readerGroupId Kafka consumer group for reading importing tasks.
+# @extra kafka.assetDataTopic Kafka topic settings to manage asset data updates.
+# @param kafka.assetDataTopic.name Kafka topic name.
 # @skip kafka.permissionsTopic
 # @param kafka.refreshAssetsIntervalMinutes Refresh interval for reading streaming assets settings in minutes.
 
@@ -267,6 +269,8 @@ kafka:
   importTasksTopic:
     name: ''
     readerGroupId: ''
+  assetDataTopic:
+    name: ''
   permissionsTopic:
     name: ''
     readerGroupId: ''
@@ -302,6 +306,12 @@ navi:
 # @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search)
 search:
   url: http://search-api.svc
+
+# @skip tileGen
+
+tileGen:
+  url: https://tilegen-api-staging.svc
+  userDataTileSet: ''
 
 # @section 2GIS PRO API Job settings
 
@@ -362,7 +372,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.49
+  tag: 1.1.57
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -390,7 +400,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.49
+  tag: 1.1.57
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

@@ -102,4 +102,15 @@ spec:
                   value: "{{ .Values.api.logging.targets }}"
                 - name: Common__EsMetricsEnabled
                   value: "{{ .Values.assetImporter.esMetricsEnabled }}"
+                - name: Navi__Url
+                  value: {{ .Values.navi.url }}
+                - name: Navi__Key
+                  valueFrom:
+                    secretKeyRef:
+                      key: routingApi2gisKey
+                      name: {{ include "pro-api.name" . }}-secret
+                - name: TileGen__Url
+                  value: "{{ .Values.tileGen.url }}"
+                - name: TileGen__UserDataTileSet
+                  value: "{{ .Values.tileGen.userDataTileSet }}"
 {{ end }}
