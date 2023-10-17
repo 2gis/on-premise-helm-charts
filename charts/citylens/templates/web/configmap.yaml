@@ -39,10 +39,14 @@ data:
     s3:
     {{- with .Values.s3 }}
       bucket_prefix: {{ required "A valid .Values.s3.bucketPrefix entry required" .bucketPrefix | squote }}
+      logs_bucket_prefix: {{ required "A valid .Values.s3.logsBucketPrefix entry required" .logsBucketPrefix | squote }}
       client_params:
         aws_access_key_id: {{ required "A valid .Values.s3.accessKey entry required" .accessKey | squote }}
         aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
         endpoint_url: {{ required "A valid .Values.s3.endpoint entry required" .endpoint | squote }}
+        {{- if not (eq .verifySSL "") }}
+        verify: {{.verifySSL}}
+        {{- end }}
     {{- end }}
     tracks_uploader:
       api: {{ .Values.worker.tracksUploader.api | squote }}
@@ -61,6 +65,11 @@ data:
       request_retries_backoff: {{ .requestRetriesBackoff }}
     {{- end }}
     {{- end }}
+    {{- with .Values.proClient }}
+    pro_client:
+    endpoint_url: {{ .endpointUrl }}
+    token: {{ .token }}
+    {{- end }}
     map:
       mapgl:
         host: {{ required "A valid .Values.map.mapgl.host entry required" .Values.map.mapgl.host | squote }}
@@ -78,6 +87,8 @@ data:
       track_downloader:
         frames_topics: {{ .Values.kafka.topics.frames }}
         metadata_topics: {{ .Values.kafka.topics.tracks }}
+      logs_saver:
+        logs_topic: {{ .Values.kafka.topics.logs }}
       reporters:
       {{- range .Values.reporters }}
         - name: {{ .name }}

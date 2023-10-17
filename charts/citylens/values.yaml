@@ -4,6 +4,27 @@
 
 dgctlDockerRegistry: ''
 
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 host. Format: `host:port`. **Required**
+# @param dgctlStorage.bucket S3 bucket name. **Required**
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **Required**
+
+# @param dgctlStorageUseHTTPS Set to `true` if dgctlStorage.host must be accessed via https. **Required**
+# @param dgctlStorageVerifySSL Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**
+
+dgctlStorage:
+  host: ''
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+  manifest: ''
+
+dgctlStorageUseHTTPS: false
+dgctlStorageVerifySSL: ''
+
 # @section Citylens API service settings
 
 # @section Image settings
@@ -348,6 +369,31 @@ worker:
     affinity: {}
     tolerations: {}
 
+# @section Citylens Logs Saver worker's settings
+
+# @param worker.logsSaver.replicas A replica count for the pod.
+
+# @param worker.logsSaver.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.logsSaver.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.logsSaver.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.logsSaver.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.logsSaver.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.logsSaver.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.logsSaver.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  logsSaver:
+
+    replicas: 1
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
 # @section Citylens Reporter Pro worker's settings
 
 # @param worker.reporterPro.replicas A replica count for the pod.
@@ -501,16 +547,19 @@ kafka:
     topic: ''
 
 # @section S3 settings
+# @param s3.verifySSL Verify SSL certificate when connecting to s3.endpoint. **Required**
 # @param s3.endpoint S3 endpoint. Format: `host:port` or `url`. **Required**
 # @param s3.accessKey S3 access key for accessing the bucket. **Required**
 # @param s3.secretAccessKey S3 secret key for accessing the bucket. **Required**
-# @param s3.bucketPrefix S3 bucket name. **Required**
+# @param s3.bucketPrefix S3 bucket name prefix for the frames buckets. **Required**
+# @param s3.logsBucketPrefix S3 bucket name prefix for the mobile app logs buckets. **Required**
 
 s3:
   endpoint: ''
   accessKey: ''
   secretAccessKey: ''
   bucketPrefix: ''
+  logsBucketPrefix: ''
 
 # @section postgres **Database settings**
 
@@ -564,3 +613,12 @@ headerLinks:
 reporters:
 - name: pro
   predictors: [camcom]
+
+# @section PRO integration (only when pro reporter enabled)
+
+# @param proClient.endpointUrl PRO API url for filters actualization
+# @param proClient.token PRO API auth token
+
+proClient:
+  endpointUrl: ''
+  token: ''
