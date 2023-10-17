@@ -521,8 +521,6 @@ migrations:
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
 # @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
 # @param kafka.topics.pro List of topics for Reporter pro worker. **Required**
-# @param kafka.topics.camcom List of topics for Camcom worker. **Required**
-# @param kafka.topics.manual List of topics for Camcom worker.
 # @param kafka.topics.uploader List of topics for Uploader worker. **Required**
 # @param kafka.topics.logs List of topics for API logs. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
