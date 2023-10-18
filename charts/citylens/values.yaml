@@ -7,23 +7,21 @@ dgctlDockerRegistry: ''
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 host. Format: `host:port`. **Required**
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
 # @param dgctlStorage.bucket S3 bucket name. **Required**
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
 # @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **Required**
-
-# @param dgctlStorageUseHTTPS Set to `true` if dgctlStorage.host must be accessed via https. **Required**
 # @param dgctlStorageVerifySSL Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**
 
 dgctlStorage:
   host: ''
+  secure: 'false'
   bucket: ''
   accessKey: ''
   secretKey: ''
   manifest: ''
-
-dgctlStorageUseHTTPS: false
-dgctlStorageVerifySSL: ''
+  verifySSL: 'true'
 
 # @section Citylens API service settings
 
