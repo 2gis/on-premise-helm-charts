@@ -553,7 +553,7 @@ kafka:
 # @param s3.logsBucketPrefix S3 bucket name prefix for the mobile app logs buckets. **Required**
 
 s3:
-  verifySSL: ''
+  verifySSL: 'true'
   endpoint: ''
   accessKey: ''
   secretAccessKey: ''
