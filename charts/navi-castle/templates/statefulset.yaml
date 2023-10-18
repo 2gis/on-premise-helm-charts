@@ -54,7 +54,7 @@ spec:
           args: 
            - --config 
            - /opt/config_builder.conf 
-           - --service={{ include "castle.serviceParameter" ( dict "flavor" $flavor ) | quote }}
+           - --service={{ include "castle.serviceParameter" ( dict "flavor" $flavor ) | toYaml }}
           volumeMounts:
           - name: {{ include "castle.fullname" $ }}-builder-config
             mountPath: /opt/config_builder.conf
