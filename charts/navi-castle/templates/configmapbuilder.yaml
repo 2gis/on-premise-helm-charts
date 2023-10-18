@@ -12,8 +12,6 @@ data:
     log_level: 'DEBUG'
     log_location:'/var/log/castle-%service%.log'
     # PATHS AND FILE PROPERTIES
-    # owner for result files
-    owner: 'root:root'
     # path to store city data
     data_destination_dir: {{ .Values.castle.castleDataPath | quote }}
     # --------------------------------------------
