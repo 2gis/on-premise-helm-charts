@@ -451,6 +451,7 @@ worker:
 
 # @param worker.tracksUploader.api API address.
 # @param worker.tracksUploader.source Source.
+# @param worker.tracksUploader.verifySSL Set to `false` if tracksUploader worker must be accessed via https without certificate validation. **Required**
 
 # @param worker.tracksUploader.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.tracksUploader.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -469,6 +470,7 @@ worker:
 
     api: ''
     source: ''
+    verifySSL: true
 
     annotations: {}
     labels: {}
@@ -617,7 +619,9 @@ reporters:
 
 # @param proClient.endpointUrl PRO API url for filters actualization
 # @param proClient.token PRO API auth token
+# @param proClient.verifySSL Set to `false` if proClient must be accessed via https without certificate validation. **Required**
 
 proClient:
   endpointUrl: ''
   token: ''
+  verifySSL: true

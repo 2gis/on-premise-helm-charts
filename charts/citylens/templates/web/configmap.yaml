@@ -50,6 +50,7 @@ data:
       api: {{ .Values.worker.tracksUploader.api | squote }}
       source: {{ .Values.worker.tracksUploader.source | squote }}
       topic: {{ .Values.kafka.topics.uploader | squote }}
+      verify_ssl: {{ .Values.worker.tracksUploader.verifySSL }}
     {{- if .Values.worker.camcomSender.enabled }}
     camcom:
     {{- with .Values.worker.camcomSender }}
@@ -65,8 +66,9 @@ data:
     {{- end }}
     {{- with .Values.proClient }}
     pro_client:
-    endpoint_url: {{ .endpointUrl }}
-    token: {{ .token }}
+      endpoint_url: {{ .endpointUrl }}
+      token: {{ .token }}
+      verify_ssl: {{ .verifySSL }}
     {{- end }}
     map:
       mapgl:
