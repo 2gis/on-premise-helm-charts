@@ -130,10 +130,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "citylens.env.importer" -}}
 - name: DGCTL_S3_ENDPOINT
   value: "http{{ if .Values.dgctlStorage.secure }}s{{ end }}://{{ required "A valid Values.dgctlStorage.host entry required" .Values.dgctlStorage.host }}"
-{{- if not (eq .Values.dgctlStorage.verifySSL "") }}
 - name: DGCTL_S3_VERIFY_SSL
   value: "{{ required "A valid Values.dgctlStorage.verifySSL entry required" .Values.dgctlStorage.verifySSL }}"
-{{- end }}
 - name: DGCTL_S3_BUCKET
   value: "{{ .Values.dgctlStorage.bucket }}"
 - name: DGCTL_S3_ACCESS_KEY
