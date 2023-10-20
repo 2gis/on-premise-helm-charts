@@ -132,6 +132,6 @@ data:
   update_services: |
     {{- range $_, $flavor := tuple "import" "restriction" "restrictionImport" }}
     {{- if index $.Values.cron.enabled $flavor }}
-    {{ index $.Values.cron.schedule $flavor }} /opt/configuration_builder --config /opt/config_builder.conf --service={{ $flavor }} --jobs={{ $.Values.castle.jobs | default 1 | int }}
+    {{ index $.Values.cron.schedule $flavor }} /opt/configuration_builder --config /opt/config_builder.conf --service={{ include "castle.serviceParameter" ( dict "flavor" $flavor ) }} --jobs={{ $.Values.castle.jobs | default 1 | int }}
     {{- end }}
     {{- end }}
