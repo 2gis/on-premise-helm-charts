@@ -41,6 +41,10 @@ Expand the name of the chart.
 {{ include "citylens.name" . }}-track-metadata-saver
 {{- end }}
 
+{{- define "citylens.track-reloader.name" -}}
+{{ include "citylens.name" . }}-track-reloader
+{{- end }}
+
 {{- define "citylens.api.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Release.Name }}
 app.kubernetes.io/instance: {{ include "citylens.api.name" . }}
@@ -106,6 +110,16 @@ app.kubernetes.io/name: {{ .Release.Name }}
 app.kubernetes.io/instance: {{ include "citylens.reporter-pro.name" . }}
 {{- end }}
 
+{{- define "citylens.track-reloader.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.track-reloader.name" . }}
+{{- end }}
+
+{{- define "citylens.track-reloader.labels" -}}
+{{ include "citylens.track-reloader.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
 {{- define "citylens.reporter-pro.labels" -}}
 {{ include "citylens.reporter-pro.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -134,6 +148,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ required "A valid Values.dgctlStorage.verifySSL entry required" .Values.dgctlStorage.verifySSL }}"
 - name: DGCTL_S3_BUCKET
   value: "{{ .Values.dgctlStorage.bucket }}"
+- name: DGCTL_S3_REGION_NAME
+  value: "{{ .Values.dgctlStorage.region }}"
 - name: DGCTL_S3_ACCESS_KEY
   valueFrom:
     secretKeyRef:
