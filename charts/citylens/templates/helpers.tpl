@@ -145,7 +145,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: DGCTL_S3_ENDPOINT
   value: "http{{ if .Values.dgctlStorage.secure }}s{{ end }}://{{ required "A valid Values.dgctlStorage.host entry required" .Values.dgctlStorage.host }}"
 - name: DGCTL_S3_VERIFY_SSL
-  value: "{{ required "A valid Values.dgctlStorage.verifySSL entry required" .Values.dgctlStorage.verifySSL }}"
+  value: "{{ required "A valid Values.dgctlStorage.verifySsl entry required" .Values.dgctlStorage.verifySsl }}"
 - name: DGCTL_S3_BUCKET
   value: "{{ .Values.dgctlStorage.bucket }}"
 - name: DGCTL_S3_REGION_NAME

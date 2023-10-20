@@ -12,7 +12,7 @@ dgctlDockerRegistry: ''
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
 # @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **Required**
-# @param dgctlStorageVerifySSL Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**
+# @param dgctlStorageVerifySsl Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**
 # @param dgctl.region S3 region name.
 
 dgctlStorage:
@@ -22,7 +22,7 @@ dgctlStorage:
   accessKey: ''
   secretKey: ''
   manifest: ''
-  verifySSL: true
+  verifySsl: true
   region: ''
 
 # @section Citylens API service settings
@@ -453,7 +453,7 @@ worker:
 
 # @param worker.tracksUploader.api API address.
 # @param worker.tracksUploader.source Source.
-# @param worker.tracksUploader.verifySSL Set to `false` if tracksUploader.api or tracksUploader.source must be accessed via https without certificate validation **Required**
+# @param worker.tracksUploader.verifySsl Set to `false` if tracksUploader.api or tracksUploader.source must be accessed via https without certificate validation **Required**
 
 # @param worker.tracksUploader.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.tracksUploader.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -472,7 +472,7 @@ worker:
 
     api: ''
     source: ''
-    verifySSL: true
+    verifySsl: true
 
     annotations: {}
     labels: {}
@@ -549,22 +549,22 @@ kafka:
     topic: ''
 
 # @section S3 settings
-# @param s3.verifySSL Verify SSL certificate when connecting to s3.endpoint.
+# @param s3.verifySsl Verify SSL certificate when connecting to s3.endpoint.
 # @param s3.endpoint S3 endpoint. Format: `host:port` or `url`. **Required**
 # @param s3.accessKey S3 access key for accessing the bucket. **Required**
 # @param s3.secretAccessKey S3 secret key for accessing the bucket. **Required**
 # @param s3.bucketPrefix S3 bucket name prefix for the frames buckets. **Required**
 # @param s3.logsBucketPrefix S3 bucket name prefix for the mobile app logs buckets. **Required**
-# @param s3.region S3 region, null for default.
+# @param s3.region S3 region.
 
 s3:
-  verifySSL: true
+  verifySsl: true
   endpoint: ''
   accessKey: ''
   secretAccessKey: ''
   bucketPrefix: ''
   logsBucketPrefix: ''
-  region: null
+  region: ''
 
 # @section postgres **Database settings**
 
@@ -602,7 +602,7 @@ map:
 
 # @param dashboardDomain Link to Citylens web address. **Required**
 # @param locale Locale language (en by default).
-# @param headerLinks List of links.
+# @param headerLinks List of links for navbar.
 # @param reporters[0].name Reporter name.
 # @param reporters[0].predictors Predictor used by reporter.
 
@@ -619,13 +619,13 @@ reporters:
 - name: pro
   predictors: [camcom]
 
-# @section PRO integration (only when pro reporter enabled)
+# @section PRO integration (only when Pro reporter enabled)
 
-# @param proClient.endpointUrl PRO API url for filters actualization
-# @param proClient.token PRO API auth token
-# @param proClient.verifySSL Set to `false` if proClient.endpointUrl must be accessed via https without certificate validation. **Required**
+# @param proClient.url PRO API url for filters actualization
+# @param proClient.key PRO API auth token
+# @param proClient.verifySsl Set to `false` if proClient.url must be accessed via https without certificate validation. **Required**
 
-proClient:
-  endpointUrl: ''
-  token: ''
-  verifySSL: true
+pro:
+  url: ''
+  key: ''
+  verifySsl: true
