@@ -12,8 +12,8 @@ dgctlDockerRegistry: ''
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
 # @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **Required**
-# @param dgctlStorageVerifySsl Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**
-# @param dgctl.region S3 region name.
+# @param dgctlStorage.verifySsl Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**
+# @param dgctlStorage.region S3 region name.
 
 dgctlStorage:
   host: ''
@@ -621,9 +621,9 @@ reporters:
 
 # @section PRO integration (only when Pro reporter enabled)
 
-# @param proClient.url PRO API url for filters actualization
-# @param proClient.key PRO API auth token
-# @param proClient.verifySsl Set to `false` if proClient.url must be accessed via https without certificate validation. **Required**
+# @param pro.url PRO API endpoint URL for filters actualization. Ex: http(s)://pro-api.svc/your_asset_name/filters
+# @param pro.key PRO API auth token
+# @param pro.verifySsl Set to `false` if pro.url must be accessed via https without certificate validation. **Required**
 
 pro:
   url: ''

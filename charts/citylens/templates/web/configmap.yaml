@@ -45,7 +45,7 @@ data:
         aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
         endpoint_url: {{ required "A valid .Values.s3.endpoint entry required" .endpoint | squote }}
         region_name: {{ .region }}
-        verify: {{.verifySsl}}
+        verify: {{ .verifySsl }}
     {{- end }}
     tracks_uploader:
       api: {{ .Values.worker.tracksUploader.api | squote }}
