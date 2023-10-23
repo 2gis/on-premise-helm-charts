@@ -9,9 +9,9 @@
 [Деплой бэкенда Pairs Directions API](#pairs-directions)  
 [Деплой бэкенда Public Transport](#public-transport)  
 [Деплой бэкенда Distance Matrix API (до 25х25)](#distance-matrix)  
-[Деплой бэкенда Distance Matrix API Async (более 25х25)](#async)   
-[Деплой бэкенда Distance Matrix API Public Transport (до 10х10)](#distance-matrix-ctx)   
-[Деплой GRPC-proxy для Distance Matrix API Async (более 25х25)](#grpc)    
+[Деплой бэкенда Distance Matrix API Async (более 25х25)](#async)  
+[Деплой бэкенда Distance Matrix API Public Transport (до 10х10)](#distance-matrix-ctx)  
+[Деплой GRPC-proxy для Distance Matrix API Async (более 25х25)](#grpc)  
 [Деплой фронтенда для Distance Matrix API Async (более 25х25)](#async-front)  
 [Деплой splitter для Distance Matrix API Public Transport (до 10х10)](#splitter)  
 [Деплой navi-router](#navi-router)  
@@ -32,7 +32,7 @@ on-premise-helm-charts
 
 Проходимся по файлам в директории helmfile_values и заполняем актуальными значениями
 
-Выставляем нужные значения в base.yaml. 
+Выставляем нужные значения в base.yaml.
 
 Перед разворачиванием сервисов навигации должен быть задеплоен keys service
 
@@ -45,7 +45,7 @@ helmfile -e test -f ../on-premise-helm-charts/helmfile/deploy/navi/navi-castle.y
 
 <a name="directions-car"><h3>Деплой бэкенда Directions API авто</h3></a>
 ```
-helmfile -e test -f ../on-premise-helm-charts/helmfile/deploy/navi/navi-back-custom.yaml -l service=directions-car sync 
+helmfile -e test -f ../on-premise-helm-charts/helmfile/deploy/navi/navi-back-custom.yaml -l service=directions-car sync
 ```
 
 <a name="directions-pedestrian"><h3>Деплой бэкенда Directions API пешеходы</h3></a>
