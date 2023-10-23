@@ -86,7 +86,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.1.0
+    tag: 1.1.2
 
   replicas: 4
 
@@ -106,18 +106,18 @@ api:
     targetPort: 8000
 
   ingress:
-    enabled: true
+    enabled: false
     className: ''
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: '0'
     hosts:
-    - host: citylens.host
+    - host: citylens-api.host
       paths:
       - path: /
         pathType: Prefix
     tls: []
       # - hosts:
-      #    host: ''
+      #    host: 'citylens-api.host'
       #  secretName: ''
 
   auth:
@@ -200,7 +200,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.1.1
+    tag: 1.1.2
 
   replicas: 1
 
@@ -220,18 +220,18 @@ web:
     targetPort: 5000
 
   ingress:
-    enabled: true
+    enabled: false
     className: ''
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: '0'
     hosts:
-    - host: citylens.host
+    - host: citylens-web.host
       paths:
       - path: /
         pathType: Prefix
     tls: []
       # - hosts:
-      #    host: ''
+      #    host: 'citylens-web.host'
       #  secretName: ''
 
   auth:
@@ -451,8 +451,8 @@ worker:
 
 # @param worker.tracksUploader.replicas A replica count for the pod.
 
-# @param worker.tracksUploader.api API address.
-# @param worker.tracksUploader.source Source.
+# @param worker.tracksUploader.api Destination API address citylens. Ex.: http(s)://citylens-api.host/
+# @param worker.tracksUploader.source Source address citylens-web. Ex.: http(s)://citylens-web.host
 # @param worker.tracksUploader.verifySsl Set to `false` if tracksUploader.api or tracksUploader.source must be accessed via https without certificate validation **Required**
 
 # @param worker.tracksUploader.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -466,7 +466,7 @@ worker:
 
   tracksUploader:
 
-    enabled: true
+    enabled: false
 
     replicas: 1
 

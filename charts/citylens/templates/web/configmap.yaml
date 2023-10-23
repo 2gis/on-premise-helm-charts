@@ -84,6 +84,10 @@ data:
     enabled_modules:
       header_links:
         {{- toYaml .Values.headerLinks | nindent 8 }}
+        {{- if .Values.worker.tracksUploader.enabled }}
+        - reload_track
+        - reload_statuses
+        {{- end }}
         {{- if .Values.pro.url }}
         - pro
         {{- end }}
