@@ -29,7 +29,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "citylens.track-metadata-saver.selectorLabels" . | nindent 8 }}
+        {{- include "citylens.track-metadata-saver.labels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ include "citylens.track-metadata-saver.name" . }}

@@ -104,6 +104,7 @@ service:
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 # @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Name of the Ingress controller class.
 # @param ingress.hosts[0].host Hostname for the Ingress service.
 # @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
 # @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
@@ -111,14 +112,15 @@ service:
 
 ingress:
   enabled: false
+  className: nginx
   hosts:
-  - host: navi-splitter.host
+  - host: navi-splitter.example.com
     paths:
     - path: /
       pathType: Prefix
   tls: []
   # - hosts:
-  #   - host.example
+  #   - navi-splitter.example.com
   #   secretName: secret.tls
 
 # @section Limits

@@ -51,7 +51,7 @@ prometheusEnabled: true
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  tag: 1.3.3
+  tag: 1.6.2
 
 
 # @section Service account settings
@@ -64,7 +64,6 @@ serviceAccount:
   create: false
   annotations: {}
   name: ''
-
 
 # @section Strategy settings
 
@@ -103,12 +102,24 @@ service:
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 # @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Name of the Ingress controller class.
 # @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration
 
 ingress:
   enabled: false
+  className: nginx
   hosts:
-  - host: navi-async-matrix.host
+  - host: navi-async-matrix.example.com
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - navi-async-matrix.example.com
+  #   secretName: secret.tls
 
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
@@ -128,19 +139,17 @@ pdb:
 # @param hpa.enabled If HPA is enabled for the service.
 # @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
 # @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
-# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window.
-# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window.
 # @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
 # @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.behavior HPA Behavior
 
 hpa:
   enabled: false
   minReplicas: 1
   maxReplicas: 2
-  scaleDownStabilizationWindowSeconds: ''
-  scaleUpStabilizationWindowSeconds: ''
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: ''
+  behavior: {}
 
 
 # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
@@ -167,16 +176,31 @@ vpa:
 
 # @param dm.port Distance Matrix Async API HTTP port.
 # @param dm.configType Configuration type. Must always be `env`.
+# @param dm.logLevel Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.
 # @param dm.workerCount Number of Distance Matrix Async workers.
 # @param dm.citiesUrl URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required**
 # @param dm.citiesUpdatePeriod Period (in seconds) between requesting data from `citiesUrl`.
+# @skip dm.taskSplitSize
+# @skip dm.compositeTaskTimeoutSec
+# @skip dm.host
+# @skip dm.archiver
+# @skip dm.labels
+# @skip dm.annotations
 
 dm:
+  host: 0.0.0.0
   port: 8000
   configType: env
+  logLevel: INFO
   workerCount: 4
   citiesUrl: ''
   citiesUpdatePeriod: 3600
+  taskSplitSize: 5000
+  compositeTaskTimeoutSec: 3600
+  archiver:
+    enabled: false
+  labels: {}
+  annotations: {}
 
 
 # @section Database settings
@@ -186,6 +210,12 @@ dm:
 # @param db.name PostgreSQL database name. **Required**
 # @param db.user PostgreSQL username. **Required**
 # @param db.password PostgreSQL password. **Required**
+# @param db.schema PostgreSQL schema.
+# @param db.tls.enabled If tls connection to postgresql is enabled.
+# @param db.tls.rootCert Root certificate file.
+# @param db.tls.cert Certificate of postgresql server.
+# @param db.tls.key Key of postgresql server.
+# @param db.tls.mode Level of protection.
 
 db:
   host: ''
@@ -193,6 +223,13 @@ db:
   name: ''
   user: ''
   password: ''
+  schema: public
+  tls:
+    enabled: false
+    rootCert: ''
+    cert: ''
+    key: ''
+    mode: verify-full
 
 
 # @section Kafka settings
@@ -200,6 +237,7 @@ db:
 # @param kafka.groupId Distance Matrix Async API group identifier.
 # @param kafka.statusTopic Name of the topic for sending new tasks to.
 # @param kafka.cancelTopic Name of the topic for canceling or receiving information about finished tasks.
+# @skip kafka.archiveTopic
 # @extra kafka.properties Properties as supported by kafka-python. Refer to inline comments for details.
 # @skip kafka.properties.bootstrap.servers
 # @skip kafka.properties.security.protocol
@@ -216,6 +254,7 @@ kafka:
   groupId: navi_async_matrix
   statusTopic: status_topic
   cancelTopic: cancel_topic
+  archiveTopic: archive_topic
   properties:
     bootstrap.servers: ''
     security.protocol: PLAINTEXT

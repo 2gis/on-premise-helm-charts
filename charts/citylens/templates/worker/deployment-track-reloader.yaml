@@ -1,0 +1,65 @@
+{{- if .Values.worker.tracksUploader.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "citylens.track-reloader.name" . }}
+  {{- if .Values.worker.tracksUploader.annotations }}
+  annotations:
+    {{- toYaml .Values.worker.tracksUploader.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "citylens.track-reloader.labels" . | nindent 4 }}
+  {{- if .Values.worker.tracksUploader.labels }}
+    {{- toYaml .Values.worker.tracksUploader.labels | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.worker.tracksUploader.replicas }}
+  selector:
+    matchLabels:
+      {{- include "citylens.track-reloader.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
+      {{- with .Values.worker.tracksUploader.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "citylens.track-reloader.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "citylens.track-reloader.name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
+          imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+          command: [ "/bin/sh", "-c" ]
+          args: [ "flask reloader reload_tracks" ]
+          env:
+            - name: CONFIG_PATH
+              value: /opt/worker/config/dashboard_config.yaml
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/worker/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "citylens.web.name" . }}-configmap
+      {{- with .Values.worker.tracksUploader.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.tracksUploader.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.tracksUploader.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

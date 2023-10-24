@@ -2,7 +2,7 @@
 bases:
 - {{ env "HELMFILE_VALUES" | default "../../../../helmfile_values" }}/base.yaml
 ---
-{{ if eq .Values.naviCustomResources true }}    
+{{ if eq .Values.naviCustomResources true }}
 environments:
 {{- printf "%s%s" .Environment.Name ":" | nindent 2 }}
     values:
@@ -27,7 +27,7 @@ templates:
     kubeContext: {{ .Values.kubeContext }}
     version: "{{ .Values.version }}"
     timeout: 3600
-    values: 
+    values:
       - {{ $path_values }}/templates/dgctl.gotmpl
       - {{ $path_values }}/services/navi/navi-back/_common.gotmpl
       - {{ $path_values }}/templates/optionalEnv.gotmpl
@@ -45,7 +45,7 @@ releases:
         value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
       - name: replicaCount
-        value: {{ .Values.carrouting.replicaCount }}      
+        value: {{ .Values.carrouting.replicaCount }}
       - name: resources.limits.cpu
         value: {{ .Values.carrouting.limits.cpu }}
       - name: resources.limits.memory
@@ -69,7 +69,7 @@ releases:
         value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
       - name: replicaCount
-        value: {{ .Values.pedestrian.replicaCount }} 
+        value: {{ .Values.pedestrian.replicaCount }}
       - name: resources.limits.cpu
         value: {{ .Values.pedestrian.limits.cpu }}
       - name: resources.limits.memory
@@ -93,7 +93,7 @@ releases:
         value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
       - name: replicaCount
-        value: {{ .Values.bicycle.replicaCount }} 
+        value: {{ .Values.bicycle.replicaCount }}
       - name: resources.limits.cpu
         value: {{ .Values.bicycle.limits.cpu }}
       - name: resources.limits.memory
@@ -117,7 +117,7 @@ releases:
         value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
       - name: replicaCount
-        value: {{ .Values.taxi.replicaCount }} 
+        value: {{ .Values.taxi.replicaCount }}
       - name: resources.limits.cpu
         value: {{ .Values.taxi.limits.cpu }}
       - name: resources.limits.memory
@@ -140,10 +140,10 @@ releases:
       - name: naviback.type
         value: {{ $type }}
       - name: naviback.simpleNetwork.emergency
-        value: true  
+        value: true
       {{ if eq .Values.naviCustomResources true }}
       - name: replicaCount
-        value: {{ .Values.emergency.replicaCount }} 
+        value: {{ .Values.emergency.replicaCount }}
       - name: resources.limits.cpu
         value: {{ .Values.emergency.limits.cpu }}
       - name: resources.limits.memory
@@ -152,7 +152,7 @@ releases:
         value: {{ .Values.emergency.requests.cpu }}
       - name: resources.requests.memory
         value: {{ .Values.emergency.requests.memory }}
-      {{- end }}    
+      {{- end }}
 
   {{ $API := "distance-matrix" }}{{ $type := "dm"}}
   - name: navi-back-{{ $API }}
@@ -164,10 +164,10 @@ releases:
       - name: naviback.app_rule
         value: {{ $API }}
       - name: naviback.type
-        value: {{ $type }}  
+        value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
       - name: replicaCount
-        value: {{ .Values.dm.replicaCount }} 
+        value: {{ .Values.dm.replicaCount }}
       - name: resources.limits.cpu
         value: {{ .Values.dm.limits.cpu }}
       - name: resources.limits.memory
@@ -176,7 +176,7 @@ releases:
         value: {{ .Values.dm.requests.cpu }}
       - name: resources.requests.memory
         value: {{ .Values.dm.requests.memory }}
-      {{- end }} 
+      {{- end }}
 
   {{ $API := "public-transport" }}{{ $type := "ctx"}}
   - name: navi-back-{{ $API }}
@@ -188,10 +188,10 @@ releases:
       - name: naviback.app_rule
         value: {{ $API }}
       - name: naviback.type
-        value: {{ $type }}  
+        value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
       - name: replicaCount
-        value: {{ .Values.ctx.replicaCount }} 
+        value: {{ .Values.ctx.replicaCount }}
       - name: resources.limits.cpu
         value: {{ .Values.ctx.limits.cpu }}
       - name: resources.limits.memory
@@ -200,7 +200,7 @@ releases:
         value: {{ .Values.ctx.requests.cpu }}
       - name: resources.requests.memory
         value: {{ .Values.ctx.requests.memory }}
-      {{- end }} 
+      {{- end }}
 
   {{ $API := "pairs-directions" }}{{ $type := "pairs"}}
   - name: navi-back-{{ $API }}
@@ -212,10 +212,10 @@ releases:
       - name: naviback.app_rule
         value: {{ $API }}
       - name: naviback.type
-        value: {{ $type }}   
+        value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
       - name: replicaCount
-        value: {{ .Values.pairs.replicaCount }} 
+        value: {{ .Values.pairs.replicaCount }}
       - name: resources.limits.cpu
         value: {{ .Values.pairs.limits.cpu }}
       - name: resources.limits.memory
@@ -224,7 +224,7 @@ releases:
         value: {{ .Values.pairs.requests.cpu }}
       - name: resources.requests.memory
         value: {{ .Values.pairs.requests.memory }}
-      {{- end }} 
+      {{- end }}
 
   {{ $API := "directions-truck" }}{{ $type := "truck"}}
   - name: navi-back-{{ $API }}
@@ -236,10 +236,10 @@ releases:
       - name: naviback.app_rule
         value: {{ $API }}
       - name: naviback.type
-        value: {{ $type }}  
+        value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
       - name: replicaCount
-        value: {{ .Values.truck.replicaCount }} 
+        value: {{ .Values.truck.replicaCount }}
       - name: resources.limits.cpu
         value: {{ .Values.truck.limits.cpu }}
       - name: resources.limits.memory
@@ -248,7 +248,7 @@ releases:
         value: {{ .Values.truck.requests.cpu }}
       - name: resources.requests.memory
         value: {{ .Values.truck.requests.memory }}
-      {{- end }} 
+      {{- end }}
 
   {{ $API := "isochrone-car" }}{{ $type := "carrouting"}}
   - name: navi-back-{{ $API }}
@@ -260,10 +260,10 @@ releases:
       - name: naviback.app_rule
         value: {{ $API }}
       - name: naviback.type
-        value: {{ $type }} 
+        value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
       - name: replicaCount
-        value: {{ .Values.carrouting.replicaCount }} 
+        value: {{ .Values.carrouting.replicaCount }}
       - name: resources.limits.cpu
         value: {{ .Values.carrouting.limits.cpu }}
       - name: resources.limits.memory
@@ -272,7 +272,7 @@ releases:
         value: {{ .Values.carrouting.requests.cpu }}
       - name: resources.requests.memory
         value: {{ .Values.carrouting.requests.memory }}
-      {{- end }}    
+      {{- end }}
 
   {{ $API := "isochrone-pedestrian" }}{{ $type := "pedestrian"}}
   - name: navi-back-{{ $API }}
@@ -284,10 +284,10 @@ releases:
       - name: naviback.app_rule
         value: {{ $API }}
       - name: naviback.type
-        value: {{ $type }}   
+        value: {{ $type }}
       {{ if eq .Values.naviCustomResources true }}
       - name: replicaCount
-        value: {{ .Values.pedestrian.replicaCount }} 
+        value: {{ .Values.pedestrian.replicaCount }}
       - name: resources.limits.cpu
         value: {{ .Values.pedestrian.limits.cpu }}
       - name: resources.limits.memory
@@ -308,12 +308,12 @@ releases:
       - name: naviback.app_rule
         value: {{ $API }}
       - name: naviback.type
-        value: {{ $type }}  
+        value: {{ $type }}
       - name: naviback.behindSplitter
         value: true
       {{ if eq .Values.naviCustomResources true }}
       - name: replicaCount
-        value: {{ .Values.matrixCtx.replicaCount }} 
+        value: {{ .Values.matrixCtx.replicaCount }}
       - name: resources.limits.cpu
         value: {{ .Values.matrixCtx.limits.cpu }}
       - name: resources.limits.memory
@@ -330,7 +330,7 @@ releases:
     labels:
       service: {{ $API }}
       chart: navi-back
-    values: 
+    values:
       - {{ $path_values }}/templates/dgctl.gotmpl
       - {{ $path_values }}/services/navi/navi-async-matrix/{{ .Environment.Name }}-kafka.yaml
       - {{ $path_values }}/services/navi/navi-back/_common_dma.gotmpl
@@ -339,34 +339,34 @@ releases:
       - name: naviback.app_rule
         value: dma
       - name: naviback.type
-        value: {{ $type }}   
+        value: {{ $type }}
       - name: s3.host
         value: {{ .Values.s3.citiesUrl }}
       - name: s3.accessKey
         value: {{ .Values.s3.accessKey }}
       - name: s3.secretKey
         value: {{ .Values.s3.secretKey }}
-{{- if or .Values.kafka.authCert .Values.kafka.authLogin }} 
-  {{- if .Values.kafka.authCert }} 
+{{- if or .Values.kafka.authCert .Values.kafka.authLogin }}
+  {{- if .Values.kafka.authCert }}
     {{- if .Values.kafka.authCert.pathCert }} #windows
       - name: kafka.fileProperties.ssl\.ca\.location
         file: {{ .Values.kafka.authCert.pathCert }}\\{{ .Values.kafka.authCert.sslCA }}
       - name: kafka.fileProperties.ssl\.certificate\.location
         file: {{ .Values.kafka.authCert.pathCert }}\\{{ .Values.kafka.authCert.sslCertificate }}
       - name: kafka.fileProperties.ssl\.key\.location
-        file: {{ .Values.kafka.authCert.pathCert }}\\{{ .Values.kafka.authCert.sslKey }}  
+        file: {{ .Values.kafka.authCert.pathCert }}\\{{ .Values.kafka.authCert.sslKey }}
     {{ else }}
       - name: kafka.fileProperties.ssl\.ca\.location
         file: {{ $path_values }}/ssl/{{ .Values.kafka.authCert.sslCA }}
       - name: kafka.fileProperties.ssl\.certificate\.location
         file: {{ $path_values }}/ssl/{{ .Values.kafka.authCert.sslCertificate }}
       - name: kafka.fileProperties.ssl\.key\.location
-        file: {{ $path_values }}/ssl/{{ .Values.kafka.authCert.sslKey }} 
-    {{ end }}     
+        file: {{ $path_values }}/ssl/{{ .Values.kafka.authCert.sslKey }}
+    {{ end }}
     {{- if .Values.kafka.authCert.sslPassword }}
       - name: kafka.properties.ssl\.key\.password
-        value: {{ .Values.kafka.authCert.sslPassword }}        
-    {{ end }} 
+        value: {{ .Values.kafka.authCert.sslPassword }}
+    {{ end }}
   {{ else }} # kafka аутентификация по логину и паролю
       - name: kafka.properties.sasl\.username
         value: {{ .Values.kafka.authLogin.username }}
