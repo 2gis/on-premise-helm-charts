@@ -1,4 +1,4 @@
-```yaml 
+```yaml
 - topic: "{{ topic-name-prefix }}input"
   partitions: {{ partitions }}
   replica-factor: {{ replica-factor }}

@@ -21,7 +21,7 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
-        {{- toYaml . | nindent 8 }}    
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "router.selectorLabels" . | nindent 8 }}
@@ -33,7 +33,7 @@ spec:
       serviceAccountName: {{ include "router.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      volumes: 
+      volumes:
       - name: {{ include "router.fullname" . }}-configmap
         configMap:
           name: {{ include "router.fullname" . }}-configmap
@@ -71,7 +71,7 @@ spec:
             timeoutSeconds: 3
             failureThreshold: 3
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}   
+            {{- toYaml .Values.resources | nindent 12 }}
       terminationGracePeriodSeconds: {{ .Values.termination_grace_period_seconds | default 60 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

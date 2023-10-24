@@ -96,7 +96,7 @@ data:
             [
                 "http://{REMOTE_FORECAST}/index.json"
             ],
-            "timeout_seconds": 
+            "timeout_seconds":
             {
                 "count": 30
             }
@@ -110,7 +110,7 @@ data:
             [
                 "http://{REMOTE_FORECAST}/"
             ],
-            "timeout_seconds": 
+            "timeout_seconds":
             {
                 "count": 30
             }
@@ -124,7 +124,7 @@ data:
             [
                 "http://{REMOTE_PATH}/"
             ],
-            "timeout_seconds": 
+            "timeout_seconds":
             {
                 "count": 60
             }
@@ -138,7 +138,7 @@ data:
             [
                 "http://{REMOTE_PATH}/options/taxi_referers.json"
             ],
-            "timeout_seconds": 
+            "timeout_seconds":
             {
                 "count": 360
             }
@@ -153,7 +153,7 @@ data:
             [
               "http://{REMOTE_PATH}/"
             ],
-            "timeout_seconds": 
+            "timeout_seconds":
             {
                "count": 10
             }
@@ -167,7 +167,7 @@ data:
             [
                 "http://{REMOTE_PATH}/"
             ],
-            "timeout_seconds": 
+            "timeout_seconds":
             {
                 "count": 10
             }
@@ -287,7 +287,7 @@ data:
             [
                 "http://{REMOTE_PATH}/tugc_users.json.zip"
             ],
-            "timeout_seconds": 
+            "timeout_seconds":
             {
                 "count": 30
             }
@@ -301,7 +301,7 @@ data:
             [
                 "http://{REMOTE_PATH}/"
             ],
-            "timeout_seconds": 
+            "timeout_seconds":
             {
                 "count": 30
             }
@@ -315,7 +315,7 @@ data:
             [
                 "http://{REMOTE_PATH}/tugc_2gis.json.zip"
             ],
-            "timeout_seconds": 
+            "timeout_seconds":
             {
                 "count": 30
             }
@@ -329,7 +329,7 @@ data:
             [
                 "http://{REMOTE_PATH}/"
             ],
-            "timeout_seconds": 
+            "timeout_seconds":
             {
                 "count": 30
             }
