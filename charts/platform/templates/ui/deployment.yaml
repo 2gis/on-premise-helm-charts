@@ -58,6 +58,10 @@ spec:
               value: {{ required ".Values.ui.brand is required" .Values.ui.brand | quote }}
             - name: PAGES
               value: {{ required ".Values.ui.pages is required" .Values.ui.pages | quote }}
+            {{- if .Values.ui.platform }}
+            - name: PLATFORM_API_URL
+              value: {{ .Values.ui.platform.api.url | quote }}
+            {{- end }}
             - name: CATALOG_API_URL
               value: {{ .Values.ui.catalog.url | quote }}
             - name: CATALOG_API_KEY
