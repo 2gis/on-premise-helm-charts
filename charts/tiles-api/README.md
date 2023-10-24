@@ -140,10 +140,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                        | Description                            | Value            |
-| --------------------------- | -------------------------------------- | ---------------- |
-| `api.ingress.enabled`       | If Ingress is enabled for the service. | `false`          |
-| `api.ingress.hosts[0].host` | Hostname for the Ingress service.      | `tiles-api.host` |
+| Name                                     | Description                               | Value                   |
+| ---------------------------------------- | ----------------------------------------- | ----------------------- |
+| `api.ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                 |
+| `api.ingress.className`                  | Name of the Ingress controller class.     | `nginx`                 |
+| `api.ingress.hosts[0].host`              | Hostname for the Ingress service.         | `tiles-api.example.com` |
+| `api.ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                     |
+| `api.ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                |
+| `api.ingress.tls`                        | TLS configuration                         | `[]`                    |
 
 ### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 

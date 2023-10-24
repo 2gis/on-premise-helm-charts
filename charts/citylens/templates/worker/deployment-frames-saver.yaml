@@ -29,7 +29,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "citylens.frames-saver.selectorLabels" . | nindent 8 }}
+        {{- include "citylens.frames-saver.labels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ include "citylens.frames-saver.name" . }}

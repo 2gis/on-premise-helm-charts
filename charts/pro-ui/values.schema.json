@@ -17,8 +17,7 @@
         "supportDocumentationLink",
         "auth",
         "api",
-        "mapgl",
-        "healthcheckPath"
+        "mapgl"
       ],
       "properties": {
         "logLevel": {
@@ -123,7 +122,13 @@
             "key": {
               "type": "string"
             },
+            "styleId": {
+              "type": "string"
+            },
             "styleUrl": {
+              "type": "string"
+            },
+            "scriptPath": {
               "type": "string"
             },
             "styleIconsUrl": {

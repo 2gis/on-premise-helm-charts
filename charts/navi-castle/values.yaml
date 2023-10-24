@@ -80,12 +80,24 @@ service:
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 # @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Name of the Ingress controller class.
 # @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration
 
 ingress:
   enabled: false
+  className: nginx
   hosts:
-  - host: navi-castle.host
+  - host: navi-castle.example.com
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  #  hosts:
+  #    navi-castle.example.com
+  #  secretName: secret.tls
 
 
 # @section Limits

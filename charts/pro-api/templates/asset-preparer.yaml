@@ -21,7 +21,7 @@ spec:
             - name: temp-volume
               emptyDir: {}
           containers:
-            - name: {{ include "pro-api.asset-importer-name" . }}
+            - name: {{ include "pro-api.asset-preparer-name" . }}
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.assetPreparer.repository }}:{{ .Values.assetPreparer.tag }}
               imagePullPolicy: IfNotPresent
               resources:

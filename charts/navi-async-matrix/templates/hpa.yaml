@@ -13,11 +13,10 @@ spec:
     name: {{ include "navi-async-matrix.fullname" $ }}
   minReplicas: {{ .minReplicas }}
   maxReplicas: {{ .maxReplicas }}
+  {{- if .behavior }}
   behavior:
-    scaleUp:
-        stabilizationWindowSeconds: {{ .scaleUpStabilizationWindowSeconds }}
-    scaleDown:
-        stabilizationWindowSeconds: {{ .scaleDownStabilizationWindowSeconds }}
+    {{- toYaml .behavior | nindent 4 }}
+  {{- end }}
   metrics:
   {{- with .targetCPUUtilizationPercentage }}
     - type: Resource
