@@ -54,7 +54,7 @@ api:
 
   image:
     repository: 2gis-on-premise/search-api
-    tag: 7.64.0
+    tag: 7.65.0
     pullPolicy: IfNotPresent
 
 
