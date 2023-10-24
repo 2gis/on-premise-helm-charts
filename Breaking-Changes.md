@@ -3,7 +3,7 @@
 ## [1.12.0]
 #### tiles-api
 - Backward compatibility with `license` versions before `2.0.0` (on-premise version `1.8.0`) is broken.
-- License v2 is required.
+- License v2 over HTTPS is required.
 
 ## [1.10.0]
 #### pro-api
