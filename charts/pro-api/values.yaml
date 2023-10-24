@@ -310,7 +310,7 @@ search:
 # @skip tileGen
 
 tileGen:
-  url: https://tilegen-api-staging.svc
+  url: ''
   userDataTileSet: ''
 
 # @section 2GIS PRO API Job settings
