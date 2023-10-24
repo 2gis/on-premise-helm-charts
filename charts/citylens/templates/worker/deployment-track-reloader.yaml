@@ -1,21 +1,22 @@
+{{- if .Values.worker.tracksUploader.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "citylens.frames-saver.name" . }}
-  {{- if .Values.worker.framesSaver.annotations }}
+  name: {{ include "citylens.track-reloader.name" . }}
+  {{- if .Values.worker.tracksUploader.annotations }}
   annotations:
-    {{- toYaml .Values.worker.framesSaver.annotations | nindent 4 }}
+    {{- toYaml .Values.worker.tracksUploader.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "citylens.frames-saver.labels" . | nindent 4 }}
-  {{- if .Values.worker.framesSaver.labels }}
-    {{- toYaml .Values.worker.labels | nindent 4 }}
+    {{- include "citylens.track-reloader.labels" . | nindent 4 }}
+  {{- if .Values.worker.tracksUploader.labels }}
+    {{- toYaml .Values.worker.tracksUploader.labels | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.worker.framesSaver.replicas }}
+  replicas: {{ .Values.worker.tracksUploader.replicas }}
   selector:
     matchLabels:
-      {{- include "citylens.frames-saver.selectorLabels" . | nindent 6 }}
+      {{- include "citylens.track-reloader.selectorLabels" . | nindent 6 }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -25,18 +26,18 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
-      {{- with .Values.worker.framesSaver.podAnnotations }}
+      {{- with .Values.worker.tracksUploader.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "citylens.frames-saver.labels" . | nindent 8 }}
+        {{- include "citylens.track-reloader.labels" . | nindent 8 }}
     spec:
       containers:
-        - name: {{ include "citylens.frames-saver.name" . }}
+        - name: {{ include "citylens.track-reloader.name" . }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
           imagePullPolicy: {{ .Values.web.image.pullPolicy }}
           command: [ "/bin/sh", "-c" ]
-          args: [ "flask downloader download_frames_ftp" ]
+          args: [ "flask reloader reload_tracks" ]
           env:
             - name: CONFIG_PATH
               value: /opt/worker/config/dashboard_config.yaml
@@ -49,15 +50,16 @@ spec:
         - name: config-volume
           configMap:
             name: {{ include "citylens.web.name" . }}-configmap
-      {{- with .Values.worker.framesSaver.nodeSelector }}
+      {{- with .Values.worker.tracksUploader.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.worker.framesSaver.affinity }}
+      {{- with .Values.worker.tracksUploader.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.worker.framesSaver.tolerations }}
+      {{- with .Values.worker.tracksUploader.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}

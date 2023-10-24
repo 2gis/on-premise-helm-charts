@@ -1,0 +1,57 @@
+{{- if .Values.migrations.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "citylens.name" . }}-data-migration-job
+  labels:
+    {{- include "citylens.migration.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-5"
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "citylens.name" . }}-migrate-data
+      labels:
+        {{- include "citylens.migration.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: data-migrations-volume
+          emptyDir: {}
+      initContainers:
+        - name: importer
+          image:  {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.migrations.image.repository }}:{{ .Values.migrations.image.tag }}
+          imagePullPolicy: {{ .Values.migrations.image.pullPolicy }}
+          command: [ "python" ]
+          args: [ "-m", "data_migrations", "download-from-dgctlstorage", "--dest", "/data_migrations" ]
+          resources:
+            {{- toYaml .Values.migrations.resources | nindent 12 }}
+          env:
+            {{- include "citylens.env.importer" . | nindent 12 }}
+          volumeMounts:
+            - mountPath: "/data_migrations"
+              name: data-migrations-volume
+      containers:
+        - name: migrate
+          image:  {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.migrations.image.repository }}:{{ .Values.migrations.image.tag }}
+          imagePullPolicy: {{ .Values.migrations.image.pullPolicy }}
+          command: [ "python" ]
+          args: [ "-m", "data_migrations", "apply-data-migrations", "--from", "/data_migrations" ]
+          resources:
+            {{- toYaml .Values.migrations.resources | nindent 12 }}
+          env:
+            - name: DATABASE_URL
+            {{- with .Values.postgres }}
+              value: postgresql://{{ .username }}:{{ .password }}@{{ .host }}:{{ .port }}/{{ .database }}
+            {{- end }}
+          volumeMounts:
+            - mountPath: "/data_migrations"
+              name: data-migrations-volume
+      {{- with .Values.migrations.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
