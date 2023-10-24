@@ -44,6 +44,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.appLocale`                  | Language in the app. Possible values: `"ar_AE"`, `"en_AE"` or `"ru_RU"`.                                                                         | `en_AE`          |
 | `ui.appInitialMapCenter`        | Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow). | `[46.71, 24.72]` |
 | `ui.supportDocumentationLink`   | Product online documentation link. Ex.: 'https://docs.urbi.ae/en/pro/start'                                                                      | `""`             |
+| `ui.immersiveModels`            | A string value for config to enabling 3D-models.                                                                                                 | `""`             |
 | `ui.auth.sso`                   | Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.                                                                   | `false`          |
 | `ui.auth.secure`                | Flag to turn on/off the https for auth. Possible values: `"true"` or `"false"`.                                                                  | `true`           |
 | `ui.auth.safeHosts`             | a string with regExp, which checks incoming authCodeUrl                                                                                          | `.*`             |
