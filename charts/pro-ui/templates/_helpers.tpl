@@ -21,6 +21,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ required "A valid .Values.ui.api.url entry required" .Values.ui.api.url }}"
 - name: MAPGL_HOST
   value: "{{ required "A valid .Values.ui.mapgl.host entry required" .Values.ui.mapgl.host }}"
+- name: MAPGL_SCRIPT_PATH
+  value: "{{ .Values.ui.mapgl.scriptPath }}"
+- name: MAPGL_STYLE_ID
+  value: "{{ .Values.ui.mapgl.styleId }}"
 - name: MAPGL_KEY
   value: "{{ required "A valid .Values.ui.mapgl.key entry required" .Values.ui.mapgl.key }}"
 - name: MAPGL_STYLE_URL
