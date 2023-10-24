@@ -93,4 +93,11 @@ spec:
               value: "{{ .Values.api.logging.targets }}"
             - name: Common__FailJobOnError
               value: "true"
+            - name: Navi__Url
+              value: {{ .Values.navi.url }}
+            - name: Navi__Key
+              valueFrom:
+                secretKeyRef:
+                  key: routingApi2gisKey
+                  name: {{ include "pro-api.name" . }}-secret
 {{ end }}

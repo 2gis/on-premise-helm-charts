@@ -59,7 +59,7 @@ spec:
         - name: temp-volume
           emptyDir: {}
       containers:
-        - name: {{ .Chart.Name }}-permissions
+        - name: {{ include "pro-api.name" . }}-permissions
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.permissionsApiImage.repository }}:{{ .Values.permissionsApiImage.tag }}
           imagePullPolicy: {{ .Values.permissionsApiImage.pullPolicy }}
           ports:
@@ -117,6 +117,13 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: dbConnectionPwd
+                  name: {{ include "pro-api.name" . }}-secret
+            - name: API_URL
+              value: http://{{ include "pro-api.name" . }}
+            - name: API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: apiKey
                   name: {{ include "pro-api.name" . }}-secret
             - name: Auth__Type
               value: {{ required "A valid .Values.auth.type entry required" $.Values.auth.type }}
