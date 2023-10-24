@@ -110,4 +110,3 @@ See the [documentation](https://docs.2gis.com/en/on-premise/traffic-proxy) to le
 | Name | Email | Url |
 | ---- | ------ | --- |
 | 2gis | <on-premise@2gis.com> | <https://github.com/2gis> |
-

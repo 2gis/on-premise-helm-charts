@@ -90,5 +90,5 @@ spec:
                 - name: Common__Logging__Targets
                   value: "{{ .Values.api.logging.targets }}"
                 - name: Common__SuppressImportFailure
-                  value: "true"                  
+                  value: "true"
 {{ end }}

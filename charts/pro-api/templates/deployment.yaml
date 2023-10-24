@@ -259,7 +259,7 @@ spec:
             - name: Redis__Username
               value: {{ $.Values.redis.username }}
             {{ if .Values.redis.password }}
-            - name: Redis__Password  
+            - name: Redis__Password
               valueFrom:
                 secretKeyRef:
                   key: redisPassword

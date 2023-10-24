@@ -13,15 +13,15 @@ releases:
   - name: navi-async-matrix
     {{- if eq .Values.remoteCharts true }}
     chart: 2gis-on-premise/navi-async-matrix
-    {{- else}}    
+    {{- else}}
     chart: ../../../charts/navi-async-matrix
-    {{- end }}  
+    {{- end }}
     namespace: {{ .Values.namespace  }}
     kubeContext: {{ .Values.kubeContext }}
     version: "{{ .Values.version }}"
     labels:
       chart: navi-async-matrix
-    values: 
+    values:
       - {{ $path_values }}/templates/dgctl.gotmpl
       - {{ $path_values }}/services/navi/navi-async-matrix/{{ .Environment.Name }}-kafka.yaml
       - {{ $path_values }}/services/navi/navi-async-matrix/_common.gotmpl
@@ -38,26 +38,26 @@ releases:
         value: {{ .Values.s3.secretKey }}
 {{- if or .Values.kafka.authCert .Values.kafka.authLogin }}
   {{- if .Values.kafka.authCert }}  # kafka аутентификация по сертификату
-    {{- if .Values.kafka.authCert.pathCert }} #windows 
+    {{- if .Values.kafka.authCert.pathCert }} #windows
       - name: kafka.fileProperties.ssl\.cafile
         file: {{ .Values.kafka.authCert.pathCert }}\\{{ .Values.kafka.authCert.sslCA }}
-      - name: kafka.fileProperties.ssl\.certfile 
+      - name: kafka.fileProperties.ssl\.certfile
         file: {{ .Values.kafka.authCert.pathCert }}\\{{ .Values.kafka.authCert.sslCertificate }}
-      - name: kafka.fileProperties.ssl\.keyfile 
+      - name: kafka.fileProperties.ssl\.keyfile
         file: {{ .Values.kafka.authCert.pathCert }}\\{{ .Values.kafka.authCert.sslKey }}
     {{ else }}
       - name: kafka.fileProperties.ssl\.cafile
         file: {{ $path_values }}/ssl/{{ .Values.kafka.authCert.sslCA }}
-      - name: kafka.fileProperties.ssl\.certfile 
+      - name: kafka.fileProperties.ssl\.certfile
         file: {{ $path_values }}/ssl/{{ .Values.kafka.authCert.sslCertificate }}
-      - name: kafka.fileProperties.ssl\.keyfile 
+      - name: kafka.fileProperties.ssl\.keyfile
         file: {{ $path_values }}/ssl/{{ .Values.kafka.authCert.sslKey }}
     {{ end }}
-      - name: kafka.properties.ssl\.check\.hostname 
+      - name: kafka.properties.ssl\.check\.hostname
         value: ''
     {{- if .Values.kafka.authCert.sslPassword }}
       - name: kafka.sensitiveProperties.ssl\.password
-        value: {{ .Values.kafka.authCert.sslPassword }}        
+        value: {{ .Values.kafka.authCert.sslPassword }}
     {{ end }}
   {{ else }} # kafka аутентификация по логину и паролю
       - name: kafka.properties.sasl\.plain\.username
@@ -67,7 +67,7 @@ releases:
   {{ end }}
 {{ end }}
     {{- if .Values.ingress.enabled }}
-    hooks: 
+    hooks:
     - events: ["postsync"]
       showlogs: true
       command: "../tests/navi-async-service.sh"

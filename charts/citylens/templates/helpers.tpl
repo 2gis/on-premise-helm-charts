@@ -108,5 +108,3 @@ app.kubernetes.io/name: {{ include "citylens.api.name" . }}
 app.kubernetes.io/instance: {{ .Chart.Name }}-db-migration
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
-
-

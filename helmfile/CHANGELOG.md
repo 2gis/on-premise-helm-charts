@@ -32,5 +32,5 @@ router:
     queries: ["get_dist_matrix"]
     routing: ["ctx"]
 ```
-#### Добавлен деплой [splitter для Distance Matrix API Public Transport (до 10х10)](README.md) 
+#### Добавлен деплой [splitter для Distance Matrix API Public Transport (до 10х10)](README.md)
 - добавлены values *helmfile_values/services/navi/navi-splitter*
