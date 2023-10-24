@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-set -u 
+set -u
 set -o pipefail
 
 SCRIPTPATH=$(dirname `readlink -f "$0"`)

@@ -17,7 +17,7 @@ spec:
         checksum/configBase: {{ include (print $.Template.BasePath "/configmap-base.yaml") . | sha256sum }}
         checksum/configExtra: {{ include (print $.Template.BasePath "/configmap-extra.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
-        {{- toYaml . | nindent 8 }}    
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "front.selectorLabels" . | nindent 8 }}
@@ -29,7 +29,7 @@ spec:
       serviceAccountName: {{ include "front.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      volumes: 
+      volumes:
       - name: {{ include "front.fullname" . }}-base
         configMap:
           name: {{ include "front.fullname" . }}-base
@@ -77,7 +77,7 @@ spec:
             httpGet:
               path: /healthcheck
               port: http
-          
+
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

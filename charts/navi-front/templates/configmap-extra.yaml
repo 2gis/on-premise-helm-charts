@@ -11,4 +11,3 @@ data:
   locations-block.conf: |-
 {{ include "tplvalues.render" ( dict "value" .Values.locationsBlock "context" $ ) | indent 4 }}
 {{- end }}
-

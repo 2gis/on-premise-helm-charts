@@ -116,7 +116,13 @@
             "key": {
               "type": "string"
             },
+            "styleId": {
+              "type": "string"
+            },
             "styleUrl": {
+              "type": "string"
+            },
+            "scriptPath": {
               "type": "string"
             },
             "styleIconsUrl": {

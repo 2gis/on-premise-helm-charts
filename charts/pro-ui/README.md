@@ -32,7 +32,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name                  | Description                    | Value                    |
 | --------------------- | ------------------------------ | ------------------------ |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/pro-ui` |
-| `ui.image.tag`        | Tag                            | `1.1.0`                  |
+| `ui.image.tag`        | Tag                            | `1.2.0`                  |
 | `imagePullPolicy`     | Pull Policy                    | `IfNotPresent`           |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                     |
 
@@ -64,14 +64,16 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### MapGL JS API settings
 
-| Name                      | Description                                                                                                                                    | Value            |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `ui.mapgl.host`           | FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service without protocol.                                  | `mapgl-api.host` |
-| `ui.mapgl.key`            | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                                                  | `""`             |
-| `ui.mapgl.styleUrl`       | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) `style.json` folder, e.g., '//mapgl.ingress.host/style'  | `""`             |
-| `ui.mapgl.styleIconsUrl`  | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons folder, e.g., '//mapgl.ingress.host/style/icons'   | `""`             |
-| `ui.mapgl.styleFontsUrl`  | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'   | `""`             |
-| `ui.mapgl.styleModelsUrl` | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) models folder, e.g., '//mapgl.ingress.host/style/models' | `""`             |
+| Name                      | Description                                                                                                                                                                                          | Value            |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `ui.mapgl.host`           | FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service with or without protocol. Without protocol we will put App's protocol.                                   | `mapgl-api.host` |
+| `ui.mapgl.scriptPath`     | URL path to [MapGL JS API](https://docs.2gis.com/en/on-premise/map) init script relative to `ui.mapgl.host`.                                                                                         | `""`             |
+| `ui.mapgl.key`            | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                                                                                                        | `""`             |
+| `ui.mapgl.styleId`        | Optional the map style ID, that you can get at https://styles.2gis.com.                                                                                                                              | `""`             |
+| `ui.mapgl.styleUrl`       | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) `style.json` folder, e.g., '//mapgl.ingress.host/style'. ui.mapgl.styleUrl has priority over ui.mapgl.styleId. | `""`             |
+| `ui.mapgl.styleIconsUrl`  | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons folder, e.g., '//mapgl.ingress.host/style/icons'                                                         | `""`             |
+| `ui.mapgl.styleFontsUrl`  | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'                                                         | `""`             |
+| `ui.mapgl.styleModelsUrl` | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) models folder, e.g., '//mapgl.ingress.host/style/models'                                                       | `""`             |
 
 ### Strategy settings
 

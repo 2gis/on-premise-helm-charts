@@ -3,7 +3,7 @@ helmDefaults:
   atomic: true
   wait: true
 
- 
+
 environments:
   test:
     values:
@@ -41,26 +41,25 @@ environments:
 
   prod:
     values:
-    - version: 1.7.0 
+    - version: 1.7.0
       remoteCharts: true
-      manifest: manifests/1675328936.json 
-      namespace: 2gis-on-premise 
-      kubeContext: prod-cluster 
+      manifest: manifests/1675328936.json
+      namespace: 2gis-on-premise
+      kubeContext: prod-cluster
       dockerRegistry: docker.storage.example.local
       s3:
         citiesUrl: http://artifacts.example.com
-        bucket: onpremise-artifacts 
+        bucket: onpremise-artifacts
         accessKey: AKIAIOSFODNN7EXAMPLE
         secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
       ingress:
-        enabled: true 
-        domain: example.com 
-        protocol: https 
-        secretName: secret_tls 
-      customProjectNavi: false 
-      kafka: 
-        authCert: 
+        enabled: true
+        domain: example.com
+        protocol: https
+        secretName: secret_tls
+      customProjectNavi: false
+      kafka:
+        authCert:
           sslCA: CAcert.pem
           sslCertificate: Cert.crt
           sslKey: Private.key
-          

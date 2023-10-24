@@ -28,23 +28,23 @@ spec:
                   - key: statefulset.kubernetes.io/pod-name
                     operator: In
                     values:
-                    - {{ include "castle.fullname" $ }}-{{ $i }} 
+                    - {{ include "castle.fullname" $ }}-{{ $i }}
                 topologyKey: "kubernetes.io/hostname"
           restartPolicy: OnFailure
-          volumes:     
+          volumes:
           - name: {{ include "castle.fullname" $ }}-pvc
             persistentVolumeClaim:
-              claimName: {{ include "castle.fullname" $ }}-pvc-{{ include "castle.fullname" $ }}-{{ $i }} 
+              claimName: {{ include "castle.fullname" $ }}-pvc-{{ include "castle.fullname" $ }}-{{ $i }}
           - name: {{ include "castle.fullname" $ }}-builder-config
             configMap:
-              name: {{ include "castle.fullname" $ }}-builder-config           
+              name: {{ include "castle.fullname" $ }}-builder-config
           containers:
             - name: castle-cron
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag | default $.Chart.AppVersion }}
-              imagePullPolicy: {{ $.Values.castle.image.pullPolicy }} 
+              imagePullPolicy: {{ $.Values.castle.image.pullPolicy }}
               command: [ "/opt/configuration_builder" ]
-              args: 
-              - --config 
+              args:
+              - --config
               - /opt/config_builder.conf
               - --service={{ $flavor }}
               - --jobs={{ $.Values.castle.jobs | default 1 | int }}
@@ -54,7 +54,7 @@ spec:
                 subPath: config_builder.conf
               - name: {{ include "castle.fullname" $ }}-builder-config
                 mountPath: {{ $.Values.castle.castleDataPath }}/cities_template
-                subPath: cities_template       
+                subPath: cities_template
               - name: {{ include "castle.fullname" $ }}-pvc
                 mountPath: {{ $.Values.castle.castleDataPath }}
               resources:
