@@ -75,7 +75,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description                                                                                   | Value                         |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ----------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag                                                                                           | `3.598.4`                     |
+| `api.image.tag`        | Tag                                                                                           | `3.600.0`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
@@ -110,10 +110,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                        | Description                           | Value              |
-| --------------------------- | ------------------------------------- | ------------------ |
-| `api.ingress.enabled`       | If Ingress is enabled for the service | `false`            |
-| `api.ingress.hosts[0].host` | Hostname for the Ingress service      | `catalog-api.host` |
+| Name                                     | Description                               | Value                     |
+| ---------------------------------------- | ----------------------------------------- | ------------------------- |
+| `api.ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                   |
+| `api.ingress.className`                  | Name of the Ingress controller class.     | `nginx`                   |
+| `api.ingress.hosts[0].host`              | Hostname for the Ingress service.         | `catalog-api.example.com` |
+| `api.ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                       |
+| `api.ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                  |
+| `api.ingress.tls`                        | TLS configuration                         | `[]`                      |
 
 ### Database settings
 

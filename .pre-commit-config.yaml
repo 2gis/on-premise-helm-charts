@@ -1,0 +1,28 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+# Using pip:
+# pip install pre-commit
+# exclude: '^collections/'
+#
+# To install, run the project in the root:
+# pre-commit install
+# To uninstall, run the project in the root:
+# pre-commit uninstall
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+      - id: check-symlinks
+      - id: debug-statements
+      # - id: check-yaml
+      #   # exclude: '^(old)/|log.yml'
+      #   args: [--unsafe]
+  # - repo: https://github.com/executablebooks/mdformat
+  #   rev: 0.7.17
+  #   hooks:
+  #     - id: mdformat

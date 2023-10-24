@@ -1,4 +1,16 @@
 # 2GIS On-Premise Breaking-Changes
+## [1.12.0]
+#### navi-async-matrix
+- Remove `hpa.scaleUpStabilizationWindowSeconds` and `.hpa.scaleDownStabilizationWindowSeconds`
+- Add `hpa.behavior`
+```yaml
+hpa:
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 500
+    scaleDown:
+      stabilizationWindowSeconds: 600
+```
 
 ## [1.10.0]
 #### pro-api

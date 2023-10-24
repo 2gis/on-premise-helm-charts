@@ -1,5 +1,5 @@
 catalog-api
-	catalog-api:3.598.4
+	catalog-api:3.600.0
 	catalog-importer:1.0.10
 citylens
 	citylens-api:1.0.9
@@ -30,7 +30,7 @@ mapgl-js-api
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
-	navi-async-matrix:1.3.3
+	navi-async-matrix:1.6.2
 navi-back
 	navi-back:7.10.0
 navi-castle

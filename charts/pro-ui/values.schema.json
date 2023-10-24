@@ -17,8 +17,7 @@
         "supportDocumentationLink",
         "auth",
         "api",
-        "mapgl",
-        "healthcheckPath"
+        "mapgl"
       ],
       "properties": {
         "logLevel": {
@@ -40,9 +39,6 @@
           "type": "string"
         },
         "supportDocumentationLink": {
-          "type": "string"
-        },
-        "healthcheckPath": {
           "type": "string"
         },
         "auth": {

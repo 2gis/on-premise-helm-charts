@@ -16,17 +16,16 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### Common settings
 
-| Name                 | Description                                                                                                                                                                                                                                                                                                          | Value                  |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `ui.replicas`        | A replica count for the pod.                                                                                                                                                                                                                                                                                         | `1`                    |
-| `ui.nodeSelector`    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                                                                                                                                  | `{}`                   |
-| `ui.affinity`        | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                                                                                                                                          | `{}`                   |
-| `ui.tolerations`     | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                                                                                                                                    | `[]`                   |
-| `ui.podAnnotations`  | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                                                                                                                        | `{}`                   |
-| `ui.podLabels`       | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                                                                                                                  | `{}`                   |
-| `ui.annotations`     | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                                                                                                                            | `{}`                   |
-| `ui.labels`          | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                                                                                                                      | `{}`                   |
-| `ui.healthcheckPath` | Kubernetes [live/ready probes path](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Possible values: `/api/healthcheck/app` (checks current app healthcheck only), `/api/healthcheck/integration` (checks healthchecks of current app and all integrations). | `/api/healthcheck/app` |
+| Name                | Description                                                                                                                 | Value |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ui.replicas`       | A replica count for the pod.                                                                                                | `1`   |
+| `ui.nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
+| `ui.affinity`       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
+| `ui.tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
+| `ui.podAnnotations` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
+| `ui.podLabels`      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
+| `ui.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
+| `ui.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
 
 ### Deployment settings
 
@@ -95,10 +94,14 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                       | Description                            | Value         |
-| -------------------------- | -------------------------------------- | ------------- |
-| `ui.ingress.enabled`       | If Ingress is enabled for the service. | `false`       |
-| `ui.ingress.hosts[0].host` | Hostname for the Ingress service.      | `pro-ui.host` |
+| Name                                    | Description                               | Value                |
+| --------------------------------------- | ----------------------------------------- | -------------------- |
+| `ui.ingress.enabled`                    | If Ingress is enabled for the service.    | `false`              |
+| `ui.ingress.className`                  | Name of the Ingress controller class.     | `nginx`              |
+| `ui.ingress.hosts[0].host`              | Hostname for the Ingress service.         | `pro-ui.example.com` |
+| `ui.ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                  |
+| `ui.ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`             |
+| `ui.ingress.tls`                        | TLS configuration                         | `[]`                 |
 
 ### Limits
 

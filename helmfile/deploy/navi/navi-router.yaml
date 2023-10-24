@@ -13,9 +13,9 @@ releases:
   - name: navi-router
     {{- if eq .Values.remoteCharts true }}
     chart: 2gis-on-premise/navi-router
-    {{- else}}    
+    {{- else}}
     chart: ../../../charts/navi-router
-    {{- end }}  
+    {{- end }}
     namespace: {{ .Values.namespace  }}
     kubeContext: {{ .Values.kubeContext }}
     version: "{{ .Values.version }}"
