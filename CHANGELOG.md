@@ -10,9 +10,6 @@ citylens
 	+ citylens-database:1.1.2
 	- citylens-web:1.0.13
 	+ citylens-web:1.1.2
-keys
-	- keys-backend:1.63.0
-	+ keys-backend:1.66.0
 pro-api
 	- pro-api:1.1.49
 	+ pro-api:1.1.57
