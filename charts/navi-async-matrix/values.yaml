@@ -65,6 +65,19 @@ serviceAccount:
   annotations: {}
   name: ''
 
+
+# @section RBAC parameters
+
+# @param rbac.create Whether to create and use RBAC resources or not
+# @param rbac.annotations Role and RoleBinding annotations
+# @param rbac.labels Role and RoleBinding additional labels
+
+rbac:
+  create: false
+  annotations: {}
+  labels: {}
+
+
 # @section Strategy settings
 
 # @param updateStrategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
