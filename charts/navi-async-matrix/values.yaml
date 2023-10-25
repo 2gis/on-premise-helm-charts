@@ -243,6 +243,12 @@ db:
 # @skip kafka.properties.security.protocol
 # @param kafka.sensitiveProperties As kafka.properties, but kept in Secrets. Refer to inlines comments for details.
 # @param kafka.fileProperties As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
+# @param kafka.consumerOverrides.properties Consumer specific properties as simple key-value pairs.
+# @param kafka.consumerOverrides.sensitiveProperties Consumer specific properties mounted as secrets.
+# @param kafka.consumerOverrides.fileProperties Consumer specific properties mounted as regular files.
+# @param kafka.producerOverrides.properties Consumer specific properties as simple key-value pairs.
+# @param kafka.producerOverrides.sensitiveProperties Consumer specific properties mounted as secrets.
+# @param kafka.producerOverrides.fileProperties Consumer specific properties mounted as regular files.
 # @extra kafka.taskTopicRules **Information about the topics that Distance Matrix Async API will use to send the requests.**
 # @extra kafka.taskTopicRules[].topic Name of the topic.
 # @extra kafka.taskTopicRules[].default If this topic is used for projects by default.
@@ -260,6 +266,14 @@ kafka:
     security.protocol: PLAINTEXT
   sensitiveProperties: {}
   fileProperties: {}
+  consumerOverrides:
+    properties: {}
+    sensitiveProperties: {}
+    fileProperties: {}
+  producerOverrides:
+    properties: {}
+    sensitiveProperties: {}
+    fileProperties: {}
   taskTopicRules:
   - topic: task_topic
     default: true

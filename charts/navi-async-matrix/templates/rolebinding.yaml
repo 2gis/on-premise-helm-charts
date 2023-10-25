@@ -1,4 +1,4 @@
-{{- if .Values.dm.archiver.enabled }}
+{{- if and .Values.rbac.create .Values.dm.archiver.enabled }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -19,4 +19,4 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: {{ include "navi-async-matrix.fullname" . }}
-{{- end }}{{- /* .Values.dm.archiver.enabled */}}
+{{- end }}{{- /* .Values.rbac.create .Values.dm.archiver.enabled */}}
