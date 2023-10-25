@@ -2,9 +2,9 @@ catalog-api
 	catalog-api:3.600.0
 	catalog-importer:1.0.10
 citylens
-	citylens-api:1.0.9
-	citylens-database:1.0.9
-	citylens-web:1.0.13
+	citylens-api:1.1.2
+	citylens-database:1.1.2
+	citylens-web:1.1.2
 dgtt
 	dgtt:0.2.27-b188673e09
 floors-api
@@ -26,7 +26,7 @@ keys
 license
 	license:2.1.2
 mapgl-js-api
-	mapgl:1.39.0
+	mapgl:1.40.0
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
@@ -46,24 +46,24 @@ navi-router
 navi-splitter
 	navi-splitter:1.0.1
 platform
-	platform-ui:0.4.0
+	platform-ui:0.5.5
 pro-api
-	pro-api:1.1.49
-	pro-importer:1.1.49
-	pro-importer:1.1.49
-	pro-permissions-api:1.1.49
+	pro-api:1.1.57
+	pro-importer:1.1.57
+	pro-importer:1.1.57
+	pro-permissions-api:1.1.57
 pro-ui
-	pro-ui:1.1.0
+	pro-ui:1.2.0
 search-api
-	search-api:7.64.0
+	search-api:7.65.0
 	search-nginx:1.21.6
 stat-receiver
 	stat-receiver-api:1.11.1
 	stat-receiver-streams:1.11.1
 tiles-api
-	tiles-api-importer:4.48.2
-	tiles-api-proxy:4.48.2
-	tiles-api:4.48.2
+	tiles-api-importer:4.49.0
+	tiles-api-proxy:4.49.0
+	tiles-api:4.49.0
 traffic-proxy
 	nginx:1.21.6
 twins-api

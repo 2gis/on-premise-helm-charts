@@ -528,6 +528,8 @@ migrations:
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
 # @param kafka.predictors[0].name Name of predictor **Required**
 # @param kafka.predictors[0].topic Topic used by predictor **Required**
+# @param kafka.predictors[1].name Name of manual predictor **Required**
+# @param kafka.predictors[1].topic Topic used by manual predictor **Required**
 
 kafka:
 
