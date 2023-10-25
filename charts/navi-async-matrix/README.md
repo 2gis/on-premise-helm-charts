@@ -67,6 +67,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
 
+### RBAC parameters
+
+| Name               | Description                                     | Value   |
+| ------------------ | ----------------------------------------------- | ------- |
+| `rbac.create`      | Whether to create and use RBAC resources or not | `false` |
+| `rbac.annotations` | Role and RoleBinding annotations                | `{}`    |
+| `rbac.labels`      | Role and RoleBinding additional labels          | `{}`    |
+
+
 ### Strategy settings
 
 | Name                  | Description                                                          | Value           |
