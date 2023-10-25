@@ -1,6 +1,7 @@
 # 2GIS On-Premise Changelog
 
 ## [1.13.0] (2023-10-24)
+#### [Breaking-Changes](Breaking-Changes.md#1300)
 #### Images
 ```
 citylens
@@ -10,6 +11,12 @@ citylens
 	+ citylens-database:1.1.2
 	- citylens-web:1.0.13
 	+ citylens-web:1.1.2
+mapgl-js-api
+	- mapgl:1.39.0
+	+ mapgl:1.40.0
+platform
+	- platform-ui:0.4.0
+	+ platform-ui:0.5.5
 pro-api
 	- pro-api:1.1.49
 	+ pro-api:1.1.57
@@ -25,6 +32,14 @@ pro-ui
 search-api
 	- search-api:7.64.0
 	+ search-api:7.65.0
+tiles-api
+	- tiles-api-importer:4.48.2
+	+ tiles-api-importer:4.49.0
+	- tiles-api-proxy:4.48.2
+	+ tiles-api-proxy:4.49.0
+	- tiles-api:4.48.2
+	+ tiles-api:4.49.0
+
 
 ```
 
