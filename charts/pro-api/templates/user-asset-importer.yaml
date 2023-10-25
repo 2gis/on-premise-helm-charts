@@ -7,6 +7,7 @@ spec:
   concurrencyPolicy: Forbid
   schedule: "{{ .Values.assetImporter.schedule }}"
   successfulJobsHistoryLimit: {{ .Values.assetImporter.successfulJobsHistoryLimit }}
+  suspend: true # джоба используется как шаблон для запуска обычных джоб
   jobTemplate:
     spec:
       backoffLimit: {{ .Values.assetImporter.backoffLimit }}
@@ -22,7 +23,7 @@ spec:
             - name: temp-volume
               emptyDir: {}
           containers:
-            - name: {{ include "pro-api.asset-importer-name" . }}
+            - name: {{ include "pro-api.user-asset-importer-name" . }}
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.assetImporter.repository }}:{{ .Values.assetImporter.tag }}
               imagePullPolicy: IfNotPresent
               resources:
@@ -90,5 +91,17 @@ spec:
                 - name: Common__Logging__Targets
                   value: "{{ .Values.api.logging.targets }}"
                 - name: Common__SuppressImportFailure
-                  value: "true"                  
+                  value: "true"
+                - name: Navi__Url
+                  value: {{ .Values.navi.url }}
+                - name: Navi__Key
+                  valueFrom:
+                    secretKeyRef:
+                      key: routingApi2gisKey
+                      name: {{ include "pro-api.name" . }}-secret
+                - name: TileGen__Url
+                  value: "{{ .Values.tileGen.url }}"
+                - name: TileGen__UserDataTileSet
+                  value: "{{ .Values.tileGen.userDataTileSet }}"
+
 {{ end }}

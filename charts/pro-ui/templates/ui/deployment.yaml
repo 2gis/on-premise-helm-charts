@@ -41,7 +41,7 @@ spec:
               containerPort: 3000
           readinessProbe:
             httpGet:
-              path: {{ .Values.ui.healthcheckPath }}
+              path: /api/healthcheck/app
               port: http
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}

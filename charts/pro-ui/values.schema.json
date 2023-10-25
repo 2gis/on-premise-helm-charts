@@ -17,8 +17,7 @@
         "supportDocumentationLink",
         "auth",
         "api",
-        "mapgl",
-        "healthcheckPath"
+        "mapgl"
       ],
       "properties": {
         "logLevel": {
@@ -40,6 +39,9 @@
           "type": "string"
         },
         "supportDocumentationLink": {
+          "type": "string"
+        },
+        "immersiveModels": {
           "type": "string"
         },
         "healthcheckPath": {
@@ -120,7 +122,13 @@
             "key": {
               "type": "string"
             },
+            "styleId": {
+              "type": "string"
+            },
             "styleUrl": {
+              "type": "string"
+            },
+            "scriptPath": {
               "type": "string"
             },
             "styleIconsUrl": {

@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "citylens.logs-saver.name" . }}
+  {{- if .Values.worker.logsSaver.annotations }}
+  annotations:
+    {{- toYaml .Values.worker.logsSaver.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "citylens.logs-saver.labels" . | nindent 4 }}
+  {{- if .Values.worker.logsSaver.labels }}
+    {{- toYaml .Values.worker.labels | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.worker.logsSaver.replicas }}
+  selector:
+    matchLabels:
+      {{- include "citylens.logs-saver.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
+      {{- with .Values.worker.logsSaver.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "citylens.logs-saver.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "citylens.logs-saver.name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
+          imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+          command: [ "/bin/sh", "-c" ]
+          args: [ "flask downloader download_logs" ]
+          env:
+            - name: CONFIG_PATH
+              value: /opt/worker/config/dashboard_config.yaml
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/worker/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "citylens.web.name" . }}-configmap
+      {{- with .Values.worker.logsSaver.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.logsSaver.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.logsSaver.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

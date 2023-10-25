@@ -4,7 +4,7 @@ type: application
 description: A Helm chart for Kubernetes to deploy Platform
 
 version: 1.11.0
-appVersion: 0.4.0
+appVersion: 0.5.3
 
 maintainers:
 - name: 2gis

@@ -20,6 +20,9 @@ data:
       {{- if eq .name "camcom" }}
       camcom: {{ required "A valid .topic entry required" .topic| squote }}
       {{- end }}
+      {{- if eq .name "manual" }}
+      manual: {{ required "A valid .topic entry required" .topic| squote }}
+      {{- end }}
       {{- end }}
     {{- end }}
     database:
