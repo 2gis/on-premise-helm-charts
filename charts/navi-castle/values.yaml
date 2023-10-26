@@ -102,11 +102,11 @@ ingress:
 
 # @section Limits
 
-# @skip resources
-# @extra resources.requests.cpu A CPU request, e.g., `100m`.
-# @extra resources.requests.memory A memory request, e.g., `128Mi`.
-# @extra resources.limits.cpu A CPU limit, e.g., `100m`.
-# @extra resources.limits.memory A memory limit, e.g., `128Mi`.
+# @param resources [nullable] Container resources requirements structure.
+# @param resources.requests.cpu [nullable] CPU request, recommended value `100m`.
+# @param resources.requests.memory [nullable] Memory request, recommended value `128Mi`.
+# @param resources.limits.cpu [nullable] CPU limit, recommended value `1000m`.
+# @param resources.limits.memory [nullable] Memory limit, recommended value `512Mi`.
 
 resources: {}
 
