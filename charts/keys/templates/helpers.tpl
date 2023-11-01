@@ -262,6 +262,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     secretKeyRef:
       name: {{ include "keys.secret.jobs.name" . }}
       key: dgctlStorageSecretKey
+- name: KEYS_MANIFEST_PATH
+  value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
 {{- end }}
 
 {{/*
