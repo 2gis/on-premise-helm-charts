@@ -11,7 +11,7 @@ Before you start, please take a moment to review the following guidelines to ens
 - [Requirements for the design of PR](#requirements-for-the-design-of-pr)
 - [Gitflow](#gitflow)
   - [Basic guidelines](#basic-guidelines)
-  - [Urgent bag fix guidelines](#urgent-bag-fix-guidelines)
+  - [Urgent bugfix guidelines](#urgent-bugfix-guidelines)
 
 ## How to Contribute
 
@@ -70,7 +70,7 @@ This project uses the Gitflow branching model.
 - If it is necessary to create a branch for a task, teams branch off from develop (this is where the latest changes will be).
 - When preparing for a release, nothing additional will be taken except for what has already been reviewed and merged into develop. We check all deployments and the operation from the develop branch. If everything is OK, we take it to master, set the tag of the new release with the minor bump.
 
-### Urgent bag fix Guidelines
+### Urgent bugfix Guidelines
 
 If it is necessary to release an urgent bug fix without going through the develop branch:
 
