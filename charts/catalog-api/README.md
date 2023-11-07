@@ -191,14 +191,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### importer.postgres **Database settings**
 
-| Name                                    | Description                                      | Value  |
-| --------------------------------------- | ------------------------------------------------ | ------ |
-| `importer.postgres.host`                | PostgreSQL rw hostname or IP. **Required**       | `""`   |
-| `importer.postgres.port`                | PostgreSQL port                                  | `5432` |
-| `importer.postgres.name`                | PostgreSQL database name. **Required**           | `""`   |
-| `importer.postgres.username`            | PostgreSQL username with rw access. **Required** | `""`   |
-| `importer.postgres.password`            | PostgreSQL password. **Required**                | `""`   |
-| `importer.postgres.schemaSwitchEnabled` | Automatic switch PostgreSQL schema on releases   | `true` |
+| Name                                    | Description                                      | Value        |
+| --------------------------------------- | ------------------------------------------------ | ------------ |
+| `importer.postgres.host`                | PostgreSQL rw hostname or IP. **Required**       | `""`         |
+| `importer.postgres.port`                | PostgreSQL port                                  | `5432`       |
+| `importer.postgres.name`                | PostgreSQL database name. **Required**           | `""`         |
+| `importer.postgres.username`            | PostgreSQL username with rw access. **Required** | `""`         |
+| `importer.postgres.password`            | PostgreSQL password. **Required**                | `""`         |
+| `importer.postgres.schemaSwitchEnabled` | Automatic switch PostgreSQL schema on releases   | `true`       |
+| `importer.postgres.schemaExtensions`    | Schema for PostgreSQL extensions                 | `extensions` |
 
 ### importer.persistentVolume **Persistent Volume settings**
 

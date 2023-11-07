@@ -155,6 +155,8 @@ onprem
   value: "{{ include "catalog.manifestCode" . }}"
 - name: IMPORTER_DB_CATALOG_SCHEMA_SWITCH_ENABLED
   value: "{{ .Values.importer.postgres.schemaSwitchEnabled }}"
+- name: IMPORTER_DB_CATALOG_SCHEMA_EXTENSIONS
+  value: "{{ .Values.importer.postgres.schemaExtensions }}"
 - name: IMPORTER_DB_CATALOG_HOST
   value: "{{ required "A valid .Values.importer.postgres.host entry required" .Values.importer.postgres.host }}"
 - name: IMPORTER_DB_CATALOG_PORT
