@@ -21,30 +21,24 @@ Before you start, please take a moment to review the following guidelines to ens
 
 ### Contribution Guidelines
 
-- Fork the repository to your GitHub account.
-- Create a new branch in your fork for your changes. Choose a descriptive branch name.
+- Create a new branch for your changes. Choose a descriptive branch name.
 - Make your changes, ensuring they follow our Style Guide (see [Style Guide](styleguide.md)).
 - Make your changes and commit them with clear, concise messages to your branch.
 - Test your changes locally to verify they work as expected.
-- Push your branch to your forked repository.
-- Create a pull request (PR) to the main repository's `develop` branch.
+- Create a pull request (PR) to the `develop` branch.
 - Provide a clear and detailed description of your changes in the PR (see [Requirements for the design of PR](#requirements-for-the-design-of-pr)).
 - Be responsive to any feedback or questions on your PR.
 
-Once your PR is approved, it will be merged into the main repository. Thank you for your contribution!
+Once your PR is approved, it will be merged. Thank you for your contribution!
 
 ## Requirements for the design of PR
 
 - New appVersion (or tag) specified
 - The title of the PR begins with the services name, the addition feature/bugfix is welcome, and the short description of the feature follows. Good examples of PR names:
   > LICENSE Feature: add super license;
-
-  > Added mapbox and tile set typing
-
+  
   > [tiles-api] Upgraded version and added breaking changes
-
-  > Update helm-charts for pro-ui.
-
+  
   > navi-back: upstream sync
 - The PRs description clearly explains the feature and how to check it.
 Good example of the description:
