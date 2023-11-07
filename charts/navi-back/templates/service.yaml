@@ -20,7 +20,7 @@ metadata:
     {{- end }}
   {{- if .Values.service.annotations }}
   annotations:
-   {{- include "tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+    {{- include "tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
@@ -63,7 +63,7 @@ metadata:
     behindSplitter: "true"
   {{- if .Values.service.headless.annotations }}
   annotations:
-   {{- include "tplvalues.render" ( dict "value" .Values.service.headless.annotations "context" $) | nindent 4 }}
+    {{- include "tplvalues.render" ( dict "value" .Values.service.headless.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: "ClusterIP"
