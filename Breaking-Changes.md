@@ -6,6 +6,11 @@
 
 - Backward compatibility with `license` versions before `2.0.0` (on-premise version `1.8.0`) is broken.
 - License v2 over HTTPS is required.
+- Update migrations, when updating the service you need to update the data
+
+### pro-api
+
+- Add required topic `assetDataTopic`
 
 ## [1.12.0]
 
