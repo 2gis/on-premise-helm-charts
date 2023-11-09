@@ -472,7 +472,7 @@ readinessProbeDelay: 75
 
 # @section License settings
 
-# @param license.url Address of the License service. Ex: http(s)://license.svc
+# @param license.url Address of the License service v2. Ex: https://license.svc
 
 # block not for onprem
 #
