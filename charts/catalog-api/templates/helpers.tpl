@@ -45,7 +45,7 @@ onprem
 
 {{- define "catalog.env.postgres" -}}
 - name: CATALOG_DB_SCHEMA
-  value: "{{ include "catalog.manifestCode" . }},extensions"
+  value: "{{ include "catalog.manifestCode" . }},{{ .Values.importer.postgres.schemaExtensions }}"
 - name: CATALOG_DB_QUERY_TIMEOUT
   value: "{{ .Values.api.postgres.queryTimeout }}"
 - name: CATALOG_DB_BRANCH_POOL_SIZE
