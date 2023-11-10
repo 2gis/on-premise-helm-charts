@@ -78,6 +78,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `api.adminUsers`                            | Usernames and passwords of admin users. Format: `username1:password1,username2:password2`.                                                                                                                                 | `""`            |
 | `api.adminSessionTTL`                       | TTL of the admin users sessions. Duration string is a sequence of decimal numbers with optional fraction and unit suffix, like `100ms`, `2.3h` or `4h35m`. Valid time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`. | `336h`          |
+| `api.logLevel`                              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                                  | `warning`       |
 | `api.replicas`                              | A replica count for the pod.                                                                                                                                                                                               | `1`             |
 | `api.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                                       | `RollingUpdate` |
 | `api.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).                   | `0`             |
@@ -115,21 +116,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Import service settings
 
-| Name                  | Description                                                                                                         | Value |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
-| `import.nodeSelector` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`  |
+| Name                  | Description                                                                                                         | Value     |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------- | --------- |
+| `import.logLevel`     | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                           | `warning` |
+| `import.nodeSelector` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`      |
 
 ### Migrate service settings
 
-| Name                          | Description                                                                                                         | Value |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
-| `migrate.initialDelaySeconds` | Delay in seconds at the service startup.                                                                            | `0`   |
-| `migrate.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`  |
+| Name                          | Description                                                                                                         | Value     |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------- |
+| `migrate.logLevel`            | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                           | `warning` |
+| `migrate.initialDelaySeconds` | Delay in seconds at the service startup.                                                                            | `0`       |
+| `migrate.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`      |
 
 ### Tasker service settings
 
 | Name                                           | Description                                                                                                                                                                                              | Value           |
 | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `tasker.logLevel`                              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                | `warning`       |
 | `tasker.delay`                                 | Delay in seconds at the service startup.                                                                                                                                                                 | `30s`           |
 | `tasker.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
 | `tasker.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
