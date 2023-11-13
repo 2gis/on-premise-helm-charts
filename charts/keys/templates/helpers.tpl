@@ -266,6 +266,25 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
 {{- end }}
 
+{{- define "keys.env.dgctlStorage" -}}
+- name: KEYS_S3_ENDPOINT
+  value: "{{ .Values.dgctlStorage.host }}"
+- name: KEYS_S3_BUCKET
+  value: "{{ .Values.dgctlStorage.bucket }}"
+- name: KEYS_S3_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.jobs.name" . }}
+      key: dgctlStorageAccessKey
+- name: KEYS_S3_SECRET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.jobs.name" . }}
+      key: dgctlStorageSecretKey
+- name: KEYS_MANIFEST_PATH
+  value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
+{{- end }}
+
 {{/*
 Return the target Kubernetes version
 */}}
