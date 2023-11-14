@@ -103,5 +103,4 @@ spec:
                   value: "{{ .Values.tileGen.url }}"
                 - name: TileGen__UserDataTileSet
                   value: "{{ .Values.tileGen.userDataTileSet }}"
-
 {{ end }}
