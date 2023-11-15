@@ -66,7 +66,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `terminationGracePeriodSeconds` | Maximum time allowed for graceful shutdown.                                                                                 | `60`  |
 
 
-
 ### Service account settings
 
 | Name                         | Description                                                                                                             | Value   |
@@ -118,7 +117,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `castle.jobs`              | Number of parallel downloading jobs.                | `1`                            |
 
 
-
 ### Navi-Front settings
 
 | Name         | Description                                      | Value  |
@@ -138,7 +136,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `cron.schedule.restrictionImport` | Cron job schedule for `restrictionImport`.                          | `*/5 * * * *` |
 | `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`.                   | `Forbid`      |
 | `cron.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept.                  | `3`           |
-
 
 
 ### Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
