@@ -51,10 +51,11 @@ spec:
         - name: castle-{{ $flavor | kebabcase }}-init
           image: {{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}
           command: [ "/opt/configuration_builder" ]
-          args: 
-           - --config 
-           - /opt/config_builder.conf 
+          args:
+           - --config
+           - /opt/config_builder.conf
            - --service={{ include "castle.serviceParameter" ( dict "flavor" $flavor ) }}
+           - --jobs={{ $.Values.castle.jobs | default 1 | int }}
           volumeMounts:
           - name: {{ include "castle.fullname" $ }}-builder-config
             mountPath: /opt/config_builder.conf
