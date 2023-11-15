@@ -119,17 +119,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Limits
 
-| Name                            | Description                     | Value    |
-| ------------------------------- | ------------------------------- | -------- |
-| `resources.requests.cpu`        | A CPU request.                  | `500m`   |
-| `resources.requests.memory`     | A memory request.               | `1024Mi` |
-| `resources.limits.cpu`          | A CPU limit.                    | `2`      |
-| `resources.limits.memory`       | A memory limit.                 | `4000Mi` |
-| `testResources`                 | **Limits for test connection.** |          |
-| `testResources.requests.cpu`    | A CPU request.                  | `100m`   |
-| `testResources.requests.memory` | A memory request.               | `100Mi`  |
-| `testResources.limits.cpu`      | A CPU limit.                    | `100m`   |
-| `testResources.limits.memory`   | A memory limit.                 | `100Mi`  |
+| Name                        | Description                                 | Value       |
+| --------------------------- | ------------------------------------------- | ----------- |
+| `resources`                 | Container resources requirements structure. | `{}`        |
+| `resources.requests.cpu`    | CPU request, recommended value `1000m`.     | `undefined` |
+| `resources.requests.memory` | Memory request, recommended value `2Gi`.    | `undefined` |
+| `resources.limits.cpu`      | CPU limit, recommended value `3000m`.       | `undefined` |
+| `resources.limits.memory`   | Memory limit, recommended value `8Gi`.      | `undefined` |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 

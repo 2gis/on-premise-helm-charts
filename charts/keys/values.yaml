@@ -22,7 +22,7 @@ imagePullPolicy: IfNotPresent
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.63.0
+    tag: 1.69.0
 
 # @section Admin service settings
 
@@ -132,6 +132,9 @@ api:
 
   adminSessionTTL: 336h
 
+  # @param api.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
+
   # @param api.replicas A replica count for the pod.
 
   replicas: 1
@@ -220,6 +223,9 @@ api:
 
 import:
 
+  # @param import.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
+
   resources:
     requests:
       cpu: 10m
@@ -236,6 +242,9 @@ import:
 # @section Migrate service settings
 
 migrate:
+
+  # @param migrate.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
 
   # @param migrate.initialDelaySeconds Delay in seconds at the service startup.
 
@@ -257,6 +266,9 @@ migrate:
 # @section Tasker service settings
 
 tasker:
+
+  # @param tasker.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
 
   resources:
     requests:
@@ -452,6 +464,20 @@ predefined:
     keys: {}
     aliases: {}
 
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
+# @param dgctlStorage.bucket S3 bucket name.
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate.
+
+dgctlStorage:
+  host: ''
+  bucket: keys
+  accessKey: ''
+  secretKey: ''
+  manifest: manifest.json
 
 # @section Limits
 

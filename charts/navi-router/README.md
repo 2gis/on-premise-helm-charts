@@ -101,12 +101,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Limits
 
-| Name                        | Description                      | Value |
-| --------------------------- | -------------------------------- | ----- |
-| `resources.requests.cpu`    | A CPU request, e.g., `100m`.     |       |
-| `resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
-| `resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
-| `resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
+| Name                        | Description                                 | Value       |
+| --------------------------- | ------------------------------------------- | ----------- |
+| `resources`                 | Container resources requirements structure. | `{}`        |
+| `resources.requests.cpu`    | CPU request, recommended value `500m`.      | `undefined` |
+| `resources.requests.memory` | Memory request, recommended value `384Mi`.  | `undefined` |
+| `resources.limits.cpu`      | CPU limit, recommended value `1000m`.       | `undefined` |
+| `resources.limits.memory`   | Memory limit, recommended value `768Mi`.    | `undefined` |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
