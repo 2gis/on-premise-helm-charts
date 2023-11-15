@@ -132,6 +132,9 @@ api:
 
   adminSessionTTL: 336h
 
+  # @param api.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
+
   # @param api.replicas A replica count for the pod.
 
   replicas: 1
@@ -220,6 +223,9 @@ api:
 
 import:
 
+  # @param import.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
+
   resources:
     requests:
       cpu: 10m
@@ -236,6 +242,9 @@ import:
 # @section Migrate service settings
 
 migrate:
+
+  # @param migrate.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
 
   # @param migrate.initialDelaySeconds Delay in seconds at the service startup.
 
@@ -257,6 +266,9 @@ migrate:
 # @section Tasker service settings
 
 tasker:
+
+  # @param tasker.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
 
   resources:
     requests:

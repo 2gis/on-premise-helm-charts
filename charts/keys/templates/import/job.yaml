@@ -25,6 +25,7 @@ spec:
           resources:
             {{- toYaml .Values.import.resources | nindent 12 }}
           env:
+            {{- include "keys.env.import" . | nindent 12 }}
             {{- include "keys.env.db.jobs" . | nindent 12 }}
             {{- include "keys.env.predef" . | nindent 12 }}
             {{- include "keys.env.dgctlStorage" . | nindent 12 }}

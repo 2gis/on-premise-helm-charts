@@ -96,8 +96,24 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "keys.env.api" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.api.logLevel }}"
+{{- end }}
+
+{{- define "keys.env.import" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.import.logLevel }}"
+{{- end }}
+
+{{- define "keys.env.migrate" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.migrate.logLevel }}"
+{{- end }}
 
 {{- define "keys.env.tasker" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.tasker.logLevel }}"
 - name: KEYS_TASKER_DELAY
   value: "{{ .Values.tasker.delay }}"
 {{- end }}
