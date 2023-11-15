@@ -20,7 +20,7 @@ keycloak
 	keycloak-themes:0.0.8
 	keycloak:21.1.1-debian-11-r4
 keys
-	keys-backend:1.63.0
+	keys-backend:1.69.0
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.5.0
 license
@@ -48,12 +48,12 @@ navi-splitter
 platform
 	platform-ui:0.5.5
 pro-api
-	pro-api:1.1.57
-	pro-importer:1.1.57
-	pro-importer:1.1.57
-	pro-permissions-api:1.1.57
+	pro-api:1.1.60
+	pro-importer:1.1.60
+	pro-importer:1.1.60
+	pro-permissions-api:1.1.60
 pro-ui
-	pro-ui:1.2.0
+	pro-ui:1.3.0
 search-api
 	search-api:7.65.0
 	search-nginx:1.21.6
@@ -61,9 +61,9 @@ stat-receiver
 	stat-receiver-api:1.11.1
 	stat-receiver-streams:1.11.1
 tiles-api
-	tiles-api-importer:4.49.0
-	tiles-api-proxy:4.49.0
-	tiles-api:4.49.0
+	tiles-api-importer:4.51.1
+	tiles-api-proxy:4.51.1
+	tiles-api:4.51.1
 traffic-proxy
 	nginx:1.21.6
 twins-api
