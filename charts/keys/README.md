@@ -209,6 +209,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `predefined.service.keys`    | Keys map as: service -> key.    | `{}`  |
 | `predefined.service.aliases` | Aliases map as: service -> key. | `{}`  |
 
+### Deployment Artifacts Storage settings
+
+| Name                     | Description                                                                                                                                                                                                                                              | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                           | `""`            |
+| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `keys`          |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                     | `""`            |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                     | `""`            |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. | `manifest.json` |
+
 ### Limits
 
 | Name                                | Description                        | Value   |
