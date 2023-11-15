@@ -100,7 +100,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `resources.limits.cpu`      | CPU limit, recommended value `1000m`.       | `undefined` |
 | `resources.limits.memory`   | Memory limit, recommended value `1Gi`.      | `undefined` |
 
-
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
 | Name                                      | Description                                                                                                                                                          | Value   |

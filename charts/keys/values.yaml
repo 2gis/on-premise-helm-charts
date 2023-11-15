@@ -474,10 +474,10 @@ predefined:
 
 dgctlStorage:
   host: ''
-  bucket: 'keys'
+  bucket: keys
   accessKey: ''
   secretKey: ''
-  manifest: 'manifest.json'
+  manifest: manifest.json
 
 # @section Limits
 

@@ -104,7 +104,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `resources.limits.cpu`      | CPU limit, recommended value `1000m`.       | `undefined` |
 | `resources.limits.memory`   | Memory limit, recommended value `512Mi`.    | `undefined` |
 
-
 ### Navi-Castle service settings
 
 | Name                       | Description                          | Value                          |
