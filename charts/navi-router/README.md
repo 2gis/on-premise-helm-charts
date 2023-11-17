@@ -64,7 +64,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `router.keyManagementService.host`               | Address if key management service server                                                                                                     | `http://keys.api.example.com` |
 | `router.keyManagementService.refreshIntervalSec` | Keys refresh interval in seconds                                                                                                             | `30`                          |
 | `router.keyManagementService.downloadTimeoutSec` | Keys download timeout in seconds                                                                                                             | `30`                          |
-| `router.keyManagementService.apis`               | Used API types and their tokens. Format: `type: token`                                                                                       | `nil`                         |
+| `router.keyManagementService.commonToken`        | Mater key to retrieve all per-service API keys, router.keyManagementService.apis ignored, if commonToken set                                 | `""`                          |
+| `router.keyManagementService.apis`               | Used API types and their tokens. Format: `type: token`                                                                                       | `undefined`                   |
 
 
 ### Service account settings
@@ -116,6 +117,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `resources.requests.memory` | Memory request, recommended value `384Mi`.  | `undefined` |
 | `resources.limits.cpu`      | CPU limit, recommended value `1000m`.       | `undefined` |
 | `resources.limits.memory`   | Memory limit, recommended value `768Mi`.    | `undefined` |
+
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
