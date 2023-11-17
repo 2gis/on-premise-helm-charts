@@ -104,6 +104,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `resources.limits.cpu`      | CPU limit, recommended value `1000m`.       | `undefined` |
 | `resources.limits.memory`   | Memory limit, recommended value `512Mi`.    | `undefined` |
 
+
 ### Navi-Castle service settings
 
 | Name                       | Description                          | Value                          |
@@ -131,6 +132,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `cron.schedule.restriction`       | Cron job schedule for `restriction`.               | `*/5 * * * *` |
 | `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`.  | `Forbid`      |
 | `cron.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. | `3`           |
+| `cron.prometheusPort`             | Container port for supercronic prometheus          | `9476`        |
 
 
 ### Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
