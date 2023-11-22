@@ -26,7 +26,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name                            | Description                                                                                                                           | Value |
@@ -47,7 +46,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `preStopDelay`                  | Delay in seconds before terminating container.                                                                                        | `5`   |
 | `terminationGracePeriodSeconds` | Maximum time allowed for graceful shutdown.                                                                                           | `60`  |
 
-
 ### Deployment settings
 
 | Name               | Description | Value                       |
@@ -55,7 +53,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
 | `image.tag`        | Tag         | `7.10.0`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
-
 
 ### Navi-Back application settings
 
@@ -115,7 +112,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.reduceEdgesOptimizationFlag`            | Enable optimizations for distance matrix queries processing                                                                                                                                                          |                                          |
 | `naviback.behindSplitter`                         | Current instance is behind splitter or not                                                                                                                                                                           | `false`                                  |
 
-
 ### Envoy settings (ignored if not transmitter.enabled)
 
 | Name                     | Description | Value              |
@@ -124,7 +120,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `envoy.image.tag`        | Tag         | `v1.27.0`          |
 | `envoy.image.pullPolicy` | Pull Policy | `IfNotPresent`     |
 
-
 ### Service account settings
 
 | Name                         | Description                                                                                                             | Value   |
@@ -132,7 +127,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
-
 
 ### Service settings
 
@@ -147,7 +141,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `service.headless.enabled`     | Enable creating a secondary headless service                                                                                   | `false`     |
 | `service.headless.annotations` | Annotations for secondary headless service                                                                                     | `{}`        |
 
-
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                                 | Description                               | Value                   |
@@ -159,7 +152,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                |
 | `ingress.tls`                        | TLS configuration                         | `[]`                    |
 
-
 ### Limits
 
 | Name                        | Description                                 | Value       |
@@ -169,7 +161,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `resources.requests.memory` | Memory request, recommended value `2Gi`.    | `undefined` |
 | `resources.limits.cpu`      | CPU limit, recommended value `3000m`.       | `undefined` |
 | `resources.limits.memory`   | Memory limit, recommended value `8Gi`.      | `undefined` |
-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -183,7 +174,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
 | `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
-
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 | Name                    | Description                                                                                                  | Value   |
@@ -195,7 +185,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     |         |
 | `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           |         |
 
-
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                 | Description                                          | Value   |
@@ -203,7 +192,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
 | `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
-
 
 ### Kafka settings for interacting with Distance Matrix Async Service
 
@@ -222,7 +210,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `kafka.distanceMatrix.requestDownloadTimeoutSec` | Timeout for downloading request data.                                                                                     | `20`           |
 | `kafka.distanceMatrix.responseUploadTimeoutSec`  | Timeout for uploading response data.                                                                                      | `40`           |
 
-
 ### S3-compatible storage settings for interacting with Distance Matrix Async Service
 
 | Name           | Description                                      | Value   |
@@ -232,7 +219,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `s3.bucket`    | S3 bucket name.                                  | `""`    |
 | `s3.accessKey` | S3 access key for accessing the bucket.          | `""`    |
 | `s3.secretKey` | S3 secret key for accessing the bucket.          | `""`    |
-
 
 ### Settings for attractor connection (not supported on-prem)
 
@@ -244,7 +230,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `transmitter.port`              | attractor port                                                      | `50051`                      |
 | `transmitter.responseTimeoutMs` | response waiting timeout                                            | `100`                        |
 
-
 ### Back-end and attractor group properties (not supported on-prem)
 
 | Name                  | Description                                      | Value         |
@@ -255,12 +240,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `livenessProbeDelay`  | initial delay for liveness probes                | `60`          |
 | `readinessProbeDelay` | initial delay for readiness probes               | `75`          |
 
-
 ### License settings
 
-| Name          | Description                                               | Value |
-| ------------- | --------------------------------------------------------- | ----- |
-| `license.url` | Address of the License service. Ex: http(s)://license.svc | `""`  |
+| Name                   | Description                                                      | Value   |
+| ---------------------- | ---------------------------------------------------------------- | ------- |
+| `license.url`          | Address of the License service v2. Ex: https://license.svc       | `""`    |
+| `license.notSupported` | Excludes the configuration block if true, for old versions only. | `false` |
 
 
 ## Maintainers

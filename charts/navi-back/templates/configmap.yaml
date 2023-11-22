@@ -524,9 +524,11 @@ data:
               }
           },
         {{- end }}{{- /* .Values.naviback.bss.enabled */}}
+        {{- if not .Values.license.notSupported }}
         {{- $licenseUrl := .Values.license.url | required "Valid license.url required!" }}
         "pasportool_client":
           {{- toPrettyJson .Values.license | nindent 8 -}},
+        {{- end }}{{- /* if not .Values.license.notSupported */}}
         {{- if .Values.naviback.additionalSections }}
           {{- include "tplvalues.render" ( dict "value" .Values.naviback.additionalSections "context" $) | nindent 8 }}
         {{- end }}

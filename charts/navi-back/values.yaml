@@ -473,16 +473,8 @@ readinessProbeDelay: 75
 # @section License settings
 
 # @param license.url Address of the License service v2. Ex: https://license.svc
-
-# block not for onprem
-#
-# valid params:
-# license.is_enabled
-# license.license_check_interval
-# license.additional_time_after_connection_lost
-# more info: https://confluence.2gis.ru/pages/viewpage.action?pageId=449547580
-#
-# end block not for onprem
+# @param license.notSupported Excludes the configuration block if true, for old versions only.
 
 license:
   url: ''
+  notSupported: false
