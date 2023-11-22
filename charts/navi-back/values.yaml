@@ -209,42 +209,35 @@ service:
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 # @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Name of the Ingress controller class.
 # @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration
 
 ingress:
   enabled: false
+  className: nginx
   hosts:
-  - host: navi-back.host
+  - host: navi-back.example.com
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - navi-back.example.com
+  #   secretName: secret.tls
 
 
 # @section Limits
 
-# @param resources.requests.cpu A CPU request.
-# @param resources.requests.memory A memory request.
-# @param resources.limits.cpu A CPU limit.
-# @param resources.limits.memory A memory limit.
+# @param resources [nullable] Container resources requirements structure.
+# @param resources.requests.cpu [nullable] CPU request, recommended value `1000m`.
+# @param resources.requests.memory [nullable] Memory request, recommended value `2Gi`.
+# @param resources.limits.cpu [nullable] CPU limit, recommended value `3000m`.
+# @param resources.limits.memory [nullable] Memory limit, recommended value `8Gi`.
 
-# @extra testResources **Limits for test connection.**
-# @param testResources.requests.cpu A CPU request.
-# @param testResources.requests.memory A memory request.
-# @param testResources.limits.cpu A CPU limit.
-# @param testResources.limits.memory A memory limit.
-
-resources:
-  limits:
-    cpu: 2
-    memory: 4000Mi
-  requests:
-    cpu: 500m
-    memory: 1024Mi
-
-testResources:
-  limits:
-    cpu: 100m
-    memory: 100Mi
-  requests:
-    cpu: 100m
-    memory: 100Mi
+resources: {}
 
 
 # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings

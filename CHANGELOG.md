@@ -1,6 +1,90 @@
 # 2GIS On-Premise Changelog
 
-## [1.11.0]
+## [1.14.0] (2023-11-15)
+#### Images
+```
+keys
+	- keys-backend:1.63.0
+	+ keys-backend:1.69.0
+pro-api
+	- pro-api:1.1.57
+	+ pro-api:1.1.60
+	- pro-importer:1.1.57
+	+ pro-importer:1.1.60
+	- pro-importer:1.1.57
+	+ pro-importer:1.1.60
+	- pro-permissions-api:1.1.57
+	+ pro-permissions-api:1.1.60
+pro-ui
+	- pro-ui:1.2.0
+	+ pro-ui:1.3.0
+tiles-api
+	- tiles-api-importer:4.49.0
+	+ tiles-api-importer:4.51.1
+	- tiles-api-proxy:4.49.0
+	+ tiles-api-proxy:4.51.1
+	- tiles-api:4.49.0
+	+ tiles-api:4.51.1
+
+```
+
+## [1.13.0] (2023-10-24)
+#### [Breaking-Changes](Breaking-Changes.md#1300)
+#### Images
+```
+citylens
+	- citylens-api:1.0.9
+	+ citylens-api:1.1.2
+	- citylens-database:1.0.9
+	+ citylens-database:1.1.2
+	- citylens-web:1.0.13
+	+ citylens-web:1.1.2
+mapgl-js-api
+	- mapgl:1.39.0
+	+ mapgl:1.40.0
+platform
+	- platform-ui:0.4.0
+	+ platform-ui:0.5.5
+pro-api
+	- pro-api:1.1.49
+	+ pro-api:1.1.57
+	- pro-importer:1.1.49
+	+ pro-importer:1.1.57
+	- pro-importer:1.1.49
+	+ pro-importer:1.1.57
+	- pro-permissions-api:1.1.49
+	+ pro-permissions-api:1.1.57
+pro-ui
+	- pro-ui:1.1.0
+	+ pro-ui:1.2.0
+search-api
+	- search-api:7.64.0
+	+ search-api:7.65.0
+tiles-api
+	- tiles-api-importer:4.48.2
+	+ tiles-api-importer:4.49.0
+	- tiles-api-proxy:4.48.2
+	+ tiles-api-proxy:4.49.0
+	- tiles-api:4.48.2
+	+ tiles-api:4.49.0
+
+
+```
+
+## [1.12.0] (2023-10-13)
+#### [Breaking-Changes](Breaking-Changes.md#1200)
+#### Images
+```
+catalog-api
+	- catalog-api:3.598.4
+	+ catalog-api:3.600.0
+navi-async-matrix
+	- navi-async-matrix:1.3.3
+	+ navi-async-matrix:1.6.2
+
+```
+
+## [1.11.0] (2023-09-22)
 #### Images
 ```
 catalog-api
@@ -54,7 +138,7 @@ tiles-api
 
 ```
 
-## [1.10.0]
+## [1.10.0] (2023-09-06)
 #### [Breaking-Changes](Breaking-Changes.md#1100)
 #### Images
 ```
@@ -100,7 +184,7 @@ tiles-api
 
 ```
 
-## [1.9.1]
+## [1.9.1] (2023-08-23)
 #### [Breaking-Changes](Breaking-Changes.md#191)
 #### Images
 ```
@@ -446,7 +530,7 @@ mapgl-js-api
 
 ```
 
-## [1.5.0]
+## [1.5.0] (2022-12-06)
 #### Images
 ```
 no changes
@@ -706,7 +790,7 @@ tiles-api
 
 ```
 
-## [1.1.0]
+## [1.1.0] (2022-07-04)
 #### Images
 ```
 no changes

@@ -55,7 +55,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description                                                                                   | Value                        |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ---------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/search-api` |
-| `api.image.tag`        | Tag                                                                                           | `7.64.0`                     |
+| `api.image.tag`        | Tag                                                                                           | `7.65.0`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`               |
 
 ### API settings
@@ -117,10 +117,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                           | Value             |
-| ----------------------- | ------------------------------------- | ----------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service | `false`           |
-| `ingress.hosts[0].host` | Hostname for the Ingress service      | `search-api.host` |
+| Name                                 | Description                               | Value                    |
+| ------------------------------------ | ----------------------------------------- | ------------------------ |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                  |
+| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`                  |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `search-api.example.com` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                      |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                 |
+| `ingress.tls`                        | TLS configuration                         | `[]`                     |
 
 ### api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings
 

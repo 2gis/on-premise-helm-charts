@@ -95,11 +95,11 @@ Checking that the back service is valid
     {{- $service := .service -}}
     {{- $is_valid := false -}}
     {{- $navigroup := default "" .context.Values.navigroup -}}
-    {{/* Supported back implementations: navi-back, mock, splitter */}} 
-    {{- if 
+    {{/* Supported back implementations: navi-back, mock, splitter */}}
+    {{- if
     and
     (has (get $service.metadata.labels "app.kubernetes.io/name") (list "navi-back" "mock" "splitter" "navi-splitter"))
-    (eq (get $service.metadata.labels "navigroup") $navigroup) 
+    (eq (get $service.metadata.labels "navigroup") $navigroup)
     (not (get $service.metadata.labels "behindSplitter"))
     -}}
         {{- $is_valid = true -}}

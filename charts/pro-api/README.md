@@ -71,7 +71,7 @@
 | Name               | Description | Value                     |
 | ------------------ | ----------- | ------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/pro-api` |
-| `image.tag`        | Tag         | `1.1.49`                  |
+| `image.tag`        | Tag         | `1.1.60`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
 ### 2GIS PRO Storage configuration
@@ -155,6 +155,8 @@
 | `kafka.importTasksTopic`               | Kafka topic settings to run import tasks.                                                                       |                 |
 | `kafka.importTasksTopic.name`          | Kafka topic name.                                                                                               | `""`            |
 | `kafka.importTasksTopic.readerGroupId` | Kafka consumer group for reading importing tasks.                                                               | `""`            |
+| `kafka.assetDataTopic`                 | Kafka topic settings to manage asset data updates.                                                              |                 |
+| `kafka.assetDataTopic.name`            | Kafka topic name.                                                                                               | `""`            |
 | `kafka.refreshAssetsIntervalMinutes`   | Refresh interval for reading streaming assets settings in minutes.                                              | `60`            |
 
 ### Import background jobs settings
@@ -202,7 +204,7 @@
 | Name                                       | Description                                                                                                                                              | Value                          |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.1.49`                       |
+| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.1.60`                       |
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
@@ -230,10 +232,14 @@
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value          |
-| ----------------------- | -------------------------------------- | -------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`        |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `pro-api.host` |
+| Name                                 | Description                               | Value                 |
+| ------------------------------------ | ----------------------------------------- | --------------------- |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`               |
+| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`               |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `pro-api.example.com` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                   |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`              |
+| `ingress.tls`                        | TLS configuration                         | `[]`                  |
 
 
 ## Installing

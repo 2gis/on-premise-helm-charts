@@ -31,7 +31,7 @@ dgctlStorage:
 # @param logFormat Logging format for 'api', 'proxy', 'importer' (can be overridden by {service}.logFormatOverride option). Allowed options: text|json. If not defined, 'json' format will be used.
 
 # @extra types **Tiles [types](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture) enabled in Tiles API**
-# @param types[0].kind Kind of tiles, should be one of: web, raster, native.
+# @param types[0].kind Kind of tiles, should be one of: web, raster, native, mapbox.
 # @param types[0].subtype Subtype of the additional tiles data. Should be empty for the regular tiles.
 # @param types[0].name Name for the tileset. If empty, the value from the kind is used.
 # @param types[0].keyspace Custom user defined keyspace. If the parameter is set, the database cleaning and maintenance processes are skipped.
@@ -124,7 +124,7 @@ proxy:
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.48.2
+    tag: 4.51.1
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -181,7 +181,7 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.48.2
+    tag: 4.51.1
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
@@ -236,12 +236,24 @@ api:
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.className Name of the Ingress controller class.
   # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+  # @param api.ingress.tls TLS configuration
 
   ingress:
     enabled: false
+    className: nginx
     hosts:
-    - host: tiles-api.host
+    - host: tiles-api.example.com
+      paths:
+      - path: /
+        pathType: Prefix
+    tls: []
+    # - hosts:
+    #   - tiles-api.example.com
+    #   secretName: secret.tls
 
   # @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
@@ -327,7 +339,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.48.2
+    tag: 4.51.1
     pullPolicy: IfNotPresent
 
 

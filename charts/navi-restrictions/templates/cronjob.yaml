@@ -60,7 +60,7 @@ spec:
           containers:
             - name: navi-restrictions-cron
               image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.cron.image.repository }}:{{ .Values.cron.image.tag | default .Chart.AppVersion }}'
-              imagePullPolicy: {{ .Values.cron.image.pullPolicy }} 
+              imagePullPolicy: {{ .Values.cron.image.pullPolicy }}
               ports:
                 - name: http
                   containerPort: {{ .Values.cron.containerPort }}

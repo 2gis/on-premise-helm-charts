@@ -78,19 +78,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value              |
-| ----------------------- | -------------------------------------- | ------------------ |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`            |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `navi-castle.host` |
+| Name                                 | Description                               | Value                     |
+| ------------------------------------ | ----------------------------------------- | ------------------------- |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                   |
+| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`                   |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `navi-castle.example.com` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                       |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                  |
+| `ingress.tls`                        | TLS configuration                         | `[]`                      |
 
 ### Limits
 
-| Name                        | Description                      | Value |
-| --------------------------- | -------------------------------- | ----- |
-| `resources.requests.cpu`    | A CPU request, e.g., `100m`.     |       |
-| `resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
-| `resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
-| `resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
+| Name                        | Description                                 | Value       |
+| --------------------------- | ------------------------------------------- | ----------- |
+| `resources`                 | Container resources requirements structure. | `{}`        |
+| `resources.requests.cpu`    | CPU request, recommended value `100m`.      | `undefined` |
+| `resources.requests.memory` | Memory request, recommended value `128Mi`.  | `undefined` |
+| `resources.limits.cpu`      | CPU limit, recommended value `1000m`.       | `undefined` |
+| `resources.limits.memory`   | Memory limit, recommended value `512Mi`.    | `undefined` |
 
 ### Navi-Castle service settings
 

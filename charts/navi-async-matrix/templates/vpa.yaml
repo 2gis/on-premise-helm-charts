@@ -17,7 +17,7 @@ spec:
     updateMode: {{ .updateMode }}
   resourcePolicy:
     containerPolicies:
-      - containerName: {{ include "navi-async-matrix.name" }}
+      - containerName: {{ include "navi-async-matrix.name" $ }}
         mode: Auto
         {{- with .minAllowed }}
         minAllowed:

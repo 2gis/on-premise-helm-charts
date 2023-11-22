@@ -63,7 +63,7 @@ spec:
         - name: temp-volume
           emptyDir: {}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ include "pro-api.name" . }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -127,9 +127,9 @@ spec:
                 secretKeyRef:
                   key: catalogApi2gisKey
                   name: {{ include "pro-api.name" . }}-secret
-            - name: ROUTING_API_2GIS_URL
+            - name: Navi__Url
               value: {{ .Values.navi.url }}
-            - name: ROUTING_API_2GIS_KEY
+            - name: Navi__Key
               valueFrom:
                 secretKeyRef:
                   key: routingApi2gisKey
@@ -209,6 +209,8 @@ spec:
               value: {{ $.Values.kafka.importTasksTopic.name }}
             - name: Kafka__ImportTasksTopicSettings__ReaderGroupId
               value: {{ $.Values.kafka.importTasksTopic.readerGroupId }}
+            - name: Kafka__AssetDataTopicSettings__Name
+              value: {{ $.Values.kafka.assetDataTopic.name }}
             - name: Auth__Type
               value: "{{ .Values.auth.type }}"
             - name: Auth__Url
@@ -259,7 +261,7 @@ spec:
             - name: Redis__Username
               value: {{ $.Values.redis.username }}
             {{ if .Values.redis.password }}
-            - name: Redis__Password  
+            - name: Redis__Password
               valueFrom:
                 secretKeyRef:
                   key: redisPassword

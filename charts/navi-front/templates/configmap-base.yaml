@@ -52,6 +52,10 @@ data:
         }
         {{- end }}
 
+        location ^~ /routing/ {
+            js_content bundle.geo_coding;
+        }
+
         location /geocoding {
             rewrite ^/geocoding(.*)$ $1 break;
             proxy_pass http://{{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }};

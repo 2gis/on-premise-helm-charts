@@ -34,6 +34,7 @@ spec:
           resources:
             {{- toYaml .Values.migrate.resources | nindent 12 }}
           env:
+            {{- include "keys.env.migrate" . | nindent 12 }}
             {{- include "keys.env.db.jobs" . | nindent 12 }}
       {{- with .Values.migrate.nodeSelector }}
       nodeSelector:

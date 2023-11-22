@@ -4,11 +4,11 @@ navigroup: navi
 
 naviback:
   castleHost: navi-castle # #имя сервиса navi-castle в k8s
-  dmSourcesLimit: 25 
-  dmTargetsLimit: 25 
+  dmSourcesLimit: 25
+  dmTargetsLimit: 25
 
 #дефолтные ресурсы
-resources: 
+resources:
   limits:
     cpu: 4
     memory: 8Gi
@@ -17,28 +17,28 @@ resources:
     memory: 4Gi
 
 rules:
-  - name: directions-car # авто 
+  - name: directions-car # авто
     queries: ["routing"]
     routing: ["driving"]
-  - name: directions-pedestrian # пешеходы 
+  - name: directions-pedestrian # пешеходы
     queries: ["routing"]
     routing: ["pedestrian"]
-  - name: directions-bicycle # велосипедисты 
+  - name: directions-bicycle # велосипедисты
     queries: ["routing"]
     routing: ["bicycle"]
-  - name: directions-taxi # taxi 
+  - name: directions-taxi # taxi
     queries: ["routing"]
     routing: ["taxi"]
   - name: distance-matrix # distance-matrix
     queries: ["get_dist_matrix"]
     routing: ["driving"]
-  - name: public-transport # общественный транспорт 
+  - name: public-transport # общественный транспорт
     queries: ["public_transport"]
     routing: ["public_transport"]
   - name: directions-truck # грузовики truck
     queries: ["routing"]
     routing: ["truck"]
-  - name: pairs-directions # pairs 
+  - name: pairs-directions # pairs
     queries: ["get_pairs"]
     routing: ["driving"]
   - name: isochrone-car # isochrone

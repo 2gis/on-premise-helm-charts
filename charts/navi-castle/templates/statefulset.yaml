@@ -25,7 +25,7 @@ spec:
         checksum/configbuilder: {{ include (print $.Template.BasePath "/configmapbuilder.yaml") . | sha256sum }}
         checksum/confignginx: {{ include (print $.Template.BasePath "/configmapnginx.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
-        {{- toYaml . | nindent 8 }}    
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "castle.selectorLabels" . | nindent 8 }}
@@ -51,9 +51,9 @@ spec:
         - name: castle-{{ $flavor }}-init
           image: {{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}
           command: [ "/opt/configuration_builder" ]
-          args: 
-           - --config 
-           - /opt/config_builder.conf 
+          args:
+           - --config
+           - /opt/config_builder.conf
            - --service={{ $flavor }}
            - --jobs={{ $.Values.castle.jobs | default 1 | int }}
           volumeMounts:
@@ -152,7 +152,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-  {{- if .Values.persistentVolume.enabled }} 
+  {{- if .Values.persistentVolume.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: {{ include "castle.fullname" . }}-pvc

@@ -96,8 +96,24 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "keys.env.api" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.api.logLevel }}"
+{{- end }}
+
+{{- define "keys.env.import" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.import.logLevel }}"
+{{- end }}
+
+{{- define "keys.env.migrate" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.migrate.logLevel }}"
+{{- end }}
 
 {{- define "keys.env.tasker" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.tasker.logLevel }}"
 - name: KEYS_TASKER_DELAY
   value: "{{ .Values.tasker.delay }}"
 {{- end }}
@@ -240,11 +256,30 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{ range $service, $key := .Values.predefined.service.keys }}
 - name: KEYS_PREDEF_SERVICE_KEY_{{ $service | upper }}
   value: {{ $key }}
-{{ end }}      
+{{ end }}
 {{ range $service, $key := .Values.predefined.service.aliases }}
 - name: KEYS_PREDEF_SERVICE_ALIAS_{{ $service | upper }}
   value: {{ $key }}
-{{ end }}      
+{{ end }}
+{{- end }}
+
+{{- define "keys.env.dgctlStorage" -}}
+- name: KEYS_S3_ENDPOINT
+  value: "{{ .Values.dgctlStorage.host }}"
+- name: KEYS_S3_BUCKET
+  value: "{{ .Values.dgctlStorage.bucket }}"
+- name: KEYS_S3_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.jobs.name" . }}
+      key: dgctlStorageAccessKey
+- name: KEYS_S3_SECRET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.jobs.name" . }}
+      key: dgctlStorageSecretKey
+- name: KEYS_MANIFEST_PATH
+  value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
 {{- end }}
 
 {{/*

@@ -39,15 +39,19 @@ data:
     s3:
     {{- with .Values.s3 }}
       bucket_prefix: {{ required "A valid .Values.s3.bucketPrefix entry required" .bucketPrefix | squote }}
+      logs_bucket_prefix: {{ required "A valid .Values.s3.logsBucketPrefix entry required" .logsBucketPrefix | squote }}
       client_params:
         aws_access_key_id: {{ required "A valid .Values.s3.accessKey entry required" .accessKey | squote }}
         aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
         endpoint_url: {{ required "A valid .Values.s3.endpoint entry required" .endpoint | squote }}
+        region_name: {{ .region }}
+        verify: {{ .verifySsl }}
     {{- end }}
     tracks_uploader:
       api: {{ .Values.worker.tracksUploader.api | squote }}
       source: {{ .Values.worker.tracksUploader.source | squote }}
       topic: {{ .Values.kafka.topics.uploader | squote }}
+      verify_ssl: {{ .Values.worker.tracksUploader.verifySsl }}
     {{- if .Values.worker.camcomSender.enabled }}
     camcom:
     {{- with .Values.worker.camcomSender }}
@@ -60,6 +64,12 @@ data:
       request_retries: {{ .requestRetries }}
       request_retries_backoff: {{ .requestRetriesBackoff }}
     {{- end }}
+    {{- end }}
+    {{- with .Values.pro }}
+    pro_client:
+      endpoint_url: {{ .url }}
+      token: {{ .key }}
+      verify_ssl: {{ .verifySsl }}
     {{- end }}
     map:
       mapgl:
@@ -74,10 +84,19 @@ data:
     enabled_modules:
       header_links:
         {{- toYaml .Values.headerLinks | nindent 8 }}
+        {{- if .Values.worker.tracksUploader.enabled }}
+        - reload_track
+        - reload_statuses
+        {{- end }}
+        {{- if .Values.pro.url }}
+        - pro
+        {{- end }}
       header_help_url: 'https://docs.google.com/document/d/1ypaEpklxfc9S5e7FdG2sWBT-WfIR_uZGvQp8X3Xrr0c'
       track_downloader:
         frames_topics: {{ .Values.kafka.topics.frames }}
         metadata_topics: {{ .Values.kafka.topics.tracks }}
+      logs_saver:
+        logs_topic: {{ .Values.kafka.topics.logs }}
       reporters:
       {{- range .Values.reporters }}
         - name: {{ .name }}
