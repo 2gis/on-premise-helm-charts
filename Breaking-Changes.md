@@ -1,5 +1,20 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.14.0]
+
+### keys-api
+
+- Added new required dgctlStorage parameters
+
+```yaml
+dgctlStorage:
+  host: ''
+  bucket: keys
+  accessKey: ''
+  secretKey: ''
+  manifest: manifest.json
+```
+
 ## [1.13.0]
 
 ### tiles-api
