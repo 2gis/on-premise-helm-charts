@@ -1,8 +1,25 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [x.y.z]
+
 ### navi-router
 
 - `router.keyManagementService.apis.*` tokens renamed, `-api` suffix added
+
+## [1.14.0]
+
+### keys-api
+
+- Added new required dgctlStorage parameters
+
+```yaml
+dgctlStorage:
+  host: ''
+  bucket: keys
+  accessKey: ''
+  secretKey: ''
+  manifest: manifest.json
+```
 
 ## [1.13.0]
 
