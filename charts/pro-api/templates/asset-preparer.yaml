@@ -42,6 +42,8 @@ spec:
                   value: "{{ .Values.assetPreparer.maxParallelJobs }}"
                 - name: S3Settings__Url
                   value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
+                - name: S3Settings__Secure
+                  value: "{{ .Values.dgctlStorage.secure }}"
                 - name: S3Settings__AssetDataBucket
                   value: {{ required "A valid .Values.s3.assetsDataBucket entry required" $.Values.s3.assetsDataBucket }}
                 - name: S3Settings__UserAssetDataBucket
@@ -86,8 +88,10 @@ spec:
                   value: "{{ .Values.api.logging.format }}"
                 - name: Common__Logging__Targets
                   value: "{{ .Values.api.logging.targets }}"
+                - name: Digger__Address
+                  value: "{{ .Values.digger.url}}"
                 - name: Digger__UserName
-                  value: "{{ .Values.api.diggerUserName}}"
+                  value: "{{ .Values.digger.userName}}"
                 - name: Digger__Password
                   valueFrom:
                     secretKeyRef:

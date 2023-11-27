@@ -45,7 +45,9 @@ spec:
                 - name: MAX_PARALLEL_JOBS
                   value: "{{ .Values.assetImporter.maxParallelJobs }}"
                 - name: S3Settings__Url
-                  value: "{{ .Values.dgctlStorage.host }}"
+                  value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
+                - name: S3Settings__Secure
+                  value: "{{ .Values.dgctlStorage.secure }}"
                 - name: S3Settings__AssetDataBucket
                   value: {{ required "A valid .Values.s3.assetsDataBucket entry required" $.Values.s3.assetsDataBucket }}
                 - name: S3Settings__UserAssetDataBucket

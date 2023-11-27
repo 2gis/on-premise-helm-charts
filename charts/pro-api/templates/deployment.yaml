@@ -168,6 +168,8 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             - name: S3Settings__Url
               value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
+            - name: S3Settings__Secure
+              value: "{{ .Values.dgctlStorage.secure }}"
             - name: S3Settings__AssetDataBucket
               value: {{ required "A valid .Values.s3.assetsDataBucket entry required" $.Values.s3.assetsDataBucket }}
             - name: S3Settings__UserAssetDataBucket
@@ -277,3 +279,8 @@ spec:
               value: "{{ .Values.api.rateLimiter.requestsLimit }}"
             - name: RateLimiter__WindowSizeInSeconds
               value: "{{ .Values.api.rateLimiter.windowSizeInSeconds }}"
+            - name: LocalCache__Enabled
+              value: "{{ .Values.api.localCache.enabled }}"
+            - name: LocalCache__TrackStatistics
+              value: "{{ .Values.api.localCache.trackStatistics }}"
+              
