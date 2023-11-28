@@ -35,7 +35,7 @@ data:
     # UPDATING CITY DATA
     s3:
     {
-    server: '{{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}',
+    server: '{{ .Values.dgctlStorage.secure | ternary "https" "http" }}://{{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}',
     bucket: '{{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}',
     login: '{{ required "Valid .Values.dgctlStorage.accessKey required!" .Values.dgctlStorage.accessKey }}',
     pwd: '{{ required "Valid .Values.dgctlStorage.secretKey required!" .Values.dgctlStorage.secretKey }}',

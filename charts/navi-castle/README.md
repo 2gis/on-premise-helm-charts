@@ -26,7 +26,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Deployment settings
 
 | Name                      | Description                           | Value                         |
@@ -37,17 +36,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `nginx.image.repository`  | Navi-Front image repository.          | `2gis-on-premise/navi-front`  |
 | `nginx.image.tag`         | Navi-Front image tag.                 | `1.24.1`                      |
 
-
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                                                              | Value |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`  |
-| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `""`  |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`  |
-
+| Name                     | Description                                                                                                                                                                                                                                              | Value   |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`    |
+| `dgctlStorage.secure`    | If S3 uses https.                                                                                                                                                                                                                                        | `false` |
+| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `""`    |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`    |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`    |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`    |
 
 ### Common settings
 
@@ -64,7 +62,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `tolerations`        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
 | `affinity`           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
 
-
 ### Service account settings
 
 | Name                         | Description                                                                                                             | Value   |
@@ -73,14 +70,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
-
 ### Service settings
 
 | Name           | Description                                                                                                                    | Value       |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `service.type` | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `service.port` | Service port.                                                                                                                  | `80`        |
-
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -92,7 +87,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                       |
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                  |
 | `ingress.tls`                        | TLS configuration                         | `[]`                      |
-
 
 ### Limits
 
@@ -113,13 +107,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `castle.restrictions.key`  | Restrictions API key.                | `""`                           |
 | `castle.jobs`              | Number of parallel downloading jobs. | `1`                            |
 
-
 ### Navi-Front settings
 
 | Name         | Description                                      | Value  |
 | ------------ | ------------------------------------------------ | ------ |
 | `nginx.port` | HTTP port on which Navi-Front will be listening. | `8080` |
-
 
 ### Cron settings
 
@@ -131,7 +123,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `cron.schedule.restriction`       | Cron job schedule for `restriction`.               | `*/5 * * * *` |
 | `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`.  | `Forbid`      |
 | `cron.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. | `3`           |
-
 
 ### Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
 
