@@ -17,6 +17,7 @@ dgctlDockerRegistry: ''
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`.
+# @param dgctlStorage.secure If S3 uses https.
 # @param dgctlStorage.bucket S3 bucket name.
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket.
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
@@ -24,6 +25,7 @@ dgctlDockerRegistry: ''
 
 dgctlStorage:
   host: ''
+  secure: false
   bucket: ''
   accessKey: ''
   secretKey: ''

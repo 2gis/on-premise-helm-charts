@@ -39,7 +39,7 @@ affinity: {}
 image:
   repository: 2gis-on-premise/navi-router
   pullPolicy: IfNotPresent
-  tag: 6.16.0
+  tag: 6.17.0.2
 
 
 # @section Navi-Router service settings
@@ -52,7 +52,8 @@ image:
 # @param router.keyManagementService.host Address if key management service server
 # @param router.keyManagementService.refreshIntervalSec Keys refresh interval in seconds
 # @param router.keyManagementService.downloadTimeoutSec Keys download timeout in seconds
-# @param router.keyManagementService.apis Used API types and their tokens. Format: `type: token`
+# @param router.keyManagementService.commonToken Mater key to retrieve all per-service API keys, router.keyManagementService.apis ignored, if commonToken set
+# @param router.keyManagementService.apis [nullable] Used API types and their tokens. Format: `type: token`
 
 router:
   appPort: 8080
@@ -64,17 +65,19 @@ router:
     host: http://keys.api.example.com
     refreshIntervalSec: 30
     downloadTimeoutSec: 30
+    commonToken: ''
     apis:
-      # directions: "DIRECTIONS_TOKEN"
-      # distance-matrix: "DISTANCE_MATRIX_TOKEN"
-      # pairs-directions: "PAIRS_DIRECTIONS_TOKEN"
-      # truck-directions: "TRUCK_DIRECTIONS_TOKEN"
-      # public-transport: "PUBLIC_TRANSPORT_TOKEN"
-      # isochrone: "ISOCHRONE_TOKEN"
-      # map-matching : "MAP_MATCHING_TOKEN"
-      # ppnot: "PPNOT_TOKEN"
-      # combo-routes: "COMBO_ROUTES_TOKEN"
-      # free-roam: "FREE_ROAM_TOKEN"
+      comboroutes-api: ''
+      directions-api: ''
+      distance-matrix-api: ''
+      freeroam-api: ''
+      isochrone-api: ''
+      map-matching-api: ''
+      pairs-directions-api: ''
+      ppnot-api: ''
+      public-transport-api: ''
+      truck-directions-api: ''
+      truck-distance-matrix-api: ''
 
 
 # @section Service account settings
