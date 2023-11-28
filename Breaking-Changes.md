@@ -15,8 +15,6 @@
 ```yaml
 dgctlStorage:
   host: ''
-  secure: false
-  region: ''
   bucket: keys
   accessKey: ''
   secretKey: ''
