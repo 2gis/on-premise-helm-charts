@@ -32,7 +32,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | ------------------------- | ------------------------------------- | ----------------------------- |
 | `castle.image.repository` | Navi-Castle service image repository. | `2gis-on-premise/navi-castle` |
 | `castle.image.pullPolicy` | Navi-Castle service pull policy.      | `IfNotPresent`                |
-| `castle.image.tag`        | Navi-Castle service image tag.        | `1.0.7`                       |
+| `castle.image.tag`        | Navi-Castle service image tag.        | `1.7.0`                       |
 | `nginx.image.repository`  | Navi-Front image repository.          | `2gis-on-premise/navi-front`  |
 | `nginx.image.tag`         | Navi-Front image tag.                 | `1.24.1`                      |
 
@@ -42,6 +42,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`    |
 | `dgctlStorage.secure`    | If S3 uses https.                                                                                                                                                                                                                                        | `false` |
+| `dgctlStorage.region`    | S3 region.                                                                                                                                                                                                                                               | `""`    |
 | `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `""`    |
 | `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`    |
 | `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`    |
@@ -98,7 +99,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `resources.requests.memory` | Memory request, recommended value `128Mi`.  | `undefined` |
 | `resources.limits.cpu`      | CPU limit, recommended value `1000m`.       | `undefined` |
 | `resources.limits.memory`   | Memory limit, recommended value `512Mi`.    | `undefined` |
-
 
 ### Navi-Castle service settings
 
