@@ -46,15 +46,15 @@ spec:
         {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       initContainers:
-        {{- range $flavor, $init_enabled := dict "import" true "restriction" .Values.cron.enabled.restriction }}
-        {{- if $init_enabled }}
-        - name: castle-{{ $flavor }}-init
+        {{- range $_, $flavor := tuple "import" "restriction" "restrictionImport" }}
+        {{- if index $.Values.cron.enabled $flavor }}
+        - name: castle-{{ $flavor | kebabcase }}-init
           image: {{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}
           command: [ "/opt/configuration_builder" ]
           args:
            - --config
            - /opt/config_builder.conf
-           - --service={{ $flavor }}
+           - --service={{ include "castle.serviceParameter" ( dict "flavor" $flavor ) }}
            - --jobs={{ $.Values.castle.jobs | default 1 | int }}
           volumeMounts:
           - name: {{ include "castle.fullname" $ }}-builder-config
@@ -72,8 +72,8 @@ spec:
           {{- end }}
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
-        {{- end }} # if
-        {{- end }} # range
+        {{- end }}{{- /* if index $.Values.cron.enabled $flavor */}}
+        {{- end }}{{- /* range $_, $flavor */}}
       containers:
         - name: castle-nginx
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}

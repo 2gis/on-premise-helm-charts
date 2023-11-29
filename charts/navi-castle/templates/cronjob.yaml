@@ -1,12 +1,12 @@
 {{- if .Values.persistentVolume.enabled }}
 {{- range $i, $e := until ( .Values.replicaCount | int ) }}
-{{- range $_, $flavor := tuple "import" "restriction" }}
+{{- range $_, $flavor := tuple "import" "restriction" "restrictionImport" }}
 {{- if index $.Values.cron.enabled $flavor }}
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "castle.fullname" $ }}-cronjob-{{ $flavor }}-{{ $i }}
+  name: {{ include "castle.fullname" $ }}-cronjob-{{ $flavor | kebabcase }}-{{ $i }}
   labels:
     {{- include "castle.labels" $ | nindent 4 }}
 spec:
@@ -46,7 +46,7 @@ spec:
               args:
               - --config
               - /opt/config_builder.conf
-              - --service={{ $flavor }}
+              - --service={{ include "castle.serviceParameter" ( dict "flavor" $flavor ) }}
               - --jobs={{ $.Values.castle.jobs | default 1 | int }}
               volumeMounts:
               - name: {{ include "castle.fullname" $ }}-builder-config

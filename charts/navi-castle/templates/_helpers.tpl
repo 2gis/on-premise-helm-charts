@@ -62,7 +62,6 @@ Create the name of the service account to use
 {{- end }}
 
 
-{{/* vim: set filetype=mustache: */}}
 {{/*
 Renders a value that contains template.
 Usage:
@@ -74,4 +73,13 @@ Usage:
     {{- else }}
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
+{{- end -}}
+
+
+{{/*
+Determine --service parameter for a specific cron job flavor
+{{ include "castle.serviceParameter" ( dict "flavor" <a key one of .Values.cron.enabled.* > ) }}
+*/}}
+{{- define "castle.serviceParameter" -}}
+{{- eq "restrictionImport" .flavor | ternary "import-restrictions" .flavor -}}
 {{- end -}}
