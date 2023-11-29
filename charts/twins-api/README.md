@@ -23,6 +23,16 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | `image.tag`        | Twins API service image tag.                                                                  | `1.6.0`                     |
 | `image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`              |
 
+### Deployment Artifacts Storage settings
+
+| Name                     | Description                                                                                                                                                                                                                                                           | Value |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `dgctlStorage.host`      | S3 host. Format: `host:port`. **Required**                                                                                                                                                                                                                            | `""`  |
+| `dgctlStorage.bucket`    | S3 bucket name. **Required**                                                                                                                                                                                                                                          | `""`  |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`  |
+
 ### API service settings
 
 | Name                                        | Description                                                                                                                                                                                              | Value           |
