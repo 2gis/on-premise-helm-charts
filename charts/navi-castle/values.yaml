@@ -157,6 +157,7 @@ nginx:
 # @param cron.schedule.restrictionImport Cron job schedule for `restrictionImport`.
 # @param cron.concurrencyPolicy Cron job concurrency policy: `Allow` or `Forbid`.
 # @param cron.successfulJobsHistoryLimit How many completed and failed jobs should be kept.
+# @param cron.prometheusPort Container port for supercronic prometheus
 
 cron:
   enabled:
@@ -169,6 +170,7 @@ cron:
     restrictionImport: '*/5 * * * *'
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
+  prometheusPort: 9476
 
 
 # @section Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
