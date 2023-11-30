@@ -26,7 +26,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name                 | Description                                                                                                                 | Value |
@@ -42,15 +41,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `tolerations`        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
 | `affinity`           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
 
-
 ### Deployment settings
 
 | Name               | Description | Value                         |
 | ------------------ | ----------- | ----------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-router` |
-| `image.tag`        | Tag         | `6.16.0`                      |
+| `image.tag`        | Tag         | `6.17.0.8`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                |
-
 
 ### Navi-Router service settings
 
@@ -67,7 +64,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `router.keyManagementService.commonToken`        | Mater key to retrieve all per-service API keys, router.keyManagementService.apis ignored, if commonToken set                                 | `""`                          |
 | `router.keyManagementService.apis`               | Used API types and their tokens. Format: `type: token`                                                                                       | `undefined`                   |
 
-
 ### Service account settings
 
 | Name                         | Description                                                                                                             | Value   |
@@ -75,7 +71,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
-
 
 ### Strategy settings
 
@@ -85,7 +80,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
 
-
 ### Service settings
 
 | Name                  | Description                                                                                                                    | Value       |
@@ -94,7 +88,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `service.port`        | Service port.                                                                                                                  | `80`        |
 | `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `nil`       |
-
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -107,7 +100,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                  |
 | `ingress.tls`                        | TLS configuration                         | `[]`                      |
 
-
 ### Limits
 
 | Name                        | Description                                 | Value       |
@@ -117,7 +109,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `resources.requests.memory` | Memory request, recommended value `384Mi`.  | `undefined` |
 | `resources.limits.cpu`      | CPU limit, recommended value `1000m`.       | `undefined` |
 | `resources.limits.memory`   | Memory limit, recommended value `768Mi`.    | `undefined` |
-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -131,7 +122,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
 | `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 
-
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                 | Description                                          | Value   |
@@ -139,7 +129,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
 | `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
-
 
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
