@@ -1,5 +1,21 @@
 # 2GIS On-Premise Changelog
 
+## [1.15.0] (2023-11-30)
+#### [Breaking-Changes](Breaking-Changes.md#1500)
+#### Images
+```
+keys
+	- keys-ui:0.5.0
+	+ keys-ui:0.6.0
+navi-castle
+	- navi-castle:1.0.7
+	+ navi-castle:1.7.0
+navi-router
+	- navi-router:6.16.0
+	+ navi-router:6.17.0.8
+
+```
+
 ## [1.14.0] (2023-11-15)
 #### [Breaking-Changes](Breaking-Changes.md#1400)
 #### Images

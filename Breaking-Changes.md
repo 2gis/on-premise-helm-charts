@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.15.0]
+
+### navi-router
+
+- `router.keyManagementService.apis.*` tokens renamed, `-api` suffix added
+
 ## [1.14.0]
 
 ### keys-api
