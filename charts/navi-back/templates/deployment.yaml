@@ -6,6 +6,10 @@ metadata:
     {{- include "naviback.labels" . | nindent 4 }}
     rule: {{ .Values.naviback.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
+    {{- if .Values.dataGroup.enabled }}
+    dataGroupTimestamp: {{ .Values.dataGroup.timestamp | quote }}
+    dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+    {{- end }}{{- /* dataGroup.enabled */}}
   {{- with .Values.labels }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -13,6 +17,7 @@ spec:
   {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   {{- if .Values.strategy }}
   strategy:
     {{- include "tplvalues.render" ( dict "value" .Values.strategy "context" $) | nindent 6 }}
@@ -30,6 +35,11 @@ spec:
       {{- end }}
       labels:
         {{- include "naviback.selectorLabels" . | nindent 8 }}
+        navigroup: {{ .Values.navigroup | default "" | quote }}
+        {{- if .Values.dataGroup.enabled }}
+        dataGroupTimestamp: {{ .Values.dataGroup.timestamp | quote }}
+        dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -47,14 +57,53 @@ spec:
         secret:
           secretName: {{ include "naviback.fullname" . }}-secret
       {{- end }}
+      {{- if .Values.naviback.sentry.enabled }}
+      - name: sentry-volume
+        emptyDir: {}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
       containers:
-        - name: {{ include "naviback.fullname" . }}
+        {{- if .Values.transmitter.enabled }}
+        - name: {{ include "naviback.containerName" . }}-envoy
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.envoy.image.repository }}:{{ .Values.envoy.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: {{ include "naviback.fullname" . }}-configmap
+              mountPath: /etc/envoy/envoy.yaml
+              subPath: envoy.yaml
+          {{- if (.Values.envoy).resources }}
+          resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
+          {{- end }}
+          lifecycle:
+            # wait for the main container to shutdown
+            preStop:
+              exec:
+                command: ["/bin/bash", "-c", "while cat < /dev/tcp/127.0.0.1/{{ .Values.naviback.appPort }} ; do sleep 5 ; done"]
+          livenessProbe:
+            httpGet:
+              path: /ready
+              port: admin
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: admin
+          ports:
+            - name: admin
+              containerPort: 9901
+              protocol: TCP
+        {{- end }}
+        - name: {{ include "naviback.containerName" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: [ "/usr/sbin/2gis/mosesd/mosesd" ]
+          command: [ "/usr/sbin/2gis/mosesd/tini", "--" ]
           args:
+           - /usr/sbin/2gis/mosesd/mosesd
            - --config
            - /etc/2gis/mosesd/navi-back.conf
           volumeMounts:
@@ -68,10 +117,19 @@ spec:
           - name: {{ include "naviback.fullname" . }}-secret
             mountPath: /etc/2gis/mosesd/secret/
           {{- end }}
+          {{- if .Values.naviback.sentry.enabled }}
+          - name: sentry-volume
+            mountPath: {{ .Values.naviback.sentry.reportPath | default "/tmp/sentry" | quote }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.naviback.appPort }}
               protocol: TCP
+            {{- if .Values.naviback.grpcPort }}
+            - name: grpc
+              containerPort: {{ .Values.naviback.grpcPort }}
+              protocol: TCP
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /heartbeat
@@ -99,7 +157,7 @@ spec:
             # wait for the endpoint removal process
             preStop:
               exec:
-                command: ["/bin/sh", "-c", "sleep 5"]
+                command: ["/bin/sh", "-c", "sleep {{ .Values.preStopDelay | default 5 | int }}"]
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 60 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

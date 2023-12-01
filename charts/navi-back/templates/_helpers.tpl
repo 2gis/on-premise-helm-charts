@@ -31,6 +31,17 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+Distinguishable main container name
+*/}}
+{{- define "naviback.containerName" -}}
+{{- if .Values.dataGroup.enabled }}
+{{- .Values.dataGroup.prefix }}-{{ .Chart.Name }}
+{{- else }}
+{{- .Chart.Name }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "naviback.labels" -}}
@@ -61,7 +72,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{/* vim: set filetype=mustache: */}}
+
 {{/*
 Renders a value that contains template.
 Usage:
@@ -74,6 +85,7 @@ Usage:
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
 {{- end -}}
+
 
 {{/*
 Get count of CPU from limits.
@@ -124,6 +136,28 @@ Usage:
       {{- end -}}
    {{- end -}}
    {{- ternary "true" "" $found -}}
+{{- end -}}
+
+
+{{/*
+Check if routing section in rules only contains certain value
+Usage:
+{{ include "rules.inRoutingSectionOnly" ( dict "routingValue" "<value>" "context" $) }}
+*/}}
+{{- define "rules.inRoutingSectionOnly" -}}
+   {{- /* if different value found */}}
+   {{- $ctx := .context -}}
+   {{- $sectionFound := false -}}
+   {{- $matches := false -}}
+   {{- if $ctx.Values.rules -}}
+      {{- range $ctx.Values.rules -}}
+         {{- if eq .name $ctx.Values.naviback.app_rule -}}
+            {{- $sectionFound = true -}}
+            {{- $matches = (.routing | uniq | join "," | eq "ctx") -}}
+         {{- end -}}
+      {{- end -}}
+   {{- end -}}
+   {{- and $matches $sectionFound | ternary "true" "false" -}}
 {{- end -}}
 
 
@@ -373,6 +407,19 @@ Usage:
 {{- define "config.setEngineUpdatePeriod" -}}
    {{- if (or (include "config.setSimpleNetworkPedestrian" $) (include "config.setSimpleNetworkBicycle" $)) -}}
       {{- 0 | int -}}
+   {{- end -}}
+{{- end -}}
+
+{{/*
+Set ECA URL
+Usage:
+{{ include "config.setEcaUrl" $ }}
+*/}}
+{{- define "config.setEcaUrl" -}}
+   {{- if .Values.naviback.ecaUrl -}}
+   {{- printf .Values.naviback.ecaUrl -}}
+   {{- else if .Values.naviback.ecaHost -}}
+   {{- printf "http://%s" .Values.naviback.ecaHost -}}
    {{- end -}}
 {{- end -}}
 

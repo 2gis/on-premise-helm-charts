@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,7 +10,11 @@ metadata:
     {{- end }}
     rule: {{ .Values.naviback.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
-    type: {{ .Values.naviback.type | quote  }}
+    type: {{ .Values.naviback.type | default "" | quote  }}
+    {{- if .Values.dataGroup.enabled }}
+    dataGroupTimestamp: {{ .Values.dataGroup.timestamp | quote }}
+    dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+    {{- end }}
     {{- if .Values.naviback.behindSplitter }}
     behindSplitter: "true"
     {{- end }}
@@ -17,13 +22,64 @@ metadata:
   annotations:
    {{- include "tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
   {{- end }}
-
 spec:
   type: {{ .Values.service.type }}
+  clusterIP: {{ .Values.service.clusterIP | default "" | quote }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http
       protocol: TCP
       name: http
+    {{- /* Only add second port if there is no headless service for it.
+         * This switch works around compexities with Blackbox Exorter probes.
+         */}}
+    {{- if and .Values.naviback.grpcPort (not .Values.service.headless.enabled) }}
+    - port: {{ .Values.service.grpcPort }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+    {{- end }}
   selector:
     {{- include "naviback.selectorLabels" . | nindent 4 }}
+{{- if .Values.service.headless.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "naviback.fullname" . }}-headless
+  labels:
+    {{- include "naviback.labels" . | nindent 4 }}
+    {{- if .Values.service.headless.labels }}
+    {{- include "tplvalues.render" ( dict "value" .Values.service.labels "context" $) | nindent 4 }}
+    {{- end }}
+    rule: {{ .Values.naviback.app_rule | default "" | quote  }}
+    navigroup: {{ .Values.navigroup | default "" | quote }}
+    type: {{ .Values.naviback.type | default "" | quote  }}
+    {{- if .Values.dataGroup.enabled }}
+    dataGroupTimestamp: {{ .Values.dataGroup.timestamp | quote }}
+    dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+    {{- end }}
+    {{- /* pretend to be behind splitter to get ignored by mfront */}}
+    behindSplitter: "true"
+  {{- if .Values.service.headless.annotations }}
+  annotations:
+   {{- include "tplvalues.render" ( dict "value" .Values.service.headless.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: "ClusterIP"
+  clusterIP: "None"
+  ports:
+    {{- /* app ports here instead of service's ones */}}
+    - port: {{ .Values.naviback.appPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    {{- if .Values.naviback.grpcPort }}
+    - port: {{ .Values.naviback.grpcPort }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+    {{- end }}
+  selector:
+    {{- include "naviback.selectorLabels" . | nindent 4 }}
+{{- end }}

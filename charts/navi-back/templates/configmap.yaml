@@ -29,21 +29,51 @@ data:
         "handlers_number": {{ .Values.naviback.handlersNumber }},
         "log_verbose": false,
         "max_process_time": {{ .Values.naviback.maxProcessTime | default 20 | int }},
-        "response_timelimit": {{ .Values.naviback.responseTimelimit | default 60 | int }},
-        "request_timeout": {{ .Values.naviback.requestTimeout | default 60 | int }},
+        "response_timelimit": {{ .Values.naviback.responseTimelimit | default 120 | int }},
+        "request_timeout": {{ .Values.naviback.requestTimeout | default 120 | int }},
         "timeout_limit_sec": {{ .Values.naviback.timeoutLimitSec | default 1200 | int }},
         "timeout_increment_sec": {{ .Values.naviback.timeoutIncrementSec | default 140 | int }},
         "total_retry_duration_sec": {{ .Values.naviback.totalRetryDurationSec | default 2400 | int }},
         "initial_retry_interval_sec": {{ .Values.naviback.initialRetryIntervalSec | default 2 | int }},
         "retry_policy": "linear"
       },
+      {{- if .Values.naviback.grpcPort }}
+      "grpc":
+      {
+        "server" : "0.0.0.0",
+        "port" : {{ .Values.naviback.grpcPort | int }},
+        "max_process_time" : {{ .Values.naviback.maxProcessTime | default 20 | int }},
+        "response_timelimit" : {{ .Values.naviback.responseTimelimit | default 120 | int }},
+        "request_timeout" : {{ .Values.naviback.requestTimeout | default 120 | int }},
+        "thread_pool_size" : 5
+      },
+      {{- end }}
+      {{- if .Values.naviback.sentry.enabled }}
+      "error_tracker" : {
+        "report_destination_address" : {{ .Values.naviback.sentry.address | quote }},
+        "project_name" : {{ .Values.naviback.sentry.project | quote }},
+        "user_name" : {{ .Values.naviback.sentry.username | quote }},
+        "print_outgoing_messages" : {{ .Values.naviback.sentry.printMessages | default false }},
+        "debug" : {{ .Values.naviback.sentry.debug | default false }},
+        "path" : {{ .Values.naviback.sentry.reportPath | default "/tmp/sentry" | quote }},
+        "handler" : {{ .Values.naviback.sentry.handler | default "/usr/sbin/2gis/mosesd/crashpad_handler" | quote }}
+      },
+      {{- end }}
+      {{- if .Values.transmitter.enabled }}
+      "transmitter": {
+        "type": {{ .Values.transmitter.type | quote }},
+        "host": "127.0.0.1",
+        "port": 9999,
+        "response_timeout_ms": {{ .Values.transmitter.responseTimeoutMs | int }}
+      },
+      {{- end }}
       "context": {
         "variables": {
           "LOCAL_PATH": "/opt/castle",
           "LOCAL_ETC": "/etc/2gis/mosesd",
           "REMOTE_PATH": "{{ .Values.naviback.castleHost }}",
           "REMOTE_FORECAST" : "{{ .Values.naviback.forecastHost }}",
-          "REMOTE_ECA" : "{{ .Values.naviback.ecaHost }}"
+          "REMOTE_ECA" : "{{ include "config.setEcaUrl" $ }}"
         },
       "rules": {
         "update_period" : 0,
@@ -64,7 +94,7 @@ data:
           }
         },
         "index": {
-          "update_period": 600,
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
           "content": "index.json",
           "nodes": [
             "http://{REMOTE_PATH}/{{ .Values.naviback.indexFilename }}"
@@ -77,10 +107,10 @@ data:
         {{- if .Values.naviback.indices.speedIndex.enabled }}
         "speed_index" :
         {
-            "update_period" : 20,
+            "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
             "nodes" :
             [
-                "http://{REMOTE_ECA}/traffic/moses/speeds5.json"
+                "{REMOTE_ECA}/traffic/moses/speeds5.json"
             ],
             "timeout_seconds":
             {
@@ -91,7 +121,7 @@ data:
         {{- if .Values.naviback.indices.forecastedSpeedsIndex.enabled }}
         "forecasted_speeds_index" :
         {
-            "update_period" : 20,
+            "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
             "nodes" :
             [
                 "http://{REMOTE_FORECAST}/index.json"
@@ -173,6 +203,20 @@ data:
             }
         },
         {{- end }}{{- /* .Values.naviback.indices.restrictedTransportPlatforms.enabled */}}
+        {{- if .Values.naviback.indices.restrictedTransportIndex.enabled }}
+        "restricted_transport_index" :
+        {
+            "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
+            "nodes" :
+            [
+                "http://{REMOTE_PATH}/restricted_transport.json.zip"
+            ],
+            "timeout_seconds":
+            {
+                "count": 10
+            }
+        },
+        {{- end }}{{- /* .Values.naviback.indices.restrictedTransportIndex.enabled */}}
         {{- end }}
         {{- if .Values.naviback.indices.ctxOptions.enabled }}
         "ctx_options": {
@@ -189,7 +233,7 @@ data:
         "car_options": {
           "update_period": 0,
           "nodes": [
-            "http://{REMOTE_PATH}/options/carrouting.json"
+            "http://{REMOTE_PATH}/options/{{ .Values.naviback.indices.carOptions.filename | default "carrouting.json" }}"
           ],
           "timeout_seconds": {
             "count": 30
@@ -232,7 +276,7 @@ data:
             "http://{REMOTE_PATH}/"
           ],
           "timeout_seconds": {
-            "count": 30
+            "count": 60
           }
         },
         "restrictions": {
@@ -282,7 +326,7 @@ data:
         {{- if .Values.naviback.indices.tugcUsersIndex.enabled }}
         "tugc_users_index" :
         {
-            "update_period" : 300,
+            "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
             "nodes" :
             [
                 "http://{REMOTE_PATH}/tugc_users.json.zip"
@@ -310,7 +354,7 @@ data:
         {{- if .Values.naviback.indices.tugc2gisIndex.enabled }}
         "tugc_2gis_index" :
         {
-            "update_period" : 600,
+            "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
             "nodes" :
             [
                 "http://{REMOTE_PATH}/tugc_2gis.json.zip"
@@ -342,7 +386,7 @@ data:
             "max_updated_time_diff_minutes" : 20,
             "nodes" :
             [
-                "http://{REMOTE_ECA}/"
+                "{REMOTE_ECA}/"
             ],
             "timeout_seconds":
             {
@@ -353,49 +397,49 @@ data:
         {{- end }}
         {{- if (include "config.isTaxi" $) }}
         {{- if .Values.naviback.indices.taxiSpeedIndex.enabled }}
-            "taxi_speed_index": {
-                "update_period": 20,
-                "nodes": [
-                "http://{REMOTE_ECA}/traffic/moses/speeds5.json"
-                ],
-                "timeout_seconds": {
-                "count": 60
-                }
-                },
+          "taxi_speed_index": {
+              "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
+              "nodes": [
+              "{REMOTE_ECA}/traffic/moses/speeds5.json"
+              ],
+              "timeout_seconds": {
+              "count": 60
+              }
+              },
         {{- end }}{{- /* .Values.naviback.indices.taxiSpeedIndex.enabled */}}
         {{- if .Values.naviback.indices.onlineTaxiSpeeds.enabled }}
-                "online_taxi_speeds" :
-                {
-                  "update_period" : 0,
-                  "max_updated_time_diff_minutes" : 20,
-                  "nodes" :
-                  [
-                    "http://{REMOTE_ECA}/"
-                  ],
-                  "timeout_seconds":
-                  {
-                    "count": 60
-                  }
-                },
+          "online_taxi_speeds" :
+            {
+              "update_period" : 0,
+              "max_updated_time_diff_minutes" : 20,
+              "nodes" :
+              [
+                "{REMOTE_ECA}/"
+              ],
+              "timeout_seconds":
+              {
+                "count": 60
+              }
+            },
         {{- end }}{{- /* .Values.naviback.indices.onlineTaxiSpeeds.enabled */}}
         {{- end }}
         {{- if (include "config.isTruck" $) }}
         {{- if .Values.naviback.indices.passZones.enabled }}
-            "pass_zones":
+          "pass_zones":
+            {
+              "update_period": 0,
+              "nodes":
+              [
+                "http://{REMOTE_PATH}/"
+              ],
+              "timeout_seconds":
               {
-                "update_period": 0,
-                "nodes":
-                [
-                  "http://{REMOTE_PATH}/"
-                ],
-                "timeout_seconds":
-                {
-                  "count": 60
-                }
-              },
+                "count": 60
+              }
+            },
         {{- end }}{{- /* .Values.naviback.indices.passZones.enabled */}}
         {{- end }}
-        "edge_transition_probability": {
+            "edge_transition_probability": {
               "update_period": 0,
               "nodes": [
                   "http://{REMOTE_PATH}/"
@@ -469,6 +513,20 @@ data:
             }
           },
         {{- end }}
+        {{- if and .Values.naviback.bss.enabled .Values.naviback.bss.client.serviceRemoteAddress }}
+          "business_statistics_system" : {
+            "client" : {
+                "service_remote_address" : {{ .Values.naviback.bss.client.serviceRemoteAddress | mustToJson }},
+                "message_count_to_flush" : {{ .Values.naviback.bss.client.messageCountToFlush | mustToJson }},
+                "use_compression" : {{ .Values.naviback.bss.client.useCompression | mustToJson }},
+                "package_size_max_bytes" : {{ .Values.naviback.bss.client.packageSizeMaxBytes | mustToJson }},
+                "pending_transmission_max_count" : {{ .Values.naviback.bss.client.pendingTransmissionMaxCount | mustToJson }}
+              }
+          },
+        {{- end }}{{- /* .Values.naviback.bss.enabled */}}
+        {{- $licenseUrl := .Values.license.url | required "Valid license.url required!" }}
+        "pasportool_client":
+          {{- toPrettyJson .Values.license | nindent 8 -}},
         {{- if .Values.naviback.additionalSections }}
           {{- include "tplvalues.render" ( dict "value" .Values.naviback.additionalSections "context" $) | nindent 8 }}
         {{- end }}
@@ -479,6 +537,7 @@ data:
           "simple_network_bicycle" : {{ include "config.setSimpleNetworkBicycle" $ | default false -}},
           "simple_network_truck" : {{ include "config.setSimpleNetworkTruck" $ | default false -}},
           "simple_network_emergency" : {{ include "config.setSimpleNetworkEmergency" $ | default false -}},
+          "ctx_only": {{ include "rules.inRoutingSectionOnly" (dict "routingValue" "ctx" "context" $) -}},
           "attractor_car" : {{ include "config.setAttractorCar" $ | default false -}},
           "attractor_pedestrian" : {{ include "config.setAttractorPedestrian" $ | default false -}},
           "attractor_bicycle" : {{ include "config.setAttractorBicycle" $ | default false -}},
@@ -554,4 +613,56 @@ data:
       }
     }
   rules.conf: |-
-   {{- include "rules.renderRules" . }}
+    {{- include "rules.renderRules" . }}
+  envoy.yaml: |
+    admin:
+      address:
+        socket_address:
+          protocol: TCP
+          address: 0.0.0.0
+          port_value: 9901
+    static_resources:
+      listeners:
+      - name: attractor_listener
+        address:
+          socket_address:
+            protocol: TCP
+            address: 127.0.0.1
+            port_value: 9999
+        filter_chains:
+        - filters:
+          - name: envoy.http_connection_manager
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+              stat_prefix: ingress_http
+              route_config:
+                name: local_route
+                virtual_hosts:
+                - name: local_service
+                  domains: ["*"]
+                  routes:
+                  - match:
+                      prefix: "/"
+                    route:
+                      cluster: attractor
+              http_filters:
+              - name: envoy.router
+                typed_config:
+                  "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+      clusters:
+      - name: attractor
+        connect_timeout: 1s
+        type: STRICT_DNS
+        dns_lookup_family: V4_ONLY
+        lb_policy: ROUND_ROBIN
+        # empty parameter specifying not to sway off gRPC
+        http2_protocol_options: {}
+        load_assignment:
+          cluster_name: attractor
+          endpoints:
+          - lb_endpoints:
+            - endpoint:
+                address:
+                  socket_address:
+                    address: {{ .Values.transmitter.host | default "localhost" | quote }}
+                    port_value: {{ .Values.transmitter.port | default 8080 | int }}

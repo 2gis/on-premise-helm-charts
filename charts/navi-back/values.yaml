@@ -8,6 +8,7 @@ dgctlDockerRegistry: ''
 # @section Common settings
 
 # @param replicaCount A replica count for the pod.
+# @param revisionHistoryLimit Number of replica sets to keep for deployment rollbacks
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
 # @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
@@ -18,8 +19,12 @@ dgctlDockerRegistry: ''
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param labels Custom labels to set to Deployment resource.
+# @param priorityClassName Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name.
+# @param preStopDelay Delay in seconds before terminating container.
+# @param terminationGracePeriodSeconds Maximum time allowed for graceful shutdown.
 
 replicaCount: 1
+revisionHistoryLimit: 1
 imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
@@ -30,6 +35,9 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 labels: {}
+priorityClassName: ''
+preStopDelay: 5
+terminationGracePeriodSeconds: 60
 
 
 # @section Deployment settings
@@ -46,7 +54,8 @@ image:
 
 # @section Navi-Back application settings
 
-# @extra naviback.ecaHost Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @extra naviback.ecaHost DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @extra naviback.ecaUrl URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @skip naviback.appPort
 # @param naviback.dmSourcesLimit Size limit for source matrices.
@@ -64,7 +73,18 @@ image:
 # @param naviback.dump.answer Dump answers in logs.
 # @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
 # @param naviback.indexFilename Name of index file.
+# @param naviback.sentry.enabled If sending crash dumps to Sentry needed
+# @param naviback.sentry.address Sentry URL
+# @param naviback.sentry.project Sentry project ID
+# @param naviback.sentry.username Sentry username
+# @param naviback.sentry.printMessages If outgoing messages needed
+# @param naviback.sentry.debug Debugging switch
+# @param naviback.sentry.reportPath Local directory to dump
+# @param naviback.sentry.handler Handler file location
 # @param naviback.castleHost URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @extra naviback.enablePassableBarriers Consider passable barriers.
+# @extra naviback.grpcPort GRPC port to serve. Disabled if empty.
+# @param naviback.disableUpdates Test switch for disabling runtime background updates
 # @extra naviback.indices List of dynamic indices kill switches.
 # @skip naviback.indices.carOptions.enabled
 # @skip naviback.indices.carOptions.filename
@@ -78,6 +98,7 @@ image:
 # @skip naviback.indices.onlineTaxiSpeeds.enabled
 # @skip naviback.indices.passZones.enabled
 # @skip naviback.indices.projectCarOptions.enabled
+# @skip naviback.indices.restrictedTransportIndex.enabled
 # @skip naviback.indices.restrictedTransportPlatforms.enabled
 # @skip naviback.indices.restrictedTransportRoutes.enabled
 # @skip naviback.indices.smatrix.enabled
@@ -96,6 +117,7 @@ image:
 # @extra naviback.simpleNetwork.pedestrian Enable simple network for pedestrian routing
 # @extra naviback.simpleNetwork.taxi Enable simple network for taxi routing
 # @extra naviback.simpleNetwork.truck Enable simple network for truck routing
+# @extra naviback.simpleNetwork.scooter Enable simple network for scooters routing
 # @skip naviback.attractor
 # @extra naviback.attractor.bicycle Enable enhanced attractor for bicycle routing
 # @extra naviback.attractor.car Enable enhanced attractor for auto routing
@@ -103,6 +125,12 @@ image:
 # @extra naviback.attractor.taxi Enable enhanced attractor for taxi routing
 # @extra naviback.attractor.truck Enable enhanced attractor for truck routing
 # @extra naviback.attractor.scooter Enable enhanced attractor for scooters routing
+# @param naviback.bss.enabled Enable sending information on the construction of routes to the business statistics service
+# @param naviback.bss.client.serviceRemoteAddress Remote address business statistics service. Requeruired for enable sending information.
+# @param naviback.bss.client.messageCountToFlush Message count to flush.
+# @param naviback.bss.client.useCompression Enable compression.
+# @param naviback.bss.client.packageSizeMaxBytes Package size max bytes.
+# @param naviback.bss.client.pendingTransmissionMaxCount Pending transmission max count.
 # @extra naviback.reduceEdgesOptimizationFlag Enable optimizations for distance matrix queries processing
 # @param naviback.behindSplitter Current instance is behind splitter or not
 # @skip rules
@@ -125,7 +153,17 @@ naviback:
     answer: false
   logLevel: Info
   indexFilename: index.json.zip
+  sentry:
+    enabled: false
+    address: "sentry.host"
+    project: "navi-back"
+    username: "navi-back"
+    printMessages: false
+    debug: false
+    reportPath: "/tmp/sentry"
+    handler: "/usr/sbin/2gis/mosesd/crashpad_handler"
   castleHost: ''
+  disableUpdates: false
   indices:
     carOptions:
       enabled: false
@@ -150,6 +188,8 @@ naviback:
       enabled: false
     projectCarOptions:
       enabled: false
+    restrictedTransportIndex:
+      enabled: true
     restrictedTransportPlatforms:
       enabled: false
     restrictedTransportRoutes:
@@ -175,9 +215,30 @@ naviback:
   simpleNetwork:
     emergency: false
   attractor: {}
+  bss:
+    enabled: false
+    client:
+      serviceRemoteAddress: ""
+      messageCountToFlush: 500
+      useCompression: true
+      packageSizeMaxBytes: 1800000
+      pendingTransmissionMaxCount: 10
   behindSplitter: false
 
 rules: []
+
+
+# @section Envoy settings (ignored if not transmitter.enabled)
+
+# @param envoy.image.repository Repository
+# @param envoy.image.tag Tag
+# @param envoy.image.pullPolicy Pull Policy
+
+envoy:
+  image:
+    repository: envoyproxy/envoy
+    pullPolicy: IfNotPresent
+    tag: v1.27.0
 
 
 # @section Service account settings
@@ -195,15 +256,24 @@ serviceAccount:
 # @section Service settings
 
 # @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.clusterIP Controls Service cluster IP allocation. Cannot be changed after resource creation.
 # @param service.port Service port.
+# @param service.grpcPort Service GRPC port if `naviback.grpcPort` enabled.
 # @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param service.headless.enabled Enable creating a secondary headless service
+# @param service.headless.annotations Annotations for secondary headless service
 
 service:
   type: ClusterIP
+  clusterIP: ""
   port: 80
+  grpcPort: 50051
   annotations: {}
   labels:
+  headless:
+    enabled: false
+    annotations: {}
 
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
@@ -368,8 +438,51 @@ s3:
   accessKey: ''
   secretKey: ''
 
+# @section Settings for attractor connection (not supported on-prem)
+
+# @param transmitter.enabled if attractor connection required
+# @param transmitter.type connection type one of: grpc, grpc-async, grpc-stream, ws, ws-async
+# @param transmitter.host attractor service
+# @param transmitter.port attractor port
+# @param transmitter.responseTimeoutMs response waiting timeout
+
+transmitter:
+  enabled: false
+  type: grpc-async-stream
+  host: http://navi-attractor.host
+  port: 50051
+  responseTimeoutMs: 100
+
+# @section Back-end and attractor group properties (not supported on-prem)
+
+# @param dataGroup.enabled if grouping enabled
+# @param dataGroup.prefix common prefix for the group used for identifiers
+# @param dataGroup.timestamp data timestamp the group is running on
+
+dataGroup:
+  enabled: false
+  prefix: sampleGroup
+  timestamp: no-default
+
 # @param livenessProbeDelay initial delay for liveness probes
 # @param readinessProbeDelay initial delay for readiness probes
 
 livenessProbeDelay: 60
 readinessProbeDelay: 75
+
+# @section License settings
+
+# @param license.url Address of the License service. Ex: http(s)://license.svc
+
+# block not for onprem
+#
+# valid params:
+# license.is_enabled
+# license.license_check_interval
+# license.additional_time_after_connection_lost
+# more info: https://confluence.2gis.ru/pages/viewpage.action?pageId=449547580
+#
+# end block not for onprem
+
+license:
+  url: ''

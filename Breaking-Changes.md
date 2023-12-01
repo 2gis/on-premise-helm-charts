@@ -1,5 +1,10 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [X.X.X]
+
+#### navi-back
+- renamed parameter naviback.ecaHost to naviback.ecaUrl
+
 ## [1.16.0]
 
 ### catalog-api
