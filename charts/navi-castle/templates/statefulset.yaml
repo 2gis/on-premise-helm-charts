@@ -109,8 +109,13 @@ spec:
           - name: {{ include "castle.fullname" $ }}-builder-config
             mountPath: /opt/update_services
             subPath: update_services
-          - name: {{ include "castle.fullname" $ }}-data
-            mountPath: {{ $.Values.castle.castleDataPath }}
+          {{- if .Values.persistentVolume.enabled }}
+          - name: {{ include "castle.fullname" . }}-pvc
+            mountPath: {{ .Values.castle.castleDataPath }}
+          {{- else }}
+          - name: {{ include "castle.fullname" . }}-data
+            mountPath: {{ .Values.castle.castleDataPath }}
+          {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
