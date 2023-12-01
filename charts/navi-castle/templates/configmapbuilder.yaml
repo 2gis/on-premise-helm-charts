@@ -61,7 +61,7 @@ data:
       {{- end }}{{- /* if */}}
     {{- end }}{{- /* with */}}
 
-    {{- if .Values.cron.enabled.restriction }}
+    {{- if or .Values.cron.enabled.restriction .Values.init.enabled.restriction }}
     restriction:
     {
         remote_name: '',
@@ -82,9 +82,9 @@ data:
 
         store_period: 'week'
     }
-    {{- end }}{{- /* .Values.cron.enabled.restriction */}}
+    {{- end }}{{- /* or .Values.cron.enabled.restriction .Values.init.enabled.restriction */}}
 
-    {{- if .Values.cron.enabled.restrictionImport }}
+    {{- if or .Values.cron.enabled.restrictionImport .Values.init.enabled.restrictionImport }}
     import_restriction:
     {
         remote_name: '',
@@ -99,9 +99,9 @@ data:
         item: 'restriction',
         store_period: 'week'
     }
-    {{- end }}{{- /* .Values.cron.enabled.restrictionImport */}}
+    {{- end }}{{- /* or .Values.cron.enabled.restrictionImport .Values.init.enabled.restrictionImport */}}
 
-    {{- if .Values.cron.enabled.import }}
+    {{- if or .Values.cron.enabled.import .Values.init.enabled.import }}
     import_package:
     {
         remote_name: '',
@@ -115,7 +115,7 @@ data:
         item: 'package',
         store_period: 'month'
     }
-    {{- end }}{{- /* .Values.cron.enabled.import */}}
+    {{- end }}{{- /* or .Values.cron.enabled.import .Values.init.enabled.import */}}
 
   cities_template: |-
     [

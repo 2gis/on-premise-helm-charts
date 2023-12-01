@@ -59,7 +59,7 @@ spec:
                 mountPath: {{ $.Values.castle.castleDataPath }}
               resources:
                 {{- toYaml $.Values.resources | nindent 16 }}
-{{- end -}} # if
-{{- end -}} # range $flavor
-{{- end -}} # range $i, $e
-{{- end -}} # if
+{{- end -}} {{/* if */}}
+{{- end -}} {{/* range $flavor */}}
+{{- end -}} {{/* range $i, $e */}}
+{{- end -}} {{/* if */}}

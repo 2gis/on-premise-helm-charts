@@ -9,7 +9,7 @@ data:
     # 2. passes control down to supercronic for the same by schedule
     set -Ceux
     {{- range $_, $flavor := tuple "import" "restriction" "restrictionImport" }}
-    {{- if index $.Values.cron.enabled $flavor }}
+    {{- if index $.Values.init.enabled $flavor }}
     /opt/configuration_builder --config /opt/config_builder.conf --service={{ include "castle.serviceParameter" ( dict "flavor" $flavor ) }} --jobs={{ $.Values.castle.jobs | default 1 | int }}
     {{- end }}
     {{- end }}
