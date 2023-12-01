@@ -130,6 +130,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `cron.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept.                  | `3`           |
 | `cron.prometheusPort`             | Container port for supercronic prometheus                           | `9476`        |
 
+### Init settings
+
+| Name                             | Description                                                                                                                       | Value   |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `init.enabled.import`            | If the `import` on init is enabled. Warning: if disable data not imported. Old data will be lost if not persistentVolume.enabled. | `true`  |
+| `init.enabled.restriction`       | If restrictions API enabled, incompatible with `restrictionImport`.                                                               | `false` |
+| `init.enabled.restrictionImport` | If restrictions import enabled, incompatible with `restriction`.                                                                  | `false` |
+
 ### Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
 
 | Name                            | Description                                                                           | Value               |

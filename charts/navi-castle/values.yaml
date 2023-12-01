@@ -173,6 +173,19 @@ cron:
   prometheusPort: 9476
 
 
+# @section Init settings
+
+# @param init.enabled.import If the `import` on init is enabled. Warning: if disable data not imported. Old data will be lost if not persistentVolume.enabled.
+# @param init.enabled.restriction If restrictions API enabled, incompatible with `restrictionImport`.
+# @param init.enabled.restrictionImport If restrictions import enabled, incompatible with `restriction`.
+
+init:
+  enabled:
+    import: true
+    restriction: false
+    restrictionImport: false
+
+
 # @section Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
 
 # @param persistentVolume.enabled If Kubernetes persistence volume should be enabled for ZooKeeper.

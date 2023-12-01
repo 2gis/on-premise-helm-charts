@@ -48,7 +48,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                         |
 | ------------------ | ----------- | ----------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-router` |
-| `image.tag`        | Tag         | `6.16.0`                      |
+| `image.tag`        | Tag         | `6.17.0.8`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
 
@@ -66,7 +66,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `router.keyManagementService.downloadTimeoutSec` | Keys download timeout in seconds                                                                                                             | `30`                          |
 | `router.keyManagementService.commonToken`        | Mater key to retrieve all per-service API keys, router.keyManagementService.apis ignored, if commonToken set                                 | `""`                          |
 | `router.keyManagementService.apis`               | Used API types and their tokens. Format: `type: token`                                                                                       | `undefined`                   |
-
 
 ### Service account settings
 
