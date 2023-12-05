@@ -18,9 +18,9 @@ data:
         {{- if .Values.kafka.fileProperties }}
         "volumes": [
           {
-            "name": {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | mustToJson }},
+            "name": {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | mustToJson }},
             "secret": {
-              "secretName": {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | mustToJson }}
+              "secretName": {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | mustToJson }}
             }
           }
         ],
@@ -31,11 +31,11 @@ data:
             "name": null,
             "image": "{{ .Values.dgctlDockerRegistry }}/{{ .Values.dm.archiver.image.repository }}:{{ .Values.dm.archiver.image.tag }}",
             "resources": {{ .Values.dm.archiver.resources | mustToJson }},
-            {{- if .Values.kafka.fileProperties }}
+            {{- if .Values.kafka.fileProperties | or (.Values.kafka.producerOverrides).fileProperties }}
             "volumeMounts": [
               {
-                "name": {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | mustToJson }},
-                "mountPath": "/app/secret/"
+                "name": {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | mustToJson }},
+                "mountPath": "/app/secret/producer"
               }
             ],
             {{- end }}
@@ -50,11 +50,12 @@ data:
               },
             {{- $kafkaPropertiesEnv := include "navi-async-matrix.kafkaPropertiesEnv" (dict
                   "kafka" .Values.kafka
+                  "overrides" .Values.kafka.producerOverrides
                   "secretname" (print
                       (include "navi-async-matrix.fullname" .)
-                      "-kafka"
+                      "-producer"
                     )
-                  "mountpoint" "/app/secret"
+                  "mountpoint" "/app/secret/producer"
                   "prefix" "KAFKA_PRODUCER_SETTING__CONFIG__"
                 ) | fromYaml -}}
             {{- include "navi-async-matrix.partialListToJson" $kafkaPropertiesEnv | nindent 14 -}}

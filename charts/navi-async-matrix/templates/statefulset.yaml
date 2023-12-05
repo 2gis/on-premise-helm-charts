@@ -73,10 +73,18 @@ spec:
           configMap:
             name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
       {{- end }}
-      {{- if .Values.kafka.fileProperties }}
-        - name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
+      {{- $kafkaVolumeMounted := (
+              .Values.kafka.fileProperties |
+              or (.Values.kafka.consumerOverrides).fileProperties |
+              or (.Values.kafka.producerOverrides).fileProperties
+            ) }}
+      {{- if $kafkaVolumeMounted }}
+        - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
           secret:
-            secretName: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
+            secretName: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+        - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+          secret:
+            secretName: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
       {{- end }}
       {{- if .Values.db.tls.enabled }}
         - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
@@ -137,9 +145,11 @@ spec:
             mountPath: /app/src/composite_task_result_archiver/manifests/archive_pod_manifest.json
             subPath: archive_pod_manifest.json
           {{- end }}
-          {{- if .Values.kafka.fileProperties }}
-          - name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
-            mountPath: /etc/2gis/secret/
+          {{- if $kafkaVolumeMounted }}
+          - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/consumer/
+          - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/producer/
           {{- end }}
           {{- if .Values.db.tls.enabled }}
           - name: {{ printf "%s-psql" (include "navi-async-matrix.fullname" .) | quote }}
@@ -210,18 +220,21 @@ spec:
             - name: DM_ASYNC_SERVICE_BSS__VERSION
               value: {{ .Values.bss.version | quote }}
             {{- end }}
-            {{- range (list
-                "DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__"
-                "DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__"
-              ) }}
+            {{- range $kafkaRole, $overridesProperty := (dict
+                  "PRODUCER" "producerOverrides"
+                  "CONSUMER" "consumerOverrides"
+                ) -}}
+            {{- $kafkaPropertyEnv := print "DM_ASYNC_SERVICE_KAFKA_" $kafkaRole "_SETTING__KAFKA_" $kafkaRole "_CONFIG__" -}}
             {{- $kafkaPropertiesEnv := include "navi-async-matrix.kafkaPropertiesEnv" (dict
                   "kafka" $.Values.kafka
+                  "overrides" ($overridesProperty | get $.Values.kafka)
                   "secretname" (print
                       (include "navi-async-matrix.fullname" $)
-                      "-kafka"
+                      "-"
+                      (lower $kafkaRole)
                     )
-                  "mountpoint" "/etc/2gis/secret"
-                  "prefix" .
+                  "mountpoint" (print "/etc/2gis/secret/" (lower $kafkaRole))
+                  "prefix" $kafkaPropertyEnv
                 ) | fromYaml }}
             {{- get $kafkaPropertiesEnv "ret" | toYaml | nindent 12 }}
             {{- end }}{{- /* range */}}
