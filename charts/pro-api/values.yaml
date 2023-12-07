@@ -1,4 +1,4 @@
-# @section Docker Registry settings
+﻿# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -41,6 +41,7 @@ revisionHistoryLimit: 3
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
 # @param dgctlStorage.bucket S3 bucket name. **Required**
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
@@ -48,6 +49,7 @@ revisionHistoryLimit: 3
 
 dgctlStorage:
   host: ''
+  secure: false
   bucket: ''
   accessKey: ''
   secretKey: ''
@@ -113,14 +115,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.1.60
+  tag: 1.1.67
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.1.60
+  tag: 1.1.67
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -148,20 +150,19 @@ s3:
 # @extra api.rateLimiter rate limiter settings
 # @param api.rateLimiter.requestsLimit max number of requests from one user during time window (0 means rate limiter is disabled)
 # @param api.rateLimiter.windowSizeInSeconds the size of time windows to count and limit incoming requests
-# @skip api.diggerPassword
-# @skip api.diggerUserName
 # @skip api.logEsQueries
 # @skip api.debug
 # @skip api.env
 # @skip api.token
 # @skip api.filterByZoneCodes
 # @skip api.esDataCentersCount
+# @skip Local cache settings
+# @skip localCache.enabled
+# @skip localCache.trackStatistics
 
 api:
   serviceAccount: runner
   tempPath: /tmp
-  diggerPassword: ''
-  diggerUserName: ''
   allowAnyOrigin: false
   logEsQueries: false
   debug: false
@@ -175,6 +176,9 @@ api:
   rateLimiter:
     requestsLimit: 0
     windowSizeInSeconds: 1
+  localCache:
+    enabled: true
+    trackStatistics: false
 
 # @section Auth configuration
 
@@ -196,6 +200,13 @@ auth:
   autoRegisterUsers: true
   turnOffCertValidation: false
   shareKeys: []
+
+# @skip digger
+
+digger:
+  url: ''
+  userName: ''
+  password: ''
 
 # @section PostgreSQL settings
 
@@ -349,10 +360,16 @@ permissionsPodSettings:
 # @section 2GIS PRO Permissions API configuration
 # @skip permissionsApi.host
 # @param permissionsApi.enabled If permissionsApi is enabled for the service.
+# @skip Local cache settings
+# @skip localCache.enabled
+# @skip localCache.trackStatistics
 
 permissionsApi:
   host: ''
   enabled: false
+  localCache:
+    enabled: true
+    trackStatistics: false
 
 # @section Import job settings
 
@@ -369,10 +386,11 @@ permissionsApi:
 # @param assetImporter.externalLinksProxyUrl URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
 # @skip assetImporter.files
 # @skip assetImporter.esMetricsEnabled
+# @skip assetImporter.suspended
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.60
+  tag: 1.1.67
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -383,9 +401,10 @@ assetImporter:
       memory: 768M
     limits:
       cpu: 1000m
-      memory: 2560M
+      memory: 8Gi
   maxParallelJobs: 1
   enabled: true
+  suspended: false
   startOnDeploy: true
   files: ''
   imageProxyUrl: ''
@@ -400,7 +419,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.60
+  tag: 1.1.67
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
