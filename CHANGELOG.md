@@ -1,5 +1,50 @@
 # 2GIS On-Premise Changelog
 
+## [1.15.0] (2023-11-30)
+#### [Breaking-Changes](Breaking-Changes.md#1500)
+#### Images
+```
+keys
+	- keys-ui:0.5.0
+	+ keys-ui:0.6.0
+navi-castle
+	- navi-castle:1.0.7
+	+ navi-castle:1.7.0
+navi-router
+	- navi-router:6.16.0
+	+ navi-router:6.17.0.8
+
+```
+
+## [1.14.0] (2023-11-15)
+#### [Breaking-Changes](Breaking-Changes.md#1400)
+#### Images
+```
+keys
+	- keys-backend:1.63.0
+	+ keys-backend:1.69.0
+pro-api
+	- pro-api:1.1.57
+	+ pro-api:1.1.60
+	- pro-importer:1.1.57
+	+ pro-importer:1.1.60
+	- pro-importer:1.1.57
+	+ pro-importer:1.1.60
+	- pro-permissions-api:1.1.57
+	+ pro-permissions-api:1.1.60
+pro-ui
+	- pro-ui:1.2.0
+	+ pro-ui:1.3.0
+tiles-api
+	- tiles-api-importer:4.49.0
+	+ tiles-api-importer:4.51.1
+	- tiles-api-proxy:4.49.0
+	+ tiles-api-proxy:4.51.1
+	- tiles-api:4.49.0
+	+ tiles-api:4.51.1
+
+```
+
 ## [1.13.0] (2023-10-24)
 #### [Breaking-Changes](Breaking-Changes.md#1300)
 #### Images

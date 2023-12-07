@@ -20,6 +20,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -72,6 +73,23 @@ spec:
             failureThreshold: 3
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            {{- range $type, $token := (.Values.router.keyManagementService).apis }}
+            {{- if $token }}
+            - name: {{ $type | replace "-" "_" | upper | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "router.fullname" $ | quote }}
+                  key: {{ $type | quote }}
+            {{- end }}{{- /* if $token */}}
+            {{- end }}{{- /* range $type, $token */}}
+            {{- if (.Values.router.keyManagementService).commonToken }}
+            - name: COMMON_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "router.fullname" . | quote }}
+                  key: common_token
+            {{- end }}
       terminationGracePeriodSeconds: {{ .Values.termination_grace_period_seconds | default 60 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

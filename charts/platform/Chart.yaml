@@ -3,7 +3,7 @@ name: platform
 type: application
 description: A Helm chart for Kubernetes to deploy Platform
 
-version: 1.13.0
+version: 1.15.0
 appVersion: 0.5.5
 
 maintainers:

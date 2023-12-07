@@ -6,12 +6,38 @@
 
 - Changes in data for catalog, if you have a version lower than 1.16.0, you need to update to version 1.16.0 to get the latest data
 
+## [1.15.0]
+
+### navi-router
+
+- `router.keyManagementService.apis.*` tokens renamed, `-api` suffix added
+
+## [1.14.0]
+
+### keys-api
+
+- Added new required dgctlStorage parameters
+
+```yaml
+dgctlStorage:
+  host: ''
+  bucket: keys
+  accessKey: ''
+  secretKey: ''
+  manifest: manifest.json
+```
+
 ## [1.13.0]
 
 ### tiles-api
 
 - Backward compatibility with `license` versions before `2.0.0` (on-premise version `1.8.0`) is broken.
 - License v2 over HTTPS is required.
+- Update migrations, when updating the service you need to update the data
+
+### pro-api
+
+- Add required topic `assetDataTopic`
 
 ## [1.12.0]
 

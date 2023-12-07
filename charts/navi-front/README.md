@@ -26,6 +26,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
+
 ### Common settings
 
 | Name                 | Description                                                                                                                 | Value |
@@ -41,6 +42,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `tolerations`        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
 | `affinity`           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
 
+
 ### Deployment settings
 
 | Name               | Description | Value                        |
@@ -48,6 +50,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `image.repository` | Repository  | `2gis-on-premise/navi-front` |
 | `image.tag`        | Tag         | `1.24.1`                     |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`               |
+
 
 ### Navi-Front service settings
 
@@ -57,6 +60,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `front.router.discover` | Enable/disable router autodiscovery.             | `true`      |
 | `front.router.host`     | Set router address if autodiscovery is disabled. | `localhost` |
 
+
 ### Service account settings
 
 | Name                         | Description                                                                                                             | Value   |
@@ -65,12 +69,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
+
 ### Service settings
 
 | Name           | Description                                                                                                                    | Value       |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `service.type` | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `service.port` | Service port.                                                                                                                  | `80`        |
+
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -83,14 +89,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                 |
 | `ingress.tls`                        | TLS configuration                         | `[]`                     |
 
+
 ### Limits
 
-| Name                        | Description                      | Value |
-| --------------------------- | -------------------------------- | ----- |
-| `resources.requests.cpu`    | A CPU request, e.g., `100m`.     |       |
-| `resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
-| `resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
-| `resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
+| Name                        | Description                                 | Value       |
+| --------------------------- | ------------------------------------------- | ----------- |
+| `resources`                 | Container resources requirements structure. | `{}`        |
+| `resources.requests.cpu`    | CPU request, recommended value `100m`.      | `undefined` |
+| `resources.requests.memory` | Memory request, recommended value `128Mi`.  | `undefined` |
+| `resources.limits.cpu`      | CPU limit, recommended value `1000m`.       | `undefined` |
+| `resources.limits.memory`   | Memory limit, recommended value `1Gi`.      | `undefined` |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -103,6 +111,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
 | `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
 | `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 

@@ -32,34 +32,37 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | ------------------------- | ------------------------------------- | ----------------------------- |
 | `castle.image.repository` | Navi-Castle service image repository. | `2gis-on-premise/navi-castle` |
 | `castle.image.pullPolicy` | Navi-Castle service pull policy.      | `IfNotPresent`                |
-| `castle.image.tag`        | Navi-Castle service image tag.        | `1.0.7`                       |
+| `castle.image.tag`        | Navi-Castle service image tag.        | `1.7.0`                       |
 | `nginx.image.repository`  | Navi-Front image repository.          | `2gis-on-premise/navi-front`  |
 | `nginx.image.tag`         | Navi-Front image tag.                 | `1.24.1`                      |
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                                                              | Value |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`  |
-| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `""`  |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`  |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`  |
+| Name                     | Description                                                                                                                                                                                                                                              | Value   |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`    |
+| `dgctlStorage.secure`    | If S3 uses https.                                                                                                                                                                                                                                        | `false` |
+| `dgctlStorage.region`    | S3 region.                                                                                                                                                                                                                                               | `""`    |
+| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `""`    |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`    |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`    |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`    |
 
 ### Common settings
 
-| Name                 | Description                                                                                                                 | Value |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `replicaCount`       | A replica count for the pod.                                                                                                | `1`   |
-| `imagePullSecrets`   | Kubernetes image pull secrets.                                                                                              | `[]`  |
-| `nameOverride`       | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
-| `fullnameOverride`   | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
-| `podAnnotations`     | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
-| `podSecurityContext` | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).              | `{}`  |
-| `securityContext`    | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                  | `{}`  |
-| `nodeSelector`       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
-| `tolerations`        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
-| `affinity`           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
+| Name                            | Description                                                                                                                 | Value |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `replicaCount`                  | A replica count for the pod.                                                                                                | `1`   |
+| `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                              | `[]`  |
+| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
+| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
+| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).              | `{}`  |
+| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                  | `{}`  |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
+| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
+| `terminationGracePeriodSeconds` | Maximum time allowed for graceful shutdown.                                                                                 | `60`  |
 
 ### Service account settings
 
@@ -89,21 +92,23 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Limits
 
-| Name                        | Description                      | Value |
-| --------------------------- | -------------------------------- | ----- |
-| `resources.requests.cpu`    | A CPU request, e.g., `100m`.     |       |
-| `resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
-| `resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
-| `resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
+| Name                        | Description                                 | Value       |
+| --------------------------- | ------------------------------------------- | ----------- |
+| `resources`                 | Container resources requirements structure. | `{}`        |
+| `resources.requests.cpu`    | CPU request, recommended value `100m`.      | `undefined` |
+| `resources.requests.memory` | Memory request, recommended value `128Mi`.  | `undefined` |
+| `resources.limits.cpu`      | CPU limit, recommended value `1000m`.       | `undefined` |
+| `resources.limits.memory`   | Memory limit, recommended value `512Mi`.    | `undefined` |
 
 ### Navi-Castle service settings
 
-| Name                       | Description                          | Value                          |
-| -------------------------- | ------------------------------------ | ------------------------------ |
-| `castle.castleDataPath`    | Path to the data directory.          | `/opt/castle/data/`            |
-| `castle.restrictions.host` | Restrictions API base URL.           | `http://restrictions-api.host` |
-| `castle.restrictions.key`  | Restrictions API key.                | `""`                           |
-| `castle.jobs`              | Number of parallel downloading jobs. | `1`                            |
+| Name                       | Description                                         | Value                          |
+| -------------------------- | --------------------------------------------------- | ------------------------------ |
+| `castle.castleDataPath`    | Path to the data directory.                         | `/opt/castle/data/`            |
+| `castle.restrictions`      | Section ignored if castle.restriction.enabled=false |                                |
+| `castle.restrictions.host` | Restrictions API base URL.                          | `http://restrictions-api.host` |
+| `castle.restrictions.key`  | Restrictions API key.                               | `""`                           |
+| `castle.jobs`              | Number of parallel downloading jobs.                | `1`                            |
 
 ### Navi-Front settings
 
@@ -113,14 +118,25 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Cron settings
 
-| Name                              | Description                                        | Value         |
-| --------------------------------- | -------------------------------------------------- | ------------- |
-| `cron.enabled.import`             | If the `import` cron job is enabled.               | `false`       |
-| `cron.enabled.restriction`        | If the `restriction` cron job is enabled.          | `false`       |
-| `cron.schedule.import`            | Cron job schedule for `import`.                    | `11 * * * *`  |
-| `cron.schedule.restriction`       | Cron job schedule for `restriction`.               | `*/5 * * * *` |
-| `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`.  | `Forbid`      |
-| `cron.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. | `3`           |
+| Name                              | Description                                                         | Value         |
+| --------------------------------- | ------------------------------------------------------------------- | ------------- |
+| `cron.enabled.import`             | If the `import` cron job is enabled.                                | `false`       |
+| `cron.enabled.restriction`        | If restrictions API enabled, incompatible with `restrictionImport`. | `false`       |
+| `cron.enabled.restrictionImport`  | If restrictions import enabled, incompatible with `restriction`.    | `false`       |
+| `cron.schedule.import`            | Cron job schedule for `import`.                                     | `11 * * * *`  |
+| `cron.schedule.restriction`       | Cron job schedule for `restriction`.                                | `*/5 * * * *` |
+| `cron.schedule.restrictionImport` | Cron job schedule for `restrictionImport`.                          | `*/5 * * * *` |
+| `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`.                   | `Forbid`      |
+| `cron.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept.                  | `3`           |
+| `cron.prometheusPort`             | Container port for supercronic prometheus                           | `9476`        |
+
+### Init settings
+
+| Name                             | Description                                                                                                                       | Value   |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `init.enabled.import`            | If the `import` on init is enabled. Warning: if disable data not imported. Old data will be lost if not persistentVolume.enabled. | `true`  |
+| `init.enabled.restriction`       | If restrictions API enabled, incompatible with `restrictionImport`.                                                               | `false` |
+| `init.enabled.restrictionImport` | If restrictions import enabled, incompatible with `restriction`.                                                                  | `false` |
 
 ### Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
 
