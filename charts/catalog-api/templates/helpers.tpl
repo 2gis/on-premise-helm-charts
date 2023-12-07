@@ -45,7 +45,7 @@ onprem
 
 {{- define "catalog.env.postgres" -}}
 - name: CATALOG_DB_SCHEMA
-  value: "{{ include "catalog.manifestCode" . }},extensions"
+  value: "{{ include "catalog.manifestCode" . }},{{ .Values.importer.postgres.schemaExtensions }}"
 - name: CATALOG_DB_QUERY_TIMEOUT
   value: "{{ .Values.api.postgres.queryTimeout }}"
 - name: CATALOG_DB_BRANCH_POOL_SIZE
@@ -155,6 +155,8 @@ onprem
   value: "{{ include "catalog.manifestCode" . }}"
 - name: IMPORTER_DB_CATALOG_SCHEMA_SWITCH_ENABLED
   value: "{{ .Values.importer.postgres.schemaSwitchEnabled }}"
+- name: IMPORTER_DB_CATALOG_SCHEMA_EXTENSIONS
+  value: "{{ .Values.importer.postgres.schemaExtensions }}"
 - name: IMPORTER_DB_CATALOG_HOST
   value: "{{ required "A valid .Values.importer.postgres.host entry required" .Values.importer.postgres.host }}"
 - name: IMPORTER_DB_CATALOG_PORT

@@ -262,7 +262,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/catalog-importer
-    tag: 1.0.10
+    tag: 1.1.0
     pullPolicy: IfNotPresent
 
   # @section importer.postgres **Database settings**
@@ -273,6 +273,7 @@ importer:
   # @param importer.postgres.username PostgreSQL username with rw access. **Required**
   # @param importer.postgres.password PostgreSQL password. **Required**
   # @param importer.postgres.schemaSwitchEnabled Automatic switch PostgreSQL schema on releases
+  # @param importer.postgres.schemaExtensions Schema for PostgreSQL extensions
 
   postgres:
     host: ''
@@ -281,6 +282,7 @@ importer:
     username: ''
     password: ''
     schemaSwitchEnabled: true
+    schemaExtensions: 'extensions'
 
   # @section importer.persistentVolume **Persistent Volume settings**
 
