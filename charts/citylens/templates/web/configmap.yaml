@@ -7,7 +7,7 @@ data:
   {{- with .Values.web.auth }}
   keycloak.json: |
     {
-      "realm": {{ required "A valid .Values.web.auth.realm entry required" .realm | quote }},
+      "realm": {{ .realm }},
       "auth-server-url": {{ required "A valid .Values.web.auth.authServerUrl entry required" .authServerUrl | quote }},
       "resource": {{ required "A valid .Values.web.auth.clientId entry required" .clientId | quote }},
       "verify-ssl": {{ .verifySsl }},
@@ -40,6 +40,13 @@ data:
     {{- with .Values.s3 }}
       bucket_prefix: {{ required "A valid .Values.s3.bucketPrefix entry required" .bucketPrefix | squote }}
       logs_bucket_prefix: {{ required "A valid .Values.s3.logsBucketPrefix entry required" .logsBucketPrefix | squote }}
+      {{- if .setPublicReadACL }}
+      set_public_read_acl: {{ .setPublicReadACL }}
+      {{- end }}
+      key_templates:
+        log: {{ required "A valid .Values.s3.logKeyTemplate entry required" .logKeyTemplate | squote }}
+        log_prefix: {{ required "A valid .Values.s3.logPrefixKeyTemplate entry required" .logPrefixKeyTemplate | squote }}
+        frame: {{ required "A valid .Values.s3.frameKeyTemplate entry required" .frameKeyTemplate | squote }}
       client_params:
         aws_access_key_id: {{ required "A valid .Values.s3.accessKey entry required" .accessKey | squote }}
         aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
@@ -97,6 +104,7 @@ data:
         metadata_topics: {{ .Values.kafka.topics.tracks }}
       logs_saver:
         logs_topic: {{ .Values.kafka.topics.logs }}
+      frames_lifecycle_topic: {{ required "A valid .Values.kafka.topics.framesLifecycle entry required" .Values.kafka.topics.framesLifecycle | squote }}
       reporters:
       {{- range .Values.reporters }}
         - name: {{ .name }}
@@ -104,6 +112,9 @@ data:
             {{- toYaml .predictors | nindent 12 }}
       {{- if eq .name "pro" }}
           topic: {{ $.Values.kafka.topics.pro }}
+          {{- if .trackTimeoutDays }}
+          timeout: {{ .trackTimeoutDays }}
+          {{- end }}
         {{- end }}
       {{- end }}
       predictors:

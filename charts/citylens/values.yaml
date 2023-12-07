@@ -86,7 +86,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.1.2
+    tag: 1.2.0
 
   replicas: 4
 
@@ -175,9 +175,9 @@ api:
 # @section Auth settings for authentication
 
 # @param web.auth.enabled If authentication is needed.
-# @param web.auth.realm Authenitcation realm, example: Inspection_Portal_backend **Required**
-# @param web.auth.authServerUrl API URL of authentication service. Example: `http(s)://keycloak.ingress.host` **Required**
-# @param web.auth.clientId Client id from keycloak, example: citylens-web-client **Required**
+# @param web.auth.realm Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: Inspection_Portal_backend
+# @param web.auth.authServerUrl API URL of authentication service. Ex: `http(s)://keycloak.ingress.host` **Required**
+# @param web.auth.clientId Client id from keycloak. Ex: citylens-web-client **Required**
 # @param web.auth.clientSecret Client Secret from keycloak. **Required**
 # @param web.auth.verifySsl Enable\Disable SSL check.
 
@@ -200,7 +200,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.1.2
+    tag: 1.2.0
 
   replicas: 1
 
@@ -503,7 +503,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.1.2
+    tag: 1.2.0
 
   resources:
     requests:
@@ -525,6 +525,7 @@ migrations:
 # @param kafka.topics.pro List of topics for Reporter pro worker. **Required**
 # @param kafka.topics.uploader List of topics for Uploader worker. **Required**
 # @param kafka.topics.logs List of topics for API logs. **Required**
+# @param kafka.topics.framesLifecycle Topic for frames lifecycle events logs. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
 # @param kafka.predictors[0].name Name of predictor **Required**
 # @param kafka.predictors[0].topic Topic used by predictor **Required**
@@ -542,6 +543,7 @@ kafka:
     pro: ''
     logs: ''
     uploader: ''
+    framesLifecycle: ''
   consumerGroups:
     prefix: ''
   predictors:
@@ -558,6 +560,10 @@ kafka:
 # @param s3.bucketPrefix S3 bucket name prefix for the frames buckets. **Required**
 # @param s3.logsBucketPrefix S3 bucket name prefix for the mobile app logs buckets. **Required**
 # @param s3.region S3 region.
+# @param s3.setPublicReadACL Set "public-read" ACL on buckets and objects.
+# @param s3.logKeyTemplate S3 key template for mobile app log files. Template variables available: track_uuid, log_date, log_timestamp_ms. Ex: `{track_uuid}/log_{log_timestamp_ms}` **Required**
+# @param s3.logPrefixKeyTemplate S3 key prefix template for mobile app log files. Template variables available: track_uuid, log_date. Ex: `{track_uuid}/log_` **Required**
+# @param s3.frameKeyTemplate S3 key prefix template for frames images. Template variables available: track_email, track_uuid, frame_date, frame_timestamp_ms, lat, lon. Ex: `{track_uuid}/{frame_timestamp_ms}.jpg` **Required**
 
 s3:
   verifySsl: true
@@ -567,6 +573,10 @@ s3:
   bucketPrefix: ''
   logsBucketPrefix: ''
   region: ''
+  setPublicReadACL: false
+  logKeyTemplate: ''
+  logPrefixKeyTemplate: ''
+  frameKeyTemplate: ''
 
 # @section postgres **Database settings**
 
@@ -607,6 +617,7 @@ map:
 # @param headerLinks List of links for navbar.
 # @param reporters[0].name Reporter name.
 # @param reporters[0].predictors Predictor used by reporter.
+# @param reporters[0].trackTimeoutDays Time in days to wait for track completion and receiving frames prediction before marking as not synced with Pro.
 
 dashboardDomain: ''
 
@@ -620,6 +631,7 @@ headerLinks:
 reporters:
 - name: pro
   predictors: [camcom]
+  trackTimeoutDays: 1
 
 # @section PRO integration (only when Pro reporter enabled)
 
