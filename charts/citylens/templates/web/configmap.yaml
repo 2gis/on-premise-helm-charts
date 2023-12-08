@@ -103,9 +103,9 @@ data:
       track_downloader:
         frames_topics: {{ .Values.kafka.topics.frames }}
         metadata_topics: {{ .Values.kafka.topics.tracks }}
+        frames_lifecycle_topic: {{ required "A valid .Values.kafka.topics.framesLifecycle entry required" .Values.kafka.topics.framesLifecycle | squote }}
       logs_saver:
         logs_topic: {{ .Values.kafka.topics.logs }}
-      frames_lifecycle_topic: {{ required "A valid .Values.kafka.topics.framesLifecycle entry required" .Values.kafka.topics.framesLifecycle | squote }}
       reporters:
       {{- range .Values.reporters }}
         - name: {{ .name }}
