@@ -136,9 +136,6 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.api.keys.requestTimeout }}"
 {{- end }}
 
-- name: IMPORTER_DB_CATALOG_SCHEMA
-  value: "{{ include "twins.manifestCode" . }}"
-
 {{- define "twins.env.importer" -}}
 {{ include "twins.env.db.jobs" . }}
 - name: TWINS_IMPORTER_DB_SCHEMA_SWITCH_ENABLED
