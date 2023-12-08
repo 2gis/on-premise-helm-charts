@@ -7,7 +7,9 @@ data:
   {{- with .Values.web.auth }}
   keycloak.json: |
     {
-      "realm": {{ .realm }},
+      {{- if .realm }}
+      "realm": {{ .realm | quote }},
+      {{- end }}
       "auth-server-url": {{ required "A valid .Values.web.auth.authServerUrl entry required" .authServerUrl | quote }},
       "resource": {{ required "A valid .Values.web.auth.clientId entry required" .clientId | quote }},
       "verify-ssl": {{ .verifySsl }},
@@ -16,7 +18,7 @@ data:
       }
     }
   {{- end }}
-  {{- end }}
+    {{- end }}
   dashboard_config.yaml: |
     dashboard_domain: {{ required "A valid .Values.dashboardDomain. entry required" .Values.dashboardDomain | squote }}
     default_locale: {{ .Values.locale | squote }}
