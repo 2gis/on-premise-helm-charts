@@ -44,9 +44,9 @@ data:
       set_public_read_acl: {{ .setPublicReadACL }}
       {{- end }}
       key_templates:
-        log: {{ required "A valid .Values.s3.logKeyTemplate entry required" .logKeyTemplate | squote }}
-        log_prefix: {{ required "A valid .Values.s3.logPrefixKeyTemplate entry required" .logPrefixKeyTemplate | squote }}
-        frame: {{ required "A valid .Values.s3.frameKeyTemplate entry required" .frameKeyTemplate | squote }}
+        log: '{track_uuid}/log_{log_timestamp_ms}'
+        log_prefix: '{track_uuid}/log_'
+        frame: '{track_uuid}/{frame_timestamp_ms}.jpg'
       client_params:
         aws_access_key_id: {{ required "A valid .Values.s3.accessKey entry required" .accessKey | squote }}
         aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
