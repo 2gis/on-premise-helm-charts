@@ -311,6 +311,8 @@ worker:
 # @param worker.camcomSender.requestRetries Camcom request retries
 # @param worker.camcomSender.requestRetriesBackoff request retries backoff
 
+# @param worker.camcomSender.sourceEnv Environment name to send to CamCam (source_env field in request), ignored if empty.
+
 
 # @param worker.camcomSender.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.camcomSender.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -335,6 +337,7 @@ worker:
       period: 60
     requestRetries: 3
     requestRetriesBackoff: 1
+    sourceEnv: ''
 
     annotations: {}
     labels: {}

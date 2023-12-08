@@ -70,6 +70,7 @@ data:
         period: {{ .requestRateLimit.period }}
       request_retries: {{ .requestRetries }}
       request_retries_backoff: {{ .requestRetriesBackoff }}
+      source_env: {{ .sourceEnv }}
     {{- end }}
     {{- end }}
     {{- with .Values.pro }}
