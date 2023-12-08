@@ -564,9 +564,9 @@ kafka:
 # @param s3.logsBucketPrefix S3 bucket name prefix for the mobile app logs buckets. **Required**
 # @param s3.region S3 region.
 # @param s3.setPublicReadACL Set "public-read" ACL on buckets and objects.
-# @param s3.logKeyTemplate S3 key template for mobile app log files. Template variables available: track_uuid, log_date, log_timestamp_ms. Ex: `{track_uuid}/log_{log_timestamp_ms}` **Required**
-# @param s3.logPrefixKeyTemplate S3 key prefix template for mobile app log files. Template variables available: track_uuid, log_date. Ex: `{track_uuid}/log_` **Required**
-# @param s3.frameKeyTemplate S3 key prefix template for frames images. Template variables available: track_email, track_uuid, frame_date, frame_timestamp_ms, lat, lon. Ex: `{track_uuid}/{frame_timestamp_ms}.jpg` **Required**
+# @param s3.logKeyTemplate S3 key template for mobile app log files. **Required**
+# @param s3.logPrefixKeyTemplate S3 key prefix template for mobile app log files. **Required**
+# @param s3.frameKeyTemplate S3 key prefix template for frames images. **Required**
 
 s3:
   verifySsl: true
@@ -577,9 +577,9 @@ s3:
   logsBucketPrefix: ''
   region: ''
   setPublicReadACL: false
-  logKeyTemplate: ''
-  logPrefixKeyTemplate: ''
-  frameKeyTemplate: ''
+  logKeyTemplate: '{track_uuid}/log_{log_timestamp_ms}'
+  logPrefixKeyTemplate: '{track_uuid}/log_'
+  frameKeyTemplate: '{track_uuid}/{frame_timestamp_ms}.jpg'
 
 # @section postgres **Database settings**
 
