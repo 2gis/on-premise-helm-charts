@@ -10,6 +10,9 @@ data:
       {{- if .realm }}
       "realm": {{ .realm | quote }},
       {{- end }}
+      {{- if .pkce }}
+      "pkce": {{ .pkce }},
+      {{- end }}
       "auth-server-url": {{ required "A valid .Values.web.auth.authServerUrl entry required" .authServerUrl | quote }},
       "resource": {{ required "A valid .Values.web.auth.clientId entry required" .clientId | quote }},
       "verify-ssl": {{ .verifySsl }},

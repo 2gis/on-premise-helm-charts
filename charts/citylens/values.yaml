@@ -86,7 +86,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.2.1
+    tag: 1.2.2
 
   replicas: 4
 
@@ -180,6 +180,7 @@ api:
 # @param web.auth.clientId Client id from keycloak. Ex: citylens-web-client **Required**
 # @param web.auth.clientSecret Client Secret from keycloak. **Required**
 # @param web.auth.verifySsl Enable\Disable SSL check.
+# @param web.auth.pkce Enable\Disable PKCE (Proof Key for Code Exchange) in Authorization Code flow.
 
 # @section Custom settings
 
@@ -200,7 +201,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.2.1
+    tag: 1.2.2
 
   replicas: 1
 
@@ -241,6 +242,7 @@ web:
     clientId: ''
     clientSecret: ''
     verifySsl: true
+    pkce: false
 
   logLevel: WARNING
 
