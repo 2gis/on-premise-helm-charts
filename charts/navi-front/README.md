@@ -26,7 +26,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name                 | Description                                                                                                                 | Value |
@@ -42,7 +41,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `tolerations`        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
 | `affinity`           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
 
-
 ### Deployment settings
 
 | Name               | Description | Value                        |
@@ -50,7 +48,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `image.repository` | Repository  | `2gis-on-premise/navi-front` |
 | `image.tag`        | Tag         | `1.24.1`                     |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`               |
-
 
 ### Navi-Front service settings
 
@@ -60,7 +57,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `front.router.discover` | Enable/disable router autodiscovery.             | `true`      |
 | `front.router.host`     | Set router address if autodiscovery is disabled. | `localhost` |
 
-
 ### Service account settings
 
 | Name                         | Description                                                                                                             | Value   |
@@ -69,14 +65,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
-
 ### Service settings
 
 | Name           | Description                                                                                                                    | Value       |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `service.type` | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `service.port` | Service port.                                                                                                                  | `80`        |
-
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -88,7 +82,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                      |
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                 |
 | `ingress.tls`                        | TLS configuration                         | `[]`                     |
-
 
 ### Limits
 
@@ -111,7 +104,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
 | `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
 | `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
-
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
