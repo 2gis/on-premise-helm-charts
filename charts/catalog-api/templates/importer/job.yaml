@@ -34,6 +34,9 @@ spec:
             {{- toYaml .Values.importer.resources | nindent 12 }}
           env:
             {{- include "catalog.env.importer" . | nindent 12 }}
+            {{- if .Values.customCAs }}
+            {{- include "catalog.env.custom.ca" . | nindent 12 }}
+            {{- end }}
           {{- if .Values.importer.persistentVolume.enabled }}
           volumeMounts:
             - name: {{ include "catalog.importer.name" . }}-pv

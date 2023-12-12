@@ -334,3 +334,6 @@ importer:
       limits:
         cpu: 1000m
         memory: 512Mi
+
+# Custom Certificate Authority. To trust a custom Certificate Authority, set the `customCAs` param. The `customCAs` value should contain the [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1).
+customCAs: ''
