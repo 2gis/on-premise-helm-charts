@@ -26,7 +26,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-
 ### Common settings
 
 | Name                            | Description                                                                                                                 | Value  |
@@ -48,7 +47,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).           | `60`   |
 | `prometheusEnabled`             | If Prometheus scrape is enabled.                                                                                            | `true` |
 
-
 ### Deployment settings
 
 | Name               | Description | Value                               |
@@ -56,7 +54,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
 | `image.tag`        | Tag         | `1.6.2`                             |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
-
 
 ### Service account settings
 
@@ -66,7 +63,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
-
 ### RBAC parameters
 
 | Name               | Description                                     | Value   |
@@ -75,13 +71,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `rbac.annotations` | Role and RoleBinding annotations                | `{}`    |
 | `rbac.labels`      | Role and RoleBinding additional labels          | `{}`    |
 
-
 ### Strategy settings
 
 | Name                  | Description                                                          | Value           |
 | --------------------- | -------------------------------------------------------------------- | --------------- |
 | `updateStrategy.type` | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`. | `RollingUpdate` |
-
 
 ### Limits
 
@@ -92,7 +86,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `resources.limits.cpu`      | A CPU limit.      |       |
 | `resources.limits.memory`   | A memory limit.   |       |
 
-
 ### Service settings
 
 | Name                  | Description                                                                                                                    | Value       |
@@ -102,7 +95,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `service.port`        | Service port.                                                                                                                  | `80`        |
 | `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
-
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -115,7 +107,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                        |
 | `ingress.tls`                        | TLS configuration                         | `[]`                            |
 
-
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                 | Description                                          | Value  |
@@ -123,7 +114,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
 | `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -136,7 +126,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `hpa.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
 | `hpa.behavior`                          | HPA Behavior                                                                                                                                                         | `{}`    |
 
-
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 | Name                    | Description                                                                                                  | Value   |
@@ -148,7 +137,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `2000m` |
 | `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `2Gi`   |
 
-
 ### Distance Matrix Async API settings
 
 | Name                    | Description                                                                                                                   | Value  |
@@ -159,7 +147,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `dm.workerCount`        | Number of Distance Matrix Async workers.                                                                                      | `4`    |
 | `dm.citiesUrl`          | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`   |
 | `dm.citiesUpdatePeriod` | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600` |
-
 
 ### Database settings
 
@@ -176,7 +163,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `db.tls.cert`     | Certificate of postgresql server.           | `""`          |
 | `db.tls.key`      | Key of postgresql server.                   | `""`          |
 | `db.tls.mode`     | Level of protection.                        | `verify-full` |
-
 
 ### Kafka settings
 
@@ -199,7 +185,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `kafka.taskTopicRules[].default`              | If this topic is used for projects by default.                                                                            |                     |
 | `kafka.taskTopicRules[].projects`             | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                     |
 
-
 ### S3-compatible storage settings
 
 | Name              | Description                                                       | Value |
@@ -209,7 +194,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `s3.accessKey`    | S3 access key for accessing the bucket. **Required**              | `""`  |
 | `s3.secretKey`    | S3 secret key for accessing the bucket. **Required**              | `""`  |
 | `s3.publicNetloc` | Announce proxy URL for S3 results instead of s3.url if not empty. | `nil` |
-
 
 ### API keys service
 

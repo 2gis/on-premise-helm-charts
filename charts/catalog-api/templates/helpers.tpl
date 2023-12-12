@@ -76,16 +76,6 @@ onprem
       name: {{ include "catalog.secret.deploys.name" . }}
       key: apiDbPassword
 
-- name: CATALOG_DB_API_KEY_URL
-  value: "jdbc:postgresql://{{ .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ .Values.api.postgres.name }}"
-- name: CATALOG_DB_API_KEY_LOGIN
-  value: "{{ .Values.api.postgres.username }}"
-- name: CATALOG_DB_API_KEY_PASS
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "catalog.secret.deploys.name" . }}
-      key: apiDbPassword
-
 - name: CATALOG_DB_RUBRIC_URL
   value: "jdbc:postgresql://{{ .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ .Values.api.postgres.name }}"
 - name: CATALOG_DB_RUBRIC_LOGIN

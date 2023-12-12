@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.1.2`                        |
+| `api.image.tag`        | Tag.         | `1.2.6`                        |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -117,7 +117,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.1.2`                        |
+| `web.image.tag`        | Tag.         | `1.2.6`                        |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -154,14 +154,15 @@ See the [documentation]() to learn about:
 
 ### Auth settings for authentication
 
-| Name                     | Description                                                                                | Value   |
-| ------------------------ | ------------------------------------------------------------------------------------------ | ------- |
-| `web.auth.enabled`       | If authentication is needed.                                                               | `false` |
-| `web.auth.realm`         | Authenitcation realm, example: Inspection_Portal_backend **Required**                      | `""`    |
-| `web.auth.authServerUrl` | API URL of authentication service. Example: `http(s)://keycloak.ingress.host` **Required** | `""`    |
-| `web.auth.clientId`      | Client id from keycloak, example: citylens-web-client **Required**                         | `""`    |
-| `web.auth.clientSecret`  | Client Secret from keycloak. **Required**                                                  | `""`    |
-| `web.auth.verifySsl`     | Enable\Disable SSL check.                                                                  | `true`  |
+| Name                     | Description                                                                                                                                                                                                                | Value   |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `web.auth.enabled`       | If authentication is needed.                                                                                                                                                                                               | `false` |
+| `web.auth.realm`         | Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: Inspection_Portal_backend | `""`    |
+| `web.auth.authServerUrl` | API URL of authentication service. Ex: `http(s)://keycloak.ingress.host` **Required**                                                                                                                                      | `""`    |
+| `web.auth.clientId`      | Client id from keycloak. Ex: citylens-web-client **Required**                                                                                                                                                              | `""`    |
+| `web.auth.clientSecret`  | Client Secret from keycloak. **Required**                                                                                                                                                                                  | `""`    |
+| `web.auth.verifySsl`     | Enable\Disable SSL check.                                                                                                                                                                                                  | `true`  |
+| `web.auth.pkce`          | Enable\Disable PKCE (Proof Key for Code Exchange) in Authorization Code flow.                                                                                                                                              | `false` |
 
 ### Custom settings
 
@@ -219,6 +220,7 @@ See the [documentation]() to learn about:
 | `worker.camcomSender.requestRateLimit.period` | Camcom period rate limit                                                                                                    | `60`    |
 | `worker.camcomSender.requestRetries`          | Camcom request retries                                                                                                      | `3`     |
 | `worker.camcomSender.requestRetriesBackoff`   | request retries backoff                                                                                                     | `1`     |
+| `worker.camcomSender.sourceEnv`               | Environment name to send to CamCam (source_env field in request), ignored if empty.                                         | `""`    |
 | `worker.camcomSender.annotations`             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`    |
 | `worker.camcomSender.labels`                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`    |
 | `worker.camcomSender.podAnnotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`    |
@@ -302,7 +304,7 @@ See the [documentation]() to learn about:
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.1.2`                             |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.2.0`                             |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |
@@ -312,33 +314,35 @@ See the [documentation]() to learn about:
 
 ### Kafka settings
 
-| Name                          | Description                                             | Value    |
-| ----------------------------- | ------------------------------------------------------- | -------- |
-| `kafka.bootstrapServer`       | A Kafka broker endpoint. **Required**                   | `""`     |
-| `kafka.username`              | A Kafka username for connection. **Required**           | `""`     |
-| `kafka.password`              | A Kafka password for connection. **Required**           | `""`     |
-| `kafka.topics.frames`         | List of topics for Frames saver worker. **Required**    | `""`     |
-| `kafka.topics.tracks`         | List of topics for Tracks metadata worker. **Required** | `""`     |
-| `kafka.topics.pro`            | List of topics for Reporter pro worker. **Required**    | `""`     |
-| `kafka.topics.uploader`       | List of topics for Uploader worker. **Required**        | `""`     |
-| `kafka.topics.logs`           | List of topics for API logs. **Required**               | `""`     |
-| `kafka.consumerGroups.prefix` | Kafka topics prefix. **Required**                       | `""`     |
-| `kafka.predictors[0].name`    | Name of predictor **Required**                          | `camcom` |
-| `kafka.predictors[0].topic`   | Topic used by predictor **Required**                    | `""`     |
-| `kafka.predictors[1].name`    | Name of manual predictor **Required**                   | `manual` |
-| `kafka.predictors[1].topic`   | Topic used by manual predictor **Required**             | `""`     |
+| Name                           | Description                                             | Value    |
+| ------------------------------ | ------------------------------------------------------- | -------- |
+| `kafka.bootstrapServer`        | A Kafka broker endpoint. **Required**                   | `""`     |
+| `kafka.username`               | A Kafka username for connection. **Required**           | `""`     |
+| `kafka.password`               | A Kafka password for connection. **Required**           | `""`     |
+| `kafka.topics.frames`          | List of topics for Frames saver worker. **Required**    | `""`     |
+| `kafka.topics.tracks`          | List of topics for Tracks metadata worker. **Required** | `""`     |
+| `kafka.topics.pro`             | List of topics for Reporter pro worker. **Required**    | `""`     |
+| `kafka.topics.uploader`        | List of topics for Uploader worker. **Required**        | `""`     |
+| `kafka.topics.logs`            | List of topics for API logs. **Required**               | `""`     |
+| `kafka.topics.framesLifecycle` | Topic for frames lifecycle events logs. **Required**    | `""`     |
+| `kafka.consumerGroups.prefix`  | Kafka topics prefix. **Required**                       | `""`     |
+| `kafka.predictors[0].name`     | Name of predictor **Required**                          | `camcom` |
+| `kafka.predictors[0].topic`    | Topic used by predictor **Required**                    | `""`     |
+| `kafka.predictors[1].name`     | Name of manual predictor **Required**                   | `manual` |
+| `kafka.predictors[1].topic`    | Topic used by manual predictor **Required**             | `""`     |
 
 ### S3 settings
 
-| Name                  | Description                                                         | Value  |
-| --------------------- | ------------------------------------------------------------------- | ------ |
-| `s3.verifySsl`        | Verify SSL certificate when connecting to s3.endpoint.              | `true` |
-| `s3.endpoint`         | S3 endpoint. Format: `host:port` or `url`. **Required**             | `""`   |
-| `s3.accessKey`        | S3 access key for accessing the bucket. **Required**                | `""`   |
-| `s3.secretAccessKey`  | S3 secret key for accessing the bucket. **Required**                | `""`   |
-| `s3.bucketPrefix`     | S3 bucket name prefix for the frames buckets. **Required**          | `""`   |
-| `s3.logsBucketPrefix` | S3 bucket name prefix for the mobile app logs buckets. **Required** | `""`   |
-| `s3.region`           | S3 region.                                                          | `""`   |
+| Name                  | Description                                                         | Value   |
+| --------------------- | ------------------------------------------------------------------- | ------- |
+| `s3.verifySsl`        | Verify SSL certificate when connecting to s3.endpoint.              | `true`  |
+| `s3.endpoint`         | S3 endpoint. Format: `host:port` or `url`. **Required**             | `""`    |
+| `s3.accessKey`        | S3 access key for accessing the bucket. **Required**                | `""`    |
+| `s3.secretAccessKey`  | S3 secret key for accessing the bucket. **Required**                | `""`    |
+| `s3.bucketPrefix`     | S3 bucket name prefix for the frames buckets. **Required**          | `""`    |
+| `s3.logsBucketPrefix` | S3 bucket name prefix for the mobile app logs buckets. **Required** | `""`    |
+| `s3.region`           | S3 region.                                                          | `""`    |
+| `s3.setPublicReadACL` | Set "public-read" ACL on buckets and objects.                       | `false` |
 
 ### postgres **Database settings**
 
@@ -362,13 +366,14 @@ See the [documentation]() to learn about:
 
 ### Custom settings
 
-| Name                      | Description                                | Value                        |
-| ------------------------- | ------------------------------------------ | ---------------------------- |
-| `dashboardDomain`         | Link to Citylens web address. **Required** | `""`                         |
-| `locale`                  | Locale language (en by default).           | `en`                         |
-| `headerLinks`             | List of links for navbar.                  | `["drivers","tracks","map"]` |
-| `reporters[0].name`       | Reporter name.                             | `pro`                        |
-| `reporters[0].predictors` | Predictor used by reporter.                | `["camcom"]`                 |
+| Name                            | Description                                                                                                      | Value                        |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `dashboardDomain`               | Link to Citylens web address. **Required**                                                                       | `""`                         |
+| `locale`                        | Locale language (en by default).                                                                                 | `en`                         |
+| `headerLinks`                   | List of links for navbar.                                                                                        | `["drivers","tracks","map"]` |
+| `reporters[0].name`             | Reporter name.                                                                                                   | `pro`                        |
+| `reporters[0].predictors`       | Predictor used by reporter.                                                                                      | `["camcom"]`                 |
+| `reporters[0].trackTimeoutDays` | Time in days to wait for track completion and receiving frames prediction before marking as not synced with Pro. | `1`                          |
 
 ### PRO integration (only when Pro reporter enabled)
 

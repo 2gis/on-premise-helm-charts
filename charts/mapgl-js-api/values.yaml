@@ -36,7 +36,7 @@ podLabels: {}
 
 image:
   repository: 2gis-on-premise/mapgl
-  tag: 1.40.0
+  tag: 1.42.0
   pullPolicy: IfNotPresent
 
 

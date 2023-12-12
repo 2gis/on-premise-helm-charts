@@ -282,7 +282,7 @@ importer:
     username: ''
     password: ''
     schemaSwitchEnabled: true
-    schemaExtensions: 'extensions'
+    schemaExtensions: extensions
 
   # @section importer.persistentVolume **Persistent Volume settings**
 

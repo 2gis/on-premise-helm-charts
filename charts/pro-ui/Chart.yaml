@@ -3,7 +3,7 @@ name: pro-ui
 type: application
 description: A Helm chart for Kubernetes to deploy 2GIS Pro UI service
 
-version: 1.15.0
+version: 1.16.0
 appVersion: 1.4.0
 
 maintainers:
