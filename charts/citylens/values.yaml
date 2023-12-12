@@ -201,7 +201,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.2.3
+    tag: 1.2.4
 
   replicas: 1
 
