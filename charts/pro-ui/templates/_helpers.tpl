@@ -58,6 +58,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ required "A valid .Values.ui.auth.clientSecret entry required" .Values.ui.auth.clientSecret }}"
 - name: O_AUTH_PROVIDER
   value: "{{ required "A valid .Values.ui.auth.oAuthProvider entry required" .Values.ui.auth.oAuthProvider }}"
+- name: O_AUTH_SCOPES
+  value: "{{ .Values.ui.auth.oAuthScopes }}"
 - name: AUTH_IDENTITY_PROVIDER_URL
   value: "{{ required "A valid .Values.ui.auth.identityProviderUrl entry required" .Values.ui.auth.identityProviderUrl }}"
 - name: O_AUTH_API_URL
