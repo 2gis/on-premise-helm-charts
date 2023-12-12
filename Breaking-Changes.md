@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.16.0]
+
+### catalog-api
+
+- Changes in data for catalog, if you have a version lower than 1.16.0, you need to update to version 1.16.0 to get the latest data
+
 ## [1.15.0]
 
 ### navi-router

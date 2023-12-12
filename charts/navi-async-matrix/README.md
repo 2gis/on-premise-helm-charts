@@ -63,6 +63,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
+### RBAC parameters
+
+| Name               | Description                                     | Value   |
+| ------------------ | ----------------------------------------------- | ------- |
+| `rbac.create`      | Whether to create and use RBAC resources or not | `false` |
+| `rbac.annotations` | Role and RoleBinding annotations                | `{}`    |
+| `rbac.labels`      | Role and RoleBinding additional labels          | `{}`    |
+
 ### Strategy settings
 
 | Name                  | Description                                                          | Value           |
@@ -158,18 +166,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Kafka settings
 
-| Name                              | Description                                                                                                               | Value               |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `kafka.groupId`                   | Distance Matrix Async API group identifier.                                                                               | `navi_async_matrix` |
-| `kafka.statusTopic`               | Name of the topic for sending new tasks to.                                                                               | `status_topic`      |
-| `kafka.cancelTopic`               | Name of the topic for canceling or receiving information about finished tasks.                                            | `cancel_topic`      |
-| `kafka.properties`                | Properties as supported by kafka-python. Refer to inline comments for details.                                            |                     |
-| `kafka.sensitiveProperties`       | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                |
-| `kafka.fileProperties`            | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                |
-| `kafka.taskTopicRules`            | **Information about the topics that Distance Matrix Async API will use to send the requests.**                            |                     |
-| `kafka.taskTopicRules[].topic`    | Name of the topic.                                                                                                        |                     |
-| `kafka.taskTopicRules[].default`  | If this topic is used for projects by default.                                                                            |                     |
-| `kafka.taskTopicRules[].projects` | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                     |
+| Name                                          | Description                                                                                                               | Value               |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `kafka.groupId`                               | Distance Matrix Async API group identifier.                                                                               | `navi_async_matrix` |
+| `kafka.statusTopic`                           | Name of the topic for sending new tasks to.                                                                               | `status_topic`      |
+| `kafka.cancelTopic`                           | Name of the topic for canceling or receiving information about finished tasks.                                            | `cancel_topic`      |
+| `kafka.properties`                            | Properties as supported by kafka-python. Refer to inline comments for details.                                            |                     |
+| `kafka.sensitiveProperties`                   | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                |
+| `kafka.fileProperties`                        | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                |
+| `kafka.consumerOverrides.properties`          | Consumer specific properties as simple key-value pairs.                                                                   | `{}`                |
+| `kafka.consumerOverrides.sensitiveProperties` | Consumer specific properties mounted as secrets.                                                                          | `{}`                |
+| `kafka.consumerOverrides.fileProperties`      | Consumer specific properties mounted as regular files.                                                                    | `{}`                |
+| `kafka.producerOverrides.properties`          | Consumer specific properties as simple key-value pairs.                                                                   | `{}`                |
+| `kafka.producerOverrides.sensitiveProperties` | Consumer specific properties mounted as secrets.                                                                          | `{}`                |
+| `kafka.producerOverrides.fileProperties`      | Consumer specific properties mounted as regular files.                                                                    | `{}`                |
+| `kafka.taskTopicRules`                        | **Information about the topics that Distance Matrix Async API will use to send the requests.**                            |                     |
+| `kafka.taskTopicRules[].topic`                | Name of the topic.                                                                                                        |                     |
+| `kafka.taskTopicRules[].default`              | If this topic is used for projects by default.                                                                            |                     |
+| `kafka.taskTopicRules[].projects`             | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                     |
 
 ### S3-compatible storage settings
 

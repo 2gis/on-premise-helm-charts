@@ -86,7 +86,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.1.2
+    tag: 1.2.6
 
   replicas: 4
 
@@ -175,11 +175,12 @@ api:
 # @section Auth settings for authentication
 
 # @param web.auth.enabled If authentication is needed.
-# @param web.auth.realm Authenitcation realm, example: Inspection_Portal_backend **Required**
-# @param web.auth.authServerUrl API URL of authentication service. Example: `http(s)://keycloak.ingress.host` **Required**
-# @param web.auth.clientId Client id from keycloak, example: citylens-web-client **Required**
+# @param web.auth.realm Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: Inspection_Portal_backend
+# @param web.auth.authServerUrl API URL of authentication service. Ex: `http(s)://keycloak.ingress.host` **Required**
+# @param web.auth.clientId Client id from keycloak. Ex: citylens-web-client **Required**
 # @param web.auth.clientSecret Client Secret from keycloak. **Required**
 # @param web.auth.verifySsl Enable\Disable SSL check.
+# @param web.auth.pkce Enable\Disable PKCE (Proof Key for Code Exchange) in Authorization Code flow.
 
 # @section Custom settings
 
@@ -200,7 +201,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.1.2
+    tag: 1.2.6
 
   replicas: 1
 
@@ -241,6 +242,7 @@ web:
     clientId: ''
     clientSecret: ''
     verifySsl: true
+    pkce: false
 
   logLevel: WARNING
 
@@ -311,6 +313,8 @@ worker:
 # @param worker.camcomSender.requestRetries Camcom request retries
 # @param worker.camcomSender.requestRetriesBackoff request retries backoff
 
+# @param worker.camcomSender.sourceEnv Environment name to send to CamCam (source_env field in request), ignored if empty.
+
 
 # @param worker.camcomSender.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.camcomSender.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -335,6 +339,7 @@ worker:
       period: 60
     requestRetries: 3
     requestRetriesBackoff: 1
+    sourceEnv: ''
 
     annotations: {}
     labels: {}
@@ -503,7 +508,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.1.2
+    tag: 1.2.0
 
   resources:
     requests:
@@ -525,6 +530,7 @@ migrations:
 # @param kafka.topics.pro List of topics for Reporter pro worker. **Required**
 # @param kafka.topics.uploader List of topics for Uploader worker. **Required**
 # @param kafka.topics.logs List of topics for API logs. **Required**
+# @param kafka.topics.framesLifecycle Topic for frames lifecycle events logs. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
 # @param kafka.predictors[0].name Name of predictor **Required**
 # @param kafka.predictors[0].topic Topic used by predictor **Required**
@@ -542,6 +548,7 @@ kafka:
     pro: ''
     logs: ''
     uploader: ''
+    framesLifecycle: ''
   consumerGroups:
     prefix: ''
   predictors:
@@ -558,6 +565,7 @@ kafka:
 # @param s3.bucketPrefix S3 bucket name prefix for the frames buckets. **Required**
 # @param s3.logsBucketPrefix S3 bucket name prefix for the mobile app logs buckets. **Required**
 # @param s3.region S3 region.
+# @param s3.setPublicReadACL Set "public-read" ACL on buckets and objects.
 
 s3:
   verifySsl: true
@@ -567,6 +575,7 @@ s3:
   bucketPrefix: ''
   logsBucketPrefix: ''
   region: ''
+  setPublicReadACL: false
 
 # @section postgres **Database settings**
 
@@ -607,6 +616,7 @@ map:
 # @param headerLinks List of links for navbar.
 # @param reporters[0].name Reporter name.
 # @param reporters[0].predictors Predictor used by reporter.
+# @param reporters[0].trackTimeoutDays Time in days to wait for track completion and receiving frames prediction before marking as not synced with Pro.
 
 dashboardDomain: ''
 
@@ -620,6 +630,7 @@ headerLinks:
 reporters:
 - name: pro
   predictors: [camcom]
+  trackTimeoutDays: 1
 
 # @section PRO integration (only when Pro reporter enabled)
 

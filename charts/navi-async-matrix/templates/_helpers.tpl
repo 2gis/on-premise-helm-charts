@@ -67,20 +67,26 @@ Create the name of the service account to use
        Context:
          .kafka.properties
          .kafka.fileProperties
+         .overrides.properties
+         .overrides.fileProperties
          .mountpoint
 
        File properties values (file contents) replaced with keys (file names).
        File names prepended with the supposed directory from .mountpoint.
+       overrides.* are merged with kafka.* accordingly.
+
        Returns {"ret": that-merged-dict}.
        Folding result in "ret" needed for marshalling.
      */ -}}
 {{- define "navi-async-matrix.kafkaProperties" -}}
   {{- $ctx := . -}}
   {{- $kafkaProperties := dict -}}
-  {{- range $key, $_ := $ctx.kafka.fileProperties -}}
+  {{- $fileProperties := deepCopy $ctx.kafka.fileProperties | mustMerge (($ctx.overrides).fileProperties | default dict) -}}
+  {{- range $key, $_ := $fileProperties -}}
     {{- $_ := set $kafkaProperties $key (printf "%s/%s" $ctx.mountpoint $key) -}}
   {{- end -}}
-  {{- $kafkaProperties = mustMerge $kafkaProperties $ctx.kafka.properties -}}
+  {{- $regularProperties := deepCopy $ctx.kafka.properties | mustMerge (($ctx.overrides).properties | default dict) -}}
+  {{- $kafkaProperties = deepCopy $regularProperties | mustMerge $kafkaProperties -}}
   {{- dict "ret" $kafkaProperties | toYaml }}
 {{- end }}
 
@@ -90,6 +96,9 @@ Create the name of the service account to use
          .kafka.properties
          .kafka.fileProperties
          .kafka.sensitiveProperties
+         .overrides.properties
+         .overrides.fileProperties
+         .overrides.sensitiveProperties
          .mountpoint
          .secretname
          .prefix
@@ -113,6 +122,8 @@ Create the name of the service account to use
            }
          }
        where secretKeyRef.name is from .secretname
+       overrides.* are merged with kafka.* accordingly.
+
        Resulting object folded in {"ret":...} for marshalling.
      */ -}}
 {{- define "navi-async-matrix.kafkaPropertiesEnv" -}}
@@ -125,7 +136,8 @@ Create the name of the service account to use
           "value" $val
         ) -}}
   {{- end -}}
-  {{- range $prop, $val := $ctx.kafka.sensitiveProperties -}}
+  {{- $sensitiveProperties := deepCopy $ctx.kafka.sensitiveProperties | mustMerge (($ctx.overrides).sensitiveProperties | default dict) -}}
+  {{- range $prop, $val := $sensitiveProperties -}}
     {{- $env = append $env (dict
           "name" (print $ctx.prefix ($prop | upper | replace "." "_"))
           "valueFrom" (dict

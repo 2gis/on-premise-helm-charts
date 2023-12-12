@@ -186,19 +186,20 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                        | Description                                                                                   | Value                              |
 | --------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `importer.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`        | Tag                                                                                           | `1.0.10`                           |
+| `importer.image.tag`        | Tag                                                                                           | `1.1.0`                            |
 | `importer.image.pullPolicy` | Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                     |
 
 ### importer.postgres **Database settings**
 
-| Name                                    | Description                                      | Value  |
-| --------------------------------------- | ------------------------------------------------ | ------ |
-| `importer.postgres.host`                | PostgreSQL rw hostname or IP. **Required**       | `""`   |
-| `importer.postgres.port`                | PostgreSQL port                                  | `5432` |
-| `importer.postgres.name`                | PostgreSQL database name. **Required**           | `""`   |
-| `importer.postgres.username`            | PostgreSQL username with rw access. **Required** | `""`   |
-| `importer.postgres.password`            | PostgreSQL password. **Required**                | `""`   |
-| `importer.postgres.schemaSwitchEnabled` | Automatic switch PostgreSQL schema on releases   | `true` |
+| Name                                    | Description                                      | Value        |
+| --------------------------------------- | ------------------------------------------------ | ------------ |
+| `importer.postgres.host`                | PostgreSQL rw hostname or IP. **Required**       | `""`         |
+| `importer.postgres.port`                | PostgreSQL port                                  | `5432`       |
+| `importer.postgres.name`                | PostgreSQL database name. **Required**           | `""`         |
+| `importer.postgres.username`            | PostgreSQL username with rw access. **Required** | `""`         |
+| `importer.postgres.password`            | PostgreSQL password. **Required**                | `""`         |
+| `importer.postgres.schemaSwitchEnabled` | Automatic switch PostgreSQL schema on releases   | `true`       |
+| `importer.postgres.schemaExtensions`    | Schema for PostgreSQL extensions                 | `extensions` |
 
 ### importer.persistentVolume **Persistent Volume settings**
 

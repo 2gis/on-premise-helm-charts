@@ -7,7 +7,12 @@ data:
   {{- with .Values.web.auth }}
   keycloak.json: |
     {
-      "realm": {{ required "A valid .Values.web.auth.realm entry required" .realm | quote }},
+      {{- if .realm }}
+      "realm": {{ .realm | quote }},
+      {{- end }}
+      {{- if .pkce }}
+      "pkce": {{ .pkce }},
+      {{- end }}
       "auth-server-url": {{ required "A valid .Values.web.auth.authServerUrl entry required" .authServerUrl | quote }},
       "resource": {{ required "A valid .Values.web.auth.clientId entry required" .clientId | quote }},
       "verify-ssl": {{ .verifySsl }},
@@ -16,7 +21,7 @@ data:
       }
     }
   {{- end }}
-  {{- end }}
+    {{- end }}
   dashboard_config.yaml: |
     dashboard_domain: {{ required "A valid .Values.dashboardDomain. entry required" .Values.dashboardDomain | squote }}
     default_locale: {{ .Values.locale | squote }}
@@ -40,6 +45,13 @@ data:
     {{- with .Values.s3 }}
       bucket_prefix: {{ required "A valid .Values.s3.bucketPrefix entry required" .bucketPrefix | squote }}
       logs_bucket_prefix: {{ required "A valid .Values.s3.logsBucketPrefix entry required" .logsBucketPrefix | squote }}
+      {{- if .setPublicReadACL }}
+      set_public_read_acl: {{ .setPublicReadACL }}
+      {{- end }}
+      key_templates:
+        log: '{track_uuid}/log_{log_timestamp_ms}'
+        log_prefix: '{track_uuid}/log_'
+        frame: '{track_uuid}/{frame_timestamp_ms}.jpg'
       client_params:
         aws_access_key_id: {{ required "A valid .Values.s3.accessKey entry required" .accessKey | squote }}
         aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
@@ -63,6 +75,7 @@ data:
         period: {{ .requestRateLimit.period }}
       request_retries: {{ .requestRetries }}
       request_retries_backoff: {{ .requestRetriesBackoff }}
+      source_env: {{ .sourceEnv }}
     {{- end }}
     {{- end }}
     {{- with .Values.pro }}
@@ -95,6 +108,7 @@ data:
       track_downloader:
         frames_topics: {{ .Values.kafka.topics.frames }}
         metadata_topics: {{ .Values.kafka.topics.tracks }}
+        frames_lifecycle_topic: {{ required "A valid .Values.kafka.topics.framesLifecycle entry required" .Values.kafka.topics.framesLifecycle | squote }}
       logs_saver:
         logs_topic: {{ .Values.kafka.topics.logs }}
       reporters:
@@ -104,6 +118,9 @@ data:
             {{- toYaml .predictors | nindent 12 }}
       {{- if eq .name "pro" }}
           topic: {{ $.Values.kafka.topics.pro }}
+          {{- if .trackTimeoutDays }}
+          timeout: {{ .trackTimeoutDays }}
+          {{- end }}
         {{- end }}
       {{- end }}
       predictors:
