@@ -29,6 +29,14 @@ spec:
             {{- if .Values.customCAs }}
             {{- include "catalog.env.custom.ca" . | nindent 12 }}
             {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            {{- include "catalog.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+      {{- if .Values.customCAs.bundle }}
+      volumes:
+        {{- include "catalog.custom.ca.volumes" . | nindent 8 }}
+      {{- end }}
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
