@@ -1,4 +1,4 @@
-{{- if .Values.customCAs }}
+{{- if .Values.customCAs.bundle }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

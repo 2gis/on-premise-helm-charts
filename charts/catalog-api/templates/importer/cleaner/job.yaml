@@ -26,7 +26,7 @@ spec:
             {{- toYaml .Values.importer.cleaner.resources | nindent 12 }}
           env:
             {{- include "catalog.env.importer" . | nindent 12 }}
-            {{- if .Values.customCAs }}
+            {{- if .Values.customCAs.bundle }}
             {{- include "catalog.env.custom.ca" . | nindent 12 }}
             {{- end }}
           {{- if .Values.customCAs.bundle }}
