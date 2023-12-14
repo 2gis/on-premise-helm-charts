@@ -1,5 +1,13 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.17.0]
+
+### license
+
+- Removed `fs` persistence type, now only `s3` is available.
+- Backward compatibility for license v1 is broken. If you have a version lower than `1.9.1`, you need to upgrade first
+  to version `1.16.0` to get license v2 without downtime - after that you can upgrade to version `1.17.0`.
+
 ## [1.16.0]
 
 ### catalog-api
