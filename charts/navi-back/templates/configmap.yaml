@@ -33,7 +33,7 @@ data:
           {{- $httpHandlers = div .Values.naviback.handlersNumber 2 }}
           {{- $grpcHandlers = sub .Values.naviback.handlersNumber $httpHandlers }}
       {{- else }}
-          {{- $httpHandlers = .Values.mosesd.handlersNumber }}
+          {{- $httpHandlers = .Values.naviback.handlersNumber }}
       {{- end }}
       "http": {
         "server": "0.0.0.0",
@@ -557,7 +557,7 @@ data:
           },
           "cache_path_": "file://{LOCAL_PATH}/{project_name}/restrictions_index.json.zip"
         },
-        {{- end }}{{- /* if .Values.mosesd.rtr.enabled */}}
+        {{- end }}{{- /* if .Values.naviback.rtr.enabled */}}
         {{- if .Values.naviback.additionalSections }}
           {{- include "tplvalues.render" ( dict "value" .Values.naviback.additionalSections "context" $) | nindent 8 }}
         {{- end }}

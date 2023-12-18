@@ -135,7 +135,7 @@ spec:
             - name: METRICS_AGGREGATOR_PORT
               value: "{{ .Values.metrics.port }}"
             - name: METRICS_AGGREGATOR_SOURCES
-              value: "http://localhost:{{ .Values.mosesd.appPort }}/metrics,http://localhost:9901/stats/prometheus"
+              value: "http://localhost:{{ .Values.naviback.appPort }}/metrics,http://localhost:9901/stats/prometheus"
             - name: GOMAXPROCS
               value: "1"
           livenessProbe:
