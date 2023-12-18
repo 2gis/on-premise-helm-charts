@@ -273,12 +273,17 @@ Usage:
 Set attractor_car parameter in server config section
 Usage:
 {{ include "config.setAttractorCar" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorCar" -}}
-   {{-  ternary
-      $.Values.naviback.attractor.car
-      (include "rules.inRoutingSection" (dict "routingValue" "driving" "context" $))
-      (hasKey $.Values.naviback.attractor "car")
+   {{- ternary
+      .Values.naviback.attractor.car
+      (.Values.transmitter.enabled | ternary false
+          (include "rules.inRoutingSection" (dict "routingValue" "driving" "context" .)))
+      (hasKey .Values.naviback.attractor "car")
    -}}
 {{- end -}}
 
@@ -287,14 +292,19 @@ Usage:
 Set attractor_pedestrian parameter in server config section
 Usage:
 {{ include "config.setAttractorPedestrian" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorPedestrian" -}}
-   {{-  ternary
-      $.Values.naviback.attractor.pedestrian
-      (or (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" $))
-      (include "rules.inRoutingSection" (dict "routingValue" "public_transport" "context" $))
-      (include "rules.inRoutingSection" (dict "routingValue" "pedestrian" "context" $)))
-      (hasKey $.Values.naviback.attractor "pedestrian")
+   {{- ternary
+      .Values.naviback.attractor.pedestrian
+      (.Values.transmitter.enabled | ternary false
+          (or (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" .))
+              (include "rules.inRoutingSection" (dict "routingValue" "public_transport" "context" .))
+              (include "rules.inRoutingSection" (dict "routingValue" "pedestrian" "context" .))))
+      (hasKey .Values.naviback.attractor "pedestrian")
    -}}
 {{- end -}}
 
@@ -303,12 +313,17 @@ Usage:
 Set attractor_taxi parameter in server config section
 Usage:
 {{ include "config.setAttractorTaxi" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorTaxi" -}}
-   {{-  ternary
-      $.Values.naviback.attractor.taxi
-      (include "rules.inRoutingSection" (dict "routingValue" "taxi" "context" $))
-      (hasKey $.Values.naviback.attractor "taxi")
+   {{- ternary
+      .Values.naviback.attractor.taxi
+      (.Values.transmitter.enabled | ternary false
+          (include "rules.inRoutingSection" (dict "routingValue" "taxi" "context" .)))
+      (hasKey .Values.naviback.attractor "taxi")
    -}}
 {{- end -}}
 
@@ -317,12 +332,17 @@ Usage:
 Set attractor_truck parameter in server config section
 Usage:
 {{ include "config.setAttractorTruck" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorTruck" -}}
-   {{-  ternary
-      $.Values.naviback.attractor.truck
-      (include "rules.inRoutingSection" (dict "routingValue" "truck" "context" $))
-      (hasKey $.Values.naviback.attractor "truck")
+   {{- ternary
+      .Values.naviback.attractor.truck
+      (.Values.transmitter.enabled | ternary false
+          (include "rules.inRoutingSection" (dict "routingValue" "truck" "context" .)))
+      (hasKey .Values.naviback.attractor "truck")
    -}}
 {{- end -}}
 
@@ -331,13 +351,18 @@ Usage:
 Set attractor_bicycle parameter in server config section
 Usage:
 {{ include "config.setAttractorBicycle" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorBicycle" -}}
-   {{-  ternary
-      $.Values.naviback.attractor.bicycle
-      (or (include "rules.inRoutingSection" (dict "routingValue" "bicycle" "context" $))
-      (include "rules.inRoutingSection" (dict "routingValue" "scooter" "context" $)))
-      (or (hasKey $.Values.naviback.attractor "bicycle") (hasKey $.Values.naviback.attractor "scooter"))
+   {{- ternary
+      (or (.Values.naviback.attractor).bicycle (.Values.naviback.attractor).scooter)
+      ( .Values.transmitter.enabled | ternary false
+          (or (include "rules.inRoutingSection" (dict "routingValue" "bicycle" "context" .))
+              (include "rules.inRoutingSection" (dict "routingValue" "scooter" "context" .))))
+      (or (hasKey .Values.naviback.attractor "bicycle") (hasKey .Values.naviback.attractor "scooter"))
    -}}
 {{- end -}}
 
@@ -451,4 +476,20 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- else -}}
 {{- print "autoscaling/v2" -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Set castle url
+If use frozenData return local path
+Usage:
+{{ include "config.setCastleUrl" $ }}
+*/}}
+{{- define "config.setCastleUrl" -}}
+   {{- if .Values.frozenData.enabled -}}
+   {{- printf "file://{LOCAL_PATH}" -}}
+   {{- else if .Values.naviback.castleUrl -}}
+   {{- printf .Values.naviback.castleUrl -}}
+   {{- else if .Values.naviback.castleHost -}}
+   {{- printf "http://%s" .Values.naviback.castleHost -}}
+   {{- end -}}
 {{- end -}}

@@ -61,8 +61,27 @@ spec:
       - name: sentry-volume
         emptyDir: {}
       {{- end }}
+      {{- if .Values.frozenData.enabled }}
+      - name: frozen-data
+        emptyDir: {}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- if .Values.frozenData.enabled }}
+      initContainers:
+        - name: frozen-data
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.frozenData.image.repository }}:{{ .Values.frozenData.image.tag }}
+          command: ['sh', '-ec', 'cp -r /frozen_data_init/* /opt/castle; ls -l /opt/castle']
+          imagePullPolicy: {{ .Values.frozenData.pullPolicy }}
+          {{- if (.Values.frozenData).resources }}
+          resources: {{- toYaml .Values.frozenData.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: frozen-data
+              mountPath: /opt/castle
       {{- end }}
       containers:
         {{- if .Values.transmitter.enabled }}
@@ -70,7 +89,7 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.envoy.image.repository }}:{{ .Values.envoy.image.tag }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
           volumeMounts:
             - name: {{ include "naviback.fullname" . }}-configmap
               mountPath: /etc/envoy/envoy.yaml
@@ -83,18 +102,56 @@ spec:
             preStop:
               exec:
                 command: ["/bin/bash", "-c", "while cat < /dev/tcp/127.0.0.1/{{ .Values.naviback.appPort }} ; do sleep 5 ; done"]
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: admin
+            periodSeconds: 5
+            failureThreshold: 10
           livenessProbe:
             httpGet:
               path: /ready
               port: admin
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 6
           readinessProbe:
             httpGet:
               path: /ready
               port: admin
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
           ports:
             - name: admin
               containerPort: 9901
               protocol: TCP
+        {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics-aggregator
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
+          env:
+            - name: METRICS_AGGREGATOR_PORT
+              value: "{{ .Values.metrics.port }}"
+            - name: METRICS_AGGREGATOR_SOURCES
+              value: "http://localhost:{{ .Values.mosesd.appPort }}/metrics,http://localhost:9901/stats/prometheus"
+            - name: GOMAXPROCS
+              value: "1"
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: {{ .Values.metrics.port }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: {{ .Values.metrics.port }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
         - name: {{ include "naviback.containerName" . }}
           securityContext:
@@ -121,6 +178,10 @@ spec:
           - name: sentry-volume
             mountPath: {{ .Values.naviback.sentry.reportPath | default "/tmp/sentry" | quote }}
           {{- end }}
+          {{- if .Values.frozenData.enabled }}
+          - name: frozen-data
+            mountPath: /opt/castle
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.naviback.appPort }}
@@ -130,11 +191,16 @@ spec:
               containerPort: {{ .Values.naviback.grpcPort }}
               protocol: TCP
             {{- end }}
+          startupProbe:
+            httpGet:
+              path: /successfulwork
+              port: http
+            periodSeconds: 5
+            failureThreshold: 360
           livenessProbe:
             httpGet:
               path: /heartbeat
               port: http
-            initialDelaySeconds: {{ .Values.livenessProbeDelay }}
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 2
@@ -142,7 +208,6 @@ spec:
             httpGet:
               path: /successfulwork
               port: http
-            initialDelaySeconds: {{ .Values.readinessProbeDelay }}
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 2

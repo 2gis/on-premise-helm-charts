@@ -31,7 +31,7 @@ spec:
       protocol: TCP
       name: http
     {{- /* Only add second port if there is no headless service for it.
-         * This switch works around compexities with Blackbox Exorter probes.
+         * This switch works around compexities with Blackbox Exporter probes.
          */}}
     {{- if and .Values.naviback.grpcPort (not .Values.service.headless.enabled) }}
     - port: {{ .Values.service.grpcPort }}

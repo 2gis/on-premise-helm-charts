@@ -73,6 +73,7 @@ image:
 # @param naviback.dump.answer Dump answers in logs.
 # @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
 # @param naviback.indexFilename Name of index file.
+# @param naviback.citiesFilename Name of the cities file on Castle
 # @param naviback.sentry.enabled If sending crash dumps to Sentry needed
 # @param naviback.sentry.address Sentry URL
 # @param naviback.sentry.project Sentry project ID
@@ -133,6 +134,9 @@ image:
 # @param naviback.bss.client.pendingTransmissionMaxCount Pending transmission max count.
 # @extra naviback.reduceEdgesOptimizationFlag Enable optimizations for distance matrix queries processing
 # @param naviback.behindSplitter Current instance is behind splitter or not
+# @param naviback.overrideConfig Complete config override. For test purposes only.
+# @param naviback.rtr.enabled Enable real time restrictions.
+# @param naviback.rtr.url URL real time restrictions server.
 # @skip rules
 
 naviback:
@@ -153,6 +157,7 @@ naviback:
     answer: false
   logLevel: Info
   indexFilename: index.json.zip
+  citiesFilename: cities.conf.zip
   sentry:
     enabled: false
     address: "sentry.host"
@@ -224,11 +229,15 @@ naviback:
       packageSizeMaxBytes: 1800000
       pendingTransmissionMaxCount: 10
   behindSplitter: false
+  overrideConfig: ''
+  rtr:
+    enabled: false
+    url: http://rtr.navi
 
 rules: []
 
 
-# @section Envoy settings (ignored if not transmitter.enabled)
+# @section Envoy settings, ignored if not `transmitter.enabled`. Leave with defaults, FOR FUTURE RELEASE.
 
 # @param envoy.image.repository Repository
 # @param envoy.image.tag Tag
@@ -236,9 +245,30 @@ rules: []
 
 envoy:
   image:
-    repository: envoyproxy/envoy
+    repository: 2gis-on-premise/envoy
     pullPolicy: IfNotPresent
     tag: v1.27.0
+
+
+# @section Frozen data settings. For test purposes only.
+
+# @param frozenData.enabled If use frozen data is enabled.
+# @param frozenData.image.repository Repository
+# @param frozenData.image.tag Tag
+# @param frozenData.image.pullPolicy Pull Policy
+# @param frozenData.resources [nullable] Container resources requirements structure.
+# @param frozenData.resources.requests.cpu [nullable] CPU request, recommended value `100m`.
+# @param frozenData.resources.requests.memory [nullable] Memory request, recommended value `100Mi`.
+# @param frozenData.resources.limits.cpu [nullable] CPU limit, recommended value `100m`.
+# @param frozenData.resources.limits.memory [nullable] Memory limit, recommended value `100Mi`.
+
+frozenData:
+  enabled: false
+  image:
+    repository: 2gis-on-premise/frozen-data
+    pullPolicy: Always
+    tag: ''
+  resources: {}
 
 
 # @section Service account settings
@@ -426,7 +456,7 @@ kafka:
 # @section S3-compatible storage settings for interacting with Distance Matrix Async Service
 
 # @param s3.enabled if S3 storage is enabled.
-# @param s3.host S3 endpoint URL, ex: http://async-matrix-s3.host
+# @param s3.host S3 endpoint, ex: async-matrix-s3.host.
 # @param s3.bucket S3 bucket name.
 # @param s3.accessKey S3 access key for accessing the bucket.
 # @param s3.secretKey S3 secret key for accessing the bucket.
@@ -438,7 +468,7 @@ s3:
   accessKey: ''
   secretKey: ''
 
-# @section Settings for attractor connection (not supported on-prem)
+# @section Settings for attractor connection. Leave with defaults, FOR FUTURE RELEASE.
 
 # @param transmitter.enabled if attractor connection required
 # @param transmitter.type connection type one of: grpc, grpc-async, grpc-stream, ws, ws-async
@@ -453,7 +483,7 @@ transmitter:
   port: 50051
   responseTimeoutMs: 100
 
-# @section Back-end and attractor group properties (not supported on-prem)
+# @section Back-end and attractor group properties. Leave with defaults, FOR FUTURE RELEASE.
 
 # @param dataGroup.enabled if grouping enabled
 # @param dataGroup.prefix common prefix for the group used for identifiers
@@ -464,12 +494,6 @@ dataGroup:
   prefix: sampleGroup
   timestamp: no-default
 
-# @param livenessProbeDelay initial delay for liveness probes
-# @param readinessProbeDelay initial delay for readiness probes
-
-livenessProbeDelay: 60
-readinessProbeDelay: 75
-
 # @section License settings
 
 # @param license.url Address of the License service v2. Ex: https://license.svc
@@ -478,3 +502,25 @@ readinessProbeDelay: 75
 license:
   url: ''
   notSupported: false
+
+# @section Metrics aggregator container. Leave with defaults, FOR FUTURE RELEASE.
+
+# @param metrics.enabled Enable metrics container and scrape annotations
+# @param metrics.image.repository Repository
+# @param metrics.image.tag Tag
+# @param metrics.image.pullPolicy Pull Policy
+# @param metrics.port Port of container.
+# @param metrics.resources [nullable] Container resources requirements structure.
+# @param metrics.resources.requests.cpu  [nullable] CPU request, recommended value `10m`.
+# @extra metrics.resources.requests.memory [nullable] Memory request, recommended value `10Mi`.
+# @extra metrics.resources.limits.cpu [nullable] CPU limit, recommended value `100m`.
+# @extra metrics.resources.limits.memory [nullable] Memory limit, recommended value `10Mi`.
+
+metrics:
+  enabled: false
+  image:
+    repository: 2gis-on-premise/metrics-aggregator
+    pullPolicy: IfNotPresent
+    tag: ''
+  port: 9090
+  resources: {}

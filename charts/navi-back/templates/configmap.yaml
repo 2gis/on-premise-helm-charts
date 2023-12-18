@@ -5,6 +5,9 @@ metadata:
   name: {{ include "naviback.fullname" . }}-configmap
 data:
   navi-back.conf: |
+  {{- if .Values.naviback.overrideConfig }}
+    {{ .Values.naviback.overrideConfig | nindent 4 }}
+  {{- else }}
     {
       "log": {
         "logger_name": "navi-back",
@@ -23,10 +26,19 @@ data:
       "service": {
         "pid_file": "/var/run/2gis/navi-back.pid"
       },
+      {{- /* distribute equally fot HTTP/GRPC */}}
+      {{- $httpHandlers := 0 }}
+      {{- $grpcHandlers := 0 }}
+      {{- if .Values.naviback.grpcPort }}
+          {{- $httpHandlers = div .Values.naviback.handlersNumber 2 }}
+          {{- $grpcHandlers = sub .Values.naviback.handlersNumber $httpHandlers }}
+      {{- else }}
+          {{- $httpHandlers = .Values.mosesd.handlersNumber }}
+      {{- end }}
       "http": {
         "server": "0.0.0.0",
         "port": {{ .Values.naviback.appPort }},
-        "handlers_number": {{ .Values.naviback.handlersNumber }},
+        "handlers_number": {{ $httpHandlers }},
         "log_verbose": false,
         "max_process_time": {{ .Values.naviback.maxProcessTime | default 20 | int }},
         "response_timelimit": {{ .Values.naviback.responseTimelimit | default 120 | int }},
@@ -45,7 +57,7 @@ data:
         "max_process_time" : {{ .Values.naviback.maxProcessTime | default 20 | int }},
         "response_timelimit" : {{ .Values.naviback.responseTimelimit | default 120 | int }},
         "request_timeout" : {{ .Values.naviback.requestTimeout | default 120 | int }},
-        "thread_pool_size" : 5
+        "thread_pool_size" : {{ $grpcHandlers }}
       },
       {{- end }}
       {{- if .Values.naviback.sentry.enabled }}
@@ -71,7 +83,7 @@ data:
         "variables": {
           "LOCAL_PATH": "/opt/castle",
           "LOCAL_ETC": "/etc/2gis/mosesd",
-          "REMOTE_PATH": "{{ .Values.naviback.castleHost }}",
+          "REMOTE_PATH": "{{ include "config.setCastleUrl" $ }}",
           "REMOTE_FORECAST" : "{{ .Values.naviback.forecastHost }}",
           "REMOTE_ECA" : "{{ include "config.setEcaUrl" $ }}"
         },
@@ -87,7 +99,7 @@ data:
         "cities": {
           "update_period": 0,
           "nodes": [
-            "http://{REMOTE_PATH}/cities.conf.zip"
+            "{REMOTE_PATH}/{{ .Values.naviback.citiesFilename }}"
           ],
           "timeout_seconds": {
             "count": 30
@@ -95,9 +107,12 @@ data:
         },
         "index": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
+          {{- /* search .zip in files */}}
+          {{- if regexMatch ".*\\.zip.*" .Values.naviback.indexFilename }}
           "content": "index.json",
+          {{- end }}
           "nodes": [
-            "http://{REMOTE_PATH}/{{ .Values.naviback.indexFilename }}"
+            "{REMOTE_PATH}/{{ .Values.naviback.indexFilename }}"
           ],
           "timeout_seconds": {
             "count": 30
@@ -152,7 +167,7 @@ data:
             "update_period" : 0,
             "nodes" :
             [
-                "http://{REMOTE_PATH}/"
+                "{REMOTE_PATH}/"
             ],
             "timeout_seconds":
             {
@@ -166,7 +181,7 @@ data:
             "update_period" : 3600,
              "nodes" :
             [
-                "http://{REMOTE_PATH}/options/taxi_referers.json"
+                "{REMOTE_PATH}/options/taxi_referers.json"
             ],
             "timeout_seconds":
             {
@@ -181,7 +196,7 @@ data:
             "update_period" : 0,
             "nodes" :
             [
-              "http://{REMOTE_PATH}/"
+              "{REMOTE_PATH}/"
             ],
             "timeout_seconds":
             {
@@ -195,7 +210,7 @@ data:
             "update_period" : 0,
             "nodes" :
             [
-                "http://{REMOTE_PATH}/"
+                "{REMOTE_PATH}/"
             ],
             "timeout_seconds":
             {
@@ -209,7 +224,7 @@ data:
             "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
             "nodes" :
             [
-                "http://{REMOTE_PATH}/restricted_transport.json.zip"
+                "{REMOTE_PATH}/restricted_transport.json.zip"
             ],
             "timeout_seconds":
             {
@@ -222,7 +237,7 @@ data:
         "ctx_options": {
           "update_period": 0,
           "nodes": [
-            "http://{REMOTE_PATH}/options/ctx_config.json"
+            "{REMOTE_PATH}/options/ctx_config.json"
           ],
           "timeout_seconds": {
             "count": 30
@@ -233,7 +248,7 @@ data:
         "car_options": {
           "update_period": 0,
           "nodes": [
-            "http://{REMOTE_PATH}/options/{{ .Values.naviback.indices.carOptions.filename | default "carrouting.json" }}"
+            "{REMOTE_PATH}/options/{{ .Values.naviback.indices.carOptions.filename | default "carrouting.json" }}"
           ],
           "timeout_seconds": {
             "count": 30
@@ -244,7 +259,7 @@ data:
         "country_car_options": {
           "update_period": 0,
           "nodes": [
-            "http://{REMOTE_PATH}/options/{payload}.json"
+            "{REMOTE_PATH}/options/{payload}.json"
           ],
           "timeout_seconds": {
             "count": 30
@@ -255,7 +270,7 @@ data:
         "project_car_options": {
           "update_period": 0,
           "nodes": [
-            "http://{REMOTE_PATH}/"
+            "{REMOTE_PATH}/"
           ],
           "timeout_seconds": {
             "count": 30
@@ -273,7 +288,7 @@ data:
         "packages": {
           "update_period": 0,
           "nodes": [
-            "http://{REMOTE_PATH}/"
+            "{REMOTE_PATH}/"
           ],
           "timeout_seconds": {
             "count": 60
@@ -282,7 +297,7 @@ data:
         "restrictions": {
           "update_period": 0,
           "nodes": [
-            "http://{REMOTE_PATH}/"
+            "{REMOTE_PATH}/"
           ],
           "timeout_seconds": {
             "count": 30
@@ -292,7 +307,7 @@ data:
         "entrances": {
           "update_period": 0,
           "nodes": [
-            "http://{REMOTE_PATH}/"
+            "{REMOTE_PATH}/"
           ],
           "timeout_seconds": {
             "count": 30
@@ -305,7 +320,7 @@ data:
         "smatrix": {
           "update_period": 0,
           "nodes": [
-            "http://{REMOTE_PATH}/"
+            "{REMOTE_PATH}/"
           ],
           "timeout_seconds": {
             "count": 30
@@ -316,7 +331,7 @@ data:
         "speed_cams": {
           "update_period": 0,
           "nodes": [
-            "http://{REMOTE_PATH}/"
+            "{REMOTE_PATH}/"
           ],
           "timeout_seconds": {
             "count": 30
@@ -329,7 +344,7 @@ data:
             "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
             "nodes" :
             [
-                "http://{REMOTE_PATH}/tugc_users.json.zip"
+                "{REMOTE_PATH}/tugc_users.json.zip"
             ],
             "timeout_seconds":
             {
@@ -343,7 +358,7 @@ data:
             "update_period" : 0,
             "nodes" :
             [
-                "http://{REMOTE_PATH}/"
+                "{REMOTE_PATH}/"
             ],
             "timeout_seconds":
             {
@@ -357,7 +372,7 @@ data:
             "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
             "nodes" :
             [
-                "http://{REMOTE_PATH}/tugc_2gis.json.zip"
+                "{REMOTE_PATH}/tugc_2gis.json.zip"
             ],
             "timeout_seconds":
             {
@@ -371,7 +386,7 @@ data:
             "update_period" : 0,
             "nodes" :
             [
-                "http://{REMOTE_PATH}/"
+                "{REMOTE_PATH}/"
             ],
             "timeout_seconds":
             {
@@ -430,7 +445,7 @@ data:
               "update_period": 0,
               "nodes":
               [
-                "http://{REMOTE_PATH}/"
+                "{REMOTE_PATH}/"
               ],
               "timeout_seconds":
               {
@@ -442,7 +457,7 @@ data:
             "edge_transition_probability": {
               "update_period": 0,
               "nodes": [
-                  "http://{REMOTE_PATH}/"
+                  "{REMOTE_PATH}/"
               ],
               "timeout_seconds": {
                   "count": 60
@@ -452,7 +467,7 @@ data:
             "turn_penalties": {
               "update_period": 0,
               "nodes": [
-                  "http://{REMOTE_PATH}/"
+                  "{REMOTE_PATH}/"
               ],
               "timeout_seconds": {
                   "count": 60
@@ -487,6 +502,7 @@ data:
           "kafka": {
             "task_group_id" : {{ .Values.kafka.groupId | quote }},
             "cancel_group_id": {{ .Values.kafka.groupId | quote }},
+            "handlers_number": {{ .Values.kafka.handlersNumber }},
             {{- /*
                  Collect merged Kafka properties from these dictionaries:
                    - kafka.properties: this is a simple key/value dictionary
@@ -520,7 +536,8 @@ data:
                 "message_count_to_flush" : {{ .Values.naviback.bss.client.messageCountToFlush | mustToJson }},
                 "use_compression" : {{ .Values.naviback.bss.client.useCompression | mustToJson }},
                 "package_size_max_bytes" : {{ .Values.naviback.bss.client.packageSizeMaxBytes | mustToJson }},
-                "pending_transmission_max_count" : {{ .Values.naviback.bss.client.pendingTransmissionMaxCount | mustToJson }}
+                "pending_transmission_max_count" : {{ .Values.naviback.bss.client.pendingTransmissionMaxCount | mustToJson }},
+                "timeout_ms" : {{ .Values.naviback.bss.client.timeoutLimitMilSec | mustToJson }}
               }
           },
         {{- end }}{{- /* .Values.naviback.bss.enabled */}}
@@ -529,6 +546,18 @@ data:
         "pasportool_client":
           {{- toPrettyJson .Values.license | nindent 8 -}},
         {{- end }}{{- /* if not .Values.license.notSupported */}}
+        {{- if .Values.naviback.rtr.enabled }}
+        "restrictions_index": {
+          "update_period": 300,
+          "nodes": [
+            "{{ .Values.naviback.rtr.url }}/restrictions_index.json.zip"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          },
+          "cache_path_": "file://{LOCAL_PATH}/{project_name}/restrictions_index.json.zip"
+        },
+        {{- end }}{{- /* if .Values.mosesd.rtr.enabled */}}
         {{- if .Values.naviback.additionalSections }}
           {{- include "tplvalues.render" ( dict "value" .Values.naviback.additionalSections "context" $) | nindent 8 }}
         {{- end }}
@@ -614,8 +643,10 @@ data:
         }
       }
     }
+  {{- end }}{{- /* .Values.naviback.overrideConfig */}}
   rules.conf: |-
     {{- include "rules.renderRules" . }}
+  {{- if .Values.transmitter.enabled }}
   envoy.yaml: |
     admin:
       address:
@@ -668,3 +699,4 @@ data:
                   socket_address:
                     address: {{ .Values.transmitter.host | default "localhost" | quote }}
                     port_value: {{ .Values.transmitter.port | default 8080 | int }}
+  {{- end }}{{- /* if .Values.transmitter.enabled */}}
