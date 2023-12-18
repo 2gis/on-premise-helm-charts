@@ -190,14 +190,6 @@ onprem
   value: "{{ .Values.importer.retry.execute.delay }}"
 {{- end }}
 
-{{- define "catalog.env.custom.ca" -}}
-- name: ADDITIONAL_CA_CERT_BUNDLE
-  valueFrom:
-    configMapKeyRef:
-      name: {{ include "catalog.name" . }}-configmap
-      key: custom-ca.crt
-{{- end }}
-
 {{/*
 Return the target Kubernetes version
 */}}
