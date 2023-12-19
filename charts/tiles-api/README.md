@@ -72,7 +72,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `cassandra.credentials.jmxPassword` | JMX password to be used by the Kubernetes Importer Job's cleaner process.                                                                                           | `cassandra`    |
 | `cassandra.ssl`                     | **SSL configuration for accessing Apache Cassandra**                                                                                                                |                |
 | `cassandra.ssl.enabled`             | If Apache Cassandra uses SSL for client connections.                                                                                                                | `false`        |
-| `cassandra.ssl.caCrt`               | Apache Cassandra CA certificate.                                                                                                                                    | `""`           |
 
 ### API Keys proxy settings
 
@@ -227,6 +226,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | --------------------- | ----------------------------------------------------------------------------------------------- | ----- |
 | `license.url`         | Address of the License service. Ex: https://license.svc                                         | `""`  |
 | `license.retryPeriod` | Duration how often tiles server should try to update license status if it is failing to get it. | `30s` |
+
+### **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container.                                                                          | `""`  |
 
 
 ## Maintainers

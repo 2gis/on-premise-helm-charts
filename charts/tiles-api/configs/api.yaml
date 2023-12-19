@@ -6,10 +6,8 @@ graceful-shutdown-time: 5s
 ui-whitelist: {{ $.Values.api.uiWhitelist }}
 {{- end }}
 
-{{- if $.Values.cassandra.ssl.enabled }}
 cassandra-ssl:
-  ca-path: "/cassandra-ssl/ca.crt"
-{{- end }}
+  enabled: {{ $.Values.cassandra.ssl.enabled }}
 
 cassandra-clusters:
   - name: kubernetes

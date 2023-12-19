@@ -1,15 +1,14 @@
-{{- if $.Values.cassandra.ssl.enabled }}
+{{- if $.Values.customCAs.bundle }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "tiles.fullname" . }}-cassandra-ssl
+  name: {{ include "tiles.fullname" . }}-custom-ca
   labels:
     {{- include "tiles.labels" . | nindent 4 }}
   annotations:
     {{- include "importer.hook-annotations" . | nindent 4 }}
 
 data:
-  ca.crt: |
-    {{- $.Values.cassandra.ssl.caCrt | nindent 4 }}
+  custom-ca.crt: {{- $.Values.customCAs.bundle | toYaml | indent 1 }}
 {{- end }}
