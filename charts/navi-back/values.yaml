@@ -194,7 +194,7 @@ naviback:
     projectCarOptions:
       enabled: false
     restrictedTransportIndex:
-      enabled: true
+      enabled: false
     restrictedTransportPlatforms:
       enabled: false
     restrictedTransportRoutes:
