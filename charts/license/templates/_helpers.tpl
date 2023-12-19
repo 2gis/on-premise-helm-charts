@@ -94,3 +94,10 @@ Converts duration (1h2m3s) to integer seconds, accepts { duration: <duration> }
 {{- $add := $now | dateModify .duration -}}
 {{ sub ($add | unixEpoch) ($now | unixEpoch) }}
 {{- end -}}
+
+{{/*
+Mount directory for custom CA
+*/}}
+{{- define "license.customCA.mountPath" -}}
+{{ $.Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}

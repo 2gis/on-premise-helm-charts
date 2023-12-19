@@ -76,6 +76,11 @@ spec:
             - mountPath: /dev/tpmrm0
               name: tpm-device
             {{- end }}
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "license.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
+            {{- end }}
           env:
             - name: CONFIG_PATH
               value: /config/config.yaml
@@ -107,6 +112,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "license.fullname" $ }}
                   key: persistenceS3SecretKey
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "license.customCA.mountPath" $ }}
+            {{- end }}
           resources:
             {{- toYaml .resources | nindent 12 }}
           {{- if and (eq (include "license.type" $) "2") (not (empty .tpm.securityContext)) }}
@@ -121,6 +130,11 @@ spec:
         - name: tpm-device
           hostPath:
             path: /dev/tpmrm0
+        {{- end }}
+        {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
+          configMap:
+            name: {{ include "license.fullname" $ }}-custom-ca
         {{- end }}
       {{- if not (empty .nodeSelector) }}
       nodeSelector:
