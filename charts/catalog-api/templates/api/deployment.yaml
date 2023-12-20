@@ -84,10 +84,6 @@ spec:
             {{- include "catalog.env.search" . | nindent 12 }}
             {{- include "catalog.env.keys" . | nindent 12 }}
             {{- include "catalog.env.license" . | nindent 12 }}
-<<<<<<< HEAD
-            {{- if $.Values.customCAs.bundle }}
-            {{- include "catalog.env.custom.ca.path" . | nindent 12 }}
-            {{- end }}
           {{- if .Values.customCAs.bundle }}
           volumeMounts:
             {{- include "catalog.custom.ca.volumeMounts" . | nindent 12 }}

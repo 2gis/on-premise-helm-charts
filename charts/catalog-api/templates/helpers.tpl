@@ -283,20 +283,6 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- end -}}
 {{- end -}}
 
-<<<<<<< HEAD
-{{- define "catalog.custom.ca.mountPath" -}}
-{{ $.Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
-=======
-{{- define "catalog.env.custom.ca.path" -}}
-- name: SSL_CERT_DIR
-  value: {{ include "catalog.custom.ca.mountPath" . }}
-{{- end }}
-
-{{- define "catalog.custom.ca.mountPath" -}}
-{{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
->>>>>>> develop
-{{- end -}}
-
 {{- define "catalog.custom.ca.volumeMounts" -}}
 - name: custom-ca
   mountPath: {{ include "catalog.custom.ca.mountPath" . }}/custom-ca.crt
