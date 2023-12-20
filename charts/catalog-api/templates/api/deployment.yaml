@@ -24,9 +24,14 @@ spec:
       {{- include "catalog.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- if or .Values.podAnnotations .Values.customCAs.bundle }}
       annotations:
+        {{- if .Values.customCAs.bundle }}
+        checksum/config: {{ include (print $.Template.BasePath "/conigmap.yaml") . | sha256sum }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- end }}
       labels:
         {{- include "catalog.labels" . | nindent 8 }}
@@ -54,6 +59,9 @@ spec:
             {{- include "catalog.env.search" . | nindent 12 }}
             {{- include "catalog.env.keys" . | nindent 12 }}
             {{- include "catalog.env.license" . | nindent 12 }}
+            {{- if $.Values.customCAs.bundle }}
+            {{- include "catalog.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
           {{- if .Values.customCAs.bundle }}
           volumeMounts:
             {{- include "catalog.custom.ca.volumeMounts" . | nindent 12 }}

@@ -5,5 +5,5 @@ metadata:
   name: {{ include "catalog.name" . }}-configmap
 data:
   custom-ca.crt: |-
-{{ print .Values.customCAs.bundle | indent 4 }}
+{{- .Values.customCAs.bundle | nindent 4 }}
 {{- end }}
