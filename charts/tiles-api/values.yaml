@@ -418,4 +418,8 @@ license:
 
 customCAs:
   bundle: ''
+# bundle: |
+#   -----BEGIN CERTIFICATE-----
+#   ...
+#   -----END CERTIFICATE-----
   certsPath: ''

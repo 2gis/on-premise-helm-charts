@@ -10,5 +10,6 @@ metadata:
     {{- include "importer.hook-annotations" . | nindent 4 }}
 
 data:
-  custom-ca.crt: {{- $.Values.customCAs.bundle | toYaml | indent 1 }}
+  custom-ca.crt: |-
+    {{- $.Values.customCAs.bundle | nindent 4 }}
 {{- end }}
