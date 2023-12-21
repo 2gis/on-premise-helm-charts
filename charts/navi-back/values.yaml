@@ -223,7 +223,7 @@ naviback:
   bss:
     enabled: false
     client:
-      serviceRemoteAddress: ""
+      serviceRemoteAddress: ''
       messageCountToFlush: 500
       useCompression: true
       packageSizeMaxBytes: 1800000
@@ -296,7 +296,7 @@ serviceAccount:
 
 service:
   type: ClusterIP
-  clusterIP: ""
+  clusterIP: ''
   port: 80
   grpcPort: 50051
   annotations: {}
