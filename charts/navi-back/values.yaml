@@ -49,7 +49,7 @@ terminationGracePeriodSeconds: 60
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.14.1.2
+  tag: 7.15.1.4
 
 
 # @section Navi-Back application settings
