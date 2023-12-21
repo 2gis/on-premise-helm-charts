@@ -160,13 +160,13 @@ naviback:
   citiesFilename: cities.conf.zip
   sentry:
     enabled: false
-    address: "sentry.host"
-    project: "navi-back"
-    username: "navi-back"
+    address: sentry.host
+    project: navi-back
+    username: navi-back
     printMessages: false
     debug: false
-    reportPath: "/tmp/sentry"
-    handler: "/usr/sbin/2gis/mosesd/crashpad_handler"
+    reportPath: /tmp/sentry
+    handler: /usr/sbin/2gis/mosesd/crashpad_handler
   castleHost: ''
   disableUpdates: false
   indices:
