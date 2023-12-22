@@ -69,15 +69,13 @@ image:
 # @section License service application settings
 
 # @param license.type License type. Should be auto generated with `dgctl pull --generate-values`.
-# @param license.updatePeriod Duration how often service should fetch new license from storage. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration].
-# @param license.retryPeriod Duration how often service should try to fetch license from storage if previous attempts were failing.
+# @param license.retryPeriod Duration how often service should try to fetch license from storage if previous attempts were failing. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration].
 # @param license.softBlockPeriod Duration until the license expiration time when license service should respond with 'soft' block status. For this duration additional time units 'd' for days and 'w' for weeks are supported.
 # @skip license.statusPort
 # @skip license.apiPort
 
 license:
   type: ''
-  updatePeriod: 1h
   retryPeriod: 30s
   softBlockPeriod: 2w
   statusPort: 8080
@@ -135,34 +133,22 @@ resources:
     cpu: 500m
     memory: 128Mi
 
-# @section Persistence
+# @section Persistence settings
 
-# @param persistence.type Type of storage used for persistence, should be one of: 's3' - for S3 storage, 'fs' - for PVC storage.
-
-# @extra persistence.fs **PVC setting for the 'fs' persistence type**
-# @param persistence.fs.storage Storage size, should be at least 10Mi.
-# @param persistence.fs.storageClassName Storage class name.
-
-# @extra persistence.s3 **S3 setting for the 's3' persistence type**
-# @param persistence.s3.host S3 endpoint. Format: `host:port`.
-# @param persistence.s3.secure If S3 uses https.
-# @param persistence.s3.bucket S3 bucket name.
-# @param persistence.s3.root Root directory in S3 bucket.
-# @param persistence.s3.accessKey S3 access key for accessing the bucket.
-# @param persistence.s3.secretKey S3 secret key for accessing the bucket.
+# @param persistence.host S3 endpoint. Format: `host:port`.
+# @param persistence.secure If S3 uses https.
+# @param persistence.bucket S3 bucket name.
+# @param persistence.root Root directory in S3 bucket.
+# @param persistence.accessKey S3 access key for accessing the bucket.
+# @param persistence.secretKey S3 secret key for accessing the bucket.
 
 persistence:
-  type: s3
-  fs:
-    storage: 10Mi
-    storageClassName: ''
-  s3:
-    host: ''
-    secure: false
-    bucket: ''
-    root: ''
-    accessKey: ''
-    secretKey: ''
+  host: ''
+  secure: false
+  bucket: ''
+  root: ''
+  accessKey: ''
+  secretKey: ''
 
 # @section TPM-related settings for license type 2
 

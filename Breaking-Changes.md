@@ -1,8 +1,27 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [X.X.X]
+## [1.17.0]
 
-#### navi-back
+### license
+
+- Backward compatibility for license v1 is broken. If you have a version lower than `1.9.1`, you need to upgrade first
+  to version `1.16.0` to get license v2 without downtime - after that you can upgrade to version `1.17.0`.
+- Removed `fs` persistence type, now only `s3` is available. `persistence.type` is no more provided, old `persistence.s3`
+  settings now should be located under `persistence`.
+
+```yaml
+--- # old
+persistence:
+  type: s3
+  s3:
+    ...
+
+--- # new
+persistence:
+  ...
+```
+
+### navi-back
 - renamed parameter naviback.ecaHost to naviback.ecaUrl
 - `livenessProbeDelay` and `readinessProbeDelay` are ignored in favor of startup probes
 
