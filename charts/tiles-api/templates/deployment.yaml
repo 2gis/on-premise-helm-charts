@@ -41,6 +41,7 @@ spec:
 
       annotations:
         checksum/config: {{ include "tiles.checksum" (merge (dict "path" "/api.configmap.yaml") $) }}
+        checksum/custom-ca: {{ include "tiles.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
         checksum/secret: {{ include "tiles.checksum" (merge (dict "path" "/api.secret.yaml") $) }}
         manifest/code: {{ include "tiles.manifestCode" . | sha256sum }}
       {{- with .Values.api.podAnnotations }}
