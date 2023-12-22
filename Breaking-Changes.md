@@ -21,6 +21,10 @@ persistence:
   ...
 ```
 
+### navi-back
+- renamed parameter naviback.ecaHost to naviback.ecaUrl
+- `livenessProbeDelay` and `readinessProbeDelay` are ignored in favor of startup probes
+
 ## [1.16.0]
 
 ### catalog-api

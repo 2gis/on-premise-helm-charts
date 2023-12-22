@@ -6,6 +6,10 @@ metadata:
     {{- include "naviback.labels" . | nindent 4 }}
     rule: {{ .Values.naviback.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
+    {{- if .Values.dataGroup.enabled }}
+    dataGroupTimestamp: {{ .Values.dataGroup.timestamp | quote }}
+    dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+    {{- end }}{{- /* dataGroup.enabled */}}
   {{- with .Values.labels }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -13,6 +17,7 @@ spec:
   {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   {{- if .Values.strategy }}
   strategy:
     {{- include "tplvalues.render" ( dict "value" .Values.strategy "context" $) | nindent 6 }}
@@ -30,6 +35,11 @@ spec:
       {{- end }}
       labels:
         {{- include "naviback.selectorLabels" . | nindent 8 }}
+        navigroup: {{ .Values.navigroup | default "" | quote }}
+        {{- if .Values.dataGroup.enabled }}
+        dataGroupTimestamp: {{ .Values.dataGroup.timestamp | quote }}
+        dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -47,14 +57,110 @@ spec:
         secret:
           secretName: {{ include "naviback.fullname" . }}-secret
       {{- end }}
+      {{- if .Values.naviback.sentry.enabled }}
+      - name: sentry-volume
+        emptyDir: {}
+      {{- end }}
+      {{- if .Values.frozenData.enabled }}
+      - name: frozen-data
+        emptyDir: {}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- if .Values.frozenData.enabled }}
+      initContainers:
+        - name: frozen-data
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.frozenData.image.repository }}:{{ .Values.frozenData.image.tag }}
+          command: ['sh', '-ec', 'cp -r /frozen_data_init/* /opt/castle; ls -l /opt/castle']
+          imagePullPolicy: {{ .Values.frozenData.pullPolicy }}
+          {{- if (.Values.frozenData).resources }}
+          resources: {{- toYaml .Values.frozenData.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: frozen-data
+              mountPath: /opt/castle
+      {{- end }}
       containers:
-        - name: {{ include "naviback.fullname" . }}
+        {{- if .Values.transmitter.enabled }}
+        - name: {{ include "naviback.containerName" . }}-envoy
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.envoy.image.repository }}:{{ .Values.envoy.image.tag }}
+          imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
+          volumeMounts:
+            - name: {{ include "naviback.fullname" . }}-configmap
+              mountPath: /etc/envoy/envoy.yaml
+              subPath: envoy.yaml
+          {{- if (.Values.envoy).resources }}
+          resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
+          {{- end }}
+          lifecycle:
+            # wait for the main container to shutdown
+            preStop:
+              exec:
+                command: ["/bin/bash", "-c", "while cat < /dev/tcp/127.0.0.1/{{ .Values.naviback.appPort }} ; do sleep 5 ; done"]
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: admin
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /ready
+              port: admin
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: admin
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+          ports:
+            - name: admin
+              containerPort: 9901
+              protocol: TCP
+        {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics-aggregator
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
+          env:
+            - name: METRICS_AGGREGATOR_PORT
+              value: "{{ .Values.metrics.port }}"
+            - name: METRICS_AGGREGATOR_SOURCES
+              value: "http://localhost:{{ .Values.naviback.appPort }}/metrics,http://localhost:9901/stats/prometheus"
+            - name: GOMAXPROCS
+              value: "1"
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: {{ .Values.metrics.port }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: {{ .Values.metrics.port }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.metrics.resources | nindent 12 }}
+        {{- end }}
+        - name: {{ include "naviback.containerName" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: [ "/usr/sbin/2gis/mosesd/mosesd" ]
+          command: [ "/usr/sbin/2gis/mosesd/tini", "--" ]
           args:
+           - /usr/sbin/2gis/mosesd/mosesd
            - --config
            - /etc/2gis/mosesd/navi-back.conf
           volumeMounts:
@@ -68,15 +174,33 @@ spec:
           - name: {{ include "naviback.fullname" . }}-secret
             mountPath: /etc/2gis/mosesd/secret/
           {{- end }}
+          {{- if .Values.naviback.sentry.enabled }}
+          - name: sentry-volume
+            mountPath: {{ .Values.naviback.sentry.reportPath | default "/tmp/sentry" | quote }}
+          {{- end }}
+          {{- if .Values.frozenData.enabled }}
+          - name: frozen-data
+            mountPath: /opt/castle
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.naviback.appPort }}
               protocol: TCP
+            {{- if .Values.naviback.grpcPort }}
+            - name: grpc
+              containerPort: {{ .Values.naviback.grpcPort }}
+              protocol: TCP
+            {{- end }}
+          startupProbe:
+            httpGet:
+              path: /successfulwork
+              port: http
+            periodSeconds: 5
+            failureThreshold: 360
           livenessProbe:
             httpGet:
               path: /heartbeat
               port: http
-            initialDelaySeconds: {{ .Values.livenessProbeDelay }}
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 2
@@ -84,7 +208,6 @@ spec:
             httpGet:
               path: /successfulwork
               port: http
-            initialDelaySeconds: {{ .Values.readinessProbeDelay }}
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 2
@@ -99,7 +222,7 @@ spec:
             # wait for the endpoint removal process
             preStop:
               exec:
-                command: ["/bin/sh", "-c", "sleep 5"]
+                command: ["/bin/sh", "-c", "sleep {{ .Values.preStopDelay | default 5 | int }}"]
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 60 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

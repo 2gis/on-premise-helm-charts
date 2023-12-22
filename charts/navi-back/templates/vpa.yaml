@@ -17,7 +17,7 @@ spec:
     updateMode: {{ default "Auto" .updateMode }}
   resourcePolicy:
     containerPolicies:
-      - containerName: {{ include "naviback.fullname" $ }}
+      - containerName: {{ include "naviback.containerName" $ }}
         mode: Auto
         {{- with .minAllowed }}
         minAllowed:
@@ -27,5 +27,9 @@ spec:
         maxAllowed:
           {{- toYaml . | nindent 10 }}
         {{- end }}
+      {{- if $.Values.transmitter.enabled }}
+      - containerName: {{ include "naviback.containerName" $ }}-envoy
+        mode: "Off"
+      {{- end }}
 {{- end }}
 {{- end }}

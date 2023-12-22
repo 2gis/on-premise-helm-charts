@@ -11,12 +11,16 @@
 {{- end -}}
 {{- end -}}
 
+{{- define "pro-api.permissions-name" -}}
+{{ include "pro-api.name" . }}-permissions
+{{- end -}}
+
 {{- define "pro-api.permissions-url" -}}
 {{- if .Values.permissionsApi.host -}}
 {{- .Values.permissionsApi.host -}}
 {{- else -}}
 {{- "http://" -}}
-{{ include "pro-api.name" . }}-permissions
+{{ include "pro-api.permissions-name" . }}
 {{- end -}}
 {{- end -}}
 
@@ -66,7 +70,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{- define "pro-api.permissionsSelectorLabels" -}}
-app.kubernetes.io/name: {{ include "pro-api.name" . }}-permissions
+app.kubernetes.io/name: {{ include "pro-api.permissions-name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}-permissions
 {{- end -}}
 
