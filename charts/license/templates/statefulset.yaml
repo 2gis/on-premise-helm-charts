@@ -25,6 +25,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include "license.checksum" (merge (dict "path" "/configmap.yaml") $) }}
+        checksum/custom-ca: {{ include "license.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
         checksum/secret: {{ include "license.checksum" (merge (dict "path" "/secret.yaml") $) }}
         {{- if not (empty .podAnnotations) }}
         {{- toYaml .podAnnotations | nindent 8 }}
