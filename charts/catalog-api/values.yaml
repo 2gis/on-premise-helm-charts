@@ -223,7 +223,7 @@ keys:
 
 # @section License settings
 
-# @param license.url URL of the License service. Ex: http(s)://license.svc **Required**
+# @param license.url Address of the License service v1. Ex: http://license.svc **Required**
 # @param license.requestTimeout Timeout for requests to the License service
 
 license:
