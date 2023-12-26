@@ -85,6 +85,13 @@ spec:
           - /opt/update_services_init.sh
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
+          startupProbe:
+            {{- /* checks if supercronic prometheus port is open */}}
+            httpGet:
+              path: /health
+              port: {{ .Values.cron.prometheusPort | int }}
+            failureThreshold: {{ (.Values.castle.startupProbe).failureThreshold | default 180 | int }}
+            periodSeconds: {{ (.Values.castle.startupProbe).periodSeconds | default 5 | int }}
           livenessProbe:
             {{- /* checks if supercronic prometheus port is open */}}
             httpGet:
