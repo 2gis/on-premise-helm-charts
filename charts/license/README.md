@@ -114,3 +114,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | `tpm.pvcBind`                  | **Kubernetes PVC used to bind pod to the kubernetes node; not needed if FS persistence is used**                                                                          |         |
 | `tpm.pvcBind.enable`           | If PVC should be used to bind pod to the kubernetes node.                                                                                                                 | `false` |
 | `tpm.pvcBind.storageClassName` | Storage class name.                                                                                                                                                       | `""`    |
+
+### **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container.                                                                          | `""`  |
