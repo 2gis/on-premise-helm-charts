@@ -33,9 +33,17 @@ data:
     auth:
       enabled: {{ .enabled }}
       {{- if .enabled }}
-      public_key: "-----BEGIN PUBLIC KEY-----\r\n{{ required "A valid .Values.api.auth.publicKey entry required" .publicKey }}\r\n-----END PUBLIC KEY-----"
+      auth_server_url: {{ required "A valid .Values.api.auth.authServerUrl entry required" .authServerUrl | quote }}
+      {{- if .verifySsl }}
+      verify_ssl: {{ .verifySsl }}
       {{- end }}
-      algorithm: {{ .algorithm | quote }}
+      {{- if .realm }}
+      realm: {{ .realm | quote }}
+      {{- end}}
+      {{- if .camcomToken }}
+      camcom_token: {{ .camcomToken | quote }}
+      {{- end }}
+      {{- end }}
     {{- end }}
     show_docs: {{ .Values.api.showDocs }}
     log_level: {{ .Values.api.logLevel }}
