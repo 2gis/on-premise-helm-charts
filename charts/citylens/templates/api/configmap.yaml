@@ -47,4 +47,4 @@ data:
     {{- end }}
     show_docs: {{ .Values.api.showDocs }}
     log_level: {{ .Values.api.logLevel }}
-    metrics_app_name: {{ include "citylens.api.metricsAppName" . }}
+    metrics_app_name: {{ .Values.api.metricsAppName }}
