@@ -2,6 +2,12 @@
 
 ## [1.17.0]
 
+### citylens
+
+- Backward compatibility for citylens 1.3.0 is broken. Parameters `api.auth.publicKey` and `api.auth.algoritm` are replaced
+  with `api.auth.authServerUrl`, `api.auth.realm`, `api.auth.verifySsl`.
+
+
 ### license
 
 - Backward compatibility for license v1 is broken. If you have a version lower than `1.9.1`, you need to upgrade first

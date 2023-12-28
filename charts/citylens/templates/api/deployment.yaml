@@ -38,6 +38,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.api.service.targetPort }}
+            - name: metrics
+              containerPort: {{ .Values.api.service.metricsTargetPort }}
           readinessProbe:
             tcpSocket:
               port: 8000

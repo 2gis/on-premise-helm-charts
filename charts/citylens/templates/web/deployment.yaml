@@ -38,6 +38,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.web.service.targetPort }}
+            - name: metrics
+              containerPort: {{ .Values.web.service.metricsTargetPort }}
           readinessProbe:
             tcpSocket:
               port: 5000
