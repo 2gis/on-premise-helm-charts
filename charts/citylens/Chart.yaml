@@ -3,8 +3,8 @@ name: citylens
 type: application
 description: A Helm chart for Kubernetes to deploy Citylens service
 
-version: 1.16.0
-appVersion: 1.2.6
+version: 1.17.0
+appVersion: 1.3.2
 
 maintainers:
 - name: 2gis
