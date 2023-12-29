@@ -25,6 +25,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include "license.checksum" (merge (dict "path" "/configmap.yaml") $) }}
+        checksum/custom-ca: {{ include "license.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
         checksum/secret: {{ include "license.checksum" (merge (dict "path" "/secret.yaml") $) }}
         {{- if not (empty .podAnnotations) }}
         {{- toYaml .podAnnotations | nindent 8 }}
@@ -76,9 +77,10 @@ spec:
             - mountPath: /dev/tpmrm0
               name: tpm-device
             {{- end }}
-            {{- if eq .persistence.type "fs" }}
-            - mountPath: /persistence
-              name: persistence
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "license.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
             {{- end }}
           env:
             - name: CONFIG_PATH
@@ -101,7 +103,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "license.fullname" $ }}
                   key: s3SecretKey
-            {{- if eq .persistence.type "s3"}}
             - name: PERSISTENCE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
@@ -112,6 +113,9 @@ spec:
                 secretKeyRef:
                   name: {{ include "license.fullname" $ }}
                   key: persistenceS3SecretKey
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "license.customCA.mountPath" $ }}
             {{- end }}
           resources:
             {{- toYaml .resources | nindent 12 }}
@@ -127,6 +131,11 @@ spec:
         - name: tpm-device
           hostPath:
             path: /dev/tpmrm0
+        {{- end }}
+        {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
+          configMap:
+            name: {{ include "license.fullname" $ }}-custom-ca
         {{- end }}
       {{- if not (empty .nodeSelector) }}
       nodeSelector:
@@ -145,20 +154,6 @@ spec:
         {{- toYaml .imagePullSecrets | nindent 8 }}
       {{- end }}
   volumeClaimTemplates:
-    {{- if eq .persistence.type "fs" }}
-    {{- with .persistence.fs }}
-    - metadata:
-        name: persistence
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        volumeMode: Filesystem
-        resources:
-          requests:
-            storage: {{ .storage }}
-        storageClassName: {{ .storageClassName }}
-    {{- end }}
-    {{- end }}
     {{- if and (eq (include "license.type" $) "2") (.tpm.pvcBind.enable) }}
     - metadata:
         name: tpm-node-bind

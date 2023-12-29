@@ -6,9 +6,7 @@ Keycloak is a high performance Java-based identity and access management solutio
 
 [Overview of Keycloak](https://www.keycloak.org/)
 
-See the [documentation](https://docs.2gis.com/en/on-premise/keycloak) to learn about:
-
-- Architecture of the service.
+See the [documentation](https://docs.2gis.com/en/on-premise/deployment/auth) to learn about:
 
 - Installing the service.
 

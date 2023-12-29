@@ -26,6 +26,7 @@ data:
     dashboard_domain: {{ required "A valid .Values.dashboardDomain. entry required" .Values.dashboardDomain | squote }}
     default_locale: {{ .Values.locale | squote }}
     log_level: {{ .Values.web.logLevel | squote }}
+    metrics_app_name: {{ .Values.web.metricsAppName }}
     db_connections:
     {{- with .Values.postgres }}
       postgres: 'postgresql://{{ required "A valid .Values.postgres.username entry required" .username }}:{{ required "A valid .Values.postgres.password entry required" .password }}@{{ required "A valid .Values.postgres.host entry required" .host }}:{{ required "A valid .Values.postgres.port entry required" .port }}/{{ required "A valid .Values.postgres.database entry required" .database }}'

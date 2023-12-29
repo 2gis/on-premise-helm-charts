@@ -72,7 +72,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `cassandra.credentials.jmxPassword` | JMX password to be used by the Kubernetes Importer Job's cleaner process.                                                                                           | `cassandra`    |
 | `cassandra.ssl`                     | **SSL configuration for accessing Apache Cassandra**                                                                                                                |                |
 | `cassandra.ssl.enabled`             | If Apache Cassandra uses SSL for client connections.                                                                                                                | `false`        |
-| `cassandra.ssl.caCrt`               | Apache Cassandra CA certificate.                                                                                                                                    | `""`           |
 
 ### API Keys proxy settings
 
@@ -90,7 +89,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `proxy.resources.limits.memory`   | A memory limit.                                                                                                               | `512Mi`                           |
 | `proxy.image`                     | **Docker image settings**                                                                                                     |                                   |
 | `proxy.image.repository`          | Docker Repository.                                                                                                            | `2gis-on-premise/tiles-api-proxy` |
-| `proxy.image.tag`                 | Docker image tag.                                                                                                             | `4.51.1`                          |
+| `proxy.image.tag`                 | Docker image tag.                                                                                                             | `4.51.5`                          |
 | `proxy.image.pullPolicy`          | Kubernetes pull policy for the service's Docker image.                                                                        | `IfNotPresent`                    |
 | `proxy.access`                    | **API Keys service access settings**                                                                                          |                                   |
 | `proxy.access.enabled`            | If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.                                     | `false`                           |
@@ -126,7 +125,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `api.resources.limits.memory`               | A memory limit.                                                                                                                                                                                          | `512Mi`                     |
 | `api.image`                                 | **Docker image settings**                                                                                                                                                                                |                             |
 | `api.image.repository`                      | Docker Repository.                                                                                                                                                                                       | `2gis-on-premise/tiles-api` |
-| `api.image.tag`                             | Docker image tag.                                                                                                                                                                                        | `4.51.1`                    |
+| `api.image.tag`                             | Docker image tag.                                                                                                                                                                                        | `4.51.5`                    |
 | `api.image.pullPolicy`                      | Kubernetes pull policy for the service's Docker image.                                                                                                                                                   | `IfNotPresent`              |
 | `api.imagePullSecrets`                      | Kubernetes image pull secrets.                                                                                                                                                                           | `[]`                        |
 | `api.strategy.rollingUpdate`                | **Service's Rolling Update strategy settings**                                                                                                                                                           |                             |
@@ -201,7 +200,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `importer.resources.limits.memory`           | A memory limit.                                                                                                                                                                                                                                                                                                                      | `256Mi`                              |
 | `importer.image`                             | **Docker image settings**                                                                                                                                                                                                                                                                                                            |                                      |
 | `importer.image.repository`                  | Docker Repository.                                                                                                                                                                                                                                                                                                                   | `2gis-on-premise/tiles-api-importer` |
-| `importer.image.tag`                         | Docker image tag.                                                                                                                                                                                                                                                                                                                    | `4.51.1`                             |
+| `importer.image.tag`                         | Docker image tag.                                                                                                                                                                                                                                                                                                                    | `4.51.5`                             |
 | `importer.image.pullPolicy`                  | Kubernetes pull policy for the service's Docker image.                                                                                                                                                                                                                                                                               | `IfNotPresent`                       |
 | `importer.imagePullSecrets`                  | Kubernetes image pull secrets.                                                                                                                                                                                                                                                                                                       | `[]`                                 |
 | `importer.cleaner`                           | **Cassandra keyspace lifecycle management and Cleaner settings**                                                                                                                                                                                                                                                                     |                                      |
@@ -227,6 +226,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | --------------------- | ----------------------------------------------------------------------------------------------- | ----- |
 | `license.url`         | Address of the License service. Ex: https://license.svc                                         | `""`  |
 | `license.retryPeriod` | Duration how often tiles server should try to update license status if it is failing to get it. | `30s` |
+
+### **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container.                                                                          | `""`  |
 
 
 ## Maintainers

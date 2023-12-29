@@ -16,6 +16,6 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      app: {{- include "naviback.selectorLabels" $ | nindent 4 }}
+      {{- include "naviback.selectorLabels" $ | nindent 6 }}
 {{- end }}
 {{- end }}

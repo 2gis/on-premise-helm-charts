@@ -233,6 +233,9 @@
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
+
+### 2GIS PRO API ingress settings
+
 | Name                                 | Description                               | Value                 |
 | ------------------------------------ | ----------------------------------------- | --------------------- |
 | `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`               |
@@ -241,6 +244,17 @@
 | `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                   |
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`              |
 | `ingress.tls`                        | TLS configuration                         | `[]`                  |
+
+### 2GIS PRO Permissions API ingress settings
+
+| Name                                               | Description                               | Value                             |
+| -------------------------------------------------- | ----------------------------------------- | --------------------------------- |
+| `permissionsApiIngress.enabled`                    | If Ingress is enabled for the service.    | `false`                           |
+| `permissionsApiIngress.className`                  | Name of the Ingress controller class.     | `nginx`                           |
+| `permissionsApiIngress.hosts[0].host`              | Hostname for the Ingress service.         | `pro-permissions-api.example.com` |
+| `permissionsApiIngress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                               |
+| `permissionsApiIngress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                          |
+| `permissionsApiIngress.tls`                        | TLS configuration                         | `[]`                              |
 
 
 ## Installing

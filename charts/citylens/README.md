@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.2.6`                        |
+| `api.image.tag`        | Tag.         | `1.3.2`                        |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -62,13 +62,14 @@ See the [documentation]() to learn about:
 
 ### Service settings
 
-| Name                      | Description                                                                                                                    | Value       |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `api.service.port`        | Service port.                                                                                                                  | `80`        |
-| `api.service.targetPort`  | Service target port.                                                                                                           | `8000`      |
-| `api.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
-| `api.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
+| Name                            | Description                                                                                                                    | Value       |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `api.service.type`              | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `api.service.port`              | Service port.                                                                                                                  | `80`        |
+| `api.service.targetPort`        | Service target port.                                                                                                           | `8000`      |
+| `api.service.metricsTargetPort` | Service prometheus metrics target port. Metrics are available on /healthz/metrics endpoint.                                    | `8001`      |
+| `api.service.annotations`       | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
+| `api.service.labels`            | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -84,18 +85,21 @@ See the [documentation]() to learn about:
 
 ### Auth settings for authentication
 
-| Name                 | Description                                                                                                         | Value   |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
-| `api.auth.enabled`   | If authentication is needed.                                                                                        | `true`  |
-| `api.auth.publicKey` | Public Key for authentication. Visit `http(s)://keycloak.ingress.host/realms/CityLens_app/` to obtain a Public Key. | `""`    |
-| `api.auth.algorithm` | Authentication algorithm type.                                                                                      | `RS256` |
+| Name                     | Description                                                                                                                                                                                                   | Value  |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `api.auth.enabled`       | If authentication is needed.                                                                                                                                                                                  | `true` |
+| `api.auth.authServerUrl` | API URL of authentication service, OIDC-compatibility expected. Ex.: `http(s)://keycloak.ingress.host/`. **Required**                                                                                         | `""`   |
+| `api.auth.realm`         | Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: CityLens_app | `""`   |
+| `api.auth.verifySsl`     | Enable\Disable SSL check.                                                                                                                                                                                     | `true` |
+| `api.auth.camcomToken`   | Bearer token, expected on CamCom callback endpoint (if integration with CamCom enabled).                                                                                                                      | `""`   |
 
 ### Custom settings
 
-| Name           | Description                        | Value   |
-| -------------- | ---------------------------------- | ------- |
-| `api.showDocs` | Show documentation link if needed. | `false` |
-| `api.logLevel` | Log level.                         | `INFO`  |
+| Name                 | Description                                            | Value          |
+| -------------------- | ------------------------------------------------------ | -------------- |
+| `api.showDocs`       | Show documentation link if needed.                     | `false`        |
+| `api.logLevel`       | Log level.                                             | `INFO`         |
+| `api.metricsAppName` | Value for service prometheus metrics label "app_name". | `citylens-api` |
 
 ### Metadata settings
 
@@ -117,7 +121,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.2.6`                        |
+| `web.image.tag`        | Tag.         | `1.3.2`                        |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -132,13 +136,14 @@ See the [documentation]() to learn about:
 
 ### Service settings
 
-| Name                      | Description                                                                                                                    | Value       |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `web.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `web.service.port`        | Service port.                                                                                                                  | `80`        |
-| `web.service.targetPort`  | Service target port.                                                                                                           | `5000`      |
-| `web.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
-| `web.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
+| Name                            | Description                                                                                                                    | Value       |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `web.service.type`              | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `web.service.port`              | Service port.                                                                                                                  | `80`        |
+| `web.service.targetPort`        | Service target port.                                                                                                           | `5000`      |
+| `web.service.metricsTargetPort` | Service prometheus metrics target port. Metrics are available on /healthz/metrics endpoint.                                    | `5001`      |
+| `web.service.annotations`       | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
+| `web.service.labels`            | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -158,7 +163,7 @@ See the [documentation]() to learn about:
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `web.auth.enabled`       | If authentication is needed.                                                                                                                                                                                               | `false` |
 | `web.auth.realm`         | Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: Inspection_Portal_backend | `""`    |
-| `web.auth.authServerUrl` | API URL of authentication service. Ex: `http(s)://keycloak.ingress.host` **Required**                                                                                                                                      | `""`    |
+| `web.auth.authServerUrl` | API URL of authentication service, OIDC-compatibility expected. Ex: `http(s)://keycloak.ingress.host` **Required**                                                                                                         | `""`    |
 | `web.auth.clientId`      | Client id from keycloak. Ex: citylens-web-client **Required**                                                                                                                                                              | `""`    |
 | `web.auth.clientSecret`  | Client Secret from keycloak. **Required**                                                                                                                                                                                  | `""`    |
 | `web.auth.verifySsl`     | Enable\Disable SSL check.                                                                                                                                                                                                  | `true`  |
@@ -166,9 +171,10 @@ See the [documentation]() to learn about:
 
 ### Custom settings
 
-| Name           | Description | Value     |
-| -------------- | ----------- | --------- |
-| `web.logLevel` | Log level.  | `WARNING` |
+| Name                 | Description                                            | Value          |
+| -------------------- | ------------------------------------------------------ | -------------- |
+| `web.logLevel`       | Log level.                                             | `WARNING`      |
+| `web.metricsAppName` | Value for service prometheus metrics label "app_name". | `citylens-web` |
 
 ### Metadata settings
 

@@ -33,10 +33,10 @@ spec:
           configMap:
             name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-import
 
-        {{- if $.Values.cassandra.ssl.enabled }}
-        - name: cassandra-ssl
+        {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
           configMap:
-            name: {{ include "tiles.fullname" $ }}-cassandra-ssl
+            name: {{ include "tiles.fullname" . }}-custom-ca
         {{- end }}
 
       {{- with $.Values.importer.nodeSelector }}
@@ -70,9 +70,10 @@ spec:
             - mountPath: "/config"
               name: config-volume
 
-            {{- if $.Values.cassandra.ssl.enabled }}
-            - mountPath: "/cassandra-ssl"
-              name: cassandra-ssl
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "tiles.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
             {{- end }}
 
           {{- with $.Values.importer.cleaner.resources }}
@@ -103,6 +104,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "tiles.fullname" $ }}-import
                   key: cassandraJmxPassword
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "tiles.customCA.mountPath" $ }}
+            {{- end }}
 
       restartPolicy: Never
 {{- end }}

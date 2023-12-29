@@ -73,6 +73,10 @@ mapbox
 {{ (include (print $.Template.BasePath .path) $ | fromYaml).data | toYaml | sha256sum }}
 {{- end }}
 
+{{- define "tiles.customCA.mountPath" -}}
+{{ $.Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}
+
 {{/* Importer */}}
 
 {{- define "tiles.importer.label" -}}

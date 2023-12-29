@@ -123,6 +123,9 @@ resources: {}
 # @param castle.restrictions.host Restrictions API base URL.
 # @param castle.restrictions.key Restrictions API key.
 # @param castle.jobs Number of parallel downloading jobs.
+# @extra castle.startupProbe [nullable] Settings for startup probes
+# @param castle.startupProbe.periodSeconds Check period for startup probes.
+# @param castle.startupProbe.failureThreshold Threshold for startup probes.
 
 castle:
   image:
@@ -134,6 +137,9 @@ castle:
     host: http://restrictions-api.host
     key: ''
   jobs: 1
+  startupProbe:
+    periodSeconds: 5
+    failureThreshold: 180
 
 
 # @section Navi-Front settings
