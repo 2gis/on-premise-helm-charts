@@ -216,7 +216,6 @@
 | `assetImporter.imageProxyUrl`              | URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                                 | `""`                           |
 | `assetImporter.externalLinksProxyUrl`      | URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                 | `""`                           |
 
-
 ### Limits
 
 | Name                                      | Description                            | Value   |
@@ -235,8 +234,6 @@
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 
-
-
 ### 2GIS PRO API ingress settings
 
 | Name                                 | Description                               | Value                 |
@@ -247,7 +244,6 @@
 | `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                   |
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`              |
 | `ingress.tls`                        | TLS configuration                         | `[]`                  |
-
 
 ### 2GIS PRO Permissions API ingress settings
 

@@ -168,7 +168,7 @@ api:
 # @param web.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 # @param web.service.port Service port.
 # @param web.service.targetPort Service target port.
-# @param web.service.targetPort Service prometheus metrics target port. Metrics are available on /healthz/metrics endpoint.
+# @param web.service.metricsTargetPort Service prometheus metrics target port. Metrics are available on /healthz/metrics endpoint.
 # @param web.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param web.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
