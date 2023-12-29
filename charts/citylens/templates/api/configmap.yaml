@@ -34,9 +34,7 @@ data:
       enabled: {{ .enabled }}
       {{- if .enabled }}
       auth_server_url: {{ required "A valid .Values.api.auth.authServerUrl entry required" .authServerUrl | quote }}
-      {{- if .verifySsl }}
       verify_ssl: {{ .verifySsl }}
-      {{- end }}
       {{- if .realm }}
       realm: {{ .realm | quote }}
       {{- end}}
