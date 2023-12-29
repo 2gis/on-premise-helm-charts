@@ -47,6 +47,7 @@ dgctlStorage:
 # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 # @param api.service.port Service port.
 # @param api.service.targetPort Service target port.
+# @param api.service.metricsTargetPort Service prometheus metrics target port. Metrics are available on /healthz/metrics endpoint.
 # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
@@ -63,13 +64,16 @@ dgctlStorage:
 # @section Auth settings for authentication
 
 # @param api.auth.enabled If authentication is needed.
-# @param api.auth.publicKey Public Key for authentication. Visit `http(s)://keycloak.ingress.host/realms/CityLens_app/` to obtain a Public Key.
-# @param api.auth.algorithm Authentication algorithm type.
+# @param api.auth.authServerUrl API URL of authentication service, OIDC-compatibility expected. Ex.: `http(s)://keycloak.ingress.host/`. **Required**
+# @param api.auth.realm Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: CityLens_app
+# @param api.auth.verifySsl Enable\Disable SSL check.
+# @param api.auth.camcomToken Bearer token, expected on CamCom callback endpoint (if integration with CamCom enabled).
 
 # @section Custom settings
 
 # @param api.showDocs Show documentation link if needed.
 # @param api.logLevel Log level.
+# @param api.metricsAppName Value for service prometheus metrics label "app_name".
 
 # @section Metadata settings
 
@@ -86,7 +90,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.2.6
+    tag: 1.3.1
 
   replicas: 4
 
@@ -104,6 +108,7 @@ api:
     type: ClusterIP
     port: 80
     targetPort: 8000
+    metricsTargetPort: 8001
 
   ingress:
     enabled: false
@@ -122,12 +127,16 @@ api:
 
   auth:
     enabled: true
-    publicKey: ''
-    algorithm: RS256
+    authServerUrl: ''
+    realm: ''
+    verifySsl: true
+    camcomToken: ''
 
   showDocs: false
 
   logLevel: INFO
+
+  metricsAppName: citylens-api
 
   annotations: {}
   labels: {}
@@ -159,6 +168,7 @@ api:
 # @param web.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 # @param web.service.port Service port.
 # @param web.service.targetPort Service target port.
+# @param web.service.targetPort Service prometheus metrics target port. Metrics are available on /healthz/metrics endpoint.
 # @param web.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param web.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
@@ -176,7 +186,7 @@ api:
 
 # @param web.auth.enabled If authentication is needed.
 # @param web.auth.realm Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: Inspection_Portal_backend
-# @param web.auth.authServerUrl API URL of authentication service. Ex: `http(s)://keycloak.ingress.host` **Required**
+# @param web.auth.authServerUrl API URL of authentication service, OIDC-compatibility expected. Ex: `http(s)://keycloak.ingress.host` **Required**
 # @param web.auth.clientId Client id from keycloak. Ex: citylens-web-client **Required**
 # @param web.auth.clientSecret Client Secret from keycloak. **Required**
 # @param web.auth.verifySsl Enable\Disable SSL check.
@@ -185,6 +195,7 @@ api:
 # @section Custom settings
 
 # @param web.logLevel Log level.
+# @param web.metricsAppName Value for service prometheus metrics label "app_name".
 
 # @section Metadata settings
 
@@ -201,7 +212,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.2.6
+    tag: 1.3.1
 
   replicas: 1
 
@@ -219,6 +230,7 @@ web:
     type: ClusterIP
     port: 80
     targetPort: 5000
+    metricsTargetPort: 5001
 
   ingress:
     enabled: false
@@ -245,6 +257,7 @@ web:
     pkce: false
 
   logLevel: WARNING
+  metricsAppName: citylens-web
 
   annotations: {}
   labels: {}
