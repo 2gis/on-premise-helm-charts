@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "twins.migrate.name" . }}-migrate
+  name: {{ include "twins.migrate.name" . }}
   labels:
     {{- include "twins.migrate.labels" . | nindent 4 }}
   annotations:

@@ -226,7 +226,7 @@ postgres:
 # @param importer.retry.execute.delay Delay until the retry attempts execute
 
 importer:
-  enabled: false
+  enabled: true
   nodeSelector: {}
   initialDelaySeconds: 1
   retry:
