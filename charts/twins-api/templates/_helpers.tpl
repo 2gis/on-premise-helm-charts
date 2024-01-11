@@ -68,7 +68,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- if .Values.importer.postgres.schemaSwitchEnabled }}
 - name: TWINS_DB_RO_SCHEMA
   value: "{{ include "twins.manifestCode" . }}"
-{{- else -}}
+{{- else }}
 - name: TWINS_DB_RO_SCHEMA
   value: "{{ .Values.postgres.ro.schema }}"
 {{- end }}
@@ -83,7 +83,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- if .Values.importer.postgres.schemaSwitchEnabled }}
 - name: TWINS_DB_RW_SCHEMA
   value: "{{ include "twins.manifestCode" . }}"
-{{- else -}}
+{{- else }}
 - name: TWINS_DB_RW_SCHEMA
   value: "{{ .Values.postgres.rw.schema }}"
 {{- end }}
