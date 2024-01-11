@@ -37,7 +37,8 @@ image:
 # @section API service settings
 
 api:
-
+  # @param api.logLevel Log level (debug|info|warning|error)
+  logLevel: info
   # @param api.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
   # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
   # @param api.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.

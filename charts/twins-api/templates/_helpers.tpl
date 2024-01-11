@@ -58,6 +58,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}
 
+{{- define "twins.env.loglevel" -}}
+- name: TWINS_LOG_LEVEL
+  value: "{{ .Values.api.logLevel }}"
+{{- end }}
+
 {{- define "twins.env.db" -}}
 - name: TWINS_DB_RO_HOST
   value: "{{ required "A valid .Values.postgres.ro.host required" .Values.postgres.ro.host }}"
@@ -111,6 +116,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "twins.env.db.jobs" -}}
 {{ include "twins.env.db" . }}
+{{ include "twins.env.loglevel" . }}
 - name: TWINS_DB_RO_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -124,6 +130,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "twins.env.api"}}
+{{ include "twins.env.loglevel" . }}
 {{ include "twins.env.db.deploys" . }}
 - name: TWINS_AUTH_ENDPOINT
   value: "{{ required "A valid .Values.api.keys.url required" .Values.api.keys.url }}"
