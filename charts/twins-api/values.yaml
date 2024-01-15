@@ -14,6 +14,21 @@ dgctlDockerRegistry: ''
 
 imagePullSecrets: []
 
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 host. Format: `host:port`. **Required**
+# @param dgctlStorage.bucket S3 bucket name. **Required**
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **Required**
+
+dgctlStorage:
+  host: ''
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+  manifest: ''
+
 image:
   repository: 2gis-on-premise/twins-api
   tag: 1.6.0
@@ -22,7 +37,8 @@ image:
 # @section API service settings
 
 api:
-
+  # @param api.logLevel Log level (debug|info|warning|error)
+  logLevel: info
   # @param api.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
   # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
   # @param api.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
@@ -44,6 +60,12 @@ api:
   # @param api.replicas A replica count for the pod.
 
   replicas: 1
+
+  # @section api.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
+  # @param api.resources.requests.cpu A CPU request.
+  # @param api.resources.requests.memory A memory request.
+  # @param api.resources.limits.cpu A CPU limit.
+  # @param api.resources.limits.memory A memory limit.
 
   resources:
     requests:
@@ -131,6 +153,12 @@ migrate:
 
   initialDelaySeconds: 0
 
+  # @section migrate.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
+  # @param migrate.resources.requests.cpu A CPU request.
+  # @param migrate.resources.requests.memory A memory request.
+  # @param migrate.resources.limits.cpu A CPU limit.
+  # @param migrate.resources.limits.memory A memory limit.
+
   resources:
     requests:
       cpu: 10m
@@ -187,16 +215,82 @@ postgres:
     password: ''
 
 
-# @section Limits
+# @section Kubernetes Importer job settings
 
-# @extra api.resources **Limits for the API service**
-# @param api.resources.requests.cpu A CPU request.
-# @param api.resources.requests.memory A memory request.
-# @param api.resources.limits.cpu A CPU limit.
-# @param api.resources.limits.memory A memory limit.
+# @extra importer **Common settings**
+# @param importer.enabled If importer is enabled for the service
+# @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param importer.initialDelaySeconds Number of seconds after the container has started before liveness or readiness probes are initiated
+# @param importer.retry.download.maxAttempts The maximum number of retries download before stopping
+# @param importer.retry.download.delay Delay until the retry attempts download
+# @param importer.retry.execute.maxAttempts The maximum number of retries execute psql command before stopping
+# @param importer.retry.execute.delay Delay until the retry attempts execute
 
-# @extra migrate.resources **Limits for the Migrate service**
-# @param migrate.resources.requests.cpu A CPU request.
-# @param migrate.resources.requests.memory A memory request.
-# @param migrate.resources.limits.cpu A CPU limit.
-# @param migrate.resources.limits.memory A memory limit.
+importer:
+  enabled: true
+  nodeSelector: {}
+  initialDelaySeconds: 1
+  retry:
+    download:
+      maxAttempts: 3
+      delay: 1s
+    execute:
+      maxAttempts: 3
+      delay: 1s
+
+  # @section importer.postgres **Database settings**
+  # @param importer.postgres.schemaSwitchEnabled Automatic switch PostgreSQL schema on releases
+
+  postgres:
+    schemaSwitchEnabled: true
+
+  # @section importer.persistentVolume **Persistent Volume settings**
+
+  # @param importer.persistentVolume.enabled If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service
+  # @param importer.persistentVolume.accessModes Persistent Volume [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
+  # @param importer.persistentVolume.storageClass Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+  # @param importer.persistentVolume.size Volume size
+
+  persistentVolume:
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    storageClass: topolvm-ext4
+    size: 50Gi
+
+  # @section importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
+  # @param importer.resources.requests.cpu A CPU request
+  # @param importer.resources.requests.memory A memory request
+  # @param importer.resources.limits.cpu A CPU limit
+  # @param importer.resources.limits.memory A memory limit
+
+  resources:
+    requests:
+      cpu: 256m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2048Mi
+
+  # @section importer.cleaner **Cleaner scheme settings**
+  # @param importer.cleaner.enabled If clean schemes is enabled for the service
+  # @param importer.cleaner.versionLimit Number of backup schemes
+
+
+  cleaner:
+    enabled: true
+    versionLimit: 2
+
+    # @section importer.cleaner.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
+    # @param importer.cleaner.resources.requests.cpu A CPU request
+    # @param importer.cleaner.resources.requests.memory A memory request
+    # @param importer.cleaner.resources.limits.cpu A CPU limit
+    # @param importer.cleaner.resources.limits.memory A memory limit
+
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 1000m
+        memory: 512Mi
