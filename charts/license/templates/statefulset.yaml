@@ -119,9 +119,13 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .resources | nindent 12 }}
-          {{- if and (eq (include "license.type" $) "2") (not (empty .tpm.securityContext)) }}
+          {{- if eq (include "license.type" $) "2" }}
           securityContext:
-            {{- toYaml .tpm.securityContext | nindent 12 }}
+            runAsUser: 0
+            runAsGroup: 0
+            {{- if $.Values.tpm.mountTPMDevice }}
+            privileged: true
+            {{- end }}
           {{- end }}
       volumes:
         - name: config
