@@ -58,6 +58,10 @@ spec:
             - name: KEYCLOAK_SETTINGS
               value: /opt/api/config/keycloak.json
             {{- end }}
+            {{- if .Values.web.service.metricsEnabled }}
+            - name: METRICS_ENABLED
+              value: "true"
+            {{- end }}
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
           volumeMounts:
