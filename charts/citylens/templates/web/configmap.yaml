@@ -65,6 +65,7 @@ data:
       source: {{ .Values.worker.tracksUploader.source | squote }}
       topic: {{ .Values.kafka.topics.uploader | squote }}
       verify_ssl: {{ .Values.worker.tracksUploader.verifySsl }}
+      reload_track_timeout_seconds: {{ .Values.worker.tracksUploader.reloadTrackTimeoutSeconds }}
     {{- if .Values.worker.camcomSender.enabled }}
     camcom:
     {{- with .Values.worker.camcomSender }}
