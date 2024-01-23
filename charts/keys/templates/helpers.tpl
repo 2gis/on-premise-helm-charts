@@ -266,6 +266,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.env.dgctlStorage" -}}
 - name: KEYS_S3_ENDPOINT
   value: "{{ .Values.dgctlStorage.host }}"
+- name: KEYS_S3_REGION
+  value: "{{ .Values.dgctlStorage.region }}"
+- name: KEYS_S3_SECURE
+  value: "{{ .Values.dgctlStorage.secure }}"
+- name: KEYS_S3_VERIFY_SSL
+  value: "{{ .Values.dgctlStorage.verifySsl }}"
 - name: KEYS_S3_BUCKET
   value: "{{ .Values.dgctlStorage.bucket }}"
 - name: KEYS_S3_ACCESS_KEY

@@ -162,6 +162,12 @@ onprem
       key: importerDbPassword
 - name: IMPORTER_S3_ENDPOINT
   value: "{{ .Values.dgctlStorage.host }}"
+- name: IMPORTER_S3_REGION
+  value: "{{ .Values.dgctlStorage.region }}"
+- name: IMPORTER_S3_SECURE
+  value: "{{ .Values.dgctlStorage.secure }}"
+- name: IMPORTER_S3_VERIFY_SSL
+  value: "{{ .Values.dgctlStorage.verifySsl }}"
 - name: IMPORTER_S3_BUCKET
   value: "{{ .Values.dgctlStorage.bucket }}"
 - name: IMPORTER_S3_ACCESS_KEY
