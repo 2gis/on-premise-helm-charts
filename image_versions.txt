@@ -51,9 +51,9 @@ navi-splitter
 platform
 	platform-ui:0.5.5
 pro-api
-	pro-api:1.1.77
-	pro-importer:1.1.77
-	pro-permissions-api:1.1.77
+	pro-api:1.1.78
+	pro-importer:1.1.78
+	pro-permissions-api:1.1.78
 pro-ui
 	pro-ui:1.4.0
 search-api
