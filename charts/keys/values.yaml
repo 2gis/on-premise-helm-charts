@@ -522,3 +522,16 @@ dgctlStorage:
 # @param redis.resources.requests.memory A memory request.
 # @param redis.resources.limits.cpu A CPU limit.
 # @param redis.resources.limits.memory A memory limit.
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container.
+
+customCAs:
+  bundle: ''
+# bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
+  certsPath: ''

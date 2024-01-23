@@ -10,6 +10,7 @@ dgctlDockerRegistry: ''
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 # @param affinity Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
 # @param imagePullSecrets Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
@@ -17,6 +18,7 @@ dgctlDockerRegistry: ''
 nodeSelector: {}
 affinity: {}
 tolerations: []
+annotations: {}
 podAnnotations: {}
 podLabels: {}
 imagePullSecrets: []
@@ -340,3 +342,16 @@ importer:
       limits:
         cpu: 1000m
         memory: 512Mi
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container.
+
+customCAs:
+  bundle: ''
+# bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
+  certsPath: ''

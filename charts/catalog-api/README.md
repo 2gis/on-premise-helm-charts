@@ -33,6 +33,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                                  | `{}`  |
 | `affinity`         | Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                                   | `{}`  |
 | `tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                                    | `[]`  |
+| `annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                           | `{}`  |
 | `podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                        | `{}`  |
 | `podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                                                  | `{}`  |
 | `imagePullSecrets` | Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) | `[]`  |
@@ -237,6 +238,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.cleaner.resources.requests.memory` | A memory request | `128Mi` |
 | `importer.cleaner.resources.limits.cpu`      | A CPU limit      | `1000m` |
 | `importer.cleaner.resources.limits.memory`   | A memory limit   | `512Mi` |
+
+### customCAs **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container.                                                                          | `""`  |
 
 
 ## Maintainers

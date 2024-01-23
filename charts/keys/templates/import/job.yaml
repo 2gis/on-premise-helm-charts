@@ -29,6 +29,13 @@ spec:
             {{- include "keys.env.db.jobs" . | nindent 12 }}
             {{- include "keys.env.predef" . | nindent 12 }}
             {{- include "keys.env.dgctlStorage" . | nindent 12 }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "keys.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
       {{- with .Values.import.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -225,3 +225,29 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- print "autoscaling/v2" -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "catalog.env.custom.ca.path" -}}
+- name: SSL_CERT_DIR
+  value: {{ include "catalog.custom.ca.mountPath" . }}
+{{- end }}
+
+{{- define "catalog.custom.ca.mountPath" -}}
+{{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}
+
+{{- define "catalog.custom.ca.volumeMounts" -}}
+- name: custom-ca
+  mountPath: {{ include "catalog.custom.ca.mountPath" . }}/custom-ca.crt
+  subPath: custom-ca.crt
+  readOnly: true
+{{- end -}}
+
+{{- define "catalog.custom.ca.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "catalog.configmap.name" }}
+{{- end -}}
+
+{{- define "catalog.configmap.name" -}}
+{{ include "catalog.name" . }}-configmap
+{{- end -}}
