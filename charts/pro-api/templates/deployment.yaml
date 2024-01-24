@@ -118,6 +118,8 @@ spec:
               value: {{ include "pro-api.user-asset-importer-name" . }}
             - name: Import__ExternalLinksProxyUrl
               value: "{{ .Values.assetImporter.externalLinksProxyUrl }}"
+            - name: Import__ExternalLinksAllowedHosts
+              value: "{{ .Values.assetImporter.externalLinksAllowedHosts }}"
             - name: TEMP_PATH
               value: "{{ .Values.api.tempPath }}"
             - name: CATALOG_API_2GIS_URL
