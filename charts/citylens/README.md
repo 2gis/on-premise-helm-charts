@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.3.2`                        |
+| `api.image.tag`        | Tag.         | `1.4.1`                        |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -121,7 +121,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.3.2`                        |
+| `web.image.tag`        | Tag.         | `1.4.1`                        |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -144,6 +144,7 @@ See the [documentation]() to learn about:
 | `web.service.metricsTargetPort` | Service prometheus metrics target port. Metrics are available on /healthz/metrics endpoint.                                    | `5001`      |
 | `web.service.annotations`       | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
 | `web.service.labels`            | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
+| `web.service.metricsEnabled`    | Enable prometheus metrics                                                                                                      | `true`      |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -289,20 +290,21 @@ See the [documentation]() to learn about:
 
 ### Citylens Tracks Uploader worker's settings
 
-| Name                                   | Description                                                                                                                          | Value   |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| `worker.tracksUploader.enabled`        | If Tracks Uploader worker is enabled for the service.                                                                                | `false` |
-| `worker.tracksUploader.replicas`       | A replica count for the pod.                                                                                                         | `1`     |
-| `worker.tracksUploader.api`            | Destination API address citylens. Ex.: http(s)://citylens-api.host/                                                                  | `""`    |
-| `worker.tracksUploader.source`         | Source address citylens-web. Ex.: http(s)://citylens-web.host                                                                        | `""`    |
-| `worker.tracksUploader.verifySsl`      | Set to `false` if tracksUploader.api or tracksUploader.source must be accessed via https without certificate validation **Required** | `true`  |
-| `worker.tracksUploader.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                            | `{}`    |
-| `worker.tracksUploader.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                      | `{}`    |
-| `worker.tracksUploader.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                            | `{}`    |
-| `worker.tracksUploader.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                      | `{}`    |
-| `worker.tracksUploader.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).              | `{}`    |
-| `worker.tracksUploader.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                | `{}`    |
-| `worker.tracksUploader.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.          | `{}`    |
+| Name                                              | Description                                                                                                                          | Value   |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `worker.tracksUploader.enabled`                   | If Tracks Uploader worker is enabled for the service.                                                                                | `false` |
+| `worker.tracksUploader.replicas`                  | A replica count for the pod.                                                                                                         | `1`     |
+| `worker.tracksUploader.api`                       | Destination API address citylens. Ex.: http(s)://citylens-api.host/                                                                  | `""`    |
+| `worker.tracksUploader.source`                    | Source address citylens-web. Ex.: http(s)://citylens-web.host                                                                        | `""`    |
+| `worker.tracksUploader.verifySsl`                 | Set to `false` if tracksUploader.api or tracksUploader.source must be accessed via https without certificate validation **Required** | `true`  |
+| `worker.tracksUploader.reloadTrackTimeoutSeconds` | Track reload timeout, seconds.                                                                                                       | `900`   |
+| `worker.tracksUploader.annotations`               | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                            | `{}`    |
+| `worker.tracksUploader.labels`                    | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                      | `{}`    |
+| `worker.tracksUploader.podAnnotations`            | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                            | `{}`    |
+| `worker.tracksUploader.podLabels`                 | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                      | `{}`    |
+| `worker.tracksUploader.nodeSelector`              | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).              | `{}`    |
+| `worker.tracksUploader.tolerations`               | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                | `{}`    |
+| `worker.tracksUploader.affinity`                  | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.          | `{}`    |
 
 ### Migration job settings
 

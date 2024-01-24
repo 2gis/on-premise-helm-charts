@@ -171,6 +171,7 @@ api:
 # @param web.service.metricsTargetPort Service prometheus metrics target port. Metrics are available on /healthz/metrics endpoint.
 # @param web.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param web.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param web.service.metricsEnabled Enable prometheus metrics
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 

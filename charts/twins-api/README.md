@@ -20,7 +20,7 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | ------------------ | --------------------------------------------------------------------------------------------- | --------------------------- |
 | `imagePullSecrets` | Kubernetes image pull secrets.                                                                | `[]`                        |
 | `image.repository` | Twins API service image repository.                                                           | `2gis-on-premise/twins-api` |
-| `image.tag`        | Twins API service image tag.                                                                  | `1.6.0`                     |
+| `image.tag`        | Twins API service image tag.                                                                  | `1.7.3`                     |
 | `image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`              |
 
 ### Deployment Artifacts Storage settings
@@ -37,6 +37,7 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 
 | Name                                        | Description                                                                                                                                                                                              | Value           |
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `api.logLevel`                              | Log level (debug|info|warning|error)                                                                                                                                                                     | `info`          |
 | `api.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
 | `api.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `api.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
@@ -117,16 +118,16 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 
 ### Kubernetes Importer job settings
 
-| Name                                  | Description                                                                                                        | Value   |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------- |
-| `importer`                            | **Common settings**                                                                                                |         |
-| `importer.enabled`                    | If importer is enabled for the service                                                                             | `false` |
-| `importer.nodeSelector`               | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) | `{}`    |
-| `importer.initialDelaySeconds`        | Number of seconds after the container has started before liveness or readiness probes are initiated                | `1`     |
-| `importer.retry.download.maxAttempts` | The maximum number of retries download before stopping                                                             | `3`     |
-| `importer.retry.download.delay`       | Delay until the retry attempts download                                                                            | `1s`    |
-| `importer.retry.execute.maxAttempts`  | The maximum number of retries execute psql command before stopping                                                 | `3`     |
-| `importer.retry.execute.delay`        | Delay until the retry attempts execute                                                                             | `1s`    |
+| Name                                  | Description                                                                                                        | Value  |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------ |
+| `importer`                            | **Common settings**                                                                                                |        |
+| `importer.enabled`                    | If importer is enabled for the service                                                                             | `true` |
+| `importer.nodeSelector`               | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) | `{}`   |
+| `importer.initialDelaySeconds`        | Number of seconds after the container has started before liveness or readiness probes are initiated                | `1`    |
+| `importer.retry.download.maxAttempts` | The maximum number of retries download before stopping                                                             | `3`    |
+| `importer.retry.download.delay`       | Delay until the retry attempts download                                                                            | `1s`   |
+| `importer.retry.execute.maxAttempts`  | The maximum number of retries execute psql command before stopping                                                 | `3`    |
+| `importer.retry.execute.delay`        | Delay until the retry attempts execute                                                                             | `1s`   |
 
 ### importer.postgres **Database settings**
 
