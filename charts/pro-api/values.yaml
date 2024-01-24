@@ -1,4 +1,4 @@
-# @section Docker Registry settings
+﻿# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -14,7 +14,7 @@ dgctlDockerRegistry: ''
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
-# @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).
+# @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -30,7 +30,7 @@ fullnameOverride: ''
 nodeSelector: {}
 affinity: {}
 priorityClassName: ''
-terminationGracePeriodSeconds: 60
+terminationGracePeriodSeconds: 300
 tolerations: []
 podAnnotations: {}
 podLabels: {}
@@ -115,14 +115,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.1.67
+  tag: 1.1.79
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.1.67
+  tag: 1.1.79
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -157,6 +157,8 @@ s3:
 # @skip api.filterByZoneCodes
 # @skip api.esDataCentersCount
 # @skip Local cache settings
+# @skip localCache.enabled
+# @skip localCache.trackStatistics
 # @skip api.localCache.enabled
 # @skip api.localCache.trackStatistics
 
@@ -361,6 +363,8 @@ permissionsPodSettings:
 # @skip permissionsApi.host
 # @param permissionsApi.enabled If permissionsApi is enabled for the service.
 # @skip Local cache settings
+# @skip localCache.enabled
+# @skip localCache.trackStatistics
 # @skip permissionsApi.localCache.enabled
 # @skip permissionsApi.localCache.trackStatistics
 
@@ -384,13 +388,14 @@ permissionsApi:
 # @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
 # @param assetImporter.imageProxyUrl URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
 # @param assetImporter.externalLinksProxyUrl URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
+# @param assetImporter.externalLinksAllowedHosts Comma separated hosts, i.e. 'someserver.com,someserver2.com' )
 # @skip assetImporter.files
 # @skip assetImporter.esMetricsEnabled
 # @skip assetImporter.suspended
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.67
+  tag: 1.1.79
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -409,6 +414,7 @@ assetImporter:
   files: ''
   imageProxyUrl: ''
   externalLinksProxyUrl: ''
+  externalLinksAllowedHosts: ''
   esMetricsEnabled: false
 
 # @skip userAssetImporter
@@ -419,7 +425,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.67
+  tag: 1.1.79
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
@@ -470,10 +476,10 @@ ingress:
   enabled: false
   className: nginx
   hosts:
-  - host: pro-api.example.com
-    paths:
-    - path: /
-      pathType: Prefix
+    - host: pro-api.example.com
+      paths:
+        - path: /
+          pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-api.example.com
@@ -490,10 +496,10 @@ permissionsApiIngress:
   enabled: false
   className: nginx
   hosts:
-  - host: pro-permissions-api.example.com
-    paths:
-    - path: /
-      pathType: Prefix
+    - host: pro-permissions-api.example.com
+      paths:
+        - path: /
+          pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-permissions-api.example.com
