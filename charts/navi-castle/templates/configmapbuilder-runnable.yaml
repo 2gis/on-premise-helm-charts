@@ -18,7 +18,8 @@ data:
       -prometheus-listen-address \
       0.0.0.0:{{ .Values.cron.prometheusPort | int }} \
       {{- if .Values.persistentVolume.enabled }}
-      /opt/update_services
-      {{- else }}{{- /* hang indefinitely if imports scheduled as k8s cronjob */}}
+      {{- /* hang indefinitely if imports scheduled as k8s cronjob */}}
       /dev/null
+      {{- else }}
+      /opt/update_services
       {{- end }}
