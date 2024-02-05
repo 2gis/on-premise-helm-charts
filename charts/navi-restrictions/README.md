@@ -51,7 +51,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | ----------------------- | -------------------------------- | ------------------------------------------ |
 | `api.image.repository`  | API service image repository.    | `2gis-on-premise/navi-restrictions-api`    |
 | `api.image.pullPolicy`  | API service pull policy.         | `IfNotPresent`                             |
-| `api.image.tag`         | API service image tag.           | `1.0.0`                                    |
+| `api.image.tag`         | API service image tag.           | `1.0.1`                                    |
 | `cron.image.repository` | Syncer service image repository. | `2gis-on-premise/navi-restrictions-syncer` |
 | `cron.image.pullPolicy` | Syncer service pull policy.      | `IfNotPresent`                             |
 | `cron.image.tag`        | Syncer service image tag.        | `1.0.1`                                    |
