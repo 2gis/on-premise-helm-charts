@@ -34,6 +34,25 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
+      {{- if .Values.api.postgres.tls.enabled }}
+      initContainers:
+      - name: copy-certs
+        image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+        command:
+          - /bin/sh
+          - -ec
+          - |
+            cp /tmp/certs/* /etc/2gis/secret/psql/
+            chmod 600 /etc/2gis/secret/psql/client.key
+        volumeMounts:
+          - name: {{ include "catalog.name-psql-raw" . | quote }}
+            mountPath: /tmp/certs
+          - name: {{ include "catalog.name-psql" . | quote }}
+            mountPath: /etc/2gis/secret/psql
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
@@ -54,6 +73,19 @@ spec:
             {{- include "catalog.env.search" . | nindent 12 }}
             {{- include "catalog.env.keys" . | nindent 12 }}
             {{- include "catalog.env.license" . | nindent 12 }}
+          {{- if .Values.api.postgres.tls.enabled }}
+          volumeMounts:
+            - name: {{ printf "%s-psql" (include "catalog.name" .) | quote }}
+              mountPath: /etc/2gis/secret/psql
+          {{- end }}
+      {{- if .Values.api.postgres.tls.enabled }}
+      volumes:
+        - name: {{ include "catalog.name-psql-raw" . | quote }}
+          secret:
+            secretName: {{ include "catalog.name-psql" . | quote }}
+        - name: {{ include "catalog.name-psql" . | quote }}
+          emptyDir: {}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

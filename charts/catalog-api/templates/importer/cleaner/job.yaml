@@ -17,6 +17,25 @@ spec:
         {{- include "catalog.importer.labels" . | nindent 8 }}
     spec:
       restartPolicy: Never
+      {{- if .Values.importer.postgres.tls.enabled }}
+      initContainers:
+      - name: copy-certs
+        image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+        command:
+          - /bin/sh
+          - -ec
+          - |
+            cp /tmp/certs/* /etc/2gis/secret/psql/
+            chmod 600 /etc/2gis/secret/psql/client.key
+        volumeMounts:
+          - name: {{ include "catalog.importer.name-psql-raw" . | quote }}
+            mountPath: /tmp/certs
+          - name: {{ include "catalog.importer.name-psql" . | quote }}
+            mountPath: /etc/2gis/secret/psql
+      {{- end }}
       containers:
         - name: cleaner-job
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag }}
@@ -26,6 +45,19 @@ spec:
             {{- toYaml .Values.importer.cleaner.resources | nindent 12 }}
           env:
             {{- include "catalog.env.importer" . | nindent 12 }}
+          {{- if .Values.importer.postgres.tls.enabled }}
+          volumeMounts:
+            - name: {{ printf "%s-psql" (include "catalog.importer.name" .) | quote }}
+              mountPath: /etc/2gis/secret/psql
+          {{- end }}
+      {{- if .Values.importer.postgres.tls.enabled }}
+      volumes:
+        - name: {{ include "catalog.importer.name-psql-raw" . | quote }}
+          secret:
+            secretName: {{ include "catalog.importer.name-psql" . | quote }}
+        - name: {{ include "catalog.importer.name-psql" . | quote }}
+          emptyDir: {}
+      {{- end }}
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
