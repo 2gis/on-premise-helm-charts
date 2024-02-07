@@ -47,6 +47,10 @@ data:
             js_content bundle.geo_coding;
         }
 
+        location ^~ /pedestrian {
+            js_content bundle.geo_coding;
+        }
+
         location ^~ /public_transport {
             js_content bundle.geo_coding;
         }
