@@ -13,8 +13,14 @@ data:
             autoindex on;
         }
 
+        location /spartacus {
+            expires epoch;
+            alias  {{ .Values.castle.castleDataPath }}/backup;
+            autoindex on;
+            autoindex_format json;
+        }
+
         location /healthcheck {
           return 200 "Ok!";
         }
     }
- 

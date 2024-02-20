@@ -57,6 +57,13 @@ data:
         },
         "server_info": {
           "server_id": "{{ include "router.fullname" . }}"
+        },
+        "local_restrictions_for_keys": {
+            "distance_between_points_km": [
+                {"type" : "directions-api", "value" : 50},
+                {"type" : "distance-matrix-api", "value" : 50},
+                {"type" : "pairs-directions-api", "value" : 50}
+            ]
         }
         {{- with .Values.router.keyManagementService }}
         {{- if .enabled }}
@@ -65,19 +72,7 @@ data:
         {
           "service_remote_address" : {{ .host | quote }},
           "keys_refresh_interval_sec" : {{ .refreshIntervalSec | int }},
-          "keys_download_timeout_sec" : {{ .downloadTimeoutSec | int }},
-          "service_apis" :
-          [
-              {{- $first := true }}
-              {{- range $type, $token := .apis }}
-              {{- if $first }}
-                  {{- $first = false }}
-              {{- else }}
-                  {{- print "," }}
-              {{- end }}
-              {"type" : {{ $type | quote }}, "token" : {{ $token | quote }} }
-              {{- end }}
-          ]
+          "keys_download_timeout_sec" : {{ .downloadTimeoutSec | int }}
         }
         {{- end }}
         {{- end }}

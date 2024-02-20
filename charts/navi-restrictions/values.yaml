@@ -104,7 +104,7 @@ api:
   image:
     repository: 2gis-on-premise/navi-restrictions-api
     pullPolicy: IfNotPresent
-    tag: 1.0.0
+    tag: 1.0.1
 
   resources:
     limits:
@@ -131,12 +131,24 @@ api:
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.className Name of the Ingress controller class.
   # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+  # @param api.ingress.tls TLS configuration
 
   ingress:
     enabled: false
+    className: nginx
     hosts:
-    - host: navi-restrictions.host
+    - host: navi-restrictions.example.com
+      paths:
+      - path: /
+        pathType: Prefix
+    tls: []
+    # - hosts:
+    #   - navi-restrictions.example.com
+    #   secretName: secret.tls
 
   # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 

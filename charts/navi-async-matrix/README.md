@@ -52,7 +52,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.3.3`                             |
+| `image.tag`        | Tag         | `1.6.2`                             |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings
@@ -62,6 +62,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+
+### RBAC parameters
+
+| Name               | Description                                     | Value   |
+| ------------------ | ----------------------------------------------- | ------- |
+| `rbac.create`      | Whether to create and use RBAC resources or not | `false` |
+| `rbac.annotations` | Role and RoleBinding annotations                | `{}`    |
+| `rbac.labels`      | Role and RoleBinding additional labels          | `{}`    |
 
 ### Strategy settings
 
@@ -90,10 +98,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value                    |
-| ----------------------- | -------------------------------------- | ------------------------ |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`                  |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `navi-async-matrix.host` |
+| Name                                 | Description                               | Value                           |
+| ------------------------------------ | ----------------------------------------- | ------------------------------- |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                         |
+| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`                         |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `navi-async-matrix.example.com` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                             |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                        |
+| `ingress.tls`                        | TLS configuration                         | `[]`                            |
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
@@ -105,15 +117,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-| Name                                      | Description                                                                                                                                                          | Value   |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
-| `hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
-| `hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
-| `hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
-| `hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
-| `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
-| `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+| Name                                    | Description                                                                                                                                                          | Value   |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `hpa.enabled`                           | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `hpa.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `hpa.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
+| `hpa.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `hpa.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+| `hpa.behavior`                          | HPA Behavior                                                                                                                                                         | `{}`    |
 
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
@@ -132,34 +143,47 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `dm.port`               | Distance Matrix Async API HTTP port.                                                                                          | `8000` |
 | `dm.configType`         | Configuration type. Must always be `env`.                                                                                     | `env`  |
+| `dm.logLevel`           | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                 | `INFO` |
 | `dm.workerCount`        | Number of Distance Matrix Async workers.                                                                                      | `4`    |
 | `dm.citiesUrl`          | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`   |
 | `dm.citiesUpdatePeriod` | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600` |
 
 ### Database settings
 
-| Name          | Description                             | Value  |
-| ------------- | --------------------------------------- | ------ |
-| `db.host`     | PostgreSQL hostname or IP. **Required** | `""`   |
-| `db.port`     | PostgreSQL port.                        | `5432` |
-| `db.name`     | PostgreSQL database name. **Required**  | `""`   |
-| `db.user`     | PostgreSQL username. **Required**       | `""`   |
-| `db.password` | PostgreSQL password. **Required**       | `""`   |
+| Name              | Description                                 | Value         |
+| ----------------- | ------------------------------------------- | ------------- |
+| `db.host`         | PostgreSQL hostname or IP. **Required**     | `""`          |
+| `db.port`         | PostgreSQL port.                            | `5432`        |
+| `db.name`         | PostgreSQL database name. **Required**      | `""`          |
+| `db.user`         | PostgreSQL username. **Required**           | `""`          |
+| `db.password`     | PostgreSQL password. **Required**           | `""`          |
+| `db.schema`       | PostgreSQL schema.                          | `public`      |
+| `db.tls.enabled`  | If tls connection to postgresql is enabled. | `false`       |
+| `db.tls.rootCert` | Root certificate file.                      | `""`          |
+| `db.tls.cert`     | Certificate of postgresql server.           | `""`          |
+| `db.tls.key`      | Key of postgresql server.                   | `""`          |
+| `db.tls.mode`     | Level of protection.                        | `verify-full` |
 
 ### Kafka settings
 
-| Name                              | Description                                                                                                               | Value               |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `kafka.groupId`                   | Distance Matrix Async API group identifier.                                                                               | `navi_async_matrix` |
-| `kafka.statusTopic`               | Name of the topic for sending new tasks to.                                                                               | `status_topic`      |
-| `kafka.cancelTopic`               | Name of the topic for canceling or receiving information about finished tasks.                                            | `cancel_topic`      |
-| `kafka.properties`                | Properties as supported by kafka-python. Refer to inline comments for details.                                            |                     |
-| `kafka.sensitiveProperties`       | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                |
-| `kafka.fileProperties`            | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                |
-| `kafka.taskTopicRules`            | **Information about the topics that Distance Matrix Async API will use to send the requests.**                            |                     |
-| `kafka.taskTopicRules[].topic`    | Name of the topic.                                                                                                        |                     |
-| `kafka.taskTopicRules[].default`  | If this topic is used for projects by default.                                                                            |                     |
-| `kafka.taskTopicRules[].projects` | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                     |
+| Name                                          | Description                                                                                                               | Value               |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `kafka.groupId`                               | Distance Matrix Async API group identifier.                                                                               | `navi_async_matrix` |
+| `kafka.statusTopic`                           | Name of the topic for sending new tasks to.                                                                               | `status_topic`      |
+| `kafka.cancelTopic`                           | Name of the topic for canceling or receiving information about finished tasks.                                            | `cancel_topic`      |
+| `kafka.properties`                            | Properties as supported by kafka-python. Refer to inline comments for details.                                            |                     |
+| `kafka.sensitiveProperties`                   | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                |
+| `kafka.fileProperties`                        | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                |
+| `kafka.consumerOverrides.properties`          | Consumer specific properties as simple key-value pairs.                                                                   | `{}`                |
+| `kafka.consumerOverrides.sensitiveProperties` | Consumer specific properties mounted as secrets.                                                                          | `{}`                |
+| `kafka.consumerOverrides.fileProperties`      | Consumer specific properties mounted as regular files.                                                                    | `{}`                |
+| `kafka.producerOverrides.properties`          | Consumer specific properties as simple key-value pairs.                                                                   | `{}`                |
+| `kafka.producerOverrides.sensitiveProperties` | Consumer specific properties mounted as secrets.                                                                          | `{}`                |
+| `kafka.producerOverrides.fileProperties`      | Consumer specific properties mounted as regular files.                                                                    | `{}`                |
+| `kafka.taskTopicRules`                        | **Information about the topics that Distance Matrix Async API will use to send the requests.**                            |                     |
+| `kafka.taskTopicRules[].topic`                | Name of the topic.                                                                                                        |                     |
+| `kafka.taskTopicRules[].default`              | If this topic is used for projects by default.                                                                            |                     |
+| `kafka.taskTopicRules[].projects`             | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                     |
 
 ### S3-compatible storage settings
 

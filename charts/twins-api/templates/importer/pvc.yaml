@@ -1,0 +1,21 @@
+{{- if .Values.importer.persistentVolume.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "twins.importer.name" . }}
+  labels:
+    {{- include "twins.importer.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-20"
+spec:
+  storageClassName: {{ .Values.importer.persistentVolume.storageClass }}
+  {{- with .Values.importer.persistentVolume.accessModes }}
+  accessModes:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.importer.persistentVolume.size }}
+{{- end }}

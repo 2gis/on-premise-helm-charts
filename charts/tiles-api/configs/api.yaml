@@ -6,15 +6,8 @@ graceful-shutdown-time: 5s
 ui-whitelist: {{ $.Values.api.uiWhitelist }}
 {{- end }}
 
-
-cassandra-credentials:
-  user: {{ .Values.cassandra.credentials.user }}
-  password: {{ .Values.cassandra.credentials.password }}
-
-{{- if $.Values.cassandra.ssl.enabled }}
 cassandra-ssl:
-  ca-path: "/cassandra-ssl/ca.crt"
-{{- end }}
+  enabled: {{ $.Values.cassandra.ssl.enabled }}
 
 cassandra-clusters:
   - name: kubernetes
@@ -27,9 +20,8 @@ cassandra-clusters:
       {{- range $_, $type := $.Values.types }}
       - tileset: {{ $type.name | default (include "tiles.kind" $type) }}
         keyspace: {{ include "tiles.keyspace" (merge $type $) }}
-        {{- if $type.subtype }}
-        type: ald
-        {{- else if $default }}
+        type: {{ include "tiles.type" $type }}
+        {{- if and $default (not $type.subtype) }}
         default: {{ $default }}
         {{- $default = false }}
         {{- end }}

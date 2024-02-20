@@ -13,9 +13,9 @@ releases:
   - name: navi-castle
     {{- if eq .Values.remoteCharts true }}
     chart: 2gis-on-premise/navi-castle
-    {{- else}}    
+    {{- else}}
     chart: ../../../charts/navi-castle
-    {{- end }}  
+    {{- end }}
     namespace: {{ .Values.namespace  }}
     kubeContext: {{ .Values.kubeContext }}
     version: "{{ .Values.version }}"

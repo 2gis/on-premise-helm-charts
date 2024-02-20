@@ -7,7 +7,12 @@ data:
   {{- with .Values.web.auth }}
   keycloak.json: |
     {
-      "realm": {{ required "A valid .Values.web.auth.realm entry required" .realm | quote }},
+      {{- if .realm }}
+      "realm": {{ .realm | quote }},
+      {{- end }}
+      {{- if .pkce }}
+      "pkce": {{ .pkce }},
+      {{- end }}
       "auth-server-url": {{ required "A valid .Values.web.auth.authServerUrl entry required" .authServerUrl | quote }},
       "resource": {{ required "A valid .Values.web.auth.clientId entry required" .clientId | quote }},
       "verify-ssl": {{ .verifySsl }},
@@ -16,11 +21,12 @@ data:
       }
     }
   {{- end }}
-  {{- end }}
+    {{- end }}
   dashboard_config.yaml: |
     dashboard_domain: {{ required "A valid .Values.dashboardDomain. entry required" .Values.dashboardDomain | squote }}
     default_locale: {{ .Values.locale | squote }}
     log_level: {{ .Values.web.logLevel | squote }}
+    metrics_app_name: {{ .Values.web.metricsAppName }}
     db_connections:
     {{- with .Values.postgres }}
       postgres: 'postgresql://{{ required "A valid .Values.postgres.username entry required" .username }}:{{ required "A valid .Values.postgres.password entry required" .password }}@{{ required "A valid .Values.postgres.host entry required" .host }}:{{ required "A valid .Values.postgres.port entry required" .port }}/{{ required "A valid .Values.postgres.database entry required" .database }}'
@@ -39,15 +45,27 @@ data:
     s3:
     {{- with .Values.s3 }}
       bucket_prefix: {{ required "A valid .Values.s3.bucketPrefix entry required" .bucketPrefix | squote }}
+      logs_bucket_prefix: {{ required "A valid .Values.s3.logsBucketPrefix entry required" .logsBucketPrefix | squote }}
+      {{- if .setPublicReadACL }}
+      set_public_read_acl: {{ .setPublicReadACL }}
+      {{- end }}
+      key_templates:
+        log: '{track_uuid}/log_{log_timestamp_ms}'
+        log_prefix: '{track_uuid}/log_'
+        frame: '{track_uuid}/{frame_timestamp_ms}.jpg'
       client_params:
         aws_access_key_id: {{ required "A valid .Values.s3.accessKey entry required" .accessKey | squote }}
         aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
         endpoint_url: {{ required "A valid .Values.s3.endpoint entry required" .endpoint | squote }}
+        region_name: {{ .region }}
+        verify: {{ .verifySsl }}
     {{- end }}
     tracks_uploader:
       api: {{ .Values.worker.tracksUploader.api | squote }}
       source: {{ .Values.worker.tracksUploader.source | squote }}
       topic: {{ .Values.kafka.topics.uploader | squote }}
+      verify_ssl: {{ .Values.worker.tracksUploader.verifySsl }}
+      reload_track_timeout_seconds: {{ .Values.worker.tracksUploader.reloadTrackTimeoutSeconds }}
     {{- if .Values.worker.camcomSender.enabled }}
     camcom:
     {{- with .Values.worker.camcomSender }}
@@ -59,7 +77,14 @@ data:
         period: {{ .requestRateLimit.period }}
       request_retries: {{ .requestRetries }}
       request_retries_backoff: {{ .requestRetriesBackoff }}
+      source_env: {{ .sourceEnv }}
     {{- end }}
+    {{- end }}
+    {{- with .Values.pro }}
+    pro_client:
+      endpoint_url: {{ .url }}
+      token: {{ .key }}
+      verify_ssl: {{ .verifySsl }}
     {{- end }}
     map:
       mapgl:
@@ -74,10 +99,20 @@ data:
     enabled_modules:
       header_links:
         {{- toYaml .Values.headerLinks | nindent 8 }}
+        {{- if .Values.worker.tracksUploader.enabled }}
+        - reload_track
+        - reload_statuses
+        {{- end }}
+        {{- if .Values.pro.url }}
+        - pro
+        {{- end }}
       header_help_url: 'https://docs.google.com/document/d/1ypaEpklxfc9S5e7FdG2sWBT-WfIR_uZGvQp8X3Xrr0c'
       track_downloader:
         frames_topics: {{ .Values.kafka.topics.frames }}
         metadata_topics: {{ .Values.kafka.topics.tracks }}
+        frames_lifecycle_topic: {{ required "A valid .Values.kafka.topics.framesLifecycle entry required" .Values.kafka.topics.framesLifecycle | squote }}
+      logs_saver:
+        logs_topic: {{ .Values.kafka.topics.logs }}
       reporters:
       {{- range .Values.reporters }}
         - name: {{ .name }}
@@ -85,6 +120,9 @@ data:
             {{- toYaml .predictors | nindent 12 }}
       {{- if eq .name "pro" }}
           topic: {{ $.Values.kafka.topics.pro }}
+          {{- if .trackTimeoutDays }}
+          timeout: {{ .trackTimeoutDays }}
+          {{- end }}
         {{- end }}
       {{- end }}
       predictors:

@@ -1,14 +1,105 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.17.0]
+
+### citylens
+
+- Backward compatibility for citylens 1.3.0 is broken. Parameters `api.auth.publicKey` and `api.auth.algoritm` are replaced
+  with `api.auth.authServerUrl`, `api.auth.realm`, `api.auth.verifySsl`.
+
+
+### license
+
+- Backward compatibility for license v1 is broken. If you have a version lower than `1.9.1`, you need to upgrade first
+  to version `1.16.0` to get license v2 without downtime - after that you can upgrade to version `1.17.0`.
+- Removed `fs` persistence type, now only `s3` is available. `persistence.type` is no more provided, old `persistence.s3`
+  settings now should be located under `persistence`.
+
+```yaml
+--- # old
+persistence:
+  type: s3
+  s3:
+    ...
+
+--- # new
+persistence:
+  ...
+```
+
+### navi-back
+- renamed parameter naviback.ecaHost to naviback.ecaUrl
+- `livenessProbeDelay` and `readinessProbeDelay` are ignored in favor of startup probes
+
+## [1.16.0]
+
+### catalog-api
+
+- Changes in data for catalog, if you have a version lower than 1.16.0, you need to update to version 1.16.0 to get the latest data
+
+## [1.15.0]
+
+### navi-router
+
+- `router.keyManagementService.apis.*` tokens renamed, `-api` suffix added
+
+## [1.14.0]
+
+### keys-api
+
+- Added new required dgctlStorage parameters
+
+```yaml
+dgctlStorage:
+  host: ''
+  bucket: keys
+  accessKey: ''
+  secretKey: ''
+  manifest: manifest.json
+```
+
+## [1.13.0]
+
+### tiles-api
+
+- Backward compatibility with `license` versions before `2.0.0` (on-premise version `1.8.0`) is broken.
+- License v2 over HTTPS is required.
+- Update migrations, when updating the service you need to update the data
+
+### pro-api
+
+- Add required topic `assetDataTopic`
+
+## [1.12.0]
+
+### navi-async-matrix
+
+- Remove `hpa.scaleUpStabilizationWindowSeconds` and `.hpa.scaleDownStabilizationWindowSeconds`
+- Add `hpa.behavior`
+
+```yaml
+hpa:
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 500
+    scaleDown:
+      stabilizationWindowSeconds: 600
+```
+
 ## [1.10.0]
-#### pro-api
+
+### pro-api
+
 - Added new required setting api.licensePartner. Now pro-api only works with a valid license file, which can be requested from your sales manager. The license file must be placed in the s3.assetsDataBucket.
 
 ## [1.9.1]
-#### license
+
+### license
+
 - Added `license.type`
 - Added `persistence`
-```
+
+```yaml
 persistence:
   type: s3
   fs:
@@ -20,13 +111,18 @@ persistence:
     root: ''
     accessKey: ''
     secretKey: ''
+```
 
 ## [1.7.6]
-#### pro-api
+
+### pro-api
+
 - Added new setting s3.assetsDataBucket. dgclStorage.bucket and buckets for the service app are completely separate now.
 
 ## [1.7.5]
-#### gis-platform
+
+### gis-platform
+
 - Rename `external_proto` and `external_hostname` to `url`
 - Rename `spcore.debug_mode` to `spcore.debug`
 - Rename `spcore.reset_cluster` to `spcore.resetCluster`
@@ -46,93 +142,121 @@ persistence:
 - Rename `portal.max_body_size` to `portal.maxBodySize`
 - Rename `portal.gzip_enabled` to `portal.gzip.enabled`
 
-#### citylens
+### citylens
+
 - Remove `kafka.topics.prediction`
 - Remove `kafka.topics.framesGroupId`
 - Remove `kafka.topics.tracksGroupId`
 - Remove `kafka.topics.predictionGroupId`
 - Remove `kafka.topics.camcomSenderGroupId`
 - Add `kafka.predictors`
+
 ```
 kafka:
   predictors:
   - name: ''
     topic: ''
 ```
+
 - Add `kafka.consumerGroups.prefix`
 
 ## [1.6.0]
-#### catalog-api
+
+### catalog-api
+
 - Rename
+
 ```
 keys.tokens
 ```
+
 to
+
 ```
 keys.token
 ```
-#### navi-router
+
+### navi-router
 
 - For zero downtime, update navi-router first, then update keys
 
 ## [1.5.3]
-#### tiles-api
+
+### tiles-api
+
 - Rename
+
 ```
 serviceName: tiles-api-webgl
 type: web
 ```
+
 to
+
 ```
 types:
   - kind: web
 ```
+
 - Rename
+
 ```
 serviceName: tiles-api-raster
 type: raster
 ```
+
 to
+
 ```
 types:
   - kind: raster
 ```
 
-#### navi-restrictions
+### navi-restrictions
+
 - Rename `api_key` to `api.api_key`
 
 
 ## [1.4.7]
-#### catalog-api
+
+### catalog-api
+
 - Rename `search.host` to `search.url`
 - Rename `keys.host` to `keys.url`
 
-#### keys
+### keys
+
 - Remove `admin.api`
 
-#### tiles-api
+### tiles-api
+
 - Rename `proxy.access.host` to `proxy.access.url`
 
-#### navi-async-matrix
+### navi-async-matrix
+
 - Renamed `keys.host` to `keys.url`
 
-#### pro-ui
+### pro-ui
+
 - Renamed `api.host` to `api.url`
 
 
 ## [1.4.5]
 
-#### navi-castle
+### navi-castle
+
 - Renamed `castle.castle_data_path` to `castle.castleDataPath`
 - Renamed `castle.restrictions_api_url` to `castle.restrictions.host`
 - Renamed `castle.restrictions_api_key` to `castle.restrictions.key`
 
-#### navi-router
+### navi-router
+
 - Renamed `router.app_port` to `router.appPort`
 - Renamed `router.app_castle_host` to `router.castleHost`
 - Renamed `router.additional_sections` to `router.additionalSections`
 
-#### navi-back
+### navi-back
+
 - Renamed `s3.url` to `s3.host`
 - Renamed `s3.keyId` to `s3.accessKey`
 - Renamed `s3.key` to `s3.secretKey`
@@ -163,25 +287,29 @@ types:
 - Renamed `naviback.attractor_taxi` to `naviback.attractor.taxi`
 - Renamed `naviback.reduce_edges_optimization_flag` to `naviback.reduceEdgesOptimizationFlag`
 
-#### navi-async-matrix
+### navi-async-matrix
+
 - Renamed `s3.url` to `s3.host`
 - Renamed `s3.keyId` to `s3.accessKey`
 - Renamed `s3.key` to `s3.secretKey`
 - Renamed `keys.endpoint` to `keys.host`
 - Renamed `keys.dm_key` to `keys.token`
 
-#### keys
+### keys
+
 - Rename `db` to `postgres`
 - Rename `admin.apiUrl` to `admin.api`
 - Rename `admin.appHost` to `admin.host`
 
-#### search-api
+### search-api
+
 - Rename `redeploy_label` to `redeployLabel`
 - Rename `api.data_dir` to `api.dataDir`
 - Rename `api.fcgi_port` to `api.fcgiPort`
 - Rename `nginx.http_port` to `nginx.httpPort`
 
-#### catalog-api
+### catalog-api
+
 - Rename `dgctlStorage.endpoint` to `dgctlStorage.host`
 - Rename `keys.endpoint` to `keys.host`
 - Rename `api.db` to `api.postgres`
@@ -191,79 +319,102 @@ types:
 
 ## [1.4.1]
 
-#### navi-async-matrix
+### navi-async-matrix
+
 - Resources limits are not set by default.
 - Mandatory dependency on API Keys service with a valid API key required.
 
-#### navi-back
+### navi-back
+
 - Default values optimized for processing async-matrix.
 
 ## [1.3.3]
 
-#### catalog-api
+### catalog-api
+
 - Rename value db to api.db
 - Rename `podDisruptionBudget` to `pdb`
 - For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
-#### keys
+### keys
+
 - For the HPA section, switched from `autoscaling/v2beta2` to `autoscaling/v2`
 
-#### gis-platform
+### gis-platform
+
 - REMOVED `.Values.spcore.s3.preview_bucket`. Move its contents to `.Values.spcore.s3.bucket`
 - ADDED `.Values.spcore.s3.session_bucket`. Create it before updating
 
-#### mapgl-js-api
+### mapgl-js-api
+
 - Rename `podDisruptionBudget` to `pdb`
 - For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
-#### navi-async-matrix
+### navi-async-matrix
+
 - Rename `podDisruptionBudget` to `pdb`
 - For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
-#### navi-back
+### navi-back
+
 - Rename `autoscaling` to `hpa`
 - Rename `autoscaling.scaleUpWindowSeconds` to `hpa.scaleUpStabilizationWindowSeconds`
 - Rename `autoscaling.scaleDownWindowsSeconds` to `hpa.scaleDownStabilizationWindowSeconds`
 - Rename `podDisruptionBudget` to `pdb`
 - Rename `podDisruptionBudget.create` to `pdb.enabled`
 
-#### navi-castle
+### navi-castle
+
 - Remove the `autoscaling` section
 
-#### navi-front
+### navi-front
+
 - Rename `autoscaling` to `hpa`
 - Rename `pdb.create` to `pdb.enabled`
 - For the HPA section, switched from `autoscaling/v2beta2` to `autoscaling/v2`
 
-#### navi-restrictions
+### navi-restrictions
+
 - Rename `podDisruptionBudget` to `pdb`
 - For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
-#### navi-router
+### navi-router
+
 - Rename `autoscaling` to `hpa`
 - Rename `podDisruptionBudget` to `pdb`
 - For the HPA section, switched from `autoscaling/v2beta2` to `autoscaling/v2`
 
-#### search-api
+### search-api
+
 - Rename `podDisruptionBudget` to `pdb`
 - For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
-#### tiles-api
+### tiles-api
+
 - For the HPA section, switched from `autoscaling/v1` to `autoscaling/v2`
 
-#### traffic-proxy
+### traffic-proxy
+
 - Rename `podDisruptionBudget` to `pdb`
 
 ---
+
 ## [1.0.4]
-#### tiles-api
+
+### tiles-api
+
 - `.Values.cassandra.environment` is required
 
 ---
+
 ## [0.2.2]
-#### keys
+
+### keys
+
 - change value `api.apiUrl` from 'http://servicename/admin/v1' to 'http://servicename'
 
 ---
+
 ## [0.1.9]
-#### Production Ready release
+
+### Production Ready release

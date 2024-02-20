@@ -7,6 +7,7 @@ spec:
   concurrencyPolicy: Forbid
   schedule: "{{ .Values.assetImporter.schedule }}"
   successfulJobsHistoryLimit: {{ .Values.assetImporter.successfulJobsHistoryLimit }}
+  suspend: {{ .Values.assetImporter.suspended }}
   jobTemplate:
     spec:
       backoffLimit: {{ .Values.assetImporter.backoffLimit }}
@@ -45,6 +46,8 @@ spec:
                   value: "{{ .Values.dgctlStorage.manifest }}"
                 - name: S3Settings__Url
                   value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
+                - name: S3Settings__Secure
+                  value: "{{ .Values.dgctlStorage.secure }}"
                 - name: S3Settings__DgctlStorageBucket
                   value: {{ required "A valid .Values.dgctlStorage.bucket entry required" $.Values.dgctlStorage.bucket }}
                 - name: S3Settings__AssetDataBucket
@@ -102,4 +105,26 @@ spec:
                   value: "{{ .Values.api.logging.targets }}"
                 - name: Common__EsMetricsEnabled
                   value: "{{ .Values.assetImporter.esMetricsEnabled }}"
+                - name: Digger__Address
+                  value: "{{ .Values.digger.url}}"
+                - name: Digger__UserName
+                  value: "{{ .Values.digger.userName}}"
+                {{ if .Values.digger.password }}
+                - name: Digger__Password
+                  valueFrom:
+                    secretKeyRef:
+                      key: diggerPassword
+                      name: {{ include "pro-api.name" . }}-secret
+                {{ end }}
+                - name: Navi__Url
+                  value: {{ .Values.navi.url }}
+                - name: Navi__Key
+                  valueFrom:
+                    secretKeyRef:
+                      key: routingApi2gisKey
+                      name: {{ include "pro-api.name" . }}-secret
+                - name: TileGen__Url
+                  value: "{{ .Values.tileGen.url }}"
+                - name: TileGen__UserDataTileSet
+                  value: "{{ .Values.tileGen.userDataTileSet }}"
 {{ end }}

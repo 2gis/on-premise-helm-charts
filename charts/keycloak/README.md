@@ -6,9 +6,7 @@ Keycloak is a high performance Java-based identity and access management solutio
 
 [Overview of Keycloak](https://www.keycloak.org/)
 
-See the [documentation](https://docs.2gis.com/en/on-premise/keycloak) to learn about:
-
-- Architecture of the service.
+See the [documentation](https://docs.2gis.com/en/on-premise/deployment/auth) to learn about:
 
 - Installing the service.
 
@@ -172,13 +170,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keycloak) to learn a
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                                 | Description                               | Value           |
-| ------------------------------------ | ----------------------------------------- | --------------- |
-| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`         |
-| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `keycloak.host` |
-| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`             |
-| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`        |
-| `ingress.tls`                        | TLS configuration                         | `[]`            |
+| Name                                 | Description                               | Value                  |
+| ------------------------------------ | ----------------------------------------- | ---------------------- |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                |
+| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`                |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `keycloak.example.com` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                    |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`               |
+| `ingress.tls`                        | TLS configuration                         | `[]`                   |
 
 ### [Network Policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) configuration
 

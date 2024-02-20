@@ -12,7 +12,7 @@
 
 Генератор можно запускать напрямую или с помощью [`Makefile`](Makefile), например:
 
-```
+```sh
 make prepare
 make charts/navi-back
 ```
@@ -27,7 +27,7 @@ make charts/navi-back
   # @param imagePullPolicy Pull policy.
   # @param ui.image.repository UI service image repository.
   # @param ui.image.tag UI service image tag.
-  
+
   dgctlDockerRegistry: ''
   imagePullSecrets: []
   imagePullPolicy: IfNotPresent
@@ -37,10 +37,10 @@ make charts/navi-back
 
   ```yaml
   # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
-  
+
   # @param pdb.enabled If PDB is enabled for the service.
   # @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
-  
+
   pdb:
     enabled: false
     maxUnavailable: 1
@@ -54,7 +54,7 @@ make charts/navi-back
   ```
 
 - Константы или переменные, которые никогда не меняются при типовом использовании сервиса, следует скрывать из `README.md` при помощи тэга `@skip`.
-  
+
   Обратите внимание, что из-за особенностей генератора описание не может начинаться со ссылки (любая конструкция в квадратных скобках в начале описания будет принята за декларацию типа). Формулируйте описания настроек и секций так, чтобы ссылки были не в начале.
 
 - Во всех случаях, где в значениях по умолчанию должен фигурировать какой-либо город, используем Москву.
@@ -64,9 +64,9 @@ make charts/navi-back
 - В названиях настроек используем camelCase. Названия начинаем с маленькой буквы. Например: `accessKey`, `dgctlDockerRegistry`.
 
 - Одинаковые настройки называем везде одинаково.
-  
+
   Примеры:
- 
+
   - Не `serviceAccount.create`, а `serviceAccount.enabled`.
   - [Настройки Kafka](https://github.com/documentat-alibaev/on-premise-helm-charts/blob/1f7b7d269aec9c6e265c41da3718bfc9135125a1/charts/navi-back/values.yaml#L185).
   - Настройки S3: `host`, `bucket`, `accessKey`, `secretKey`.
@@ -98,10 +98,10 @@ make charts/navi-back
 
   Пример для чарта `pro-api`: не `repository: 2gis-on-premise/urbigeo-importer`, а `repository: 2gis-on-premise/pro-api-importer`.
 
-- Настройки, связанные с подключением к другим сервисам On-Premise, должны группироваться в блоки, названные 
-в соответствии с сервисом. Адрес сервиса должен указываться в настройке `url`. 
-Ключ для авторизации должен указываться в настройке `key`. Приложение, желательно, должно уметь обрабатывать url 
-в виде hostname, scheme://hostname, scheme://hostname:port. Если url является шаблоном, то это можно отразить в названии, 
+- Настройки, связанные с подключением к другим сервисам On-Premise, должны группироваться в блоки, названные
+в соответствии с сервисом. Адрес сервиса должен указываться в настройке `url`.
+Ключ для авторизации должен указываться в настройке `key`. Приложение, желательно, должно уметь обрабатывать url
+в виде hostname, scheme://hostname, scheme://hostname:port. Если url является шаблоном, то это можно отразить в названии,
 например `urlTemplate: http://service-name.svc/{project}/{date_str}_{hour}.json`
 
 Примеры:
@@ -125,8 +125,10 @@ make charts/navi-back
   ```
 
 ## Дефолтные значения
-Для каждой обязательной настройки **не должно** быть дефолтного значения (адрес базы, адрес сервиса ключей), 
+
+Для каждой обязательной настройки **не должно** быть дефолтного значения (адрес базы, адрес сервиса ключей),
 а в шаблоне настройка должна проверятся через required функцию. Пример:
+
 ```yaml
 --- values.yaml
 dgctlStorage:
@@ -134,7 +136,8 @@ dgctlStorage:
 
 --- deployment.yaml
 host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
-```
+
+```text
 Сюда же входят настройки, которые критично повлияют на сервис при неправильном указании.
 Пример: суффикс в касандре для Tiles API. Если выставить дефолт, то клиент про него не узнает или забудет и в
 конечном итоге себе что-нибудь сломает, т.к. суффикс служит защитой от перетирания кейспейсов,
@@ -153,6 +156,7 @@ host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStora
 - `{service-name}.host` - если сервис может находится где угодно
 
 Примеры:
+
 ```yaml
 # @param search.url URL of the Search service. Ex: http://search-api.svc. This URL should be accessible from all the pods within your Kubernetes cluster
 search:
@@ -166,7 +170,6 @@ env:
 db:
   host: ''
 ```
-
 
 ## Стиль кода
 

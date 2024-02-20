@@ -38,6 +38,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.web.service.targetPort }}
+            - name: metrics
+              containerPort: {{ .Values.web.service.metricsTargetPort }}
           readinessProbe:
             tcpSocket:
               port: 5000
@@ -56,6 +58,10 @@ spec:
             - name: KEYCLOAK_SETTINGS
               value: /opt/api/config/keycloak.json
             {{- end }}
+            {{- if .Values.web.service.metricsEnabled }}
+            - name: METRICS_ENABLED
+              value: "true"
+            {{- end }}
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
           volumeMounts:
@@ -65,15 +71,15 @@ spec:
         - name: config-volume
           configMap:
             name: {{ include "citylens.web.name" . }}-configmap
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.web.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.web.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.web.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

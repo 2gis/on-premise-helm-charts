@@ -46,7 +46,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                         |
 | ------------------ | ----------- | ----------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-router` |
-| `image.tag`        | Tag         | `6.11.0`                      |
+| `image.tag`        | Tag         | `6.17.0.8`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
 ### Navi-Router service settings
@@ -61,7 +61,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `router.keyManagementService.host`               | Address if key management service server                                                                                                     | `http://keys.api.example.com` |
 | `router.keyManagementService.refreshIntervalSec` | Keys refresh interval in seconds                                                                                                             | `30`                          |
 | `router.keyManagementService.downloadTimeoutSec` | Keys download timeout in seconds                                                                                                             | `30`                          |
-| `router.keyManagementService.apis`               | Used API types and their tokens. Format: `type: token`                                                                                       | `nil`                         |
+| `router.keyManagementService.commonToken`        | Mater key to retrieve all per-service API keys, router.keyManagementService.apis ignored, if commonToken set                                 | `""`                          |
+| `router.keyManagementService.apis`               | Used API types and their tokens. Format: `type: token`                                                                                       | `undefined`                   |
 
 ### Service account settings
 
@@ -90,19 +91,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value              |
-| ----------------------- | -------------------------------------- | ------------------ |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`            |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `navi-router.host` |
+| Name                                 | Description                               | Value                     |
+| ------------------------------------ | ----------------------------------------- | ------------------------- |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                   |
+| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`                   |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `navi-router.example.com` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                       |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                  |
+| `ingress.tls`                        | TLS configuration                         | `[]`                      |
 
 ### Limits
 
-| Name                        | Description                      | Value |
-| --------------------------- | -------------------------------- | ----- |
-| `resources.requests.cpu`    | A CPU request, e.g., `100m`.     |       |
-| `resources.requests.memory` | A memory request, e.g., `128Mi`. |       |
-| `resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |       |
-| `resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |       |
+| Name                        | Description                                 | Value       |
+| --------------------------- | ------------------------------------------- | ----------- |
+| `resources`                 | Container resources requirements structure. | `{}`        |
+| `resources.requests.cpu`    | CPU request, recommended value `500m`.      | `undefined` |
+| `resources.requests.memory` | Memory request, recommended value `384Mi`.  | `undefined` |
+| `resources.limits.cpu`      | CPU limit, recommended value `1000m`.       | `undefined` |
+| `resources.limits.memory`   | Memory limit, recommended value `768Mi`.    | `undefined` |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 

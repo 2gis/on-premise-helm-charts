@@ -23,9 +23,10 @@ spec:
     metadata:
       annotations:
         checksum/configbuilder: {{ include (print $.Template.BasePath "/configmapbuilder.yaml") . | sha256sum }}
+        checksum/configbuilder-runnable: {{ include (print $.Template.BasePath "/configmapbuilder-runnable.yaml") . | sha256sum }}
         checksum/confignginx: {{ include (print $.Template.BasePath "/configmapnginx.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
-        {{- toYaml . | nindent 8 }}    
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "castle.selectorLabels" . | nindent 8 }}
@@ -37,6 +38,10 @@ spec:
         - name: {{ include "castle.fullname" . }}-builder-config
           configMap:
             name: {{ include "castle.fullname" . }}-builder-config
+        - name: {{ include "castle.fullname" . }}-runnable
+          configMap:
+            name: {{ include "castle.fullname" . }}-runnable
+            defaultMode: 0775
         - name: {{ include "castle.fullname" . }}-castle-nginx-config
           configMap:
             name: {{ include "castle.fullname" . }}-castle-nginx-config
@@ -45,35 +50,6 @@ spec:
           emptyDir: {}
         {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
-      initContainers:
-        {{- range $flavor, $init_enabled := dict "import" true "restriction" .Values.cron.enabled.restriction }}
-        {{- if $init_enabled }}
-        - name: castle-{{ $flavor }}-init
-          image: {{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}
-          command: [ "/opt/configuration_builder" ]
-          args: 
-           - --config 
-           - /opt/config_builder.conf 
-           - --service={{ $flavor }}
-           - --jobs={{ $.Values.castle.jobs | default 1 | int }}
-          volumeMounts:
-          - name: {{ include "castle.fullname" $ }}-builder-config
-            mountPath: /opt/config_builder.conf
-            subPath: config_builder.conf
-          - name: {{ include "castle.fullname" $ }}-builder-config
-            mountPath: {{ $.Values.castle.castleDataPath }}/cities_template
-            subPath: cities_template
-          {{- if $.Values.persistentVolume.enabled }}
-          - name: {{ include "castle.fullname" $ }}-pvc
-            mountPath: {{ $.Values.castle.castleDataPath }}
-          {{- else }}
-          - name: {{ include "castle.fullname" $ }}-data
-            mountPath: {{ $.Values.castle.castleDataPath }}
-          {{- end }}
-          resources:
-            {{- toYaml $.Values.resources | nindent 12 }}
-        {{- end }} # if
-        {{- end }} # range
       containers:
         - name: castle-nginx
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}
@@ -102,42 +78,51 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 2
-        # If Persistent volume is not enabled then cron jobs will be running as sidecar containers
-        {{- if (not .Values.persistentVolume.enabled) }}
         - name: castle-cron
-          image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}"
+          image: {{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}
           command: ["/tini","--"]
           args:
-          - /usr/local/bin/supercronic
-          - -json
-          - -prometheus-listen-address
-          - '0.0.0.0:9476'
-          - /opt/update_services
+          - /opt/update_services_init.sh
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
-          livenessProbe:
+          startupProbe:
+            {{- /* checks if supercronic prometheus port is open */}}
             httpGet:
               path: /health
-              port: 9476
+              port: {{ .Values.cron.prometheusPort | int }}
+            failureThreshold: {{ (.Values.castle.startupProbe).failureThreshold | default 180 | int }}
+            periodSeconds: {{ (.Values.castle.startupProbe).periodSeconds | default 5 | int }}
+          livenessProbe:
+            {{- /* checks if supercronic prometheus port is open */}}
+            httpGet:
+              path: /health
+              port: {{ .Values.cron.prometheusPort | int }}
             initialDelaySeconds: 10
             periodSeconds: 10
           ports:
             - name: cron-prom
-              containerPort: 9476
+              containerPort: {{ .Values.cron.prometheusPort | int }}
               protocol: TCP
           volumeMounts:
           - name: {{ include "castle.fullname" $ }}-builder-config
             mountPath: /opt/config_builder.conf
             subPath: config_builder.conf
+          - name: {{ include "castle.fullname" $ }}-runnable
+            mountPath: /opt/update_services_init.sh
+            subPath: update_services_init.sh
           - name: {{ include "castle.fullname" $ }}-builder-config
             mountPath: {{ $.Values.castle.castleDataPath }}/cities_template
             subPath: cities_template
           - name: {{ include "castle.fullname" $ }}-builder-config
             mountPath: /opt/update_services
             subPath: update_services
-          - name: {{ include "castle.fullname" $ }}-data
-            mountPath: {{ $.Values.castle.castleDataPath }}
-        {{- end }}
+          {{- if .Values.persistentVolume.enabled }}
+          - name: {{ include "castle.fullname" . }}-pvc
+            mountPath: {{ .Values.castle.castleDataPath }}
+          {{- else }}
+          - name: {{ include "castle.fullname" . }}-data
+            mountPath: {{ .Values.castle.castleDataPath }}
+          {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -152,7 +137,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-  {{- if .Values.persistentVolume.enabled }} 
+  {{- if .Values.persistentVolume.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: {{ include "castle.fullname" . }}-pvc

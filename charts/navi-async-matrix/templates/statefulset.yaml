@@ -26,12 +26,13 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         prometheus.io/path: "/metrics"
         prometheus.io/port: {{ .Values.dm.port | quote }}
         {{- if .Values.prometheusEnabled }}
         prometheus.io/scrape: "true"
         {{- end }}
+        checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -66,12 +67,55 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
-      {{- if .Values.kafka.fileProperties }}
       volumes:
-        - name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
-          secret:
-            secretName: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
+      {{- if .Values.dm.archiver.enabled }}
+        - name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
+          configMap:
+            name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
       {{- end }}
+      {{- $kafkaVolumeMounted := (
+              .Values.kafka.fileProperties |
+              or (.Values.kafka.consumerOverrides).fileProperties |
+              or (.Values.kafka.producerOverrides).fileProperties
+            ) }}
+      {{- if $kafkaVolumeMounted }}
+        - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+          secret:
+            secretName: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+        - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+          secret:
+            secretName: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+      {{- end }}
+      {{- if .Values.db.tls.enabled }}
+        - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
+          secret:
+            secretName: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+        - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+          emptyDir: {}
+      {{- end }}
+      initContainers:
+        {{- if .Values.db.tls.enabled }}
+        - name: copy-certs
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              cp /tmp/certs/* /etc/2gis/secret/psql/
+              chmod 600 /etc/2gis/secret/psql/client.key
+          volumeMounts:
+            - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
+              mountPath: /tmp/certs
+            - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+              mountPath: /etc/2gis/secret/psql
+        {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
@@ -95,24 +139,27 @@ spec:
             periodSeconds: 15
             timeoutSeconds: 5
           readinessProbe: *healthProbe
-          # exposing Pod's ordinal is not yet achieved:
-          # https://github.com/kubernetes/kubernetes/issues/30427
-          # here is a workaround for that
-          command:
-            - uvicorn
-            - src.main:app
-            - '--host'
-            - '0.0.0.0'
-            - '--port'
-            - '{{ .Values.dm.port | int }}'
-            - '--workers'
-            - '{{ .Values.dm.workerCount | int }}'
-          {{- if .Values.kafka.fileProperties }}
           volumeMounts:
-          - name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" .) | quote }}
-            mountPath: /etc/2gis/secret/
+          {{- if .Values.dm.archiver.enabled }}
+          - name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
+            mountPath: /app/src/composite_task_result_archiver/manifests/archive_pod_manifest.json
+            subPath: archive_pod_manifest.json
+          {{- end }}
+          {{- if $kafkaVolumeMounted }}
+          - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/consumer/
+          - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/producer/
+          {{- end }}
+          {{- if .Values.db.tls.enabled }}
+          - name: {{ printf "%s-psql" (include "navi-async-matrix.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/psql
           {{- end }}
           env:
+            - name: DM_ASYNC_SERVICE_HOST
+              value: {{ .Values.dm.host | quote }}
+            - name: DM_ASYNC_SERVICE_PORT
+              value: {{ .Values.dm.port | quote }}
             - name: CONFIG_TYPE
               value: {{ .Values.dm.configType | quote }}
             - name: DM_ASYNC_SERVICE_CITIES_SETTING__LINK_TO_CITIES_FILE
@@ -127,6 +174,8 @@ spec:
               value: {{ required "A valid .Values.s3.host entry required" .Values.s3.host | quote }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__S3_BUCKET
               value: {{ required "A valid .Values.s3.bucket entry required" .Values.s3.bucket | quote }}
+            - name: DM_ASYNC_SERVICE_LOGGER_SETTING__LEVEL
+              value: {{ .Values.dm.logLevel | quote }}
             {{- if .Values.s3.publicNetloc }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC
               value: {{ .Values.s3.publicNetloc | quote }}
@@ -138,27 +187,27 @@ spec:
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__GROUP_ID
               value: {{ .Values.kafka.groupId | quote }}
             - name: DM_ASYNC_SERVICE_TOPIC_RULES
+              {{- /* topicRules is a structure, hence mustToJson */}}
               value: {{ .Values.kafka.taskTopicRules | mustToJson | quote }}
-            {{- /*
-                 Collect merged Kafka properties from these dictionaries:
-                   - kafka.properties: this is a simple key/value dictionary
-                   - kafka.fileProperties: this is a key/content dictionary given in values,
-                     content is sensitive and stored in Secret resource, they get
-                     mounted as files sonamed after key. While actual secret values are
-                     hidden this way, what actually goes here in environment properties is
-                     file names. This value substitution is implemented down here.
-                 */ -}}
-            {{- $kafkaProperties := dict -}}
-            {{- range $key, $_ := .Values.kafka.fileProperties -}}
-            {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/secret/%s" $key) -}}
-            {{- end -}}
-            {{- $kafkaProperties := mustMerge $kafkaProperties .Values.kafka.properties -}}
-            {{- range $prop, $val := $kafkaProperties }}
-            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__{{ $prop | upper | replace "." "_" }}
-              value: {{ $val | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__{{ $prop | upper | replace "." "_" }}
-              value: {{ $val | quote }}
-            {{- end }}
+            {{- if .Values.dm.archiver.enabled }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ARCHIVE_RESPONSE_TOPIC
+              value: {{ .Values.kafka.archiveTopic | quote }}
+            - name: DM_ASYNC_SERVICE_DEBUG_MODE
+              value: {{ .Values.dm.archiver.fetchLogs | ternary "true" "false" | quote }}
+            - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__NAMESPACE
+              value: {{ .Release.Namespace | quote }}
+            - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__CONFIG_TYPE
+              value: cluster
+            {{- /* master-uri and token used in local runs only */}}
+            - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__MASTER_URI
+              value: ""
+            - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__TOKEN
+              value: ""
+            - name: DM_ASYNC_SERVICE_TASK_SPLIT_SIZE
+              value: {{ .Values.dm.taskSplitSize | quote }}
+            - name: DM_ASYNC_SERVICE_COMPOSITE_TASK_TIMEOUT_IN_SECONDS
+              value: {{ .Values.dm.compositeTaskTimeoutSec | quote }}
+            {{- end }}{{- /* .Values.dm.archiver.enabled */}}
             - name: DM_ASYNC_SERVICE_NODE_ID
               valueFrom:
                 fieldRef:
@@ -171,7 +220,27 @@ spec:
             - name: DM_ASYNC_SERVICE_BSS__VERSION
               value: {{ .Values.bss.version | quote }}
             {{- end }}
+            {{- range $kafkaRole, $overridesProperty := (dict
+                  "PRODUCER" "producerOverrides"
+                  "CONSUMER" "consumerOverrides"
+                ) -}}
+            {{- $kafkaPropertyEnv := print "DM_ASYNC_SERVICE_KAFKA_" $kafkaRole "_SETTING__KAFKA_" $kafkaRole "_CONFIG__" -}}
+            {{- $kafkaPropertiesEnv := include "navi-async-matrix.kafkaPropertiesEnv" (dict
+                  "kafka" $.Values.kafka
+                  "overrides" ($overridesProperty | get $.Values.kafka)
+                  "secretname" (print
+                      (include "navi-async-matrix.fullname" $)
+                      "-"
+                      (lower $kafkaRole)
+                    )
+                  "mountpoint" (print "/etc/2gis/secret/" (lower $kafkaRole))
+                  "prefix" $kafkaPropertyEnv
+                ) | fromYaml }}
+            {{- get $kafkaPropertiesEnv "ret" | toYaml | nindent 12 }}
+            {{- end }}{{- /* range */}}
             # sensitive data
+            - name: DM_ASYNC_SERVICE_DB_SCHEMA
+              value: {{ .Values.db.schema | quote }}
             - name: DM_ASYNC_SERVICE_DB_DSN
               valueFrom:
                 secretKeyRef:
@@ -182,18 +251,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "navi-async-matrix.fullname" . | quote }}
                   key: s3key
-            {{- range $prop, $val := .Values.kafka.sensitiveProperties }}
-            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__{{ $prop | upper | replace "." "_" }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" $) | quote }}
-                  key: {{ $prop | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__KAFKA_PRODUCER_CONFIG__{{ $prop | upper | replace "." "_" }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ printf "%s-kafka" (include "navi-async-matrix.fullname" $) | quote }}
-                  key: {{ $prop | quote }}
-            {{- end }}
             - name: DM_ASYNC_SERVICE_KMS__DM_ASYNC_TOKEN
               valueFrom:
                 secretKeyRef:

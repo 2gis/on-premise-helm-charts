@@ -18,7 +18,7 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 | ------------------------- | -------------------------------- | ------------------------------- |
 | `nodejs.image.repository` | Floors backend image repository. | `2gis-on-premise/floors-nodejs` |
 | `nodejs.image.pullPolicy` | Floors backend pull policy.      | `IfNotPresent`                  |
-| `nodejs.image.tag`        | Floors backend image tag.        | `1.0.3`                         |
+| `nodejs.image.tag`        | Floors backend image tag.        | `1.0.4`                         |
 | `nginx.image.repository`  | Floors nginx image repository.   | `2gis-on-premise/nginx`         |
 | `nginx.image.pullPolicy`  | Floors nginx pull policy.        | `IfNotPresent`                  |
 | `nginx.image.tag`         | Floors nginx image tag.          | `1.21.6`                        |
@@ -65,10 +65,14 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value         |
-| ----------------------- | -------------------------------------- | ------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`       |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `floors.host` |
+| Name                                 | Description                               | Value                |
+| ------------------------------------ | ----------------------------------------- | -------------------- |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`              |
+| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`              |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `floors.example.com` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                  |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`             |
+| `ingress.tls`                        | TLS configuration                         | `[]`                 |
 
 ### Limits
 
@@ -98,7 +102,7 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 | ---------------------------------- | -------------------------------- | --------------------------------- |
 | `import.enabled`                   | If import task should be enabled | `true`                            |
 | `import.image.repository`          | Import task image repository.    | `2gis-on-premise/floors-importer` |
-| `import.image.tag`                 | Import task image tag.           | `1.0.3`                           |
+| `import.image.tag`                 | Import task image tag.           | `1.0.4`                           |
 | `import.image.pullPolicy`          | Import task pull policy.         | `IfNotPresent`                    |
 | `import.resources.requests.cpu`    | A CPU request, e.g., `100m`.     |                                   |
 | `import.resources.requests.memory` | A memory request, e.g., `128Mi`. |                                   |

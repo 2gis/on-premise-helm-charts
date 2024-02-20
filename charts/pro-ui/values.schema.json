@@ -41,6 +41,12 @@
         "supportDocumentationLink": {
           "type": "string"
         },
+        "immersiveModels": {
+          "type": "string"
+        },
+        "healthcheckPath": {
+          "type": "string"
+        },
         "auth": {
           "type": "object",
           "additionalProperties": false,
@@ -80,6 +86,9 @@
               "type": "string",
               "enum": ["keycloak", "ugc"]
             },
+            "oAuthScopes": {
+              "type": "string"
+            },
             "identityProviderUrl": {
               "type": "string"
             },
@@ -116,7 +125,13 @@
             "key": {
               "type": "string"
             },
+            "styleId": {
+              "type": "string"
+            },
             "styleUrl": {
+              "type": "string"
+            },
+            "scriptPath": {
               "type": "string"
             },
             "styleIconsUrl": {

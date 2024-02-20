@@ -20,6 +20,9 @@ data:
       {{- if eq .name "camcom" }}
       camcom: {{ required "A valid .topic entry required" .topic| squote }}
       {{- end }}
+      {{- if eq .name "manual" }}
+      manual: {{ required "A valid .topic entry required" .topic| squote }}
+      {{- end }}
       {{- end }}
     {{- end }}
     database:
@@ -30,9 +33,16 @@ data:
     auth:
       enabled: {{ .enabled }}
       {{- if .enabled }}
-      public_key: "-----BEGIN PUBLIC KEY-----\r\n{{ required "A valid .Values.api.auth.publicKey entry required" .publicKey }}\r\n-----END PUBLIC KEY-----"
+      auth_server_url: {{ required "A valid .Values.api.auth.authServerUrl entry required" .authServerUrl | quote }}
+      verify_ssl: {{ .verifySsl }}
+      {{- if .realm }}
+      realm: {{ .realm | quote }}
+      {{- end}}
+      {{- if .camcomToken }}
+      camcom_token: {{ .camcomToken | quote }}
       {{- end }}
-      algorithm: {{ .algorithm | quote }}
+      {{- end }}
     {{- end }}
     show_docs: {{ .Values.api.showDocs }}
     log_level: {{ .Values.api.logLevel }}
+    metrics_app_name: {{ .Values.api.metricsAppName }}

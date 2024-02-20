@@ -36,7 +36,7 @@ podLabels: {}
 
 image:
   repository: 2gis-on-premise/mapgl
-  tag: 1.39.0
+  tag: 1.42.0
   pullPolicy: IfNotPresent
 
 
@@ -63,8 +63,7 @@ env:
   MAPGL_FLOORSSERVER: https://floors-api.ingress.host
   MAPGL_KEYSERVER: https://keys-api.ingress.host
   MAPGL_RTLPLUGIN: https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js
-  MAPGL_RTLPLUGINHASH:
-    sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
+  MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
 
 
 # @section Strategy settings
@@ -97,12 +96,24 @@ service:
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 # @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Name of the Ingress controller class.
 # @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration
 
 ingress:
   enabled: false
+  className: nginx
   hosts:
-  - host: mapgl-js-api.host
+  - host: mapgl-js-api.example.com
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - mapgl-js-api.example.com
+  #   secretName: secret.tls
 
 
 # @section Limits

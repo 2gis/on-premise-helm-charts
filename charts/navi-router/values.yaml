@@ -39,7 +39,7 @@ affinity: {}
 image:
   repository: 2gis-on-premise/navi-router
   pullPolicy: IfNotPresent
-  tag: 6.11.0
+  tag: 6.17.0.8
 
 
 # @section Navi-Router service settings
@@ -52,7 +52,8 @@ image:
 # @param router.keyManagementService.host Address if key management service server
 # @param router.keyManagementService.refreshIntervalSec Keys refresh interval in seconds
 # @param router.keyManagementService.downloadTimeoutSec Keys download timeout in seconds
-# @param router.keyManagementService.apis Used API types and their tokens. Format: `type: token`
+# @param router.keyManagementService.commonToken Mater key to retrieve all per-service API keys, router.keyManagementService.apis ignored, if commonToken set
+# @param router.keyManagementService.apis [nullable] Used API types and their tokens. Format: `type: token`
 
 router:
   appPort: 8080
@@ -64,17 +65,19 @@ router:
     host: http://keys.api.example.com
     refreshIntervalSec: 30
     downloadTimeoutSec: 30
+    commonToken: ''
     apis:
-      # directions: "DIRECTIONS_TOKEN"
-      # distance-matrix: "DISTANCE_MATRIX_TOKEN"
-      # pairs-directions: "PAIRS_DIRECTIONS_TOKEN"
-      # truck-directions: "TRUCK_DIRECTIONS_TOKEN"
-      # public-transport: "PUBLIC_TRANSPORT_TOKEN"
-      # isochrone: "ISOCHRONE_TOKEN"
-      # map-matching : "MAP_MATCHING_TOKEN"
-      # ppnot: "PPNOT_TOKEN"
-      # combo-routes: "COMBO_ROUTES_TOKEN"
-      # free-roam: "FREE_ROAM_TOKEN"
+      comboroutes-api: ''
+      directions-api: ''
+      distance-matrix-api: ''
+      freeroam-api: ''
+      isochrone-api: ''
+      map-matching-api: ''
+      pairs-directions-api: ''
+      ppnot-api: ''
+      public-transport-api: ''
+      truck-directions-api: ''
+      truck-distance-matrix-api: ''
 
 
 # @section Service account settings
@@ -119,21 +122,34 @@ service:
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 # @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Name of the Ingress controller class.
 # @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration
 
 ingress:
   enabled: false
+  className: nginx
   hosts:
-  - host: navi-router.host
+  - host: navi-router.example.com
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - navi-router.example.com
+  #   secretName: secret.tls
 
 
 # @section Limits
 
-# @skip resources
-# @extra resources.requests.cpu A CPU request, e.g., `100m`.
-# @extra resources.requests.memory A memory request, e.g., `128Mi`.
-# @extra resources.limits.cpu A CPU limit, e.g., `100m`.
-# @extra resources.limits.memory A memory limit, e.g., `128Mi`.
+
+# @param resources [nullable] Container resources requirements structure.
+# @param resources.requests.cpu [nullable] CPU request, recommended value `500m`.
+# @param resources.requests.memory [nullable] Memory request, recommended value `384Mi`.
+# @param resources.limits.cpu [nullable] CPU limit, recommended value `1000m`.
+# @param resources.limits.memory [nullable] Memory limit, recommended value `768Mi`.
 
 resources: {}
 

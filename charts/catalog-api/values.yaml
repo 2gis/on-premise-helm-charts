@@ -78,7 +78,7 @@ api:
 
   image:
     repository: 2gis-on-premise/catalog-api
-    tag: 3.597.0
+    tag: 3.600.0
     pullPolicy: IfNotPresent
 
 
@@ -134,13 +134,25 @@ api:
 
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-  # @param api.ingress.enabled If Ingress is enabled for the service
-  # @param api.ingress.hosts[0].host Hostname for the Ingress service
+  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.className Name of the Ingress controller class.
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+  # @param api.ingress.tls TLS configuration
 
   ingress:
     enabled: false
+    className: nginx
     hosts:
-    - host: catalog-api.host
+    - host: catalog-api.example.com
+      paths:
+      - path: /
+        pathType: Prefix
+    tls: []
+    # - hosts:
+    #   - catalog-api.example.com
+    #   secretName: secret.tls
 
   # @section Database settings
 
@@ -188,17 +200,30 @@ search:
 # @section Keys settings
 
 # @param keys.url URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required**
-# @param keys.requestTimeout Timeout for requests to the Keys API
 # @param keys.token Keys service API key
+# @param keys.client.connectingTimeout The time period within which the TCP connecting process must be completed
+# @param keys.client.idleTimeout The time after which an idle connection will be automatically closed
+# @param keys.client.maxRetries The maximum number of times failed requests are attempted again, (if the request can be safely retried) before giving up and returning an error
+# @param keys.client.maxConnectionLifetime The maximum duration for a connection to be kept alive
+# @param keys.client.baseConnectionBackoff The minimum duration to backoff new connection attempts after the previous connection attempt failed
+# @param keys.client.maxConnectionBackoff Maximum backoff duration between failed connection attempts
+# @param keys.client.responseTimeout The time period after the response was dispatched
 
 keys:
   url: ''
-  requestTimeout: 5s
   token: ''
+  client:
+    connectingTimeout: 1s
+    idleTimeout: 1s
+    maxRetries: 0
+    maxConnectionLifetime: 20s
+    baseConnectionBackoff: 1s
+    maxConnectionBackoff: 20s
+    responseTimeout: 5s
 
 # @section License settings
 
-# @param license.url URL of the License service. Ex: http(s)://license.svc **Required**
+# @param license.url Address of the License service v1. Ex: http://license.svc **Required**
 # @param license.requestTimeout Timeout for requests to the License service
 
 license:
@@ -280,7 +305,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/catalog-importer
-    tag: 1.0.10
+    tag: 1.1.0
     pullPolicy: IfNotPresent
 
   # @section importer.postgres **Database settings**
@@ -291,6 +316,7 @@ importer:
   # @param importer.postgres.username PostgreSQL username with rw access. **Required**
   # @param importer.postgres.password PostgreSQL password. **Required**
   # @param importer.postgres.schemaSwitchEnabled Automatic switch PostgreSQL schema on releases
+  # @param importer.postgres.schemaExtensions Schema for PostgreSQL extensions
 
   postgres:
     host: ''
@@ -299,6 +325,7 @@ importer:
     username: ''
     password: ''
     schemaSwitchEnabled: true
+    schemaExtensions: extensions
 
   # @section importer.persistentVolume **Persistent Volume settings**
 

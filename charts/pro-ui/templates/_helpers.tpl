@@ -21,6 +21,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ required "A valid .Values.ui.api.url entry required" .Values.ui.api.url }}"
 - name: MAPGL_HOST
   value: "{{ required "A valid .Values.ui.mapgl.host entry required" .Values.ui.mapgl.host }}"
+- name: MAPGL_SCRIPT_PATH
+  value: "{{ .Values.ui.mapgl.scriptPath }}"
+- name: MAPGL_STYLE_ID
+  value: "{{ .Values.ui.mapgl.styleId }}"
 - name: MAPGL_KEY
   value: "{{ required "A valid .Values.ui.mapgl.key entry required" .Values.ui.mapgl.key }}"
 - name: MAPGL_STYLE_URL
@@ -54,6 +58,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ required "A valid .Values.ui.auth.clientSecret entry required" .Values.ui.auth.clientSecret }}"
 - name: O_AUTH_PROVIDER
   value: "{{ required "A valid .Values.ui.auth.oAuthProvider entry required" .Values.ui.auth.oAuthProvider }}"
+- name: O_AUTH_SCOPES
+  value: "{{ .Values.ui.auth.oAuthScopes }}"
 - name: AUTH_IDENTITY_PROVIDER_URL
   value: "{{ required "A valid .Values.ui.auth.identityProviderUrl entry required" .Values.ui.auth.identityProviderUrl }}"
 - name: O_AUTH_API_URL
@@ -69,6 +75,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.ui.appInitialMapCenter }}"
 - name: SUPPORT_DOCUMENTATION_LINK
   value: "{{ .Values.ui.supportDocumentationLink }}"
+- name: IMMERSIVE_MODELS
+  value: {{ .Values.ui.immersiveModels | quote }}
 - name: HOME
   value: "/tmp"
 {{- end }}

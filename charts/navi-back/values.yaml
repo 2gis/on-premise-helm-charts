@@ -8,6 +8,7 @@ dgctlDockerRegistry: ''
 # @section Common settings
 
 # @param replicaCount A replica count for the pod.
+# @param revisionHistoryLimit Number of replica sets to keep for deployment rollbacks
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
 # @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
@@ -18,8 +19,12 @@ dgctlDockerRegistry: ''
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param labels Custom labels to set to Deployment resource.
+# @param priorityClassName Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name.
+# @param preStopDelay Delay in seconds before terminating container.
+# @param terminationGracePeriodSeconds Maximum time allowed for graceful shutdown.
 
 replicaCount: 1
+revisionHistoryLimit: 1
 imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
@@ -30,6 +35,9 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 labels: {}
+priorityClassName: ''
+preStopDelay: 5
+terminationGracePeriodSeconds: 60
 
 
 # @section Deployment settings
@@ -41,12 +49,13 @@ labels: {}
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.3.1
+  tag: 7.15.1.4
 
 
 # @section Navi-Back application settings
 
-# @extra naviback.ecaHost Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @extra naviback.ecaHost DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @extra naviback.ecaUrl URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @skip naviback.appPort
 # @param naviback.dmSourcesLimit Size limit for source matrices.
@@ -64,7 +73,19 @@ image:
 # @param naviback.dump.answer Dump answers in logs.
 # @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
 # @param naviback.indexFilename Name of index file.
+# @param naviback.citiesFilename Name of the cities file on Castle
+# @param naviback.sentry.enabled If sending crash dumps to Sentry needed
+# @param naviback.sentry.address Sentry URL
+# @param naviback.sentry.project Sentry project ID
+# @param naviback.sentry.username Sentry username
+# @param naviback.sentry.printMessages If outgoing messages needed
+# @param naviback.sentry.debug Debugging switch
+# @param naviback.sentry.reportPath Local directory to dump
+# @param naviback.sentry.handler Handler file location
 # @param naviback.castleHost URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @extra naviback.enablePassableBarriers Consider passable barriers.
+# @extra naviback.grpcPort GRPC port to serve. Disabled if empty.
+# @param naviback.disableUpdates Test switch for disabling runtime background updates
 # @extra naviback.indices List of dynamic indices kill switches.
 # @skip naviback.indices.carOptions.enabled
 # @skip naviback.indices.carOptions.filename
@@ -78,6 +99,7 @@ image:
 # @skip naviback.indices.onlineTaxiSpeeds.enabled
 # @skip naviback.indices.passZones.enabled
 # @skip naviback.indices.projectCarOptions.enabled
+# @skip naviback.indices.restrictedTransportIndex.enabled
 # @skip naviback.indices.restrictedTransportPlatforms.enabled
 # @skip naviback.indices.restrictedTransportRoutes.enabled
 # @skip naviback.indices.smatrix.enabled
@@ -96,6 +118,7 @@ image:
 # @extra naviback.simpleNetwork.pedestrian Enable simple network for pedestrian routing
 # @extra naviback.simpleNetwork.taxi Enable simple network for taxi routing
 # @extra naviback.simpleNetwork.truck Enable simple network for truck routing
+# @extra naviback.simpleNetwork.scooter Enable simple network for scooters routing
 # @skip naviback.attractor
 # @extra naviback.attractor.bicycle Enable enhanced attractor for bicycle routing
 # @extra naviback.attractor.car Enable enhanced attractor for auto routing
@@ -103,8 +126,17 @@ image:
 # @extra naviback.attractor.taxi Enable enhanced attractor for taxi routing
 # @extra naviback.attractor.truck Enable enhanced attractor for truck routing
 # @extra naviback.attractor.scooter Enable enhanced attractor for scooters routing
+# @param naviback.bss.enabled Enable sending information on the construction of routes to the business statistics service
+# @param naviback.bss.client.serviceRemoteAddress Remote address business statistics service. Requeruired for enable sending information.
+# @param naviback.bss.client.messageCountToFlush Message count to flush.
+# @param naviback.bss.client.useCompression Enable compression.
+# @param naviback.bss.client.packageSizeMaxBytes Package size max bytes.
+# @param naviback.bss.client.pendingTransmissionMaxCount Pending transmission max count.
 # @extra naviback.reduceEdgesOptimizationFlag Enable optimizations for distance matrix queries processing
 # @param naviback.behindSplitter Current instance is behind splitter or not
+# @param naviback.overrideConfig Complete config override. For test purposes only.
+# @param naviback.rtr.enabled Enable real time restrictions.
+# @param naviback.rtr.url URL real time restrictions server.
 # @skip rules
 
 naviback:
@@ -125,7 +157,18 @@ naviback:
     answer: false
   logLevel: Info
   indexFilename: index.json.zip
+  citiesFilename: cities.conf.zip
+  sentry:
+    enabled: false
+    address: sentry.host
+    project: navi-back
+    username: navi-back
+    printMessages: false
+    debug: false
+    reportPath: /tmp/sentry
+    handler: /usr/sbin/2gis/mosesd/crashpad_handler
   castleHost: ''
+  disableUpdates: false
   indices:
     carOptions:
       enabled: false
@@ -149,6 +192,8 @@ naviback:
     passZones:
       enabled: false
     projectCarOptions:
+      enabled: false
+    restrictedTransportIndex:
       enabled: false
     restrictedTransportPlatforms:
       enabled: false
@@ -175,9 +220,55 @@ naviback:
   simpleNetwork:
     emergency: false
   attractor: {}
+  bss:
+    enabled: false
+    client:
+      serviceRemoteAddress: ''
+      messageCountToFlush: 500
+      useCompression: true
+      packageSizeMaxBytes: 1800000
+      pendingTransmissionMaxCount: 10
   behindSplitter: false
+  overrideConfig: ''
+  rtr:
+    enabled: false
+    url: http://rtr.navi
 
 rules: []
+
+
+# @section Envoy settings, ignored if not `transmitter.enabled`. Leave with defaults, FOR FUTURE RELEASE.
+
+# @param envoy.image.repository Repository
+# @param envoy.image.tag Tag
+# @param envoy.image.pullPolicy Pull Policy
+
+envoy:
+  image:
+    repository: 2gis-on-premise/envoy
+    pullPolicy: IfNotPresent
+    tag: v1.27.0
+
+
+# @section Frozen data settings. For test purposes only.
+
+# @param frozenData.enabled If use frozen data is enabled.
+# @param frozenData.image.repository Repository
+# @param frozenData.image.tag Tag
+# @param frozenData.image.pullPolicy Pull Policy
+# @param frozenData.resources [nullable] Container resources requirements structure.
+# @param frozenData.resources.requests.cpu [nullable] CPU request, recommended value `100m`.
+# @param frozenData.resources.requests.memory [nullable] Memory request, recommended value `100Mi`.
+# @param frozenData.resources.limits.cpu [nullable] CPU limit, recommended value `100m`.
+# @param frozenData.resources.limits.memory [nullable] Memory limit, recommended value `100Mi`.
+
+frozenData:
+  enabled: false
+  image:
+    repository: 2gis-on-premise/frozen-data
+    pullPolicy: Always
+    tag: ''
+  resources: {}
 
 
 # @section Service account settings
@@ -195,56 +286,58 @@ serviceAccount:
 # @section Service settings
 
 # @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.clusterIP Controls Service cluster IP allocation. Cannot be changed after resource creation.
 # @param service.port Service port.
+# @param service.grpcPort Service GRPC port if `naviback.grpcPort` enabled.
 # @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param service.headless.enabled Enable creating a secondary headless service
+# @param service.headless.annotations Annotations for secondary headless service
 
 service:
   type: ClusterIP
+  clusterIP: ''
   port: 80
+  grpcPort: 50051
   annotations: {}
   labels:
+  headless:
+    enabled: false
+    annotations: {}
 
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 # @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Name of the Ingress controller class.
 # @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration
 
 ingress:
   enabled: false
+  className: nginx
   hosts:
-  - host: navi-back.host
+  - host: navi-back.example.com
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - navi-back.example.com
+  #   secretName: secret.tls
 
 
 # @section Limits
 
-# @param resources.requests.cpu A CPU request.
-# @param resources.requests.memory A memory request.
-# @param resources.limits.cpu A CPU limit.
-# @param resources.limits.memory A memory limit.
+# @param resources [nullable] Container resources requirements structure.
+# @param resources.requests.cpu [nullable] CPU request, recommended value `1000m`.
+# @param resources.requests.memory [nullable] Memory request, recommended value `2Gi`.
+# @param resources.limits.cpu [nullable] CPU limit, recommended value `3000m`.
+# @param resources.limits.memory [nullable] Memory limit, recommended value `8Gi`.
 
-# @extra testResources **Limits for test connection.**
-# @param testResources.requests.cpu A CPU request.
-# @param testResources.requests.memory A memory request.
-# @param testResources.limits.cpu A CPU limit.
-# @param testResources.limits.memory A memory limit.
-
-resources:
-  limits:
-    cpu: 2
-    memory: 4000Mi
-  requests:
-    cpu: 500m
-    memory: 1024Mi
-
-testResources:
-  limits:
-    cpu: 100m
-    memory: 100Mi
-  requests:
-    cpu: 100m
-    memory: 100Mi
+resources: {}
 
 
 # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
@@ -363,7 +456,7 @@ kafka:
 # @section S3-compatible storage settings for interacting with Distance Matrix Async Service
 
 # @param s3.enabled if S3 storage is enabled.
-# @param s3.host S3 endpoint URL, ex: http://async-matrix-s3.host
+# @param s3.host S3 endpoint, ex: async-matrix-s3.host.
 # @param s3.bucket S3 bucket name.
 # @param s3.accessKey S3 access key for accessing the bucket.
 # @param s3.secretKey S3 secret key for accessing the bucket.
@@ -375,8 +468,59 @@ s3:
   accessKey: ''
   secretKey: ''
 
-# @param livenessProbeDelay initial delay for liveness probes
-# @param readinessProbeDelay initial delay for readiness probes
+# @section Settings for attractor connection. Leave with defaults, FOR FUTURE RELEASE.
 
-livenessProbeDelay: 60
-readinessProbeDelay: 75
+# @param transmitter.enabled if attractor connection required
+# @param transmitter.type connection type one of: grpc, grpc-async, grpc-stream, ws, ws-async
+# @param transmitter.host attractor service
+# @param transmitter.port attractor port
+# @param transmitter.responseTimeoutMs response waiting timeout
+
+transmitter:
+  enabled: false
+  type: grpc-async-stream
+  host: http://navi-attractor.host
+  port: 50051
+  responseTimeoutMs: 100
+
+# @section Back-end and attractor group properties. Leave with defaults, FOR FUTURE RELEASE.
+
+# @param dataGroup.enabled if grouping enabled
+# @param dataGroup.prefix common prefix for the group used for identifiers
+# @param dataGroup.timestamp data timestamp the group is running on
+
+dataGroup:
+  enabled: false
+  prefix: sampleGroup
+  timestamp: no-default
+
+# @section License settings
+
+# @param license.url Address of the License service v2. Ex: https://license.svc
+# @param license.notSupported Excludes the configuration block if true, for old versions only.
+
+license:
+  url: ''
+  notSupported: false
+
+# @section Metrics aggregator container. Leave with defaults, FOR FUTURE RELEASE.
+
+# @param metrics.enabled Enable metrics container and scrape annotations
+# @param metrics.image.repository Repository
+# @param metrics.image.tag Tag
+# @param metrics.image.pullPolicy Pull Policy
+# @param metrics.port Port of container.
+# @param metrics.resources [nullable] Container resources requirements structure.
+# @param metrics.resources.requests.cpu  [nullable] CPU request, recommended value `10m`.
+# @extra metrics.resources.requests.memory [nullable] Memory request, recommended value `10Mi`.
+# @extra metrics.resources.limits.cpu [nullable] CPU limit, recommended value `100m`.
+# @extra metrics.resources.limits.memory [nullable] Memory limit, recommended value `10Mi`.
+
+metrics:
+  enabled: false
+  image:
+    repository: 2gis-on-premise/metrics-aggregator
+    pullPolicy: IfNotPresent
+    tag: ''
+  port: 9090
+  resources: {}

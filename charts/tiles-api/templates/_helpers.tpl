@@ -57,9 +57,25 @@ dgis_tileserver_{{ include "tiles.kind" . }}_{{ required "Valid .Values.cassandr
 {{- end -}}
 {{- end -}}
 
+{{- define "tiles.type" -}}
+{{- if .subtype -}}
+ald
+{{- else if has .kind (list "web" "native") -}}
+vector
+{{- else if eq .kind "raster" -}}
+raster
+{{- else if eq .kind "mapbox" -}}
+mapbox
+{{- end -}}
+{{- end -}}
+
 {{- define "tiles.checksum" -}}
 {{ (include (print $.Template.BasePath .path) $ | fromYaml).data | toYaml | sha256sum }}
 {{- end }}
+
+{{- define "tiles.customCA.mountPath" -}}
+{{ $.Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}
 
 {{/* Importer */}}
 
@@ -74,18 +90,21 @@ tiles-api-vector
 tiles-api-raster
 {{- else if eq . "native" -}}
 tiles-api-mobile-sdk
-{{- else -}}
+{{- else if eq . "mapbox" -}}
+tiles-api-mapbox
 {{- end -}}
 {{- end -}}
 
 {{- define "importer.types" -}}
 {{- if .subtype -}}
 - {{ .subtype }}
-{{- else if eq .kind "raster" -}}
-- tiles
-{{- else -}}
+{{- else if has .kind (list "web" "native") -}}
 - vtiles
 - poiicons
+{{- else if eq .kind "raster" -}}
+- tiles
+{{- else if eq .kind "mapbox" -}}
+- mapbox
 {{- end -}}
 {{- end -}}
 

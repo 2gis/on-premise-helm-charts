@@ -45,7 +45,7 @@ onprem
 
 {{- define "catalog.env.postgres" -}}
 - name: CATALOG_DB_SCHEMA
-  value: "{{ include "catalog.manifestCode" . }},extensions"
+  value: "{{ include "catalog.manifestCode" . }},{{ .Values.importer.postgres.schemaExtensions }}"
 - name: CATALOG_DB_QUERY_TIMEOUT
   value: "{{ .Values.api.postgres.queryTimeout }}"
 - name: CATALOG_DB_BRANCH_POOL_SIZE
@@ -71,16 +71,6 @@ onprem
 - name: CATALOG_DB_REGION_LOGIN
   value: "{{ .Values.api.postgres.username }}"
 - name: CATALOG_DB_REGION_PASS
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "catalog.secret.deploys.name" . }}
-      key: apiDbPassword
-
-- name: CATALOG_DB_API_KEY_URL
-  value: "jdbc:postgresql://{{ .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ .Values.api.postgres.name }}"
-- name: CATALOG_DB_API_KEY_LOGIN
-  value: "{{ .Values.api.postgres.username }}"
-- name: CATALOG_DB_API_KEY_PASS
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
@@ -120,17 +110,27 @@ onprem
 {{- end }}
 
 {{- define "catalog.env.keys" -}}
-- name: CATALOG_KEYS_ENABLED
-  value: "true"
 - name: CATALOG_KEYS_ENDPOINT
   value: "{{ required "A valid .Values.keys.url entry required" .Values.keys.url }}"
-- name: CATALOG_KEYS_REQUEST_TIMEOUT
-  value: "{{ .Values.keys.requestTimeout }}"
 - name: CATALOG_KEYS_SERVICE_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServiceToken
+- name: CATALOG_KEYS_CONNECTING_TIMEOUT
+  value: "{{ .Values.keys.client.connectingTimeout }}"
+- name: CATALOG_KEYS_IDLE_TIMEOUT
+  value: "{{ .Values.keys.client.idleTimeout }}"
+- name: CATALOG_KEYS_MAX_RETRIES
+  value: "{{ .Values.keys.client.maxRetries }}"
+- name: CATALOG_KEYS_MAX_CONNECTION_LIFETIME
+  value: "{{ .Values.keys.client.maxConnectionLifetime }}"
+- name: CATALOG_KEYS_BASE_CONNECTION_BACKOFF
+  value: "{{ .Values.keys.client.baseConnectionBackoff }}"
+- name: CATALOG_KEYS_MAX_CONNECTION_BACKOFF
+  value: "{{ .Values.keys.client.maxConnectionBackoff }}"
+- name: CATALOG_KEYS_RESPONSE_TIMEOUT
+  value: "{{ .Values.keys.client.responseTimeout }}"
 {{- end }}
 
 {{- define "catalog.env.license" -}}
@@ -186,6 +186,8 @@ onprem
   value: "{{ include "catalog.manifestCode" . }}"
 - name: IMPORTER_DB_CATALOG_SCHEMA_SWITCH_ENABLED
   value: "{{ .Values.importer.postgres.schemaSwitchEnabled }}"
+- name: IMPORTER_DB_CATALOG_SCHEMA_EXTENSIONS
+  value: "{{ .Values.importer.postgres.schemaExtensions }}"
 - name: IMPORTER_DB_CATALOG_HOST
   value: "{{ required "A valid .Values.importer.postgres.host entry required" .Values.importer.postgres.host }}"
 - name: IMPORTER_DB_CATALOG_PORT

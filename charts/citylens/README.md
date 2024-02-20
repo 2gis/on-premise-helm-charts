@@ -26,6 +26,19 @@ See the [documentation]() to learn about:
 | --------------------- | --------------------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port` **Required** | `""`  |
 
+### Deployment Artifacts Storage settings
+
+| Name                     | Description                                                                                                                                                                                                                                                           | Value   |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`      | S3 host. Format: `host:port`. **Required**                                                                                                                                                                                                                            | `""`    |
+| `dgctlStorage.secure`    | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                                           | `false` |
+| `dgctlStorage.bucket`    | S3 bucket name. **Required**                                                                                                                                                                                                                                          | `""`    |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`    |
+| `dgctlStorage.verifySsl` | Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**                                                                                                                                                           | `true`  |
+| `dgctlStorage.region`    | S3 region name.                                                                                                                                                                                                                                                       | `""`    |
+
 ### Citylens API service settings
 
 
@@ -34,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.0.9`                        |
+| `api.image.tag`        | Tag.         | `1.4.1`                        |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -49,40 +62,44 @@ See the [documentation]() to learn about:
 
 ### Service settings
 
-| Name                      | Description                                                                                                                    | Value       |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `api.service.port`        | Service port.                                                                                                                  | `80`        |
-| `api.service.targetPort`  | Service target port.                                                                                                           | `8000`      |
-| `api.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
-| `api.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
+| Name                            | Description                                                                                                                    | Value       |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `api.service.type`              | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `api.service.port`              | Service port.                                                                                                                  | `80`        |
+| `api.service.targetPort`        | Service target port.                                                                                                           | `8000`      |
+| `api.service.metricsTargetPort` | Service prometheus metrics target port. Metrics are available on /healthz/metrics endpoint.                                    | `8001`      |
+| `api.service.annotations`       | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
+| `api.service.labels`            | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                                                                  | Description                                                                                                           | Value                                                 |
 | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| `api.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `true`                                                |
+| `api.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                                               |
 | `api.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                                                  |
 | `api.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `{"nginx.ingress.kubernetes.io/proxy-body-size":"0"}` |
-| `api.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens.host`                                       |
+| `api.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-api.host`                                   |
 | `api.ingress.hosts[0].paths[0].path`                                  | Endpoint of host.                                                                                                     | `/`                                                   |
 | `api.ingress.hosts[0].paths[0].pathType`                              | Path type of endpoint.                                                                                                | `Prefix`                                              |
 | `api.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                                                  |
 
 ### Auth settings for authentication
 
-| Name                 | Description                                                                                                         | Value   |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
-| `api.auth.enabled`   | If authentication is needed.                                                                                        | `true`  |
-| `api.auth.publicKey` | Public Key for authentication. Visit `http(s)://keycloak.ingress.host/realms/CityLens_app/` to obtain a Public Key. | `""`    |
-| `api.auth.algorithm` | Authentication algorithm type.                                                                                      | `RS256` |
+| Name                     | Description                                                                                                                                                                                                   | Value  |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `api.auth.enabled`       | If authentication is needed.                                                                                                                                                                                  | `true` |
+| `api.auth.authServerUrl` | API URL of authentication service, OIDC-compatibility expected. Ex.: `http(s)://keycloak.ingress.host/`. **Required**                                                                                         | `""`   |
+| `api.auth.realm`         | Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: CityLens_app | `""`   |
+| `api.auth.verifySsl`     | Enable\Disable SSL check.                                                                                                                                                                                     | `true` |
+| `api.auth.camcomToken`   | Bearer token, expected on CamCom callback endpoint (if integration with CamCom enabled).                                                                                                                      | `""`   |
 
 ### Custom settings
 
-| Name           | Description                        | Value   |
-| -------------- | ---------------------------------- | ------- |
-| `api.showDocs` | Show documentation link if needed. | `false` |
-| `api.logLevel` | Log level.                         | `INFO`  |
+| Name                 | Description                                            | Value          |
+| -------------------- | ------------------------------------------------------ | -------------- |
+| `api.showDocs`       | Show documentation link if needed.                     | `false`        |
+| `api.logLevel`       | Log level.                                             | `INFO`         |
+| `api.metricsAppName` | Value for service prometheus metrics label "app_name". | `citylens-api` |
 
 ### Metadata settings
 
@@ -104,7 +121,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.0.13`                       |
+| `web.image.tag`        | Tag.         | `1.4.1`                        |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -119,42 +136,46 @@ See the [documentation]() to learn about:
 
 ### Service settings
 
-| Name                      | Description                                                                                                                    | Value       |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `web.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `web.service.port`        | Service port.                                                                                                                  | `80`        |
-| `web.service.targetPort`  | Service target port.                                                                                                           | `5000`      |
-| `web.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
-| `web.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
+| Name                            | Description                                                                                                                    | Value       |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `web.service.type`              | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `web.service.port`              | Service port.                                                                                                                  | `80`        |
+| `web.service.targetPort`        | Service target port.                                                                                                           | `5000`      |
+| `web.service.metricsTargetPort` | Service prometheus metrics target port. Metrics are available on /healthz/metrics endpoint.                                    | `5001`      |
+| `web.service.annotations`       | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
+| `web.service.labels`            | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
+| `web.service.metricsEnabled`    | Enable prometheus metrics                                                                                                      | `true`      |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                                                                  | Description                                                                                                           | Value                                                 |
 | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| `web.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `true`                                                |
+| `web.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                                               |
 | `web.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                                                  |
 | `web.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `{"nginx.ingress.kubernetes.io/proxy-body-size":"0"}` |
-| `web.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.web'.                                                                | `citylens.host`                                       |
+| `web.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.web'.                                                                | `citylens-web.host`                                   |
 | `web.ingress.hosts[0].paths[0].path`                                  | Endpoint of host.                                                                                                     | `/`                                                   |
 | `web.ingress.hosts[0].paths[0].pathType`                              | Path type of endpoint.                                                                                                | `Prefix`                                              |
 | `web.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                                                  |
 
 ### Auth settings for authentication
 
-| Name                     | Description                                                                                | Value   |
-| ------------------------ | ------------------------------------------------------------------------------------------ | ------- |
-| `web.auth.enabled`       | If authentication is needed.                                                               | `false` |
-| `web.auth.realm`         | Authenitcation realm, example: Inspection_Portal_backend **Required**                      | `""`    |
-| `web.auth.authServerUrl` | API URL of authentication service. Example: `http(s)://keycloak.ingress.host` **Required** | `""`    |
-| `web.auth.clientId`      | Client id from keycloak, example: citylens-web-client **Required**                         | `""`    |
-| `web.auth.clientSecret`  | Client Secret from keycloak. **Required**                                                  | `""`    |
-| `web.auth.verifySsl`     | Enable\Disable SSL check.                                                                  | `true`  |
+| Name                     | Description                                                                                                                                                                                                                | Value   |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `web.auth.enabled`       | If authentication is needed.                                                                                                                                                                                               | `false` |
+| `web.auth.realm`         | Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: Inspection_Portal_backend | `""`    |
+| `web.auth.authServerUrl` | API URL of authentication service, OIDC-compatibility expected. Ex: `http(s)://keycloak.ingress.host` **Required**                                                                                                         | `""`    |
+| `web.auth.clientId`      | Client id from keycloak. Ex: citylens-web-client **Required**                                                                                                                                                              | `""`    |
+| `web.auth.clientSecret`  | Client Secret from keycloak. **Required**                                                                                                                                                                                  | `""`    |
+| `web.auth.verifySsl`     | Enable\Disable SSL check.                                                                                                                                                                                                  | `true`  |
+| `web.auth.pkce`          | Enable\Disable PKCE (Proof Key for Code Exchange) in Authorization Code flow.                                                                                                                                              | `false` |
 
 ### Custom settings
 
-| Name           | Description | Value     |
-| -------------- | ----------- | --------- |
-| `web.logLevel` | Log level.  | `WARNING` |
+| Name                 | Description                                            | Value          |
+| -------------------- | ------------------------------------------------------ | -------------- |
+| `web.logLevel`       | Log level.                                             | `WARNING`      |
+| `web.metricsAppName` | Value for service prometheus metrics label "app_name". | `citylens-web` |
 
 ### Metadata settings
 
@@ -206,6 +227,7 @@ See the [documentation]() to learn about:
 | `worker.camcomSender.requestRateLimit.period` | Camcom period rate limit                                                                                                    | `60`    |
 | `worker.camcomSender.requestRetries`          | Camcom request retries                                                                                                      | `3`     |
 | `worker.camcomSender.requestRetriesBackoff`   | request retries backoff                                                                                                     | `1`     |
+| `worker.camcomSender.sourceEnv`               | Environment name to send to CamCam (source_env field in request), ignored if empty.                                         | `""`    |
 | `worker.camcomSender.annotations`             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`    |
 | `worker.camcomSender.labels`                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`    |
 | `worker.camcomSender.podAnnotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`    |
@@ -226,6 +248,19 @@ See the [documentation]() to learn about:
 | `worker.predictionsSaver.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`  |
 | `worker.predictionsSaver.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`  |
 | `worker.predictionsSaver.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
+
+### Citylens Logs Saver worker's settings
+
+| Name                              | Description                                                                                                                 | Value |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `worker.logsSaver.replicas`       | A replica count for the pod.                                                                                                | `1`   |
+| `worker.logsSaver.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
+| `worker.logsSaver.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
+| `worker.logsSaver.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
+| `worker.logsSaver.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
+| `worker.logsSaver.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`  |
+| `worker.logsSaver.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`  |
+| `worker.logsSaver.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
 
 ### Citylens Reporter Pro worker's settings
 
@@ -255,19 +290,21 @@ See the [documentation]() to learn about:
 
 ### Citylens Tracks Uploader worker's settings
 
-| Name                                   | Description                                                                                                                 | Value  |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `worker.tracksUploader.enabled`        | If Tracks Uploader worker is enabled for the service.                                                                       | `true` |
-| `worker.tracksUploader.replicas`       | A replica count for the pod.                                                                                                | `1`    |
-| `worker.tracksUploader.api`            | API address.                                                                                                                | `""`   |
-| `worker.tracksUploader.source`         | Source.                                                                                                                     | `""`   |
-| `worker.tracksUploader.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
-| `worker.tracksUploader.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
-| `worker.tracksUploader.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
-| `worker.tracksUploader.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
-| `worker.tracksUploader.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`   |
-| `worker.tracksUploader.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`   |
-| `worker.tracksUploader.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`   |
+| Name                                              | Description                                                                                                                          | Value   |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `worker.tracksUploader.enabled`                   | If Tracks Uploader worker is enabled for the service.                                                                                | `false` |
+| `worker.tracksUploader.replicas`                  | A replica count for the pod.                                                                                                         | `1`     |
+| `worker.tracksUploader.api`                       | Destination API address citylens. Ex.: http(s)://citylens-api.host/                                                                  | `""`    |
+| `worker.tracksUploader.source`                    | Source address citylens-web. Ex.: http(s)://citylens-web.host                                                                        | `""`    |
+| `worker.tracksUploader.verifySsl`                 | Set to `false` if tracksUploader.api or tracksUploader.source must be accessed via https without certificate validation **Required** | `true`  |
+| `worker.tracksUploader.reloadTrackTimeoutSeconds` | Track reload timeout, seconds.                                                                                                       | `900`   |
+| `worker.tracksUploader.annotations`               | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                            | `{}`    |
+| `worker.tracksUploader.labels`                    | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                      | `{}`    |
+| `worker.tracksUploader.podAnnotations`            | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                            | `{}`    |
+| `worker.tracksUploader.podLabels`                 | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                      | `{}`    |
+| `worker.tracksUploader.nodeSelector`              | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).              | `{}`    |
+| `worker.tracksUploader.tolerations`               | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                | `{}`    |
+| `worker.tracksUploader.affinity`                  | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.          | `{}`    |
 
 ### Migration job settings
 
@@ -275,7 +312,7 @@ See the [documentation]() to learn about:
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.0.9`                             |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.2.0`                             |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |
@@ -285,29 +322,35 @@ See the [documentation]() to learn about:
 
 ### Kafka settings
 
-| Name                          | Description                                              | Value    |
-| ----------------------------- | -------------------------------------------------------- | -------- |
-| `kafka.bootstrapServer`       | A Kafka broker endpoint. **Required**                    | `""`     |
-| `kafka.username`              | A Kafka username for connection. **Required**            | `""`     |
-| `kafka.password`              | A Kafka password for connection. **Required**            | `""`     |
-| `kafka.topics.frames`         | List of topics for Frames saver worker. **Required**     | `""`     |
-| `kafka.topics.tracks`         | List of topics for Tracks metadata worker. **Required**2 | `""`     |
-| `kafka.topics.pro`            | List of topics for Reporter pro worker. **Required**     | `""`     |
-| `kafka.topics.camcom`         | List of topics for Camcom worker. **Required**           | `""`     |
-| `kafka.topics.uploader`       | List of topics for Uploader worker. **Required**         | `""`     |
-| `kafka.topics.logs`           | List of topics for API logs. **Required**                | `""`     |
-| `kafka.consumerGroups.prefix` | Kafka topics prefix. **Required**                        | `""`     |
-| `kafka.predictors[0].name`    | Name of predictor **Required**                           | `camcom` |
-| `kafka.predictors[0].topic`   | Topic used by predictor **Required**                     | `""`     |
+| Name                           | Description                                             | Value    |
+| ------------------------------ | ------------------------------------------------------- | -------- |
+| `kafka.bootstrapServer`        | A Kafka broker endpoint. **Required**                   | `""`     |
+| `kafka.username`               | A Kafka username for connection. **Required**           | `""`     |
+| `kafka.password`               | A Kafka password for connection. **Required**           | `""`     |
+| `kafka.topics.frames`          | List of topics for Frames saver worker. **Required**    | `""`     |
+| `kafka.topics.tracks`          | List of topics for Tracks metadata worker. **Required** | `""`     |
+| `kafka.topics.pro`             | List of topics for Reporter pro worker. **Required**    | `""`     |
+| `kafka.topics.uploader`        | List of topics for Uploader worker. **Required**        | `""`     |
+| `kafka.topics.logs`            | List of topics for API logs. **Required**               | `""`     |
+| `kafka.topics.framesLifecycle` | Topic for frames lifecycle events logs. **Required**    | `""`     |
+| `kafka.consumerGroups.prefix`  | Kafka topics prefix. **Required**                       | `""`     |
+| `kafka.predictors[0].name`     | Name of predictor **Required**                          | `camcom` |
+| `kafka.predictors[0].topic`    | Topic used by predictor **Required**                    | `""`     |
+| `kafka.predictors[1].name`     | Name of manual predictor **Required**                   | `manual` |
+| `kafka.predictors[1].topic`    | Topic used by manual predictor **Required**             | `""`     |
 
 ### S3 settings
 
-| Name                 | Description                                             | Value |
-| -------------------- | ------------------------------------------------------- | ----- |
-| `s3.endpoint`        | S3 endpoint. Format: `host:port` or `url`. **Required** | `""`  |
-| `s3.accessKey`       | S3 access key for accessing the bucket. **Required**    | `""`  |
-| `s3.secretAccessKey` | S3 secret key for accessing the bucket. **Required**    | `""`  |
-| `s3.bucketPrefix`    | S3 bucket name. **Required**                            | `""`  |
+| Name                  | Description                                                         | Value   |
+| --------------------- | ------------------------------------------------------------------- | ------- |
+| `s3.verifySsl`        | Verify SSL certificate when connecting to s3.endpoint.              | `true`  |
+| `s3.endpoint`         | S3 endpoint. Format: `host:port` or `url`. **Required**             | `""`    |
+| `s3.accessKey`        | S3 access key for accessing the bucket. **Required**                | `""`    |
+| `s3.secretAccessKey`  | S3 secret key for accessing the bucket. **Required**                | `""`    |
+| `s3.bucketPrefix`     | S3 bucket name prefix for the frames buckets. **Required**          | `""`    |
+| `s3.logsBucketPrefix` | S3 bucket name prefix for the mobile app logs buckets. **Required** | `""`    |
+| `s3.region`           | S3 region.                                                          | `""`    |
+| `s3.setPublicReadACL` | Set "public-read" ACL on buckets and objects.                       | `false` |
 
 ### postgres **Database settings**
 
@@ -331,10 +374,19 @@ See the [documentation]() to learn about:
 
 ### Custom settings
 
-| Name                      | Description                                | Value                        |
-| ------------------------- | ------------------------------------------ | ---------------------------- |
-| `dashboardDomain`         | Link to Citylens web address. **Required** | `""`                         |
-| `locale`                  | Locale language (en by default).           | `en`                         |
-| `headerLinks`             | List of links.                             | `["drivers","tracks","map"]` |
-| `reporters[0].name`       | Reporter name.                             | `pro`                        |
-| `reporters[0].predictors` | Predictor used by reporter.                | `["camcom"]`                 |
+| Name                            | Description                                                                                                      | Value                        |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `dashboardDomain`               | Link to Citylens web address. **Required**                                                                       | `""`                         |
+| `locale`                        | Locale language (en by default).                                                                                 | `en`                         |
+| `headerLinks`                   | List of links for navbar.                                                                                        | `["drivers","tracks","map"]` |
+| `reporters[0].name`             | Reporter name.                                                                                                   | `pro`                        |
+| `reporters[0].predictors`       | Predictor used by reporter.                                                                                      | `["camcom"]`                 |
+| `reporters[0].trackTimeoutDays` | Time in days to wait for track completion and receiving frames prediction before marking as not synced with Pro. | `1`                          |
+
+### PRO integration (only when Pro reporter enabled)
+
+| Name            | Description                                                                                       | Value  |
+| --------------- | ------------------------------------------------------------------------------------------------- | ------ |
+| `pro.url`       | PRO API endpoint URL for filters actualization. Ex: http(s)://pro-api.svc/your_asset_name/filters | `""`   |
+| `pro.key`       | PRO API auth token                                                                                | `""`   |
+| `pro.verifySsl` | Set to `false` if pro.url must be accessed via https without certificate validation. **Required** | `true` |

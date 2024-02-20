@@ -41,7 +41,8 @@ spec:
 
       annotations:
         checksum/config: {{ include "tiles.checksum" (merge (dict "path" "/api.configmap.yaml") $) }}
-        checksum/secret: {{ include "tiles.checksum" (merge (dict "path" "/secret.yaml") $) }}
+        checksum/custom-ca: {{ include "tiles.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
+        checksum/secret: {{ include "tiles.checksum" (merge (dict "path" "/api.secret.yaml") $) }}
         manifest/code: {{ include "tiles.manifestCode" . | sha256sum }}
       {{- with .Values.api.podAnnotations }}
         {{- toYaml . | nindent 8 }}
@@ -54,10 +55,10 @@ spec:
         - configMap:
             name: {{ include "tiles.fullname" . }}-api
           name: config-volume
-        {{- if $.Values.cassandra.ssl.enabled }}
+        {{- if $.Values.customCAs.bundle }}
         - configMap:
-            name: {{ include "tiles.fullname" . }}-cassandra-ssl
-          name: cassandra-ssl
+            name: {{ include "tiles.fullname" $ }}-custom-ca
+          name: custom-ca
         {{- end }}
 
       {{- with .Values.api.nodeSelector }}
@@ -106,6 +107,11 @@ spec:
           volumeMounts:
             - mountPath: "/config"
               name: config-volume
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "tiles.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
+            {{- end }}
 
           ports:
             - name: proxy
@@ -119,6 +125,10 @@ spec:
           env:
             - name: CONFIG_PATH
               value: "/config/proxy.yaml"
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "tiles.customCA.mountPath" $ }}
+            {{- end }}
         {{- end }}
 
         - name: tiles-api
@@ -136,9 +146,10 @@ spec:
           volumeMounts:
             - mountPath: "/config"
               name: config-volume
-            {{- if $.Values.cassandra.ssl.enabled }}
-            - mountPath: "/cassandra-ssl"
-              name: cassandra-ssl
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "tiles.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
             {{- end }}
 
           {{- with .Values.api.resources }}
@@ -155,3 +166,17 @@ spec:
               value: "/config/api.yaml"
             - name: API_PORT
               value: "{{ .Values.api.containerPort }}"
+            - name: CASSANDRA_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-api
+                  key: cassandraUser
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-api
+                  key: cassandraPassword
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "tiles.customCA.mountPath" $ }}
+            {{- end }}

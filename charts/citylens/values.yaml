@@ -4,6 +4,27 @@
 
 dgctlDockerRegistry: ''
 
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 host. Format: `host:port`. **Required**
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
+# @param dgctlStorage.bucket S3 bucket name. **Required**
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **Required**
+# @param dgctlStorage.verifySsl Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**
+# @param dgctlStorage.region S3 region name.
+
+dgctlStorage:
+  host: ''
+  secure: false
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+  manifest: ''
+  verifySsl: true
+  region: ''
+
 # @section Citylens API service settings
 
 # @section Image settings
@@ -26,6 +47,7 @@ dgctlDockerRegistry: ''
 # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 # @param api.service.port Service port.
 # @param api.service.targetPort Service target port.
+# @param api.service.metricsTargetPort Service prometheus metrics target port. Metrics are available on /healthz/metrics endpoint.
 # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
@@ -42,13 +64,16 @@ dgctlDockerRegistry: ''
 # @section Auth settings for authentication
 
 # @param api.auth.enabled If authentication is needed.
-# @param api.auth.publicKey Public Key for authentication. Visit `http(s)://keycloak.ingress.host/realms/CityLens_app/` to obtain a Public Key.
-# @param api.auth.algorithm Authentication algorithm type.
+# @param api.auth.authServerUrl API URL of authentication service, OIDC-compatibility expected. Ex.: `http(s)://keycloak.ingress.host/`. **Required**
+# @param api.auth.realm Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: CityLens_app
+# @param api.auth.verifySsl Enable\Disable SSL check.
+# @param api.auth.camcomToken Bearer token, expected on CamCom callback endpoint (if integration with CamCom enabled).
 
 # @section Custom settings
 
 # @param api.showDocs Show documentation link if needed.
 # @param api.logLevel Log level.
+# @param api.metricsAppName Value for service prometheus metrics label "app_name".
 
 # @section Metadata settings
 
@@ -65,7 +90,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.0.9
+    tag: 1.4.1
 
   replicas: 4
 
@@ -83,30 +108,35 @@ api:
     type: ClusterIP
     port: 80
     targetPort: 8000
+    metricsTargetPort: 8001
 
   ingress:
-    enabled: true
+    enabled: false
     className: ''
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: '0'
     hosts:
-    - host: citylens.host
+    - host: citylens-api.host
       paths:
       - path: /
         pathType: Prefix
     tls: []
       # - hosts:
-      #    host: ''
+      #    host: 'citylens-api.host'
       #  secretName: ''
 
   auth:
     enabled: true
-    publicKey: ''
-    algorithm: RS256
+    authServerUrl: ''
+    realm: ''
+    verifySsl: true
+    camcomToken: ''
 
   showDocs: false
 
   logLevel: INFO
+
+  metricsAppName: citylens-api
 
   annotations: {}
   labels: {}
@@ -138,8 +168,10 @@ api:
 # @param web.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 # @param web.service.port Service port.
 # @param web.service.targetPort Service target port.
+# @param web.service.metricsTargetPort Service prometheus metrics target port. Metrics are available on /healthz/metrics endpoint.
 # @param web.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param web.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param web.service.metricsEnabled Enable prometheus metrics
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -154,15 +186,17 @@ api:
 # @section Auth settings for authentication
 
 # @param web.auth.enabled If authentication is needed.
-# @param web.auth.realm Authenitcation realm, example: Inspection_Portal_backend **Required**
-# @param web.auth.authServerUrl API URL of authentication service. Example: `http(s)://keycloak.ingress.host` **Required**
-# @param web.auth.clientId Client id from keycloak, example: citylens-web-client **Required**
+# @param web.auth.realm Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: Inspection_Portal_backend
+# @param web.auth.authServerUrl API URL of authentication service, OIDC-compatibility expected. Ex: `http(s)://keycloak.ingress.host` **Required**
+# @param web.auth.clientId Client id from keycloak. Ex: citylens-web-client **Required**
 # @param web.auth.clientSecret Client Secret from keycloak. **Required**
 # @param web.auth.verifySsl Enable\Disable SSL check.
+# @param web.auth.pkce Enable\Disable PKCE (Proof Key for Code Exchange) in Authorization Code flow.
 
 # @section Custom settings
 
 # @param web.logLevel Log level.
+# @param web.metricsAppName Value for service prometheus metrics label "app_name".
 
 # @section Metadata settings
 
@@ -179,7 +213,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.0.13
+    tag: 1.4.1
 
   replicas: 1
 
@@ -197,20 +231,22 @@ web:
     type: ClusterIP
     port: 80
     targetPort: 5000
+    metricsTargetPort: 5001
+    metricsEnabled: true
 
   ingress:
-    enabled: true
+    enabled: false
     className: ''
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: '0'
     hosts:
-    - host: citylens.host
+    - host: citylens-web.host
       paths:
       - path: /
         pathType: Prefix
     tls: []
       # - hosts:
-      #    host: ''
+      #    host: 'citylens-web.host'
       #  secretName: ''
 
   auth:
@@ -220,8 +256,10 @@ web:
     clientId: ''
     clientSecret: ''
     verifySsl: true
+    pkce: false
 
   logLevel: WARNING
+  metricsAppName: citylens-web
 
   annotations: {}
   labels: {}
@@ -290,6 +328,8 @@ worker:
 # @param worker.camcomSender.requestRetries Camcom request retries
 # @param worker.camcomSender.requestRetriesBackoff request retries backoff
 
+# @param worker.camcomSender.sourceEnv Environment name to send to CamCam (source_env field in request), ignored if empty.
+
 
 # @param worker.camcomSender.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.camcomSender.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -314,6 +354,7 @@ worker:
       period: 60
     requestRetries: 3
     requestRetriesBackoff: 1
+    sourceEnv: ''
 
     annotations: {}
     labels: {}
@@ -337,6 +378,31 @@ worker:
 # @param worker.predictionsSaver.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
 
   predictionsSaver:
+
+    replicas: 1
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+# @section Citylens Logs Saver worker's settings
+
+# @param worker.logsSaver.replicas A replica count for the pod.
+
+# @param worker.logsSaver.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.logsSaver.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.logsSaver.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.logsSaver.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.logsSaver.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.logsSaver.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.logsSaver.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  logsSaver:
 
     replicas: 1
 
@@ -405,8 +471,10 @@ worker:
 
 # @param worker.tracksUploader.replicas A replica count for the pod.
 
-# @param worker.tracksUploader.api API address.
-# @param worker.tracksUploader.source Source.
+# @param worker.tracksUploader.api Destination API address citylens. Ex.: http(s)://citylens-api.host/
+# @param worker.tracksUploader.source Source address citylens-web. Ex.: http(s)://citylens-web.host
+# @param worker.tracksUploader.verifySsl Set to `false` if tracksUploader.api or tracksUploader.source must be accessed via https without certificate validation **Required**
+# @param worker.tracksUploader.reloadTrackTimeoutSeconds Track reload timeout, seconds.
 
 # @param worker.tracksUploader.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.tracksUploader.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -419,12 +487,14 @@ worker:
 
   tracksUploader:
 
-    enabled: true
+    enabled: false
 
     replicas: 1
 
     api: ''
     source: ''
+    verifySsl: true
+    reloadTrackTimeoutSeconds: 900  # 15 minutes
 
     annotations: {}
     labels: {}
@@ -455,7 +525,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.0.9
+    tag: 1.2.0
 
   resources:
     requests:
@@ -473,14 +543,16 @@ migrations:
 # @param kafka.username A Kafka username for connection. **Required**
 # @param kafka.password A Kafka password for connection. **Required**
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
-# @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**2
+# @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
 # @param kafka.topics.pro List of topics for Reporter pro worker. **Required**
-# @param kafka.topics.camcom List of topics for Camcom worker. **Required**
 # @param kafka.topics.uploader List of topics for Uploader worker. **Required**
 # @param kafka.topics.logs List of topics for API logs. **Required**
+# @param kafka.topics.framesLifecycle Topic for frames lifecycle events logs. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
 # @param kafka.predictors[0].name Name of predictor **Required**
 # @param kafka.predictors[0].topic Topic used by predictor **Required**
+# @param kafka.predictors[1].name Name of manual predictor **Required**
+# @param kafka.predictors[1].topic Topic used by manual predictor **Required**
 
 kafka:
 
@@ -492,25 +564,35 @@ kafka:
     tracks: ''
     pro: ''
     logs: ''
-    camcom: ''
     uploader: ''
+    framesLifecycle: ''
   consumerGroups:
     prefix: ''
   predictors:
   - name: camcom
     topic: ''
+  - name: manual
+    topic: ''
 
 # @section S3 settings
+# @param s3.verifySsl Verify SSL certificate when connecting to s3.endpoint.
 # @param s3.endpoint S3 endpoint. Format: `host:port` or `url`. **Required**
 # @param s3.accessKey S3 access key for accessing the bucket. **Required**
 # @param s3.secretAccessKey S3 secret key for accessing the bucket. **Required**
-# @param s3.bucketPrefix S3 bucket name. **Required**
+# @param s3.bucketPrefix S3 bucket name prefix for the frames buckets. **Required**
+# @param s3.logsBucketPrefix S3 bucket name prefix for the mobile app logs buckets. **Required**
+# @param s3.region S3 region.
+# @param s3.setPublicReadACL Set "public-read" ACL on buckets and objects.
 
 s3:
+  verifySsl: true
   endpoint: ''
   accessKey: ''
   secretAccessKey: ''
   bucketPrefix: ''
+  logsBucketPrefix: ''
+  region: ''
+  setPublicReadACL: false
 
 # @section postgres **Database settings**
 
@@ -548,9 +630,10 @@ map:
 
 # @param dashboardDomain Link to Citylens web address. **Required**
 # @param locale Locale language (en by default).
-# @param headerLinks List of links.
+# @param headerLinks List of links for navbar.
 # @param reporters[0].name Reporter name.
 # @param reporters[0].predictors Predictor used by reporter.
+# @param reporters[0].trackTimeoutDays Time in days to wait for track completion and receiving frames prediction before marking as not synced with Pro.
 
 dashboardDomain: ''
 
@@ -564,3 +647,15 @@ headerLinks:
 reporters:
 - name: pro
   predictors: [camcom]
+  trackTimeoutDays: 1
+
+# @section PRO integration (only when Pro reporter enabled)
+
+# @param pro.url PRO API endpoint URL for filters actualization. Ex: http(s)://pro-api.svc/your_asset_name/filters
+# @param pro.key PRO API auth token
+# @param pro.verifySsl Set to `false` if pro.url must be accessed via https without certificate validation. **Required**
+
+pro:
+  url: ''
+  key: ''
+  verifySsl: true

@@ -21,6 +21,10 @@ Expand the name of the chart.
 {{ include "citylens.name" . }}-frames-saver
 {{- end }}
 
+{{- define "citylens.logs-saver.name" -}}
+{{ include "citylens.name" . }}-logs-saver
+{{- end }}
+
 {{- define "citylens.predictions-saver.name" -}}
 {{ include "citylens.name" . }}-predictions-saver
 {{- end }}
@@ -29,8 +33,16 @@ Expand the name of the chart.
 {{ include "citylens.name" . }}-reporter-pro
 {{- end }}
 
+{{- define "citylens.secret.import.name" -}}
+{{ include "citylens.name" . }}-import-secret
+{{- end }}
+
 {{- define "citylens.track-metadata-saver.name" -}}
 {{ include "citylens.name" . }}-track-metadata-saver
+{{- end }}
+
+{{- define "citylens.track-reloader.name" -}}
+{{ include "citylens.name" . }}-track-reloader
 {{- end }}
 
 {{- define "citylens.api.selectorLabels" -}}
@@ -73,6 +85,16 @@ app.kubernetes.io/instance: {{ include "citylens.frames-saver.name" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "citylens.logs-saver.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.logs-saver.name" . }}
+{{- end }}
+
+{{- define "citylens.logs-saver.labels" -}}
+{{ include "citylens.logs-saver.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
 {{- define "citylens.predictions-saver.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Release.Name }}
 app.kubernetes.io/instance: {{ include "citylens.predictions-saver.name" . }}
@@ -86,6 +108,16 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "citylens.reporter-pro.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Release.Name }}
 app.kubernetes.io/instance: {{ include "citylens.reporter-pro.name" . }}
+{{- end }}
+
+{{- define "citylens.track-reloader.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.track-reloader.name" . }}
+{{- end }}
+
+{{- define "citylens.track-reloader.labels" -}}
+{{ include "citylens.track-reloader.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "citylens.reporter-pro.labels" -}}
@@ -109,4 +141,29 @@ app.kubernetes.io/instance: {{ .Chart.Name }}-db-migration
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
-
+{{- define "citylens.env.importer" -}}
+- name: DGCTL_S3_ENDPOINT
+  value: "http{{ if .Values.dgctlStorage.secure }}s{{ end }}://{{ required "A valid Values.dgctlStorage.host entry required" .Values.dgctlStorage.host }}"
+- name: DGCTL_S3_VERIFY_SSL
+  value: "{{ required "A valid Values.dgctlStorage.verifySsl entry required" .Values.dgctlStorage.verifySsl }}"
+- name: DGCTL_S3_BUCKET
+  value: "{{ .Values.dgctlStorage.bucket }}"
+- name: DGCTL_S3_REGION_NAME
+  value: "{{ .Values.dgctlStorage.region }}"
+- name: DGCTL_S3_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "citylens.secret.import.name" . }}
+      key: dgctlStorageAccessKey
+- name: DGCTL_S3_SECRET_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "citylens.secret.import.name" . }}
+      key: dgctlStorageSecretKey
+- name: DGCTL_MANIFEST_PATH
+  value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
+- name: DGCTL_MANIFEST_APP_NAME
+  value: "citylens"
+- name: DGCTL_MANIFEST_DATA_TYPE
+  value: "data_migration"
+{{- end }}
