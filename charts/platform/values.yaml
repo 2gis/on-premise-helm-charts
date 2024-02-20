@@ -48,8 +48,8 @@ ui:
   # @param ui.brand Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
   # @skip ui.defaultLocale
   # @param ui.pages A list of pages available in application. Values must be written with a comma. Possible values: `"status"`, `"playground"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
-  # @param ui.googleAnalyticsId An id for Google Analytics.
-  # @param ui.googleTagManagerId An id for Google Tag Manager.
+  # @skip ui.googleAnalyticsId
+  # @skip ui.googleTagManagerId
 
   brand: ''
   defaultLocale: en
