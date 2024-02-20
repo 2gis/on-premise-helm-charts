@@ -235,7 +235,6 @@ license:
 # @param stat.enabled If statistic is enabled
 # @param stat.url URL of the statistic service. Ex: http(s)://stat.svc
 # @param stat.buffer.lifetime Lifetime of Statistic buffer
-# @param stat.buffer.retryCount The maximum number of attempts to send Stat messages
 # @param stat.buffer.sendTimeout Timeout between sending statistic messages
 # @param stat.buffer.sendLimit The maximum number of messages in the buffer before they are sent to the Statistic
 # @param stat.client.connectingTimeout The time period within which the TCP connecting process must be completed
@@ -256,7 +255,6 @@ stat:
   url: ''
   buffer:
     lifetime: 5s
-    retryCount: 2
     sendTimeout: 2s
     sendLimit: 256
   client:

@@ -147,8 +147,6 @@ onprem
   value: "{{ .Values.stat.url }}"
 - name: CATALOG_BSS_BUFFER_LIFETIME
   value: "{{ .Values.stat.buffer.lifetime }}"
-- name: CATALOG_BSS_BUFFER_RETRY_COUNT
-  value: "{{ .Values.stat.buffer.retryCount }}"
 - name: CATALOG_BSS_BUFFER_SEND_TIMEOUT
   value: "{{ .Values.stat.buffer.sendTimeout }}"
 - name: CATALOG_BSS_BUFFER_SEND_LIMIT
@@ -162,8 +160,6 @@ onprem
 - name: CATALOG_BSS_MAX_CONNECTIONS
   value: "{{ .Values.stat.client.maxConnections }}"
 - name: CATALOG_BSS_MAX_OPEN_REQUESTS
-  value: "{{ .Values.stat.client.maxOpenRequests }}"
-- name: CATALOG_BSS_OPEN_REQUESTS
   value: "{{ .Values.stat.client.maxOpenRequests }}"
 - name: CATALOG_BSS_MAX_RETRIES
   value: "{{ .Values.stat.client.maxRetries }}"

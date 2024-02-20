@@ -175,7 +175,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `stat.enabled`                      | If statistic is enabled                                                                                                                         | `false` |
 | `stat.url`                          | URL of the statistic service. Ex: http(s)://stat.svc                                                                                            | `""`    |
 | `stat.buffer.lifetime`              | Lifetime of Statistic buffer                                                                                                                    | `5s`    |
-| `stat.buffer.retryCount`            | The maximum number of attempts to send Stat messages                                                                                            | `2`     |
 | `stat.buffer.sendTimeout`           | Timeout between sending statistic messages                                                                                                      | `2s`    |
 | `stat.buffer.sendLimit`             | The maximum number of messages in the buffer before they are sent to the Statistic                                                              | `256`   |
 | `stat.client.connectingTimeout`     | The time period within which the TCP connecting process must be completed                                                                       | `500ms` |
