@@ -86,6 +86,9 @@
               "type": "string",
               "enum": ["keycloak", "ugc"]
             },
+            "oAuthScopes": {
+              "type": "string"
+            },
             "identityProviderUrl": {
               "type": "string"
             },

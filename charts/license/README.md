@@ -53,7 +53,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | Name               | Description  | Value                     |
 | ------------------ | ------------ | ------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/license` |
-| `image.tag`        | Tag.         | `2.2.0`                   |
+| `image.tag`        | Tag.         | `2.2.1`                   |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`            |
 
 ### License service application settings
@@ -107,13 +107,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 
 ### TPM-related settings for license type 2
 
-| Name                           | Description                                                                                                                                                               | Value   |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `tpm.securityContext`          | Main container [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/). Should enable access to the host TPM device (/dev/tpmrm0). | `{}`    |
-| `tpm.mountTPMDevice`           | If TPM device should be mounted to the main container. Required if no TPM device plugin is used. Additionally, requires privileged access for the main container.         | `false` |
-| `tpm.pvcBind`                  | **Kubernetes PVC used to bind pod to the kubernetes node; not needed if FS persistence is used**                                                                          |         |
-| `tpm.pvcBind.enable`           | If PVC should be used to bind pod to the kubernetes node.                                                                                                                 | `false` |
-| `tpm.pvcBind.storageClassName` | Storage class name.                                                                                                                                                       | `""`    |
+| Name                           | Description                                                                                                                                     | Value   |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `tpm.mountTPMDevice`           | If TPM device should be mounted to the main container. Required if no TPM device plugin is used. Adds privileged access for the main container. | `false` |
+| `tpm.pvcBind`                  | **Kubernetes PVC used to bind pod to the kubernetes node**                                                                                      |         |
+| `tpm.pvcBind.enable`           | If PVC should be used to bind pod to the kubernetes node.                                                                                       | `false` |
+| `tpm.pvcBind.storageClassName` | Storage class name.                                                                                                                             | `""`    |
 
 ### **Custom Certificate Authority**
 

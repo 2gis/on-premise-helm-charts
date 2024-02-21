@@ -63,7 +63,7 @@ imagePullSecrets: []
 
 image:
   repository: 2gis-on-premise/license
-  tag: 2.2.0
+  tag: 2.2.1
   pullPolicy: IfNotPresent
 
 # @section License service application settings
@@ -152,14 +152,12 @@ persistence:
 
 # @section TPM-related settings for license type 2
 
-# @param tpm.securityContext Main container [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/). Should enable access to the host TPM device (/dev/tpmrm0).
-# @param tpm.mountTPMDevice If TPM device should be mounted to the main container. Required if no TPM device plugin is used. Additionally, requires privileged access for the main container.
-# @extra tpm.pvcBind **Kubernetes PVC used to bind pod to the kubernetes node; not needed if FS persistence is used**
+# @param tpm.mountTPMDevice If TPM device should be mounted to the main container. Required if no TPM device plugin is used. Adds privileged access for the main container.
+# @extra tpm.pvcBind **Kubernetes PVC used to bind pod to the kubernetes node**
 # @param tpm.pvcBind.enable If PVC should be used to bind pod to the kubernetes node.
 # @param tpm.pvcBind.storageClassName Storage class name.
 
 tpm:
-  securityContext: {}
   mountTPMDevice: false
   pvcBind:
     enable: false

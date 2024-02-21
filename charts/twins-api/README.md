@@ -20,8 +20,18 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | ------------------ | --------------------------------------------------------------------------------------------- | --------------------------- |
 | `imagePullSecrets` | Kubernetes image pull secrets.                                                                | `[]`                        |
 | `image.repository` | Twins API service image repository.                                                           | `2gis-on-premise/twins-api` |
-| `image.tag`        | Twins API service image tag.                                                                  | `1.6.0`                     |
+| `image.tag`        | Twins API service image tag.                                                                  | `1.7.3`                     |
 | `image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`              |
+
+### Deployment Artifacts Storage settings
+
+| Name                     | Description                                                                                                                                                                                                                                                           | Value |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `dgctlStorage.host`      | S3 host. Format: `host:port`. **Required**                                                                                                                                                                                                                            | `""`  |
+| `dgctlStorage.bucket`    | S3 bucket name. **Required**                                                                                                                                                                                                                                          | `""`  |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`  |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`  |
 
 ### API service settings
 
@@ -61,10 +71,19 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 
 ### Migrate service settings
 
-| Name                          | Description                                                                                                         | Value |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
-| `migrate.initialDelaySeconds` | Delay in seconds at the service startup.                                                                            | `0`   |
-| `migrate.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`  |
+| Name                          | Description                              | Value |
+| ----------------------------- | ---------------------------------------- | ----- |
+| `migrate.initialDelaySeconds` | Delay in seconds at the service startup. | `0`   |
+
+### migrate.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
+
+| Name                                | Description                                                                                                         | Value  |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------ |
+| `migrate.resources.requests.cpu`    | A CPU request.                                                                                                      | `10m`  |
+| `migrate.resources.requests.memory` | A memory request.                                                                                                   | `32Mi` |
+| `migrate.resources.limits.cpu`      | A CPU limit.                                                                                                        | `100m` |
+| `migrate.resources.limits.memory`   | A memory limit.                                                                                                     | `64Mi` |
+| `migrate.nodeSelector`              | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`   |
 
 ### Database access settings
 
@@ -87,7 +106,7 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | `postgres.rw.username` | PostgreSQL username. **Required**                                                   | `""`   |
 | `postgres.rw.password` | PostgreSQL password. **Required**                                                   | `""`   |
 
-### Limits
+### Kubernetes Importer job settings
 
 | Name                                | Description                        | Value   |
 | ----------------------------------- | ---------------------------------- | ------- |
