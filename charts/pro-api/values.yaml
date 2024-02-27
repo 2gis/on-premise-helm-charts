@@ -1,4 +1,4 @@
-﻿# @section Docker Registry settings
+# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -165,6 +165,8 @@ s3:
 # @skip Local cache settings
 # @skip localCache.enabled
 # @skip localCache.trackStatistics
+# @skip api.localCache.enabled
+# @skip api.localCache.trackStatistics
 
 api:
   serviceAccount: runner
@@ -369,6 +371,8 @@ permissionsPodSettings:
 # @skip Local cache settings
 # @skip localCache.enabled
 # @skip localCache.trackStatistics
+# @skip permissionsApi.localCache.enabled
+# @skip permissionsApi.localCache.trackStatistics
 
 permissionsApi:
   host: ''
