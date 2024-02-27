@@ -1,5 +1,34 @@
 # 2GIS On-Premise Changelog
 
+## [1.19.0] (2024-02-27)
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.42.0
+	+ mapgl:1.45.1
+navi-back
+	- navi-back:7.15.1.4
+	+ navi-back:7.15.2.4
+navi-restrictions
+	- navi-restrictions-api:1.0.0
+	+ navi-restrictions-api:1.0.1
+platform
+	- platform-ui:0.5.5
+	+ platform-ui:0.8.1
+pro-api
+	- pro-api:1.1.79
+	+ pro-api:1.5.0
+	- pro-importer:1.1.79
+	+ pro-importer:1.5.0
+	+ pro-importer:1.5.0
+	- pro-permissions-api:1.1.79
+	+ pro-permissions-api:1.5.0
+pro-ui
+	- pro-ui:1.7.5
+	+ pro-ui:1.9.0
+
+```
+
 ## [1.18.0] (2024-01-24)
 #### Images
 ```
