@@ -172,6 +172,10 @@ spec:
               value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
             - name: S3Settings__Secure
               value: "{{ .Values.dgctlStorage.secure }}"
+            - name: S3Settings__Region
+              value: {{ .Values.dgctlStorage.region }}
+            - name: S3Settings__DisablePayloadSigning
+              value: "{{ .Values.dgctlStorage.disablePayloadSigning }}"
             - name: S3Settings__AssetDataBucket
               value: {{ required "A valid .Values.s3.assetsDataBucket entry required" $.Values.s3.assetsDataBucket }}
             - name: S3Settings__UserAssetDataBucket
@@ -180,6 +184,8 @@ spec:
               value: {{ required "A valid .Values.s3.layerDataBucket entry required" $.Values.s3.layerDataBucket }}
             - name: S3Settings__SnapshotBucket
               value: {{ required "A valid .Values.s3.snapshotBucket entry required" $.Values.s3.snapshotBucket }}
+            - name: S3Settings__ResourcesBucket
+              value: {{ required "A valid .Values.s3.resourcesBucket entry required" $.Values.s3.resourcesBucket }}
             - name: S3Settings__AccessKey
               valueFrom:
                 secretKeyRef:

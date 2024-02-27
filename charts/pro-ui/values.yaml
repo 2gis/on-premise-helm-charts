@@ -37,7 +37,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/pro-ui
-    tag: 1.7.5
+    tag: 1.9.0
 
   # @section UI service settings
 

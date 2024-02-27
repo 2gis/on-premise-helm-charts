@@ -11,6 +11,7 @@ floors-api
 	floors-importer:1.0.4
 	floors-nodejs:1.0.4
 	nginx:1.21.6
+generic-chart
 gis-platform
 	gis_platform_portal:2023.8.3-0
 	gis_platform_spcore:2023.8.3-0
@@ -26,7 +27,7 @@ keys
 license
 	license:2.2.1
 mapgl-js-api
-	mapgl:1.42.0
+	mapgl:1.45.1
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
@@ -35,28 +36,28 @@ navi-back
 	envoy:v1.27.0
 	frozen-data:
 	metrics-aggregator:
-	navi-back:7.15.1.4
+	navi-back:7.15.2.4
 navi-castle
 	navi-castle:1.7.0
 	navi-front:1.24.1
 navi-front
 	navi-front:1.24.1
 navi-restrictions
-	navi-restrictions-api:1.0.0
+	navi-restrictions-api:1.0.1
 	navi-restrictions-syncer:1.0.1
 navi-router
 	navi-router:6.17.0.8
 navi-splitter
 	navi-splitter:1.0.1
 platform
-	platform-ui:0.5.5
+	platform-ui:0.8.1
 pro-api
-	pro-api:1.1.79
-	pro-importer:1.1.79
-	pro-importer:1.1.79
-	pro-permissions-api:1.1.79
+	pro-api:1.5.0
+	pro-importer:1.5.0
+	pro-importer:1.5.0
+	pro-permissions-api:1.5.0
 pro-ui
-	pro-ui:1.7.5
+	pro-ui:1.9.0
 search-api
 	search-api:7.70.0
 	search-nginx:1.21.6

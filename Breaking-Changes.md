@@ -7,7 +7,6 @@
 - Backward compatibility for citylens 1.3.0 is broken. Parameters `api.auth.publicKey` and `api.auth.algoritm` are replaced
   with `api.auth.authServerUrl`, `api.auth.realm`, `api.auth.verifySsl`.
 
-
 ### license
 
 - Backward compatibility for license v1 is broken. If you have a version lower than `1.9.1`, you need to upgrade first
@@ -15,19 +14,27 @@
 - Removed `fs` persistence type, now only `s3` is available. `persistence.type` is no more provided, old `persistence.s3`
   settings now should be located under `persistence`.
 
-```yaml
---- # old
-persistence:
-  type: s3
-  s3:
-    ...
+  ```yaml
+  --- # old
+  persistence:
+    type: s3
+    s3:
+      ...
 
---- # new
-persistence:
-  ...
-```
+  --- # new
+  persistence:
+    ...
+  ```
 
 ### navi-back
+
+- added integration with license service (v2), mandatory for recent navi-back versions
+
+  ```yaml
+  license:
+    url: https://license
+  ```
+
 - renamed parameter naviback.ecaHost to naviback.ecaUrl
 - `livenessProbeDelay` and `readinessProbeDelay` are ignored in favor of startup probes
 
@@ -49,14 +56,14 @@ persistence:
 
 - Added new required dgctlStorage parameters
 
-```yaml
-dgctlStorage:
-  host: ''
-  bucket: keys
-  accessKey: ''
-  secretKey: ''
-  manifest: manifest.json
-```
+  ```yaml
+  dgctlStorage:
+    host: ''
+    bucket: keys
+    accessKey: ''
+    secretKey: ''
+    manifest: manifest.json
+  ```
 
 ## [1.13.0]
 
@@ -77,14 +84,14 @@ dgctlStorage:
 - Remove `hpa.scaleUpStabilizationWindowSeconds` and `.hpa.scaleDownStabilizationWindowSeconds`
 - Add `hpa.behavior`
 
-```yaml
-hpa:
-  behavior:
-    scaleUp:
-      stabilizationWindowSeconds: 500
-    scaleDown:
-      stabilizationWindowSeconds: 600
-```
+  ```yaml
+  hpa:
+    behavior:
+      scaleUp:
+        stabilizationWindowSeconds: 500
+      scaleDown:
+        stabilizationWindowSeconds: 600
+  ```
 
 ## [1.10.0]
 
@@ -99,19 +106,19 @@ hpa:
 - Added `license.type`
 - Added `persistence`
 
-```yaml
-persistence:
-  type: s3
-  fs:
-    storage: 10Mi
-    storageClassName: ''
-  s3:
-    host: ''
-    bucket: ''
-    root: ''
-    accessKey: ''
-    secretKey: ''
-```
+  ```yaml
+  persistence:
+    type: s3
+    fs:
+      storage: 10Mi
+      storageClassName: ''
+    s3:
+      host: ''
+      bucket: ''
+      root: ''
+      accessKey: ''
+      secretKey: ''
+  ```
 
 ## [1.7.6]
 
