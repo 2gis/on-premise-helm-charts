@@ -1,0 +1,16 @@
+{{- define "generic-chart.job.tpl" -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "generic-chart.fullname" . }}
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+  {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}{{- /* labels */}}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}{{- /* annotations */}}
+{{ include "generic-chart.job_spec.tpl" . }}
+{{- end }}
