@@ -46,6 +46,8 @@ revisionHistoryLimit: 3
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
 # @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
+# @param dgctlStorage.region AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property
+# @param dgctlStorage.disablePayloadSigning Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage
 
 dgctlStorage:
   host: ''
@@ -54,6 +56,8 @@ dgctlStorage:
   accessKey: ''
   secretKey: ''
   manifest: ''
+  region: ''
+  disablePayloadSigning: false
 
 # @section Strategy settings
 
@@ -115,14 +119,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.1.79
+  tag: 1.5.0
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.1.79
+  tag: 1.5.0
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -131,12 +135,14 @@ permissionsApiImage:
 # @param s3.userAssetsDataBucket S3 bucket with user-created assets, aggregations, and filters. **Required**
 # @param s3.layerDataBucket S3 bucket with prepared layer data. **Required**
 # @param s3.snapshotBucket S3 bucket for storing snapshots of inclemental data updates. **Required**
+# @param s3.resourcesBucket S3 bucket for storing static resources. **Required**
 
 s3:
   assetsDataBucket: ''
   userAssetsDataBucket: ''
   layerDataBucket: ''
   snapshotBucket: ''
+  resourcesBucket: ''
 
 # @section 2GIS PRO API configuration
 
@@ -159,8 +165,6 @@ s3:
 # @skip Local cache settings
 # @skip localCache.enabled
 # @skip localCache.trackStatistics
-# @skip api.localCache.enabled
-# @skip api.localCache.trackStatistics
 
 api:
   serviceAccount: runner
@@ -365,8 +369,6 @@ permissionsPodSettings:
 # @skip Local cache settings
 # @skip localCache.enabled
 # @skip localCache.trackStatistics
-# @skip permissionsApi.localCache.enabled
-# @skip permissionsApi.localCache.trackStatistics
 
 permissionsApi:
   host: ''
@@ -395,7 +397,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.79
+  tag: 1.5.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -425,7 +427,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.79
+  tag: 1.5.0
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
