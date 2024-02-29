@@ -39,7 +39,7 @@ data:
       realm: {{ .realm | quote }}
       {{- end}}
       predictor_tokens:
-        {{- .Values.api.auth.predictorsTokens | toYaml | nindent 8 }}
+        {{- .predictorsTokens | toYaml | nindent 8 }}
       {{- end }}
     {{- end }}
     {{- with .Values.api.licensing }}

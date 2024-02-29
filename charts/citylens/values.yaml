@@ -70,7 +70,7 @@ dgctlStorage:
 
 # @section Bearer tokens for callbacks & predictors
 
-# @param api.auth.predictorTokens.camcom Bearer token, expected on CamCom callback endpoint and CamCom prediction endpoint (if integration with CamCom enabled).
+# @param api.auth.predictorsTokens.camcom Bearer token, expected on CamCom callback endpoint and CamCom prediction endpoint (if integration with CamCom enabled).
 
 # @section Licensing server settings
 
@@ -137,7 +137,7 @@ api:
     authServerUrl: ''
     realm: ''
     verifySsl: true
-    predictorTokens:
+    predictorsTokens:
       camcom: ''
 
   licensing:
