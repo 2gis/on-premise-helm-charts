@@ -280,4 +280,4 @@ stylesImporter:
       cpu: 1000m
       memory: 8Gi
   maxParallelJobs: 1
-  startOnDeploy: false
+  startOnDeploy: true
