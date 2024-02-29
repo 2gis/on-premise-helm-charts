@@ -4,6 +4,8 @@
 
 dgctlDockerRegistry: ''
 
+# @param imagePullPolicy Pull Policy
+# @param imagePullSecrets Kubernetes image pull secrets.
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
 
@@ -11,8 +13,8 @@ ui:
   # @section Common settings
 
   # @param ui.replicas A replica count for the pod.
-  # @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
-  # @param terminationGracePeriodSeconds Seconds pod needs to [terminate](https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods) gracefully
+  # @param ui.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @param ui.terminationGracePeriodSeconds Seconds pod needs to [terminate](https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods) gracefully
   # @param ui.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param ui.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param ui.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -21,8 +23,6 @@ ui:
   # @param ui.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param ui.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param ui.readinessProbe.enabled Enable [readinessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on PRO UI containers
-  # @param ui.readinessProbe.initialDelaySeconds Seconds before the first probe.
-  # @param ui.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe.
   # @param ui.livenessProbe.enabled Enable [livenessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on PRO UI containers
   # @param ui.healthcheckPath Application http path for health check
   # @param ui.containerPort Port on which application listen connection in container
@@ -48,9 +48,6 @@ ui:
 
   # @param ui.image.repository Repository
   # @param ui.image.tag Tag
-  # @param imagePullPolicy Pull Policy
-  # @param imagePullSecrets Kubernetes image pull secrets.
-
   image:
     repository: 2gis-on-premise/pro-ui
     tag: 2.1.1
@@ -97,7 +94,7 @@ ui:
   # @param ui.auth.openIdWellKnownUrlListUrl URL to OpenID Connect Discovery data
   # specs: https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
   # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/.well-known/openid-configuration
-  # Used only in case of oAuthProvider == 'openid'
+  # Used only in case of ui.auth.oAuthProvider == 'openid'
   auth:
     sso: false
     secure: true
@@ -122,9 +119,9 @@ ui:
   # @section MapGL JS API settings
 
   # @param ui.mapgl.host FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service with or without protocol. Without protocol we will put App's protocol.
-  # @skip ui.mapgl.scriptPath URL path to [MapGL JS API](https://docs.2gis.com/en/on-premise/map) init script relative to `ui.mapgl.host`.
+  # @skip ui.mapgl.scriptPath
   # @param ui.mapgl.key A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.
-  # @skip ui.mapgl.styleId Optional the map style ID, that you can get at https://styles.2gis.com.
+  # @skip ui.mapgl.styleId
   # @param ui.mapgl.styleUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) `style.json` folder, e.g., '//mapgl.ingress.host/style'. ui.mapgl.styleUrl has priority over ui.mapgl.styleId.
   # @param ui.mapgl.styleIconsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons folder, e.g., '//mapgl.ingress.host/style/icons'
   # @param ui.mapgl.styleFontsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'
@@ -142,7 +139,7 @@ ui:
     stylePreview: ''
     styleModelsUrl: ''
 
-  # @sections Map styles config settings
+  # @section Map styles config settings
   #
   # @param ui.styles.s3Bucket Optional S3 bucket name for style files
   # @param ui.styles.configUrl Optional URL for styles config file
@@ -153,9 +150,7 @@ ui:
   # @section WhiteLabel config settings
   #
   # @param ui.whiteLabel.configUrl Optional URL for whitelabel config file
-  # @param ui.whiteLabel.s3Bucket  Optional S3 bucket name for whitelabel files
-  #        if set (+publicS3Url) all relative URL in config will be replaced to
-  #        publicS3Url + whiteLabel.s3Bucket + originalURL
+  # @param ui.whiteLabel.s3Bucket  Optional S3 bucket name for whitelabel files if set (+publicS3Url) all relative URL in config will be replaced to ui.publicS3Url + ui.whiteLabel.s3Bucket + originalURL
   whiteLabel:
     configUrl: ''
     s3Bucket: ''
@@ -178,7 +173,7 @@ ui:
   # @param ui.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param ui.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
   # @param ui.service.port Service port.
-  # @param ui.service.port Service target port.
+  # @param ui.service.targetPort Service target port.
 
   service:
     annotations: {}
@@ -266,7 +261,6 @@ dgctlStorage:
 
 # If the Style Importer Job failed, then we don't need to deploy the whole pro-ui app.
 
-# @param stylesImporter.image Style Importer image's description. Fully supported by PRO BE.
 # @param stylesImporter.image.repository Docker Repository Image.
 # @param stylesImporter.image.tag Docker image tag.
 # @param stylesImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
