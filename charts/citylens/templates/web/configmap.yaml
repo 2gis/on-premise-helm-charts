@@ -104,6 +104,9 @@ data:
         - reload_track
         - reload_statuses
         {{- end }}
+        {{- if .Values.worker.camcomSender.enabled }}
+        - camcom
+        {{- end }}
         {{- if .Values.pro.url }}
         - pro
         {{- end }}
