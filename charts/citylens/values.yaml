@@ -655,6 +655,7 @@ locale: en
 headerLinks:
 - drivers
 - tracks
+- interest_zones
 - map
 
 reporters:
