@@ -622,7 +622,7 @@ postgres:
 
 # @section Map settings
 
-# @param map.tileserverUrlTemplate URL template for tileserver. Ex.: `http://tileserver.host/tiles?x={x}&y={y}&z={z}`
+# @param map.tileserverUrl URL template for tileserver. Ex.: `http://tileserver.host`
 # @param map.mapgl.host Hostname of mapgl server. **Required**
 # @param map.mapgl.key Key of mapgl server. **Required**
 # @param map.projects[0].name Name of project.
@@ -630,7 +630,7 @@ postgres:
 # @param map.initialProject Default project shown on Map.
 
 map:
-  tileserverUrlTemplate: ''
+  tileserverUrl: ''
   mapgl:
     host: ''
     key: ''

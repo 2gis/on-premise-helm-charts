@@ -1,5 +1,14 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [0.0.0]
+
+### citylens
+
+- Backward compatibility for citylens 1.5.0 is broken:
+  - Parameter `api.auth.camcomToken` is replaced with `api.auth.predictorsTokens.camcom`
+  - License v2 service now required: `api.licensing.url`
+  - Parameter `map.tileserverUrl` now required
+
 ## [1.17.0]
 
 ### citylens
