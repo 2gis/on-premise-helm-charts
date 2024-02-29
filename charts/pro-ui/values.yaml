@@ -150,6 +150,14 @@ ui:
     s3Bucket: ''
     configUrl: ''
 
+  # @section WhiteLabel config settings
+  #
+  # @param ui.whiteLabel.configUrl Optional URL for whitelabel config file
+  # @param ui.whiteLabel.s3Bucket  Optional S3 bucket name for whitelabel files
+  whiteLabel:
+    configUrl: ''
+    s3Bucket: ''
+
   # @section Strategy settings
 
   # @param ui.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
@@ -280,4 +288,4 @@ stylesImporter:
       cpu: 1000m
       memory: 8Gi
   maxParallelJobs: 1
-  startOnDeploy: true
+  startOnDeploy: false

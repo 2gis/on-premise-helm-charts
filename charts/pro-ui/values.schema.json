@@ -169,6 +169,14 @@
             "s3Bucket": { "type": "string" },
             "configUrl": { "type": "string" }
           }
+        },
+        "whiteLabel": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "configUrl": { "type": "string" },
+            "s3Bucket": { "type": "string" }
+          }
         }
       }
     }
