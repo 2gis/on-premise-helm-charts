@@ -67,7 +67,14 @@ dgctlStorage:
 # @param api.auth.authServerUrl API URL of authentication service, OIDC-compatibility expected. Ex.: `http(s)://keycloak.ingress.host/`. **Required**
 # @param api.auth.realm Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: CityLens_app
 # @param api.auth.verifySsl Enable\Disable SSL check.
-# @param api.auth.camcomToken Bearer token, expected on CamCom callback endpoint (if integration with CamCom enabled).
+
+# @section Bearer tokens for callbacks & predictors
+
+# @param api.auth.predictorTokens.camcom Bearer token, expected on CamCom callback endpoint and CamCom prediction endpoint (if integration with CamCom enabled).
+
+# @section Licensing server settings
+
+# @param api.licensing.url Licensing server v2 URL. http://license.svc. **Required**
 
 # @section Custom settings
 
@@ -90,7 +97,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.4.1
+    tag: 1.5.0
 
   replicas: 4
 
@@ -130,7 +137,11 @@ api:
     authServerUrl: ''
     realm: ''
     verifySsl: true
-    camcomToken: ''
+    predictorTokens:
+      camcom: ''
+
+  licensing:
+    url: ''
 
   showDocs: false
 
@@ -213,7 +224,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.4.1
+    tag: 1.5.0
 
   replicas: 1
 
@@ -525,7 +536,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.2.0
+    tag: 1.5.0
 
   resources:
     requests:
@@ -611,6 +622,7 @@ postgres:
 
 # @section Map settings
 
+# @param map.tileserverUrlTemplate URL template for tileserver. Ex.: `http://tileserver.host/tiles?x={x}&y={y}&z={z}`
 # @param map.mapgl.host Hostname of mapgl server. **Required**
 # @param map.mapgl.key Key of mapgl server. **Required**
 # @param map.projects[0].name Name of project.
@@ -618,6 +630,7 @@ postgres:
 # @param map.initialProject Default project shown on Map.
 
 map:
+  tileserverUrlTemplate: ''
   mapgl:
     host: ''
     key: ''

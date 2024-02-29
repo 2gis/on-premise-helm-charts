@@ -87,6 +87,7 @@ data:
       verify_ssl: {{ .verifySsl }}
     {{- end }}
     map:
+      tileserver_url_template: {{ required "A valid .Values.map.tileserverUrlTemplate entry required" .Values.map.tileserverUrlTemplate | squote }}
       mapgl:
         host: {{ required "A valid .Values.map.mapgl.host entry required" .Values.map.mapgl.host | squote }}
         key: {{ required "A valid .Values.map.mapgl.key entry required" .Values.map.mapgl.key | squote }}
