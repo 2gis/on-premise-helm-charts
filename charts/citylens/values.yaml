@@ -74,7 +74,7 @@ dgctlStorage:
 
 # @section Licensing server settings
 
-# @param api.licensing.url Licensing server v2 URL. http://license.svc. **Required**
+# @param api.licensing.url Licensing server v2 URL. https://license.svc. **Required**
 
 # @section Custom settings
 
