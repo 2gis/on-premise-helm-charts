@@ -154,6 +154,8 @@ ui:
   #
   # @param ui.whiteLabel.configUrl Optional URL for whitelabel config file
   # @param ui.whiteLabel.s3Bucket  Optional S3 bucket name for whitelabel files
+  #        if set (+publicS3Url) all relative URL in config will be replaced to
+  #        publicS3Url + whiteLabel.s3Bucket + originalURL
   whiteLabel:
     configUrl: ''
     s3Bucket: ''

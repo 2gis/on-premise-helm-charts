@@ -80,7 +80,7 @@
 - name: S3_WHITE_LABEL_BUCKET
   value: "{{ .Values.ui.whiteLabel.s3Bucket }}"
 - name: WHITE_LABEL_CONFIG_URL
-  value: "{{ .Values.ui.whiteLabel.configUrl }}"
+  value: "{{ .Values.ui.whiteLabel.configUrl | default "/static/theme/urbi.json" }}"
 {{- if .Values.ui.extraEnvVars }}
 {{- range $key, $val := .Values.ui.extraEnvVars }}
 - name: {{ $key }}
