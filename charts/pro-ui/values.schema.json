@@ -33,7 +33,15 @@
         },
         "appLocale": {
           "type": "string",
-          "enum": ["ar_AE", "en_AE", "ru_RU"]
+          "anyOf": [
+            {
+              "enum": ["ar-AE", "en-AE", "ru-RU"]
+            },
+            {
+              "enum": ["ar_AE", "en_AE", "ru_RU"],
+              "deprecated": true
+            }
+          ]
         },
         "appInitialMapCenter": {
           "type": "string"
@@ -45,6 +53,9 @@
           "type": "string"
         },
         "healthcheckPath": {
+          "type": "string"
+        },
+        "publicS3Url": {
           "type": "string"
         },
         "auth": {
@@ -84,7 +95,7 @@
             },
             "oAuthProvider": {
               "type": "string",
-              "enum": ["keycloak", "ugc"]
+              "enum": ["keycloak", "ugc", "openid"]
             },
             "oAuthScopes": {
               "type": "string"
@@ -100,6 +111,9 @@
             },
             "turnOffCertValidation": {
               "type": "boolean"
+            },
+            "openIdWellKnownUrlListUrl": {
+              "type": "string"
             }
           }
         },
@@ -140,9 +154,20 @@
             "styleFontsUrl": {
               "type": "string"
             },
+            "stylePreview": {
+              "type": "string"
+            },
             "styleModelsUrl": {
               "type": "string"
             }
+          }
+        },
+        "styles": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "s3Bucket": { "type": "string" },
+            "configUrl": { "type": "string" }
           }
         }
       }

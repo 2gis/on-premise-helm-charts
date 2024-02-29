@@ -1,0 +1,58 @@
+{{ if .Values.stylesImporter.startOnDeploy }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "pro.ui.styles-importer-name" . }}-starter
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  backoffLimit: {{ .Values.stylesImporter.backoffLimit }}
+  template:
+    spec:
+      {{- with .Values.stylesImporter.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: Never
+      serviceAccountName: runner
+      volumes:
+        - name: temp-volume
+          emptyDir: {}
+      containers:
+        - name: {{ include "pro.ui.styles-importer-name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.stylesImporter.image.repository }}:{{ .Values.stylesImporter.image.tag }}
+          imagePullPolicy: IfNotPresent
+          resources:
+            {{- toYaml .Values.stylesImporter.resources | nindent 16 }}
+          volumeMounts:
+            - mountPath: "/tmp"
+              name: temp-volume
+          env:
+            - name: MODE
+              value: "ManifestData"
+            - name: manifest_filename
+              value: {{ .Values.dgctlStorage.manifest.filename }}
+            - name: manifest_section
+              value: {{ .Values.dgctlStorage.manifest.section }}
+            - name: manifest_data_uncompress_file_pattern
+              value: "*.tar.gz"
+            - name: S3Settings__Url
+              value: {{ .Values.dgctlStorage.host }}
+            - name: S3Settings__Secure
+              value: false
+            - name: S3Settings__DgctlStorageBucket
+              value:  {{ .Values.dgctlStorage.bucket }}
+            - name: S3Settings__StylesDataBucket
+              value:  {{ .Values.ui.styles.s3Bucket }}
+            - name: S3Settings__AccessKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3AccessKey
+                  name: {{ .Values.dgctlStorage.accessKey }}
+            - name: S3Settings__SecretKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3SecretKey
+                  name: {{ include "pro.ui.name" . }}-secret
+{{ end }}
