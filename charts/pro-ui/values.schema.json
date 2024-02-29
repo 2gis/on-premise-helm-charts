@@ -179,6 +179,44 @@
           }
         }
       }
+    },
+    "appStylesImporterName": {
+      "type": "string"
+    },
+    "dgctlStorage": {
+      "type": "object",
+      "required": ["host", "bucket", "accessKey", "secretKey", "manifest"],
+      "additionalProperties": false,
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "bucket": {
+          "type": "string"
+        },
+        "accessKey": {
+          "type": "string"
+        },
+        "secretKey": {
+          "type": "string"
+        },
+        "manifest": {
+          "type": "object",
+          "required": [
+            "section",
+            "filename"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "section": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   }
 }
