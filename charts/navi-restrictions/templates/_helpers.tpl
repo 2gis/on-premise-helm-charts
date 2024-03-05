@@ -78,7 +78,7 @@ Check for deprecated values
 */}}
 {{- define "check.deprecated.values" -}}
 {{- if not ("1.19.0" | get ((.Values.debug).disableDeprecationChecks | default dict) ) }}
-{{- if .Values.api.api_key -}}{{ fail "[after 1.19.0] .Values.api.api_key is deprecated, use .Values.api.apiKey" }}{{- end }}
+{{- if .Values.api.api_key -}}{{ fail "[after 1.19.0] .Values.api.api_key is deprecated, use .Values.api.key" }}{{- end }}
 {{- if .Values.api.is_init_db -}}{{ fail "[after 1.19.0] .Values.api.is_init_db is deprecated, use .Values.api.isInitDb" }}{{- end }}
 {{- if .Values.api.attractor_url -}}{{ fail "[after 1.19.0] .Values.api.attractor_url is deprecated, use .Values.api.attractorUrl" }}{{- end }}
 {{- if .Values.cron.edges_url_template -}}{{ fail "[after 1.19.0] .Values.cron.edges_url_template is deprecated, use .Values.cron.edgesUrlTemplate" }}{{- end }}

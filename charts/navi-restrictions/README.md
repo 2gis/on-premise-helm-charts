@@ -84,7 +84,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 
 | Name                      | Description                                                                                                                   | Value                                  |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| `api.apiKey`              | API key                                                                                                                       | `example`                              |
+| `api.key`                 | API key                                                                                                                       | `example`                              |
 | `api.debug`               | If the debug mode is enabled                                                                                                  | `false`                                |
 | `api.isInitDb`            | If `true` and the database does not exist, it will be created                                                                 | `true`                                 |
 | `api.attractorUrl`        | URL of Navi-Back service                                                                                                      | `http://restrictions-api.host/attract` |

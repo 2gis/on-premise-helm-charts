@@ -87,14 +87,14 @@ strategy:
 
 # @section API service settings
 
-# @param api.apiKey API key
+# @param api.key API key
 # @param api.debug If the debug mode is enabled
 # @param api.isInitDb If `true` and the database does not exist, it will be created
 # @param api.attractorUrl URL of Navi-Back service
 # @param api.securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
 api:
-  apiKey: example
+  key: example
   debug: false
   isInitDb: true
   attractorUrl: http://restrictions-api.host/attract
