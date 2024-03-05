@@ -84,5 +84,6 @@ Check for deprecated values
 {{- if .Values.cron.edges_url_template -}}{{ fail "[after 1.19.0] .Values.cron.edges_url_template is deprecated, use .Values.cron.edgesUrlTemplate" }}{{- end }}
 {{- if .Values.cron.edge_attributes_url_template -}}{{ fail "[after 1.19.0] .Values.cron.edge_attributes_url_template is deprecated, use .Values.cron.edgeAttributesUrlTemplate" }}{{- end }}
 {{- if .Values.cron.max_attributes_fetcher_rps -}}{{ fail "[after 1.19.0] .Values.cron.max_attributes_fetcher_rps is deprecated, use .Values.cron.maxAttributesFetcherRps" }}{{- end }}
+{{- if .Values.db -}}{{ fail "[after 1.19.0] .Values.db renamed to .Values.postgres" }}{{- end }}
 {{- end }} {{/* 1.19.0 */}}
 {{- end }}

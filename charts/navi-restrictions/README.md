@@ -132,13 +132,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 
 ### Database settings
 
-| Name          | Description                           | Value  |
-| ------------- | ------------------------------------- | ------ |
-| `db.host`     | PostgreSQL host **required**          | `""`   |
-| `db.port`     | PostgreSQL port                       | `5432` |
-| `db.name`     | PostgreSQL database name **required** | `""`   |
-| `db.user`     | PostgreSQL username **required**      | `""`   |
-| `db.password` | PostgreSQL password. **required**     | `""`   |
+| Name                | Description                           | Value  |
+| ------------------- | ------------------------------------- | ------ |
+| `postgres.host`     | PostgreSQL host **required**          | `""`   |
+| `postgres.port`     | PostgreSQL port                       | `5432` |
+| `postgres.name`     | PostgreSQL database name **required** | `""`   |
+| `postgres.user`     | PostgreSQL username **required**      | `""`   |
+| `postgres.password` | PostgreSQL password. **required**     | `""`   |
 
 ### Cron job settings
 

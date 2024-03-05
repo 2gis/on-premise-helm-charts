@@ -95,13 +95,13 @@ spec:
             - name: IS_INIT_DB
               value: "{{ .Values.api.isInitDb | ternary "True" "False" }}"
             - name: DB_HOST
-              value: {{ required "A valid .Values.db.host entry required" .Values.db.host | quote }}
+              value: {{ required "A valid .Values.postgres.host entry required" .Values.postgres.host | quote }}
             - name: DB_PORT
-              value: {{ required "A valid .Values.db.port entry required" .Values.db.port | quote }}
+              value: {{ required "A valid .Values.postgres.port entry required" .Values.postgres.port | quote }}
             - name: DB_NAME
-              value: {{ required "A valid .Values.db.name entry required" .Values.db.name | quote }}
+              value: {{ required "A valid .Values.postgres.name entry required" .Values.postgres.name | quote }}
             - name: DB_USER
-              value: {{ required "A valid .Values.db.user entry required" .Values.db.user | quote }}
+              value: {{ required "A valid .Values.postgres.user entry required" .Values.postgres.user | quote }}
             - name: ATTRACTOR_URL
               value: {{ required "A valid .Values.api.attractorUrl entry required" .Values.api.attractorUrl | quote }}
             - name: DB_PASSWORD

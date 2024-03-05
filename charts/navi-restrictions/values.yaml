@@ -191,13 +191,13 @@ api:
 
 # @section Database settings
 
-# @param db.host PostgreSQL host **required**
-# @param db.port PostgreSQL port
-# @param db.name PostgreSQL database name **required**
-# @param db.user PostgreSQL username **required**
-# @param db.password PostgreSQL password. **required**
+# @param postgres.host PostgreSQL host **required**
+# @param postgres.port PostgreSQL port
+# @param postgres.name PostgreSQL database name **required**
+# @param postgres.user PostgreSQL username **required**
+# @param postgres.password PostgreSQL password. **required**
 
-db:
+postgres:
   host: ''
   port: 5432
   name: ''
