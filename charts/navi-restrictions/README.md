@@ -84,10 +84,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 
 | Name                      | Description                                                                                                                   | Value                                  |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| `api.api_key`             | API key                                                                                                                       | `example`                              |
+| `api.apiKey`              | API key                                                                                                                       | `example`                              |
 | `api.debug`               | If the debug mode is enabled                                                                                                  | `false`                                |
-| `api.is_init_db`          | If `true` and the database does not exist, it will be created                                                                 | `true`                                 |
-| `api.attractor_url`       | URL of Navi-Back service                                                                                                      | `http://restrictions-api.host/attract` |
+| `api.isInitDb`            | If `true` and the database does not exist, it will be created                                                                 | `true`                                 |
+| `api.attractorUrl`        | URL of Navi-Back service                                                                                                      | `http://restrictions-api.host/attract` |
 | `api.securityContext`     | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                     | `{}`                                   |
 | `api.service`             | **Service settings.**                                                                                                         |                                        |
 | `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) | `ClusterIP`                            |
@@ -142,17 +142,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 
 ### Cron job settings
 
-| Name                                | Description                                                              | Value                                                                        |
-| ----------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
-| `cron.enabled`                      | If Cron job is enabled                                                   | `false`                                                                      |
-| `cron.schedule`                     | Cron job schedule                                                        | `1 * * * *`                                                                  |
-| `cron.concurrencyPolicy`            | Cron job concurrency policy: `Allow` or `Forbid`                         | `Forbid`                                                                     |
-| `cron.successfulJobsHistoryLimit`   | How many completed and failed jobs should be kept                        | `3`                                                                          |
-| `cron.containerPort`                | Cron container port                                                      | `8000`                                                                       |
-| `cron.edges_url_template`           | URL template for getting edges                                           | `http://navi-back.host/restrictions_json/{project}/{date_str}_{hour}.json`   |
-| `cron.edge_attributes_url_template` | URL template for getting an edge's details                               | `http://navi-back.host/edge?edge_id={edge_id}&offset=200&routing=carrouting` |
-| `cron.projects`                     | List of projects to get data for                                         | `["moscow"]`                                                                 |
-| `cron.max_attributes_fetcher_rps`   | Maximum amount oif requests to `edge_attributes_url_template` per second | `25`                                                                         |
+| Name                              | Description                                                              | Value                                                                        |
+| --------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| `cron.enabled`                    | If Cron job is enabled                                                   | `false`                                                                      |
+| `cron.schedule`                   | Cron job schedule                                                        | `1 * * * *`                                                                  |
+| `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`                         | `Forbid`                                                                     |
+| `cron.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept                        | `3`                                                                          |
+| `cron.containerPort`              | Cron container port                                                      | `8000`                                                                       |
+| `cron.edgesUrlTemplate`           | URL template for getting edges                                           | `http://navi-back.host/restrictions_json/{project}/{date_str}_{hour}.json`   |
+| `cron.edgeAttributesUrlTemplate`  | URL template for getting an edge's details                               | `http://navi-back.host/edge?edge_id={edge_id}&offset=200&routing=carrouting` |
+| `cron.projects`                   | List of projects to get data for                                         | `["moscow"]`                                                                 |
+| `cron.maxAttributesFetcherRps`    | Maximum amount oif requests to `edge_attributes_url_template` per second | `25`                                                                         |
 
 ### Limits
 

@@ -87,17 +87,17 @@ strategy:
 
 # @section API service settings
 
-# @param api.api_key API key
+# @param api.apiKey API key
 # @param api.debug If the debug mode is enabled
-# @param api.is_init_db If `true` and the database does not exist, it will be created
-# @param api.attractor_url URL of Navi-Back service
+# @param api.isInitDb If `true` and the database does not exist, it will be created
+# @param api.attractorUrl URL of Navi-Back service
 # @param api.securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
 api:
-  api_key: example
+  apiKey: example
   debug: false
-  is_init_db: true
-  attractor_url: http://restrictions-api.host/attract
+  isInitDb: true
+  attractorUrl: http://restrictions-api.host/attract
 
   securityContext: {}
 
@@ -212,10 +212,10 @@ db:
 # @param cron.concurrencyPolicy Cron job concurrency policy: `Allow` or `Forbid`
 # @param cron.successfulJobsHistoryLimit How many completed and failed jobs should be kept
 # @param cron.containerPort Cron container port
-# @param cron.edges_url_template URL template for getting edges
-# @param cron.edge_attributes_url_template URL template for getting an edge's details
+# @param cron.edgesUrlTemplate URL template for getting edges
+# @param cron.edgeAttributesUrlTemplate URL template for getting an edge's details
 # @param cron.projects List of projects to get data for
-# @param cron.max_attributes_fetcher_rps Maximum amount oif requests to `edge_attributes_url_template` per second
+# @param cron.maxAttributesFetcherRps Maximum amount oif requests to `edge_attributes_url_template` per second
 
 cron:
   enabled: false
@@ -223,11 +223,11 @@ cron:
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   containerPort: 8000
-  edges_url_template: http://navi-back.host/restrictions_json/{project}/{date_str}_{hour}.json
-  edge_attributes_url_template: http://navi-back.host/edge?edge_id={edge_id}&offset=200&routing=carrouting
+  edgesUrlTemplate: http://navi-back.host/restrictions_json/{project}/{date_str}_{hour}.json
+  edgeAttributesUrlTemplate: http://navi-back.host/edge?edge_id={edge_id}&offset=200&routing=carrouting
   projects:
   - moscow
-  max_attributes_fetcher_rps: 25
+  maxAttributesFetcherRps: 25
 
   image:
     repository: 2gis-on-premise/navi-restrictions-syncer
