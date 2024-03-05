@@ -95,15 +95,15 @@ spec:
             - name: IS_INIT_DB
               value: "{{ .Values.api.isInitDb | ternary "True" "False" }}"
             - name: DB_HOST
-              value: {{ .Values.db.host | quote }}
+              value: {{ required "A valid .Values.db.host entry required" .Values.db.host | quote }}
             - name: DB_PORT
-              value: {{ .Values.db.port | quote }}
+              value: {{ required "A valid .Values.db.port entry required" .Values.db.port | quote }}
             - name: DB_NAME
-              value: {{ .Values.db.name | quote }}
+              value: {{ required "A valid .Values.db.name entry required" .Values.db.name | quote }}
             - name: DB_USER
-              value: {{ .Values.db.user | quote }}
+              value: {{ required "A valid .Values.db.user entry required" .Values.db.user | quote }}
             - name: ATTRACTOR_URL
-              value: {{ .Values.api.attractorUrl | quote }}
+              value: {{ required "A valid .Values.api.attractorUrl entry required" .Values.api.attractorUrl | quote }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:

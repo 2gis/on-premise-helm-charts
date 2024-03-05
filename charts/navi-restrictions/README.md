@@ -82,19 +82,19 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 
 ### API service settings
 
-| Name                      | Description                                                                                                                   | Value                                  |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| `api.key`                 | API key                                                                                                                       | `example`                              |
-| `api.debug`               | If the debug mode is enabled                                                                                                  | `false`                                |
-| `api.isInitDb`            | If `true` and the database does not exist, it will be created                                                                 | `true`                                 |
-| `api.attractorUrl`        | URL of Navi-Back service                                                                                                      | `http://restrictions-api.host/attract` |
-| `api.securityContext`     | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                     | `{}`                                   |
-| `api.service`             | **Service settings.**                                                                                                         |                                        |
-| `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) | `ClusterIP`                            |
-| `api.service.port`        | Service port                                                                                                                  | `80`                                   |
-| `api.service.targetPort`  | Port inside the container                                                                                                     | `8000`                                 |
-| `api.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)              | `{}`                                   |
-| `api.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                        | `{}`                                   |
+| Name                      | Description                                                                                                                   | Value       |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `api.key`                 | API key **required**                                                                                                          | `""`        |
+| `api.debug`               | If the debug mode is enabled                                                                                                  | `false`     |
+| `api.isInitDb`            | If `true` and the database does not exist, it will be created                                                                 | `true`      |
+| `api.attractorUrl`        | URL of Navi-Back service, example: `http://restrictions-api.host/attract` **required**                                        | `""`        |
+| `api.securityContext`     | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                     | `{}`        |
+| `api.service`             | **Service settings.**                                                                                                         |             |
+| `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) | `ClusterIP` |
+| `api.service.port`        | Service port                                                                                                                  | `80`        |
+| `api.service.targetPort`  | Port inside the container                                                                                                     | `8000`      |
+| `api.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)              | `{}`        |
+| `api.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                        | `{}`        |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -132,13 +132,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 
 ### Database settings
 
-| Name          | Description                                         | Value          |
-| ------------- | --------------------------------------------------- | -------------- |
-| `db.host`     | PostgreSQL host                                     | `localhost`    |
-| `db.port`     | PostgreSQL port                                     | `5432`         |
-| `db.name`     | PostgreSQL database name                            | `restrictions` |
-| `db.user`     | PostgreSQL username                                 | `dbuser`       |
-| `db.password` | PostgreSQL password. Must be specified in overrides | `dbpassword`   |
+| Name          | Description                           | Value  |
+| ------------- | ------------------------------------- | ------ |
+| `db.host`     | PostgreSQL host **required**          | `""`   |
+| `db.port`     | PostgreSQL port                       | `5432` |
+| `db.name`     | PostgreSQL database name **required** | `""`   |
+| `db.user`     | PostgreSQL username **required**      | `""`   |
+| `db.password` | PostgreSQL password. **required**     | `""`   |
 
 ### Cron job settings
 

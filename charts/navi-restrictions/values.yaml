@@ -87,17 +87,17 @@ strategy:
 
 # @section API service settings
 
-# @param api.key API key
+# @param api.key API key **required**
 # @param api.debug If the debug mode is enabled
 # @param api.isInitDb If `true` and the database does not exist, it will be created
-# @param api.attractorUrl URL of Navi-Back service
+# @param api.attractorUrl URL of Navi-Back service, example: `http://restrictions-api.host/attract` **required**
 # @param api.securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
 api:
-  key: example
+  key: ''
   debug: false
   isInitDb: true
-  attractorUrl: http://restrictions-api.host/attract
+  attractorUrl: ''
 
   securityContext: {}
 
@@ -191,18 +191,18 @@ api:
 
 # @section Database settings
 
-# @param db.host PostgreSQL host
+# @param db.host PostgreSQL host **required**
 # @param db.port PostgreSQL port
-# @param db.name PostgreSQL database name
-# @param db.user PostgreSQL username
-# @param db.password PostgreSQL password. Must be specified in overrides
+# @param db.name PostgreSQL database name **required**
+# @param db.user PostgreSQL username **required**
+# @param db.password PostgreSQL password. **required**
 
 db:
-  host: localhost
+  host: ''
   port: 5432
-  name: restrictions
-  user: dbuser
-  password: dbpassword
+  name: ''
+  user: ''
+  password: ''
 
 
 # @section Cron job settings
