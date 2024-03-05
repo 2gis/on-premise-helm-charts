@@ -73,6 +73,8 @@
   value: "{{ .Values.ui.containerPort }}"
 - name: PUBLIC_S3_HOST
   value: "{{ .Values.ui.publicS3Url }}"
+- name: PUBLIC_S3_URL
+  value: "{{ .Values.ui.publicS3Url }}"
 - name: S3_STYLES_BUCKET
   value: "{{ .Values.ui.styles.s3Bucket }}"
 - name: STYLES_CONFIG_URL
