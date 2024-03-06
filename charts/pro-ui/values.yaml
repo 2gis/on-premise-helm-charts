@@ -245,17 +245,14 @@ appStylesImporterName: styles-importer
 # @param dgctlStorage.bucket S3 bucket name. **Required**
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
-# @param dgctlStorage.manifest.filename The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
-# @param dgctlStorage.manifest.section Manifest's section where are files of styles placed **Required**
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
 
 dgctlStorage:
   host: ''
   bucket: ''
   accessKey: ''
   secretKey: ''
-  manifest:
-    section: pro-ui
-    filename: ''
+  manifest: ''
 
 # @section Import job settings
 

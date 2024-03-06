@@ -32,9 +32,9 @@ spec:
             - name: MODE
               value: "ManifestData"
             - name: manifest_filename
-              value: {{ .Values.dgctlStorage.manifest.filename }}
+              value: {{ .Values.dgctlStorage.manifest }}
             - name: manifest_section
-              value: {{ .Values.dgctlStorage.manifest.section }}
+              value: "pro-ui"
             - name: manifest_data_uncompress_file_pattern
               value: "*.tar.gz"
             - name: S3Settings__Url
