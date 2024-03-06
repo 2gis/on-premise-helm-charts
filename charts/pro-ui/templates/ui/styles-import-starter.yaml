@@ -5,7 +5,7 @@ metadata:
   name: {{ include "pro.ui.styles-importer-name" . }}-starter
   annotations:
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
   backoffLimit: {{ .Values.stylesImporter.backoffLimit }}
   template:
@@ -15,7 +15,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       restartPolicy: Never
-      serviceAccountName: runner
+      serviceAccountName: {{ include "pro-ui.service-account-name" . }}
       volumes:
         - name: temp-volume
           emptyDir: {}
@@ -49,7 +49,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: s3AccessKey
-                  name: {{ .Values.dgctlStorage.accessKey }}
+                  name: {{ include "pro.ui.name" . }}-secret
             - name: S3Settings__SecretKey
               valueFrom:
                 secretKeyRef:

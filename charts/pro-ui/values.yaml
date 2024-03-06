@@ -272,8 +272,8 @@ dgctlStorage:
 
 stylesImporter:
   image:
-    repository: urbigeo/urbi-geo-import
-    tag: 1.4.0
+    repository: 2gis-on-premise/pro-importer
+    tag: 1.5.1
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   nodeSelector: {}

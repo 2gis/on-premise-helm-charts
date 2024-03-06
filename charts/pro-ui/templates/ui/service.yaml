@@ -15,5 +15,7 @@ spec:
     - name: http
       port: {{ .Values.ui.service.port }}
       targetPort: {{ .Values.ui.service.targetPort }}
+      protocol: TCP
+      appProtocol: http
   selector:
     {{- include "pro.ui.selectorLabels" . | nindent 4 }}
