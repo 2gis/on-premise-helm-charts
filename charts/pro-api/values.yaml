@@ -119,14 +119,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.5.1
+  tag: 1.6.0
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.5.1
+  tag: 1.6.0
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -397,7 +397,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.5.1
+  tag: 1.6.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -427,7 +427,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.5.1
+  tag: 1.6.0
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
