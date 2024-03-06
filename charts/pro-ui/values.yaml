@@ -258,6 +258,7 @@ dgctlStorage:
 
 # If the Style Importer Job failed, then we don't need to deploy the whole pro-ui app.
 
+# @param stylesImporter.serviceAccount  Kubernetes service account
 # @param stylesImporter.image.repository Docker Repository Image.
 # @param stylesImporter.image.tag Docker image tag.
 # @param stylesImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
@@ -271,6 +272,7 @@ dgctlStorage:
 # @param stylesImporter.resources.limits.memory A memory limit.
 
 stylesImporter:
+  serviceAccount: runner
   image:
     repository: 2gis-on-premise/pro-importer
     tag: 1.5.1

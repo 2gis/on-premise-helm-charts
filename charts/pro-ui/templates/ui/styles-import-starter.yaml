@@ -15,7 +15,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       restartPolicy: Never
-      serviceAccountName: {{ include "pro-ui.service-account-name" . }}
+      serviceAccountName: {{ include "pro.ui.service-account-name" . }}
       volumes:
         - name: temp-volume
           emptyDir: {}

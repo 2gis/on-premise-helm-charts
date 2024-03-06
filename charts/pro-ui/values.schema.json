@@ -201,20 +201,7 @@
           "type": "string"
         },
         "manifest": {
-          "type": "object",
-          "required": [
-            "section",
-            "filename"
-          ],
-          "additionalProperties": false,
-          "properties": {
-            "section": {
-              "type": "string"
-            },
-            "filename": {
-              "type": "string"
-            }
-          }
+          "type": "string"
         }
       }
     }
