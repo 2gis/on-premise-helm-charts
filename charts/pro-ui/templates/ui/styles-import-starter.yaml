@@ -29,6 +29,12 @@ spec:
             - mountPath: "/tmp"
               name: temp-volume
           env:
+            - name: JOB_NAME
+              value: {{ include "pro.ui.styles-importer-name" . }}
+            - name: ES_HOST
+              value: http://some_fake_url
+            - name: API_URL
+              value: http://some_fake_url
             - name: MODE
               value: "ManifestData"
             - name: manifest_filename
