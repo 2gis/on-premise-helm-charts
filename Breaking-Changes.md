@@ -1,5 +1,14 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [NEXT-VERSION]
+
+### navi-restrictions
+- `api.api_key` renamed to `api.key`
+- `api.is_init_db` renamed to `api.isInitDb`
+- `db` renamed to `postgres`
+- `cron.max_attributes_fetcher_rps` renamed to `cron.maxAttributesFetcherRps`
+- `api.attractor_url`, `cron.edges_url_template` and `cron.edge_attributes_url_template` are deprecated. Set `naviBackHost` and `naviCastleHost` with `api.attractorUri`, `cron.edgeAttributesUriTemplate` and `cron.maxAttributesFetcherRps` instead
+
 ## [1.20.0]
 
 ### navi-router
