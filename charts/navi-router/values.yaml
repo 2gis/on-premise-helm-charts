@@ -48,36 +48,37 @@ image:
 # @param router.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`
 # @param router.additionalSections Additional configurations sections for the Navi-Router service
 # @param router.castleHost URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster
-# @param router.keyManagementService.enabled Disable or enable key management service
-# @param router.keyManagementService.host Address if key management service server
-# @param router.keyManagementService.refreshIntervalSec Keys refresh interval in seconds
-# @param router.keyManagementService.downloadTimeoutSec Keys download timeout in seconds
-# @param router.keyManagementService.commonToken Mater key to retrieve all per-service API keys, router.keyManagementService.apis ignored, if commonToken set
-# @param router.keyManagementService.apis [nullable] Used API types and their tokens. Format: `type: token`
 
 router:
   appPort: 8080
   logLevel: Warning
   additionalSections: ''
   castleHost: ''
-  keyManagementService:
-    enabled: false
-    host: http://keys.api.example.com
-    refreshIntervalSec: 30
-    downloadTimeoutSec: 30
-    commonToken: ''
-    apis:
-      comboroutes-api: ''
-      directions-api: ''
-      distance-matrix-api: ''
-      freeroam-api: ''
-      isochrone-api: ''
-      map-matching-api: ''
-      pairs-directions-api: ''
-      ppnot-api: ''
-      public-transport-api: ''
-      truck-directions-api: ''
-      truck-distance-matrix-api: ''
+
+# @param keys.enabled Disable or enable key management service
+# @param keys.url key management service server URL
+# @param keys.refreshIntervalSec Keys refresh interval in seconds
+# @param keys.downloadTimeoutSec Keys download timeout in seconds
+# @param keys.commonToken Mater key to retrieve all per-service API keys, keys.apis ignored, if commonToken set
+# @param keys.apis [nullable] Used API types and their tokens. Format: `type: token`
+keys:
+  enabled: false
+  url: ''
+  refreshIntervalSec: 30
+  downloadTimeoutSec: 30
+  commonToken: ''
+  apis:
+    comboroutes-api: ''
+    directions-api: ''
+    distance-matrix-api: ''
+    freeroam-api: ''
+    isochrone-api: ''
+    map-matching-api: ''
+    pairs-directions-api: ''
+    ppnot-api: ''
+    public-transport-api: ''
+    truck-directions-api: ''
+    truck-distance-matrix-api: ''
 
 
 # @section Service account settings

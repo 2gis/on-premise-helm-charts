@@ -51,18 +51,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Router service settings
 
-| Name                                             | Description                                                                                                                                 | Value                         |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `router.appPort`                                 | Navi-Router service HTTP port                                                                                                               | `8080`                        |
-| `router.logLevel`                                | Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`                                                             | `Warning`                     |
-| `router.additionalSections`                      | Additional configurations sections for the Navi-Router service                                                                              | `""`                          |
-| `router.castleHost`                              | URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster | `""`                          |
-| `router.keyManagementService.enabled`            | Disable or enable key management service                                                                                                    | `false`                       |
-| `router.keyManagementService.host`               | Address if key management service server                                                                                                    | `http://keys.api.example.com` |
-| `router.keyManagementService.refreshIntervalSec` | Keys refresh interval in seconds                                                                                                            | `30`                          |
-| `router.keyManagementService.downloadTimeoutSec` | Keys download timeout in seconds                                                                                                            | `30`                          |
-| `router.keyManagementService.commonToken`        | Mater key to retrieve all per-service API keys, router.keyManagementService.apis ignored, if commonToken set                                | `""`                          |
-| `router.keyManagementService.apis`               | Used API types and their tokens. Format: `type: token`                                                                                      | `undefined`                   |
+| Name                        | Description                                                                                                                                 | Value       |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `router.appPort`            | Navi-Router service HTTP port                                                                                                               | `8080`      |
+| `router.logLevel`           | Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`                                                             | `Warning`   |
+| `router.additionalSections` | Additional configurations sections for the Navi-Router service                                                                              | `""`        |
+| `router.castleHost`         | URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster | `""`        |
+| `keys.enabled`              | Disable or enable key management service                                                                                                    | `false`     |
+| `keys.url`                  | key management service server URL                                                                                                           | `""`        |
+| `keys.refreshIntervalSec`   | Keys refresh interval in seconds                                                                                                            | `30`        |
+| `keys.downloadTimeoutSec`   | Keys download timeout in seconds                                                                                                            | `30`        |
+| `keys.commonToken`          | Mater key to retrieve all per-service API keys, keys.apis ignored, if commonToken set                                                       | `""`        |
+| `keys.apis`                 | Used API types and their tokens. Format: `type: token`                                                                                      | `undefined` |
 
 ### Service account settings
 

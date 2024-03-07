@@ -65,12 +65,12 @@ data:
                 {"type" : "pairs-directions-api", "value" : 50}
             ]
         }
-        {{- with .Values.router.keyManagementService }}
+        {{- with .Values.keys }}
         {{- if .enabled }}
         {{ println "," }}
         "key_management_service" :
         {
-          "service_remote_address" : {{ .host | quote }},
+          "service_remote_address" : {{ required "A valid .Values.keys.url entry required" .url | quote }},
           "keys_refresh_interval_sec" : {{ .refreshIntervalSec | int }},
           "keys_download_timeout_sec" : {{ .downloadTimeoutSec | int }}
         }

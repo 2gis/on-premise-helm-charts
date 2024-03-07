@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [NEXT-VERSION]
+
+### navi-router
+- `router.keyManagementService.host` renamed to `router.keyManagementService.url`
+- `router.keyManagementService` renamed to `keys`
+
 ## [1.17.0]
 
 ### citylens

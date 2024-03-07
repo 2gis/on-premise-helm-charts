@@ -122,3 +122,13 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- print "autoscaling/v2" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Check for deprecated values
+*/}}
+{{- define "check.deprecated.values" -}}
+{{- if not ("1.19.0" | get ((.Values.debug).disableDeprecationChecks | default dict) ) }}
+{{- if .Values.router.keyManagementService -}}{{ fail "[after 1.19.0] .Values.router.keyManagementService renamed to .Values.keys" }}{{- end }}
+{{- if .Values.keys.host -}}{{ fail "[after 1.19.0] .Values.router.keys.host renamed to .Values.keys.url" }}{{- end }}
+{{- end }} {{/* 1.19.0 */}}
+{{- end }}
