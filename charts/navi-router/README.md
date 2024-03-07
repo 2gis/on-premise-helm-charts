@@ -56,7 +56,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `router.appPort`            | Navi-Router service HTTP port                                                                                                               | `8080`      |
 | `router.logLevel`           | Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`                                                             | `Warning`   |
 | `router.additionalSections` | Additional configurations sections for the Navi-Router service                                                                              | `""`        |
-| `router.castleHost`         | URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster | `""`        |
+| `router.castleUrl`          | URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster | `""`        |
 | `keys.enabled`              | Disable or enable key management service                                                                                                    | `false`     |
 | `keys.url`                  | key management service server URL                                                                                                           | `""`        |
 | `keys.refreshIntervalSec`   | Keys refresh interval in seconds                                                                                                            | `30`        |

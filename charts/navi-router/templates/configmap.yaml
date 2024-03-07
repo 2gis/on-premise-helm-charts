@@ -34,13 +34,13 @@ data:
       "context": {
         "variables": {
           "LOCAL_ETC": "/src/etc",
-          "REMOTE_PATH": "{{ required "A valid .Values.router.castleHost  entry required!" .Values.router.castleHost }}",
+          "REMOTE_PATH": "{{ required "A valid .Values.router.castleUrl  entry required!" .Values.router.castleUrl }}",
           "LOCAL_PATH": "/var/lib/2gis/castle/"
         },
         "cities": {
           "update_period": 600,
           "nodes": [
-            "http://{REMOTE_PATH}/cities.conf.zip"
+            "{REMOTE_PATH}/cities.conf.zip"
           ],
           "timeout_seconds": {
             "count": 60

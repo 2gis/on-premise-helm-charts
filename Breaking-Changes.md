@@ -5,6 +5,7 @@
 ### navi-router
 - `router.keyManagementService.host` renamed to `router.keyManagementService.url`
 - `router.keyManagementService` renamed to `keys`
+- `router.castleHost` renamed to `router.castleUrl`
 
 ## [1.17.0]
 
