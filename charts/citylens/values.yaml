@@ -97,7 +97,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.5.1
+    tag: 1.6.0
 
   replicas: 4
 
@@ -224,7 +224,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.5.1
+    tag: 1.6.0
 
   replicas: 1
 
@@ -425,7 +425,7 @@ worker:
     affinity: {}
     tolerations: {}
 
-# @section Citylens Reporter Pro worker's settings
+# @section Citylens Reporter Pro worker's settings (synchronization with Pro)
 
 # @param worker.reporterPro.replicas A replica count for the pod.
 
@@ -439,6 +439,31 @@ worker:
 # @param worker.reporterPro.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
 
   reporterPro:
+
+    replicas: 1
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+# @section Citylens Reporter Pro Tracks worker's settings (track status actualization)
+
+# @param worker.reporterProTracks.replicas A replica count for the pod.
+
+# @param worker.reporterProTracks.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.reporterProTracks.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.reporterProTracks.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.reporterProTracks.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.reporterProTracks.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.reporterProTracks.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.reporterProTracks.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  reporterProTracks:
 
     replicas: 1
 
@@ -536,7 +561,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.5.0
+    tag: 1.6.0
 
   resources:
     requests:
