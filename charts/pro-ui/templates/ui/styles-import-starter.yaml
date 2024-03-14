@@ -53,7 +53,7 @@ spec:
               value: "{{ .Values.dgctlStorage.secure }}"
             - name: S3Settings__DgctlStorageBucket
               value: {{ .Values.dgctlStorage.bucket }}
-            - name: S3Settings__StylesDataBucket
+            - name: S3Settings__AssetDataBucket
               value: {{ .Values.ui.styles.s3Bucket }}
             - name: S3Settings__AccessKey
               valueFrom:
