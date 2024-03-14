@@ -25,12 +25,12 @@ spec:
     metadata:
       {{- with .Values.ui.podAnnotations }}
       annotations:
-        {{- include "pro.ui.tplvalues.render" (dict "value" . "context" $ )  | nindent 8 }}
+        {{- include "pro.ui.tplvalues.render" (dict "value" . "context" $ ) | nindent 8 }}
       {{- end }}
       labels:
         {{- include "pro.ui.labels" . | nindent 8 }}
         {{- with .Values.ui.podLabels }}
-        {{- include "pro.ui.tplvalues.render" (dict "value" . "context" $ )  | nindent 8 }}
+        {{- include "pro.ui.tplvalues.render" (dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
     spec:
       containers:

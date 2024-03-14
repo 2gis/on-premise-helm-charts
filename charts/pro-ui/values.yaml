@@ -150,7 +150,7 @@ ui:
   # @section WhiteLabel config settings
   #
   # @param ui.whiteLabel.configUrl Optional URL for whitelabel config file
-  # @param ui.whiteLabel.s3Bucket  Optional S3 bucket name for whitelabel files. If set with ui.publicS3Url all relative URL in config will be replaced to ui.publicS3Url + ui.whiteLabel.s3Bucket + originalURL
+  # @param ui.whiteLabel.s3Bucket Optional S3 bucket name for whitelabel files. If set with ui.publicS3Url all relative URL in config will be replaced to ui.publicS3Url + ui.whiteLabel.s3Bucket + originalURL
   whiteLabel:
     configUrl: ''
     s3Bucket: ''
@@ -242,23 +242,29 @@ appStylesImporterName: styles-importer
 # @section Artifacts Storage settings
 
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
 # @param dgctlStorage.bucket S3 bucket name. **Required**
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
 # @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
+# @param dgctlStorage.region AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property
+# @param dgctlStorage.disablePayloadSigning Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage
 
 dgctlStorage:
   host: ''
+  secure: false
   bucket: ''
   accessKey: ''
   secretKey: ''
   manifest: ''
+  region: ''
+  disablePayloadSigning: false
 
 # @section Import job settings
 
 # If the Style Importer Job failed, then we don't need to deploy the whole pro-ui app.
 
-# @param stylesImporter.serviceAccount  Kubernetes service account
+# @param stylesImporter.serviceAccount Kubernetes service account
 # @param stylesImporter.image.repository Docker Repository Image.
 # @param stylesImporter.image.tag Docker image tag.
 # @param stylesImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.

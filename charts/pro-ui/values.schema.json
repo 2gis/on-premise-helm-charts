@@ -185,11 +185,14 @@
     },
     "dgctlStorage": {
       "type": "object",
-      "required": ["host", "bucket", "accessKey", "secretKey", "manifest"],
+      "required": ["host", "secure", "bucket", "accessKey", "secretKey", "manifest"],
       "additionalProperties": false,
       "properties": {
         "host": {
           "type": "string"
+        },
+        "secure": {
+          "type": "boolean"
         },
         "bucket": {
           "type": "string"
@@ -202,6 +205,12 @@
         },
         "manifest": {
           "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "disablePayloadSigning": {
+          "type": "boolean"
         }
       }
     }
