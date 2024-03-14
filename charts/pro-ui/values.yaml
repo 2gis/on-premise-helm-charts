@@ -141,7 +141,7 @@ ui:
 
   # @section Map styles config settings
   #
-  # @param ui.styles.s3Bucket Optional S3 bucket name for style files
+  # @param ui.styles.s3Bucket Optional S3 bucket name for style files. Bucket must be public.
   # @param ui.styles.configUrl Optional URL for styles config file
   styles:
     s3Bucket: ''
@@ -150,7 +150,7 @@ ui:
   # @section WhiteLabel config settings
   #
   # @param ui.whiteLabel.configUrl Optional URL for whitelabel config file
-  # @param ui.whiteLabel.s3Bucket Optional S3 bucket name for whitelabel files. If set with ui.publicS3Url all relative URL in config will be replaced to ui.publicS3Url + ui.whiteLabel.s3Bucket + originalURL
+  # @param ui.whiteLabel.s3Bucket Optional S3 bucket name for whitelabel files. Bucket must be public. If set with ui.publicS3Url all relative URL in config will be replaced to ui.publicS3Url + ui.whiteLabel.s3Bucket + originalURL
   whiteLabel:
     configUrl: ''
     s3Bucket: ''
