@@ -2,10 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "pro.ui.name" . }}
-  {{- with .Values.ui.service.annotations }}
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- include "pro.ui.service.annotations" . | nindent 4 }}
   labels:
     {{- include "pro.ui.labels" . | nindent 4 }}
     {{- with .Values.ui.service.labels }}
@@ -14,8 +12,10 @@ metadata:
 spec:
   type: {{ .Values.ui.service.type }}
   ports:
-    - port: {{ .Values.ui.service.port }}
-      name: http
-      targetPort: http
+    - name: http
+      port: {{ .Values.ui.service.port }}
+      targetPort: {{ .Values.ui.service.targetPort }}
+      protocol: TCP
+      appProtocol: http
   selector:
     {{- include "pro.ui.selectorLabels" . | nindent 4 }}
