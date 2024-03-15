@@ -61,7 +61,7 @@ ui:
   # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).
   # @param ui.supportDocumentationLink Product online documentation link. Ex.: 'https://docs.urbi.ae/en/pro/start'
   # @param ui.immersiveModels A string value for config to enabling 3D-models. Possible values: [{"id":4,"name":"Ground","mapOptions":{"center":[53.287567,23.564967],"styleZoom":19.2,"pitch":45,"rotation":0},"objects":[{"buildingIds":[],"coords":[53.284762,23.569323],"scale":90,"rotateX":0.5,"rotateY":0,"moveX":0,"moveY":0,"moveZ":0,"models":[{"path":"/static/models/adnoc/ground.glb","name":"Ground","displayName":"Ground"}]}]}]
-  # @param ui.publicS3Url Optional FQDN (domain or IP) public S3 host where style data will be placed.
+  # @param ui.publicS3Url Optional URL of public S3 where style data will be placed. Example: https://s3.domain.example.com/
 
   logLevel: error
   isOnPremise: true

@@ -51,7 +51,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.appInitialMapCenter`            | Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).                                                                                                                                                                                                                                                                  | `[46.71, 24.72]` |
 | `ui.supportDocumentationLink`       | Product online documentation link. Ex.: 'https://docs.urbi.ae/en/pro/start'                                                                                                                                                                                                                                                                                                                                       | `""`             |
 | `ui.immersiveModels`                | A string value for config to enabling 3D-models. Possible values: [{"id":4,"name":"Ground","mapOptions":{"center":[53.287567,23.564967],"styleZoom":19.2,"pitch":45,"rotation":0},"objects":[{"buildingIds":[],"coords":[53.284762,23.569323],"scale":90,"rotateX":0.5,"rotateY":0,"moveX":0,"moveY":0,"moveZ":0,"models":[{"path":"/static/models/adnoc/ground.glb","name":"Ground","displayName":"Ground"}]}]}] | `""`             |
-| `ui.publicS3Url`                    | Optional FQDN (domain or IP) public S3 host where style data will be placed.                                                                                                                                                                                                                                                                                                                                      | `""`             |
+| `ui.publicS3Url`                    | Optional URL of public S3 where style data will be placed. Example: https://s3.domain.example.com/                                                                                                                                                                                                                                                                                                                | `""`             |
 | `ui.auth.sso`                       | Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.                                                                                                                                                                                                                                                                                                                                    | `false`          |
 | `ui.auth.secure`                    | Flag to turn on/off the https for auth. Possible values: `"true"` or `"false"`.                                                                                                                                                                                                                                                                                                                                   | `true`           |
 | `ui.auth.safeHosts`                 | a string with regExp, which checks incoming authCodeUrl                                                                                                                                                                                                                                                                                                                                                           | `.*`             |
@@ -86,17 +86,17 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### Map styles config settings
 
-| Name                  | Description                             | Value |
-| --------------------- | --------------------------------------- | ----- |
-| `ui.styles.s3Bucket`  | Optional S3 bucket name for style files | `""`  |
-| `ui.styles.configUrl` | Optional URL for styles config file     | `""`  |
+| Name                  | Description                                                     | Value |
+| --------------------- | --------------------------------------------------------------- | ----- |
+| `ui.styles.s3Bucket`  | Optional S3 bucket name for style files. Bucket must be public. | `""`  |
+| `ui.styles.configUrl` | Optional URL for styles config file                             | `""`  |
 
 ### WhiteLabel config settings
 
-| Name                      | Description                                                                                                                                                                   | Value |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `ui.whiteLabel.configUrl` | Optional URL for whitelabel config file                                                                                                                                       | `""`  |
-| `ui.whiteLabel.s3Bucket`  | Optional S3 bucket name for whitelabel files. If set with ui.publicS3Url all relative URL in config will be replaced to ui.publicS3Url + ui.whiteLabel.s3Bucket + originalURL | `""`  |
+| Name                      | Description                                                                                                                                                                                          | Value |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ui.whiteLabel.configUrl` | Optional URL for whitelabel config file                                                                                                                                                              | `""`  |
+| `ui.whiteLabel.s3Bucket`  | Optional S3 bucket name for whitelabel files. Bucket must be public. If set with ui.publicS3Url all relative URL in config will be replaced to ui.publicS3Url + ui.whiteLabel.s3Bucket + originalURL | `""`  |
 
 ### Strategy settings
 
