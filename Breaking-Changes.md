@@ -7,6 +7,15 @@
 - `router.keyManagementService` renamed to `keys`
 - `router.castleHost` renamed to `router.castleUrl`
 
+### citylens
+
+- Backward compatibility for citylens 1.6.0 is broken:
+  - Parameter `api.auth.camcomToken` is replaced with `api.auth.predictorsTokens.camcom`
+  - License v2 service now required: `api.licensing.url`
+  - Parameter `map.tileserverUrl` now required
+  - Parameters group `worker.reporterProTracks` now required
+  - Database structure changed
+
 ## [1.17.0]
 
 ### citylens
