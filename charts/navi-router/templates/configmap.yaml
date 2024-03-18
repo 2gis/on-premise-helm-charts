@@ -34,13 +34,13 @@ data:
       "context": {
         "variables": {
           "LOCAL_ETC": "/src/etc",
-          "REMOTE_PATH": "{{ required "A valid .Values.router.castleHost  entry required!" .Values.router.castleHost }}",
+          "REMOTE_PATH": "{{ required "A valid .Values.router.castleUrl  entry required!" .Values.router.castleUrl }}",
           "LOCAL_PATH": "/var/lib/2gis/castle/"
         },
         "cities": {
           "update_period": 600,
           "nodes": [
-            "http://{REMOTE_PATH}/cities.conf.zip"
+            "{REMOTE_PATH}/cities.conf.zip"
           ],
           "timeout_seconds": {
             "count": 60
@@ -65,12 +65,12 @@ data:
                 {"type" : "pairs-directions-api", "value" : 50}
             ]
         }
-        {{- with .Values.router.keyManagementService }}
+        {{- with .Values.keys }}
         {{- if .enabled }}
         {{ println "," }}
         "key_management_service" :
         {
-          "service_remote_address" : {{ .host | quote }},
+          "service_remote_address" : {{ required "A valid .Values.keys.url entry required" .url | quote }},
           "keys_refresh_interval_sec" : {{ .refreshIntervalSec | int }},
           "keys_download_timeout_sec" : {{ .downloadTimeoutSec | int }}
         }

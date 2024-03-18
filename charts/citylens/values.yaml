@@ -67,7 +67,14 @@ dgctlStorage:
 # @param api.auth.authServerUrl API URL of authentication service, OIDC-compatibility expected. Ex.: `http(s)://keycloak.ingress.host/`. **Required**
 # @param api.auth.realm Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: CityLens_app
 # @param api.auth.verifySsl Enable\Disable SSL check.
-# @param api.auth.camcomToken Bearer token, expected on CamCom callback endpoint (if integration with CamCom enabled).
+
+# @section Bearer tokens for callbacks & predictors
+
+# @param api.auth.predictorsTokens.camcom Bearer token, expected on CamCom callback endpoint and CamCom prediction endpoint (if integration with CamCom enabled).
+
+# @section Licensing server settings
+
+# @param api.licensing.url Licensing server v2 URL. https://license.svc. **Required**
 
 # @section Custom settings
 
@@ -90,7 +97,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.4.1
+    tag: 1.6.0
 
   replicas: 4
 
@@ -130,7 +137,11 @@ api:
     authServerUrl: ''
     realm: ''
     verifySsl: true
-    camcomToken: ''
+    predictorsTokens:
+      camcom: ''
+
+  licensing:
+    url: ''
 
   showDocs: false
 
@@ -213,7 +224,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.4.1
+    tag: 1.6.0
 
   replicas: 1
 
@@ -414,7 +425,7 @@ worker:
     affinity: {}
     tolerations: {}
 
-# @section Citylens Reporter Pro worker's settings
+# @section Citylens Reporter Pro worker's settings (synchronization with Pro)
 
 # @param worker.reporterPro.replicas A replica count for the pod.
 
@@ -428,6 +439,31 @@ worker:
 # @param worker.reporterPro.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
 
   reporterPro:
+
+    replicas: 1
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+# @section Citylens Reporter Pro Tracks worker's settings (track status actualization)
+
+# @param worker.reporterProTracks.replicas A replica count for the pod.
+
+# @param worker.reporterProTracks.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.reporterProTracks.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.reporterProTracks.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.reporterProTracks.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.reporterProTracks.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.reporterProTracks.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.reporterProTracks.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  reporterProTracks:
 
     replicas: 1
 
@@ -525,7 +561,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.2.0
+    tag: 1.6.0
 
   resources:
     requests:
@@ -611,6 +647,7 @@ postgres:
 
 # @section Map settings
 
+# @param map.tileserverUrl URL template for tileserver. Ex.: `http://tileserver.host`
 # @param map.mapgl.host Hostname of mapgl server. **Required**
 # @param map.mapgl.key Key of mapgl server. **Required**
 # @param map.projects[0].name Name of project.
@@ -618,6 +655,7 @@ postgres:
 # @param map.initialProject Default project shown on Map.
 
 map:
+  tileserverUrl: ''
   mapgl:
     host: ''
     key: ''
@@ -642,6 +680,7 @@ locale: en
 headerLinks:
 - drivers
 - tracks
+- interest_zones
 - map
 
 reporters:

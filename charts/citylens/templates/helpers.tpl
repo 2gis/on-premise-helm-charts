@@ -33,6 +33,10 @@ Expand the name of the chart.
 {{ include "citylens.name" . }}-reporter-pro
 {{- end }}
 
+{{- define "citylens.reporter-pro-tracks.name" -}}
+{{ include "citylens.name" . }}-reporter-pro-tracks
+{{- end }}
+
 {{- define "citylens.secret.import.name" -}}
 {{ include "citylens.name" . }}-import-secret
 {{- end }}
@@ -110,6 +114,11 @@ app.kubernetes.io/name: {{ .Release.Name }}
 app.kubernetes.io/instance: {{ include "citylens.reporter-pro.name" . }}
 {{- end }}
 
+{{- define "citylens.reporter-pro-tracks.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.reporter-pro-tracks.name" . }}
+{{- end }}
+
 {{- define "citylens.track-reloader.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Release.Name }}
 app.kubernetes.io/instance: {{ include "citylens.track-reloader.name" . }}
@@ -122,6 +131,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "citylens.reporter-pro.labels" -}}
 {{ include "citylens.reporter-pro.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "citylens.reporter-pro-tracks.labels" -}}
+{{ include "citylens.reporter-pro-tracks.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 

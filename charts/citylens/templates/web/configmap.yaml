@@ -87,6 +87,7 @@ data:
       verify_ssl: {{ .verifySsl }}
     {{- end }}
     map:
+      tileserver_url_template: {{ required "A valid .Values.map.tileserverUrl entry required" .Values.map.tileserverUrl }}/tiles?x={x}&y={y}&z={z}
       mapgl:
         host: {{ required "A valid .Values.map.mapgl.host entry required" .Values.map.mapgl.host | squote }}
         key: {{ required "A valid .Values.map.mapgl.key entry required" .Values.map.mapgl.key | squote }}
@@ -102,6 +103,9 @@ data:
         {{- if .Values.worker.tracksUploader.enabled }}
         - reload_track
         - reload_statuses
+        {{- end }}
+        {{- if .Values.worker.camcomSender.enabled }}
+        - camcom_stats
         {{- end }}
         {{- if .Values.pro.url }}
         - pro

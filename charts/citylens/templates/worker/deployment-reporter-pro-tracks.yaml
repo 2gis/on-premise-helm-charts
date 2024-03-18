@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "citylens.reporter-pro-tracks.name" . }}
+  {{- if .Values.worker.reporterProTracks.annotations }}
+  annotations:
+    {{- toYaml .Values.worker.reporterProTracks.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "citylens.reporter-pro-tracks.labels" . | nindent 4 }}
+  {{- if .Values.worker.reporterProTracks.labels }}
+    {{- toYaml .Values.worker.reporterProTracks.labels | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.worker.reporterProTracks.replicas }}
+  selector:
+    matchLabels:
+      {{- include "citylens.reporter-pro-tracks.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
+      {{- with .Values.worker.reporterProTracks.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "citylens.reporter-pro-tracks.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "citylens.reporter-pro-tracks.name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
+          imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+          command: [ "/bin/sh", "-c" ]
+          args: [ "flask reporter run-pro-tracks" ]
+          env:
+            - name: CONFIG_PATH
+              value: /opt/worker/config/dashboard_config.yaml
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/worker/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "citylens.web.name" . }}-configmap
+      {{- with .Values.worker.reporterProTracks.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.reporterProTracks.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.reporterProTracks.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

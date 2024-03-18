@@ -74,7 +74,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-            {{- range $type, $token := (.Values.router.keyManagementService).apis }}
+            {{- range $type, $token := (.Values.keys).apis }}
             {{- if $token }}
             - name: {{ $type | replace "-" "_" | upper | quote }}
               valueFrom:
@@ -83,7 +83,7 @@ spec:
                   key: {{ $type | quote }}
             {{- end }}{{- /* if $token */}}
             {{- end }}{{- /* range $type, $token */}}
-            {{- if (.Values.router.keyManagementService).commonToken }}
+            {{- if (.Values.keys).commonToken }}
             - name: COMMON_TOKEN
               valueFrom:
                 secretKeyRef:

@@ -4,6 +4,8 @@
 
 dgctlDockerRegistry: ''
 
+# @param imagePullPolicy Pull Policy
+# @param imagePullSecrets Kubernetes image pull secrets.
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
 
@@ -11,6 +13,8 @@ ui:
   # @section Common settings
 
   # @param ui.replicas A replica count for the pod.
+  # @param ui.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @param ui.terminationGracePeriodSeconds Seconds pod needs to [terminate](https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods) gracefully
   # @param ui.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param ui.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param ui.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -18,8 +22,14 @@ ui:
   # @param ui.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param ui.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param ui.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param ui.readinessProbe.enabled Enable [readinessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on PRO UI containers
+  # @param ui.livenessProbe.enabled Enable [livenessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on PRO UI containers
+  # @param ui.healthcheckPath Application http path for health check
+  # @param ui.containerPort Port on which application listen connection in container
 
   replicas: 1
+  revisionHistoryLimit: 3
+  terminationGracePeriodSeconds: 60
   nodeSelector: {}
   affinity: {}
   tolerations: []
@@ -27,17 +37,20 @@ ui:
   podLabels: {}
   annotations: {}
   labels: {}
+  readinessProbe:
+    enabled: true
+  livenessProbe:
+    enabled: false
+  healthcheckPath: /api/healthcheck/app
+  containerPort: 3000
 
   # @section Deployment settings
 
   # @param ui.image.repository Repository
   # @param ui.image.tag Tag
-  # @param imagePullPolicy Pull Policy
-  # @param imagePullSecrets Kubernetes image pull secrets.
-
   image:
     repository: 2gis-on-premise/pro-ui
-    tag: 1.9.0
+    tag: 2.1.1
 
   # @section UI service settings
 
@@ -48,6 +61,7 @@ ui:
   # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).
   # @param ui.supportDocumentationLink Product online documentation link. Ex.: 'https://docs.urbi.ae/en/pro/start'
   # @param ui.immersiveModels A string value for config to enabling 3D-models. Possible values: [{"id":4,"name":"Ground","mapOptions":{"center":[53.287567,23.564967],"styleZoom":19.2,"pitch":45,"rotation":0},"objects":[{"buildingIds":[],"coords":[53.284762,23.569323],"scale":90,"rotateX":0.5,"rotateY":0,"moveX":0,"moveY":0,"moveZ":0,"models":[{"path":"/static/models/adnoc/ground.glb","name":"Ground","displayName":"Ground"}]}]}]
+  # @param ui.publicS3Url Optional URL of public S3 where style data will be placed. Example: https://s3.domain.example.com/
 
   logLevel: error
   isOnPremise: true
@@ -56,6 +70,7 @@ ui:
   appInitialMapCenter: '[46.71, 24.72]'
   supportDocumentationLink: ''
   immersiveModels: ''
+  publicS3Url: ''
 
   # @param ui.auth.sso Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.
   # @param ui.auth.secure Flag to turn on/off the https for auth. Possible values: `"true"` or `"false"`.
@@ -64,7 +79,9 @@ ui:
   # Ex: http(s)://pro-ui.ingress.host/api/auth/code
   # @param ui.auth.clientId a client_id from keycloack
   # @param ui.auth.clientSecret a client_secret from keycloack
-  # @param ui.auth.oAuthProvider a provider name. Possible values: "keycloak" | "ugc"
+  # @param ui.auth.oAuthProvider a provider name. Possible values: "keycloak" | "ugc" | "openid"
+  # if oAuthProvider == 'openid', identityProviderUrl, oAuthApiUrl and userDataApiUrl params
+  # will be ignored, cause these URL will be loaded via openIdWellKnownUrlListUrl
   # @param ui.auth.oAuthScopes scopes for openid connect. Possible values:
   # any of: name, email, phone, avatar, openid
   # Ex.: "name email openid"
@@ -74,6 +91,10 @@ ui:
   # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/
   # @param ui.auth.userDataApiUrl an user data provider URL
   # @param ui.auth.turnOffCertValidation Flag to turn off certificate validation. Possible values: `"true"` or `"false"`.
+  # @param ui.auth.openIdWellKnownUrlListUrl URL to OpenID Connect Discovery data
+  # specs: https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
+  # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/.well-known/openid-configuration
+  # Used only in case of ui.auth.oAuthProvider == 'openid'
   auth:
     sso: false
     secure: true
@@ -87,6 +108,7 @@ ui:
     oAuthApiUrl: ''
     userDataApiUrl: ''
     turnOffCertValidation: false
+    openIdWellKnownUrlListUrl: ''
   # @section 2GIS Pro API settings
 
   # @param ui.api.url Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/.
@@ -103,6 +125,7 @@ ui:
   # @param ui.mapgl.styleUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) `style.json` folder, e.g., '//mapgl.ingress.host/style'. ui.mapgl.styleUrl has priority over ui.mapgl.styleId.
   # @param ui.mapgl.styleIconsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons folder, e.g., '//mapgl.ingress.host/style/icons'
   # @param ui.mapgl.styleFontsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'
+  # @param ui.mapgl.stylePreview URL to image for ui.mapgl.styleUrl or ui.mapgl.styleId. It needs for preview in manager styles.
   # @param ui.mapgl.styleModelsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) models folder, e.g., '//mapgl.ingress.host/style/models'
 
   mapgl:
@@ -113,7 +136,24 @@ ui:
     styleUrl: ''
     styleIconsUrl: ''
     styleFontsUrl: ''
+    stylePreview: ''
     styleModelsUrl: ''
+
+  # @section Map styles config settings
+  #
+  # @param ui.styles.s3Bucket Optional S3 bucket name for style files. Bucket must be public.
+  # @param ui.styles.configUrl Optional URL for styles config file
+  styles:
+    s3Bucket: ''
+    configUrl: ''
+
+  # @section WhiteLabel config settings
+  #
+  # @param ui.whiteLabel.configUrl Optional URL for whitelabel config file
+  # @param ui.whiteLabel.s3Bucket Optional S3 bucket name for whitelabel files. Bucket must be public. If set with ui.publicS3Url all relative URL in config will be replaced to ui.publicS3Url + ui.whiteLabel.s3Bucket + originalURL
+  whiteLabel:
+    configUrl: ''
+    s3Bucket: ''
 
   # @section Strategy settings
 
@@ -133,12 +173,14 @@ ui:
   # @param ui.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param ui.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
   # @param ui.service.port Service port.
+  # @param ui.service.targetPort Service target port.
 
   service:
     annotations: {}
     labels: {}
     type: ClusterIP
     port: 3000
+    targetPort: http
 
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -153,10 +195,10 @@ ui:
     enabled: false
     className: nginx
     hosts:
-      - host: pro-ui.example.com
-        paths:
-          - path: /
-            pathType: Prefix
+    - host: pro-ui.example.com
+      paths:
+      - path: /
+        pathType: Prefix
     tls: []
     # - hosts:
     #   - pro-ui.example.com
@@ -176,3 +218,79 @@ ui:
     limits:
       cpu: 1
       memory: 384Mi
+
+  # @section Autoscaling configuration
+
+  # @param ui.hpa.enabled Enable hpa for PRO UI
+  # @param ui.hpa.minReplicas Minimum number of PRO UI replicas
+  # @param ui.hpa.maxReplicas Maximum number of PRO UI replicas
+  # @param ui.hpa.targetCPU Target CPU utilization percentage
+  # @param ui.hpa.targetMemory Target Memory utilization percentage
+  hpa:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPU: 100
+    targetMemory: ''
+
+# @section 2GIS PRO UI Job settings
+
+# @param appStylesImporterName Styles Import job name.
+
+appStylesImporterName: styles-importer
+
+# @section Artifacts Storage settings
+
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
+# @param dgctlStorage.bucket S3 bucket name. **Required**
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
+# @param dgctlStorage.region AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property
+# @param dgctlStorage.disablePayloadSigning Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage
+
+dgctlStorage:
+  host: ''
+  secure: false
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+  manifest: ''
+  region: ''
+  disablePayloadSigning: false
+
+# @section Import job settings
+
+# If the Style Importer Job failed, then we don't need to deploy the whole pro-ui app.
+
+# @param stylesImporter.serviceAccount Kubernetes service account
+# @param stylesImporter.image.repository Docker Repository Image.
+# @param stylesImporter.image.tag Docker image tag.
+# @param stylesImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
+# @param stylesImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
+# @param stylesImporter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param stylesImporter.maxParallelJobs How many import jobs can be run simultaneously
+# @param stylesImporter.startOnDeploy Indicates that styles import should start when service installed or updated
+# @param stylesImporter.resources.requests.cpu A CPU request.
+# @param stylesImporter.resources.requests.memory A memory request.
+# @param stylesImporter.resources.limits.cpu A CPU limit.
+# @param stylesImporter.resources.limits.memory A memory limit.
+
+stylesImporter:
+  serviceAccount: runner
+  image:
+    repository: 2gis-on-premise/pro-importer
+    tag: 1.6.0
+  backoffLimit: 2
+  successfulJobsHistoryLimit: 3
+  nodeSelector: {}
+  resources:
+    requests:
+      cpu: 700m
+      memory: 768M
+    limits:
+      cpu: 1000m
+      memory: 8Gi
+  maxParallelJobs: 1
+  startOnDeploy: false
