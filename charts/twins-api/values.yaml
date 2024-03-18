@@ -254,7 +254,7 @@ importer:
   persistentVolume:
     enabled: false
     accessModes:
-      - ReadWriteOnce
+    - ReadWriteOnce
     storageClass: topolvm-ext4
     size: 50Gi
 

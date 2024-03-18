@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.4.1`                        |
+| `api.image.tag`        | Tag.         | `1.6.0`                        |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -91,7 +91,18 @@ See the [documentation]() to learn about:
 | `api.auth.authServerUrl` | API URL of authentication service, OIDC-compatibility expected. Ex.: `http(s)://keycloak.ingress.host/`. **Required**                                                                                         | `""`   |
 | `api.auth.realm`         | Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: CityLens_app | `""`   |
 | `api.auth.verifySsl`     | Enable\Disable SSL check.                                                                                                                                                                                     | `true` |
-| `api.auth.camcomToken`   | Bearer token, expected on CamCom callback endpoint (if integration with CamCom enabled).                                                                                                                      | `""`   |
+
+### Bearer tokens for callbacks & predictors
+
+| Name                               | Description                                                                                                             | Value |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----- |
+| `api.auth.predictorsTokens.camcom` | Bearer token, expected on CamCom callback endpoint and CamCom prediction endpoint (if integration with CamCom enabled). | `""`  |
+
+### Licensing server settings
+
+| Name                | Description                                                | Value |
+| ------------------- | ---------------------------------------------------------- | ----- |
+| `api.licensing.url` | Licensing server v2 URL. https://license.svc. **Required** | `""`  |
 
 ### Custom settings
 
@@ -121,7 +132,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.4.1`                        |
+| `web.image.tag`        | Tag.         | `1.6.0`                        |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -262,7 +273,7 @@ See the [documentation]() to learn about:
 | `worker.logsSaver.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`  |
 | `worker.logsSaver.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
 
-### Citylens Reporter Pro worker's settings
+### Citylens Reporter Pro worker's settings (synchronization with Pro)
 
 | Name                                | Description                                                                                                                 | Value |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
@@ -274,6 +285,19 @@ See the [documentation]() to learn about:
 | `worker.reporterPro.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`  |
 | `worker.reporterPro.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`  |
 | `worker.reporterPro.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
+
+### Citylens Reporter Pro Tracks worker's settings (track status actualization)
+
+| Name                                      | Description                                                                                                                 | Value |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `worker.reporterProTracks.replicas`       | A replica count for the pod.                                                                                                | `1`   |
+| `worker.reporterProTracks.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
+| `worker.reporterProTracks.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
+| `worker.reporterProTracks.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
+| `worker.reporterProTracks.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
+| `worker.reporterProTracks.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`  |
+| `worker.reporterProTracks.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`  |
+| `worker.reporterProTracks.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
 
 ### Citylens Track Metadata Saver worker's settings
 
@@ -312,7 +336,7 @@ See the [documentation]() to learn about:
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.2.0`                             |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.6.0`                             |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |
@@ -364,24 +388,25 @@ See the [documentation]() to learn about:
 
 ### Map settings
 
-| Name                     | Description                            | Value |
-| ------------------------ | -------------------------------------- | ----- |
-| `map.mapgl.host`         | Hostname of mapgl server. **Required** | `""`  |
-| `map.mapgl.key`          | Key of mapgl server. **Required**      | `""`  |
-| `map.projects[0].name`   | Name of project.                       | `""`  |
-| `map.projects[0].coords` | Coordinates of area.                   | `[]`  |
-| `map.initialProject`     | Default project shown on Map.          | `""`  |
+| Name                     | Description                                                | Value |
+| ------------------------ | ---------------------------------------------------------- | ----- |
+| `map.tileserverUrl`      | URL template for tileserver. Ex.: `http://tileserver.host` | `""`  |
+| `map.mapgl.host`         | Hostname of mapgl server. **Required**                     | `""`  |
+| `map.mapgl.key`          | Key of mapgl server. **Required**                          | `""`  |
+| `map.projects[0].name`   | Name of project.                                           | `""`  |
+| `map.projects[0].coords` | Coordinates of area.                                       | `[]`  |
+| `map.initialProject`     | Default project shown on Map.                              | `""`  |
 
 ### Custom settings
 
-| Name                            | Description                                                                                                      | Value                        |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `dashboardDomain`               | Link to Citylens web address. **Required**                                                                       | `""`                         |
-| `locale`                        | Locale language (en by default).                                                                                 | `en`                         |
-| `headerLinks`                   | List of links for navbar.                                                                                        | `["drivers","tracks","map"]` |
-| `reporters[0].name`             | Reporter name.                                                                                                   | `pro`                        |
-| `reporters[0].predictors`       | Predictor used by reporter.                                                                                      | `["camcom"]`                 |
-| `reporters[0].trackTimeoutDays` | Time in days to wait for track completion and receiving frames prediction before marking as not synced with Pro. | `1`                          |
+| Name                            | Description                                                                                                      | Value                                         |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `dashboardDomain`               | Link to Citylens web address. **Required**                                                                       | `""`                                          |
+| `locale`                        | Locale language (en by default).                                                                                 | `en`                                          |
+| `headerLinks`                   | List of links for navbar.                                                                                        | `["drivers","tracks","interest_zones","map"]` |
+| `reporters[0].name`             | Reporter name.                                                                                                   | `pro`                                         |
+| `reporters[0].predictors`       | Predictor used by reporter.                                                                                      | `["camcom"]`                                  |
+| `reporters[0].trackTimeoutDays` | Time in days to wait for track completion and receiving frames prediction before marking as not synced with Pro. | `1`                                           |
 
 ### PRO integration (only when Pro reporter enabled)
 

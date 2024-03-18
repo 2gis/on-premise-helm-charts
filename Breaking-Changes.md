@@ -1,6 +1,6 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [NEXT-VERSION]
+## [1.20.0]
 
 ### navi-router
 - `router.keyManagementService.host` renamed to `router.keyManagementService.url`

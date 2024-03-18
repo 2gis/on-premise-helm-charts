@@ -195,10 +195,10 @@ ui:
     enabled: false
     className: nginx
     hosts:
-      - host: pro-ui.example.com
-        paths:
-          - path: /
-            pathType: Prefix
+    - host: pro-ui.example.com
+      paths:
+      - path: /
+        pathType: Prefix
     tls: []
     # - hosts:
     #   - pro-ui.example.com
@@ -281,7 +281,7 @@ stylesImporter:
   serviceAccount: runner
   image:
     repository: 2gis-on-premise/pro-importer
-    tag: 1.5.1
+    tag: 1.6.0
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   nodeSelector: {}

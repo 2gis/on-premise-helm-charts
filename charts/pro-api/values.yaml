@@ -1,4 +1,4 @@
-﻿# @section Docker Registry settings
+# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -163,8 +163,8 @@ s3:
 # @skip api.filterByZoneCodes
 # @skip api.esDataCentersCount
 # @skip Local cache settings
-# @skip localCache.enabled
-# @skip localCache.trackStatistics
+# @skip api.localCache.enabled
+# @skip api.localCache.trackStatistics
 
 api:
   serviceAccount: runner
@@ -367,8 +367,8 @@ permissionsPodSettings:
 # @skip permissionsApi.host
 # @param permissionsApi.enabled If permissionsApi is enabled for the service.
 # @skip Local cache settings
-# @skip localCache.enabled
-# @skip localCache.trackStatistics
+# @skip permissionsApi.localCache.enabled
+# @skip permissionsApi.localCache.trackStatistics
 
 permissionsApi:
   host: ''
@@ -478,10 +478,10 @@ ingress:
   enabled: false
   className: nginx
   hosts:
-    - host: pro-api.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  - host: pro-api.example.com
+    paths:
+    - path: /
+      pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-api.example.com
@@ -498,10 +498,10 @@ permissionsApiIngress:
   enabled: false
   className: nginx
   hosts:
-    - host: pro-permissions-api.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  - host: pro-permissions-api.example.com
+    paths:
+    - path: /
+      pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-permissions-api.example.com
