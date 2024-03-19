@@ -324,7 +324,7 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- end }}
 
 {{- define "keys.custom.ca.mountPath" -}}
-{{ $.Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
 {{- end -}}
 
 {{- define "keys.custom.ca.volumeMounts" -}}
@@ -337,7 +337,7 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- define "keys.custom.ca.volumes" -}}
 - name: custom-ca
   configMap:
-    name: {{ include "keys.configmap.name" }}
+    name: {{ include "keys.configmap.name" . }}
 {{- end -}}
 
 {{- define "keys.configmap.name" -}}

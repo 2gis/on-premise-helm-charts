@@ -245,7 +245,7 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- define "catalog.custom.ca.volumes" -}}
 - name: custom-ca
   configMap:
-    name: {{ include "catalog.configmap.name" }}
+    name: {{ include "catalog.configmap.name" . }}
 {{- end -}}
 
 {{- define "catalog.configmap.name" -}}
