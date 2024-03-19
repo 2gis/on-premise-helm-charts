@@ -162,6 +162,22 @@
             }
           }
         },
+        "mapbox": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "styleToken": {
+              "type": "string"
+            }
+          }
+        },
+        "externalStyleManager": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type":  "boolean" }
+          }
+        },
         "styles": {
           "type": "object",
           "additionalProperties": false,
