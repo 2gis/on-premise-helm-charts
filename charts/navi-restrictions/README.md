@@ -82,19 +82,23 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 
 ### API service settings
 
-| Name                      | Description                                                                                                                   | Value       |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `api.key`                 | API key **required**                                                                                                          | `""`        |
-| `api.debug`               | If the debug mode is enabled                                                                                                  | `false`     |
-| `api.isInitDb`            | If `true` and the database does not exist, it will be created                                                                 | `true`      |
-| `api.attractorUrl`        | URL of Navi-Back service, example: `http://restrictions-api.host/attract` **required**                                        | `""`        |
-| `api.securityContext`     | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                     | `{}`        |
-| `api.service`             | **Service settings.**                                                                                                         |             |
-| `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) | `ClusterIP` |
-| `api.service.port`        | Service port                                                                                                                  | `80`        |
-| `api.service.targetPort`  | Port inside the container                                                                                                     | `8000`      |
-| `api.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)              | `{}`        |
-| `api.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                        | `{}`        |
+| Name                      | Description                                                                                                                   | Value                   |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `naviBackHost`            | Hostname of Navi-Back service **required**                                                                                    | `""`                    |
+| `naviBackHostScheme`      | Scheme (http/https) to access Navi-Back service                                                                               | `http`                  |
+| `naviCastleHost`          | Hostname of Navi-Castle service **required**                                                                                  | `""`                    |
+| `naviCastleHostScheme`    | Scheme (http/https) to access Navi-Castle service                                                                             | `http`                  |
+| `api.key`                 | API key **required**                                                                                                          | `""`                    |
+| `api.debug`               | If the debug mode is enabled                                                                                                  | `false`                 |
+| `api.isInitDb`            | If `true` and the database does not exist, it will be created                                                                 | `true`                  |
+| `api.attractorUri`        | Attractor URI of Navi-Back service                                                                                            | `attract/1.0.0/global/` |
+| `api.securityContext`     | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                     | `{}`                    |
+| `api.service`             | **Service settings.**                                                                                                         |                         |
+| `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) | `ClusterIP`             |
+| `api.service.port`        | Service port                                                                                                                  | `80`                    |
+| `api.service.targetPort`  | Port inside the container                                                                                                     | `8000`                  |
+| `api.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)              | `{}`                    |
+| `api.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                        | `{}`                    |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -142,17 +146,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 
 ### Cron job settings
 
-| Name                              | Description                                                              | Value                                                                        |
-| --------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
-| `cron.enabled`                    | If Cron job is enabled                                                   | `false`                                                                      |
-| `cron.schedule`                   | Cron job schedule                                                        | `1 * * * *`                                                                  |
-| `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`                         | `Forbid`                                                                     |
-| `cron.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept                        | `3`                                                                          |
-| `cron.containerPort`              | Cron container port                                                      | `8000`                                                                       |
-| `cron.edgesUrlTemplate`           | URL template for getting edges                                           | `http://navi-back.host/restrictions_json/{project}/{date_str}_{hour}.json`   |
-| `cron.edgeAttributesUrlTemplate`  | URL template for getting an edge's details                               | `http://navi-back.host/edge?edge_id={edge_id}&offset=200&routing=carrouting` |
-| `cron.projects`                   | List of projects to get data for                                         | `["moscow"]`                                                                 |
-| `cron.maxAttributesFetcherRps`    | Maximum amount oif requests to `edge_attributes_url_template` per second | `25`                                                                         |
+| Name                              | Description                                                           | Value                                                          |
+| --------------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `cron.enabled`                    | If Cron job is enabled                                                | `false`                                                        |
+| `cron.schedule`                   | Cron job schedule                                                     | `1 * * * *`                                                    |
+| `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`                      | `Forbid`                                                       |
+| `cron.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept                     | `3`                                                            |
+| `cron.containerPort`              | Cron container port                                                   | `8000`                                                         |
+| `cron.edgesUriTemplate`           | URL template for getting edges                                        | `restrictions_json/{project}/{date_str}_{hour}.json`           |
+| `cron.edgeAttributesUriTemplate`  | URL template for getting an edge's details                            | `develop/edge?edge_id={edge_id}&offset=200&routing=carrouting` |
+| `cron.projects`                   | List of projects to get data for                                      | `["moscow"]`                                                   |
+| `cron.maxAttributesFetcherRps`    | Maximum amount oif requests to `edgeAttributesUrlTemplate` per second | `25`                                                           |
 
 ### Limits
 

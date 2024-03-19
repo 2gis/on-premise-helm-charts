@@ -71,9 +71,9 @@ spec:
                 - name: MAX_ATTRIBUTES_FETCHER_RPS
                   value: "{{ .Values.cron.maxAttributesFetcherRps }}"
                 - name: EDGES_URL_TEMPLATE
-                  value: {{ .Values.cron.edgesUrlTemplate | quote }}
+                  value: {{ printf "%s://%s/%s" .Values.naviCastleHostScheme (required "A valid .Values.naviCastleHost entry reuiqred" .Values.naviCastleHost) .Values.cron.edgesUriTemplate | quote }}
                 - name: EDGE_ATTRIBUTES_URL_TEMPLATE
-                  value: {{ .Values.cron.edgeAttributesUrlTemplate | quote }}
+                  value: {{ printf "%s://%s/%s" .Values.naviBackHostScheme (required "A valid .Values.naviBackHost entry reuiqred" .Values.naviBackHost) .Values.cron.edgeAttributesUriTemplate | quote }}
                 - name: PROJECTS
                   value: {{ join "," .Values.cron.projects | quote }}
                 - name: RESTRICTIONS_API_URL

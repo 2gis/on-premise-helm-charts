@@ -103,7 +103,7 @@ spec:
             - name: DB_USER
               value: {{ required "A valid .Values.postgres.user entry required" .Values.postgres.user | quote }}
             - name: ATTRACTOR_URL
-              value: {{ required "A valid .Values.api.attractorUrl entry required" .Values.api.attractorUrl | quote }}
+              value: {{ printf "%s://%s/%s" .Values.naviBackHostScheme (required "A valid .Values.naviBackHost entry required" .Values.naviBackHost) .Values.api.attractorUri | quote }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
