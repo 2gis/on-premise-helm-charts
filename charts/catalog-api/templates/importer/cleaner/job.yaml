@@ -35,7 +35,7 @@ spec:
           {{- end }}
       {{- if .Values.customCAs.bundle }}
       volumes:
-        {{- include "catalog.custom.ca.volumes" . | nindent 8 }}
+        {{- include "catalog.custom.ca.jobs.volumes" . | nindent 8 }}
       {{- end }}
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:

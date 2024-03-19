@@ -55,7 +55,7 @@ spec:
             claimName: {{ include "catalog.importer.name" . }}
       {{- end }}
       {{- if .Values.customCAs.bundle }}
-        {{- include "catalog.custom.ca.volumes" . | nindent 8 }}
+        {{- include "catalog.custom.ca.jobs.volumes" . | nindent 8 }}
       {{- end }}
       {{- end }}
       {{- with .Values.importer.nodeSelector }}
