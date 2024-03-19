@@ -37,6 +37,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
 | `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
 
+### Flags for enabling/disabling certain features.
+
+| Name                       | Description           | Value   |
+| -------------------------- | --------------------- | ------- |
+| `featureFlags.enableAudit` | Enable audit logging. | `false` |
+
 ### Admin service settings
 
 | Name                                          | Description                                                                                                                                                                                              | Value           |
@@ -184,6 +190,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `postgres.rw.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`   |
 | `postgres.rw.username` | PostgreSQL username. **Required**                                                   | `""`   |
 | `postgres.rw.password` | PostgreSQL password. **Required**                                                   | `""`   |
+
+### Kafka settings
+
+| Name                                  | Description                                                                                                                                                | Value  |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `kafka.audit`                         | **Settings for sending audit messages.**                                                                                                                   |        |
+| `kafka.audit.brokers`                 | List of Kafka brokers separated by comma (e.g. 'localhost:9092,localhost:9093').                                                                           | `""`   |
+| `kafka.audit.username`                | Username for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`   |
+| `kafka.audit.password`                | Password for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`   |
+| `kafka.audit.topic`                   | Topic to produce audit messages.                                                                                                                           | `""`   |
+| `kafka.audit.produce.retryCount`      | Number of retries to produce a message.                                                                                                                    | `5`    |
+| `kafka.audit.produce.idempotentWrite` | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true` |
 
 ### LDAP connection settings
 
