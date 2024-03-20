@@ -22,7 +22,7 @@ imagePullPolicy: IfNotPresent
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.76.0
+    tag: 1.78.0
 
 # @section Flags for enabling/disabling certain features.
 

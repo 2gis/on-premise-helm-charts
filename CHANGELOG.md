@@ -1,5 +1,14 @@
 # 2GIS On-Premise Changelog
 
+## [1.20.2] (2024-03-20)
+#### Images
+```
+keys
+	- keys-backend:1.76.0
+	+ keys-backend:1.78.0
+
+```
+
 ## [1.20.0] (2024-03-18)
 #### [Breaking-Changes](Breaking-Changes.md#1200)
 #### Images
