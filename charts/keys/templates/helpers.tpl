@@ -334,12 +334,22 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
   readOnly: true
 {{- end -}}
 
-{{- define "keys.custom.ca.volumes" -}}
+{{- define "keys.custom.ca.jobs.volumes" -}}
 - name: custom-ca
   configMap:
-    name: {{ include "keys.configmap.name" . }}
+    name: {{ include "keys.configmap.jobs.name" . }}
 {{- end -}}
 
-{{- define "keys.configmap.name" -}}
-{{ include "keys.name" . }}-configmap
+{{- define "keys.custom.ca.deploys.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "keys.configmap.deploys.name" . }}
+{{- end -}}
+
+{{- define "keys.configmap.jobs.name" -}}
+{{ include "keys.name" . }}-configmap-jobs
+{{- end -}}
+
+{{- define "keys.configmap.deploys.name" -}}
+{{ include "keys.name" . }}-configmap-deploys
 {{- end -}}
