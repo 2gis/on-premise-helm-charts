@@ -289,7 +289,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.kafka.audit" -}}
 - name: KEYS_KAFKA_AUDIT_BROKERS
-  value: "{{ .Values.kafka.audit.brokers }}"
+  value: "{{ .Values.kafka.audit.bootstrapServers }}"
 - name: KEYS_KAFKA_AUDIT_USERNAME
   value: "{{ .Values.kafka.audit.username }}"
 - name: KEYS_KAFKA_AUDIT_PASSWORD

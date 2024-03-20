@@ -196,7 +196,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | Name                                  | Description                                                                                                                                                | Value  |
 | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `kafka.audit`                         | **Settings for sending audit messages.**                                                                                                                   |        |
-| `kafka.audit.brokers`                 | List of Kafka brokers separated by comma (e.g. 'localhost:9092,localhost:9093').                                                                           | `""`   |
+| `kafka.audit.bootstrapServers`        | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`   |
 | `kafka.audit.username`                | Username for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`   |
 | `kafka.audit.password`                | Password for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`   |
 | `kafka.audit.topic`                   | Topic to produce audit messages.                                                                                                                           | `""`   |

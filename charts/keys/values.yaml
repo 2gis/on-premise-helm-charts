@@ -423,7 +423,7 @@ kafka:
 
   # @extra kafka.audit **Settings for sending audit messages.**
 
-  # @param kafka.audit.brokers List of Kafka brokers separated by comma (e.g. 'localhost:9092,localhost:9093').
+  # @param kafka.audit.bootstrapServers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
   # @param kafka.audit.username Username for authorization (SASL/PLAINTEXT SHA-512).
   # @param kafka.audit.password Password for authorization (SASL/PLAINTEXT SHA-512).
   # @param kafka.audit.topic Topic to produce audit messages.
@@ -431,7 +431,7 @@ kafka:
   # @param kafka.audit.produce.idempotentWrite Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence).
 
   audit:
-    brokers: ''
+    bootstrapServers: ''
     username: ''
     password: ''
     topic: ''
