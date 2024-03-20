@@ -22,7 +22,14 @@ imagePullPolicy: IfNotPresent
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.76.0
+    tag: 1.78.0
+
+# @section Flags for enabling/disabling certain features.
+
+featureFlags:
+  # @param featureFlags.enableAudit Enable audit logging.
+
+  enableAudit: false
 
 # @section Admin service settings
 
@@ -409,6 +416,28 @@ postgres:
     username: ''
     password: ''
 
+
+# @section Kafka settings
+
+kafka:
+
+  # @extra kafka.audit **Settings for sending audit messages.**
+
+  # @param kafka.audit.bootstrapServers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
+  # @param kafka.audit.username Username for authorization (SASL/PLAINTEXT SHA-512).
+  # @param kafka.audit.password Password for authorization (SASL/PLAINTEXT SHA-512).
+  # @param kafka.audit.topic Topic to produce audit messages.
+  # @param kafka.audit.produce.retryCount Number of retries to produce a message.
+  # @param kafka.audit.produce.idempotentWrite Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence).
+
+  audit:
+    bootstrapServers: ''
+    username: ''
+    password: ''
+    topic: ''
+    produce:
+      retryCount: 5
+      idempotentWrite: true
 
 # @section LDAP connection settings
 
