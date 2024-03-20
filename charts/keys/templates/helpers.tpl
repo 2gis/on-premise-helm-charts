@@ -96,6 +96,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "keys.env.featureFlags" -}}
+- name: KEYS_FEATURE_FLAGS_AUDIT
+  value: "{{ .Values.featureFlags.enableAudit }}"
+{{- end }}
+
 {{- define "keys.env.api" -}}
 - name: KEYS_LOG_LEVEL
   value: "{{ .Values.api.logLevel }}"
@@ -280,6 +285,21 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       key: dgctlStorageSecretKey
 - name: KEYS_MANIFEST_PATH
   value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
+{{- end }}
+
+{{- define "keys.env.kafka.audit" -}}
+- name: KEYS_KAFKA_AUDIT_BROKERS
+  value: "{{ .Values.kafka.audit.bootstrapServers }}"
+- name: KEYS_KAFKA_AUDIT_USERNAME
+  value: "{{ .Values.kafka.audit.username }}"
+- name: KEYS_KAFKA_AUDIT_PASSWORD
+  value: "{{ .Values.kafka.audit.password }}"
+- name: KEYS_KAFKA_AUDIT_TOPIC
+  value: "{{ .Values.kafka.audit.topic }}"
+- name: KEYS_KAFKA_AUDIT_PRODUCE_RETRY_COUNT
+  value: "{{ .Values.kafka.audit.produce.retryCount }}"
+- name: KEYS_KAFKA_AUDIT_PRODUCE_IDEMPOTENT_WRITE
+  value: "{{ .Values.kafka.audit.produce.idempotentWrite }}"
 {{- end }}
 
 {{/*
