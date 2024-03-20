@@ -5,7 +5,7 @@ metadata:
   {{- if or .Values.api.annotations .Values.customCAs.bundle }}
   annotations:
     {{- if .Values.customCAs.bundle }}
-    checksum/config: {{ include (print $.Template.BasePath "/conigmap.yaml") . | sha256sum }}
+    checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
     {{- end }}
     {{- with .Values.api.annotations }}
     {{- toYaml . | nindent 4 }}
