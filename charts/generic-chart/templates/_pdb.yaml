@@ -1,0 +1,24 @@
+{{- define "generic-chart.pdb.tpl" -}}
+{{ $ctx := . }}
+{{- with .Values.pdb }}
+{{- if .enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "generic-chart.fullname" $ctx }}
+  labels:
+    {{- include "generic-chart.labels" $ctx | nindent 4 }}
+spec:
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
+  {{- end }}
+  {{- if .maxUnavailable }}
+  maxUnavailable: {{ .maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "generic-chart.selectorLabels" $ctx | nindent 6 }}
+{{- end }}
+{{- end }}
+{{- end }} {{- /* define */}}

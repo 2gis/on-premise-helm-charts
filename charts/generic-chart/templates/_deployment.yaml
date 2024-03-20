@@ -1,0 +1,67 @@
+{{- define "generic-chart.deployment.tpl" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "generic-chart.fullname" . }}
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+  {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}{{- /* labels */}}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}{{- /* annotations */}}
+spec:
+  {{- if not (.Values.hpa).enabled }}
+  {{- with .Values.replicaCount }}
+  replicas: {{ . }}
+  {{- end }}{{- /* replicaCount */}}
+  {{- end }}{{- /* hpa.enabled */}}
+  {{- with .Values.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ . }}
+  {{- end }}{{- /* revisionHistoryLimit */}}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- include "tplvalues.render" ( dict "value" .Values.strategy "context" . ) | nindent 4 }}
+  {{- end }}{{- /* strategy */}}
+  selector:
+    matchLabels:
+      {{- include "generic-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* podAnnotations */}}
+      labels:
+        {{- include "generic-chart.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* imagePullSecrets */}}
+      serviceAccountName: {{ include "generic-chart.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* podSecurityContext */}}
+      {{- with .Values.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}{{- /* priorityClassName */}}
+      {{- with .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ . | default 60 }}
+      {{- end }}{{- /* terminationGracePeriodSeconds */}}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* nodeSelector */}}
+      {{- if .Values.affinity }}
+      affinity:
+        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" . ) | nindent 8 }}
+      {{- end }}{{- /* affinity */}}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* tolerations */}}
+{{- end }} {{- /* define */}}

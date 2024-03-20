@@ -10,34 +10,36 @@
 
 ### Common settings
 
-| Name                            | Description                                                                                                                                    | Value     |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| `appName`                       | Name of the service.                                                                                                                           | `pro-api` |
-| `replicaCount`                  | A replica count for the pod.                                                                                                                   | `2`       |
-| `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                 | `[]`      |
-| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                        | `""`      |
-| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                    | `""`      |
-| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                            | `{}`      |
-| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                    | `{}`      |
-| `priorityClassName`             | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                                   | `""`      |
-| `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).                              | `60`      |
-| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                              | `[]`      |
-| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                  | `{}`      |
-| `podLabels`                     | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                            | `{}`      |
-| `annotations`                   | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`      |
-| `labels`                        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`      |
-| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`       |
+| Name                            | Description                                                                                                                                      | Value     |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
+| `appName`                       | Name of the service.                                                                                                                             | `pro-api` |
+| `replicaCount`                  | A replica count for the pod.                                                                                                                     | `2`       |
+| `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                   | `[]`      |
+| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                          | `""`      |
+| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                      | `""`      |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                              | `{}`      |
+| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                      | `{}`      |
+| `priorityClassName`             | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                                     | `""`      |
+| `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds | `300`     |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                | `[]`      |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                    | `{}`      |
+| `podLabels`                     | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                              | `{}`      |
+| `annotations`                   | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                        | `{}`      |
+| `labels`                        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                  | `{}`      |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).   | `3`       |
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                                                                           | Value   |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                                        | `""`    |
-| `dgctlStorage.secure`    | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                                           | `false` |
-| `dgctlStorage.bucket`    | S3 bucket name. **Required**                                                                                                                                                                                                                                          | `""`    |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`    |
+| Name                                 | Description                                                                                                                                                                                                                                                           | Value   |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`                  | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                                        | `""`    |
+| `dgctlStorage.secure`                | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                                           | `false` |
+| `dgctlStorage.bucket`                | S3 bucket name. **Required**                                                                                                                                                                                                                                          | `""`    |
+| `dgctlStorage.accessKey`             | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
+| `dgctlStorage.secretKey`             | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
+| `dgctlStorage.manifest`              | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`    |
+| `dgctlStorage.region`                | AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property                                                                                                                                                               | `""`    |
+| `dgctlStorage.disablePayloadSigning` | Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage                                                                                                                                                                         | `false` |
 
 ### Strategy settings
 
@@ -72,7 +74,7 @@
 | Name               | Description | Value                     |
 | ------------------ | ----------- | ------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/pro-api` |
-| `image.tag`        | Tag         | `1.1.67`                  |
+| `image.tag`        | Tag         | `1.6.0`                   |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
 ### 2GIS PRO Storage configuration
@@ -83,6 +85,7 @@
 | `s3.userAssetsDataBucket` | S3 bucket with user-created assets, aggregations, and filters. **Required** | `""`  |
 | `s3.layerDataBucket`      | S3 bucket with prepared layer data. **Required**                            | `""`  |
 | `s3.snapshotBucket`       | S3 bucket for storing snapshots of inclemental data updates. **Required**   | `""`  |
+| `s3.resourcesBucket`      | S3 bucket for storing static resources. **Required**                        | `""`  |
 
 ### 2GIS PRO API configuration
 
@@ -205,7 +208,7 @@
 | Name                                       | Description                                                                                                                                              | Value                          |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.1.67`                       |
+| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.6.0`                        |
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
@@ -215,6 +218,7 @@
 | `assetImporter.startOnDeploy`              | Indicates that asset import should start when service installed or updated                                                                               | `true`                         |
 | `assetImporter.imageProxyUrl`              | URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                                 | `""`                           |
 | `assetImporter.externalLinksProxyUrl`      | URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                 | `""`                           |
+| `assetImporter.externalLinksAllowedHosts`  | Comma separated hosts, i.e. 'someserver.com,someserver2.com' )                                                                                           | `""`                           |
 
 ### Limits
 

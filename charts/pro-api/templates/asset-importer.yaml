@@ -48,6 +48,10 @@ spec:
                   value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
                 - name: S3Settings__Secure
                   value: "{{ .Values.dgctlStorage.secure }}"
+                - name: S3Settings__Region
+                  value: {{ .Values.dgctlStorage.region }}
+                - name: S3Settings__DisablePayloadSigning
+                  value: "{{ .Values.dgctlStorage.disablePayloadSigning }}"
                 - name: S3Settings__DgctlStorageBucket
                   value: {{ required "A valid .Values.dgctlStorage.bucket entry required" $.Values.dgctlStorage.bucket }}
                 - name: S3Settings__AssetDataBucket

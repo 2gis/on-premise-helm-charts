@@ -1,4 +1,4 @@
-# @section Docker Registry settings
+﻿# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -14,7 +14,7 @@ dgctlDockerRegistry: ''
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
-# @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).
+# @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -30,7 +30,7 @@ fullnameOverride: ''
 nodeSelector: {}
 affinity: {}
 priorityClassName: ''
-terminationGracePeriodSeconds: 60
+terminationGracePeriodSeconds: 300
 tolerations: []
 podAnnotations: {}
 podLabels: {}
@@ -46,6 +46,8 @@ revisionHistoryLimit: 3
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
 # @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
+# @param dgctlStorage.region AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property
+# @param dgctlStorage.disablePayloadSigning Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage
 
 dgctlStorage:
   host: ''
@@ -54,6 +56,8 @@ dgctlStorage:
   accessKey: ''
   secretKey: ''
   manifest: ''
+  region: ''
+  disablePayloadSigning: false
 
 # @section Strategy settings
 
@@ -115,14 +119,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.1.67
+  tag: 1.6.0
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.1.67
+  tag: 1.6.0
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -131,12 +135,14 @@ permissionsApiImage:
 # @param s3.userAssetsDataBucket S3 bucket with user-created assets, aggregations, and filters. **Required**
 # @param s3.layerDataBucket S3 bucket with prepared layer data. **Required**
 # @param s3.snapshotBucket S3 bucket for storing snapshots of inclemental data updates. **Required**
+# @param s3.resourcesBucket S3 bucket for storing static resources. **Required**
 
 s3:
   assetsDataBucket: ''
   userAssetsDataBucket: ''
   layerDataBucket: ''
   snapshotBucket: ''
+  resourcesBucket: ''
 
 # @section 2GIS PRO API configuration
 
@@ -384,13 +390,14 @@ permissionsApi:
 # @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
 # @param assetImporter.imageProxyUrl URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
 # @param assetImporter.externalLinksProxyUrl URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
+# @param assetImporter.externalLinksAllowedHosts Comma separated hosts, i.e. 'someserver.com,someserver2.com' )
 # @skip assetImporter.files
 # @skip assetImporter.esMetricsEnabled
 # @skip assetImporter.suspended
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.67
+  tag: 1.6.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -409,6 +416,7 @@ assetImporter:
   files: ''
   imageProxyUrl: ''
   externalLinksProxyUrl: ''
+  externalLinksAllowedHosts: ''
   esMetricsEnabled: false
 
 # @skip userAssetImporter
@@ -419,7 +427,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.67
+  tag: 1.6.0
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

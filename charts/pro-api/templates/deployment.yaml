@@ -118,6 +118,8 @@ spec:
               value: {{ include "pro-api.user-asset-importer-name" . }}
             - name: Import__ExternalLinksProxyUrl
               value: "{{ .Values.assetImporter.externalLinksProxyUrl }}"
+            - name: Import__ExternalLinksAllowedHosts
+              value: "{{ .Values.assetImporter.externalLinksAllowedHosts }}"
             - name: TEMP_PATH
               value: "{{ .Values.api.tempPath }}"
             - name: CATALOG_API_2GIS_URL
@@ -170,6 +172,10 @@ spec:
               value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
             - name: S3Settings__Secure
               value: "{{ .Values.dgctlStorage.secure }}"
+            - name: S3Settings__Region
+              value: {{ .Values.dgctlStorage.region }}
+            - name: S3Settings__DisablePayloadSigning
+              value: "{{ .Values.dgctlStorage.disablePayloadSigning }}"
             - name: S3Settings__AssetDataBucket
               value: {{ required "A valid .Values.s3.assetsDataBucket entry required" $.Values.s3.assetsDataBucket }}
             - name: S3Settings__UserAssetDataBucket
@@ -178,6 +184,8 @@ spec:
               value: {{ required "A valid .Values.s3.layerDataBucket entry required" $.Values.s3.layerDataBucket }}
             - name: S3Settings__SnapshotBucket
               value: {{ required "A valid .Values.s3.snapshotBucket entry required" $.Values.s3.snapshotBucket }}
+            - name: S3Settings__ResourcesBucket
+              value: {{ required "A valid .Values.s3.resourcesBucket entry required" $.Values.s3.resourcesBucket }}
             - name: S3Settings__AccessKey
               valueFrom:
                 secretKeyRef:

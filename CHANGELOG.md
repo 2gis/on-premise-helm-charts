@@ -1,5 +1,98 @@
 # 2GIS On-Premise Changelog
 
+## [1.20.2] (2024-03-20)
+#### Images
+```
+keys
+	- keys-backend:1.76.0
+	+ keys-backend:1.78.0
+
+```
+
+## [1.20.0] (2024-03-18)
+#### [Breaking-Changes](Breaking-Changes.md#1200)
+#### Images
+```
+citylens
+	- citylens-api:1.4.1
+	+ citylens-api:1.6.0
+	- citylens-database:1.2.0
+	+ citylens-database:1.6.0
+	- citylens-web:1.4.1
+	+ citylens-web:1.6.0
+pro-api
+	- pro-api:1.5.1
+	+ pro-api:1.6.0
+	- pro-importer:1.5.1
+	+ pro-importer:1.6.0
+	- pro-importer:1.5.1
+	+ pro-importer:1.6.0
+	- pro-permissions-api:1.5.1
+	+ pro-permissions-api:1.6.0
+pro-ui
+	+ pro-importer:1.6.0
+	- pro-ui:1.9.0
+	+ pro-ui:2.1.1
+search-api
+	- search-api:7.70.0
+	+ search-api:7.74.0
+
+```
+
+## [1.19.0] (2024-02-27)
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.42.0
+	+ mapgl:1.45.1
+navi-back
+	- navi-back:7.15.1.4
+	+ navi-back:7.15.2.4
+navi-restrictions
+	- navi-restrictions-api:1.0.0
+	+ navi-restrictions-api:1.0.1
+platform
+	- platform-ui:0.5.5
+	+ platform-ui:0.8.1
+pro-api
+	- pro-api:1.1.79
+	+ pro-api:1.5.0
+	- pro-importer:1.1.79
+	+ pro-importer:1.5.0
+	+ pro-importer:1.5.0
+	- pro-permissions-api:1.1.79
+	+ pro-permissions-api:1.5.0
+pro-ui
+	- pro-ui:1.7.5
+	+ pro-ui:1.9.0
+
+```
+
+## [1.18.0] (2024-01-24)
+#### Images
+```
+citylens
+	- citylens-api:1.3.2
+	+ citylens-api:1.4.1
+	- citylens-web:1.3.2
+	+ citylens-web:1.4.1
+keys
+	- keys-backend:1.71.0
+	+ keys-backend:1.76.0
+license
+	- license:2.2.0
+	+ license:2.2.1
+pro-api
+	+ pro-importer:1.1.79
+pro-ui
+	- pro-ui:1.4.0
+	+ pro-ui:1.7.5
+twins-api
+	- twins-api:1.6.0
+	+ twins-api:1.7.3
+
+```
+
 ## [1.17.0] (2023-12-29)
 #### [Breaking-Changes](Breaking-Changes.md#1700)
 #### Images
