@@ -31,13 +31,6 @@ featureFlags:
 
   enableAudit: false
 
-# @section Flags for enabling/disabling certain features.
-
-featureFlags:
-  # @param featureFlags.enableAudit Enable audit logging.
-
-  enableAudit: false
-
 # @section Admin service settings
 
 admin:
