@@ -31,7 +31,7 @@ spec:
           image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag | default .Chart.AppVersion }}'
           imagePullPolicy: {{ .Values.importer.image.pullPolicy }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.importer.resources | nindent 12 }}
           command:
             - /bin/sh
             - -ec
