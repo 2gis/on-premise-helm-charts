@@ -28,8 +28,8 @@ spec:
       {{- end }}
       {{- if .Values.importer.postgres.tls.enabled }}
         - name: copy-certs
-          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.importer.image.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           command:
