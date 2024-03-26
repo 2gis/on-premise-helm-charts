@@ -131,7 +131,7 @@ castle:
   image:
     repository: 2gis-on-premise/navi-castle
     pullPolicy: IfNotPresent
-    tag: 1.7.0
+    tag: 1.9.2
   castleDataPath: /opt/castle/data/
   restrictions:
     host: http://restrictions-api.host

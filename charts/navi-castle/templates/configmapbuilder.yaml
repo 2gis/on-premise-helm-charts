@@ -45,10 +45,10 @@ data:
     manifest:
     {
         pattern: '{{ default "/manifests/" .Values.dgctlStorage.manifest }}',
-        service: ['navi','navi-restrictions'],
-        mapping: {
-            'navi': 'import_package',
-            'navi-restrictions': 'import_restriction'
+        service: ['navi'],
+        type_mapping: {
+            '': 'import_package',
+            'restrictions': 'import_restriction'
         }
     }
     # --------------------------------------------
