@@ -8,6 +8,7 @@
 - `db` renamed to `postgres`
 - `cron.max_attributes_fetcher_rps` renamed to `cron.maxAttributesFetcherRps`
 - `api.attractor_url`, `cron.edges_url_template` and `cron.edge_attributes_url_template` are deprecated. Set `naviBackHost` and `naviCastleHost` with `api.attractorUri`, `cron.edgeAttributesUriTemplate` and `cron.maxAttributesFetcherRps` instead
+- New values required `naviBackHost`, `naviCastleHost`
 
 ## [1.20.0]
 
