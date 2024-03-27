@@ -190,6 +190,11 @@ onprem
   value: "{{ .Values.importer.retry.execute.delay }}"
 {{- end }}
 
+{{- define "catalog.env.custom.ca.path" -}}
+- name: SSL_CERT_DIR
+  value: {{ include "catalog.custom.ca.mountPath" . }}
+{{- end }}
+
 {{/*
 Return the target Kubernetes version
 */}}
@@ -218,4 +223,21 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- else -}}
 {{- print "autoscaling/v2" -}}
 {{- end -}}
+{{- end -}}
+
+{{- define "catalog.custom.ca.mountPath" -}}
+{{ $.Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}
+
+{{- define "catalog.custom.ca.volumeMounts" -}}
+- name: custom-ca
+  mountPath: {{ include "catalog.custom.ca.mountPath" . }}/custom-ca.crt
+  subPath: custom-ca.crt
+  readOnly: true
+{{- end -}}
+
+{{- define "catalog.custom.ca.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "catalog.name" . }}-configmap
 {{- end -}}
