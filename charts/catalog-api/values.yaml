@@ -166,6 +166,11 @@ api:
   # @param api.postgres.poolSize.preloaders.region PostgreSQL connection pool size for preloader regions
   # @param api.postgres.poolSize.preloaders.rubric PostgreSQL connection pool size for preloader rubrics
   # @param api.postgres.poolSize.preloaders.additionalAttribute PostgreSQL connection pool size for preloader additional attributes
+  # @param api.postgres.tls.enabled If tls connection to postgresql is enabled.
+  # @param api.postgres.tls.rootCert Root certificate file.
+  # @param api.postgres.tls.cert Certificate of postgresql server.
+  # @param api.postgres.tls.key Key of postgresql server.
+  # @param api.postgres.tls.mode Level of protection.
 
   postgres:
     host: ''
@@ -180,6 +185,12 @@ api:
         region: 2
         rubric: 3
         additionalAttribute: 3
+    tls:
+      enabled: false
+      rootCert: ''
+      cert: ''
+      key: ''
+      mode: ''
 
   # @section Preloaders settings
 
@@ -274,6 +285,11 @@ importer:
   # @param importer.postgres.password PostgreSQL password. **Required**
   # @param importer.postgres.schemaSwitchEnabled Automatic switch PostgreSQL schema on releases
   # @param importer.postgres.schemaExtensions Schema for PostgreSQL extensions
+  # @param importer.postgres.tls.enabled If tls connection to postgresql is enabled.
+  # @param importer.postgres.tls.rootCert Root certificate file.
+  # @param importer.postgres.tls.cert Certificate of postgresql server.
+  # @param importer.postgres.tls.key Key of postgresql server.
+  # @param importer.postgres.tls.mode Level of protection.
 
   postgres:
     host: ''
@@ -283,6 +299,12 @@ importer:
     password: ''
     schemaSwitchEnabled: true
     schemaExtensions: extensions
+    tls:
+      enabled: false
+      rootCert: ''
+      cert: ''
+      key: ''
+      mode: ''
 
   # @section importer.persistentVolume **Persistent Volume settings**
 
