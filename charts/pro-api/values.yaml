@@ -486,8 +486,8 @@ ingress:
   hosts:
   - host: pro-api.example.com
     paths:
-      - path: /
-        pathType: Prefix
+    - path: /
+      pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-api.example.com
@@ -506,8 +506,8 @@ permissionsApiIngress:
   hosts:
   - host: pro-permissions-api.example.com
     paths:
-      - path: /
-        pathType: Prefix
+    - path: /
+      pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-permissions-api.example.com
