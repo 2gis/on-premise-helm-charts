@@ -512,4 +512,3 @@ permissionsApiIngress:
   # - hosts:
   #   - pro-permissions-api.example.com
   #   secretName: secret.tls
-
