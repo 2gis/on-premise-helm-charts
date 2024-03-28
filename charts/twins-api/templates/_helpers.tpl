@@ -79,6 +79,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 - name: TWINS_DB_RO_CONNECTION_TIMEOUT
   value: "{{ .Values.postgres.ro.timeout }}"
+- name: TWINS_DB_RO_CONNECTION_RETRY
+  value: "{{ .Values.postgres.ro.retry }}"
 - name: TWINS_DB_RO_USERNAME
   value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username }}"
 - name: TWINS_DB_RW_HOST
@@ -94,6 +96,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 - name: TWINS_DB_RW_CONNECTION_TIMEOUT
   value: "{{ .Values.postgres.rw.timeout }}"
+- name: TWINS_DB_RW_CONNECTION_RETRY
+  value: "{{ .Values.postgres.rw.retry }}"
 - name: TWINS_DB_RW_NAME
   value: "{{ required "A valid .Values.postgres.rw.name required" .Values.postgres.rw.name }}"
 - name: TWINS_DB_RW_USERNAME

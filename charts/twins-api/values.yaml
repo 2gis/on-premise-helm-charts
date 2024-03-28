@@ -181,6 +181,7 @@ postgres:
   # @param postgres.ro.host PostgreSQL hostname or IP. **Required**
   # @param postgres.ro.port PostgreSQL port.
   # @param postgres.ro.timeout PostgreSQL client connection timeout.
+  # @param postgres.ro.retry PostgreSQL client connection retry.
   # @param postgres.ro.name PostgreSQL database name. **Required**
   # @param postgres.ro.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
   # @param postgres.ro.username PostgreSQL username. **Required**
@@ -190,6 +191,7 @@ postgres:
     host: ''
     port: 5432
     timeout: 3s
+    retry: 10
     name: ''
     schema: ''
     username: ''
@@ -200,6 +202,7 @@ postgres:
   # @param postgres.rw.host PostgreSQL hostname or IP. **Required**
   # @param postgres.rw.port PostgreSQL port.
   # @param postgres.rw.timeout PostgreSQL client connection timeout.
+  # @param postgres.rw.retry PostgreSQL client connection retry.
   # @param postgres.rw.name PostgreSQL database name. **Required**
   # @param postgres.rw.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
   # @param postgres.rw.username PostgreSQL username. **Required**
@@ -209,6 +212,7 @@ postgres:
     host: ''
     port: 5432
     timeout: 3s
+    retry: 10
     name: ''
     schema: ''
     username: ''
