@@ -71,6 +71,10 @@
   value: "/tmp"
 - name: SERVER_PORT
   value: "{{ .Values.ui.containerPort }}"
+- name: MAPBOX_STYLE_TOKEN
+  value: "{{ .Values.ui.mapbox.styleToken }}"
+- name: FEATURE_EXTERNAL_STYLE_MANAGER_IS_ENABLED
+  value: "{{ .Values.ui.externalStyleManager.enabled }}"
 - name: PUBLIC_S3_HOST
   value: "{{ .Values.ui.publicS3Url }}"
 - name: PUBLIC_S3_URL

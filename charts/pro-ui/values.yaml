@@ -139,6 +139,21 @@ ui:
     stylePreview: ''
     styleModelsUrl: ''
 
+  # @section Mapbox style config settings
+  #
+  # Fill that parameters if your app has connection to Global Internet.
+  # @param ui.mapbox.styleToken Optional [Mapbox Token](https://docs.mapbox.com/api/accounts/tokens/)
+  mapbox:
+    styleToken: ''
+
+  # @section External style manager configuration.
+  # External style manager allows managing WMS- and WMTS-maps from external sources.
+  # Access to public (internet) or private (intranet) WM(T)S services is required for this feature to work.
+  #
+  # @param ui.externalStyleManager.enabled - Set "true" to enable External Style Manager features
+  externalStyleManager:
+    enabled: false
+
   # @section Map styles config settings
   #
   # @param ui.styles.s3Bucket Optional S3 bucket name for style files. Bucket must be public.
