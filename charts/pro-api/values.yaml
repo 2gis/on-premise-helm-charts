@@ -484,10 +484,10 @@ ingress:
   enabled: false
   className: nginx
   hosts:
-    - host: pro-api.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  - host: pro-api.example.com
+    paths:
+      - path: /
+        pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-api.example.com
@@ -504,10 +504,10 @@ permissionsApiIngress:
   enabled: false
   className: nginx
   hosts:
-    - host: pro-permissions-api.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  - host: pro-permissions-api.example.com
+    paths:
+      - path: /
+        pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-permissions-api.example.com
