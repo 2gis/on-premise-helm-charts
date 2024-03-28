@@ -57,8 +57,6 @@ spec:
             - name: MAPGL_FLOORSSERVER_HOST
               value: "{{ .Values.env.MAPGL_FLOORSSERVER }}"
             - name: MAPGL_KEYSERVER
-              value: "https://{{ .Values.env.MAPGL_KEYSERVER }}/public/v1/keys/{keyID}/services/mapgl-js-api"
-            - name: MAPGL_KEYSERVER_HOST
               value: "{{ .Values.env.MAPGL_KEYSERVER }}"
             - name: MAPGL_RTLPLUGIN
               value: "{{ .Values.env.MAPGL_RTLPLUGIN }}"
