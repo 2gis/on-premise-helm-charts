@@ -2,9 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "keys.admin.name" . }}
-  {{- with .Values.admin.annotations }}
+  {{- if or .Values.admin.annotations .Values.customCAs.bundle }}
   annotations:
+    {{- if .Values.customCAs.bundle }}
+    checksum/config: {{ include (print .Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
+    {{- end }}
+    {{- with .Values.admin.annotations }}
     {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- end }}
   labels:
     {{- include "keys.admin.labels" . | nindent 4 }}
@@ -45,6 +50,17 @@ spec:
             {{- toYaml .Values.admin.resources | nindent 12 }}
           env:
             {{- include "keys.env.admin" . | nindent 12 }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "keys.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+      {{- if .Values.customCAs.bundle }}
+      volumes:
+        {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
+      {{- end }}
       {{- with .Values.admin.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

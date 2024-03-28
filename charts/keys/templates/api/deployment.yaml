@@ -2,9 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "keys.api.name" . }}
-  {{- with .Values.api.annotations }}
+  {{- if or .Values.api.annotations .Values.customCAs.bundle }}
   annotations:
+    {{- if .Values.customCAs.bundle }}
+    checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
+    {{- end }}
+    {{- with .Values.api.annotations }}
     {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- end }}
   labels:
     {{- include "keys.api.labels" . | nindent 4 }}
@@ -53,6 +58,17 @@ spec:
             {{- include "keys.env.redis" . | nindent 12 }}
             {{- include "keys.env.auth" . | nindent 12 }}
             {{- include "keys.env.kafka.audit" . | nindent 12 }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "keys.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+      {{- if .Values.customCAs.bundle }}
+      volumes:
+        {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
+      {{- end }}
       {{- with .Values.api.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
