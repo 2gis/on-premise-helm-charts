@@ -213,6 +213,8 @@ spec:
             {{ end }}
             - name: Kafka__AssetTopicsReaderGroupId
               value: {{ $.Values.kafka.assetTopicsReaderGroupId }}
+            - name: Kafka__EventsGroupId
+              value: {{ $.Values.kafka.eventsGroupId }}
             - name: Kafka__RefreshAssetsIntervalMinutes
               value: "{{ $.Values.kafka.refreshAssetsIntervalMinutes }}"
             - name: Kafka__ImportTasksTopicSettings__Name
@@ -221,6 +223,8 @@ spec:
               value: {{ $.Values.kafka.importTasksTopic.readerGroupId }}
             - name: Kafka__AssetDataTopicSettings__Name
               value: {{ $.Values.kafka.assetDataTopic.name }}
+            - name: Kafka__EventsTopicSettings__Name
+              value: {{ $.Values.kafka.eventsTopic.name }}
             - name: Auth__Type
               value: "{{ .Values.auth.type }}"
             - name: Auth__Url
