@@ -162,6 +162,12 @@ onprem
       key: importerDbPassword
 - name: IMPORTER_S3_ENDPOINT
   value: "{{ .Values.dgctlStorage.host }}"
+- name: IMPORTER_S3_REGION
+  value: "{{ .Values.dgctlStorage.region }}"
+- name: IMPORTER_S3_SECURE
+  value: "{{ .Values.dgctlStorage.secure }}"
+- name: IMPORTER_S3_VERIFY_SSL
+  value: "{{ .Values.dgctlStorage.verifySsl }}"
 - name: IMPORTER_S3_BUCKET
   value: "{{ .Values.dgctlStorage.bucket }}"
 - name: IMPORTER_S3_ACCESS_KEY
@@ -218,4 +224,40 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- else -}}
 {{- print "autoscaling/v2" -}}
 {{- end -}}
+{{- end -}}
+
+{{- define "catalog.env.custom.ca.path" -}}
+- name: SSL_CERT_DIR
+  value: {{ include "catalog.custom.ca.mountPath" . }}
+{{- end }}
+
+{{- define "catalog.custom.ca.mountPath" -}}
+{{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}
+
+{{- define "catalog.custom.ca.volumeMounts" -}}
+- name: custom-ca
+  mountPath: {{ include "catalog.custom.ca.mountPath" . }}/custom-ca.crt
+  subPath: custom-ca.crt
+  readOnly: true
+{{- end -}}
+
+{{- define "catalog.custom.ca.jobs.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "catalog.configmap.jobs.name" . }}
+{{- end -}}
+
+{{- define "catalog.custom.ca.deploys.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "catalog.configmap.deploys.name" . }}
+{{- end -}}
+
+{{- define "catalog.configmap.jobs.name" -}}
+{{ include "catalog.name" . }}-configmap-jobs
+{{- end -}}
+
+{{- define "catalog.configmap.deploys.name" -}}
+{{ include "catalog.name" . }}-configmap-deploys
 {{- end -}}
