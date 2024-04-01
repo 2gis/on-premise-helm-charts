@@ -97,7 +97,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.6.0
+    tag: 1.7.0
 
   replicas: 4
 
@@ -224,7 +224,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.6.0
+    tag: 1.7.0
 
   replicas: 1
 
@@ -561,7 +561,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.6.0
+    tag: 1.7.0
 
   resources:
     requests:
@@ -580,10 +580,10 @@ migrations:
 # @param kafka.password A Kafka password for connection. **Required**
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
 # @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
-# @param kafka.topics.pro List of topics for Reporter pro worker. **Required**
-# @param kafka.topics.uploader List of topics for Uploader worker. **Required**
-# @param kafka.topics.logs List of topics for API logs. **Required**
-# @param kafka.topics.framesLifecycle Topic for frames lifecycle events logs. **Required**
+# @param kafka.topics.pro Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**
+# @param kafka.topics.uploader Topic for Uploader worker. **Required**
+# @param kafka.topics.logs Topic for citylens mobile app logs, uploaded via citylens-api. **Required**
+# @param kafka.topics.framesLifecycle Topic for frames lifecycle events. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
 # @param kafka.predictors[0].name Name of predictor **Required**
 # @param kafka.predictors[0].topic Topic used by predictor **Required**
