@@ -57,7 +57,7 @@ pro-api
 	pro-importer:1.11.2
 	pro-permissions-api:1.11.2
 pro-ui
-	pro-importer:1.10.0
+	pro-importer:1.11.2
 	pro-ui:2.5.1
 search-api
 	search-api:7.74.0

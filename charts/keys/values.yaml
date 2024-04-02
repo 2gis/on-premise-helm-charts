@@ -19,6 +19,13 @@ dgctlDockerRegistry: ''
 imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
+# @section Flags for enabling/disabling certain features.
+
+featureFlags:
+  # @param featureFlags.enableAudit Enable audit logging.
+
+  enableAudit: false
+
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
