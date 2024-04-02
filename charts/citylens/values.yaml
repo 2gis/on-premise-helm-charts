@@ -452,7 +452,7 @@ worker:
 
 # @section Citylens Reporter Pro Tracks worker's settings (track status actualization)
 
-# @param worker.reporterProTracks.replicas A replica count for the pod.
+# @param worker.reporterProTracks.enabled Deploy worker or not.
 
 # @param worker.reporterProTracks.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.reporterProTracks.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -465,7 +465,7 @@ worker:
 
   reporterProTracks:
 
-    replicas: 1
+    enabled: true
 
     annotations: {}
     labels: {}

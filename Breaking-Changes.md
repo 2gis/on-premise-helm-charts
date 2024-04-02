@@ -10,6 +10,9 @@
 - `api.attractor_url`, `cron.edges_url_template` and `cron.edge_attributes_url_template` are deprecated. Set `naviBackHost` and `naviCastleHost` with `api.attractorUri`, `cron.edgeAttributesUriTemplate` and `cron.maxAttributesFetcherRps` instead
 - New values required `naviBackHost`, `naviCastleHost`
 
+### citylens
+- `worker.reporterProTracks.replicas` replaced with `worker.reporterProTracks.enabled`. One replica will be deployed if enabled.
+
 ## [1.20.0]
 
 ### navi-router
