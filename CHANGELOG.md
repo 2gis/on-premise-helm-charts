@@ -1,5 +1,32 @@
 # 2GIS On-Premise Changelog
 
+## [1.21.0] (2024-04-02)
+#### [Breaking-Changes](Breaking-Changes.md#1210)
+#### Images
+```
+catalog-api
+	- catalog-importer:1.1.0
+	+ catalog-importer:1.5.0
+citylens
+	- citylens-api:1.6.0
+	+ citylens-api:1.7.2
+	- citylens-database:1.6.0
+	+ citylens-database:1.7.0
+	- citylens-web:1.6.0
+	+ citylens-web:1.7.2
+keys
+	- keys-backend:1.78.0
+	+ keys-backend:1.79.0
+tiles-api
+	- tiles-api-importer:4.51.5
+	+ tiles-api-importer:4.52.9
+	- tiles-api-proxy:4.51.5
+	+ tiles-api-proxy:4.52.9
+	- tiles-api:4.51.5
+	+ tiles-api:4.52.9
+
+```
+
 ## [1.20.2] (2024-03-20)
 #### Images
 ```

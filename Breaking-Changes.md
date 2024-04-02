@@ -1,6 +1,6 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [NEXT-VERSION]
+## [1.21.0]
 
 ### navi-restrictions
 - `api.api_key` renamed to `api.key`
