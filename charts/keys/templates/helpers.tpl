@@ -271,6 +271,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.env.dgctlStorage" -}}
 - name: KEYS_S3_ENDPOINT
   value: "{{ .Values.dgctlStorage.host }}"
+- name: KEYS_S3_REGION
+  value: "{{ .Values.dgctlStorage.region }}"
+- name: KEYS_S3_SECURE
+  value: "{{ .Values.dgctlStorage.secure }}"
+- name: KEYS_S3_VERIFY_SSL
+  value: "{{ .Values.dgctlStorage.verifySsl }}"
 - name: KEYS_S3_BUCKET
   value: "{{ .Values.dgctlStorage.bucket }}"
 - name: KEYS_S3_ACCESS_KEY
@@ -330,4 +336,40 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- else -}}
 {{- print "autoscaling/v2" -}}
 {{- end -}}
+{{- end -}}
+
+{{- define "keys.env.custom.ca.path" -}}
+- name: SSL_CERT_DIR
+  value: {{ include "keys.custom.ca.mountPath" . }}
+{{- end }}
+
+{{- define "keys.custom.ca.mountPath" -}}
+{{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}
+
+{{- define "keys.custom.ca.volumeMounts" -}}
+- name: custom-ca
+  mountPath: {{ include "keys.custom.ca.mountPath" . }}/custom-ca.crt
+  subPath: custom-ca.crt
+  readOnly: true
+{{- end -}}
+
+{{- define "keys.custom.ca.jobs.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "keys.configmap.jobs.name" . }}
+{{- end -}}
+
+{{- define "keys.custom.ca.deploys.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "keys.configmap.deploys.name" . }}
+{{- end -}}
+
+{{- define "keys.configmap.jobs.name" -}}
+{{ include "keys.name" . }}-configmap-jobs
+{{- end -}}
+
+{{- define "keys.configmap.deploys.name" -}}
+{{ include "keys.name" . }}-configmap-deploys
 {{- end -}}

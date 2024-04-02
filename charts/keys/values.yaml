@@ -19,17 +19,17 @@ dgctlDockerRegistry: ''
 imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
-backend:
-  image:
-    repository: 2gis-on-premise/keys-backend
-    tag: 1.78.0
-
 # @section Flags for enabling/disabling certain features.
 
 featureFlags:
   # @param featureFlags.enableAudit Enable audit logging.
 
   enableAudit: false
+
+backend:
+  image:
+    repository: 2gis-on-premise/keys-backend
+    tag: 1.79.0
 
 # @section Admin service settings
 
@@ -496,6 +496,9 @@ predefined:
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
+# @param dgctlStorage.region S3 region name.
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
+# @param dgctlStorage.verifySsl Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**
 # @param dgctlStorage.bucket S3 bucket name.
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
@@ -503,6 +506,9 @@ predefined:
 
 dgctlStorage:
   host: ''
+  region: ''
+  secure: false
+  verifySsl: true
   bucket: keys
   accessKey: ''
   secretKey: ''
@@ -545,3 +551,16 @@ dgctlStorage:
 # @param redis.resources.requests.memory A memory request.
 # @param redis.resources.limits.cpu A CPU limit.
 # @param redis.resources.limits.memory A memory limit.
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container.
+
+customCAs:
+  bundle: ''
+# bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
+  certsPath: ''

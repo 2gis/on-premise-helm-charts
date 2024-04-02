@@ -4,7 +4,7 @@ description: Search engine for catalog
 
 type: application
 
-version: 1.20.2
+version: 1.21.0
 appVersion: 7.74.0
 
 maintainers:
