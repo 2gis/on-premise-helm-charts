@@ -2,6 +2,9 @@
 
 ## [NEXT-VERSION]
 
+### pro-api
+- Added new required parameters: kafka.eventsTopic.name, kafka.eventsTopic.readerGroupId   
+
 ### navi-restrictions
 - `api.api_key` renamed to `api.key`
 - `api.is_init_db` renamed to `api.isInitDb`

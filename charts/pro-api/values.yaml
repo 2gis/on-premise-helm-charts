@@ -271,8 +271,8 @@ redis:
 # @param kafka.importTasksTopic.name Kafka topic name.
 # @param kafka.importTasksTopic.readerGroupId Kafka consumer group for reading importing tasks.
 # @extra kafka.eventsTopic Kafka topic settings to manage events.
-# @param kafka.eventsTopic.name Kafka events topic name.
-# @param kafka.eventsTopic.readerGroupId Kafka consumer group for reading events.
+# @param kafka.eventsTopic.name Kafka events topic name. **Required**
+# @param kafka.eventsTopic.readerGroupId Kafka consumer group for reading events. **Required**
 # @extra kafka.assetDataTopic Kafka topic settings to manage asset data updates.
 # @param kafka.assetDataTopic.name Kafka topic name.
 # @skip kafka.permissionsTopic
