@@ -52,6 +52,7 @@ image:
 # @param env.MAPGL_KEYSERVER Domain name of the API Keys service.
 # @param env.MAPGL_RTLPLUGIN URL of the plugin for right-to-left languages support.
 # @param env.MAPGL_RTLPLUGINHASH SHA512 hash of the RTL plugin.
+# @skip env.MAPGL_INVALID_KEY_MESSAGE
 
 env:
   MAPGL_DEMO_KEY: empty
@@ -64,7 +65,7 @@ env:
   MAPGL_KEYSERVER: "https://keys-api.ingress.host/public/v1/keys/{keyID}/services/mapgl-js-api"
   MAPGL_RTLPLUGIN: https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js
   MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
-
+  MAPGL_INVALID_KEY_MESSAGE: Your MapGL key is invalid. Please contact support to get valid key.
 
 # @section Strategy settings
 
