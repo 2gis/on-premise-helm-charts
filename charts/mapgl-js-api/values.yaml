@@ -52,7 +52,7 @@ image:
 # @param env.MAPGL_KEYSERVER Domain name of the API Keys service.
 # @param env.MAPGL_RTLPLUGIN URL of the plugin for right-to-left languages support.
 # @param env.MAPGL_RTLPLUGINHASH SHA512 hash of the RTL plugin.
-# @skip env.MAPGL_INVALID_KEY_MESSAGE
+# @param env.MAPGL_INVALID_KEY_MESSAGE Custom error message for invalid MapGL key.
 
 env:
   MAPGL_DEMO_KEY: empty
