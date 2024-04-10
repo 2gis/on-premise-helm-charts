@@ -62,6 +62,8 @@ spec:
               value: "{{ .Values.env.MAPGL_RTLPLUGIN }}"
             - name: MAPGL_RTLPLUGINHASH
               value: "{{ .Values.env.MAPGL_RTLPLUGINHASH }}"
+            - name: MAPGL_INVALID_KEY_MESSAGE
+              value: "{{ .Values.env.MAPGL_INVALID_KEY_MESSAGE }}"
           ports:
             - name: http
               containerPort: 8080
