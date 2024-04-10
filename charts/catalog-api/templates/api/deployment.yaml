@@ -93,7 +93,7 @@ spec:
         {{- end }}
       {{- if or .Values.customCAs.bundle .Values.api.postgres.tls.enabled }}
       volumes:
-        {{- if Values.customCAs.bundle }}
+        {{- if .Values.customCAs.bundle }}
         {{- include "catalog.custom.ca.deploys.volumes" . | nindent 8 }}
         {{- end }}
         {{- if .Values.api.postgres.tls.enabled }}

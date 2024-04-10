@@ -67,10 +67,9 @@ spec:
             - name: {{ printf "%s-psql" (include "catalog.importer.name" .) | quote }}
               mountPath: /etc/2gis/secret/psql
             {{- end }}
-          {{- end }}
-          {{- if .Values.customCAs.bundle }}
+            {{- if .Values.customCAs.bundle }}
             {{- include "catalog.custom.ca.volumeMounts" . | nindent 12 }}
-          {{- end }}
+            {{- end }}
           {{- end }}
       {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle .Values.importer.postgres.tls.enabled }}
       volumes:
