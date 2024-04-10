@@ -1,0 +1,11 @@
+apiVersion: v2
+name: generic-chart
+description: Generic library Helm chart for 2Gis
+type: library
+keywords:
+- library
+version: 1.21.0
+maintainers:
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

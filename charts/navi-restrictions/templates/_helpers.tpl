@@ -72,3 +72,18 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- print "autoscaling/v2" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Check for deprecated values
+*/}}
+{{- define "check.deprecated.values" -}}
+{{- if not ("1.20.2" | get ((.Values.debug).disableDeprecationChecks | default dict) ) }}
+{{- if .Values.api.api_key -}}{{ fail "[after 1.20.2] .Values.api.api_key is deprecated, use .Values.api.key" }}{{- end }}
+{{- if .Values.api.is_init_db -}}{{ fail "[after 1.20.2] .Values.api.is_init_db is deprecated, use .Values.api.isInitDb" }}{{- end }}
+{{- if .Values.api.attractor_url -}}{{ fail "[after 1.20.2] .Values.api.attractor_url is deprecated, use .Values.naviBackHost and .Values.api.attractorUri" }}{{- end }}
+{{- if .Values.cron.edges_url_template -}}{{ fail "[after 1.20.2] .Values.cron.edges_url_template is deprecated, use .Values.naviCastleHost and .Values.cron.edgesUriTemplate" }}{{- end }}
+{{- if .Values.cron.edge_attributes_url_template -}}{{ fail "[after 1.20.2] .Values.cron.edge_attributes_url_template is deprecated, use .Values.naviBackHost and .Values.cron.edgeAttributesUriTemplate" }}{{- end }}
+{{- if .Values.cron.max_attributes_fetcher_rps -}}{{ fail "[after 1.20.2] .Values.cron.max_attributes_fetcher_rps is deprecated, use .Values.cron.maxAttributesFetcherRps" }}{{- end }}
+{{- if .Values.db -}}{{ fail "[after 1.20.2] .Values.db renamed to .Values.postgres" }}{{- end }}
+{{- end }} {{/* 1.20.2 */}}
+{{- end }}

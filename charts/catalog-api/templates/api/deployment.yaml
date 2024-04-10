@@ -2,9 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "catalog.name" . }}
-  {{- if .Values.annotations }}
+  {{- if or .Values.annotations .Values.customCAs.bundle }}
   annotations:
-    {{- toYaml .Values.annotations | nindent 4 }}
+    {{- if .Values.customCAs.bundle }}
+    checksum/config: {{ include (print .Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
+    {{- end }}
+    {{- with .Values.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- end }}
   labels:
     {{- include "catalog.labels" . | nindent 4 }}
@@ -73,18 +78,31 @@ spec:
             {{- include "catalog.env.search" . | nindent 12 }}
             {{- include "catalog.env.keys" . | nindent 12 }}
             {{- include "catalog.env.license" . | nindent 12 }}
-          {{- if .Values.api.postgres.tls.enabled }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "catalog.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+        {{- if or .Values.customCAs.bundle .Values.api.postgres.tls.enabled }}
           volumeMounts:
+          {{- if .Values.customCAs.bundle }}
+            {{- include "catalog.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.api.postgres.tls.enabled }}
             - name: {{ printf "%s-psql" (include "catalog.name" .) | quote }}
               mountPath: /etc/2gis/secret/psql
           {{- end }}
-      {{- if .Values.api.postgres.tls.enabled }}
+        {{- end }}
+      {{- if or .Values.customCAs.bundle .Values.api.postgres.tls.enabled }}
       volumes:
+        {{- if Values.customCAs.bundle }}
+        {{- include "catalog.custom.ca.deploys.volumes" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.api.postgres.tls.enabled }}
         - name: {{ include "catalog.name-psql-raw" . | quote }}
           secret:
             secretName: {{ include "catalog.name-psql" . | quote }}
         - name: {{ include "catalog.name-psql" . | quote }}
           emptyDir: {}
+        {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
