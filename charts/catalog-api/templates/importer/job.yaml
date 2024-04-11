@@ -82,11 +82,11 @@ spec:
         {{- include "catalog.custom.ca.jobs.volumes" . | nindent 8 }}
       {{- end }}
       {{- if .Values.importer.postgres.tls.enabled }}
-      - name: {{ include "catalog.importer.name-psql-raw" . | quote }}
-        secret:
-          secretName: {{ include "catalog.importer.name-psql" . | quote }}
-      - name: {{ include "catalog.importer.name-psql" . | quote }}
-        emptyDir: {}
+        - name: {{ include "catalog.importer.name-psql-raw" . | quote }}
+          secret:
+            secretName: {{ include "catalog.importer.name-psql" . | quote }}
+        - name: {{ include "catalog.importer.name-psql" . | quote }}
+          emptyDir: {}
       {{- end }}
       {{- end }}
       {{- with .Values.importer.nodeSelector }}
