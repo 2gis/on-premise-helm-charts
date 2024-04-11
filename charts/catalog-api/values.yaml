@@ -198,7 +198,7 @@ api:
       rootCert: ''
       cert: ''
       key: ''
-      mode: ''
+      mode: verify-full
 
   # @section Preloaders settings
 
@@ -312,7 +312,7 @@ importer:
       rootCert: ''
       cert: ''
       key: ''
-      mode: ''
+      mode: verify-full
 
   # @section importer.persistentVolume **Persistent Volume settings**
 
