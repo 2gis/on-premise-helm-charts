@@ -53,7 +53,7 @@ spec:
             - name: MAPGL_TRAFFICSERVER
               value: "{{ .Values.env.MAPGL_TRAFFICSERVER }}"
             - name: MAPGL_FLOORSSERVER
-              value: "https://{{ .Values.env.MAPGL_FLOORSSERVER }}"
+              value: "{{ .Values.env.MAPGL_FLOORSSERVER }}"
             - name: MAPGL_FLOORSSERVER_HOST
               value: "{{ .Values.env.MAPGL_FLOORSSERVER }}"
             - name: MAPGL_KEYSERVER
