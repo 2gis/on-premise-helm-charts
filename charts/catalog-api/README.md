@@ -131,7 +131,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.postgres.port`                                    | PostgreSQL port                                                     | `5432`        |
 | `api.postgres.name`                                    | PostgreSQL database name. **Required**                              | `""`          |
 | `api.postgres.username`                                | PostgreSQL username. **Required**                                   | `""`          |
-| `api.postgres.password`                                | PostgreSQL password. **Required**                                   | `""`          |
+| `api.postgres.password`                                | PostgreSQL password. **Required** if tls.enabled: false             | `""`          |
 | `api.postgres.queryTimeout`                            | Max execution time PostgreSQL query timeout in seconds              | `3`           |
 | `api.postgres.poolSize.api`                            | PostgreSQL connection pool size for API                             | `32`          |
 | `api.postgres.poolSize.preloaders.region`              | PostgreSQL connection pool size for preloader regions               | `2`           |
@@ -200,20 +200,20 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### importer.postgres **Database settings**
 
-| Name                                    | Description                                      | Value         |
-| --------------------------------------- | ------------------------------------------------ | ------------- |
-| `importer.postgres.host`                | PostgreSQL rw hostname or IP. **Required**       | `""`          |
-| `importer.postgres.port`                | PostgreSQL port                                  | `5432`        |
-| `importer.postgres.name`                | PostgreSQL database name. **Required**           | `""`          |
-| `importer.postgres.username`            | PostgreSQL username with rw access. **Required** | `""`          |
-| `importer.postgres.password`            | PostgreSQL password. **Required**                | `""`          |
-| `importer.postgres.schemaSwitchEnabled` | Automatic switch PostgreSQL schema on releases   | `true`        |
-| `importer.postgres.schemaExtensions`    | Schema for PostgreSQL extensions                 | `extensions`  |
-| `importer.postgres.tls.enabled`         | If tls connection to postgresql is enabled.      | `false`       |
-| `importer.postgres.tls.rootCert`        | Root certificate file.                           | `""`          |
-| `importer.postgres.tls.cert`            | Certificate of postgresql server.                | `""`          |
-| `importer.postgres.tls.key`             | Key of postgresql server.                        | `""`          |
-| `importer.postgres.tls.mode`            | Level of protection.                             | `verify-full` |
+| Name                                    | Description                                             | Value         |
+| --------------------------------------- | ------------------------------------------------------- | ------------- |
+| `importer.postgres.host`                | PostgreSQL rw hostname or IP. **Required**              | `""`          |
+| `importer.postgres.port`                | PostgreSQL port                                         | `5432`        |
+| `importer.postgres.name`                | PostgreSQL database name. **Required**                  | `""`          |
+| `importer.postgres.username`            | PostgreSQL username with rw access. **Required**        | `""`          |
+| `importer.postgres.password`            | PostgreSQL password. **Required** if tls.enabled: false | `""`          |
+| `importer.postgres.schemaSwitchEnabled` | Automatic switch PostgreSQL schema on releases          | `true`        |
+| `importer.postgres.schemaExtensions`    | Schema for PostgreSQL extensions                        | `extensions`  |
+| `importer.postgres.tls.enabled`         | If tls connection to postgresql is enabled.             | `false`       |
+| `importer.postgres.tls.rootCert`        | Root certificate file.                                  | `""`          |
+| `importer.postgres.tls.cert`            | Certificate of postgresql server.                       | `""`          |
+| `importer.postgres.tls.key`             | Key of postgresql server.                               | `""`          |
+| `importer.postgres.tls.mode`            | Level of protection.                                    | `verify-full` |
 
 ### importer.persistentVolume **Persistent Volume settings**
 

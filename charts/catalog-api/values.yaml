@@ -168,7 +168,7 @@ api:
   # @param api.postgres.port PostgreSQL port
   # @param api.postgres.name PostgreSQL database name. **Required**
   # @param api.postgres.username PostgreSQL username. **Required**
-  # @param api.postgres.password PostgreSQL password. **Required**
+  # @param api.postgres.password PostgreSQL password. **Required** if tls.enabled: false
   # @param api.postgres.queryTimeout Max execution time PostgreSQL query timeout in seconds
   # @param api.postgres.poolSize.api PostgreSQL connection pool size for API
   # @param api.postgres.poolSize.preloaders.region PostgreSQL connection pool size for preloader regions
