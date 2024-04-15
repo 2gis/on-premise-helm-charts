@@ -290,7 +290,7 @@ importer:
   # @param importer.postgres.port PostgreSQL port
   # @param importer.postgres.name PostgreSQL database name. **Required**
   # @param importer.postgres.username PostgreSQL username with rw access. **Required**
-  # @param importer.postgres.password PostgreSQL password. **Required**
+  # @param importer.postgres.password PostgreSQL password. **Required** if tls.enabled: false
   # @param importer.postgres.schemaSwitchEnabled Automatic switch PostgreSQL schema on releases
   # @param importer.postgres.schemaExtensions Schema for PostgreSQL extensions
   # @param importer.postgres.tls.enabled If tls connection to postgresql is enabled.
