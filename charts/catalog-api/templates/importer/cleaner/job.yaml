@@ -17,6 +17,25 @@ spec:
         {{- include "catalog.importer.labels" . | nindent 8 }}
     spec:
       restartPolicy: Never
+      {{- if .Values.importer.postgres.tls.enabled }}
+      initContainers:
+      - name: copy-certs
+        image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag | default .Chart.AppVersion }}'
+        imagePullPolicy: {{ .Values.importer.image.pullPolicy }}
+        resources:
+          {{- toYaml .Values.importer.cleaner.resources | nindent 12 }}
+        command:
+          - /bin/sh
+          - -ec
+          - |
+            cp /tmp/certs/* /etc/2gis/secret/psql/
+            chmod 600 /etc/2gis/secret/psql/client.key
+        volumeMounts:
+          - name: {{ include "catalog.importer.name-psql-raw" . | quote }}
+            mountPath: /tmp/certs
+          - name: {{ include "catalog.importer.name-psql" . | quote }}
+            mountPath: /etc/2gis/secret/psql
+      {{- end }}
       containers:
         - name: cleaner-job
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag }}
@@ -29,13 +48,28 @@ spec:
             {{- if $.Values.customCAs.bundle }}
             {{- include "catalog.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
-          {{- if .Values.customCAs.bundle }}
+          {{- if or .Values.customCAs.bundle .Values.importer.postgres.tls.enabled }}
           volumeMounts:
+            {{- if .Values.customCAs.bundle }}
             {{- include "catalog.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.importer.postgres.tls.enabled }}
+            - name: {{ printf "%s-psql" (include "catalog.importer.name" .) | quote }}
+              mountPath: /etc/2gis/secret/psql
+            {{- end }}
           {{- end }}
-      {{- if .Values.customCAs.bundle }}
+      {{- if or .Values.customCAs.bundle .Values.importer.postgres.tls.enabled }}
       volumes:
+        {{- if .Values.customCAs.bundle }}
         {{- include "catalog.custom.ca.jobs.volumes" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.importer.postgres.tls.enabled }}
+        - name: {{ include "catalog.importer.name-psql-raw" . | quote }}
+          secret:
+            secretName: {{ include "catalog.importer.name-psql" . | quote }}
+        - name: {{ include "catalog.importer.name-psql" . | quote }}
+          emptyDir: {}
+        {{- end }}
       {{- end }}
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:

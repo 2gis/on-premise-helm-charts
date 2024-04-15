@@ -168,12 +168,17 @@ api:
   # @param api.postgres.port PostgreSQL port
   # @param api.postgres.name PostgreSQL database name. **Required**
   # @param api.postgres.username PostgreSQL username. **Required**
-  # @param api.postgres.password PostgreSQL password. **Required**
+  # @param api.postgres.password PostgreSQL password. **Required** if tls.enabled: false
   # @param api.postgres.queryTimeout Max execution time PostgreSQL query timeout in seconds
   # @param api.postgres.poolSize.api PostgreSQL connection pool size for API
   # @param api.postgres.poolSize.preloaders.region PostgreSQL connection pool size for preloader regions
   # @param api.postgres.poolSize.preloaders.rubric PostgreSQL connection pool size for preloader rubrics
   # @param api.postgres.poolSize.preloaders.additionalAttribute PostgreSQL connection pool size for preloader additional attributes
+  # @param api.postgres.tls.enabled If tls connection to postgresql is enabled.
+  # @param api.postgres.tls.rootCert Root certificate file.
+  # @param api.postgres.tls.cert Certificate of postgresql server.
+  # @param api.postgres.tls.key Key of postgresql server.
+  # @param api.postgres.tls.mode Level of protection.
 
   postgres:
     host: ''
@@ -188,6 +193,12 @@ api:
         region: 2
         rubric: 3
         additionalAttribute: 3
+    tls:
+      enabled: false
+      rootCert: ''
+      cert: ''
+      key: ''
+      mode: verify-full
 
   # @section Preloaders settings
 
@@ -279,9 +290,14 @@ importer:
   # @param importer.postgres.port PostgreSQL port
   # @param importer.postgres.name PostgreSQL database name. **Required**
   # @param importer.postgres.username PostgreSQL username with rw access. **Required**
-  # @param importer.postgres.password PostgreSQL password. **Required**
+  # @param importer.postgres.password PostgreSQL password. **Required** if tls.enabled: false
   # @param importer.postgres.schemaSwitchEnabled Automatic switch PostgreSQL schema on releases
   # @param importer.postgres.schemaExtensions Schema for PostgreSQL extensions
+  # @param importer.postgres.tls.enabled If tls connection to postgresql is enabled.
+  # @param importer.postgres.tls.rootCert Root certificate file.
+  # @param importer.postgres.tls.cert Certificate of postgresql server.
+  # @param importer.postgres.tls.key Key of postgresql server.
+  # @param importer.postgres.tls.mode Level of protection.
 
   postgres:
     host: ''
@@ -291,6 +307,12 @@ importer:
     password: ''
     schemaSwitchEnabled: true
     schemaExtensions: extensions
+    tls:
+      enabled: false
+      rootCert: ''
+      cert: ''
+      key: ''
+      mode: verify-full
 
   # @section importer.persistentVolume **Persistent Volume settings**
 
