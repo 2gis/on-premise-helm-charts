@@ -19,10 +19,17 @@ dgctlDockerRegistry: ''
 imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
+# @section Flags for enabling/disabling certain features.
+
+featureFlags:
+  # @param featureFlags.enableAudit Enable audit logging.
+
+  enableAudit: false
+
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.76.0
+    tag: 1.79.0
 
 # @section Admin service settings
 
@@ -410,6 +417,28 @@ postgres:
     password: ''
 
 
+# @section Kafka settings
+
+kafka:
+
+  # @extra kafka.audit **Settings for sending audit messages.**
+
+  # @param kafka.audit.bootstrapServers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
+  # @param kafka.audit.username Username for authorization (SASL/PLAINTEXT SHA-512).
+  # @param kafka.audit.password Password for authorization (SASL/PLAINTEXT SHA-512).
+  # @param kafka.audit.topic Topic to produce audit messages.
+  # @param kafka.audit.produce.retryCount Number of retries to produce a message.
+  # @param kafka.audit.produce.idempotentWrite Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence).
+
+  audit:
+    bootstrapServers: ''
+    username: ''
+    password: ''
+    topic: ''
+    produce:
+      retryCount: 5
+      idempotentWrite: true
+
 # @section LDAP connection settings
 
 # @param ldap.host LDAP host.
@@ -467,6 +496,9 @@ predefined:
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
+# @param dgctlStorage.region S3 region name.
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
+# @param dgctlStorage.verifySsl Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**
 # @param dgctlStorage.bucket S3 bucket name.
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
@@ -474,6 +506,9 @@ predefined:
 
 dgctlStorage:
   host: ''
+  region: ''
+  secure: false
+  verifySsl: true
   bucket: keys
   accessKey: ''
   secretKey: ''
@@ -516,3 +551,16 @@ dgctlStorage:
 # @param redis.resources.requests.memory A memory request.
 # @param redis.resources.limits.cpu A CPU limit.
 # @param redis.resources.limits.memory A memory limit.
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container.
+
+customCAs:
+  bundle: ''
+# bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
+  certsPath: ''

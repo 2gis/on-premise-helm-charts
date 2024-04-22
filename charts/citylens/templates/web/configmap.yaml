@@ -80,12 +80,15 @@ data:
       source_env: {{ .sourceEnv }}
     {{- end }}
     {{- end }}
-    {{- with .Values.pro }}
-    pro_client:
-      endpoint_url: {{ .url }}
-      token: {{ .key }}
-      verify_ssl: {{ .verifySsl }}
-    {{- end }}
+    pro:
+      {{- with .Values.pro }}
+      client:
+        endpoint_url: {{ .url }}
+        token: {{ .key }}
+        verify_ssl: {{ .verifySsl }}
+      {{- end }}
+      topics:
+        frames: {{ .Values.kafka.topics.pro }}
     map:
       tileserver_url_template: {{ required "A valid .Values.map.tileserverUrl entry required" .Values.map.tileserverUrl }}/tiles?x={x}&y={y}&z={z}
       mapgl:
@@ -123,7 +126,6 @@ data:
           predictors:
             {{- toYaml .predictors | nindent 12 }}
       {{- if eq .name "pro" }}
-          topic: {{ $.Values.kafka.topics.pro }}
           {{- if .trackTimeoutDays }}
           timeout: {{ .trackTimeoutDays }}
           {{- end }}

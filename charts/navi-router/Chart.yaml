@@ -5,7 +5,7 @@ type: application
 keywords:
 - navi
 - router
-version: 1.20.0
+version: 1.21.0
 appVersion: 6.17.0.8
 maintainers:
 - name: 2gis

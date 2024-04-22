@@ -1,10 +1,10 @@
 catalog-api
 	catalog-api:3.600.0
-	catalog-importer:1.1.0
+	catalog-importer:1.5.0
 citylens
-	citylens-api:1.6.0
-	citylens-database:1.6.0
-	citylens-web:1.6.0
+	citylens-api:1.7.2
+	citylens-database:1.7.0
+	citylens-web:1.7.2
 dgtt
 	dgtt:0.2.27-b188673e09
 floors-api
@@ -21,7 +21,7 @@ keycloak
 	keycloak-themes:0.0.8
 	keycloak:21.1.1-debian-11-r4
 keys
-	keys-backend:1.76.0
+	keys-backend:1.79.0
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.6.0
 license
@@ -66,9 +66,9 @@ stat-receiver
 	stat-receiver-api:1.11.1
 	stat-receiver-streams:1.11.1
 tiles-api
-	tiles-api-importer:4.51.5
-	tiles-api-proxy:4.51.5
-	tiles-api:4.51.5
+	tiles-api-importer:4.52.9
+	tiles-api-proxy:4.52.9
+	tiles-api:4.52.9
 traffic-proxy
 	nginx:1.21.6
 twins-api

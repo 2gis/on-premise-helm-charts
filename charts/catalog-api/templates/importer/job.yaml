@@ -34,16 +34,29 @@ spec:
             {{- toYaml .Values.importer.resources | nindent 12 }}
           env:
             {{- include "catalog.env.importer" . | nindent 12 }}
-          {{- if .Values.importer.persistentVolume.enabled }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "catalog.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle }}
           volumeMounts:
+          {{- if .Values.importer.persistentVolume.enabled }}
             - name: {{ include "catalog.importer.name" . }}-pv
               mountPath: "/tmp"
           {{- end }}
-      {{- if .Values.importer.persistentVolume.enabled }}
+          {{- if .Values.customCAs.bundle }}
+            {{- include "catalog.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+          {{- end }}
+      {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle }}
       volumes:
+      {{- if .Values.importer.persistentVolume.enabled }}
         - name: {{ include "catalog.importer.name" . }}-pv
           persistentVolumeClaim:
             claimName: {{ include "catalog.importer.name" . }}
+      {{- end }}
+      {{- if .Values.customCAs.bundle }}
+        {{- include "catalog.custom.ca.jobs.volumes" . | nindent 8 }}
+      {{- end }}
       {{- end }}
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:

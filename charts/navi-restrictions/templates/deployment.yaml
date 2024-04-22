@@ -24,7 +24,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
         prometheus.io/path: "/metrics"
         prometheus.io/port: {{ .Values.api.service.targetPort | quote }}
         {{- if .Values.prometheusEnabled }}
@@ -93,17 +93,17 @@ spec:
             - name: DEBUG
               value: "{{ .Values.api.debug | ternary "True" "False" }}"
             - name: IS_INIT_DB
-              value: "{{ .Values.api.is_init_db | ternary "True" "False" }}"
+              value: "{{ .Values.api.isInitDb | ternary "True" "False" }}"
             - name: DB_HOST
-              value: {{ .Values.db.host | quote }}
+              value: {{ required "A valid .Values.postgres.host entry required" .Values.postgres.host | quote }}
             - name: DB_PORT
-              value: {{ .Values.db.port | quote }}
+              value: {{ required "A valid .Values.postgres.port entry required" .Values.postgres.port | quote }}
             - name: DB_NAME
-              value: {{ .Values.db.name | quote }}
+              value: {{ required "A valid .Values.postgres.name entry required" .Values.postgres.name | quote }}
             - name: DB_USER
-              value: {{ .Values.db.user | quote }}
+              value: {{ required "A valid .Values.postgres.user entry required" .Values.postgres.user | quote }}
             - name: ATTRACTOR_URL
-              value: {{ .Values.api.attractor_url | quote }}
+              value: {{ printf "%s://%s/%s" .Values.naviBackHostScheme (required "A valid .Values.naviBackHost entry required" .Values.naviBackHost) .Values.api.attractorUri | quote }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
