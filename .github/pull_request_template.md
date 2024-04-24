@@ -8,7 +8,7 @@
 
 - `Issue-123` (Link to related issue)
 
-## Braking changes
+## Breaking changes
 
 - If there are breaking changes, they need to be added to the file [Breaking-Changes](../Breaking-Changes.md)
 
