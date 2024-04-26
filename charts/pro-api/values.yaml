@@ -1,4 +1,4 @@
-# @section Docker Registry settings
+﻿# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -119,14 +119,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.6.0
+  tag: 1.11.2
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.6.0
+  tag: 1.11.2
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -163,8 +163,8 @@ s3:
 # @skip api.filterByZoneCodes
 # @skip api.esDataCentersCount
 # @skip Local cache settings
-# @skip api.localCache.enabled
-# @skip api.localCache.trackStatistics
+# @skip localCache.enabled
+# @skip localCache.trackStatistics
 
 api:
   serviceAccount: runner
@@ -270,6 +270,9 @@ redis:
 # @extra kafka.importTasksTopic Kafka topic settings to run import tasks.
 # @param kafka.importTasksTopic.name Kafka topic name.
 # @param kafka.importTasksTopic.readerGroupId Kafka consumer group for reading importing tasks.
+# @extra kafka.eventsTopic Kafka topic settings to manage events.
+# @param kafka.eventsTopic.name Kafka events topic name. **Required**
+# @param kafka.eventsTopic.readerGroupId Kafka consumer group for reading events. **Required**
 # @extra kafka.assetDataTopic Kafka topic settings to manage asset data updates.
 # @param kafka.assetDataTopic.name Kafka topic name.
 # @skip kafka.permissionsTopic
@@ -288,6 +291,9 @@ kafka:
     readerGroupId: ''
   assetDataTopic:
     name: ''
+  eventsTopic:
+    name: ''
+    readerGroupId: ''
   permissionsTopic:
     name: ''
     readerGroupId: ''
@@ -367,8 +373,8 @@ permissionsPodSettings:
 # @skip permissionsApi.host
 # @param permissionsApi.enabled If permissionsApi is enabled for the service.
 # @skip Local cache settings
-# @skip permissionsApi.localCache.enabled
-# @skip permissionsApi.localCache.trackStatistics
+# @skip localCache.enabled
+# @skip localCache.trackStatistics
 
 permissionsApi:
   host: ''
@@ -388,6 +394,7 @@ permissionsApi:
 # @param assetImporter.maxParallelJobs How many import jobs can be run simultaneously
 # @param assetImporter.enabled If assetImporter is enabled for the service.
 # @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
+# @param assetImporter.startOnDeployMode Import mode: 'ScheduleManifest' - copy data from manifest and schedule import, 'ManifestData' - just copy data from manifest.
 # @param assetImporter.imageProxyUrl URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
 # @param assetImporter.externalLinksProxyUrl URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
 # @param assetImporter.externalLinksAllowedHosts Comma separated hosts, i.e. 'someserver.com,someserver2.com' )
@@ -397,7 +404,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.6.0
+  tag: 1.11.2
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -413,6 +420,7 @@ assetImporter:
   enabled: true
   suspended: false
   startOnDeploy: true
+  startOnDeployMode: ScheduleManifest
   files: ''
   imageProxyUrl: ''
   externalLinksProxyUrl: ''
@@ -427,7 +435,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.6.0
+  tag: 1.11.2
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

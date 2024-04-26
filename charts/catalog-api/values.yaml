@@ -10,6 +10,7 @@ dgctlDockerRegistry: ''
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 # @param affinity Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
 # @param imagePullSecrets Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
@@ -17,6 +18,7 @@ dgctlDockerRegistry: ''
 nodeSelector: {}
 affinity: {}
 tolerations: []
+annotations: {}
 podAnnotations: {}
 podLabels: {}
 imagePullSecrets: []
@@ -37,6 +39,9 @@ pdb:
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 host. Format: `host:port`. **Required**
+# @param dgctlStorage.region S3 region name.
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
+# @param dgctlStorage.verifySsl Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**
 # @param dgctlStorage.bucket S3 bucket name. **Required**
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
@@ -44,6 +49,9 @@ pdb:
 
 dgctlStorage:
   host: ''
+  region: ''
+  secure: false
+  verifySsl: true
   bucket: ''
   accessKey: ''
   secretKey: ''
@@ -160,12 +168,17 @@ api:
   # @param api.postgres.port PostgreSQL port
   # @param api.postgres.name PostgreSQL database name. **Required**
   # @param api.postgres.username PostgreSQL username. **Required**
-  # @param api.postgres.password PostgreSQL password. **Required**
+  # @param api.postgres.password PostgreSQL password. **Required** if tls.enabled: false
   # @param api.postgres.queryTimeout Max execution time PostgreSQL query timeout in seconds
   # @param api.postgres.poolSize.api PostgreSQL connection pool size for API
   # @param api.postgres.poolSize.preloaders.region PostgreSQL connection pool size for preloader regions
   # @param api.postgres.poolSize.preloaders.rubric PostgreSQL connection pool size for preloader rubrics
   # @param api.postgres.poolSize.preloaders.additionalAttribute PostgreSQL connection pool size for preloader additional attributes
+  # @param api.postgres.tls.enabled If tls connection to postgresql is enabled.
+  # @param api.postgres.tls.rootCert Root certificate file.
+  # @param api.postgres.tls.cert Certificate of postgresql server.
+  # @param api.postgres.tls.key Key of postgresql server.
+  # @param api.postgres.tls.mode Level of protection.
 
   postgres:
     host: ''
@@ -180,6 +193,12 @@ api:
         region: 2
         rubric: 3
         additionalAttribute: 3
+    tls:
+      enabled: false
+      rootCert: ''
+      cert: ''
+      key: ''
+      mode: verify-full
 
   # @section Preloaders settings
 
@@ -262,7 +281,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/catalog-importer
-    tag: 1.1.0
+    tag: 1.5.0
     pullPolicy: IfNotPresent
 
   # @section importer.postgres **Database settings**
@@ -271,9 +290,14 @@ importer:
   # @param importer.postgres.port PostgreSQL port
   # @param importer.postgres.name PostgreSQL database name. **Required**
   # @param importer.postgres.username PostgreSQL username with rw access. **Required**
-  # @param importer.postgres.password PostgreSQL password. **Required**
+  # @param importer.postgres.password PostgreSQL password. **Required** if tls.enabled: false
   # @param importer.postgres.schemaSwitchEnabled Automatic switch PostgreSQL schema on releases
   # @param importer.postgres.schemaExtensions Schema for PostgreSQL extensions
+  # @param importer.postgres.tls.enabled If tls connection to postgresql is enabled.
+  # @param importer.postgres.tls.rootCert Root certificate file.
+  # @param importer.postgres.tls.cert Certificate of postgresql server.
+  # @param importer.postgres.tls.key Key of postgresql server.
+  # @param importer.postgres.tls.mode Level of protection.
 
   postgres:
     host: ''
@@ -283,6 +307,12 @@ importer:
     password: ''
     schemaSwitchEnabled: true
     schemaExtensions: extensions
+    tls:
+      enabled: false
+      rootCert: ''
+      cert: ''
+      key: ''
+      mode: verify-full
 
   # @section importer.persistentVolume **Persistent Volume settings**
 
@@ -334,3 +364,16 @@ importer:
       limits:
         cpu: 1000m
         memory: 512Mi
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container.
+
+customCAs:
+  bundle: ''
+# bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
+  certsPath: ''

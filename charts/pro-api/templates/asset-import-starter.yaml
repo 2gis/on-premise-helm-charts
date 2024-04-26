@@ -5,7 +5,7 @@ metadata:
   name: {{ include "pro-api.asset-importer-name" . }}-starter
   annotations:
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
   backoffLimit: {{ .Values.assetImporter.backoffLimit }}
   template:
@@ -36,7 +36,7 @@ spec:
             - name: ENV
               value: "{{ .Values.api.env }}"
             - name: MODE
-              value: "ScheduleManifest"
+              value: "{{ .Values.assetImporter.startOnDeployMode }}"
             - name: MAX_PARALLEL_JOBS
               value: "{{ .Values.assetImporter.maxParallelJobs }}"
             - name: manifest_filename

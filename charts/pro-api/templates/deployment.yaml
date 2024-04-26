@@ -221,6 +221,10 @@ spec:
               value: {{ $.Values.kafka.importTasksTopic.readerGroupId }}
             - name: Kafka__AssetDataTopicSettings__Name
               value: {{ $.Values.kafka.assetDataTopic.name }}
+            - name: Kafka__EventsTopicSettings__Name
+              value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
+            - name: Kafka__EventsTopicSettings__ReaderGroupId
+              value: {{ required "A valid .Values.kafka.eventsTopic.readerGroupId entry required" $.Values.kafka.eventsTopic.readerGroupId }}
             - name: Auth__Type
               value: "{{ .Values.auth.type }}"
             - name: Auth__Url

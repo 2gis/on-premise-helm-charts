@@ -1,5 +1,21 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.21.0]
+
+### pro-api
+- Added new required parameters: kafka.eventsTopic.name, kafka.eventsTopic.readerGroupId   
+
+### navi-restrictions
+- `api.api_key` renamed to `api.key`
+- `api.is_init_db` renamed to `api.isInitDb`
+- `db` renamed to `postgres`
+- `cron.max_attributes_fetcher_rps` renamed to `cron.maxAttributesFetcherRps`
+- `api.attractor_url`, `cron.edges_url_template` and `cron.edge_attributes_url_template` are deprecated. Set `naviBackHost` and `naviCastleHost` with `api.attractorUri`, `cron.edgeAttributesUriTemplate` and `cron.maxAttributesFetcherRps` instead
+- New values required `naviBackHost`, `naviCastleHost`
+
+### citylens
+- `worker.reporterProTracks.replicas` replaced with `worker.reporterProTracks.enabled`. One replica will be deployed if enabled.
+
 ## [1.20.0]
 
 ### navi-router
