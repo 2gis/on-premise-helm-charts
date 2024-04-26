@@ -23,7 +23,7 @@ imagePullPolicy: IfNotPresent
 
 featureFlags:
   # @param featureFlags.enableAudit Enable audit logging.
-  # @param featureFlags.enablePublicAPISign Enable signing responses in Public API..
+  # @param featureFlags.enablePublicAPISign Enable signing responses in Public API.
 
   enableAudit: false
   enablePublicAPISign: true
@@ -142,7 +142,6 @@ api:
   adminSessionTTL: 336h
 
   # @param api.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
-  #
   logLevel: warning
 
   # @param api.signPrivateKey RSA-PSS 2048 private key (in PKCS#1 format) for signing responses in Public API.

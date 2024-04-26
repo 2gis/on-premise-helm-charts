@@ -39,10 +39,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Flags for enabling/disabling certain features.
 
-| Name                               | Description                              | Value   |
-| ---------------------------------- | ---------------------------------------- | ------- |
-| `featureFlags.enableAudit`         | Enable audit logging.                    | `false` |
-| `featureFlags.enablePublicAPISign` | Enable signing responses in Public API.. | `true`  |
+| Name                               | Description                             | Value   |
+| ---------------------------------- | --------------------------------------- | ------- |
+| `featureFlags.enableAudit`         | Enable audit logging.                   | `false` |
+| `featureFlags.enablePublicAPISign` | Enable signing responses in Public API. | `true`  |
 
 ### Admin service settings
 
