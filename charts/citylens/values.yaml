@@ -586,7 +586,7 @@ migrations:
 # @param kafka.topics.framesLifecycle Topic for frames lifecycle events. **Required**
 # @param kafka.topics.predictions Topic for predictions events from detectors. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
-# @param kafka.predictorsExtraTopics Additional topics to consume predictions from. List of objects with keys `name` and `topic`. **Required**
+# @param kafka.predictorsExtraTopics Additional topics to consume predictions from. List of objects with keys `name` and `topic`.
 
 kafka:
 
