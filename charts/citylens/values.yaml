@@ -586,7 +586,6 @@ migrations:
 # @param kafka.topics.framesLifecycle Topic for frames lifecycle events. **Required**
 # @param kafka.topics.predictions Topic for predictions events from detectors. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
-# @param kafka.predictorsExtraTopics Additional topics to consume predictions from. List of objects with keys `name` and `topic`.
 
 kafka:
 
@@ -603,7 +602,6 @@ kafka:
     predictions: ''
   consumerGroups:
     prefix: ''
-  predictorsExtraTopics: {}
 
 # @section S3 settings
 # @param s3.verifySsl Verify SSL certificate when connecting to s3.endpoint.

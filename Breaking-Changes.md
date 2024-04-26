@@ -3,9 +3,7 @@
 ## [NEXT-VERSION]
 
 ## citylens
-- Kafka topics `kafka.predictors[0].topic` (camcom), `kafka.predictors[1].topic` (manual) replaced with single topic `kafka.topics.predictions`.
-Extra topics can be provided via `kafka.predictorsExtraTopics`, `kafka.predictors[0].topic` (camcom) can be used as `kafka.topics.predictions`.
-- `kafka.predictors` is removed in favor of `kafka.predictorsExtraTopics`.
+- `kafka.predictors` is removed. Topics `kafka.predictors[0].topic` (`camcom` in values example), `kafka.predictors[1].topic` (`manual` in values example) replaced with single topic `kafka.topics.predictions`.
 
 ## [1.21.0]
 
