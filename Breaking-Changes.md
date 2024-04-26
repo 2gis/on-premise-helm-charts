@@ -1,5 +1,10 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [NEXT-VERSION]
+
+## citylens
+- `kafka.predictors` is removed. Topics `kafka.predictors[0].topic` (`camcom` in values example), `kafka.predictors[1].topic` (`manual` in values example) replaced with single topic `kafka.topics.predictions`.
+
 ## [1.21.0]
 
 ### pro-api

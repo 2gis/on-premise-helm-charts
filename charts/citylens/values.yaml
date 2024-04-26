@@ -97,7 +97,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.7.2
+    tag: 1.8.0
 
   replicas: 4
 
@@ -224,7 +224,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.7.2
+    tag: 1.8.0
 
   replicas: 1
 
@@ -561,7 +561,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.7.0
+    tag: 1.8.0
 
   resources:
     requests:
@@ -584,11 +584,8 @@ migrations:
 # @param kafka.topics.uploader Topic for Uploader worker. **Required**
 # @param kafka.topics.logs Topic for citylens mobile app logs, uploaded via citylens-api. **Required**
 # @param kafka.topics.framesLifecycle Topic for frames lifecycle events. **Required**
+# @param kafka.topics.predictions Topic for predictions events from detectors. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
-# @param kafka.predictors[0].name Name of predictor **Required**
-# @param kafka.predictors[0].topic Topic used by predictor **Required**
-# @param kafka.predictors[1].name Name of manual predictor **Required**
-# @param kafka.predictors[1].topic Topic used by manual predictor **Required**
 
 kafka:
 
@@ -602,13 +599,9 @@ kafka:
     logs: ''
     uploader: ''
     framesLifecycle: ''
+    predictions: ''
   consumerGroups:
     prefix: ''
-  predictors:
-  - name: camcom
-    topic: ''
-  - name: manual
-    topic: ''
 
 # @section S3 settings
 # @param s3.verifySsl Verify SSL certificate when connecting to s3.endpoint.
