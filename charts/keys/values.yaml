@@ -26,7 +26,7 @@ featureFlags:
   # @param featureFlags.enablePublicAPISign Enable signing responses in Public API.
 
   enableAudit: false
-  enablePublicAPISign: true
+  enablePublicAPISign: false
 
 backend:
   image:

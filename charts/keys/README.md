@@ -42,7 +42,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | Name                               | Description                             | Value   |
 | ---------------------------------- | --------------------------------------- | ------- |
 | `featureFlags.enableAudit`         | Enable audit logging.                   | `false` |
-| `featureFlags.enablePublicAPISign` | Enable signing responses in Public API. | `true`  |
+| `featureFlags.enablePublicAPISign` | Enable signing responses in Public API. | `false` |
 
 ### Admin service settings
 
