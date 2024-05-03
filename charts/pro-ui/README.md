@@ -40,7 +40,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name                  | Description | Value                    |
 | --------------------- | ----------- | ------------------------ |
 | `ui.image.repository` | Repository  | `2gis-on-premise/pro-ui` |
-| `ui.image.tag`        | Tag         | `2.1.1`                  |
+| `ui.image.tag`        | Tag         | `2.5.1`                  |
 
 ### UI service settings
 
@@ -171,7 +171,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `stylesImporter.serviceAccount`             | Kubernetes service account                                                                                                                               | `runner`                       |
 | `stylesImporter.image.repository`           | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `stylesImporter.image.tag`                  | Docker image tag.                                                                                                                                        | `1.6.0`                        |
+| `stylesImporter.image.tag`                  | Docker image tag.                                                                                                                                        | `1.11.2`                       |
 | `stylesImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `stylesImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
 | `stylesImporter.nodeSelector`               | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                      | `{}`                           |

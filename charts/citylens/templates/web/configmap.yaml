@@ -132,4 +132,4 @@ data:
         {{- end }}
       {{- end }}
       predictors:
-        {{- toYaml .Values.kafka.predictors | nindent 8 }}
+        {{- toYaml .Values.kafka.predictorsExtraTopics | nindent 8 }}

@@ -20,7 +20,7 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | ------------------ | --------------------------------------------------------------------------------------------- | --------------------------- |
 | `imagePullSecrets` | Kubernetes image pull secrets.                                                                | `[]`                        |
 | `image.repository` | Twins API service image repository.                                                           | `2gis-on-premise/twins-api` |
-| `image.tag`        | Twins API service image tag.                                                                  | `1.7.3`                     |
+| `image.tag`        | Twins API service image tag.                                                                  | `1.9.0`                     |
 | `image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`              |
 
 ### Deployment Artifacts Storage settings
@@ -103,6 +103,7 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | `postgres.ro.host`     | PostgreSQL hostname or IP. **Required**                                             | `""`   |
 | `postgres.ro.port`     | PostgreSQL port.                                                                    | `5432` |
 | `postgres.ro.timeout`  | PostgreSQL client connection timeout.                                               | `3s`   |
+| `postgres.ro.retry`    | PostgreSQL client connection retry.                                                 | `10`   |
 | `postgres.ro.name`     | PostgreSQL database name. **Required**                                              | `""`   |
 | `postgres.ro.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`   |
 | `postgres.ro.username` | PostgreSQL username. **Required**                                                   | `""`   |
@@ -111,6 +112,7 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | `postgres.rw.host`     | PostgreSQL hostname or IP. **Required**                                             | `""`   |
 | `postgres.rw.port`     | PostgreSQL port.                                                                    | `5432` |
 | `postgres.rw.timeout`  | PostgreSQL client connection timeout.                                               | `3s`   |
+| `postgres.rw.retry`    | PostgreSQL client connection retry.                                                 | `10`   |
 | `postgres.rw.name`     | PostgreSQL database name. **Required**                                              | `""`   |
 | `postgres.rw.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`   |
 | `postgres.rw.username` | PostgreSQL username. **Required**                                                   | `""`   |

@@ -74,7 +74,7 @@
 | Name               | Description | Value                     |
 | ------------------ | ----------- | ------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/pro-api` |
-| `image.tag`        | Tag         | `1.6.0`                   |
+| `image.tag`        | Tag         | `1.11.2`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
 ### 2GIS PRO Storage configuration
@@ -159,6 +159,9 @@
 | `kafka.importTasksTopic`               | Kafka topic settings to run import tasks.                                                                       |                 |
 | `kafka.importTasksTopic.name`          | Kafka topic name.                                                                                               | `""`            |
 | `kafka.importTasksTopic.readerGroupId` | Kafka consumer group for reading importing tasks.                                                               | `""`            |
+| `kafka.eventsTopic`                    | Kafka topic settings to manage events.                                                                          |                 |
+| `kafka.eventsTopic.name`               | Kafka events topic name. **Required**                                                                           | `""`            |
+| `kafka.eventsTopic.readerGroupId`      | Kafka consumer group for reading events. **Required**                                                           | `""`            |
 | `kafka.assetDataTopic`                 | Kafka topic settings to manage asset data updates.                                                              |                 |
 | `kafka.assetDataTopic.name`            | Kafka topic name.                                                                                               | `""`            |
 | `kafka.refreshAssetsIntervalMinutes`   | Refresh interval for reading streaming assets settings in minutes.                                              | `60`            |
@@ -208,7 +211,7 @@
 | Name                                       | Description                                                                                                                                              | Value                          |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.6.0`                        |
+| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.11.2`                       |
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
@@ -216,6 +219,7 @@
 | `assetImporter.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                           | `1`                            |
 | `assetImporter.enabled`                    | If assetImporter is enabled for the service.                                                                                                             | `true`                         |
 | `assetImporter.startOnDeploy`              | Indicates that asset import should start when service installed or updated                                                                               | `true`                         |
+| `assetImporter.startOnDeployMode`          | Import mode: 'ScheduleManifest' - copy data from manifest and schedule import, 'ManifestData' - just copy data from manifest.                            | `ScheduleManifest`             |
 | `assetImporter.imageProxyUrl`              | URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                                 | `""`                           |
 | `assetImporter.externalLinksProxyUrl`      | URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                 | `""`                           |
 | `assetImporter.externalLinksAllowedHosts`  | Comma separated hosts, i.e. 'someserver.com,someserver2.com' )                                                                                           | `""`                           |

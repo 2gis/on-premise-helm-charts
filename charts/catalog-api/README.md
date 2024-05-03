@@ -125,18 +125,23 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Database settings
 
-| Name                                                   | Description                                                         | Value  |
-| ------------------------------------------------------ | ------------------------------------------------------------------- | ------ |
-| `api.postgres.host`                                    | PostgreSQL rw/ro hostname or IP. **Required**                       | `""`   |
-| `api.postgres.port`                                    | PostgreSQL port                                                     | `5432` |
-| `api.postgres.name`                                    | PostgreSQL database name. **Required**                              | `""`   |
-| `api.postgres.username`                                | PostgreSQL username. **Required**                                   | `""`   |
-| `api.postgres.password`                                | PostgreSQL password. **Required**                                   | `""`   |
-| `api.postgres.queryTimeout`                            | Max execution time PostgreSQL query timeout in seconds              | `3`    |
-| `api.postgres.poolSize.api`                            | PostgreSQL connection pool size for API                             | `32`   |
-| `api.postgres.poolSize.preloaders.region`              | PostgreSQL connection pool size for preloader regions               | `2`    |
-| `api.postgres.poolSize.preloaders.rubric`              | PostgreSQL connection pool size for preloader rubrics               | `3`    |
-| `api.postgres.poolSize.preloaders.additionalAttribute` | PostgreSQL connection pool size for preloader additional attributes | `3`    |
+| Name                                                   | Description                                                         | Value         |
+| ------------------------------------------------------ | ------------------------------------------------------------------- | ------------- |
+| `api.postgres.host`                                    | PostgreSQL rw/ro hostname or IP. **Required**                       | `""`          |
+| `api.postgres.port`                                    | PostgreSQL port                                                     | `5432`        |
+| `api.postgres.name`                                    | PostgreSQL database name. **Required**                              | `""`          |
+| `api.postgres.username`                                | PostgreSQL username. **Required**                                   | `""`          |
+| `api.postgres.password`                                | PostgreSQL password. **Required** if tls.enabled: false             | `""`          |
+| `api.postgres.queryTimeout`                            | Max execution time PostgreSQL query timeout in seconds              | `3`           |
+| `api.postgres.poolSize.api`                            | PostgreSQL connection pool size for API                             | `32`          |
+| `api.postgres.poolSize.preloaders.region`              | PostgreSQL connection pool size for preloader regions               | `2`           |
+| `api.postgres.poolSize.preloaders.rubric`              | PostgreSQL connection pool size for preloader rubrics               | `3`           |
+| `api.postgres.poolSize.preloaders.additionalAttribute` | PostgreSQL connection pool size for preloader additional attributes | `3`           |
+| `api.postgres.tls.enabled`                             | If tls connection to postgresql is enabled.                         | `false`       |
+| `api.postgres.tls.rootCert`                            | Root certificate file.                                              | `""`          |
+| `api.postgres.tls.cert`                                | Certificate of postgresql server.                                   | `""`          |
+| `api.postgres.tls.key`                                 | Key of postgresql server.                                           | `""`          |
+| `api.postgres.tls.mode`                                | Level of protection.                                                | `verify-full` |
 
 ### Preloaders settings
 
@@ -190,20 +195,25 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                        | Description                                                                                   | Value                              |
 | --------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `importer.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`        | Tag                                                                                           | `1.5.0`                            |
+| `importer.image.tag`        | Tag                                                                                           | `1.7.0`                            |
 | `importer.image.pullPolicy` | Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                     |
 
 ### importer.postgres **Database settings**
 
-| Name                                    | Description                                      | Value        |
-| --------------------------------------- | ------------------------------------------------ | ------------ |
-| `importer.postgres.host`                | PostgreSQL rw hostname or IP. **Required**       | `""`         |
-| `importer.postgres.port`                | PostgreSQL port                                  | `5432`       |
-| `importer.postgres.name`                | PostgreSQL database name. **Required**           | `""`         |
-| `importer.postgres.username`            | PostgreSQL username with rw access. **Required** | `""`         |
-| `importer.postgres.password`            | PostgreSQL password. **Required**                | `""`         |
-| `importer.postgres.schemaSwitchEnabled` | Automatic switch PostgreSQL schema on releases   | `true`       |
-| `importer.postgres.schemaExtensions`    | Schema for PostgreSQL extensions                 | `extensions` |
+| Name                                    | Description                                             | Value         |
+| --------------------------------------- | ------------------------------------------------------- | ------------- |
+| `importer.postgres.host`                | PostgreSQL rw hostname or IP. **Required**              | `""`          |
+| `importer.postgres.port`                | PostgreSQL port                                         | `5432`        |
+| `importer.postgres.name`                | PostgreSQL database name. **Required**                  | `""`          |
+| `importer.postgres.username`            | PostgreSQL username with rw access. **Required**        | `""`          |
+| `importer.postgres.password`            | PostgreSQL password. **Required** if tls.enabled: false | `""`          |
+| `importer.postgres.schemaSwitchEnabled` | Automatic switch PostgreSQL schema on releases          | `true`        |
+| `importer.postgres.schemaExtensions`    | Schema for PostgreSQL extensions                        | `extensions`  |
+| `importer.postgres.tls.enabled`         | If tls connection to postgresql is enabled.             | `false`       |
+| `importer.postgres.tls.rootCert`        | Root certificate file.                                  | `""`          |
+| `importer.postgres.tls.cert`            | Certificate of postgresql server.                       | `""`          |
+| `importer.postgres.tls.key`             | Key of postgresql server.                               | `""`          |
+| `importer.postgres.tls.mode`            | Level of protection.                                    | `verify-full` |
 
 ### importer.persistentVolume **Persistent Volume settings**
 

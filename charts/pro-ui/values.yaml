@@ -50,7 +50,7 @@ ui:
   # @param ui.image.tag Tag
   image:
     repository: 2gis-on-premise/pro-ui
-    tag: 2.1.1
+    tag: 2.5.1
 
   # @section UI service settings
 
@@ -281,7 +281,7 @@ stylesImporter:
   serviceAccount: runner
   image:
     repository: 2gis-on-premise/pro-importer
-    tag: 1.6.0
+    tag: 1.11.2
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   nodeSelector: {}
