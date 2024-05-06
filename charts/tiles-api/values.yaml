@@ -122,7 +122,7 @@ proxy:
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.52.9
+    tag: 4.54.0
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -179,7 +179,7 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.52.9
+    tag: 4.54.0
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
@@ -337,7 +337,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.52.9
+    tag: 4.54.0
     pullPolicy: IfNotPresent
 
 
@@ -358,6 +358,9 @@ importer:
   # @param importer.clearSnapshots If enabled, then the Importer job will delete keyspace's snapshot as well when deleting a keyspace.<br>It executes the `nodetool clearsnapshot` command over JMX to do so, and therefore requires JMS to be enabled on the Cassandra side, and `cassandra.credentials.jmxUser`/`cassandra.credentials.jmxPassword` values to be set.
   # @param importer.cassandraHostsClockTimeCheckLimit Maximum difference over cassandra hosts clock time.
 
+  # @param importer.retryInterval Period of time between tries to spawn worker job.
+  # @param importer.retryCount Maximum number of tries to spawn worker job.
+
   # @param importer.cleaner.enabled Enables deletion of obsolete tilesets before making new imports.
   # @param importer.cleaner.limit Limit on the number of old tilesets to leave untouched when cleaning, minimum 1.
 
@@ -370,6 +373,9 @@ importer:
   forceImport: false
   clearSnapshots: false
   cassandraHostsClockTimeCheckLimit: 1s
+
+  retryInterval: "5s"
+  retryCount: 3
 
   tolerations: {}
   imagePullSecrets: []

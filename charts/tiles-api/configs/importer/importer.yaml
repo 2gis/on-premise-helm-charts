@@ -18,6 +18,8 @@ k8s:
   job-template-file-path: /config/job.yaml
   {{- with .Values.importer }}
   worker-image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}
+  retry-interval: {{ .retryInterval }}
+  retry-count: {{ .retryCount }}
   {{- end }}
   namespace: {{ .Release.Namespace }}
 
