@@ -374,7 +374,7 @@ importer:
   clearSnapshots: false
   cassandraHostsClockTimeCheckLimit: 1s
 
-  retryInterval: 5s
+  retryInterval: "5s"
   retryCount: 3
 
   tolerations: {}
