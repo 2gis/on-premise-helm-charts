@@ -1,10 +1,10 @@
 catalog-api
 	catalog-api:3.600.0
-	catalog-importer:1.5.0
+	catalog-importer:1.7.0
 citylens
-	citylens-api:1.7.2
-	citylens-database:1.7.0
-	citylens-web:1.7.2
+	citylens-api:1.8.0
+	citylens-database:1.8.0
+	citylens-web:1.8.0
 dgtt
 	dgtt:0.2.27-b188673e09
 floors-api
@@ -38,7 +38,7 @@ navi-back
 	metrics-aggregator:
 	navi-back:7.15.2.4
 navi-castle
-	navi-castle:1.7.0
+	navi-castle:1.9.2
 	navi-front:1.24.1
 navi-front
 	navi-front:1.24.1
@@ -72,4 +72,4 @@ tiles-api
 traffic-proxy
 	nginx:1.21.6
 twins-api
-	twins-api:1.7.3
+	twins-api:1.9.0
