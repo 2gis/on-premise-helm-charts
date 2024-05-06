@@ -281,7 +281,7 @@ stylesImporter:
   serviceAccount: runner
   image:
     repository: 2gis-on-premise/pro-importer
-    tag: 1.10.0
+    tag: 1.11.2
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   nodeSelector: {}

@@ -159,6 +159,9 @@
 | `kafka.importTasksTopic`               | Kafka topic settings to run import tasks.                                                                       |                 |
 | `kafka.importTasksTopic.name`          | Kafka topic name.                                                                                               | `""`            |
 | `kafka.importTasksTopic.readerGroupId` | Kafka consumer group for reading importing tasks.                                                               | `""`            |
+| `kafka.eventsTopic`                    | Kafka topic settings to manage events.                                                                          |                 |
+| `kafka.eventsTopic.name`               | Kafka events topic name. **Required**                                                                           | `""`            |
+| `kafka.eventsTopic.readerGroupId`      | Kafka consumer group for reading events. **Required**                                                           | `""`            |
 | `kafka.assetDataTopic`                 | Kafka topic settings to manage asset data updates.                                                              |                 |
 | `kafka.assetDataTopic.name`            | Kafka topic name.                                                                                               | `""`            |
 | `kafka.refreshAssetsIntervalMinutes`   | Refresh interval for reading streaming assets settings in minutes.                                              | `60`            |
@@ -216,6 +219,7 @@
 | `assetImporter.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                           | `1`                            |
 | `assetImporter.enabled`                    | If assetImporter is enabled for the service.                                                                                                             | `true`                         |
 | `assetImporter.startOnDeploy`              | Indicates that asset import should start when service installed or updated                                                                               | `true`                         |
+| `assetImporter.startOnDeployMode`          | Import mode: 'ScheduleManifest' - copy data from manifest and schedule import, 'ManifestData' - just copy data from manifest.                            | `ScheduleManifest`             |
 | `assetImporter.imageProxyUrl`              | URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                                 | `""`                           |
 | `assetImporter.externalLinksProxyUrl`      | URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                 | `""`                           |
 | `assetImporter.externalLinksAllowedHosts`  | Comma separated hosts, i.e. 'someserver.com,someserver2.com' )                                                                                           | `""`                           |
