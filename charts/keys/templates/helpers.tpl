@@ -106,11 +106,13 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.env.api" -}}
 - name: KEYS_LOG_LEVEL
   value: "{{ .Values.api.logLevel }}"
+{{- if .Values.featureFlags.enablePublicAPISign }}
 - name: KEYS_SIGN_PRIVATE_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "keys.secret.deploys.name" . }}
       key: signPrivateKey
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.import" -}}
