@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [NEW_VERSION]
+
+### pro-api
+- Added new required parameters: licenseKey, license.url
+- Removed api.licensePartner
+
 ## [1.22.0]
 
 ## citylens
