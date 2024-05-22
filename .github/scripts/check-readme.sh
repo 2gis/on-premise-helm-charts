@@ -4,19 +4,13 @@ set -e
 set -u
 set -o pipefail
 
-# Определяем директории
+# Define directories
 SCRIPT_DIR="$( cd $(dirname "$0") ; pwd )"
 REPO_PATH=$( git -C "$SCRIPT_DIR" rev-parse --show-toplevel )
 
 cd "$REPO_PATH"
 
-# Проверка наличия утилиты readme-generator
-if ! command -v readme-generator &> /dev/null; then
-  echo "readme-generator could not be found, please install it."
-  exit 1
-fi
-
-# Запуск генератора для каждой поддиректории в charts
+# Run the generator for each subdirectory in charts
 for chart in charts/*; do
   if [ -d "$chart" ]; then
     echo "Building README for $chart..."
@@ -25,7 +19,7 @@ for chart in charts/*; do
   fi
 done
 
-# Проверка, есть ли несохраненные изменения в репозитории
+# Check for unsaved changes in the repository
 IS_DIRTY=0
 HAS_UNTRACKED=0
 
@@ -36,9 +30,9 @@ git -C "$REPO_PATH" ls-files --others --exclude-standard --directory --no-empty-
 RESULT=$(( IS_DIRTY + HAS_UNTRACKED ))
 
 if [[ "$RESULT" -eq 0 ]]; then
-  echo 'Documentation is up-to-date'
+  echo -e '\033[0;32mDocumentation is up-to-date\033[0m'
 else
-  echo 'You need to update documentation: run `make prepare && make all`'
+  echo -e '\033[0;31mYou need to update documentation: run `make prepare && make all`\033[0m'
   echo 'Changed files:'
   git status --porcelain
   exit 1
