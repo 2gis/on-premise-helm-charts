@@ -1,4 +1,4 @@
-name: Run Script on PR to Master
+name: Check Readme Files
 
 on:
   pull_request:
