@@ -9,8 +9,7 @@ REPO_PATH=$( git -C "$SCRIPT_DIR" rev-parse --show-toplevel )
 
 cd "$REPO_PATH"
 
-make prepare
-make all
+readme-generator --config=/config.json --values=/values.yaml --readme=/README.md
 
 IS_DIRTY=0
 HAS_UNTRACKED=0

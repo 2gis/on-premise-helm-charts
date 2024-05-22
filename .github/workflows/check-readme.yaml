@@ -7,7 +7,9 @@ on:
 
 jobs:
   run-script:
-    runs-on: ubuntu-latest
+    runs-on: readme-generator-for-helm
+    container:
+      image: readme-generator-for-helm:latest
 
     steps:
       - name: Checkout repository
