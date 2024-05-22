@@ -7,13 +7,23 @@ on:
 
 jobs:
   run-script:
-    runs-on: readme-generator-for-helm
-    container:
-      image: readme-generator-for-helm:latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Install Node.js and npm
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install readme-generator-for-helm
+        run: |
+          git clone https://github.com/bitnami/readme-generator-for-helm
+          cd readme-generator-for-helm
+          npm install
+          npm install -g .
 
       - name: Set up script permissions
         run: chmod +x .github/scripts/check-readme.sh
