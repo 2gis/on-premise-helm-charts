@@ -23,7 +23,6 @@ done
 IS_DIRTY=0
 HAS_UNTRACKED=0
 
-# #######
 # Check for unsaved changes in README.md files only
 IS_DIRTY=0
 HAS_UNTRACKED=0
@@ -38,12 +37,6 @@ git -C "$REPO_PATH" diff --cached --name-only -- '*.md' | grep -q '.' && IS_DIRT
 git -C "$REPO_PATH" ls-files --others --exclude-standard -- '*.md' | grep -q '.' && HAS_UNTRACKED=1
 
 RESULT=$(( IS_DIRTY + HAS_UNTRACKED ))
-# #######
-
-
-# git -C "$REPO_PATH" diff --no-ext-diff --quiet || IS_DIRTY=1
-# git -C "$REPO_PATH" diff --no-ext-diff --cached --quiet || IS_DIRTY=1
-# git -C "$REPO_PATH" ls-files --others --exclude-standard --directory --no-empty-directory --error-unmatch -- ':/*' >/dev/null 2>/dev/null && HAS_UNTRACKED=1
 
 RESULT=$(( IS_DIRTY + HAS_UNTRACKED ))
 
@@ -52,7 +45,7 @@ if [[ "$RESULT" -eq 0 ]]; then
 else
   echo -e '\033[0;31mYou need to update documentation: run `make prepare && make all`\033[0m'
   echo 'Changed files:'
-  git status --porcelain
+  git status --porcelain | grep md
   exit 1
 fi
 
