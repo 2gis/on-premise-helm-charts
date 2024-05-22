@@ -1,0 +1,20 @@
+name: Run Script on PR to Master
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up script permissions
+        run: chmod +x .github/actions/check-readme.sh
+
+      - name: Run script
+        run: .github/scripts/check-readme.sh
