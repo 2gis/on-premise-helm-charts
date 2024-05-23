@@ -97,7 +97,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.8.0
+    tag: 1.9.0
 
   replicas: 4
 
@@ -224,7 +224,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.8.0
+    tag: 1.9.0
 
   replicas: 1
 
@@ -561,7 +561,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.8.0
+    tag: 1.9.0
 
   resources:
     requests:
