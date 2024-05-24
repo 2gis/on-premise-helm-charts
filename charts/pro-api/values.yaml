@@ -317,26 +317,26 @@ catalog:
 
 # @section Navigation API settings
 
-# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-back.svc
 # @param navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
 
 navi:
-  url: http://navi-back.svc
+  url: ''
   key: ''
 
 # @section License Service API settings
 
-# @param license.url Licensing server v2 URL. **Required**
+# @param license.url Licensing server v2 URL. Example: https://license.svc **Required**
 
 license:
-  url: http://license.svc
+  url: ''
 
 # @section Search API settings
 
-# @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search)
+# @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search). Example: http://search-api.svc
 
 search:
-  url: http://search-api.svc
+  url: ''
 
 # @skip tileGen
 
