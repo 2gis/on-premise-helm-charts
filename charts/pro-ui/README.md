@@ -84,6 +84,18 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.mapgl.stylePreview`   | URL to image for ui.mapgl.styleUrl or ui.mapgl.styleId. It needs for preview in manager styles.                                                                                                      | `""`             |
 | `ui.mapgl.styleModelsUrl` | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) models folder, e.g., '//mapgl.ingress.host/style/models'                                                       | `""`             |
 
+### Mapbox style config settings
+
+| Name                   | Description                                                           | Value |
+| ---------------------- | --------------------------------------------------------------------- | ----- |
+| `ui.mapbox.styleToken` | Optional [Mapbox Token](https://docs.mapbox.com/api/accounts/tokens/) | `""`  |
+
+### External style manager configuration.
+
+| Name                              | Description                                            | Value   |
+| --------------------------------- | ------------------------------------------------------ | ------- |
+| `ui.externalStyleManager.enabled` | - Set "true" to enable External Style Manager features | `false` |
+
 ### Map styles config settings
 
 | Name                  | Description                                                     | Value |
