@@ -7,7 +7,7 @@ dgctlDockerRegistry: ''
 # @param imagePullPolicy Pull Policy
 # @param imagePullSecrets Kubernetes image pull secrets.
 imagePullPolicy: IfNotPresent
-imagePullSecrets: [ ]
+imagePullSecrets: []
 
 ui:
   # @section Common settings
@@ -30,13 +30,13 @@ ui:
   replicas: 1
   revisionHistoryLimit: 3
   terminationGracePeriodSeconds: 60
-  nodeSelector: { }
-  affinity: { }
-  tolerations: [ ]
-  podAnnotations: { }
-  podLabels: { }
-  annotations: { }
-  labels: { }
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  podAnnotations: {}
+  podLabels: {}
+  annotations: {}
+  labels: {}
   readinessProbe:
     enabled: true
   livenessProbe:
@@ -189,8 +189,8 @@ ui:
   # @param ui.service.targetPort Service target port.
 
   service:
-    annotations: { }
-    labels: { }
+    annotations: {}
+    labels: {}
     type: ClusterIP
     port: 3000
     targetPort: http
@@ -297,7 +297,7 @@ stylesImporter:
     tag: 1.11.2
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
-  nodeSelector: { }
+  nodeSelector: {}
   resources:
     requests:
       cpu: 700m
