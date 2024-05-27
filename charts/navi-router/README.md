@@ -46,7 +46,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                         |
 | ------------------ | ----------- | ----------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-router` |
-| `image.tag`        | Tag         | `6.17.0.8`                    |
+| `image.tag`        | Tag         | `6.17.1.2`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
 ### Navi-Router service settings
