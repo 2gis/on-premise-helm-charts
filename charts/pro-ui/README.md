@@ -38,9 +38,9 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 ### Deployment settings
 
 | Name                  | Description | Value                    |
-| --------------------- | ----------- | ------------------------ |
+| --------------------- | ----------- |--------------------------|
 | `ui.image.repository` | Repository  | `2gis-on-premise/pro-ui` |
-| `ui.image.tag`        | Tag         | `2.5.1`                  |
+| `ui.image.tag`        | Tag         | `2.14.0`                 |
 
 ### UI service settings
 
@@ -83,6 +83,18 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.mapgl.styleFontsUrl`  | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'                                                         | `""`             |
 | `ui.mapgl.stylePreview`   | URL to image for ui.mapgl.styleUrl or ui.mapgl.styleId. It needs for preview in manager styles.                                                                                                      | `""`             |
 | `ui.mapgl.styleModelsUrl` | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) models folder, e.g., '//mapgl.ingress.host/style/models'                                                       | `""`             |
+
+### Mapbox style config settings
+
+| Name                   | Description                                                           | Value |
+| ---------------------- | --------------------------------------------------------------------- | ----- |
+| `ui.mapbox.styleToken` | Optional [Mapbox Token](https://docs.mapbox.com/api/accounts/tokens/) | `""`  |
+
+### External style manager configuration.
+
+| Name                              | Description                                            | Value   |
+| --------------------------------- | ------------------------------------------------------ | ------- |
+| `ui.externalStyleManager.enabled` | - Set "true" to enable External Style Manager features | `false` |
 
 ### Map styles config settings
 

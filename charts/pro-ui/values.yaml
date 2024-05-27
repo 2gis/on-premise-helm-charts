@@ -7,7 +7,7 @@ dgctlDockerRegistry: ''
 # @param imagePullPolicy Pull Policy
 # @param imagePullSecrets Kubernetes image pull secrets.
 imagePullPolicy: IfNotPresent
-imagePullSecrets: []
+imagePullSecrets: [ ]
 
 ui:
   # @section Common settings
@@ -30,13 +30,13 @@ ui:
   replicas: 1
   revisionHistoryLimit: 3
   terminationGracePeriodSeconds: 60
-  nodeSelector: {}
-  affinity: {}
-  tolerations: []
-  podAnnotations: {}
-  podLabels: {}
-  annotations: {}
-  labels: {}
+  nodeSelector: { }
+  affinity: { }
+  tolerations: [ ]
+  podAnnotations: { }
+  podLabels: { }
+  annotations: { }
+  labels: { }
   readinessProbe:
     enabled: true
   livenessProbe:
@@ -50,7 +50,7 @@ ui:
   # @param ui.image.tag Tag
   image:
     repository: 2gis-on-premise/pro-ui
-    tag: 2.5.1
+    tag: 2.14.0
 
   # @section UI service settings
 
@@ -61,7 +61,7 @@ ui:
   # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).
   # @param ui.supportDocumentationLink Product online documentation link. Ex.: 'https://docs.urbi.ae/en/pro/start'
   # @param ui.immersiveModels A string value for config to enabling 3D-models. Possible values: [{"id":4,"name":"Ground","mapOptions":{"center":[53.287567,23.564967],"styleZoom":19.2,"pitch":45,"rotation":0},"objects":[{"buildingIds":[],"coords":[53.284762,23.569323],"scale":90,"rotateX":0.5,"rotateY":0,"moveX":0,"moveY":0,"moveZ":0,"models":[{"path":"/static/models/adnoc/ground.glb","name":"Ground","displayName":"Ground"}]}]}]
-  # @param ui.publicS3Url Optional URL of public S3 where style data will be placed. Example: https://s3.domain.example.com/
+  # @param ui.publicS3Url Optional FQDN (domain or IP) public S3 host where style data will be placed.
 
   logLevel: error
   isOnPremise: true
@@ -121,7 +121,6 @@ ui:
   # @param ui.mapgl.host FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service with or without protocol. Without protocol we will put App's protocol.
   # @skip ui.mapgl.scriptPath
   # @param ui.mapgl.key A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.
-  # @skip ui.mapgl.styleId
   # @param ui.mapgl.styleUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) `style.json` folder, e.g., '//mapgl.ingress.host/style'. ui.mapgl.styleUrl has priority over ui.mapgl.styleId.
   # @param ui.mapgl.styleIconsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons folder, e.g., '//mapgl.ingress.host/style/icons'
   # @param ui.mapgl.styleFontsUrl Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'
@@ -132,12 +131,26 @@ ui:
     host: mapgl-api.host
     scriptPath: ''
     key: ''
-    styleId: ''
     styleUrl: ''
     styleIconsUrl: ''
     styleFontsUrl: ''
     stylePreview: ''
     styleModelsUrl: ''
+
+  # @section Mapbox style config settings
+  #
+  # Fill that parameters if your app has connection to Global Internet.
+  # @param ui.mapbox.styleToken Optional [Mapbox Token](https://docs.mapbox.com/api/accounts/tokens/)
+  mapbox:
+    styleToken: ''
+
+  # @section External style manager configuration.
+  # External style manager allows managing WMS- and WMTS-maps from external sources.
+  # Access to public (internet) or private (intranet) WM(T)S services is required for this feature to work.
+  #
+  # @param ui.externalStyleManager.enabled - Set "true" to enable External Style Manager features
+  externalStyleManager:
+    enabled: true
 
   # @section Map styles config settings
   #
@@ -176,8 +189,8 @@ ui:
   # @param ui.service.targetPort Service target port.
 
   service:
-    annotations: {}
-    labels: {}
+    annotations: { }
+    labels: { }
     type: ClusterIP
     port: 3000
     targetPort: http
@@ -195,11 +208,11 @@ ui:
     enabled: false
     className: nginx
     hosts:
-    - host: pro-ui.example.com
-      paths:
-      - path: /
-        pathType: Prefix
-    tls: []
+      - host: pro-ui.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: [ ]
     # - hosts:
     #   - pro-ui.example.com
     #   secretName: secret.tls
@@ -284,7 +297,7 @@ stylesImporter:
     tag: 1.11.2
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
-  nodeSelector: {}
+  nodeSelector: { }
   resources:
     requests:
       cpu: 700m
