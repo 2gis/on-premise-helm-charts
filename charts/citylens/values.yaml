@@ -694,8 +694,8 @@ pro:
 
 # @section **Custom Certificate Authority**
 
-# @param web.customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
-# @param web.customCAs.certsPath Custom CA bundle mount directory in the container.
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container.
 
 customCAs:
   bundle: ''
