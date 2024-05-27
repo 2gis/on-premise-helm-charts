@@ -212,7 +212,7 @@ ui:
         paths:
           - path: /
             pathType: Prefix
-    tls: [ ]
+    tls: []
     # - hosts:
     #   - pro-ui.example.com
     #   secretName: secret.tls
