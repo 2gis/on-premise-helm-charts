@@ -92,9 +92,9 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### External style manager configuration.
 
-| Name                              | Description                                            | Value  |
-| --------------------------------- | ------------------------------------------------------ | ------ |
-| `ui.externalStyleManager.enabled` | - Set "true" to enable External Style Manager features | `true` |
+| Name                              | Description                                            | Value   |
+| --------------------------------- | ------------------------------------------------------ | ------- |
+| `ui.externalStyleManager.enabled` | - Set "true" to enable External Style Manager features | `false` |
 
 ### Map styles config settings
 
