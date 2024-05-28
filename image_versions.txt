@@ -46,7 +46,7 @@ navi-restrictions
 	navi-restrictions-api:1.0.1
 	navi-restrictions-syncer:1.0.1
 navi-router
-	navi-router:6.17.0.8
+	navi-router:6.17.1.2
 navi-splitter
 	navi-splitter:1.0.1
 platform
@@ -58,17 +58,17 @@ pro-api
 	pro-permissions-api:1.11.2
 pro-ui
 	pro-importer:1.11.2
-	pro-ui:2.5.1
+	pro-ui:2.14.0
 search-api
-	search-api:7.74.0
+	search-api:7.76.1
 	search-nginx:1.21.6
 stat-receiver
 	stat-receiver-api:1.11.1
 	stat-receiver-streams:1.11.1
 tiles-api
-	tiles-api-importer:4.52.9
-	tiles-api-proxy:4.52.9
-	tiles-api:4.52.9
+	tiles-api-importer:4.54.0
+	tiles-api-proxy:4.54.0
+	tiles-api:4.54.0
 traffic-proxy
 	nginx:1.21.6
 twins-api

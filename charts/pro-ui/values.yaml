@@ -68,7 +68,7 @@ ui:
   appTheme: urbi
   appLocale: en_AE
   appInitialMapCenter: '[46.71, 24.72]'
-  supportDocumentationLink: 'https://docs.urbi.ae/en/pro/start'
+  supportDocumentationLink: https://docs.urbi.ae/en/pro/start
   immersiveModels: ''
   publicS3Url: ''
 

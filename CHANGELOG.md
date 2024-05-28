@@ -1,5 +1,27 @@
 # 2GIS On-Premise Changelog
 
+## [1.23.0] (2024-05-28)
+#### Images
+```
+navi-router
+	- navi-router:6.17.0.8
+	+ navi-router:6.17.1.2
+pro-ui
+	- pro-ui:2.5.1
+	+ pro-ui:2.14.0
+search-api
+	- search-api:7.74.0
+	+ search-api:7.76.1
+tiles-api
+	- tiles-api-importer:4.52.9
+	+ tiles-api-importer:4.54.0
+	- tiles-api-proxy:4.52.9
+	+ tiles-api-proxy:4.54.0
+	- tiles-api:4.52.9
+	+ tiles-api:4.54.0
+
+```
+
 ## [1.22.0] (2024-05-02)
 #### [Breaking-Changes](Breaking-Changes.md#1220)
 #### Images
