@@ -150,7 +150,7 @@ ui:
   #
   # @param ui.externalStyleManager.enabled - Set "true" to enable External Style Manager features
   externalStyleManager:
-    enabled: true
+    enabled: false
 
   # @section Map styles config settings
   #
