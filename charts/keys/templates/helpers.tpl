@@ -96,6 +96,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "keys.env.featureFlags" -}}
+- name: KEYS_FEATURE_FLAGS_AUDIT
+  value: "{{ .Values.featureFlags.enableAudit }}"
+{{- end }}
+
 {{- define "keys.env.api" -}}
 - name: KEYS_LOG_LEVEL
   value: "{{ .Values.api.logLevel }}"
@@ -266,6 +271,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.env.dgctlStorage" -}}
 - name: KEYS_S3_ENDPOINT
   value: "{{ .Values.dgctlStorage.host }}"
+- name: KEYS_S3_REGION
+  value: "{{ .Values.dgctlStorage.region }}"
+- name: KEYS_S3_SECURE
+  value: "{{ .Values.dgctlStorage.secure }}"
+- name: KEYS_S3_VERIFY_SSL
+  value: "{{ .Values.dgctlStorage.verifySsl }}"
 - name: KEYS_S3_BUCKET
   value: "{{ .Values.dgctlStorage.bucket }}"
 - name: KEYS_S3_ACCESS_KEY
@@ -280,6 +291,21 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       key: dgctlStorageSecretKey
 - name: KEYS_MANIFEST_PATH
   value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
+{{- end }}
+
+{{- define "keys.env.kafka.audit" -}}
+- name: KEYS_KAFKA_AUDIT_BROKERS
+  value: "{{ .Values.kafka.audit.bootstrapServers }}"
+- name: KEYS_KAFKA_AUDIT_USERNAME
+  value: "{{ .Values.kafka.audit.username }}"
+- name: KEYS_KAFKA_AUDIT_PASSWORD
+  value: "{{ .Values.kafka.audit.password }}"
+- name: KEYS_KAFKA_AUDIT_TOPIC
+  value: "{{ .Values.kafka.audit.topic }}"
+- name: KEYS_KAFKA_AUDIT_PRODUCE_RETRY_COUNT
+  value: "{{ .Values.kafka.audit.produce.retryCount }}"
+- name: KEYS_KAFKA_AUDIT_PRODUCE_IDEMPOTENT_WRITE
+  value: "{{ .Values.kafka.audit.produce.idempotentWrite }}"
 {{- end }}
 
 {{/*
@@ -310,4 +336,40 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- else -}}
 {{- print "autoscaling/v2" -}}
 {{- end -}}
+{{- end -}}
+
+{{- define "keys.env.custom.ca.path" -}}
+- name: SSL_CERT_DIR
+  value: {{ include "keys.custom.ca.mountPath" . }}
+{{- end }}
+
+{{- define "keys.custom.ca.mountPath" -}}
+{{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}
+
+{{- define "keys.custom.ca.volumeMounts" -}}
+- name: custom-ca
+  mountPath: {{ include "keys.custom.ca.mountPath" . }}/custom-ca.crt
+  subPath: custom-ca.crt
+  readOnly: true
+{{- end -}}
+
+{{- define "keys.custom.ca.jobs.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "keys.configmap.jobs.name" . }}
+{{- end -}}
+
+{{- define "keys.custom.ca.deploys.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "keys.configmap.deploys.name" . }}
+{{- end -}}
+
+{{- define "keys.configmap.jobs.name" -}}
+{{ include "keys.name" . }}-configmap-jobs
+{{- end -}}
+
+{{- define "keys.configmap.deploys.name" -}}
+{{ include "keys.name" . }}-configmap-deploys
 {{- end -}}

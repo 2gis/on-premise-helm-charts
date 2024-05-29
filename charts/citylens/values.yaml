@@ -67,7 +67,14 @@ dgctlStorage:
 # @param api.auth.authServerUrl API URL of authentication service, OIDC-compatibility expected. Ex.: `http(s)://keycloak.ingress.host/`. **Required**
 # @param api.auth.realm Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: CityLens_app
 # @param api.auth.verifySsl Enable\Disable SSL check.
-# @param api.auth.camcomToken Bearer token, expected on CamCom callback endpoint (if integration with CamCom enabled).
+
+# @section Bearer tokens for callbacks & predictors
+
+# @param api.auth.predictorsTokens.camcom Bearer token, expected on CamCom callback endpoint and CamCom prediction endpoint (if integration with CamCom enabled).
+
+# @section Licensing server settings
+
+# @param api.licensing.url Licensing server v2 URL. https://license.svc. **Required**
 
 # @section Custom settings
 
@@ -90,7 +97,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.4.1
+    tag: 1.8.0
 
   replicas: 4
 
@@ -130,7 +137,11 @@ api:
     authServerUrl: ''
     realm: ''
     verifySsl: true
-    camcomToken: ''
+    predictorsTokens:
+      camcom: ''
+
+  licensing:
+    url: ''
 
   showDocs: false
 
@@ -213,7 +224,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.4.1
+    tag: 1.8.0
 
   replicas: 1
 
@@ -414,7 +425,7 @@ worker:
     affinity: {}
     tolerations: {}
 
-# @section Citylens Reporter Pro worker's settings
+# @section Citylens Reporter Pro worker's settings (synchronization with Pro)
 
 # @param worker.reporterPro.replicas A replica count for the pod.
 
@@ -430,6 +441,31 @@ worker:
   reporterPro:
 
     replicas: 1
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+# @section Citylens Reporter Pro Tracks worker's settings (track status actualization)
+
+# @param worker.reporterProTracks.enabled Deploy worker or not.
+
+# @param worker.reporterProTracks.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.reporterProTracks.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.reporterProTracks.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.reporterProTracks.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.reporterProTracks.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.reporterProTracks.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.reporterProTracks.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  reporterProTracks:
+
+    enabled: true
 
     annotations: {}
     labels: {}
@@ -525,7 +561,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.2.0
+    tag: 1.8.0
 
   resources:
     requests:
@@ -544,15 +580,12 @@ migrations:
 # @param kafka.password A Kafka password for connection. **Required**
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
 # @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
-# @param kafka.topics.pro List of topics for Reporter pro worker. **Required**
-# @param kafka.topics.uploader List of topics for Uploader worker. **Required**
-# @param kafka.topics.logs List of topics for API logs. **Required**
-# @param kafka.topics.framesLifecycle Topic for frames lifecycle events logs. **Required**
+# @param kafka.topics.pro Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**
+# @param kafka.topics.uploader Topic for Uploader worker. **Required**
+# @param kafka.topics.logs Topic for citylens mobile app logs, uploaded via citylens-api. **Required**
+# @param kafka.topics.framesLifecycle Topic for frames lifecycle events. **Required**
+# @param kafka.topics.predictions Topic for predictions events from detectors. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
-# @param kafka.predictors[0].name Name of predictor **Required**
-# @param kafka.predictors[0].topic Topic used by predictor **Required**
-# @param kafka.predictors[1].name Name of manual predictor **Required**
-# @param kafka.predictors[1].topic Topic used by manual predictor **Required**
 
 kafka:
 
@@ -566,13 +599,9 @@ kafka:
     logs: ''
     uploader: ''
     framesLifecycle: ''
+    predictions: ''
   consumerGroups:
     prefix: ''
-  predictors:
-  - name: camcom
-    topic: ''
-  - name: manual
-    topic: ''
 
 # @section S3 settings
 # @param s3.verifySsl Verify SSL certificate when connecting to s3.endpoint.
@@ -611,6 +640,7 @@ postgres:
 
 # @section Map settings
 
+# @param map.tileserverUrl URL template for tileserver. Ex.: `http://tileserver.host`
 # @param map.mapgl.host Hostname of mapgl server. **Required**
 # @param map.mapgl.key Key of mapgl server. **Required**
 # @param map.projects[0].name Name of project.
@@ -618,6 +648,7 @@ postgres:
 # @param map.initialProject Default project shown on Map.
 
 map:
+  tileserverUrl: ''
   mapgl:
     host: ''
     key: ''
@@ -642,6 +673,7 @@ locale: en
 headerLinks:
 - drivers
 - tracks
+- interest_zones
 - map
 
 reporters:

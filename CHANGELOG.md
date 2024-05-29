@@ -1,5 +1,160 @@
 # 2GIS On-Premise Changelog
 
+## [1.23.0] (2024-05-28)
+#### Images
+```
+navi-router
+	- navi-router:6.17.0.8
+	+ navi-router:6.17.1.2
+pro-ui
+	- pro-ui:2.5.1
+	+ pro-ui:2.14.0
+search-api
+	- search-api:7.74.0
+	+ search-api:7.76.1
+tiles-api
+	- tiles-api-importer:4.52.9
+	+ tiles-api-importer:4.54.0
+	- tiles-api-proxy:4.52.9
+	+ tiles-api-proxy:4.54.0
+	- tiles-api:4.52.9
+	+ tiles-api:4.54.0
+
+```
+
+## [1.22.0] (2024-05-02)
+#### [Breaking-Changes](Breaking-Changes.md#1220)
+#### Images
+```
+catalog-api
+	- catalog-importer:1.5.0
+	+ catalog-importer:1.7.0
+citylens
+	- citylens-api:1.7.2
+	+ citylens-api:1.8.0
+	- citylens-database:1.7.0
+	+ citylens-database:1.8.0
+	- citylens-web:1.7.2
+	+ citylens-web:1.8.0
+keys
+    - keys-ui:0.6.0
+    + keys-ui:0.7.0
+navi-castle
+	- navi-castle:1.7.0
+	+ navi-castle:1.9.2
+pro-api
+	- pro-api:1.6.0
+	+ pro-api:1.11.2
+	- pro-importer:1.6.0
+	+ pro-importer:1.11.2
+	- pro-permissions-api:1.6.0
+	+ pro-permissions-api:1.11.2
+pro-ui
+	- pro-importer:1.6.0
+	+ pro-importer:1.11.2
+	- pro-ui:2.1.1
+	+ pro-ui:2.5.1
+twins-api
+	- twins-api:1.7.3
+	+ twins-api:1.9.0
+
+```
+
+## [1.21.0] (2024-04-02)
+#### [Breaking-Changes](Breaking-Changes.md#1210)
+#### Images
+```
+catalog-api
+	- catalog-importer:1.1.0
+	+ catalog-importer:1.5.0
+citylens
+	- citylens-api:1.6.0
+	+ citylens-api:1.7.2
+	- citylens-database:1.6.0
+	+ citylens-database:1.7.0
+	- citylens-web:1.6.0
+	+ citylens-web:1.7.2
+keys
+	- keys-backend:1.78.0
+	+ keys-backend:1.79.0
+tiles-api
+	- tiles-api-importer:4.51.5
+	+ tiles-api-importer:4.52.9
+	- tiles-api-proxy:4.51.5
+	+ tiles-api-proxy:4.52.9
+	- tiles-api:4.51.5
+	+ tiles-api:4.52.9
+
+```
+
+## [1.20.2] (2024-03-20)
+#### Images
+```
+keys
+	- keys-backend:1.76.0
+	+ keys-backend:1.78.0
+
+```
+
+## [1.20.0] (2024-03-18)
+#### [Breaking-Changes](Breaking-Changes.md#1200)
+#### Images
+```
+citylens
+	- citylens-api:1.4.1
+	+ citylens-api:1.6.0
+	- citylens-database:1.2.0
+	+ citylens-database:1.6.0
+	- citylens-web:1.4.1
+	+ citylens-web:1.6.0
+pro-api
+	- pro-api:1.5.1
+	+ pro-api:1.6.0
+	- pro-importer:1.5.1
+	+ pro-importer:1.6.0
+	- pro-importer:1.5.1
+	+ pro-importer:1.6.0
+	- pro-permissions-api:1.5.1
+	+ pro-permissions-api:1.6.0
+pro-ui
+	+ pro-importer:1.6.0
+	- pro-ui:1.9.0
+	+ pro-ui:2.1.1
+search-api
+	- search-api:7.70.0
+	+ search-api:7.74.0
+
+```
+
+## [1.19.0] (2024-02-27)
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.42.0
+	+ mapgl:1.45.1
+navi-back
+	- navi-back:7.15.1.4
+	+ navi-back:7.15.2.4
+navi-restrictions
+	- navi-restrictions-api:1.0.0
+	+ navi-restrictions-api:1.0.1
+platform
+	- platform-ui:0.5.5
+	+ platform-ui:0.8.1
+pro-api
+	- pro-api:1.1.79
+	+ pro-api:1.5.0
+	- pro-importer:1.1.79
+	+ pro-importer:1.5.0
+	+ pro-importer:1.5.0
+	- pro-permissions-api:1.1.79
+	+ pro-permissions-api:1.5.0
+pro-ui
+	- pro-ui:1.7.5
+	+ pro-ui:1.9.0
+
+```
+
 ## [1.18.0] (2024-01-24)
 #### Images
 ```

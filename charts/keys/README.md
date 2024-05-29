@@ -31,11 +31,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.76.0`                       |
+| `backend.image.tag`        | Backend service image tag.        | `1.79.0`                       |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.          | `0.6.0`                        |
+| `admin.image.tag`          | Admin service image tag.          | `0.7.0`                        |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
 | `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
+
+### Flags for enabling/disabling certain features.
+
+| Name                       | Description           | Value   |
+| -------------------------- | --------------------- | ------- |
+| `featureFlags.enableAudit` | Enable audit logging. | `false` |
 
 ### Admin service settings
 
@@ -185,6 +191,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `postgres.rw.username` | PostgreSQL username. **Required**                                                   | `""`   |
 | `postgres.rw.password` | PostgreSQL password. **Required**                                                   | `""`   |
 
+### Kafka settings
+
+| Name                                  | Description                                                                                                                                                | Value  |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `kafka.audit`                         | **Settings for sending audit messages.**                                                                                                                   |        |
+| `kafka.audit.bootstrapServers`        | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`   |
+| `kafka.audit.username`                | Username for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`   |
+| `kafka.audit.password`                | Password for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`   |
+| `kafka.audit.topic`                   | Topic to produce audit messages.                                                                                                                           | `""`   |
+| `kafka.audit.produce.retryCount`      | Number of retries to produce a message.                                                                                                                    | `5`    |
+| `kafka.audit.produce.idempotentWrite` | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true` |
+
 ### LDAP connection settings
 
 | Name                                  | Description                                        | Value                                      |
@@ -218,6 +236,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | Name                     | Description                                                                                                                                                                                                                                              | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `dgctlStorage.host`      | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                           | `""`            |
+| `dgctlStorage.region`    | S3 region name.                                                                                                                                                                                                                                          | `""`            |
+| `dgctlStorage.secure`    | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                              | `false`         |
+| `dgctlStorage.verifySsl` | Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**                                                                                                                                              | `true`          |
 | `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `keys`          |
 | `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                     | `""`            |
 | `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                     | `""`            |
@@ -257,6 +278,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `redis.resources.requests.memory`   | A memory request.                  | `32Mi`  |
 | `redis.resources.limits.cpu`        | A CPU limit.                       | `1`     |
 | `redis.resources.limits.memory`     | A memory limit.                    | `256Mi` |
+
+### customCAs **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container.                                                                          | `""`  |
 
 
 ## Maintainers

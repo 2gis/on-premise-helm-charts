@@ -16,14 +16,7 @@ data:
       frames: {{ required "A valid .Values.kafka.topics.frames entry required" .topics.frames | squote }}
       tracks: {{ required "A valid .Values.kafka.topics.tracks entry required" .topics.tracks | squote }}
       logs: {{ required "A valid .Values.kafka.topics.logs entry required" .topics.logs | squote }}
-      {{- range .predictors }}
-      {{- if eq .name "camcom" }}
-      camcom: {{ required "A valid .topic entry required" .topic| squote }}
-      {{- end }}
-      {{- if eq .name "manual" }}
-      manual: {{ required "A valid .topic entry required" .topic| squote }}
-      {{- end }}
-      {{- end }}
+      predictions: {{ required "A valid .Values.kafka.topics.predictions entry required" .topics.predictions | squote }}
     {{- end }}
     database:
     {{- with .Values.postgres }}
@@ -38,10 +31,17 @@ data:
       {{- if .realm }}
       realm: {{ .realm | quote }}
       {{- end}}
-      {{- if .camcomToken }}
-      camcom_token: {{ .camcomToken | quote }}
+      predictor_tokens:
+        {{- .predictorsTokens | toYaml | nindent 8 }}
       {{- end }}
+    {{- end }}
+    {{- with .Values.api.licensing }}
+    pasportool:
+      {{- if .enabled }}
+      enabled: {{ .enabled }}
       {{- end }}
+      client_params:
+        endpoint_url: {{ required "A valid .Values.api.licensing.url entry required" .url | quote }}
     {{- end }}
     show_docs: {{ .Values.api.showDocs }}
     log_level: {{ .Values.api.logLevel }}

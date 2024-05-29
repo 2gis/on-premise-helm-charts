@@ -1,12 +1,48 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.22.0]
+
+## citylens
+- `kafka.predictors` is removed. Topics `kafka.predictors[0].topic` (`camcom` in values example), `kafka.predictors[1].topic` (`manual` in values example) replaced with single topic `kafka.topics.predictions`.
+
+### pro-api
+- Added new required parameters: kafka.eventsTopic.name, kafka.eventsTopic.readerGroupId
+
+## [1.21.0]
+
+### navi-restrictions
+- `api.api_key` renamed to `api.key`
+- `api.is_init_db` renamed to `api.isInitDb`
+- `db` renamed to `postgres`
+- `cron.max_attributes_fetcher_rps` renamed to `cron.maxAttributesFetcherRps`
+- `api.attractor_url`, `cron.edges_url_template` and `cron.edge_attributes_url_template` are deprecated. Set `naviBackHost` and `naviCastleHost` with `api.attractorUri`, `cron.edgeAttributesUriTemplate` and `cron.maxAttributesFetcherRps` instead
+- New values required `naviBackHost`, `naviCastleHost`
+
+### citylens
+- `worker.reporterProTracks.replicas` replaced with `worker.reporterProTracks.enabled`. One replica will be deployed if enabled.
+
+## [1.20.0]
+
+### navi-router
+- `router.keyManagementService.host` renamed to `router.keyManagementService.url`
+- `router.keyManagementService` renamed to `keys`
+- `router.castleHost` renamed to `router.castleUrl`
+
+### citylens
+
+- Backward compatibility for citylens 1.6.0 is broken:
+  - Parameter `api.auth.camcomToken` is replaced with `api.auth.predictorsTokens.camcom`
+  - License v2 service now required: `api.licensing.url`
+  - Parameter `map.tileserverUrl` now required
+  - Parameters group `worker.reporterProTracks` now required
+  - Database structure changed
+
 ## [1.17.0]
 
 ### citylens
 
 - Backward compatibility for citylens 1.3.0 is broken. Parameters `api.auth.publicKey` and `api.auth.algoritm` are replaced
   with `api.auth.authServerUrl`, `api.auth.realm`, `api.auth.verifySsl`.
-
 
 ### license
 
@@ -15,19 +51,27 @@
 - Removed `fs` persistence type, now only `s3` is available. `persistence.type` is no more provided, old `persistence.s3`
   settings now should be located under `persistence`.
 
-```yaml
---- # old
-persistence:
-  type: s3
-  s3:
-    ...
+  ```yaml
+  --- # old
+  persistence:
+    type: s3
+    s3:
+      ...
 
---- # new
-persistence:
-  ...
-```
+  --- # new
+  persistence:
+    ...
+  ```
 
 ### navi-back
+
+- added integration with license service (v2), mandatory for recent navi-back versions
+
+  ```yaml
+  license:
+    url: https://license
+  ```
+
 - renamed parameter naviback.ecaHost to naviback.ecaUrl
 - `livenessProbeDelay` and `readinessProbeDelay` are ignored in favor of startup probes
 
@@ -49,14 +93,14 @@ persistence:
 
 - Added new required dgctlStorage parameters
 
-```yaml
-dgctlStorage:
-  host: ''
-  bucket: keys
-  accessKey: ''
-  secretKey: ''
-  manifest: manifest.json
-```
+  ```yaml
+  dgctlStorage:
+    host: ''
+    bucket: keys
+    accessKey: ''
+    secretKey: ''
+    manifest: manifest.json
+  ```
 
 ## [1.13.0]
 
@@ -77,14 +121,14 @@ dgctlStorage:
 - Remove `hpa.scaleUpStabilizationWindowSeconds` and `.hpa.scaleDownStabilizationWindowSeconds`
 - Add `hpa.behavior`
 
-```yaml
-hpa:
-  behavior:
-    scaleUp:
-      stabilizationWindowSeconds: 500
-    scaleDown:
-      stabilizationWindowSeconds: 600
-```
+  ```yaml
+  hpa:
+    behavior:
+      scaleUp:
+        stabilizationWindowSeconds: 500
+      scaleDown:
+        stabilizationWindowSeconds: 600
+  ```
 
 ## [1.10.0]
 
@@ -99,19 +143,19 @@ hpa:
 - Added `license.type`
 - Added `persistence`
 
-```yaml
-persistence:
-  type: s3
-  fs:
-    storage: 10Mi
-    storageClassName: ''
-  s3:
-    host: ''
-    bucket: ''
-    root: ''
-    accessKey: ''
-    secretKey: ''
-```
+  ```yaml
+  persistence:
+    type: s3
+    fs:
+      storage: 10Mi
+      storageClassName: ''
+    s3:
+      host: ''
+      bucket: ''
+      root: ''
+      accessKey: ''
+      secretKey: ''
+  ```
 
 ## [1.7.6]
 

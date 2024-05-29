@@ -22,7 +22,7 @@
       "properties": {
         "logLevel": {
           "type": "string",
-          "enum": ["error"]
+          "enum": ["error", "warn"]
         },
         "isOnPremise": {
           "type": "boolean"
@@ -33,7 +33,15 @@
         },
         "appLocale": {
           "type": "string",
-          "enum": ["ar_AE", "en_AE", "ru_RU"]
+          "anyOf": [
+            {
+              "enum": ["ar-AE", "en-AE", "ru-RU"]
+            },
+            {
+              "enum": ["ar_AE", "en_AE", "ru_RU"],
+              "deprecated": true
+            }
+          ]
         },
         "appInitialMapCenter": {
           "type": "string"
@@ -45,6 +53,9 @@
           "type": "string"
         },
         "healthcheckPath": {
+          "type": "string"
+        },
+        "publicS3Url": {
           "type": "string"
         },
         "auth": {
@@ -84,7 +95,7 @@
             },
             "oAuthProvider": {
               "type": "string",
-              "enum": ["keycloak", "ugc"]
+              "enum": ["keycloak", "ugc", "openid"]
             },
             "oAuthScopes": {
               "type": "string"
@@ -100,6 +111,9 @@
             },
             "turnOffCertValidation": {
               "type": "boolean"
+            },
+            "openIdWellKnownUrlListUrl": {
+              "type": "string"
             }
           }
         },
@@ -140,10 +154,79 @@
             "styleFontsUrl": {
               "type": "string"
             },
+            "stylePreview": {
+              "type": "string"
+            },
             "styleModelsUrl": {
               "type": "string"
             }
           }
+        },
+        "mapbox": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "styleToken": {
+              "type": "string"
+            }
+          }
+        },
+        "externalStyleManager": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" }
+          }
+        },
+        "styles": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "s3Bucket": { "type": "string" },
+            "configUrl": { "type": "string" }
+          }
+        },
+        "whiteLabel": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "configUrl": { "type": "string" },
+            "s3Bucket": { "type": "string" }
+          }
+        }
+      }
+    },
+    "appStylesImporterName": {
+      "type": "string"
+    },
+    "dgctlStorage": {
+      "type": "object",
+      "required": ["host", "secure", "bucket", "accessKey", "secretKey", "manifest"],
+      "additionalProperties": false,
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "secure": {
+          "type": "boolean"
+        },
+        "bucket": {
+          "type": "string"
+        },
+        "accessKey": {
+          "type": "string"
+        },
+        "secretKey": {
+          "type": "string"
+        },
+        "manifest": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "disablePayloadSigning": {
+          "type": "boolean"
         }
       }
     }

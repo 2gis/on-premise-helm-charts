@@ -1,4 +1,4 @@
-﻿# @section Docker Registry settings
+# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -46,6 +46,8 @@ revisionHistoryLimit: 3
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
 # @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
+# @param dgctlStorage.region AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property
+# @param dgctlStorage.disablePayloadSigning Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage
 
 dgctlStorage:
   host: ''
@@ -54,6 +56,8 @@ dgctlStorage:
   accessKey: ''
   secretKey: ''
   manifest: ''
+  region: ''
+  disablePayloadSigning: false
 
 # @section Strategy settings
 
@@ -115,14 +119,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.1.79
+  tag: 1.11.2
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.1.79
+  tag: 1.11.2
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -131,12 +135,14 @@ permissionsApiImage:
 # @param s3.userAssetsDataBucket S3 bucket with user-created assets, aggregations, and filters. **Required**
 # @param s3.layerDataBucket S3 bucket with prepared layer data. **Required**
 # @param s3.snapshotBucket S3 bucket for storing snapshots of inclemental data updates. **Required**
+# @param s3.resourcesBucket S3 bucket for storing static resources. **Required**
 
 s3:
   assetsDataBucket: ''
   userAssetsDataBucket: ''
   layerDataBucket: ''
   snapshotBucket: ''
+  resourcesBucket: ''
 
 # @section 2GIS PRO API configuration
 
@@ -157,8 +163,6 @@ s3:
 # @skip api.filterByZoneCodes
 # @skip api.esDataCentersCount
 # @skip Local cache settings
-# @skip localCache.enabled
-# @skip localCache.trackStatistics
 # @skip api.localCache.enabled
 # @skip api.localCache.trackStatistics
 
@@ -266,6 +270,9 @@ redis:
 # @extra kafka.importTasksTopic Kafka topic settings to run import tasks.
 # @param kafka.importTasksTopic.name Kafka topic name.
 # @param kafka.importTasksTopic.readerGroupId Kafka consumer group for reading importing tasks.
+# @extra kafka.eventsTopic Kafka topic settings to manage events.
+# @param kafka.eventsTopic.name Kafka events topic name. **Required**
+# @param kafka.eventsTopic.readerGroupId Kafka consumer group for reading events. **Required**
 # @extra kafka.assetDataTopic Kafka topic settings to manage asset data updates.
 # @param kafka.assetDataTopic.name Kafka topic name.
 # @skip kafka.permissionsTopic
@@ -284,6 +291,9 @@ kafka:
     readerGroupId: ''
   assetDataTopic:
     name: ''
+  eventsTopic:
+    name: ''
+    readerGroupId: ''
   permissionsTopic:
     name: ''
     readerGroupId: ''
@@ -363,8 +373,6 @@ permissionsPodSettings:
 # @skip permissionsApi.host
 # @param permissionsApi.enabled If permissionsApi is enabled for the service.
 # @skip Local cache settings
-# @skip localCache.enabled
-# @skip localCache.trackStatistics
 # @skip permissionsApi.localCache.enabled
 # @skip permissionsApi.localCache.trackStatistics
 
@@ -386,6 +394,7 @@ permissionsApi:
 # @param assetImporter.maxParallelJobs How many import jobs can be run simultaneously
 # @param assetImporter.enabled If assetImporter is enabled for the service.
 # @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
+# @param assetImporter.startOnDeployMode Import mode: 'ScheduleManifest' - copy data from manifest and schedule import, 'ManifestData' - just copy data from manifest.
 # @param assetImporter.imageProxyUrl URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
 # @param assetImporter.externalLinksProxyUrl URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
 # @param assetImporter.externalLinksAllowedHosts Comma separated hosts, i.e. 'someserver.com,someserver2.com' )
@@ -395,7 +404,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.79
+  tag: 1.11.2
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -411,6 +420,7 @@ assetImporter:
   enabled: true
   suspended: false
   startOnDeploy: true
+  startOnDeployMode: ScheduleManifest
   files: ''
   imageProxyUrl: ''
   externalLinksProxyUrl: ''
@@ -425,7 +435,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.79
+  tag: 1.11.2
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
@@ -476,10 +486,10 @@ ingress:
   enabled: false
   className: nginx
   hosts:
-    - host: pro-api.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  - host: pro-api.example.com
+    paths:
+    - path: /
+      pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-api.example.com
@@ -496,10 +506,10 @@ permissionsApiIngress:
   enabled: false
   className: nginx
   hosts:
-    - host: pro-permissions-api.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  - host: pro-permissions-api.example.com
+    paths:
+    - path: /
+      pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-permissions-api.example.com

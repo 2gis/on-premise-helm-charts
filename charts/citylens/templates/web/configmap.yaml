@@ -80,13 +80,17 @@ data:
       source_env: {{ .sourceEnv }}
     {{- end }}
     {{- end }}
-    {{- with .Values.pro }}
-    pro_client:
-      endpoint_url: {{ .url }}
-      token: {{ .key }}
-      verify_ssl: {{ .verifySsl }}
-    {{- end }}
+    pro:
+      {{- with .Values.pro }}
+      client:
+        endpoint_url: {{ .url }}
+        token: {{ .key }}
+        verify_ssl: {{ .verifySsl }}
+      {{- end }}
+      topics:
+        frames: {{ .Values.kafka.topics.pro }}
     map:
+      tileserver_url_template: {{ required "A valid .Values.map.tileserverUrl entry required" .Values.map.tileserverUrl }}/tiles?x={x}&y={y}&z={z}
       mapgl:
         host: {{ required "A valid .Values.map.mapgl.host entry required" .Values.map.mapgl.host | squote }}
         key: {{ required "A valid .Values.map.mapgl.key entry required" .Values.map.mapgl.key | squote }}
@@ -102,6 +106,9 @@ data:
         {{- if .Values.worker.tracksUploader.enabled }}
         - reload_track
         - reload_statuses
+        {{- end }}
+        {{- if .Values.worker.camcomSender.enabled }}
+        - camcom_stats
         {{- end }}
         {{- if .Values.pro.url }}
         - pro
@@ -119,11 +126,10 @@ data:
           predictors:
             {{- toYaml .predictors | nindent 12 }}
       {{- if eq .name "pro" }}
-          topic: {{ $.Values.kafka.topics.pro }}
           {{- if .trackTimeoutDays }}
           timeout: {{ .trackTimeoutDays }}
           {{- end }}
         {{- end }}
       {{- end }}
       predictors:
-        {{- toYaml .Values.kafka.predictors | nindent 8 }}
+        {{- toYaml (.Values.kafka.predictorsExtraTopics | default list) | nindent 8 }}

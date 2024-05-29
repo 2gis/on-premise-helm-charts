@@ -13,9 +13,10 @@ metadata:
     {{- end }}
 spec:
   replicas: {{ .Values.ui.replicas }}
-  {{- if .Values.strategy }}
+  revisionHistoryLimit: {{ .Values.ui.revisionHistoryLimit }}
+  {{- if .Values.ui.strategy }}
   strategy:
-    {{- toYaml .Values.strategy | nindent 4 }}
+    {{- toYaml .Values.ui.strategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels:
@@ -24,12 +25,12 @@ spec:
     metadata:
       {{- with .Values.ui.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+        {{- include "pro.ui.tplvalues.render" (dict "value" . "context" $ ) | nindent 8 }}
       {{- end }}
       labels:
         {{- include "pro.ui.labels" . | nindent 8 }}
         {{- with .Values.ui.podLabels }}
-        {{- toYaml . | nindent 8 }}
+        {{- include "pro.ui.tplvalues.render" (dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
     spec:
       containers:
@@ -38,13 +39,34 @@ spec:
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           ports:
             - name: http
-              containerPort: 3000
+              containerPort: {{ .Values.ui.containerPort }}
+          {{- if .Values.ui.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /api/healthcheck/app
+              path: {{ .Values.ui.healthcheckPath }}
               port: http
-          resources:
-            {{- toYaml .Values.ui.resources | nindent 12 }}
+            {{- $otherProbeParams := (omit .Values.ui.readinessProbe "enabled") }}
+            {{- with $otherProbeParams }}
+            {{- include "pro.ui.tplvalues.render" (dict "value" . "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.ui.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.ui.healthcheckPath }}
+              port: http
+            {{- $otherProbeParams := (omit .Values.ui.livenessProbe "enabled") }}
+            {{- with $otherProbeParams }}
+            {{- include "pro.ui.tplvalues.render" (dict "value" . "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5"]
+          {{- if .Values.ui.resources }}
+          resources: {{- toYaml .Values.ui.resources | nindent 12 }}
+          {{- end }}
           env:
             {{- include "pro.env.ui" . | nindent 12 }}
       {{- with .Values.ui.nodeSelector }}
@@ -62,4 +84,7 @@ spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ui.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.ui.terminationGracePeriodSeconds }}
       {{- end }}

@@ -1,0 +1,15 @@
+{{- if .Values.customCAs.bundle }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "catalog.configmap.jobs.name" . }}
+  labels:
+    {{- include "catalog.labels" . | nindent 4}}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "-10"
+data:
+  custom-ca.crt: |-
+{{- .Values.customCAs.bundle | nindent 4 }}
+{{- end }}
