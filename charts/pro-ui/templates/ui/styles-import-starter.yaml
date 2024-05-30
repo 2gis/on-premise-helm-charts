@@ -4,8 +4,8 @@ kind: Job
 metadata:
   name: {{ include "pro.ui.styles-importer-name" . }}-starter
   annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- include "pro.ui.importer.hook.annotations" $ | nindent 4 }}
+    "helm.sh/hook-weight": "1"
 spec:
   backoffLimit: {{ .Values.stylesImporter.backoffLimit }}
   template:
