@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "keys.dispatcher.name" . }}
+  {{- if or .Values.dispatcher.annotations .Values.customCAs.bundle }}
+  annotations:
+    {{- if .Values.customCAs.bundle }}
+    checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
+    {{- end }}
+    {{- with .Values.dispatcher.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  labels:
+    {{- include "keys.dispatcher.labels" . | nindent 4 }}
+    {{- with .Values.dispatcher.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.dispatcher.replicas }}
+  strategy:
+    {{- toYaml .Values.dispatcher.strategy | nindent 4 }}
+  selector:
+    matchLabels:
+      {{- include "keys.dispatcher.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.dispatcher.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "keys.dispatcher.labels" . | nindent 8 }}
+        {{- with .Values.dispatcher.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+        - name: dispatcher
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: [ "keys-dispatcher" ]
+          resources:
+            {{- toYaml .Values.dispatcher.resources | nindent 12 }}
+          env:
+            {{- include "keys.env.db.deploys" . | nindent 12 }}
+            {{- include "keys.env.dispatcher" . | nindent 12 }}
+            {{- include "keys.env.kafka.audit" . | nindent 12 }}
+            {{- include "keys.env.featureFlags" . | nindent 12 }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "keys.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+      {{- if .Values.customCAs.bundle }}
+      volumes:
+        {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.dispatcher.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.dispatcher.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.dispatcher.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

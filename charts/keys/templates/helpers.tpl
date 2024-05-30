@@ -10,6 +10,14 @@
 {{ include "keys.name" . }}-tasker
 {{- end }}
 
+{{- define "keys.dispatcher.name" -}}
+{{ include "keys.name" . }}-dispatcher
+{{- end }}
+
+{{- define "keys.cleaner.name" -}}
+{{ include "keys.name" . }}-cleaner
+{{- end }}
+
 {{- define "keys.migrate.name" -}}
 {{ include "keys.name" . }}-migrate
 {{- end }}
@@ -80,6 +88,22 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "keys.dispatcher.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}-dispatcher
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "keys.dispatcher.labels" -}}
+{{ include "keys.dispatcher.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "keys.cleaner.labels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}-cleaner
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
 {{- define "keys.import.labels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-import
 app.kubernetes.io/instance: {{ .Release.Name }}
@@ -131,6 +155,24 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_TASKER_DELAY
   value: "{{ .Values.tasker.delay }}"
 {{- end }}
+
+{{- define "keys.env.dispatcher" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.dispatcher.logLevel }}"
+- name: KEYS_AUDIT_EVENTS_SEND_INTERVAL
+  value: "{{ .Values.dispatcher.auditEvents.sendInterval }}"
+- name: KEYS_AUDIT_EVENTS_BATCH_MAX_SIZE
+  value: "{{ .Values.dispatcher.auditEvents.batchMaxSize }}"
+- name: KEYS_AUDIT_EVENTS_HOLD_DURATION
+  value: "{{ .Values.dispatcher.auditEvents.holdDuration }}"
+{{- end }}
+
+{{- define "keys.env.cleaner" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.cleaner.logLevel }}"
+- name: KEYS_AUDIT_EVENTS_RETENTION_DURATION
+  value: "{{ .Values.cleaner.auditEvents.retentionDuration }}"
+{{- end -}}
 
 {{- define "keys.env.db" -}}
 - name: KEYS_DB_RO_HOST
