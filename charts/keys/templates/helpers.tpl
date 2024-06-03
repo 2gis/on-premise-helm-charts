@@ -160,10 +160,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.cleaner" -}}
 - name: KEYS_LOG_LEVEL
-  value: "{{ .Values.dispatcher.logLevel }}"
+  value: "{{ .Values.cleaner.logLevel }}"
 - name: KEYS_AUDIT_EVENTS_RETENTION_DURATION
   value: "{{ .Values.cleaner.auditEvents.retentionDuration }}"
-{{- end -}}}}
+{{- end -}}
 
 {{- define "keys.env.db" -}}
 - name: KEYS_DB_RO_HOST
