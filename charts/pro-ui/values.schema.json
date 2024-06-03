@@ -22,7 +22,7 @@
       "properties": {
         "logLevel": {
           "type": "string",
-          "enum": ["error"]
+          "enum": ["error", "warn"]
         },
         "isOnPremise": {
           "type": "boolean"
@@ -160,6 +160,22 @@
             "styleModelsUrl": {
               "type": "string"
             }
+          }
+        },
+        "mapbox": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "styleToken": {
+              "type": "string"
+            }
+          }
+        },
+        "externalStyleManager": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" }
           }
         },
         "styles": {

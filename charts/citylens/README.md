@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.7.2`                        |
+| `api.image.tag`        | Tag.         | `1.8.0`                        |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -132,7 +132,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.7.2`                        |
+| `web.image.tag`        | Tag.         | `1.8.0`                        |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -336,7 +336,7 @@ See the [documentation]() to learn about:
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.7.0`                             |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.8.0`                             |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |
@@ -346,22 +346,19 @@ See the [documentation]() to learn about:
 
 ### Kafka settings
 
-| Name                           | Description                                                                           | Value    |
-| ------------------------------ | ------------------------------------------------------------------------------------- | -------- |
-| `kafka.bootstrapServer`        | A Kafka broker endpoint. **Required**                                                 | `""`     |
-| `kafka.username`               | A Kafka username for connection. **Required**                                         | `""`     |
-| `kafka.password`               | A Kafka password for connection. **Required**                                         | `""`     |
-| `kafka.topics.frames`          | List of topics for Frames saver worker. **Required**                                  | `""`     |
-| `kafka.topics.tracks`          | List of topics for Tracks metadata worker. **Required**                               | `""`     |
-| `kafka.topics.pro`             | Topic for frames synchronization with Pro (used by Reporter pro worker). **Required** | `""`     |
-| `kafka.topics.uploader`        | Topic for Uploader worker. **Required**                                               | `""`     |
-| `kafka.topics.logs`            | Topic for citylens mobile app logs, uploaded via citylens-api. **Required**           | `""`     |
-| `kafka.topics.framesLifecycle` | Topic for frames lifecycle events. **Required**                                       | `""`     |
-| `kafka.consumerGroups.prefix`  | Kafka topics prefix. **Required**                                                     | `""`     |
-| `kafka.predictors[0].name`     | Name of predictor **Required**                                                        | `camcom` |
-| `kafka.predictors[0].topic`    | Topic used by predictor **Required**                                                  | `""`     |
-| `kafka.predictors[1].name`     | Name of manual predictor **Required**                                                 | `manual` |
-| `kafka.predictors[1].topic`    | Topic used by manual predictor **Required**                                           | `""`     |
+| Name                           | Description                                                                           | Value |
+| ------------------------------ | ------------------------------------------------------------------------------------- | ----- |
+| `kafka.bootstrapServer`        | A Kafka broker endpoint. **Required**                                                 | `""`  |
+| `kafka.username`               | A Kafka username for connection. **Required**                                         | `""`  |
+| `kafka.password`               | A Kafka password for connection. **Required**                                         | `""`  |
+| `kafka.topics.frames`          | List of topics for Frames saver worker. **Required**                                  | `""`  |
+| `kafka.topics.tracks`          | List of topics for Tracks metadata worker. **Required**                               | `""`  |
+| `kafka.topics.pro`             | Topic for frames synchronization with Pro (used by Reporter pro worker). **Required** | `""`  |
+| `kafka.topics.uploader`        | Topic for Uploader worker. **Required**                                               | `""`  |
+| `kafka.topics.logs`            | Topic for citylens mobile app logs, uploaded via citylens-api. **Required**           | `""`  |
+| `kafka.topics.framesLifecycle` | Topic for frames lifecycle events. **Required**                                       | `""`  |
+| `kafka.topics.predictions`     | Topic for predictions events from detectors. **Required**                             | `""`  |
+| `kafka.consumerGroups.prefix`  | Kafka topics prefix. **Required**                                                     | `""`  |
 
 ### S3 settings
 
