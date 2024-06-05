@@ -374,3 +374,27 @@ releases:
         value: {{ .Values.kafka.authLogin.sslPassword }}
   {{ end }}
 {{ end }}
+
+  {{ $API := "freeroam" }}{{ $type := "freeroam"}}
+  - name: navi-back-{{ $API }}
+    <<: *default
+    labels:
+      service: {{ $API }}
+      chart: navi-back
+    set:
+      - name: naviback.app_rule
+        value: {{ $API }}
+      - name: naviback.type
+        value: {{ $type }}
+      {{ if eq .Values.naviCustomResources true }}
+      - name: replicaCount
+        value: {{ .Values.freeroam.replicaCount }}
+      - name: resources.limits.cpu
+        value: {{ .Values.freeroam.limits.cpu }}
+      - name: resources.limits.memory
+        value: {{ .Values.freeroam.limits.memory }}
+      - name: resources.requests.cpu
+        value: {{ .Values.freeroam.requests.cpu }}
+      - name: resources.requests.memory
+        value: {{ .Values.freeroam.requests.memory }}
+      {{- end }}
