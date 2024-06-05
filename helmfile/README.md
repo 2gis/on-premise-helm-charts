@@ -1,21 +1,22 @@
 #### Содержание
-[Подготовка](#prepare)  
-[Деплой castle](#castle)  
-[Деплой бэкенда Directions API авто](#directions-car)  
-[Деплой бэкенда Directions API пешеходы](#directions-pedestrian)  
-[Деплой бэкенда Directions API велосипеды](#directions-bicycle)  
-[Деплой бэкенда Directions API такси](#directions-taxi)  
-[Деплой бэкенда Directions API грузовики](#directions-truck)  
-[Деплой бэкенда Pairs Directions API](#pairs-directions)  
-[Деплой бэкенда Public Transport](#public-transport)  
-[Деплой бэкенда Distance Matrix API (до 25х25)](#distance-matrix)  
-[Деплой бэкенда Distance Matrix API Async (более 25х25)](#async)  
-[Деплой бэкенда Distance Matrix API Public Transport (до 10х10)](#distance-matrix-ctx)  
-[Деплой GRPC-proxy для Distance Matrix API Async (более 25х25)](#grpc)  
-[Деплой фронтенда для Distance Matrix API Async (более 25х25)](#async-front)  
-[Деплой splitter для Distance Matrix API Public Transport (до 10х10)](#splitter)  
-[Деплой navi-router](#navi-router)  
-[Деплой navi-front](#navi-front)  
+[Подготовка](#prepare)
+[Деплой castle](#castle)
+[Деплой бэкенда Directions API авто](#directions-car)
+[Деплой бэкенда Directions API пешеходы](#directions-pedestrian)
+[Деплой бэкенда Directions API велосипеды](#directions-bicycle)
+[Деплой бэкенда Directions API такси](#directions-taxi)
+[Деплой бэкенда Directions API грузовики](#directions-truck)
+[Деплой бэкенда Free Roam API](#freeroam)
+[Деплой бэкенда Pairs Directions API](#pairs-directions)
+[Деплой бэкенда Public Transport](#public-transport)
+[Деплой бэкенда Distance Matrix API (до 25х25)](#distance-matrix)
+[Деплой бэкенда Distance Matrix API Async (более 25х25)](#async)
+[Деплой бэкенда Distance Matrix API Public Transport (до 10х10)](#distance-matrix-ctx)
+[Деплой GRPC-proxy для Distance Matrix API Async (более 25х25)](#grpc)
+[Деплой фронтенда для Distance Matrix API Async (более 25х25)](#async-front)
+[Деплой splitter для Distance Matrix API Public Transport (до 10х10)](#splitter)
+[Деплой navi-router](#navi-router)
+[Деплой navi-front](#navi-front)
 
 <a name="prepare"><h3>Подготовка</h3></a>
 Скачать данные и загрузить в s3
@@ -66,6 +67,11 @@ helmfile -e test -f ../on-premise-helm-charts/helmfile/deploy/navi/navi-back-cus
 <a name="directions-truck"><h3>Деплой бэкенда Directions API грузовики</h3></a>
 ```
 helmfile -e test -f ../on-premise-helm-charts/helmfile/deploy/navi/navi-back-custom.yaml -l service=directions-truck sync
+```
+
+<a name="freeroam"><h3>Деплой бэкенда Free Roam</h3></a>
+```
+helmfile -e test -f ../on-premise-helm-charts/helmfile/deploy/navi/navi-back-custom.yaml -l service=freeroam sync
 ```
 
 <a name="pairs-directions"><h3>Деплой бэкенда Pairs Directions API</h3></a>
