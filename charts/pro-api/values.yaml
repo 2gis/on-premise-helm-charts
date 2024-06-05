@@ -308,11 +308,11 @@ backgroundJobs:
 
 # @section Catalog API settings
 
-# @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search).
+# @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc
 # @param catalog.key Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).
 
 catalog:
-  url: http://catalog-api.svc
+  url: ''
   key: ''
 
 # @section Navigation API settings
