@@ -19,6 +19,12 @@ echo $UPSTREAM
 # Truck Directions API - to do нет токена в api key
 for service in $UPSTREAM; do
   case $service in
+    "freeroam")
+        echo "Create routing for Directions API bicycle:"
+        echo
+        echo `curl -sSfG  $URL/free_roam/2.0?key=$KEY -d @moscow_fr.txt`
+        echo
+        ;;
     "directions-bicycle")
         echo "Create routing for Directions API bicycle:"
         echo
