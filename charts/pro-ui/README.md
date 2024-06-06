@@ -40,7 +40,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name                  | Description | Value                    |
 | --------------------- | ----------- | ------------------------ |
 | `ui.image.repository` | Repository  | `2gis-on-premise/pro-ui` |
-| `ui.image.tag`        | Tag         | `2.14.0`                 |
+| `ui.image.tag`        | Tag         | `2.15.1`                 |
 
 ### UI service settings
 
@@ -68,9 +68,11 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### 2GIS Pro API settings
 
-| Name         | Description                                                                                  | Value |
-| ------------ | -------------------------------------------------------------------------------------------- | ----- |
-| `ui.api.url` | Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/. | `""`  |
+| Name                   | Description                                                                                  | Value   |
+| ---------------------- | -------------------------------------------------------------------------------------------- | ------- |
+| `ui.api.url`           | Base URL for the Pro API with protocol and trailing slash, ex: http://pro-api.ingress.host/. | `""`    |
+| `ui.api.timeout`       | Timeout in ms for API request on client side, ex: 30000.                                     | `30000` |
+| `ui.api.serverTimeout` | Timeout in ms for API request on server side, ex: 30000.                                     | `30000` |
 
 ### MapGL JS API settings
 
@@ -180,7 +182,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 ### Import job settings
 
 | Name                                        | Description                                                                                                                                              | Value                          |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |--------------------------------|
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `stylesImporter.serviceAccount`             | Kubernetes service account                                                                                                                               | `runner`                       |
 | `stylesImporter.image.repository`           | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
 | `stylesImporter.image.tag`                  | Docker image tag.                                                                                                                                        | `1.22.0`                       |
