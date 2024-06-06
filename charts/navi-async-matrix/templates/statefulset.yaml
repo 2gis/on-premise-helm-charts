@@ -174,6 +174,8 @@ spec:
               value: {{ required "A valid .Values.s3.host entry required" .Values.s3.host | quote }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__S3_BUCKET
               value: {{ required "A valid .Values.s3.bucket entry required" .Values.s3.bucket | quote }}
+            - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__REGION_NAME
+              value: {{ .Values.s3.region | quote }}
             - name: DM_ASYNC_SERVICE_LOGGER_SETTING__LEVEL
               value: {{ .Values.dm.logLevel | quote }}
             {{- if .Values.s3.publicNetloc }}
@@ -189,6 +191,22 @@ spec:
             - name: DM_ASYNC_SERVICE_TOPIC_RULES
               {{- /* topicRules is a structure, hence mustToJson */}}
               value: {{ .Values.kafka.taskTopicRules | mustToJson | quote }}
+            {{- if .Values.kafka.attractTopic }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ATTRACT_TOPIC
+              value: {{ .Values.kafka.attractTopic | quote }}
+            {{- end }}
+            {{- if .Values.kafka.oneToManyTopic }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ONE_TO_MANY_TOPIC
+              value: {{ .Values.kafka.oneToManyTopic | quote }}
+            {{- end }}
+            {{- if .Values.kafka.attractTopicRules }}
+            - name: DM_ASYNC_SERVICE_ATTRACT_TOPIC_RULES
+              value: {{ .Values.kafka.attractTopicRules | mustToJson | quote }}
+            {{- end }}
+            {{- if .Values.kafka.vrpStatusTopic }}
+            - name: DM_ASYNC_SERVICE_SUBSCRIBER_TOPIC
+              value: {{ .Values.kafka.vrpStatusTopic | quote }}
+            {{- end }}
             {{- if .Values.dm.archiver.enabled }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ARCHIVE_RESPONSE_TOPIC
               value: {{ .Values.kafka.archiveTopic | quote }}
@@ -208,6 +226,20 @@ spec:
             - name: DM_ASYNC_SERVICE_COMPOSITE_TASK_TIMEOUT_IN_SECONDS
               value: {{ .Values.dm.compositeTaskTimeoutSec | quote }}
             {{- end }}{{- /* .Values.dm.archiver.enabled */}}
+            {{- if .Values.multiDc.enabled }}
+            - name: DM_ASYNC_SERVICE_APP__LOCATION
+              value: {{ .Values.multiDc.location | quote }}
+            - name: DM_ASYNC_SERVICE_REDIRECT_HEADER
+              value: {{ .Values.multiDc.redirectHeader | default "" | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_TASK_TOPIC
+              value: {{ .Values.multiDc.secondaryTopics.statusTopic | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_CANCEL_TOPIC
+              value: {{ .Values.multiDc.secondaryTopics.cancelTopic | quote }}
+            {{- if .Values.dm.archiver.enabled }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ARCHIVE_RESPONSE_TOPIC
+              value: {{ .Values.multiDc.secondaryTopics.archiveTopic | quote }}
+            {{- end }}{{- /* .Values.dm.archiver.enabled */}}
+            {{- end }}{{- /* .Values.kafka.secondaryTopics */}}
             - name: DM_ASYNC_SERVICE_NODE_ID
               valueFrom:
                 fieldRef:
@@ -256,3 +288,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "navi-async-matrix.fullname" . | quote }}
                   key: dmApiKey
+            {{- if .Values.keys.truckToken }}
+            - name: DM_ASYNC_SERVICE_KMS__TRUCK_DM_ASYNC_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  key: dmApiTruckKey
+            {{- end }}
