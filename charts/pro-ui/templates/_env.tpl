@@ -1,13 +1,15 @@
 
 {{- define "pro.env.ui" -}}
+- name: NETWORK_TIMEOUT
+  value: "{{ required "A valid .Values.ui.api.timeout" .Values.ui.api.timeout }}"
+- name: SERVER_NETWORK_TIMEOUT
+  value: "{{ required "A valid .Values.ui.api.serverTimeout" .Values.ui.api.serverTimeout }}"
 - name: URBI_API_URL
   value: "{{ required "A valid .Values.ui.api.url entry required" .Values.ui.api.url }}"
 - name: MAPGL_HOST
   value: "{{ required "A valid .Values.ui.mapgl.host entry required" .Values.ui.mapgl.host }}"
 - name: MAPGL_SCRIPT_PATH
   value: "{{ .Values.ui.mapgl.scriptPath }}"
-- name: MAPGL_STYLE_ID
-  value: "{{ .Values.ui.mapgl.styleId }}"
 - name: MAPGL_KEY
   value: "{{ required "A valid .Values.ui.mapgl.key entry required" .Values.ui.mapgl.key }}"
 - name: MAPGL_STYLE_URL
@@ -49,6 +51,8 @@
 - name: OPEN_ID_WELL_KNOWN_URL_LIST_URL
   value: "{{ required "A valid .Values.ui.auth.openIdWellKnownUrlListUrl entry required" .Values.ui.auth.openIdWellKnownUrlListUrl }}"
 {{- else }}
+- name: OPEN_ID_WELL_KNOWN_URL_LIST_URL
+  value: ''
 - name: AUTH_IDENTITY_PROVIDER_URL
   value: "{{ required "A valid .Values.ui.auth.identityProviderUrl entry required" .Values.ui.auth.identityProviderUrl }}"
 - name: O_AUTH_API_URL
