@@ -22,7 +22,7 @@
       "properties": {
         "logLevel": {
           "type": "string",
-          "enum": ["error"]
+          "enum": ["error", "warn"]
         },
         "isOnPremise": {
           "type": "boolean"
