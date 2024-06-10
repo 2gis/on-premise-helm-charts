@@ -31,7 +31,7 @@ featureFlags:
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.79.0
+    tag: 1.85.2
 
 # @section Admin service settings
 
