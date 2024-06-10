@@ -73,7 +73,7 @@ spec:
             - name: config-volume
               mountPath: /opt/api/config
             {{- if $.Values.customCAs.bundle }}
-            - mountPath: { { include "citylens.customCA.mountPath" $ } }
+            - mountPath: {{ include "citylens.customCA.mountPath" $ }}
               name: custom-ca
               readOnly: true
             {{- end }}
@@ -84,7 +84,7 @@ spec:
         {{- if $.Values.customCAs.bundle }}
         - name: custom-ca
           configMap:
-            name: { { include "citylens.name" $ } }-custom-ca-configmap
+            name: {{ include "citylens.name" $ }}-custom-ca-configmap
         {{- end }}
       {{- with .Values.web.nodeSelector }}
       nodeSelector:
