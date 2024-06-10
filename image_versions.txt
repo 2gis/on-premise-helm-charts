@@ -23,7 +23,7 @@ keycloak
 keys
 	keys-backend:1.79.0
 	keys-redis:6.2.6-alpine3.15
-	keys-ui:0.7.0
+	keys-ui:0.8.0
 license
 	license:2.2.1
 mapgl-js-api
