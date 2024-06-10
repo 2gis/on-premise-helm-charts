@@ -120,12 +120,14 @@
         "api": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["url"],
+          "required": ["url", "timeout", "serverTimeout"],
           "properties": {
             "url": {
               "type": "string",
               "pattern": "^(https?://.+/)?$"
-            }
+            },
+            "timeout": { "type": "number", "minimum": 0 },
+            "serverTimeout": { "type": "number", "minimum": 0 }
           }
         },
         "mapgl": {
