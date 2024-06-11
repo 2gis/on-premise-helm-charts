@@ -118,6 +118,7 @@ data:
         frames_topics: {{ .Values.kafka.topics.frames }}
         metadata_topics: {{ .Values.kafka.topics.tracks }}
         frames_lifecycle_topic: {{ required "A valid .Values.kafka.topics.framesLifecycle entry required" .Values.kafka.topics.framesLifecycle | squote }}
+        unified_predictions_topic: {{ required "A valid .Values.kafka.topics.predictions entry required" .Values.kafka.topics.predictions | squote }}
       logs_saver:
         logs_topic: {{ .Values.kafka.topics.logs }}
       reporters:
