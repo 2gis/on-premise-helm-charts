@@ -148,7 +148,7 @@ spcore:
   # @param spcore.catalog.regionId Additional geocoder filter
 
   catalog:
-    url: ''
+    url: http://catalog-api
     key: ''
     type: ''
     regionId: ''
@@ -157,7 +157,7 @@ spcore:
   # @param spcore.navi.url Navi service URL.
 
   navi:
-    url: https://catalog-api.host
+    url: http://navi-front
 
   # @extra spcore.defaultLimits **Default limits.**
   # @param spcore.defaultLimits.tables Maximum number of tables.
