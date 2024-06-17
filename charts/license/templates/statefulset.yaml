@@ -39,6 +39,7 @@ spec:
       {{- if ne (include "license.type" $) "1" }}
       serviceAccountName: {{ include "license.serviceAccount" $ }}
       {{- end }}
+      automountServiceAccountToken: true
       containers:
         - name: license
           {{- with .image }}
