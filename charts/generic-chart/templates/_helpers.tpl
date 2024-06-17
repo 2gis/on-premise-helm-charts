@@ -82,7 +82,7 @@ Usage:
                                         "value" .Values.vpa.containerName
                                         "context" .) }}
   {{- else }}
-    {{- .Chart.Name }}
+    {{- .Chart.Name | replace "_" "-" }}
   {{- end }}
 {{- end -}}
 
@@ -144,4 +144,24 @@ type: ContainerResource
 containerResource:
   container: {{ include "generic-chart.containerName" . }}
   {{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for cronjob.
+*/}}
+{{- define "generic-chart.capabilities.cronjob.apiVersion" -}}
+{{- if semverCompare "<1.21-0" (include "generic-chart.capabilities.kubeVersion" .) -}}
+{{- print "batch/v1beta1" -}}
+{{- else -}}
+{{- print "batch/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the suffix from .suffix.
+*/}}
+{{- define "generic-chart.getSuffix" -}}
+{{- if .suffix -}}
+{{- printf "-%s" (toString .suffix) -}}
+{{- end -}}
 {{- end -}}
