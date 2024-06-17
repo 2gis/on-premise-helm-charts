@@ -23,7 +23,7 @@ spec:
             - name: clean
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
               imagePullPolicy: {{ .Values.imagePullPolicy }}
-              command: [ "keysctl", "clean" ]
+              command: [ "keysctl", "clear" ]
               args: [ "audit_events" ]
               resources:
                 {{- toYaml .Values.cleaner.resources | nindent 16 }}
