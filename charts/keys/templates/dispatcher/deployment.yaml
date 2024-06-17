@@ -46,6 +46,7 @@ spec:
             {{- include "keys.env.db.deploys" . | nindent 12 }}
             {{- include "keys.env.dispatcher" . | nindent 12 }}
             {{- include "keys.env.kafka.audit" . | nindent 12 }}
+            {{- include "keys.env.featureFlags" . | nindent 12 }}
             {{- if .Values.customCAs.bundle }}
             {{- include "keys.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
