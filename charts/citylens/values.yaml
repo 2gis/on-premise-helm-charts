@@ -685,7 +685,7 @@ reporters:
 
 # @param pro.baseUrl PRO API URL (used for filters actualization). Ex: http(s)://pro-api.svc/your_asset_name/filters
 # @param pro.key PRO API auth token
-# @param pro.verifySsl Set to `false` if pro.url must be accessed via https without certificate validation. **Required**
+# @param pro.verifySsl Set to `false` if pro.baseUrl must be accessed via https without certificate validation. **Required**
 # @param pro.framesAssetId PRO frames asset id (used for filters actualization). Ex: your_asset_name
 
 pro:

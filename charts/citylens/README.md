@@ -407,12 +407,12 @@ See the [documentation]() to learn about:
 
 ### PRO integration (only when Pro reporter enabled)
 
-| Name                | Description                                                                                       | Value  |
-| ------------------- | ------------------------------------------------------------------------------------------------- | ------ |
-| `pro.baseUrl`       | PRO API URL (used for filters actualization). Ex: http(s)://pro-api.svc/your_asset_name/filters   | `""`   |
-| `pro.key`           | PRO API auth token                                                                                | `""`   |
-| `pro.verifySsl`     | Set to `false` if pro.url must be accessed via https without certificate validation. **Required** | `true` |
-| `pro.framesAssetId` | PRO frames asset id (used for filters actualization). Ex: your_asset_name                         | `""`   |
+| Name                | Description                                                                                           | Value  |
+| ------------------- | ----------------------------------------------------------------------------------------------------- | ------ |
+| `pro.baseUrl`       | PRO API URL (used for filters actualization). Ex: http(s)://pro-api.svc/your_asset_name/filters       | `""`   |
+| `pro.key`           | PRO API auth token                                                                                    | `""`   |
+| `pro.verifySsl`     | Set to `false` if pro.baseUrl must be accessed via https without certificate validation. **Required** | `true` |
+| `pro.framesAssetId` | PRO frames asset id (used for filters actualization). Ex: your_asset_name                             | `""`   |
 
 ### **Custom Certificate Authority**
 
