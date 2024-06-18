@@ -23,13 +23,15 @@ imagePullPolicy: IfNotPresent
 
 featureFlags:
   # @param featureFlags.enableAudit Enable audit logging.
+  # @param featureFlags.enablePublicAPISign Enable signing responses in Public API.
 
   enableAudit: false
+  enablePublicAPISign: false
 
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.79.0
+    tag: 1.85.2
 
 # @section Admin service settings
 
@@ -141,6 +143,14 @@ api:
 
   # @param api.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
   logLevel: warning
+
+  # @param api.signPrivateKey RSA-PSS 2048 private key (in PKCS#1 format) for signing responses in Public API.
+
+  signPrivateKey: ''
+  # signPrivateKey: |
+      # -----BEGIN CERTIFICATE-----
+      # ...
+      # -----END CERTIFICATE-----
 
   # @param api.replicas A replica count for the pod.
 

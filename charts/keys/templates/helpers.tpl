@@ -99,11 +99,20 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.env.featureFlags" -}}
 - name: KEYS_FEATURE_FLAGS_AUDIT
   value: "{{ .Values.featureFlags.enableAudit }}"
+- name: KEYS_FEATURE_FLAGS_PUBLIC_API_SIGN
+  value: "{{ .Values.featureFlags.enablePublicAPISign }}"
 {{- end }}
 
 {{- define "keys.env.api" -}}
 - name: KEYS_LOG_LEVEL
   value: "{{ .Values.api.logLevel }}"
+{{- if .Values.featureFlags.enablePublicAPISign }}
+- name: KEYS_SIGN_PRIVATE_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.deploys.name" . }}
+      key: signPrivateKey
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.import" -}}

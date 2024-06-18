@@ -31,7 +31,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.79.0`                       |
+| `backend.image.tag`        | Backend service image tag.        | `1.85.2`                       |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
 | `admin.image.tag`          | Admin service image tag.          | `0.8.0`                        |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
@@ -39,9 +39,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Flags for enabling/disabling certain features.
 
-| Name                       | Description           | Value   |
-| -------------------------- | --------------------- | ------- |
-| `featureFlags.enableAudit` | Enable audit logging. | `false` |
+| Name                               | Description                             | Value   |
+| ---------------------------------- | --------------------------------------- | ------- |
+| `featureFlags.enableAudit`         | Enable audit logging.                   | `false` |
+| `featureFlags.enablePublicAPISign` | Enable signing responses in Public API. | `false` |
 
 ### Admin service settings
 
@@ -85,6 +86,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.adminUsers`                            | Usernames and passwords of admin users. Format: `username1:password1,username2:password2`.                                                                                                                                 | `""`            |
 | `api.adminSessionTTL`                       | TTL of the admin users sessions. Duration string is a sequence of decimal numbers with optional fraction and unit suffix, like `100ms`, `2.3h` or `4h35m`. Valid time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`. | `336h`          |
 | `api.logLevel`                              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                                  | `warning`       |
+| `api.signPrivateKey`                        | RSA-PSS 2048 private key (in PKCS#1 format) for signing responses in Public API.                                                                                                                                           | `""`            |
 | `api.replicas`                              | A replica count for the pod.                                                                                                                                                                                               | `1`             |
 | `api.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                                       | `RollingUpdate` |
 | `api.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).                   | `0`             |
