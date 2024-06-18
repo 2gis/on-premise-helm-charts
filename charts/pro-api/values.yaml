@@ -1,4 +1,4 @@
-﻿# @section Docker Registry settings
+# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -7,6 +7,7 @@ dgctlDockerRegistry: ''
 # @section Common settings
 
 # @param appName Name of the service.
+# @param licenseKey License key. **Required**
 # @param replicaCount A replica count for the pod.
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
@@ -23,6 +24,7 @@ dgctlDockerRegistry: ''
 # @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
 appName: pro-api
+licenseKey: ''
 replicaCount: 2
 imagePullSecrets: []
 nameOverride: ''
@@ -119,14 +121,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.11.2
+  tag: 1.22.0
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.11.2
+  tag: 1.22.0
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -149,7 +151,6 @@ s3:
 # @param api.serviceAccount  Kubernetes service account
 # @param api.tempPath Path to directory used for temp data
 # @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
-# @param api.licensePartner Name of a partner for license verification. **Required**
 # @extra api.logging Logging settings
 # @param api.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
 # @param api.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
@@ -175,12 +176,11 @@ api:
   env: ''
   filterByZoneCodes: false
   esDataCentersCount: 1
-  licensePartner: ''
   logging:
     format: simple
     targets: ''
   rateLimiter:
-    requestsLimit: 0
+    requestsLimit: 1024
     windowSizeInSeconds: 1
   localCache:
     enabled: true
@@ -308,27 +308,35 @@ backgroundJobs:
 
 # @section Catalog API settings
 
-# @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search).
+# @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc
 # @param catalog.key Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).
 
 catalog:
-  url: http://catalog-api.svc
+  url: ''
   key: ''
 
 # @section Navigation API settings
 
-# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-back.svc
 # @param navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
 
 navi:
-  url: http://navi-back.svc
+  url: ''
   key: ''
+
+# @section License Service API settings
+
+# @param license.url Licensing server v2 URL. Example: https://license.svc **Required**
+
+license:
+  url: ''
 
 # @section Search API settings
 
-# @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search)
+# @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search). Example: http://search-api.svc
+
 search:
-  url: http://search-api.svc
+  url: ''
 
 # @skip tileGen
 
@@ -404,7 +412,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.11.2
+  tag: 1.22.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -435,7 +443,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.11.2
+  tag: 1.22.0
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

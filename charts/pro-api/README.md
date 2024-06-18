@@ -13,6 +13,7 @@
 | Name                            | Description                                                                                                                                      | Value     |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
 | `appName`                       | Name of the service.                                                                                                                             | `pro-api` |
+| `licenseKey`                    | License key. **Required**                                                                                                                        | `""`      |
 | `replicaCount`                  | A replica count for the pod.                                                                                                                     | `2`       |
 | `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                   | `[]`      |
 | `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                          | `""`      |
@@ -74,7 +75,7 @@
 | Name               | Description | Value                     |
 | ------------------ | ----------- | ------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/pro-api` |
-| `image.tag`        | Tag         | `1.11.2`                  |
+| `image.tag`        | Tag         | `1.22.0`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
 ### 2GIS PRO Storage configuration
@@ -94,12 +95,11 @@
 | `api.serviceAccount`                  | Kubernetes service account                                                                                                                              | `runner` |
 | `api.tempPath`                        | Path to directory used for temp data                                                                                                                    | `/tmp`   |
 | `api.allowAnyOrigin`                  | Cors policy: allow any origin to perform requests to pro-api service                                                                                    | `false`  |
-| `api.licensePartner`                  | Name of a partner for license verification. **Required**                                                                                                | `""`     |
 | `api.logging`                         | Logging settings                                                                                                                                        |          |
 | `api.logging.format`                  | Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text                     | `simple` |
 | `api.logging.targets`                 | Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify). | `""`     |
 | `api.rateLimiter`                     | rate limiter settings                                                                                                                                   |          |
-| `api.rateLimiter.requestsLimit`       | max number of requests from one user during time window (0 means rate limiter is disabled)                                                              | `0`      |
+| `api.rateLimiter.requestsLimit`       | max number of requests from one user during time window (0 means rate limiter is disabled)                                                              | `1024`   |
 | `api.rateLimiter.windowSizeInSeconds` | the size of time windows to count and limit incoming requests                                                                                           | `1`      |
 
 ### Auth configuration
@@ -175,23 +175,29 @@
 
 ### Catalog API settings
 
-| Name          | Description                                                              | Value                    |
-| ------------- | ------------------------------------------------------------------------ | ------------------------ |
-| `catalog.url` | URL for [Catalog API](https://docs.2gis.com/en/on-premise/search).       | `http://catalog-api.svc` |
-| `catalog.key` | Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search). | `""`                     |
+| Name          | Description                                                                                        | Value |
+| ------------- | -------------------------------------------------------------------------------------------------- | ----- |
+| `catalog.url` | URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc | `""`  |
+| `catalog.key` | Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).                           | `""`  |
 
 ### Navigation API settings
 
-| Name       | Description                                                                              | Value                  |
-| ---------- | ---------------------------------------------------------------------------------------- | ---------------------- |
-| `navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).       | `http://navi-back.svc` |
-| `navi.key` | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). | `""`                   |
+| Name       | Description                                                                                                      | Value |
+| ---------- | ---------------------------------------------------------------------------------------------------------------- | ----- |
+| `navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-back.svc | `""`  |
+| `navi.key` | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).                         | `""`  |
+
+### License Service API settings
+
+| Name          | Description                                                        | Value |
+| ------------- | ------------------------------------------------------------------ | ----- |
+| `license.url` | Licensing server v2 URL. Example: https://license.svc **Required** | `""`  |
 
 ### Search API settings
 
-| Name         | Description                                                      | Value                   |
-| ------------ | ---------------------------------------------------------------- | ----------------------- |
-| `search.url` | URL for [Search API](https://docs.2gis.com/en/on-premise/search) | `http://search-api.svc` |
+| Name         | Description                                                                                      | Value |
+| ------------ | ------------------------------------------------------------------------------------------------ | ----- |
+| `search.url` | URL for [Search API](https://docs.2gis.com/en/on-premise/search). Example: http://search-api.svc | `""`  |
 
 ### 2GIS PRO API Job settings
 
@@ -211,7 +217,7 @@
 | Name                                       | Description                                                                                                                                              | Value                          |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.11.2`                       |
+| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.22.0`                       |
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
