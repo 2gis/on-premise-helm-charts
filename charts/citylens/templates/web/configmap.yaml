@@ -83,12 +83,14 @@ data:
     pro:
       {{- with .Values.pro }}
       client:
-        endpoint_url: {{ .url }}
+        base_url: {{ .baseUrl }}
         token: {{ .key }}
         verify_ssl: {{ .verifySsl }}
       {{- end }}
       topics:
         frames: {{ .Values.kafka.topics.pro }}
+      assets:
+        frames: {{ .Values.pro.framesAssetId }}
     map:
       tileserver_url_template: {{ required "A valid .Values.map.tileserverUrl entry required" .Values.map.tileserverUrl }}/tiles?x={x}&y={y}&z={z}
       mapgl:
@@ -110,7 +112,7 @@ data:
         {{- if .Values.worker.camcomSender.enabled }}
         - camcom_stats
         {{- end }}
-        {{- if .Values.pro.url }}
+        {{- if .Values.pro.baseUrl }}
         - pro
         {{- end }}
       header_help_url: 'https://docs.google.com/document/d/1ypaEpklxfc9S5e7FdG2sWBT-WfIR_uZGvQp8X3Xrr0c'

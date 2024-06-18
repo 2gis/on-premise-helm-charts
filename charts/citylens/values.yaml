@@ -97,7 +97,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.9.0
+    tag: 1.10.0
 
   replicas: 4
 
@@ -224,7 +224,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.9.0
+    tag: 1.10.0
 
   replicas: 1
 
@@ -561,7 +561,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.9.0
+    tag: 1.10.0
 
   resources:
     requests:
@@ -683,14 +683,16 @@ reporters:
 
 # @section PRO integration (only when Pro reporter enabled)
 
-# @param pro.url PRO API endpoint URL for filters actualization. Ex: http(s)://pro-api.svc/your_asset_name/filters
+# @param pro.baseUrl PRO API URL (used for filters actualization). Ex: http(s)://pro-api.svc/your_asset_name/filters
 # @param pro.key PRO API auth token
-# @param pro.verifySsl Set to `false` if pro.url must be accessed via https without certificate validation. **Required**
+# @param pro.verifySsl Set to `false` if pro.baseUrl must be accessed via https without certificate validation. **Required**
+# @param pro.framesAssetId PRO frames asset id (used for filters actualization). Ex: your_asset_name
 
 pro:
-  url: ''
+  baseUrl: ''
   key: ''
   verifySsl: true
+  framesAssetId: ''
 
 # @section **Custom Certificate Authority**
 
