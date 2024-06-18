@@ -53,6 +53,14 @@ spec:
             {{- toYaml .Values.api.resources | nindent 12 }}
           env:
             {{- include "twins.env.api" . | nindent 12 }}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            {{- include "twins.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+      {{- if .Values.customCAs.bundle }}
+      volumes:
+        {{- include "twins.custom.ca.deploys.volumes" . | nindent 8 }}
+      {{- end }}
       {{- with .Values.api.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
