@@ -26,6 +26,17 @@ spec:
             {{- toYaml .Values.importer.cleaner.resources | nindent 12 }}
           env:
             {{- include "twins.env.importer" . | nindent 12 }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "twins.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            {{- include "twins.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+      {{- if .Values.customCAs.bundle }}
+      volumes:
+        {{- include "twins.custom.ca.jobs.volumes" . | nindent 8 }}
+      {{- end }}
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -1,0 +1,11 @@
+{{- if .Values.customCAs.bundle }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "twins.configmap.deploys.name" . }}
+  labels:
+    {{- include "twins.labels" . | nindent 4}}
+data:
+  custom-ca.crt: |-
+{{- .Values.customCAs.bundle | nindent 4 }}
+{{- end }}
