@@ -49,6 +49,11 @@ Expand the name of the chart.
 {{ include "citylens.name" . }}-track-reloader
 {{- end }}
 
+{{- define "citylens.configmap.labels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
 {{- define "citylens.api.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Release.Name }}
 app.kubernetes.io/instance: {{ include "citylens.api.name" . }}
@@ -181,3 +186,17 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: DGCTL_MANIFEST_DATA_TYPE
   value: "data_migration"
 {{- end }}
+
+{{/*
+Checksum for configmap or secret
+*/}}
+{{- define "citylens.checksum" -}}
+{{ (include (print $.Template.BasePath .path) $ | fromYaml).data | toYaml | sha256sum }}
+{{- end }}
+
+{{/*
+Mount directory for custom CA
+*/}}
+{{- define "citylens.customCA.mountPath" -}}
+{{ $.Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}

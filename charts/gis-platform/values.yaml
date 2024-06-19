@@ -142,7 +142,7 @@ spcore:
     tokenAdmin: supersecrettoken
 
   # @extra spcore.catalog **Catalog settings.**
-  # @param spcore.catalog.url Catalog service URL **Required**
+  # @param spcore.catalog.url Catalog service URL **Required** Example: `http://catalog-api`
   # @param spcore.catalog.key Catalog access key **Required**
   # @param spcore.catalog.type Additional geocoder filter
   # @param spcore.catalog.regionId Additional geocoder filter
@@ -157,7 +157,7 @@ spcore:
   # @param spcore.navi.url Navi service URL.
 
   navi:
-    url: https://catalog-api.host
+    url: http://navi-front
 
   # @extra spcore.defaultLimits **Default limits.**
   # @param spcore.defaultLimits.tables Maximum number of tables.

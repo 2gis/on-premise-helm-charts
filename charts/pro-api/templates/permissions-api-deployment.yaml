@@ -181,6 +181,8 @@ spec:
               value: "{{ $.Values.kafka.permissionsTopic.name }}"
             - name: Kafka__PermissionsTopicSettings__ReaderGroupId
               value: "{{ $.Values.kafka.permissionsTopic.readerGroupId }}"
+            - name: Kafka__EventsTopicSettings__Name
+              value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
             - name: LocalCache__Enabled
               value: "{{ .Values.permissionsApi.localCache.enabled }}"
             - name: LocalCache__TrackStatistics

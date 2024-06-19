@@ -25,6 +25,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/api/configmap.yaml") . | sha256sum }}
+        checksum/custom-ca: {{ include "citylens.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
       {{- with .Values.api.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -54,15 +55,29 @@ spec:
           env:
             - name: API_CONFIG_PATH
               value: /opt/api/config/api_config.yaml
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "citylens.customCA.mountPath" $ }}
+            {{- end }}
           resources:
             {{- toYaml .Values.api.resources | nindent 12 }}
           volumeMounts:
             - name: config-volume
               mountPath: /opt/api/config
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "citylens.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
+            {{- end }}
       volumes:
         - name: config-volume
           configMap:
             name: {{ include "citylens.api.name" . }}-configmap
+        {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
+          configMap:
+            name: {{ include "citylens.name" $ }}-custom-ca-configmap
+        {{- end }}
       {{- with .Values.api.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
