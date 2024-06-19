@@ -1,6 +1,6 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [NEW_VERSION]
+## [1.24.0]
 
 ### pro-api
 - Added new required parameters: licenseKey, license.url
