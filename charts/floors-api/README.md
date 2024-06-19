@@ -100,7 +100,6 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 
 | Name                               | Description                      | Value                             |
 | ---------------------------------- | -------------------------------- | --------------------------------- |
-| `import.enabled`                   | If import task should be enabled | `true`                            |
 | `import.image.repository`          | Import task image repository.    | `2gis-on-premise/floors-importer` |
 | `import.image.tag`                 | Import task image tag.           | `1.0.4`                           |
 | `import.image.pullPolicy`          | Import task pull policy.         | `IfNotPresent`                    |
