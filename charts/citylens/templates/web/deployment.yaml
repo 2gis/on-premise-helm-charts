@@ -72,6 +72,7 @@ spec:
             - name: {{ $env_name }}
               value: {{ $env_value | squote }}
             {{- end }}
+            {{- end }}
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
           volumeMounts:
