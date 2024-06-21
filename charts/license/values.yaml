@@ -55,6 +55,10 @@ affinity: {}
 
 imagePullSecrets: []
 
+# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+revisionHistoryLimit: 3
+
 # @section StatefulSet settings
 
 # @param image.repository Repository.
