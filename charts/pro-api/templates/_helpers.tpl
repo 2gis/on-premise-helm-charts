@@ -51,7 +51,7 @@
 {{- end -}}
 {{- end -}}
 
-# _helpers.tpl
+
 {{- define "pro-api.service-account-name" -}}
 {{- if empty .Values.api.serviceAccountOverride }}
   {{- $name := default .Values.api.serviceAccount -}}
