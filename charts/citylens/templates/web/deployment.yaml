@@ -67,6 +67,12 @@ spec:
             - name: SSL_CERT_DIR
               value: {{ include "citylens.customCA.mountPath" $ }}
             {{- end }}
+            {{- if .Values.web.extraEnvVars }}
+            {{- range $env_name, $env_value := .Values.web.extraEnvVars }}
+            - name: {{ $env_name }}
+              value: {{ $env_value | squote }}
+            {{- end }}
+            {{- end }}
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
           volumeMounts:
