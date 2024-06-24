@@ -4,8 +4,8 @@ description: Search engine for catalog
 
 type: application
 
-version: 1.22.0
-appVersion: 7.74.0
+version: 1.24.0
+appVersion: 7.76.1
 
 maintainers:
 - name: 2gis

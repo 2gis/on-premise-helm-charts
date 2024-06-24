@@ -1,5 +1,14 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.24.0]
+
+### pro-api
+- Added new required parameters: licenseKey, license.url
+- Removed api.licensePartner
+
+### citylens
+- Parameter `pro.url` replaced with `pro.baseUrl` and `pro.framesAssetId` (ex: `pro.url: "http://pro-api:8080/my_asset/filters"` -> `pro.baseUrl: "http://pro-api:8080"` , `pro.framesAssetId: "my_asset"`)
+
 ## [1.22.0]
 
 ## citylens
