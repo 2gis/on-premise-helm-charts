@@ -104,9 +104,9 @@ args: []
 # @param image.pullPolicy Pull Policy
 
 image:
-  repository: 2gis/mosesd
+  repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: master
+  tag: ''
 
 
 # @section Navi-Back application settings
