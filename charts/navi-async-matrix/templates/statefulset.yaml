@@ -15,6 +15,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   serviceName: {{ include "navi-async-matrix.fullname" . }}
   {{- if .Values.updateStrategy }}
   updateStrategy:
