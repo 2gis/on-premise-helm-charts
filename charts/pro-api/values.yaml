@@ -146,7 +146,8 @@ s3:
 
 # @section 2GIS PRO API configuration
 
-# @param api.serviceAccount  Kubernetes service account
+# @param api.serviceAccount Kubernetes service account
+# @param api.serviceAccountOverride The name of an existing custom service account. If specified, the services in the chart will use this existing service account. If not specified, a new service account will be created and used with the name from the variable `api.serviceAccount`.
 # @param api.tempPath Path to directory used for temp data
 # @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
 # @param api.licensePartner Name of a partner for license verification. **Required**
