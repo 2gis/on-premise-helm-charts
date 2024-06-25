@@ -163,9 +163,9 @@ spec:
             {{- include "tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-           - /usr/sbin/2gis/mosesd/mosesd
-           - --config
-           - /etc/2gis/mosesd/navi-back.conf
+          - /usr/sbin/2gis/mosesd/mosesd
+          - --config
+          - /etc/2gis/mosesd/navi-back.conf
           {{- end }}
           volumeMounts:
           - name: {{ include "generic-chart.fullname" . }}-configmap
