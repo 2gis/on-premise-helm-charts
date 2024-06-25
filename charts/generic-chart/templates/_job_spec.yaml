@@ -1,0 +1,28 @@
+{{- define "generic-chart.job_spec.tpl" -}}
+{{ $ctx := .ctx }}
+{{ $job := .job }}
+spec:
+  {{- if ($job).backoffLimit }}
+  backoffLimit: {{ ($job).backoffLimit }}
+  {{- end }}
+  {{- if ($job).backoffLimitPerIndex }}
+  backoffLimitPerIndex: {{ ($job).backoffLimitPerIndex }}
+  {{- end }}
+  {{- if ($job).podFailurePolicy }}
+  podFailurePolicy: {{ ($job).podFailurePolicy }}
+  {{- end }}
+  {{- if ($job).completions }}
+  completions: {{ ($job).completions }}
+  {{- end }}
+  {{- if ($job).completionMode }}
+  completionMode: {{ ($job).completionMode }}
+  {{- end }}
+  {{- if ($job).parallelism }}
+  parallelism: {{ ($job).parallelism }}
+  {{- end }}
+  template:
+    {{- include "generic-chart.pod_spec.tpl" $ctx | nindent 4 }}
+      {{- with ($job).restartPolicy }}
+      restartPolicy: {{ . }}
+      {{- end }}{{- /* restartPolicy */}}
+{{- end }}

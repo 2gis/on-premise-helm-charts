@@ -29,39 +29,8 @@ spec:
     matchLabels:
       {{- include "generic-chart.selectorLabels" . | nindent 6 }}
   template:
-    metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* podAnnotations */}}
-      labels:
-        {{- include "generic-chart.selectorLabels" . | nindent 8 }}
-    spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* imagePullSecrets */}}
-      serviceAccountName: {{ include "generic-chart.serviceAccountName" . }}
-      {{- with .Values.podSecurityContext }}
-      securityContext:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* podSecurityContext */}}
-      {{- with .Values.priorityClassName }}
-      priorityClassName: {{ . }}
-      {{- end }}{{- /* priorityClassName */}}
-      {{- with .Values.terminationGracePeriodSeconds }}
-      terminationGracePeriodSeconds: {{ . | default 60 }}
-      {{- end }}{{- /* terminationGracePeriodSeconds */}}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* nodeSelector */}}
-      {{- if .Values.affinity }}
-      affinity:
-        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" . ) | nindent 8 }}
-      {{- end }}{{- /* affinity */}}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* tolerations */}}
+    {{ include "generic-chart.pod_spec.tpl" . | nindent 4 }}
+      {{- with .Values.restartPolicy }}
+      restartPolicy: {{ . }}
+      {{- end }}{{- /* restartPolicy */}}
 {{- end }} {{- /* define */}}
