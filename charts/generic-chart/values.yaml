@@ -102,7 +102,7 @@ service:
   labels: {}
   annotations: {}
   type: ClusterIP
-  clusterIP: ""
+  clusterIP: ''
   port: 80
 
 
