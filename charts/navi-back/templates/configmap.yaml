@@ -27,13 +27,11 @@ data:
         "pid_file": "/var/run/2gis/navi-back.pid"
       },
       {{- /* distribute equally fot HTTP/GRPC */}}
-      {{- $httpHandlers := 0 }}
-      {{- $grpcHandlers := 0 }}
       "http": {
         "server": "0.0.0.0",
         "port": {{ .Values.naviback.appPort }},
         "handlers_number": {{ .Values.naviback.handlersNumber | int }},
-        "queue_size": {{ .Values.naviback.queueSize }},
+        "queue_size": {{ .Values.naviback.queueSize | int }},
         "log_verbose": false,
         "max_process_time": {{ .Values.naviback.maxProcessTime | default 20 | int }},
         "response_timelimit": {{ .Values.naviback.responseTimelimit | default 120 | int }},
@@ -554,7 +552,7 @@ data:
         {{- end }}{{- /* if not .Values.license.notSupported */}}
         {{- if .Values.naviback.rtr.enabled }}
         "restrictions_index": {
-          "update_period": {{ .Values.naviback.rtr.updatePeriod }},
+          "update_period": {{ .Values.naviback.rtr.updatePeriod | int }},
           "nodes": [
             "{{ .Values.naviback.rtr.url }}/restrictions_index.json.zip"
           ],
