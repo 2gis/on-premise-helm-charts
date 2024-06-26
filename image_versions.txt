@@ -34,9 +34,8 @@ navi-async-matrix
 	navi-async-matrix:1.6.2
 navi-back
 	envoy:v1.27.0
-	frozen-data:
 	metrics-aggregator:
-	navi-back:7.15.2.4
+	navi-back:7.23.0.5
 navi-castle
 	navi-castle:1.9.2
 	navi-front:1.24.1
@@ -60,7 +59,7 @@ pro-ui
 	pro-importer:1.22.0
 	pro-ui:2.15.1
 search-api
-	search-api:7.76.1
+	search-api:7.77.2
 	search-nginx:1.21.6
 stat-receiver
 	stat-receiver-api:1.11.1

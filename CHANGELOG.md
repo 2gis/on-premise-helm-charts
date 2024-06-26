@@ -1,5 +1,18 @@
 # 2GIS On-Premise Changelog
 
+## [1.25.0] (2024-06-26)
+#### Images
+```
+navi-back
+	- frozen-data:
+	- navi-back:7.15.2.4
+	+ navi-back:7.23.0.5
+search-api
+	- search-api:7.76.1
+	+ search-api:7.77.2
+
+```
+
 ## [1.24.0] (2024-06-19)
 #### [Breaking-Changes](Breaking-Changes.md#1240)
 #### Images
