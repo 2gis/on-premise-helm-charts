@@ -47,6 +47,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | `tolerations`            | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                                                         | `[]`  |
 | `affinity`               | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                                                                                                   | `{}`  |
 | `imagePullSecrets`       | Kubernetes image pull secrets.                                                                                                                                                                                                                | `[]`  |
+| `revisionHistoryLimit`   | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                                                                | `3`   |
 
 ### StatefulSet settings
 

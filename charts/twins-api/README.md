@@ -45,6 +45,7 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | `api.keys.token`                            | Keys service API key **Required**                                                                                                                                                                        | `""`            |
 | `api.keys.requestTimeout`                   | Timeout for requests to the Keys API.                                                                                                                                                                    | `5s`            |
 | `api.replicas`                              | A replica count for the pod.                                                                                                                                                                             | `1`             |
+| `api.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                           | `3`             |
 
 ### api.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
