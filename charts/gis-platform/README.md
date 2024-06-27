@@ -84,11 +84,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 | `spcore.postgres.name`                      | PostgreSQL database name **Required**                                                               | `""`                |
 | `spcore.postgres.poolsize`                  | PostgreSQL connection pool size.                                                                    | `25`                |
 | `spcore.admin`                              | **Admin access settings.**                                                                          |                     |
-| `spcore.admin.email`                        | Admin email **Required**                                                                            | `admin@example.com` |
-| `spcore.admin.password`                     | Admin password **Required**                                                                         | `123456`            |
+| `spcore.admin.email`                        | Admin email **Required** Example: admin@example.com                                                 | `""`                |
+| `spcore.admin.password`                     | Admin password **Required**                                                                         | `""`                |
 | `spcore.jwt`                                | **JSON Web Token (JWT) settings.**                                                                  |                     |
-| `spcore.jwt.tokenKey`                       | JWT default user token **Required**                                                                 | `supersecrettoken`  |
-| `spcore.jwt.tokenAdmin`                     | JWT admin user token **Required**                                                                   | `supersecrettoken`  |
+| `spcore.jwt.tokenKey`                       | JWT default user token **Required**                                                                 | `""`                |
+| `spcore.jwt.tokenAdmin`                     | JWT admin user token **Required**                                                                   | `""`                |
 | `spcore.catalog`                            | **Catalog settings.**                                                                               |                     |
 | `spcore.catalog.url`                        | Catalog service URL **Required** Example: `http://catalog-api`                                      | `""`                |
 | `spcore.catalog.key`                        | Catalog access key **Required**                                                                     | `""`                |
