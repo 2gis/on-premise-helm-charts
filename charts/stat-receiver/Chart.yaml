@@ -3,7 +3,7 @@ name: stat-receiver
 type: application
 description: A Helm chart for Kubernetes to deploy Stat Receiver
 
-version: 1.24.0
+version: 1.25.0
 appVersion: 1.11.1
 
 maintainers:
