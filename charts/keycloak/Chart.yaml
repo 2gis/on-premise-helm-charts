@@ -5,7 +5,7 @@ description: Keycloak is a high performance Java-based identity and access manag
   solution. It lets developers add an authentication layer to their applications with
   minimum effort.
 
-version: 1.24.0
+version: 1.25.0
 appVersion: 21.1.1-debian-11-r4
 
 maintainers:

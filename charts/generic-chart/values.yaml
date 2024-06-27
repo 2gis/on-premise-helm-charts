@@ -7,7 +7,7 @@ nameOverride: ''
 fullnameOverride: ''
 
 
-# @section Deployment settings
+# @section [Deployment](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/) settings
 
 # @param labels Custom labels to set to Deployment resource
 # @param annotations Custom annotations to set to Deployment resource
@@ -22,6 +22,8 @@ fullnameOverride: ''
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param enableServiceLinks Services injection into containers environment
+# @param restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
 
 labels: {}
 annotations: {}
@@ -36,6 +38,8 @@ terminationGracePeriodSeconds: 60
 nodeSelector: {}
 affinity: {}
 tolerations: []
+enableServiceLinks: false
+restartPolicy: ''
 
 
 # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
@@ -86,7 +90,7 @@ pdb:
   maxUnavailable: 1
 
 
-# @section Service settings
+# @section [Service](https://kubernetes.io/docs/concepts/services-networking/service/) settings
 
 # @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/). Undergoes template rendering
 # @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). Undergoes template rendering
@@ -102,7 +106,7 @@ service:
   port: 80
 
 
-# @section Service account settings
+# @section [Service account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
 
 # @param serviceAccount.create Specifies whether a service account should be created.
 # @param serviceAccount.annotations Annotations to add to the service account.
@@ -112,3 +116,41 @@ serviceAccount:
   create: true
   annotations: {}
   name: ''
+
+
+# @section [CronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) settings
+
+# @param cronJob.suspend Suspend execution of Jobs.
+# @param cronJob.schedule Schedule follows the Cron syntax.
+# @param cronJob.startingDeadlineSeconds Defines a deadline (in whole seconds) for starting the Job.
+# @param cronJob.concurrencyPolicy Concurrent executions of a Job that is created by this CronJob.
+# @param cronJob.successfulJobsHistoryLimit How many completed Jobs should be kept.
+# @param cronJob.failedJobsHistoryLimit How many failed Jobs should be kept.
+
+cronJob:
+  suspend: false
+  schedule: ''
+  startingDeadlineSeconds: ''
+  concurrencyPolicy: ''
+  successfulJobsHistoryLimit: ''
+  failedJobsHistoryLimit: ''
+
+
+# @section [Job](https://kubernetes.io/docs/concepts/workloads/controllers/job/) settings
+
+# @param job.backoffLimit Number of retries before considering a Job as failed.
+# @param job.backoffLimitPerIndex Maximal number of pod failures per index.
+# @param job.podFailurePolicy Pod failure policy.
+# @param job.completions Number of successful pods for completion Job.
+# @param job.completionMode Completion mode (NonIndexed or Indexed).
+# @param job.parallelism Number of pods running at any instant.
+# @param job.restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
+
+job:
+  backoffLimit: ''
+  backoffLimitPerIndex: ''
+  podFailurePolicy: ''
+  completions: ''
+  completionMode: ''
+  parallelism: ''
+  restartPolicy: ''

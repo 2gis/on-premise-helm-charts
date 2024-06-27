@@ -65,8 +65,7 @@ env:
   MAPGL_KEYSERVER: https://keys-api.ingress.host/public/v1/keys/{keyID}/services/mapgl-js-api
   MAPGL_RTLPLUGIN: https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js
   MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
-  MAPGL_INVALID_KEY_MESSAGE: Your MapGL key is invalid. Please contact support to
-    get valid key.
+  MAPGL_INVALID_KEY_MESSAGE: Your MapGL key is invalid. Please contact support to get valid key.
 
 # @section Strategy settings
 
