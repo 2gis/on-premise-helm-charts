@@ -15,10 +15,11 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "replicas":  { "type": "integer", "minimum": 0 },
-                "jvmXmx":    { "type": "string" },
-                "image":     { "$ref": "#/definitions/image" },
-                "resources": { "$ref": "#/definitions/k8s_resources" },
+                "replicas":             { "type": "integer", "minimum": 0 },
+                "revisionHistoryLimit": { "type": "integer", "minimum": 0 },
+                "jvmXmx":               { "type": "string" },
+                "image":                { "$ref": "#/definitions/image" },
+                "resources":            { "$ref": "#/definitions/k8s_resources" },
                 "service": {
                     "type": "object",
                     "additionalProperties": false,
@@ -34,13 +35,14 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "replicas":        { "type": "integer", "minimum": 0 },
-                "jvmXmx":          { "type": "string" },
-                "jmxPort":         { "$ref": "#/definitions/port" },
-                "metricsPort":     { "$ref": "#/definitions/port" },
-                "image":           { "$ref": "#/definitions/image" },
-                "resources":       { "$ref": "#/definitions/k8s_resources" },
-                "storageSize":     { "$ref": "#/definitions/k8s_quantity" }
+                "replicas":             { "type": "integer", "minimum": 0 },
+                "revisionHistoryLimit": { "type": "integer", "minimum": 0 },
+                "jvmXmx":               { "type": "string" },
+                "jmxPort":              { "$ref": "#/definitions/port" },
+                "metricsPort":          { "$ref": "#/definitions/port" },
+                "image":                { "$ref": "#/definitions/image" },
+                "resources":            { "$ref": "#/definitions/k8s_resources" },
+                "storageSize":          { "$ref": "#/definitions/k8s_quantity" }
             }
         },
         "kafka": {

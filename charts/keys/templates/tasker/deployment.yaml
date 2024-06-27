@@ -18,6 +18,7 @@ metadata:
     {{- end }}
 spec:
   replicas: 1
+  revisionHistoryLimit: {{ .Values.tasker.revisionHistoryLimit }}
   strategy:
     {{- toYaml .Values.tasker.strategy | nindent 4 }}
   selector:

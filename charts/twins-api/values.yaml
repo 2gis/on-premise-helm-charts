@@ -58,8 +58,10 @@ api:
     requestTimeout: 5s
 
   # @param api.replicas A replica count for the pod.
+  # @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
   replicas: 1
+  revisionHistoryLimit: 3
 
   # @section api.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
   # @param api.resources.requests.cpu A CPU request.

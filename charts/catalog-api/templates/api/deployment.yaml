@@ -20,6 +20,7 @@ spec:
   {{- if not .Values.api.hpa.enabled }}
   replicas: {{ .Values.api.replicas }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.api.revisionHistoryLimit }}
   {{- if .Values.strategy }}
   strategy:
     {{- toYaml .Values.strategy | nindent 4 }}

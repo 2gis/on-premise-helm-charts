@@ -13,6 +13,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.api.replicas}}
+  revisionHistoryLimit: {{ .Values.api.revisionHistoryLimit }}
   selector:
     matchLabels:
       {{- include "citylens.api.selectorLabels" . | nindent 6 }}

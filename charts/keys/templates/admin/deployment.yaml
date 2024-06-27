@@ -18,6 +18,7 @@ metadata:
     {{- end }}
 spec:
   replicas: {{ .Values.admin.replicas }}
+  revisionHistoryLimit: {{ .Values.admin.revisionHistoryLimit }}
   strategy:
     {{- toYaml .Values.admin.strategy | nindent 4 }}
   selector:

@@ -14,6 +14,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.worker.camcomSender.replicas }}
+  revisionHistoryLimit: {{ .Values.worker.camcomSender.revisionHistoryLimit }}
   selector:
     matchLabels:
       {{- include "citylens.camcom-sender.selectorLabels" . | nindent 6 }}

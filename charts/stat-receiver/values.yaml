@@ -10,9 +10,11 @@ api:
 
   # @extra api **Common settings**
   # @param api.replicas A replica count for the pod.
+  # @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
   # @param api.jvmXmx Memory allocation options for JVM.
 
   replicas: 1
+  revisionHistoryLimit: 3
   jvmXmx: -Xmx1500m
 
   # @extra api.image **Deployment settings**
@@ -51,11 +53,13 @@ streams:
 
   # @extra streams **Common settings**
   # @param streams.replicas A replica count for the pod.
+  # @param streams.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
   # @param streams.jvmXmx Memory allocation options for JVM.
   # @param streams.jmxPort Port for JMX protocol.
   # @param streams.metricsPort Port for metrics.
 
   replicas: 1
+  revisionHistoryLimit: 3
   jvmXmx: -Xmx2G -XX:+UseParallelGC
   jmxPort: 9010
   metricsPort: 8081

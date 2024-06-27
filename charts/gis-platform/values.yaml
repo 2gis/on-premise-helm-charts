@@ -47,6 +47,7 @@ ingress:
 # @section SPCore service settings
 
 # @param spcore.replicaCount A replica count for the pod.
+# @param spcore.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 # @param spcore.service Service settings.
 # @param spcore.debug If the debug mode is enabled.
 # @param spcore.resetCluster If true, the cluster will be reset when applying this configuration.
@@ -60,6 +61,8 @@ ingress:
 
 spcore:
   replicaCount: 1
+
+  revisionHistoryLimit: 3
 
   service: {}
   debug: false
@@ -195,12 +198,14 @@ spcore:
 # @section Portal settings
 
 # @param portal.replicaCount A replica count for the pod.
+# @param portal.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 # @param portal.terminationGracePeriodSeconds Wait for up to this amount of seconds for a running instance of the service to shut down.
 # @param portal.maxBodySize Maximum HTTP request body size.
 # @param portal.gzip.enabled If GZip compression should be enabled for the HTTP requests and responses.
 
 portal:
   replicaCount: 1
+  revisionHistoryLimit: 3
   terminationGracePeriodSeconds: 60
   maxBodySize: 100m
   gzip:

@@ -9,6 +9,7 @@ spec:
 {{- else }}
   replicas: {{ .Values.spcore.replicaCount }}
 {{- end }}
+  revisionHistoryLimit: {{ .Values.spcore.revisionHistoryLimit }}
   selector:
     matchLabels:
       {{- include "gis-platform-spcore.selectorLabels" . | nindent 6 }}

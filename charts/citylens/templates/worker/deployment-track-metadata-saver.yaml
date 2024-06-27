@@ -13,6 +13,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.worker.trackMetadataSaver.replicas }}
+  revisionHistoryLimit: {{ .Values.worker.trackMetadataSaver.revisionHistoryLimit }}
   selector:
     matchLabels:
       {{- include "citylens.track-metadata-saver.selectorLabels" . | nindent 6 }}

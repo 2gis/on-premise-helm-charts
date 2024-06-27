@@ -6,6 +6,7 @@ metadata:
   name: {{ include "gis-platform-portal.fullname" . }}
 spec:
   replicas: {{ .Values.portal.replicaCount }}
+  revisionHistoryLimit: {{ .Values.portal.revisionHistoryLimit }}
   selector:
     matchLabels:
       {{- include "gis-platform-portal.selectorLabels" . | nindent 6 }}
