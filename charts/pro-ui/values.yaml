@@ -68,7 +68,7 @@ ui:
   appTheme: urbi
   appLocale: en_AE
   appInitialMapCenter: '[46.71, 24.72]'
-  supportDocumentationLink: https://docs.urbi.ae/en/pro/start
+  supportDocumentationLink: ''
   immersiveModels: ''
   publicS3Url: ''
 
@@ -250,12 +250,6 @@ ui:
     targetCPU: 100
     targetMemory: ''
 
-# @section 2GIS PRO UI Job settings
-
-# @param appStylesImporterName Styles Import job name.
-
-appStylesImporterName: styles-importer
-
 # @section Artifacts Storage settings
 
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
@@ -281,7 +275,7 @@ dgctlStorage:
 
 # If the Style Importer Job failed, then we don't need to deploy the whole pro-ui app.
 
-# @param stylesImporter.serviceAccount Kubernetes service account
+# @param stylesImporter.name Styles Import job name.
 # @param stylesImporter.image.repository Docker Repository Image.
 # @param stylesImporter.image.tag Docker image tag.
 # @param stylesImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
@@ -295,7 +289,7 @@ dgctlStorage:
 # @param stylesImporter.resources.limits.memory A memory limit.
 
 stylesImporter:
-  serviceAccount: runner
+  name: styles-importer
   image:
     repository: 2gis-on-premise/pro-importer
     tag: 1.22.0

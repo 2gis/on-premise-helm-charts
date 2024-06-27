@@ -198,9 +198,6 @@
         }
       }
     },
-    "appStylesImporterName": {
-      "type": "string"
-    },
     "dgctlStorage": {
       "type": "object",
       "required": ["host", "secure", "bucket", "accessKey", "secretKey", "manifest"],
@@ -230,6 +227,11 @@
         "disablePayloadSigning": {
           "type": "boolean"
         }
+      }
+    },
+    "stylesImporter": {
+      "properties": {
+        "name": { "type": "string" }
       }
     }
   }
