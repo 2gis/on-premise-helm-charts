@@ -1,0 +1,89 @@
+{{- if .Values.counter.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "keys.counter.name" . }}
+  labels:
+    {{- include "keys.counter.labels" . | nindent 4 }}
+  {{- with .Values.counter.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  serviceName: {{ include "keys.counter.name" . }}
+  replicas: {{ .Values.counter.replicas }}
+  selector:
+    matchLabels:
+      {{- include "keys.counter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8090"
+        prometheus.io/scrape: "{{ .Values.counter.prometheus.scrape }}"
+      labels:
+        {{- include "keys.counter.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.counter.kafka.tls.enabled }}
+      initContainers:
+        - name: copy-counter-kafka-certs
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          resources:
+            {{- toYaml .Values.counter.resources | nindent 12 }}
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              cp /tmp/certs/* /etc/2gis/secret/kafka-counter/
+              chmod 600 /etc/2gis/secret/kafka-counter/client.key
+          volumeMounts:
+            - name: {{ include "keys.counter.name-kafka-raw" . | quote }}
+              mountPath: /tmp/certs
+            - name: {{ include "keys.counter.name-kafka" . | quote }}
+              mountPath: /etc/2gis/secret/kafka-counter
+      {{- end }}
+      containers:
+        - name: counter
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: [ "keys-counter" ]
+          ports:
+            - name: http
+              containerPort: 8090
+          resources:
+            {{- toYaml .Values.counter.resources | nindent 12 }}
+          env:
+            {{- include "keys.env.db.deploys" . | nindent 12 }}
+            {{- include "keys.env.redis" . | nindent 12 }}
+            {{- include "keys.env.counter" . | nindent 12 }}
+          {{- if .Values.counter.kafka.tls.enabled }}
+          volumeMounts:
+          - name: {{ printf "%s-kafka" (include "keys.counter.name" .) | quote }}
+            mountPath: /etc/2gis/secret/kafka-counter
+          {{- end }}
+      {{- if .Values.counter.kafka.tls.enabled }}
+      volumes:
+        - name: {{ include "keys.counter.name-kafka-raw" . | quote }}
+          secret:
+            secretName: {{ include "keys.counter.name-kafka" . | quote }}
+        - name: {{ include "keys.counter.name-kafka" . | quote }}
+          emptyDir: {}
+      {{- end }}
+      {{- with .Values.counter.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.counter.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.counter.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

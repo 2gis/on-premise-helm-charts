@@ -10,6 +10,10 @@
 {{ include "keys.name" . }}-tasker
 {{- end }}
 
+{{- define "keys.counter.name" -}}
+{{ include "keys.name" . }}-counter
+{{- end }}
+
 {{- define "keys.migrate.name" -}}
 {{ include "keys.name" . }}-migrate
 {{- end }}
@@ -33,6 +37,39 @@
 {{- define "keys.secret.jobs.name" -}}
 {{ include "keys.name" . }}-jobs
 {{- end }}
+
+{{- /*
+Name for kafka counter intermediate volume for copy secrets
+*/ -}}
+
+{{- define "keys.counter.name-kafka-raw" -}}
+{{- printf "%s-kafka-raw" (include "keys.counter.name" .) -}}
+{{- end }}
+
+{{- /*
+Name for kafka counter secret and volume
+*/ -}}
+
+{{- define "keys.counter.name-kafka" -}}
+{{- printf "%s-kafka" (include "keys.counter.name" .) -}}
+{{- end }}
+
+{{- /*
+Name for kafka audit intermediate volume for copy secrets
+*/ -}}
+
+{{- define "keys.name-kafka-audit-raw" -}}
+{{- printf "%s-kafka-audit-raw" (include "keys.name" .) -}}
+{{- end }}
+
+{{- /*
+Name for kafka audit secret and volume
+*/ -}}
+
+{{- define "keys.name-kafka-audit" -}}
+{{- printf "%s-kafka-audit" (include "keys.name" .) -}}
+{{- end }}
+
 
 {{- define "keys.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
@@ -77,6 +114,16 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 
 {{- define "keys.tasker.labels" -}}
 {{ include "keys.tasker.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "keys.counter.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}-counter
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "keys.counter.labels" -}}
+{{ include "keys.counter.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
@@ -266,6 +313,48 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.admin.badge.backgroundColor }}"
 {{- end }}
 
+{{- define "keys.env.counter" -}}
+- name: KEYS_COUNTER_BUFFER_SIZE
+  value: "{{ .Values.counter.buffer.size }}"
+- name: KEYS_COUNTER_BUFFER_DELAY
+  value: "{{ .Values.counter.buffer.delay }}"
+- name: KEYS_COUNTER_PRELOADER_REFRESH_TICK
+  value: "{{ .Values.counter.preloader.refreshTick }}"
+- name: KEYS_COUNTER_UPDATE_STATUS_QUERY_TIMEOUT
+  value: "{{ .Values.counter.updateStatusQueryTimeout }}"
+- name: KEYS_KAFKA_MAIN_BROKERS
+  value: "{{ .Values.counter.kafka.brokers }}"
+- name: KEYS_KAFKA_MAIN_CLIENT_PREFIX
+  value: "{{ .Values.counter.kafka.clientPrefix }}"
+- name: KEYS_KAFKA_MAIN_STATS_TOPIC
+  value: "{{ .Values.counter.kafka.topics.stats }}"
+- name: KEYS_KAFKA_MAIN_USERNAME
+  value: "{{ .Values.counter.kafka.username }}"
+- name: KEYS_KAFKA_MAIN_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.deploys.name" . }}
+      key: kafkaPassword
+- name: KEYS_REDIS_RETRIES
+  value: "{{ .Values.counter.redis.retries }}"
+- name: KEYS_REDIS_MIN_RETRY_BACKOFF
+  value: "{{ .Values.counter.redis.minRetryBackoff }}"
+- name: KEYS_REDIS_MAX_RETRY_BACKOFF
+  value: "{{ .Values.counter.redis.maxRetryBackoff }}"
+- name: KEYS_KAFKA_MAIN_TLS_ENABLED
+  value: "{{ .Values.counter.kafka.tls.enabled }}"
+{{- if .Values.counter.kafka.tls.enabled }}
+- name: KEYS_KAFKA_MAIN_TLS_SKIP_SERVER_CERTIFICATE_VERIFY
+  value: "{{ .Values.counter.kafka.tls.skipServerCertificateVerify }}"
+- name: KEYS_KAFKA_MAIN_TLS_CLIENT_CERTIFICATE_PATH
+  value: "/etc/2gis/secret/kafka-counter/client.crt"
+- name: KEYS_KAFKA_MAIN_TLS_CLIENT_KEY_PATH
+  value: "/etc/2gis/secret/kafka-counter/client.key"
+- name: KEYS_KAFKA_MAIN_TLS_CA_CERT_PATH
+  value: "/etc/2gis/secret/kafka-counter/ca.crt"
+{{- end }}
+{{- end }}
+
 {{- define "keys.env.predef" -}}
 {{ range $service, $key := .Values.predefined.service.keys }}
 - name: KEYS_PREDEF_SERVICE_KEY_{{ $service | upper }}
@@ -309,6 +398,18 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.kafka.audit.username }}"
 - name: KEYS_KAFKA_AUDIT_PASSWORD
   value: "{{ .Values.kafka.audit.password }}"
+- name: KEYS_KAFKA_AUDIT_TLS_ENABLED
+  value: "{{ .Values.kafka.audit.tls.enabled }}"
+{{- if .Values.counter.kafka.tls.enabled }}
+- name: KEYS_KAFKA_AUDIT_TLS_SKIP_SERVER_CERTIFICATE_VERIFY
+  value: "{{ .Values.kafka.audit.tls.skipServerCertificateVerify }}"
+- name: KEYS_KAFKA_AUDIT_TLS_CLIENT_CERTIFICATE_PATH
+  value: "/etc/2gis/secret/kafka-audit/client.crt"
+- name: KEYS_KAFKA_AUDIT_TLS_CLIENT_KEY_PATH
+  value: "/etc/2gis/secret/kafka-audit/client.key"
+- name: KEYS_KAFKA_AUDIT_TLS_CA_CERT_PATH
+  value: "/etc/2gis/secret/kafka-audit/ca.crt"
+{{- end }}
 - name: KEYS_KAFKA_AUDIT_TOPIC
   value: "{{ .Values.kafka.audit.topic }}"
 - name: KEYS_KAFKA_AUDIT_PRODUCE_RETRY_COUNT
