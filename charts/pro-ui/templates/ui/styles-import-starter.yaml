@@ -5,6 +5,7 @@ metadata:
   name: {{ include "pro.ui.styles-importer-name" . }}-starter
   annotations:
     {{- include "pro.ui.importer.hook.annotations" $ | nindent 4 }}
+    "helm.sh/hook-delete-policy": hook-succeeded
     "helm.sh/hook-weight": "1"
 spec:
   backoffLimit: {{ .Values.stylesImporter.backoffLimit }}

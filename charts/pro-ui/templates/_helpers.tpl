@@ -50,5 +50,5 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "pro.ui.importer.hook.annotations" -}}
 "helm.sh/hook": pre-install,pre-upgrade
-"helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+"helm.sh/hook-delete-policy": before-hook-creation
 {{- end -}}
