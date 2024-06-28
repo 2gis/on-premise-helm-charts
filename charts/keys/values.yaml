@@ -330,6 +330,110 @@ tasker:
   tolerations: {}
 
 
+# @section Counter service settings
+
+counter:
+
+  # @param counter.enabled Counter service is enabled.
+
+  enabled: false
+
+  # @param counter.replicas A replica count for the pod.
+
+  replicas: 1
+
+  # @param counter.prometheus.scrape If Prometheus scrape is enabled.
+
+  prometheus:
+    scrape: true
+
+  # @param counter.resources.requests.cpu A CPU request.
+  # @param counter.resources.requests.memory A memory request.
+  # @param counter.resources.limits.cpu A CPU limit.
+  # @param counter.resources.limits.memory A memory limit.
+
+  resources:
+    requests:
+      cpu: 20m
+      memory: 32Mi
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+
+  # @param counter.preloader.refreshTick If HPA is enabled for the service.
+
+  preloader:
+    refreshTick: 1m
+
+  # @param counter.updateStatusQueryTimeout Update status query timeout.
+
+  updateStatusQueryTimeout: 1s
+
+  # @param counter.buffer.size Buffer size
+  # @param counter.buffer.delay Buffer delay
+
+  buffer:
+    size: 1000
+    delay: 1s
+
+  # @extra counter.kafka **Settings for read stat messages.**
+
+  # @param counter.kafka.clientPrefix Client prefix name
+  # @param counter.kafka.brokers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
+  # @param counter.kafka.username Username for authorization (SASL/PLAINTEXT SHA-512).
+  # @param counter.kafka.password Password for authorization (SASL/PLAINTEXT SHA-512).
+  # @param counter.kafka.tls.enabled If tls connection to kafka is enabled.
+  # @param counter.kafka.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name
+  # @param counter.kafka.tls.rootCert Root certificate.
+  # @param counter.kafka.tls.cert Client certificate.
+  # @param counter.kafka.tls.key Client key.
+  # @param counter.kafka.topics.stats Topic to consume stat messages.
+
+  kafka:
+    clientPrefix: ''
+    brokers: ''
+    username: ''
+    password: ''
+    tls:
+      enabled: false
+      skipServerCertificateVerify: false
+      rootCert: ''
+      cert: ''
+      key: ''
+    topics:
+      stats: ''
+
+  # @section Redis settings
+
+  # @param counter.redis.retries
+  # @param counter.redis.minRetryBackoff
+  # @param counter.redis.maxRetryBackoff
+
+  redis:
+    retries: 5
+    minRetryBackoff: 100ms
+    maxRetryBackoff: 3s
+
+  # @param counter.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param counter.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  annotations: {}
+  labels: {}
+
+  # @param counter.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param counter.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  podAnnotations: {}
+  podLabels: {}
+
+  # @param counter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param counter.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param counter.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
 # @section Redis settings
 
 redis:
@@ -437,6 +541,11 @@ kafka:
   # @param kafka.audit.username Username for authorization (SASL/PLAINTEXT SHA-512).
   # @param kafka.audit.password Password for authorization (SASL/PLAINTEXT SHA-512).
   # @param kafka.audit.topic Topic to produce audit messages.
+  # @param kafka.audit.tls.enabled If tls connection to kafka is enabled.
+  # @param kafka.audit.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name
+  # @param kafka.audit.tls.rootCert Root certificate.
+  # @param kafka.audit.tls.cert Client certificate.
+  # @param kafka.audit.tls.key Client key.
   # @param kafka.audit.produce.retryCount Number of retries to produce a message.
   # @param kafka.audit.produce.idempotentWrite Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence).
 
@@ -445,6 +554,12 @@ kafka:
     username: ''
     password: ''
     topic: ''
+    tls:
+      enabled: false
+      skipServerCertificateVerify: false
+      rootCert: ''
+      cert: ''
+      key: ''
     produce:
       retryCount: 5
       idempotentWrite: true
