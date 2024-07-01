@@ -32,7 +32,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                   | Description                                                                                                                 | Value |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `replicaCount`         | A replica count for the pod.                                                                                                | `1`   |
-| `revisionHistoryLimit` | Number of replica sets to keep for deployment rollbacks                                                                     | `1`   |
+| `revisionHistoryLimit` | Number of replica sets to keep for deployment rollbacks                                                                     | `3`   |
 | `imagePullSecrets`     | Kubernetes image pull secrets.                                                                                              | `[]`  |
 | `nameOverride`         | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
 | `fullnameOverride`     | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
