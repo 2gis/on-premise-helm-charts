@@ -6,7 +6,6 @@ metadata:
 spec:
   serviceName: {{ include "dgtt.fullname" . }}
   replicas: {{ .Values.replicaCount }}
-  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
       {{- include "dgtt.selectorLabels" . | nindent 6 }}

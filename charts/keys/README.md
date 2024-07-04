@@ -159,22 +159,21 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Redis settings
 
-| Name                         | Description                                                                                                                                    | Value             |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `redis.port`                 | HTTP port for Redis to listen.                                                                                                                 | `6379`            |
-| `redis.configPath`           | Path to Redis configuration file.                                                                                                              | `/opt/redis.conf` |
-| `redis.password`             | Redis password. Empty string if no authentication is required.                                                                                 | `""`              |
-| `redis.useExternalRedis`     | If true, external Redis server will be used.                                                                                                   | `false`           |
-| `redis.host`                 | External Redis hostname or IP.                                                                                                                 | `""`              |
-| `redis.db`                   | External Redis database number.                                                                                                                | `1`               |
-| `redis.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`              |
-| `redis.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`              |
-| `redis.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`               |
-| `redis.podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                  | `{}`              |
-| `redis.podLabels`            | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                            | `{}`              |
-| `redis.nodeSelector`         | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                            | `{}`              |
-| `redis.affinity`             | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                    | `{}`              |
-| `redis.tolerations`          | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                              | `{}`              |
+| Name                     | Description                                                                                                                 | Value             |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `redis.port`             | HTTP port for Redis to listen.                                                                                              | `6379`            |
+| `redis.configPath`       | Path to Redis configuration file.                                                                                           | `/opt/redis.conf` |
+| `redis.password`         | Redis password. Empty string if no authentication is required.                                                              | `""`              |
+| `redis.useExternalRedis` | If true, external Redis server will be used.                                                                                | `false`           |
+| `redis.host`             | External Redis hostname or IP.                                                                                              | `""`              |
+| `redis.db`               | External Redis database number.                                                                                             | `1`               |
+| `redis.annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`              |
+| `redis.labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`              |
+| `redis.podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`              |
+| `redis.podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`              |
+| `redis.nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`              |
+| `redis.affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`              |
+| `redis.tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`              |
 
 ### Database access settings
 

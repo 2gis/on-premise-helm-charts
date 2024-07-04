@@ -14,7 +14,6 @@ metadata:
     {{- end }}
 spec:
   serviceName: {{ include "keys.redis.name" . }}
-  revisionHistoryLimit: {{ .Values.redis.revisionHistoryLimit }}
   selector:
     matchLabels:
       {{- include "keys.redis.selectorLabels" . | nindent 6 }}

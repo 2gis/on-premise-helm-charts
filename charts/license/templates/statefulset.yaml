@@ -16,7 +16,6 @@ metadata:
     {{- end }}
 spec:
   replicas: {{ include "license.replicaCount" $ }}
-  revisionHistoryLimit: {{ $.Values.revisionHistoryLimit }}
   serviceName: {{ include "license.fullname" $ }}
   podManagementPolicy: Parallel
   selector:

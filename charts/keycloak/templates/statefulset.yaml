@@ -9,7 +9,6 @@ spec:
   {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
-  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   serviceName: {{ printf "%s-headless" (include "keycloak.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy:

@@ -180,7 +180,6 @@ extraEnvVarsSecret: ''
 # @section Keycloak statefulset parameters
 
 # @param replicaCount Number of Keycloak replicas to deploy
-# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 # @param containerPorts.http Keycloak HTTP container port
 # @param containerPorts.https Keycloak HTTPS container port
 # @param containerPorts.infinispan Keycloak infinispan container port
@@ -271,7 +270,6 @@ extraEnvVarsSecret: ''
 #         containerPort: 1234
 
 replicaCount: 1
-revisionHistoryLimit: 3
 containerPorts:
   http: 8080
   https: 8443
