@@ -16,7 +16,6 @@ metadata:
 spec:
   serviceName: {{ include "castle.fullname" . }}
   replicas: {{ .Values.replicaCount }}
-  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
       {{- include "castle.selectorLabels" . | nindent 6 }}
