@@ -69,10 +69,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### API settings
 
-| Name           | Description                    | Value  |
-| -------------- | ------------------------------ | ------ |
-| `api.replicas` | Number of replicas of API pods | `1`    |
-| `api.logLevel` | Log level                      | `info` |
+| Name                       | Description                                                                                                                                    | Value  |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `api.replicas`             | Number of replicas of API pods                                                                                                                 | `1`    |
+| `api.logLevel`             | Log level                                                                                                                                      | `info` |
+| `api.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`    |
 
 ### api.image **Deployment settings**
 

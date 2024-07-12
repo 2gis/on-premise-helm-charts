@@ -44,6 +44,10 @@ admin:
 
   replicas: 1
 
+  # @param admin.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+  revisionHistoryLimit: 3
+
   # @param admin.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
   # @param admin.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
   # @param admin.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
@@ -155,6 +159,10 @@ api:
   # @param api.replicas A replica count for the pod.
 
   replicas: 1
+
+  # @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+  revisionHistoryLimit: 3
 
   # @param api.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
   # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
@@ -298,6 +306,10 @@ tasker:
   # @param tasker.delay Delay in seconds at the service startup.
 
   delay: 30s
+
+  # @param tasker.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+  revisionHistoryLimit: 3
 
   # @param tasker.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
   # @param tasker.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
