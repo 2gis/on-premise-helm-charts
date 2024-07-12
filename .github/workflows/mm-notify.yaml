@@ -1,0 +1,16 @@
+on:
+  pull_request:
+    types: [opened, reopened]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mattermost/action-mattermost-notify@master
+        with:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
+          MATTERMOST_USERNAME: Github
+          MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
+          TEXT: |
+            Создан pull_request ${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }}
+            ${{ github.event.pull_request.title }}
+            Автор:  ${{ github.triggering_actor }}
