@@ -17,6 +17,9 @@ resources:
     memory: 4Gi
 
 rules:
+  - name: free-roam # свободное вождение
+    queries: ["free_roam"]
+    routing: []
   - name: directions-car # авто
     queries: ["routing"]
     routing: ["driving"]
