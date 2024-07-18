@@ -20,7 +20,7 @@ echo $UPSTREAM
 for service in $UPSTREAM; do
   case $service in
     "freeroam")
-        echo "Create routing for Directions API bicycle:"
+        echo "Create routing for Directions API freeroam:"
         echo
         echo `curl -sSfG  $URL/free_roam/2.0?key=$KEY -d @moscow_fr.txt`
         echo
