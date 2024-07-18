@@ -11,7 +11,6 @@ jobs:
     steps:
       - name: Install jq
         run: sudo apt -y install jq
-
       - uses: mattermost/action-mattermost-notify@master
         if: ${{ !github.event.pull_request.draft && !startsWith(github.event.pull_request.title, 'WIP:') && github.event.action != 'edited' }}
         with:
@@ -21,7 +20,6 @@ jobs:
           TEXT: |
             Создан Pull Request [${{ github.event.pull_request.title }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }})
             Автор:  ${{ github.triggering_actor }}
-
       - uses: mattermost/action-mattermost-notify@master
         if: ${{ github.event.pull_request.draft == false && startsWith(github.event.pull_request.title, 'WIP:') == false && github.event.action == 'edited'  &&  startsWith(github.event.changes.title.from, 'WIP:') == true }}
         with:
@@ -31,7 +29,6 @@ jobs:
           TEXT: |
             Pull Request готов к проверке [${{ github.event.pull_request.title }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }})
             Автор:  ${{ github.triggering_actor }}
-
      - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
