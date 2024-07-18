@@ -4,13 +4,13 @@ name: Send notification to Mattermost
 
 on:
   pull_request:
-    types: [opened, reopened, edited]
+    types: [opened, reopened, edited, ready_for_review]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: mattermost/action-mattermost-notify@master
-        if: ${{ !github.event.pull_request.draft && !startsWith(github.event.pull_request.title, 'WIP:') && github.event.action != 'edited' }}
+        if: ${{ !github.event.pull_request.draft && !startsWith(github.event.pull_request.title, 'WIP:') && github.event.action != 'edited' && github.event.action != 'ready_for_review'}}
         with:
           MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
           MATTERMOST_USERNAME: Github
@@ -19,7 +19,7 @@ jobs:
             Создан Pull Request [${{ github.event.pull_request.title }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }})
             Автор:  ${{ github.triggering_actor }}
       - uses: mattermost/action-mattermost-notify@master
-        if: ${{ github.event.pull_request.draft == false && startsWith(github.event.pull_request.title, 'WIP:') == false && github.event.action == 'edited'  &&  startsWith(github.event.changes.title.from, 'WIP:') == true }}
+        if: ${{ (github.event.pull_request.draft == false && startsWith(github.event.pull_request.title, 'WIP:') == false && github.event.action == 'edited'  &&  startsWith(github.event.changes.title.from, 'WIP:') == true ) ||  github.event.action == 'ready_for_review'}}
         with:
           MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
           MATTERMOST_USERNAME: Github
