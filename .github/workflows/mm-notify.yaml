@@ -1,16 +1,30 @@
+---
+
+name: Send notification to Mattermost
+
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, edited]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: mattermost/action-mattermost-notify@master
+        if: ${{ !github.event.pull_request.draft && !startsWith(github.event.pull_request.title, 'WIP:') && github.event.action != 'edited' }}
         with:
           MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
           MATTERMOST_USERNAME: Github
           MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
           TEXT: |
-            Создан pull_request ${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }}
-            ${{ github.event.pull_request.title }}
+            Создан Pull Request [${{ github.event.pull_request.title }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }})
+            Автор:  ${{ github.triggering_actor }}
+
+      - uses: mattermost/action-mattermost-notify@master
+        if: ${{ github.event.pull_request.draft == false && startsWith(github.event.pull_request.title, 'WIP:') == false && github.event.action == 'edited'  &&  startsWith(github.event.changes.title.from, 'WIP:') == true }}
+        with:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
+          MATTERMOST_USERNAME: Github
+          MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
+          TEXT: |
+            Pull Request готов к проверке [${{ github.event.pull_request.title }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }})
             Автор:  ${{ github.triggering_actor }}
