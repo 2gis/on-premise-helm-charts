@@ -27,8 +27,10 @@ jobs:
           TEXT: |
             Pull Request готов к проверке [${{ github.event.pull_request.title }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }})
             Автор:  ${{ github.triggering_actor }}
+            
       - name: Install jq
         run: sudo apt -y install jq
+        
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
