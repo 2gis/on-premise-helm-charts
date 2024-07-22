@@ -35,7 +35,7 @@ navi-async-matrix
 navi-back
 	envoy:v1.27.0
 	metrics-aggregator:
-	navi-back:7.23.0.5
+	navi-back:7.25.0.3
 navi-castle
 	navi-castle:1.9.2
 	navi-front:1.24.1
@@ -45,7 +45,7 @@ navi-restrictions
 	navi-restrictions-api:1.0.1
 	navi-restrictions-syncer:1.0.1
 navi-router
-	navi-router:6.17.1.2
+	navi-router:6.24.0.3
 navi-splitter
 	navi-splitter:1.0.1
 platform
