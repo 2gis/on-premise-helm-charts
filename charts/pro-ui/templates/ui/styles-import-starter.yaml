@@ -2,10 +2,9 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "pro.ui.styles-importer-name" . }}-starter
+  name: {{ include "pro.ui.styles-importer.name" . }}-starter
   annotations:
-    {{- include "pro.ui.importer.hook.annotations" $ | nindent 4 }}
-    "helm.sh/hook-weight": "1"
+    {{- include "pro.ui.styles-importer.helm-hooks" $ | nindent 4 }}
 spec:
   backoffLimit: {{ .Values.stylesImporter.backoffLimit }}
   template:
@@ -15,12 +14,11 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       restartPolicy: Never
-      serviceAccountName: {{ include "pro.ui.service-account-name" . }}
       volumes:
         - name: temp-volume
           emptyDir: {}
       containers:
-        - name: {{ include "pro.ui.styles-importer-name" . }}
+        - name: {{ include "pro.ui.styles-importer.name" . }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.stylesImporter.image.repository }}:{{ .Values.stylesImporter.image.tag }}
           imagePullPolicy: IfNotPresent
           resources:
@@ -30,7 +28,7 @@ spec:
               name: temp-volume
           env:
             - name: JOB_NAME
-              value: {{ include "pro.ui.styles-importer-name" . }}
+              value: {{ include "pro.ui.styles-importer.name" . }}
             - name: ES_HOST
               value: http://some_fake_url
             - name: API_URL
