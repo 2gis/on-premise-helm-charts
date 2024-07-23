@@ -101,6 +101,7 @@ data:
           coords: [{{ join "," .coords }}]
       {{- end }}
       initial_project: {{ .Values.map.initialProject | squote }}
+    register_predictor_ttl_seconds: 600
     enabled_modules:
       header_links:
         {{- toYaml .Values.headerLinks | nindent 8 }}
@@ -136,4 +137,3 @@ data:
       {{- end }}
       predictors:
         {{- toYaml (.Values.kafka.predictorsExtraTopics | default list) | nindent 8 }}
-      register_predictor_ttl_seconds: 600
