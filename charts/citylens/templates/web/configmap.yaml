@@ -136,3 +136,4 @@ data:
       {{- end }}
       predictors:
         {{- toYaml (.Values.kafka.predictorsExtraTopics | default list) | nindent 8 }}
+      register_predictor_ttl_seconds: 600
