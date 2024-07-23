@@ -154,26 +154,27 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `tasker.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
 | `tasker.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `{}`            |
 
-### Counter service settings
+### Counter worker settings
 
 | Name                                            | Description                                                                                                                     | Value   |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `counter.enabled`                               | Counter service is enabled.                                                                                                     | `false` |
+| `counter.enabled`                               | Counter worker is enabled.                                                                                                      | `false` |
 | `counter.replicas`                              | A replica count for the pod.                                                                                                    | `1`     |
 | `counter.prometheus.scrape`                     | If Prometheus scrape is enabled.                                                                                                | `true`  |
 | `counter.resources.requests.cpu`                | A CPU request.                                                                                                                  | `20m`   |
 | `counter.resources.requests.memory`             | A memory request.                                                                                                               | `32Mi`  |
 | `counter.resources.limits.cpu`                  | A CPU limit.                                                                                                                    | `1000m` |
 | `counter.resources.limits.memory`               | A memory limit.                                                                                                                 | `512Mi` |
-| `counter.preloader.refreshTick`                 | If HPA is enabled for the service.                                                                                              | `1m`    |
-| `counter.updateStatusQueryTimeout`              | Update status query timeout.                                                                                                    | `1s`    |
-| `counter.buffer.size`                           | Buffer size                                                                                                                     | `1000`  |
-| `counter.buffer.delay`                          | Buffer delay                                                                                                                    | `1s`    |
+| `counter.preloader.refreshTick`                 | Preloader refresh tick.                                                                                                         | `1m`    |
+| `counter.updateStatusQueryTimeout`              | Timeout for database queries to update key status.                                                                              | `1s`    |
+| `counter.buffer`                                | **Settings for in-memory buffer for statistics data.**                                                                          |         |
+| `counter.buffer.size`                           | The maximum size of the buffer. When the limit is reached, the data from the buffer is transferred to Redis.                    | `1000`  |
+| `counter.buffer.delay`                          | The maximum interval between data transfer operations from the buffer to Redis.                                                 | `1s`    |
 | `counter.kafka`                                 | **Settings for read stat messages.**                                                                                            |         |
 | `counter.kafka.clientPrefix`                    | Client prefix name                                                                                                              | `""`    |
 | `counter.kafka.brokers`                         | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093'). | `""`    |
-| `counter.kafka.username`                        | Username for authorization (SASL/PLAINTEXT SHA-512).                                                                            | `""`    |
-| `counter.kafka.password`                        | Password for authorization (SASL/PLAINTEXT SHA-512).                                                                            | `""`    |
+| `counter.kafka.username`                        | Username for authorization (SASL/SCRAM SHA-512).                                                                                | `""`    |
+| `counter.kafka.password`                        | Password for authorization (SASL/SCRAM SHA-512).                                                                                | `""`    |
 | `counter.kafka.tls.enabled`                     | If tls connection to kafka is enabled.                                                                                          | `false` |
 | `counter.kafka.tls.skipServerCertificateVerify` | Controls whether a client verifies the server's certificate chain and host name                                                 | `false` |
 | `counter.kafka.tls.rootCert`                    | Root certificate.                                                                                                               | `""`    |
@@ -241,8 +242,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `kafka.audit`                                 | **Settings for sending audit messages.**                                                                                                                   |         |
 | `kafka.audit.bootstrapServers`                | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`    |
-| `kafka.audit.username`                        | Username for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`    |
-| `kafka.audit.password`                        | Password for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`    |
+| `kafka.audit.username`                        | Username for authorization (SASL/SCRAM SHA-512).                                                                                                           | `""`    |
+| `kafka.audit.password`                        | Password for authorization (SASL/SCRAM SHA-512).                                                                                                           | `""`    |
 | `kafka.audit.topic`                           | Topic to produce audit messages.                                                                                                                           | `""`    |
 | `kafka.audit.tls.enabled`                     | If tls connection to kafka is enabled.                                                                                                                     | `false` |
 | `kafka.audit.tls.skipServerCertificateVerify` | Controls whether a client verifies the server's certificate chain and host name                                                                            | `false` |

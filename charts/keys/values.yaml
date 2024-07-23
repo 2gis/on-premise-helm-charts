@@ -330,11 +330,11 @@ tasker:
   tolerations: {}
 
 
-# @section Counter service settings
+# @section Counter worker settings
 
 counter:
 
-  # @param counter.enabled Counter service is enabled.
+  # @param counter.enabled Counter worker is enabled.
 
   enabled: false
 
@@ -360,17 +360,19 @@ counter:
       cpu: 1000m
       memory: 512Mi
 
-  # @param counter.preloader.refreshTick If HPA is enabled for the service.
+  # @param counter.preloader.refreshTick Preloader refresh tick.
 
   preloader:
     refreshTick: 1m
 
-  # @param counter.updateStatusQueryTimeout Update status query timeout.
+  # @param counter.updateStatusQueryTimeout Timeout for database queries to update key status.
 
   updateStatusQueryTimeout: 1s
 
-  # @param counter.buffer.size Buffer size
-  # @param counter.buffer.delay Buffer delay
+  # @extra counter.buffer **Settings for in-memory buffer for statistics data.**
+
+  # @param counter.buffer.size The maximum size of the buffer. When the limit is reached, the data from the buffer is transferred to Redis.
+  # @param counter.buffer.delay The maximum interval between data transfer operations from the buffer to Redis.
 
   buffer:
     size: 1000
@@ -380,8 +382,8 @@ counter:
 
   # @param counter.kafka.clientPrefix Client prefix name
   # @param counter.kafka.brokers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
-  # @param counter.kafka.username Username for authorization (SASL/PLAINTEXT SHA-512).
-  # @param counter.kafka.password Password for authorization (SASL/PLAINTEXT SHA-512).
+  # @param counter.kafka.username Username for authorization (SASL/SCRAM SHA-512).
+  # @param counter.kafka.password Password for authorization (SASL/SCRAM SHA-512).
   # @param counter.kafka.tls.enabled If tls connection to kafka is enabled.
   # @param counter.kafka.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name
   # @param counter.kafka.tls.rootCert Root certificate.
@@ -538,8 +540,8 @@ kafka:
   # @extra kafka.audit **Settings for sending audit messages.**
 
   # @param kafka.audit.bootstrapServers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
-  # @param kafka.audit.username Username for authorization (SASL/PLAINTEXT SHA-512).
-  # @param kafka.audit.password Password for authorization (SASL/PLAINTEXT SHA-512).
+  # @param kafka.audit.username Username for authorization (SASL/SCRAM SHA-512).
+  # @param kafka.audit.password Password for authorization (SASL/SCRAM SHA-512).
   # @param kafka.audit.topic Topic to produce audit messages.
   # @param kafka.audit.tls.enabled If tls connection to kafka is enabled.
   # @param kafka.audit.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name

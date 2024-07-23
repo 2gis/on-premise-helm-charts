@@ -17,10 +17,6 @@ spec:
       {{- include "keys.counter.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      annotations:
-        prometheus.io/path: "/metrics"
-        prometheus.io/port: "8090"
-        prometheus.io/scrape: "{{ .Values.counter.prometheus.scrape }}"
       labels:
         {{- include "keys.counter.selectorLabels" . | nindent 8 }}
     spec:
