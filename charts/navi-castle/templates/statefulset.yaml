@@ -103,6 +103,11 @@ spec:
             - name: cron-prom
               containerPort: {{ .Values.cron.prometheusPort | int }}
               protocol: TCP
+          {{- if .Values.castle.excludeProjects }}
+          env:
+          - name: CASTLE_EXCLUDE_PROJECTS
+            value: {{ join "," .Values.castle.excludeProjects | quote }}
+          {{- end }}
           volumeMounts:
           - name: {{ include "castle.fullname" $ }}-builder-config
             mountPath: /opt/config_builder.conf
