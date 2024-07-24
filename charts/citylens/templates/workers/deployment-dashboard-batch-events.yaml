@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "citylens.dashboard-batch-events.name" . }}
+  {{- if .Values.worker.dashboardBatchEvents.podAnnotations }}
+  annotations:
+    {{- toYaml .Values.worker.dashboardBatchEvents.podAnnotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "citylens.dashboard-batch-events.labels" . | nindent 4 }}
+  {{- if .Values.worker.dashboardBatchEvents.labels }}
+    {{- toYaml .Values.worker.dashboardBatchEvents.labels | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.worker.dashboardBatchEvents.replicas}}
+  revisionHistoryLimit: {{ .Values.worker.dashboardBatchEvents.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "citylens.dashboard-batch-events.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
+        checksum/custom-ca: {{ include "citylens.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
+      {{- with .Values.worker.dashboardBatchEvents.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "citylens.dashboard-batch-events.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "citylens.dashboard-batch-events.name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.worker.dashboardBatchEvents.image.repository }}:{{ .Values.worker.dashboardBatchEvents.image.tag }}
+          imagePullPolicy: {{ .Values.worker.dashboardBatchEvents.image.pullPolicy }}
+          command: [ "/bin/sh", "-c" ]
+          args: [ "python -m faust -A faust_workers.dashboard_batch_events.app worker -p 8080 -l INFO" ]
+          env:
+            - name: CONFIG_PATH
+              value: /opt/workers/config/workers_config.yaml
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "citylens.customCA.mountPath" $ }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/workers/config
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "citylens.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
+            {{- end }}
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "citylens.workers.name" . }}-configmap
+        {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
+          configMap:
+            name: {{ include "citylens.name" $ }}-custom-ca-configmap
+        {{- end }}
+      {{- with .Values.worker.dashboardBatchEvents.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.dashboardBatchEvents.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.dashboardBatchEvents.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

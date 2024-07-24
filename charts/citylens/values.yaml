@@ -99,7 +99,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.10.0
+    tag: 1.11.0
 
   replicas: 4
 
@@ -230,7 +230,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.10.0
+    tag: 1.11.1
 
   replicas: 1
 
@@ -580,6 +580,52 @@ worker:
     affinity: {}
     tolerations: {}
 
+
+# @section Citylens Dashboard batch events worker's settings
+
+# @param worker.dashboardBatchEvents.replicas A replica count for the pod.
+
+# @section Citylens Dashboard batch events worker's Image settings
+
+# @param worker.dashboardBatchEvents.image.repository Repository.
+# @param worker.dashboardBatchEvents.image.tag Tag.
+# @param worker.dashboardBatchEvents.image.pullPolicy Pull Policy.
+
+# @param worker.dashboardBatchEvents.logLevel Worker's log level.
+
+# @param worker.dashboardBatchEvents.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+# @param worker.dashboardBatchEvents.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.dashboardBatchEvents.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.dashboardBatchEvents.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.dashboardBatchEvents.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.dashboardBatchEvents.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.dashboardBatchEvents.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.dashboardBatchEvents.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  dashboardBatchEvents:
+
+    replicas: 1
+
+    image:
+      repository: 2gis-on-premise/citylens-workers
+      pullPolicy: IfNotPresent
+      tag: 1.11.1
+
+    revisionHistoryLimit: 3
+
+    logLevel: INFO
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+
 # @section Migration job settings
 
 # @param migrations.enabled If migrations needed.
@@ -601,7 +647,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.10.0
+    tag: 1.11.0
 
   resources:
     requests:
@@ -621,9 +667,11 @@ migrations:
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
 # @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
 # @param kafka.topics.pro Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**
+# @param kafka.topics.proDrivers Topic for drivers tracks synchronization with Pro (used by Reporter pro worker). **Required**
 # @param kafka.topics.uploader Topic for Uploader worker. **Required**
 # @param kafka.topics.logs Topic for citylens mobile app logs, uploaded via citylens-api. **Required**
 # @param kafka.topics.framesLifecycle Topic for frames lifecycle events. **Required**
+# @param kafka.topics.tracksLifecycle Topic for tracks lifecycle events. **Required**
 # @param kafka.topics.predictions Topic for predictions events from detectors. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
 
@@ -636,9 +684,11 @@ kafka:
     frames: ''
     tracks: ''
     pro: ''
+    proDrivers: ''
     logs: ''
     uploader: ''
     framesLifecycle: ''
+    tracksLifecycle: ''
     predictions: ''
   consumerGroups:
     prefix: ''
