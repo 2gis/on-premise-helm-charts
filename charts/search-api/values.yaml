@@ -10,6 +10,7 @@ dgctlDockerRegistry: ''
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
 # @param replicaCount A replica count for the pod
+# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 # @param affinity Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
@@ -18,6 +19,7 @@ dgctlDockerRegistry: ''
 podAnnotations: {}
 podLabels: {}
 replicaCount: 1
+revisionHistoryLimit: 3
 nodeSelector: {}
 affinity: {}
 tolerations: []
@@ -54,7 +56,7 @@ api:
 
   image:
     repository: 2gis-on-premise/search-api
-    tag: 7.77.2
+    tag: 7.78.0
     pullPolicy: IfNotPresent
 
 

@@ -1,21 +1,23 @@
+{{- if .Values.worker.tracksUploader.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "citylens.logs-saver.name" . }}
-  {{- if .Values.worker.logsSaver.annotations }}
+  name: {{ include "citylens.track-reloader.name" . }}
+  {{- if .Values.worker.tracksUploader.annotations }}
   annotations:
-    {{- toYaml .Values.worker.logsSaver.annotations | nindent 4 }}
+    {{- toYaml .Values.worker.tracksUploader.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "citylens.logs-saver.labels" . | nindent 4 }}
-  {{- if .Values.worker.logsSaver.labels }}
-    {{- toYaml .Values.worker.labels | nindent 4 }}
+    {{- include "citylens.track-reloader.labels" . | nindent 4 }}
+  {{- if .Values.worker.tracksUploader.labels }}
+    {{- toYaml .Values.worker.tracksUploader.labels | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.worker.logsSaver.replicas }}
+  replicas: {{ .Values.worker.tracksUploader.replicas }}
+  revisionHistoryLimit: {{ .Values.worker.tracksUploader.revisionHistoryLimit }}
   selector:
     matchLabels:
-      {{- include "citylens.logs-saver.selectorLabels" . | nindent 6 }}
+      {{- include "citylens.track-reloader.selectorLabels" . | nindent 6 }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -26,18 +28,18 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
         checksum/custom-ca: {{ include "citylens.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
-      {{- with .Values.worker.logsSaver.podAnnotations }}
+      {{- with .Values.worker.tracksUploader.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "citylens.logs-saver.labels" . | nindent 8 }}
+        {{- include "citylens.track-reloader.labels" . | nindent 8 }}
     spec:
       containers:
-        - name: {{ include "citylens.logs-saver.name" . }}
+        - name: {{ include "citylens.track-reloader.name" . }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
           imagePullPolicy: {{ .Values.web.image.pullPolicy }}
           command: [ "/bin/sh", "-c" ]
-          args: [ "flask downloader download_logs" ]
+          args: [ "flask reloader reload_tracks" ]
           env:
             - name: CONFIG_PATH
               value: /opt/worker/config/dashboard_config.yaml
@@ -64,15 +66,16 @@ spec:
           configMap:
             name: {{ include "citylens.name" $ }}-custom-ca-configmap
         {{- end }}
-      {{- with .Values.worker.logsSaver.nodeSelector }}
+      {{- with .Values.worker.tracksUploader.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.worker.logsSaver.affinity }}
+      {{- with .Values.worker.tracksUploader.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.worker.logsSaver.tolerations }}
+      {{- with .Values.worker.tracksUploader.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}

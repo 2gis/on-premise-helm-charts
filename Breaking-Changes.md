@@ -1,5 +1,13 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [#.#.#]
+
+### citylens
+- Added new worker `worker.dashboardBatchEvents`
+- Added new kafka topics
+  - `kafka.topics.tracksLifecycle` - tracks lifecycle events
+  - `kafka.topics.proDrivers` - synchonization drivers tracks with Pro
+
 ## [1.24.0]
 
 ### pro-api

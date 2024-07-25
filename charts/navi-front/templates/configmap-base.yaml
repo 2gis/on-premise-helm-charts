@@ -71,6 +71,15 @@ data:
             js_content bundle.geo_coding;
         }
 
+        location ^~ /free_roam {
+            gzip on;
+            gzip_vary on;
+            gzip_proxied any;
+            gzip_comp_level 5;
+            gzip_types *;
+            js_content bundle.geo_coding;
+        }
+
         location /geocoding {
             rewrite ^/geocoding(.*)$ $1 break;
             proxy_pass http://{{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }};

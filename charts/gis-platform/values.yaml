@@ -195,12 +195,14 @@ spcore:
 # @section Portal settings
 
 # @param portal.replicaCount A replica count for the pod.
+# @param portal.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 # @param portal.terminationGracePeriodSeconds Wait for up to this amount of seconds for a running instance of the service to shut down.
 # @param portal.maxBodySize Maximum HTTP request body size.
 # @param portal.gzip.enabled If GZip compression should be enabled for the HTTP requests and responses.
 
 portal:
   replicaCount: 1
+  revisionHistoryLimit: 3
   terminationGracePeriodSeconds: 60
   maxBodySize: 100m
   gzip:

@@ -1,21 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "citylens.frames-saver.name" . }}
-  {{- if .Values.worker.framesSaver.annotations }}
+  name: {{ include "citylens.reporter-pro.name" . }}
+  {{- if .Values.worker.reporterPro.annotations }}
   annotations:
-    {{- toYaml .Values.worker.framesSaver.annotations | nindent 4 }}
+    {{- toYaml .Values.worker.reporterPro.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "citylens.frames-saver.labels" . | nindent 4 }}
-  {{- if .Values.worker.framesSaver.labels }}
-    {{- toYaml .Values.worker.labels | nindent 4 }}
+    {{- include "citylens.reporter-pro.labels" . | nindent 4 }}
+  {{- if .Values.worker.reporterPro.labels }}
+    {{- toYaml .Values.worker.reporterPro.labels | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.worker.framesSaver.replicas }}
+  replicas: {{ .Values.worker.reporterPro.replicas }}
+  revisionHistoryLimit: {{ .Values.worker.reporterPro.revisionHistoryLimit }}
   selector:
     matchLabels:
-      {{- include "citylens.frames-saver.selectorLabels" . | nindent 6 }}
+      {{- include "citylens.reporter-pro.selectorLabels" . | nindent 6 }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -26,18 +27,18 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
         checksum/custom-ca: {{ include "citylens.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
-      {{- with .Values.worker.framesSaver.podAnnotations }}
+      {{- with .Values.worker.reporterPro.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "citylens.frames-saver.labels" . | nindent 8 }}
+        {{- include "citylens.reporter-pro.labels" . | nindent 8 }}
     spec:
       containers:
-        - name: {{ include "citylens.frames-saver.name" . }}
+        - name: {{ include "citylens.reporter-pro.name" . }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
           imagePullPolicy: {{ .Values.web.image.pullPolicy }}
           command: [ "/bin/sh", "-c" ]
-          args: [ "flask downloader download_frames_ftp" ]
+          args: [ "flask reporter run-pro" ]
           env:
             - name: CONFIG_PATH
               value: /opt/worker/config/dashboard_config.yaml
@@ -64,15 +65,15 @@ spec:
           configMap:
             name: {{ include "citylens.name" $ }}-custom-ca-configmap
         {{- end }}
-      {{- with .Values.worker.framesSaver.nodeSelector }}
+      {{- with .Values.worker.reporterPro.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.worker.framesSaver.affinity }}
+      {{- with .Values.worker.reporterPro.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.worker.framesSaver.tolerations }}
+      {{- with .Values.worker.reporterPro.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

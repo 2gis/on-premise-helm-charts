@@ -73,10 +73,12 @@ strategy:
 
 # @param api.replicas Number of replicas of API pods
 # @param api.logLevel Log level
+# @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
 api:
   replicas: 1
   logLevel: info
+  revisionHistoryLimit: 3
 
   # @section api.image **Deployment settings**
 
@@ -86,7 +88,7 @@ api:
 
   image:
     repository: 2gis-on-premise/catalog-api
-    tag: 3.600.0
+    tag: 3.619.0
     pullPolicy: IfNotPresent
 
 

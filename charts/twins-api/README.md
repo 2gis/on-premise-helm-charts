@@ -20,7 +20,7 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | ------------------ | --------------------------------------------------------------------------------------------- | --------------------------- |
 | `imagePullSecrets` | Kubernetes image pull secrets.                                                                | `[]`                        |
 | `image.repository` | Twins API service image repository.                                                           | `2gis-on-premise/twins-api` |
-| `image.tag`        | Twins API service image tag.                                                                  | `1.9.0`                     |
+| `image.tag`        | Twins API service image tag.                                                                  | `1.13.0`                    |
 | `image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`              |
 
 ### Deployment Artifacts Storage settings
@@ -45,6 +45,7 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | `api.keys.token`                            | Keys service API key **Required**                                                                                                                                                                        | `""`            |
 | `api.keys.requestTimeout`                   | Timeout for requests to the Keys API.                                                                                                                                                                    | `5s`            |
 | `api.replicas`                              | A replica count for the pod.                                                                                                                                                                             | `1`             |
+| `api.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                           | `3`             |
 
 ### api.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 

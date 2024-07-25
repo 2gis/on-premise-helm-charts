@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "citylens.workers.name" . }}-configmap
+data:
+  workers_config.yaml: |
+    pg_connection_url: {{ include "citylens.pgDSN"  . | squote }}
+
+    image_service:
+    {{- with .Values.s3 }}
+      s3_endpoint: {{ required "A valid .Values.s3.endpoint entry required" .endpoint | squote }}
+      bucket_prefix: {{ required "A valid .Values.s3.bucketPrefix entry required" .bucketPrefix | squote }}
+      frame_key_template:  {{ include "citylens.s3_constants.frame_key_template" . | squote }}
+    {{- end }}
+    topics:
+    {{- with .Values.kafka.topics }}
+      frames_lifecycle_topic: {{ required "A valid .Values.kafka.topics.framesLifecycle entry required" .framesLifecycle | squote }}
+      tracks_lifecycle_topic: {{ required "A valid .Values.kafka.topics.tracksLifecycle entry required" .tracksLifecycle | squote }}
+    {{- end }}
+    log_level: {{ .Values.worker.dashboardBatchEvents.logLevel }}
+    {{- with .Values.kafka }}
+    kafka:
+      broker: {{ .bootstrapServer }}
+      is_credentials_enabled: true
+      credentials:
+        mechanism: 'SCRAM-SHA-512'
+        username: {{ .username }}
+        password: {{ .password }}
+      advanced:
+        stream_wait_empty: true
+        topic_allow_declare: false
+        topic_disable_leader: true
+        consumer_max_fetch_size: 8192
+        broker_max_poll_records: 32
+        stream_buffer_maxsize: 32
+
+    consumer_group_prefix: {{ .consumerGroups.prefix }}
+    {{- end }}
