@@ -99,11 +99,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-<<<<<<< HEAD
-    tag: 1.11.0
-=======
     tag: 1.11.1
->>>>>>> origin/master
 
   replicas: 4
 
