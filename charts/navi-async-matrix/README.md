@@ -52,7 +52,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.6.2`                             |
+| `image.tag`        | Tag         | `1.10.3`                            |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings

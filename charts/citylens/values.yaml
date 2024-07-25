@@ -99,7 +99,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.11.0
+    tag: 1.11.1
 
   replicas: 4
 

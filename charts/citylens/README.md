@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.11.0`                       |
+| `api.image.tag`        | Tag.         | `1.11.1`                       |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
