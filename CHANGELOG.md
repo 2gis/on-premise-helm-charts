@@ -1,6 +1,7 @@
 # 2GIS On-Premise Changelog
 
 ## [1.26.0] (2024-07-25)
+#### [Breaking-Changes](Breaking-Changes.md#1260)
 #### Images
 ```
 catalog-api
