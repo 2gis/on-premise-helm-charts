@@ -1,6 +1,6 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [#.#.#]
+## [1.26.0]
 
 ### citylens
 - Added new worker `worker.dashboardBatchEvents`
