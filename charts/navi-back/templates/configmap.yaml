@@ -21,6 +21,7 @@ data:
           "ProjectContext"
         ],
         "format": "Json",
+        "json_message_field_name": {{ .Values.naviback.logMessageField | quote }},
         "enable_mirroring": true
       },
       "service": {
@@ -533,6 +534,18 @@ data:
           }
         },
         {{- end }}
+        {{- if .Values.routesharing.enabled }}
+        "sharing": {
+          {{- $kafkaProperties := dict -}}
+          {{- range $key, $_ := .Values.routesharing.kafka.fileProperties -}}
+          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
+          {{- end -}}
+          {{- $kafkaProperties := mustMerge $kafkaProperties .Values.routesharing.kafka.properties }}
+          "kafka_properties":
+            {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
+          "topic": {{ .Values.routesharing.topic | quote }}
+        },
+        {{- end }}{{/* .Values.routesharing.enabled */}}
         {{- if and .Values.naviback.bss.enabled .Values.naviback.bss.client.serviceRemoteAddress }}
         "business_statistics_system": {
           "client": {
@@ -564,8 +577,11 @@ data:
         {{- end }}{{- /* if .Values.naviback.rtr.enabled */}}
         {{- if .Values.naviback.hierarchies.enabled }}
         "hierarchies": {
-          "graphs_file_name": "{SHORTCUT_PATH}",
-          "patches_dir_name": "{PATCHES_PATH}"
+          "use_hierarchy": true,
+          {{- if (not .Values.naviback.hierarchies.skipPatches) }}
+          "patches_file_name": "{PATCHES_PATH}",
+          {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
+          "graphs_file_name": "{SHORTCUT_PATH}"
         },
         "hierarchy_shortcuts": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
@@ -576,15 +592,17 @@ data:
             "count": 600
           }
         },
+        {{- if (not .Values.naviback.hierarchies.skipPatches) }}
         "hierarchy_patches": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
           "nodes": [
-            "{S3_CACHE_PATH}/patches.json"
+            "{S3_CACHE_PATH}/patches/patches.tar.gz"
           ],
           "timeout_seconds": {
             "count": 600
           }
         },
+        {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
         "sn_import": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
           "nodes": [
