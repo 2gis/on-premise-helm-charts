@@ -214,8 +214,8 @@ ui:
     hosts:
     - host: pro-ui.example.com
       paths:
-        - path: /
-          pathType: Prefix
+      - path: /
+        pathType: Prefix
     tls: []
     # - hosts:
     #   - pro-ui.example.com
