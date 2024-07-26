@@ -67,9 +67,9 @@ env:
   MAPGL_IMMERSIVE_TILESET: web_immersive
   MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
   MAPGL_FLOORSSERVER: https://floors-api.ingress.host
-  MAPGL_STYLESERVER: https://styles.api.2gis.com
-  MAPGL_ICONSPATH: https://disk.2gis.com/styles/assets/icons
-  MAPGL_MODELSPATH: https://disk.2gis.com/styles/assets/models
+  MAPGL_STYLESERVER: https://styles.ingress.host
+  MAPGL_ICONSPATH: https://styles.ingress.host/styles/assets/icons
+  MAPGL_MODELSPATH: https://styles.ingress.host/styles/assets/models
   MAPGL_KEYSERVER: https://keys-api.ingress.host/public/v1/keys/{keyID}/services/mapgl-js-api
   MAPGL_RTLPLUGIN: https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js
   MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
