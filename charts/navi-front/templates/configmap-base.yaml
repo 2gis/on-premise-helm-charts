@@ -34,6 +34,10 @@ data:
         {{ if .Values.hullLocation }}
         {{ include "tplvalues.render" ( dict "value" .Values.hullLocation "context" $ ) | indent 4 }}
         {{ else  }}
+        location ^~ /get_hull {
+            js_content bundle.geo_coding;
+        }
+        {{- end }}
 
         location ^~ /get_dist_matrix {
             js_content bundle.geo_coding;
@@ -43,16 +47,36 @@ data:
             js_content bundle.geo_coding;
         }
 
+        location ^~ /pedestrian {
+            js_content bundle.geo_coding;
+        }
+
         location ^~ /public_transport {
             js_content bundle.geo_coding;
         }
 
-        location ^~ /get_hull {
+        location ^~ /routing/ {
             js_content bundle.geo_coding;
         }
-        {{- end }}
 
-        location ^~ /routing/ {
+        location ^~ /map_matching/ {
+            js_content bundle.geo_coding;
+        }
+
+        location ^~ /get_pairs/ {
+            js_content bundle.geo_coding;
+        }
+
+        location ^~ /truck/ {
+            js_content bundle.geo_coding;
+        }
+
+        location ^~ /free_roam {
+            gzip on;
+            gzip_vary on;
+            gzip_proxied any;
+            gzip_comp_level 5;
+            gzip_types *;
             js_content bundle.geo_coding;
         }
 

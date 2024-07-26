@@ -14,6 +14,38 @@
 {{ include "catalog.name" . }}-jobs
 {{- end }}
 
+{{- /*
+Name for psql intermediate volume for copy secrets and change permissions
+*/ -}}
+
+{{- define "catalog.name-psql-raw" -}}
+{{- printf "%s-psql-raw" (include "catalog.name" .) -}}
+{{- end }}
+
+{{- /*
+Name for psql secret and volume
+*/ -}}
+
+{{- define "catalog.name-psql" -}}
+{{- printf "%s-psql" (include "catalog.name" .) -}}
+{{- end }}
+
+{{- /*
+Name for psql intermediate volume for copy secrets and change permissions
+*/ -}}
+
+{{- define "catalog.importer.name-psql-raw" -}}
+{{- printf "%s-psql-raw" (include "catalog.importer.name" .) -}}
+{{- end }}
+
+{{- /*
+Name for psql secret and volume
+*/ -}}
+
+{{- define "catalog.importer.name-psql" -}}
+{{- printf "%s-psql" (include "catalog.importer.name" .) -}}
+{{- end }}
+
 {{- define "catalog.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
@@ -95,6 +127,16 @@ onprem
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
       key: apiDbPassword
+- name: CATALOG_DB_SSL_ENABLED
+  value: "{{ .Values.api.postgres.tls.enabled }}"
+- name: CATALOG_DB_SSL_MODE
+  value: "{{ .Values.api.postgres.tls.mode }}"
+- name: CATALOG_DB_SSL_CLIENTCERT_PATH
+  value: "/etc/2gis/secret/psql/client.crt"
+- name: CATALOG_DB_SSL_CLIENTKEY_PATH
+  value: "/etc/2gis/secret/psql/client.key"
+- name: CATALOG_DB_SSL_SERVERCERT_PATH
+  value: "/etc/2gis/secret/psql/ca.crt"
 {{- end }}
 
 {{- define "catalog.env.preloaders" -}}
@@ -160,8 +202,24 @@ onprem
     secretKeyRef:
       name: {{ include "catalog.secret.jobs.name" . }}
       key: importerDbPassword
+{{- if .Values.importer.postgres.tls.enabled }}
+- name: IMPORTER_DB_CATALOG_SSL_MODE
+  value: "{{ .Values.importer.postgres.tls.mode }}"
+- name: IMPORTER_DB_CATALOG_SSL_CLIENTCERT_PATH
+  value: "/etc/2gis/secret/psql/client.crt"
+- name: IMPORTER_DB_CATALOG_SSL_CLIENTKEY_PATH
+  value: "/etc/2gis/secret/psql/client.key"
+- name: IMPORTER_DB_CATALOG_SSL_SERVERCERT_PATH
+  value: "/etc/2gis/secret/psql/ca.crt"
+{{- end }}
 - name: IMPORTER_S3_ENDPOINT
   value: "{{ .Values.dgctlStorage.host }}"
+- name: IMPORTER_S3_REGION
+  value: "{{ .Values.dgctlStorage.region }}"
+- name: IMPORTER_S3_SECURE
+  value: "{{ .Values.dgctlStorage.secure }}"
+- name: IMPORTER_S3_VERIFY_SSL
+  value: "{{ .Values.dgctlStorage.verifySsl }}"
 - name: IMPORTER_S3_BUCKET
   value: "{{ .Values.dgctlStorage.bucket }}"
 - name: IMPORTER_S3_ACCESS_KEY
@@ -225,8 +283,18 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- end -}}
 {{- end -}}
 
+<<<<<<< HEAD
 {{- define "catalog.custom.ca.mountPath" -}}
 {{ $.Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+=======
+{{- define "catalog.env.custom.ca.path" -}}
+- name: SSL_CERT_DIR
+  value: {{ include "catalog.custom.ca.mountPath" . }}
+{{- end }}
+
+{{- define "catalog.custom.ca.mountPath" -}}
+{{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+>>>>>>> develop
 {{- end -}}
 
 {{- define "catalog.custom.ca.volumeMounts" -}}
@@ -236,8 +304,29 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
   readOnly: true
 {{- end -}}
 
+<<<<<<< HEAD
 {{- define "catalog.custom.ca.volumes" -}}
 - name: custom-ca
   configMap:
     name: {{ include "catalog.name" . }}-configmap
+=======
+{{- define "catalog.custom.ca.jobs.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "catalog.configmap.jobs.name" . }}
+{{- end -}}
+
+{{- define "catalog.custom.ca.deploys.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "catalog.configmap.deploys.name" . }}
+{{- end -}}
+
+{{- define "catalog.configmap.jobs.name" -}}
+{{ include "catalog.name" . }}-configmap-jobs
+{{- end -}}
+
+{{- define "catalog.configmap.deploys.name" -}}
+{{ include "catalog.name" . }}-configmap-deploys
+>>>>>>> develop
 {{- end -}}

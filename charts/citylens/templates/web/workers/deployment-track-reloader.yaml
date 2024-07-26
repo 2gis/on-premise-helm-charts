@@ -14,6 +14,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.worker.tracksUploader.replicas }}
+  revisionHistoryLimit: {{ .Values.worker.tracksUploader.revisionHistoryLimit }}
   selector:
     matchLabels:
       {{- include "citylens.track-reloader.selectorLabels" . | nindent 6 }}
@@ -26,6 +27,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
+        checksum/custom-ca: {{ include "citylens.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
       {{- with .Values.worker.tracksUploader.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -41,15 +43,29 @@ spec:
           env:
             - name: CONFIG_PATH
               value: /opt/worker/config/dashboard_config.yaml
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "citylens.customCA.mountPath" $ }}
+            {{- end }}
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}
           volumeMounts:
             - name: config-volume
               mountPath: /opt/worker/config
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "citylens.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
+            {{- end }}
       volumes:
         - name: config-volume
           configMap:
             name: {{ include "citylens.web.name" . }}-configmap
+        {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
+          configMap:
+            name: {{ include "citylens.name" $ }}-custom-ca-configmap
+        {{- end }}
       {{- with .Values.worker.tracksUploader.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

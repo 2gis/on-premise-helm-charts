@@ -26,10 +26,9 @@ data:
     dashboard_domain: {{ required "A valid .Values.dashboardDomain. entry required" .Values.dashboardDomain | squote }}
     default_locale: {{ .Values.locale | squote }}
     log_level: {{ .Values.web.logLevel | squote }}
+    metrics_app_name: {{ .Values.web.metricsAppName }}
     db_connections:
-    {{- with .Values.postgres }}
-      postgres: 'postgresql://{{ required "A valid .Values.postgres.username entry required" .username }}:{{ required "A valid .Values.postgres.password entry required" .password }}@{{ required "A valid .Values.postgres.host entry required" .host }}:{{ required "A valid .Values.postgres.port entry required" .port }}/{{ required "A valid .Values.postgres.database entry required" .database }}'
-    {{- end }}
+      postgres: {{ include "citylens.pgDSN"  . | squote }}
     kafka:
     {{- with .Values.kafka }}
       bootstrap_servers: {{  required "A valid .Values.kafka.bootstrap.servers entry required" .bootstrapServer | squote }}
@@ -51,7 +50,7 @@ data:
       key_templates:
         log: '{track_uuid}/log_{log_timestamp_ms}'
         log_prefix: '{track_uuid}/log_'
-        frame: '{track_uuid}/{frame_timestamp_ms}.jpg'
+        frame: {{ include "citylens.s3_constants.frame_key_template" . | squote }}
       client_params:
         aws_access_key_id: {{ required "A valid .Values.s3.accessKey entry required" .accessKey | squote }}
         aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
@@ -64,6 +63,7 @@ data:
       source: {{ .Values.worker.tracksUploader.source | squote }}
       topic: {{ .Values.kafka.topics.uploader | squote }}
       verify_ssl: {{ .Values.worker.tracksUploader.verifySsl }}
+      reload_track_timeout_seconds: {{ .Values.worker.tracksUploader.reloadTrackTimeoutSeconds }}
     {{- if .Values.worker.camcomSender.enabled }}
     camcom:
     {{- with .Values.worker.camcomSender }}
@@ -78,13 +78,20 @@ data:
       source_env: {{ .sourceEnv }}
     {{- end }}
     {{- end }}
-    {{- with .Values.pro }}
-    pro_client:
-      endpoint_url: {{ .url }}
-      token: {{ .key }}
-      verify_ssl: {{ .verifySsl }}
-    {{- end }}
+    pro:
+      {{- with .Values.pro }}
+      client:
+        base_url: {{ .baseUrl }}
+        token: {{ .key }}
+        verify_ssl: {{ .verifySsl }}
+      {{- end }}
+      topics:
+        frames: {{ .Values.kafka.topics.pro }}
+        drivers: {{ .Values.kafka.topics.proDrivers }}
+      assets:
+        frames: {{ .Values.pro.framesAssetId }}
     map:
+      tileserver_url_template: {{ required "A valid .Values.map.tileserverUrl entry required" .Values.map.tileserverUrl }}/tiles?x={x}&y={y}&z={z}
       mapgl:
         host: {{ required "A valid .Values.map.mapgl.host entry required" .Values.map.mapgl.host | squote }}
         key: {{ required "A valid .Values.map.mapgl.key entry required" .Values.map.mapgl.key | squote }}
@@ -94,6 +101,7 @@ data:
           coords: [{{ join "," .coords }}]
       {{- end }}
       initial_project: {{ .Values.map.initialProject | squote }}
+    register_predictor_ttl_seconds: 600
     enabled_modules:
       header_links:
         {{- toYaml .Values.headerLinks | nindent 8 }}
@@ -101,7 +109,10 @@ data:
         - reload_track
         - reload_statuses
         {{- end }}
-        {{- if .Values.pro.url }}
+        {{- if .Values.worker.camcomSender.enabled }}
+        - camcom_stats
+        {{- end }}
+        {{- if .Values.pro.baseUrl }}
         - pro
         {{- end }}
       header_help_url: 'https://docs.google.com/document/d/1ypaEpklxfc9S5e7FdG2sWBT-WfIR_uZGvQp8X3Xrr0c'
@@ -109,6 +120,8 @@ data:
         frames_topics: {{ .Values.kafka.topics.frames }}
         metadata_topics: {{ .Values.kafka.topics.tracks }}
         frames_lifecycle_topic: {{ required "A valid .Values.kafka.topics.framesLifecycle entry required" .Values.kafka.topics.framesLifecycle | squote }}
+        tracks_lifecycle_topic: {{ required "A valid .Values.kafka.topics.tracksLifecycle entry required" .Values.kafka.topics.tracksLifecycle | squote }}
+        unified_predictions_topic: {{ required "A valid .Values.kafka.topics.predictions entry required" .Values.kafka.topics.predictions | squote }}
       logs_saver:
         logs_topic: {{ .Values.kafka.topics.logs }}
       reporters:
@@ -117,11 +130,10 @@ data:
           predictors:
             {{- toYaml .predictors | nindent 12 }}
       {{- if eq .name "pro" }}
-          topic: {{ $.Values.kafka.topics.pro }}
           {{- if .trackTimeoutDays }}
           timeout: {{ .trackTimeoutDays }}
           {{- end }}
         {{- end }}
       {{- end }}
       predictors:
-        {{- toYaml .Values.kafka.predictors | nindent 8 }}
+        {{- toYaml (.Values.kafka.predictorsExtraTopics | default list) | nindent 8 }}

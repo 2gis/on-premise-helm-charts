@@ -1,11 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "naviback.fullname" . }}
+  name: {{ include "generic-chart.fullname" . }}
   labels:
-    {{- include "naviback.labels" . | nindent 4 }}
+    {{- include "generic-chart.labels" . | nindent 4 }}
     rule: {{ .Values.naviback.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
+    {{- if .Values.dataGroup.enabled }}
+    dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
+    dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+    {{- end }}{{- /* dataGroup.enabled */}}
   {{- with .Values.labels }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -13,81 +17,229 @@ spec:
   {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   {{- if .Values.strategy }}
   strategy:
     {{- include "tplvalues.render" ( dict "value" .Values.strategy "context" $) | nindent 6 }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "naviback.selectorLabels" . | nindent 6 }}
+      {{- include "generic-chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "naviback.selectorLabels" . | nindent 8 }}
+        {{- include "generic-chart.selectorLabels" . | nindent 8 }}
+        navigroup: {{ .Values.navigroup | default "" | quote }}
+        {{- if .Values.dataGroup.enabled }}
+        dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
+        dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "naviback.serviceAccountName" . }}
+      serviceAccountName: {{ include "generic-chart.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
-      - name: {{ include "naviback.fullname" . }}-configmap
+      - name: {{ include "generic-chart.fullname" . }}-configmap
         configMap:
-          name: {{ include "naviback.fullname" . }}-configmap
+          name: {{ include "generic-chart.fullname" . }}-configmap
       {{- if .Values.kafka.fileProperties }}
-      - name: {{ include "naviback.fullname" . }}-secret
+      - name: {{ include "generic-chart.fullname" . }}-secret
         secret:
-          secretName: {{ include "naviback.fullname" . }}-secret
+          secretName: {{ include "generic-chart.fullname" . }}-secret
+      {{- end }}
+      {{- if .Values.naviback.sentry.enabled }}
+      - name: sentry-volume
+        emptyDir: {}
+      {{- end }}
+      {{- if .Values.naviback.hierarchies.enabled }}
+      - name: hierarchies-volume
+        emptyDir: {}
+      {{- end }}
+      {{- if .Values.extraVolumes }}
+      {{- include "tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- if .Values.initContainers }}
+      initContainers:
+        {{- include "tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ include "naviback.fullname" . }}
+        {{- if .Values.transmitter.enabled }}
+{{- /* generic-chart.containerName redefined in _helpers.tpl */}}
+        - name: {{ include "generic-chart.containerName" . }}-envoy
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.envoy.image.repository }}:{{ .Values.envoy.image.tag }}
+          imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
+          volumeMounts:
+            - name: {{ include "generic-chart.fullname" . }}-configmap
+              mountPath: /etc/envoy/envoy.yaml
+              subPath: envoy.yaml
+          {{- if (.Values.envoy).resources }}
+          resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
+          {{- end }}
+          lifecycle:
+            # wait for the main container to shutdown
+            preStop:
+              exec:
+                command: ["/bin/bash", "-c", "while cat < /dev/tcp/127.0.0.1/{{ .Values.naviback.appPort }} ; do sleep 5 ; done"]
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: admin
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /ready
+              port: admin
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: admin
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+          ports:
+            - name: admin
+              containerPort: 9901
+              protocol: TCP
+        {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics-aggregator
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
+          env:
+            - name: METRICS_AGGREGATOR_PORT
+              value: "{{ .Values.metrics.port }}"
+            - name: METRICS_AGGREGATOR_SOURCES
+              value: "http://localhost:{{ .Values.naviback.appPort }}/metrics,http://localhost:9901/stats/prometheus"
+            - name: GOMAXPROCS
+              value: "1"
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: {{ .Values.metrics.port }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: {{ .Values.metrics.port }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.metrics.resources | nindent 12 }}
+        {{- end }}
+{{- /* generic-chart.containerName redefined in _helpers.tpl */}}
+        - name: {{ include "generic-chart.containerName" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: [ "/usr/sbin/2gis/mosesd/mosesd" ]
+          {{- if .Values.command }}
+          command:
+            {{- include "tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- else }}
+          command: [ "/usr/sbin/2gis/mosesd/tini", "--" ]
+          {{- end }}
+          {{- if .Values.args }}
           args:
-           - --config
-           - /etc/2gis/mosesd/navi-back.conf
+            {{- include "tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+          - /usr/sbin/2gis/mosesd/mosesd
+          - --config
+          - /etc/2gis/mosesd/navi-back.conf
+          {{- end }}
           volumeMounts:
-          - name: {{ include "naviback.fullname" . }}-configmap
+          - name: {{ include "generic-chart.fullname" . }}-configmap
             mountPath: /etc/2gis/mosesd/navi-back.conf
             subPath: navi-back.conf
-          - name: {{ include "naviback.fullname" . }}-configmap
+          - name: {{ include "generic-chart.fullname" . }}-configmap
             mountPath: /etc/2gis/mosesd/rules.conf
             subPath: rules.conf
           {{- if .Values.kafka.fileProperties }}
-          - name: {{ include "naviback.fullname" . }}-secret
+          - name: {{ include "generic-chart.fullname" . }}-secret
             mountPath: /etc/2gis/mosesd/secret/
+          {{- end }}
+          {{- if .Values.naviback.sentry.enabled }}
+          - name: sentry-volume
+            mountPath: {{ .Values.naviback.sentry.reportPath | default "/tmp/sentry" | quote }}
+          {{- end }}
+          {{- if .Values.naviback.hierarchies.enabled }}
+          - name: hierarchies-volume
+            mountPath: "/tmp/hierarchies"
+          {{- end }}
+          {{- if .Values.extraVolumeMounts }}
+          {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 10 }}
           {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.naviback.appPort }}
               protocol: TCP
+            {{- if .Values.naviback.grpcPort }}
+            - name: grpc
+              containerPort: {{ .Values.naviback.grpcPort }}
+              protocol: TCP
+            {{- end }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe:
+            {{- include "tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /successfulwork
+              port: http
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.customLivenessProbe }}
+          livenessProbe:
+            {{- include "tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.startupProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /heartbeat
               port: http
-            initialDelaySeconds: {{ .Values.livenessProbeDelay }}
-            periodSeconds: 5
-            timeoutSeconds: 3
-            failureThreshold: 2
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.customReadinessProbe }}
+          readinessProbe:
+            {{- include "tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /successfulwork
               port: http
-            initialDelaySeconds: {{ .Values.readinessProbeDelay }}
-            periodSeconds: 5
-            timeoutSeconds: 3
-            failureThreshold: 2
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
@@ -99,7 +251,10 @@ spec:
             # wait for the endpoint removal process
             preStop:
               exec:
-                command: ["/bin/sh", "-c", "sleep 5"]
+                command: ["/bin/sh", "-c", "sleep {{ .Values.preStopDelay | default 5 | int }}"]
+        {{- if .Values.sidecars }}
+        {{- include "tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 60 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

@@ -53,17 +53,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | Name               | Description  | Value                     |
 | ------------------ | ------------ | ------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/license` |
-| `image.tag`        | Tag.         | `2.1.2`                   |
+| `image.tag`        | Tag.         | `2.2.1`                   |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`            |
 
 ### License service application settings
 
-| Name                      | Description                                                                                                                                                                                    | Value |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `license.type`            | License type. Should be auto generated with `dgctl pull --generate-values`.                                                                                                                    | `""`  |
-| `license.updatePeriod`    | Duration how often service should fetch new license from storage. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration].                      | `1h`  |
-| `license.retryPeriod`     | Duration how often service should try to fetch license from storage if previous attempts were failing.                                                                                         | `30s` |
-| `license.softBlockPeriod` | Duration until the license expiration time when license service should respond with 'soft' block status. For this duration additional time units 'd' for days and 'w' for weeks are supported. | `2w`  |
+| Name                      | Description                                                                                                                                                                                                    | Value |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `license.type`            | License type. Should be auto generated with `dgctl pull --generate-values`.                                                                                                                                    | `""`  |
+| `license.retryPeriod`     | Duration how often service should try to fetch license from storage if previous attempts were failing. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration]. | `30s` |
+| `license.softBlockPeriod` | Duration until the license expiration time when license service should respond with 'soft' block status. For this duration additional time units 'd' for days and 'w' for weeks are supported.                 | `2w`  |
 
 ### Service settings
 
@@ -95,28 +94,29 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | `resources.limits.cpu`      | A CPU limit.      | `1`     |
 | `resources.limits.memory`   | A memory limit.   | `512Mi` |
 
-### Persistence
+### Persistence settings
 
-| Name                              | Description                                                                                            | Value   |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
-| `persistence.type`                | Type of storage used for persistence, should be one of: 's3' - for S3 storage, 'fs' - for PVC storage. | `s3`    |
-| `persistence.fs`                  | **PVC setting for the 'fs' persistence type**                                                          |         |
-| `persistence.fs.storage`          | Storage size, should be at least 10Mi.                                                                 | `10Mi`  |
-| `persistence.fs.storageClassName` | Storage class name.                                                                                    | `""`    |
-| `persistence.s3`                  | **S3 setting for the 's3' persistence type**                                                           |         |
-| `persistence.s3.host`             | S3 endpoint. Format: `host:port`.                                                                      | `""`    |
-| `persistence.s3.secure`           | If S3 uses https.                                                                                      | `false` |
-| `persistence.s3.bucket`           | S3 bucket name.                                                                                        | `""`    |
-| `persistence.s3.root`             | Root directory in S3 bucket.                                                                           | `""`    |
-| `persistence.s3.accessKey`        | S3 access key for accessing the bucket.                                                                | `""`    |
-| `persistence.s3.secretKey`        | S3 secret key for accessing the bucket.                                                                | `""`    |
+| Name                    | Description                             | Value   |
+| ----------------------- | --------------------------------------- | ------- |
+| `persistence.host`      | S3 endpoint. Format: `host:port`.       | `""`    |
+| `persistence.secure`    | If S3 uses https.                       | `false` |
+| `persistence.bucket`    | S3 bucket name.                         | `""`    |
+| `persistence.root`      | Root directory in S3 bucket.            | `""`    |
+| `persistence.accessKey` | S3 access key for accessing the bucket. | `""`    |
+| `persistence.secretKey` | S3 secret key for accessing the bucket. | `""`    |
 
 ### TPM-related settings for license type 2
 
-| Name                           | Description                                                                                                                                                               | Value   |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `tpm.securityContext`          | Main container [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/). Should enable access to the host TPM device (/dev/tpmrm0). | `{}`    |
-| `tpm.mountTPMDevice`           | If TPM device should be mounted to the main container. Required if no TPM device plugin is used. Additionally, requires privileged access for the main container.         | `false` |
-| `tpm.pvcBind`                  | **Kubernetes PVC used to bind pod to the kubernetes node; not needed if FS persistence is used**                                                                          |         |
-| `tpm.pvcBind.enable`           | If PVC should be used to bind pod to the kubernetes node.                                                                                                                 | `false` |
-| `tpm.pvcBind.storageClassName` | Storage class name.                                                                                                                                                       | `""`    |
+| Name                           | Description                                                                                                                                     | Value   |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `tpm.mountTPMDevice`           | If TPM device should be mounted to the main container. Required if no TPM device plugin is used. Adds privileged access for the main container. | `false` |
+| `tpm.pvcBind`                  | **Kubernetes PVC used to bind pod to the kubernetes node**                                                                                      |         |
+| `tpm.pvcBind.enable`           | If PVC should be used to bind pod to the kubernetes node.                                                                                       | `false` |
+| `tpm.pvcBind.storageClassName` | Storage class name.                                                                                                                             | `""`    |
+
+### **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container.                                                                          | `""`  |

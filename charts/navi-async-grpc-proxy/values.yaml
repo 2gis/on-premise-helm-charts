@@ -21,7 +21,7 @@ dgctlDockerRegistry: ''
 # @param labels Custom labels to set to Deployment resource.
 
 replicaCount: 1
-revisionHistoryLimit: 1
+revisionHistoryLimit: 3
 imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''

@@ -17,13 +17,33 @@ spec:
         {{- include "catalog.importer.labels" . | nindent 8 }}
     spec:
       restartPolicy: Never
-      {{- if .Values.importer.initialDelaySeconds }}
+      {{- if or .Values.importer.initialDelaySeconds .Values.importer.postgres.tls.enabled }}
       initContainers:
+      {{- if .Values.importer.initialDelaySeconds }}
         - name: delay
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag }}
           command: [ "sh", "-c", "sleep {{ .Values.importer.initialDelaySeconds }}" ]
           resources:
             {{- toYaml .Values.importer.resources | nindent 12 }}
+      {{- end }}
+      {{- if .Values.importer.postgres.tls.enabled }}
+        - name: copy-certs
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.importer.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.importer.resources | nindent 12 }}
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              cp /tmp/certs/* /etc/2gis/secret/psql/
+              chmod 600 /etc/2gis/secret/psql/client.key
+          volumeMounts:
+            - name: {{ include "catalog.importer.name-psql-raw" . | quote }}
+              mountPath: /tmp/certs
+            - name: {{ include "catalog.importer.name-psql" . | quote }}
+              mountPath: /etc/2gis/secret/psql
+      {{- end }}
       {{- end }}
       containers:
         - name: importer
@@ -34,20 +54,41 @@ spec:
             {{- toYaml .Values.importer.resources | nindent 12 }}
           env:
             {{- include "catalog.env.importer" . | nindent 12 }}
+<<<<<<< HEAD
             {{- if $.Values.customCAs.bundle }}
             {{- include "catalog.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
           {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle }}
           volumeMounts:
           {{- if .Values.importer.persistentVolume.enabled }}
+=======
+            {{- if .Values.customCAs.bundle }}
+            {{- include "catalog.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle .Values.importer.postgres.tls.enabled }}
+          volumeMounts:
+            {{- if .Values.importer.persistentVolume.enabled }}
+>>>>>>> develop
             - name: {{ include "catalog.importer.name" . }}-pv
               mountPath: "/tmp"
+            {{- end }}
+            {{- if .Values.importer.postgres.tls.enabled }}
+            - name: {{ printf "%s-psql" (include "catalog.importer.name" .) | quote }}
+              mountPath: /etc/2gis/secret/psql
+            {{- end }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "catalog.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- end }}
           {{- end }}
+<<<<<<< HEAD
           {{- if .Values.customCAs.bundle }}
             {{- include "catalog.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
           {{- end }}
       {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle }}
+=======
+      {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle .Values.importer.postgres.tls.enabled }}
+>>>>>>> develop
       volumes:
       {{- if .Values.importer.persistentVolume.enabled }}
         - name: {{ include "catalog.importer.name" . }}-pv
@@ -55,7 +96,18 @@ spec:
             claimName: {{ include "catalog.importer.name" . }}
       {{- end }}
       {{- if .Values.customCAs.bundle }}
+<<<<<<< HEAD
         {{- include "catalog.custom.ca.volumes" . | nindent 8 }}
+=======
+        {{- include "catalog.custom.ca.jobs.volumes" . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.importer.postgres.tls.enabled }}
+        - name: {{ include "catalog.importer.name-psql-raw" . | quote }}
+          secret:
+            secretName: {{ include "catalog.importer.name-psql" . | quote }}
+        - name: {{ include "catalog.importer.name-psql" . | quote }}
+          emptyDir: {}
+>>>>>>> develop
       {{- end }}
       {{- end }}
       {{- with .Values.importer.nodeSelector }}

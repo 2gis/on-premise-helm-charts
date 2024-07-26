@@ -13,6 +13,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.web.replicas}}
+  revisionHistoryLimit: {{ .Values.web.revisionHistoryLimit }}
   selector:
     matchLabels:
       {{- include "citylens.web.selectorLabels" . | nindent 6 }}
@@ -25,6 +26,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
+        checksum/custom-ca: {{ include "citylens.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
       {{- with .Values.web.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -38,6 +40,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.web.service.targetPort }}
+            - name: metrics
+              containerPort: {{ .Values.web.service.metricsTargetPort }}
           readinessProbe:
             tcpSocket:
               port: 5000
@@ -56,24 +60,48 @@ spec:
             - name: KEYCLOAK_SETTINGS
               value: /opt/api/config/keycloak.json
             {{- end }}
+            {{- if .Values.web.service.metricsEnabled }}
+            - name: METRICS_ENABLED
+              value: "true"
+            {{- end }}
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "citylens.customCA.mountPath" $ }}
+            {{- end }}
+            {{- if .Values.web.extraEnvVars }}
+            {{- range $env_name, $env_value := .Values.web.extraEnvVars }}
+            - name: {{ $env_name }}
+              value: {{ $env_value | squote }}
+            {{- end }}
+            {{- end }}
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
           volumeMounts:
             - name: config-volume
               mountPath: /opt/api/config
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "citylens.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
+            {{- end }}
       volumes:
         - name: config-volume
           configMap:
             name: {{ include "citylens.web.name" . }}-configmap
-      {{- with .Values.nodeSelector }}
+        {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
+          configMap:
+            name: {{ include "citylens.name" $ }}-custom-ca-configmap
+        {{- end }}
+      {{- with .Values.web.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.web.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.web.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

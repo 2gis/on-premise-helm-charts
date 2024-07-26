@@ -1,0 +1,18 @@
+{{- define "generic-chart.job.tpl" -}}
+{{ $ctx := .ctx }}
+{{ $job := .job }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "generic-chart.fullname" $ctx }}{{ include "generic-chart.getSuffix" $job  }}
+  labels:
+    {{- include "generic-chart.labels" $ctx | nindent 4 }}
+  {{- with $ctx.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}{{- /* labels */}}
+  {{- with $ctx.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}{{- /* annotations */}}
+{{ include "generic-chart.job_spec.tpl" . }}
+{{- end }}

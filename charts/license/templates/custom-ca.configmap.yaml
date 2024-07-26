@@ -1,0 +1,13 @@
+{{- if $.Values.customCAs.bundle }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "license.fullname" . }}-custom-ca
+  labels:
+    {{- include "license.labels" . | nindent 4 }}
+
+data:
+  custom-ca.crt: |-
+    {{- $.Values.customCAs.bundle | nindent 4 }}
+{{- end }}

@@ -1,0 +1,156 @@
+# @section Common settings
+
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+
+nameOverride: ''
+fullnameOverride: ''
+
+
+# @section [Deployment](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/) settings
+
+# @param labels Custom labels to set to Deployment resource
+# @param annotations Custom annotations to set to Deployment resource
+# @param replicaCount A replica count for the pod
+# @param revisionHistoryLimit Number of replica sets to keep for deployment rollbacks
+# @param strategy Deployment [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy). Undergoes template rendering
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param imagePullSecrets Kubernetes image pull secrets
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param priorityClassName Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name
+# @param terminationGracePeriodSeconds Maximum time allowed for graceful shutdown
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param enableServiceLinks Services injection into containers environment
+# @param restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
+
+labels: {}
+annotations: {}
+replicaCount: 1
+revisionHistoryLimit: 1
+strategy: {}
+podAnnotations: {}
+imagePullSecrets: []
+podSecurityContext: {}
+priorityClassName: ''
+terminationGracePeriodSeconds: 60
+nodeSelector: {}
+affinity: {}
+tolerations: []
+enableServiceLinks: false
+restartPolicy: ''
+
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+# @param hpa.enabled If HPA is enabled for the service
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up
+# @param hpa.scaleDown Scale-down settings structure
+# @param hpa.scaleUp Scale-up settings structure
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used
+# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used
+
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  scaleDown: {}
+  scaleUp: {}
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ''
+
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+# @param vpa.enabled If VPA is enabled for the service
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start)
+# @param vpa.containerName Name of a container to measure utilization for
+# @extra vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down
+# @extra vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down
+# @extra vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up
+# @extra vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up
+
+vpa:
+  enabled: false
+  updateMode: Auto
+  containerName: ''
+
+
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+pdb:
+  enabled: false
+  minAvailable: ''
+  maxUnavailable: 1
+
+
+# @section [Service](https://kubernetes.io/docs/concepts/services-networking/service/) settings
+
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/). Undergoes template rendering
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). Undergoes template rendering
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.clusterIP Controls Service cluster IP allocation. Cannot be changed after resource creation.
+# @param service.port Service port.
+
+service:
+  labels: {}
+  annotations: {}
+  type: ClusterIP
+  clusterIP: ''
+  port: 80
+
+
+# @section [Service account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
+
+# @param serviceAccount.create Specifies whether a service account should be created.
+# @param serviceAccount.annotations Annotations to add to the service account.
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ''
+
+
+# @section [CronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) settings
+
+# @param cronJob.suspend Suspend execution of Jobs.
+# @param cronJob.schedule Schedule follows the Cron syntax.
+# @param cronJob.startingDeadlineSeconds Defines a deadline (in whole seconds) for starting the Job.
+# @param cronJob.concurrencyPolicy Concurrent executions of a Job that is created by this CronJob.
+# @param cronJob.successfulJobsHistoryLimit How many completed Jobs should be kept.
+# @param cronJob.failedJobsHistoryLimit How many failed Jobs should be kept.
+
+cronJob:
+  suspend: false
+  schedule: ''
+  startingDeadlineSeconds: ''
+  concurrencyPolicy: ''
+  successfulJobsHistoryLimit: ''
+  failedJobsHistoryLimit: ''
+
+
+# @section [Job](https://kubernetes.io/docs/concepts/workloads/controllers/job/) settings
+
+# @param job.backoffLimit Number of retries before considering a Job as failed.
+# @param job.backoffLimitPerIndex Maximal number of pod failures per index.
+# @param job.podFailurePolicy Pod failure policy.
+# @param job.completions Number of successful pods for completion Job.
+# @param job.completionMode Completion mode (NonIndexed or Indexed).
+# @param job.parallelism Number of pods running at any instant.
+# @param job.restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
+
+job:
+  backoffLimit: ''
+  backoffLimitPerIndex: ''
+  podFailurePolicy: ''
+  completions: ''
+  completionMode: ''
+  parallelism: ''
+  restartPolicy: ''

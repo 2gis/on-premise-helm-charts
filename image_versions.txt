@@ -1,16 +1,18 @@
 catalog-api
-	catalog-api:3.600.0
-	catalog-importer:1.1.0
+	catalog-api:3.619.0
+	catalog-importer:1.7.0
 citylens
-	citylens-api:1.2.6
-	citylens-database:1.2.0
-	citylens-web:1.2.6
+	citylens-api:1.11.1
+	citylens-database:1.11.0
+	citylens-web:1.11.1
+	citylens-workers:1.11.1
 dgtt
 	dgtt:0.2.27-b188673e09
 floors-api
 	floors-importer:1.0.4
 	floors-nodejs:1.0.4
 	nginx:1.21.6
+generic-chart
 gis-platform
 	gis_platform_portal:2023.8.3-0
 	gis_platform_spcore:2023.8.3-0
@@ -20,51 +22,54 @@ keycloak
 	keycloak-themes:0.0.8
 	keycloak:21.1.1-debian-11-r4
 keys
-	keys-backend:1.71.0
+	keys-backend:1.87.0
 	keys-redis:6.2.6-alpine3.15
-	keys-ui:0.6.0
+	keys-ui:0.8.0
 license
-	license:2.1.2
+	license:2.2.1
 mapgl-js-api
-	mapgl:1.42.0
+	mapgl:1.49.0
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
-	navi-async-matrix:1.6.2
+	navi-async-matrix:1.10.3
 navi-back
-	navi-back:7.10.0
+	envoy:v1.27.0
+	metrics-aggregator:
+	navi-back:7.25.0.3
 navi-castle
-	navi-castle:1.7.0
+	navi-castle:1.9.2
 	navi-front:1.24.1
 navi-front
 	navi-front:1.24.1
 navi-restrictions
-	navi-restrictions-api:1.0.0
+	navi-restrictions-api:1.0.1
 	navi-restrictions-syncer:1.0.1
 navi-router
-	navi-router:6.17.0.8
+	navi-router:6.24.0.3
 navi-splitter
 	navi-splitter:1.0.1
 platform
-	platform-ui:0.5.5
+	platform-ui:0.8.1
 pro-api
-	pro-api:1.1.67
-	pro-importer:1.1.67
-	pro-importer:1.1.67
-	pro-permissions-api:1.1.67
+	pro-api:1.22.0
+	pro-importer:1.22.0
+	pro-importer:1.22.0
+	pro-permissions-api:1.22.0
 pro-ui
-	pro-ui:1.4.0
+	pro-importer:1.22.0
+	pro-ui:2.15.1
 search-api
-	search-api:7.68.0
+	search-api:7.78.0
 	search-nginx:1.21.6
 stat-receiver
 	stat-receiver-api:1.11.1
 	stat-receiver-streams:1.11.1
 tiles-api
-	tiles-api-importer:4.51.1
-	tiles-api-proxy:4.51.1
-	tiles-api:4.51.1
+	tiles-api-importer:4.54.0
+	tiles-api-proxy:4.54.0
+	tiles-api:4.54.0
 traffic-proxy
 	nginx:1.21.6
 twins-api
-	twins-api:1.6.0
+	twins-api:1.13.0

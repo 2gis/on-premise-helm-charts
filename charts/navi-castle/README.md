@@ -32,7 +32,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | ------------------------- | ------------------------------------- | ----------------------------- |
 | `castle.image.repository` | Navi-Castle service image repository. | `2gis-on-premise/navi-castle` |
 | `castle.image.pullPolicy` | Navi-Castle service pull policy.      | `IfNotPresent`                |
-| `castle.image.tag`        | Navi-Castle service image tag.        | `1.7.0`                       |
+| `castle.image.tag`        | Navi-Castle service image tag.        | `1.9.2`                       |
 | `nginx.image.repository`  | Navi-Front image repository.          | `2gis-on-premise/navi-front`  |
 | `nginx.image.tag`         | Navi-Front image tag.                 | `1.24.1`                      |
 
@@ -102,13 +102,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Castle service settings
 
-| Name                       | Description                                         | Value                          |
-| -------------------------- | --------------------------------------------------- | ------------------------------ |
-| `castle.castleDataPath`    | Path to the data directory.                         | `/opt/castle/data/`            |
-| `castle.restrictions`      | Section ignored if castle.restriction.enabled=false |                                |
-| `castle.restrictions.host` | Restrictions API base URL.                          | `http://restrictions-api.host` |
-| `castle.restrictions.key`  | Restrictions API key.                               | `""`                           |
-| `castle.jobs`              | Number of parallel downloading jobs.                | `1`                            |
+| Name                                   | Description                                         | Value                          |
+| -------------------------------------- | --------------------------------------------------- | ------------------------------ |
+| `castle.castleDataPath`                | Path to the data directory.                         | `/opt/castle/data/`            |
+| `castle.restrictions`                  | Section ignored if castle.restriction.enabled=false |                                |
+| `castle.restrictions.host`             | Restrictions API base URL.                          | `http://restrictions-api.host` |
+| `castle.restrictions.key`              | Restrictions API key.                               | `""`                           |
+| `castle.jobs`                          | Number of parallel downloading jobs.                | `1`                            |
+| `castle.startupProbe`                  | Settings for startup probes                         |                                |
+| `castle.startupProbe.periodSeconds`    | Check period for startup probes.                    | `5`                            |
+| `castle.startupProbe.failureThreshold` | Threshold for startup probes.                       | `180`                          |
 
 ### Navi-Front settings
 

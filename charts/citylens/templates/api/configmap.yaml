@@ -16,26 +16,31 @@ data:
       frames: {{ required "A valid .Values.kafka.topics.frames entry required" .topics.frames | squote }}
       tracks: {{ required "A valid .Values.kafka.topics.tracks entry required" .topics.tracks | squote }}
       logs: {{ required "A valid .Values.kafka.topics.logs entry required" .topics.logs | squote }}
-      {{- range .predictors }}
-      {{- if eq .name "camcom" }}
-      camcom: {{ required "A valid .topic entry required" .topic| squote }}
-      {{- end }}
-      {{- if eq .name "manual" }}
-      manual: {{ required "A valid .topic entry required" .topic| squote }}
-      {{- end }}
-      {{- end }}
+      predictions: {{ required "A valid .Values.kafka.topics.predictions entry required" .topics.predictions | squote }}
     {{- end }}
     database:
-    {{- with .Values.postgres }}
-      postgres: 'postgresql+asyncpg://{{ required "A valid .Values.postgres.username entry required" .username }}:{{ required "A valid .Values.postgres.password entry required" .password }}@{{ required "A valid .Values.postgres.host entry required" .host }}:{{ required "A valid .Values.postgres.port entry required" .port }}/{{ required "A valid .Values.postgres.database entry required" .database }}'
-    {{- end }}
+      postgres: {{ include "citylens.pgDSN.asyncpg" . | squote }}
     {{- with .Values.api.auth }}
     auth:
       enabled: {{ .enabled }}
       {{- if .enabled }}
-      public_key: "-----BEGIN PUBLIC KEY-----\r\n{{ required "A valid .Values.api.auth.publicKey entry required" .publicKey }}\r\n-----END PUBLIC KEY-----"
+      auth_server_url: {{ required "A valid .Values.api.auth.authServerUrl entry required" .authServerUrl | quote }}
+      verify_ssl: {{ .verifySsl }}
+      {{- if .realm }}
+      realm: {{ .realm | quote }}
+      {{- end}}
+      predictor_tokens:
+        {{- .predictorsTokens | toYaml | nindent 8 }}
       {{- end }}
-      algorithm: {{ .algorithm | quote }}
+    {{- end }}
+    {{- with .Values.api.licensing }}
+    pasportool:
+      {{- if .enabled }}
+      enabled: {{ .enabled }}
+      {{- end }}
+      client_params:
+        endpoint_url: {{ required "A valid .Values.api.licensing.url entry required" .url | quote }}
     {{- end }}
     show_docs: {{ .Values.api.showDocs }}
     log_level: {{ .Values.api.logLevel }}
+    metrics_app_name: {{ .Values.api.metricsAppName }}

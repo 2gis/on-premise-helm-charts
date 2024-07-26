@@ -28,39 +28,41 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 ### Common settings
 
-| Name               | Description                                                                                                                 | Value |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `replicaCount`     | A replica count for the pod.                                                                                                | `1`   |
-| `imagePullSecrets` | Kubernetes image pull secrets.                                                                                              | `[]`  |
-| `nameOverride`     | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
-| `fullnameOverride` | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
-| `nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
-| `affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
-| `tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
-| `podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
-| `podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`  |
+| Name                   | Description                                                                                                                                    | Value |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `replicaCount`         | A replica count for the pod.                                                                                                                   | `1`   |
+| `revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
+| `imagePullSecrets`     | Kubernetes image pull secrets.                                                                                                                 | `[]`  |
+| `nameOverride`         | Base name to use in all the Kubernetes entities deployed by this chart.                                                                        | `""`  |
+| `fullnameOverride`     | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                    | `""`  |
+| `nodeSelector`         | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                            | `{}`  |
+| `affinity`             | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                    | `{}`  |
+| `tolerations`          | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                              | `[]`  |
+| `podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                  | `{}`  |
+| `podLabels`            | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                            | `{}`  |
 
 ### Deployment settings
 
 | Name               | Description | Value                   |
 | ------------------ | ----------- | ----------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/mapgl` |
-| `image.tag`        | Tag         | `1.42.0`                |
+| `image.tag`        | Tag         | `1.49.0`                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
 
 ### Environment variables
 
-| Name                          | Description                                                   | Value                                                                                             |
-| ----------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `env.MAPGL_HOST`              | Domain name for MapGL JS API service.                         | `https://mapgl-api.ingress.host`                                                                  |
-| `env.MAPGL_TILES_API`         | Domain name of the Tiles API service.                         | `https://tiles-api.ingress.host`                                                                  |
-| `env.MAPGL_TILESET`           | Tileset of the Tiles API service to use.                      | `web`                                                                                             |
-| `env.MAPGL_IMMERSIVE_TILESET` | Additional immersive tileset of the Tiles API service to use. | `web_immersive`                                                                                   |
-| `env.MAPGL_TRAFFICSERVER`     | Domain name of the Traffic Proxy service.                     | `https://traffic-proxy.ingress.host`                                                              |
-| `env.MAPGL_FLOORSSERVER`      | Domain name of the Floors API service.                        | `https://floors-api.ingress.host`                                                                 |
-| `env.MAPGL_KEYSERVER`         | Domain name of the API Keys service.                          | `https://keys-api.ingress.host`                                                                   |
-| `env.MAPGL_RTLPLUGIN`         | URL of the plugin for right-to-left languages support.        | `https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js`                                     |
-| `env.MAPGL_RTLPLUGINHASH`     | SHA512 hash of the RTL plugin.                                | `sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==` |
+| Name                            | Description                                                   | Value                                                                                             |
+| ------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `env.MAPGL_HOST`                | URL for MapGL JS API service.                                 | `https://mapgl-api.ingress.host`                                                                  |
+| `env.MAPGL_TILES_API`           | URL of the Tiles API service.                                 | `https://tiles-api.ingress.host`                                                                  |
+| `env.MAPGL_TILESET`             | Tileset of the Tiles API service to use.                      | `web`                                                                                             |
+| `env.MAPGL_IMMERSIVE_TILESET`   | Additional immersive tileset of the Tiles API service to use. | `web_immersive`                                                                                   |
+| `env.MAPGL_TRAFFICSERVER`       | Domain name of the Traffic Proxy service.                     | `https://traffic-proxy.ingress.host`                                                              |
+| `env.MAPGL_FLOORSSERVER`        | URL of the Floors API service.                                | `https://floors-api.ingress.host`                                                                 |
+| `env.MAPGL_KEYSERVER`           | URL of the API Keys service.                                  | `https://keys-api.ingress.host/public/v1/keys/{keyID}/services/mapgl-js-api`                      |
+| `env.MAPGL_RTLPLUGIN`           | URL of the plugin for right-to-left languages support.        | `https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js`                                     |
+| `env.MAPGL_RTLPLUGINHASH`       | SHA512 hash of the RTL plugin.                                | `sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==` |
+| `env.MAPGL_INVALID_KEY_MESSAGE` | Custom error message for invalid MapGL key.                   | `Your MapGL key is invalid. Please contact support to get valid key.`                             |
 
 ### Strategy settings
 

@@ -1,79 +1,16 @@
 {{/*
-Expand the name of the chart.
+Distinguishable main container name
+Override generic-chart
+TODO: rewrite https://github.com/helm/helm/issues/11291
 */}}
-{{- define "naviback.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "naviback.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- define "generic-chart.containerName" -}}
+{{- if .Values.dataGroup.enabled }}
+{{- .Values.dataGroup.prefix }}-{{ .Chart.Name }}
 {{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- .Chart.Name }}
 {{- end }}
-{{- end }}
-{{- end }}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "naviback.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Common labels
-*/}}
-{{- define "naviback.labels" -}}
-helm.sh/chart: {{ include "naviback.chart" . }}
-{{ include "naviback.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "naviback.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "naviback.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "naviback.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "naviback.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{/* vim: set filetype=mustache: */}}
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "tplvalues.render" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
 {{- end -}}
+
 
 {{/*
 Get count of CPU from limits.
@@ -124,6 +61,28 @@ Usage:
       {{- end -}}
    {{- end -}}
    {{- ternary "true" "" $found -}}
+{{- end -}}
+
+
+{{/*
+Check if routing section in rules only contains certain value
+Usage:
+{{ include "rules.inRoutingSectionOnly" ( dict "routingValue" "<value>" "context" $) }}
+*/}}
+{{- define "rules.inRoutingSectionOnly" -}}
+   {{- /* if different value found */}}
+   {{- $ctx := .context -}}
+   {{- $sectionFound := false -}}
+   {{- $matches := false -}}
+   {{- if $ctx.Values.rules -}}
+      {{- range $ctx.Values.rules -}}
+         {{- if eq .name $ctx.Values.naviback.app_rule -}}
+            {{- $sectionFound = true -}}
+            {{- $matches = (.routing | uniq | join "," | eq "ctx") -}}
+         {{- end -}}
+      {{- end -}}
+   {{- end -}}
+   {{- and $matches $sectionFound | ternary "true" "false" -}}
 {{- end -}}
 
 
@@ -239,12 +198,17 @@ Usage:
 Set attractor_car parameter in server config section
 Usage:
 {{ include "config.setAttractorCar" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorCar" -}}
-   {{-  ternary
-      $.Values.naviback.attractor.car
-      (include "rules.inRoutingSection" (dict "routingValue" "driving" "context" $))
-      (hasKey $.Values.naviback.attractor "car")
+   {{- ternary
+      .Values.naviback.attractor.car
+      (.Values.transmitter.enabled | ternary false
+          (include "rules.inRoutingSection" (dict "routingValue" "driving" "context" .)))
+      (hasKey .Values.naviback.attractor "car")
    -}}
 {{- end -}}
 
@@ -253,14 +217,19 @@ Usage:
 Set attractor_pedestrian parameter in server config section
 Usage:
 {{ include "config.setAttractorPedestrian" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorPedestrian" -}}
-   {{-  ternary
-      $.Values.naviback.attractor.pedestrian
-      (or (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" $))
-      (include "rules.inRoutingSection" (dict "routingValue" "public_transport" "context" $))
-      (include "rules.inRoutingSection" (dict "routingValue" "pedestrian" "context" $)))
-      (hasKey $.Values.naviback.attractor "pedestrian")
+   {{- ternary
+      .Values.naviback.attractor.pedestrian
+      (.Values.transmitter.enabled | ternary false
+          (or (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" .))
+              (include "rules.inRoutingSection" (dict "routingValue" "public_transport" "context" .))
+              (include "rules.inRoutingSection" (dict "routingValue" "pedestrian" "context" .))))
+      (hasKey .Values.naviback.attractor "pedestrian")
    -}}
 {{- end -}}
 
@@ -269,12 +238,17 @@ Usage:
 Set attractor_taxi parameter in server config section
 Usage:
 {{ include "config.setAttractorTaxi" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorTaxi" -}}
-   {{-  ternary
-      $.Values.naviback.attractor.taxi
-      (include "rules.inRoutingSection" (dict "routingValue" "taxi" "context" $))
-      (hasKey $.Values.naviback.attractor "taxi")
+   {{- ternary
+      .Values.naviback.attractor.taxi
+      (.Values.transmitter.enabled | ternary false
+          (include "rules.inRoutingSection" (dict "routingValue" "taxi" "context" .)))
+      (hasKey .Values.naviback.attractor "taxi")
    -}}
 {{- end -}}
 
@@ -283,12 +257,17 @@ Usage:
 Set attractor_truck parameter in server config section
 Usage:
 {{ include "config.setAttractorTruck" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorTruck" -}}
-   {{-  ternary
-      $.Values.naviback.attractor.truck
-      (include "rules.inRoutingSection" (dict "routingValue" "truck" "context" $))
-      (hasKey $.Values.naviback.attractor "truck")
+   {{- ternary
+      .Values.naviback.attractor.truck
+      (.Values.transmitter.enabled | ternary false
+          (include "rules.inRoutingSection" (dict "routingValue" "truck" "context" .)))
+      (hasKey .Values.naviback.attractor "truck")
    -}}
 {{- end -}}
 
@@ -297,13 +276,18 @@ Usage:
 Set attractor_bicycle parameter in server config section
 Usage:
 {{ include "config.setAttractorBicycle" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorBicycle" -}}
-   {{-  ternary
-      $.Values.naviback.attractor.bicycle
-      (or (include "rules.inRoutingSection" (dict "routingValue" "bicycle" "context" $))
-      (include "rules.inRoutingSection" (dict "routingValue" "scooter" "context" $)))
-      (or (hasKey $.Values.naviback.attractor "bicycle") (hasKey $.Values.naviback.attractor "scooter"))
+   {{- ternary
+      (or (.Values.naviback.attractor).bicycle (.Values.naviback.attractor).scooter)
+      ( .Values.transmitter.enabled | ternary false
+          (or (include "rules.inRoutingSection" (dict "routingValue" "bicycle" "context" .))
+              (include "rules.inRoutingSection" (dict "routingValue" "scooter" "context" .))))
+      (or (hasKey .Values.naviback.attractor "bicycle") (hasKey .Values.naviback.attractor "scooter"))
    -}}
 {{- end -}}
 
@@ -377,31 +361,41 @@ Usage:
 {{- end -}}
 
 {{/*
-Return the target Kubernetes version
+Set ECA URL
+Usage:
+{{ include "config.setEcaUrl" $ }}
 */}}
-{{- define "capabilities.kubeVersion" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.kubeVersion }}
-    {{- .Values.global.kubeVersion -}}
-    {{- else }}
-    {{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
-    {{- end -}}
-{{- else }}
-{{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
-{{- end -}}
+{{- define "config.setEcaUrl" -}}
+   {{- if .Values.naviback.ecaUrl -}}
+   {{- printf .Values.naviback.ecaUrl -}}
+   {{- else if .Values.naviback.ecaHost -}}
+   {{- printf "http://%s" .Values.naviback.ecaHost -}}
+   {{- end -}}
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for Horizontal Pod Autoscaler.
+Set castle url
+Usage:
+{{ include "config.setCastleUrl" $ }}
 */}}
-{{- define "capabilities.hpa.apiVersion" -}}
-{{- if semverCompare "<1.23-0" (include "capabilities.kubeVersion" .) -}}
-{{- if .beta2 -}}
-{{- print "autoscaling/v2beta2" -}}
-{{- else -}}
-{{- print "autoscaling/v2beta1" -}}
+{{- define "config.setCastleUrl" -}}
+   {{- if .Values.naviback.castleUrl -}}
+   {{- printf .Values.naviback.castleUrl -}}
+   {{- else if .Values.naviback.castleHost -}}
+   {{- printf "http://%s" .Values.naviback.castleHost -}}
+   {{- end -}}
 {{- end -}}
-{{- else -}}
-{{- print "autoscaling/v2" -}}
-{{- end -}}
+
+{{/*
+Set restriction url
+If rtr enabled return naviback.rtr.url, else return naviback.castleUrl
+Usage:
+{{ include "config.setRestrictionUrl" $ }}
+*/}}
+{{- define "config.setRestrictionUrl" -}}
+   {{- if .Values.naviback.rtr.enabled -}}
+   {{- printf .Values.naviback.rtr.url -}}
+   {{- else  -}}
+   {{- printf (include "config.setCastleUrl" $) -}}
+   {{- end -}}
 {{- end -}}

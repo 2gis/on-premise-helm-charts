@@ -13,6 +13,7 @@ metadata:
     {{- end }}
 spec:
   replicas: {{ .Values.ui.replicas }}
+  revisionHistoryLimit: {{ .Values.ui.revisionHistoryLimit }}
   {{- if .Values.strategy }}
   strategy:
     {{- toYaml .Values.strategy | nindent 4 }}
@@ -62,6 +63,10 @@ spec:
             - name: PLATFORM_API_URL
               value: {{ .Values.ui.platform.api.url | quote }}
             {{- end }}
+            - name: GOOGLE_ANALYTICS_ID
+              value: {{ .Values.ui.googleAnalyticsId | quote}}
+            - name: GOOGLE_TAG_MANAGER_ID
+              value: {{ .Values.ui.googleTagManagerId | quote }}
             - name: CATALOG_API_URL
               value: {{ .Values.ui.catalog.url | quote }}
             - name: CATALOG_API_KEY
@@ -90,8 +95,24 @@ spec:
               value: {{ .Values.ui.status.gisPlatform | quote }}
             - name: KEYS_STATUS
               value: {{ .Values.ui.status.keys | quote }}
-            - name: SOME_SECRET
-              value: ""
+            {{- if .Values.ui.oauth}}
+            - name: OAUTH_API_URL
+              value: {{ .Values.ui.oauth.url | quote }}
+            - name: OAUTH_IDENTITY_PROVIDER_URL
+              value: {{ .Values.ui.oauth.identityProviderUrl | quote }}
+            - name: OAUTH_CLIENT_ID
+              value: {{ .Values.ui.oauth.clientId | quote }}
+            - name: OAUTH_CLIENT_SECRET
+              value: {{ .Values.ui.oauth.clientSecret | quote }}
+            - name: OAUTH_CODE_URL
+              value: {{ .Values.ui.oauth.codeUrl | quote }}
+            - name: OAUTH_SAFE_HOSTS
+              value: {{ .Values.ui.oauth.safeHosts }}
+            - name: OAUTH_SECURE
+              value: {{ .Values.ui.oauth.secure | quote }}
+            - name: OAUTH_SIGNUP_MAIL_TEMPLATE_PATH
+              value: {{ .Values.ui.oauth.signupMailTemplatePath | quote }}
+            {{- end }}
             - name: HOME
               value: "/tmp"
       {{- with .Values.ui.nodeSelector }}

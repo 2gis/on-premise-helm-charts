@@ -12,6 +12,7 @@ ui:
   # @section Common settings
 
   # @param ui.replicas A replica count for a pod.
+  # @param ui.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
   # @param ui.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param ui.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param ui.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -21,6 +22,7 @@ ui:
   # @param ui.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
   replicas: 1
+  revisionHistoryLimit: 3
   nodeSelector: {}
   affinity: {}
   tolerations: []
@@ -37,7 +39,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/platform-ui
-    tag: 0.5.5
+    tag: 0.8.1
 
   # @section UI service settings
 
@@ -48,10 +50,14 @@ ui:
   # @param ui.brand Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
   # @skip ui.defaultLocale
   # @param ui.pages A list of pages available in application. Values must be written with a comma. Possible values: `"status"`, `"playground"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
+  # @skip ui.googleAnalyticsId
+  # @skip ui.googleTagManagerId
 
   brand: ''
   defaultLocale: en
   pages: ''
+  googleAnalyticsId: ''
+  googleTagManagerId: ''
 
   # @section Statuses for services. A value is a string containing pairs of label and healthcheck URL for a service. Pairs must be divided with a comma. Each pair must be connected with a symbol "=", e.g. `mapgl: 'MapGL JS=https://example.com/healthcheck'`. URL must be an absolute. You can specify only one URL, e.g. `mapgl: 'https://example.com/healthcheck'`.
 

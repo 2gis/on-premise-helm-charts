@@ -1,0 +1,25 @@
+{{- define "generic-chart.service.tpl" -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "generic-chart.fullname" . }}
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+    {{- if (.Values.service).labels }}
+        {{- include "tplvalues.render" ( dict "value" .Values.service.labels "context" .) | nindent 4 }}
+    {{- end }}
+  {{- if (.Values.service).annotations }}
+  annotations:
+    {{- include "tplvalues.render" ( dict "value" (.Values.service).annotations "context" .) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ (.Values.service).type | default "ClusterIP" | quote }}
+  clusterIP: {{ (.Values.service).clusterIP | default "" | quote }}
+  ports:
+    - port: {{ (.Values.service).port | default 80 | int }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "generic-chart.selectorLabels" . | nindent 4 }}
+{{- end }} {{- /* define */}}

@@ -11,12 +11,16 @@
 {{- end -}}
 {{- end -}}
 
+{{- define "pro-api.permissions-name" -}}
+{{ include "pro-api.name" . }}-permissions
+{{- end -}}
+
 {{- define "pro-api.permissions-url" -}}
 {{- if .Values.permissionsApi.host -}}
 {{- .Values.permissionsApi.host -}}
 {{- else -}}
 {{- "http://" -}}
-{{ include "pro-api.name" . }}-permissions
+{{ include "pro-api.permissions-name" . }}
 {{- end -}}
 {{- end -}}
 
@@ -47,12 +51,17 @@
 {{- end -}}
 {{- end -}}
 
+
 {{- define "pro-api.service-account-name" -}}
-{{- $name := default .Values.api.serviceAccount -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- if empty .Values.api.serviceAccountOverride }}
+  {{- $name := default .Values.api.serviceAccount -}}
+  {{- if contains $name .Release.Name -}}
+    {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+  {{- else -}}
+    {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+  {{- end -}}
 {{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+  {{- .Values.api.serviceAccountOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -66,7 +75,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{- define "pro-api.permissionsSelectorLabels" -}}
-app.kubernetes.io/name: {{ include "pro-api.name" . }}-permissions
+app.kubernetes.io/name: {{ include "pro-api.permissions-name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}-permissions
 {{- end -}}
 

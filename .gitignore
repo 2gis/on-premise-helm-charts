@@ -1,2 +1,5 @@
 .idea
 .DS_Store
+readme-generator-for-helm
+Chart.lock
+/charts/*/charts

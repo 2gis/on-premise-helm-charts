@@ -5,10 +5,8 @@ force-import: {{ .Values.importer.forceImport }}
 clear-snapshots: {{ .Values.importer.clearSnapshots }}
 cassandra-hosts-clock-time-check-limit: {{ .Values.importer.cassandraHostsClockTimeCheckLimit }}
 
-{{- if $.Values.cassandra.ssl.enabled }}
 ssl:
-  ca-path: "/cassandra-ssl/ca.crt"
-{{- end }}
+  enabled: {{ $.Values.cassandra.ssl.enabled }}
 
 storage:
   host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
@@ -20,6 +18,8 @@ k8s:
   job-template-file-path: /config/job.yaml
   {{- with .Values.importer }}
   worker-image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}
+  retry-interval: {{ .retryInterval }}
+  retry-count: {{ .retryCount }}
   {{- end }}
   namespace: {{ .Release.Namespace }}
 

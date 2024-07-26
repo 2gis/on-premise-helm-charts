@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "pro-api.name" . }}-permissions
+  name: {{ include "pro-api.permissions-name" . }}
   {{- with .Values.permissionsPodSettings.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -59,7 +59,7 @@ spec:
         - name: temp-volume
           emptyDir: {}
       containers:
-        - name: {{ include "pro-api.name" . }}-permissions
+        - name: {{ include "pro-api.permissions-name" . }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.permissionsApiImage.repository }}:{{ .Values.permissionsApiImage.tag }}
           imagePullPolicy: {{ .Values.permissionsApiImage.pullPolicy }}
           ports:
@@ -181,6 +181,8 @@ spec:
               value: "{{ $.Values.kafka.permissionsTopic.name }}"
             - name: Kafka__PermissionsTopicSettings__ReaderGroupId
               value: "{{ $.Values.kafka.permissionsTopic.readerGroupId }}"
+            - name: Kafka__EventsTopicSettings__Name
+              value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
             - name: LocalCache__Enabled
               value: "{{ .Values.permissionsApi.localCache.enabled }}"
             - name: LocalCache__TrackStatistics

@@ -45,10 +45,10 @@ data:
     manifest:
     {
         pattern: '{{ default "/manifests/" .Values.dgctlStorage.manifest }}',
-        service: ['navi','navi-restrictions'],
-        mapping: {
-            'navi': 'import_package',
-            'navi-restrictions': 'import_restriction'
+        service: ['navi'],
+        type_mapping: {
+            '': 'import_package',
+            'restrictions': 'import_restriction'
         }
     }
     # --------------------------------------------
@@ -64,7 +64,7 @@ data:
     {{- if or .Values.cron.enabled.restriction .Values.init.enabled.restriction }}
     restriction:
     {
-        remote_name: '',
+        remote_name: 'edges/',
         remote_dir: '',
 
         local_name: 'restrictions-%project%.json',
@@ -75,7 +75,7 @@ data:
         http:
         {
             server: '{{ .Values.castle.restrictions.host }}',
-            base_dir: 'edges/',
+            base_dir: '',
             api_key: '{{ .Values.castle.restrictions.key }}',
             timeout: 5  #sec
         },

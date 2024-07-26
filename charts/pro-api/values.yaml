@@ -7,6 +7,7 @@ dgctlDockerRegistry: ''
 # @section Common settings
 
 # @param appName Name of the service.
+# @param licenseKey License key. **Required**
 # @param replicaCount A replica count for the pod.
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
@@ -14,7 +15,7 @@ dgctlDockerRegistry: ''
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
-# @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).
+# @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -23,6 +24,7 @@ dgctlDockerRegistry: ''
 # @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
 appName: pro-api
+licenseKey: ''
 replicaCount: 2
 imagePullSecrets: []
 nameOverride: ''
@@ -30,7 +32,7 @@ fullnameOverride: ''
 nodeSelector: {}
 affinity: {}
 priorityClassName: ''
-terminationGracePeriodSeconds: 60
+terminationGracePeriodSeconds: 300
 tolerations: []
 podAnnotations: {}
 podLabels: {}
@@ -46,6 +48,8 @@ revisionHistoryLimit: 3
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
 # @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
+# @param dgctlStorage.region AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property
+# @param dgctlStorage.disablePayloadSigning Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage
 
 dgctlStorage:
   host: ''
@@ -54,6 +58,8 @@ dgctlStorage:
   accessKey: ''
   secretKey: ''
   manifest: ''
+  region: ''
+  disablePayloadSigning: false
 
 # @section Strategy settings
 
@@ -115,14 +121,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.1.67
+  tag: 1.22.0
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.1.67
+  tag: 1.22.0
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -131,19 +137,21 @@ permissionsApiImage:
 # @param s3.userAssetsDataBucket S3 bucket with user-created assets, aggregations, and filters. **Required**
 # @param s3.layerDataBucket S3 bucket with prepared layer data. **Required**
 # @param s3.snapshotBucket S3 bucket for storing snapshots of inclemental data updates. **Required**
+# @param s3.resourcesBucket S3 bucket for storing static resources. **Required**
 
 s3:
   assetsDataBucket: ''
   userAssetsDataBucket: ''
   layerDataBucket: ''
   snapshotBucket: ''
+  resourcesBucket: ''
 
 # @section 2GIS PRO API configuration
 
-# @param api.serviceAccount  Kubernetes service account
+# @param api.serviceAccount Kubernetes service account
+# @param api.serviceAccountOverride The name of an existing custom service account. If specified, the services in the chart will use this existing service account. If not specified, a new service account will be created and used with the name from the variable `api.serviceAccount`.
 # @param api.tempPath Path to directory used for temp data
 # @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
-# @param api.licensePartner Name of a partner for license verification. **Required**
 # @extra api.logging Logging settings
 # @param api.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
 # @param api.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
@@ -162,6 +170,7 @@ s3:
 
 api:
   serviceAccount: runner
+  serviceAccountOverride: ''
   tempPath: /tmp
   allowAnyOrigin: false
   logEsQueries: false
@@ -169,12 +178,11 @@ api:
   env: ''
   filterByZoneCodes: false
   esDataCentersCount: 1
-  licensePartner: ''
   logging:
     format: simple
     targets: ''
   rateLimiter:
-    requestsLimit: 0
+    requestsLimit: 1024
     windowSizeInSeconds: 1
   localCache:
     enabled: true
@@ -264,6 +272,9 @@ redis:
 # @extra kafka.importTasksTopic Kafka topic settings to run import tasks.
 # @param kafka.importTasksTopic.name Kafka topic name.
 # @param kafka.importTasksTopic.readerGroupId Kafka consumer group for reading importing tasks.
+# @extra kafka.eventsTopic Kafka topic settings to manage events.
+# @param kafka.eventsTopic.name Kafka events topic name. **Required**
+# @param kafka.eventsTopic.readerGroupId Kafka consumer group for reading events. **Required**
 # @extra kafka.assetDataTopic Kafka topic settings to manage asset data updates.
 # @param kafka.assetDataTopic.name Kafka topic name.
 # @skip kafka.permissionsTopic
@@ -282,6 +293,9 @@ kafka:
     readerGroupId: ''
   assetDataTopic:
     name: ''
+  eventsTopic:
+    name: ''
+    readerGroupId: ''
   permissionsTopic:
     name: ''
     readerGroupId: ''
@@ -296,27 +310,35 @@ backgroundJobs:
 
 # @section Catalog API settings
 
-# @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search).
+# @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc
 # @param catalog.key Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).
 
 catalog:
-  url: http://catalog-api.svc
+  url: ''
   key: ''
 
 # @section Navigation API settings
 
-# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-back.svc
 # @param navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
 
 navi:
-  url: http://navi-back.svc
+  url: ''
   key: ''
+
+# @section License Service API settings
+
+# @param license.url Licensing server v2 URL. Example: https://license.svc **Required**
+
+license:
+  url: ''
 
 # @section Search API settings
 
-# @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search)
+# @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search). Example: http://search-api.svc
+
 search:
-  url: http://search-api.svc
+  url: ''
 
 # @skip tileGen
 
@@ -382,15 +404,17 @@ permissionsApi:
 # @param assetImporter.maxParallelJobs How many import jobs can be run simultaneously
 # @param assetImporter.enabled If assetImporter is enabled for the service.
 # @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
+# @param assetImporter.startOnDeployMode Import mode: 'ScheduleManifest' - copy data from manifest and schedule import, 'ManifestData' - just copy data from manifest.
 # @param assetImporter.imageProxyUrl URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
 # @param assetImporter.externalLinksProxyUrl URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
+# @param assetImporter.externalLinksAllowedHosts Comma separated hosts, i.e. 'someserver.com,someserver2.com' )
 # @skip assetImporter.files
 # @skip assetImporter.esMetricsEnabled
 # @skip assetImporter.suspended
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.67
+  tag: 1.22.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -406,9 +430,11 @@ assetImporter:
   enabled: true
   suspended: false
   startOnDeploy: true
+  startOnDeployMode: ScheduleManifest
   files: ''
   imageProxyUrl: ''
   externalLinksProxyUrl: ''
+  externalLinksAllowedHosts: ''
   esMetricsEnabled: false
 
 # @skip userAssetImporter
@@ -419,7 +445,7 @@ userAssetImporter:
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.1.67
+  tag: 1.22.0
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
@@ -458,6 +484,7 @@ resources:
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
+# @section 2GIS PRO API ingress settings
 # @param ingress.enabled If Ingress is enabled for the service.
 # @param ingress.className Name of the Ingress controller class.
 # @param ingress.hosts[0].host Hostname for the Ingress service.
@@ -476,4 +503,24 @@ ingress:
   tls: []
   # - hosts:
   #   - pro-api.example.com
+  #   secretName: secret.tls
+
+# @section 2GIS PRO Permissions API ingress settings
+# @param permissionsApiIngress.enabled If Ingress is enabled for the service.
+# @param permissionsApiIngress.className Name of the Ingress controller class.
+# @param permissionsApiIngress.hosts[0].host Hostname for the Ingress service.
+# @param permissionsApiIngress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param permissionsApiIngress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param permissionsApiIngress.tls TLS configuration
+permissionsApiIngress:
+  enabled: false
+  className: nginx
+  hosts:
+  - host: pro-permissions-api.example.com
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - pro-permissions-api.example.com
   #   secretName: secret.tls
