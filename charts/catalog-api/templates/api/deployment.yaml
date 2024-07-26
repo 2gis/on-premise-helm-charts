@@ -33,7 +33,7 @@ spec:
       {{- if or .Values.podAnnotations .Values.customCAs.bundle }}
       annotations:
         {{- if .Values.customCAs.bundle }}
-        checksum/config: {{ include (print $.Template.BasePath "/conigmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
