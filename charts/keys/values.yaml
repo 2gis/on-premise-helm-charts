@@ -360,7 +360,7 @@ counter:
       cpu: 1000m
       memory: 512Mi
 
-  # @param counter.preloader.refreshTick Refresh interval for in-memory cache with keys info.
+  # @param counter.preloader.refreshTick Refresh interval for in-memory cache with keys limitations info. The smaller the interval, the faster the worker will know about changes in limitations.
 
   preloader:
     refreshTick: 1m
