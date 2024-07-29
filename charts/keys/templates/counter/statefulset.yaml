@@ -20,9 +20,9 @@ spec:
       labels:
         {{- include "keys.counter.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if .Values.counter.kafka.tls.enabled }}
+      {{- if or (eq .Values.kafka.main.securityProtocol "SSL") (eq .Values.kafka.main.securityProtocol "SASL_SSL") }}
       initContainers:
-        - name: copy-counter-kafka-certs
+        - name: copy-kafka-main-certs
           image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion }}'
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           resources:
@@ -31,13 +31,13 @@ spec:
             - /bin/sh
             - -ec
             - |
-              cp /tmp/certs/* /etc/2gis/secret/kafka-counter/
-              chmod 600 /etc/2gis/secret/kafka-counter/client.key
+              cp /tmp/certs/* /etc/2gis/secret/kafka-main/
+              chmod 600 /etc/2gis/secret/kafka-main/client.key
           volumeMounts:
-            - name: {{ include "keys.counter.name-kafka-raw" . | quote }}
+            - name: {{ include "keys.name-kafka-main-raw" . | quote }}
               mountPath: /tmp/certs
-            - name: {{ include "keys.counter.name-kafka" . | quote }}
-              mountPath: /etc/2gis/secret/kafka-counter
+            - name: {{ include "keys.name-kafka-main" . | quote }}
+              mountPath: /etc/2gis/secret/kafka-main
       {{- end }}
       containers:
         - name: counter
@@ -53,17 +53,17 @@ spec:
             {{- include "keys.env.db.deploys" . | nindent 12 }}
             {{- include "keys.env.redis" . | nindent 12 }}
             {{- include "keys.env.counter" . | nindent 12 }}
-          {{- if .Values.counter.kafka.tls.enabled }}
+          {{- if or (eq .Values.kafka.main.securityProtocol "SSL") (eq .Values.kafka.main.securityProtocol "SASL_SSL") }}
           volumeMounts:
           - name: {{ printf "%s-kafka" (include "keys.counter.name" .) | quote }}
-            mountPath: /etc/2gis/secret/kafka-counter
+            mountPath: /etc/2gis/secret/kafka-main
           {{- end }}
-      {{- if .Values.counter.kafka.tls.enabled }}
+      {{- if or (eq .Values.kafka.main.securityProtocol "SSL") (eq .Values.kafka.main.securityProtocol "SASL_SSL") }}
       volumes:
-        - name: {{ include "keys.counter.name-kafka-raw" . | quote }}
+        - name: {{ include "keys.name-kafka-main-raw" . | quote }}
           secret:
-            secretName: {{ include "keys.counter.name-kafka" . | quote }}
-        - name: {{ include "keys.counter.name-kafka" . | quote }}
+            secretName: {{ include "keys.name-kafka-main" . | quote }}
+        - name: {{ include "keys.name-kafka-main" . | quote }}
           emptyDir: {}
       {{- end }}
       {{- with .Values.counter.nodeSelector }}

@@ -360,7 +360,7 @@ counter:
       cpu: 1000m
       memory: 512Mi
 
-  # @param counter.preloader.refreshTick Preloader refresh tick.
+  # @param counter.preloader.refreshTick Refresh interval for in-memory cache with keys info.
 
   preloader:
     refreshTick: 1m
@@ -377,33 +377,6 @@ counter:
   buffer:
     size: 1000
     delay: 1s
-
-  # @extra counter.kafka **Settings for read stat messages.**
-
-  # @param counter.kafka.clientPrefix Client prefix name
-  # @param counter.kafka.brokers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
-  # @param counter.kafka.username Username for authorization (SASL/SCRAM SHA-512).
-  # @param counter.kafka.password Password for authorization (SASL/SCRAM SHA-512).
-  # @param counter.kafka.tls.enabled If tls connection to kafka is enabled.
-  # @param counter.kafka.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name
-  # @param counter.kafka.tls.rootCert Root certificate.
-  # @param counter.kafka.tls.cert Client certificate.
-  # @param counter.kafka.tls.key Client key.
-  # @param counter.kafka.topics.stats Topic to consume stat messages.
-
-  kafka:
-    clientPrefix: ''
-    brokers: ''
-    username: ''
-    password: ''
-    tls:
-      enabled: false
-      skipServerCertificateVerify: false
-      rootCert: ''
-      cert: ''
-      key: ''
-    topics:
-      stats: ''
 
   # @section Redis settings
 
@@ -537,13 +510,43 @@ postgres:
 
 kafka:
 
+  # @extra kafka.main **Settings for read stat messages.**
+
+  # @param kafka.main.clientPrefix Client prefix name
+  # @param kafka.main.brokers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
+  # @param kafka.main.securityProtocol Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.
+  # @param kafka.main.SASLMechanism Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.
+  # @param kafka.main.username Username for authorization (SASL).
+  # @param kafka.main.password Password for authorization (SASL).
+  # @param kafka.main.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name
+  # @param kafka.main.tls.rootCert Root certificate.
+  # @param kafka.main.tls.cert Client certificate.
+  # @param kafka.main.tls.key Client key.
+  # @param kafka.main.topics.stats Topic to consume stat messages.
+
+  main:
+    clientPrefix: ''
+    brokers: ''
+    securityProtocol: 'PLAINTEXT'
+    SASLMechanism: 'PLAIN'
+    username: ''
+    password: ''
+    tls:
+      skipServerCertificateVerify: false
+      rootCert: ''
+      cert: ''
+      key: ''
+    topics:
+      stats: ''
+
   # @extra kafka.audit **Settings for sending audit messages.**
 
   # @param kafka.audit.bootstrapServers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
-  # @param kafka.audit.username Username for authorization (SASL/SCRAM SHA-512).
-  # @param kafka.audit.password Password for authorization (SASL/SCRAM SHA-512).
+  # @param kafka.audit.securityProtocol Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.
+  # @param kafka.audit.SASLMechanism Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.
+  # @param kafka.audit.username Username for authorization (SASL).
+  # @param kafka.audit.password Password for authorization (SASL).
   # @param kafka.audit.topic Topic to produce audit messages.
-  # @param kafka.audit.tls.enabled If tls connection to kafka is enabled.
   # @param kafka.audit.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name
   # @param kafka.audit.tls.rootCert Root certificate.
   # @param kafka.audit.tls.cert Client certificate.
@@ -553,11 +556,12 @@ kafka:
 
   audit:
     bootstrapServers: ''
+    securityProtocol: 'PLAINTEXT'
+    SASLMechanism: 'PLAIN'
     username: ''
     password: ''
     topic: ''
     tls:
-      enabled: false
       skipServerCertificateVerify: false
       rootCert: ''
       cert: ''

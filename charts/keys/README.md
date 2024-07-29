@@ -156,31 +156,20 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Counter worker settings
 
-| Name                                            | Description                                                                                                                     | Value   |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `counter.enabled`                               | Counter worker is enabled.                                                                                                      | `false` |
-| `counter.replicas`                              | A replica count for the pod.                                                                                                    | `1`     |
-| `counter.prometheus.scrape`                     | If Prometheus scrape is enabled.                                                                                                | `true`  |
-| `counter.resources.requests.cpu`                | A CPU request.                                                                                                                  | `20m`   |
-| `counter.resources.requests.memory`             | A memory request.                                                                                                               | `32Mi`  |
-| `counter.resources.limits.cpu`                  | A CPU limit.                                                                                                                    | `1000m` |
-| `counter.resources.limits.memory`               | A memory limit.                                                                                                                 | `512Mi` |
-| `counter.preloader.refreshTick`                 | Preloader refresh tick.                                                                                                         | `1m`    |
-| `counter.updateStatusQueryTimeout`              | Timeout for database queries to update key status.                                                                              | `1s`    |
-| `counter.buffer`                                | **Settings for in-memory buffer for statistics data.**                                                                          |         |
-| `counter.buffer.size`                           | The maximum size of the buffer. When the limit is reached, the data from the buffer is transferred to Redis.                    | `1000`  |
-| `counter.buffer.delay`                          | The maximum interval between data transfer operations from the buffer to Redis.                                                 | `1s`    |
-| `counter.kafka`                                 | **Settings for read stat messages.**                                                                                            |         |
-| `counter.kafka.clientPrefix`                    | Client prefix name                                                                                                              | `""`    |
-| `counter.kafka.brokers`                         | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093'). | `""`    |
-| `counter.kafka.username`                        | Username for authorization (SASL/SCRAM SHA-512).                                                                                | `""`    |
-| `counter.kafka.password`                        | Password for authorization (SASL/SCRAM SHA-512).                                                                                | `""`    |
-| `counter.kafka.tls.enabled`                     | If tls connection to kafka is enabled.                                                                                          | `false` |
-| `counter.kafka.tls.skipServerCertificateVerify` | Controls whether a client verifies the server's certificate chain and host name                                                 | `false` |
-| `counter.kafka.tls.rootCert`                    | Root certificate.                                                                                                               | `""`    |
-| `counter.kafka.tls.cert`                        | Client certificate.                                                                                                             | `""`    |
-| `counter.kafka.tls.key`                         | Client key.                                                                                                                     | `""`    |
-| `counter.kafka.topics.stats`                    | Topic to consume stat messages.                                                                                                 | `""`    |
+| Name                                | Description                                                                                                  | Value   |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
+| `counter.enabled`                   | Counter worker is enabled.                                                                                   | `false` |
+| `counter.replicas`                  | A replica count for the pod.                                                                                 | `1`     |
+| `counter.prometheus.scrape`         | If Prometheus scrape is enabled.                                                                             | `true`  |
+| `counter.resources.requests.cpu`    | A CPU request.                                                                                               | `20m`   |
+| `counter.resources.requests.memory` | A memory request.                                                                                            | `32Mi`  |
+| `counter.resources.limits.cpu`      | A CPU limit.                                                                                                 | `1000m` |
+| `counter.resources.limits.memory`   | A memory limit.                                                                                              | `512Mi` |
+| `counter.preloader.refreshTick`     | Refresh interval for in-memory cache with keys info.                                                         | `1m`    |
+| `counter.updateStatusQueryTimeout`  | Timeout for database queries to update key status.                                                           | `1s`    |
+| `counter.buffer`                    | **Settings for in-memory buffer for statistics data.**                                                       |         |
+| `counter.buffer.size`               | The maximum size of the buffer. When the limit is reached, the data from the buffer is transferred to Redis. | `1000`  |
+| `counter.buffer.delay`              | The maximum interval between data transfer operations from the buffer to Redis.                              | `1s`    |
 
 ### Redis settings
 
@@ -238,20 +227,33 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Kafka settings
 
-| Name                                          | Description                                                                                                                                                | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `kafka.audit`                                 | **Settings for sending audit messages.**                                                                                                                   |         |
-| `kafka.audit.bootstrapServers`                | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`    |
-| `kafka.audit.username`                        | Username for authorization (SASL/SCRAM SHA-512).                                                                                                           | `""`    |
-| `kafka.audit.password`                        | Password for authorization (SASL/SCRAM SHA-512).                                                                                                           | `""`    |
-| `kafka.audit.topic`                           | Topic to produce audit messages.                                                                                                                           | `""`    |
-| `kafka.audit.tls.enabled`                     | If tls connection to kafka is enabled.                                                                                                                     | `false` |
-| `kafka.audit.tls.skipServerCertificateVerify` | Controls whether a client verifies the server's certificate chain and host name                                                                            | `false` |
-| `kafka.audit.tls.rootCert`                    | Root certificate.                                                                                                                                          | `""`    |
-| `kafka.audit.tls.cert`                        | Client certificate.                                                                                                                                        | `""`    |
-| `kafka.audit.tls.key`                         | Client key.                                                                                                                                                | `""`    |
-| `kafka.audit.produce.retryCount`              | Number of retries to produce a message.                                                                                                                    | `5`     |
-| `kafka.audit.produce.idempotentWrite`         | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true`  |
+| Name                                          | Description                                                                                                                                                | Value       |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `kafka.main`                                  | **Settings for read stat messages.**                                                                                                                       |             |
+| `kafka.main.clientPrefix`                     | Client prefix name                                                                                                                                         | `""`        |
+| `kafka.main.brokers`                          | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`        |
+| `kafka.main.securityProtocol`                 | Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.                                 | `PLAINTEXT` |
+| `kafka.main.SASLMechanism`                    | Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.       | `PLAIN`     |
+| `kafka.main.username`                         | Username for authorization (SASL).                                                                                                                         | `""`        |
+| `kafka.main.password`                         | Password for authorization (SASL).                                                                                                                         | `""`        |
+| `kafka.main.tls.skipServerCertificateVerify`  | Controls whether a client verifies the server's certificate chain and host name                                                                            | `false`     |
+| `kafka.main.tls.rootCert`                     | Root certificate.                                                                                                                                          | `""`        |
+| `kafka.main.tls.cert`                         | Client certificate.                                                                                                                                        | `""`        |
+| `kafka.main.tls.key`                          | Client key.                                                                                                                                                | `""`        |
+| `kafka.main.topics.stats`                     | Topic to consume stat messages.                                                                                                                            | `""`        |
+| `kafka.audit`                                 | **Settings for sending audit messages.**                                                                                                                   |             |
+| `kafka.audit.bootstrapServers`                | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`        |
+| `kafka.audit.securityProtocol`                | Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.                                 | `PLAINTEXT` |
+| `kafka.audit.SASLMechanism`                   | Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.       | `PLAIN`     |
+| `kafka.audit.username`                        | Username for authorization (SASL).                                                                                                                         | `""`        |
+| `kafka.audit.password`                        | Password for authorization (SASL).                                                                                                                         | `""`        |
+| `kafka.audit.topic`                           | Topic to produce audit messages.                                                                                                                           | `""`        |
+| `kafka.audit.tls.skipServerCertificateVerify` | Controls whether a client verifies the server's certificate chain and host name                                                                            | `false`     |
+| `kafka.audit.tls.rootCert`                    | Root certificate.                                                                                                                                          | `""`        |
+| `kafka.audit.tls.cert`                        | Client certificate.                                                                                                                                        | `""`        |
+| `kafka.audit.tls.key`                         | Client key.                                                                                                                                                | `""`        |
+| `kafka.audit.produce.retryCount`              | Number of retries to produce a message.                                                                                                                    | `5`         |
+| `kafka.audit.produce.idempotentWrite`         | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true`      |
 
 ### LDAP connection settings
 
