@@ -547,7 +547,7 @@ kafka:
   # @param kafka.audit.username Username for authorization (SASL).
   # @param kafka.audit.password Password for authorization (SASL).
   # @param kafka.audit.topic Topic to produce audit messages.
-  # @param kafka.audit.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name
+  # @param kafka.audit.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name.
   # @param kafka.audit.tls.rootCert Root certificate.
   # @param kafka.audit.tls.cert Client certificate.
   # @param kafka.audit.tls.key Client key.
