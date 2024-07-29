@@ -326,6 +326,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.kafka.main.brokers }}"
 - name: KEYS_KAFKA_MAIN_CLIENT_PREFIX
   value: "{{ .Values.kafka.main.clientPrefix }}"
+- name: KEYS_KAFKA_MAIN_CLIENT_ID
+  value: "{{ .Values.kafka.main.clientId }}"
 - name: KEYS_KAFKA_MAIN_STATS_TOPIC
   value: "{{ .Values.kafka.main.topics.stats }}"
 - name: KEYS_KAFKA_MAIN_USERNAME

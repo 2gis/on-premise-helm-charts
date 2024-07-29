@@ -512,20 +512,22 @@ kafka:
 
   # @extra kafka.main **Settings for read stat messages.**
 
-  # @param kafka.main.clientPrefix Client prefix name
+  # @param kafka.main.clientPrefix Client prefix name.
+  # @param kafka.main.clientId Client id.
   # @param kafka.main.brokers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
   # @param kafka.main.securityProtocol Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.
   # @param kafka.main.SASLMechanism Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.
   # @param kafka.main.username Username for authorization (SASL).
   # @param kafka.main.password Password for authorization (SASL).
-  # @param kafka.main.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name
+  # @param kafka.main.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name.
   # @param kafka.main.tls.rootCert Root certificate.
   # @param kafka.main.tls.cert Client certificate.
   # @param kafka.main.tls.key Client key.
   # @param kafka.main.topics.stats Topic to consume stat messages.
 
   main:
-    clientPrefix: ''
+    clientPrefix: 'production'
+    clientId: ''
     brokers: ''
     securityProtocol: 'PLAINTEXT'
     SASLMechanism: 'PLAIN'

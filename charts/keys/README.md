@@ -227,33 +227,34 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Kafka settings
 
-| Name                                          | Description                                                                                                                                                | Value       |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `kafka.main`                                  | **Settings for read stat messages.**                                                                                                                       |             |
-| `kafka.main.clientPrefix`                     | Client prefix name                                                                                                                                         | `""`        |
-| `kafka.main.brokers`                          | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`        |
-| `kafka.main.securityProtocol`                 | Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.                                 | `PLAINTEXT` |
-| `kafka.main.SASLMechanism`                    | Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.       | `PLAIN`     |
-| `kafka.main.username`                         | Username for authorization (SASL).                                                                                                                         | `""`        |
-| `kafka.main.password`                         | Password for authorization (SASL).                                                                                                                         | `""`        |
-| `kafka.main.tls.skipServerCertificateVerify`  | Controls whether a client verifies the server's certificate chain and host name                                                                            | `false`     |
-| `kafka.main.tls.rootCert`                     | Root certificate.                                                                                                                                          | `""`        |
-| `kafka.main.tls.cert`                         | Client certificate.                                                                                                                                        | `""`        |
-| `kafka.main.tls.key`                          | Client key.                                                                                                                                                | `""`        |
-| `kafka.main.topics.stats`                     | Topic to consume stat messages.                                                                                                                            | `""`        |
-| `kafka.audit`                                 | **Settings for sending audit messages.**                                                                                                                   |             |
-| `kafka.audit.bootstrapServers`                | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`        |
-| `kafka.audit.securityProtocol`                | Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.                                 | `PLAINTEXT` |
-| `kafka.audit.SASLMechanism`                   | Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.       | `PLAIN`     |
-| `kafka.audit.username`                        | Username for authorization (SASL).                                                                                                                         | `""`        |
-| `kafka.audit.password`                        | Password for authorization (SASL).                                                                                                                         | `""`        |
-| `kafka.audit.topic`                           | Topic to produce audit messages.                                                                                                                           | `""`        |
-| `kafka.audit.tls.skipServerCertificateVerify` | Controls whether a client verifies the server's certificate chain and host name                                                                            | `false`     |
-| `kafka.audit.tls.rootCert`                    | Root certificate.                                                                                                                                          | `""`        |
-| `kafka.audit.tls.cert`                        | Client certificate.                                                                                                                                        | `""`        |
-| `kafka.audit.tls.key`                         | Client key.                                                                                                                                                | `""`        |
-| `kafka.audit.produce.retryCount`              | Number of retries to produce a message.                                                                                                                    | `5`         |
-| `kafka.audit.produce.idempotentWrite`         | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true`      |
+| Name                                          | Description                                                                                                                                                | Value        |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `kafka.main`                                  | **Settings for read stat messages.**                                                                                                                       |              |
+| `kafka.main.clientPrefix`                     | Client prefix name.                                                                                                                                        | `production` |
+| `kafka.main.clientId`                         | Client id.                                                                                                                                                 | `""`         |
+| `kafka.main.brokers`                          | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`         |
+| `kafka.main.securityProtocol`                 | Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.                                 | `PLAINTEXT`  |
+| `kafka.main.SASLMechanism`                    | Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.       | `PLAIN`      |
+| `kafka.main.username`                         | Username for authorization (SASL).                                                                                                                         | `""`         |
+| `kafka.main.password`                         | Password for authorization (SASL).                                                                                                                         | `""`         |
+| `kafka.main.tls.skipServerCertificateVerify`  | Controls whether a client verifies the server's certificate chain and host name.                                                                           | `false`      |
+| `kafka.main.tls.rootCert`                     | Root certificate.                                                                                                                                          | `""`         |
+| `kafka.main.tls.cert`                         | Client certificate.                                                                                                                                        | `""`         |
+| `kafka.main.tls.key`                          | Client key.                                                                                                                                                | `""`         |
+| `kafka.main.topics.stats`                     | Topic to consume stat messages.                                                                                                                            | `""`         |
+| `kafka.audit`                                 | **Settings for sending audit messages.**                                                                                                                   |              |
+| `kafka.audit.bootstrapServers`                | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`         |
+| `kafka.audit.securityProtocol`                | Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.                                 | `PLAINTEXT`  |
+| `kafka.audit.SASLMechanism`                   | Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.       | `PLAIN`      |
+| `kafka.audit.username`                        | Username for authorization (SASL).                                                                                                                         | `""`         |
+| `kafka.audit.password`                        | Password for authorization (SASL).                                                                                                                         | `""`         |
+| `kafka.audit.topic`                           | Topic to produce audit messages.                                                                                                                           | `""`         |
+| `kafka.audit.tls.skipServerCertificateVerify` | Controls whether a client verifies the server's certificate chain and host name.                                                                           | `false`      |
+| `kafka.audit.tls.rootCert`                    | Root certificate.                                                                                                                                          | `""`         |
+| `kafka.audit.tls.cert`                        | Client certificate.                                                                                                                                        | `""`         |
+| `kafka.audit.tls.key`                         | Client key.                                                                                                                                                | `""`         |
+| `kafka.audit.produce.retryCount`              | Number of retries to produce a message.                                                                                                                    | `5`          |
+| `kafka.audit.produce.idempotentWrite`         | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true`       |
 
 ### LDAP connection settings
 
