@@ -37,6 +37,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
 | `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
 
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+| Name                 | Description                                         | Value   |
+| -------------------- | --------------------------------------------------- | ------- |
+| `pdb.enabled`        | If PDB is enabled for the service                   | `false` |
+| `pdb.minAvailable`   | How many pods must be available after the eviction  | `""`    |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction | `1`     |
+
 ### Flags for enabling/disabling certain features.
 
 | Name                               | Description                             | Value   |

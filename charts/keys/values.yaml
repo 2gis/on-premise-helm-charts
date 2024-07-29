@@ -19,6 +19,17 @@ dgctlDockerRegistry: ''
 imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param pdb.enabled If PDB is enabled for the service
+# @param pdb.minAvailable How many pods must be available after the eviction
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction
+
+pdb:
+  enabled: false
+  minAvailable: ''
+  maxUnavailable: 1
+
 # @section Flags for enabling/disabling certain features.
 
 featureFlags:
