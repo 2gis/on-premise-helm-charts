@@ -24,6 +24,11 @@ mapgl-js-api
 navi-async-matrix
 	- navi-async-matrix:1.6.2
 	+ navi-async-matrix:1.10.3
+navi
+	- navi-back:7.23.0.5
+	+ navi-back:7.25.0.3
+	- navi-router:6.17.1.2
+	+ navi-router:6.24.0.3
 search-api
 	- search-api:7.77.2
 	+ search-api:7.78.0
