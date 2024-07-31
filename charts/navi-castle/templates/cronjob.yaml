@@ -48,6 +48,11 @@ spec:
               - /opt/config_builder.conf
               - --service={{ include "castle.serviceParameter" ( dict "flavor" $flavor ) }}
               - --jobs={{ $.Values.castle.jobs | default 1 | int }}
+              {{- if .Values.castle.excludeProjects }}
+              env:
+              - name: CASTLE_EXCLUDE_PROJECTS
+                value: {{ join "," .Values.castle.excludeProjects | quote }}
+              {{- end }}
               volumeMounts:
               - name: {{ include "castle.fullname" $ }}-builder-config
                 mountPath: /opt/config_builder.conf
@@ -59,7 +64,7 @@ spec:
                 mountPath: {{ $.Values.castle.castleDataPath }}
               resources:
                 {{- toYaml $.Values.resources | nindent 16 }}
-{{- end -}} {{/* if */}}
+{{- end -}} {{/* if index $.Values.cron.enabled $flavor */}}
 {{- end -}} {{/* range $flavor */}}
 {{- end -}} {{/* range $i, $e */}}
 {{- end -}} {{/* if */}}
