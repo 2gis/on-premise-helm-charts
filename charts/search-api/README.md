@@ -142,6 +142,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `nginx.resources.limits.cpu`      | A CPU limit, e.g., `100m`        |       |
 | `nginx.resources.limits.memory`   | A memory limit, e.g., `128Mi`    |       |
 
+### customCAs **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container.                                                                          | `""`  |
+
 
 ## Maintainers
 
