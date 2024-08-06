@@ -27,6 +27,7 @@ spec:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
+        checksum/custom-ca: {{ include "mapgl.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -65,6 +66,10 @@ spec:
               value: "{{ .Values.env.MAPGL_RTLPLUGINHASH }}"
             - name: MAPGL_INVALID_KEY_MESSAGE
               value: "{{ .Values.env.MAPGL_INVALID_KEY_MESSAGE }}"
+            {{- if $.Values.customCAs.bundle }}
+            - name: MAPGL_SSL_CERT_DIR
+              value: {{ include "mapgl.customCA.mountPath" $ }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080
@@ -94,7 +99,17 @@ spec:
               exec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           volumeMounts:
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "mapgl.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
+            {{- end }}
       volumes:
+        {{- if $.Values.customCAs.bundle }}
+        - configMap:
+            name: {{ include "mapgl.fullname" $ }}-custom-ca
+          name: custom-ca
+        {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}

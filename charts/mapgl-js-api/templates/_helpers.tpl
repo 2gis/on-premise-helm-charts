@@ -62,3 +62,14 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- print "autoscaling/v2" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Mount directory for custom CA
+*/}}
+{{- define "mapgl.customCA.mountPath" -}}
+{{ $.Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}
+
+{{- define "mapgl.checksum" -}}
+{{ (include (print $.Template.BasePath .path) $ | fromYaml).data | toYaml | sha256sum }}
+{{- end }}
