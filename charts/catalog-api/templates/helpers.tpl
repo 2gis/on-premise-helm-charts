@@ -149,6 +149,12 @@ onprem
   value: "{{ required "A valid .Values.search.url entry required" .Values.search.url }}"
 - name: CATALOG_SAPPHIRE_CONNECTION_TIMEOUT
   value: "{{ .Values.search.connectTimeout }}"
+- name: CATALOG_SAPPHIRE_MIN_CONNECTIONS
+  value: "{{ .Values.search.minConnections }}"
+- name: CATALOG_SAPPHIRE_MAX_CONNECTIONS
+  value: "{{ .Values.search.maxConnections }}"
+- name: CATALOG_SAPPHIRE_MAX_OPEN_REQUESTS
+  value: "{{ .Values.search.maxOpenRequests }}"
 {{- end }}
 
 {{- define "catalog.env.keys" -}}
