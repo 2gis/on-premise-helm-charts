@@ -1,8 +1,0 @@
-{
-    "start": {
-        "lat":37.5998,
-        "lon":55.7683
-    },
-    "durations": [600, 1200],
-    "mode": "driving"
-}
