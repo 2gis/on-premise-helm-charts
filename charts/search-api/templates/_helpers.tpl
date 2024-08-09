@@ -37,6 +37,28 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .registry (printf "%s:%s" .username .password | b64enc) | b64enc }}
 {{- end }}
 
+{{- define "search_api.env.custom.ca.path" -}}
+- name: SSL_CERT_FILE
+  value: {{ include "search_api.custom.ca.mountPath" . }}/custom-ca.crt
+{{- end }}
+
+{{- define "search_api.custom.ca.mountPath" -}}
+{{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}
+
+{{- define "search_api.custom.ca.volumeMounts" -}}
+- name: custom-ca
+  mountPath: {{ include "search_api.custom.ca.mountPath" . }}/custom-ca.crt
+  subPath: custom-ca.crt
+  readOnly: true
+{{- end -}}
+
+{{- define "search_api.custom.ca.deploys.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "search_api.fullname" . }}
+{{- end -}}
+
 {{/*
 Return the target Kubernetes version
 */}}
