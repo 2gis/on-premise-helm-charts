@@ -55,8 +55,12 @@ spec:
               value: "{{ .Values.env.MAPGL_TRAFFICSERVER }}"
             - name: MAPGL_FLOORSSERVER
               value: "{{ .Values.env.MAPGL_FLOORSSERVER }}"
-            - name: MAPGL_FLOORSSERVER_HOST
-              value: "{{ .Values.env.MAPGL_FLOORSSERVER }}"
+            - name: MAPGL_STYLESERVER
+              value: "{{ .Values.env.MAPGL_STYLESERVER }}"
+            - name: MAPGL_ICONSPATH
+              value: "{{ .Values.env.MAPGL_ICONSPATH }}"
+            - name: MAPGL_MODELSPATH
+              value: "{{ .Values.env.MAPGL_MODELSPATH }}"
             - name: MAPGL_KEYSERVER
               value: "{{ .Values.env.MAPGL_KEYSERVER }}"
             - name: MAPGL_RTLPLUGIN
