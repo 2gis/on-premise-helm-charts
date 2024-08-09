@@ -67,8 +67,8 @@ spec:
             - name: MAPGL_INVALID_KEY_MESSAGE
               value: "{{ .Values.env.MAPGL_INVALID_KEY_MESSAGE }}"
             {{- if $.Values.customCAs.bundle }}
-            - name: MAPGL_SSL_CERT_DIR
-              value: {{ include "mapgl.customCA.mountPath" $ }}
+            - name: MAPGL_SSL_CERT_FILE
+              value: {{ include "mapgl.customCA.mountPath" $ }}/custom-ca.crt
             {{- end }}
           ports:
             - name: http
@@ -100,15 +100,16 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           volumeMounts:
             {{- if $.Values.customCAs.bundle }}
-            - mountPath: {{ include "mapgl.customCA.mountPath" $ }}
-              name: custom-ca
+            - name: custom-ca
+              mountPath: {{ include "mapgl.customCA.mountPath" $ }}/custom-ca.crt
+              subPath: custom-ca.crt
               readOnly: true
             {{- end }}
       volumes:
         {{- if $.Values.customCAs.bundle }}
-        - configMap:
+        - name: custom-ca
+          configMap:
             name: {{ include "mapgl.fullname" $ }}-custom-ca
-          name: custom-ca
         {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
