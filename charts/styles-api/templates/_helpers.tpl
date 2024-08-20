@@ -89,7 +89,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: MGS_S3_ENDPOINT
   value: "{{ required "A valid .Values.s3.endpoint required" .Values.s3.endpoint }}"
 - name: MGS_S3_BUCKET
-  value: "{{ .Values.s3.bucket }}"
+  value: "styles"
 - name: MGS_S3_PUBLIC_DOMAIN
   value: "{{ .Values.s3.publicDomain }}"
 - name: MGS_S3_CONNECT_TIMEOUT

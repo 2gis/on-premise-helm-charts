@@ -212,14 +212,17 @@ postgres:
   username: ''
   password: ''
 
-# @section S3 like storage access settings
+# @section S3 like storage access settings.
 
 s3:
+
+  # @descriptionStart
+  # Requires the `styles` bucket in S3 storage.
+  # @descriptionEnd
 
   # @param s3.endpoint S3 endpoint as `host|ip:port`. **Required**
   # @param s3.accessKey S3 access key. **Required**
   # @param s3.secretKey S3 secret key. **Required**
-  # @param s3.bucket S3 bucket name. **Required**
   # @param s3.publicDomain S3 public access domain. **Required**
   # @param s3.connectTimeout S3 management client connection timeout. If not specified, the default value is 3s.
   # @param s3.requestTimeout S3 management client request timeout. If not specified, the default value is 30s.
@@ -228,7 +231,6 @@ s3:
   endpoint: ''
   accessKey: ''
   secretKey: ''
-  bucket: styles
   publicDomain: ''
   connectTimeout: 3s
   requestTimeout: 5s
