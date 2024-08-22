@@ -9,60 +9,72 @@ dgctlDockerRegistry: ''
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
 
+# @section Strategy settings
+
+# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
+# @section Deployment settings
+
+# @param image.repository Repository
+# @param image.tag Tag
+image:
+  repository: 2gis-on-premise/pro-ui
+  tag: 2.15.1
+
+# @section Common deployment settings
+
+# @param replicas A replica count for the pod.
+# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param terminationGracePeriodSeconds Seconds pod needs to [terminate](https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods) gracefully
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param readinessProbe.enabled Enable [readinessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on PRO UI containers
+# @param livenessProbe.enabled Enable [livenessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on PRO UI containers
+# @param containerPort Port on which application listen connection in container
+
+replicas: 1
+revisionHistoryLimit: 3
+terminationGracePeriodSeconds: 60
+nodeSelector: {}
+affinity: {}
+tolerations: []
+podAnnotations: {}
+podLabels: {}
+annotations: {}
+labels: {}
+readinessProbe:
+  enabled: true
+livenessProbe:
+  enabled: false
+containerPort: 3000
+
+# @section UI service settings
+
 ui:
-  # @section Common settings
-
-  # @param ui.replicas A replica count for the pod.
-  # @param ui.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
-  # @param ui.terminationGracePeriodSeconds Seconds pod needs to [terminate](https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods) gracefully
-  # @param ui.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-  # @param ui.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
-  # @param ui.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-  # @param ui.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-  # @param ui.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @param ui.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-  # @param ui.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @param ui.readinessProbe.enabled Enable [readinessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on PRO UI containers
-  # @param ui.livenessProbe.enabled Enable [livenessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on PRO UI containers
-  # @param ui.healthcheckPath Application http path for health check
-  # @param ui.containerPort Port on which application listen connection in container
-
-  replicas: 1
-  revisionHistoryLimit: 3
-  terminationGracePeriodSeconds: 60
-  nodeSelector: {}
-  affinity: {}
-  tolerations: []
-  podAnnotations: {}
-  podLabels: {}
-  annotations: {}
-  labels: {}
-  readinessProbe:
-    enabled: true
-  livenessProbe:
-    enabled: false
-  healthcheckPath: /api/healthcheck/app
-  containerPort: 3000
-
-  # @section Deployment settings
-
-  # @param ui.image.repository Repository
-  # @param ui.image.tag Tag
-  image:
-    repository: 2gis-on-premise/pro-ui
-    tag: 2.15.1
-
-  # @section UI service settings
-
   # @skip ui.logLevel
   # @skip ui.isOnPremise
+  # @param ui.healthcheckPath Application http path for health check
   # @param ui.appTheme Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
   # @param ui.appLocale Language in the app. Possible values: `"ar_AE"`, `"en_AE"` or `"ru_RU"`.
   # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).
-  # @param ui.supportDocumentationLink Product online documentation link. Ex.: 'https://docs.urbi.ae/en/pro/start' or 'https://docs.2gis.com/ru/pro/start'
+  # @param ui.supportDocumentationLink Product online documentation link. Ex.: 'https://docs.urbi.ae/en/pro/start', 'https://docs.2gis.com/ru/pro/start'
   # @param ui.immersiveModels A string value for config to enabling 3D-models. Possible values: [{"id":4,"name":"Ground","mapOptions":{"center":[53.287567,23.564967],"styleZoom":19.2,"pitch":45,"rotation":0},"objects":[{"buildingIds":[],"coords":[53.284762,23.569323],"scale":90,"rotateX":0.5,"rotateY":0,"moveX":0,"moveY":0,"moveZ":0,"models":[{"path":"/static/models/adnoc/ground.glb","name":"Ground","displayName":"Ground"}]}]}]
   # @param ui.publicS3Url Optional URL of public S3 where style data will be placed. Example: https://s3.domain.example.com/
 
+  healthcheckPath: /api/healthcheck/app
   logLevel: error
   isOnPremise: true
   appTheme: urbi
@@ -172,83 +184,71 @@ ui:
     configUrl: ''
     s3Bucket: ''
 
-  # @section Strategy settings
+# @section Service settings
 
-  # @param ui.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
-  # @param ui.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
-  # @param ui.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.port Service port.
+# @param service.targetPort Service target port.
 
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1
+service:
+  annotations: {}
+  labels: {}
+  type: ClusterIP
+  port: 3000
+  targetPort: http
 
-  # @section Service settings
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-  # @param ui.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-  # @param ui.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @param ui.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-  # @param ui.service.port Service port.
-  # @param ui.service.targetPort Service target port.
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Name of the Ingress controller class.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration
 
-  service:
-    annotations: {}
-    labels: {}
-    type: ClusterIP
-    port: 3000
-    targetPort: http
-
-  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
-
-  # @param ui.ingress.enabled If Ingress is enabled for the service.
-  # @param ui.ingress.className Name of the Ingress controller class.
-  # @param ui.ingress.hosts[0].host Hostname for the Ingress service.
-  # @param ui.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
-  # @param ui.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
-  # @param ui.ingress.tls TLS configuration
-
-  ingress:
-    enabled: false
-    className: nginx
-    hosts:
+ingress:
+  enabled: false
+  className: nginx
+  hosts:
     - host: pro-ui.example.com
       paths:
-      - path: /
-        pathType: Prefix
-    tls: []
-    # - hosts:
-    #   - pro-ui.example.com
-    #   secretName: secret.tls
+        - path: /
+          pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - pro-ui.example.com
+  #   secretName: secret.tls
 
-  # @section Limits
+# @section Limits
 
-  # @param ui.resources.requests.cpu A CPU request.
-  # @param ui.resources.requests.memory A memory request.
-  # @param ui.resources.limits.cpu A CPU limit.
-  # @param ui.resources.limits.memory A memory limit.
+# @param resources.requests.cpu A CPU request.
+# @param resources.requests.memory A memory request.
+# @param resources.limits.cpu A CPU limit.
+# @param resources.limits.memory A memory limit.
 
-  resources:
-    requests:
-      cpu: 300m
-      memory: 256Mi
-    limits:
-      cpu: 1
-      memory: 384Mi
+resources:
+  requests:
+    cpu: 300m
+    memory: 256Mi
+  limits:
+    cpu: 1
+    memory: 384Mi
 
-  # @section Autoscaling configuration
+# @section Autoscaling configuration
 
-  # @param ui.hpa.enabled Enable hpa for PRO UI
-  # @param ui.hpa.minReplicas Minimum number of PRO UI replicas
-  # @param ui.hpa.maxReplicas Maximum number of PRO UI replicas
-  # @param ui.hpa.targetCPU Target CPU utilization percentage
-  # @param ui.hpa.targetMemory Target Memory utilization percentage
-  hpa:
-    enabled: false
-    minReplicas: 2
-    maxReplicas: 5
-    targetCPU: 100
-    targetMemory: ''
+# @param hpa.enabled Enable hpa for PRO UI
+# @param hpa.minReplicas Minimum number of PRO UI replicas
+# @param hpa.maxReplicas Maximum number of PRO UI replicas
+# @param hpa.targetCPU Target CPU utilization percentage
+# @param hpa.targetMemory Target Memory utilization percentage
+hpa:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPU: 100
+  targetMemory: ''
 
 # @section Artifacts Storage settings
 
@@ -292,7 +292,7 @@ stylesImporter:
   name: styles-importer
   image:
     repository: 2gis-on-premise/pro-importer
-    tag: 1.22.0
+    tag: 1.35.0
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   nodeSelector: {}
@@ -305,3 +305,4 @@ stylesImporter:
       memory: 8Gi
   maxParallelJobs: 1
   startOnDeploy: false
+

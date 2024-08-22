@@ -34,8 +34,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end -}}
 
 {{- define "pro.ui.service.annotations" -}}
-{{- if .Values.ui.service.annotations }}
-{{- include "pro.ui.tplvalues.render" (dict "value" .Values.ui.service.annotations "context" . ) }}
+{{- if .Values.service.annotations }}
+{{- include "pro.ui.tplvalues.render" (dict "value" .Values.service.annotations "context" . ) }}
 {{ end }}
 {{- end -}}
 
