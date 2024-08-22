@@ -39,7 +39,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/platform-ui
-    tag: 0.8.1
+    tag: 0.15.0
 
   # @section UI service settings
 
@@ -88,6 +88,13 @@ ui:
     scriptPath: /api.js
     key: ''
     initCenter: ''
+
+  # @section Map styles API settings
+
+  # @param ui.mapStyles.url URL to Map Styles API.
+
+  mapStyles:
+    url: ''
 
   # @section Search API settings
 

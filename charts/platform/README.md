@@ -34,7 +34,7 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | Name                  | Description                    | Value                         |
 | --------------------- | ------------------------------ | ----------------------------- |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/platform-ui` |
-| `ui.image.tag`        | Tag                            | `0.8.1`                       |
+| `ui.image.tag`        | Tag                            | `0.15.0`                      |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                          |
 
 ### UI service settings
@@ -64,6 +64,12 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | `ui.mapgl.scriptPath` | URL path to [MapGL JS API](https://docs.2gis.com/en/on-premise/map) init script relative to `ui.mapgl.url`.                                                   | `/api.js` |
 | `ui.mapgl.key`        | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                                                                 | `""`      |
 | `ui.mapgl.initCenter` | Optional default map coordinates. Contains of two numbers in an array: `[lon,lat]` (e.g., `"[55.27,25.2]"` stands for Dubai, `"[37.64,55.74]"` — for Moscow). | `""`      |
+
+### Map styles API settings
+
+| Name               | Description            | Value |
+| ------------------ | ---------------------- | ----- |
+| `ui.mapStyles.url` | URL to Map Styles API. | `""`  |
 
 ### Search API settings
 
