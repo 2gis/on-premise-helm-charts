@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.11.1`                       |
+| `api.image.tag`        | Tag.         | `1.12.0`                       |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -107,11 +107,12 @@ See the [documentation]() to learn about:
 
 ### Custom settings
 
-| Name                 | Description                                            | Value          |
-| -------------------- | ------------------------------------------------------ | -------------- |
-| `api.showDocs`       | Show documentation link if needed.                     | `false`        |
-| `api.logLevel`       | Log level.                                             | `INFO`         |
-| `api.metricsAppName` | Value for service prometheus metrics label "app_name". | `citylens-api` |
+| Name                   | Description                                                                                                                                                              | Value          |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------- |
+| `api.showDocs`         | Show documentation link if needed.                                                                                                                                       | `false`        |
+| `api.logLevel`         | Log level.                                                                                                                                                               | `INFO`         |
+| `api.metricsAppName`   | Value for service prometheus metrics label "app_name".                                                                                                                   | `citylens-api` |
+| `api.routesApiBaseUrl` | Base url of Citylens Routes API service. If provided - all requests to citylens-api/routes-api/* will be proxied to this API. Ex.: `http(s)://routes-api.ingress.host/`. | `""`           |
 
 ### Metadata settings
 
@@ -133,7 +134,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.11.1`                       |
+| `web.image.tag`        | Tag.         | `1.12.0`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -351,7 +352,7 @@ See the [documentation]() to learn about:
 | Name                                               | Description                                                                                                                                    | Value                              |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `worker.dashboardBatchEvents.image.repository`     | Repository.                                                                                                                                    | `2gis-on-premise/citylens-workers` |
-| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.11.1`                           |
+| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.12.0`                           |
 | `worker.dashboardBatchEvents.image.pullPolicy`     | Pull Policy.                                                                                                                                   | `IfNotPresent`                     |
 | `worker.dashboardBatchEvents.logLevel`             | Worker's log level.                                                                                                                            | `INFO`                             |
 | `worker.dashboardBatchEvents.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`                                |

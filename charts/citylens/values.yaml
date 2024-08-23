@@ -83,6 +83,7 @@ dgctlStorage:
 # @param api.showDocs Show documentation link if needed.
 # @param api.logLevel Log level.
 # @param api.metricsAppName Value for service prometheus metrics label "app_name".
+# @param api.routesApiBaseUrl Base url of Citylens Routes API service. If provided - all requests to citylens-api/routes-api/* will be proxied to this API. Ex.: `http(s)://routes-api.ingress.host/`.
 
 # @section Metadata settings
 
@@ -99,7 +100,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.11.1
+    tag: 1.12.0
 
   replicas: 4
 
@@ -152,6 +153,8 @@ api:
   logLevel: INFO
 
   metricsAppName: citylens-api
+
+  routesApiBaseUrl: ''
 
   annotations: {}
   labels: {}
@@ -230,7 +233,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.11.1
+    tag: 1.12.0
 
   replicas: 1
 
@@ -611,7 +614,7 @@ worker:
     image:
       repository: 2gis-on-premise/citylens-workers
       pullPolicy: IfNotPresent
-      tag: 1.11.1
+      tag: 1.12.0
 
     revisionHistoryLimit: 3
 
