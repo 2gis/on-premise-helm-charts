@@ -108,10 +108,7 @@ spec:
             {{- if .Values.customCAs.bundle }}
             {{- include "search_api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
-      volumes:
-        {{- if .Values.customCAs.bundle }}
-        {{- include "search_api.custom.ca.deploys.volumes" . | nindent 8 }}
-        {{- end }}
+
         - name: nginx
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}
           imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
