@@ -15,7 +15,7 @@ imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 image:
   repository: 2gis-on-premise/styles-api
-  tag: 1.13.0
+  tag: 1.0.0
 
 # @section API service settings
 
