@@ -4,9 +4,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "search_api.fullname" . }}
-  {{- if .Values.annotations }}
+  {{- if or .Values.annotations .Values.customCAs.bundle }}
   annotations:
-    {{- toYaml .Values.annotations | nindent 4 }}
+    {{- if .Values.customCAs.bundle }}
+    checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
+    {{- end }}
+    {{- with .Values.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}    
   {{- end }}
   labels:
     {{- include "search_api.labels" . | nindent 4 }}
@@ -53,6 +58,9 @@ spec:
               secretKeyRef:
                 name: {{ include "search_api.fullname" . }}
                 key: s3SecretKey
+          {{- if .Values.customCAs.bundle }}
+          {{- include "search_api.env.custom.ca.path" . | nindent 10 }}
+          {{- end }}
           command:
             - importer
             - --endpoint={{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
@@ -72,6 +80,9 @@ spec:
               mountPath: /etc/2gis
             - name: search-api-data
               mountPath: {{ .Values.api.dataDir }}
+          {{- if .Values.customCAs.bundle }}
+            {{- include "search_api.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
       containers:
         - name: api
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
@@ -88,9 +99,16 @@ spec:
               mountPath: /etc/2gis
             - name: search-api-data
               mountPath: {{ .Values.api.dataDir }}
+          {{- if .Values.customCAs.bundle }}
+            {{- include "search_api.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
           env:
             - name: REDEPLOY_LABEL
               value: "{{ .Values.redeployLabel }}"
+            {{- if .Values.customCAs.bundle }}
+            {{- include "search_api.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+
         - name: nginx
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}
           imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
@@ -122,6 +140,13 @@ spec:
           volumeMounts:
             - name: {{ include "search_api.name" $ }}-configmap
               mountPath: /etc/2gis
+          {{- if .Values.customCAs.bundle }}
+            {{- include "search_api.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if .Values.customCAs.bundle }}
+            {{- include "search_api.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
       volumes:
         - name: {{ include "search_api.name" . }}-configmap
           configMap:
@@ -133,6 +158,9 @@ spec:
                 path: nginx.conf
         - name: search-api-data
           emptyDir: {}
+        {{- if .Values.customCAs.bundle }}
+        {{- include "search_api.custom.ca.deploys.volumes" . | nindent 8 }}
+        {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
