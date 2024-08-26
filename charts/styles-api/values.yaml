@@ -82,10 +82,9 @@ api:
     type: ClusterIP
     port: 80
 
-  # @section api.ingress Kubernetes [Ingress annotations](https://kubernetes.io/docs/concepts/services-networking/ingress/#the-ingress-resource).
   # @param api.ingress.enabled If Ingress is enabled for the service.
   # @param api.ingress.className Name of the Ingress controller class.
-  # @param api.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size Maximum body size for the client request.
+  # @param api.ingress.annotations Kubernetes [Ingress annotations](https://kubernetes.io/docs/concepts/services-networking/ingress/#the-ingress-resource).
   # @param api.ingress.hosts[0].host Hostname for the Ingress service.
   # @param api.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
   # @param api.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
@@ -94,8 +93,7 @@ api:
   ingress:
     enabled: false
     className: nginx
-    annotations:
-      nginx.ingress.kubernetes.io/proxy-body-size: "100mb"
+    annotations: {}
     hosts:
       - host: styles.example.com
         paths:
