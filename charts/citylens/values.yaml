@@ -647,7 +647,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.11.0
+    tag: 1.12.0
 
   resources:
     requests:
