@@ -193,7 +193,7 @@ ingress:
 # @section customCAs **Custom Certificate Authority**
 
 # @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
-# @param customCAs.certsPath Custom CA bundle mount directory in the container.
+# @param customCAs.certsPath Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"
 
 customCAs:
   bundle: ''
