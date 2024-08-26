@@ -369,7 +369,7 @@ See the [documentation]() to learn about:
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.11.0`                            |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.12.0`                            |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |
