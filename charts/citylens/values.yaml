@@ -83,7 +83,6 @@ dgctlStorage:
 # @param api.showDocs Show documentation link if needed.
 # @param api.logLevel Log level.
 # @param api.metricsAppName Value for service prometheus metrics label "app_name".
-# @param api.routesApiBaseUrl Base url of Citylens Routes API service. If provided - all requests to citylens-api/routes-api/* will be proxied to this API. Ex.: `http(s)://routes-api.ingress.host/`.
 
 # @section Metadata settings
 
@@ -153,8 +152,6 @@ api:
   logLevel: INFO
 
   metricsAppName: citylens-api
-
-  routesApiBaseUrl: ''
 
   annotations: {}
   labels: {}

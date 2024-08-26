@@ -107,12 +107,11 @@ See the [documentation]() to learn about:
 
 ### Custom settings
 
-| Name                   | Description                                                                                                                                                              | Value          |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------- |
-| `api.showDocs`         | Show documentation link if needed.                                                                                                                                       | `false`        |
-| `api.logLevel`         | Log level.                                                                                                                                                               | `INFO`         |
-| `api.metricsAppName`   | Value for service prometheus metrics label "app_name".                                                                                                                   | `citylens-api` |
-| `api.routesApiBaseUrl` | Base url of Citylens Routes API service. If provided - all requests to citylens-api/routes-api/* will be proxied to this API. Ex.: `http(s)://routes-api.ingress.host/`. | `""`           |
+| Name                 | Description                                            | Value          |
+| -------------------- | ------------------------------------------------------ | -------------- |
+| `api.showDocs`       | Show documentation link if needed.                     | `false`        |
+| `api.logLevel`       | Log level.                                             | `INFO`         |
+| `api.metricsAppName` | Value for service prometheus metrics label "app_name". | `citylens-api` |
 
 ### Metadata settings
 
