@@ -1,4 +1,3 @@
-
 {{- define "pro.env.ui" -}}
 - name: NETWORK_TIMEOUT
   value: "{{ required "A valid .Values.ui.api.timeout" .Values.ui.api.timeout }}"
@@ -74,7 +73,7 @@
 - name: HOME
   value: "/tmp"
 - name: SERVER_PORT
-  value: "{{ .Values.ui.containerPort }}"
+  value: "{{ .Values.containerPort }}"
 - name: MAPBOX_STYLE_TOKEN
   value: "{{ .Values.ui.mapbox.styleToken }}"
 - name: FEATURE_EXTERNAL_STYLE_MANAGER_IS_ENABLED

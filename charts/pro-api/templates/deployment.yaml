@@ -70,13 +70,16 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+            - name: management
+              containerPort: 8090
+              protocol: TCP
           volumeMounts:
             - mountPath: "{{ .Values.api.tempPath }}"
               name: temp-volume
           livenessProbe:
             httpGet:
               path: /health/live
-              port: http
+              port: management
             failureThreshold: 5
             initialDelaySeconds: 5
             periodSeconds: 15
@@ -85,7 +88,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health/ready
-              port: http
+              port: management
             failureThreshold: 3
             initialDelaySeconds: 5
             periodSeconds: 5
@@ -94,7 +97,7 @@ spec:
           startupProbe:
             httpGet:
               path: /health/live
-              port: http
+              port: management
             failureThreshold: 20
             initialDelaySeconds: 5
             periodSeconds: 5
@@ -112,10 +115,8 @@ spec:
               value: "{{ .Values.backgroundJobs.enableUserAssetsImporter }}"
             - name: Import__EnableAssetsStreaming
               value: "{{ .Values.backgroundJobs.enableAssetsStreaming }}"
-            - name: Import__CommonAssetsJobName
+            - name: Import__AssetImporterJobName
               value: {{ include "pro-api.asset-importer-name" . }}
-            - name: Import__UserAssetsJobName
-              value: {{ include "pro-api.user-asset-importer-name" . }}
             - name: Import__ExternalLinksProxyUrl
               value: "{{ .Values.assetImporter.externalLinksProxyUrl }}"
             - name: Import__ExternalLinksAllowedHosts
@@ -220,7 +221,7 @@ spec:
             - name: Kafka__ImportTasksTopicSettings__ReaderGroupId
               value: {{ $.Values.kafka.importTasksTopic.readerGroupId }}
             - name: Kafka__AssetDataTopicSettings__Name
-              value: {{ $.Values.kafka.assetDataTopic.name }}
+              value: {{ required "A valid .Values.kafka.assetDataTopic.name entry required" $.Values.kafka.assetDataTopic.name }}
             - name: Kafka__EventsTopicSettings__Name
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
             - name: Kafka__EventsTopicSettings__ReaderGroupId
@@ -231,6 +232,8 @@ spec:
               value: "{{ .Values.auth.url }}"
             - name: Auth__UserInfoEndpoint
               value: "{{ .Values.auth.userInfoEndpoint }}"
+            - name: Auth__WellKnownConfigEndpoint
+              value: "{{ .Values.auth.wellKnownConfigEndpoint }}"
             - name: Auth__AutoRegisterUsers
               value: "{{ .Values.auth.autoRegisterUsers }}"
             - name: Auth__TurnOffCertValidation
@@ -297,3 +300,7 @@ spec:
               value: "{{ .Values.api.localCache.trackStatistics }}"
             - name: LicensingService__BaseUri
               value: {{ required "A valid .Values.license.url entry required" $.Values.license.url }}
+            {{- range $i, $s := .Values.api.openApi.servers }}
+            - name: OpenApi__Servers__{{$i}}
+              value: "{{ $s }}"
+            {{- end }}

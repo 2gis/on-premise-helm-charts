@@ -1,4 +1,4 @@
-{{- with .Values.ui.hpa -}}
+{{- with .Values.hpa -}}
 {{- if .enabled -}}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
