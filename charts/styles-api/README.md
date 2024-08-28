@@ -84,12 +84,19 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 
 ### worker.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
-| Name                               | Description       | Value   |
-| ---------------------------------- | ----------------- | ------- |
-| `worker.resources.requests.cpu`    | A CPU request.    | `50m`   |
-| `worker.resources.requests.memory` | A memory request. | `128Mi` |
-| `worker.resources.limits.cpu`      | A CPU limit.      | `1`     |
-| `worker.resources.limits.memory`   | A memory limit.   | `256Mi` |
+| Name                               | Description                                                                                                                 | Value   |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `worker.resources.requests.cpu`    | A CPU request.                                                                                                              | `50m`   |
+| `worker.resources.requests.memory` | A memory request.                                                                                                           | `128Mi` |
+| `worker.resources.limits.cpu`      | A CPU limit.                                                                                                                | `1`     |
+| `worker.resources.limits.memory`   | A memory limit.                                                                                                             | `256Mi` |
+| `worker.annotations`               | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`    |
+| `worker.labels`                    | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`    |
+| `worker.podAnnotations`            | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`    |
+| `worker.podLabels`                 | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`    |
+| `worker.nodeSelector`              | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`    |
+| `worker.affinity`                  | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`    |
+| `worker.tolerations`               | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`    |
 
 ### Migrate service settings
 
