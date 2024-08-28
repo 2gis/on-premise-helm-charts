@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.27.0]
+
+### catalog-api
+- Backward compatibility with `license` versions before `2.0.0` (on-premise version `1.8.0`) is broken.
+- License v2 over HTTPS is required.
+
 ## [1.26.0]
 
 ### citylens
