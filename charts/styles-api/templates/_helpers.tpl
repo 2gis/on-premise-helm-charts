@@ -85,6 +85,15 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       key: dbPassword
 {{- end }}
 
+{{- define "styles.env.db.jobs" -}}
+{{ include "styles.env.db" . }}
+- name: MGS_DB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "styles.secret.jobs.name" . }}
+      key: dbPassword
+{{- end }}
+
 {{- define "styles.env.s3" -}}
 - name: MGS_S3_ENDPOINT
   value: "{{ required "A valid .Values.s3.endpoint required" .Values.s3.endpoint }}"
@@ -114,6 +123,20 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       key: s3SecretKey
 {{- end }}
 
+{{- define "styles.env.s3.jobs" -}}
+{{ include "styles.env.s3" . }}
+- name: MGS_S3_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "styles.secret.jobs.name" . }}
+      key: s3AccessKey
+- name: MGS_S3_SECRET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "styles.secret.jobs.name" . }}
+      key: s3SecretKey
+{{- end }}
+
 {{- define "styles.env.api" -}}
 {{ include "styles.env.loglevel" . }}
 {{ include "styles.env.db.deploys" . }}
@@ -122,13 +145,13 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "styles.env.worker" -}}
 {{ include "styles.env.loglevel" . }}
-{{ include "styles.env.db.deploys" . }}
-{{ include "styles.env.s3.deploys" . }}
+{{ include "styles.env.db.jobs" . }}
+{{ include "styles.env.s3.jobs" . }}
 {{- end }}
 
 {{- define "styles.env.migrate" -}}
 {{ include "styles.env.loglevel" . }}
-{{ include "styles.env.db.deploys" . }}
+{{ include "styles.env.db.jobs" . }}
 {{- end }}
 
 {{/*
