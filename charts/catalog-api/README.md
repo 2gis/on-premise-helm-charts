@@ -176,10 +176,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### License settings
 
-| Name                     | Description                                                            | Value |
-| ------------------------ | ---------------------------------------------------------------------- | ----- |
-| `license.url`            | Address of the License service v1. Ex: http://license.svc **Required** | `""`  |
-| `license.requestTimeout` | Timeout for requests to the License service                            | `1s`  |
+| Name                     | Description                                                             | Value |
+| ------------------------ | ----------------------------------------------------------------------- | ----- |
+| `license.url`            | Address of the License service v2. Ex: https://license.svc **Required** | `""`  |
+| `license.requestTimeout` | Timeout for requests to the License service                             | `1s`  |
 
 ### Kubernetes Importer job settings
 

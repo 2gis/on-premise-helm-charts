@@ -2,6 +2,10 @@
 
 ## [1.27.0]
 
+### catalog-api
+- Backward compatibility with `license` versions before `2.0.0` (on-premise version `1.8.0`) is broken.
+- License v2 over HTTPS is required.
+
 ### PRO
 - ui.strategy renamed to strategy
 - ui.image renamed to image
@@ -22,7 +26,6 @@
 - ui.ingress renamed to ingress
 - ui.resources renamed to resources
 - ui.hpa renamed to hpa
-
 
 ## [1.26.0]
 
