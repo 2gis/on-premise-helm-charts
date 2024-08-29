@@ -51,6 +51,9 @@ image:
 # @param env.MAPGL_IMMERSIVE_TILESET Additional immersive tileset of the Tiles API service to use.
 # @param env.MAPGL_TRAFFICSERVER Domain name of the Traffic Proxy service.
 # @param env.MAPGL_FLOORSSERVER URL of the Floors API service.
+# @param env.MAPGL_STYLESERVER URL of the Styles API service.
+# @param env.MAPGL_ICONSPATH URL of the icons directory.
+# @param env.MAPGL_MODELSPATH URL of the models directory.
 # @param env.MAPGL_KEYSERVER URL of the API Keys service.
 # @param env.MAPGL_RTLPLUGIN URL of the plugin for right-to-left languages support.
 # @param env.MAPGL_RTLPLUGINHASH SHA512 hash of the RTL plugin.
@@ -64,6 +67,9 @@ env:
   MAPGL_IMMERSIVE_TILESET: web_immersive
   MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
   MAPGL_FLOORSSERVER: https://floors-api.ingress.host
+  MAPGL_STYLESERVER: https://styles.ingress.host
+  MAPGL_ICONSPATH: https://styles.ingress.host/styles/assets/icons
+  MAPGL_MODELSPATH: https://styles.ingress.host/styles/assets/models
   MAPGL_KEYSERVER: https://keys-api.ingress.host/public/v1/keys/{keyID}/services/mapgl-js-api
   MAPGL_RTLPLUGIN: https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js
   MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
