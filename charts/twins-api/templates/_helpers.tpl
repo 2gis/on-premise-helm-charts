@@ -208,3 +208,39 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- print "autoscaling/v2" -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "twins.env.custom.ca.path" -}}
+- name: SSL_CERT_DIR
+  value: {{ include "twins.custom.ca.mountPath" . }}
+{{- end }}
+
+{{- define "twins.custom.ca.mountPath" -}}
+{{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}
+
+{{- define "twins.custom.ca.volumeMounts" -}}
+- name: custom-ca
+  mountPath: {{ include "twins.custom.ca.mountPath" . }}/custom-ca.crt
+  subPath: custom-ca.crt
+  readOnly: true
+{{- end -}}
+
+{{- define "twins.custom.ca.jobs.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "twins.configmap.jobs.name" . }}
+{{- end -}}
+
+{{- define "twins.custom.ca.deploys.volumes" -}}
+- name: custom-ca
+  configMap:
+    name: {{ include "twins.configmap.deploys.name" . }}
+{{- end -}}
+
+{{- define "twins.configmap.jobs.name" -}}
+{{ include "twins.name" . }}-configmap-jobs
+{{- end -}}
+
+{{- define "twins.configmap.deploys.name" -}}
+{{ include "twins.name" . }}-configmap-deploys
+{{- end -}}

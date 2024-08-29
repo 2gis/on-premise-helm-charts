@@ -33,15 +33,6 @@
 {{- end -}}
 {{- end -}}
 
-{{- define "pro-api.user-asset-importer-name" -}}
-{{- $name := default .Values.appUserAssetImporterName -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
 {{- define "pro-api.asset-preparer-name" -}}
 {{- $name := default .Values.appAssetPreparerName -}}
 {{- if contains $name .Release.Name -}}
@@ -52,11 +43,15 @@
 {{- end -}}
 
 {{- define "pro-api.service-account-name" -}}
-{{- $name := default .Values.api.serviceAccount -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- if empty .Values.api.serviceAccountOverride }}
+  {{- $name := default .Values.api.serviceAccount -}}
+  {{- if contains $name .Release.Name -}}
+    {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+  {{- else -}}
+    {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+  {{- end -}}
 {{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+  {{- .Values.api.serviceAccountOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 

@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "naviback.fullname" . }}-configmap
+  name: {{ include "generic-chart.fullname" . }}-configmap
 data:
   navi-back.conf: |
   {{- if .Values.naviback.overrideConfig }}
@@ -21,24 +21,18 @@ data:
           "ProjectContext"
         ],
         "format": "Json",
+        "json_message_field_name": {{ .Values.naviback.logMessageField | quote }},
         "enable_mirroring": true
       },
       "service": {
         "pid_file": "/var/run/2gis/navi-back.pid"
       },
       {{- /* distribute equally fot HTTP/GRPC */}}
-      {{- $httpHandlers := 0 }}
-      {{- $grpcHandlers := 0 }}
-      {{- if .Values.naviback.grpcPort }}
-          {{- $httpHandlers = div .Values.naviback.handlersNumber 2 }}
-          {{- $grpcHandlers = sub .Values.naviback.handlersNumber $httpHandlers }}
-      {{- else }}
-          {{- $httpHandlers = .Values.naviback.handlersNumber }}
-      {{- end }}
       "http": {
         "server": "0.0.0.0",
         "port": {{ .Values.naviback.appPort }},
-        "handlers_number": {{ $httpHandlers }},
+        "handlers_number": {{ .Values.naviback.handlersNumber | int }},
+        "queue_size": {{ .Values.naviback.queueSize | int }},
         "log_verbose": false,
         "max_process_time": {{ .Values.naviback.maxProcessTime | default 20 | int }},
         "response_timelimit": {{ .Values.naviback.responseTimelimit | default 120 | int }},
@@ -52,23 +46,22 @@ data:
       {{- if .Values.naviback.grpcPort }}
       "grpc":
       {
-        "server" : "0.0.0.0",
-        "port" : {{ .Values.naviback.grpcPort | int }},
-        "max_process_time" : {{ .Values.naviback.maxProcessTime | default 20 | int }},
-        "response_timelimit" : {{ .Values.naviback.responseTimelimit | default 120 | int }},
-        "request_timeout" : {{ .Values.naviback.requestTimeout | default 120 | int }},
-        "thread_pool_size" : {{ $grpcHandlers }}
+        "server": "0.0.0.0",
+        "port": {{ .Values.naviback.grpcPort | int }},
+        "max_process_time": {{ .Values.naviback.maxProcessTime | default 20 | int }},
+        "response_timelimit": {{ .Values.naviback.responseTimelimit | default 120 | int }},
+        "request_timeout": {{ .Values.naviback.requestTimeout | default 120 | int }}
       },
       {{- end }}
       {{- if .Values.naviback.sentry.enabled }}
-      "error_tracker" : {
-        "report_destination_address" : {{ .Values.naviback.sentry.address | quote }},
-        "project_name" : {{ .Values.naviback.sentry.project | quote }},
-        "user_name" : {{ .Values.naviback.sentry.username | quote }},
-        "print_outgoing_messages" : {{ .Values.naviback.sentry.printMessages | default false }},
-        "debug" : {{ .Values.naviback.sentry.debug | default false }},
-        "path" : {{ .Values.naviback.sentry.reportPath | default "/tmp/sentry" | quote }},
-        "handler" : {{ .Values.naviback.sentry.handler | default "/usr/sbin/2gis/mosesd/crashpad_handler" | quote }}
+      "error_tracker": {
+        "report_destination_address": {{ .Values.naviback.sentry.address | quote }},
+        "project_name": {{ .Values.naviback.sentry.project | quote }},
+        "user_name": {{ .Values.naviback.sentry.username | quote }},
+        "print_outgoing_messages": {{ .Values.naviback.sentry.printMessages | default false }},
+        "debug": {{ .Values.naviback.sentry.debug | default false }},
+        "path": {{ .Values.naviback.sentry.reportPath | default "/tmp/sentry" | quote }},
+        "handler": {{ .Values.naviback.sentry.handler | default "/usr/sbin/2gis/mosesd/crashpad_handler" | quote }}
       },
       {{- end }}
       {{- if .Values.transmitter.enabled }}
@@ -76,19 +69,52 @@ data:
         "type": {{ .Values.transmitter.type | quote }},
         "host": "127.0.0.1",
         "port": 9999,
-        "response_timeout_ms": {{ .Values.transmitter.responseTimeoutMs | int }}
+        "timeout_limit_ms": {{ .Values.transmitter.responseTimeoutMs | int }}
       },
       {{- end }}
       "context": {
+        {{- if .Values.naviback.validation.enabled }}
+        "validation": [
+          {
+            "service_name": "ctx",
+            "schemas_folder": {{ .Values.naviback.validation.ctx.schemasFolder | quote }},
+            "request_schema_name": {{ .Values.naviback.validation.ctx.requestSchemaName | quote }},
+            "response_schema_name": {{ .Values.naviback.validation.ctx.responseSchemaName | quote }}
+          },
+          {
+            "service_name": "bss",
+            "schemas_folder": {{ .Values.naviback.validation.bss.schemasFolder | quote }},
+            "request_schema_name": {{ .Values.naviback.validation.bss.requestSchemaName | quote }},
+            "response_schema_name": {{ .Values.naviback.validation.bss.responseSchemaName | quote }}
+          },
+          {
+            "service_name": "distance_matrix",
+            "schemas_folder": {{ .Values.naviback.validation.distanceMatrix.schemasFolder | quote }},
+            "request_schema_name": {{ .Values.naviback.validation.distanceMatrix.requestSchemaName | quote }},
+            "response_schema_name": {{ .Values.naviback.validation.distanceMatrix.responseSchemaName | quote }}
+          },
+          {
+            "service_name": "isochrone",
+            "schemas_folder": {{ .Values.naviback.validation.isochrone.schemasFolder | quote }},
+            "request_schema_name": {{ .Values.naviback.validation.isochrone.requestSchemaName | quote }},
+            "response_schema_name": {{ .Values.naviback.validation.isochrone.responseSchemaName | quote }}
+          }
+        ],
+        {{- end }}
         "variables": {
           "LOCAL_PATH": "/opt/castle",
           "LOCAL_ETC": "/etc/2gis/mosesd",
+          {{- if .Values.naviback.hierarchies.enabled }}
+          "S3_CACHE_PATH": {{ .Values.naviback.hierarchies.s3path | quote }},
+          "SHORTCUT_PATH": "/tmp/hierarchies/shortcuts",
+          "PATCHES_PATH": "/tmp/hierarchies/patches",
+          {{- end }}{{- /* if .Values.naviback.hierarchies.enabled */}}
           "REMOTE_PATH": "{{ include "config.setCastleUrl" $ }}",
-          "REMOTE_FORECAST" : "{{ .Values.naviback.forecastHost }}",
-          "REMOTE_ECA" : "{{ include "config.setEcaUrl" $ }}"
+          "REMOTE_FORECAST": "{{ .Values.naviback.forecastHost }}",
+          "REMOTE_ECA": "{{ include "config.setEcaUrl" $ }}"
         },
-      "rules": {
-        "update_period" : 0,
+        "rules": {
+          "update_period": 0,
           "nodes": [
             "file://{LOCAL_ETC}/rules.conf"
           ],
@@ -120,116 +146,81 @@ data:
         },
         {{- if not (include "config.isCTX" $) }}
         {{- if .Values.naviback.indices.speedIndex.enabled }}
-        "speed_index" :
-        {
-            "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
-            "nodes" :
-            [
-                "{REMOTE_ECA}/traffic/moses/speeds5.json"
-            ],
-            "timeout_seconds":
-            {
-                "count": 60
-            }
+        "speed_index": {
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
+          "nodes": [
+            "{REMOTE_ECA}/traffic/moses/speeds5.json"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
         },
         {{- end }}{{- /* .Values.naviback.indices.speedIndex.enabled */}}
-        {{- if .Values.naviback.indices.forecastedSpeedsIndex.enabled }}
-        "forecasted_speeds_index" :
-        {
-            "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
-            "nodes" :
-            [
-                "http://{REMOTE_FORECAST}/index.json"
-            ],
-            "timeout_seconds":
-            {
-                "count": 30
-            }
+        {{- if and .Values.naviback.indices.forecastedSpeedsIndex.enabled .Values.naviback.forecastHost }}
+        "forecasted_speeds_index": {
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
+          "nodes": [
+            "http://{REMOTE_FORECAST}/index.json"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
         },
         {{- end }}{{- /* .Values.naviback.indices.forecastedSpeedsIndex.enabled */}}
-        {{- if .Values.naviback.indices.forecastedSpeeds.enabled }}
-        "forecasted_speeds" :
-        {
-            "update_period" : 0,
-            "nodes" :
-            [
-                "http://{REMOTE_FORECAST}/"
-            ],
-            "timeout_seconds":
-            {
-                "count": 30
-            }
+        {{- if and .Values.naviback.indices.forecastedSpeeds.enabled .Values.naviback.forecastHost }}
+        "forecasted_speeds": {
+          "update_period": 0,
+          "nodes": [
+            "http://{REMOTE_FORECAST}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
         },
         {{- end }}{{- /* .Values.naviback.indices.forecastedSpeeds.enabled */}}
         {{- if .Values.naviback.indices.etaCorrectionCores.enabled }}
-        "eta_correction_cores" :
-        {
-            "update_period" : 0,
-            "nodes" :
-            [
-                "{REMOTE_PATH}/"
-            ],
-            "timeout_seconds":
-            {
-                "count": 60
-            }
+        "eta_correction_cores": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
         },
         {{- end }}{{- /* .Values.naviback.indices.etaCorrectionCores.enabled */}}
-        {{- if .Values.naviback.indices.taxiReferers.enabled }}
-        "taxi_referers":
-        {
-            "update_period" : 3600,
-             "nodes" :
-            [
-                "{REMOTE_PATH}/options/taxi_referers.json"
-            ],
-            "timeout_seconds":
-            {
-                "count": 360
-            }
-        },
-        {{- end }}{{- /* .Values.naviback.indices.taxiReferers.enabled */}}
         {{- else }}
         {{- if .Values.naviback.indices.restrictedTransportRoutes.enabled }}
-        "restricted_transport_routes" :
-        {
-            "update_period" : 0,
-            "nodes" :
-            [
-              "{REMOTE_PATH}/"
-            ],
-            "timeout_seconds":
-            {
-               "count": 10
-            }
+        "restricted_transport_routes": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 10
+          }
         },
         {{- end }}{{- /* .Values.naviback.indices.restrictedTransportRoutes.enabled */}}
         {{- if .Values.naviback.indices.restrictedTransportPlatforms.enabled }}
-        "restricted_transport_platforms" :
-        {
-            "update_period" : 0,
-            "nodes" :
-            [
-                "{REMOTE_PATH}/"
-            ],
-            "timeout_seconds":
-            {
-                "count": 10
-            }
+        "restricted_transport_platforms": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 10
+          }
         },
         {{- end }}{{- /* .Values.naviback.indices.restrictedTransportPlatforms.enabled */}}
         {{- if .Values.naviback.indices.restrictedTransportIndex.enabled }}
-        "restricted_transport_index" :
-        {
-            "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
-            "nodes" :
-            [
-                "{REMOTE_PATH}/restricted_transport.json.zip"
-            ],
-            "timeout_seconds":
-            {
-                "count": 10
-            }
+        "restricted_transport_index": {
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
+          "nodes": [
+            "{REMOTE_PATH}/restricted_transport.json.zip"
+          ],
+          "timeout_seconds": {
+            "count": 10
+          }
         },
         {{- end }}{{- /* .Values.naviback.indices.restrictedTransportIndex.enabled */}}
         {{- end }}
@@ -297,7 +288,7 @@ data:
         "restrictions": {
           "update_period": 0,
           "nodes": [
-            "{REMOTE_PATH}/"
+            "{{ include "config.setRestrictionUrl" $ }}/"
           ],
           "timeout_seconds": {
             "count": 30
@@ -339,207 +330,233 @@ data:
         },
         {{- end }}{{- /* .Values.naviback.indices.speedCams.enabled */}}
         {{- if .Values.naviback.indices.tugcUsersIndex.enabled }}
-        "tugc_users_index" :
-        {
-            "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
-            "nodes" :
-            [
-                "{REMOTE_PATH}/tugc_users.json.zip"
-            ],
-            "timeout_seconds":
-            {
-                "count": 30
-            }
+        "tugc_users_index": {
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
+          "nodes": [
+            "{REMOTE_PATH}/tugc_users.json.zip"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
         },
         {{- end }}{{- /* .Values.naviback.indices.tugcUsersIndex.enabled */}}
         {{- if .Values.naviback.indices.tugcUsers.enabled }}
-        "tugc_users" :
-        {
-            "update_period" : 0,
-            "nodes" :
-            [
-                "{REMOTE_PATH}/"
-            ],
-            "timeout_seconds":
-            {
-                "count": 30
-            }
+        "tugc_users": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
         },
         {{- end }}{{- /* .Values.naviback.indices.tugcUsers.enabled */}}
         {{- if .Values.naviback.indices.tugc2gisIndex.enabled }}
-        "tugc_2gis_index" :
-        {
-            "update_period" : {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
-            "nodes" :
-            [
-                "{REMOTE_PATH}/tugc_2gis.json.zip"
-            ],
-            "timeout_seconds":
-            {
-                "count": 30
-            }
+        "tugc_2gis_index": {
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
+          "nodes": [
+            "{REMOTE_PATH}/tugc_2gis.json.zip"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
         },
         {{- end }}{{- /* .Values.naviback.indices.tugc2gisIndex.enabled */}}
         {{- if .Values.naviback.indices.tugc2gis.enabled }}
-        "tugc_2gis" :
-        {
-            "update_period" : 0,
-            "nodes" :
-            [
-                "{REMOTE_PATH}/"
-            ],
-            "timeout_seconds":
-            {
-                "count": 30
-            }
+        "tugc_2gis": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
         },
         {{- end }}{{- /* .Values.naviback.indices.tugc2gis.enabled */}}
         {{- if .Values.naviback.indices.onlineSpeeds.enabled }}
-        "online_speeds" :
-        {
-            "update_period" : 0,
-            "max_updated_time_diff_minutes" : 20,
-            "nodes" :
-            [
-                "{REMOTE_ECA}/"
-            ],
-            "timeout_seconds":
-            {
-                "count": 30
-            }
+        "online_speeds": {
+          "update_period": 0,
+          "max_updated_time_diff_minutes": 20,
+          "nodes": [
+            "{REMOTE_ECA}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
         },
         {{- end }}{{- /* .Values.naviback.indices.onlineSpeeds.enabled */}}
         {{- end }}
         {{- if (include "config.isTaxi" $) }}
+        {{- if .Values.naviback.indices.taxiReferers.enabled }}
+        "taxi_referers": {
+          "update_period": 3600,
+          "nodes": [
+            "{REMOTE_PATH}/options/taxi_referers.json"
+          ],
+          "timeout_seconds": {
+            "count": 360
+          }
+        },
+        {{- end }}{{- /* .Values.naviback.indices.taxiReferers.enabled */}}
         {{- if .Values.naviback.indices.taxiSpeedIndex.enabled }}
-          "taxi_speed_index": {
-              "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
-              "nodes": [
-              "{REMOTE_ECA}/traffic/moses/speeds5.json"
-              ],
-              "timeout_seconds": {
-              "count": 60
-              }
-              },
+        "taxi_speed_index": {
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
+          "nodes": [
+            "{REMOTE_ECA}/traffic/moses/speeds5.json"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
         {{- end }}{{- /* .Values.naviback.indices.taxiSpeedIndex.enabled */}}
         {{- if .Values.naviback.indices.onlineTaxiSpeeds.enabled }}
-          "online_taxi_speeds" :
-            {
-              "update_period" : 0,
-              "max_updated_time_diff_minutes" : 20,
-              "nodes" :
-              [
-                "{REMOTE_ECA}/"
-              ],
-              "timeout_seconds":
-              {
-                "count": 60
-              }
-            },
+        "online_taxi_speeds": {
+          "update_period": 0,
+          "max_updated_time_diff_minutes": 20,
+          "nodes": [
+            "{REMOTE_ECA}/"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
         {{- end }}{{- /* .Values.naviback.indices.onlineTaxiSpeeds.enabled */}}
         {{- end }}
         {{- if (include "config.isTruck" $) }}
         {{- if .Values.naviback.indices.passZones.enabled }}
-          "pass_zones":
-            {
-              "update_period": 0,
-              "nodes":
-              [
-                "{REMOTE_PATH}/"
-              ],
-              "timeout_seconds":
-              {
-                "count": 60
-              }
-            },
+        "pass_zones": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
         {{- end }}{{- /* .Values.naviback.indices.passZones.enabled */}}
         {{- end }}
-            "edge_transition_probability": {
-              "update_period": 0,
-              "nodes": [
-                  "{REMOTE_PATH}/"
-              ],
-              "timeout_seconds": {
-                  "count": 60
-              },
-            "cache_path": "file://{LOCAL_PATH}/{project_name}/edge_transition_probability.json"
-        },
-            "turn_penalties": {
-              "update_period": 0,
-              "nodes": [
-                  "{REMOTE_PATH}/"
-              ],
-              "timeout_seconds": {
-                  "count": 60
-              },
-            "cache_path": "file://{LOCAL_PATH}/{project_name}/turn_penalties.json"
-        },
-        {{- if .Values.s3.enabled }}
-          "s3": {
-            "distance_matrix": {
-              "endpoint": {{ .Values.s3.host | quote }},
-              "bucket": {{ .Values.s3.bucket | quote }},
-              "access_key": {{ .Values.s3.accessKey | quote }},
-              "secret_key": {{ .Values.s3.secretKey | quote }}
-            }
+        "edge_transition_probability": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 60
           },
+          "cache_path": "file://{LOCAL_PATH}/{project_name}/edge_transition_probability.json"
+        },
+        "turn_penalties": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          },
+          "cache_path": "file://{LOCAL_PATH}/{project_name}/turn_penalties.json"
+        },
+        {{- if .Values.naviback.indices.snImport.enabled }}
+        "sn_import": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
+        {{- end }}{{- /* .Values.naviback.indices.snImport.enabled */}}
+        {{- if .Values.naviback.indices.geoImport.enabled }}
+        "geo_import": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
+        {{- end }}{{- /* .Values.naviback.indices.geoImport.enabled */}}
+        {{- if .Values.s3.enabled }}
+        "s3": {
+          "distance_matrix": {
+            {{- if .Values.s3.suffix }}
+            "suffix": {{ .Values.s3.suffix | quote }},
+            {{- end }}
+            "endpoint": {{ .Values.s3.host | quote }},
+            "bucket": {{ .Values.s3.bucket | quote }},
+            "access_key": {{ .Values.s3.accessKey | quote }},
+            "secret_key": {{ .Values.s3.secretKey | quote }}
+          }
+        },
         {{- end }}
         {{- if (include "config.isMapMatching" $) }}
-        "map_matching" :
-        {
-          "fmm":
-            {
-              "k": "24",
-              "radius": "4000",
-              "gps_error": "3000",
-              "vmax": "40",
-              "factor": "1.5",
-              "reverse_tolerance": "0.1"
-            }
+        "map_matching": {
+          "fmm": {
+            "k": "24",
+            "radius": "4000",
+            "gps_error": "3000",
+            "vmax": "40",
+            "factor": "1.5",
+            "reverse_tolerance": "0.1"
+          }
         },
         {{- end }}
         {{- if .Values.kafka.enabled }}
-          "kafka": {
-            "task_group_id" : {{ .Values.kafka.groupId | quote }},
-            "cancel_group_id": {{ .Values.kafka.groupId | quote }},
-            "handlers_number": {{ .Values.kafka.handlersNumber }},
-            {{- /*
-                 Collect merged Kafka properties from these dictionaries:
-                   - kafka.properties: this is a simple key/value dictionary
-                   - kafka.fileProperties: this is a key/content dictionary given in values,
-                     content is sensitive and stored in Secret resource, they get
-                     mounted as files sonamed after key. While actual secret values are
-                     hidden this way, what actually goes here in environment properties is
-                     file names. This value substitution is implemented down here.
-                 */ -}}
-            {{- $kafkaProperties := dict -}}
-            {{- range $key, $_ := .Values.kafka.fileProperties -}}
-            {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
-            {{- end -}}
-            {{- $kafkaProperties := mustMerge $kafkaProperties .Values.kafka.properties -}}
-            "kafka_properties": {{ mustToPrettyJson $kafkaProperties | nindent 12 }},
-            "distance_matrix": {
-              "task_topic": {{ .Values.kafka.distanceMatrix.taskTopic | quote }},
-              "cancel_topic":  {{ .Values.kafka.distanceMatrix.cancelTopic | quote }},
-              "status_topic":  {{ .Values.kafka.distanceMatrix.statusTopic | quote }},
-              "update_task_status_period_sec": {{ .Values.kafka.distanceMatrix.updateTaskStatusPeriodSec | int }},
-              "message_expired_period_sec" : {{ .Values.kafka.distanceMatrix.messageExpiredPeriodSec | int }},
-              "request_download_timeout_sec" : {{ .Values.kafka.distanceMatrix.requestDownloadTimeoutSec | int }},
-              "response_upload_timeout_sec": {{ .Values.kafka.distanceMatrix.responseUploadTimeoutSec | int }}
-            }
-          },
+        "kafka": {
+          "task_group_id": {{ .Values.kafka.groupId | quote }},
+          "cancel_group_id": {{ .Values.kafka.groupId | quote }},
+          "handlers_number": {{ .Values.kafka.handlersNumber }},
+          {{- /*
+               Collect merged Kafka properties from these dictionaries:
+                 - kafka.properties: this is a simple key/value dictionary
+                 - kafka.fileProperties: this is a key/content dictionary given in values,
+                   content is sensitive and stored in Secret resource, they get
+                   mounted as files sonamed after key. While actual secret values are
+                   hidden this way, what actually goes here in environment properties is
+                   file names. This value substitution is implemented down here.
+              */ -}}
+          {{- $kafkaProperties := dict -}}
+          {{- range $key, $_ := .Values.kafka.fileProperties -}}
+          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
+          {{- end -}}
+          {{- $kafkaProperties := mustMerge $kafkaProperties .Values.kafka.properties }}
+          "kafka_properties":
+            {{- mustToPrettyJson $kafkaProperties | nindent 12 -}},
+          "distance_matrix": {
+            "task_topic": {{ .Values.kafka.distanceMatrix.taskTopic | quote }},
+            "cancel_topic": {{ .Values.kafka.distanceMatrix.cancelTopic | quote }},
+            "status_topic": {{ .Values.kafka.distanceMatrix.statusTopic | quote }},
+            "update_task_status_period_sec": {{ .Values.kafka.distanceMatrix.updateTaskStatusPeriodSec | int }},
+            "message_expired_period_sec": {{ .Values.kafka.distanceMatrix.messageExpiredPeriodSec | int }},
+            "request_download_timeout_sec": {{ .Values.kafka.distanceMatrix.requestDownloadTimeoutSec | int }},
+            "response_upload_timeout_sec": {{ .Values.kafka.distanceMatrix.responseUploadTimeoutSec | int }}
+          }
+        },
         {{- end }}
+        {{- if .Values.routesharing.enabled }}
+        "sharing": {
+          {{- $kafkaProperties := dict -}}
+          {{- range $key, $_ := .Values.routesharing.kafka.fileProperties -}}
+          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
+          {{- end -}}
+          {{- $kafkaProperties := mustMerge $kafkaProperties .Values.routesharing.kafka.properties }}
+          "kafka_properties":
+            {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
+          "topic": {{ .Values.routesharing.topic | quote }}
+        },
+        {{- end }}{{/* .Values.routesharing.enabled */}}
         {{- if and .Values.naviback.bss.enabled .Values.naviback.bss.client.serviceRemoteAddress }}
-          "business_statistics_system" : {
-            "client" : {
-                "service_remote_address" : {{ .Values.naviback.bss.client.serviceRemoteAddress | mustToJson }},
-                "message_count_to_flush" : {{ .Values.naviback.bss.client.messageCountToFlush | mustToJson }},
-                "use_compression" : {{ .Values.naviback.bss.client.useCompression | mustToJson }},
-                "package_size_max_bytes" : {{ .Values.naviback.bss.client.packageSizeMaxBytes | mustToJson }},
-                "pending_transmission_max_count" : {{ .Values.naviback.bss.client.pendingTransmissionMaxCount | mustToJson }},
-                "timeout_ms" : {{ .Values.naviback.bss.client.timeoutLimitMilSec | mustToJson }}
-              }
-          },
+        "business_statistics_system": {
+          "client": {
+              "service_remote_address": {{ .Values.naviback.bss.client.serviceRemoteAddress | mustToJson }},
+              "message_count_to_flush": {{ .Values.naviback.bss.client.messageCountToFlush | mustToJson }},
+              "use_compression": {{ .Values.naviback.bss.client.useCompression | mustToJson }},
+              "package_size_max_bytes": {{ .Values.naviback.bss.client.packageSizeMaxBytes | mustToJson }},
+              "pending_transmission_max_count": {{ .Values.naviback.bss.client.pendingTransmissionMaxCount | mustToJson }},
+              "timeout_ms": {{ .Values.naviback.bss.client.timeoutLimitMilSec | mustToJson }}
+            }
+        },
         {{- end }}{{- /* .Values.naviback.bss.enabled */}}
         {{- if not .Values.license.notSupported }}
         {{- $licenseUrl := .Values.license.url | required "Valid license.url required!" }}
@@ -548,7 +565,7 @@ data:
         {{- end }}{{- /* if not .Values.license.notSupported */}}
         {{- if .Values.naviback.rtr.enabled }}
         "restrictions_index": {
-          "update_period": 300,
+          "update_period": {{ .Values.naviback.rtr.updatePeriod | int }},
           "nodes": [
             "{{ .Values.naviback.rtr.url }}/restrictions_index.json.zip"
           ],
@@ -558,43 +575,99 @@ data:
           "cache_path_": "file://{LOCAL_PATH}/{project_name}/restrictions_index.json.zip"
         },
         {{- end }}{{- /* if .Values.naviback.rtr.enabled */}}
+        {{- if .Values.naviback.hierarchies.enabled }}
+        "hierarchies": {
+          "use_hierarchy": true,
+          {{- if (not .Values.naviback.hierarchies.skipPatches) }}
+          "patches_file_name": "{PATCHES_PATH}",
+          {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
+          "graphs_file_name": "{SHORTCUT_PATH}"
+        },
+        "hierarchy_shortcuts": {
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
+          "nodes": [
+            "{S3_CACHE_PATH}/shortcuts/shortcuts.tar.gz"
+          ],
+          "timeout_seconds": {
+            "count": 600
+          }
+        },
+        {{- if (not .Values.naviback.hierarchies.skipPatches) }}
+        "hierarchy_patches": {
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
+          "nodes": [
+            "{S3_CACHE_PATH}/patches/patches.tar.gz"
+          ],
+          "timeout_seconds": {
+            "count": 600
+          }
+        },
+        {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
+        "sn_import": {
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
+          "nodes": [
+            "{S3_CACHE_PATH}/sn/export_sn.tar.gz"
+          ],
+          "timeout_seconds": {
+            "count": 600
+          }
+        },
+        {{- end }}{{- /* if .Values.naviback.hierarchies.enabled */}}
+        {{- if .Values.naviback.etaScheduleIndex.enabled }}
+        "eta_schedule_index": {
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 10 }},
+          "nodes": [
+            "{{ .Values.naviback.etaScheduleIndex.url }}"
+          ],
+          "timeout_seconds": {
+            "count": 5
+          }
+        },
+        "eta_schedule": {
+          "update_period": 0,
+          "timeout_seconds": {
+            "count": 5
+          }
+        },
+        {{- end }}{{- /* if .Values.naviback.etaScheduleIndex.enabled */}}
         {{- if .Values.naviback.additionalSections }}
           {{- include "tplvalues.render" ( dict "value" .Values.naviback.additionalSections "context" $) | nindent 8 }}
         {{- end }}
         "server_info": {
-          "simple_network_car" : {{ include "config.setSimpleNetworkCar" $ | default false -}},
-          "simple_network_pedestrian" : {{ include "config.setSimpleNetworkPedestrian" $ | default false -}},
-          "simple_network_taxi" : {{ include "config.setSimpleNetworkTaxi" $ | default false -}},
-          "simple_network_bicycle" : {{ include "config.setSimpleNetworkBicycle" $ | default false -}},
-          "simple_network_truck" : {{ include "config.setSimpleNetworkTruck" $ | default false -}},
-          "simple_network_emergency" : {{ include "config.setSimpleNetworkEmergency" $ | default false -}},
+          "tiles_metrics_threshold": {{ .Values.naviback.tilesMetricsThreshold | int }},
+          "simple_network_car": {{ include "config.setSimpleNetworkCar" $ | default false -}},
+          "simple_network_pedestrian": {{ include "config.setSimpleNetworkPedestrian" $ | default false -}},
+          "simple_network_taxi": {{ include "config.setSimpleNetworkTaxi" $ | default false -}},
+          "simple_network_bicycle": {{ include "config.setSimpleNetworkBicycle" $ | default false -}},
+          "simple_network_truck": {{ include "config.setSimpleNetworkTruck" $ | default false -}},
+          "simple_network_emergency": {{ include "config.setSimpleNetworkEmergency" $ | default false -}},
           "ctx_only": {{ include "rules.inRoutingSectionOnly" (dict "routingValue" "ctx" "context" $) -}},
-          "attractor_car" : {{ include "config.setAttractorCar" $ | default false -}},
-          "attractor_pedestrian" : {{ include "config.setAttractorPedestrian" $ | default false -}},
-          "attractor_bicycle" : {{ include "config.setAttractorBicycle" $ | default false -}},
-          "attractor_taxi" : {{ include "config.setAttractorTaxi" $ | default false -}},
-          "attractor_truck" : {{ include "config.setAttractorTruck" $ | default false -}},
-          "reduce_edges_optimization_flag" : {{ include "config.setReduceEdgesOptimizationFlag" $ | default false -}},
+          "attractor_car": {{ include "config.setAttractorCar" $ | default false -}},
+          "attractor_pedestrian": {{ include "config.setAttractorPedestrian" $ | default false -}},
+          "attractor_bicycle": {{ include "config.setAttractorBicycle" $ | default false -}},
+          "attractor_taxi": {{ include "config.setAttractorTaxi" $ | default false -}},
+          "attractor_truck": {{ include "config.setAttractorTruck" $ | default false -}},
+          "reduce_edges_optimization_flag": {{ include "config.setReduceEdgesOptimizationFlag" $ | default false -}},
           {{- if ((.Values.resources).limits).cpu }}
-          "dist_matrix_thread_pool_size" : {{ include "config.setCpuNumber" . }},
-          "simple_network_build_thread_pool_size" : {{ include "config.setCpuNumber" . }},
+          "dist_matrix_thread_pool_size": {{ include "config.setCpuNumber" . }},
+          "simple_network_build_thread_pool_size": {{ include "config.setCpuNumber" . }},
           {{- end }}
-          "update_projects_limit" : 2,
-          "carrouting_page_cache_size" : 8192,
-          "carrouting_tile_cache_size" : 8192,
-          "carrouting_bit_tile_cache_size" : 2048,
-          "dump_query" : {{ mustToJson (.Values.naviback.dump).query }},
-          "dump_result" : {{ mustToJson (.Values.naviback.dump).result }},
-          "dump_answer" : {{ mustToJson (.Values.naviback.dump).answer }},
-          "max_parallel_workers" : 2,
-          "use_memory_mapped_vfs" : true,
-          "engine_update_period_sec" : {{ include "config.setEngineUpdatePeriod" $ | default 30 }},
+          "update_projects_limit": 2,
+          "carrouting_page_cache_size": 8192,
+          "carrouting_tile_cache_size": 8192,
+          "carrouting_bit_tile_cache_size": 2048,
+          "dump_query": {{ mustToJson (.Values.naviback.dump).query }},
+          "dump_result": {{ mustToJson (.Values.naviback.dump).result }},
+          "dump_answer": {{ mustToJson (.Values.naviback.dump).answer }},
+          "max_parallel_workers": 2,
+          "use_memory_mapped_vfs": true,
+          "engine_update_period_sec": {{ include "config.setEngineUpdatePeriod" $ | default 30 }},
           {{- if .Values.naviback.server_id }}
-          "server_id" : "{{- include "tplvalues.render" ( dict "value" .Values.naviback.server_id "context" .) }}",
+          "server_id": "{{- include "tplvalues.render" ( dict "value" .Values.naviback.server_id "context" .) }}",
           {{- else }}
-          "server_id" : "{{- include "naviback.fullname" . }}",
+          "server_id": "{{- include "generic-chart.fullname" . }}",
           {{- end }}
-          "extended_metrics": [ ],
+          "extended_metrics": [],
           "dash_colors": [
             {
               "ratio": 2,
@@ -678,6 +751,11 @@ data:
                       prefix: "/"
                     route:
                       cluster: attractor
+                      {{- if .Values.transmitter.retry.enabled }}
+                      retry_policy:
+                        retry_on: {{ .Values.transmitter.retry.retryOn | quote }}
+                        num_retries: {{ .Values.transmitter.retry.numRetries | int }}
+                      {{- end }}
               http_filters:
               - name: envoy.router
                 typed_config:

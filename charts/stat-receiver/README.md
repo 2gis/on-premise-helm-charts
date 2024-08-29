@@ -56,34 +56,36 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 
 ### API service settings
 
-| Name                     | Description                                                                                                                    | Value                               |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
-| `api`                    | **Common settings**                                                                                                            |                                     |
-| `api.replicas`           | A replica count for the pod.                                                                                                   | `1`                                 |
-| `api.jvmXmx`             | Memory allocation options for JVM.                                                                                             | `-Xmx1500m`                         |
-| `api.image`              | **Deployment settings**                                                                                                        |                                     |
-| `api.image.repository`   | Repository                                                                                                                     | `2gis-on-premise/stat-receiver-api` |
-| `api.image.tag`          | Tag                                                                                                                            | `1.11.1`                            |
-| `api.image.pullPolicy`   | Pull Policy                                                                                                                    | `IfNotPresent`                      |
-| `api.service`            | **Service settings**                                                                                                           |                                     |
-| `api.service.type`       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP`                         |
-| `api.service.port`       | Service port.                                                                                                                  | `80`                                |
-| `api.service.targetPort` | Port inside the container.                                                                                                     | `8080`                              |
+| Name                       | Description                                                                                                                                    | Value                               |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `api`                      | **Common settings**                                                                                                                            |                                     |
+| `api.replicas`             | A replica count for the pod.                                                                                                                   | `1`                                 |
+| `api.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`                                 |
+| `api.jvmXmx`               | Memory allocation options for JVM.                                                                                                             | `-Xmx1500m`                         |
+| `api.image`                | **Deployment settings**                                                                                                                        |                                     |
+| `api.image.repository`     | Repository                                                                                                                                     | `2gis-on-premise/stat-receiver-api` |
+| `api.image.tag`            | Tag                                                                                                                                            | `1.11.1`                            |
+| `api.image.pullPolicy`     | Pull Policy                                                                                                                                    | `IfNotPresent`                      |
+| `api.service`              | **Service settings**                                                                                                                           |                                     |
+| `api.service.type`         | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                 | `ClusterIP`                         |
+| `api.service.port`         | Service port.                                                                                                                                  | `80`                                |
+| `api.service.targetPort`   | Port inside the container.                                                                                                                     | `8080`                              |
 
 ### Streams service settings
 
-| Name                       | Description                                       | Value                                   |
-| -------------------------- | ------------------------------------------------- | --------------------------------------- |
-| `streams`                  | **Common settings**                               |                                         |
-| `streams.replicas`         | A replica count for the pod.                      | `1`                                     |
-| `streams.jvmXmx`           | Memory allocation options for JVM.                | `-Xmx2G -XX:+UseParallelGC`             |
-| `streams.jmxPort`          | Port for JMX protocol.                            | `9010`                                  |
-| `streams.metricsPort`      | Port for metrics.                                 | `8081`                                  |
-| `streams.storageSize`      | Size of ephemeral disk that holds temporary files | `500Mi`                                 |
-| `streams.image`            | **Deployment settings**                           |                                         |
-| `streams.image.repository` | Repository                                        | `2gis-on-premise/stat-receiver-streams` |
-| `streams.image.tag`        | Tag                                               | `1.11.1`                                |
-| `streams.image.pullPolicy` | Pull Policy                                       | `IfNotPresent`                          |
+| Name                           | Description                                                                                                                                    | Value                                   |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `streams`                      | **Common settings**                                                                                                                            |                                         |
+| `streams.replicas`             | A replica count for the pod.                                                                                                                   | `1`                                     |
+| `streams.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`                                     |
+| `streams.jvmXmx`               | Memory allocation options for JVM.                                                                                                             | `-Xmx2G -XX:+UseParallelGC`             |
+| `streams.jmxPort`              | Port for JMX protocol.                                                                                                                         | `9010`                                  |
+| `streams.metricsPort`          | Port for metrics.                                                                                                                              | `8081`                                  |
+| `streams.storageSize`          | Size of ephemeral disk that holds temporary files                                                                                              | `500Mi`                                 |
+| `streams.image`                | **Deployment settings**                                                                                                                        |                                         |
+| `streams.image.repository`     | Repository                                                                                                                                     | `2gis-on-premise/stat-receiver-streams` |
+| `streams.image.tag`            | Tag                                                                                                                                            | `1.11.1`                                |
+| `streams.image.pullPolicy`     | Pull Policy                                                                                                                                    | `IfNotPresent`                          |
 
 ### Kafka service settings
 

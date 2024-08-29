@@ -120,12 +120,14 @@
         "api": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["url"],
+          "required": ["url", "timeout", "serverTimeout"],
           "properties": {
             "url": {
               "type": "string",
               "pattern": "^(https?://.+/)?$"
-            }
+            },
+            "timeout": { "type": "number", "minimum": 0 },
+            "serverTimeout": { "type": "number", "minimum": 0 }
           }
         },
         "mapgl": {
@@ -196,9 +198,6 @@
         }
       }
     },
-    "appStylesImporterName": {
-      "type": "string"
-    },
     "dgctlStorage": {
       "type": "object",
       "required": ["host", "secure", "bucket", "accessKey", "secretKey", "manifest"],
@@ -228,6 +227,11 @@
         "disablePayloadSigning": {
           "type": "boolean"
         }
+      }
+    },
+    "stylesImporter": {
+      "properties": {
+        "name": { "type": "string" }
       }
     }
   }

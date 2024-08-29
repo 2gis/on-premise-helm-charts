@@ -1,5 +1,46 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.27.0]
+
+### PRO
+- ui.strategy renamed to strategy
+- ui.image renamed to image
+- ui.replicas renamed to replicas
+- ui.revisionHistoryLimit renamed to revisionHistoryLimit
+- ui.terminationGracePeriodSeconds renamed to terminationGracePeriodSeconds
+- ui.nodeSelector renamed to nodeSelector
+- ui.affinity renamed to affinity
+- ui.tolerations renamed to tolerations
+- ui.podAnnotations renamed to podAnnotations
+- ui.podLabels renamed to podLabels
+- ui.annotations renamed to annotations
+- ui.labels renamed to labels
+- ui.readinessProbe renamed to readinessProbe
+- ui.livenessProbe renamed to livenessProbe
+- ui.containerPort renamed to containerPort
+- ui.service renamed to service
+- ui.ingress renamed to ingress
+- ui.resources renamed to resources
+- ui.hpa renamed to hpa
+
+
+## [1.26.0]
+
+### citylens
+- Added new worker `worker.dashboardBatchEvents`
+- Added new kafka topics
+  - `kafka.topics.tracksLifecycle` - tracks lifecycle events
+  - `kafka.topics.proDrivers` - synchonization drivers tracks with Pro
+
+## [1.24.0]
+
+### pro-api
+- Added new required parameters: licenseKey, license.url
+- Removed api.licensePartner
+
+### citylens
+- Parameter `pro.url` replaced with `pro.baseUrl` and `pro.framesAssetId` (ex: `pro.url: "http://pro-api:8080/my_asset/filters"` -> `pro.baseUrl: "http://pro-api:8080"` , `pro.framesAssetId: "my_asset"`)
+
 ## [1.22.0]
 
 ## citylens

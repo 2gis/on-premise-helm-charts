@@ -49,6 +49,19 @@ Expand the name of the chart.
 {{ include "citylens.name" . }}-track-reloader
 {{- end }}
 
+{{- define "citylens.workers.name" -}}
+{{ include "citylens.name" . }}-workers
+{{- end }}
+
+{{- define "citylens.dashboard-batch-events.name" -}}
+{{ include "citylens.name" . }}-dashboard-batch-events
+{{- end }}
+
+{{- define "citylens.configmap.labels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
 {{- define "citylens.api.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Release.Name }}
 app.kubernetes.io/instance: {{ include "citylens.api.name" . }}
@@ -129,6 +142,16 @@ app.kubernetes.io/instance: {{ include "citylens.track-reloader.name" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "citylens.dashboard-batch-events.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.dashboard-batch-events.name" . }}
+{{- end }}
+
+{{- define "citylens.dashboard-batch-events.labels" -}}
+{{ include "citylens.dashboard-batch-events.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
 {{- define "citylens.reporter-pro.labels" -}}
 {{ include "citylens.reporter-pro.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -181,3 +204,37 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: DGCTL_MANIFEST_DATA_TYPE
   value: "data_migration"
 {{- end }}
+
+{{/*
+Checksum for configmap or secret
+*/}}
+{{- define "citylens.checksum" -}}
+{{ (include (print $.Template.BasePath .path) $ | fromYaml).data | toYaml | sha256sum }}
+{{- end }}
+
+{{/*
+Mount directory for custom CA
+*/}}
+{{- define "citylens.customCA.mountPath" -}}
+{{ $.Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}
+
+{{/*
+Postgres DSN variations
+*/}}
+{{- define "citylens.pgDSN" -}}
+{{- with .Values.postgres -}}
+postgresql://{{ required "A valid .Values.postgres.username entry required" .username }}:{{ required "A valid .Values.postgres.password entry required" .password }}@{{ required "A valid .Values.postgres.host entry required" .host }}:{{ required "A valid .Values.postgres.port entry required" .port }}/{{ required "A valid .Values.postgres.database entry required" .database }}
+{{- end -}}
+{{- end -}}
+
+{{- define "citylens.pgDSN.asyncpg" -}}
+{{ include "citylens.pgDSN" . | replace "postgresql://" "postgresql+asyncpg://" }}
+{{- end -}}
+
+{{/*
+S3 key template for frames
+*/}}
+{{- define "citylens.s3_constants.frame_key_template" -}}
+{track_uuid}/{frame_timestamp_ms}.jpg
+{{- end -}}

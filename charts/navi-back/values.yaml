@@ -1,27 +1,54 @@
 # @section Docker Registry settings
 
-# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`
 
 dgctlDockerRegistry: ''
 
 
 # @section Common settings
 
-# @param replicaCount A replica count for the pod.
+# @param replicaCount A replica count for the pod
 # @param revisionHistoryLimit Number of replica sets to keep for deployment rollbacks
-# @param imagePullSecrets Kubernetes image pull secrets.
-# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
-# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
-# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
-# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
-# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
-# @param labels Custom labels to set to Deployment resource.
-# @param priorityClassName Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name.
-# @param preStopDelay Delay in seconds before terminating container.
-# @param terminationGracePeriodSeconds Maximum time allowed for graceful shutdown.
+# @param imagePullSecrets Kubernetes image pull secrets
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+# @param labels Custom labels to set to Deployment resource
+# @param priorityClassName Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name
+# @param preStopDelay Delay in seconds before terminating container
+# @param terminationGracePeriodSeconds Maximum time allowed for graceful shutdown
+# @param extraVolumes Optionally specify extra list of additional volumes
+# @param extraVolumeMounts Optionally specify extra list of additional volumeMounts
+# @param initContainers Add additional init containers
+# @param sidecars Add additional sidecar containers
+# @param livenessProbe.enabled Enable livenessProbe
+# @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+# @param livenessProbe.periodSeconds Period seconds for livenessProbe
+# @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+# @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+# @param livenessProbe.successThreshold Success threshold for livenessProbe
+# @param readinessProbe.enabled Enable readinessProbe
+# @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+# @param readinessProbe.periodSeconds Period seconds for readinessProbe
+# @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+# @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+# @param readinessProbe.successThreshold Success threshold for readinessProbe
+# @param startupProbe.enabled Enable startupProbe
+# @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+# @param startupProbe.periodSeconds Period seconds for startupProbe
+# @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+# @param startupProbe.failureThreshold Failure threshold for startupProbe
+# @param startupProbe.successThreshold Success threshold for startupProbe
+# @param customLivenessProbe Override default liveness probe
+# @param customReadinessProbe Override default readiness probe
+# @param customStartupProbe Override default startup probe
+# @param command Override default command
+# @param args Override default args
 
 replicaCount: 1
 revisionHistoryLimit: 1
@@ -38,9 +65,39 @@ labels: {}
 priorityClassName: ''
 preStopDelay: 5
 terminationGracePeriodSeconds: 60
+extraVolumes: []
+extraVolumeMounts: []
+initContainers: []
+sidecars: []
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 0
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 2
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 0
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 2
+  successThreshold: 1
+startupProbe:
+  enabled: true
+  initialDelaySeconds: 0
+  periodSeconds: 5
+  failureThreshold: 360
+  timeoutSeconds: 5
+  successThreshold: 1
+customLivenessProbe: {}
+customReadinessProbe: {}
+customStartupProbe: {}
+command: []
+args: []
 
 
-# @section Deployment settings
+# @section Container image settings
 
 # @param image.repository Repository
 # @param image.tag Tag
@@ -49,30 +106,32 @@ terminationGracePeriodSeconds: 60
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.15.2.4
+  tag: 7.25.0.3
 
 
 # @section Navi-Back application settings
 
-# @extra naviback.ecaHost DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
-# @extra naviback.ecaUrl URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
-# @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @extra naviback.ecaHost DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.ecaUrl URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @skip naviback.appPort
-# @param naviback.dmSourcesLimit Size limit for source matrices.
-# @param naviback.dmTargetsLimit Size limit for target matrices.
-# @param naviback.handlersNumber Number of HTTP handlers.
-# @param naviback.maxProcessTime Maximum processing time limit in minutes.
-# @param naviback.responseTimelimit Maximum response time limit in minutes.
-# @param naviback.requestTimeout Maximum request time limit in minutes.
-# @param naviback.timeoutLimitSec Maximum downloading time can be reached after failures.
-# @param naviback.timeoutIncrementSec Downloading time increment after failures.
-# @param naviback.totalRetryDurationSec Downloading timeout with all failure retries.
-# @param naviback.initialRetryIntervalSec Initial timeout for a failure retry.
-# @param naviback.dump.result Dump results in logs.
-# @param naviback.dump.query Dump queries in logs.
-# @param naviback.dump.answer Dump answers in logs.
-# @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
-# @param naviback.indexFilename Name of index file.
+# @param naviback.dmSourcesLimit Size limit for source matrices
+# @param naviback.dmTargetsLimit Size limit for target matrices
+# @param naviback.handlersNumber Total number of HTTP/GRPC handlers
+# @param naviback.queueSize Internal queue size
+# @param naviback.maxProcessTime Maximum processing time limit in minutes
+# @param naviback.responseTimelimit Maximum response time limit in minutes
+# @param naviback.requestTimeout Maximum request time limit in minutes
+# @param naviback.timeoutLimitSec Maximum downloading time can be reached after failures
+# @param naviback.timeoutIncrementSec Downloading time increment after failures
+# @param naviback.totalRetryDurationSec Downloading timeout with all failure retries
+# @param naviback.initialRetryIntervalSec Initial timeout for a failure retry
+# @param naviback.dump.result Dump results in logs
+# @param naviback.dump.query Dump queries in logs
+# @param naviback.dump.answer Dump answers in logs
+# @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal
+# @param naviback.logMessageField Field name in logs for messages data.
+# @param naviback.indexFilename Name of the index file on Castle
 # @param naviback.citiesFilename Name of the cities file on Castle
 # @param naviback.sentry.enabled If sending crash dumps to Sentry needed
 # @param naviback.sentry.address Sentry URL
@@ -82,11 +141,12 @@ image:
 # @param naviback.sentry.debug Debugging switch
 # @param naviback.sentry.reportPath Local directory to dump
 # @param naviback.sentry.handler Handler file location
-# @param naviback.castleHost URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
-# @extra naviback.enablePassableBarriers Consider passable barriers.
-# @extra naviback.grpcPort GRPC port to serve. Disabled if empty.
+# @extra naviback.castleHost DEPRECATED: Use naviback.castleUrl. Domain name of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @param naviback.castleUrl URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.enablePassableBarriers Consider passable barriers
+# @extra naviback.grpcPort GRPC port to serve. Disabled if empty
 # @param naviback.disableUpdates Test switch for disabling runtime background updates
-# @extra naviback.indices List of dynamic indices kill switches.
+# @extra naviback.indices List of dynamic indices kill switches
 # @skip naviback.indices.carOptions.enabled
 # @skip naviback.indices.carOptions.filename
 # @skip naviback.indices.countryCarOptions.enabled
@@ -95,6 +155,7 @@ image:
 # @skip naviback.indices.etaCorrectionCores.enabled
 # @skip naviback.indices.forecastedSpeeds.enabled
 # @skip naviback.indices.forecastedSpeedsIndex.enabled
+# @skip naviback.indices.geoImport.enabled
 # @skip naviback.indices.onlineSpeeds.enabled
 # @skip naviback.indices.onlineTaxiSpeeds.enabled
 # @skip naviback.indices.passZones.enabled
@@ -103,6 +164,7 @@ image:
 # @skip naviback.indices.restrictedTransportPlatforms.enabled
 # @skip naviback.indices.restrictedTransportRoutes.enabled
 # @skip naviback.indices.smatrix.enabled
+# @skip naviback.indices.snImport.enabled
 # @skip naviback.indices.speedCams.enabled
 # @skip naviback.indices.speedIndex.enabled
 # @skip naviback.indices.taxiReferers.enabled
@@ -111,10 +173,11 @@ image:
 # @skip naviback.indices.tugc2gisIndex.enabled
 # @skip naviback.indices.tugcUsers.enabled
 # @skip naviback.indices.tugcUsersIndex.enabled
-# @extra naviback.additionalSections Optinal JSON block to be added to config file as-is.
+# @extra naviback.additionalSections Optinal JSON block to be added to config file as-is
+# @skip naviback.simpleNetwork
 # @extra naviback.simpleNetwork.bicycle Enable simple network for bicycle routing
 # @extra naviback.simpleNetwork.car Enable simple network for auto routing
-# @param naviback.simpleNetwork.emergency Enable simple network for emergency vehicles routing
+# @extra naviback.simpleNetwork.emergency Enable simple network for emergency vehicles routing
 # @extra naviback.simpleNetwork.pedestrian Enable simple network for pedestrian routing
 # @extra naviback.simpleNetwork.taxi Enable simple network for taxi routing
 # @extra naviback.simpleNetwork.truck Enable simple network for truck routing
@@ -127,16 +190,37 @@ image:
 # @extra naviback.attractor.truck Enable enhanced attractor for truck routing
 # @extra naviback.attractor.scooter Enable enhanced attractor for scooters routing
 # @param naviback.bss.enabled Enable sending information on the construction of routes to the business statistics service
-# @param naviback.bss.client.serviceRemoteAddress Remote address business statistics service. Requeruired for enable sending information.
-# @param naviback.bss.client.messageCountToFlush Message count to flush.
-# @param naviback.bss.client.useCompression Enable compression.
-# @param naviback.bss.client.packageSizeMaxBytes Package size max bytes.
-# @param naviback.bss.client.pendingTransmissionMaxCount Pending transmission max count.
+# @param naviback.bss.client.serviceRemoteAddress Remote address business statistics service. Requeruired for enable sending information
+# @param naviback.bss.client.messageCountToFlush Message count to flush
+# @param naviback.bss.client.useCompression Enable compression
+# @param naviback.bss.client.packageSizeMaxBytes Package size max bytes
+# @param naviback.bss.client.pendingTransmissionMaxCount Pending transmission max count
+# @param naviback.bss.client.timeoutLimitMilSec Maximum request time limit in milliseconds
 # @extra naviback.reduceEdgesOptimizationFlag Enable optimizations for distance matrix queries processing
-# @param naviback.behindSplitter Current instance is behind splitter or not
-# @param naviback.overrideConfig Complete config override. For test purposes only.
-# @param naviback.rtr.enabled Enable real time restrictions.
-# @param naviback.rtr.url URL real time restrictions server.
+# @param naviback.behindSplitter The current instance is behind splitter or not
+# @param naviback.overrideConfig Complete config override. For test purposes only
+# @param naviback.rtr.enabled Enable real time restrictions
+# @param naviback.rtr.url URL real time restrictions server
+# @param naviback.rtr.updatePeriod Update period from real time restrictions server
+# @param naviback.validation.enabled Enable validation responses and requests (used for internal tests)
+# @param naviback.validation.ctx.schemasFolder Path to folder with ctx JSON schemas
+# @param naviback.validation.ctx.requestSchemaName Name of ctx request validation schema
+# @param naviback.validation.ctx.responseSchemaName Name of ctx response validation schema
+# @param naviback.validation.bss.schemasFolder Path to folder with bss JSON schemas
+# @param naviback.validation.bss.requestSchemaName Name of bss request validation schema
+# @param naviback.validation.bss.responseSchemaName Name of bss response validation schema
+# @param naviback.validation.distanceMatrix.schemasFolder Path to folder with distance matrix JSON schemas
+# @param naviback.validation.distanceMatrix.requestSchemaName Name of distance matrix request validation schema
+# @param naviback.validation.distanceMatrix.responseSchemaName Name of distance matrix response validation schema
+# @param naviback.validation.isochrone.schemasFolder Path to folder with isochrone JSON schemas
+# @param naviback.validation.isochrone.requestSchemaName Name of isochrone request validation schema
+# @param naviback.validation.isochrone.responseSchemaName Name of isochrone response validation schema
+# @param naviback.tilesMetricsThreshold The value at which we send tiles metrics (used for internal tests)
+# @param naviback.hierarchies.enabled If hierarchies cache available
+# @param naviback.hierarchies.skipPatches Skip patches in hierarchies cache
+# @param naviback.hierarchies.s3path Hierarchies cache remote location
+# @param naviback.etaScheduleIndex.enabled If Schedule Index available
+# @param naviback.etaScheduleIndex.url Schedule Index remote url
 # @skip rules
 
 naviback:
@@ -144,9 +228,10 @@ naviback:
   dmSourcesLimit: 1000
   dmTargetsLimit: 1000
   handlersNumber: 1
-  maxProcessTime: 600
-  responseTimelimit: 60
-  requestTimeout: 60
+  queueSize: 128
+  maxProcessTime: 20
+  responseTimelimit: 120
+  requestTimeout: 120
   timeoutLimitSec: 1200
   timeoutIncrementSec: 140
   totalRetryDurationSec: 2400
@@ -156,18 +241,19 @@ naviback:
     query: false
     answer: false
   logLevel: Info
+  logMessageField: custom.navi_msg
   indexFilename: index.json.zip
   citiesFilename: cities.conf.zip
   sentry:
     enabled: false
-    address: sentry.host
+    address: sentry.local
     project: navi-back
-    username: navi-back
+    username: navi
     printMessages: false
     debug: false
     reportPath: /tmp/sentry
     handler: /usr/sbin/2gis/mosesd/crashpad_handler
-  castleHost: ''
+  castleUrl: ''
   disableUpdates: false
   indices:
     carOptions:
@@ -185,6 +271,8 @@ naviback:
       enabled: false
     forecastedSpeedsIndex:
       enabled: false
+    geoImport:
+      enabled: false
     onlineSpeeds:
       enabled: false
     onlineTaxiSpeeds:
@@ -200,6 +288,8 @@ naviback:
     restrictedTransportRoutes:
       enabled: false
     smatrix:
+      enabled: false
+    snImport:
       enabled: false
     speedCams:
       enabled: false
@@ -228,11 +318,39 @@ naviback:
       useCompression: true
       packageSizeMaxBytes: 1800000
       pendingTransmissionMaxCount: 10
+      timeoutLimitMilSec: 5000
   behindSplitter: false
   overrideConfig: ''
   rtr:
     enabled: false
-    url: http://rtr.navi
+    url: http://rtr
+    updatePeriod: 60
+  validation:
+    enabled: false
+    ctx:
+      schemasFolder: /usr/share/2gis/schemas/nsr_schemas
+      requestSchemaName: CTXRequestModel.json
+      responseSchemaName: CTXResponseModelV4.json
+    bss:
+      schemasFolder: /usr/share/2gis/schemas/bss_schemas
+      requestSchemaName: ''
+      responseSchemaName: 401.schema.json
+    distanceMatrix:
+      schemasFolder: /usr/share/2gis/schemas/nsr_schemas
+      requestSchemaName: DistanceMatrixRequestModel.json
+      responseSchemaName: DistanceMatrixResponseModel.json
+    isochrone:
+      schemasFolder: /usr/share/2gis/schemas/nsr_schemas
+      requestSchemaName: IsochroneApiRequestModel.json
+      responseSchemaName: IsochroneApiResponseModel.json
+  tilesMetricsThreshold: 0
+  hierarchies:
+    enabled: false
+    skipPatches: false
+    s3path: ''
+  etaScheduleIndex:
+    enabled: false
+    url: ''
 
 rules: []
 
@@ -242,40 +360,25 @@ rules: []
 # @param envoy.image.repository Repository
 # @param envoy.image.tag Tag
 # @param envoy.image.pullPolicy Pull Policy
+# @param envoy.resources [nullable] Container resources requirements structure
+# @param envoy.resources.requests.cpu [nullable] CPU request, recommended value `100m`
+# @param envoy.resources.requests.memory [nullable] Memory request, recommended value `100Mi`
+# @param envoy.resources.limits.cpu [nullable] CPU limit, recommended value `100m`
+# @param envoy.resources.limits.memory [nullable] Memory limit, recommended value `100Mi`
 
 envoy:
   image:
     repository: 2gis-on-premise/envoy
     pullPolicy: IfNotPresent
     tag: v1.27.0
-
-
-# @section Frozen data settings. For test purposes only.
-
-# @param frozenData.enabled If use frozen data is enabled.
-# @param frozenData.image.repository Repository
-# @param frozenData.image.tag Tag
-# @param frozenData.image.pullPolicy Pull Policy
-# @param frozenData.resources [nullable] Container resources requirements structure.
-# @param frozenData.resources.requests.cpu [nullable] CPU request, recommended value `100m`.
-# @param frozenData.resources.requests.memory [nullable] Memory request, recommended value `100Mi`.
-# @param frozenData.resources.limits.cpu [nullable] CPU limit, recommended value `100m`.
-# @param frozenData.resources.limits.memory [nullable] Memory limit, recommended value `100Mi`.
-
-frozenData:
-  enabled: false
-  image:
-    repository: 2gis-on-premise/frozen-data
-    pullPolicy: Always
-    tag: ''
   resources: {}
 
 
 # @section Service account settings
 
-# @param serviceAccount.create Specifies whether a service account should be created.
-# @param serviceAccount.annotations Annotations to add to the service account.
-# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+# @param serviceAccount.create Specifies whether a service account should be created
+# @param serviceAccount.annotations Annotations to add to the service account
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template
 
 serviceAccount:
   create: false
@@ -285,12 +388,13 @@ serviceAccount:
 
 # @section Service settings
 
-# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-# @param service.clusterIP Controls Service cluster IP allocation. Cannot be changed after resource creation.
-# @param service.port Service port.
-# @param service.grpcPort Service GRPC port if `naviback.grpcPort` enabled.
-# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
+# @param service.clusterIP Controls Service cluster IP allocation. Cannot be changed after resource creation
+# @param service.port Service port
+# @param service.grpcPort Service GRPC port if `naviback.grpcPort` enabled
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
 # @param service.headless.enabled Enable creating a secondary headless service
 # @param service.headless.annotations Annotations for secondary headless service
 
@@ -301,6 +405,7 @@ service:
   grpcPort: 50051
   annotations: {}
   labels:
+  extraPorts: []
   headless:
     enabled: false
     annotations: {}
@@ -308,16 +413,16 @@ service:
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-# @param ingress.enabled If Ingress is enabled for the service.
-# @param ingress.className Name of the Ingress controller class.
-# @param ingress.hosts[0].host Hostname for the Ingress service.
-# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
-# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.className Name of the Ingress controller class
+# @param ingress.enabled If Ingress is enabled for the service
+# @param ingress.hosts[0].host Hostname for the Ingress service
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service
 # @param ingress.tls TLS configuration
 
 ingress:
-  enabled: false
   className: nginx
+  enabled: false
   hosts:
   - host: navi-back.example.com
     paths:
@@ -331,24 +436,24 @@ ingress:
 
 # @section Limits
 
-# @param resources [nullable] Container resources requirements structure.
-# @param resources.requests.cpu [nullable] CPU request, recommended value `1000m`.
-# @param resources.requests.memory [nullable] Memory request, recommended value `2Gi`.
-# @param resources.limits.cpu [nullable] CPU limit, recommended value `3000m`.
-# @param resources.limits.memory [nullable] Memory limit, recommended value `8Gi`.
+# @param resources [nullable] Container resources requirements structure
+# @param resources.requests.cpu [nullable] CPU request, recommended value `1000m`
+# @param resources.requests.memory [nullable] Memory request, recommended value `2Gi`
+# @param resources.limits.cpu [nullable] CPU limit, recommended value `3000m`
+# @param resources.limits.memory [nullable] Memory limit, recommended value `8Gi`
 
 resources: {}
 
 
 # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-# @param hpa.enabled If HPA is enabled for the service.
-# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
-# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
-# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window.
-# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window.
-# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
-# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.enabled If HPA is enabled for the service
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up
+# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window
+# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used
+# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used
 
 hpa:
   enabled: false
@@ -362,12 +467,12 @@ hpa:
 
 # @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
-# @param vpa.enabled If VPA is enabled for the service.
-# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
-# @extra vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
-# @extra vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
-# @extra vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
-# @extra vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+# @param vpa.enabled If VPA is enabled for the service
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start)
+# @extra vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down
+# @extra vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down
+# @extra vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up
+# @extra vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up
 
 vpa:
   enabled: false
@@ -376,9 +481,9 @@ vpa:
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-# @param pdb.enabled If PDB is enabled for the service.
-# @param pdb.minAvailable How many pods must be available after the eviction.
-# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+# @param pdb.enabled If PDB is enabled for the service
+# @param pdb.minAvailable How many pods must be available after the eviction
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction
 
 pdb:
   enabled: false
@@ -388,24 +493,26 @@ pdb:
 
 # @section Kafka settings for interacting with Distance Matrix Async Service
 
-# @param kafka.enabled If the Kafka is enabled.
-# @param kafka.groupId Navi-Back service group identifier.
-# @extra kafka.properties Properties as supported by librdkafka. Refer to inline comments for details.
+# @param kafka.enabled If the Kafka is enabled
+# @param kafka.groupId Navi-Back service group identifier
+# @param kafka.handlersNumber Number of Kafka handlers
+# @extra kafka.properties Properties as supported by librdkafka. Refer to inline comments for details
 # @skip kafka.properties.bootstrap.servers
 # @skip kafka.properties.security.protocol
-# @param kafka.fileProperties As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
+# @param kafka.fileProperties As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details
 # @extra kafka.distanceMatrix **Settings for interacting with Distance Matrix Async service.**
-# @param kafka.distanceMatrix.taskTopic Name of the topic for receiving new tasks from Distance Matrix Async API.
-# @param kafka.distanceMatrix.cancelTopic Name of the topic for canceling or receiving information about finished tasks.
-# @param kafka.distanceMatrix.statusTopic Name of the topic for receiving task status information.
-# @param kafka.distanceMatrix.updateTaskStatusPeriodSec Update period for task statuses.
-# @param kafka.distanceMatrix.messageExpiredPeriodSec Update period for task cancellations.
-# @param kafka.distanceMatrix.requestDownloadTimeoutSec Timeout for downloading request data.
-# @param kafka.distanceMatrix.responseUploadTimeoutSec Timeout for uploading response data.
+# @param kafka.distanceMatrix.taskTopic Name of the topic for receiving new tasks from Distance Matrix Async API
+# @param kafka.distanceMatrix.cancelTopic Name of the topic for canceling or receiving information about finished tasks
+# @param kafka.distanceMatrix.statusTopic Name of the topic for receiving task status information
+# @param kafka.distanceMatrix.updateTaskStatusPeriodSec Update period for task statuses
+# @param kafka.distanceMatrix.messageExpiredPeriodSec Update period for task cancellations
+# @param kafka.distanceMatrix.requestDownloadTimeoutSec Timeout for downloading request data
+# @param kafka.distanceMatrix.responseUploadTimeoutSec Timeout for uploading response data
 
 kafka:
   enabled: false
   groupId: navi_back
+  handlersNumber: 2
   properties:
     bootstrap.servers: kafka.host:9092
     security.protocol: PLAINTEXT
@@ -455,11 +562,12 @@ kafka:
 
 # @section S3-compatible storage settings for interacting with Distance Matrix Async Service
 
-# @param s3.enabled if S3 storage is enabled.
-# @param s3.host S3 endpoint, ex: async-matrix-s3.host.
-# @param s3.bucket S3 bucket name.
-# @param s3.accessKey S3 access key for accessing the bucket.
-# @param s3.secretKey S3 secret key for accessing the bucket.
+# @param s3.enabled if S3 storage is enabled
+# @param s3.host S3 endpoint, ex: async-matrix-s3.host
+# @param s3.bucket S3 bucket name
+# @param s3.accessKey S3 access key for accessing the bucket
+# @param s3.secretKey S3 secret key for accessing the bucket
+# @param s3.suffix String to append to file names in replies
 
 s3:
   enabled: false
@@ -467,6 +575,7 @@ s3:
   bucket: ''
   accessKey: ''
   secretKey: ''
+  suffix: ''
 
 # @section Settings for attractor connection. Leave with defaults, FOR FUTURE RELEASE.
 
@@ -475,13 +584,20 @@ s3:
 # @param transmitter.host attractor service
 # @param transmitter.port attractor port
 # @param transmitter.responseTimeoutMs response waiting timeout
+# @param transmitter.retry.enabled Enable retry failed requests
+# @param transmitter.retry.retryOn Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)
+# @param transmitter.retry.numRetries Specifies the allowed number of retries
 
 transmitter:
   enabled: false
   type: grpc-async-stream
   host: http://navi-attractor.host
   port: 50051
-  responseTimeoutMs: 100
+  responseTimeoutMs: 2000
+  retry:
+    enabled: false
+    retryOn: internal,unavailable
+    numRetries: 5
 
 # @section Back-end and attractor group properties. Leave with defaults, FOR FUTURE RELEASE.
 
@@ -494,14 +610,30 @@ dataGroup:
   prefix: sampleGroup
   timestamp: no-default
 
+# @section Route sharing properties. Leave with defaults, FOR FUTURE RELEASE
+
+# @param routesharing.enabled If route sharing enabled
+# @param routesharing.topic Topic to use for route sharing
+# @extra routesharing.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
+# @skip routesharing.kafka.properties.bootstrap.servers
+# @skip routesharing.kafka.properties.security.protocol
+# @param routesharing.kafka.fileProperties Properties stored in file, see `kafka` section and comments
+
+routesharing:
+  enabled: false
+  topic: sharing-kafka-topic
+  kafka:
+    properties:
+      bootstrap.servers: kafka.host:9092
+      security.protocol: PLAINTEXT
+    fileProperties: {}
+
 # @section License settings
 
 # @param license.url Address of the License service v2. Ex: https://license.svc
-# @param license.notSupported Excludes the configuration block if true, for old versions only.
 
 license:
   url: ''
-  notSupported: false
 
 # @section Metrics aggregator container. Leave with defaults, FOR FUTURE RELEASE.
 
@@ -509,12 +641,12 @@ license:
 # @param metrics.image.repository Repository
 # @param metrics.image.tag Tag
 # @param metrics.image.pullPolicy Pull Policy
-# @param metrics.port Port of container.
-# @param metrics.resources [nullable] Container resources requirements structure.
-# @param metrics.resources.requests.cpu  [nullable] CPU request, recommended value `10m`.
-# @extra metrics.resources.requests.memory [nullable] Memory request, recommended value `10Mi`.
-# @extra metrics.resources.limits.cpu [nullable] CPU limit, recommended value `100m`.
-# @extra metrics.resources.limits.memory [nullable] Memory limit, recommended value `10Mi`.
+# @param metrics.port Port of container
+# @param metrics.resources [nullable] Container resources requirements structure
+# @param metrics.resources.requests.cpu  [nullable] CPU request, recommended value `10m`
+# @extra metrics.resources.requests.memory [nullable] Memory request, recommended value `10Mi`
+# @extra metrics.resources.limits.cpu [nullable] CPU limit, recommended value `100m`
+# @extra metrics.resources.limits.memory [nullable] Memory limit, recommended value `10Mi`
 
 metrics:
   enabled: false

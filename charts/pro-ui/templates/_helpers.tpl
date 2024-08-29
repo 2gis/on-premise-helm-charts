@@ -24,17 +24,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     {{- end }}
 {{- end -}}
 
-{{- define "pro.ui.styles-importer-name" -}}
-{{- $name := default .Values.appStylesImporterName -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
-{{- define "pro.ui.service-account-name" -}}
-{{- $name := default .Values.stylesImporter.serviceAccount -}}
+{{- define "pro.ui.styles-importer.name" -}}
+{{- $name := default .Values.stylesImporter.name -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -43,8 +34,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end -}}
 
 {{- define "pro.ui.service.annotations" -}}
-{{- if .Values.ui.service.annotations }}
-{{- include "pro.ui.tplvalues.render" (dict "value" .Values.ui.service.annotations "context" . ) }}
+{{- if .Values.service.annotations }}
+{{- include "pro.ui.tplvalues.render" (dict "value" .Values.service.annotations "context" . ) }}
 {{ end }}
 {{- end -}}
 
+{{- define "pro.ui.styles-importer.helm-hooks" -}}
+"helm.sh/hook": pre-install,pre-upgrade
+"helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+{{- end -}}

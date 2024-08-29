@@ -33,6 +33,7 @@ dgctlStorage:
 # @section Common settings
 
 # @param replicaCount A replica count for the pod.
+# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
 # @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
@@ -44,6 +45,7 @@ dgctlStorage:
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 
 replicaCount: 1
+revisionHistoryLimit: 3
 imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
@@ -150,7 +152,6 @@ nginx:
 
 # @section Floors API data import settings
 
-# @param import.enabled If import task should be enabled
 # @param import.image.repository Import task image repository.
 # @param import.image.tag Import task image tag.
 # @param import.image.pullPolicy Import task pull policy.
@@ -161,7 +162,6 @@ nginx:
 # @extra import.resources.limits.memory A memory limit, e.g., `128Mi`.
 
 import:
-  enabled: true
   image:
     repository: 2gis-on-premise/floors-importer
     pullPolicy: IfNotPresent

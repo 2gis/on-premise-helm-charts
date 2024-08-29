@@ -31,7 +31,7 @@ dgctlStorage:
 
 image:
   repository: 2gis-on-premise/twins-api
-  tag: 1.9.0
+  tag: 1.13.0
   pullPolicy: IfNotPresent
 
 # @section API service settings
@@ -58,8 +58,10 @@ api:
     requestTimeout: 5s
 
   # @param api.replicas A replica count for the pod.
+  # @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
   replicas: 1
+  revisionHistoryLimit: 3
 
   # @section api.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
   # @param api.resources.requests.cpu A CPU request.
@@ -298,3 +300,16 @@ importer:
       limits:
         cpu: 1000m
         memory: 512Mi
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container.
+
+customCAs:
+  bundle: ''
+    # bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+  # -----END CERTIFICATE-----
+  certsPath: ''

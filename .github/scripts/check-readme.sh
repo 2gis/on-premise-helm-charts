@@ -37,7 +37,7 @@ RESULT=$(( IS_DIRTY + HAS_UNTRACKED ))
 if [[ "$RESULT" -eq 0 ]]; then
   echo -e '\033[0;32mDocumentation is up-to-date\033[0m'
 else
-  echo -e '\033[0;31mYou need to update documentation: run `make prepare && make all`\033[0m'
+  echo -e '\033[0;31mYou need to update documentation: run in the root of the project `make prepare && make all`\033[0m'
   echo 'Changed files:'
   git status --porcelain | grep md
   exit 1

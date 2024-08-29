@@ -1,4 +1,4 @@
-# @section Docker Registry settings
+﻿# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
@@ -7,6 +7,7 @@ dgctlDockerRegistry: ''
 # @section Common settings
 
 # @param appName Name of the service.
+# @param licenseKey License key. **Required**
 # @param replicaCount A replica count for the pod.
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
@@ -23,6 +24,7 @@ dgctlDockerRegistry: ''
 # @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
 appName: pro-api
+licenseKey: ''
 replicaCount: 2
 imagePullSecrets: []
 nameOverride: ''
@@ -119,14 +121,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.11.2
+  tag: 1.35.0
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.11.2
+  tag: 1.35.0
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -146,10 +148,10 @@ s3:
 
 # @section 2GIS PRO API configuration
 
-# @param api.serviceAccount  Kubernetes service account
+# @param api.serviceAccount Kubernetes service account
+# @param api.serviceAccountOverride The name of an existing custom service account. If specified, the services in the chart will use this existing service account. If not specified, a new service account will be created and used with the name from the variable `api.serviceAccount`.
 # @param api.tempPath Path to directory used for temp data
 # @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
-# @param api.licensePartner Name of a partner for license verification. **Required**
 # @extra api.logging Logging settings
 # @param api.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
 # @param api.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
@@ -165,9 +167,12 @@ s3:
 # @skip Local cache settings
 # @skip api.localCache.enabled
 # @skip api.localCache.trackStatistics
+# @skip Open API settings
+# @skip api.openApi.servers
 
 api:
   serviceAccount: runner
+  serviceAccountOverride: ''
   tempPath: /tmp
   allowAnyOrigin: false
   logEsQueries: false
@@ -175,22 +180,24 @@ api:
   env: ''
   filterByZoneCodes: false
   esDataCentersCount: 1
-  licensePartner: ''
   logging:
     format: simple
     targets: ''
   rateLimiter:
-    requestsLimit: 0
+    requestsLimit: 1024
     windowSizeInSeconds: 1
   localCache:
     enabled: true
     trackStatistics: false
+  openApi:
+    servers: []
 
 # @section Auth configuration
 
 # @param auth.type Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol
 # @param auth.url API URL of authentication service. Example: `http(s)://keycloak.ingress.host`
 # @param auth.userInfoEndpoint The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`
+# @param auth.wellKnownConfigEndpoint The [Well-Known Config endpoint](https://openid.net/specs/openid-connect-discovery-1_0.html). Example: `realms/URBI_Pro/.well-known/openid-configuration`
 # @param auth.apiKey Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`
 # @param auth.permissionsApiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`
 # @param auth.turnOffCertValidation Turn off certificate validation for auth.url
@@ -201,6 +208,7 @@ auth:
   type: none
   url: ''
   userInfoEndpoint: ''
+  wellKnownConfigEndpoint: ''
   apiKey: ''
   permissionsApiKey: ''
   autoRegisterUsers: true
@@ -308,27 +316,35 @@ backgroundJobs:
 
 # @section Catalog API settings
 
-# @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search).
+# @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc
 # @param catalog.key Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).
 
 catalog:
-  url: http://catalog-api.svc
+  url: ''
   key: ''
 
 # @section Navigation API settings
 
-# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-back.svc
 # @param navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
 
 navi:
-  url: http://navi-back.svc
+  url: ''
   key: ''
+
+# @section License Service API settings
+
+# @param license.url Licensing server v2 URL. Example: https://license.svc **Required**
+
+license:
+  url: ''
 
 # @section Search API settings
 
-# @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search)
+# @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search). Example: http://search-api.svc
+
 search:
-  url: http://search-api.svc
+  url: ''
 
 # @skip tileGen
 
@@ -339,11 +355,9 @@ tileGen:
 # @section 2GIS PRO API Job settings
 
 # @param appAssetImporterName Data Import job name.
-# @param appUserAssetImporterName User Data Import job name.
 # @skip appAssetPreparerName
 
 appAssetImporterName: asset-importer
-appUserAssetImporterName: user-asset-importer
 appAssetPreparerName: asset-preparer
 
 # @skip permissionsPodSettings
@@ -364,10 +378,10 @@ permissionsPodSettings:
   resources:
     requests:
       cpu: 300m
-      memory: 256M
+      memory: 512M
     limits:
       cpu: 1
-      memory: 512M
+      memory: 1G
 
 # @section 2GIS PRO Permissions API configuration
 # @skip permissionsApi.host
@@ -404,7 +418,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.11.2
+  tag: 1.35.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -427,15 +441,11 @@ assetImporter:
   externalLinksAllowedHosts: ''
   esMetricsEnabled: false
 
-# @skip userAssetImporter
-userAssetImporter:
-  enabled: true
-
 # @skip assetPreparer
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.11.2
+  tag: 1.35.0
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

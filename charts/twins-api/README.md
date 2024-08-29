@@ -20,7 +20,7 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | ------------------ | --------------------------------------------------------------------------------------------- | --------------------------- |
 | `imagePullSecrets` | Kubernetes image pull secrets.                                                                | `[]`                        |
 | `image.repository` | Twins API service image repository.                                                           | `2gis-on-premise/twins-api` |
-| `image.tag`        | Twins API service image tag.                                                                  | `1.9.0`                     |
+| `image.tag`        | Twins API service image tag.                                                                  | `1.13.0`                    |
 | `image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`              |
 
 ### Deployment Artifacts Storage settings
@@ -45,6 +45,7 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | `api.keys.token`                            | Keys service API key **Required**                                                                                                                                                                        | `""`            |
 | `api.keys.requestTimeout`                   | Timeout for requests to the Keys API.                                                                                                                                                                    | `5s`            |
 | `api.replicas`                              | A replica count for the pod.                                                                                                                                                                             | `1`             |
+| `api.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                           | `3`             |
 
 ### api.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
@@ -170,6 +171,13 @@ Use this Helm chart to deploy API Twins service, which is a part of 2GIS's [On-P
 | `importer.cleaner.resources.requests.memory` | A memory request | `128Mi` |
 | `importer.cleaner.resources.limits.cpu`      | A CPU limit      | `1000m` |
 | `importer.cleaner.resources.limits.memory`   | A memory limit   | `512Mi` |
+
+### customCAs **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container.                                                                          | `""`  |
 
 
 ## Maintainers

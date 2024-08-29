@@ -66,13 +66,16 @@ spec:
             - name: http
               containerPort: 8081
               protocol: TCP
+            - name: management
+              containerPort: 8091
+              protocol: TCP
           volumeMounts:
             - mountPath: "{{ .Values.api.tempPath }}"
               name: temp-volume
           livenessProbe:
             httpGet:
               path: /health/live
-              port: http
+              port: management
             failureThreshold: 5
             initialDelaySeconds: 5
             periodSeconds: 15
@@ -81,7 +84,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health/ready
-              port: http
+              port: management
             failureThreshold: 3
             initialDelaySeconds: 15
             periodSeconds: 5
@@ -90,7 +93,7 @@ spec:
           startupProbe:
             httpGet:
               path: /health/live
-              port: http
+              port: management
             failureThreshold: 3
             initialDelaySeconds: 15
             periodSeconds: 5
@@ -181,6 +184,8 @@ spec:
               value: "{{ $.Values.kafka.permissionsTopic.name }}"
             - name: Kafka__PermissionsTopicSettings__ReaderGroupId
               value: "{{ $.Values.kafka.permissionsTopic.readerGroupId }}"
+            - name: Kafka__EventsTopicSettings__Name
+              value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
             - name: LocalCache__Enabled
               value: "{{ .Values.permissionsApi.localCache.enabled }}"
             - name: LocalCache__TrackStatistics

@@ -69,17 +69,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### API settings
 
-| Name           | Description                    | Value  |
-| -------------- | ------------------------------ | ------ |
-| `api.replicas` | Number of replicas of API pods | `1`    |
-| `api.logLevel` | Log level                      | `info` |
+| Name                       | Description                                                                                                                                    | Value  |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `api.replicas`             | Number of replicas of API pods                                                                                                                 | `1`    |
+| `api.logLevel`             | Log level                                                                                                                                      | `info` |
+| `api.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`    |
 
 ### api.image **Deployment settings**
 
 | Name                   | Description                                                                                   | Value                         |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ----------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag                                                                                           | `3.600.0`                     |
+| `api.image.tag`        | Tag                                                                                           | `3.619.0`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
@@ -151,10 +152,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Search settings
 
-| Name                    | Description                                                                                                                                          | Value   |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `search.url`            | URL of the Search service, ex: http://{search-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`    |
-| `search.connectTimeout` | Timeout for connect to the Search service                                                                                                            | `300ms` |
+| Name                     | Description                                                                                                                                          | Value   |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `search.url`             | URL of the Search service, ex: http://{search-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`    |
+| `search.connectTimeout`  | Timeout for connect to the Search service                                                                                                            | `300ms` |
+| `search.minConnections`  | The minimum number connections to the Search service                                                                                                 | `10`    |
+| `search.maxConnections`  | The maximum number connections to the Search service                                                                                                 | `100`   |
+| `search.maxOpenRequests` | The maximum number open requests to the Search service                                                                                               | `128`   |
 
 ### Keys settings
 

@@ -142,7 +142,7 @@ spcore:
     tokenAdmin: supersecrettoken
 
   # @extra spcore.catalog **Catalog settings.**
-  # @param spcore.catalog.url Catalog service URL **Required**
+  # @param spcore.catalog.url Catalog service URL **Required** Example: `http://catalog-api`
   # @param spcore.catalog.key Catalog access key **Required**
   # @param spcore.catalog.type Additional geocoder filter
   # @param spcore.catalog.regionId Additional geocoder filter
@@ -157,7 +157,7 @@ spcore:
   # @param spcore.navi.url Navi service URL.
 
   navi:
-    url: https://catalog-api.host
+    url: http://navi-front
 
   # @extra spcore.defaultLimits **Default limits.**
   # @param spcore.defaultLimits.tables Maximum number of tables.
@@ -195,12 +195,14 @@ spcore:
 # @section Portal settings
 
 # @param portal.replicaCount A replica count for the pod.
+# @param portal.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 # @param portal.terminationGracePeriodSeconds Wait for up to this amount of seconds for a running instance of the service to shut down.
 # @param portal.maxBodySize Maximum HTTP request body size.
 # @param portal.gzip.enabled If GZip compression should be enabled for the HTTP requests and responses.
 
 portal:
   replicaCount: 1
+  revisionHistoryLimit: 3
   terminationGracePeriodSeconds: 60
   maxBodySize: 100m
   gzip:
