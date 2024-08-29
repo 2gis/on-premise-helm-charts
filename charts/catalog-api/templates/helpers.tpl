@@ -189,16 +189,24 @@ onprem
 {{- end }}
 
 {{- define "catalog.env.stat" -}}
-- name: CATALOG_BSS_ENABLED
-  value: "{{ .Values.stat.enabled }}"
 - name: CATALOG_BSS_ENDPOINT
   value: "{{ .Values.stat.url }}"
-- name: CATALOG_BSS_BUFFER_LIFETIME
-  value: "{{ .Values.stat.buffer.lifetime }}"
-- name: CATALOG_BSS_BUFFER_SEND_TIMEOUT
-  value: "{{ .Values.stat.buffer.sendTimeout }}"
-- name: CATALOG_BSS_BUFFER_SEND_LIMIT
-  value: "{{ .Values.stat.buffer.sendLimit }}"
+- name: CATALOG_BSS_REQUEST_ENABLED
+  value: "{{ .Values.stat.request.enabled }}"
+- name: CATALOG_BSS_REQUEST_BUFFER_LIFETIME
+  value: "{{ .Values.stat.request.buffer.lifetime }}"
+- name: CATALOG_BSS_REQUEST_BUFFER_SEND_TIMEOUT
+  value: "{{ .Values.stat.request.buffer.sendTimeout }}"
+- name: CATALOG_BSS_REQUEST_BUFFER_SEND_LIMIT
+  value: "{{ .Values.stat.request.buffer.sendLimit }}"
+- name: CATALOG_BSS_SEARCH_ENABLED
+  value: "{{ .Values.stat.search.enabled }}"
+- name: CATALOG_BSS_SEARCH_BUFFER_LIFETIME
+  value: "{{ .Values.stat.search.buffer.lifetime }}"
+- name: CATALOG_BSS_SEARCH_BUFFER_SEND_TIMEOUT
+  value: "{{ .Values.stat.search.buffer.sendTimeout }}"
+- name: CATALOG_BSS_SEARCH_BUFFER_SEND_LIMIT
+  value: "{{ .Values.stat.search.buffer.sendLimit }}"
 - name: CATALOG_BSS_CONNECTING_TIMEOUT
   value: "{{ .Values.stat.client.connectingTimeout }}"
 - name: CATALOG_BSS_IDLE_TIMEOUT

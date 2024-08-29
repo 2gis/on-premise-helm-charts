@@ -259,11 +259,15 @@ license:
 
 # @section Statistic settings
 
-# @param stat.enabled If statistic is enabled
 # @param stat.url URL of the statistic service. Ex: http(s)://stat.svc
-# @param stat.buffer.lifetime Lifetime of Statistic buffer
-# @param stat.buffer.sendTimeout Timeout between sending statistic messages
-# @param stat.buffer.sendLimit The maximum number of messages in the buffer before they are sent to the Statistic
+# @param stat.request.enabled If statistic by request is enabled
+# @param stat.request.buffer.lifetime Lifetime of request Statistic buffer
+# @param stat.request.buffer.sendTimeout Timeout between sending request statistic messages
+# @param stat.request.buffer.sendLimit The maximum number of request messages in the buffer before they are sent to the Statistic
+# @param stat.search.enabled If statistic by search is enabled
+# @param stat.search.buffer.lifetime Lifetime of search Statistic buffer
+# @param stat.search.buffer.sendTimeout Timeout between sending search statistic messages
+# @param stat.search.buffer.sendLimit The maximum number of search messages in the buffer before they are sent to the Statistic
 # @param stat.client.connectingTimeout The time period within which the TCP connecting process must be completed
 # @param stat.client.idleTimeout The time after which an idle connection will be automatically closed
 # @param stat.client.minConnections The minimum number of parallel connections that a pool should keep alive ("hot")
@@ -278,12 +282,19 @@ license:
 # @param stat.dispatcher.throughput Throughput defines the maximum number of messages to be processed per actor before the thread jumps to the next actor
 
 stat:
-  enabled: false
   url: ''
-  buffer:
-    lifetime: 5s
-    sendTimeout: 2s
-    sendLimit: 256
+  request:
+    enabled: false
+    buffer:
+      lifetime: 5s
+      sendTimeout: 2s
+      sendLimit: 256
+  search:
+    enabled: false
+    buffer:
+      lifetime: 5s
+      sendTimeout: 2s
+      sendLimit: 256
   client:
     connectingTimeout: 500ms
     idleTimeout: 250ms
