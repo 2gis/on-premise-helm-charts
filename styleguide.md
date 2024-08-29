@@ -68,8 +68,21 @@ make charts/navi-back
   Примеры:
 
   - Не `serviceAccount.create`, а `serviceAccount.enabled`.
-  - [Настройки Kafka](https://github.com/documentat-alibaev/on-premise-helm-charts/blob/1f7b7d269aec9c6e265c41da3718bfc9135125a1/charts/navi-back/values.yaml#L185).
-  - Настройки S3: `host`, `bucket`, `accessKey`, `secretKey`.
+  - Настройки Kafka:
+
+  ```yaml
+  kafka:
+    enabled: false
+    groupId: example_group
+    bootstrapServers: ''
+    securityProtocol: SaslPlaintext
+    sasl:
+      mechanism: ScramSha512
+      username: ''
+      password: ''
+  ```
+
+  - Настройки S3: `host`, `bucket`, `accessKey`, `secretKey`, `region`.
   - Настройки PostgreSQL: `host`, `port`, `name`, `username`, `password`.
   - Настройки Ingress: `enabled`, `host`. Другие настройки Ingress не описываем.
   - horizontalPodAutoscaler - hpa
