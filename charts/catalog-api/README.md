@@ -152,10 +152,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Search settings
 
-| Name                    | Description                                                                                                                                          | Value   |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `search.url`            | URL of the Search service, ex: http://{search-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`    |
-| `search.connectTimeout` | Timeout for connect to the Search service                                                                                                            | `300ms` |
+| Name                     | Description                                                                                                                                          | Value   |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `search.url`             | URL of the Search service, ex: http://{search-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required** | `""`    |
+| `search.connectTimeout`  | Timeout for connect to the Search service                                                                                                            | `300ms` |
+| `search.minConnections`  | The minimum number connections to the Search service                                                                                                 | `10`    |
+| `search.maxConnections`  | The maximum number connections to the Search service                                                                                                 | `100`   |
+| `search.maxOpenRequests` | The maximum number open requests to the Search service                                                                                               | `128`   |
 
 ### Keys settings
 
