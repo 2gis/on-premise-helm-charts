@@ -39,7 +39,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/platform-ui
-    tag: 0.8.1
+    tag: 0.15.0
 
   # @section UI service settings
 
@@ -49,7 +49,7 @@ ui:
 
   # @param ui.brand Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
   # @skip ui.defaultLocale
-  # @param ui.pages A list of pages available in application. Values must be written with a comma. Possible values: `"status"`, `"playground"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
+  # @param ui.pages A list of pages available in application. Values must be written with a comma. Possible values: `"status"`, `"playground", "map_styles"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
   # @skip ui.googleAnalyticsId
   # @skip ui.googleTagManagerId
 
@@ -88,6 +88,13 @@ ui:
     scriptPath: /api.js
     key: ''
     initCenter: ''
+
+  # @section Map styles API settings
+
+  # @param ui.mapStyles.url URL to Map Styles API.
+
+  mapStyles:
+    url: ''
 
   # @section Search API settings
 

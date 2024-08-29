@@ -6,6 +6,27 @@
 - Backward compatibility with `license` versions before `2.0.0` (on-premise version `1.8.0`) is broken.
 - License v2 over HTTPS is required.
 
+### PRO
+- ui.strategy renamed to strategy
+- ui.image renamed to image
+- ui.replicas renamed to replicas
+- ui.revisionHistoryLimit renamed to revisionHistoryLimit
+- ui.terminationGracePeriodSeconds renamed to terminationGracePeriodSeconds
+- ui.nodeSelector renamed to nodeSelector
+- ui.affinity renamed to affinity
+- ui.tolerations renamed to tolerations
+- ui.podAnnotations renamed to podAnnotations
+- ui.podLabels renamed to podLabels
+- ui.annotations renamed to annotations
+- ui.labels renamed to labels
+- ui.readinessProbe renamed to readinessProbe
+- ui.livenessProbe renamed to livenessProbe
+- ui.containerPort renamed to containerPort
+- ui.service renamed to service
+- ui.ingress renamed to ingress
+- ui.resources renamed to resources
+- ui.hpa renamed to hpa
+
 ## [1.26.0]
 
 ### citylens

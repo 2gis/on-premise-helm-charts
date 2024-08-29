@@ -75,7 +75,7 @@
 | Name               | Description | Value                     |
 | ------------------ | ----------- | ------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/pro-api` |
-| `image.tag`        | Tag         | `1.22.0`                  |
+| `image.tag`        | Tag         | `1.35.0`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
 
 ### 2GIS PRO Storage configuration
@@ -105,15 +105,16 @@
 
 ### Auth configuration
 
-| Name                         | Description                                                                                                                                                                                                                                 | Value   |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `auth.type`                  | Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol                                         | `none`  |
-| `auth.url`                   | API URL of authentication service. Example: `http(s)://keycloak.ingress.host`                                                                                                                                                               | `""`    |
-| `auth.userInfoEndpoint`      | The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`                                                                                        | `""`    |
-| `auth.apiKey`                | Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`                                                                                        | `""`    |
-| `auth.permissionsApiKey`     | Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`                                                                            | `""`    |
-| `auth.turnOffCertValidation` | Turn off certificate validation for auth.url                                                                                                                                                                                                | `false` |
-| `auth.shareKeys`             | Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR` | `[]`    |
+| Name                           | Description                                                                                                                                                                                                                                 | Value   |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `auth.type`                    | Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol                                         | `none`  |
+| `auth.url`                     | API URL of authentication service. Example: `http(s)://keycloak.ingress.host`                                                                                                                                                               | `""`    |
+| `auth.userInfoEndpoint`        | The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`                                                                                        | `""`    |
+| `auth.wellKnownConfigEndpoint` | The [Well-Known Config endpoint](https://openid.net/specs/openid-connect-discovery-1_0.html). Example: `realms/URBI_Pro/.well-known/openid-configuration`                                                                                   | `""`    |
+| `auth.apiKey`                  | Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`                                                                                        | `""`    |
+| `auth.permissionsApiKey`       | Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`                                                                            | `""`    |
+| `auth.turnOffCertValidation`   | Turn off certificate validation for auth.url                                                                                                                                                                                                | `false` |
+| `auth.shareKeys`               | Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR` | `[]`    |
 
 ### PostgreSQL settings
 
@@ -202,10 +203,9 @@
 
 ### 2GIS PRO API Job settings
 
-| Name                       | Description                | Value                 |
-| -------------------------- | -------------------------- | --------------------- |
-| `appAssetImporterName`     | Data Import job name.      | `asset-importer`      |
-| `appUserAssetImporterName` | User Data Import job name. | `user-asset-importer` |
+| Name                   | Description           | Value            |
+| ---------------------- | --------------------- | ---------------- |
+| `appAssetImporterName` | Data Import job name. | `asset-importer` |
 
 ### 2GIS PRO Permissions API configuration
 
@@ -218,7 +218,7 @@
 | Name                                       | Description                                                                                                                                              | Value                          |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.22.0`                       |
+| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.35.0`                       |
 | `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |

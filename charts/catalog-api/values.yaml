@@ -213,10 +213,16 @@ api:
 
 # @param search.url URL of the Search service, ex: http://{search-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required**
 # @param search.connectTimeout Timeout for connect to the Search service
+# @param search.minConnections The minimum number connections to the Search service
+# @param search.maxConnections The maximum number connections to the Search service
+# @param search.maxOpenRequests The maximum number open requests to the Search service
 
 search:
   url: ''
   connectTimeout: 300ms
+  minConnections: 10
+  maxConnections: 100
+  maxOpenRequests: 128
 
 # @section Keys settings
 
