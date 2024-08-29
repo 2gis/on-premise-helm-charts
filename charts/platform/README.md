@@ -34,16 +34,16 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | Name                  | Description                    | Value                         |
 | --------------------- | ------------------------------ | ----------------------------- |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/platform-ui` |
-| `ui.image.tag`        | Tag                            | `0.8.1`                       |
+| `ui.image.tag`        | Tag                            | `0.15.0`                      |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                          |
 
 ### UI service settings
 
-| Name         | Description                                                                                                                                                                                                                                          | Value  |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `ui.appPort` | Service port.                                                                                                                                                                                                                                        | `3000` |
-| `ui.brand`   | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                      | `""`   |
-| `ui.pages`   | A list of pages available in application. Values must be written with a comma. Possible values: `"status"`, `"playground"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones. | `""`   |
+| Name         | Description                                                                                                                                                                                                                                                        | Value  |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| `ui.appPort` | Service port.                                                                                                                                                                                                                                                      | `3000` |
+| `ui.brand`   | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                                    | `""`   |
+| `ui.pages`   | A list of pages available in application. Values must be written with a comma. Possible values: `"status"`, `"playground", "map_styles"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones. | `""`   |
 
 ### Statuses for services. A value is a string containing pairs of label and healthcheck URL for a service. Pairs must be divided with a comma. Each pair must be connected with a symbol "=", e.g. `mapgl: 'MapGL JS=https://example.com/healthcheck'`. URL must be an absolute. You can specify only one URL, e.g. `mapgl: 'https://example.com/healthcheck'`.
 
@@ -64,6 +64,12 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | `ui.mapgl.scriptPath` | URL path to [MapGL JS API](https://docs.2gis.com/en/on-premise/map) init script relative to `ui.mapgl.url`.                                                   | `/api.js` |
 | `ui.mapgl.key`        | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                                                                 | `""`      |
 | `ui.mapgl.initCenter` | Optional default map coordinates. Contains of two numbers in an array: `[lon,lat]` (e.g., `"[55.27,25.2]"` stands for Dubai, `"[37.64,55.74]"` — for Moscow). | `""`      |
+
+### Map styles API settings
+
+| Name               | Description            | Value |
+| ------------------ | ---------------------- | ----- |
+| `ui.mapStyles.url` | URL to Map Styles API. | `""`  |
 
 ### Search API settings
 

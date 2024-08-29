@@ -106,7 +106,7 @@ args: []
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.23.0.5
+  tag: 7.25.0.3
 
 
 # @section Navi-Back application settings
@@ -130,6 +130,7 @@ image:
 # @param naviback.dump.query Dump queries in logs
 # @param naviback.dump.answer Dump answers in logs
 # @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal
+# @param naviback.logMessageField Field name in logs for messages data.
 # @param naviback.indexFilename Name of the index file on Castle
 # @param naviback.citiesFilename Name of the cities file on Castle
 # @param naviback.sentry.enabled If sending crash dumps to Sentry needed
@@ -216,6 +217,7 @@ image:
 # @param naviback.validation.isochrone.responseSchemaName Name of isochrone response validation schema
 # @param naviback.tilesMetricsThreshold The value at which we send tiles metrics (used for internal tests)
 # @param naviback.hierarchies.enabled If hierarchies cache available
+# @param naviback.hierarchies.skipPatches Skip patches in hierarchies cache
 # @param naviback.hierarchies.s3path Hierarchies cache remote location
 # @param naviback.etaScheduleIndex.enabled If Schedule Index available
 # @param naviback.etaScheduleIndex.url Schedule Index remote url
@@ -239,6 +241,7 @@ naviback:
     query: false
     answer: false
   logLevel: Info
+  logMessageField: custom.navi_msg
   indexFilename: index.json.zip
   citiesFilename: cities.conf.zip
   sentry:
@@ -343,6 +346,7 @@ naviback:
   tilesMetricsThreshold: 0
   hierarchies:
     enabled: false
+    skipPatches: false
     s3path: ''
   etaScheduleIndex:
     enabled: false
@@ -605,6 +609,24 @@ dataGroup:
   enabled: false
   prefix: sampleGroup
   timestamp: no-default
+
+# @section Route sharing properties. Leave with defaults, FOR FUTURE RELEASE
+
+# @param routesharing.enabled If route sharing enabled
+# @param routesharing.topic Topic to use for route sharing
+# @extra routesharing.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
+# @skip routesharing.kafka.properties.bootstrap.servers
+# @skip routesharing.kafka.properties.security.protocol
+# @param routesharing.kafka.fileProperties Properties stored in file, see `kafka` section and comments
+
+routesharing:
+  enabled: false
+  topic: sharing-kafka-topic
+  kafka:
+    properties:
+      bootstrap.servers: kafka.host:9092
+      security.protocol: PLAINTEXT
+    fileProperties: {}
 
 # @section License settings
 

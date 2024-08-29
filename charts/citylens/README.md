@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.10.0`                       |
+| `api.image.tag`        | Tag.         | `1.12.0`                       |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -133,7 +133,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.10.0`                       |
+| `web.image.tag`        | Tag.         | `1.12.0`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -340,13 +340,36 @@ See the [documentation]() to learn about:
 | `worker.tracksUploader.tolerations`               | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`    |
 | `worker.tracksUploader.affinity`                  | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`    |
 
+### Citylens Dashboard batch events worker's settings
+
+| Name                                   | Description                  | Value |
+| -------------------------------------- | ---------------------------- | ----- |
+| `worker.dashboardBatchEvents.replicas` | A replica count for the pod. | `1`   |
+
+### Citylens Dashboard batch events worker's Image settings
+
+| Name                                               | Description                                                                                                                                    | Value                              |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `worker.dashboardBatchEvents.image.repository`     | Repository.                                                                                                                                    | `2gis-on-premise/citylens-workers` |
+| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.12.0`                           |
+| `worker.dashboardBatchEvents.image.pullPolicy`     | Pull Policy.                                                                                                                                   | `IfNotPresent`                     |
+| `worker.dashboardBatchEvents.logLevel`             | Worker's log level.                                                                                                                            | `INFO`                             |
+| `worker.dashboardBatchEvents.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`                                |
+| `worker.dashboardBatchEvents.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`                               |
+| `worker.dashboardBatchEvents.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`                               |
+| `worker.dashboardBatchEvents.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`                               |
+| `worker.dashboardBatchEvents.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`                               |
+| `worker.dashboardBatchEvents.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`                               |
+| `worker.dashboardBatchEvents.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`                               |
+| `worker.dashboardBatchEvents.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`                               |
+
 ### Migration job settings
 
 | Name                                   | Description                                                                                                             | Value                               |
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.10.0`                            |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.12.0`                            |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |
@@ -356,19 +379,21 @@ See the [documentation]() to learn about:
 
 ### Kafka settings
 
-| Name                           | Description                                                                           | Value |
-| ------------------------------ | ------------------------------------------------------------------------------------- | ----- |
-| `kafka.bootstrapServer`        | A Kafka broker endpoint. **Required**                                                 | `""`  |
-| `kafka.username`               | A Kafka username for connection. **Required**                                         | `""`  |
-| `kafka.password`               | A Kafka password for connection. **Required**                                         | `""`  |
-| `kafka.topics.frames`          | List of topics for Frames saver worker. **Required**                                  | `""`  |
-| `kafka.topics.tracks`          | List of topics for Tracks metadata worker. **Required**                               | `""`  |
-| `kafka.topics.pro`             | Topic for frames synchronization with Pro (used by Reporter pro worker). **Required** | `""`  |
-| `kafka.topics.uploader`        | Topic for Uploader worker. **Required**                                               | `""`  |
-| `kafka.topics.logs`            | Topic for citylens mobile app logs, uploaded via citylens-api. **Required**           | `""`  |
-| `kafka.topics.framesLifecycle` | Topic for frames lifecycle events. **Required**                                       | `""`  |
-| `kafka.topics.predictions`     | Topic for predictions events from detectors. **Required**                             | `""`  |
-| `kafka.consumerGroups.prefix`  | Kafka topics prefix. **Required**                                                     | `""`  |
+| Name                           | Description                                                                                   | Value |
+| ------------------------------ | --------------------------------------------------------------------------------------------- | ----- |
+| `kafka.bootstrapServer`        | A Kafka broker endpoint. **Required**                                                         | `""`  |
+| `kafka.username`               | A Kafka username for connection. **Required**                                                 | `""`  |
+| `kafka.password`               | A Kafka password for connection. **Required**                                                 | `""`  |
+| `kafka.topics.frames`          | List of topics for Frames saver worker. **Required**                                          | `""`  |
+| `kafka.topics.tracks`          | List of topics for Tracks metadata worker. **Required**                                       | `""`  |
+| `kafka.topics.pro`             | Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**         | `""`  |
+| `kafka.topics.proDrivers`      | Topic for drivers tracks synchronization with Pro (used by Reporter pro worker). **Required** | `""`  |
+| `kafka.topics.uploader`        | Topic for Uploader worker. **Required**                                                       | `""`  |
+| `kafka.topics.logs`            | Topic for citylens mobile app logs, uploaded via citylens-api. **Required**                   | `""`  |
+| `kafka.topics.framesLifecycle` | Topic for frames lifecycle events. **Required**                                               | `""`  |
+| `kafka.topics.tracksLifecycle` | Topic for tracks lifecycle events. **Required**                                               | `""`  |
+| `kafka.topics.predictions`     | Topic for predictions events from detectors. **Required**                                     | `""`  |
+| `kafka.consumerGroups.prefix`  | Kafka topics prefix. **Required**                                                             | `""`  |
 
 ### S3 settings
 

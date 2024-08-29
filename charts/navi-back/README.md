@@ -78,7 +78,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.23.0.5`                  |
+| `image.tag`        | Tag         | `7.25.0.3`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings
@@ -103,6 +103,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.dump.query`                                   | Dump queries in logs                                                                                                                                                                                                | `false`                                  |
 | `naviback.dump.answer`                                  | Dump answers in logs                                                                                                                                                                                                | `false`                                  |
 | `naviback.logLevel`                                     | Logging level, one of: Verbose, Info, Warning, Error, Fatal                                                                                                                                                         | `Info`                                   |
+| `naviback.logMessageField`                              | Field name in logs for messages data.                                                                                                                                                                               | `custom.navi_msg`                        |
 | `naviback.indexFilename`                                | Name of the index file on Castle                                                                                                                                                                                    | `index.json.zip`                         |
 | `naviback.citiesFilename`                               | Name of the cities file on Castle                                                                                                                                                                                   | `cities.conf.zip`                        |
 | `naviback.sentry.enabled`                               | If sending crash dumps to Sentry needed                                                                                                                                                                             | `false`                                  |
@@ -161,6 +162,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.validation.isochrone.responseSchemaName`      | Name of isochrone response validation schema                                                                                                                                                                        | `IsochroneApiResponseModel.json`         |
 | `naviback.tilesMetricsThreshold`                        | The value at which we send tiles metrics (used for internal tests)                                                                                                                                                  | `0`                                      |
 | `naviback.hierarchies.enabled`                          | If hierarchies cache available                                                                                                                                                                                      | `false`                                  |
+| `naviback.hierarchies.skipPatches`                      | Skip patches in hierarchies cache                                                                                                                                                                                   | `false`                                  |
 | `naviback.hierarchies.s3path`                           | Hierarchies cache remote location                                                                                                                                                                                   | `""`                                     |
 | `naviback.etaScheduleIndex.enabled`                     | If Schedule Index available                                                                                                                                                                                         | `false`                                  |
 | `naviback.etaScheduleIndex.url`                         | Schedule Index remote url                                                                                                                                                                                           | `""`                                     |
@@ -301,6 +303,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `dataGroup.enabled`   | if grouping enabled                              | `false`       |
 | `dataGroup.prefix`    | common prefix for the group used for identifiers | `sampleGroup` |
 | `dataGroup.timestamp` | data timestamp the group is running on           | `no-default`  |
+
+### Route sharing properties. Leave with defaults, FOR FUTURE RELEASE
+
+| Name                                | Description                                                             | Value                 |
+| ----------------------------------- | ----------------------------------------------------------------------- | --------------------- |
+| `routesharing.enabled`              | If route sharing enabled                                                | `false`               |
+| `routesharing.topic`                | Topic to use for route sharing                                          | `sharing-kafka-topic` |
+| `routesharing.kafka.properties`     | Properties as supported by librdkafka, see `kafka` section and comments |                       |
+| `routesharing.kafka.fileProperties` | Properties stored in file, see `kafka` section and comments             | `{}`                  |
 
 ### License settings
 

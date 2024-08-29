@@ -75,6 +75,8 @@ spec:
               value: {{ .Values.ui.navi.url | quote }}
             - name: NAVI_API_KEY
               value: {{ .Values.ui.navi.key | quote }}
+            - name: MAP_STYLES_API_URL
+              value: {{ .Values.ui.mapStyles.url | quote }}
             - name: MAPGL_URL
               value: {{ .Values.ui.mapgl.url | quote }}
             - name: MAPGL_SCRIPT_PATH
