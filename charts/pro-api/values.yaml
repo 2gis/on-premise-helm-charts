@@ -121,14 +121,14 @@ vpa:
 
 image:
   repository: 2gis-on-premise/pro-api
-  tag: 1.22.0
+  tag: 1.35.0
   pullPolicy: IfNotPresent
 
 # @skip permissionsApiImage
 
 permissionsApiImage:
   repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.22.0
+  tag: 1.35.0
   pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
@@ -167,6 +167,8 @@ s3:
 # @skip Local cache settings
 # @skip api.localCache.enabled
 # @skip api.localCache.trackStatistics
+# @skip Open API settings
+# @skip api.openApi.servers
 
 api:
   serviceAccount: runner
@@ -187,12 +189,15 @@ api:
   localCache:
     enabled: true
     trackStatistics: false
+  openApi:
+    servers: []
 
 # @section Auth configuration
 
 # @param auth.type Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol
 # @param auth.url API URL of authentication service. Example: `http(s)://keycloak.ingress.host`
 # @param auth.userInfoEndpoint The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`
+# @param auth.wellKnownConfigEndpoint The [Well-Known Config endpoint](https://openid.net/specs/openid-connect-discovery-1_0.html). Example: `realms/URBI_Pro/.well-known/openid-configuration`
 # @param auth.apiKey Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`
 # @param auth.permissionsApiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`
 # @param auth.turnOffCertValidation Turn off certificate validation for auth.url
@@ -203,6 +208,7 @@ auth:
   type: none
   url: ''
   userInfoEndpoint: ''
+  wellKnownConfigEndpoint: ''
   apiKey: ''
   permissionsApiKey: ''
   autoRegisterUsers: true
@@ -349,11 +355,9 @@ tileGen:
 # @section 2GIS PRO API Job settings
 
 # @param appAssetImporterName Data Import job name.
-# @param appUserAssetImporterName User Data Import job name.
 # @skip appAssetPreparerName
 
 appAssetImporterName: asset-importer
-appUserAssetImporterName: user-asset-importer
 appAssetPreparerName: asset-preparer
 
 # @skip permissionsPodSettings
@@ -374,10 +378,10 @@ permissionsPodSettings:
   resources:
     requests:
       cpu: 300m
-      memory: 256M
+      memory: 512M
     limits:
       cpu: 1
-      memory: 512M
+      memory: 1G
 
 # @section 2GIS PRO Permissions API configuration
 # @skip permissionsApi.host
@@ -414,7 +418,7 @@ permissionsApi:
 
 assetImporter:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.22.0
+  tag: 1.35.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -437,15 +441,11 @@ assetImporter:
   externalLinksAllowedHosts: ''
   esMetricsEnabled: false
 
-# @skip userAssetImporter
-userAssetImporter:
-  enabled: true
-
 # @skip assetPreparer
 
 assetPreparer:
   repository: 2gis-on-premise/pro-importer
-  tag: 1.22.0
+  tag: 1.35.0
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

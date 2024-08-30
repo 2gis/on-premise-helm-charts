@@ -44,3 +44,6 @@ data:
     show_docs: {{ .Values.api.showDocs }}
     log_level: {{ .Values.api.logLevel }}
     metrics_app_name: {{ .Values.api.metricsAppName }}
+    {{- if .Values.api.routesApiBaseUrl }}
+    routes_api_base_url: {{ .Values.api.routesApiBaseUrl | squote }}
+    {{- end }}

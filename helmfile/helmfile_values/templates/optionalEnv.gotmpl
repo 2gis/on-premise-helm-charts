@@ -1,5 +1,0 @@
-{{- with $envVal := printf "../services/navi/%s/%s.yaml" $.Release.Labels.chart $.Environment.Name }}
-{{- if isFile $envVal }}
-{{ readFile $envVal }}
-{{- end }}
-{{- end }}

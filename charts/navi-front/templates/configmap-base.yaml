@@ -51,6 +51,10 @@ data:
             js_content bundle.geo_coding;
         }
 
+        location ^~ /bicycle {
+            js_content bundle.geo_coding;
+        }
+
         location ^~ /public_transport {
             js_content bundle.geo_coding;
         }

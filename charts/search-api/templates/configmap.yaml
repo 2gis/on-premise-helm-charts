@@ -74,3 +74,7 @@ data:
             }
         }
     }
+{{- if .Values.customCAs.bundle }}
+  custom-ca.crt: |-
+{{- .Values.customCAs.bundle | nindent 4 }}
+{{- end }}

@@ -56,7 +56,7 @@ api:
 
   image:
     repository: 2gis-on-premise/search-api
-    tag: 7.78.0
+    tag: 7.80.0
     pullPolicy: IfNotPresent
 
 
@@ -189,3 +189,16 @@ ingress:
 # @extra nginx.resources.requests.memory A memory request, e.g., `128Mi`
 # @extra nginx.resources.limits.cpu A CPU limit, e.g., `100m`
 # @extra nginx.resources.limits.memory A memory limit, e.g., `128Mi`
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"
+
+customCAs:
+  bundle: ''
+# bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
+  certsPath: ''
