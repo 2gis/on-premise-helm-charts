@@ -6,7 +6,7 @@
 - Backward compatibility with `license` versions before `2.0.0` (on-premise version `1.8.0`) is broken.
 - License v2 over HTTPS is required.
 
-### PRO
+### pro-ui
 - ui.strategy renamed to strategy
 - ui.image renamed to image
 - ui.replicas renamed to replicas
