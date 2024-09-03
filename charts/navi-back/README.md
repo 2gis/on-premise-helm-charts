@@ -78,7 +78,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.25.0.3`                  |
+| `image.tag`        | Tag         | `7.23.0.5`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings
@@ -161,8 +161,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.validation.isochrone.requestSchemaName`       | Name of isochrone request validation schema                                                                                                                                                                         | `IsochroneApiRequestModel.json`          |
 | `naviback.validation.isochrone.responseSchemaName`      | Name of isochrone response validation schema                                                                                                                                                                        | `IsochroneApiResponseModel.json`         |
 | `naviback.tilesMetricsThreshold`                        | The value at which we send tiles metrics (used for internal tests)                                                                                                                                                  | `0`                                      |
-| `naviback.hierarchies.enabled`                          | If hierarchies cache available                                                                                                                                                                                      | `false`                                  |
-| `naviback.hierarchies.skipPatches`                      | Skip patches in hierarchies cache                                                                                                                                                                                   | `false`                                  |
+| `naviback.hierarchies.enabled`                          | If SN cache available                                                                                                                                                                                               | `false`                                  |
+| `naviback.hierarchies.skipPatches`                      | Skip patches in hierarchies cache, ignored if skipShortcuts set                                                                                                                                                     | `false`                                  |
+| `naviback.hierarchies.skipShortcuts`                    | Skip shortcuts in SN cache                                                                                                                                                                                          | `false`                                  |
 | `naviback.hierarchies.s3path`                           | Hierarchies cache remote location                                                                                                                                                                                   | `""`                                     |
 | `naviback.etaScheduleIndex.enabled`                     | If Schedule Index available                                                                                                                                                                                         | `false`                                  |
 | `naviback.etaScheduleIndex.url`                         | Schedule Index remote url                                                                                                                                                                                           | `""`                                     |
