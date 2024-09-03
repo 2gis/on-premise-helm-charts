@@ -32,13 +32,13 @@ spec:
             - name: JOB_NAME
               value: {{ include "pro-api.asset-importer-name" . }}
             - name: TEMP_PATH
-              value: "{{ .Values.api.tempPath }}"
+              value: "{{ .Values.api.settings.tempPath }}"
             - name: ENV
-              value: "{{ .Values.api.env }}"
+              value: "{{ .Values.api.settings.env }}"
             - name: MODE
               value: "{{ .Values.assetImporter.startOnDeployMode }}"
             - name: MAX_PARALLEL_JOBS
-              value: "{{ .Values.assetImporter.maxParallelJobs }}"
+              value: "{{ .Values.assetImporter.settings.maxParallelJobs }}"
             - name: manifest_filename
               value: "{{ .Values.dgctlStorage.manifest }}"
             - name: S3Settings__Url
@@ -82,21 +82,21 @@ spec:
               value: "{{ .Values.elastic.indexPrefix }}"
             - name: API_URL
               value: http://{{ include "pro-api.name" . }}
-            {{- if .Values.auth.apiKey }}
+            {{- if .Values.api.settings.auth.apiKey }}
             - name: API_TOKEN
               valueFrom:
                 secretKeyRef:
                   key: apiKey
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
-            {{- if .Values.assetImporter.files }}
+            {{- if .Values.assetImporter.settings.files }}
             - name: FILES
-              value: "{{ .Values.assetImporter.files}}"
+              value: "{{ .Values.assetImporter.settings.files}}"
             {{- end }}
             - name: Common__Logging__Format
-              value: "{{ .Values.api.logging.format }}"
+              value: "{{ .Values.api.settings.logging.format }}"
             - name: Common__Logging__Targets
-              value: "{{ .Values.api.logging.targets }}"
+              value: "{{ .Values.api.settings.logging.targets }}"
             - name: Common__FailJobOnError
               value: "true"
             - name: Navi__Url

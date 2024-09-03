@@ -39,7 +39,7 @@ spec:
                 - name: MODE
                   value: "PrepareData"
                 - name: MAX_PARALLEL_JOBS
-                  value: "{{ .Values.assetPreparer.maxParallelJobs }}"
+                  value: "{{ .Values.assetPreparer.settings.maxParallelJobs }}"
                 - name: S3Settings__Url
                   value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
                 - name: S3Settings__Secure
@@ -77,21 +77,21 @@ spec:
                   value: "{{ .Values.elastic.indexPrefix }}"
                 - name: API_URL
                   value: http://{{ include "pro-api.name" . }}
-                {{ if .Values.auth.apiKey }}
+                {{ if .Values.api.settings.auth.apiKey }}
                 - name: API_TOKEN
                   valueFrom:
                     secretKeyRef:
                       key: apiKey
                       name: {{ include "pro-api.name" . }}-secret
                 {{ end }}
-                {{ if .Values.assetPreparer.files }}
+                {{ if .Values.assetPreparer.settings.files }}
                 - name: FILES
-                  value: "{{ .Values.assetPreparer.files}}"
+                  value: "{{ .Values.assetPreparer.settings.files}}"
                 {{ end }}
                 - name: Common__Logging__Format
-                  value: "{{ .Values.api.logging.format }}"
+                  value: "{{ .Values.api.settings.logging.format }}"
                 - name: Common__Logging__Targets
-                  value: "{{ .Values.api.logging.targets }}"
+                  value: "{{ .Values.api.settings.logging.targets }}"
                 - name: Digger__Address
                   value: "{{ .Values.digger.url}}"
                 - name: Digger__UserName
