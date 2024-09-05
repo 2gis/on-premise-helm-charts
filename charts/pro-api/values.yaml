@@ -508,9 +508,6 @@ license:
 search:
   url: ''
 
-
-# @section TileGen settings
-
 # @skip tileGen
 
 tileGen:
