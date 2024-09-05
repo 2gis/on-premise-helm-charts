@@ -241,6 +241,7 @@
 
 
 
+
 ## Installing
 
 1. Create a configuration file values-api.yaml and fill in all the required parameters according to the docs above.
