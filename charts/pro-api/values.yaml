@@ -252,7 +252,11 @@ permissions:
 # @param assetImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
 # @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
 # @param assetImporter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-# @param assetImporter.resources (https://kubernetes.io/docs/concepts/configuration/manage-resources-containers).
+# @extra assetImporter.resources **Limits for the import job**
+# @param assetImporter.resources.requests.cpu A CPU request.
+# @param assetImporter.resources.requests.memory A memory request.
+# @param assetImporter.resources.limits.cpu A CPU limit.
+# @param assetImporter.resources.limits.memory A memory limit.
 # @param assetImporter.enabled If assetImporter is enabled for the service.
 # @skip assetImporter.suspended
 # @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
