@@ -44,7 +44,7 @@ image:
 
 # @section Environment variables
 
-# @skip env.MAPGL_DEMO_KEY
+# @param env.MAPGL_DEMO_KEY token from 'keys-api' service. Defines access for map through MAPGL_HOST.
 # @param env.MAPGL_HOST URL for MapGL JS API service, e.g. 'https://mapgl-api.ingress.host'
 # @param env.MAPGL_TILES_API URL of the Tiles API service, e.g. 'https://tiles-api.ingress.host'
 # @param env.MAPGL_TILESET Tileset of the Tiles API service to use.
