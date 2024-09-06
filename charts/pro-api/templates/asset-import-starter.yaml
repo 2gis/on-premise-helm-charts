@@ -26,7 +26,7 @@ spec:
           resources:
             {{- toYaml .Values.assetImporter.resources | nindent 16 }}
           volumeMounts:
-            - mountPath: "{{ .Values.api.tempPath }}"
+            - mountPath: "{{ .Values.api.settings.tempPath }}"
               name: temp-volume
           env:
             - name: JOB_NAME
