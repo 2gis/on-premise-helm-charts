@@ -51,7 +51,7 @@ prometheusEnabled: true
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  tag: 1.10.3
+  tag: 1.11.2
 
 
 # @section Service account settings
@@ -363,14 +363,14 @@ kafka:
 # @param s3.bucket S3 bucket name. **Required**
 # @param s3.accessKey S3 access key for accessing the bucket. **Required**
 # @param s3.secretKey S3 secret key for accessing the bucket. **Required**
-# @param s3.publicNetloc Announce proxy URL for S3 results instead of s3.url if not empty.
+# @param s3.publicNetloc Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://`
 
 s3:
   host: ''
   bucket: ''
   accessKey: ''
   secretKey: ''
-  publicNetloc:
+  publicNetloc: ''
 
 # @skip bss.enabled
 # @skip bss.url
