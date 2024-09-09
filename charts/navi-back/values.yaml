@@ -106,7 +106,7 @@ args: []
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.27.0.4
+  tag: 7.27.1.2
 
 
 # @section Navi-Back application settings
