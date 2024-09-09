@@ -1,4 +1,4 @@
-Twins API service is released as "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace.
+Styles API service is released as "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace.
 
 {{ if .Values.api.ingress.enabled }}
 You can check service using curl
