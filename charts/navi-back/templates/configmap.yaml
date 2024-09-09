@@ -576,11 +576,12 @@ data:
         },
         {{- end }}{{- /* if .Values.naviback.rtr.enabled */}}
         {{- if .Values.naviback.hierarchies.enabled }}
+          {{- if (not .Values.naviback.hierarchies.skipShortcuts) }}
         "hierarchies": {
           "use_hierarchy": true,
-          {{- if (not .Values.naviback.hierarchies.skipPatches) }}
+            {{- if (not .Values.naviback.hierarchies.skipPatches) }}
           "patches_file_name": "{PATCHES_PATH}",
-          {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
+            {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
           "graphs_file_name": "{SHORTCUT_PATH}"
         },
         "hierarchy_shortcuts": {
@@ -592,7 +593,7 @@ data:
             "count": 600
           }
         },
-        {{- if (not .Values.naviback.hierarchies.skipPatches) }}
+          {{- if (not .Values.naviback.hierarchies.skipPatches) }}
         "hierarchy_patches": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
           "nodes": [
@@ -602,7 +603,8 @@ data:
             "count": 600
           }
         },
-        {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
+          {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
+        {{- end }}{{- /* (not .Values.naviback.hierarchies.skipShortcuts) */}}
         "sn_import": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
           "nodes": [
