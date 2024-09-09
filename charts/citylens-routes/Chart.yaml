@@ -1,0 +1,13 @@
+﻿apiVersion: v2
+name: citylens-routes
+description: Citylens routes services
+
+type: application
+
+version: 0.0.1
+appVersion: 0.0.1
+
+maintainers:
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

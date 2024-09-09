@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "api.name" . }}
+  annotations:
+    router.deis.io/domains: citylens-routes-api-{{ .Values.environment }}
+    {{- if .Values.api.service.annotations }}
+    {{- toYaml .Values.api.service.annotations | nindent 4 }}
+    {{- end }}
+  labels:
+    {{- include "api.labels" . | nindent 4 }}
+  {{- if .Values.api.service.labels }}
+    {{- toYaml .Values.api.service.labels | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.api.service.type }}
+  ports:
+    - port: {{ .Values.api.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      appProtocol: http
+  selector:
+    {{- include "api.selectorLabels" . | nindent 4 }}
