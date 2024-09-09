@@ -1,0 +1,154 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "worker-service.name" . }}
+  {{- with .Values.worker.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "worker-service.labels" . | nindent 4 }}
+  {{- with .Values.worker.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.worker.replicaCount }}
+  revisionHistoryLimit: {{ .Values.worker.revisionHistoryLimit }}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- toYaml .Values.strategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "worker-service.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+      {{- with .Values.worker.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "worker-service.labels" . | nindent 8 }}
+      {{- with .Values.worker.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      volumes:
+        - name: temp-volume
+          emptyDir: { }
+      containers:
+        - name: {{ include "worker-service.name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "{{ .Values.api.tempPath }}"
+              name: temp-volume
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 5
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 20
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 5" ]
+          env:
+            - name: DEBUG
+              value: "{{ .Values.worker.debug }}"
+            - name: Common__Logging__Format
+              value: "{{ .Values.worker.logging.format }}"
+            - name: PgSettings__ConnectionString
+              value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
+            {{ if .Values.postgres.connectionStringReadonly }}
+            - name: PgSettings__ConnectionStringReadonly
+              value: "{{ .Values.postgres.connectionStringReadonly }}"
+            {{ end }}
+            - name: PgSettings__UserName
+              value: "{{ .Values.postgres.userName }}"
+            - name: PgSettings__AppName
+              value: "{{ .Values.postgres.appName }}"
+            - name: PgSettings__Password
+              valueFrom:
+                secretKeyRef:
+                  key: postgresPassword
+                  name: {{ include "api.name" . }}-secret
+            - name: BusConfig__Brokers
+              value: "{{ .Values.worker.busConfig.brokers }}"
+            - name: BusConfig__SecurityInformation__SaslUsername
+              value: "{{ .Values.worker.busConfig.securityInformation.saslUsername }}"
+            - name: BusConfig__SecurityInformation__SaslPassword
+              valueFrom:
+                secretKeyRef:
+                  key: busConfigSaslPassword
+                  name: {{ include "api.name" . }}-secret
+            - name: BusConfig__SecurityInformation__SaslMechanism
+              value: "{{ .Values.worker.busConfig.securityInformation.saslMechanism }}"
+            - name: BusConfig__SecurityInformation__SecurityProtocol
+              value: "{{ .Values.worker.busConfig.securityInformation.securityProtocol }}"
+            - name: BusConfig__Consumers__AppEvents__Topic
+              value: "{{ .Values.worker.busConfig.consumers.appEvents.topic }}"
+            - name: BusConfig__Consumers__AppEvents__GroupId
+              value: "{{ .Values.worker.busConfig.consumers.appEvents.groupId }}"
+            - name: BusConfig__Consumers__AppEvents__BufferSize
+              value: "{{ .Values.worker.busConfig.consumers.appEvents.bufferSize }}"
+            - name: BusConfig__Consumers__AppEvents__WorkersCount
+              value: "{{ .Values.worker.busConfig.consumers.appEvents.workersCount }}"
+            - name: Hangfire__Database__ConnectionString
+              value: "{{ .Values.hangfire.database.connectionString }}"
+            - name: Hangfire__Database__UserName
+              value: "{{ .Values.hangfire.database.userName }}"
+            - name: Hangfire__Database__AppName
+              value: "{{ .Values.hangfire.database.appName }}"
+            - name: Hangfire__Database__Password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "api.name" . }}-secret
+                  key: hangfirePassword
