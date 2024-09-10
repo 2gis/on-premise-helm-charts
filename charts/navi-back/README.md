@@ -78,7 +78,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.27.1.2`                  |
+| `image.tag`        | Tag         | `7.25.0.3`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings
@@ -161,9 +161,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.validation.isochrone.requestSchemaName`       | Name of isochrone request validation schema                                                                                                                                                                         | `IsochroneApiRequestModel.json`          |
 | `naviback.validation.isochrone.responseSchemaName`      | Name of isochrone response validation schema                                                                                                                                                                        | `IsochroneApiResponseModel.json`         |
 | `naviback.tilesMetricsThreshold`                        | The value at which we send tiles metrics (used for internal tests)                                                                                                                                                  | `0`                                      |
-| `naviback.hierarchies.enabled`                          | If SN cache available                                                                                                                                                                                               | `false`                                  |
-| `naviback.hierarchies.skipPatches`                      | Skip patches in hierarchies cache, ignored if skipShortcuts set                                                                                                                                                     | `false`                                  |
-| `naviback.hierarchies.skipShortcuts`                    | Skip shortcuts in SN cache                                                                                                                                                                                          | `false`                                  |
+| `naviback.hierarchies.enabled`                          | If hierarchies cache available                                                                                                                                                                                      | `false`                                  |
+| `naviback.hierarchies.skipPatches`                      | Skip patches in hierarchies cache                                                                                                                                                                                   | `false`                                  |
 | `naviback.hierarchies.s3path`                           | Hierarchies cache remote location                                                                                                                                                                                   | `""`                                     |
 | `naviback.etaScheduleIndex.enabled`                     | If Schedule Index available                                                                                                                                                                                         | `false`                                  |
 | `naviback.etaScheduleIndex.url`                         | Schedule Index remote url                                                                                                                                                                                           | `""`                                     |
@@ -334,6 +333,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `metrics.resources.requests.memory` | Memory request, recommended value `10Mi`        |                                      |
 | `metrics.resources.limits.cpu`      | CPU limit, recommended value `100m`             |                                      |
 | `metrics.resources.limits.memory`   | Memory limit, recommended value `10Mi`          |                                      |
+
+### customCAs **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"          | `""`  |
 
 
 ## Maintainers
