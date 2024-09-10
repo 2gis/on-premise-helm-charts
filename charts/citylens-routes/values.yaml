@@ -12,7 +12,7 @@ dgctlDockerRegistry: ''
 # @param priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
 # @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).
 
-appName: citylens-routes
+appName: citylens-routes-api
 environment: ''
 imagePullSecrets: [ ]
 nameOverride: ''
@@ -79,8 +79,7 @@ strategy:
 
 # @section Api configuration
 
-# @param api.debug A boolean flag to enable or disable debug mode for the API.
-# @param api.serviceAccount  Kubernetes service account
+# @param api.serviceAccount Kubernetes service account
 # @param api.tempPath Path to directory used for temp data
 # @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
 # @extra api.logging Logging settings
@@ -127,7 +126,6 @@ api:
   affinity: { }
   tolerations: [ ]
 
-  debug: false
   serviceAccount: runner
   tempPath: /tmp
   allowAnyOrigin: false
@@ -182,7 +180,6 @@ api:
 
 # @section Api configuration
 
-# @param worker.debug A boolean flag to enable or disable debug mode for the API.
 # @param worker.serviceAccount  Kubernetes service account
 # @param worker.tempPath Path to directory used for temp data
 # @param worker.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
@@ -234,7 +231,7 @@ worker:
     annotations: { }
     className: ''
     hosts:
-      - host: citylens-routes-api.host
+      - host: citylens-worker-service.host
 
   annotations: { }
   labels: { }
@@ -244,10 +241,8 @@ worker:
   affinity: { }
   tolerations: [ ]
 
-  debug: false
   serviceAccount: runner
   tempPath: /tmp
-  allowAnyOrigin: false
   logging:
     format: simple
     targets: ''
@@ -283,6 +278,7 @@ postgres:
 
 # @section Hangfire settings
 
+# @section database settings
 # @param hangfire.database.connectionString Connection string to the Hangfire PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;`
 # @param hangfire.postgres.password User password to connect to the Hangfire database.
 # @param hangfire.postgres.userName User to connect to the Hangfire database.
@@ -294,8 +290,3 @@ hangfire:
     password: ''
     userName: ''
     appName: ''
-
-  dashboardAuthorization:
-    enabled: 'false'
-    login: ''
-    password: ''

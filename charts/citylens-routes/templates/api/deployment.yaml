@@ -101,8 +101,6 @@ spec:
               exec:
                 command: [ "/bin/sh", "-c", "sleep 5" ]
           env:
-            - name: DEBUG
-              value: "{{ .Values.api.debug }}"
             - name: Common__TempPath
               value: "{{ .Values.api.tempPath }}"
             - name: Common__AllowAnyOrigin
@@ -135,17 +133,5 @@ spec:
                 secretKeyRef:
                   name: {{ include "api.name" . }}-secret
                   key: hangfirePassword
-            {{ if .Values.hangfire.dashboardAuthorization.enabled }}
             - name: Hangfire__DashboardAuthorization__Enabled
               value: "{{ .Values.hangfire.dashboardAuthorization.enabled }}"
-            - name: Hangfire__DashboardAuthorization__Login
-              value: "{{ .Values.hangfire.dashboardAuthorization.login }}"
-            - name: Hangfire__DashboardAuthorization__Password
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "api.name" . }}-secret
-                  key: hangfireDashboardPassword
-            {{ else }}
-            - name: Hangfire__DashboardAuthorization__Enabled
-              value: "{{ .Values.hangfire.dashboardAuthorization.enabled }}"
-            {{ end }}

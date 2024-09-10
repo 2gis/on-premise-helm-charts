@@ -101,8 +101,6 @@ spec:
               exec:
                 command: [ "/bin/sh", "-c", "sleep 5" ]
           env:
-            - name: DEBUG
-              value: "{{ .Values.worker.debug }}"
             - name: Common__Logging__Format
               value: "{{ .Values.worker.logging.format }}"
             - name: PgSettings__ConnectionString
