@@ -80,13 +80,12 @@ See the [documentation]() to learn about:
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                                                                  | Description                                                                                                           | Value                                                 |
-|-----------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| `api.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                                               |
-| `api.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                                                  |
-| `api.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `{"nginx.ingress.kubernetes.io/proxy-body-size":"0"}` |
-| `api.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-routes-api.host`                            |
-| `api.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                                                  |
+| Name                        | Description                                                                                                           | Value                      |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------|----------------------------|
+| `api.ingress.enabled`       | If Ingress is enabled for the service.                                                                                | `false`                    |
+| `api.ingress.className`     | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                       |
+| `api.ingress.hosts[0].host` | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-routes-api.host` |
+| `api.ingress.tls`           | Tls settings for https.                                                                                               | `[]`                       |
 
 ### Metadata settings
 
@@ -145,13 +144,12 @@ See the [documentation]() to learn about:
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                                                                     | Description                                                                                                           | Value                                                 |
-|--------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| `worker.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                                               |
-| `worker.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                                                  |
-| `worker.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `{"nginx.ingress.kubernetes.io/proxy-body-size":"0"}` |
-| `worker.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-worker-service.host`                        |
-| `worker.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                                                  |
+| Name                           | Description                                                                                                           | Value                          |
+|--------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| `worker.ingress.enabled`       | If Ingress is enabled for the service.                                                                                | `false`                        |
+| `worker.ingress.className`     | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                           |
+| `worker.ingress.hosts[0].host` | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-worker-service.host` |
+| `worker.ingress.tls`           | Tls settings for https.                                                                                               | `[]`                           |
 
 ### Metadata settings
 
