@@ -11,6 +11,7 @@ dgctlDockerRegistry: ''
 # @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
 # @param priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
 # @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).
+# @skip environment
 
 appName: citylens-routes-api
 environment: ''
