@@ -97,6 +97,7 @@ pdb:
 # @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 # @param service.clusterIP Controls Service cluster IP allocation. Cannot be changed after resource creation.
 # @param service.port Service port.
+# @param service.nodePort Node port if type NodePort.
 
 service:
   labels: {}
@@ -104,7 +105,7 @@ service:
   type: ClusterIP
   clusterIP: ''
   port: 80
-
+  nodePort:
 
 # @section [Service account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
 
@@ -154,3 +155,20 @@ job:
   completionMode: ''
   parallelism: ''
   restartPolicy: ''
+
+# @section Network Policy configuration
+
+# @param networkPolicy.ingress.enabled Enable creation of NetworkPolicy resources for ingress rules
+# @param networkPolicy.ingress.explicitNamespacesSelector Explict namespace selector for default rule ingress
+# @param networkPolicy.ingress.additionalRules Array of additional ingress rules
+# @param networkPolicy.egress.enabled Enable creation of NetworkPolicy resources for egress rules
+# @param networkPolicy.egress.config Array of egress rules
+
+networkPolicy:
+  ingress:
+    enabled: false
+    explicitNamespacesSelector: {}
+    additionalRules: []
+  egress:
+    enabled: false
+    config: []

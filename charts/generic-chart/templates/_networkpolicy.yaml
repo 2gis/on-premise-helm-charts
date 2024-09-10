@@ -1,0 +1,47 @@
+{{- define "generic-chart.networkPolicy.tpl" -}}
+{{ $ctx := . }}
+{{- with .Values.networkPolicy }}
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ template "generic-chart.fullname" $ctx }}
+  labels:
+    {{- include "generic-chart.labels" $ctx | nindent 4 }}
+  {{- with $ctx.Values.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}{{- /* labels */}}
+  {{- with $ctx.Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}{{- /* annotations */}}
+spec:
+  podSelector:
+    matchLabels:
+     {{- include "generic-chart.selectorLabels" $ctx | nindent 6 }}
+  {{- if (or .ingress.enabled .ingress.additionalRules ) }}
+  ingress:
+    {{- if .ingress.enabled }}
+    - ports:
+      - port: {{ $ctx.Values.service.port }}
+      from:
+        # From authorized Pods (having the correct label)
+        - podSelector:
+            matchLabels:
+              {{ template "generic-chart.fullname" $ctx }}-client: "true"
+        {{- with .ingress.explicitNamespacesSelector }}
+          # From authorized namespaces
+          namespaceSelector:
+            {{ toYaml . | nindent 12 }}
+        {{- end }}
+        {{- with .ingress.additionalRules }}
+            # Or from custom additional rules
+          {{ toYaml . | nindent 8 }}
+        {{- end }}
+    {{- end }}
+  {{- end }}{{/* if (or .ingress.enabled .ingress.additionalRules ) */}}
+  {{- if .egress.enabled }}
+  egress:
+    {{ .egress.config | toYaml | nindent 4 }}
+  {{- end }}{{/* if .egress.enabled */}}
+{{- end }}{{/* with .Values.networkPolicy */}}
+{{- end }} {{- /* define */}}
