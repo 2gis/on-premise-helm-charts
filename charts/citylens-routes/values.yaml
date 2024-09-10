@@ -61,7 +61,6 @@ strategy:
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 # @param api.ingress.enabled If Ingress is enabled for the service.
-# @param api.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size Proxy-body-size parameter (default 1MB).
 # @param api.ingress.className Resource that contains additional configuration including the name of the controller that should implement the class.
 # @param api.ingress.tls Tls settings for https
 # @param api.ingress.hosts[0].host Hostname for the Ingress service.
@@ -112,7 +111,6 @@ api:
 
   ingress:
     enabled: false
-    annotations:
     className: ''
     tls: []
     hosts:
@@ -162,7 +160,6 @@ api:
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 # @param worker.ingress.enabled If Ingress is enabled for the service.
-# @param worker.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size Proxy-body-size parameter (default 1MB).
 # @param worker.ingress.className Resource that contains additional configuration including the name of the controller that should implement the class.
 # @param worker.ingress.tls Tls settings for https
 # @param worker.ingress.hosts[0].host Hostname for the Ingress service.
@@ -182,7 +179,6 @@ api:
 
 # @param worker.serviceAccount  Kubernetes service account
 # @param worker.tempPath Path to directory used for temp data
-# @param worker.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
 # @extra worker.logging Logging settings
 # @param worker.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
 # @param worker.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
@@ -228,8 +224,8 @@ worker:
 
   ingress:
     enabled: false
-    annotations: { }
     className: ''
+    tls: []
     hosts:
       - host: citylens-worker-service.host
 
@@ -280,9 +276,9 @@ postgres:
 
 # @section database settings
 # @param hangfire.database.connectionString Connection string to the Hangfire PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;`
-# @param hangfire.postgres.password User password to connect to the Hangfire database.
-# @param hangfire.postgres.userName User to connect to the Hangfire database.
-# @param hangfire.postgres.appName App name to connect to the Hangfire database.
+# @param hangfire.database.password User password to connect to the Hangfire database.
+# @param hangfire.database.userName User to connect to the Hangfire database.
+# @param hangfire.database.appName App name to connect to the Hangfire database.
 
 hangfire:
   database:
