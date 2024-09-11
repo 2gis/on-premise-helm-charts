@@ -100,7 +100,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "styles.env.s3" -}}
 - name: MGS_S3_ENDPOINT
-  value: "{{ required "A valid .Values.s3.endpoint required" .Values.s3.endpoint }}"
+  value: "{{ required "A valid .Values.s3.host required" .Values.s3.host }}"
 - name: MGS_S3_BUCKET
   value: "{{ .Values.s3.bucket }}"
 - name: MGS_S3_PUBLIC_DOMAIN
