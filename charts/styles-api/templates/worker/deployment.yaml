@@ -1,76 +1,68 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "twins.api.name" . }}
-  {{- if or .Values.api.annotations .Values.customCAs.bundle }}
+  name: {{ include "styles.worker.name" . }}
+  {{- if or .Values.worker.annotations .Values.customCAs.bundle }}
   annotations:
     {{- if .Values.customCAs.bundle }}
     checksum/config: {{ include (print .Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
     {{- end }}
-    {{- with .Values.api.annotations }}
+    {{- with .Values.worker.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- end }}
   labels:
-    {{- include "twins.api.labels" . | nindent 4 }}
-    {{- with .Values.api.labels }}
+    {{- include "styles.worker.labels" . | nindent 4 }}
+    {{- with .Values.worker.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  {{- if not .Values.api.hpa.enabled }}
   replicas: {{ .Values.api.replicas }}
-  {{- end }}
-  revisionHistoryLimit: {{ .Values.api.revisionHistoryLimit }}
+  revisionHistoryLimit: 1
   strategy:
-    {{- toYaml .Values.api.strategy | nindent 4 }}
+    type: Recreate
   selector:
     matchLabels:
-      {{- include "twins.api.selectorLabels" . | nindent 6 }}
+      {{- include "styles.worker.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
         checksum/config: {{ (include (print $.Template.BasePath "/secret-deploys.yaml") . | fromYaml).data | toYaml | sha256sum }}
-        {{- with .Values.api.podAnnotations }}
+        {{- with .Values.worker.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
       labels:
-        {{- include "twins.api.labels" . | nindent 8 }}
-        {{- with .Values.api.podLabels }}
+        {{- include "styles.worker.labels" . | nindent 8 }}
+        {{- with .Values.worker.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
       containers:
-        - name: twins-api
+        - name: worker
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 8080
-          readinessProbe:
-            httpGet:
-              path: /healthcheck
-              port: http
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: [ "mgs", "worker" ]
           resources:
-            {{- toYaml .Values.api.resources | nindent 12 }}
+            {{- toYaml .Values.worker.resources | nindent 12 }}
           env:
-            {{- include "twins.env.api" . | nindent 12 }}
+            {{- include "styles.env.worker" . | nindent 12 }}
           {{- if .Values.customCAs.bundle }}
           volumeMounts:
-            {{- include "twins.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "styles.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
       {{- if .Values.customCAs.bundle }}
       volumes:
-        {{- include "twins.custom.ca.deploys.volumes" . | nindent 8 }}
+        {{- include "styles.custom.ca.deploys.volumes" . | nindent 8 }}
       {{- end }}
-      {{- with .Values.api.nodeSelector }}
+      {{- with .Values.worker.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.api.affinity }}
+      {{- with .Values.worker.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.api.tolerations }}
+      {{- with .Values.worker.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

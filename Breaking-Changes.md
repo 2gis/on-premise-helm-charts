@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.28.0]
+
+### navi-async-matric
+
+- `s3.publicNetloc` now MUST start with `http://` or `https://` scheme
+
 ## [1.27.0]
 
 ### catalog-api

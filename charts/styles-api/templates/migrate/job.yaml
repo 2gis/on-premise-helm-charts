@@ -1,10 +1,9 @@
-{{- if not .Values.importer.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "twins.migrate.name" . }}
+  name: {{ include "styles.migrate.name" . }}
   labels:
-    {{- include "twins.migrate.labels" . | nindent 4 }}
+    {{- include "styles.migrate.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
@@ -13,9 +12,9 @@ spec:
   backoffLimit: 0
   template:
     metadata:
-      name: {{ include "twins.migrate.name" . }}
+      name: {{ include "styles.migrate.name" . }}
       labels:
-        {{- include "twins.migrate.labels" . | nindent 8 }}
+        {{- include "styles.migrate.labels" . | nindent 8 }}
     spec:
       restartPolicy: Never
       {{- if .Values.migrate.initialDelaySeconds }}
@@ -29,25 +28,24 @@ spec:
       containers:
         - name: migrate
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: [ "twins-migrate" ]
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: [ "mgs", "migrate" ]
           resources:
             {{- toYaml .Values.migrate.resources | nindent 12 }}
           env:
-            {{- include "twins.env.db.jobs" . | nindent 12 }}
+            {{- include "styles.env.migrate" . | nindent 12 }}
             {{- if .Values.customCAs.bundle }}
-            {{- include "twins.env.custom.ca.path" . | nindent 12 }}
+            {{- include "styles.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
           {{- if .Values.customCAs.bundle }}
           volumeMounts:
-            {{- include "twins.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "styles.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
       {{- if .Values.customCAs.bundle }}
       volumes:
-        {{- include "twins.custom.ca.jobs.volumes" . | nindent 8 }}
+        {{- include "styles.custom.ca.jobs.volumes" . | nindent 8 }}
       {{- end }}
       {{- with .Values.migrate.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-{{- end }}

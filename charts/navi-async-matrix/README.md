@@ -52,7 +52,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.10.3`                            |
+| `image.tag`        | Tag         | `1.11.2`                            |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings
@@ -187,13 +187,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### S3-compatible storage settings
 
-| Name              | Description                                                       | Value |
-| ----------------- | ----------------------------------------------------------------- | ----- |
-| `s3.host`         | S3 endpoint URL, ex: http://async-matrix-s3.host. **Required**    | `""`  |
-| `s3.bucket`       | S3 bucket name. **Required**                                      | `""`  |
-| `s3.accessKey`    | S3 access key for accessing the bucket. **Required**              | `""`  |
-| `s3.secretKey`    | S3 secret key for accessing the bucket. **Required**              | `""`  |
-| `s3.publicNetloc` | Announce proxy URL for S3 results instead of s3.url if not empty. | `nil` |
+| Name              | Description                                                                                    | Value |
+| ----------------- | ---------------------------------------------------------------------------------------------- | ----- |
+| `s3.host`         | S3 endpoint URL, ex: http://async-matrix-s3.host. **Required**                                 | `""`  |
+| `s3.bucket`       | S3 bucket name. **Required**                                                                   | `""`  |
+| `s3.accessKey`    | S3 access key for accessing the bucket. **Required**                                           | `""`  |
+| `s3.secretKey`    | S3 secret key for accessing the bucket. **Required**                                           | `""`  |
+| `s3.publicNetloc` | Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://` | `""`  |
 
 ### API keys service
 
