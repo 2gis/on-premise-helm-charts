@@ -21,7 +21,7 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 | `imagePullSecrets` | Kubernetes image pull secrets.                                                                | `[]`                         |
 | `imagePullPolicy`  | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`               |
 | `image.repository` | Styles API service image repository.                                                          | `2gis-on-premise/styles-api` |
-| `image.tag`        | Styles API service image tag.                                                                 | `1.0.0`                      |
+| `image.tag`        | Styles API service image tag.                                                                 | `0.30.0`                     |
 
 ### API service settings
 
