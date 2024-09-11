@@ -128,7 +128,7 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 
 | Name                 | Description                                                                         | Value |
 | -------------------- | ----------------------------------------------------------------------------------- | ----- |
-| `s3.host`            | S3 host as `host|ip:port`. **Required**                                             | `""`  |
+| `s3.host`            | S3 host as `host:port`. **Required**                                                | `""`  |
 | `s3.accessKey`       | S3 access key. **Required**                                                         | `""`  |
 | `s3.secretKey`       | S3 secret key. **Required**                                                         | `""`  |
 | `s3.bucket`          | S3 bucket name, for example 'styles'. **Required**                                  | `""`  |

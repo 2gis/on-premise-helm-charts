@@ -224,7 +224,7 @@ postgres:
 
 s3:
 
-  # @param s3.host S3 host as `host|ip:port`. **Required**
+  # @param s3.host S3 host as `host:port`. **Required**
   # @param s3.accessKey S3 access key. **Required**
   # @param s3.secretKey S3 secret key. **Required**
   # @param s3.bucket S3 bucket name, for example 'styles'. **Required**
