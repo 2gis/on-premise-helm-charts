@@ -183,7 +183,7 @@ migrate:
 
   # @param migrate.initialDelaySeconds Delay in seconds at the service startup.
 
-  initialDelaySeconds: 0
+  initialDelaySeconds: 5
 
   # @section migrate.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
   # @param migrate.resources.requests.cpu A CPU request.
