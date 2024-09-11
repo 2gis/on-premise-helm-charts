@@ -531,10 +531,10 @@ dgctlStorage:
   region: ''
   secure: false
   verifySsl: true
-  bucket: keys
+  bucket: ''
   accessKey: ''
   secretKey: ''
-  manifest: manifest.json
+  manifest: ''
 
 # @section Limits
 
