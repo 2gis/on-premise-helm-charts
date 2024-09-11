@@ -50,7 +50,7 @@ navi-router
 navi-splitter
 	navi-splitter:1.0.1
 platform
-	platform-ui:0.15.0
+	platform-ui:0.15.1
 pro-api
 	pro-api:1.35.0
 	pro-importer:1.35.0
