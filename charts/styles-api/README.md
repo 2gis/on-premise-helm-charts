@@ -71,16 +71,7 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 
 | Name                         | Description                              | Value |
 | ---------------------------- | ---------------------------------------- | ----- |
-| `worker.initialDelaySeconds` | Delay in seconds at the service startup. | `0`   |
-
-### worker.persistentVolume **Persistent Volume settings**
-
-| Name                                   | Description                                                                                                         | Value               |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `worker.persistentVolume.enabled`      | If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service | `false`             |
-| `worker.persistentVolume.accessModes`  | Persistent Volume [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)       | `["ReadWriteOnce"]` |
-| `worker.persistentVolume.storageClass` | Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)                          | `topolvm-ext4`      |
-| `worker.persistentVolume.size`         | Volume size                                                                                                         | `256Mi`             |
+| `worker.initialDelaySeconds` | Delay in seconds at the service startup. | `5`   |
 
 ### worker.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
@@ -102,7 +93,7 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 
 | Name                          | Description                              | Value |
 | ----------------------------- | ---------------------------------------- | ----- |
-| `migrate.initialDelaySeconds` | Delay in seconds at the service startup. | `0`   |
+| `migrate.initialDelaySeconds` | Delay in seconds at the service startup. | `5`   |
 
 ### migrate.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 

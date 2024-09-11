@@ -128,20 +128,7 @@ worker:
 
   # @param worker.initialDelaySeconds Delay in seconds at the service startup.
 
-  initialDelaySeconds: 0
-
-  # @section worker.persistentVolume **Persistent Volume settings**
-  # @param worker.persistentVolume.enabled If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is enabled for the service
-  # @param worker.persistentVolume.accessModes Persistent Volume [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
-  # @param worker.persistentVolume.storageClass Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)
-  # @param worker.persistentVolume.size Volume size
-
-  persistentVolume:
-    enabled: false
-    accessModes:
-      - ReadWriteOnce
-    storageClass: topolvm-ext4
-    size: 256Mi
+  initialDelaySeconds: 5
 
   # @section worker.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
   # @param worker.resources.requests.cpu A CPU request.
