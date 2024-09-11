@@ -227,8 +227,8 @@ s3:
   # @param s3.host S3 host as `host|ip:port`. **Required**
   # @param s3.accessKey S3 access key. **Required**
   # @param s3.secretKey S3 secret key. **Required**
-  # @param s3.bucket S3 bucket name, for example 'styles'.
-  # @param s3.publicDomain S3 public access domain. Uses https access.
+  # @param s3.bucket S3 bucket name, for example 'styles'. **Required**
+  # @param s3.publicDomain S3 public access domain. Uses https access. **Required**
   # @param s3.connectTimeout S3 management client connection timeout. If not specified, the default value is 3s.
   # @param s3.requestTimeout S3 management client request timeout. If not specified, the default value is 30s.
   # @param s3.responseTimeout S3 management client response timeout. If not specified, the default value is 3s.
