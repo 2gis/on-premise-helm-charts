@@ -32,11 +32,11 @@ mapgl-js-api
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
-	navi-async-matrix:1.10.3
+	navi-async-matrix:1.11.2
 navi-back
 	envoy:v1.27.0
 	metrics-aggregator:
-	navi-back:7.25.0.3
+	navi-back:7.27.1.2
 navi-castle
 	navi-castle:1.9.2
 	navi-front:1.24.1
@@ -65,6 +65,8 @@ search-api
 stat-receiver
 	stat-receiver-api:1.11.1
 	stat-receiver-streams:1.11.1
+styles-api
+	styles-api:0.30.0
 tiles-api
 	tiles-api-importer:4.54.0
 	tiles-api-proxy:4.54.0
