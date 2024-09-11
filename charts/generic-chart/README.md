@@ -114,6 +114,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                 | `ClusterIP` |
 | `service.clusterIP`   | Controls Service cluster IP allocation. Cannot be changed after resource creation.                                                             | `""`        |
 | `service.port`        | Service port.                                                                                                                                  | `80`        |
+| `service.nodePort`    | Node port if type NodePort.                                                                                                                    | `nil`       |
 
 #### [Service account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
 
@@ -145,3 +146,13 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `job.completionMode`       | Completion mode (NonIndexed or Indexed).                                                                          | `""`  |
 | `job.parallelism`          | Number of pods running at any instant.                                                                            | `""`  |
 | `job.restartPolicy`        | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy) | `""`  |
+
+#### Network Policy configuration
+
+| Name                                               | Description                                                  | Value   |
+| -------------------------------------------------- | ------------------------------------------------------------ | ------- |
+| `networkPolicy.ingress.enabled`                    | Enable creation of NetworkPolicy resources for ingress rules | `false` |
+| `networkPolicy.ingress.explicitNamespacesSelector` | Explict namespace selector for default rule ingress          | `{}`    |
+| `networkPolicy.ingress.additionalRules`            | Array of additional ingress rules                            | `[]`    |
+| `networkPolicy.egress.enabled`                     | Enable creation of NetworkPolicy resources for egress rules  | `false` |
+| `networkPolicy.egress.config`                      | Array of egress rules                                        | `[]`    |
