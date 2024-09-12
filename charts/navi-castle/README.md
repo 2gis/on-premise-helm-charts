@@ -145,7 +145,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 | Name                            | Description                                                                           | Value               |
 | ------------------------------- | ------------------------------------------------------------------------------------- | ------------------- |
-| `persistentVolume.enabled`      | If Kubernetes persistence volume should be enabled for ZooKeeper.                     | `false`             |
+| `persistentVolume.enabled`      | If Kubernetes persistence volume should be enabled for Castle.                        | `false`             |
 | `persistentVolume.accessModes`  | Volume access mode.                                                                   | `["ReadWriteOnce"]` |
 | `persistentVolume.storageClass` | Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/). | `ceph-csi-rbd`      |
 | `persistentVolume.size`         | Volume size.                                                                          | `5Gi`               |
