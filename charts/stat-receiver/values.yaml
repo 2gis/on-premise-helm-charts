@@ -3,6 +3,7 @@
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
 dgctlDockerRegistry: ''
+imagePullSecrets: []
 
 # @section API service settings
 
@@ -37,6 +38,12 @@ api:
     type: ClusterIP
     port: 80
     targetPort: 8080
+
+  # @extra api.resources **Limits for the API service**
+  # @param api.resources.requests.cpu A CPU request.
+  # @param api.resources.requests.memory A memory request.
+  # @param api.resources.limits.cpu A CPU limit.
+  # @param api.resources.limits.memory A memory limit.
 
   resources:
     requests:
@@ -76,6 +83,12 @@ streams:
     repository: 2gis-on-premise/stat-receiver-streams
     tag: 1.11.1
     pullPolicy: IfNotPresent
+
+  # @extra streams.resources **Limits for the Streams service**
+  # @param streams.resources.requests.cpu A CPU request.
+  # @param streams.resources.requests.memory A memory request.
+  # @param streams.resources.limits.cpu A CPU limit.
+  # @param streams.resources.limits.memory A memory limit.
 
   resources:
     requests:
@@ -154,18 +167,4 @@ ingress:
   enabled: false
   hosts:
   - host: stat-receiver.host
-
-
-# @section Limits
-
-# @extra api.resources **Limits for the API service**
-# @param api.resources.requests.cpu A CPU request.
-# @param api.resources.requests.memory A memory request.
-# @param api.resources.limits.cpu A CPU limit.
-# @param api.resources.limits.memory A memory limit.
-
-# @extra streams.resources **Limits for the Streams service**
-# @param streams.resources.requests.cpu A CPU request.
-# @param streams.resources.requests.memory A memory request.
-# @param streams.resources.limits.cpu A CPU limit.
-# @param streams.resources.limits.memory A memory limit.
+  
