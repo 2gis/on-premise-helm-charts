@@ -1,4 +1,4 @@
-# @section Docker Registry settings
+﻿# @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
