@@ -4,7 +4,7 @@ description: Service implements asynchronous API over Distance Matrix
 
 type: application
 
-version: 1.28.0
+version: 1.28.2
 appVersion: 1.11.2
 
 maintainers:

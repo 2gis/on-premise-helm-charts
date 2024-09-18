@@ -3,7 +3,7 @@ name: twins-api
 type: application
 description: A Helm chart for Kubernetes to deploy API Twins service
 
-version: 1.28.0
+version: 1.28.2
 appVersion: 1.13.0
 
 maintainers:
