@@ -19,7 +19,6 @@ imagePullSecrets: []
 # @param dgctlStorage.host S3 host. Format: `host:port`. **Required**
 # @param dgctlStorage.region S3 region name.
 # @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
-# @param dgctlStorage.verifySsl Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**
 # @param dgctlStorage.bucket S3 bucket name. **Required**
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
@@ -29,7 +28,6 @@ dgctlStorage:
   host: ''
   region: ''
   secure: false
-  verifySsl: true
   bucket: ''
   accessKey: ''
   secretKey: ''
