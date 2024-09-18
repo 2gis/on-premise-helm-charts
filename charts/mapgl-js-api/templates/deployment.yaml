@@ -46,13 +46,13 @@ spec:
             - name: DEMO_KEY
               value: "{{ .Values.env.MAPGL_DEMO_KEY }}"
             - name: MAPGL_TILESERVER
-              value: "{{ .Values.env.MAPGL_TILES_API }}"
+              value: {{ required "A valid .Values.env.MAPGL_TILES_API entry required" .Values.env.MAPGL_TILES_API | quote}}
             - name: MAPGL_TILESET
               value: "{{ .Values.env.MAPGL_TILESET }}"
             - name: MAPGL_MODELS_TILESET
               value: "{{ .Values.env.MAPGL_IMMERSIVE_TILESET }}"
             - name: MAPGL_TRAFFICSERVER
-              value: "{{ .Values.env.MAPGL_TRAFFICSERVER }}"
+              value: {{ required "A valid .Values.env.MAPGL_TRAFFICSERVER entry required" .Values.env.MAPGL_TRAFFICSERVER | quote}}
             - name: MAPGL_FLOORSSERVER
               value: "{{ .Values.env.MAPGL_FLOORSSERVER }}"
             - name: MAPGL_STYLESERVER
