@@ -28,7 +28,7 @@ keys
 license
 	license:2.2.1
 mapgl-js-api
-	mapgl:1.50.1
+	mapgl:1.51.0
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
