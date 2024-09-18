@@ -1,5 +1,14 @@
 # 2GIS On-Premise Changelog
 
+## [1.28.2] (2024-09-18)
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.50.1
+	+ mapgl:1.51.0
+
+```
+
 ## [1.28.0] (2024-09-11)
 #### [Breaking-Changes](Breaking-Changes.md#1280)
 #### Images
