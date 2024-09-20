@@ -1,31 +1,34 @@
-{{- if .Values.api.ingress.enabled -}}
-{{- $fullName := include "api.name" . -}}
-{{- $svcPort := .Values.api.service.port -}}
+{{- with .Values.routes.api.ingress }}
+{{- if .enabled -}}
+{{- $fullName := include "citylens.routes.api.name" $ -}}
+---
 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "api.labels" . | nindent 4 }}
-  {{- with .Values.api.ingress.annotations }}
+    {{- include "citylens.routes.api.labels" $ | nindent 4 }}
+
+  {{- with .annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+
 spec:
-  ingressClassName: {{ .Values.api.ingress.className }}
-  {{- if .Values.api.ingress.tls }}
+  ingressClassName: {{ .className }}
+  {{- if .tls }}
   tls:
-    {{- range .Values.api.ingress.tls }}
+    {{- range .tls }}
     - hosts:
-        {{- range .hosts }}
+      {{- range .hosts }}
         - {{ . | quote }}
-        {{- end }}
+      {{- end }}
       secretName: {{ .secretName }}
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.api.ingress.hosts }}
+    {{- range .hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -36,7 +39,9 @@ spec:
               service:
                 name: {{ $fullName }}
                 port:
-                  number: {{ $svcPort }}
+                  number: {{ $.Values.routes.api.service.port }}
           {{- end }}
     {{- end }}
+
+{{- end }}
 {{- end }}
