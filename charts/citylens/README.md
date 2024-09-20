@@ -520,7 +520,7 @@ See the [documentation]() to learn about:
 | `routes.environment`                   | Set environment for services.                                                                                                                     | `""`   |
 | `routes.imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                    | `[]`   |
 | `routes.terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds. | `[]`   |
-| `routes.migrations.enabled`            | If migrations needed.                                                                                                                             | `true` |
+| `routes.migration.enabled`             | If migrations needed.                                                                                                                             | `true` |
 
 ### Strategy settings
 
@@ -582,15 +582,15 @@ See the [documentation]() to learn about:
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                                                                         | Description                                                                                                           | Value                                                 |
-|------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| `routes.api.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                                               |
-| `routes.api.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                                                  |
-| `routes.api.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `{"nginx.ingress.kubernetes.io/proxy-body-size":"0"}` |
-| `routes.api.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-api.host`                                   |
-| `routes.api.ingress.hosts[0].paths[0].path`                                  | Endpoint of host.                                                                                                     | `/`                                                   |
-| `routes.api.ingress.hosts[0].paths[0].pathType`                              | Path type of endpoint.                                                                                                | `Prefix`                                              |
-| `routes.api.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                                                  |
+| Name                                            | Description                                                                                                           | Value               |
+|-------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------|
+| `routes.api.ingress.enabled`                    | If Ingress is enabled for the service.                                                                                | `false`             |
+| `routes.api.ingress.className`                  | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                |
+| `routes.api.ingress.annotations`                | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).             | `{}`                |
+| `routes.api.ingress.hosts[0].host`              | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-api.host` |
+| `routes.api.ingress.hosts[0].paths[0].path`     | Endpoint of host.                                                                                                     | `/`                 |
+| `routes.api.ingress.hosts[0].paths[0].pathType` | Path type of endpoint.                                                                                                | `Prefix`            |
+| `routes.api.ingress.tls`                        | Tls settings for https.                                                                                               | `[]`                |
 
 ### Metadata settings
 
