@@ -23,13 +23,13 @@ See the [documentation]() to learn about:
 ### Docker Registry settings
 
 | Name                  | Description                                                                                         | Value |
-|-----------------------|-----------------------------------------------------------------------------------------------------|-------|
+| --------------------- | --------------------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port` **Required** | `""`  |
 
 ### Deployment Artifacts Storage settings
 
 | Name                     | Description                                                                                                                                                                                                                                                           | Value   |
-|--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `dgctlStorage.host`      | S3 host. Format: `host:port`. **Required**                                                                                                                                                                                                                            | `""`    |
 | `dgctlStorage.secure`    | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                                           | `false` |
 | `dgctlStorage.bucket`    | S3 bucket name. **Required**                                                                                                                                                                                                                                          | `""`    |
@@ -41,10 +41,11 @@ See the [documentation]() to learn about:
 
 ### Citylens API service settings
 
+
 ### Image settings
 
 | Name                   | Description  | Value                          |
-|------------------------|--------------|--------------------------------|
+| ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
 | `api.image.tag`        | Tag.         | `1.12.0`                       |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
@@ -52,7 +53,7 @@ See the [documentation]() to learn about:
 ### Resources settings
 
 | Name                            | Description                                                                                                                                    | Value   |
-|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `api.replicas`                  | A replica count for the pod.                                                                                                                   | `4`     |
 | `api.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
 | `api.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `1000m` |
@@ -63,7 +64,7 @@ See the [documentation]() to learn about:
 ### Service settings
 
 | Name                            | Description                                                                                                                    | Value       |
-|---------------------------------|--------------------------------------------------------------------------------------------------------------------------------|-------------|
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `api.service.type`              | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `api.service.port`              | Service port.                                                                                                                  | `80`        |
 | `api.service.targetPort`        | Service target port.                                                                                                           | `8000`      |
@@ -74,7 +75,7 @@ See the [documentation]() to learn about:
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                                                                  | Description                                                                                                           | Value                                                 |
-|-----------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
+| --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | `api.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                                               |
 | `api.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                                                  |
 | `api.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `{"nginx.ingress.kubernetes.io/proxy-body-size":"0"}` |
@@ -86,7 +87,7 @@ See the [documentation]() to learn about:
 ### Auth settings for authentication
 
 | Name                     | Description                                                                                                                                                                                                   | Value  |
-|--------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `api.auth.enabled`       | If authentication is needed.                                                                                                                                                                                  | `true` |
 | `api.auth.authServerUrl` | API URL of authentication service, OIDC-compatibility expected. Ex.: `http(s)://keycloak.ingress.host/`. **Required**                                                                                         | `""`   |
 | `api.auth.realm`         | Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: CityLens_app | `""`   |
@@ -95,19 +96,19 @@ See the [documentation]() to learn about:
 ### Bearer tokens for callbacks & predictors
 
 | Name                               | Description                                                                                                             | Value |
-|------------------------------------|-------------------------------------------------------------------------------------------------------------------------|-------|
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----- |
 | `api.auth.predictorsTokens.camcom` | Bearer token, expected on CamCom callback endpoint and CamCom prediction endpoint (if integration with CamCom enabled). | `""`  |
 
 ### Licensing server settings
 
 | Name                | Description                                                | Value |
-|---------------------|------------------------------------------------------------|-------|
+| ------------------- | ---------------------------------------------------------- | ----- |
 | `api.licensing.url` | Licensing server v2 URL. https://license.svc. **Required** | `""`  |
 
 ### Custom settings
 
 | Name                 | Description                                            | Value          |
-|----------------------|--------------------------------------------------------|----------------|
+| -------------------- | ------------------------------------------------------ | -------------- |
 | `api.showDocs`       | Show documentation link if needed.                     | `false`        |
 | `api.logLevel`       | Log level.                                             | `INFO`         |
 | `api.metricsAppName` | Value for service prometheus metrics label "app_name". | `citylens-api` |
@@ -115,7 +116,7 @@ See the [documentation]() to learn about:
 ### Metadata settings
 
 | Name                 | Description                                                                                                                 | Value |
-|----------------------|-----------------------------------------------------------------------------------------------------------------------------|-------|
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `api.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
 | `api.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
 | `api.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
@@ -126,10 +127,11 @@ See the [documentation]() to learn about:
 
 ### Citylens web service settings
 
+
 ### Image settings
 
 | Name                   | Description  | Value                          |
-|------------------------|--------------|--------------------------------|
+| ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
 | `web.image.tag`        | Tag.         | `1.12.0`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
@@ -137,7 +139,7 @@ See the [documentation]() to learn about:
 ### Resources settings
 
 | Name                            | Description                                                                                                                                    | Value   |
-|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `web.replicas`                  | A replica count for the pod.                                                                                                                   | `1`     |
 | `web.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
 | `web.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `1000m` |
@@ -148,7 +150,7 @@ See the [documentation]() to learn about:
 ### Service settings
 
 | Name                            | Description                                                                                                                    | Value       |
-|---------------------------------|--------------------------------------------------------------------------------------------------------------------------------|-------------|
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `web.service.type`              | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `web.service.port`              | Service port.                                                                                                                  | `80`        |
 | `web.service.targetPort`        | Service target port.                                                                                                           | `5000`      |
@@ -160,7 +162,7 @@ See the [documentation]() to learn about:
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
 | Name                                                                  | Description                                                                                                           | Value                                                 |
-|-----------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
+| --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | `web.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                                               |
 | `web.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                                                  |
 | `web.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `{"nginx.ingress.kubernetes.io/proxy-body-size":"0"}` |
@@ -172,7 +174,7 @@ See the [documentation]() to learn about:
 ### Auth settings for authentication
 
 | Name                     | Description                                                                                                                                                                                                                | Value   |
-|--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `web.auth.enabled`       | If authentication is needed.                                                                                                                                                                                               | `false` |
 | `web.auth.realm`         | Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: Inspection_Portal_backend | `""`    |
 | `web.auth.authServerUrl` | API URL of authentication service, OIDC-compatibility expected. Ex: `http(s)://keycloak.ingress.host` **Required**                                                                                                         | `""`    |
@@ -184,14 +186,14 @@ See the [documentation]() to learn about:
 ### Custom settings
 
 | Name                 | Description                                            | Value          |
-|----------------------|--------------------------------------------------------|----------------|
+| -------------------- | ------------------------------------------------------ | -------------- |
 | `web.logLevel`       | Log level.                                             | `WARNING`      |
 | `web.metricsAppName` | Value for service prometheus metrics label "app_name". | `citylens-web` |
 
 ### Metadata settings
 
 | Name                 | Description                                                                                                                 | Value |
-|----------------------|-----------------------------------------------------------------------------------------------------------------------------|-------|
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `web.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
 | `web.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
 | `web.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
@@ -202,10 +204,11 @@ See the [documentation]() to learn about:
 
 ### Citylens workers service settings
 
+
 ### Resources settings
 
 | Name                               | Description       | Value   |
-|------------------------------------|-------------------|---------|
+| ---------------------------------- | ----------------- | ------- |
 | `worker.resources.requests.cpu`    | A CPU request.    | `1000m` |
 | `worker.resources.requests.memory` | A memory request. | `1Gi`   |
 | `worker.resources.limits.cpu`      | A CPU limit.      | `2000m` |
@@ -214,7 +217,7 @@ See the [documentation]() to learn about:
 ### Citylens Frames Saver worker's settings
 
 | Name                                      | Description                                                                                                                                    | Value |
-|-------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-------|
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `worker.framesSaver.replicas`             | A replica count for the pod.                                                                                                                   | `4`   |
 | `worker.framesSaver.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
 | `worker.framesSaver.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
@@ -228,7 +231,7 @@ See the [documentation]() to learn about:
 ### Citylens Camcom sender worker's settings
 
 | Name                                          | Description                                                                                                                                    | Value   |
-|-----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `worker.camcomSender.enabled`                 | If Camcom Sender worker is enabled for the service.                                                                                            | `false` |
 | `worker.camcomSender.replicas`                | A replica count for the pod.                                                                                                                   | `1`     |
 | `worker.camcomSender.revisionHistoryLimit`    | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
@@ -251,7 +254,7 @@ See the [documentation]() to learn about:
 ### Citylens Predictions Saver worker's settings
 
 | Name                                           | Description                                                                                                                                    | Value |
-|------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-------|
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `worker.predictionsSaver.replicas`             | A replica count for the pod.                                                                                                                   | `1`   |
 | `worker.predictionsSaver.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
 | `worker.predictionsSaver.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
@@ -265,7 +268,7 @@ See the [documentation]() to learn about:
 ### Citylens Logs Saver worker's settings
 
 | Name                                    | Description                                                                                                                                    | Value |
-|-----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-------|
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `worker.logsSaver.replicas`             | A replica count for the pod.                                                                                                                   | `1`   |
 | `worker.logsSaver.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
 | `worker.logsSaver.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
@@ -279,7 +282,7 @@ See the [documentation]() to learn about:
 ### Citylens Reporter Pro worker's settings (synchronization with Pro)
 
 | Name                                      | Description                                                                                                                                    | Value |
-|-------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-------|
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `worker.reporterPro.replicas`             | A replica count for the pod.                                                                                                                   | `1`   |
 | `worker.reporterPro.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
 | `worker.reporterPro.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
@@ -293,7 +296,7 @@ See the [documentation]() to learn about:
 ### Citylens Reporter Pro Tracks worker's settings (track status actualization)
 
 | Name                                            | Description                                                                                                                                    | Value  |
-|-------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|--------|
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `worker.reporterProTracks.enabled`              | Deploy worker or not.                                                                                                                          | `true` |
 | `worker.reporterProTracks.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`    |
 | `worker.reporterProTracks.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
@@ -307,7 +310,7 @@ See the [documentation]() to learn about:
 ### Citylens Track Metadata Saver worker's settings
 
 | Name                                             | Description                                                                                                                                    | Value |
-|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-------|
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `worker.trackMetadataSaver.replicas`             | A replica count for the pod.                                                                                                                   | `1`   |
 | `worker.trackMetadataSaver.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
 | `worker.trackMetadataSaver.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
@@ -321,7 +324,7 @@ See the [documentation]() to learn about:
 ### Citylens Tracks Uploader worker's settings
 
 | Name                                              | Description                                                                                                                                    | Value   |
-|---------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `worker.tracksUploader.enabled`                   | If Tracks Uploader worker is enabled for the service.                                                                                          | `false` |
 | `worker.tracksUploader.replicas`                  | A replica count for the pod.                                                                                                                   | `1`     |
 | `worker.tracksUploader.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
@@ -340,13 +343,13 @@ See the [documentation]() to learn about:
 ### Citylens Dashboard batch events worker's settings
 
 | Name                                   | Description                  | Value |
-|----------------------------------------|------------------------------|-------|
+| -------------------------------------- | ---------------------------- | ----- |
 | `worker.dashboardBatchEvents.replicas` | A replica count for the pod. | `1`   |
 
 ### Citylens Dashboard batch events worker's Image settings
 
 | Name                                               | Description                                                                                                                                    | Value                              |
-|----------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------|
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `worker.dashboardBatchEvents.image.repository`     | Repository.                                                                                                                                    | `2gis-on-premise/citylens-workers` |
 | `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.12.0`                           |
 | `worker.dashboardBatchEvents.image.pullPolicy`     | Pull Policy.                                                                                                                                   | `IfNotPresent`                     |
@@ -363,7 +366,7 @@ See the [documentation]() to learn about:
 ### Migration job settings
 
 | Name                                   | Description                                                                                                             | Value                               |
-|----------------------------------------|-------------------------------------------------------------------------------------------------------------------------|-------------------------------------|
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
 | `migrations.image.tag`                 | Tag.                                                                                                                    | `1.12.0`                            |
@@ -377,7 +380,7 @@ See the [documentation]() to learn about:
 ### Kafka settings
 
 | Name                           | Description                                                                                   | Value |
-|--------------------------------|-----------------------------------------------------------------------------------------------|-------|
+| ------------------------------ | --------------------------------------------------------------------------------------------- | ----- |
 | `kafka.bootstrapServer`        | A Kafka broker endpoint. **Required**                                                         | `""`  |
 | `kafka.username`               | A Kafka username for connection. **Required**                                                 | `""`  |
 | `kafka.password`               | A Kafka password for connection. **Required**                                                 | `""`  |
@@ -395,7 +398,7 @@ See the [documentation]() to learn about:
 ### S3 settings
 
 | Name                  | Description                                                         | Value   |
-|-----------------------|---------------------------------------------------------------------|---------|
+| --------------------- | ------------------------------------------------------------------- | ------- |
 | `s3.verifySsl`        | Verify SSL certificate when connecting to s3.endpoint.              | `true`  |
 | `s3.endpoint`         | S3 endpoint. Format: `host:port` or `url`. **Required**             | `""`    |
 | `s3.accessKey`        | S3 access key for accessing the bucket. **Required**                | `""`    |
@@ -408,7 +411,7 @@ See the [documentation]() to learn about:
 ### postgres **Database settings**
 
 | Name                | Description                                      | Value  |
-|---------------------|--------------------------------------------------|--------|
+| ------------------- | ------------------------------------------------ | ------ |
 | `postgres.host`     | PostgreSQL rw hostname or IP. **Required**       | `""`   |
 | `postgres.port`     | PostgreSQL port. **Required**                    | `5432` |
 | `postgres.database` | PostgreSQL database name. **Required**           | `""`   |
@@ -418,7 +421,7 @@ See the [documentation]() to learn about:
 ### Map settings
 
 | Name                     | Description                                                | Value |
-|--------------------------|------------------------------------------------------------|-------|
+| ------------------------ | ---------------------------------------------------------- | ----- |
 | `map.tileserverUrl`      | URL template for tileserver. Ex.: `http://tileserver.host` | `""`  |
 | `map.mapgl.host`         | Hostname of mapgl server. **Required**                     | `""`  |
 | `map.mapgl.key`          | Key of mapgl server. **Required**                          | `""`  |
@@ -429,7 +432,7 @@ See the [documentation]() to learn about:
 ### Custom settings
 
 | Name                            | Description                                                                                                      | Value                                         |
-|---------------------------------|------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
 | `dashboardDomain`               | Link to Citylens web address. **Required**                                                                       | `""`                                          |
 | `locale`                        | Locale language (en by default).                                                                                 | `en`                                          |
 | `headerLinks`                   | List of links for navbar.                                                                                        | `["drivers","tracks","interest_zones","map"]` |
@@ -440,7 +443,7 @@ See the [documentation]() to learn about:
 ### PRO integration (only when Pro reporter enabled)
 
 | Name                | Description                                                                                           | Value  |
-|---------------------|-------------------------------------------------------------------------------------------------------|--------|
+| ------------------- | ----------------------------------------------------------------------------------------------------- | ------ |
 | `pro.baseUrl`       | PRO API URL (used for filters actualization). Ex: http(s)://pro-api.svc/your_asset_name/filters       | `""`   |
 | `pro.key`           | PRO API auth token                                                                                    | `""`   |
 | `pro.verifySsl`     | Set to `false` if pro.baseUrl must be accessed via https without certificate validation. **Required** | `true` |
@@ -449,74 +452,61 @@ See the [documentation]() to learn about:
 ### **Custom Certificate Authority**
 
 | Name                  | Description                                                                                                                 | Value |
-|-----------------------|-----------------------------------------------------------------------------------------------------------------------------|-------|
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
 | `customCAs.certsPath` | Custom CA bundle mount directory in the container.                                                                          | `""`  |
 
-### **Citylens Routes sevices**
-
-### Custom settings
-
-| Name                                   | Description                                                                                                                                       | Value  |
-|----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|--------|
-| `routes.environment`                   | Set environment for services.                                                                                                                     | `""`   |
-| `routes.imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                    | `[]`   |
-| `routes.terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds. | `[]`   |
-| `routes.migration.enabled`             | If migrations needed.                                                                                                                             | `true` |
-
-### Strategy settings
+### Citylens routes services settings
 
 | Name                                           | Description                                                                                                                                                                                              | Value           |
-|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `routes.environment`                           | Set environment for services.                                                                                                                                                                            | `""`            |
+| `routes.imagePullSecrets`                      | Kubernetes image pull secrets.                                                                                                                                                                           | `[]`            |
+| `routes.terminationGracePeriodSeconds`         | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds                                                         | `60`            |
+| `routes.migration.enabled`                     | If migrations needed.                                                                                                                                                                                    | `true`          |
+| `routes`                                       | **Strategy**                                                                                                                                                                                             |                 |
 | `routes.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
 | `routes.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `routes.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
+| `routes`                                       | **Postgres**                                                                                                                                                                                             |                 |
+| `routes.postgres.database`                     | PostgreSQL database name. **Required**                                                                                                                                                                   | `""`            |
+| `routes.postgres.timeout`                      | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.                                                                             | `15`            |
+| `routes.postgres.commandTimeout`               | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.                                                                                  | `30`            |
+| `routes.postgres.maxPoolSize`                  | The maximum connection pool size.                                                                                                                                                                        | `30`            |
+| `routes.postgres.pooling`                      | Whether connection pooling should be used.                                                                                                                                                               | `false`         |
+| `routes`                                       | **Hangfire**                                                                                                                                                                                             |                 |
+| `routes.hangfire.database`                     | PostgreSQL database name. **Required**                                                                                                                                                                   | `""`            |
+| `routes.hangfire.timeout`                      | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.                                                                             | `15`            |
+| `routes.hangfire.commandTimeout`               | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.                                                                                  | `30`            |
+| `routes.hangfire.maxPoolSize`                  | The maximum connection pool size.                                                                                                                                                                        | `30`            |
+| `routes.hangfire.pooling`                      | Whether connection pooling should be used.                                                                                                                                                               | `false`         |
 
-### Postgres settings
+### Citylens routes API
 
-| Name                             | Description                                                                                                                  | Value   |
-|----------------------------------|------------------------------------------------------------------------------------------------------------------------------|---------|
-| `routes.postgres.database`       | PostgreSQL database name.                                                                                                    | `""`    |
-| `routes.postgres.timeout`        | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error. | `15`    |
-| `routes.postgres.commandTimeout` | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.      | `30`    |
-| `routes.postgres.maxPoolSize`    | The maximum connection pool size.                                                                                            | `30`    |
-| `routes.postgres.pooling`        | Whether connection pooling should be used.                                                                                   | `false` |
-
-### Hangfire settings
-
-| Name                             | Description                                                                                                                  | Value   |
-|----------------------------------|------------------------------------------------------------------------------------------------------------------------------|---------|
-| `routes.hangfire.database`       | PostgreSQL database name.                                                                                                    | `""`    |
-| `routes.hangfire.timeout`        | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error. | `15`    |
-| `routes.hangfire.commandTimeout` | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.      | `30`    |
-| `routes.hangfire.maxPoolSize`    | The maximum connection pool size.                                                                                            | `30`    |
-| `routes.hangfire.pooling`        | Whether connection pooling should be used.                                                                                   | `false` |
-
-### **Citylens Routes API**
 
 ### Image settings
 
 | Name                          | Description  | Value                                 |
-|-------------------------------|--------------|---------------------------------------|
+| ----------------------------- | ------------ | ------------------------------------- |
 | `routes.api.image.repository` | Repository.  | `2gis-on-premise/citylens-routes-api` |
-| `routes.api.image.tag`        | Tag.         | `1.12.0`                              |
-| `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        | 
+| `routes.api.image.tag`        | Tag.         | `latest`                              |
+| `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        |
 
 ### Resources settings
 
 | Name                                   | Description                                                                                                                                    | Value   |
-|----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| `routes.api.replicas`                  | A replica count for the pod.                                                                                                                   | `4`     |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `routes.api.replicaCount`              | A replica count for the pod.                                                                                                                   | `2`     |
 | `routes.api.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
-| `routes.api.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `1000m` |
-| `routes.api.resources.requests.memory` | A memory request.                                                                                                                              | `1Gi`   |
-| `routes.api.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `2000m` |
-| `routes.api.resources.limits.memory`   | A memory limit.                                                                                                                                | `2Gi`   |
+| `routes.api.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`  |
+| `routes.api.resources.requests.memory` | A memory request.                                                                                                                              | `256M`  |
+| `routes.api.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`     |
+| `routes.api.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024M` |
 
 ### Service settings
 
 | Name                             | Description                                                                                                                    | Value       |
-|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------|-------------|
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `routes.api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `routes.api.service.port`        | Service port.                                                                                                                  | `80`        |
 | `routes.api.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
@@ -524,86 +514,82 @@ See the [documentation]() to learn about:
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                                            | Description                                                                                                           | Value               |
-|-------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------|
-| `routes.api.ingress.enabled`                    | If Ingress is enabled for the service.                                                                                | `false`             |
-| `routes.api.ingress.className`                  | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                |
-| `routes.api.ingress.annotations`                | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).             | `{}`                |
-| `routes.api.ingress.hosts[0].host`              | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-api.host` |
-| `routes.api.ingress.hosts[0].paths[0].path`     | Endpoint of host.                                                                                                     | `/`                 |
-| `routes.api.ingress.hosts[0].paths[0].pathType` | Path type of endpoint.                                                                                                | `Prefix`            |
-| `routes.api.ingress.tls`                        | Tls settings for https.                                                                                               | `[]`                |
+| Name                                            | Description                                                                                                           | Value                      |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `routes.api.ingress.enabled`                    | If Ingress is enabled for the service.                                                                                | `false`                    |
+| `routes.api.ingress.className`                  | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                       |
+| `routes.api.ingress.annotations`                | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).             | `{}`                       |
+| `routes.api.ingress.hosts[0].host`              | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-routes-api.host` |
+| `routes.api.ingress.hosts[0].paths[0].path`     | Endpoint of host.                                                                                                     | `/`                        |
+| `routes.api.ingress.hosts[0].paths[0].pathType` | Path type of endpoint.                                                                                                | `Prefix`                   |
+| `routes.api.ingress.tls`                        | Tls settings for https.                                                                                               | `[]`                       |
 
 ### Metadata settings
 
-| Name                        | Description                                                                                                                 | Value  |
-|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------|--------|
-| `routes.api.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
-| `routes.api.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
-| `routes.api.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
-| `routes.api.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
-| `routes.api.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`   |
-| `routes.api.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`   |
-| `routes.api.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`   |
-| `routes.api.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp` |
+| Name                        | Description                                                                                                                 | Value         |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `routes.api.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.api.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.api.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.api.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.api.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
+| `routes.api.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
+| `routes.api.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
+| `routes.api.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp`        |
+| `routes.api.logging`        | Routes **Logging** settings                                                                                                 |               |
+| `routes.api.logging.level`  | Log message level. Trace, Debug, Information, Warning, Error, Critical, None.                                               | `Information` |
 
-### Logging
+### Citylens routes Worker
 
-| Name                       | Description                                                                   | Value |
-|----------------------------|-------------------------------------------------------------------------------|-------|
-| `routes.api.logging.level` | Log message level. Trace, Debug, Information, Warning, Error, Critical, None. | `""`  |
-
-### **Citylens Routes Worker**
 
 ### Image settings
 
 | Name                             | Description  | Value                                     |
-|----------------------------------|--------------|-------------------------------------------|
+| -------------------------------- | ------------ | ----------------------------------------- |
 | `routes.worker.image.repository` | Repository.  | `2gis-on-premise/citylens-worker-service` |
-| `routes.worker.image.tag`        | Tag.         | `1.12.0`                                  |
-| `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            | 
+| `routes.worker.image.tag`        | Tag.         | `latest`                                  |
+| `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            |
 
 ### Resources settings
 
 | Name                                      | Description                                                                                                                                    | Value   |
-|-------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| `routes.worker.replicas`                  | A replica count for the pod.                                                                                                                   | `4`     |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `routes.worker.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`     |
 | `routes.worker.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
-| `routes.worker.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `1000m` |
-| `routes.worker.resources.requests.memory` | A memory request.                                                                                                                              | `1Gi`   |
-| `routes.worker.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `2000m` |
-| `routes.worker.resources.limits.memory`   | A memory limit.                                                                                                                                | `2Gi`   |
+| `routes.worker.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`  |
+| `routes.worker.resources.requests.memory` | A memory request.                                                                                                                              | `256M`  |
+| `routes.worker.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`     |
+| `routes.worker.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024M` |
 
 ### Metadata settings
 
-| Name                           | Description                                                                                                                 | Value  |
-|--------------------------------|-----------------------------------------------------------------------------------------------------------------------------|--------|
-| `routes.worker.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
-| `routes.worker.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
-| `routes.worker.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
-| `routes.worker.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
-| `routes.worker.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`   |
-| `routes.worker.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`   |
-| `routes.worker.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`   |
-| `routes.worker.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp` |
+| Name                           | Description                                                                                                                 | Value         |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `routes.worker.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.worker.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.worker.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.worker.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.worker.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
+| `routes.worker.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
+| `routes.worker.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
+| `routes.worker.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp`        |
+| `routes.worker.logging`        | Routes **Logging** settings                                                                                                 |               |
+| `routes.worker.logging.level`  | Log message level. Trace, Debug, Information, Warning, Error, Critical, None.                                               | `Information` |
 
-### Logging
+### Bus configuration settings
 
-| Name                          | Description                                                                   | Value |
-|-------------------------------|-------------------------------------------------------------------------------|-------|
-| `routes.worker.logging.level` | Log message level. Trace, Debug, Information, Warning, Error, Critical, None. | `""`  |
-
-### Kafka Bus settings
-
-| Name                                                           | Description                                     | Value |
-|----------------------------------------------------------------|-------------------------------------------------|-------|
-| `routes.worker.busConfig.brokers`                              | A list of brokers for the bus configuration     | `[]`  |
-| `routes.worker.busConfigsecurityInformation.saslUsername`      | The username for SASL authentication            | `""`  |
-| `routes.worker.busConfig.securityInformation.saslPassword`     | The password for SASL authentication            | `""`  |
-| `routes.worker.busConfig.securityInformation.saslMechanism`    | The mechanism for SASL authentication           | `""`  |
-| `routes.worker.busConfig.securityInformation.securityProtocol` | The security protocol for the bus configuration | `""`  |
-| `routes.worker.busConfig.consumers.appEvents`                  | App events for the consumers                    | `""`  |
-| `routes.worker.busConfig.consumers.appEvents.topic`            | The topic for the app events                    | `""`  |
-| `routes.worker.busConfig.consumers.appEvents.groupId`          | The group ID for the app events                 | `""`  |
-| `routes.worker.busConfig.consumers.appEvents.bufferSize`       | The buffer size for the app events              | `100` |
-| `routes.worker.busConfig.consumers.appEvents.workersCount`     | The workers count for the app events            | `10`  |
+| Name                                                           | Description                                      | Value |
+| -------------------------------------------------------------- | ------------------------------------------------ | ----- |
+| `routes.worker.busConfig`                                      | Bus configuration                                |       |
+| `routes.worker.busConfig.brokers`                              | A list of brokers for the bus configuration.     | `[]`  |
+| `routes.worker.busConfig.securityInformation`                  | Security information for the bus configuration   |       |
+| `routes.worker.busConfig.securityInformation.saslUsername`     | The username for SASL authentication.            | `""`  |
+| `routes.worker.busConfig.securityInformation.saslPassword`     | The password for SASL authentication.            | `""`  |
+| `routes.worker.busConfig.securityInformation.saslMechanism`    | The mechanism for SASL authentication.           | `""`  |
+| `routes.worker.busConfig.securityInformation.securityProtocol` | The security protocol for the bus configuration. | `""`  |
+| `routes.worker.busConfig.consumers`                            | Consumers for the bus configuration              |       |
+| `routes.worker.busConfig.consumers.appEvents`                  | App events for the consumers                     |       |
+| `routes.worker.busConfig.consumers.appEvents.topic`            | The topic for the app events.                    | `""`  |
+| `routes.worker.busConfig.consumers.appEvents.groupId`          | The group ID for the app events.                 | `""`  |
+| `routes.worker.busConfig.consumers.appEvents.bufferSize`       | The buffer size for the app events.              | `100` |
+| `routes.worker.busConfig.consumers.appEvents.workersCount`     | The workers count for the app events.            | `10`  |
