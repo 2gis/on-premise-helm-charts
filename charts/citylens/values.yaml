@@ -1021,7 +1021,8 @@ customCAs:
 # @extra routes.worker.logging Routes **Logging** settings
 # @param routes.worker.logging.level Log message level. Trace, Debug, Information, Warning, Error, Critical, None.
 
-# @section routes.worker.busConfig Bus configuration settings
+# @section Bus configuration settings
+# @extra routes.worker.busConfig Bus configuration
 # @param routes.worker.busConfig.brokers A list of brokers for the bus configuration.
 # @extra routes.worker.busConfig.securityInformation Security information for the bus configuration
 # @param routes.worker.busConfig.securityInformation.saslUsername The username for SASL authentication.
