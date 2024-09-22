@@ -1039,7 +1039,7 @@ customCAs:
 routes:
 
   environment: ''
-  imagePullSecrets: [ ]
+  imagePullSecrets: []
   terminationGracePeriodSeconds: 60
 
   migration:
@@ -1084,29 +1084,29 @@ routes:
         memory: 1024M
 
     service:
-      annotations: { }
-      labels: { }
+      annotations: {}
+      labels: {}
       type: ClusterIP
       port: 80
 
     ingress:
       enabled: false
-      annotations: { }
+      annotations: {}
       className: ''
-      tls: [ ]
+      tls: []
       hosts:
         - host: citylens-routes-api.host
           paths:
             - path: /
               pathType: Prefix
 
-    annotations: { }
-    labels: { }
-    podAnnotations: { }
-    podLabels: { }
-    nodeSelector: { }
-    affinity: { }
-    tolerations: [ ]
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
 
     tempPath: /tmp
 
@@ -1131,13 +1131,13 @@ routes:
         cpu: 1
         memory: 1024M
 
-    annotations: { }
-    labels: { }
-    podAnnotations: { }
-    podLabels: { }
-    nodeSelector: { }
-    affinity: { }
-    tolerations: [ ]
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
 
     tempPath: /tmp
 
@@ -1145,7 +1145,7 @@ routes:
       level: 'Information'
 
     busConfig:
-      brokers: [ ]
+      brokers: []
       securityInformation:
         saslUsername: ''
         saslPassword: ''
