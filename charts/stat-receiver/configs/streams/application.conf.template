@@ -53,7 +53,7 @@ streams = {
     "rocksdb.shared.block.cache.size" = 536870912 # 512Mb
     "bootstrap.servers" = {{ required "A valid .Values.kafka.servers entry required" .Values.kafka.servers | quote }}
     {{- if .Values.kafka.sasl.mechanism }}
-    "sasl.mechanism" = {{ .Values.kafka.saslMechanism }}
+    "sasl.mechanism" = {{ .Values.kafka.sasl.mechanism }}
     {{- end }}
     {{- if .Values.kafka.securityProtocol }}
     "security.protocol" = {{ .Values.kafka.securityProtocol }}
