@@ -58,9 +58,9 @@ spec:
             - name: MAPGL_STYLESERVER
               value: {{ .Values.env.MAPGL_STYLESERVER | quote }}
             - name: MAPGL_ICONSPATH
-              value: {{ .Values.env.MAPGL_ICONSPATH | quote }}
+              value: {{ .Values.env.MAPGL_ICONS_URL | quote }}
             - name: MAPGL_MODELSPATH
-              value: {{ .Values.env.MAPGL_MODELSPATH | quote }}
+              value: {{ .Values.env.MAPGL_MODELS_URL | quote }}
             - name: MAPGL_KEYSERVER
               value: {{ .Values.env.MAPGL_KEYSERVER | quote }}
             - name: MAPGL_RTLPLUGIN
