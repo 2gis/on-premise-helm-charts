@@ -118,24 +118,26 @@ resources: {}
 
 # @section Navi-Castle service settings
 
-# @param castle.castleDataPath Path to the data directory.
+# @param castle.castleDataPath Path to the data directory
+# @param castle.excludeProjects Array of project labels to exclude
 # @extra castle.restrictions Section ignored if castle.restriction.enabled=false
-# @param castle.restrictions.host Restrictions API base URL.
-# @param castle.restrictions.key Restrictions API key.
-# @param castle.jobs Number of parallel downloading jobs.
+# @param castle.restrictions.host Restrictions API base URL
+# @param castle.restrictions.key Restrictions API key
+# @param castle.jobs Number of parallel downloading jobs
 # @extra castle.startupProbe [nullable] Settings for startup probes
-# @param castle.startupProbe.periodSeconds Check period for startup probes.
-# @param castle.startupProbe.failureThreshold Threshold for startup probes.
+# @param castle.startupProbe.periodSeconds Check period for startup probes
+# @param castle.startupProbe.failureThreshold Threshold for startup probes
 
 castle:
   image:
     repository: 2gis-on-premise/navi-castle
     pullPolicy: IfNotPresent
-    tag: 1.9.2
+    tag: 1.9.4
   castleDataPath: /opt/castle/data/
   restrictions:
     host: http://restrictions-api.host
     key: ''
+  excludeProjects: []
   jobs: 1
   startupProbe:
     periodSeconds: 5
