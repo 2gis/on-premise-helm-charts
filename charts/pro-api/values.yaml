@@ -83,7 +83,7 @@
 api:
   image:
     repository: 2gis-on-premise/pro-api
-    tag: latest
+    tag: 1.35.0
     pullPolicy: IfNotPresent
   ingress:
     enabled: false
@@ -196,7 +196,7 @@ api:
 permissions:
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: latest
+    tag: 1.35.0
     pullPolicy: IfNotPresent
   ingress:
     enabled: false
@@ -272,7 +272,7 @@ permissions:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: latest
+  tag: 1.35.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -304,7 +304,7 @@ assetImporter:
 assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
-  tag: latest
+  tag: 1.35.0
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
