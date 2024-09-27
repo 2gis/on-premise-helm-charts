@@ -38,6 +38,11 @@ spec:
           - name: {{ include "castle.fullname" $ }}-builder-config
             configMap:
               name: {{ include "castle.fullname" $ }}-builder-config
+          {{- if .Values.customCAs.bundle }}
+          - name: {{ include "castle.fullname" $ }}-ca
+            configMap:
+              name: {{ include "castle.fullname" $ }}-ca
+          {{- end }}
           containers:
             - name: castle-cron
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag | default $.Chart.AppVersion }}
@@ -48,6 +53,11 @@ spec:
               - /opt/config_builder.conf
               - --service={{ include "castle.serviceParameter" ( dict "flavor" $flavor ) }}
               - --jobs={{ $.Values.castle.jobs | default 1 | int }}
+              {{- if .Values.customCAs.bundle }}
+              env:
+              - name: SSL_CERT_FILE
+                value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+              {{- end }}
               volumeMounts:
               - name: {{ include "castle.fullname" $ }}-builder-config
                 mountPath: /opt/config_builder.conf
@@ -55,6 +65,11 @@ spec:
               - name: {{ include "castle.fullname" $ }}-builder-config
                 mountPath: {{ $.Values.castle.castleDataPath }}/cities_template
                 subPath: cities_template
+              {{- if .Values.customCAs.bundle }}
+              - name: {{ include "castle.fullname" $ }}-ca
+                mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+                subPath: custom-ca.crt
+              {{- end }}
               - name: {{ include "castle.fullname" $ }}-pvc
                 mountPath: {{ $.Values.castle.castleDataPath }}
               resources:
