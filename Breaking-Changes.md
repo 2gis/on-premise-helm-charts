@@ -1,6 +1,7 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [1.28.0]
+## [1.29.0]
+
 ### pro-api
 - appName renamed to api.appName
 - image renamed to api.image
@@ -33,6 +34,11 @@
 - assetImporter.externalLinksAllowedHosts renamed to assetImporter.settings.externalLinksAllowedHosts
 - assetImporter.esMetricsEnabled renamed to assetImporter.settings.esMetricsEnabled
 - assetPreparer.maxParallelJobs renamed to assetPreparer.settings.maxParallelJobs
+
+## [1.28.0]
+
+### navi-async-matric
+- `s3.publicNetloc` now MUST start with `http://` or `https://` scheme
 
 ## [1.27.0]
 

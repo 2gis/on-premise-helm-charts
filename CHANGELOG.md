@@ -1,5 +1,29 @@
 # 2GIS On-Premise Changelog
 
+## [1.28.2] (2024-09-18)
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.50.1
+	+ mapgl:1.51.0
+
+```
+
+## [1.28.0] (2024-09-11)
+#### [Breaking-Changes](Breaking-Changes.md#1280)
+#### Images
+```
+navi-async-matrix
+	- navi-async-matrix:1.10.3
+	+ navi-async-matrix:1.11.2
+navi-back
+	- navi-back:7.25.0.3
+	+ navi-back:7.27.1.2
+styles-api
+	+ styles-api:0.30.0
+
+```
+
 ## [1.27.0] (2024-08-30)
 #### [Breaking-Changes](Breaking-Changes.md#1270)
 #### Images

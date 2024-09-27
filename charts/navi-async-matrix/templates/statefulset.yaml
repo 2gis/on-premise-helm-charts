@@ -177,7 +177,14 @@ spec:
             - name: DM_ASYNC_SERVICE_LOGGER_SETTING__LEVEL
               value: {{ .Values.dm.logLevel | quote }}
             {{- if .Values.s3.publicNetloc }}
+            # DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC for < 1.11.0
+            # DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC_URL for >= 1.11.0
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC
+              value: {{ regexReplaceAllLiteral "^https?://" .Values.s3.publicNetloc "" | quote }}
+              {{- if not (regexMatch "^https?://" .Values.s3.publicNetloc) }}
+                {{- fail "s3.publicNetLoc must start with the scheme: `<scheme>://<netloc>[/]`" }}
+              {{- end }}
+            - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC_URL
               value: {{ .Values.s3.publicNetloc | quote }}
             {{- end }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_TASK_TOPIC

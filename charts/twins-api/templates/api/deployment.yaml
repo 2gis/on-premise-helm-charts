@@ -22,7 +22,7 @@ spec:
   {{- end }}
   revisionHistoryLimit: {{ .Values.api.revisionHistoryLimit }}
   strategy:
-    {{- toYaml .Values.strategy | nindent 4 }}
+    {{- toYaml .Values.api.strategy | nindent 4 }}
   selector:
     matchLabels:
       {{- include "twins.api.selectorLabels" . | nindent 6 }}
