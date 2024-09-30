@@ -100,7 +100,7 @@ spec:
           env:
             - name: Common__TempPath
               value: "{{ .Values.routes.api.tempPath }}"
-              
+
             - name: Logging__LogLevel__Default
               value: "{{ .Values.routes.api.logging.level }}"
 
@@ -128,12 +128,29 @@ spec:
               value: "{{ $.Values.routes.postgres.pooling }}"
 
             - name: PgSettings__Hangfire__Database
-              value: "{{ required "A valid .Values.routes.hangfire.database entry required" $.Values.routes.hangfire.database }}"
+              value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
             - name: PgSettings__Hangfire__Timeout
-              value: "{{ $.Values.routes.hangfire.timeout }}"
+              value: "{{ $.Values.routes.hangfire.postgres.timeout }}"
             - name: PgSettings__Hangfire__CommandTimeout
-              value: "{{ $.Values.routes.hangfire.commandTimeout }}"
+              value: "{{ $.Values.routes.hangfire.postgres.commandTimeout }}"
             - name: PgSettings__Hangfire__MaxPoolSize
-              value: "{{ $.Values.routes.hangfire.maxPoolSize }}"
+              value: "{{ $.Values.routes.hangfire.postgres.maxPoolSize }}"
             - name: PgSettings__Hangfire__Pooling
-              value: "{{ $.Values.routes.hangfire.pooling }}"
+              value: "{{ $.Values.routes.hangfire.postgres.pooling }}"
+
+            - name: S3__BucketPrefix
+              value: "{{ required "A valid .Values.s3.bucketPrefix entry required" $.Values.s3.bucketPrefix }}"
+            - name: S3__LogsBucketPrefix
+              value: "{{ required "A valid .Values.s3.logsBucketPrefix entry required" $.Values.s3.logsBucketPrefix }}"
+            - name: S3__AccessKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3AccessKey
+                  name: {{ include "citylens.routes.api.name" . }}-secret
+            - name: S3__SecretAccessKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3SecretAccessKey
+                  name: {{ include "citylens.routes.api.name" . }}-secret
+            - name: S3__Region
+              value: "{{ $.Values.s3.region }}"

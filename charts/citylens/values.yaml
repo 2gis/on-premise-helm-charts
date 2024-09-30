@@ -944,11 +944,11 @@ customCAs:
 # @param routes.postgres.pooling Whether connection pooling should be used.
 
 # @extra routes **Hangfire**
-# @param routes.hangfire.database PostgreSQL database name. **Required**
-# @param routes.hangfire.timeout The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.
-# @param routes.hangfire.commandTimeout The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.
-# @param routes.hangfire.maxPoolSize The maximum connection pool size.
-# @param routes.hangfire.pooling Whether connection pooling should be used.
+# @param routes.hangfire.postgres.database PostgreSQL database name. **Required**
+# @param routes.hangfire.postgres.timeout The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.
+# @param routes.hangfire.postgres.commandTimeout The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.
+# @param routes.hangfire.postgres.maxPoolSize The maximum connection pool size.
+# @param routes.hangfire.postgres.pooling Whether connection pooling should be used.
 
 # @section Citylens routes API
 
@@ -1023,12 +1023,6 @@ customCAs:
 
 # @section Bus configuration settings
 # @extra routes.worker.busConfig Bus configuration
-# @param routes.worker.busConfig.brokers A list of brokers for the bus configuration.
-# @extra routes.worker.busConfig.securityInformation Security information for the bus configuration
-# @param routes.worker.busConfig.securityInformation.saslUsername The username for SASL authentication.
-# @param routes.worker.busConfig.securityInformation.saslPassword The password for SASL authentication.
-# @param routes.worker.busConfig.securityInformation.saslMechanism The mechanism for SASL authentication.
-# @param routes.worker.busConfig.securityInformation.securityProtocol The security protocol for the bus configuration.
 # @extra routes.worker.busConfig.consumers Consumers for the bus configuration
 # @extra routes.worker.busConfig.consumers.appEvents App events for the consumers
 # @param routes.worker.busConfig.consumers.appEvents.topic The topic for the app events.
@@ -1039,7 +1033,7 @@ customCAs:
 routes:
 
   environment: ''
-  imagePullSecrets: []
+  imagePullSecrets: [ ]
   terminationGracePeriodSeconds: 60
 
   migration:
@@ -1059,11 +1053,12 @@ routes:
     pooling: false
 
   hangfire:
-    database: ''
-    timeout: 15
-    commandTimeout: 30
-    maxPoolSize: 30
-    pooling: false
+    postgres:
+      database: ''
+      timeout: 15
+      commandTimeout: 30
+      maxPoolSize: 30
+      pooling: false
 
   api:
     image:
@@ -1145,12 +1140,6 @@ routes:
       level: 'Information'
 
     busConfig:
-      brokers: []
-      securityInformation:
-        saslUsername: ''
-        saslPassword: ''
-        saslMechanism: ''
-        securityProtocol: ''
       consumers:
         appEvents:
           topic: ''
