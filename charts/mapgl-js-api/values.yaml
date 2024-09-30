@@ -52,8 +52,8 @@ image:
 # @param env.MAPGL_TRAFFICSERVER Domain name of the Traffic Proxy service, e.g. 'https://traffic-proxy.ingress.host'
 # @param env.MAPGL_FLOORSSERVER URL of the Floors API service, e.g. 'https://floors-api.ingress.host'
 # @param env.MAPGL_STYLESERVER URL of the Styles API service, e.g. 'https://styles.ingress.host'
-# @param env.MAPGL_ICONSPATH URL of the icons directory, e.g. 'https://styles.ingress.host/styles/assets/icons'
-# @param env.MAPGL_MODELSPATH URL of the models directory, e.g. 'https://styles.ingress.host/styles/assets/models'
+# @param env.MAPGL_ICONS_URL URL of the icons directory, e.g. 'https://s3.ingress.host/styles/assets/icons'. This s3 URL must be public available (accessible from browser).
+# @param env.MAPGL_MODELS_URL URL of the models directory, e.g. 'https://s3.ingress.host/styles/assets/models'. This s3 URL must be public available (accessible from browser).
 # @param env.MAPGL_KEYSERVER URL of the API Keys service, e.g. 'https://keys-api.ingress.host/public/v1/keys/{keyID}/services/mapgl-js-api'
 # @param env.MAPGL_RTLPLUGIN URL of the plugin for right-to-left languages support, e.g. 'https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js'
 # @param env.MAPGL_RTLPLUGINHASH SHA512 hash of the RTL plugin.
@@ -68,8 +68,8 @@ env:
   MAPGL_TRAFFICSERVER: 'https://traffic-proxy.ingress.host'
   MAPGL_FLOORSSERVER: ''
   MAPGL_STYLESERVER: ''
-  MAPGL_ICONSPATH: ''
-  MAPGL_MODELSPATH: ''
+  MAPGL_ICONS_URL: ''
+  MAPGL_MODELS_URL: ''
   MAPGL_KEYSERVER: ''
   MAPGL_RTLPLUGIN: ''
   MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
