@@ -1033,7 +1033,7 @@ customCAs:
 routes:
 
   environment: ''
-  imagePullSecrets: [ ]
+  imagePullSecrets: []
   terminationGracePeriodSeconds: 60
 
   migration:
