@@ -42,7 +42,7 @@ spec:
                 secretKeyRef:
                   key: postgresPassword
                   name: {{ include "citylens.routes.migration.name" . }}-secret
-            
+
             - name: PgSettings__Api__Database
               value: "{{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database }}"
             - name: PgSettings__Api__Timeout
@@ -51,15 +51,17 @@ spec:
               value: "{{ $.Values.routes.postgres.commandTimeout }}"
             - name: PgSettings__Api__MaxPoolSize
               value: "{{ $.Values.routes.postgres.maxPoolSize }}"
-            
+
             - name: PgSettings__Hangfire__Database
-              value: "{{ required "A valid .Values.routes.hangfire.database entry required" $.Values.routes.hangfire.database }}"
+              value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
             - name: PgSettings__Hangfire__Timeout
-              value: "{{ $.Values.routes.hangfire.timeout }}"
+              value: "{{ $.Values.routes.hangfire.postgres.timeout }}"
             - name: PgSettings__Hangfire__CommandTimeout
-              value: "{{ $.Values.routes.hangfire.commandTimeout }}"
+              value: "{{ $.Values.routes.hangfire.postgres.commandTimeout }}"
             - name: PgSettings__Hangfire__MaxPoolSize
-              value: "{{ $.Values.routes.hangfire.maxPoolSize }}"
+              value: "{{ $.Values.routes.hangfire.postgres.maxPoolSize }}"
+            - name: PgSettings__Hangfire__Pooling
+              value: "{{ $.Values.routes.hangfire.postgres.pooling }}"
 
         - name: worker-migrate
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.routes.worker.image.repository }}:{{ .Values.routes.worker.image.tag }}
@@ -79,7 +81,7 @@ spec:
                 secretKeyRef:
                   key: postgresPassword
                   name: {{ include "citylens.routes.migration.name" . }}-secret
-            
+
             - name: PgSettings__Api__Database
               value: "{{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database }}"
             - name: PgSettings__Api__Timeout
@@ -90,31 +92,29 @@ spec:
               value: "{{ $.Values.routes.postgres.maxPoolSize }}"
             - name: PgSettings__Api__Pooling
               value: "{{ $.Values.routes.postgres.pooling }}"
-            
+
             - name: PgSettings__Hangfire__Database
-              value: "{{ required "A valid .Values.routes.hangfire.database entry required" $.Values.routes.hangfire.database }}"
+              value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
             - name: PgSettings__Hangfire__Timeout
-              value: "{{ $.Values.routes.hangfire.timeout }}"
+              value: "{{ $.Values.routes.hangfire.postgres.timeout }}"
             - name: PgSettings__Hangfire__CommandTimeout
-              value: "{{ $.Values.routes.hangfire.commandTimeout }}"
+              value: "{{ $.Values.routes.hangfire.postgres.commandTimeout }}"
             - name: PgSettings__Hangfire__MaxPoolSize
-              value: "{{ $.Values.routes.hangfire.maxPoolSize }}"
+              value: "{{ $.Values.routes.hangfire.postgres.maxPoolSize }}"
             - name: PgSettings__Hangfire__Pooling
-              value: "{{ $.Values.routes.hangfire.pooling }}"
-            
-            - name: BusConfig__Brokers
-              value: "{{ $.Values.routes.worker.busConfig.brokers }}"
+              value: "{{ $.Values.routes.hangfire.postgres.pooling }}"
+
+            - name: BusConfig__Broker
+              value: "{{ .Values.kafka.bootstrapServer }}"
             - name: BusConfig__SecurityInformation__SaslUsername
-              value: "{{ $.Values.routes.worker.busConfig.securityInformation.saslUsername }}"
+              value: "{{ $.Values.kafka.username }}"
             - name: BusConfig__SecurityInformation__SaslPassword
               valueFrom:
                 secretKeyRef:
                   key: busConfigSaslPassword
                   name: {{ include "citylens.routes.migration.name" . }}-secret
-            - name: BusConfig__SecurityInformation__SaslMechanism
-              value: "{{ $.Values.routes.worker.busConfig.securityInformation.saslMechanism }}"
-            - name: BusConfig__SecurityInformation__SecurityProtocol
-              value: "{{ $.Values.routes.worker.busConfig.securityInformation.securityProtocol }}"
+
+
             - name: BusConfig__Consumers__AppEvents__Topic
               value: "{{ $.Values.routes.worker.busConfig.consumers.appEvents.topic }}"
             - name: BusConfig__Consumers__AppEvents__GroupId

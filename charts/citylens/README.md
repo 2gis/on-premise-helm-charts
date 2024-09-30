@@ -475,11 +475,11 @@ See the [documentation]() to learn about:
 | `routes.postgres.maxPoolSize`                  | The maximum connection pool size.                                                                                                                                                                        | `30`            |
 | `routes.postgres.pooling`                      | Whether connection pooling should be used.                                                                                                                                                               | `false`         |
 | `routes`                                       | **Hangfire**                                                                                                                                                                                             |                 |
-| `routes.hangfire.database`                     | PostgreSQL database name. **Required**                                                                                                                                                                   | `""`            |
-| `routes.hangfire.timeout`                      | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.                                                                             | `15`            |
-| `routes.hangfire.commandTimeout`               | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.                                                                                  | `30`            |
-| `routes.hangfire.maxPoolSize`                  | The maximum connection pool size.                                                                                                                                                                        | `30`            |
-| `routes.hangfire.pooling`                      | Whether connection pooling should be used.                                                                                                                                                               | `false`         |
+| `routes.hangfire.postgres.database`            | PostgreSQL database name. **Required**                                                                                                                                                                   | `""`            |
+| `routes.hangfire.postgres.timeout`             | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.                                                                             | `15`            |
+| `routes.hangfire.postgres.commandTimeout`      | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.                                                                                  | `30`            |
+| `routes.hangfire.postgres.maxPoolSize`         | The maximum connection pool size.                                                                                                                                                                        | `30`            |
+| `routes.hangfire.postgres.pooling`             | Whether connection pooling should be used.                                                                                                                                                               | `false`         |
 
 ### Citylens routes API
 
@@ -578,18 +578,12 @@ See the [documentation]() to learn about:
 
 ### Bus configuration settings
 
-| Name                                                           | Description                                      | Value |
-| -------------------------------------------------------------- | ------------------------------------------------ | ----- |
-| `routes.worker.busConfig`                                      | Bus configuration                                |       |
-| `routes.worker.busConfig.brokers`                              | A list of brokers for the bus configuration.     | `[]`  |
-| `routes.worker.busConfig.securityInformation`                  | Security information for the bus configuration   |       |
-| `routes.worker.busConfig.securityInformation.saslUsername`     | The username for SASL authentication.            | `""`  |
-| `routes.worker.busConfig.securityInformation.saslPassword`     | The password for SASL authentication.            | `""`  |
-| `routes.worker.busConfig.securityInformation.saslMechanism`    | The mechanism for SASL authentication.           | `""`  |
-| `routes.worker.busConfig.securityInformation.securityProtocol` | The security protocol for the bus configuration. | `""`  |
-| `routes.worker.busConfig.consumers`                            | Consumers for the bus configuration              |       |
-| `routes.worker.busConfig.consumers.appEvents`                  | App events for the consumers                     |       |
-| `routes.worker.busConfig.consumers.appEvents.topic`            | The topic for the app events.                    | `""`  |
-| `routes.worker.busConfig.consumers.appEvents.groupId`          | The group ID for the app events.                 | `""`  |
-| `routes.worker.busConfig.consumers.appEvents.bufferSize`       | The buffer size for the app events.              | `100` |
-| `routes.worker.busConfig.consumers.appEvents.workersCount`     | The workers count for the app events.            | `10`  |
+| Name                                                       | Description                           | Value |
+| ---------------------------------------------------------- | ------------------------------------- | ----- |
+| `routes.worker.busConfig`                                  | Bus configuration                     |       |
+| `routes.worker.busConfig.consumers`                        | Consumers for the bus configuration   |       |
+| `routes.worker.busConfig.consumers.appEvents`              | App events for the consumers          |       |
+| `routes.worker.busConfig.consumers.appEvents.topic`        | The topic for the app events.         | `""`  |
+| `routes.worker.busConfig.consumers.appEvents.groupId`      | The group ID for the app events.      | `""`  |
+| `routes.worker.busConfig.consumers.appEvents.bufferSize`   | The buffer size for the app events.   | `100` |
+| `routes.worker.busConfig.consumers.appEvents.workersCount` | The workers count for the app events. | `10`  |
