@@ -31,6 +31,9 @@ spec:
         {{- if .Values.prometheusEnabled }}
         prometheus.io/scrape: "true"
         {{- end }}
+        {{- if .Values.customCAs.bundle }}
+        checksum/custom-ca: {{ (include (print $.Template.BasePath "/configmap-ca.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- end }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -41,6 +44,12 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      {{- if .Values.customCAs.bundle }}
+      volumes:
+        - name: {{ include "navi-restrictions.fullname" . }}-ca
+          configMap:
+            name: {{ include "navi-restrictions.fullname" . }}-ca
+      {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -90,6 +99,12 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            - name: {{ include "navi-restrictions.fullname" . }}-ca
+              mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+              subPath: custom-ca.crt
+          {{- end }}
           env:
             - name: DEBUG
               value: "{{ .Values.api.debug | ternary "True" "False" }}"
@@ -115,3 +130,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "navi-restrictions.fullname" . }}
                   key: keysApi
+          {{- if .Values.customCAs.bundle }}
+            - name: SSL_CERT_FILE
+              value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+          {{- end }}
