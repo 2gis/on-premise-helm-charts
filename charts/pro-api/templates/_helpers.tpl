@@ -2,7 +2,7 @@
 {{- if .Values.api.pod.fullnameOverride -}}
 {{- .Values.api.pod.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default .Values.api.pod.appName .Values.api.pod.nameOverride -}}
+{{- $name := default .Values.api.appName .Values.api.pod.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -13,6 +13,10 @@
 
 {{- define "pro-api.permissions-name" -}}
 {{ include "pro-api.name" . }}-permissions
+{{- end -}}
+
+{{- define "pro-api.tasks-name" -}}
+{{ include "pro-api.name" . }}-tasks
 {{- end -}}
 
 {{- define "pro-api.permissions-url" -}}
@@ -56,7 +60,7 @@
 {{- end -}}
 
 {{- define "pro-api.chart" -}}
-{{- printf "%s-%s" .Values.api.pod.appName .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Values.api.appName .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{- define "pro-api.selectorLabels" -}}
@@ -67,6 +71,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- define "pro-api.permissionsSelectorLabels" -}}
 app.kubernetes.io/name: {{ include "pro-api.permissions-name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}-permissions
+{{- end -}}
+
+{{- define "pro-api.tasksSelectorLabels" -}}
+app.kubernetes.io/name: {{ include "pro-api.tasks-name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}-tasks
 {{- end -}}
 
 {{- define "pro-api.labels" -}}
@@ -81,6 +90,15 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- define "pro-api.permissionLabels" -}}
 helm.sh/chart: {{ include "pro-api.chart" . }}
 {{ include "pro-api.permissionsSelectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{- define "pro-api.tasksLabels" -}}
+helm.sh/chart: {{ include "pro-api.chart" . }}
+{{ include "pro-api.tasksSelectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}

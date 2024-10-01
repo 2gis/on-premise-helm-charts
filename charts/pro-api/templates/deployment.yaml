@@ -112,9 +112,9 @@ spec:
             - name: DEBUG
               value: "{{ .Values.api.settings.debug }}"
             - name: Import__EnableUserAssetsImporter
-              value: "{{ .Values.api.settings.enableUserAssetsImporter }}"
+              value: "{{ .Values.api.settings.backgroundJobs.enableUserAssetsImporter }}"
             - name: Import__EnableAssetsStreaming
-              value: "{{ .Values.api.settings.enableAssetsStreaming }}"
+              value: "{{ .Values.api.settings.backgroundJobs.enableAssetsStreaming }}"
             - name: Import__AssetImporterJobName
               value: {{ include "pro-api.asset-importer-name" . }}
             - name: Import__ExternalLinksProxyUrl
@@ -158,13 +158,13 @@ spec:
               value: "{{ .Values.api.settings.env }}"
             - name: Common__FilterByZoneCodes
               value: "{{ .Values.api.settings.filterByZoneCodes }}"
-            - name: DB_CONNECTION_STRING
+            - name: Postgres__ConnectionString
               value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
             {{ if .Values.postgres.connectionStringReadonly }}
-            - name: DB_CONNECTION_STRING_READONLY
+            - name: Postgres__ConnectionStringReadonly
               value: "{{ .Values.postgres.connectionStringReadonly }}"
             {{ end }}
-            - name: DB_CONNECTION_PWD
+            - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
                   key: dbConnectionPwd
@@ -226,6 +226,8 @@ spec:
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
             - name: Kafka__EventsTopicSettings__ReaderGroupId
               value: {{ required "A valid .Values.kafka.eventsTopic.readerGroupId entry required" $.Values.kafka.eventsTopic.readerGroupId }}
+            - name: Kafka__UseReplicaTopics
+              value: "{{ $.Values.kafka.useReplicaTopics }}"
             - name: Auth__Type
               value: "{{ .Values.api.settings.auth.type }}"
             - name: Auth__Url
@@ -247,7 +249,7 @@ spec:
             {{ end }}
             - name: Auth__PermissionsApiUrl
               value: {{ include "pro-api.permissions-url" . }}
-            {{ if .Values.api.settings.auth.permissionsApiKey }}
+            {{ if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
@@ -300,6 +302,8 @@ spec:
               value: "{{ .Values.api.settings.localCache.trackStatistics }}"
             - name: LicensingService__BaseUri
               value: {{ required "A valid .Values.license.url entry required" $.Values.license.url }}
+            - name: LayerGeneration__IsochroneLayerMaxPointsCount
+              value: "{{ .Values.api.settings.layerGeneration.isochroneLayerMaxPointsCount }}"
             {{- range $i, $s := .Values.api.settings.openApi.servers }}
             - name: OpenApi__Servers__{{$i}}
               value: "{{ $s }}"
