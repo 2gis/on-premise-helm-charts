@@ -12,6 +12,7 @@ storage:
   host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
   secure: {{ .Values.dgctlStorage.secure }}
   bucket: {{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}
+  region: {{ .Values.dgctlStorage.region }}
   url-lifetime-period: 60m
 
 k8s:
