@@ -3,12 +3,10 @@
 name: Send release notification to Mattermost
 
 on:
-  registry_package:
-    push:
-      branches:
-        - 'ONPREM-932'
-#      tags:
-#        - \d+\.\d+\.\d+
+  push:
+    branches:
+      - 'ONPREM-932'
+
 jobs:
   build:
     runs-on: ubuntu-latest
