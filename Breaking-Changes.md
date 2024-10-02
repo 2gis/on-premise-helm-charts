@@ -4,7 +4,7 @@
 
 ### mapgl-js-api
 - MAPGL_ICONSPATH renamed to MAPGL_ICONS_URL
-- MAPGL_MODELSPATH renamed to MAPGL_MODELS_URL.
+- MAPGL_MODELSPATH renamed to MAPGL_MODELS_URL
 
 ### pro-api
 - appName renamed to api.appName

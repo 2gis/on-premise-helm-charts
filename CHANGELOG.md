@@ -1,5 +1,24 @@
 # 2GIS On-Premise Changelog
 
+## [1.29.0] (2024-10-02)
+#### [Breaking-Changes](Breaking-Changes.md#1290)
+#### Images
+```
+citylens
+	- citylens-api:1.12.0
+	+ citylens-api:1.13.1
+	- citylens-database:1.12.0
+	+ citylens-database:1.13.0
+	- citylens-web:1.12.0
+	+ citylens-web:1.13.0
+	- citylens-workers:1.12.0
+	+ citylens-workers:1.13.0
+license
+	- license:2.2.1
+	+ license:2.2.3
+
+```
+
 ## [1.28.2] (2024-09-18)
 #### Images
 ```

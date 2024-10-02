@@ -4,6 +4,6 @@ kind: ConfigMap
 metadata:
   name: {{ include "generic-chart.fullname" . }}-configmap-ca
 data:
-  custom-ca.crt: |-
+  5c4a6517.0: |-
     {{- .Values.customCAs.bundle | nindent 4 }}
 {{- end }}
