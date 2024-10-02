@@ -101,7 +101,7 @@ spec:
             - name: Common__TempPath
               value: "{{ .Values.routes.worker.tempPath }}"
 
-            - name: Logging__LogLevel__Default
+            - name: Common__Logging__LogLevel
               value: "{{ .Values.routes.worker.logging.level }}"
 
             - name: PgSettings__Host
