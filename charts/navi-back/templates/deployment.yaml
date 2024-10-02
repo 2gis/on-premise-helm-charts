@@ -103,7 +103,7 @@ spec:
           {{- if .Values.customCAs.bundle }}
           env:
             - name: SSL_CERT_FILE
-              value: {{ include "custom.ca.mountPath" . }}/
+              value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
           {{- end }}
           {{- if (.Values.envoy).resources }}
           resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
@@ -272,7 +272,7 @@ spec:
               value: {{ .Values.app_project | default "" | quote }}
           {{- if .Values.customCAs.bundle }}
             - name: SSL_CERT_FILE
-              value: {{ include "custom.ca.mountPath" . }}/
+              value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
           {{- end }}
           lifecycle:
             # wait for the endpoint removal process
