@@ -97,12 +97,12 @@ spec:
               subPath: envoy.yaml
             {{- if .Values.customCAs.bundle }}
             - name: {{ include "generic-chart.fullname" . }}-configmap-ca
-              mountPath: {{ include "custom.ca.mountPath" . }}/5c4a6517.0
-              subPath: 5c4a6517.0
+              mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+              subPath: custom-ca.crt
             {{- end }}
           {{- if .Values.customCAs.bundle }}
           env:
-            - name: SSL_CERT_DIR
+            - name: SSL_CERT_FILE
               value: {{ include "custom.ca.mountPath" . }}/
           {{- end }}
           {{- if (.Values.envoy).resources }}
@@ -209,8 +209,8 @@ spec:
             {{- end }}
             {{- if .Values.customCAs.bundle }}
             - name: {{ include "generic-chart.fullname" . }}-configmap-ca
-              mountPath: {{ include "custom.ca.mountPath" . }}/5c4a6517.0
-              subPath: 5c4a6517.0
+              mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+              subPath: custom-ca.crt
             {{- end }}
           ports:
             - name: http
@@ -271,7 +271,7 @@ spec:
             - name: PROJECT
               value: {{ .Values.app_project | default "" | quote }}
           {{- if .Values.customCAs.bundle }}
-            - name: SSL_CERT_DIR
+            - name: SSL_CERT_FILE
               value: {{ include "custom.ca.mountPath" . }}/
           {{- end }}
           lifecycle:
