@@ -1,12 +1,12 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "bss-receiver-api.name" . -}}
+{{- $fullName := include "stat-receiver-api.name" . -}}
 {{- $svcPort := .Values.api.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "bss-receiver-api.labels" . | nindent 4 }}
+    {{- include "stat-receiver-api.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

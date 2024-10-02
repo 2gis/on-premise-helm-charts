@@ -1,9 +1,47 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.29.0]
+
+### mapgl-js-api
+- MAPGL_ICONSPATH renamed to MAPGL_ICONS_URL
+- MAPGL_MODELSPATH renamed to MAPGL_MODELS_URL
+
+### pro-api
+- appName renamed to api.appName
+- image renamed to api.image
+- ingress renamed to api.ingress
+- pod renamed to api.pod
+- vpa renamed to api.vpa
+- service renamed to api.service
+- licenseKey renamed to api.settings.licenseKey
+- api.tempPath renamed to api.settings.tempPath
+- api.allowAnyOrigin renamed to api.settings.allowAnyOrigin
+- api.logEsQueries renamed to api.settings.logEsQueries
+- api.debug renamed to api.settings.debug
+- api.env renamed to api.settings.env
+- api.filterByZoneCodes renamed to api.settings.filterByZoneCodes
+- api.esDataCentersCount renamed to api.settings.esDataCentersCount
+- api.rateLimiter renamed to api.settings.rateLimiter
+- api.localCache renamed to api.settings.localCache
+- api.openApi renamed to api.settings.openApi
+- auth renamed to api.settings.auth
+- permissionsApiImage renamed to permissions.image
+- permissionsApiIngress renamed to permissions.ingress
+- permissionsPodSettings renamed to permissions.pod
+- permissionApiService renamed to permissions.service
+- add permissions.settings block
+- add assetImporter.appName
+- assetImporter.maxParallelJobs renamed to assetImporter.settings.maxParallelJobs
+- assetImporter.files renamed to assetImporter.settings.files
+- assetImporter.imageProxyUrl renamed to assetImporter.settings.imageProxyUrl
+- assetImporter.externalLinksProxyUrl renamed to assetImporter.settings.externalLinksProxyUrl
+- assetImporter.externalLinksAllowedHosts renamed to assetImporter.settings.externalLinksAllowedHosts
+- assetImporter.esMetricsEnabled renamed to assetImporter.settings.esMetricsEnabled
+- assetPreparer.maxParallelJobs renamed to assetPreparer.settings.maxParallelJobs
+
 ## [1.28.0]
 
 ### navi-async-matric
-
 - `s3.publicNetloc` now MUST start with `http://` or `https://` scheme
 
 ## [1.27.0]

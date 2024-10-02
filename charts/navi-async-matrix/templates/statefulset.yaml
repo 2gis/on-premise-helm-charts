@@ -33,6 +33,9 @@ spec:
         {{- end }}
         checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
         checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- if .Values.customCAs.bundle }}
+        checksum/custom-ca: {{ (include (print $.Template.BasePath "/configmap-ca.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- end }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -92,6 +95,11 @@ spec:
             secretName: {{ include "navi-async-matrix.fullname-psql" . | quote }}
         - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
           emptyDir: {}
+      {{- end }}
+      {{- if .Values.customCAs.bundle }}
+        - name: {{ include "navi-async-matrix.fullname" . }}-ca
+          configMap:
+            name: {{ include "navi-async-matrix.fullname" . }}-ca
       {{- end }}
       initContainers:
         {{- if .Values.db.tls.enabled }}
@@ -154,6 +162,11 @@ spec:
           {{- if .Values.db.tls.enabled }}
           - name: {{ printf "%s-psql" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /etc/2gis/secret/psql
+          {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          - name: {{ include "navi-async-matrix.fullname" . }}-ca
+            mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+            subPath: custom-ca.crt
           {{- end }}
           env:
             - name: DM_ASYNC_SERVICE_HOST
@@ -263,3 +276,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "navi-async-matrix.fullname" . | quote }}
                   key: dmApiKey
+            {{- if .Values.customCAs.bundle }}
+            - name: SSL_CERT_FILE
+              value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+            {{- end }}

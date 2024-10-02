@@ -1,20 +1,20 @@
-{{ if .Values.permissionsApi.enabled }}
+{{ if .Values.permissions.settings.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "pro-api.permissions-name" . }}
-  {{- with .Values.permissionsPodSettings.annotations }}
+  {{- with .Values.permissions.pod.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
     {{- end }}
   labels:
     {{- include "pro-api.permissionLabels" . | nindent 4 }}
-  {{- with .Values.permissionsPodSettings.labels }}
+  {{- with .Values.permissions.pod.labels }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.permissionsPodSettings.replicaCount }}
-  revisionHistoryLimit: {{ .Values.permissionsPodSettings.revisionHistoryLimit }}
+  replicas: {{ .Values.permissions.pod.replicaCount }}
+  revisionHistoryLimit: {{ .Values.permissions.pod.revisionHistoryLimit }}
   selector:
     matchLabels:
       {{- include "pro-api.permissionsSelectorLabels" . | nindent 6 }}
@@ -22,46 +22,46 @@ spec:
     metadata:
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
-      {{- with .Values.permissionsPodSettings.podAnnotations }}
+      {{- with .Values.permissions.pod.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "pro-api.permissionLabels" . | nindent 8 }}
-      {{- with .Values.permissionsPodSettings.podLabels }}
+      {{- with .Values.permissions.pod.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- with .Values.permissionsPodSettings.imagePullSecrets }}
+      {{- with .Values.permissions.pod.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.permissionsPodSettings.affinity }}
+      {{- with .Values.permissions.pod.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.permissionsPodSettings.nodeSelector }}
+      {{- with .Values.permissions.pod.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.permissionsPodSettings.tolerations }}
+      {{- with .Values.permissions.pod.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.permissionsPodSettings.priorityClassName }}
-      priorityClassName: {{ .Values.permissionsPodSettings.priorityClassName }}
+      {{- if .Values.permissions.pod.priorityClassName }}
+      priorityClassName: {{ .Values.permissions.pod.priorityClassName }}
       {{- end }}
-      {{- with .Values.permissionsPodSettings.podSecurityContext }}
+      {{- with .Values.permissions.pod.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: {{ .Values.permissionsPodSettings.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.permissions.pod.terminationGracePeriodSeconds }}
       volumes:
         - name: temp-volume
           emptyDir: {}
       containers:
         - name: {{ include "pro-api.permissions-name" . }}
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.permissionsApiImage.repository }}:{{ .Values.permissionsApiImage.tag }}
-          imagePullPolicy: {{ .Values.permissionsApiImage.pullPolicy }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.permissions.image.repository }}:{{ .Values.permissions.image.tag }}
+          imagePullPolicy: {{ .Values.permissions.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8081
@@ -70,7 +70,7 @@ spec:
               containerPort: 8091
               protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.api.tempPath }}"
+            - mountPath: "{{ .Values.api.settings.tempPath }}"
               name: temp-volume
           livenessProbe:
             httpGet:
@@ -100,18 +100,18 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
           resources:
-            {{- toYaml .Values.permissionsPodSettings.resources | nindent 12 }}
+            {{- toYaml .Values.permissions.pod.resources | nindent 12 }}
           lifecycle:
             preStop:
               exec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           env:
             - name: DEBUG
-              value: "{{ .Values.api.debug }}"
+              value: "{{ .Values.api.settings.debug }}"
             - name: ALLOW_ANY_ORIGIN
-              value: "{{ .Values.api.allowAnyOrigin }}"
+              value: "{{ .Values.api.settings.allowAnyOrigin }}"
             - name: ENV
-              value: "{{ .Values.api.env }}"
+              value: "{{ .Values.api.settings.env }}"
             - name: DB_CONNECTION_STRING
               value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
             - name: DB_CONNECTION_STRING_READONLY
@@ -129,8 +129,8 @@ spec:
                   key: apiKey
                   name: {{ include "pro-api.name" . }}-secret
             - name: Auth__Type
-              value: {{ required "A valid .Values.auth.type entry required" $.Values.auth.type }}
-            {{ if .Values.auth.permissionsApiKey }}
+              value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
+            {{ if .Values.api.settings.auth.permissionsApiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
@@ -162,9 +162,9 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}
             - name: Common__Logging__Format
-              value: "{{ .Values.api.logging.format }}"
+              value: "{{ .Values.api.settings.logging.format }}"
             - name: Common__Logging__Targets
-              value: "{{ .Values.api.logging.targets }}"
+              value: "{{ .Values.api.settings.logging.targets }}"
             - name: Kafka__BootstrapServers
               value: {{ $.Values.kafka.bootstrapServers }}
             - name: Kafka__SecurityProtocol
@@ -187,7 +187,7 @@ spec:
             - name: Kafka__EventsTopicSettings__Name
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
             - name: LocalCache__Enabled
-              value: "{{ .Values.permissionsApi.localCache.enabled }}"
+              value: "{{ .Values.permissions.settings.localCache.enabled }}"
             - name: LocalCache__TrackStatistics
-              value: "{{ .Values.permissionsApi.localCache.trackStatistics }}"
+              value: "{{ .Values.permissions.settings.localCache.trackStatistics }}"
 {{- end }}

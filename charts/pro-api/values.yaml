@@ -1,44 +1,333 @@
+# @section Geo API configuration & settings
+
+# @extra Image settings
+# @param api.image.repository Repository
+# @param api.image.tag Tag
+# @param api.image.pullPolicy Pull Policy
+# @extra Ingress settings
+# @param api.ingress.enabled If Ingress is enabled for the service.
+# @param api.ingress.className Name of the Ingress controller class.
+# @param api.ingress.hosts[0].host Hostname for the Ingress service.
+# @param api.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param api.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param api.ingress.tls TLS configuration
+# @extra Pod settings
+# @param api.pod.appName Name of the service.
+# @param api.pod.replicaCount A replica count for the pod.
+# @param api.pod.imagePullSecrets Kubernetes image pull secrets.
+# @param api.pod.nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param api.pod.fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param api.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param api.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param api.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
+# @param api.pod.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
+# @param api.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param api.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param api.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param api.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param api.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param api.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @extra api.pod.resources **Limits for the application service**
+# @param api.pod.resources.requests.cpu A CPU request.
+# @param api.pod.resources.requests.memory A memory request.
+# @param api.pod.resources.limits.cpu A CPU limit.
+# @param api.pod.resources.limits.memory A memory limit.
+# @param api.pod.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param api.pod.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param api.pod.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+# @extra VPA settings [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md)
+# @param api.vpa.enabled If VPA is enabled for the service.
+# @param api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param api.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @param api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @param api.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @param api.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+# @extra Service settings
+# @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param api.service.port PRO API service port.
+# @param api.service.serviceAccount  Kubernetes service account
+# @param api.service.serviceAccountOverride The name of an existing custom service account. If specified, the services in the chart will use this existing service account. If not specified, a new service account will be created and used with the name from the variable `api.serviceAccount`.
+# @extra Geo API settings
+# @param api.settings.licenseKey License key. **Required**
+# @param api.settings.tempPath Path to directory used for temp data
+# @param api.settings.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
+# @skip api.settings.logEsQueries
+# @skip api.settings.debug
+# @skip api.settings.env
+# @skip api.settings.filterByZoneCodes
+# @skip api.settings.esDataCentersCount
+# @extra api.settings.logging Logging settings
+# @param api.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
+# @param api.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
+# @extra api.settings.rateLimiter rate limiter settings
+# @param api.settings.rateLimiter.requestsLimit max number of requests from one user during time window (0 means rate limiter is disabled)
+# @param api.settings.rateLimiter.windowSizeInSeconds the size of time windows to count and limit incoming requests
+# @skip api.settings.localCache.enabled
+# @skip api.settings.localCache.trackStatistics
+# @skip api.settings.openApi.servers
+# @param api.settings.enableUserAssetsImporter If user data importer job is enabled for the service.
+# @param api.settings.enableAssetsStreaming If the streaming data processing job is enabled for the service.
+# @param api.settings.auth.type Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol
+# @param api.settings.auth.url API URL of authentication service. Example: `http(s)://keycloak.ingress.host`
+# @param api.settings.auth.userInfoEndpoint The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`
+# @param api.settings.auth.wellKnownConfigEndpoint The [Well-Known Config endpoint](https://openid.net/specs/openid-connect-discovery-1_0.html). Example: `realms/URBI_Pro/.well-known/openid-configuration`
+# @param api.settings.auth.apiKey Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`
+# @param api.settings.auth.permissionsApiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`
+# @skip api.settings.auth.autoRegisterUsers
+# @param api.settings.auth.turnOffCertValidation Turn off certificate validation for auth.url
+# @param api.settings.auth.shareKeys Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`
+
+api:
+  image:
+    repository: 2gis-on-premise/pro-api
+    tag: 1.35.0
+    pullPolicy: IfNotPresent
+  ingress:
+    enabled: false
+    className: nginx
+    hosts:
+    - host: pro-api.example.com
+      paths:
+      - path: /
+        pathType: Prefix
+    tls: []
+    # - hosts:
+    #   - pro-api.example.com
+    #   secretName: secret.tls
+  pod:
+    appName: pro-api
+    replicaCount: 2
+    imagePullSecrets: []
+    nameOverride: ''
+    fullnameOverride: ''
+    nodeSelector: {}
+    affinity: {}
+    priorityClassName: ''
+    terminationGracePeriodSeconds: 300
+    tolerations: []
+    podAnnotations: {}
+    podLabels: {}
+    annotations: {}
+    labels: {}
+    revisionHistoryLimit: 3
+    resources:
+      requests:
+        cpu: 400m
+        memory: 256M
+      limits:
+        cpu: 1
+        memory: 1024M
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 0
+        maxSurge: 1
+  vpa:
+    enabled: false
+    updateMode: Auto
+    minAllowed:
+      cpu: 400m
+      memory: 256M
+    maxAllowed:
+      cpu: 1
+      memory: 1024M
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+    serviceAccount: runner
+    serviceAccountOverride: ''
+  settings:
+    licenseKey: ''
+    tempPath: /tmp
+    allowAnyOrigin: false
+    logEsQueries: false
+    debug: false
+    env: ''
+    filterByZoneCodes: false
+    esDataCentersCount: 1
+    logging:
+      format: simple
+      targets: ''
+    rateLimiter:
+      requestsLimit: 1024
+      windowSizeInSeconds: 1
+    localCache:
+      enabled: true
+      trackStatistics: false
+    openApi:
+      servers: []
+    enableUserAssetsImporter: true
+    enableAssetsStreaming: false
+    auth:
+      type: none
+      url: ''
+      userInfoEndpoint: ''
+      wellKnownConfigEndpoint: ''
+      apiKey: ''
+      permissionsApiKey: ''
+      autoRegisterUsers: true
+      turnOffCertValidation: false
+      shareKeys: []
+
+
+# @section Permissions API configuration & settings
+
+# @skip permissions.image
+# @extra Ingress settings
+# @param permissions.ingress.enabled If Ingress is enabled for the service.
+# @param permissions.ingress.className Name of the Ingress controller class.
+# @param permissions.ingress.hosts[0].host Hostname for the Ingress service.
+# @param permissions.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param permissions.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param permissions.ingress.tls TLS configuration
+# @skip permissions.pod
+# @skip permissions.service
+# @extra Permissions API settings
+# @skip permissions.settings.host
+# @param permissions.settings.enabled If permissionsApi is enabled for the service.
+# @skip permissions.settings.localCache.enabled
+# @skip permissions.settings.localCache.trackStatistics
+
+permissions:
+  image:
+    repository: 2gis-on-premise/pro-permissions-api
+    tag: 1.35.0
+    pullPolicy: IfNotPresent
+  ingress:
+    enabled: false
+    className: nginx
+    hosts:
+    - host: pro-permissions-api.example.com
+      paths:
+      - path: /
+        pathType: Prefix
+    tls: []
+    # - hosts:
+    #   - pro-permissions-api.example.com
+    #   secretName: secret.tls
+  pod:
+    replicaCount: 1
+    imagePullSecrets: []
+    nodeSelector: {}
+    affinity: {}
+    priorityClassName: ''
+    terminationGracePeriodSeconds: 60
+    tolerations: []
+    podAnnotations: {}
+    podLabels: {}
+    annotations: {}
+    labels: {}
+    revisionHistoryLimit: 3
+    resources:
+      requests:
+        cpu: 300m
+        memory: 256M
+      limits:
+        cpu: 1
+        memory: 1G
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+  settings:
+    host: ''
+    enabled: false
+    localCache:
+      enabled: true
+      trackStatistics: false
+
+
+# @section asset importer settings
+
+# @param assetImporter.appName Data Import job name.
+# @param assetImporter.repository Docker Repository Image.
+# @param assetImporter.tag Docker image tag.
+# @param assetImporter.schedule Import job schedule.
+# @param assetImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
+# @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
+# @param assetImporter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @extra assetImporter.resources **Limits for the import job**
+# @param assetImporter.resources.requests.cpu A CPU request.
+# @param assetImporter.resources.requests.memory A memory request.
+# @param assetImporter.resources.limits.cpu A CPU limit.
+# @param assetImporter.resources.limits.memory A memory limit.
+# @param assetImporter.enabled If assetImporter is enabled for the service.
+# @skip assetImporter.suspended
+# @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
+# @param assetImporter.startOnDeployMode Import mode: 'ScheduleManifest' - copy data from manifest and schedule import, 'ManifestData' - just copy data from manifest.
+# @extra Asset importer settings
+# @param assetImporter.settings.maxParallelJobs How many import jobs can be run simultaneously
+# @skip assetImporter.settings.files
+# @param assetImporter.settings.imageProxyUrl URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
+# @param assetImporter.settings.externalLinksProxyUrl URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
+# @param assetImporter.settings.externalLinksAllowedHosts Comma separated hosts, i.e. 'someserver.com,someserver2.com' )
+# @skip assetImporter.settings.esMetricsEnabled
+
+assetImporter:
+  appName: asset-importer
+  repository: 2gis-on-premise/pro-importer
+  tag: 1.35.0
+  schedule: 0 18 * * *
+  backoffLimit: 2
+  successfulJobsHistoryLimit: 3
+  nodeSelector: {}
+  resources:
+    requests:
+      cpu: 700m
+      memory: 768M
+    limits:
+      cpu: 1000m
+      memory: 8Gi
+  enabled: true
+  suspended: false
+  startOnDeploy: true
+  startOnDeployMode: ScheduleManifest
+  settings:
+    maxParallelJobs: 1
+    files: ''
+    imageProxyUrl: ''
+    externalLinksProxyUrl: ''
+    externalLinksAllowedHosts: ''
+    esMetricsEnabled: false
+
+
+# @section asset preparer settings
+
+# @skip assetPreparer
+
+assetPreparer:
+  appName: asset-preparer
+  repository: 2gis-on-premise/pro-importer
+  tag: 1.35.0
+  schedule: 0 16 * * 6
+  backoffLimit: 2
+  successfulJobsHistoryLimit: 1
+  nodeSelector: {}
+  resources:
+    requests:
+      cpu: 300m
+      memory: 256M
+    limits:
+      cpu: 500m
+      memory: 512M
+  enabled: true
+  settings:
+    maxParallelJobs: 1
+
+
+# @section common infrastructure settings
+
+
 # @section Docker Registry settings
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
 dgctlDockerRegistry: ''
-
-# @section Common settings
-
-# @param appName Name of the service.
-# @param licenseKey License key. **Required**
-# @param replicaCount A replica count for the pod.
-# @param imagePullSecrets Kubernetes image pull secrets.
-# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
-# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
-# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
-# @param priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
-# @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
-# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
-
-appName: pro-api
-licenseKey: ''
-replicaCount: 2
-imagePullSecrets: []
-nameOverride: ''
-fullnameOverride: ''
-nodeSelector: {}
-affinity: {}
-priorityClassName: ''
-terminationGracePeriodSeconds: 300
-tolerations: []
-podAnnotations: {}
-podLabels: {}
-annotations: {}
-labels: {}
-revisionHistoryLimit: 3
 
 # @section Deployment Artifacts Storage settings
 
@@ -61,75 +350,6 @@ dgctlStorage:
   region: ''
   disablePayloadSigning: false
 
-# @section Strategy settings
-
-# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
-# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
-# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
-
-strategy:
-  type: RollingUpdate
-  rollingUpdate:
-    maxUnavailable: 0
-    maxSurge: 1
-
-# @section Service settings
-
-# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
-# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-# @param service.port PRO API service port.
-
-service:
-  annotations: {}
-  labels: {}
-  type: ClusterIP
-  port: 80
-
-# @skip permissionApiService
-
-permissionApiService:
-  annotations: {}
-  labels: {}
-  type: ClusterIP
-  port: 80
-
-# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
-
-# @param vpa.enabled If VPA is enabled for the service.
-# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
-# @param vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
-# @param vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
-# @param vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
-# @param vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
-
-vpa:
-  enabled: false
-  updateMode: Auto
-  minAllowed:
-    cpu: 400m
-    memory: 256M
-  maxAllowed:
-    cpu: 1
-    memory: 1024M
-
-# @section Deployment settings
-
-# @param image.repository Repository
-# @param image.tag Tag
-# @param image.pullPolicy Pull Policy
-
-image:
-  repository: 2gis-on-premise/pro-api
-  tag: 1.35.0
-  pullPolicy: IfNotPresent
-
-# @skip permissionsApiImage
-
-permissionsApiImage:
-  repository: 2gis-on-premise/pro-permissions-api
-  tag: 1.35.0
-  pullPolicy: IfNotPresent
 
 # @section 2GIS PRO Storage configuration
 
@@ -146,81 +366,6 @@ s3:
   snapshotBucket: ''
   resourcesBucket: ''
 
-# @section 2GIS PRO API configuration
-
-# @param api.serviceAccount Kubernetes service account
-# @param api.serviceAccountOverride The name of an existing custom service account. If specified, the services in the chart will use this existing service account. If not specified, a new service account will be created and used with the name from the variable `api.serviceAccount`.
-# @param api.tempPath Path to directory used for temp data
-# @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
-# @extra api.logging Logging settings
-# @param api.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
-# @param api.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
-# @extra api.rateLimiter rate limiter settings
-# @param api.rateLimiter.requestsLimit max number of requests from one user during time window (0 means rate limiter is disabled)
-# @param api.rateLimiter.windowSizeInSeconds the size of time windows to count and limit incoming requests
-# @skip api.logEsQueries
-# @skip api.debug
-# @skip api.env
-# @skip api.token
-# @skip api.filterByZoneCodes
-# @skip api.esDataCentersCount
-# @skip Local cache settings
-# @skip api.localCache.enabled
-# @skip api.localCache.trackStatistics
-# @skip Open API settings
-# @skip api.openApi.servers
-
-api:
-  serviceAccount: runner
-  serviceAccountOverride: ''
-  tempPath: /tmp
-  allowAnyOrigin: false
-  logEsQueries: false
-  debug: false
-  env: ''
-  filterByZoneCodes: false
-  esDataCentersCount: 1
-  logging:
-    format: simple
-    targets: ''
-  rateLimiter:
-    requestsLimit: 1024
-    windowSizeInSeconds: 1
-  localCache:
-    enabled: true
-    trackStatistics: false
-  openApi:
-    servers: []
-
-# @section Auth configuration
-
-# @param auth.type Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol
-# @param auth.url API URL of authentication service. Example: `http(s)://keycloak.ingress.host`
-# @param auth.userInfoEndpoint The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`
-# @param auth.wellKnownConfigEndpoint The [Well-Known Config endpoint](https://openid.net/specs/openid-connect-discovery-1_0.html). Example: `realms/URBI_Pro/.well-known/openid-configuration`
-# @param auth.apiKey Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`
-# @param auth.permissionsApiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`
-# @param auth.turnOffCertValidation Turn off certificate validation for auth.url
-# @param auth.shareKeys Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`
-# @skip auth.autoRegisterUsers
-
-auth:
-  type: none
-  url: ''
-  userInfoEndpoint: ''
-  wellKnownConfigEndpoint: ''
-  apiKey: ''
-  permissionsApiKey: ''
-  autoRegisterUsers: true
-  turnOffCertValidation: false
-  shareKeys: []
-
-# @skip digger
-
-digger:
-  url: ''
-  userName: ''
-  password: ''
 
 # @section PostgreSQL settings
 
@@ -233,41 +378,9 @@ postgres:
   connectionStringReadonly: ''
   password: ''
 
-# @section Keys Service settings
-# @param keys.url API URL of service for managing partners' keys to 2GIS services (keys.api). **Required**
-# @param keys.token keys.api access token. **Required**
-
-keys:
-  url: ''
-  token: ''
-
-# @section ElasticSearch settings (supported version 7.x)
-
-# @param elastic.host ElasticSearch host address. Format: `http(s)://HOST:PORT`
-# @param elastic.credentials User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD`
-# @skip elastic.indexPrefix
-
-elastic:
-  host: ''
-  credentials: ''
-  indexPrefix: ''
-
-# @section Redis settings (supported version 6.x)
-
-# @param redis.host Redis host address. **Required**
-# @param redis.port Redis port. **Required**
-# @skip redis.enabled
-# @param redis.username Username used to connect to Redis
-# @param redis.password Password used to connect to Redis
-
-redis:
-  host: ''
-  port: 6379
-  enabled: true
-  username: ''
-  password: ''
 
 # @section Kafka settings (supported version 2.7)
+
 # @param kafka.bootstrapServers Kafka bootstrap servers. Format: 'host1:port1,host2:port2'
 # @param kafka.securityProtocol Kafka security protocol. Supported options: SaslPlaintext.
 # @extra kafka.sasl **Kafka sasl settings** (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config))
@@ -307,12 +420,57 @@ kafka:
     readerGroupId: ''
   refreshAssetsIntervalMinutes: 60
 
-# @section Import background jobs settings
-# @param backgroundJobs.enableUserAssetsImporter If user data importer job is enabled for the service.
-# @param backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
-backgroundJobs:
-  enableUserAssetsImporter: true
-  enableAssetsStreaming: false
+
+# @section ElasticSearch settings (supported version 7.x)
+
+# @param elastic.host ElasticSearch host address. Format: `http(s)://HOST:PORT`
+# @param elastic.credentials User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD`
+# @skip elastic.indexPrefix
+
+elastic:
+  host: ''
+  credentials: ''
+  indexPrefix: ''
+
+
+# @section Redis settings (supported version 6.x)
+
+# @param redis.host Redis host address. **Required**
+# @param redis.port Redis port. **Required**
+# @skip redis.enabled
+# @param redis.username Username used to connect to Redis
+# @param redis.password Password used to connect to Redis
+
+redis:
+  host: ''
+  port: 6379
+  enabled: true
+  username: ''
+  password: ''
+
+
+# @section external services
+
+
+# @section digger settings
+
+# @skip digger
+
+digger:
+  url: ''
+  userName: ''
+  password: ''
+
+
+# @section Keys Service settings
+
+# @param keys.url API URL of service for managing partners' keys to 2GIS services (keys.api). **Required**
+# @param keys.token keys.api access token. **Required**
+
+keys:
+  url: ''
+  token: ''
+
 
 # @section Catalog API settings
 
@@ -323,6 +481,7 @@ catalog:
   url: ''
   key: ''
 
+
 # @section Navigation API settings
 
 # @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-back.svc
@@ -332,12 +491,14 @@ navi:
   url: ''
   key: ''
 
+
 # @section License Service API settings
 
 # @param license.url Licensing server v2 URL. Example: https://license.svc **Required**
 
 license:
   url: ''
+
 
 # @section Search API settings
 
@@ -351,176 +512,3 @@ search:
 tileGen:
   url: ''
   userDataTileSet: ''
-
-# @section 2GIS PRO API Job settings
-
-# @param appAssetImporterName Data Import job name.
-# @skip appAssetPreparerName
-
-appAssetImporterName: asset-importer
-appAssetPreparerName: asset-preparer
-
-# @skip permissionsPodSettings
-
-permissionsPodSettings:
-  replicaCount: 1
-  imagePullSecrets: []
-  nodeSelector: {}
-  affinity: {}
-  priorityClassName: ''
-  terminationGracePeriodSeconds: 60
-  tolerations: []
-  podAnnotations: {}
-  podLabels: {}
-  annotations: {}
-  labels: {}
-  revisionHistoryLimit: 3
-  resources:
-    requests:
-      cpu: 300m
-      memory: 512M
-    limits:
-      cpu: 1
-      memory: 1G
-
-# @section 2GIS PRO Permissions API configuration
-# @skip permissionsApi.host
-# @param permissionsApi.enabled If permissionsApi is enabled for the service.
-# @skip Local cache settings
-# @skip permissionsApi.localCache.enabled
-# @skip permissionsApi.localCache.trackStatistics
-
-permissionsApi:
-  host: ''
-  enabled: false
-  localCache:
-    enabled: true
-    trackStatistics: false
-
-# @section Import job settings
-
-# @param assetImporter.repository Docker Repository Image.
-# @param assetImporter.tag Docker image tag.
-# @param assetImporter.schedule Import job schedule.
-# @param assetImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
-# @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
-# @param assetImporter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-# @param assetImporter.maxParallelJobs How many import jobs can be run simultaneously
-# @param assetImporter.enabled If assetImporter is enabled for the service.
-# @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
-# @param assetImporter.startOnDeployMode Import mode: 'ScheduleManifest' - copy data from manifest and schedule import, 'ManifestData' - just copy data from manifest.
-# @param assetImporter.imageProxyUrl URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
-# @param assetImporter.externalLinksProxyUrl URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
-# @param assetImporter.externalLinksAllowedHosts Comma separated hosts, i.e. 'someserver.com,someserver2.com' )
-# @skip assetImporter.files
-# @skip assetImporter.esMetricsEnabled
-# @skip assetImporter.suspended
-
-assetImporter:
-  repository: 2gis-on-premise/pro-importer
-  tag: 1.35.0
-  schedule: 0 18 * * *
-  backoffLimit: 2
-  successfulJobsHistoryLimit: 3
-  nodeSelector: {}
-  resources:
-    requests:
-      cpu: 700m
-      memory: 768M
-    limits:
-      cpu: 1000m
-      memory: 8Gi
-  maxParallelJobs: 1
-  enabled: true
-  suspended: false
-  startOnDeploy: true
-  startOnDeployMode: ScheduleManifest
-  files: ''
-  imageProxyUrl: ''
-  externalLinksProxyUrl: ''
-  externalLinksAllowedHosts: ''
-  esMetricsEnabled: false
-
-# @skip assetPreparer
-
-assetPreparer:
-  repository: 2gis-on-premise/pro-importer
-  tag: 1.35.0
-  schedule: 0 16 * * 6
-  backoffLimit: 2
-  successfulJobsHistoryLimit: 1
-  nodeSelector: {}
-  resources:
-    requests:
-      cpu: 300m
-      memory: 256M
-    limits:
-      cpu: 500m
-      memory: 512M
-  enabled: true
-  maxParallelJobs: 1
-
-# @section Limits
-
-# @extra resources **Limits for the application service**
-# @param resources.requests.cpu A CPU request.
-# @param resources.requests.memory A memory request.
-# @param resources.limits.cpu A CPU limit.
-# @param resources.limits.memory A memory limit.
-
-# @extra assetImporter.resources **Limits for the import job**
-# @param assetImporter.resources.requests.cpu A CPU request.
-# @param assetImporter.resources.requests.memory A memory request.
-# @param assetImporter.resources.limits.cpu A CPU limit.
-# @param assetImporter.resources.limits.memory A memory limit.
-
-resources:
-  requests:
-    cpu: 400m
-    memory: 256M
-  limits:
-    cpu: 1
-    memory: 1024M
-
-# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
-
-# @section 2GIS PRO API ingress settings
-# @param ingress.enabled If Ingress is enabled for the service.
-# @param ingress.className Name of the Ingress controller class.
-# @param ingress.hosts[0].host Hostname for the Ingress service.
-# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
-# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
-# @param ingress.tls TLS configuration
-
-ingress:
-  enabled: false
-  className: nginx
-  hosts:
-  - host: pro-api.example.com
-    paths:
-    - path: /
-      pathType: Prefix
-  tls: []
-  # - hosts:
-  #   - pro-api.example.com
-  #   secretName: secret.tls
-
-# @section 2GIS PRO Permissions API ingress settings
-# @param permissionsApiIngress.enabled If Ingress is enabled for the service.
-# @param permissionsApiIngress.className Name of the Ingress controller class.
-# @param permissionsApiIngress.hosts[0].host Hostname for the Ingress service.
-# @param permissionsApiIngress.hosts[0].paths[0].path Path of the host for the Ingress service.
-# @param permissionsApiIngress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
-# @param permissionsApiIngress.tls TLS configuration
-permissionsApiIngress:
-  enabled: false
-  className: nginx
-  hosts:
-  - host: pro-permissions-api.example.com
-    paths:
-    - path: /
-      pathType: Prefix
-  tls: []
-  # - hosts:
-  #   - pro-permissions-api.example.com
-  #   secretName: secret.tls
