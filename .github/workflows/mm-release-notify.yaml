@@ -3,6 +3,7 @@
 name: Send release notification to Mattermost
 
 on:
+ workflow_run:
   workflows: ["Release Charts"]
   push:
     tags: ["\d+\.\d+\.\d+"]
