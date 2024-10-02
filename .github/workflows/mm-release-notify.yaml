@@ -1,0 +1,25 @@
+---
+
+name: Send release notification to Mattermost
+
+on:
+  registry_package:
+    push:
+      branches:
+        - 'ONPREM-932'
+#      tags:
+#        - \d+\.\d+\.\d+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mattermost/action-mattermost-notify@master
+#        if: ${{ github.event.release }} ${{ github.ref_name }}
+        with:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
+          MATTERMOST_USERNAME: Github
+          MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
+          TEXT: |
+            Опубликован On-Premise: 1.28.2 
+            Документация: https://confluence.2gis.ru/display/ONPREM/Release+1.28.2+On-Premise
+
