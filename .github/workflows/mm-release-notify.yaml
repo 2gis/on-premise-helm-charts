@@ -1,0 +1,27 @@
+---
+
+name: Send release notification to Mattermost
+
+on:
+  workflow_run:
+    workflows:
+      - "Release Charts"
+    push:
+      tags:
+        - \d+\.\d+\.\d+
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mattermost/action-mattermost-notify@master
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        with:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WH_ON_PREMISE_RELEASE }}
+          MATTERMOST_USERNAME: Github
+          MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
+          TEXT: |
+            Опубликован On-Premise: ${{ github.ref_name }} 
+            Документация: https://confluence.2gis.ru/display/Karta/Release+${{ github.ref_name }}+On-Premise
