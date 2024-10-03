@@ -1,6 +1,6 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [1.40.0]
+## [1.41.0]
 
 ### pro-api
 - set host pro-api.example.com
