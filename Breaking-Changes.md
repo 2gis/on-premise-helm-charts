@@ -12,7 +12,6 @@
 - add section layerGeneration to api.settings
 - add api.settings.layerGeneration.isochroneLayerMaxPointsCount
 - add permissions.settings.auth.apiKey
-- add section tasks by new tasks service
 - add assetPreparer.settings.files
 - add kafka.useReplicaTopics
 

@@ -158,13 +158,13 @@ spec:
               value: "{{ .Values.api.settings.env }}"
             - name: Common__FilterByZoneCodes
               value: "{{ .Values.api.settings.filterByZoneCodes }}"
-            - name: Postgres__ConnectionString
+            - name: DB_CONNECTION_STRING
               value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
             {{ if .Values.postgres.connectionStringReadonly }}
-            - name: Postgres__ConnectionStringReadonly
+            - name: DB_CONNECTION_STRING_READONLY
               value: "{{ .Values.postgres.connectionStringReadonly }}"
             {{ end }}
-            - name: Postgres__Password
+            - name: DB_CONNECTION_PWD
               valueFrom:
                 secretKeyRef:
                   key: dbConnectionPwd

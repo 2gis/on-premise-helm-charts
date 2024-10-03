@@ -15,10 +15,6 @@
 {{ include "pro-api.name" . }}-permissions
 {{- end -}}
 
-{{- define "pro-api.tasks-name" -}}
-{{ include "pro-api.name" . }}-tasks
-{{- end -}}
-
 {{- define "pro-api.permissions-url" -}}
 {{- if .Values.permissions.settings.host -}}
 {{- .Values.permissions.settings.host -}}
@@ -73,11 +69,6 @@ app.kubernetes.io/name: {{ include "pro-api.permissions-name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}-permissions
 {{- end -}}
 
-{{- define "pro-api.tasksSelectorLabels" -}}
-app.kubernetes.io/name: {{ include "pro-api.tasks-name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}-tasks
-{{- end -}}
-
 {{- define "pro-api.labels" -}}
 helm.sh/chart: {{ include "pro-api.chart" . }}
 {{ include "pro-api.selectorLabels" . }}
@@ -90,15 +81,6 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- define "pro-api.permissionLabels" -}}
 helm.sh/chart: {{ include "pro-api.chart" . }}
 {{ include "pro-api.permissionsSelectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{- define "pro-api.tasksLabels" -}}
-helm.sh/chart: {{ include "pro-api.chart" . }}
-{{ include "pro-api.tasksSelectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
