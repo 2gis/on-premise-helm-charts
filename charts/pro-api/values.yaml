@@ -137,6 +137,7 @@ api:
   # @param api.settings.auth.shareKeys Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`
   # @param api.settings.backgroundJobs.enableUserAssetsImporter If user data importer job is enabled for the service.
   # @param api.settings.backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
+  # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount If layer contains more points, isochrone is not avalible
   settings:
     licenseKey: ''
     tempPath: /tmp
