@@ -3,6 +3,7 @@
 ## [1.41.0]
 
 ### pro-api
+- settings structure changed, settings are grouped by their services
 - set host pro-api.example.com
 - remove appName from api.pod
 - add section backgroundJobs to api.settings
