@@ -130,7 +130,7 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             - name: Auth__Type
               value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
-            {{ if .Values.api.settings.auth.permissionsApiKey }}
+            {{ if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
@@ -186,6 +186,8 @@ spec:
               value: "{{ $.Values.kafka.permissionsTopic.readerGroupId }}"
             - name: Kafka__EventsTopicSettings__Name
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
+            - name: Kafka__UseReplicaTopics
+              value: "{{ $.Values.kafka.useReplicaTopics }}"
             - name: LocalCache__Enabled
               value: "{{ .Values.permissions.settings.localCache.enabled }}"
             - name: LocalCache__TrackStatistics
