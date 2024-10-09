@@ -99,4 +99,10 @@ data:
         {{ end }}
       {{ end }}
         }
+
+    {{ if .Values.proxy.httpServers }}
+      {{ range .Values.proxy.httpServers  }}
+        {{- . | trim | nindent 6 }}
+      {{ end }}
+    {{ end }}
     }
