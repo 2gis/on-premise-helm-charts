@@ -49,6 +49,19 @@ proxy:
     enabled: true
     age: 1m
     size: 32m
+  worker:
+    processes: 2
+    connections: 1024
+  log:
+    errorLog:
+      level: error
+      path:  /dev/stderr
+    accessLog:
+      enabled: false
+      path:  /dev/stdout
+      format: main
+
+  keepaliveTimeout: 65
 
 
 # @section Deployment settings

@@ -8,12 +8,12 @@ metadata:
     {{- include "traffic-proxy.labels" . | nindent 4 }}
 data:
   nginx.conf: |
-    worker_processes  2;
+    worker_processes {{ .Values.proxy.worker.processes }};
 
     pid /run/nginx.pid;
 
     events {
-        worker_connections  1024;
+        worker_connections  {{ .Values.proxy.worker.connections }};
     }
 
     http {
@@ -44,12 +44,21 @@ data:
                                     '"request_id":"$http_x_request_id",'
                                     '"upstream_request_id":"$upstream_http_x_request_id"}';
 
+      {{- if .Values.proxy.log.customFormats }}
+        {{ .Values.proxy.log.customFormats | indent 8 }}
+      {{- end }}
+
+      {{- if .Values.proxy.log.accessLog.enabled }}
+        access_log {{ .Values.proxy.log.accessLog.path }}  {{ .Values.proxy.log.accessLog.format }};
+      {{- else }}
         access_log off;
-        error_log  /dev/stderr  error;
+      {{- end }}
+
+        error_log  {{ .Values.proxy.log.errorLog.path }}  {{ .Values.proxy.log.errorLog.level }};
 
         sendfile       on;
         tcp_nopush     on;
-        keepalive_timeout  65;
+        keepalive_timeout  {{ .Values.proxy.keepaliveTimeout }};
 
       {{ if .Values.proxy.cache.enabled }}
         proxy_cache_path /var/cache/nginx/trafficcache keys_zone=trafficcache:{{ .Values.proxy.cache.size }};
@@ -81,5 +90,13 @@ data:
               default_type text/html;
               return 200 "<!DOCTYPE html><h2>OK</h2>\n";
           }
+
+      {{ if .Values.proxy.locations }}
+        {{ range .Values.proxy.locations }}
+          location {{ .path }} {
+            {{- .definition | trim | nindent 14}}
+          }
+        {{ end }}
+      {{ end }}
         }
     }
