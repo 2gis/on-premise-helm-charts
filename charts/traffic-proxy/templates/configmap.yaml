@@ -49,7 +49,7 @@ data:
       {{- end }}
 
       {{- if .Values.proxy.log.accessLog.enabled }}
-        access_log {{ .Values.proxy.log.accessLog.path }}  {{ .Values.proxy.log.accessLog.format }};
+        access_log {{ .Values.proxy.log.accessLog.path }} {{ .Values.proxy.log.accessLog.format }};
       {{- else }}
         access_log off;
       {{- end }}
