@@ -13,7 +13,7 @@ data:
     pid /run/nginx.pid;
 
     events {
-        worker_connections  {{ .Values.proxy.worker.connections }};
+        worker_connections {{ .Values.proxy.worker.connections }};
     }
 
     http {
