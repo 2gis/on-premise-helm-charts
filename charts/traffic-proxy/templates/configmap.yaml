@@ -44,17 +44,15 @@ data:
                                     '"request_id":"$http_x_request_id",'
                                     '"upstream_request_id":"$upstream_http_x_request_id"}';
 
-      {{- if .Values.proxy.log.customFormats }}
-        {{ .Values.proxy.log.customFormats | indent 8 }}
+    {{- if .Values.proxy.log.customFormats }}
+      {{ range .Values.proxy.log.customFormats }}
+      log_format {{ .name }} escape={{ .escape }} {{ .format | nindent 36 | trim }};
       {{- end }}
+    {{- end }}
 
-      {{- if .Values.proxy.log.accessLog.enabled }}
-        access_log {{ .Values.proxy.log.accessLog.path }} {{ .Values.proxy.log.accessLog.format }};
-      {{- else }}
-        access_log off;
-      {{- end }}
+        access_log {{ required "A valid .Values.proxy.log.accessLog required" .Values.proxy.log.accessLog }};
 
-        error_log  {{ .Values.proxy.log.errorLog.path }}  {{ .Values.proxy.log.errorLog.level }};
+        error_log /dev/stderr {{ required "A valid .Values.proxy.log.errorLog.level required" .Values.proxy.log.errorLog.level }};
 
         sendfile       on;
         tcp_nopush     on;

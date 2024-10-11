@@ -55,11 +55,7 @@ proxy:
   log:
     errorLog:
       level: error
-      path:  /dev/stderr
-    accessLog:
-      enabled: false
-      path:  /dev/stdout
-      format: main
+    accessLog: 'off'
 
   keepaliveTimeout: 65
 
