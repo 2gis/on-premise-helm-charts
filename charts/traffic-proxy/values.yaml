@@ -72,12 +72,10 @@ proxy:
     errorLog:
       level: error
 
-    accessLog: off
+    accessLog: 'off'
     # accessLog: '/dev/stdout main'
 
   keepaliveTimeout: 65
-
-
 
   # @param proxy.locations List of additional location blocks to be included in the NGINX configuration
   locations: []
