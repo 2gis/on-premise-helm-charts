@@ -72,7 +72,7 @@ proxy:
     errorLog:
       level: error
 
-    accessLog: 'off'
+    accessLog: off
     # accessLog: '/dev/stdout main'
 
   keepaliveTimeout: 65
@@ -84,8 +84,7 @@ proxy:
   #     default_type text/html;
   #     return 200 "<!DOCTYPE html><h2>test page</h2>\n";
 
-  # @param proxy.httpServers Additional server blocks to be included in the NGINX configuration
-  # @param proxy.httpServers List of the server block. Key is the name of the server block, value is the NGINX configuration for the server block
+  # @param proxy.httpServers List of additional server blocks to be included in the NGINX configuration
   httpServers: {}
       # examplecfg: |
       # server {
