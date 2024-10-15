@@ -10,7 +10,7 @@
 
 Файлы `README.md` формируются полуавтоматически. Для каждого чарта сначала необходимо создать файл `README.md` с общим описанием сервиса и пустым разделом «Values», а затем запустить инструмент [`readme-generator-for-helm`](https://github.com/bitnami-labs/readme-generator-for-helm) от Bitnami, чтобы автоматически заполнить раздел «Values» описаниями настроек на основе комментариев из `values.yaml`. Подробнее об использовании генератора можно прочитать в [документе](https://docs.google.com/document/d/1iEPG8tcCYu9q5iZssTAPOd43xh8uCQhNXyXhFPUTir8/edit).
 
-Генератор можно запускать напрямую или с помощью [`Makefile`](Makefile), например:
+Генератор можно запускать напрямую или с помощью [`Makefile`](Makefile) (лучше это делать на linux. На windows были замечены проблемы с лишними пустыми строками при генерации README.md), например:
 
 ```sh
 make prepare
