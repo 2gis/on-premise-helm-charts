@@ -49,8 +49,8 @@ make charts/navi-back
 - В переменных, где предполагается конечный список значений, всегда его явно перечисляем.
 
   ```yaml
-  # @param LOG_LEVEL Log level: `error`, `warn`, `info` or `debug`.
-  LOG_LEVEL: error
+  # @param logLevel Log level: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: error
   ```
 
 - Константы или переменные, которые никогда не меняются при типовом использовании сервиса, следует скрывать из `README.md` при помощи тэга `@skip`.
@@ -89,6 +89,9 @@ make charts/navi-back
   - verticalPodAutoscaler - vpa
   - podDisruptionBudget - pdb
   - serviceAccount.yaml - serviceAccount
+  - Настройки логгирования:
+    - logLevel: `trace`, `debug`, `info`, `warning`, `error`, `fatal`
+    - logFormat: `json`, `plaintext`
 
 - Группы настроек называем везде одинаково. Предпочтение отдаём не сокращённым, а полным названиям. По возможности используем [официальные названия](https://github.com/helm/helm/blob/main/pkg/releaseutil/kind_sorter.go#L72).
   - Исключения: hpa, vpa, pdb
