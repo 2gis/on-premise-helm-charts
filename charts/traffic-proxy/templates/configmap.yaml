@@ -46,7 +46,7 @@ data:
 
     {{- if .Values.proxy.log.customFormats }}
       {{ range .Values.proxy.log.customFormats }}
-      log_format {{ .name }} escape={{ .escape }} {{ .format | nindent 36 | trim }};
+        log_format {{ .name }} escape={{ .escape }} {{ .format | nindent 36 | trim }};
       {{- end }}
     {{- end }}
 

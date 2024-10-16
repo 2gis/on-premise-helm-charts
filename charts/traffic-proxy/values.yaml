@@ -41,7 +41,7 @@ podLabels: {}
 # @param proxy.cache.size Maximum cache size.
 # @param proxy.worker.processes Number of worker processes.
 # @param proxy.worker.connections Number of worker connections.
-# @param proxy.log.errorLog.level Error log level.
+# @param proxy.log.errorLog.level Error log level. Allowed values: `debug`, `info`, `notice`, `warn`, `error`, `crit`, `alert`, `emerg`.
 # @param proxy.log.accessLog Access log definition.
 # @param proxy.keepaliveTimeout Keepalive timeout.
 
