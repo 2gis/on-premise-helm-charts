@@ -42,7 +42,7 @@
 Name for kafka main intermediate volume for copy secrets
 */ -}}
 
-{{- define "keys.name-kafka-main-raw" -}}
+{{- define "keys.kafka-main-raw.name" -}}
 {{- printf "%s-kafka-main-raw" (include "keys.name" .) -}}
 {{- end }}
 
@@ -50,7 +50,7 @@ Name for kafka main intermediate volume for copy secrets
 Name for kafka main secret and volume
 */ -}}
 
-{{- define "keys.name-kafka-main" -}}
+{{- define "keys.kafka-main.name" -}}
 {{- printf "%s-kafka-main" (include "keys.name" .) -}}
 {{- end }}
 
@@ -58,7 +58,7 @@ Name for kafka main secret and volume
 Name for kafka audit intermediate volume for copy secrets
 */ -}}
 
-{{- define "keys.name-kafka-audit-raw" -}}
+{{- define "keys.kafka-audit-raw.name" -}}
 {{- printf "%s-kafka-audit-raw" (include "keys.name" .) -}}
 {{- end }}
 
@@ -66,7 +66,7 @@ Name for kafka audit intermediate volume for copy secrets
 Name for kafka audit secret and volume
 */ -}}
 
-{{- define "keys.name-kafka-audit" -}}
+{{- define "keys.kafka-audit.name" -}}
 {{- printf "%s-kafka-audit" (include "keys.name" .) -}}
 {{- end }}
 
@@ -204,10 +204,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.postgres.rw.schema }}"
 - name: KEYS_DB_RW_USERNAME
   value: "{{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username }}"
-{{- end }}
+{{- end -}}
 
 {{- define "keys.env.db.deploys" -}}
-{{ include "keys.env.db" . }}
+{{- include "keys.env.db" . }}
 - name: KEYS_DB_RO_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -218,10 +218,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     secretKeyRef:
       name: {{ include "keys.secret.deploys.name" . }}
       key: dbRWPassword
-{{- end }}
+{{- end -}}
 
 {{- define "keys.env.db.jobs" -}}
-{{ include "keys.env.db" . }}
+{{- include "keys.env.db" . }}
 - name: KEYS_DB_RO_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -232,31 +232,31 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     secretKeyRef:
       name: {{ include "keys.secret.jobs.name" . }}
       key: dbRWPassword
-{{- end }}
+{{- end -}}
 
 {{- define "keys.env.redis" -}}
-{{- if .Values.redis.useExternalRedis }}
+{{- if .Values.redis.useExternalRedis -}}
 - name: KEYS_REDIS_HOST
   value: "{{ .Values.redis.host }}"
 - name: KEYS_REDIS_DB
   value: "{{ .Values.redis.db }}"
-{{- else  }}
+{{- else -}}
 - name: KEYS_REDIS_HOST
   value: "{{ include "keys.redis.name" . }}"
-{{- end  }}
+{{- end }}
 - name: KEYS_REDIS_PORT
   value: "{{ .Values.redis.port }}"
-{{- if .Values.redis.password }}
+{{- if .Values.redis.password -}}
 - name: KEYS_REDIS_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "keys.secret.deploys.name" . }}
       key: redisPassword
-{{- end }}
-{{- end }}
+{{- end -}}
+{{- end -}}
 
 {{- define "keys.env.auth" -}}
-{{- if .Values.api.adminUsers }}
+{{- if .Values.api.adminUsers -}}
 - name: KEYS_ADMIN_USERS
   valueFrom:
     secretKeyRef:
@@ -332,11 +332,13 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.kafka.main.topics.stats }}"
 - name: KEYS_KAFKA_MAIN_USERNAME
   value: "{{ .Values.kafka.main.username }}"
+{{- if .Values.kafka.main.password }}
 - name: KEYS_KAFKA_MAIN_PASSWORD
   valueFrom:
     secretKeyRef:
-      name: {{ include "keys.secret.deploys.name" . }}
+      name: {{ include "keys.kafka-main.name" . }}
       key: kafkaPassword
+{{- end }}
 - name: KEYS_REDIS_RETRIES
   value: "{{ .Values.counter.redis.retries }}"
 - name: KEYS_REDIS_MIN_RETRY_BACKOFF
@@ -347,7 +349,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.kafka.main.securityProtocol }}"
 - name: KEYS_KAFKA_MAIN_SASL_MECHANISM
   value: "{{ .Values.kafka.main.SASLMechanism }}"
-{{- if or (eq .Values.kafka.main.securityProtocol "SSL") (eq .Values.kafka.main.securityProtocol "SASL_SSL") }}
+{{- $sslEnabled := include "kafka.ssl.enabled" (dict "global" $ "variation" "main") }}
+{{- if $sslEnabled }}
 - name: KEYS_KAFKA_MAIN_TLS_SKIP_SERVER_CERTIFICATE_VERIFY
   value: "{{ .Values.kafka.main.tls.skipServerCertificateVerify }}"
 - name: KEYS_KAFKA_MAIN_TLS_CLIENT_CERTIFICATE_PATH
@@ -400,13 +403,19 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.kafka.audit.bootstrapServers }}"
 - name: KEYS_KAFKA_AUDIT_USERNAME
   value: "{{ .Values.kafka.audit.username }}"
+{{- if .Values.kafka.audit.password }}
 - name: KEYS_KAFKA_AUDIT_PASSWORD
-  value: "{{ .Values.kafka.audit.password }}"
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.kafka-audit.name" . }}
+      key: kafkaPassword
+{{- end }}
 - name: KEYS_KAFKA_AUDIT_SECURITY_PROTOCOL
   value: "{{ .Values.kafka.audit.securityProtocol }}"
 - name: KEYS_KAFKA_AUDIT_SASL_MECHANISM
   value: "{{ .Values.kafka.audit.SASLMechanism }}"
-{{- if or (eq .Values.kafka.audit.securityProtocol "SSL") (eq .Values.kafka.audit.securityProtocol "SASL_SSL") }}
+{{- $sslEnabled := include "kafka.ssl.enabled" (dict "global" $ "variation" "audit") }}
+{{- if $sslEnabled }}
 - name: KEYS_KAFKA_AUDIT_TLS_SKIP_SERVER_CERTIFICATE_VERIFY
   value: "{{ .Values.kafka.audit.tls.skipServerCertificateVerify }}"
 - name: KEYS_KAFKA_AUDIT_TLS_CLIENT_CERTIFICATE_PATH
@@ -488,4 +497,13 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 
 {{- define "keys.configmap.deploys.name" -}}
 {{ include "keys.name" . }}-configmap-deploys
+{{- end -}}
+
+{{- define "kafka.ssl.enabled" }}
+{{- $global := required "Global cursor is required in dict!" (get . "global") -}}
+{{- $variation := required "Kafka variant is required in dict!" (get . "variation") -}}
+{{- $securityProtocol := index $global.Values.kafka $variation "securityProtocol" -}}
+{{- $isEnabled := or (eq $securityProtocol "SSL") (eq $securityProtocol "SASL_SSL") -}}
+{{/* Converting bool to "thruthy" string cause "include" can only return string. */}}
+{{- ternary "true" "" $isEnabled }}
 {{- end -}}

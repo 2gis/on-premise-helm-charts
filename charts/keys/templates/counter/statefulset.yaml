@@ -34,9 +34,9 @@ spec:
               cp /tmp/certs/* /etc/2gis/secret/kafka-main/
               chmod 600 /etc/2gis/secret/kafka-main/client.key
           volumeMounts:
-            - name: {{ include "keys.name-kafka-main-raw" . | quote }}
+            - name: {{ include "keys.kafka-main-raw.name" . | quote }}
               mountPath: /tmp/certs
-            - name: {{ include "keys.name-kafka-main" . | quote }}
+            - name: {{ include "keys.kafka-main.name" . | quote }}
               mountPath: /etc/2gis/secret/kafka-main
       {{- end }}
       containers:
@@ -60,10 +60,10 @@ spec:
           {{- end }}
       {{- if or (eq .Values.kafka.main.securityProtocol "SSL") (eq .Values.kafka.main.securityProtocol "SASL_SSL") }}
       volumes:
-        - name: {{ include "keys.name-kafka-main-raw" . | quote }}
+        - name: {{ include "keys.kafka-main-raw.name" . | quote }}
           secret:
-            secretName: {{ include "keys.name-kafka-main" . | quote }}
-        - name: {{ include "keys.name-kafka-main" . | quote }}
+            secretName: {{ include "keys.kafka-main.name" . | quote }}
+        - name: {{ include "keys.kafka-main.name" . | quote }}
           emptyDir: {}
       {{- end }}
       {{- with .Values.counter.nodeSelector }}

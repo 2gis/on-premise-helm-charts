@@ -52,9 +52,9 @@ spec:
               cp /tmp/certs/* /etc/2gis/secret/kafka-audit/
               chmod 600 /etc/2gis/secret/kafka-audit/client.key
           volumeMounts:
-            - name: {{ include "keys.name-kafka-audit-raw" . | quote }}
+            - name: {{ include "keys.kafka-audit-raw.name" . | quote }}
               mountPath: /tmp/certs
-            - name: {{ include "keys.name-kafka-audit" . | quote }}
+            - name: {{ include "keys.kafka-audit.name" . | quote }}
               mountPath: /etc/2gis/secret/kafka-audit
       {{- end }}
       containers:
@@ -97,10 +97,10 @@ spec:
         {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
         {{- end }}
         {{- if or (eq .Values.kafka.audit.securityProtocol "SSL") (eq .Values.kafka.audit.securityProtocol "SASL_SSL") }}
-        - name: {{ include "keys.name-kafka-audit-raw" . | quote }}
+        - name: {{ include "keys.kafka-audit-raw.name" . | quote }}
           secret:
-            secretName: {{ include "keys.name-kafka-audit" . | quote }}
-        - name: {{ include "keys.name-kafka-audit" . | quote }}
+            secretName: {{ include "keys.kafka-audit.name" . | quote }}
+        - name: {{ include "keys.kafka-audit.name" . | quote }}
           emptyDir: {}
         {{- end }}
       {{- end }}
