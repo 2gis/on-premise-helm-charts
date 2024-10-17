@@ -38,6 +38,25 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
+      {{- if or (eq .Values.kafka.main.securityProtocol "SSL") (eq .Values.kafka.main.securityProtocol "SASL_SSL") }}
+      initContainers:
+        - name: copy-kafka-audit-certs
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              cp /tmp/certs/* /etc/2gis/secret/kafka-audit/
+              chmod 600 /etc/2gis/secret/kafka-audit/client.key
+          volumeMounts:
+            - name: {{ include "keys.kafka-audit-raw.name" . | quote }}
+              mountPath: /tmp/certs
+            - name: {{ include "keys.kafka-audit.name" . | quote }}
+              mountPath: /etc/2gis/secret/kafka-audit
+      {{- end }}
       containers:
         - name: keys-api
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
@@ -62,13 +81,28 @@ spec:
             {{- if .Values.customCAs.bundle }}
             {{- include "keys.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
-          {{- if .Values.customCAs.bundle }}
+          {{- if or (.Values.customCAs.bundle) (eq .Values.kafka.audit.securityProtocol "SSL") (eq .Values.kafka.audit.securityProtocol "SASL_SSL") }}
           volumeMounts:
+            {{- if .Values.customCAs.bundle }}
             {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- end }}
+            {{- if or (eq .Values.kafka.audit.securityProtocol "SSL") (eq .Values.kafka.audit.securityProtocol "SASL_SSL") }}
+            - name: {{ printf "%s-kafka-audit" (include "keys.name" .) | quote }}
+              mountPath: /etc/2gis/secret/kafka-audit
+            {{- end }}
           {{- end }}
-      {{- if .Values.customCAs.bundle }}
+      {{- if or (.Values.customCAs.bundle) (eq .Values.kafka.audit.securityProtocol "SSL") (eq .Values.kafka.audit.securityProtocol "SASL_SSL") }}
       volumes:
+        {{- if .Values.customCAs.bundle }}
         {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
+        {{- end }}
+        {{- if or (eq .Values.kafka.audit.securityProtocol "SSL") (eq .Values.kafka.audit.securityProtocol "SASL_SSL") }}
+        - name: {{ include "keys.kafka-audit-raw.name" . | quote }}
+          secret:
+            secretName: {{ include "keys.kafka-audit.name" . | quote }}
+        - name: {{ include "keys.kafka-audit.name" . | quote }}
+          emptyDir: {}
+        {{- end }}
       {{- end }}
       {{- with .Values.api.nodeSelector }}
       nodeSelector:
