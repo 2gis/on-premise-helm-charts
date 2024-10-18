@@ -16,6 +16,14 @@
 - add assetPreparer.settings.files
 - add kafka.useReplicaTopics
 
+## [1.30.0]
+
+### pro-api
+- api.pod.appName renamed api.appName
+- api.settings.enableUserAssetsImporter renamed to api.settings.backgroundJobs.enableUserAssetsImporter
+- api.settings.enableAssetsStreaming renamed to api.settings.backgroundJobs.enableAssetsStreaming
+- api.settings.auth.permissionsApiKey renamed permissions.settings.auth.apiKey
+
 ## [1.29.0]
 
 ### mapgl-js-api
