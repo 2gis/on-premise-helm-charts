@@ -97,9 +97,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `proxy.access.url`                | API Keys endpoint url, ex: http://keys-api.svc. **Required**                                                                  | `""`                              |
 | `proxy.access.token`              | Service key for Keys API. **Required**                                                                                        | `""`                              |
 | `proxy.access.syncPeriod`         | Proxy sync period.                                                                                                            | `2m`                              |
-| `proxy.access.bss`                | **BSS statistics receiver settings**                                                                                          |                                   |
-| `proxy.access.bss.enabled`        | If statistics receiver is enabled.                                                                                            | `false`                           |
-| `proxy.access.bss.url`            | BSS statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**                                              | `""`                              |
+| `proxy.access.stat`               | **Statistics receiver settings**                                                                                              |                                   |
+| `proxy.access.stat.enabled`       | If statistics receiver is enabled.                                                                                            | `false`                           |
+| `proxy.access.stat.url`           | Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**                                                  | `""`                              |
 
 ### Tiles API settings
 
