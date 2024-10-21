@@ -346,6 +346,9 @@ tasker:
 
 dispatcher:
 
+  # @param dispatcher.enabled If dispatcher worker is deployed.
+  enabled: true
+
   # @param dispatcher.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
   logLevel: warning
 
@@ -400,38 +403,38 @@ dispatcher:
   tolerations: {}
 
 
-# @section Cleaner settings
+  # @extra dispatcher.cleaner **Settings for cronjob that cleans sent messages from database**
 
-cleaner:
+  cleaner:
 
-  # @param cleaner.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
-  logLevel: warning
+    # @param dispatcher.cleaner.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+    logLevel: warning
 
-  # @param cleaner.auditEvents.retentionDuration Retention period for successfully sent messages.
+    # @param dispatcher.cleaner.auditEvents.retentionDuration Retention period for successfully sent audit messages.
 
-  auditEvents:
-    retentionDuration: 4320h
+    auditEvents:
+      retentionDuration: 4320h
 
-  resources:
-    requests:
-      cpu: 10m
-      memory: 32Mi
-    limits:
-      cpu: 100m
-      memory: 64Mi
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 64Mi
 
-  # @param cleaner.cron.schedule Cron job schedule.
-  # @param cleaner.cron.successfulJobsHistoryLimit Specifies the number of successful finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
-  # @param cleaner.cron.suspend You can suspend execution of Jobs for a CronJob, by setting the field to true. See [schedule suspension](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension).
+    # @param dispatcher.cleaner.cron.schedule Cron job schedule.
+    # @param dispatcher.cleaner.cron.successfulJobsHistoryLimit Specifies the number of successful finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
+    # @param dispatcher.cleaner.cron.suspend You can suspend execution of Jobs for a CronJob, by setting the field to true. See [schedule suspension](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension).
 
-  cron:
-    schedule: 0 1 * * *
-    successfulJobsHistoryLimit: 3
-    suspend: false
+    cron:
+      schedule: 0 1 * * *
+      successfulJobsHistoryLimit: 3
+      suspend: false
 
-  # @param cleaner.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+    # @param dispatcher.cleaner.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 
-  nodeSelector: {}
+    nodeSelector: {}
 
 
 # @section Redis settings
@@ -666,11 +669,11 @@ dgctlStorage:
 # @param dispatcher.resources.limits.cpu A CPU limit.
 # @param dispatcher.resources.limits.memory A memory limit.
 
-# @extra cleaner.resources **Limits for the Cleaner service**
-# @param cleaner.resources.requests.cpu A CPU request.
-# @param cleaner.resources.requests.memory A memory request.
-# @param cleaner.resources.limits.cpu A CPU limit.
-# @param cleaner.resources.limits.memory A memory limit.
+# @extra dispatcher.cleaner.resources **Limits for the Cleaner service**
+# @param dispatcher.cleaner.resources.requests.cpu A CPU request.
+# @param dispatcher.cleaner.resources.requests.memory A memory request.
+# @param dispatcher.cleaner.resources.limits.cpu A CPU limit.
+# @param dispatcher.cleaner.resources.limits.memory A memory limit.
 
 # @extra redis.resources **Limits for Redis**
 # @param redis.resources.requests.cpu A CPU request.

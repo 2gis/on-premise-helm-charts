@@ -1,3 +1,4 @@
+{{- if .Values.dispatcher.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -74,3 +75,4 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}

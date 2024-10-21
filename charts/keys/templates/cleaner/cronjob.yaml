@@ -1,3 +1,4 @@
+{{- if .Values.dispatcher.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -7,9 +8,9 @@ metadata:
 
 spec:
   concurrencyPolicy: Forbid
-  schedule: "{{ .Values.cleaner.cron.schedule }}"
-  successfulJobsHistoryLimit: {{ .Values.cleaner.cron.successfulJobsHistoryLimit }}
-  suspend: {{ .Values.cleaner.cron.suspend }}
+  schedule: "{{ .Values.dispatcher.cleaner.cron.schedule }}"
+  successfulJobsHistoryLimit: {{ .Values.dispatcher.cleaner.cron.successfulJobsHistoryLimit }}
+  suspend: {{ .Values.dispatcher.cleaner.cron.suspend }}
   jobTemplate:
     spec:
       template:
@@ -26,7 +27,7 @@ spec:
               command: [ "keysctl", "clear" ]
               args: [ "audit_events" ]
               resources:
-                {{- toYaml .Values.cleaner.resources | nindent 16 }}
+                {{- toYaml .Values.dispatcher.cleaner.resources | nindent 16 }}
               env:
                 {{- include "keys.env.db.deploys" . | nindent 16 }}
                 {{- include "keys.env.cleaner" . | nindent 16 }}
@@ -41,7 +42,8 @@ spec:
           volumes:
             {{- include "keys.custom.ca.jobs.volumes" . | nindent 12 }}
           {{- end }}
-          {{- with .Values.cleaner.nodeSelector }}
+          {{- with .Values.dispatcher.cleaner.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+{{- end }}

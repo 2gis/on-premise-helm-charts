@@ -169,9 +169,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.cleaner" -}}
 - name: KEYS_LOG_LEVEL
-  value: "{{ .Values.cleaner.logLevel }}"
+  value: "{{ .Values.dispatcher.cleaner.logLevel }}"
 - name: KEYS_AUDIT_EVENTS_RETENTION_DURATION
-  value: "{{ .Values.cleaner.auditEvents.retentionDuration }}"
+  value: "{{ .Values.dispatcher.cleaner.auditEvents.retentionDuration }}"
 {{- end -}}
 
 {{- define "keys.env.db" -}}
