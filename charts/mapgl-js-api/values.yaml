@@ -65,7 +65,7 @@ env:
   MAPGL_TILES_API: ''
   MAPGL_TILESET: web
   MAPGL_IMMERSIVE_TILESET: web_immersive
-  MAPGL_TRAFFICSERVER: 'https://traffic-proxy.ingress.host'
+  MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
   MAPGL_FLOORSSERVER: ''
   MAPGL_STYLESERVER: ''
   MAPGL_ICONS_URL: ''

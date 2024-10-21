@@ -2,10 +2,10 @@ catalog-api
 	catalog-api:3.625.0
 	catalog-importer:1.7.0
 citylens
-	citylens-api:1.12.0
-	citylens-database:1.12.0
-	citylens-web:1.12.0
-	citylens-workers:1.12.0
+	citylens-api:1.13.1
+	citylens-database:1.13.0
+	citylens-web:1.13.0
+	citylens-workers:1.13.0
 dgtt
 	dgtt:0.2.27-b188673e09
 floors-api
@@ -26,7 +26,7 @@ keys
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.8.0
 license
-	license:2.2.1
+	license:2.2.3
 mapgl-js-api
 	mapgl:1.51.0
 navi-async-grpc-proxy
