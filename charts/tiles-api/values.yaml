@@ -6,13 +6,13 @@ dgctlDockerRegistry: ''
 
 # @section Deployment Artifacts Storage settings
 
-# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
-# @param dgctlStorage.secure If S3 uses https.
-# @param dgctlStorage.bucket S3 bucket name.
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
+# @param dgctlStorage.bucket S3 bucket name. **Required**
 # @param dgctlStorage.region S3 region.
-# @param dgctlStorage.accessKey S3 access key for accessing the bucket.
-# @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
-# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate.
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
 
 dgctlStorage:
   host: ''
@@ -65,8 +65,8 @@ types:
 # @param cassandra.timeout Timeout for connect attempts to the database.
 
 # @extra cassandra.credentials **Credentials for accessing Apache Cassandra**
-# @param cassandra.credentials.user User name to connect to the database.
-# @param cassandra.credentials.password User password to connect to the database.
+# @param cassandra.credentials.user User name to connect to the database. **Required**
+# @param cassandra.credentials.password User password to connect to the database. **Required**
 # @param cassandra.credentials.jmxUser JMX user name to be used by the Kubernetes Importer Job's cleaner process.
 # @param cassandra.credentials.jmxPassword JMX password to be used by the Kubernetes Importer Job's cleaner process.
 
@@ -314,7 +314,7 @@ api:
 # @param importer.logFormatOverride A custom importer logging format. Allowed options: text|json. If not defined, 'json' format will be used.
 # @param importer.workerNum Number of parallel import processes (workers).
 # @param importer.writerNum Number of write processes per import process (worker).
-# @param importer.workerNumAttempts Number of attempts for import process (worker) if it is failing.
+# @param importer.workerNumAttempts Number of attempts for import process (worker) if it is failing. **Required**
 
 # @param importer.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
@@ -412,7 +412,7 @@ importer:
 
 # @section License service settings
 
-# @param license.url Address of the License service. Ex: https://license.svc
+# @param license.url Address of the License service. Ex: https://license.svc **Required**
 # @param license.retryPeriod Duration how often tiles server should try to update license status if it is failing to get it.
 
 license:
