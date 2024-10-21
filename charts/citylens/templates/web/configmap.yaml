@@ -29,6 +29,7 @@ data:
     metrics_app_name: {{ .Values.web.metricsAppName }}
     db_connections:
       postgres: {{ include "citylens.pgDSN"  . | squote }}
+      postgres_pool_size: 5
     kafka:
     {{- with .Values.kafka }}
       bootstrap_servers: {{  required "A valid .Values.kafka.bootstrap.servers entry required" .bootstrapServer | squote }}
@@ -44,6 +45,7 @@ data:
     {{- with .Values.s3 }}
       bucket_prefix: {{ required "A valid .Values.s3.bucketPrefix entry required" .bucketPrefix | squote }}
       logs_bucket_prefix: {{ required "A valid .Values.s3.logsBucketPrefix entry required" .logsBucketPrefix | squote }}
+      videos_bucket_prefix: ''
       {{- if .setPublicReadACL }}
       set_public_read_acl: {{ .setPublicReadACL }}
       {{- end }}
@@ -51,12 +53,15 @@ data:
         log: '{track_uuid}/log_{log_timestamp_ms}'
         log_prefix: '{track_uuid}/log_'
         frame: {{ include "citylens.s3_constants.frame_key_template" . | squote }}
+        videos: '{track_uuid}/{resource_type}'
       client_params:
         aws_access_key_id: {{ required "A valid .Values.s3.accessKey entry required" .accessKey | squote }}
         aws_secret_access_key: {{ required "A valid .Values.s3.secretAccessKey entry required" .secretAccessKey | squote }}
         endpoint_url: {{ required "A valid .Values.s3.endpoint entry required" .endpoint | squote }}
         region_name: {{ .region }}
         verify: {{ .verifySsl }}
+        config:
+          max_pool_connections: 10
     {{- end }}
     tracks_uploader:
       api: {{ .Values.worker.tracksUploader.api | squote }}
