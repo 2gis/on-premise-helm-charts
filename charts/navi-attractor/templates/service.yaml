@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "generic-chart.fullname" . }}
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+    {{- if .Values.service.labels }}
+    {{- include "tplvalues.render" ( dict "value" .Values.service.labels "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.service.grpc.labels }}
+    {{- include "tplvalues.render" ( dict "value" .Values.service.grpc.labels "context" $) | nindent 4 }}
+    {{- end }}
+    rule: {{ .Values.attractor.app_rule | default "" | quote  }}
+    navigroup: {{ .Values.navigroup | default "" | quote }}
+    type: {{ .Values.attractor.type | quote  }}
+    {{- if .Values.dataGroup.enabled }}
+    dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
+    dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+    {{- end }}
+  {{- if .Values.service.grpc.annotations }}
+  annotations:
+    {{- include "tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+
+spec:
+  type: {{ .Values.service.grpc.type }}
+  clusterIP: {{ .Values.service.grpc.clusterIP | default "" | quote }}
+  ports:
+    - port: {{ .Values.service.grpc.port }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+  selector:
+    {{- include "generic-chart.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "generic-chart.fullname" . }}-http
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+    {{- if .Values.service.labels }}
+    {{- include "tplvalues.render" ( dict "value" .Values.service.labels "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.service.http.labels }}
+    {{- include "tplvalues.render" ( dict "value" .Values.service.http.labels "context" $) | nindent 4 }}
+    {{- end }}
+    rule: {{ .Values.attractor.app_rule | default "" | quote  }}
+    navigroup: {{ .Values.navigroup | default "" | quote }}
+    type: {{ .Values.attractor.type | quote  }}
+    {{- if .Values.dataGroup.enabled }}
+    dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
+    dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+    {{- end }}
+  annotations:
+  {{- if .Values.service.annotations }}
+    {{- include "tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.service.http.annotations }}
+    {{- include "tplvalues.render" ( dict "value" .Values.service.http.annotations "context" $) | nindent 4 }}
+  {{- end }}
+
+spec:
+  type: {{ .Values.service.http.type }}
+  clusterIP: {{ .Values.service.http.clusterIP | default "" | quote }}
+  ports:
+    - port: {{ .Values.service.http.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "generic-chart.selectorLabels" . | nindent 4 }}

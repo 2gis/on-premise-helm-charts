@@ -1,0 +1,299 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "generic-chart.fullname" . }}-configmap
+data:
+  attractord.conf: |
+  {{- if .Values.attractor.overrideConfig }}
+    {{ .Values.attractor.overrideConfig | nindent 4 }}
+  {{- else }}
+    {
+      "log": {
+        "logger_name": "attractord",
+        "file_prefix": "../../../../",
+        "enable_syslog": true,
+        "level": {{ .Values.attractor.logLevel | quote }},
+        "disabled_tags_": [
+          "http",
+          "UploadData",
+          "Download",
+          "ProjectContext"
+        ],
+        "format": "Json",
+        "json_message_field_name": {{ .Values.attractor.logMessageField | quote }},
+        "enable_mirroring": true
+      },
+      "service": {
+        "pid_file": "/var/run/2gis/attractord.pid"
+      },
+      "http": {
+        "port": {{ .Values.attractor.appPort }},
+        "handlers_number": {{ .Values.attractor.handlersNumber | int }},
+        "log_verbose": false,
+        "max_process_time": {{ .Values.attractor.maxProcessTime | int }},
+        "response_timelimit": {{ .Values.attractor.responseTimelimit | int }},
+        "request_timeout": {{ .Values.attractor.requestTimeout | int }},
+        "server": "0.0.0.0"
+      },
+      "grpc":
+      {
+        "server" : "0.0.0.0",
+        "port" : {{ .Values.attractor.grpcPort | int }},
+        "max_process_time": {{ .Values.attractor.maxProcessTime | int }},
+        "response_timelimit": {{ .Values.attractor.responseTimelimit | int }},
+        "request_timeout": {{ .Values.attractor.requestTimeout | int }}
+      },
+      "context": {
+        "variables": {
+          "LOCAL_PATH": "/opt/castle",
+          "LOCAL_ETC": "/etc/2gis/mosesd",
+          "REMOTE_PATH": "{{ include "config.setCastleUrl" $ }}"
+        },
+      "rules": {
+        "update_period" : 0,
+          "nodes": [
+            "file://{LOCAL_ETC}/rules.conf"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "cities": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/{{ .Values.attractor.citiesFilename }}"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "index": {
+          "update_period": 600,
+          {{- /* search .zip in files */}}
+          {{- if regexMatch ".*\\.zip.*" .Values.attractor.indexFilename }}
+          "content": "index.json",
+          {{- end }}
+          "nodes": [
+            "{REMOTE_PATH}/{{ .Values.attractor.indexFilename }}"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        {{- if .Values.attractor.indices.ctxOptions.enabled }}
+        "ctx_options": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/options/ctx_config.json"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        {{- end }}{{- /* .Values.attractor.indices.ctxOptions.enabled */}}
+        {{- if .Values.attractor.indices.carOptions.enabled }}
+        "car_options": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/options/carrouting.json"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        {{- end }}{{- /* .Values.attractor.indices.carOptions.enabled */}}
+        {{- if .Values.attractor.indices.countryCarOptions.enabled }}
+        "country_car_options": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/options/{payload}.json"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        {{- end }}{{- /* .Values.attractor.indices.countryCarOptions.enabled */}}
+        {{- if .Values.attractor.indices.projectCarOptions.enabled }}
+        "project_car_options": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        {{- end }}{{- /* .Values.attractor.indices.projectCarOptions.enabled */}}
+        "routing_resources": {
+          "nodes": [
+            "dir:///usr/share/2gis/moses2-routing-resources/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "packages": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        "restrictions": {
+          "update_period": 0,
+          "nodes": [
+            "{{ include "config.setRestrictionUrl" $ }}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        {{- if .Values.attractor.indices.entrances.enabled }}
+        "entrances": {
+          "update_period": 0,
+          "nodes": [
+            "{REMOTE_PATH}/"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        {{- end }}{{- /* .Values.attractor.indices.entrances.enabled */}}
+        {{- if .Values.attractor.indices.snImport.enabled }}
+        "sn_import": {
+            "update_period": 0,
+            "nodes":
+            [
+                "{REMOTE_PATH}/"
+            ],
+            "timeout_seconds":
+            {
+                "count": 60
+            }
+        },
+        {{- end }}{{- /* .Values.attractor.indices.snImport.enabled */}}
+        {{- if .Values.attractor.indices.geoImport.enabled }}
+        "geo_import": {
+            "update_period": 0,
+            "nodes":
+            [
+                "{REMOTE_PATH}/"
+            ],
+            "timeout_seconds":
+            {
+                "count": 60
+            }
+        },
+        {{- end }}{{- /* .Values.attractor.indices.geoImport.enabled */}}
+
+
+        {{- if eq .Values.attractor.type "truck" }}
+        {{- if .Values.attractor.indices.passZones.enabled }}
+            "pass_zones":
+              {
+                "update_period": 0,
+                "nodes":
+                [
+                  "{REMOTE_PATH}/"
+                ],
+                "timeout_seconds":
+                {
+                  "count": 60
+                }
+              },
+        {{- end }}{{- /* .Values.attractor.indices.passZones.enabled */}}
+        {{- end }}
+        {{- if .Values.attractor.rtr.enabled }}
+        "restrictions_index": {
+          "update_period": {{ .Values.attractor.rtr.updatePeriod }},
+          "nodes": [
+            "{{ .Values.attractor.rtr.url }}/restrictions_index.json.zip"
+          ],
+          "timeout_seconds": {
+            "count": 30
+          }
+        },
+        {{- end }}{{- /* if .Values.attractor.rtr.enabled */}}
+        {{- if .Values.s3.enabled }}
+          "s3": {
+            "distance_matrix": {
+              {{- if .Values.s3.suffix }}
+              "suffix": {{ .Values.s3.suffix | quote }},
+              {{- end }}
+              "endpoint": {{ .Values.s3.host | quote }},
+              "bucket": {{ .Values.s3.bucket | quote }},
+              "access_key": {{ .Values.s3.accessKey | quote }},
+              "secret_key": {{ .Values.s3.secretKey | quote }}
+            }
+          },
+        {{- end }}{{- /* .Values.s3.enabled */}}
+        {{- if .Values.kafka.enabled }}
+          "kafka": {
+            "task_group_id" : {{ .Values.kafka.groupId | quote }},
+            "cancel_group_id": {{ .Values.kafka.groupId | quote }},
+            "handlers_number": {{ .Values.kafka.handlersNumber }},
+            {{- /*
+                 Collect merged Kafka properties from these dictionaries:
+                   - kafka.properties: this is a simple key/value dictionary
+                   - kafka.fileProperties: this is a key/content dictionary given in values,
+                     content is sensitive and stored in Secret resource, they get
+                     mounted as files sonamed after key. While actual secret values are
+                     hidden this way, what actually goes here in environment properties is
+                     file names. This value substitution is implemented down here.
+                 */ -}}
+            {{- $kafkaProperties := dict -}}
+            {{- range $key, $_ := .Values.kafka.fileProperties -}}
+            {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
+            {{- end -}}
+            {{- $kafkaProperties := mustMerge $kafkaProperties .Values.kafka.properties }}
+            "kafka_properties": {{ mustToPrettyJson $kafkaProperties | nindent 12 }},
+            "distance_matrix": {
+              "task_topic": {{ .Values.kafka.distanceMatrix.taskTopic | quote }},
+              "cancel_topic":  {{ .Values.kafka.distanceMatrix.cancelTopic | quote }},
+              "status_topic":  {{ .Values.kafka.distanceMatrix.statusTopic | quote }},
+              "update_task_status_period_sec": {{ .Values.kafka.distanceMatrix.updateTaskStatusPeriodSec | int }},
+              "message_expired_period_sec" : {{ .Values.kafka.distanceMatrix.messageExpiredPeriodSec | int }},
+              "request_download_timeout_sec" : {{ .Values.kafka.distanceMatrix.requestDownloadTimeoutSec | int }},
+              "response_upload_timeout_sec": {{ .Values.kafka.distanceMatrix.responseUploadTimeoutSec | int }}
+            }
+          },
+        {{- end }}{{- /* .Values.kafka.enabled */}}
+        {{- if .Values.attractor.additional_sections }}
+          {{- include "tplvalues.render" ( dict "value" .Values.attractor.additional_sections "context" $) | nindent 8 }}
+        {{- end }}
+        "server_info": {
+          "tiles_metrics_threshold": {{ .Values.attractor.tilesMetricsThreshold | int }},
+          "attractor_car" : {{ include "config.setAttractorCar" $ | default false -}},
+          "attractor_pedestrian" : {{ include "config.setAttractorPedestrian" $ | default false -}},
+          "attractor_bicycle" : {{ include "config.setAttractorBicycle" $ | default false -}},
+          "attractor_taxi" : {{ include "config.setAttractorTaxi" $ | default false -}},
+          "attractor_truck" : {{ include "config.setAttractorTruck" $ | default false -}},
+          {{- if ((.Values.resources).limits).cpu }}
+          "dist_matrix_thread_pool_size" : {{ include "config.setCpuNumber" . }},
+          "simple_network_build_thread_pool_size" : {{ include "config.setCpuNumber" . }},
+          {{- end }}
+          "update_projects_limit" : 2,
+          "carrouting_page_cache_size" : 8192,
+          "carrouting_tile_cache_size" : 8192,
+          "carrouting_bit_tile_cache_size" : 2048,
+          "dump_query" : {{ mustToJson .Values.attractor.dump.query }},
+          "dump_result" : {{ mustToJson .Values.attractor.dump.result }},
+          "dump_answer" : {{ mustToJson .Values.attractor.dump.answer }},
+          "max_parallel_workers" : 2,
+          "use_memory_mapped_vfs" : true,
+          "engine_update_period_sec" : 30,
+          {{- if .Values.attractor.server_id }}
+          "server_id" : "{{- include "tplvalues.render" ( dict "value" .Values.attractor.server_id "context" .) }}",
+          {{- else }}
+          "server_id" : "{{- include "generic-chart.fullname" . }}",
+          {{- end }}
+          "extended_metrics": [ ]
+        }
+      }
+    }
+  {{- end }}{{- /* .Values.attractor.overrideConfig */}}
+  rules.conf: |-
+   {{- include "rules.renderRules" . }}

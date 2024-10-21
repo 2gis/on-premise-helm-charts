@@ -1,0 +1,356 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+
+# @section Common settings
+
+# @param replicaCount A replica count for the pod.
+# @param revisionHistoryLimit Number of replica sets to keep for deployment rollbacks
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param labels Custom labels to set to Deployment resource.
+# @param preStopDelay Delay in seconds before terminating container.
+# @param terminationGracePeriodSeconds Maximum time allowed for graceful shutdown.
+
+replicaCount: 1
+revisionHistoryLimit: 1
+imagePullSecrets: []
+nameOverride: ''
+fullnameOverride: ''
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+labels: {}
+preStopDelay: 5
+terminationGracePeriodSeconds: 60
+
+
+# @section Container image settings
+
+# @param image.repository Repository
+# @param image.pullPolicy Pull Policy
+# @param image.tag Tag
+
+image:
+  repository: 2gis-on-premise/attractord
+  pullPolicy: IfNotPresent
+  tag: 7.27.1.2
+
+
+# @section Service account settings
+
+# @param serviceAccount.create Specifies whether a service account should be created.
+# @param serviceAccount.annotations Annotations to add to the service account.
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ''
+
+
+# @section Service settings
+
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param service.http.port Service HTTP port.
+# @param service.http.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.http.clusterIP Controls Service cluster IP allocation. Cannot be changed after resource creation.
+# @param service.http.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param service.http.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param service.grpc.port Service GRPC port.
+# @param service.grpc.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.grpc.clusterIP Controls Service cluster IP allocation. Cannot be changed after resource creation.
+# @param service.grpc.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param service.grpc.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+
+service:
+  labels: {}
+  annotations: {}
+  http:
+    port: 80
+    type: ClusterIP
+    clusterIP: ''
+    labels: {}
+    annotations: {}
+  grpc:
+    port: 50051
+    type: ClusterIP
+    clusterIP: None
+    labels: {}
+    annotations: {}
+
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
+
+ingress:
+  enabled: false
+  hosts:
+  - host: navi-attractor.host
+
+
+# @section Limits
+
+# @param resources [nullable] Container resources requirements structure.
+# @param resources.requests.cpu [nullable] CPU request, recommended value `1000m`.
+# @param resources.requests.memory [nullable] Memory request, recommended value `2Gi`.
+# @param resources.limits.cpu [nullable] CPU limit, recommended value `3000m`.
+# @param resources.limits.memory [nullable] Memory limit, recommended value `8Gi`.
+
+resources: {}
+
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+# @param hpa.enabled If HPA is enabled for the service.
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param hpa.scaleDown Scale-down settings structure
+# @param hpa.scaleUp Scale-up settings structure
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  scaleDown: ''
+  scaleUp: ''
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ''
+
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+# @param vpa.enabled If VPA is enabled for the service.
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @extra vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @extra vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @extra vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @extra vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+
+vpa:
+  enabled: false
+  updateMode: Auto
+
+
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+pdb:
+  enabled: false
+  minAvailable: ''
+  maxUnavailable: 1
+
+
+# @section Navi-Attractor application settings
+
+# @param attractor.appPort Container port for HTTP interface
+# @param attractor.handlersNumber Total number of HTTP/GRPC handlers.
+# @param attractor.maxProcessTime Maximum processing time limit in minutes.
+# @param attractor.responseTimelimit Maximum response time limit in minutes.
+# @param attractor.requestTimeout Maximum request time limit in minutes.
+# @param attractor.dump.result Dump results in logs.
+# @param attractor.dump.query Dump queries in logs.
+# @param attractor.dump.answer Dump answers in logs.
+# @param attractor.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
+# @param attractor.logMessageField Field name in logs for messages data.
+# @param attractor.grpcPort Container port for gRPC interface
+# @param attractor.indexFilename Name of the index file on Castle
+# @param attractor.citiesFilename Name of the cities file on Castle
+# @extra attractor.indices List of dynamic indices kill switches.
+# @skip attractor.indices.carOptions.enabled
+# @skip attractor.indices.countryCarOptions.enabled
+# @skip attractor.indices.ctxOptions.enabled
+# @skip attractor.indices.entrances.enabled
+# @skip attractor.indices.geoImport.enabled
+# @skip attractor.indices.passZones.enabled
+# @skip attractor.indices.projectCarOptions.enabled
+# @skip attractor.indices.snImport.enabled
+# @skip attractor.attractor
+# @param attractor.overrideConfig Complete config override. For test purposes only.
+# @param attractor.rtr.enabled Enable real time restrictions.
+# @param attractor.rtr.url URL real time restrictions server.
+# @param attractor.rtr.updatePeriod Update period from real time restrictions server.
+# @param attractor.mock If mock service being deployed. For test purposes only.
+# @param attractor.tilesMetricsThreshold The value at which we send tiles metrics (used for internal tests).
+# @skip rules
+
+attractor:
+  appPort: 8080
+  handlersNumber: 20
+  maxProcessTime: 20
+  responseTimelimit: 120
+  requestTimeout: 120
+  dump:
+    result: true
+    query: true
+    answer: false
+  logLevel: Info
+  logMessageField: custom.navi_msg
+  grpcPort: 50051
+  indexFilename: index.json.zip
+  citiesFilename: cities.conf.zip
+  indices:
+    # items in alphabet order
+    carOptions:
+      enabled: true
+    countryCarOptions:
+      enabled: true
+    ctxOptions:
+      enabled: true
+    entrances:
+      enabled: true
+    geoImport:
+      enabled: false
+    passZones:
+      enabled: true
+    projectCarOptions:
+      enabled: true
+    snImport:
+      enabled: false
+  attractor: {}
+  overrideConfig: ''
+  rtr:
+    enabled: false
+    url: http://rtr
+    updatePeriod: 60
+  mock: false
+  tilesMetricsThreshold: 0
+
+rules: []
+
+# @section Kafka settings for interacting with Distance Matrix Async Service
+
+# @param kafka.enabled If the Kafka is enabled
+# @param kafka.groupId Navi-Attractor service group identifier
+# @param kafka.handlersNumber Number of Kafka handlers
+# @extra kafka.properties Properties as supported by librdkafka. Refer to inline comments for details
+# @skip kafka.properties.bootstrap.servers
+# @skip kafka.properties.security.protocol
+# @param kafka.fileProperties As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details
+# @extra kafka.distanceMatrix **Settings for interacting with Distance Matrix Async service**
+# @param kafka.distanceMatrix.taskTopic Name of the topic for receiving new tasks from Distance Matrix Async API
+# @param kafka.distanceMatrix.cancelTopic Name of the topic for canceling or receiving information about finished tasks
+# @param kafka.distanceMatrix.statusTopic Name of the topic for receiving task status information
+# @param kafka.distanceMatrix.updateTaskStatusPeriodSec Update period for task statuses
+# @param kafka.distanceMatrix.messageExpiredPeriodSec Update period for task cancellations
+# @param kafka.distanceMatrix.requestDownloadTimeoutSec Timeout for downloading request data
+# @param kafka.distanceMatrix.responseUploadTimeoutSec Timeout for uploading response data
+
+kafka:
+  enabled: false
+  groupId: navi_attractor
+  handlersNumber: 2
+  properties:
+    bootstrap.servers: kafka.host:9092
+    security.protocol: PLAINTEXT
+  fileProperties: {}
+  distanceMatrix:
+    taskTopic: task_topic
+    cancelTopic: cancel_topic
+    statusTopic: status_topic
+    updateTaskStatusPeriodSec: 120
+    messageExpiredPeriodSec: 3600
+    requestDownloadTimeoutSec: 20
+    responseUploadTimeoutSec: 40
+
+# Kafka properties for common use-cases:
+#
+# Note that <Set-by-CI from user.p12> means that actual content passed from
+# file user.p12 with --set-file (especially binary data), e.g.:
+#
+#   $ helm install navi-attractor . --set-file 'kafka.fileProperties.ssl\.keystore\.location=user.p12'
+#
+# 1. SSL authentication with key file protected with password 123:
+#
+#  properties:
+#    bootstrap.servers: kafka.host:9092
+#    security.protocol: SSL
+#    ssl.keystore.password: '123'
+#  fileProperties:
+#    ssl.ca.location: '<Set-by-CI from ca.crt>'
+#    ssl.certificate.location: '<Set-by-CI from user.crt>'
+#    ssl.key.location: '<Set-by-CI from user.pem>'
+#
+# 2. login/password SASL as test-username/123:
+#
+#  properties:
+#    bootstrap.servers: kafka.host:9092
+#    security.protocol: SASL_PLAINTEXT
+#    sasl.mechanism: SCRAM-SHA-512
+#    sasl.username: test-username
+#    sasl.password: '123'
+#
+# 3. Unauthenticated:
+#
+#  properties:
+#    bootstrap.servers: kafka.host:9092
+#    security.protocol: PLAINTEXT
+
+# @section S3-compatible storage settings for interacting with Distance Matrix Async Service
+
+# @param s3.enabled if S3 storage is enabled
+# @param s3.host S3 endpoint
+# @param s3.bucket S3 bucket name
+# @param s3.accessKey S3 access key for accessing the bucket
+# @param s3.secretKey S3 secret key for accessing the bucket
+# @param s3.suffix String to be prepended to file name in reply
+
+s3:
+  enabled: false
+  host: ''
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+  suffix: ''
+
+# @section Back-end and attractor group properties. Leave with defaults, FOR FUTURE RELEASE.
+
+# @param dataGroup.enabled if grouping enabled
+# @param dataGroup.prefix common prefix for the group used for identifiers
+# @param dataGroup.timestamp data timestamp the group is running on
+
+dataGroup:
+  enabled: false
+  prefix: sampleGroup
+  timestamp: no-default
+
+
+# @section Frozen data settings
+
+# @param frozenData.enabled If use frozen data is enabled.
+# @param frozenData.image.repository Repository
+# @param frozenData.image.tag Tag
+# @param frozenData.image.pullPolicy Pull Policy
+# @param frozenData.resources [nullable] Container resources requirements structure.
+# @param frozenData.resources.requests.cpu [nullable] CPU request, recommended value `100m`.
+# @param frozenData.resources.requests.memory [nullable] Memory request, recommended value `100Mi`.
+# @param frozenData.resources.limits.cpu [nullable] CPU limit, recommended value `100m`.
+# @param frozenData.resources.limits.memory [nullable] Memory limit, recommended value `100Mi`.
+
+frozenData:
+  enabled: false
+  image:
+    repository: navi/frozen-data
+    pullPolicy: Always
+    tag: perftesting-common-master
+  resources: {}

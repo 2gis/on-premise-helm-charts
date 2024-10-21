@@ -1,0 +1,158 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "generic-chart.fullname" . }}
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+    rule: {{ .Values.attractor.app_rule | default "" | quote  }}
+    navigroup: {{ .Values.navigroup | default "" | quote }}
+    {{- if .Values.dataGroup.enabled }}
+    dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
+    dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+    {{- end }}{{- /* dataGroup.enabled */}}
+    {{- with .Values.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if not .Values.hpa.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- include "tplvalues.render" ( dict "value" .Values.strategy "context" $) | nindent 6 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "generic-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "generic-chart.selectorLabels" . | nindent 8 }}
+        navigroup: {{ .Values.navigroup | default "" | quote }}
+        {{- if .Values.dataGroup.enabled }}
+        dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
+        dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "generic-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+      - name: {{ include "generic-chart.fullname" . }}-configmap
+        configMap:
+          name: {{ include "generic-chart.fullname" . }}-configmap
+      {{- if .Values.frozenData.enabled }}
+      - name: frozen-data
+        emptyDir: {}
+      {{- end }}
+      {{- if .Values.kafka.fileProperties }}
+      - name: {{ include "generic-chart.fullname" . }}-secret
+        secret:
+          secretName: {{ include "generic-chart.fullname" . }}-secret
+      {{- end }}
+      {{- if .Values.frozenData.enabled }}
+      initContainers:
+        - name: frozen-data
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.frozenData.image.repository }}:{{ .Values.frozenData.image.tag }}
+          command: ['sh', '-ec', 'cp -r /frozen_data_init/* /opt/castle; ls -l /opt/castle']
+          imagePullPolicy: {{ .Values.frozenData.pullPolicy }}
+          {{- if (.Values.frozenData).resources }}
+          resources: {{- toYaml .Values.frozenData.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: frozen-data
+              mountPath: /opt/castle
+      {{- end }}
+      containers:
+{{- /* generic-chart.containerName redefined in _helpers.tpl */}}
+        - name: {{ include "generic-chart.containerName" . }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if not .Values.attractor.mock }}
+          command: [ "/usr/sbin/2gis/mosesd/tini","--" ]
+          args:
+           - /usr/sbin/2gis/mosesd/attractord
+           - --config
+           - /etc/2gis/mosesd/attractord.conf
+          {{- end }}
+          volumeMounts:
+          - name: {{ include "generic-chart.fullname" . }}-configmap
+            mountPath: /etc/2gis/mosesd/attractord.conf
+            subPath: attractord.conf
+          - name: {{ include "generic-chart.fullname" . }}-configmap
+            mountPath: /etc/2gis/mosesd/rules.conf
+            subPath: rules.conf
+          {{- if .Values.frozenData.enabled }}
+          - name: frozen-data
+            mountPath: /opt/castle
+          {{- end }}
+          {{- if .Values.kafka.fileProperties }}
+          - name: {{ include "generic-chart.fullname" . }}-secret
+            mountPath: /etc/2gis/mosesd/secret/
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.attractor.appPort }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ .Values.attractor.grpcPort }}
+              protocol: TCP
+          startupProbe:
+            {{- include "navi-attractor.probe" . | nindent 12 }}
+            periodSeconds: 5
+            failureThreshold: 100
+          livenessProbe:
+            {{- include "navi-attractor.probe" . | nindent 12 }}
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 5
+          readinessProbe:
+            {{- include "navi-attractor.probe" . | nindent 12 }}
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          {{ if ne .Values.attractor.type "schedule" }}
+          - name: RULE
+            value: {{ .Values.attractor.app_rule | default "" | quote  }}
+          {{- else -}}
+          - name: RULE
+            value: ""
+          {{ end }}
+          - name: PROJECT
+            value: {{ .Values.app_project | default "" | quote }}
+          - name: PORT_GRPC
+            value: {{ .Values.attractor.grpc_port | quote }}
+          lifecycle:
+            # wait for the endpoint removal process
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep {{ .Values.preStopDelay | default 5 | int }}"]
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 60 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
