@@ -1,21 +1,5 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [1.41.0]
-
-### pro-api
-- settings structure changed, settings are grouped by their services
-- set host pro-api.example.com
-- remove appName from api.pod
-- add section backgroundJobs to api.settings
-- api.settings.enableUserAssetsImporter renamed to api.settings.backgroundJobs.enableUserAssetsImporter
-- api.settings.enableAssetsStreaming renamed to api.settings.backgroundJobs.enableAssetsStreaming
-- remove api.settings.auth.permissionsApiKey
-- add section layerGeneration to api.settings
-- add api.settings.layerGeneration.isochroneLayerMaxPointsCount
-- add permissions.settings.auth.apiKey
-- add assetPreparer.settings.files
-- add kafka.useReplicaTopics
-
 ## [1.30.0]
 
 ### pro-api
