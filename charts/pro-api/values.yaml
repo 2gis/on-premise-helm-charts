@@ -246,7 +246,6 @@ permissions:
   # @param permissions.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param permissions.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
   # @param permissions.service.port PRO API service port.
-  # @extra servise is required when uathorization activated
   service:
     annotations: {}
     labels: {}
@@ -254,7 +253,7 @@ permissions:
     port: 80
 
   # @skip permissions.settings.host
-  # @param permissions.settings.enabled If permissionsApi is enabled for the service.
+  # @param permissions.settings.enabled Set to `true` if authorization is used
   # @skip permissions.settings.localCache.enabled
   # @skip permissions.settings.localCache.trackStatistics
   # @param permissions.settings.auth.apiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`

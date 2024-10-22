@@ -104,7 +104,7 @@
 | `permissions.service.labels`                     | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                          | `{}`                                  |
 | `permissions.service.type`                       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                   | `ClusterIP`                           |
 | `permissions.service.port`                       | PRO API service port.                                                                                                                                            | `80`                                  |
-| `permissions.settings.enabled`                   | If permissionsApi is enabled for the service.                                                                                                                    | `false`                               |
+| `permissions.settings.enabled`                   | Set to `true` if authorization is used                                                                                                                           | `false`                               |
 | `permissions.settings.auth.apiKey`               | Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399` | `""`                                  |
 
 ### asset importer settings
