@@ -214,6 +214,7 @@ api:
 
 # @param web.logLevel Log level.
 # @param web.metricsAppName Value for service prometheus metrics label "app_name".
+# @param web.pgPoolSize Postgres: maximum number of connections in connections pool to maintain.
 
 # @section Metadata settings
 
@@ -276,6 +277,8 @@ web:
     clientSecret: ''
     verifySsl: true
     pkce: false
+
+  pgPoolSize: 5
 
   logLevel: WARNING
   metricsAppName: citylens-web

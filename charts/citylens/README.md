@@ -185,10 +185,11 @@ See the [documentation]() to learn about:
 
 ### Custom settings
 
-| Name                 | Description                                            | Value          |
-| -------------------- | ------------------------------------------------------ | -------------- |
-| `web.logLevel`       | Log level.                                             | `WARNING`      |
-| `web.metricsAppName` | Value for service prometheus metrics label "app_name". | `citylens-web` |
+| Name                 | Description                                                              | Value          |
+| -------------------- | ------------------------------------------------------------------------ | -------------- |
+| `web.logLevel`       | Log level.                                                               | `WARNING`      |
+| `web.metricsAppName` | Value for service prometheus metrics label "app_name".                   | `citylens-web` |
+| `web.pgPoolSize`     | Postgres: maximum number of connections in connections pool to maintain. | `5`            |
 
 ### Metadata settings
 

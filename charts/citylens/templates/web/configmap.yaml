@@ -29,7 +29,7 @@ data:
     metrics_app_name: {{ .Values.web.metricsAppName }}
     db_connections:
       postgres: {{ include "citylens.pgDSN"  . | squote }}
-      postgres_pool_size: 5
+      postgres_pool_size: {{ .Values.web.pgPoolSize }}
     kafka:
     {{- with .Values.kafka }}
       bootstrap_servers: {{  required "A valid .Values.kafka.bootstrap.servers entry required" .bootstrapServer | squote }}
