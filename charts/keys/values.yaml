@@ -347,7 +347,7 @@ tasker:
 dispatcher:
 
   # @param dispatcher.enabled If dispatcher worker is deployed.
-  enabled: true
+  enabled: false
 
   # @param dispatcher.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
   logLevel: warning
