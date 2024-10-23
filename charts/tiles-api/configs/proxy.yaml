@@ -18,9 +18,9 @@ access:
   host: {{ .access.url }}
   token: {{ .access.token }}
   bss:
-    enabled: {{ .access.bss.enabled }}
-    {{- if .access.bss.enabled }}
-    host: {{ required "Valid .Values.proxy.access.bss.url required!" .access.bss.url }}
+    enabled: {{ .access.stat.enabled }}
+    {{- if .access.stat.enabled }}
+    host: {{ required "Valid .Values.proxy.access.stat.url required!" .access.stat.url }}
     {{- end }}
 
 storage:
