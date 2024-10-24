@@ -2,10 +2,10 @@ catalog-api
 	catalog-api:3.625.0
 	catalog-importer:1.7.0
 citylens
-	citylens-api:1.13.1
-	citylens-database:1.13.0
-	citylens-web:1.13.0
-	citylens-workers:1.13.0
+	citylens-api:1.14.2
+	citylens-database:1.14.0
+	citylens-web:1.14.2
+	citylens-workers:1.14.2
 dgtt
 	dgtt:0.2.27-b188673e09
 floors-api
@@ -22,7 +22,7 @@ keycloak
 	keycloak-themes:0.0.8
 	keycloak:21.1.1-debian-11-r4
 keys
-	keys-backend:1.87.0
+	keys-backend:1.89.0
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.8.0
 license
@@ -52,12 +52,12 @@ navi-splitter
 platform
 	platform-ui:0.15.1
 pro-api
-	pro-api:1.35.0
-	pro-importer:1.35.0
-	pro-importer:1.35.0
-	pro-permissions-api:1.35.0
+	pro-api:1.41.0
+	pro-importer:1.41.0
+	pro-importer:1.41.0
+	pro-permissions-api:1.41.0
 pro-ui
-	pro-importer:1.35.0
+	pro-importer:1.41.0
 	pro-ui:2.27.0
 search-api
 	search-api:7.80.0
@@ -68,9 +68,9 @@ stat-receiver
 styles-api
 	styles-api:0.30.0
 tiles-api
-	tiles-api-importer:4.54.0
-	tiles-api-proxy:4.54.0
-	tiles-api:4.54.0
+	tiles-api-importer:4.61.0
+	tiles-api-proxy:4.61.0
+	tiles-api:4.61.0
 traffic-proxy
 	nginx:1.21.6
 twins-api

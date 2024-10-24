@@ -99,7 +99,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.13.1
+    tag: 1.14.2
 
   replicas: 4
 
@@ -214,6 +214,7 @@ api:
 
 # @param web.logLevel Log level.
 # @param web.metricsAppName Value for service prometheus metrics label "app_name".
+# @param web.pgPoolSize Postgres: maximum number of connections in connections pool to maintain.
 
 # @section Metadata settings
 
@@ -230,7 +231,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.13.0
+    tag: 1.14.2
 
   replicas: 1
 
@@ -276,6 +277,8 @@ web:
     clientSecret: ''
     verifySsl: true
     pkce: false
+
+  pgPoolSize: 5
 
   logLevel: WARNING
   metricsAppName: citylens-web
@@ -611,7 +614,7 @@ worker:
     image:
       repository: 2gis-on-premise/citylens-workers
       pullPolicy: IfNotPresent
-      tag: 1.13.0
+      tag: 1.14.2
 
     revisionHistoryLimit: 3
 
@@ -647,7 +650,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.13.0
+    tag: 1.14.0
 
   resources:
     requests:

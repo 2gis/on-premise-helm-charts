@@ -1,89 +1,24 @@
 # @section Geo API configuration & settings
 
-# @extra Image settings
-# @param api.image.repository Repository
-# @param api.image.tag Tag
-# @param api.image.pullPolicy Pull Policy
-# @extra Ingress settings
-# @param api.ingress.enabled If Ingress is enabled for the service.
-# @param api.ingress.className Name of the Ingress controller class.
-# @param api.ingress.hosts[0].host Hostname for the Ingress service.
-# @param api.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
-# @param api.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
-# @param api.ingress.tls TLS configuration
-# @extra Pod settings
-# @param api.pod.appName Name of the service.
-# @param api.pod.replicaCount A replica count for the pod.
-# @param api.pod.imagePullSecrets Kubernetes image pull secrets.
-# @param api.pod.nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
-# @param api.pod.fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
-# @param api.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-# @param api.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
-# @param api.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
-# @param api.pod.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
-# @param api.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-# @param api.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param api.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param api.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param api.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param api.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
-# @extra api.pod.resources **Limits for the application service**
-# @param api.pod.resources.requests.cpu A CPU request.
-# @param api.pod.resources.requests.memory A memory request.
-# @param api.pod.resources.limits.cpu A CPU limit.
-# @param api.pod.resources.limits.memory A memory limit.
-# @param api.pod.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
-# @param api.pod.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
-# @param api.pod.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
-# @extra VPA settings [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md)
-# @param api.vpa.enabled If VPA is enabled for the service.
-# @param api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
-# @param api.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
-# @param api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
-# @param api.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
-# @param api.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
-# @extra Service settings
-# @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
-# @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-# @param api.service.port PRO API service port.
-# @param api.service.serviceAccount  Kubernetes service account
-# @param api.service.serviceAccountOverride The name of an existing custom service account. If specified, the services in the chart will use this existing service account. If not specified, a new service account will be created and used with the name from the variable `api.serviceAccount`.
-# @extra Geo API settings
-# @param api.settings.licenseKey License key. **Required**
-# @param api.settings.tempPath Path to directory used for temp data
-# @param api.settings.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
-# @skip api.settings.logEsQueries
-# @skip api.settings.debug
-# @skip api.settings.env
-# @skip api.settings.filterByZoneCodes
-# @skip api.settings.esDataCentersCount
-# @extra api.settings.logging Logging settings
-# @param api.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
-# @param api.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
-# @extra api.settings.rateLimiter rate limiter settings
-# @param api.settings.rateLimiter.requestsLimit max number of requests from one user during time window (0 means rate limiter is disabled)
-# @param api.settings.rateLimiter.windowSizeInSeconds the size of time windows to count and limit incoming requests
-# @skip api.settings.localCache.enabled
-# @skip api.settings.localCache.trackStatistics
-# @skip api.settings.openApi.servers
-# @param api.settings.enableUserAssetsImporter If user data importer job is enabled for the service.
-# @param api.settings.enableAssetsStreaming If the streaming data processing job is enabled for the service.
-# @param api.settings.auth.type Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol
-# @param api.settings.auth.url API URL of authentication service. Example: `http(s)://keycloak.ingress.host`
-# @param api.settings.auth.userInfoEndpoint The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`
-# @param api.settings.auth.wellKnownConfigEndpoint The [Well-Known Config endpoint](https://openid.net/specs/openid-connect-discovery-1_0.html). Example: `realms/URBI_Pro/.well-known/openid-configuration`
-# @param api.settings.auth.apiKey Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`
-# @param api.settings.auth.permissionsApiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`
-# @skip api.settings.auth.autoRegisterUsers
-# @param api.settings.auth.turnOffCertValidation Turn off certificate validation for auth.url
-# @param api.settings.auth.shareKeys Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`
-
 api:
+
+  # @param api.appName Name of the service
+  appName: pro-api
+
+  # @param api.image.repository Repository
+  # @param api.image.tag Tag
+  # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 1.35.0
+    tag: 1.41.0
     pullPolicy: IfNotPresent
+
+  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.className Name of the Ingress controller class.
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+  # @param api.ingress.tls TLS configuration
   ingress:
     enabled: false
     className: nginx
@@ -96,8 +31,30 @@ api:
     # - hosts:
     #   - pro-api.example.com
     #   secretName: secret.tls
+
+  # @param api.pod.replicaCount A replica count for the pod.
+  # @param api.pod.imagePullSecrets Kubernetes image pull secrets.
+  # @param api.pod.nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+  # @param api.pod.fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+  # @param api.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param api.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param api.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
+  # @param api.pod.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
+  # @param api.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  # @param api.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param api.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param api.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @extra api.pod.resources **Limits for the application service**
+  # @param api.pod.resources.requests.cpu A CPU request.
+  # @param api.pod.resources.requests.memory A memory request.
+  # @param api.pod.resources.limits.cpu A CPU limit.
+  # @param api.pod.resources.limits.memory A memory limit.
+  # @param api.pod.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param api.pod.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param api.pod.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
   pod:
-    appName: pro-api
     replicaCount: 2
     imagePullSecrets: []
     nameOverride: ''
@@ -124,6 +81,13 @@ api:
       rollingUpdate:
         maxUnavailable: 0
         maxSurge: 1
+
+  # @param api.vpa.enabled If VPA is enabled for the service.
+  # @param api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+  # @param api.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+  # @param api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+  # @param api.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+  # @param api.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
   vpa:
     enabled: false
     updateMode: Auto
@@ -133,6 +97,13 @@ api:
     maxAllowed:
       cpu: 1
       memory: 1024M
+
+  # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+  # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param api.service.port PRO API service port.
+  # @param api.service.serviceAccount  Kubernetes service account
+  # @param api.service.serviceAccountOverride The name of an existing custom service account. If specified, the services in the chart will use this existing service account. If not specified, a new service account will be created and used with the name from the variable `api.serviceAccount`.
   service:
     annotations: {}
     labels: {}
@@ -140,6 +111,35 @@ api:
     port: 80
     serviceAccount: runner
     serviceAccountOverride: ''
+
+  # @param api.settings.licenseKey License key. **Required**
+  # @param api.settings.tempPath Path to directory used for temp data
+  # @param api.settings.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
+  # @skip api.settings.logEsQueries
+  # @skip api.settings.debug
+  # @skip api.settings.env
+  # @skip api.settings.filterByZoneCodes
+  # @skip api.settings.esDataCentersCount
+  # @extra api.settings.logging Logging settings
+  # @param api.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
+  # @param api.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
+  # @extra api.settings.rateLimiter rate limiter settings
+  # @param api.settings.rateLimiter.requestsLimit max number of requests from one user during time window (0 means rate limiter is disabled)
+  # @param api.settings.rateLimiter.windowSizeInSeconds the size of time windows to count and limit incoming requests
+  # @skip api.settings.localCache.enabled
+  # @skip api.settings.localCache.trackStatistics
+  # @skip api.settings.openApi.servers
+  # @param api.settings.auth.type Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol
+  # @param api.settings.auth.url API URL of authentication service. Example: `http(s)://keycloak.ingress.host`
+  # @param api.settings.auth.userInfoEndpoint The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`
+  # @param api.settings.auth.wellKnownConfigEndpoint The [Well-Known Config endpoint](https://openid.net/specs/openid-connect-discovery-1_0.html). Example: `realms/URBI_Pro/.well-known/openid-configuration`
+  # @param api.settings.auth.apiKey Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`
+  # @skip api.settings.auth.autoRegisterUsers
+  # @param api.settings.auth.turnOffCertValidation Turn off certificate validation for auth.url
+  # @param api.settings.auth.shareKeys Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`
+  # @param api.settings.backgroundJobs.enableUserAssetsImporter If user data importer job is enabled for the service.
+  # @param api.settings.backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
+  # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount If layer contains more points, isochrone is not avalible
   settings:
     licenseKey: ''
     tempPath: /tmp
@@ -160,43 +160,39 @@ api:
       trackStatistics: false
     openApi:
       servers: []
-    enableUserAssetsImporter: true
-    enableAssetsStreaming: false
     auth:
       type: none
       url: ''
       userInfoEndpoint: ''
       wellKnownConfigEndpoint: ''
       apiKey: ''
-      permissionsApiKey: ''
       autoRegisterUsers: true
       turnOffCertValidation: false
       shareKeys: []
-
+    backgroundJobs:
+      enableUserAssetsImporter: true
+      enableAssetsStreaming: false
+    layerGeneration:
+      isochroneLayerMaxPointsCount: 500
 
 # @section Permissions API configuration & settings
 
-# @skip permissions.image
-# @extra Ingress settings
-# @param permissions.ingress.enabled If Ingress is enabled for the service.
-# @param permissions.ingress.className Name of the Ingress controller class.
-# @param permissions.ingress.hosts[0].host Hostname for the Ingress service.
-# @param permissions.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
-# @param permissions.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
-# @param permissions.ingress.tls TLS configuration
-# @skip permissions.pod
-# @skip permissions.service
-# @extra Permissions API settings
-# @skip permissions.settings.host
-# @param permissions.settings.enabled If permissionsApi is enabled for the service.
-# @skip permissions.settings.localCache.enabled
-# @skip permissions.settings.localCache.trackStatistics
-
 permissions:
+
+  # @param permissions.image.repository Repository
+  # @param permissions.image.tag Tag
+  # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 1.35.0
+    tag: 1.41.0
     pullPolicy: IfNotPresent
+
+  # @param permissions.ingress.enabled If Ingress is enabled for the service
+  # @param permissions.ingress.className Name of the Ingress controller class
+  # @param permissions.ingress.hosts[0].host Hostname for the Ingress service
+  # @param permissions.ingress.hosts[0].paths[0].path Path of the host for the Ingress service
+  # @param permissions.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service
+  # @param permissions.ingress.tls TLS configuration
   ingress:
     enabled: false
     className: nginx
@@ -206,9 +202,25 @@ permissions:
       - path: /
         pathType: Prefix
     tls: []
-    # - hosts:
-    #   - pro-permissions-api.example.com
     #   secretName: secret.tls
+
+  # @param permissions.pod.replicaCount A replica count for the pod.
+  # @param permissions.pod.imagePullSecrets Kubernetes image pull secrets.
+  # @param permissions.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param permissions.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param permissions.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
+  # @param permissions.pod.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
+  # @param permissions.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  # @param permissions.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param permissions.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param permissions.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param permissions.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param permissions.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @extra permissions.pod.resources **Limits for the application service**
+  # @param permissions.pod.resources.requests.cpu A CPU request.
+  # @param permissions.pod.resources.requests.memory A memory request.
+  # @param permissions.pod.resources.limits.cpu A CPU limit.
+  # @param permissions.pod.resources.limits.memory A memory limit.
   pod:
     replicaCount: 1
     imagePullSecrets: []
@@ -229,17 +241,30 @@ permissions:
       limits:
         cpu: 1
         memory: 1G
+
+  # @param permissions.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+  # @param permissions.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param permissions.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param permissions.service.port PRO API service port.
   service:
     annotations: {}
     labels: {}
     type: ClusterIP
     port: 80
+
+  # @skip permissions.settings.host
+  # @param permissions.settings.enabled Set to `true` if authorization is used
+  # @skip permissions.settings.localCache.enabled
+  # @skip permissions.settings.localCache.trackStatistics
+  # @param permissions.settings.auth.apiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`
   settings:
     host: ''
     enabled: false
     localCache:
       enabled: true
       trackStatistics: false
+    auth:
+      apiKey: ''
 
 
 # @section asset importer settings
@@ -271,7 +296,7 @@ permissions:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 1.35.0
+  tag: 1.41.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -303,7 +328,7 @@ assetImporter:
 assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
-  tag: 1.35.0
+  tag: 1.41.0
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
@@ -317,6 +342,7 @@ assetPreparer:
       memory: 512M
   enabled: true
   settings:
+    files: ''
     maxParallelJobs: 1
 
 
@@ -398,6 +424,7 @@ postgres:
 # @param kafka.assetDataTopic.name Kafka topic name.
 # @skip kafka.permissionsTopic
 # @param kafka.refreshAssetsIntervalMinutes Refresh interval for reading streaming assets settings in minutes.
+# @param kafka.useReplicaTopics Use topic replica when using multiple kafka clusters. Each topic in the kafka settings must have a corresponding ".replica" topic
 
 kafka:
   bootstrapServers: ''
@@ -419,6 +446,7 @@ kafka:
     name: ''
     readerGroupId: ''
   refreshAssetsIntervalMinutes: 60
+  useReplicaTopics: false
 
 
 # @section ElasticSearch settings (supported version 7.x)
@@ -506,6 +534,7 @@ license:
 
 search:
   url: ''
+
 
 # @skip tileGen
 

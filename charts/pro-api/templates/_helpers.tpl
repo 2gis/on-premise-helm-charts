@@ -2,7 +2,7 @@
 {{- if .Values.api.pod.fullnameOverride -}}
 {{- .Values.api.pod.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default .Values.api.pod.appName .Values.api.pod.nameOverride -}}
+{{- $name := default .Values.api.appName .Values.api.pod.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -56,7 +56,7 @@
 {{- end -}}
 
 {{- define "pro-api.chart" -}}
-{{- printf "%s-%s" .Values.api.pod.appName .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Values.api.appName .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{- define "pro-api.selectorLabels" -}}

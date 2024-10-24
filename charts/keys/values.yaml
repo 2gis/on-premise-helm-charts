@@ -31,7 +31,7 @@ featureFlags:
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.87.0
+    tag: 1.89.0
 
 # @section Admin service settings
 
@@ -342,6 +342,101 @@ tasker:
   tolerations: {}
 
 
+# @section Dispatcher settings
+
+dispatcher:
+
+  # @param dispatcher.enabled If dispatcher worker is deployed.
+  enabled: false
+
+  # @param dispatcher.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
+
+  # @param dispatcher.replicas A replica count for the pod.
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+  # @param dispatcher.auditEvents.sendInterval Send audit events interval
+  # @param dispatcher.auditEvents.batchMaxSize Max batch size when sending audit events
+  # @param dispatcher.auditEvents.holdDuration In case of an unsuccessful attempt to send messages, the service will not resend it for a given duration
+
+  auditEvents:
+    sendInterval: 1m
+    batchMaxSize: 1000
+    holdDuration: 10m
+
+  # @param dispatcher.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param dispatcher.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param dispatcher.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  # @param dispatcher.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param dispatcher.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  annotations: {}
+  labels: {}
+
+  # @param dispatcher.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param dispatcher.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  podAnnotations: {}
+  podLabels: {}
+
+  # @param dispatcher.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param dispatcher.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param dispatcher.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
+
+  # @extra dispatcher.cleaner **Settings for cronjob that cleans sent messages from database**
+
+  cleaner:
+
+    # @param dispatcher.cleaner.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+    logLevel: warning
+
+    # @param dispatcher.cleaner.auditEvents.retentionDuration Retention period for successfully sent audit messages.
+
+    auditEvents:
+      retentionDuration: 4320h
+
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 64Mi
+
+    # @param dispatcher.cleaner.cron.schedule Cron job schedule.
+    # @param dispatcher.cleaner.cron.successfulJobsHistoryLimit Specifies the number of successful finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
+    # @param dispatcher.cleaner.cron.suspend You can suspend execution of Jobs for a CronJob, by setting the field to true. See [schedule suspension](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension).
+
+    cron:
+      schedule: 0 1 * * *
+      successfulJobsHistoryLimit: 3
+      suspend: false
+
+    # @param dispatcher.cleaner.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+
+    nodeSelector: {}
+
+
 # @section Redis settings
 
 redis:
@@ -567,6 +662,18 @@ dgctlStorage:
 # @param tasker.resources.requests.memory A memory request.
 # @param tasker.resources.limits.cpu A CPU limit.
 # @param tasker.resources.limits.memory A memory limit.
+
+# @extra dispatcher.resources **Limits for the Dispatcher service**
+# @param dispatcher.resources.requests.cpu A CPU request.
+# @param dispatcher.resources.requests.memory A memory request.
+# @param dispatcher.resources.limits.cpu A CPU limit.
+# @param dispatcher.resources.limits.memory A memory limit.
+
+# @extra dispatcher.cleaner.resources **Limits for the Cleaner service**
+# @param dispatcher.cleaner.resources.requests.cpu A CPU request.
+# @param dispatcher.cleaner.resources.requests.memory A memory request.
+# @param dispatcher.cleaner.resources.limits.cpu A CPU limit.
+# @param dispatcher.cleaner.resources.limits.memory A memory limit.
 
 # @extra redis.resources **Limits for Redis**
 # @param redis.resources.requests.cpu A CPU request.

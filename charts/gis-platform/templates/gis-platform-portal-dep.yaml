@@ -40,8 +40,8 @@ spec:
             {{- toYaml .Values.portal.resources | nindent 12 }}
           volumeMounts:
             - name: {{ include "gis-platform-portal.name" . }}-configmap
-              mountPath: /etc/nginx/templates/default.conf.template
-              subPath: default.conf.template
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
             - name: {{ include "gis-platform-portal.name" . }}-configmap
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
