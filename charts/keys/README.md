@@ -159,20 +159,21 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Counter worker settings
 
-| Name                                | Description                                                                                                                                              | Value   |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `counter.enabled`                   | Counter worker is enabled.                                                                                                                               | `false` |
-| `counter.replicas`                  | A replica count for the pod.                                                                                                                             | `1`     |
-| `counter.prometheus.scrape`         | If Prometheus scrape is enabled.                                                                                                                         | `true`  |
-| `counter.resources.requests.cpu`    | A CPU request.                                                                                                                                           | `20m`   |
-| `counter.resources.requests.memory` | A memory request.                                                                                                                                        | `32Mi`  |
-| `counter.resources.limits.cpu`      | A CPU limit.                                                                                                                                             | `1000m` |
-| `counter.resources.limits.memory`   | A memory limit.                                                                                                                                          | `512Mi` |
-| `counter.preloader.refreshTick`     | Refresh interval for in-memory cache with keys limitations info. The smaller the interval, the faster the worker will know about changes in limitations. | `1m`    |
-| `counter.updateStatusQueryTimeout`  | Timeout for database queries to update key status.                                                                                                       | `1s`    |
-| `counter.buffer`                    | **Settings for in-memory buffer for statistics data.**                                                                                                   |         |
-| `counter.buffer.size`               | The maximum size of the buffer. When the limit is reached, the data from the buffer is transferred to Redis.                                             | `1000`  |
-| `counter.buffer.delay`              | The maximum interval between data transfer operations from the buffer to Redis.                                                                          | `1s`    |
+| Name                                | Description                                                                                                                                              | Value     |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| `counter.enabled`                   | Counter worker is enabled.                                                                                                                               | `false`   |
+| `counter.replicas`                  | A replica count for the pod.                                                                                                                             | `1`       |
+| `counter.prometheus.scrape`         | If Prometheus scrape is enabled.                                                                                                                         | `true`    |
+| `counter.resources.requests.cpu`    | A CPU request.                                                                                                                                           | `20m`     |
+| `counter.resources.requests.memory` | A memory request.                                                                                                                                        | `32Mi`    |
+| `counter.resources.limits.cpu`      | A CPU limit.                                                                                                                                             | `1000m`   |
+| `counter.resources.limits.memory`   | A memory limit.                                                                                                                                          | `512Mi`   |
+| `counter.logLevel`                  | Log level for the worker. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                 | `warning` |
+| `counter.preloader.refreshTick`     | Refresh interval for in-memory cache with keys limitations info. The smaller the interval, the faster the worker will know about changes in limitations. | `1m`      |
+| `counter.updateStatusQueryTimeout`  | Timeout for database queries to update key status.                                                                                                       | `1s`      |
+| `counter.buffer`                    | **Settings for in-memory buffer for statistics data.**                                                                                                   |           |
+| `counter.buffer.size`               | The maximum size of the buffer. When the limit is reached, the data from the buffer is transferred to Redis.                                             | `1000`    |
+| `counter.buffer.delay`              | The maximum interval between data transfer operations from the buffer to Redis.                                                                          | `1s`      |
 
 ### Redis settings
 

@@ -372,6 +372,9 @@ counter:
       cpu: 1000m
       memory: 512Mi
 
+  # @param counter.logLevel Log level for the worker. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
+
   # @param counter.preloader.refreshTick Refresh interval for in-memory cache with keys limitations info. The smaller the interval, the faster the worker will know about changes in limitations.
 
   preloader:

@@ -314,6 +314,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.counter" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.counter.logLevel }}"
 - name: KEYS_COUNTER_BUFFER_SIZE
   value: "{{ .Values.counter.buffer.size }}"
 - name: KEYS_COUNTER_BUFFER_DELAY
