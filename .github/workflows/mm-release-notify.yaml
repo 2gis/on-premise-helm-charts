@@ -24,4 +24,4 @@ jobs:
           MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
           TEXT: |
             Опубликован On-Premise: ${{ github.event.workflow_run.head_branch }}
-            Документация: https://confluence.2gis.ru/display/Karta/Release+${{ github.event.workflow_run.head_branch }}+On-Premise
+            Документация: https://confluence.2gis.ru/display/ONPREM/Release+${{ github.event.workflow_run.head_branch }}+On-Premise
