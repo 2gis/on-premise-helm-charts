@@ -31,7 +31,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.87.0`                       |
+| `backend.image.tag`        | Backend service image tag.        | `1.89.0`                       |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
 | `admin.image.tag`          | Admin service image tag.          | `0.8.0`                        |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
@@ -157,6 +157,34 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `tasker.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
 | `tasker.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `{}`            |
 
+### Dispatcher settings
+
+| Name                                                 | Description                                                                                                                                                                                              | Value           |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `dispatcher.enabled`                                 | If dispatcher worker is deployed.                                                                                                                                                                        | `false`         |
+| `dispatcher.logLevel`                                | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                | `warning`       |
+| `dispatcher.replicas`                                | A replica count for the pod.                                                                                                                                                                             | `1`             |
+| `dispatcher.auditEvents.sendInterval`                | Send audit events interval                                                                                                                                                                               | `1m`            |
+| `dispatcher.auditEvents.batchMaxSize`                | Max batch size when sending audit events                                                                                                                                                                 | `1000`          |
+| `dispatcher.auditEvents.holdDuration`                | In case of an unsuccessful attempt to send messages, the service will not resend it for a given duration                                                                                                 | `10m`           |
+| `dispatcher.strategy.type`                           | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
+| `dispatcher.strategy.rollingUpdate.maxUnavailable`   | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
+| `dispatcher.strategy.rollingUpdate.maxSurge`         | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
+| `dispatcher.annotations`                             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                | `{}`            |
+| `dispatcher.labels`                                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                          | `{}`            |
+| `dispatcher.podAnnotations`                          | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                            | `{}`            |
+| `dispatcher.podLabels`                               | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`            |
+| `dispatcher.nodeSelector`                            | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
+| `dispatcher.affinity`                                | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
+| `dispatcher.tolerations`                             | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `{}`            |
+| `dispatcher.cleaner`                                 | **Settings for cronjob that cleans sent messages from database**                                                                                                                                         |                 |
+| `dispatcher.cleaner.logLevel`                        | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                | `warning`       |
+| `dispatcher.cleaner.auditEvents.retentionDuration`   | Retention period for successfully sent audit messages.                                                                                                                                                   | `4320h`         |
+| `dispatcher.cleaner.cron.schedule`                   | Cron job schedule.                                                                                                                                                                                       | `0 1 * * *`     |
+| `dispatcher.cleaner.cron.successfulJobsHistoryLimit` | Specifies the number of successful finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).                           | `3`             |
+| `dispatcher.cleaner.cron.suspend`                    | You can suspend execution of Jobs for a CronJob, by setting the field to true. See [schedule suspension](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension).      | `false`         |
+| `dispatcher.cleaner.nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
+
 ### Redis settings
 
 | Name                     | Description                                                                                                                 | Value             |
@@ -251,38 +279,48 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Limits
 
-| Name                                | Description                        | Value   |
-| ----------------------------------- | ---------------------------------- | ------- |
-| `admin.resources`                   | **Limits for the Admin service**   |         |
-| `admin.resources.requests.cpu`      | A CPU request.                     | `300m`  |
-| `admin.resources.requests.memory`   | A memory request.                  | `256Mi` |
-| `admin.resources.limits.cpu`        | A CPU limit.                       | `1`     |
-| `admin.resources.limits.memory`     | A memory limit.                    | `384Mi` |
-| `api.resources`                     | **Limits for the API service**     |         |
-| `api.resources.requests.cpu`        | A CPU request.                     | `50m`   |
-| `api.resources.requests.memory`     | A memory request.                  | `128Mi` |
-| `api.resources.limits.cpu`          | A CPU limit.                       | `1`     |
-| `api.resources.limits.memory`       | A memory limit.                    | `256Mi` |
-| `import.resources`                  | **Limits for the Import service**  |         |
-| `import.resources.requests.cpu`     | A CPU request.                     | `10m`   |
-| `import.resources.requests.memory`  | A memory request.                  | `32Mi`  |
-| `import.resources.limits.cpu`       | A CPU limit.                       | `100m`  |
-| `import.resources.limits.memory`    | A memory limit.                    | `64Mi`  |
-| `migrate.resources`                 | **Limits for the Migrate service** |         |
-| `migrate.resources.requests.cpu`    | A CPU request.                     | `10m`   |
-| `migrate.resources.requests.memory` | A memory request.                  | `32Mi`  |
-| `migrate.resources.limits.cpu`      | A CPU limit.                       | `100m`  |
-| `migrate.resources.limits.memory`   | A memory limit.                    | `64Mi`  |
-| `tasker.resources`                  | **Limits for the Tasker service**  |         |
-| `tasker.resources.requests.cpu`     | A CPU request.                     | `10m`   |
-| `tasker.resources.requests.memory`  | A memory request.                  | `32Mi`  |
-| `tasker.resources.limits.cpu`       | A CPU limit.                       | `100m`  |
-| `tasker.resources.limits.memory`    | A memory limit.                    | `64Mi`  |
-| `redis.resources`                   | **Limits for Redis**               |         |
-| `redis.resources.requests.cpu`      | A CPU request.                     | `50m`   |
-| `redis.resources.requests.memory`   | A memory request.                  | `32Mi`  |
-| `redis.resources.limits.cpu`        | A CPU limit.                       | `1`     |
-| `redis.resources.limits.memory`     | A memory limit.                    | `256Mi` |
+| Name                                           | Description                           | Value   |
+| ---------------------------------------------- | ------------------------------------- | ------- |
+| `admin.resources`                              | **Limits for the Admin service**      |         |
+| `admin.resources.requests.cpu`                 | A CPU request.                        | `300m`  |
+| `admin.resources.requests.memory`              | A memory request.                     | `256Mi` |
+| `admin.resources.limits.cpu`                   | A CPU limit.                          | `1`     |
+| `admin.resources.limits.memory`                | A memory limit.                       | `384Mi` |
+| `api.resources`                                | **Limits for the API service**        |         |
+| `api.resources.requests.cpu`                   | A CPU request.                        | `50m`   |
+| `api.resources.requests.memory`                | A memory request.                     | `128Mi` |
+| `api.resources.limits.cpu`                     | A CPU limit.                          | `1`     |
+| `api.resources.limits.memory`                  | A memory limit.                       | `256Mi` |
+| `import.resources`                             | **Limits for the Import service**     |         |
+| `import.resources.requests.cpu`                | A CPU request.                        | `10m`   |
+| `import.resources.requests.memory`             | A memory request.                     | `32Mi`  |
+| `import.resources.limits.cpu`                  | A CPU limit.                          | `100m`  |
+| `import.resources.limits.memory`               | A memory limit.                       | `64Mi`  |
+| `migrate.resources`                            | **Limits for the Migrate service**    |         |
+| `migrate.resources.requests.cpu`               | A CPU request.                        | `10m`   |
+| `migrate.resources.requests.memory`            | A memory request.                     | `32Mi`  |
+| `migrate.resources.limits.cpu`                 | A CPU limit.                          | `100m`  |
+| `migrate.resources.limits.memory`              | A memory limit.                       | `64Mi`  |
+| `tasker.resources`                             | **Limits for the Tasker service**     |         |
+| `tasker.resources.requests.cpu`                | A CPU request.                        | `10m`   |
+| `tasker.resources.requests.memory`             | A memory request.                     | `32Mi`  |
+| `tasker.resources.limits.cpu`                  | A CPU limit.                          | `100m`  |
+| `tasker.resources.limits.memory`               | A memory limit.                       | `64Mi`  |
+| `dispatcher.resources`                         | **Limits for the Dispatcher service** |         |
+| `dispatcher.resources.requests.cpu`            | A CPU request.                        | `10m`   |
+| `dispatcher.resources.requests.memory`         | A memory request.                     | `32Mi`  |
+| `dispatcher.resources.limits.cpu`              | A CPU limit.                          | `100m`  |
+| `dispatcher.resources.limits.memory`           | A memory limit.                       | `64Mi`  |
+| `dispatcher.cleaner.resources`                 | **Limits for the Cleaner service**    |         |
+| `dispatcher.cleaner.resources.requests.cpu`    | A CPU request.                        | `10m`   |
+| `dispatcher.cleaner.resources.requests.memory` | A memory request.                     | `32Mi`  |
+| `dispatcher.cleaner.resources.limits.cpu`      | A CPU limit.                          | `100m`  |
+| `dispatcher.cleaner.resources.limits.memory`   | A memory limit.                       | `64Mi`  |
+| `redis.resources`                              | **Limits for Redis**                  |         |
+| `redis.resources.requests.cpu`                 | A CPU request.                        | `50m`   |
+| `redis.resources.requests.memory`              | A memory request.                     | `32Mi`  |
+| `redis.resources.limits.cpu`                   | A CPU limit.                          | `1`     |
+| `redis.resources.limits.memory`                | A memory limit.                       | `256Mi` |
 
 ### customCAs **Custom Certificate Authority**
 
