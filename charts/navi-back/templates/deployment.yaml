@@ -71,7 +71,11 @@ spec:
       {{- end }}
       {{- if .Values.naviback.hierarchies.enabled }}
       - name: hierarchies-volume
+        {{- if .Values.naviback.hierarchies.volume }}
+        {{- toYaml .Values.naviback.hierarchies.volume | nindent 8 }}
+        {{- else }}
         emptyDir: {}
+        {{- end }}{{- /* if .Values.naviback.hierarchies.volume */}}
       {{- end }}
       {{- if .Values.extraVolumes }}
       {{- include "tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
@@ -91,6 +95,15 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.envoy.image.repository }}:{{ .Values.envoy.image.tag }}
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
+          args:
+            - -c
+            - /etc/envoy/envoy.yaml
+          {{- if and (kindIs "string" .Values.envoy.concurrency) (eq "" .Values.envoy.concurrency) }}
+          {{/* envoy.concurrency = '', skip */}}
+          {{- else }}
+            - "--concurrency"
+            - {{ include "envoy.get-concurrency" . | quote }}
+          {{- end }}
           volumeMounts:
             - name: {{ include "generic-chart.fullname" . }}-configmap
               mountPath: /etc/envoy/envoy.yaml
@@ -205,7 +218,7 @@ spec:
               mountPath: "/tmp/hierarchies"
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
-            {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 10 }}
+            {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
             {{- if .Values.customCAs.bundle }}
             - name: {{ include "generic-chart.fullname" . }}-configmap-ca
