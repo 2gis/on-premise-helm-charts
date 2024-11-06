@@ -108,3 +108,10 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 | `import.resources.requests.memory` | A memory request, e.g., `128Mi`. |                                   |
 | `import.resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |                                   |
 | `import.resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |                                   |
+
+### **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container.                                                                          | `""`  |
