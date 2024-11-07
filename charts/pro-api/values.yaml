@@ -1,3 +1,4 @@
+﻿
 # @section Geo API configuration & settings
 
 api:
@@ -10,7 +11,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 1.41.0
+    tag: 1.45.0
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -28,8 +29,6 @@ api:
       - path: /
         pathType: Prefix
     tls: []
-    # - hosts:
-    #   - pro-api.example.com
     #   secretName: secret.tls
 
   # @param api.pod.replicaCount A replica count for the pod.
@@ -139,7 +138,7 @@ api:
   # @param api.settings.auth.shareKeys Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`
   # @param api.settings.backgroundJobs.enableUserAssetsImporter If user data importer job is enabled for the service.
   # @param api.settings.backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
-  # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount If layer contains more points, isochrone is not avalible
+  # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount If layer contains more points, isochrone is not avalible.
   settings:
     licenseKey: ''
     tempPath: /tmp
@@ -184,7 +183,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 1.41.0
+    tag: 1.45.0
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -253,7 +252,7 @@ permissions:
     port: 80
 
   # @skip permissions.settings.host
-  # @param permissions.settings.enabled Set to `true` if authorization is used
+  # @param permissions.settings.enabled If permissionsApi is enabled for the service.
   # @skip permissions.settings.localCache.enabled
   # @skip permissions.settings.localCache.trackStatistics
   # @param permissions.settings.auth.apiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`
@@ -265,6 +264,128 @@ permissions:
       trackStatistics: false
     auth:
       apiKey: ''
+
+# @section Tasks API configuration & settings
+
+tasks:
+
+  # @param tasks.image.repository Repository
+  # @param tasks.image.tag Tag
+  # @param tasks.image.pullPolicy Pull Policy
+  image:
+    repository: 2gis-on-premise/urbi-geo-tasks-api
+    tag: 1.45.0
+    pullPolicy: IfNotPresent
+
+  # @param tasks.ingress.enabled If Ingress is enabled for the service
+  # @param tasks.ingress.className Name of the Ingress controller class
+  # @param tasks.ingress.hosts[0].host Hostname for the Ingress service
+  # @param tasks.ingress.hosts[0].paths[0].path Path of the host for the Ingress service
+  # @param tasks.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service
+  # @param tasks.ingress.tls TLS configuration
+  ingress:
+    enabled: false
+    className: nginx
+    hosts:
+    - host: ''
+      paths:
+      - path: /
+        pathType: Prefix
+    tls: []
+    #   secretName: secret.tls
+
+  # @param tasks.pod.apiReplicaCount A replica count for the pod.
+  # @param tasks.pod.workerReplicaCount A replica count for the pod.
+  # @param tasks.pod.imagePullSecrets Kubernetes image pull secrets.
+  # @param tasks.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param tasks.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param tasks.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
+  # @param tasks.pod.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
+  # @param tasks.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  # @param tasks.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param tasks.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param tasks.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param tasks.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param tasks.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @extra tasks.pod.resources **Limits for the application service**
+  # @param tasks.pod.resources.requests.cpu A CPU request.
+  # @param tasks.pod.resources.requests.memory A memory request.
+  # @param tasks.pod.resources.limits.cpu A CPU limit.
+  # @param tasks.pod.resources.limits.memory A memory limit.
+  # @param tasks.pod.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param tasks.pod.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param tasks.pod.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+  pod:
+    apiReplicaCount: 2
+    workerReplicaCount: 2
+    imagePullSecrets: []
+    nodeSelector: {}
+    affinity: {}
+    priorityClassName: ''
+    terminationGracePeriodSeconds: 60
+    tolerations: []
+    podAnnotations: {}
+    podLabels: {}
+    annotations: {}
+    labels: {}
+    revisionHistoryLimit: 3
+    resources:
+      requests:
+        cpu: 400m
+        memory: 256M
+      limits:
+        cpu: 1
+        memory: 1024M
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 0
+        maxSurge: 1
+
+  # @param tasks.vpa.enabled If VPA is enabled for the service.
+  # @param tasks.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+  # @param tasks.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+  # @param tasks.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+  # @param tasks.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+  # @param tasks.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+  vpa:
+    enabled: false
+    updateMode: Auto
+    minAllowed:
+      cpu: 400m
+      memory: 256M
+    maxAllowed:
+      cpu: 1
+      memory: 1024M
+
+  # @param tasks.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+  # @param tasks.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param tasks.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param tasks.service.port Tasks API service port.
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+
+  # @param tasks.settings.enabled If Tasks API is disabled it will not be deployed to k8s
+  # @skip tasks.settings.env
+  # @param tasks.settings.tempPath Path to directory used for temp data
+  # @extra tasks.settings.logging Logging settings
+  # @param tasks.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
+  # @param tasks.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
+  # @param tasks.settings.worker.resourceIntensiveTasksWorkersCount Number of threads that will be used by Hangfire-server to performs resource-intensive tasks
+  # @param tasks.settings.worker.regularTasksWorkersCount Number of threads that will be used by Hangfire-server to performs other tasks
+  settings:
+    enabled: false
+    env: ''
+    tempPath: /tmp
+    logging:
+      format: simple
+      targets: ''
+    worker:
+      resourceIntensiveTasksWorkersCount: 5
+      regularTasksWorkersCount: 5
 
 
 # @section asset importer settings
@@ -296,7 +417,7 @@ permissions:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 1.41.0
+  tag: 1.45.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -328,7 +449,7 @@ assetImporter:
 assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
-  tag: 1.41.0
+  tag: 1.45.0
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
@@ -340,7 +461,7 @@ assetPreparer:
     limits:
       cpu: 500m
       memory: 512M
-  enabled: true
+  enabled: false
   settings:
     files: ''
     maxParallelJobs: 1
@@ -393,7 +514,7 @@ s3:
   resourcesBucket: ''
 
 
-# @section PostgreSQL settings
+# @section PostgreSQL settings (minimum supported version 15)
 
 # @param postgres.connectionString Connection string to the PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;`
 # @param postgres.connectionStringReadonly Connection string to the readonly node of PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;`

@@ -1,0 +1,28 @@
+{{- if and (.Values.tasks.vpa.enabled) (.Values.tasks.settings.enabled) }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "pro-api.tasks-name" . }}
+  labels:
+    {{- include "pro-api.tasksLabels" . | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "pro-api.tasks-name" . }}
+  updatePolicy:
+    updateMode: {{ .Values.tasks.vpa.updateMode }}
+  resourcePolicy:
+    containerPolicies:
+      - containerName: {{ .Chart.Name }}
+        controlledValues: RequestsOnly
+        mode: Auto
+        {{- with .Values.tasks.vpa.minAllowed }}
+        minAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.tasks.vpa.maxAllowed }}
+        maxAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+{{- end }}

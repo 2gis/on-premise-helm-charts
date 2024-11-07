@@ -1,0 +1,25 @@
+{{ if .Values.tasks.settings.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pro-api.tasks-name" . }}
+  {{- if .Values.tasks.service.annotations }}
+  annotations:
+    {{- toYaml .Values.tasks.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "pro-api.tasksLabels" . | nindent 4 }}
+  {{- if .Values.tasks.service.labels }}
+    {{- toYaml .Values.tasks.service.labels | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.tasks.service.type }}
+  ports:
+    - port: {{ .Values.tasks.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      appProtocol: http
+  selector:
+    {{- include "pro-api.tasksSelectorLabels" . | nindent 4 }}
+{{- end }}
