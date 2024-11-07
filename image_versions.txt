@@ -9,8 +9,8 @@ citylens
 dgtt
 	dgtt:0.2.27-b188673e09
 floors-api
-	floors-importer:1.1.0
-	floors-nodejs:1.1.0
+	floors-importer:1.0.4
+	floors-nodejs:1.0.4
 	nginx:1.21.6
 generic-chart
 gis-platform
@@ -28,7 +28,7 @@ keys
 license
 	license:2.2.3
 mapgl-js-api
-	mapgl:1.53.0
+	mapgl:1.51.0
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
@@ -36,7 +36,7 @@ navi-async-matrix
 navi-back
 	envoy:v1.27.0
 	metrics-aggregator:
-	navi-back:7.29.2.2
+	navi-back:7.27.1.2
 navi-castle
 	navi-castle:1.9.2
 	navi-front:1.24.1
@@ -60,7 +60,7 @@ pro-ui
 	pro-importer:1.41.0
 	pro-ui:2.27.0
 search-api
-	search-api:7.85.0
+	search-api:7.80.0
 	search-nginx:1.21.6
 stat-receiver
 	stat-receiver-api:1.11.1
