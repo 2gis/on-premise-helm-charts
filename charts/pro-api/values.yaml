@@ -270,20 +270,11 @@ permissions:
 
 tasks:
 
-  # @skip tasks.image.repository Repository
-  # @skip tasks.image.tag Tag
-  # @skip tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/urbi-geo-tasks-api
     tag: 1.46.0
     pullPolicy: IfNotPresent
 
-  # @skip tasks.ingress.enabled If Ingress is enabled for the service
-  # @skip tasks.ingress.className Name of the Ingress controller class
-  # @skip tasks.ingress.hosts[0].host Hostname for the Ingress service
-  # @skip tasks.ingress.hosts[0].paths[0].path Path of the host for the Ingress service
-  # @skip tasks.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service
-  # @skip tasks.ingress.tls TLS configuration
   ingress:
     enabled: false
     className: nginx
@@ -295,27 +286,6 @@ tasks:
     tls: []
     #   secretName: secret.tls
 
-  # @skip tasks.pod.apiReplicaCount A replica count for the pod.
-  # @skip tasks.pod.workerReplicaCount A replica count for the pod.
-  # @skip tasks.pod.imagePullSecrets Kubernetes image pull secrets.
-  # @skip tasks.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-  # @skip tasks.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
-  # @skip tasks.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
-  # @skip tasks.pod.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
-  # @skip tasks.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-  # @skip tasks.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-  # @skip tasks.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @skip tasks.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-  # @skip tasks.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @skip tasks.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
-  # @skip tasks.pod.resources **Limits for the application service**
-  # @skip tasks.pod.resources.requests.cpu A CPU request.
-  # @skip tasks.pod.resources.requests.memory A memory request.
-  # @skip tasks.pod.resources.limits.cpu A CPU limit.
-  # @skip tasks.pod.resources.limits.memory A memory limit.
-  # @skip tasks.pod.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
-  # @skip tasks.pod.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
-  # @skip tasks.pod.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
   pod:
     apiReplicaCount: 2
     workerReplicaCount: 2
@@ -343,12 +313,6 @@ tasks:
         maxUnavailable: 0
         maxSurge: 1
 
-  # @skip tasks.vpa.enabled If VPA is enabled for the service.
-  # @skip tasks.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
-  # @skip tasks.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
-  # @skip tasks.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
-  # @skip tasks.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
-  # @skip tasks.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
   vpa:
     enabled: false
     updateMode: Auto
@@ -359,24 +323,12 @@ tasks:
       cpu: 1
       memory: 1024M
 
-  # @skip tasks.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
-  # @skip tasks.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @skip tasks.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-  # @skip tasks.service.port Tasks API service port.
   service:
     annotations: {}
     labels: {}
     type: ClusterIP
     port: 80
 
-  # @skip tasks.settings.enabled If Tasks API is disabled it will not be deployed to k8s
-  # @skip tasks.settings.env
-  # @skip tasks.settings.tempPath Path to directory used for temp data
-  # @skip tasks.settings.logging Logging settings
-  # @skip tasks.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
-  # @skip tasks.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
-  # @skip tasks.settings.worker.resourceIntensiveTasksWorkersCount Number of threads that will be used by Hangfire-server to performs resource-intensive tasks
-  # @skip tasks.settings.worker.regularTasksWorkersCount Number of threads that will be used by Hangfire-server to performs other tasks
   settings:
     enabled: false
     env: ''
