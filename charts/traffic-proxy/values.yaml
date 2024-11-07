@@ -72,7 +72,7 @@ proxy:
     errorLog:
       level: error
 
-    accessLog: 'off'
+    accessLog: off
     # accessLog: '/dev/stdout main'
 
   keepaliveTimeout: 65

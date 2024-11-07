@@ -1,5 +1,25 @@
 # 2GIS On-Premise Changelog
 
+## [1.31.0] (2024-11-07)
+#### Images
+```
+floors-api
+	- floors-importer:1.0.4
+	+ floors-importer:1.1.0
+	- floors-nodejs:1.0.4
+	+ floors-nodejs:1.1.0
+mapgl-js-api
+	- mapgl:1.51.0
+	+ mapgl:1.53.0
+navi-back
+	- navi-back:7.27.1.2
+	+ navi-back:7.29.2.2
+search-api
+	- search-api:7.80.0
+	+ search-api:7.85.0
+
+```
+
 ## [1.30.0] (2024-10-24)
 #### [Breaking-Changes](Breaking-Changes.md#1300)
 #### Images
