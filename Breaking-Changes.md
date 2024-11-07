@@ -3,8 +3,6 @@
 ## [1.31.0]
 
 ### pro-api
-- Added urbi-geo-tasks-api
-- Disabled asset-preparer
 - pro-api: removed management TCP port 8090; liveness and readiness probes use TCP port 8080
 - permissions-api: removed management TCP port 8091; liveness and readiness probes use TCP port 8081
 
