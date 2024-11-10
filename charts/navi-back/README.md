@@ -78,7 +78,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.27.1.2`                  |
+| `image.tag`        | Tag         | `7.29.2.2`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings
@@ -88,6 +88,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.ecaHost`                                      | DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster |                                          |
 | `naviback.ecaUrl`                                       | URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster                                          |                                          |
 | `naviback.forecastHost`                                 | URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster            |                                          |
+| `naviback.walkingUserSpeedsUrl`                         | URL of walking user speeds                                                                                                                                                                                          |                                          |
+| `naviback.routeAsUsualUrl`                              | URL of route as usual                                                                                                                                                                                               |                                          |
 | `naviback.dmSourcesLimit`                               | Size limit for source matrices                                                                                                                                                                                      | `1000`                                   |
 | `naviback.dmTargetsLimit`                               | Size limit for target matrices                                                                                                                                                                                      | `1000`                                   |
 | `naviback.handlersNumber`                               | Total number of HTTP/GRPC handlers                                                                                                                                                                                  | `1`                                      |
@@ -99,6 +101,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.timeoutIncrementSec`                          | Downloading time increment after failures                                                                                                                                                                           | `140`                                    |
 | `naviback.totalRetryDurationSec`                        | Downloading timeout with all failure retries                                                                                                                                                                        | `2400`                                   |
 | `naviback.initialRetryIntervalSec`                      | Initial timeout for a failure retry                                                                                                                                                                                 | `2`                                      |
+| `naviback.clearCacheThreshold`                          | Memory usage percentage threshold to run cache cleanup                                                                                                                                                              | `90`                                     |
 | `naviback.dump.result`                                  | Dump results in logs                                                                                                                                                                                                | `false`                                  |
 | `naviback.dump.query`                                   | Dump queries in logs                                                                                                                                                                                                | `false`                                  |
 | `naviback.dump.answer`                                  | Dump answers in logs                                                                                                                                                                                                | `false`                                  |
@@ -161,25 +164,28 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.validation.isochrone.requestSchemaName`       | Name of isochrone request validation schema                                                                                                                                                                         | `IsochroneApiRequestModel.json`          |
 | `naviback.validation.isochrone.responseSchemaName`      | Name of isochrone response validation schema                                                                                                                                                                        | `IsochroneApiResponseModel.json`         |
 | `naviback.tilesMetricsThreshold`                        | The value at which we send tiles metrics (used for internal tests)                                                                                                                                                  | `0`                                      |
+| `naviback.engineUpdatePeriodSec`                        | The time interval between engine updates                                                                                                                                                                            | `30`                                     |
 | `naviback.hierarchies.enabled`                          | If SN cache available                                                                                                                                                                                               | `false`                                  |
 | `naviback.hierarchies.skipPatches`                      | Skip patches in hierarchies cache, ignored if skipShortcuts set                                                                                                                                                     | `false`                                  |
 | `naviback.hierarchies.skipShortcuts`                    | Skip shortcuts in SN cache                                                                                                                                                                                          | `false`                                  |
 | `naviback.hierarchies.s3path`                           | Hierarchies cache remote location                                                                                                                                                                                   | `""`                                     |
+| `naviback.hierarchies.volume`                           | Hierarchies local cache specification. Leave empty for default emptydir.                                                                                                                                            | `{}`                                     |
 | `naviback.etaScheduleIndex.enabled`                     | If Schedule Index available                                                                                                                                                                                         | `false`                                  |
 | `naviback.etaScheduleIndex.url`                         | Schedule Index remote url                                                                                                                                                                                           | `""`                                     |
 
 ### Envoy settings, ignored if not `transmitter.enabled`. Leave with defaults, FOR FUTURE RELEASE.
 
-| Name                              | Description                                | Value                   |
-| --------------------------------- | ------------------------------------------ | ----------------------- |
-| `envoy.image.repository`          | Repository                                 | `2gis-on-premise/envoy` |
-| `envoy.image.tag`                 | Tag                                        | `v1.27.0`               |
-| `envoy.image.pullPolicy`          | Pull Policy                                | `IfNotPresent`          |
-| `envoy.resources`                 | Container resources requirements structure | `{}`                    |
-| `envoy.resources.requests.cpu`    | CPU request, recommended value `100m`      | `undefined`             |
-| `envoy.resources.requests.memory` | Memory request, recommended value `100Mi`  | `undefined`             |
-| `envoy.resources.limits.cpu`      | CPU limit, recommended value `100m`        | `undefined`             |
-| `envoy.resources.limits.memory`   | Memory limit, recommended value `100Mi`    | `undefined`             |
+| Name                              | Description                                                                                  | Value                   |
+| --------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------- |
+| `envoy.image.repository`          | Repository                                                                                   | `2gis-on-premise/envoy` |
+| `envoy.image.tag`                 | Tag                                                                                          | `v1.27.0`               |
+| `envoy.image.pullPolicy`          | Pull Policy                                                                                  | `IfNotPresent`          |
+| `envoy.concurrency`               | The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0` | `""`                    |
+| `envoy.resources`                 | Container resources requirements structure                                                   | `{}`                    |
+| `envoy.resources.requests.cpu`    | CPU request, recommended value `100m`                                                        | `undefined`             |
+| `envoy.resources.requests.memory` | Memory request, recommended value `100Mi`                                                    | `undefined`             |
+| `envoy.resources.limits.cpu`      | CPU limit, recommended value `100m`                                                          | `undefined`             |
+| `envoy.resources.limits.memory`   | Memory limit, recommended value `100Mi`                                                      | `undefined`             |
 
 ### Service account settings
 
