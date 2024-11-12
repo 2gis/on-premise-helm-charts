@@ -168,3 +168,14 @@ ingress:
   enabled: false
   hosts:
   - host: stat-receiver.host
+
+# @section stat-receiver parameters
+# @param statReceiver.initializeTopics If true, topics will be created automatically.
+# @param statReceiver.topicsPrefix Prefix for topics.
+
+initializeTopics:
+  enabled: false
+topicsPrefix: ''
+
+# @param logLevel Log level: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `OFF`
+logLevel: INFO
