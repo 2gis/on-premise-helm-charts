@@ -170,8 +170,8 @@ ingress:
   - host: stat-receiver.host
 
 # @section stat-receiver parameters
-# @param statReceiver.initializeTopics If true, topics will be created automatically.
-# @param statReceiver.topicsPrefix Prefix for topics.
+# @param initializeTopics.enabled If true, topics will be created automatically.
+# @param topicsPrefix Prefix for topics.
 
 initializeTopics:
   enabled: false

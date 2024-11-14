@@ -135,6 +135,14 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | `ingress.enabled`       | If Ingress is enabled for the service. | `false`              |
 | `ingress.hosts[0].host` | Hostname for the Ingress service.      | `stat-receiver.host` |
 
+### stat-receiver parameters
+
+| Name                       | Description                                                 | Value   |
+| -------------------------- | ----------------------------------------------------------- | ------- |
+| `initializeTopics.enabled` | If true, topics will be created automatically.              | `false` |
+| `topicsPrefix`             | Prefix for topics.                                          | `""`    |
+| `logLevel`                 | Log level: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `OFF` | `INFO`  |
+
 
 ## Maintainers
 
