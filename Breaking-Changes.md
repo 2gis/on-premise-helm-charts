@@ -7,6 +7,7 @@
 - permissions-api: removed management TCP port 8091; liveness and readiness probes use TCP port 8081
 
 ## pro-ui
+- Using new UI based on dashboards
 - Using mapgl v1.51.1
 
 
