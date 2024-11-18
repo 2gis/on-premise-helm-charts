@@ -311,7 +311,7 @@ Citylens routes chart name
 */}}
 
 {{- define "app.chart" -}}
-{{- printf "%s-%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -319,7 +319,7 @@ Citylens routes name defines
 */}}
 
 {{- define "citylens.routes" -}}
-{{- printf "%s-%s" .Chart.Name "routes" | trunc 63 | trimSuffix "-" -}}
+{{ include "citylens.name" . }}-routes
 {{- end -}}
 
 {{- define "citylens.routes.api.name" -}}

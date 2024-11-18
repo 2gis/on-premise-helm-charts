@@ -926,7 +926,7 @@ customCAs:
 
 # @section Citylens routes services settings
 
-# @param routes.environment Set environment for services.
+# @skip routes.environment
 # @param routes.imagePullSecrets Kubernetes image pull secrets.
 # @param routes.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
 # @param routes.migration.enabled If migrations needed.
@@ -991,7 +991,7 @@ customCAs:
 # @param routes.api.tempPath Path to directory used for temp data
 
 # @extra routes.api.logging Routes **Logging** settings
-# @param routes.api.logging.level Log message level. Trace, Debug, Information, Warning, Error, Critical, None.
+# @param routes.api.logging.level Log message level. verbose, debug, information, warning, error, fatal.
 
 # @section Citylens routes Worker
 
@@ -1019,7 +1019,7 @@ customCAs:
 # @param routes.worker.tempPath Path to directory used for temp data
 
 # @extra routes.worker.logging Routes **Logging** settings
-# @param routes.worker.logging.level Log message level. Trace, Debug, Information, Warning, Error, Critical, None.
+# @param routes.worker.logging.level Log message level. verbose, debug, information, warning, error, fatal.
 
 # @section Bus configuration settings
 # @extra routes.worker.busConfig Bus configuration
@@ -1106,7 +1106,7 @@ routes:
     tempPath: /tmp
 
     logging:
-      level: 'Information'
+      level: 'information'
 
   worker:
     image:
@@ -1137,7 +1137,7 @@ routes:
     tempPath: /tmp
 
     logging:
-      level: 'Information'
+      level: 'information'
 
     busConfig:
       consumers:
