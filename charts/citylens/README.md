@@ -483,7 +483,6 @@ See the [documentation]() to learn about:
 
 | Name                                           | Description                                                                                                                                                                                              | Value           |
 | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `routes.environment`                           | Set environment for services.                                                                                                                                                                            | `""`            |
 | `routes.imagePullSecrets`                      | Kubernetes image pull secrets.                                                                                                                                                                           | `[]`            |
 | `routes.terminationGracePeriodSeconds`         | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds                                                         | `60`            |
 | `routes.migration.enabled`                     | If migrations needed.                                                                                                                                                                                    | `true`          |
@@ -560,7 +559,7 @@ See the [documentation]() to learn about:
 | `routes.api.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
 | `routes.api.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp`        |
 | `routes.api.logging`        | Routes **Logging** settings                                                                                                 |               |
-| `routes.api.logging.level`  | Log message level. Trace, Debug, Information, Warning, Error, Critical, None.                                               | `Information` |
+| `routes.api.logging.level`  | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
 
 ### Citylens routes Worker
 
@@ -597,7 +596,7 @@ See the [documentation]() to learn about:
 | `routes.worker.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
 | `routes.worker.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp`        |
 | `routes.worker.logging`        | Routes **Logging** settings                                                                                                 |               |
-| `routes.worker.logging.level`  | Log message level. Trace, Debug, Information, Warning, Error, Critical, None.                                               | `Information` |
+| `routes.worker.logging.level`  | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
 
 ### Bus configuration settings
 
