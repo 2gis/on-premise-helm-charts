@@ -187,6 +187,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.postgres.ro.timeout }}"
 - name: KEYS_DB_RO_USERNAME
   value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username }}"
+- name: KEYS_DB_RO_SSL_MODE
+  value: {{ .Values.postgres.ro.ssl.mode }}
 - name: KEYS_DB_RW_HOST
   value: "{{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host }}"
 - name: KEYS_DB_RW_PORT
@@ -199,10 +201,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.postgres.rw.schema }}"
 - name: KEYS_DB_RW_USERNAME
   value: "{{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username }}"
+- name: KEYS_DB_RW_SSL_MODE
+  value: {{ .Values.postgres.rw.ssl.mode }}
 {{- end }}
 
 {{- define "keys.env.db.deploys" -}}
-{{ include "keys.env.db" . }}
+{{- include "keys.env.db" . }}
 - name: KEYS_DB_RO_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -216,7 +220,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.db.jobs" -}}
-{{ include "keys.env.db" . }}
+{{- include "keys.env.db" . }}
 - name: KEYS_DB_RO_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -309,14 +313,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.predef" -}}
-{{ range $service, $key := .Values.predefined.service.keys }}
+{{- range $service, $key := .Values.predefined.service.keys }}
 - name: KEYS_PREDEF_SERVICE_KEY_{{ $service | upper }}
   value: {{ $key }}
-{{ end }}
-{{ range $service, $key := .Values.predefined.service.aliases }}
+{{- end }}
+{{- range $service, $key := .Values.predefined.service.aliases }}
 - name: KEYS_PREDEF_SERVICE_ALIAS_{{ $service | upper }}
   value: {{ $key }}
-{{ end }}
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.dgctlStorage" -}}
