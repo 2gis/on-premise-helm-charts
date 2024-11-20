@@ -21,7 +21,7 @@ streams = {
       v-3-schemas-path = "file:///app/schema/v3/0/"
     }
 
-    initialize-topics = {{ required "A valid .Values.initializeTopics entry required" .Values.initializeTopics }}
+    initialize-topics = {{ required "A valid .Values.initializeTopics.enabled entry required" .Values.initializeTopics.enabled }}
     topics-manager.prefix = {{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}
 
     input-topics = [

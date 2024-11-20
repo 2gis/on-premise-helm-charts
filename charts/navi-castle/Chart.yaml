@@ -4,7 +4,7 @@ description: Castle Helm chart for Kubernetes
 type: application
 
 
-version: 1.29.0
+version: 1.31.0
 appVersion: 1.9.2
 
 maintainers:

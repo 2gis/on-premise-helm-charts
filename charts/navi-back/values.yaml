@@ -106,7 +106,7 @@ args: []
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.27.1.2
+  tag: 7.29.2.2
 
 
 # @section Navi-Back application settings
@@ -114,6 +114,8 @@ image:
 # @extra naviback.ecaHost DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.ecaUrl URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.walkingUserSpeedsUrl URL of walking user speeds
+# @extra naviback.routeAsUsualUrl URL of route as usual
 # @skip naviback.appPort
 # @param naviback.dmSourcesLimit Size limit for source matrices
 # @param naviback.dmTargetsLimit Size limit for target matrices
@@ -126,6 +128,7 @@ image:
 # @param naviback.timeoutIncrementSec Downloading time increment after failures
 # @param naviback.totalRetryDurationSec Downloading timeout with all failure retries
 # @param naviback.initialRetryIntervalSec Initial timeout for a failure retry
+# @param naviback.clearCacheThreshold Memory usage percentage threshold to run cache cleanup
 # @param naviback.dump.result Dump results in logs
 # @param naviback.dump.query Dump queries in logs
 # @param naviback.dump.answer Dump answers in logs
@@ -173,6 +176,8 @@ image:
 # @skip naviback.indices.tugc2gisIndex.enabled
 # @skip naviback.indices.tugcUsers.enabled
 # @skip naviback.indices.tugcUsersIndex.enabled
+# @skip naviback.indices.routeAsUsual.enabled
+# @skip naviback.indices.walkingUserSpeeds.enabled
 # @extra naviback.additionalSections Optinal JSON block to be added to config file as-is
 # @skip naviback.simpleNetwork
 # @extra naviback.simpleNetwork.bicycle Enable simple network for bicycle routing
@@ -216,10 +221,12 @@ image:
 # @param naviback.validation.isochrone.requestSchemaName Name of isochrone request validation schema
 # @param naviback.validation.isochrone.responseSchemaName Name of isochrone response validation schema
 # @param naviback.tilesMetricsThreshold The value at which we send tiles metrics (used for internal tests)
+# @param naviback.engineUpdatePeriodSec The time interval between engine updates
 # @param naviback.hierarchies.enabled If SN cache available
 # @param naviback.hierarchies.skipPatches Skip patches in hierarchies cache, ignored if skipShortcuts set
 # @param naviback.hierarchies.skipShortcuts Skip shortcuts in SN cache
 # @param naviback.hierarchies.s3path Hierarchies cache remote location
+# @param naviback.hierarchies.volume Hierarchies local cache specification. Leave empty for default emptydir.
 # @param naviback.etaScheduleIndex.enabled If Schedule Index available
 # @param naviback.etaScheduleIndex.url Schedule Index remote url
 # @skip rules
@@ -237,6 +244,7 @@ naviback:
   timeoutIncrementSec: 140
   totalRetryDurationSec: 2400
   initialRetryIntervalSec: 2
+  clearCacheThreshold: 90
   dump:
     result: false
     query: false
@@ -308,6 +316,10 @@ naviback:
       enabled: false
     tugcUsersIndex:
       enabled: false
+    routeAsUsual:
+      enabled: false
+    walkingUserSpeeds:
+      enabled: false
   simpleNetwork:
     emergency: false
   attractor: {}
@@ -345,11 +357,13 @@ naviback:
       requestSchemaName: IsochroneApiRequestModel.json
       responseSchemaName: IsochroneApiResponseModel.json
   tilesMetricsThreshold: 0
+  engineUpdatePeriodSec: 30
   hierarchies:
     enabled: false
     skipPatches: false
     skipShortcuts: false
     s3path: ''
+    volume: {}
   etaScheduleIndex:
     enabled: false
     url: ''
@@ -362,6 +376,7 @@ rules: []
 # @param envoy.image.repository Repository
 # @param envoy.image.tag Tag
 # @param envoy.image.pullPolicy Pull Policy
+# @param envoy.concurrency The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0`
 # @param envoy.resources [nullable] Container resources requirements structure
 # @param envoy.resources.requests.cpu [nullable] CPU request, recommended value `100m`
 # @param envoy.resources.requests.memory [nullable] Memory request, recommended value `100Mi`
@@ -373,6 +388,7 @@ envoy:
     repository: 2gis-on-premise/envoy
     pullPolicy: IfNotPresent
     tag: v1.27.0
+  concurrency: ''
   resources: {}
 
 
