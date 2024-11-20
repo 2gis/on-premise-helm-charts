@@ -8,4 +8,4 @@ data:
   application.conf: |-
     {{- tpl (.Files.Get "configs/streams/application.conf.template") . | nindent 4 }}
   logback.xml: |-
-    {{- .Files.Get "configs/streams/logback.xml" | nindent 4 }}
+    {{- tpl (.Files.Get "configs/streams/logback.xml.template") . | nindent 4 }}
