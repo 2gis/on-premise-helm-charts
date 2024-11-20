@@ -188,7 +188,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_DB_RO_USERNAME
   value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username }}"
 - name: KEYS_DB_RO_SSL_MODE
-  value: {{ .Values.postgres.ro.ssl.mode }}
+  value: {{ .Values.postgres.ro.tls.mode }}
+{{- if has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full") }}
+- name: KEYS_DB_RO_SSL_SERVERCERT_PATH
+  value: /tls/psql-ro-server-ca.crt
+{{- end }}
 - name: KEYS_DB_RW_HOST
   value: "{{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host }}"
 - name: KEYS_DB_RW_PORT
@@ -202,7 +206,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_DB_RW_USERNAME
   value: "{{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username }}"
 - name: KEYS_DB_RW_SSL_MODE
-  value: {{ .Values.postgres.rw.ssl.mode }}
+  value: {{ .Values.postgres.rw.tls.mode }}
+{{- if has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full") }}
+- name: KEYS_DB_RW_SSL_SERVERCERT_PATH
+  value: /tls/psql-rw-server-ca.crt
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.db.deploys" -}}
@@ -427,4 +435,34 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 
 {{- define "keys.configmap.deploys.name" -}}
 {{ include "keys.name" . }}-configmap-deploys
+{{- end -}}
+
+{{- define "keys.psql.volumeMount" -}}
+{{- if or 
+  (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+  (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+-}}
+- name: tls
+  mountPath: /tls
+{{- end }}
+{{- end -}}
+
+{{- define "keys.psql.volume" -}}
+{{- if or 
+  (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+  (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+-}}
+- name: tls
+  secret:
+    secretName: {{ include "keys.name" . }}-tls
+    items:
+    {{- if .Values.postgres.ro.tls.serverCA }}
+      - key: psql-ro-server-ca.crt
+        path: psql-ro-server-ca.crt
+    {{- end }}
+    {{- if .Values.postgres.rw.tls.serverCA }}
+      - key: psql-rw-server-ca.crt
+        path: psql-rw-server-ca.crt
+    {{- end }}
+{{- end }}
 {{- end -}}

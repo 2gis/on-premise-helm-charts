@@ -504,7 +504,8 @@ postgres:
   # @param postgres.ro.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
   # @param postgres.ro.username PostgreSQL username. **Required**
   # @param postgres.ro.password PostgreSQL password. **Required**
-  # @param postgres.ro.ssl.mode PostgreSQL ssl [connection mode](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION)
+  # @param postgres.ro.tls.mode PostgreSQL ssl [connection mode](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION).
+  # @param postgres.ro.tls.serverCA PostgreSQL CA certificate for server CA verify. **Required for mode `verify-ca` or `verify-full`**.
 
   ro:
     host: ''
@@ -514,8 +515,9 @@ postgres:
     schema: ''
     username: ''
     password: ''
-    ssl:
+    tls:
       mode: require
+      serverCA: ''
 
   # @extra postgres.rw **Settings for the read-write access**
 
@@ -526,7 +528,8 @@ postgres:
   # @param postgres.rw.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
   # @param postgres.rw.username PostgreSQL username. **Required**
   # @param postgres.rw.password PostgreSQL password. **Required**
-  # @param postgres.rw.ssl.mode PostgreSQL ssl [connection mode](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION)
+  # @param postgres.rw.tls.mode PostgreSQL ssl [connection mode](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION).
+  # @param postgres.rw.tls.serverCA PostgreSQL CA certificate for server CA verify. **Required for mode `verify-ca` or `verify-full`**.
 
   rw:
     host: ''
@@ -536,9 +539,9 @@ postgres:
     schema: ''
     username: ''
     password: ''
-    ssl:
+    tls:
       mode: require
-
+      serverCA: ''
 
 # @section Kafka settings
 

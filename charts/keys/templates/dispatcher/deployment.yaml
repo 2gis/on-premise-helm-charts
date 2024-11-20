@@ -51,14 +51,16 @@ spec:
             {{- if .Values.customCAs.bundle }}
             {{- include "keys.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
-          {{- if .Values.customCAs.bundle }}
           volumeMounts:
-            {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- if .Values.customCAs.bundle }}
+          {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
-      {{- if .Values.customCAs.bundle }}
+          {{- include "keys.psql.volumeMount" . | nindent 12 }}
       volumes:
-        {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
+      {{- if .Values.customCAs.bundle }}
+      {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
       {{- end }}
+      {{- include "keys.psql.volume" . | nindent 8 }}
       {{- with .Values.dispatcher.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

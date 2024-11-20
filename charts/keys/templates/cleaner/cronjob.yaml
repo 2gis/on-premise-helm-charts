@@ -5,7 +5,6 @@ metadata:
   name: {{ include "keys.cleaner.name" . }}
   labels:
     {{- include "keys.cleaner.labels" . | nindent 4 }}
-
 spec:
   concurrencyPolicy: Forbid
   schedule: "{{ .Values.dispatcher.cleaner.cron.schedule }}"
@@ -34,14 +33,16 @@ spec:
                 {{- if .Values.customCAs.bundle }}
                 {{- include "keys.env.custom.ca.path" . | nindent 16 }}
                 {{- end }}
-              {{- if .Values.customCAs.bundle }}
               volumeMounts:
-                {{- include "keys.custom.ca.volumeMounts" . | nindent 16 }}
+              {{- if .Values.customCAs.bundle }}
+              {{- include "keys.custom.ca.volumeMounts" . | nindent 16 }}
               {{- end }}
-          {{- if .Values.customCAs.bundle }}
+              {{- include "keys.psql.volumeMount" . | nindent 16 }}
           volumes:
-            {{- include "keys.custom.ca.jobs.volumes" . | nindent 12 }}
+          {{- if .Values.customCAs.bundle }}
+          {{- include "keys.custom.ca.jobs.volumes" . | nindent 12 }}
           {{- end }}
+          {{- include "keys.psql.volume" . | nindent 12 }}
           {{- with .Values.dispatcher.cleaner.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
