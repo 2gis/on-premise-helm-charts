@@ -3,12 +3,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "bss-receiver-streams.name" . }}-headless
+  name: {{ include "stat-receiver-streams.name" . }}-headless
   labels:
-    {{- include "bss-receiver-streams.labels" . | nindent 4 }}
+    {{- include "stat-receiver-streams.labels" . | nindent 4 }}
 spec:
   type: ClusterIP
   clusterIP: None
   publishNotReadyAddresses: true
   selector:
-    {{- include "bss-receiver-streams.selectorLabels" . | nindent 4 }}
+    {{- include "stat-receiver-streams.selectorLabels" . | nindent 4 }}

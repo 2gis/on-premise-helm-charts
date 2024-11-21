@@ -18,7 +18,7 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 | ------------------------- | -------------------------------- | ------------------------------- |
 | `nodejs.image.repository` | Floors backend image repository. | `2gis-on-premise/floors-nodejs` |
 | `nodejs.image.pullPolicy` | Floors backend pull policy.      | `IfNotPresent`                  |
-| `nodejs.image.tag`        | Floors backend image tag.        | `1.0.4`                         |
+| `nodejs.image.tag`        | Floors backend image tag.        | `1.1.0`                         |
 | `nginx.image.repository`  | Floors nginx image repository.   | `2gis-on-premise/nginx`         |
 | `nginx.image.pullPolicy`  | Floors nginx pull policy.        | `IfNotPresent`                  |
 | `nginx.image.tag`         | Floors nginx image tag.          | `1.21.6`                        |
@@ -102,9 +102,16 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 | Name                               | Description                      | Value                             |
 | ---------------------------------- | -------------------------------- | --------------------------------- |
 | `import.image.repository`          | Import task image repository.    | `2gis-on-premise/floors-importer` |
-| `import.image.tag`                 | Import task image tag.           | `1.0.4`                           |
+| `import.image.tag`                 | Import task image tag.           | `1.1.0`                           |
 | `import.image.pullPolicy`          | Import task pull policy.         | `IfNotPresent`                    |
 | `import.resources.requests.cpu`    | A CPU request, e.g., `100m`.     |                                   |
 | `import.resources.requests.memory` | A memory request, e.g., `128Mi`. |                                   |
 | `import.resources.limits.cpu`      | A CPU limit, e.g., `100m`.       |                                   |
 | `import.resources.limits.memory`   | A memory limit, e.g., `128Mi`.   |                                   |
+
+### **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container.                                                                          | `""`  |

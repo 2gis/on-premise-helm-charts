@@ -145,10 +145,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 | Name                            | Description                                                                           | Value               |
 | ------------------------------- | ------------------------------------------------------------------------------------- | ------------------- |
-| `persistentVolume.enabled`      | If Kubernetes persistence volume should be enabled for ZooKeeper.                     | `false`             |
+| `persistentVolume.enabled`      | If Kubernetes persistence volume should be enabled for Castle.                        | `false`             |
 | `persistentVolume.accessModes`  | Volume access mode.                                                                   | `["ReadWriteOnce"]` |
 | `persistentVolume.storageClass` | Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/). | `ceph-csi-rbd`      |
 | `persistentVolume.size`         | Volume size.                                                                          | `5Gi`               |
+
+### customCAs **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"          | `""`  |
 
 
 ## Maintainers

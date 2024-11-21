@@ -28,6 +28,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | ------------------------ | --------------------------------------- | ------- |
 | `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.       | `""`    |
 | `dgctlStorage.secure`    | If S3 uses https.                       | `false` |
+| `dgctlStorage.region`    | S3 region.                              | `""`    |
 | `dgctlStorage.bucket`    | S3 bucket name.                         | `""`    |
 | `dgctlStorage.accessKey` | S3 access key for accessing the bucket. | `""`    |
 | `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. | `""`    |
@@ -53,7 +54,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | Name               | Description  | Value                     |
 | ------------------ | ------------ | ------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/license` |
-| `image.tag`        | Tag.         | `2.2.1`                   |
+| `image.tag`        | Tag.         | `2.2.3`                   |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`            |
 
 ### License service application settings
@@ -100,6 +101,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | ----------------------- | --------------------------------------- | ------- |
 | `persistence.host`      | S3 endpoint. Format: `host:port`.       | `""`    |
 | `persistence.secure`    | If S3 uses https.                       | `false` |
+| `persistence.region`    | S3 region.                              | `""`    |
 | `persistence.bucket`    | S3 bucket name.                         | `""`    |
 | `persistence.root`      | Root directory in S3 bucket.            | `""`    |
 | `persistence.accessKey` | S3 access key for accessing the bucket. | `""`    |

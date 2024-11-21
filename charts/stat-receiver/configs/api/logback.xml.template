@@ -14,7 +14,7 @@
 
   <logger name="org.http4s.blaze.channel" level="WARN" />
 
-  <root level="INFO">
+  <root level="{{ required "A valid .Values.logLevel entry required" .Values.logLevel }}">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>

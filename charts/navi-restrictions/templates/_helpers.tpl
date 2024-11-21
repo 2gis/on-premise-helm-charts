@@ -87,3 +87,12 @@ Check for deprecated values
 {{- if .Values.db -}}{{ fail "[after 1.20.2] .Values.db renamed to .Values.postgres" }}{{- end }}
 {{- end }} {{/* 1.20.2 */}}
 {{- end }}
+
+{{/*
+Set custom CAs mount path
+Usage:
+{{ include "custom.ca.mountPath" $ }}
+*/}}
+{{- define "custom.ca.mountPath" -}}
+{{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}

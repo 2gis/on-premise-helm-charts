@@ -27,6 +27,7 @@ spec:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
+        checksum/custom-ca: {{ include "floors.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -60,9 +61,19 @@ spec:
               value: "{{ .Values.dgctlStorage.region }}"
             - name: IMPORTER_S3_SECURE
               value: "{{ .Values.dgctlStorage.secure }}"
+            {{- if $.Values.customCAs.bundle }}
+            - name: IMPORTER_SSL_CERT_FILE
+              value: {{ include "floors.customCA.mountPath" $ }}/custom-ca.crt
+            {{- end }}
           volumeMounts:
             - name: {{ include "floors.fullname" $ }}-data
               mountPath: "/var/floorsConvertedData"
+            {{- if $.Values.customCAs.bundle }}
+            - name: custom-ca
+              mountPath: {{ include "floors.customCA.mountPath" $ }}/custom-ca.crt
+              subPath: custom-ca.crt
+              readOnly: true
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       containers:
@@ -146,6 +157,11 @@ spec:
                 path: servers.conf
         - name: {{ include "floors.fullname" $ }}-data
           emptyDir: {}
+          {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
+          configMap:
+            name: {{ include "floors.fullname" $ }}-custom-ca
+        {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}

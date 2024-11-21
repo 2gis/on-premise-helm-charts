@@ -39,6 +39,12 @@ podLabels: {}
 # @param proxy.cache.enabled If caching should be enabled for the proxy server.
 # @param proxy.cache.age Cache validity period.
 # @param proxy.cache.size Maximum cache size.
+# @param proxy.worker.processes Number of worker processes.
+# @param proxy.worker.connections Number of worker connections.
+# @param proxy.log.errorLog.level Error log level. Allowed values: `debug`, `info`, `notice`, `warn`, `error`, `crit`, `alert`, `emerg`.
+# @param proxy.log.accessLog Access log definition.
+# @param proxy.keepaliveTimeout Keepalive timeout.
+
 
 proxy:
   host: ''
@@ -49,6 +55,46 @@ proxy:
     enabled: true
     age: 1m
     size: 32m
+  worker:
+    processes: 2
+    connections: 1024
+  log:
+    # @param proxy.log.customFormats List of custom log formats to be used in NGINX configuration
+    customFormats: []
+    # - name: small
+    #   escape: json
+    #   format: |
+    #     '{"time_local":"$time_local",'
+    #     '"remote_addr":"$remote_addr",'
+    #     '"request":"$request",'
+    #     '"status":"$status",'
+    #     '"host":"$host"}'
+    errorLog:
+      level: error
+
+    accessLog: off
+    # accessLog: '/dev/stdout main'
+
+  keepaliveTimeout: 65
+
+  # @param proxy.locations List of additional location blocks to be included in the NGINX configuration
+  locations: []
+  # - path: /test/
+  #   definition: |
+  #     default_type text/html;
+  #     return 200 "<!DOCTYPE html><h2>test page</h2>\n";
+
+  # @param proxy.httpServers List of additional server blocks to be included in the NGINX configuration
+  httpServers: {}
+      # examplecfg: |
+      # server {
+      #   listen 0.0.0.0:8080;
+
+      #   location / {
+      #       default_type text/html;
+      #       return 200 "<!DOCTYPE html><h2>test page</h2>\n";
+      #   }
+      # }
 
 
 # @section Deployment settings

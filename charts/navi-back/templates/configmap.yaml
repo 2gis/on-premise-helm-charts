@@ -466,6 +466,28 @@ data:
           }
         },
         {{- end }}{{- /* .Values.naviback.indices.snImport.enabled */}}
+        {{- if .Values.naviback.indices.routeAsUsual.enabled }}
+        "route_as_usual": {
+          "update_period": 0,
+          "nodes": [
+            "{{ .Values.naviback.routeAsUsualUrl }}"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
+        {{- end }}{{- /* .Values.naviback.indices.routeAsUsual.enabled */}}
+        {{- if .Values.naviback.indices.walkingUserSpeeds.enabled }}
+        "walking_user_speeds": {
+          "update_period": 0,
+          "nodes": [
+            "{{ .Values.naviback.walkingUserSpeedsUrl }}"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
+        {{- end }}{{- /* .Values.naviback.indices.walkingUserSpeeds.enabled */}}
         {{- if .Values.naviback.indices.geoImport.enabled }}
         "geo_import": {
           "update_period": 0,
@@ -576,11 +598,12 @@ data:
         },
         {{- end }}{{- /* if .Values.naviback.rtr.enabled */}}
         {{- if .Values.naviback.hierarchies.enabled }}
+          {{- if (not .Values.naviback.hierarchies.skipShortcuts) }}
         "hierarchies": {
           "use_hierarchy": true,
-          {{- if (not .Values.naviback.hierarchies.skipPatches) }}
+            {{- if (not .Values.naviback.hierarchies.skipPatches) }}
           "patches_file_name": "{PATCHES_PATH}",
-          {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
+            {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
           "graphs_file_name": "{SHORTCUT_PATH}"
         },
         "hierarchy_shortcuts": {
@@ -592,7 +615,7 @@ data:
             "count": 600
           }
         },
-        {{- if (not .Values.naviback.hierarchies.skipPatches) }}
+          {{- if (not .Values.naviback.hierarchies.skipPatches) }}
         "hierarchy_patches": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
           "nodes": [
@@ -602,7 +625,8 @@ data:
             "count": 600
           }
         },
-        {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
+          {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
+        {{- end }}{{- /* (not .Values.naviback.hierarchies.skipShortcuts) */}}
         "sn_import": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
           "nodes": [
@@ -661,7 +685,8 @@ data:
           "dump_answer": {{ mustToJson (.Values.naviback.dump).answer }},
           "max_parallel_workers": 2,
           "use_memory_mapped_vfs": true,
-          "engine_update_period_sec": {{ include "config.setEngineUpdatePeriod" $ | default 30 }},
+          "clear_cache_threshold": {{ .Values.naviback.clearCacheThreshold | int }},
+          "engine_update_period_sec": {{ include "config.setEngineUpdatePeriod" $ | default .Values.naviback.engineUpdatePeriodSec }},
           {{- if .Values.naviback.server_id }}
           "server_id": "{{- include "tplvalues.render" ( dict "value" .Values.naviback.server_id "context" .) }}",
           {{- else }}

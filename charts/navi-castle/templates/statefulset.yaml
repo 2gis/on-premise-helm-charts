@@ -25,6 +25,9 @@ spec:
         checksum/configbuilder: {{ include (print $.Template.BasePath "/configmapbuilder.yaml") . | sha256sum }}
         checksum/configbuilder-runnable: {{ include (print $.Template.BasePath "/configmapbuilder-runnable.yaml") . | sha256sum }}
         checksum/confignginx: {{ include (print $.Template.BasePath "/configmapnginx.yaml") . | sha256sum }}
+        {{- if .Values.customCAs.bundle }}
+        checksum/custom-ca: {{ (include (print $.Template.BasePath "/configmap-ca.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- end }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -34,6 +37,10 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: {{ include "castle.fullname" . }}-builder-config
           configMap:
@@ -45,6 +52,11 @@ spec:
         - name: {{ include "castle.fullname" . }}-castle-nginx-config
           configMap:
             name: {{ include "castle.fullname" . }}-castle-nginx-config
+        {{- if .Values.customCAs.bundle }}
+        - name: {{ include "castle.fullname" $ }}-ca
+          configMap:
+            name: {{ include "castle.fullname" $ }}-ca
+        {{- end }}
         {{- if (not .Values.persistentVolume.enabled) }}
         - name: {{ include "castle.fullname" . }}-data
           emptyDir: {}
@@ -53,6 +65,11 @@ spec:
       containers:
         - name: castle-nginx
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}
+          imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
@@ -80,9 +97,19 @@ spec:
             failureThreshold: 2
         - name: castle-cron
           image: {{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}
+          imagePullPolicy: {{ .Values.castle.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           command: ["/tini","--"]
           args:
           - /opt/update_services_init.sh
+          env:
+          {{- if .Values.customCAs.bundle }}
+          - name: SSL_CERT_FILE
+            value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+          {{- end }}
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
           startupProbe:
@@ -116,6 +143,11 @@ spec:
           - name: {{ include "castle.fullname" $ }}-builder-config
             mountPath: /opt/update_services
             subPath: update_services
+          {{- if .Values.customCAs.bundle }}
+          - name: {{ include "castle.fullname" $ }}-ca
+            mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+            subPath: custom-ca.crt
+          {{- end }}
           {{- if .Values.persistentVolume.enabled }}
           - name: {{ include "castle.fullname" . }}-pvc
             mountPath: {{ .Values.castle.castleDataPath }}

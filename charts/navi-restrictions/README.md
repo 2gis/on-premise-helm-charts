@@ -174,6 +174,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `cron.resources.limits.cpu`      | A CPU limit                     | `1000m`  |
 | `cron.resources.limits.memory`   | A memory limit                  | `1024Mi` |
 
+### customCAs **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"          | `""`  |
+
 
 ## Maintainers
 

@@ -9,7 +9,13 @@
                 { "$ref": "#/definitions/ip_or_host" }
             ]
         },
-        "initializeTopics": { "type": "boolean" },
+        "initializeTopics": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "enabled": { "type": "boolean" }
+            }
+        },
         "topicsPrefix":     { "type": "string" },
         "api": {
             "type": "object",

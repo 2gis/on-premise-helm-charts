@@ -12,7 +12,7 @@
     </encoder>
   </appender>
 
-  <root level="INFO">
+  <root level="{{ required "A valid .Values.logLevel entry required" .Values.logLevel }}">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>
