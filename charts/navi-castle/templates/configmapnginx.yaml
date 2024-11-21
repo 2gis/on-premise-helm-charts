@@ -7,6 +7,10 @@ data:
     server {
         listen {{ .Values.nginx.port }} default_server;
         server_name _;
+        {{- if .Values.nginx.nodeHeader }}
+        # Show server hostname
+        add_header X-Node $hostname;
+        {{- end }}
 
         location / {
             root {{ .Values.castle.castleDataPath }};

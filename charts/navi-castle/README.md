@@ -32,7 +32,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | ------------------------- | ------------------------------------- | ----------------------------- |
 | `castle.image.repository` | Navi-Castle service image repository. | `2gis-on-premise/navi-castle` |
 | `castle.image.pullPolicy` | Navi-Castle service pull policy.      | `IfNotPresent`                |
-| `castle.image.tag`        | Navi-Castle service image tag.        | `1.9.2`                       |
+| `castle.image.tag`        | Navi-Castle service image tag.        | `1.9.5`                       |
 | `nginx.image.repository`  | Navi-Front image repository.          | `2gis-on-premise/navi-front`  |
 | `nginx.image.tag`         | Navi-Front image tag.                 | `1.25.2`                      |
 
@@ -103,22 +103,30 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Castle service settings
 
-| Name                                   | Description                                         | Value                          |
-| -------------------------------------- | --------------------------------------------------- | ------------------------------ |
-| `castle.castleDataPath`                | Path to the data directory.                         | `/opt/castle/data/`            |
-| `castle.restrictions`                  | Section ignored if castle.restriction.enabled=false |                                |
-| `castle.restrictions.host`             | Restrictions API base URL.                          | `http://restrictions-api.host` |
-| `castle.restrictions.key`              | Restrictions API key.                               | `""`                           |
-| `castle.jobs`                          | Number of parallel downloading jobs.                | `1`                            |
-| `castle.startupProbe`                  | Settings for startup probes                         |                                |
-| `castle.startupProbe.periodSeconds`    | Check period for startup probes.                    | `5`                            |
-| `castle.startupProbe.failureThreshold` | Threshold for startup probes.                       | `180`                          |
+| Name                                   | Description                                                                                                                                                            | Value                          |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `castle.castleDataPath`                | Path to the data directory.                                                                                                                                            | `/opt/castle/data/`            |
+| `castle.excludeProjects`               | Array of project labels to exclude                                                                                                                                     | `[]`                           |
+| `castle.restrictions`                  | Section ignored if castle.restriction.enabled=false                                                                                                                    |                                |
+| `castle.restrictions.host`             | Restrictions API base URL.                                                                                                                                             | `http://restrictions-api.host` |
+| `castle.restrictions.key`              | Restrictions API key.                                                                                                                                                  | `""`                           |
+| `castle.jobs`                          | Number of parallel downloading jobs.                                                                                                                                   | `1`                            |
+| `castle.logLevel`                      | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                                                          | `INFO`                         |
+| `castle.startupProbe`                  | Settings for startup probes                                                                                                                                            |                                |
+| `castle.startupProbe.periodSeconds`    | Check period for startup probes.                                                                                                                                       | `5`                            |
+| `castle.startupProbe.failureThreshold` | Threshold for startup probes.                                                                                                                                          | `180`                          |
+| `castle.storePeriod`                   | Retention period for the corresponding data if enabled, ref. `cron`, `init` and `rtr` sections. Supported values: `day`, `month`, `week` or a specific number of days. |                                |
+| `castle.storePeriod.import`            | Retention period for `import` job data, ref. `cron/init.enabled.import`                                                                                                | `month`                        |
+| `castle.storePeriod.restriction`       | Retention period for `restriction` job data, ref. `cron/init.enabled.restriction`                                                                                      | `week`                         |
+| `castle.storePeriod.restrictionImport` | Retention period for `restrictionImport` job data, ref. `cron/init.enabled.restrictionImport`                                                                          | `week`                         |
+| `castle.storePeriod.rtr`               | Retention period for `rtr` data, ref. `rtr.enabled`                                                                                                                    | `week`                         |
 
 ### Navi-Front settings
 
-| Name         | Description                                      | Value  |
-| ------------ | ------------------------------------------------ | ------ |
-| `nginx.port` | HTTP port on which Navi-Front will be listening. | `8080` |
+| Name               | Description                                      | Value   |
+| ------------------ | ------------------------------------------------ | ------- |
+| `nginx.port`       | HTTP port on which Navi-Front will be listening. | `8080`  |
+| `nginx.nodeHeader` | Enable header with node name (X-Node).           | `false` |
 
 ### Cron settings
 
@@ -150,6 +158,32 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `persistentVolume.accessModes`  | Volume access mode.                                                                   | `["ReadWriteOnce"]` |
 | `persistentVolume.storageClass` | Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/). | `ceph-csi-rbd`      |
 | `persistentVolume.size`         | Volume size.                                                                          | `5Gi`               |
+| `persistentVolume.type`         | Volume type `pvc` or `ephemeral`.                                                     | `pvc`               |
+
+### RTR settings. Leave with defaults, FOR FUTURE RELEASE.
+
+| Name                            | Description                                                                                                                   | Value                                           |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `rtr.enabled`                   | If the RTR is enabled.                                                                                                        | `false`                                         |
+| `rtr.http.baseDir`              | Base dir on server.                                                                                                           | `export-restrictions-json`                      |
+| `rtr.http.serverUrl`            | Server URL.                                                                                                                   | `http://server`                                 |
+| `rtr.kafka.topic`               | Name of the topic.                                                                                                            | `rtr.topic`                                     |
+| `rtr.kafka.groupId`             | Kafka consumer group id.                                                                                                      | `castle-rtr`                                    |
+| `rtr.kafka.properties`          | Properties as supported by kafka-python. Refer to inline comments for details.                                                |                                                 |
+| `rtr.kafka.sensitiveProperties` | As rtr.kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                                            |
+| `rtr.kafka.fileProperties`      | As rtr.kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                                            |
+| `rtr.buildFtp.baseDir`          | Base dir on build ftp.                                                                                                        | `trafficedro`                                   |
+| `rtr.buildFtp.login`            | Login on build ftp.                                                                                                           | `login`                                         |
+| `rtr.buildFtp.password`         | Password on build ftp.                                                                                                        | `password`                                      |
+| `rtr.buildFtp.serverUrl`        | URL build ftp.                                                                                                                | `http://buildftp/`                              |
+| `rtr.prometheus.baseDir`        | Base dir on premtheus.                                                                                                        | `api/private/Export/segmentGrid/freezeVersions` |
+| `rtr.prometheus.serverUrl`      | URL premtheus.                                                                                                                | `http://prometheus/`                            |
+| `rtr.puzzle.baseDir`            | Base dir on puzzle.                                                                                                           | `api/segments-to-download?version=%version%`    |
+| `rtr.puzzle.serverUrl`          | URL puzzle.                                                                                                                   | `http://puzzle/`                                |
+| `rtr.puzzleSegments.baseDir`    | Base dir on puzzle segments.                                                                                                  | `api/segments/%code%?version=%version%`         |
+| `rtr.puzzleSegments.serverUrl`  | URL puzzle segments.                                                                                                          | `http://puzzle/`                                |
+| `rtr.webapi.baseDir`            | Base dir on webapi.                                                                                                           | `/2.0/region/list?fields=*&type=segment,region` |
+| `rtr.webapi.serverUrl`          | URL webapi.                                                                                                                   | `http://catalog/`                               |
 
 ### customCAs **Custom Certificate Authority**
 
