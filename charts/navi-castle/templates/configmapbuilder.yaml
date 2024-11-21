@@ -9,18 +9,17 @@ data:
     lock_file_location:'/var/run/2gis/%service%.lock'
     service_name: 'castle'
     # LOGGING
-    log_level: 'DEBUG'
-    log_location:'/var/log/castle-%service%.log'
+    log_level: '{{ .Values.castle.logLevel }}'
     # PATHS AND FILE PROPERTIES
     # path to store city data
-    data_destination_dir: {{ .Values.castle.castleDataPath | quote }}
+    data_destination_dir: {{ .Values.castle.castleDataPath | squote }}
     # --------------------------------------------
     # CONFIGURATION BUILDER ONLY
     # BUILDING CITY CONFIGURATION FROM TEMPLATE
     # path to conf files and templates
     work_dir: '{{ .Values.castle.castleDataPath }}'
     # path to store temporary configs
-    tmp_dir: '/opt/castle/tmp/'
+    tmp_dir: '{{ .Values.castle.castleDataPath }}/tmp/'
     templates:
     {
         # template file name in work_dir: 'full path to result destination'
@@ -33,14 +32,14 @@ data:
     # UPDATING CITY DATA
     s3:
     {
-    server: '{{ .Values.dgctlStorage.secure | ternary "https" "http" }}://{{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}',
-    {{- if .Values.dgctlStorage.region }}
-    region: '{{ .Values.dgctlStorage.region }}',
-    {{- end }}
-    bucket: '{{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}',
-    login: '{{ required "Valid .Values.dgctlStorage.accessKey required!" .Values.dgctlStorage.accessKey }}',
-    pwd: '{{ required "Valid .Values.dgctlStorage.secretKey required!" .Values.dgctlStorage.secretKey }}',
-    header: 'Last-Modified',
+        server: '{{ .Values.dgctlStorage.secure | ternary "https" "http" }}://{{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}',
+        {{- if .Values.dgctlStorage.region }}
+        region: '{{ .Values.dgctlStorage.region }}',
+        {{- end }}
+        bucket: '{{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}',
+        login: '{{ required "Valid .Values.dgctlStorage.accessKey required!" .Values.dgctlStorage.accessKey }}',
+        pwd: '{{ required "Valid .Values.dgctlStorage.secretKey required!" .Values.dgctlStorage.secretKey }}',
+        header: 'Last-Modified',
     }
     manifest:
     {
@@ -80,7 +79,7 @@ data:
             timeout: 5  #sec
         },
 
-        store_period: 'week'
+        store_period: {{ .Values.castle.storePeriod.restriction | squote }}
     }
     {{- end }}{{- /* or .Values.cron.enabled.restriction .Values.init.enabled.restriction */}}
 
@@ -97,7 +96,7 @@ data:
         meta: '%project%.json'
         content: '%project%-restriction.json',
         item: 'restriction',
-        store_period: 'week'
+        store_period: {{ .Values.castle.storePeriod.restrictionImport | squote }}
     }
     {{- end }}{{- /* or .Values.cron.enabled.restrictionImport .Values.init.enabled.restrictionImport */}}
 
@@ -113,9 +112,138 @@ data:
         meta: '%project%.json',
         content: '%project%.2gis',
         item: 'package',
-        store_period: 'month'
+        store_period: {{ .Values.castle.storePeriod.import | squote }}
     }
     {{- end }}{{- /* or .Values.cron.enabled.import .Values.init.enabled.import */}}
+  {{- if .Values.rtr.enabled }}
+  config_builder_rtr.conf: |-
+    # --------------------------------------------
+    # COMMON CONFIGURATION
+    lock_file_location:'/var/run/2gis/%service%.lock'
+    service_name: 'castle'
+    # LOGGING
+    log_level: '{{ .Values.castle.logLevel }}'
+    # PATHS AND FILE PROPERTIES
+    # path to store city data
+    data_destination_dir: {{ .Values.castle.castleDataPath | squote }}
+    # --------------------------------------------
+    # CONFIGURATION BUILDER ONLY
+    # BUILDING CITY CONFIGURATION FROM TEMPLATE
+    # path to conf files and templates
+    work_dir: '{{ .Values.castle.castleDataPath }}'
+    # path to store temporary configs
+    tmp_dir: '{{ .Values.castle.castleDataPath }}/tmp/'
+    templates:
+    {
+        # template file name in work_dir: 'full path to result destination'
+        'cities_template': '{{ .Values.castle.castleDataPath }}/cities.conf'
+    }
+    cities_file: 'cities.conf'
+    cities_zip_file: 'cities.conf.zip'
+    index_file: 'index.json'
+    index_zip_file: 'index.json.zip'
+    restriction_index_file: 'restrictions_index.json'
+    restriction_index_zip_file: 'restrictions_index.json.zip'
+    http:
+    {
+        server: '{{ .Values.rtr.buildFtp.serverUrl }}',
+        base_dir: '{{ .Values.rtr.buildFtp.baseDir }}/',
+        login: '{{ .Values.rtr.buildFtp.login }}',
+        pwd: 'from-env',
+        header: 'Last-Modified',
+        timeout: 30  #sec
+    }
+
+    webapi:
+    {
+        server: '{{ .Values.rtr.webapi.serverUrl }}',
+        base_dir: '{{ .Values.rtr.webapi.baseDir }}',
+        local_name: 'webapi',
+        header: 'Date',
+        timeout: 10  #sec
+    }
+
+    # --------------------------------------------
+    # Puzzle list
+    puzzle:
+    {
+        server: '{{ .Values.rtr.puzzle.serverUrl }}',
+        base_dir: '{{ .Values.rtr.puzzle.baseDir }}',
+        local_name: 'puzzle_geometry',
+        timeout: 10  #sec
+    }
+
+    # --------------------------------------------
+    # Puzzle segments
+    puzzle_segments:
+    {
+        server: '{{ .Values.rtr.puzzleSegments.serverUrl }}',
+        base_dir: '{{ .Values.rtr.puzzleSegments.baseDir }}',
+        local_name: 'puzzle_segments.%version%',
+        timeout: 10  #sec
+    }
+
+    # --------------------------------------------
+    # Prometheus list
+    prometheus:
+    {
+        server: '{{ .Values.rtr.prometheus.serverUrl }}',
+        base_dir: '{{ .Values.rtr.prometheus.baseDir }}',
+        timeout: 10  #sec
+    }
+
+    restriction_json:
+    {
+        remote_name: 'restrictions-temp-%project%.json',
+        remote_dir: '',
+
+        local_name: '%project%-restriction.json',
+        local_dir: 'restrictions/%project%',
+
+        post_processing: RestrictionFilter
+
+        http:
+        {
+            server: '{{ .Values.rtr.http.serverUrl }}',
+            base_dir: '{{ .Values.rtr.http.baseDir }}/',
+            header: 'Last-Modified',
+            timeout: 20 #sec
+        },
+        kafka:
+        {
+            probe_path: '/var/run/2gis/castle_connect_kafka.lock',
+            topic: '{{ .Values.rtr.kafka.topic }}',
+            seek_to_begin: True,
+            handler: RestrictionJsonLoader,
+            config:
+            {
+                group_id: 'from-env',
+            {{- /* app required config options for override env variables */}}
+            {{- range $kafkaRole, $overridesProperty := (dict
+                  "CONSUMER" "consumerOverrides"
+                ) -}}
+            {{- $overrides := dict }}
+            {{- /* if override property key exists in values */}}
+            {{- if (hasKey $.Values.rtr.kafka $overridesProperty) }}
+              {{- $overrides = $overridesProperty | get ($overridesProperty | get $.Values.kafka.rtr)}}
+            {{- end }}
+            {{- include "castle.kafkaPropertiesConfig" (dict
+                  "kafka" $.Values.rtr.kafka
+                  "overrides" $overrides
+                  "secretname" (print
+                      (include "castle.fullname" $)
+                      "-"
+                      (lower $kafkaRole)
+                    )
+                  "mountpoint" (print "/etc/2gis/secret/" (lower $kafkaRole))
+                ) | nindent 16}}
+            {{- end }}{{- /* range */}}
+            }
+        },
+        store_period: {{ .Values.castle.storePeriod.rtr | squote }}
+    }
+  {{ end }}{{- /* .Values.rtr.enabled */}}
+
 
   cities_template: |-
     [
