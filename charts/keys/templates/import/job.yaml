@@ -17,6 +17,10 @@ spec:
         {{- include "keys.import.labels" . | nindent 8 }}
     spec:
       restartPolicy: Never
+      {{- with include "keys.psql.initTLS" . }}
+      initContainers:
+      {{- . | nindent 8 }}
+      {{- end }}
       containers:
         - name: migrate
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}

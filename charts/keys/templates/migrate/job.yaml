@@ -17,14 +17,15 @@ spec:
         {{- include "keys.migrate.labels" . | nindent 8 }}
     spec:
       restartPolicy: Never
-      {{- if .Values.migrate.initialDelaySeconds }}
       initContainers:
+      {{- if .Values.migrate.initialDelaySeconds }}
         - name: delay
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           command: [ "sh", "-c", "sleep {{ .Values.migrate.initialDelaySeconds }}" ]
           resources:
             {{- toYaml .Values.migrate.resources | nindent 12 }}
       {{- end }}
+      {{- include "keys.psql.initTLS" . | nindent 8 }}
       containers:
         - name: migrate
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}

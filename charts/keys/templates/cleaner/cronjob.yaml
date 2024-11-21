@@ -19,6 +19,10 @@ spec:
             {{- include "keys.cleaner.labels" . | nindent 12 }}
         spec:
           restartPolicy: Never
+          {{- with include "keys.psql.initTLS" . }}
+          initContainers:
+          {{- . | nindent 12 }}
+          {{- end }}
           containers:
             - name: clean
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
