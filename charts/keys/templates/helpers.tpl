@@ -18,6 +18,10 @@
 {{ include "keys.name" . }}-cleaner
 {{- end }}
 
+{{- define "keys.counter.name" -}}
+{{ include "keys.name" . }}-counter
+{{- end }}
+
 {{- define "keys.migrate.name" -}}
 {{ include "keys.name" . }}-migrate
 {{- end }}
@@ -117,6 +121,16 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.cleaner.labels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-cleaner
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "keys.counter.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}-counter
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "keys.counter.labels" -}}
+{{ include "keys.counter.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
@@ -322,6 +336,56 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.admin.badge.titleColor }}"
 - name: BADGE_BACKGROUND_COLOR
   value: "{{ .Values.admin.badge.backgroundColor }}"
+{{- end }}
+
+{{- define "keys.env.counter" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.counter.logLevel }}"
+- name: KEYS_COUNTER_BUFFER_SIZE
+  value: "{{ .Values.counter.buffer.size }}"
+- name: KEYS_COUNTER_BUFFER_DELAY
+  value: "{{ .Values.counter.buffer.delay }}"
+- name: KEYS_COUNTER_PRELOADER_REFRESH_TICK
+  value: "{{ .Values.counter.preloader.refreshTick }}"
+- name: KEYS_COUNTER_UPDATE_STATUS_QUERY_TIMEOUT
+  value: "{{ .Values.counter.updateStatusQueryTimeout }}"
+- name: KEYS_KAFKA_MAIN_BROKERS
+  value: "{{ required "A valid .Values.kafka.bootstrapServers entry required" .Values.kafka.bootstrapServers }}"
+- name: KEYS_KAFKA_MAIN_GROUP_ID
+  value: "{{ required "A valid .Values.kafka.stats.groupId entry required" .Values.kafka.stats.groupId }}"
+- name: KEYS_KAFKA_MAIN_CLIENT_ID
+  value: "{{ .Values.kafka.stats.clientId }}"
+- name: KEYS_KAFKA_MAIN_STATS_TOPIC
+  value: "{{ required "A valid .Values.kafka.stats.topic entry required" .Values.kafka.stats.topic }}"
+- name: KEYS_KAFKA_MAIN_USERNAME
+  value: "{{ .Values.kafka.username }}"
+{{- if .Values.kafka.password }}
+- name: KEYS_KAFKA_MAIN_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.kafka.name" . }}
+      key: password
+{{- end }}
+- name: KEYS_REDIS_RETRIES
+  value: "{{ .Values.counter.redis.retries }}"
+- name: KEYS_REDIS_MIN_RETRY_BACKOFF
+  value: "{{ .Values.counter.redis.minRetryBackoff }}"
+- name: KEYS_REDIS_MAX_RETRY_BACKOFF
+  value: "{{ .Values.counter.redis.maxRetryBackoff }}"
+- name: KEYS_KAFKA_MAIN_SECURITY_PROTOCOL
+  value: "{{ .Values.kafka.securityProtocol }}"
+- name: KEYS_KAFKA_MAIN_SASL_MECHANISM
+  value: "{{ .Values.kafka.saslMechanism }}"
+{{- if (include "kafka.ssl.enabled" .) }}
+- name: KEYS_KAFKA_MAIN_TLS_SKIP_SERVER_CERTIFICATE_VERIFY
+  value: "{{ .Values.kafka.tls.skipServerCertificateVerify }}"
+- name: KEYS_KAFKA_MAIN_TLS_CLIENT_CERTIFICATE_PATH
+  value: "/etc/2gis/secret/kafka/client.crt"
+- name: KEYS_KAFKA_MAIN_TLS_CLIENT_KEY_PATH
+  value: "/etc/2gis/secret/kafka/client.key"
+- name: KEYS_KAFKA_MAIN_TLS_CA_CERT_PATH
+  value: "/etc/2gis/secret/kafka/ca.crt"
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.predef" -}}
