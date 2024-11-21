@@ -196,6 +196,33 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `dispatcher.cleaner.cron.failedJobsHistoryLimit`     | Specifies the number of failed finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).                               | `3`             |
 | `dispatcher.cleaner.cron.suspend`                    | You can suspend execution of Jobs for a CronJob, by setting the field to true. See [schedule suspension](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension).      | `false`         |
 | `dispatcher.cleaner.nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
+| `counter.enabled`                                    | Counter worker is enabled.                                                                                                                                                                               | `false`         |
+| `counter.replicas`                                   | A replica count for the pod.                                                                                                                                                                             | `1`             |
+| `counter.resources.requests.cpu`                     | A CPU request.                                                                                                                                                                                           | `20m`           |
+| `counter.resources.requests.memory`                  | A memory request.                                                                                                                                                                                        | `32Mi`          |
+| `counter.resources.limits.cpu`                       | A CPU limit.                                                                                                                                                                                             | `1000m`         |
+| `counter.resources.limits.memory`                    | A memory limit.                                                                                                                                                                                          | `512Mi`         |
+| `counter.logLevel`                                   | Log level for the worker. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                 | `warning`       |
+| `counter.preloader.refreshTick`                      | Refresh interval for in-memory cache with keys limitations info. The smaller the interval, the faster the worker will know about changes in limitations.                                                 | `1m`            |
+| `counter.updateStatusQueryTimeout`                   | Timeout for database queries to update key status.                                                                                                                                                       | `1s`            |
+| `counter.buffer`                                     | **Settings for in-memory buffer for statistics data.**                                                                                                                                                   |                 |
+| `counter.buffer.size`                                | The maximum size of the buffer. When the limit is reached, the data from the buffer is transferred to Redis.                                                                                             | `1000`          |
+| `counter.buffer.delay`                               | The maximum interval between data transfer operations from the buffer to Redis.                                                                                                                          | `1s`            |
+
+### Redis settings
+
+| Name                            | Description                                                                                                                 | Value   |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `counter.redis.retries`         |                                                                                                                             | `5`     |
+| `counter.redis.minRetryBackoff` |                                                                                                                             | `100ms` |
+| `counter.redis.maxRetryBackoff` |                                                                                                                             | `3s`    |
+| `counter.annotations`           | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`    |
+| `counter.labels`                | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`    |
+| `counter.podAnnotations`        | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`    |
+| `counter.podLabels`             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`    |
+| `counter.nodeSelector`          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`    |
+| `counter.affinity`              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`    |
+| `counter.tolerations`           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`    |
 
 ### Redis settings
 
@@ -248,6 +275,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `kafka.tls.serverCA`                    | Server's root certificate.                                                                                                                                 | `""`        |
 | `kafka.tls.clientCert`                  | Client certificate.                                                                                                                                        | `""`        |
 | `kafka.tls.clientKey`                   | Client key.                                                                                                                                                | `""`        |
+| `kafka.stats`                           | **Settings for consuming key's usage statistics messages.**                                                                                                |             |
+| `kafka.stats.topic`                     | Topic to consume stat messages from. **Required**                                                                                                          | `""`        |
+| `kafka.stats.groupId`                   | Name of the consumer group to use. **Required**                                                                                                            | `""`        |
+| `kafka.stats.clientId`                  | Client id. If empty hostname will be used.                                                                                                                 | `""`        |
 | `kafka.audit`                           | **Settings for sending audit messages.**                                                                                                                   |             |
 | `kafka.audit.topic`                     | Topic to produce audit messages. **Required**                                                                                                              | `""`        |
 | `kafka.audit.produce.retryCount`        | Number of retries to produce a message.                                                                                                                    | `5`         |

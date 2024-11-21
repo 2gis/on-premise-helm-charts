@@ -467,6 +467,81 @@ dispatcher:
     nodeSelector: {}
 
 
+counter:
+
+  # @param counter.enabled Counter worker is enabled.
+
+  enabled: false
+
+  # @param counter.replicas A replica count for the pod.
+
+  replicas: 1
+
+  # @param counter.resources.requests.cpu A CPU request.
+  # @param counter.resources.requests.memory A memory request.
+  # @param counter.resources.limits.cpu A CPU limit.
+  # @param counter.resources.limits.memory A memory limit.
+
+  resources:
+    requests:
+      cpu: 20m
+      memory: 32Mi
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+
+  # @param counter.logLevel Log level for the worker. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
+
+  # @param counter.preloader.refreshTick Refresh interval for in-memory cache with keys limitations info. The smaller the interval, the faster the worker will know about changes in limitations.
+
+  preloader:
+    refreshTick: 1m
+
+  # @param counter.updateStatusQueryTimeout Timeout for database queries to update key status.
+
+  updateStatusQueryTimeout: 1s
+
+  # @extra counter.buffer **Settings for in-memory buffer for statistics data.**
+
+  # @param counter.buffer.size The maximum size of the buffer. When the limit is reached, the data from the buffer is transferred to Redis.
+  # @param counter.buffer.delay The maximum interval between data transfer operations from the buffer to Redis.
+
+  buffer:
+    size: 1000
+    delay: 1s
+
+  # @section Redis settings
+
+  # @param counter.redis.retries
+  # @param counter.redis.minRetryBackoff
+  # @param counter.redis.maxRetryBackoff
+
+  redis:
+    retries: 5
+    minRetryBackoff: 100ms
+    maxRetryBackoff: 3s
+
+  # @param counter.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param counter.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  annotations: {}
+  labels: {}
+
+  # @param counter.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param counter.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  podAnnotations: {}
+  podLabels: {}
+
+  # @param counter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param counter.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param counter.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
 # @section Redis settings
 
 redis:
@@ -564,6 +639,17 @@ kafka:
     serverCA: ''
     clientCert: ''
     clientKey: ''
+
+  # @extra kafka.stats **Settings for consuming key's usage statistics messages.**
+
+  # @param kafka.stats.topic Topic to consume stat messages from. **Required**
+  # @param kafka.stats.groupId Name of the consumer group to use. **Required**
+  # @param kafka.stats.clientId Client id. If empty hostname will be used.
+
+  stats:
+    topic: ''
+    groupId: ''
+    clientId: ''
 
   # @extra kafka.audit **Settings for sending audit messages.**
 
