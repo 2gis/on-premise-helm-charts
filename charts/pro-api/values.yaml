@@ -1,5 +1,4 @@
-﻿
-# @section Geo API configuration & settings
+﻿# @section Geo API configuration & settings
 
 api:
 
@@ -271,7 +270,7 @@ permissions:
 tasks:
 
   image:
-    repository: 2gis-on-premise/urbi-geo-tasks-api
+    repository: 2gis-on-premise/pro-tasks-api
     tag: 1.50.0
     pullPolicy: IfNotPresent
 
