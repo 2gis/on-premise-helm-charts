@@ -3,6 +3,9 @@
 ## [1.31.0]
 
 ### pro-api
+- DB_CONNECTION_STRING renamed to Postgres__ConnectionString
+- DB_CONNECTION_STRING_READONLY renamed to Postgres__ConnectionStringReadonly
+- DB_CONNECTION_PWD renamed to Postgres__Password
 - pro-api: removed management TCP port 8090; liveness and readiness probes use TCP port 8080
 - permissions-api: removed management TCP port 8091; liveness and readiness probes use TCP port 8081
 
