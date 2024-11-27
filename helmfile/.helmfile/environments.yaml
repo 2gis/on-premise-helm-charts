@@ -1,0 +1,14 @@
+templates:
+  .default: &default
+    missingFileHandler: Info
+    values:
+      # Apps
+      - apps/*.*
+      # Env
+      - envs/{{ .Environment.Name }}/*.*
+      # Values
+      - envs/{{ .Environment.Name }}/values/*.*
+
+environments:
+  example/prod:
+    <<: *default

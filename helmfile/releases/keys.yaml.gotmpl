@@ -1,0 +1,55 @@
+dgctlDockerRegistry: {{ .Values.global.dgctlDockerRegistry }}
+
+{{ $IsIngressEnabled :=  .Values.apps.keys | get "api.ingress.enabled" false -}}
+{{- $ingressData := dict "name" "keys-api" "Values" $.Values "isEnabled" $IsIngressEnabled -}}
+
+api: 
+  ingress:
+  {{- include "ingress" $ingressData | nindent 4 }}
+
+{{ $IsIngressEnabled :=  .Values.apps.keys | get "admin.ingress.enabled" false -}}
+{{- $ingressData := dict "name" "keys-admin" "Values" $.Values "isEnabled" $IsIngressEnabled -}}
+
+api: 
+  ingress:
+  {{- include "ingress" $ingressData | nindent 4 }}
+
+
+postgres:
+  ro:
+    host: '!!!'
+    port: 5432
+    timeout: 3s
+    name: '!!!'
+    schema: '!!!'
+    username: '!!!'
+    password: '!!!'
+
+  rw:
+    host: '!!!'
+    port: 5432
+    timeout: 3s
+    name: '!!!'
+    schema: '!!!'
+    username: '!!!'
+    password: '!!!'
+
+kafka:
+  audit:
+    bootstrapServers: '!!!'
+    username: '!!!'
+    password: '!!!'
+    topic: '!!!'
+    produce:
+      retryCount: 5
+      idempotentWrite: true
+
+dgctlStorage:
+  host: {{ .Values.global.s3Storage.host }}
+  secure: {{ .Values.global.s3Storage.secure }}
+  region: {{ .Values.global.s3Storage.region }}
+  bucket: {{ .Values.global.dgctlStorage.bucket }}
+  accessKey: {{ .Values.global.s3Storage.accessKey }}
+  secretKey: {{ .Values.global.s3Storage.secretKey }}
+  manifest: '!!!'
+  verifySsl: true
