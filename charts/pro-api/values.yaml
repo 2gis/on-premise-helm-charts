@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 1.50.0
+    tag: 1.50.1
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -182,7 +182,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 1.50.0
+    tag: 1.50.1
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -271,7 +271,7 @@ tasks:
 
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 1.50.0
+    tag: 1.50.1
     pullPolicy: IfNotPresent
 
   ingress:
@@ -369,7 +369,7 @@ tasks:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 1.50.0
+  tag: 1.50.1
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -401,7 +401,7 @@ assetImporter:
 assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
-  tag: 1.50.0
+  tag: 1.50.1
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
