@@ -15,11 +15,21 @@ metadata:
 spec:
   type: {{ (.Values.service).type | default "ClusterIP" | quote }}
   clusterIP: {{ (.Values.service).clusterIP | default "" | quote }}
+  {{- if contains "NodePort" (.Values.service).type }}
+  externalTrafficPolicy: Cluster
+  {{- end }}
   ports:
     - port: {{ (.Values.service).port | default 80 | int }}
       targetPort: http
       protocol: TCP
       name: http
+      {{- if .Values.service.nodePort }}
+        {{- if contains "NodePort" .Values.service.type }}
+      nodePort: {{ .Values.service.nodePort }}
+        {{- else }}
+          {{ printf "For nodePort need set `service.type` to `NodePort`" | fail }}
+        {{- end }}
+      {{- end }}
   selector:
     {{- include "generic-chart.selectorLabels" . | nindent 4 }}
 {{- end }} {{- /* define */}}
