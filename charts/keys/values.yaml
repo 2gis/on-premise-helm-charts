@@ -518,7 +518,7 @@ postgres:
     username: ''
     password: ''
     tls:
-      mode: require
+      mode: disabled
       serverCA: ''
       clientCert: ''
       clientKey: ''
@@ -546,7 +546,7 @@ postgres:
     username: ''
     password: ''
     tls:
-      mode: require
+      mode: disabled
       serverCA: ''
       clientCert: ''
       clientKey: ''
