@@ -1,4 +1,4 @@
-# @section Geo API configuration & settings
+﻿# @section Geo API configuration & settings
 
 api:
 
@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 1.41.0
+    tag: 1.50.1
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -28,8 +28,6 @@ api:
       - path: /
         pathType: Prefix
     tls: []
-    # - hosts:
-    #   - pro-api.example.com
     #   secretName: secret.tls
 
   # @param api.pod.replicaCount A replica count for the pod.
@@ -139,7 +137,7 @@ api:
   # @param api.settings.auth.shareKeys Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`
   # @param api.settings.backgroundJobs.enableUserAssetsImporter If user data importer job is enabled for the service.
   # @param api.settings.backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
-  # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount If layer contains more points, isochrone is not avalible
+  # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount If layer contains more points, isochrone is not avalible.
   settings:
     licenseKey: ''
     tempPath: /tmp
@@ -184,7 +182,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 1.41.0
+    tag: 1.50.1
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -253,7 +251,7 @@ permissions:
     port: 80
 
   # @skip permissions.settings.host
-  # @param permissions.settings.enabled Set to `true` if authorization is used
+  # @param permissions.settings.enabled If permissionsApi is enabled for the service.
   # @skip permissions.settings.localCache.enabled
   # @skip permissions.settings.localCache.trackStatistics
   # @param permissions.settings.auth.apiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`
@@ -265,6 +263,81 @@ permissions:
       trackStatistics: false
     auth:
       apiKey: ''
+
+
+# @skip tasks
+
+tasks:
+
+  image:
+    repository: 2gis-on-premise/pro-tasks-api
+    tag: 1.50.1
+    pullPolicy: IfNotPresent
+
+  ingress:
+    enabled: false
+    className: nginx
+    hosts:
+    - host: ''
+      paths:
+      - path: /
+        pathType: Prefix
+    tls: []
+    #   secretName: secret.tls
+
+  pod:
+    apiReplicaCount: 1
+    workerReplicaCount: 1
+    imagePullSecrets: []
+    nodeSelector: {}
+    affinity: {}
+    priorityClassName: ''
+    terminationGracePeriodSeconds: 60
+    tolerations: []
+    podAnnotations: {}
+    podLabels: {}
+    annotations: {}
+    labels: {}
+    revisionHistoryLimit: 3
+    resources:
+      requests:
+        cpu: 400m
+        memory: 256M
+      limits:
+        cpu: 1
+        memory: 1024M
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 0
+        maxSurge: 1
+
+  vpa:
+    enabled: false
+    updateMode: Auto
+    minAllowed:
+      cpu: 400m
+      memory: 256M
+    maxAllowed:
+      cpu: 1
+      memory: 1024M
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+
+  settings:
+    enabled: false
+    env: ''
+    tempPath: /tmp
+    logging:
+      format: simple
+      targets: ''
+    worker:
+      resourceIntensiveTasksWorkersCount: 5
+      regularTasksWorkersCount: 5
 
 
 # @section asset importer settings
@@ -296,7 +369,7 @@ permissions:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 1.41.0
+  tag: 1.50.1
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -328,7 +401,7 @@ assetImporter:
 assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
-  tag: 1.41.0
+  tag: 1.50.1
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
