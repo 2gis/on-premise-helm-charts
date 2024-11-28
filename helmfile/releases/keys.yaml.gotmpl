@@ -3,14 +3,14 @@ dgctlDockerRegistry: {{ .Values.global.dgctlDockerRegistry }}
 {{ $IsIngressEnabled :=  .Values.apps | get "keys.api.ingress.enabled" false -}}
 {{- $ingressData := dict "name" "keys-api" "Values" $.Values "isEnabled" $IsIngressEnabled -}}
 
-api: 
+api:
   ingress:
   {{- include "ingress" $ingressData | nindent 4 }}
 
 {{ $IsIngressEnabled :=  .Values.apps | get "keys.admin.ingress.enabled" false -}}
 {{- $ingressData := dict "name" "keys-admin" "Values" $.Values "isEnabled" $IsIngressEnabled -}}
 
-api: 
+api:
   ingress:
   {{- include "ingress" $ingressData | nindent 4 }}
 
