@@ -46,6 +46,7 @@ data:
       bucket_prefix: {{ required "A valid .Values.s3.bucketPrefix entry required" .bucketPrefix | squote }}
       logs_bucket_prefix: {{ required "A valid .Values.s3.logsBucketPrefix entry required" .logsBucketPrefix | squote }}
       videos_bucket_prefix: ''
+      executor_max_workers: 50
       {{- if .setPublicReadACL }}
       set_public_read_acl: {{ .setPublicReadACL }}
       {{- end }}
@@ -53,6 +54,7 @@ data:
         log: '{track_uuid}/log_{log_timestamp_ms}'
         log_prefix: '{track_uuid}/log_'
         frame: {{ include "citylens.s3_constants.frame_key_template" . | squote }}
+        crop_frame: {{ include "citylens.s3_constants.crop_frame_key_template" . | squote }}
         videos: '{track_uuid}/{resource_type}'
       client_params:
         aws_access_key_id: {{ required "A valid .Values.s3.accessKey entry required" .accessKey | squote }}
