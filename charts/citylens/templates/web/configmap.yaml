@@ -46,7 +46,6 @@ data:
       bucket_prefix: {{ required "A valid .Values.s3.bucketPrefix entry required" .bucketPrefix | squote }}
       logs_bucket_prefix: {{ required "A valid .Values.s3.logsBucketPrefix entry required" .logsBucketPrefix | squote }}
       videos_bucket_prefix: ''
-      executor_max_workers: 50
       {{- if .setPublicReadACL }}
       set_public_read_acl: {{ .setPublicReadACL }}
       {{- end }}
