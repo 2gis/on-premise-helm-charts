@@ -233,8 +233,12 @@ postgresql://{{ required "A valid .Values.postgres.username entry required" .use
 {{- end -}}
 
 {{/*
-S3 key template for frames
+S3 key templates for frames & frames crops
 */}}
 {{- define "citylens.s3_constants.frame_key_template" -}}
 {track_uuid}/{frame_timestamp_ms}.jpg
+{{- end -}}
+
+{{- define "citylens.s3_constants.crop_frame_key_template" -}}
+{track_uuid}/{frame_timestamp_ms}_{theta}.jpg
 {{- end -}}
