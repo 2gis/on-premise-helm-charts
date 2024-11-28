@@ -66,16 +66,13 @@ spec:
             - name: http
               containerPort: 8081
               protocol: TCP
-            - name: management
-              containerPort: 8091
-              protocol: TCP
           volumeMounts:
             - mountPath: "{{ .Values.api.settings.tempPath }}"
               name: temp-volume
           livenessProbe:
             httpGet:
               path: /health/live
-              port: management
+              port: http
             failureThreshold: 5
             initialDelaySeconds: 5
             periodSeconds: 15
@@ -84,7 +81,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health/ready
-              port: management
+              port: http
             failureThreshold: 3
             initialDelaySeconds: 15
             periodSeconds: 5
@@ -93,7 +90,7 @@ spec:
           startupProbe:
             httpGet:
               path: /health/live
-              port: management
+              port: http
             failureThreshold: 3
             initialDelaySeconds: 15
             periodSeconds: 5
@@ -112,11 +109,11 @@ spec:
               value: "{{ .Values.api.settings.allowAnyOrigin }}"
             - name: ENV
               value: "{{ .Values.api.settings.env }}"
-            - name: DB_CONNECTION_STRING
+            - name: Postgres__ConnectionString
               value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
-            - name: DB_CONNECTION_STRING_READONLY
+            - name: Postgres__ConnectionStringReadonly
               value: "{{ .Values.postgres.connectionStringReadonly }}"
-            - name: DB_CONNECTION_PWD
+            - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
                   key: dbConnectionPwd

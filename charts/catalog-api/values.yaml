@@ -13,6 +13,7 @@ dgctlDockerRegistry: ''
 # @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 # @param imagePullSecrets Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 nodeSelector: {}
@@ -21,6 +22,7 @@ tolerations: []
 annotations: {}
 podAnnotations: {}
 podLabels: {}
+podSecurityContext: {}
 imagePullSecrets: []
 
 

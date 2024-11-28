@@ -10,5 +10,4 @@ data:
   application.conf: |-
     {{- tpl (.Files.Get "configs/api/application.conf.template") . | nindent 4 }}
   logback.xml: |-
-    {{- .Files.Get "configs/api/logback.xml" | nindent 4 }}
-    
+    {{- tpl (.Files.Get "configs/api/logback.xml.template") . | nindent 4 }}
