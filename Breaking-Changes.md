@@ -2,6 +2,11 @@
 
 ## [1.30.0]
 
+### tiles-api
+- proxy.access.bss.enabled renamed to proxy.access.stat.enabled
+- proxy.access.bss.url renamed to proxy.access.stat.url
+- added setting dgctlStorage.region
+
 ### pro-api
 - api.pod.appName renamed api.appName
 - api.settings.enableUserAssetsImporter renamed to api.settings.backgroundJobs.enableUserAssetsImporter
