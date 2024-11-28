@@ -1,11 +1,12 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [1.30.0]
+## [1.32.0]
 
 ### tiles-api
 - proxy.access.bss.enabled renamed to proxy.access.stat.enabled
 - proxy.access.bss.url renamed to proxy.access.stat.url
-- added setting dgctlStorage.region
+
+## [1.30.0]
 
 ### pro-api
 - api.pod.appName renamed api.appName
