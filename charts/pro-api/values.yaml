@@ -286,8 +286,8 @@ tasks:
     #   secretName: secret.tls
 
   pod:
-    apiReplicaCount: 2
-    workerReplicaCount: 2
+    apiReplicaCount: 1
+    workerReplicaCount: 1
     imagePullSecrets: []
     nodeSelector: {}
     affinity: {}
@@ -466,7 +466,7 @@ s3:
   resourcesBucket: ''
 
 
-# @section PostgreSQL settings (minimum supported version 15)
+# @section PostgreSQL settings
 
 # @param postgres.connectionString Connection string to the PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;`
 # @param postgres.connectionStringReadonly Connection string to the readonly node of PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;`
