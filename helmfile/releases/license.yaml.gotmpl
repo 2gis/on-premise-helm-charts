@@ -14,7 +14,7 @@ license:
   statusPort: 8080
   apiPort: 8443
 
-{{ $IsIngressEnabled :=  .Values.apps.license | get "ingress.enabled" false -}}
+{{ $IsIngressEnabled :=  .Values.apps | get "license.ingress.enabled" false -}}
 {{- $ingressData := dict "name" "license" "Values" $.Values "isEnabled" $IsIngressEnabled -}}
 
 ingress:
