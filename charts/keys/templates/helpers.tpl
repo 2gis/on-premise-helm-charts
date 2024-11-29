@@ -381,7 +381,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   valueFrom:
     secretKeyRef:
       name: {{ include "keys.kafka-main.name" . }}
-      key: kafkaPassword
+      key: password
 {{- end }}
 - name: KEYS_REDIS_RETRIES
   value: "{{ .Values.counter.redis.retries }}"
@@ -452,7 +452,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   valueFrom:
     secretKeyRef:
       name: {{ include "keys.kafka-audit.name" . }}
-      key: kafkaPassword
+      key: password
 {{- end }}
 - name: KEYS_KAFKA_AUDIT_SECURITY_PROTOCOL
   value: "{{ .Values.kafka.audit.securityProtocol }}"

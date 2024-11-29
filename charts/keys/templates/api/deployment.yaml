@@ -41,7 +41,7 @@ spec:
       {{- if or (eq .Values.kafka.main.securityProtocol "SSL") (eq .Values.kafka.main.securityProtocol "SASL_SSL") }}
       initContainers:
         - name: copy-kafka-audit-certs
-          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion }}'
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           resources:
             {{- toYaml .Values.api.resources | nindent 12 }}

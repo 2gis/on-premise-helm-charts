@@ -634,11 +634,11 @@ kafka:
   # @param kafka.main.topics.stats Topic to consume stat messages.
 
   main:
-    clientPrefix: 'production'
+    clientPrefix: production
     clientId: ''
     brokers: ''
-    securityProtocol: 'PLAINTEXT'
-    SASLMechanism: 'PLAIN'
+    securityProtocol: PLAINTEXT
+    SASLMechanism: PLAIN
     username: ''
     password: ''
     tls:
@@ -666,8 +666,8 @@ kafka:
 
   audit:
     bootstrapServers: ''
-    securityProtocol: 'PLAINTEXT'
-    SASLMechanism: 'PLAIN'
+    securityProtocol: PLAINTEXT
+    SASLMechanism: PLAIN
     username: ''
     password: ''
     topic: ''
