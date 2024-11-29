@@ -288,7 +288,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 - name: KEYS_REDIS_PORT
   value: "{{ .Values.redis.port }}"
-{{- if .Values.redis.password -}}
+{{- if .Values.redis.password }}
 - name: KEYS_REDIS_PASSWORD
   valueFrom:
     secretKeyRef:
