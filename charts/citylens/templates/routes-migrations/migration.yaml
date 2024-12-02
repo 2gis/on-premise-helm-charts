@@ -114,7 +114,6 @@ spec:
                   key: busConfigSaslPassword
                   name: {{ include "citylens.routes.migration.name" . }}-secret
 
-
             - name: BusConfig__Consumers__AppEvents__Topic
               value: "{{ $.Values.routes.worker.busConfig.consumers.appEvents.topic }}"
             - name: BusConfig__Consumers__AppEvents__GroupId
