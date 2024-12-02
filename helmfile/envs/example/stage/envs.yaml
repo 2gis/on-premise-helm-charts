@@ -1,12 +1,12 @@
 global:
   version: 1.31.0
-  domain: prod.example.com
+  domain: stage.example.com
   tlsSecret: 'secret-tls'
   dgctlDockerRegistry: registry.example.com
   dgctlStorage:
     bucket: 'onpremise-artifacts'
   s3Storage:
-    host: 's3.example.com'
+    host: 's3-stage.example.com'
     secure: false
     region: 'US'
     accessKey: 'AKIAIOSFODNN7EXAMPLE'
@@ -35,7 +35,7 @@ apps:
     - traffic-proxy.yaml.gotmpl
 
   traffic-proxy-second:
-    installed: true
+    installed: false
     ingress:
       enabled: true
     valueFiles:

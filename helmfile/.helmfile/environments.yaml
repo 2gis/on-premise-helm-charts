@@ -12,3 +12,6 @@ templates:
 environments:
   example/prod:
     <<: *default
+
+  example/stage:
+    <<: *default
