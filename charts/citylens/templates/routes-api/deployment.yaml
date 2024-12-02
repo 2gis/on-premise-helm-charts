@@ -154,3 +154,8 @@ spec:
                   name: {{ include "citylens.routes.api.name" . }}-secret
             - name: S3__Region
               value: "{{ $.Values.s3.region }}"
+
+            - name: Clients__Navigation__Enabled
+              value: "true"
+            - name: Clients__Navigation_Url
+              value: "{{ $.Values.routes.navi.baseUrl }}"
