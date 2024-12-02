@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.32.0]
+
+### tiles-api
+- proxy.access.bss.enabled renamed to proxy.access.stat.enabled
+- proxy.access.bss.url renamed to proxy.access.stat.url
+
 ## [1.30.0]
 
 ### pro-api

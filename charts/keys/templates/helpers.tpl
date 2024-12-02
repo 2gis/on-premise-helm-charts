@@ -187,6 +187,24 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.postgres.ro.timeout }}"
 - name: KEYS_DB_RO_USERNAME
   value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username }}"
+- name: KEYS_DB_RO_SSL_MODE
+  value: {{ .Values.postgres.ro.tls.mode }}
+{{- if has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full") }}
+{{- if .Values.postgres.ro.tls.serverCA }}
+- name: KEYS_DB_RO_SSL_SERVERCERT_PATH
+  value: /etc/ssl/psql/psql-ro-server-ca.crt
+{{- end }}
+{{- if eq .Values.postgres.ro.tls.mode "verify-full" }}
+{{- if .Values.postgres.ro.tls.clientKey }}
+- name: KEYS_DB_RO_SSL_CLIENTKEY_PATH
+  value: /etc/ssl/psql/psql-ro-client.key
+{{- end }}
+{{- if .Values.postgres.ro.tls.clientCert }}
+- name: KEYS_DB_RO_SSL_CLIENTCERT_PATH
+  value: /etc/ssl/psql/psql-ro-client.crt
+{{- end }}
+{{- end }}
+{{- end }}
 - name: KEYS_DB_RW_HOST
   value: "{{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host }}"
 - name: KEYS_DB_RW_PORT
@@ -199,10 +217,28 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.postgres.rw.schema }}"
 - name: KEYS_DB_RW_USERNAME
   value: "{{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username }}"
+- name: KEYS_DB_RW_SSL_MODE
+  value: {{ .Values.postgres.rw.tls.mode }}
+{{- if has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full") }}
+{{- if .Values.postgres.rw.tls.serverCA }}
+- name: KEYS_DB_RW_SSL_SERVERCERT_PATH
+  value: /etc/ssl/psql/psql-rw-server-ca.crt
+{{- end }}
+{{- if eq .Values.postgres.rw.tls.mode "verify-full" }}
+{{- if .Values.postgres.rw.tls.clientKey }}
+- name: KEYS_DB_RW_SSL_CLIENTKEY_PATH
+  value: /etc/ssl/psql/psql-rw-client.key
+{{- end }}
+{{- if .Values.postgres.rw.tls.clientCert }}
+- name: KEYS_DB_RW_SSL_CLIENTCERT_PATH
+  value: /etc/ssl/psql/psql-rw-client.crt
+{{- end }}
+{{- end }}
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.db.deploys" -}}
-{{ include "keys.env.db" . }}
+{{- include "keys.env.db" . }}
 - name: KEYS_DB_RO_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -216,7 +252,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.db.jobs" -}}
-{{ include "keys.env.db" . }}
+{{- include "keys.env.db" . }}
 - name: KEYS_DB_RO_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -230,12 +266,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.redis" -}}
-{{- if .Values.redis.useExternalRedis }}
+{{- if .Values.redis.useExternalRedis -}}
 - name: KEYS_REDIS_HOST
   value: "{{ .Values.redis.host }}"
 - name: KEYS_REDIS_DB
   value: "{{ .Values.redis.db }}"
-{{- else  }}
+{{- else  -}}
 - name: KEYS_REDIS_HOST
   value: "{{ include "keys.redis.name" . }}"
 {{- end  }}
@@ -309,14 +345,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.predef" -}}
-{{ range $service, $key := .Values.predefined.service.keys }}
+{{- range $service, $key := .Values.predefined.service.keys }}
 - name: KEYS_PREDEF_SERVICE_KEY_{{ $service | upper }}
   value: {{ $key }}
-{{ end }}
-{{ range $service, $key := .Values.predefined.service.aliases }}
+{{- end }}
+{{- range $service, $key := .Values.predefined.service.aliases }}
 - name: KEYS_PREDEF_SERVICE_ALIAS_{{ $service | upper }}
   value: {{ $key }}
-{{ end }}
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.dgctlStorage" -}}
@@ -423,4 +459,106 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 
 {{- define "keys.configmap.deploys.name" -}}
 {{ include "keys.name" . }}-configmap-deploys
+{{- end -}}
+
+{{- define "keys.psql.checks" -}}
+{{- if has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full") }}
+{{ $testVar := required "You should set .Values.postgres.ro.tls.serverCA for selected mode" .Values.postgres.ro.tls.serverCA }}
+{{- end }}
+{{- if eq .Values.postgres.ro.tls.mode "verify-full" }}
+{{ $testVar := required "You should set .Values.postgres.ro.tls.clientCert for selected mode" .Values.postgres.ro.tls.clientCert }}
+{{ $testVar := required "You should set .Values.postgres.ro.tls.clientKey for selected mode" .Values.postgres.ro.tls.clientKey }}
+{{- end }}
+{{- if has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full") }}
+{{ $testVar := required "You should set .Values.postgres.rw.tls.serverCA for selected mode" .Values.postgres.rw.tls.serverCA }}
+{{- end }}
+{{- if eq .Values.postgres.rw.tls.mode "verify-full" }}
+{{ $testVar := required "You should set .Values.postgres.rw.tls.clientCert for selected mode" .Values.postgres.rw.tls.clientCert }}
+{{ $testVar := required "You should set .Values.postgres.rw.tls.clientKey for selected mode" .Values.postgres.rw.tls.clientKey }}
+{{- end }}
+{{- end -}}
+
+{{- define "keys.psql.volumeMount" -}}
+{{- if or 
+  (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+  (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+-}}
+- name: tls
+  mountPath: /etc/ssl/psql
+{{- end }}
+{{- end -}}
+
+{{- define "keys.psql.volume" -}}
+{{- if or 
+  (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+  (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+-}}
+- name: tls-raw
+  secret:
+    secretName: {{ include "keys.name" . }}-tls
+    items:
+    {{- if has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full") }}
+    {{- if .Values.postgres.ro.tls.serverCA }}
+      - key: psql-ro-server-ca.crt
+        path: psql-ro-server-ca.crt
+    {{- end }}
+    {{- if has .Values.postgres.ro.tls.mode (list "verify-full") }}
+    {{- if .Values.postgres.ro.tls.clientKey }}
+      - key: psql-ro-client.key
+        path: psql-ro-client.key
+    {{- end }}
+    {{- if .Values.postgres.ro.tls.clientCert }}
+      - key: psql-ro-client.crt
+        path: psql-ro-client.crt
+    {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full") }}
+    {{- if .Values.postgres.rw.tls.serverCA }}
+      - key: psql-rw-server-ca.crt
+        path: psql-rw-server-ca.crt
+    {{- end }}
+    {{- if has .Values.postgres.rw.tls.mode (list "verify-full") }}
+    {{- if .Values.postgres.rw.tls.clientKey }}
+      - key: psql-rw-client.key
+        path: psql-rw-client.key
+    {{- end }}
+    {{- if .Values.postgres.rw.tls.clientCert }}
+      - key: psql-rw-client.crt
+        path: psql-rw-client.crt
+    {{- end }}
+    {{- end }}
+    {{- end }}
+- name: tls
+  emptyDir: {}
+{{- end }}
+{{- end -}}
+
+{{- define "keys.psql.initTLS" -}}
+{{- if or 
+  (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+  (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+-}}
+- name: copy-certs
+  image: {{ .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+  command:
+    - /bin/sh
+    - -c
+    - |-
+      cp /tls/* /etc/ssl/psql/
+      chmod 0400 /etc/ssl/psql/psql-ro-client.key
+      chmod 0400 /etc/ssl/psql/psql-rw-client.key
+  resources:
+    requests:
+      cpu: 20m
+      memory: 16Mi
+    limits:
+      cpu: 20m
+      memory: 16Mi
+  volumeMounts:
+    - name: tls-raw
+      mountPath: /tls
+    - name: tls
+      mountPath: /etc/ssl/psql
+{{- end -}}
 {{- end -}}

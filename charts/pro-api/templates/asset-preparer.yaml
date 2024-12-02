@@ -10,6 +10,7 @@ spec:
   jobTemplate:
     spec:
       backoffLimit: {{ .Values.assetPreparer.backoffLimit }}
+      activeDeadlineSeconds: 172800
       template:
         spec:
           {{- with .Values.assetPreparer.nodeSelector }}
