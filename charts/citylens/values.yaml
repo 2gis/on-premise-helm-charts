@@ -980,6 +980,28 @@ customCAs:
 # @param routes.api.ingress.hosts[0].paths[0].pathType Path type of endpoint.
 # @param routes.api.ingress.tls Tls settings for https.
 
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @param routes.api.pdb.enabled If PDB is enabled for the service.
+# @param routes.api.pdb.minAvailable How many pods must be available after the eviction.
+# @param routes.api.pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+# @param routes.api.hpa.enabled If HPA is enabled for the service.
+# @param routes.api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param routes.api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param routes.api.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+# @param routes.api.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
+# @param routes.api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @param routes.api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+# @param routes.api.vpa.enabled If VPA is enabled for the service.
+# @param routes.api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param routes.api.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @param routes.api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @param routes.api.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @param routes.api.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+
 # @section Metadata settings
 # @param routes.api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param routes.api.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -1008,6 +1030,11 @@ customCAs:
 # @param routes.worker.resources.limits.cpu A CPU limit.
 # @param routes.worker.resources.limits.memory A memory limit.
 
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @param routes.worker.pdb.enabled If PDB is enabled for the service.
+# @param routes.worker.pdb.minAvailable How many pods must be available after the eviction.
+# @param routes.worker.pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
 # @section Metadata settings
 # @param routes.worker.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param routes.worker.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -1029,6 +1056,11 @@ customCAs:
 # @param routes.worker.busConfig.consumers.appEvents.groupId The group ID for the app events.
 # @param routes.worker.busConfig.consumers.appEvents.bufferSize The buffer size for the app events.
 # @param routes.worker.busConfig.consumers.appEvents.workersCount The workers count for the app events.
+
+# @section Citylens routes Clients
+
+# @section Navi integration
+# @param routes.navi.baseUrl NAVI GATEWAY URL (used for getting navigation).
 
 routes:
 
@@ -1095,6 +1127,30 @@ routes:
             - path: /
               pathType: Prefix
 
+    pdb:
+      enabled: true
+      minAvailable: ''
+      maxUnavailable: 1
+
+    hpa:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 1
+      scaleDownStabilizationWindowSeconds: ''
+      scaleUpStabilizationWindowSeconds: ''
+      targetCPUUtilizationPercentage: 50
+      targetMemoryUtilizationPercentage: ''
+
+    vpa:
+      enabled: false
+      updateMode: Auto
+      minAllowed:
+        cpu: 100m
+        memory: 128Mi
+      maxAllowed:
+        cpu: 1
+        memory: 512Mi
+
     annotations: {}
     labels: {}
     podAnnotations: {}
@@ -1126,6 +1182,11 @@ routes:
         cpu: 1
         memory: 1024M
 
+    pdb:
+      enabled: true
+      minAvailable: ''
+      maxUnavailable: 1
+
     annotations: {}
     labels: {}
     podAnnotations: {}
@@ -1146,3 +1207,6 @@ routes:
           groupId: ''
           bufferSize: 100
           workersCount: 10
+
+  navi:
+    baseUrl: ''

@@ -581,6 +581,37 @@ See the [documentation]() to learn about:
 | `routes.api.ingress.hosts[0].paths[0].pathType` | Path type of endpoint.                                                                                                | `Prefix`                   |
 | `routes.api.ingress.tls`                        | Tls settings for https.                                                                                               | `[]`                       |
 
+### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+| Name                            | Description                                          | Value  |
+| ------------------------------- | ---------------------------------------------------- | ------ |
+| `routes.api.pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
+| `routes.api.pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
+| `routes.api.pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
+
+### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+| Name                                                 | Description                                                                                                                                                          | Value   |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `routes.api.hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `routes.api.hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `routes.api.hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `1`     |
+| `routes.api.hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
+| `routes.api.hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
+| `routes.api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `50`    |
+| `routes.api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+
+### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+| Name                               | Description                                                                                                  | Value   |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
+| `routes.api.vpa.enabled`           | If VPA is enabled for the service.                                                                           | `false` |
+| `routes.api.vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). | `Auto`  |
+| `routes.api.vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                   | `100m`  |
+| `routes.api.vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         | `128Mi` |
+| `routes.api.vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `1`     |
+| `routes.api.vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `512Mi` |
+
 ### Metadata settings
 
 | Name                        | Description                                                                                                                 | Value         |
@@ -617,6 +648,14 @@ See the [documentation]() to learn about:
 | `routes.worker.resources.requests.memory` | A memory request.                                                                                                                              | `256M`  |
 | `routes.worker.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`     |
 | `routes.worker.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024M` |
+
+### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+| Name                               | Description                                          | Value  |
+| ---------------------------------- | ---------------------------------------------------- | ------ |
+| `routes.worker.pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
+| `routes.worker.pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
+| `routes.worker.pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
 
 ### Metadata settings
 
