@@ -20,7 +20,8 @@ spec:
       labels:
         {{- include "keys.counter.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if or (eq .Values.kafka.main.securityProtocol "SSL") (eq .Values.kafka.main.securityProtocol "SASL_SSL") }}
+      {{ $kafkaSslEnabled := include "kafka.ssl.enabled" (dict "global" $ "variation" "main") }}
+      {{- if $kafkaSslEnabled }}
       initContainers:
         - name: copy-kafka-main-certs
           image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion }}'
@@ -53,12 +54,12 @@ spec:
             {{- include "keys.env.db.deploys" . | nindent 12 }}
             {{- include "keys.env.redis" . | nindent 12 }}
             {{- include "keys.env.counter" . | nindent 12 }}
-          {{- if or (eq .Values.kafka.main.securityProtocol "SSL") (eq .Values.kafka.main.securityProtocol "SASL_SSL") }}
+          {{- if $kafkaSslEnabled }}
           volumeMounts:
-          - name: {{ printf "%s-kafka" (include "keys.counter.name" .) | quote }}
+          - name: {{ printf "%s" (include "keys.kafka-main.name" .) | quote }}
             mountPath: /etc/2gis/secret/kafka-main
           {{- end }}
-      {{- if or (eq .Values.kafka.main.securityProtocol "SSL") (eq .Values.kafka.main.securityProtocol "SASL_SSL") }}
+      {{- if or $kafkaSslEnabled }}
       volumes:
         - name: {{ include "keys.kafka-main-raw.name" . | quote }}
           secret:
