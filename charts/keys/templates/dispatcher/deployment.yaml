@@ -36,10 +36,10 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{ $kafkaSslEnabled := include "kafka.ssl.enabled" (dict "global" $ "variation" "audit") }}
+      {{ $kafkaSslEnabled := include "kafka.ssl.enabled" .}}
       {{- if $kafkaSslEnabled }}
       initContainers:
-        - name: copy-kafka-audit-certs
+        - name: copy-kafka-certs
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           resources:
@@ -48,13 +48,13 @@ spec:
             - /bin/sh
             - -ec
             - |
-              cp /tmp/certs/* /etc/2gis/secret/kafka-audit/
-              chmod 600 /etc/2gis/secret/kafka-audit/client.key
+              cp /tmp/certs/* /etc/2gis/secret/kafka/
+              chmod 600 /etc/2gis/secret/kafka/client.key
           volumeMounts:
-            - name: {{ include "keys.kafka-audit-raw.name" . | quote }}
+            - name: {{ include "keys.kafka-raw.name" . | quote }}
               mountPath: /tmp/certs
-            - name: {{ include "keys.kafka-audit.name" . | quote }}
-              mountPath: /etc/2gis/secret/kafka-audit
+            - name: {{ include "keys.kafka.name" . | quote }}
+              mountPath: /etc/2gis/secret/kafka
       {{- end }}
       containers:
         - name: dispatcher
@@ -76,9 +76,9 @@ spec:
             {{- if .Values.customCAs.bundle }}
             {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
             {{- end }}
-            {{- if (include "kafka.ssl.enabled" (dict "global" $ "variation" "audit")) }}
-            - name: {{ include "keys.kafka-audit.name" . | quote }}
-              mountPath: /etc/2gis/secret/kafka-audit
+            {{- if $kafkaSslEnabled }}
+            - name: {{ include "keys.kafka.name" . | quote }}
+              mountPath: /etc/2gis/secret/kafka
             {{- end }}
           {{- end }}
       {{- if or .Values.customCAs.bundle $kafkaSslEnabled }}
@@ -87,10 +87,10 @@ spec:
         {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
         {{- end }}
         {{- if $kafkaSslEnabled }}
-        - name: {{ include "keys.kafka-audit-raw.name" . | quote }}
+        - name: {{ include "keys.kafka-raw.name" . | quote }}
           secret:
-            secretName: {{ include "keys.kafka-audit.name" . | quote }}
-        - name: {{ include "keys.kafka-audit.name" . | quote }}
+            secretName: {{ include "keys.kafka.name" . | quote }}
+        - name: {{ include "keys.kafka.name" . | quote }}
           emptyDir: {}
         {{- end }}
       {{- end }}

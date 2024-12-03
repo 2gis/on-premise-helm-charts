@@ -20,10 +20,10 @@ spec:
       labels:
         {{- include "keys.counter.selectorLabels" . | nindent 8 }}
     spec:
-      {{ $kafkaSslEnabled := include "kafka.ssl.enabled" (dict "global" $ "variation" "main") }}
+      {{ $kafkaSslEnabled := include "kafka.ssl.enabled" . }}
       {{- if $kafkaSslEnabled }}
       initContainers:
-        - name: copy-kafka-main-certs
+        - name: copy-kafka-certs
           image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion }}'
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           resources:
@@ -32,13 +32,13 @@ spec:
             - /bin/sh
             - -ec
             - |
-              cp /tmp/certs/* /etc/2gis/secret/kafka-main/
-              chmod 600 /etc/2gis/secret/kafka-main/client.key
+              cp /tmp/certs/* /etc/2gis/secret/kafka/
+              chmod 600 /etc/2gis/secret/kafka/client.key
           volumeMounts:
-            - name: {{ include "keys.kafka-main-raw.name" . | quote }}
+            - name: {{ include "keys.kafka-raw.name" . | quote }}
               mountPath: /tmp/certs
-            - name: {{ include "keys.kafka-main.name" . | quote }}
-              mountPath: /etc/2gis/secret/kafka-main
+            - name: {{ include "keys.kafka.name" . | quote }}
+              mountPath: /etc/2gis/secret/kafka
       {{- end }}
       containers:
         - name: counter
@@ -56,15 +56,15 @@ spec:
             {{- include "keys.env.counter" . | nindent 12 }}
           {{- if $kafkaSslEnabled }}
           volumeMounts:
-          - name: {{ printf "%s" (include "keys.kafka-main.name" .) | quote }}
-            mountPath: /etc/2gis/secret/kafka-main
+          - name: {{ printf "%s" (include "keys.kafka.name" .) | quote }}
+            mountPath: /etc/2gis/secret/kafka
           {{- end }}
       {{- if or $kafkaSslEnabled }}
       volumes:
-        - name: {{ include "keys.kafka-main-raw.name" . | quote }}
+        - name: {{ include "keys.kafka-raw.name" . | quote }}
           secret:
-            secretName: {{ include "keys.kafka-main.name" . | quote }}
-        - name: {{ include "keys.kafka-main.name" . | quote }}
+            secretName: {{ include "keys.kafka.name" . | quote }}
+        - name: {{ include "keys.kafka.name" . | quote }}
           emptyDir: {}
       {{- end }}
       {{- with .Values.counter.nodeSelector }}

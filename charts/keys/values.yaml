@@ -618,64 +618,46 @@ postgres:
 
 kafka:
 
-  # @extra kafka.main **Settings for read stat messages.**
+  # @param kafka.bootstrapServers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093'). **Required**
+  # @param kafka.securityProtocol Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.
+  # @param kafka.saslMechanism Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.
+  # @param kafka.username Username for authorization (SASL).
+  # @param kafka.password Password for authorization (SASL).
+  # @param kafka.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name.
+  # @param kafka.tls.rootCert Root certificate.
+  # @param kafka.tls.cert Client certificate.
+  # @param kafka.tls.key Client key.
 
-  # @param kafka.main.clientPrefix Client prefix name.
-  # @param kafka.main.clientId Client id. If empty, then hostname will be used.
-  # @param kafka.main.brokers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
-  # @param kafka.main.securityProtocol Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.
-  # @param kafka.main.SASLMechanism Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.
-  # @param kafka.main.username Username for authorization (SASL).
-  # @param kafka.main.password Password for authorization (SASL).
-  # @param kafka.main.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name.
-  # @param kafka.main.tls.rootCert Root certificate.
-  # @param kafka.main.tls.cert Client certificate.
-  # @param kafka.main.tls.key Client key.
-  # @param kafka.main.topics.stats Topic to consume stat messages.
+  bootstrapServers: ''
+  securityProtocol: PLAINTEXT
+  saslMechanism: PLAIN
+  username: ''
+  password: ''
+  tls:
+    skipServerCertificateVerify: false
+    rootCert: ''
+    cert: ''
+    key: ''
 
-  main:
+  # @extra kafka.stats **Settings for consuming key's usage statistics messages.**
+
+  # @param kafka.stats.topic Topic to consume stat messages from. **Required**
+  # @param kafka.stats.clientPrefix Prefix for client name.
+  # @param kafka.stats.clientId Client id. If empty hostname will be used.
+
+  stats:
+    topic: ''
     clientPrefix: production
     clientId: ''
-    brokers: ''
-    securityProtocol: PLAINTEXT
-    SASLMechanism: PLAIN
-    username: ''
-    password: ''
-    tls:
-      skipServerCertificateVerify: false
-      rootCert: ''
-      cert: ''
-      key: ''
-    topics:
-      stats: ''
 
   # @extra kafka.audit **Settings for sending audit messages.**
 
-  # @param kafka.audit.bootstrapServers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
-  # @param kafka.audit.securityProtocol Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.
-  # @param kafka.audit.SASLMechanism Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.
-  # @param kafka.audit.username Username for authorization (SASL).
-  # @param kafka.audit.password Password for authorization (SASL).
-  # @param kafka.audit.topic Topic to produce audit messages.
-  # @param kafka.audit.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name.
-  # @param kafka.audit.tls.rootCert Root certificate.
-  # @param kafka.audit.tls.cert Client certificate.
-  # @param kafka.audit.tls.key Client key.
+  # @param kafka.audit.topic Topic to produce audit messages. **Required**
   # @param kafka.audit.produce.retryCount Number of retries to produce a message.
   # @param kafka.audit.produce.idempotentWrite Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence).
 
   audit:
-    bootstrapServers: ''
-    securityProtocol: PLAINTEXT
-    SASLMechanism: PLAIN
-    username: ''
-    password: ''
     topic: ''
-    tls:
-      skipServerCertificateVerify: false
-      rootCert: ''
-      cert: ''
-      key: ''
     produce:
       retryCount: 5
       idempotentWrite: true

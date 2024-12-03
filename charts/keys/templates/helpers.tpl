@@ -47,37 +47,20 @@
 {{- end }}
 
 {{- /*
-Name for kafka main intermediate volume for copy secrets
+Name for kafka intermediate volume for copy secrets
 */ -}}
 
-{{- define "keys.kafka-main-raw.name" -}}
-{{- printf "%s-kafka-main-raw" (include "keys.name" .) -}}
+{{- define "keys.kafka-raw.name" -}}
+{{- printf "%s-kafka-raw" (include "keys.name" .) -}}
 {{- end }}
 
 {{- /*
-Name for kafka main secret and volume
+Name for kafka secret and volume
 */ -}}
 
-{{- define "keys.kafka-main.name" -}}
-{{- printf "%s-kafka-main" (include "keys.name" .) -}}
+{{- define "keys.kafka.name" -}}
+{{- printf "%s-kafka" (include "keys.name" .) -}}
 {{- end }}
-
-{{- /*
-Name for kafka audit intermediate volume for copy secrets
-*/ -}}
-
-{{- define "keys.kafka-audit-raw.name" -}}
-{{- printf "%s-kafka-audit-raw" (include "keys.name" .) -}}
-{{- end }}
-
-{{- /*
-Name for kafka audit secret and volume
-*/ -}}
-
-{{- define "keys.kafka-audit.name" -}}
-{{- printf "%s-kafka-audit" (include "keys.name" .) -}}
-{{- end }}
-
 
 {{- define "keys.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
@@ -367,20 +350,20 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_COUNTER_UPDATE_STATUS_QUERY_TIMEOUT
   value: "{{ .Values.counter.updateStatusQueryTimeout }}"
 - name: KEYS_KAFKA_MAIN_BROKERS
-  value: "{{ .Values.kafka.main.brokers }}"
+  value: "{{ required "A valid .Values.kafka.bootstrapServers entry required" .Values.kafka.bootstrapServers }}"
 - name: KEYS_KAFKA_MAIN_CLIENT_PREFIX
-  value: "{{ .Values.kafka.main.clientPrefix }}"
+  value: "{{ .Values.kafka.stats.clientPrefix }}"
 - name: KEYS_KAFKA_MAIN_CLIENT_ID
-  value: "{{ .Values.kafka.main.clientId }}"
+  value: "{{ .Values.kafka.stats.clientId }}"
 - name: KEYS_KAFKA_MAIN_STATS_TOPIC
-  value: "{{ .Values.kafka.main.topics.stats }}"
+  value: "{{ required "A valid .Values.kafka.stats.topic entry required" .Values.kafka.stats.topic }}"
 - name: KEYS_KAFKA_MAIN_USERNAME
-  value: "{{ .Values.kafka.main.username }}"
-{{- if .Values.kafka.main.password }}
+  value: "{{ .Values.kafka.username }}"
+{{- if .Values.kafka.password }}
 - name: KEYS_KAFKA_MAIN_PASSWORD
   valueFrom:
     secretKeyRef:
-      name: {{ include "keys.kafka-main.name" . }}
+      name: {{ include "keys.kafka.name" . }}
       key: password
 {{- end }}
 - name: KEYS_REDIS_RETRIES
@@ -390,19 +373,18 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_REDIS_MAX_RETRY_BACKOFF
   value: "{{ .Values.counter.redis.maxRetryBackoff }}"
 - name: KEYS_KAFKA_MAIN_SECURITY_PROTOCOL
-  value: "{{ .Values.kafka.main.securityProtocol }}"
+  value: "{{ .Values.kafka.securityProtocol }}"
 - name: KEYS_KAFKA_MAIN_SASL_MECHANISM
-  value: "{{ .Values.kafka.main.SASLMechanism }}"
-{{- $sslEnabled := include "kafka.ssl.enabled" (dict "global" $ "variation" "main") }}
-{{- if $sslEnabled }}
+  value: "{{ .Values.kafka.saslMechanism }}"
+{{- if (include "kafka.ssl.enabled" .) }}
 - name: KEYS_KAFKA_MAIN_TLS_SKIP_SERVER_CERTIFICATE_VERIFY
-  value: "{{ .Values.kafka.main.tls.skipServerCertificateVerify }}"
+  value: "{{ .Values.kafka.tls.skipServerCertificateVerify }}"
 - name: KEYS_KAFKA_MAIN_TLS_CLIENT_CERTIFICATE_PATH
-  value: "/etc/2gis/secret/kafka-main/client.crt"
+  value: "/etc/2gis/secret/kafka/client.crt"
 - name: KEYS_KAFKA_MAIN_TLS_CLIENT_KEY_PATH
-  value: "/etc/2gis/secret/kafka-main/client.key"
+  value: "/etc/2gis/secret/kafka/client.key"
 - name: KEYS_KAFKA_MAIN_TLS_CA_CERT_PATH
-  value: "/etc/2gis/secret/kafka-main/ca.crt"
+  value: "/etc/2gis/secret/kafka/ca.crt"
 {{- end }}
 {{- end }}
 
@@ -444,33 +426,32 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.kafka.audit" -}}
 - name: KEYS_KAFKA_AUDIT_BROKERS
-  value: "{{ .Values.kafka.audit.bootstrapServers }}"
+  value: "{{ required "A valid .Values.kafka.bootstrapServers entry required" .Values.kafka.bootstrapServers }}"
 - name: KEYS_KAFKA_AUDIT_USERNAME
-  value: "{{ .Values.kafka.audit.username }}"
-{{- if .Values.kafka.audit.password }}
+  value: "{{ .Values.kafka.username }}"
+{{- if .Values.kafka.password }}
 - name: KEYS_KAFKA_AUDIT_PASSWORD
   valueFrom:
     secretKeyRef:
-      name: {{ include "keys.kafka-audit.name" . }}
+      name: {{ include "keys.kafka.name" . }}
       key: password
 {{- end }}
 - name: KEYS_KAFKA_AUDIT_SECURITY_PROTOCOL
-  value: "{{ .Values.kafka.audit.securityProtocol }}"
+  value: "{{ .Values.kafka.securityProtocol }}"
 - name: KEYS_KAFKA_AUDIT_SASL_MECHANISM
-  value: "{{ .Values.kafka.audit.SASLMechanism }}"
-{{- $sslEnabled := include "kafka.ssl.enabled" (dict "global" $ "variation" "audit") }}
-{{- if $sslEnabled }}
+  value: "{{ .Values.kafka.saslMechanism }}"
+{{- if (include "kafka.ssl.enabled" .) }}
 - name: KEYS_KAFKA_AUDIT_TLS_SKIP_SERVER_CERTIFICATE_VERIFY
-  value: "{{ .Values.kafka.audit.tls.skipServerCertificateVerify }}"
+  value: "{{ .Values.kafka.tls.skipServerCertificateVerify }}"
 - name: KEYS_KAFKA_AUDIT_TLS_CLIENT_CERTIFICATE_PATH
-  value: "/etc/2gis/secret/kafka-audit/client.crt"
+  value: "/etc/2gis/secret/kafka/client.crt" {{/* TODO: use variables maybe? */}}
 - name: KEYS_KAFKA_AUDIT_TLS_CLIENT_KEY_PATH
-  value: "/etc/2gis/secret/kafka-audit/client.key"
+  value: "/etc/2gis/secret/kafka/client.key"
 - name: KEYS_KAFKA_AUDIT_TLS_CA_CERT_PATH
-  value: "/etc/2gis/secret/kafka-audit/ca.crt"
+  value: "/etc/2gis/secret/kafka/ca.crt"
 {{- end }}
 - name: KEYS_KAFKA_AUDIT_TOPIC
-  value: "{{ .Values.kafka.audit.topic }}"
+  value: "{{ required "A valid .Values.kafka.audit.topic entry required" .Values.kafka.audit.topic }}"
 - name: KEYS_KAFKA_AUDIT_PRODUCE_RETRY_COUNT
   value: "{{ .Values.kafka.audit.produce.retryCount }}"
 - name: KEYS_KAFKA_AUDIT_PRODUCE_IDEMPOTENT_WRITE
@@ -544,9 +525,7 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- end -}}
 
 {{- define "kafka.ssl.enabled" }}
-{{- $global := required "Global cursor is required in dict!" (get . "global") -}}
-{{- $variation := required "Kafka variant is required in dict!" (get . "variation") -}}
-{{- $securityProtocol := index $global.Values.kafka $variation "securityProtocol" -}}
+{{- $securityProtocol := index .Values.kafka.securityProtocol -}}
 {{- $isEnabled := or (eq $securityProtocol "SSL") (eq $securityProtocol "SASL_SSL") -}}
 {{/* Converting bool to "thruthy" string cause "include" can only return string. */}}
 {{- ternary "true" "" $isEnabled }}
