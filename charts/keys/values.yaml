@@ -497,8 +497,8 @@ postgres:
 
   # @extra postgres.ro **Settings for the read-only access**
 
-  # @param postgres.ro.host PostgreSQL hostname or IP. **Required**
-  # @param postgres.ro.port PostgreSQL port.
+  # @param postgres.ro.host PostgreSQL one or multiple hostnames or IPs separated by comma (e.g. 'host1,host2,10.0.0.1').  **Required**
+  # @param postgres.ro.port PostgreSQL one or multiple ports (one for each host). Values must be separated by comma (e.g. '1234,4567,5432').
   # @param postgres.ro.timeout PostgreSQL client connection timeout.
   # @param postgres.ro.name PostgreSQL database name. **Required**
   # @param postgres.ro.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
@@ -511,7 +511,7 @@ postgres:
 
   ro:
     host: ''
-    port: 5432
+    port: '5432'
     timeout: 3s
     name: ''
     schema: ''
@@ -525,8 +525,8 @@ postgres:
 
   # @extra postgres.rw **Settings for the read-write access**
 
-  # @param postgres.rw.host PostgreSQL hostname or IP. **Required**
-  # @param postgres.rw.port PostgreSQL port.
+  # @param postgres.rw.host PostgreSQL one or multiple hostnames or IPs separated by comma (e.g. 'host1,host2,host3').  **Required**
+  # @param postgres.rw.port PostgreSQL one or multiple ports (one for each host). Values must be separated by comma (e.g. '1234,4567,5432').
   # @param postgres.rw.timeout PostgreSQL client connection timeout.
   # @param postgres.rw.name PostgreSQL database name. **Required**
   # @param postgres.rw.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
@@ -539,7 +539,7 @@ postgres:
 
   rw:
     host: ''
-    port: 5432
+    port: '5432'
     timeout: 3s
     name: ''
     schema: ''
