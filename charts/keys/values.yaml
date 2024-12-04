@@ -447,11 +447,6 @@ counter:
 
   replicas: 1
 
-  # @param counter.prometheus.scrape If Prometheus scrape is enabled.
-
-  prometheus:
-    scrape: true
-
   # @param counter.resources.requests.cpu A CPU request.
   # @param counter.resources.requests.memory A memory request.
   # @param counter.resources.limits.cpu A CPU limit.
