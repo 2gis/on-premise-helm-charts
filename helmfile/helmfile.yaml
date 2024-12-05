@@ -1,5 +1,5 @@
 bases:
-  - .helmfile/environments.yaml
+  - envs/environments.yaml
 ---
 bases:
   - .helmfile/repositories.yaml

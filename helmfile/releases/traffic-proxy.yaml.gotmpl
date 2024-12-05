@@ -47,8 +47,9 @@ proxy:
       #   }
       # }
 
-{{ $IsIngressEnabled :=  .Values.apps | get "traffic-proxy-web.admin.ingress.enabled" false -}}
-{{- $ingressData := dict "name" "traffic-proxy-web" "Values" $.Values "isEnabled" $IsIngressEnabled -}}
+{{ $a := print .Release.Name ".ingress.enabled" }}
+{{ $IsIngressEnabled :=  .Values.apps | get $a false -}}
+{{- $ingressData := dict "name" .Release.Name "Values" $.Values "isEnabled" $IsIngressEnabled -}}
 
 ingress:
   {{- include "ingress" $ingressData | nindent 2 }}
