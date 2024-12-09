@@ -156,11 +156,9 @@ spec:
             - name: Common__FilterByZoneCodes
               value: "{{ .Values.api.settings.filterByZoneCodes }}"
             - name: Postgres__ConnectionString
-              value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
-            {{ if .Values.postgres.connectionStringReadonly }}
+              value: {{ include "pro-api.connectionString" . }}
             - name: Postgres__ConnectionStringReadonly
-              value: "{{ .Values.postgres.connectionStringReadonly }}"
-            {{ end }}
+              value: {{ include "pro-api.connectionStringReadOnly" . }}
             - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
@@ -306,4 +304,6 @@ spec:
               value: "{{ $s }}"
             {{- end }}
             - name: TasksApi__Url
-              value: http://{{ include "pro-api.tasks-name" . }}
+              value: http://{{ include "pro-api.tasks-name" . }}:{{ .Values.tasks.settings.grpcPort }}
+            - name: TasksApi__UseForLayerDataPreparation
+              value: "{{ .Values.api.settings.tasksApi.useForLayerDataPreparation }}"

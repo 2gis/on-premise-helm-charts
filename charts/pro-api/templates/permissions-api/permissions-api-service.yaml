@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pro-api.permissions-name" . }}
+  {{- if .Values.permissions.service.annotations }}
+  annotations:
+    {{- toYaml .Values.permissions.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "pro-api.permissionLabels" . | nindent 4 }}
+  {{- if .Values.permissions.service.labels }}
+    {{- toYaml .Values.permissions.service.labels | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.permissions.service.type }}
+  ports:
+    - port: {{ .Values.permissions.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      appProtocol: http
+  selector:
+    {{- include "pro-api.permissionsSelectorLabels" . | nindent 4 }}

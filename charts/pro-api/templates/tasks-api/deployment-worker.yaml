@@ -69,7 +69,7 @@ spec:
           imagePullPolicy: {{ .Values.tasks.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 8082
+              containerPort: {{ .Values.tasks.settings.httpPort }}
               protocol: TCP
           volumeMounts:
             - mountPath: "{{ .Values.tasks.settings.tempPath }}"
@@ -112,11 +112,11 @@ spec:
             - name: TEMP_PATH
               value: "{{ .Values.tasks.settings.tempPath }}"
             - name: Postgres__ConnectionString
-              value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
+              value: {{ include "pro-tasks.connectionString" . }}
             - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
-                  key: dbConnectionPwd
+                  key: tasksDbConnectionPwd
                   name: {{ include "pro-api.name" . }}-secret
             - name: Common__Logging__Format
               value: "{{ .Values.tasks.settings.logging.format }}"
@@ -146,5 +146,53 @@ spec:
             - name: Common__Worker__ResourceIntensiveTasksWorkersCount
               value: "{{ $.Values.tasks.settings.worker.resourceIntensiveTasksWorkersCount }}"
             - name: Common__Worker__DefaultWorkersCount
-              value: "{{ $.Values.tasks.settings.worker.regularTasksWorkersCount }}"              
+              value: "{{ $.Values.tasks.settings.worker.regularTasksWorkersCount }}"
+            - name: ES_HOST
+              value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
+            - name: ES_INDEX_PREFIX
+              value: "{{ .Values.elastic.indexPrefix }}"
+            {{ if .Values.elastic.credentials }}
+            - name: ES_CREDENTIALS
+              valueFrom:
+                secretKeyRef:
+                  key: esCredentials
+                  name: {{ include "pro-api.name" . }}-secret
+            {{ end }}
+            - name: LOG_ES_QUERIES
+              value: "{{ .Values.api.settings.logEsQueries }}"
+            - name: S3Settings__Url
+              value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
+            - name: S3Settings__Secure
+              value: "{{ .Values.dgctlStorage.secure }}"
+            - name: S3Settings__Region
+              value: {{ .Values.dgctlStorage.region }}
+            - name: S3Settings__DisablePayloadSigning
+              value: "{{ .Values.dgctlStorage.disablePayloadSigning }}"
+            - name: S3Settings__AssetDataBucket
+              value: {{ required "A valid .Values.s3.assetsDataBucket entry required" $.Values.s3.assetsDataBucket }}
+            - name: S3Settings__UserAssetDataBucket
+              value: {{ required "A valid .Values.s3.userAssetsDataBucket entry required" $.Values.s3.userAssetsDataBucket }}
+            - name: S3Settings__LayerDataBucket
+              value: {{ required "A valid .Values.s3.layerDataBucket entry required" $.Values.s3.layerDataBucket }}
+            - name: S3Settings__SnapshotBucket
+              value: {{ required "A valid .Values.s3.snapshotBucket entry required" $.Values.s3.snapshotBucket }}
+            - name: S3Settings__ResourcesBucket
+              value: {{ required "A valid .Values.s3.resourcesBucket entry required" $.Values.s3.resourcesBucket }}
+            - name: S3Settings__AccessKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3AccessKey
+                  name: {{ include "pro-api.name" . }}-secret
+            - name: S3Settings__SecretKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3SecretKey
+                  name: {{ include "pro-api.name" . }}-secret
+            - name: GeoApi__Url
+              value: http://{{ include "pro-api.name" . }}
+            - name: GeoApi__Key
+              valueFrom:
+                secretKeyRef:
+                  key: apiKey
+                  name: {{ include "pro-api.name" . }}-secret
 {{- end }}
