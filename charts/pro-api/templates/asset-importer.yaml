@@ -97,7 +97,7 @@ spec:
                   value: "{{ .Values.assetImporter.settings.files}}"
                 {{- end }}
                 - name: DB_CONNECTION_STRING
-                  value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
+                  value: {{ include "pro-api.connectionString" . }}
                 - name: DB_CONNECTION_PWD
                   valueFrom:
                     secretKeyRef:
