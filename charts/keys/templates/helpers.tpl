@@ -351,8 +351,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.counter.updateStatusQueryTimeout }}"
 - name: KEYS_KAFKA_MAIN_BROKERS
   value: "{{ required "A valid .Values.kafka.bootstrapServers entry required" .Values.kafka.bootstrapServers }}"
-- name: KEYS_KAFKA_MAIN_CLIENT_PREFIX
-  value: "{{ .Values.kafka.stats.clientPrefix }}"
+- name: KEYS_KAFKA_MAIN_GROUP_ID
+  value: "{{ required "A valid .Values.kafka.stats.groupId entry required" .Values.kafka.stats.groupId }}"
 - name: KEYS_KAFKA_MAIN_CLIENT_ID
   value: "{{ .Values.kafka.stats.clientId }}"
 - name: KEYS_KAFKA_MAIN_STATS_TOPIC

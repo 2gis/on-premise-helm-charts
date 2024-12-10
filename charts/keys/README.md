@@ -253,25 +253,25 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Kafka settings
 
-| Name                                    | Description                                                                                                                                                | Value        |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
-| `kafka.bootstrapServers`                | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093'). **Required**               | `""`         |
-| `kafka.securityProtocol`                | Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.                                 | `PLAINTEXT`  |
-| `kafka.saslMechanism`                   | Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.       | `PLAIN`      |
-| `kafka.username`                        | Username for authorization (SASL).                                                                                                                         | `""`         |
-| `kafka.password`                        | Password for authorization (SASL).                                                                                                                         | `""`         |
-| `kafka.tls.skipServerCertificateVerify` | Controls whether a client verifies the server's certificate chain and host name.                                                                           | `false`      |
-| `kafka.tls.rootCert`                    | Root certificate.                                                                                                                                          | `""`         |
-| `kafka.tls.cert`                        | Client certificate.                                                                                                                                        | `""`         |
-| `kafka.tls.key`                         | Client key.                                                                                                                                                | `""`         |
-| `kafka.stats`                           | **Settings for consuming key's usage statistics messages.**                                                                                                |              |
-| `kafka.stats.topic`                     | Topic to consume stat messages from. **Required**                                                                                                          | `""`         |
-| `kafka.stats.clientPrefix`              | Prefix for client name.                                                                                                                                    | `production` |
-| `kafka.stats.clientId`                  | Client id. If empty hostname will be used.                                                                                                                 | `""`         |
-| `kafka.audit`                           | **Settings for sending audit messages.**                                                                                                                   |              |
-| `kafka.audit.topic`                     | Topic to produce audit messages. **Required**                                                                                                              | `""`         |
-| `kafka.audit.produce.retryCount`        | Number of retries to produce a message.                                                                                                                    | `5`          |
-| `kafka.audit.produce.idempotentWrite`   | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true`       |
+| Name                                    | Description                                                                                                                                                | Value       |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `kafka.bootstrapServers`                | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093'). **Required**               | `""`        |
+| `kafka.securityProtocol`                | Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.                                 | `PLAINTEXT` |
+| `kafka.saslMechanism`                   | Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.       | `PLAIN`     |
+| `kafka.username`                        | Username for authorization (SASL).                                                                                                                         | `""`        |
+| `kafka.password`                        | Password for authorization (SASL).                                                                                                                         | `""`        |
+| `kafka.tls.skipServerCertificateVerify` | Controls whether a client verifies the server's certificate chain and host name.                                                                           | `false`     |
+| `kafka.tls.rootCert`                    | Root certificate.                                                                                                                                          | `""`        |
+| `kafka.tls.cert`                        | Client certificate.                                                                                                                                        | `""`        |
+| `kafka.tls.key`                         | Client key.                                                                                                                                                | `""`        |
+| `kafka.stats`                           | **Settings for consuming key's usage statistics messages.**                                                                                                |             |
+| `kafka.stats.topic`                     | Topic to consume stat messages from. **Required**                                                                                                          | `""`        |
+| `kafka.stats.groupId`                   | Name of the consumer group to use. **Required**                                                                                                            | `""`        |
+| `kafka.stats.clientId`                  | Client id. If empty hostname will be used.                                                                                                                 | `""`        |
+| `kafka.audit`                           | **Settings for sending audit messages.**                                                                                                                   |             |
+| `kafka.audit.topic`                     | Topic to produce audit messages. **Required**                                                                                                              | `""`        |
+| `kafka.audit.produce.retryCount`        | Number of retries to produce a message.                                                                                                                    | `5`         |
+| `kafka.audit.produce.idempotentWrite`   | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true`      |
 
 ### LDAP connection settings
 

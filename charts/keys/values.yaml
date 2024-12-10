@@ -637,12 +637,12 @@ kafka:
   # @extra kafka.stats **Settings for consuming key's usage statistics messages.**
 
   # @param kafka.stats.topic Topic to consume stat messages from. **Required**
-  # @param kafka.stats.clientPrefix Prefix for client name.
+  # @param kafka.stats.groupId Name of the consumer group to use. **Required**
   # @param kafka.stats.clientId Client id. If empty hostname will be used.
 
   stats:
     topic: ''
-    groupId: production-keys-counter
+    groupId: ''
     clientId: ''
 
   # @extra kafka.audit **Settings for sending audit messages.**
