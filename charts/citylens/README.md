@@ -654,6 +654,6 @@ See the [documentation]() to learn about:
 
 ### Navi integration
 
-| Name                  | Description                                     | Value |
-| --------------------- | ----------------------------------------------- | ----- |
-| `routes.navi.baseUrl` | NAVI GATEWAY URL (used for getting navigation). | `""`  |
+| Name              | Description                                     | Value |
+| ----------------- | ----------------------------------------------- | ----- |
+| `routes.navi.url` | NAVI GATEWAY URL (used for getting navigation). | `""`  |
