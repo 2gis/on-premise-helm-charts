@@ -642,7 +642,7 @@ kafka:
 
   stats:
     topic: ''
-    clientPrefix: production
+    groupId: production-keys-counter
     clientId: ''
 
   # @extra kafka.audit **Settings for sending audit messages.**
