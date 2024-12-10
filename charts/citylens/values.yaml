@@ -936,7 +936,7 @@ customCAs:
 # @section Citylens routes Clients
 
 # @section Navi integration
-# @param routes.navi.baseUrl NAVI GATEWAY URL (used for getting navigation).
+# @param routes.navi.url NAVI GATEWAY URL (used for getting navigation).
 
 routes:
 
@@ -1085,4 +1085,4 @@ routes:
           workersCount: 10
 
   navi:
-    baseUrl: ''
+    url: ''
