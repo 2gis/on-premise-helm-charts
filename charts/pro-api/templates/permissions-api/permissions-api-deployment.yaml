@@ -126,13 +126,11 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             - name: Auth__Type
               value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
-            {{ if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
             - name: KEYS_SERVICE_URL
               value: "{{ .Values.keys.url }}"
             {{ if .Values.keys.token }}

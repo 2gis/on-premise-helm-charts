@@ -224,9 +224,9 @@ spec:
             - name: Kafka__UseReplicaTopics
               value: "{{ $.Values.kafka.useReplicaTopics }}"
             - name: Auth__Type
-              value: "{{ .Values.api.settings.auth.type }}"
+              value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
             - name: Auth__Url
-              value: "{{ .Values.api.settings.auth.url }}"
+              value: {{ required "A valid .Values.api.settings.auth.url entry required" $.Values.api.settings.auth.url }}
             - name: Auth__UserInfoEndpoint
               value: "{{ .Values.api.settings.auth.userInfoEndpoint }}"
             - name: Auth__WellKnownConfigEndpoint
