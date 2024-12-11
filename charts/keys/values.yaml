@@ -31,7 +31,7 @@ featureFlags:
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.89.0
+    tag: 1.102.3
 
 # @section Admin service settings
 
@@ -538,19 +538,34 @@ postgres:
 
 kafka:
 
+  # @param kafka.bootstrapServers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093'). **Required**
+  # @param kafka.securityProtocol Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.
+  # @param kafka.saslMechanism Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.
+  # @param kafka.username Username for authorization (SASL).
+  # @param kafka.password Password for authorization (SASL).
+  # @param kafka.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name.
+  # @param kafka.tls.rootCert Root certificate.
+  # @param kafka.tls.cert Client certificate.
+  # @param kafka.tls.key Client key.
+
+  bootstrapServers: ''
+  securityProtocol: PLAINTEXT
+  saslMechanism: PLAIN
+  username: ''
+  password: ''
+  tls:
+    skipServerCertificateVerify: false
+    rootCert: ''
+    cert: ''
+    key: ''
+
   # @extra kafka.audit **Settings for sending audit messages.**
 
-  # @param kafka.audit.bootstrapServers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
-  # @param kafka.audit.username Username for authorization (SASL/PLAINTEXT SHA-512).
-  # @param kafka.audit.password Password for authorization (SASL/PLAINTEXT SHA-512).
-  # @param kafka.audit.topic Topic to produce audit messages.
+  # @param kafka.audit.topic Topic to produce audit messages. **Required**
   # @param kafka.audit.produce.retryCount Number of retries to produce a message.
   # @param kafka.audit.produce.idempotentWrite Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence).
 
   audit:
-    bootstrapServers: ''
-    username: ''
-    password: ''
     topic: ''
     produce:
       retryCount: 5
