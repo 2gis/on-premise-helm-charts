@@ -544,9 +544,9 @@ kafka:
   # @param kafka.username Username for authorization (SASL).
   # @param kafka.password Password for authorization (SASL).
   # @param kafka.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name.
-  # @param kafka.tls.rootCert Root certificate.
-  # @param kafka.tls.cert Client certificate.
-  # @param kafka.tls.key Client key.
+  # @param kafka.tls.serverCA Server's root certificate.
+  # @param kafka.tls.clientCert Client certificate.
+  # @param kafka.tls.clientKey Client key.
 
   bootstrapServers: ''
   securityProtocol: PLAINTEXT
@@ -555,9 +555,9 @@ kafka:
   password: ''
   tls:
     skipServerCertificateVerify: false
-    rootCert: ''
-    cert: ''
-    key: ''
+    serverCA: ''
+    clientCert: ''
+    clientKey: ''
 
   # @extra kafka.audit **Settings for sending audit messages.**
 
