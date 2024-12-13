@@ -1,0 +1,33 @@
+templates:
+  .default: &default
+    missingFileHandler: Info
+    values:
+      # Apps
+      - apps/*.*
+      # Env
+      - envs/{{ .Environment.Name }}/*.*
+      # Values
+      - envs/{{ .Environment.Name }}/values/*.*
+
+environments:
+
+  prod:
+    <<: *default
+
+  example/prod:
+    <<: *default
+
+  example/stage:
+    <<: *default
+
+  onprem-deploy/test-helmfile:
+    missingFileHandler: Info
+    values:
+      # Apps
+      - apps/*.*
+      # Env
+      - envs/test-helmfile/prod/*.*
+      - envs/{{ .Environment.Name }}/*.*
+      # Values
+      - envs/test-helmfile/prod/values/*.*
+      - envs/{{ .Environment.Name }}/values/*.*

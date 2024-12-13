@@ -1,0 +1,18 @@
+---
+bases:
+- ../common.yaml
+---
+
+releases:
+  - name: "{{ .Environment.Name }}-keys"
+    chart: 2gis-on-premise/keys
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    version: "{{ .Values.version }}"
+    labels:
+      service: keys
+    values:
+      - ../values/dgctl/_common.gotmpl
+      - ../values/dgctl/{{ $envName }}.yaml
+      - ../values/keys/_common.gotmpl
+      - ../values/keys/{{ $envName }}.yaml

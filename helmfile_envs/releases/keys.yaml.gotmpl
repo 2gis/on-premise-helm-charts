@@ -1,5 +1,3 @@
-dgctlDockerRegistry: {{ .Values.global.dgctlDockerRegistry }}
-
 {{ $IsIngressEnabled :=  .Values.apps | get "keys.api.ingress.enabled" false -}}
 {{- $ingressData := dict "name" "keys-api" "Values" $.Values "isEnabled" $IsIngressEnabled -}}
 
@@ -43,13 +41,3 @@ kafka:
     produce:
       retryCount: 5
       idempotentWrite: true
-
-dgctlStorage:
-  host: {{ .Values.global.s3Storage.host }}
-  secure: {{ .Values.global.s3Storage.secure }}
-  region: {{ .Values.global.s3Storage.region }}
-  bucket: {{ .Values.global.dgctlStorage.bucket }}
-  accessKey: {{ .Values.global.s3Storage.accessKey }}
-  secretKey: {{ .Values.global.s3Storage.secretKey }}
-  manifest: '!!!'
-  verifySsl: true
