@@ -1,0 +1,2 @@
+Release - {{ .Release.Name }}
+Namespace - {{ .Release.Namespace }}
