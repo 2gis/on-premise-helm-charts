@@ -186,7 +186,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: latest
+    tag: 1.54.0
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -271,7 +271,7 @@ tasks:
 
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: latest
+    tag: 1.54.0
     pullPolicy: IfNotPresent
 
   ingress:
@@ -372,7 +372,7 @@ tasks:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: latest
+  tag: 1.54.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -405,7 +405,7 @@ assetImporter:
 assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
-  tag: latest
+  tag: 1.54.0
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
@@ -470,7 +470,7 @@ s3:
   resourcesBucket: ''
 
 
-# @section PostgreSQL settings (minimum supported version 15)
+# @section PostgreSQL settings
 
 postgres:
 

@@ -75,7 +75,7 @@
 | Name                                             | Description                                                                                                                                                                    | Value                                 |
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
 | `permissions.image.repository`                   | Repository                                                                                                                                                                     | `2gis-on-premise/pro-permissions-api` |
-| `permissions.image.tag`                          | Tag                                                                                                                                                                            | `latest`                              |
+| `permissions.image.tag`                          | Tag                                                                                                                                                                            | `1.54.0`                              |
 | `permissions.image.pullPolicy`                   | Pull Policy                                                                                                                                                                    | `IfNotPresent`                        |
 | `permissions.ingress.enabled`                    | If Ingress is enabled for the service                                                                                                                                          | `false`                               |
 | `permissions.ingress.className`                  | Name of the Ingress controller class                                                                                                                                           | `nginx`                               |
@@ -114,7 +114,7 @@
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `assetImporter.appName`                            | Data Import job name.                                                                                                                                    | `asset-importer`               |
 | `assetImporter.repository`                         | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                                | Docker image tag.                                                                                                                                        | `latest`                       |
+| `assetImporter.tag`                                | Docker image tag.                                                                                                                                        | `1.54.0`                       |
 | `assetImporter.schedule`                           | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`                       | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit`         | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
@@ -169,7 +169,7 @@
 | `s3.snapshotBucket`       | S3 bucket for storing snapshots of inclemental data updates. **Required**   | `""`  |
 | `s3.resourcesBucket`      | S3 bucket for storing static resources. **Required**                        | `""`  |
 
-### PostgreSQL settings (minimum supported version 15)
+### PostgreSQL settings
 
 | Name                             | Description                                                                                                            | Value  |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------ |
