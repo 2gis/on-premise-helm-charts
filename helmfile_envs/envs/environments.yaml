@@ -11,23 +11,17 @@ templates:
 
 environments:
 
-  prod:
-    <<: *default
-
   example/prod:
     <<: *default
 
   example/stage:
-    <<: *default
-
-  onprem-deploy/test-helmfile:
     missingFileHandler: Info
     values:
       # Apps
       - apps/*.*
       # Env
-      - envs/test-helmfile/prod/*.*
+      - envs/example/prod/*.*
       - envs/{{ .Environment.Name }}/*.*
       # Values
-      - envs/test-helmfile/prod/values/*.*
+      - envs/example/prod/values/*.*
       - envs/{{ .Environment.Name }}/values/*.*
