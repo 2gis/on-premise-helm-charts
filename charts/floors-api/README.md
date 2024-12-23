@@ -21,7 +21,7 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 | `nodejs.image.tag`        | Floors backend image tag.        | `1.1.0`                         |
 | `nginx.image.repository`  | Floors nginx image repository.   | `2gis-on-premise/nginx`         |
 | `nginx.image.pullPolicy`  | Floors nginx pull policy.        | `IfNotPresent`                  |
-| `nginx.image.tag`         | Floors nginx image tag.          | `1.21.6`                        |
+| `nginx.image.tag`         | Floors nginx image tag.          | `1.25.4`                        |
 
 ### Deployment Artifacts Storage settings
 
