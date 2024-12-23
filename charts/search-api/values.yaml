@@ -87,8 +87,8 @@ api:
 
 nginx:
   image:
-    repository: 2gis-on-premise/search-nginx
-    tag: 1.21.6
+    repository: 2gis-on-premise/nginx
+    tag: 1.25.4
     pullPolicy: IfNotPresent
   resources: {}
   httpPort: 8080
