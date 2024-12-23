@@ -1,4 +1,0 @@
-global:
-  domain: stage.external.my
-  s3Storage:
-    host: 's3-stage.external.my'
