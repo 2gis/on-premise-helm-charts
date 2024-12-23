@@ -176,7 +176,7 @@
 | `postgres.api.`                  | Settings for Geo API database connection                                                                               |        |
 | `postgres.api.rw.`               | Settings for the read-write access. Same settings for read-only access can be added, if necessary (postgres.api.ro).   |        |
 | `postgres.api.rw.host`           | PostgreSQL hostname or IP. **Required**                                                                                | `""`   |
-| `postgres.api.rw.port`           | PostgreSQL port.                                                                                                       | `5432` |
+| `postgres.api.rw.port`           | PostgreSQL port. **Required**                                                                                          | `5432` |
 | `postgres.api.rw.timeout`        | PostgreSQL client connection timeout in seconds.                                                                       | `15`   |
 | `postgres.api.rw.poolSize.`      | Settings for the pool size                                                                                             |        |
 | `postgres.api.rw.poolSize.min`   | PostgreSQL minimum connection pool size. 0 means no minimal bound.                                                     | `1`    |
@@ -188,11 +188,11 @@
 | `postgres.tasks.`                | Settings for Tasks API database connection                                                                             |        |
 | `postgres.tasks.rw.`             | Settings for the read-write access. Same settings for read-only access can be added, if necessary (postgres.tasks.ro). |        |
 | `postgres.tasks.rw.host`         | PostgreSQL hostname or IP. **Required**                                                                                | `""`   |
-| `postgres.tasks.rw.port`         | PostgreSQL port.                                                                                                       | `5432` |
+| `postgres.tasks.rw.port`         | PostgreSQL port. **Required**                                                                                          | `5432` |
 | `postgres.tasks.rw.timeout`      | PostgreSQL client connection timeout in seconds.                                                                       | `15`   |
-| `postgres.tasks.rw.poolSize.`    | Settings for the pool size                                                                                             |        |
+| `postgres.tasks.rw.poolSize.`    | Settings for the pool size.                                                                                            |        |
 | `postgres.tasks.rw.poolSize.min` | PostgreSQL minimum connection pool size. 0 means no minimal bound.                                                     | `1`    |
-| `postgres.tasks.rw.poolSize.max` | PostgreSQL maximum connection pool size                                                                                | `5`    |
+| `postgres.tasks.rw.poolSize.max` | PostgreSQL maximum connection pool size.                                                                               | `5`    |
 | `postgres.tasks.rw.name`         | PostgreSQL database name. **Required**                                                                                 | `""`   |
 | `postgres.tasks.rw.username`     | PostgreSQL username. **Required**                                                                                      | `""`   |
 | `postgres.tasks.rw.password`     | PostgreSQL password. **Required**                                                                                      | `""`   |
