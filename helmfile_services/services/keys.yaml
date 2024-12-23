@@ -9,10 +9,11 @@ releases:
     namespace: {{ .Values.namespace  }}
     kubeContext: {{ .Values.kubeContext }}
     version: "{{ .Values.version }}"
+    missingFileHandler: Info
     labels:
       service: keys
     values:
       - ../values/dgctl/_common.gotmpl
-      - ../values/dgctl/{{ $envName }}.yaml
+      - ../values/dgctl/{{ .Environment.Name }}.yaml
       - ../values/keys/_common.gotmpl
-      - ../values/keys/{{ $envName }}.yaml
+      - ../values/keys/{{ .Environment.Name }}.yaml

@@ -1,0 +1,7 @@
+proxy:
+  host: 'second.remotehost.com'
+  locations:
+  - path: /test-stage/
+    definition: |
+      default_type text/html;
+      return 200 "<!DOCTYPE html><h2>test on stage</h2>\n";
