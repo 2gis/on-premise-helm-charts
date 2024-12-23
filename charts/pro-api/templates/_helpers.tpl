@@ -111,8 +111,8 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 	(.Values.postgres.api.rw.port | int | required "A valid .Values.postgres.api.rw.port entry required!")
 	(.Values.postgres.api.rw.name | required "A valid .Values.postgres.api.rw.name entry required!")
 	(.Values.postgres.api.rw.username | required "A valid .Values.postgres.api.rw.username entry required!")
-	(.Values.postgres.api.rw.poolSize.min | int | default 1)
-	(.Values.postgres.api.rw.poolSize.max | int | default 10)
+	((.Values.postgres.api.rw.poolSize).min | int | default 1)
+	((.Values.postgres.api.rw.poolSize).max | int | default 10)
 	(.Values.postgres.api.rw.timeout | int | default 15)
 -}}
 {{- end -}}
@@ -124,8 +124,8 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 	(.Values.postgres.api.ro.port | int | required "A valid .Values.postgres.api.ro.port entry required!")
 	(.Values.postgres.api.ro.name | required "A valid .Values.postgres.api.ro.name entry required!")
 	(.Values.postgres.api.ro.username | required "A valid .Values.postgres.api.ro.username entry required!")
-	(.Values.postgres.api.ro.poolSize.min | int | default 1)
-	(.Values.postgres.api.ro.poolSize.max | int | default 10)
+	((.Values.postgres.api.ro.poolSize).min | int | default 1)
+	((.Values.postgres.api.ro.poolSize).max | int | default 10)
 	(.Values.postgres.api.ro.timeout | int | default 15)
 -}}
 {{- else -}}
@@ -139,8 +139,8 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 	(.Values.postgres.tasks.rw.port | int | required "A valid .Values.postgres.tasks.rw.port entry required!")
 	(.Values.postgres.tasks.rw.name | required "A valid .Values.postgres.tasks.rw.name entry required!")
 	(.Values.postgres.tasks.rw.username | required "A valid .Values.postgres.tasks.rw.username entry required!")
-	(.Values.postgres.tasks.rw.poolSize.min | int | default 1)
-	(.Values.postgres.tasks.rw.poolSize.max | int | default 5)
+	((.Values.postgres.tasks.rw.poolSize).min | int | default 1)
+	((.Values.postgres.tasks.rw.poolSize).max | int | default 5)
 	(.Values.postgres.tasks.rw.timeout | int | default 15)
 -}}
 {{- end -}}
