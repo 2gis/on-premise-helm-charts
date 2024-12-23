@@ -69,7 +69,10 @@ spec:
           imagePullPolicy: {{ .Values.tasks.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 8082
+              containerPort: {{ .Values.tasks.settings.httpPort }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ .Values.tasks.settings.grpcPort }}
               protocol: TCP
           volumeMounts:
             - mountPath: "{{ .Values.tasks.settings.tempPath }}"
@@ -112,11 +115,11 @@ spec:
             - name: TEMP_PATH
               value: "{{ .Values.tasks.settings.tempPath }}"
             - name: Postgres__ConnectionString
-              value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
+              value: {{ include "pro-tasks.connectionString" . }}
             - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
-                  key: dbConnectionPwd
+                  key: tasksDbConnectionPwd
                   name: {{ include "pro-api.name" . }}-secret
             - name: Common__Logging__Format
               value: "{{ .Values.tasks.settings.logging.format }}"
@@ -143,4 +146,9 @@ spec:
               value: "{{ $.Values.kafka.useReplicaTopics }}"
             - name: Common__Mode
               value: "Api"
+            - name: Common__HttpPort
+              value: "{{ .Values.tasks.settings.httpPort }}"
+            - name: Common__GrpcPort
+              value: "{{ .Values.tasks.settings.grpcPort }}"
+              
 {{- end }}
