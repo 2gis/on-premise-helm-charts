@@ -33,6 +33,9 @@ spec:
         - configMap:
             name: {{ include "keys.redis.name" . }}
           name: conf
+        - name: data
+          emptyDir:
+            sizeLimit: 1Gi
       containers:
         - name: redis
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}
@@ -53,6 +56,8 @@ spec:
             - name: conf
               mountPath: {{ .Values.redis.configPath }}
               subPath: redis.conf
+            - name: data
+              mountPath: /data
       {{- with .Values.redis.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
