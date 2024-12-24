@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.15.0`                       |
+| `api.image.tag`        | Tag.         | `1.16.1`                       |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -133,7 +133,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.15.0`                       |
+| `web.image.tag`        | Tag.         | `1.16.1`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -185,11 +185,12 @@ See the [documentation]() to learn about:
 
 ### Custom settings
 
-| Name                 | Description                                                              | Value          |
-| -------------------- | ------------------------------------------------------------------------ | -------------- |
-| `web.logLevel`       | Log level.                                                               | `WARNING`      |
-| `web.metricsAppName` | Value for service prometheus metrics label "app_name".                   | `citylens-web` |
-| `web.pgPoolSize`     | Postgres: maximum number of connections in connections pool to maintain. | `5`            |
+| Name                    | Description                                                                                 | Value          |
+| ----------------------- | ------------------------------------------------------------------------------------------- | -------------- |
+| `web.logLevel`          | Log level.                                                                                  | `WARNING`      |
+| `web.metricsAppName`    | Value for service prometheus metrics label "app_name".                                      | `citylens-web` |
+| `web.pgPoolSize`        | Postgres: maximum number of connections in connections pool to maintain.                    | `5`            |
+| `web.pgPoolMaxOverflow` | Postgres: maximum number of extra connections in connections pool (relative of pgPoolSize). | `10`           |
 
 ### Metadata settings
 
@@ -341,6 +342,26 @@ See the [documentation]() to learn about:
 | `worker.tracksUploader.tolerations`               | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`    |
 | `worker.tracksUploader.affinity`                  | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`    |
 
+### Citylens Map Matcher worker's settings
+
+| Name                                     | Description                                                                                                                                            | Value   |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `worker.mapMatcher.enabled`              | If Map Matcher worker is enabled for the service.                                                                                                      | `false` |
+| `worker.mapMatcher.replicas`             | A replica count for the pod.                                                                                                                           | `1`     |
+| `worker.mapMatcher.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).         | `3`     |
+| `worker.mapMatcher.host`                 | Map Matching API address. Ex.: http://navi-front.svc                                                                                                   | `""`    |
+| `worker.mapMatcher.key`                  | Map Matching API key.                                                                                                                                  | `""`    |
+| `worker.mapMatcher.interpolation`        | Set to `true` for compatibility with Map Matching API which requires gps points timestamps in seconds as integers (w/o millisecond precision support). | `true`  |
+| `worker.mapMatcher.retries`              | Total number of retries in case of Map Matching API unavailability/errors.                                                                             | `3`     |
+| `worker.mapMatcher.timeoutSeconds`       | Map Matching API timeout, seconds.                                                                                                                     | `30`    |
+| `worker.mapMatcher.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                              | `{}`    |
+| `worker.mapMatcher.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                        | `{}`    |
+| `worker.mapMatcher.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                              | `{}`    |
+| `worker.mapMatcher.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                        | `{}`    |
+| `worker.mapMatcher.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                | `{}`    |
+| `worker.mapMatcher.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                  | `{}`    |
+| `worker.mapMatcher.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                            | `{}`    |
+
 ### Citylens Dashboard batch events worker's settings
 
 | Name                                   | Description                  | Value |
@@ -352,7 +373,7 @@ See the [documentation]() to learn about:
 | Name                                               | Description                                                                                                                                    | Value                              |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `worker.dashboardBatchEvents.image.repository`     | Repository.                                                                                                                                    | `2gis-on-premise/citylens-workers` |
-| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.15.0`                           |
+| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.16.1`                           |
 | `worker.dashboardBatchEvents.image.pullPolicy`     | Pull Policy.                                                                                                                                   | `IfNotPresent`                     |
 | `worker.dashboardBatchEvents.logLevel`             | Worker's log level.                                                                                                                            | `INFO`                             |
 | `worker.dashboardBatchEvents.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`                                |
@@ -370,7 +391,7 @@ See the [documentation]() to learn about:
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.15.0`                            |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.16.1`                            |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |

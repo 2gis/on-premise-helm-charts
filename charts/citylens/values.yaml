@@ -99,7 +99,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.15.0
+    tag: 1.16.1
 
   replicas: 4
 
@@ -215,6 +215,7 @@ api:
 # @param web.logLevel Log level.
 # @param web.metricsAppName Value for service prometheus metrics label "app_name".
 # @param web.pgPoolSize Postgres: maximum number of connections in connections pool to maintain.
+# @param web.pgPoolMaxOverflow Postgres: maximum number of extra connections in connections pool (relative of pgPoolSize).
 
 # @section Metadata settings
 
@@ -231,7 +232,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.15.0
+    tag: 1.16.1
 
   replicas: 1
 
@@ -279,6 +280,7 @@ web:
     pkce: false
 
   pgPoolSize: 5
+  pgPoolMaxOverflow: 10
 
   logLevel: WARNING
   metricsAppName: citylens-web
@@ -584,6 +586,52 @@ worker:
     tolerations: {}
 
 
+# @section Citylens Map Matcher worker's settings
+
+# @param worker.mapMatcher.enabled If Map Matcher worker is enabled for the service.
+
+# @param worker.mapMatcher.replicas A replica count for the pod.
+
+# @param worker.mapMatcher.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+# @param worker.mapMatcher.host Map Matching API address. Ex.: http://navi-front.svc
+# @param worker.mapMatcher.key Map Matching API key.
+# @param worker.mapMatcher.interpolation Set to `true` for compatibility with Map Matching API which requires gps points timestamps in seconds as integers (w/o millisecond precision support).
+# @param worker.mapMatcher.retries Total number of retries in case of Map Matching API unavailability/errors.
+# @param worker.mapMatcher.timeoutSeconds Map Matching API timeout, seconds.
+
+# @param worker.mapMatcher.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.mapMatcher.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.mapMatcher.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.mapMatcher.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.mapMatcher.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.mapMatcher.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.mapMatcher.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  mapMatcher:
+
+    enabled: false
+
+    replicas: 1
+
+    host: ''
+    key: ''
+    interpolation: true
+    retries: 3
+    timeoutSeconds: 30
+
+    revisionHistoryLimit: 3
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+
 # @section Citylens Dashboard batch events worker's settings
 
 # @param worker.dashboardBatchEvents.replicas A replica count for the pod.
@@ -614,7 +662,7 @@ worker:
     image:
       repository: 2gis-on-premise/citylens-workers
       pullPolicy: IfNotPresent
-      tag: 1.15.0
+      tag: 1.16.1
 
     revisionHistoryLimit: 3
 
@@ -650,7 +698,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.15.0
+    tag: 1.16.1
 
   resources:
     requests:
