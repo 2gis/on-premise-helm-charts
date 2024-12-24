@@ -594,8 +594,8 @@ worker:
 
 # @param worker.mapMatcher.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
-# @param worker.mapMatcher.baseUrl Map Matching API address. Ex.: http://navi-front.svc
-# @param worker.mapMatcher.key Map Matching API key.
+# @param worker.mapMatcher.baseUrl Map Matching API address. Ex.: http://navi-front.svc **Required**
+# @param worker.mapMatcher.key Map Matching API key. **Required**
 # @param worker.mapMatcher.interpolation Set to `true` for compatibility with Map Matching API which requires gps points timestamps in seconds as integers (w/o millisecond precision support).
 # @param worker.mapMatcher.retries Total number of retries in case of Map Matching API unavailability/errors.
 # @param worker.mapMatcher.timeoutSeconds Map Matching API timeout, seconds.

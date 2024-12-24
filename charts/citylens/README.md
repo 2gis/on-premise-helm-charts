@@ -349,8 +349,8 @@ See the [documentation]() to learn about:
 | `worker.mapMatcher.enabled`              | If Map Matcher worker is enabled for the service.                                                                                                      | `false` |
 | `worker.mapMatcher.replicas`             | A replica count for the pod.                                                                                                                           | `1`     |
 | `worker.mapMatcher.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).         | `3`     |
-| `worker.mapMatcher.baseUrl`              | Map Matching API address. Ex.: http://navi-front.svc                                                                                                   | `""`    |
-| `worker.mapMatcher.key`                  | Map Matching API key.                                                                                                                                  | `""`    |
+| `worker.mapMatcher.baseUrl`              | Map Matching API address. Ex.: http://navi-front.svc **Required**                                                                                      | `""`    |
+| `worker.mapMatcher.key`                  | Map Matching API key. **Required**                                                                                                                     | `""`    |
 | `worker.mapMatcher.interpolation`        | Set to `true` for compatibility with Map Matching API which requires gps points timestamps in seconds as integers (w/o millisecond precision support). | `true`  |
 | `worker.mapMatcher.retries`              | Total number of retries in case of Map Matching API unavailability/errors.                                                                             | `3`     |
 | `worker.mapMatcher.timeoutSeconds`       | Map Matching API timeout, seconds.                                                                                                                     | `30`    |

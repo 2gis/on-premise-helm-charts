@@ -109,14 +109,16 @@ data:
       {{- end }}
       initial_project: {{ .Values.map.initialProject | squote }}
       {{- with .Values.worker.mapMatcher }}
+      {{- if .enabled }}
       matching:
         enabled: {{ .enabled }}
-        host: {{ .baseUrl }}
-        key: {{ .key }}
+        host: {{ required "A valid .Values.worker.mapMatcher.baseUrl entry required" .baseUrl }}
+        key: {{ required "A valid .Values.worker.mapMatcher.key entry required" .key }}
         interpolation: {{ .interpolation }}
         retries_total: {{ .retries }}
         retries_backoff_factor: 0.8
         timeout: {{ .timeoutSeconds }}
+      {{- end }}
       {{- end }}
     register_predictor_ttl_seconds: 600
     enabled_modules:
