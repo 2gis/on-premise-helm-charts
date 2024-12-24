@@ -111,7 +111,7 @@ data:
       {{- with .Values.worker.mapMatcher }}
       matching:
         enabled: {{ .enabled }}
-        host: {{ .host }}
+        host: {{ .baseUrl }}
         key: {{ .key }}
         interpolation: {{ .interpolation }}
         retries_total: {{ .retries }}
