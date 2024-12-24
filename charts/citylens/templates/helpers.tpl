@@ -25,6 +25,10 @@ Expand the name of the chart.
 {{ include "citylens.name" . }}-logs-saver
 {{- end }}
 
+{{- define "citylens.map-matcher.name" -}}
+{{ include "citylens.name" . }}-map-matcher
+{{- end }}
+
 {{- define "citylens.predictions-saver.name" -}}
 {{ include "citylens.name" . }}-predictions-saver
 {{- end }}
@@ -109,6 +113,16 @@ app.kubernetes.io/instance: {{ include "citylens.logs-saver.name" . }}
 
 {{- define "citylens.logs-saver.labels" -}}
 {{ include "citylens.logs-saver.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "citylens.map-matcher.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.map-matcher.name" . }}
+{{- end }}
+
+{{- define "citylens.map-matcher.labels" -}}
+{{ include "citylens.map-matcher.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
