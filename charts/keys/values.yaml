@@ -38,7 +38,7 @@ backend:
 admin:
   image:
     repository: 2gis-on-premise/keys-ui
-    tag: 0.8.0
+    tag: 0.10.3
 
   # @param admin.replicas A replica count for the pod.
 
