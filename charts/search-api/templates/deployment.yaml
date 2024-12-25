@@ -19,7 +19,6 @@ metadata:
     {{- toYaml .Values.labels | nindent 4 }}
   {{- end }}
 spec:
-  enableServiceLinks: {{ .Values.enableServiceLinks }}
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   {{- if .Values.strategy }}
@@ -43,6 +42,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       initContainers:
         - name: init
