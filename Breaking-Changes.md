@@ -1,23 +1,5 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [NEW VERSION]
-
-### mapgl-js-api
-- add enableServiceLinks
-- add default and description for terminationGracePeriodSeconds
-
-### floors-api
-- add enableServiceLinks
-- add default and description for terminationGracePeriodSeconds
-
-### traffic-proxy
-- add enableServiceLinks
-- add default and description for terminationGracePeriodSeconds
-
-### search-api
-- add enableServiceLinks
-- add default and description for terminationGracePeriodSeconds
-
 ## [1.32.0]
 
 ### tiles-api
