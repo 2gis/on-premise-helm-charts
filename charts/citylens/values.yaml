@@ -99,7 +99,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.16.3
+    tag: 1.16.4
 
   replicas: 4
 
@@ -232,7 +232,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.16.3
+    tag: 1.16.4
 
   replicas: 1
 
@@ -662,7 +662,7 @@ worker:
     image:
       repository: 2gis-on-premise/citylens-workers
       pullPolicy: IfNotPresent
-      tag: 1.16.3
+      tag: 1.16.4
 
     revisionHistoryLimit: 3
 
@@ -715,6 +715,7 @@ migrations:
 # @param kafka.bootstrapServer A Kafka broker endpoint. **Required**
 # @param kafka.username A Kafka username for connection. **Required**
 # @param kafka.password A Kafka password for connection. **Required**
+# @param kafka.produceTimeoutSeconds Timeout for producer.
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
 # @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
 # @param kafka.topics.pro Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**
@@ -731,6 +732,7 @@ kafka:
   bootstrapServer: ''
   username: ''
   password: ''
+  produceTimeoutSeconds: 5
   topics:
     frames: ''
     tracks: ''

@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.16.3`                       |
+| `api.image.tag`        | Tag.         | `1.16.4`                       |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -133,7 +133,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.16.3`                       |
+| `web.image.tag`        | Tag.         | `1.16.4`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -373,7 +373,7 @@ See the [documentation]() to learn about:
 | Name                                               | Description                                                                                                                                    | Value                              |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `worker.dashboardBatchEvents.image.repository`     | Repository.                                                                                                                                    | `2gis-on-premise/citylens-workers` |
-| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.16.3`                           |
+| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.16.4`                           |
 | `worker.dashboardBatchEvents.image.pullPolicy`     | Pull Policy.                                                                                                                                   | `IfNotPresent`                     |
 | `worker.dashboardBatchEvents.logLevel`             | Worker's log level.                                                                                                                            | `INFO`                             |
 | `worker.dashboardBatchEvents.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`                                |
@@ -406,6 +406,7 @@ See the [documentation]() to learn about:
 | `kafka.bootstrapServer`        | A Kafka broker endpoint. **Required**                                                         | `""`  |
 | `kafka.username`               | A Kafka username for connection. **Required**                                                 | `""`  |
 | `kafka.password`               | A Kafka password for connection. **Required**                                                 | `""`  |
+| `kafka.produceTimeoutSeconds`  | Timeout for producer.                                                                         | `5`   |
 | `kafka.topics.frames`          | List of topics for Frames saver worker. **Required**                                          | `""`  |
 | `kafka.topics.tracks`          | List of topics for Tracks metadata worker. **Required**                                       | `""`  |
 | `kafka.topics.pro`             | Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**         | `""`  |

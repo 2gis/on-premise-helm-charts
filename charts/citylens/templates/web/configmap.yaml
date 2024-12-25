@@ -33,7 +33,8 @@ data:
       postgres_pool_max_overflow: {{ .Values.web.pgPoolMaxOverflow }}
     kafka:
     {{- with .Values.kafka }}
-      bootstrap_servers: {{  required "A valid .Values.kafka.bootstrap.servers entry required" .bootstrapServer | squote }}
+      bootstrap_servers: {{ required "A valid .Values.kafka.bootstrap.servers entry required" .bootstrapServer | squote }}
+      producer_timeout_seconds: {{ .produceTimeoutSeconds }}
       security:
         security_protocol: 'SASL_PLAINTEXT'
         sasl_mechanism: 'SCRAM-SHA-512'
