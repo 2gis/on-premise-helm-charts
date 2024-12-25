@@ -501,22 +501,9 @@ postgres:
       username: ''
       password: ''
     ro: null
-  # @extra postgres.tasks. Settings for Tasks API database connection
 
+  # @skip postgres.tasks
   tasks:
-
-    # @extra postgres.tasks.rw. Settings for the read-write access. Same settings for read-only access can be added, if necessary (postgres.tasks.ro).
-    # @param postgres.tasks.rw.host PostgreSQL hostname or IP. **Required**
-    # @param postgres.tasks.rw.port PostgreSQL port. **Required**
-    # @param postgres.tasks.rw.timeout PostgreSQL client connection timeout in seconds.
-    # @extra postgres.tasks.rw.poolSize. Settings for the pool size.
-    # @param postgres.tasks.rw.poolSize.min PostgreSQL minimum connection pool size. 0 means no minimal bound.
-    # @param postgres.tasks.rw.poolSize.max PostgreSQL maximum connection pool size.
-    # @param postgres.tasks.rw.name PostgreSQL database name. **Required**
-    # @param postgres.tasks.rw.username PostgreSQL username. **Required**
-    # @param postgres.tasks.rw.password PostgreSQL password. **Required**
-    # @param postgres.tasks.ro Settings for the read-only access.
-
     rw:
       host: ''
       port: 5432
