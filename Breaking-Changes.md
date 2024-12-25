@@ -1,6 +1,6 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [NEW VERSION]
+## [1.33.0]
 
 ### pro-api
 - permissions.settings.enabled was removed, permissions api is now always mandatory 
