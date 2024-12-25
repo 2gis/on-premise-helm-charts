@@ -19,6 +19,7 @@ metadata:
     {{- toYaml .Values.labels | nindent 4 }}
   {{- end }}
 spec:
+  enableServiceLinks: {{ .Values.enableServiceLinks }}
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   {{- if .Values.strategy }}

@@ -7,8 +7,10 @@ dgctlDockerRegistry: ''
 
 # @section Common settings
 
+# @param enableServiceLinks Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service)
 # @param replicaCount A replica count for the pod.
 # @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
 # @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
@@ -18,8 +20,10 @@ dgctlDockerRegistry: ''
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 
+enableServiceLinks: true
 replicaCount: 1
 revisionHistoryLimit: 3
+terminationGracePeriodSeconds: 30
 imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
