@@ -1,5 +1,12 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.33.0]
+
+### pro-api
+- permissions.settings.enabled was removed, permissions api is now always mandatory 
+- postgres.connectionString, postgres.connectionStringReadonly, postgres.password were changed to postgres.api.rw / postgres.api.ro settings
+
+
 ## [1.32.0]
 
 ### tiles-api

@@ -1,4 +1,3 @@
-{{ if .Values.permissions.settings.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13,7 +12,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.permissions.pod.replicaCount }}
+  replicas: 1
   revisionHistoryLimit: {{ .Values.permissions.pod.revisionHistoryLimit }}
   selector:
     matchLabels:
@@ -110,9 +109,9 @@ spec:
             - name: ENV
               value: "{{ .Values.api.settings.env }}"
             - name: Postgres__ConnectionString
-              value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
+              value: {{ include "pro-api.connectionString" . }}
             - name: Postgres__ConnectionStringReadonly
-              value: "{{ .Values.postgres.connectionStringReadonly }}"
+              value: {{ include "pro-api.connectionStringReadOnly" . }}
             - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
@@ -127,13 +126,11 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             - name: Auth__Type
               value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
-            {{ if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
             - name: KEYS_SERVICE_URL
               value: "{{ .Values.keys.url }}"
             {{ if .Values.keys.token }}
@@ -144,7 +141,7 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}
             - name: Redis__Host
-              value: "{{ .Values.redis.host }}"
+              value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
               value: "{{ .Values.redis.port }}"
             - name: Redis__Enabled
@@ -189,4 +186,3 @@ spec:
               value: "{{ .Values.permissions.settings.localCache.enabled }}"
             - name: LocalCache__TrackStatistics
               value: "{{ .Values.permissions.settings.localCache.trackStatistics }}"
-{{- end }}

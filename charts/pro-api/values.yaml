@@ -1,3 +1,4 @@
+﻿
 # @section Geo API configuration & settings
 
 api:
@@ -10,7 +11,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 1.50.1
+    tag: 1.54.0
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -127,8 +128,8 @@ api:
   # @skip api.settings.localCache.enabled
   # @skip api.settings.localCache.trackStatistics
   # @skip api.settings.openApi.servers
-  # @param api.settings.auth.type Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol
-  # @param api.settings.auth.url API URL of authentication service. Example: `http(s)://keycloak.ingress.host`
+  # @param api.settings.auth.type Authentication type: 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol. **Required**
+  # @param api.settings.auth.url API URL of authentication service. Example: `http(s)://keycloak.ingress.host`. **Required**
   # @param api.settings.auth.userInfoEndpoint The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`
   # @param api.settings.auth.wellKnownConfigEndpoint The [Well-Known Config endpoint](https://openid.net/specs/openid-connect-discovery-1_0.html). Example: `realms/URBI_Pro/.well-known/openid-configuration`
   # @param api.settings.auth.apiKey Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`
@@ -137,7 +138,8 @@ api:
   # @param api.settings.auth.shareKeys Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`
   # @param api.settings.backgroundJobs.enableUserAssetsImporter If user data importer job is enabled for the service.
   # @param api.settings.backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
-  # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount If layer contains more points, isochrone is not avalible.
+  # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount Maximum number of points in a layer for generating isochrones.
+  # @skip api.settings.tasksApi.useForLayerDataPreparation
   settings:
     licenseKey: ''
     tempPath: /tmp
@@ -159,7 +161,7 @@ api:
     openApi:
       servers: []
     auth:
-      type: none
+      type: openid10
       url: ''
       userInfoEndpoint: ''
       wellKnownConfigEndpoint: ''
@@ -172,6 +174,8 @@ api:
       enableAssetsStreaming: false
     layerGeneration:
       isochroneLayerMaxPointsCount: 500
+    tasksApi:
+      useForLayerDataPreparation: false
 
 # @section Permissions API configuration & settings
 
@@ -182,7 +186,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 1.50.1
+    tag: 1.54.0
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -202,7 +206,6 @@ permissions:
     tls: []
     #   secretName: secret.tls
 
-  # @param permissions.pod.replicaCount A replica count for the pod.
   # @param permissions.pod.imagePullSecrets Kubernetes image pull secrets.
   # @param permissions.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param permissions.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
@@ -220,7 +223,6 @@ permissions:
   # @param permissions.pod.resources.limits.cpu A CPU limit.
   # @param permissions.pod.resources.limits.memory A memory limit.
   pod:
-    replicaCount: 1
     imagePullSecrets: []
     nodeSelector: {}
     affinity: {}
@@ -251,34 +253,32 @@ permissions:
     port: 80
 
   # @skip permissions.settings.host
-  # @param permissions.settings.enabled If permissionsApi is enabled for the service.
   # @skip permissions.settings.localCache.enabled
   # @skip permissions.settings.localCache.trackStatistics
-  # @param permissions.settings.auth.apiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`
+  # @param permissions.settings.auth.apiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`. **Required**
   settings:
     host: ''
-    enabled: false
     localCache:
       enabled: true
       trackStatistics: false
     auth:
       apiKey: ''
 
-
+# @section Tasks API configuration & settings
 # @skip tasks
 
 tasks:
 
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 1.50.1
+    tag: 1.54.0
     pullPolicy: IfNotPresent
 
   ingress:
     enabled: false
     className: nginx
     hosts:
-    - host: ''
+    - host: pro-tasks-api.example.com
       paths:
       - path: /
         pathType: Prefix
@@ -338,6 +338,8 @@ tasks:
     worker:
       resourceIntensiveTasksWorkersCount: 5
       regularTasksWorkersCount: 5
+    httpPort: 8082
+    grpcPort: 8083
 
 
 # @section asset importer settings
@@ -365,11 +367,12 @@ tasks:
 # @param assetImporter.settings.externalLinksProxyUrl URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )
 # @param assetImporter.settings.externalLinksAllowedHosts Comma separated hosts, i.e. 'someserver.com,someserver2.com' )
 # @skip assetImporter.settings.esMetricsEnabled
+# @param assetImporter.settings.failedImportJobsLimit How many import jobs can fail before scheduler stops creating new imports
 
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 1.50.1
+  tag: 1.54.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -392,6 +395,7 @@ assetImporter:
     externalLinksProxyUrl: ''
     externalLinksAllowedHosts: ''
     esMetricsEnabled: false
+    failedImportJobsLimit: 0
 
 
 # @section asset preparer settings
@@ -401,7 +405,7 @@ assetImporter:
 assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
-  tag: 1.50.1
+  tag: 1.54.0
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
@@ -413,7 +417,7 @@ assetPreparer:
     limits:
       cpu: 500m
       memory: 512M
-  enabled: true
+  enabled: false
   settings:
     files: ''
     maxParallelJobs: 1
@@ -468,15 +472,49 @@ s3:
 
 # @section PostgreSQL settings
 
-# @param postgres.connectionString Connection string to the PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;`
-# @param postgres.connectionStringReadonly Connection string to the readonly node of PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;`
-# @param postgres.password User password to connect to the PostgreSQL database.
-
 postgres:
-  connectionString: ''
-  connectionStringReadonly: ''
-  password: ''
 
+  # @extra postgres.api. Settings for Geo API database connection
+
+  api:
+
+    # @extra postgres.api.rw. Settings for the read-write access. Same settings for read-only access can be added, if necessary (postgres.api.ro).
+    # @param postgres.api.rw.host PostgreSQL hostname or IP. **Required**
+    # @param postgres.api.rw.port PostgreSQL port. **Required**
+    # @param postgres.api.rw.timeout PostgreSQL client connection timeout in seconds.
+    # @extra postgres.api.rw.poolSize. Settings for the pool size
+    # @param postgres.api.rw.poolSize.min PostgreSQL minimum connection pool size. 0 means no minimal bound.
+    # @param postgres.api.rw.poolSize.max PostgreSQL maximum connection pool size
+    # @param postgres.api.rw.name PostgreSQL database name. **Required**
+    # @param postgres.api.rw.username PostgreSQL username. **Required**
+    # @param postgres.api.rw.password PostgreSQL password. **Required**
+    # @param postgres.api.ro Settings for the read-only access.
+
+    rw:
+      host: ''
+      port: 5432
+      timeout: 15
+      poolSize:
+        min: 1
+        max: 10
+      name: ''
+      username: ''
+      password: ''
+    ro: null
+
+  # @skip postgres.tasks
+  tasks:
+    rw:
+      host: ''
+      port: 5432
+      timeout: 15
+      poolSize:
+        min: 1
+        max: 5
+      name: ''
+      username: ''
+      password: ''
+    ro: null
 
 # @section Kafka settings (supported version 2.7)
 

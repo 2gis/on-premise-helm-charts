@@ -156,11 +156,9 @@ spec:
             - name: Common__FilterByZoneCodes
               value: "{{ .Values.api.settings.filterByZoneCodes }}"
             - name: Postgres__ConnectionString
-              value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
-            {{ if .Values.postgres.connectionStringReadonly }}
+              value: {{ include "pro-api.connectionString" . }}
             - name: Postgres__ConnectionStringReadonly
-              value: "{{ .Values.postgres.connectionStringReadonly }}"
-            {{ end }}
+              value: {{ include "pro-api.connectionStringReadOnly" . }}
             - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
@@ -226,9 +224,9 @@ spec:
             - name: Kafka__UseReplicaTopics
               value: "{{ $.Values.kafka.useReplicaTopics }}"
             - name: Auth__Type
-              value: "{{ .Values.api.settings.auth.type }}"
+              value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
             - name: Auth__Url
-              value: "{{ .Values.api.settings.auth.url }}"
+              value: {{ required "A valid .Values.api.settings.auth.url entry required" $.Values.api.settings.auth.url }}
             - name: Auth__UserInfoEndpoint
               value: "{{ .Values.api.settings.auth.userInfoEndpoint }}"
             - name: Auth__WellKnownConfigEndpoint
@@ -306,4 +304,6 @@ spec:
               value: "{{ $s }}"
             {{- end }}
             - name: TasksApi__Url
-              value: http://{{ include "pro-api.tasks-name" . }}
+              value: http://{{ include "pro-api.tasks-name" . }}:{{ .Values.tasks.settings.grpcPort }}
+            - name: TasksApi__UseForLayerDataPreparation
+              value: "{{ .Values.api.settings.tasksApi.useForLayerDataPreparation }}"
