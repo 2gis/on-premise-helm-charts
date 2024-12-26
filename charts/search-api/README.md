@@ -28,16 +28,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Common settings
 
-| Name                   | Description                                                                                                                                    | Value |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                   | `{}`  |
-| `podLabels`            | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                                             | `{}`  |
-| `replicaCount`         | A replica count for the pod                                                                                                                    | `1`   |
-| `revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `nodeSelector`         | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                             | `{}`  |
-| `affinity`             | Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                              | `{}`  |
-| `tolerations`          | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                               | `[]`  |
-| `redeployLabel`        | If this label is changed since the last deployment, the whole chart will be redeployed                                                         | `""`  |
+| Name                            | Description                                                                                                                                                               | Value  |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `enableServiceLinks`            | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `true` |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                                              | `{}`   |
+| `podLabels`                     | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                                                                        | `{}`   |
+| `replicaCount`                  | A replica count for the pod                                                                                                                                               | `1`    |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                            | `3`    |
+| `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)                                                          | `30`   |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                                                        | `{}`   |
+| `affinity`                      | Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                                                         | `{}`   |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                                                          | `[]`   |
+| `redeployLabel`                 | If this label is changed since the last deployment, the whole chart will be redeployed                                                                                    | `""`   |
 
 ### Deployment Artifacts Storage settings
 
