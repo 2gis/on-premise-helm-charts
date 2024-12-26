@@ -36,6 +36,17 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
+      initContainers:
+        - name: wait-redis
+          image: redis
+          command: ['/bin/bash', '-c', "state=0; while (( $state == 0 )); do if redis-cli -u redis://default:{{ .Values.redis.password }}@{{ include "keys.redis.name" . }}:{{ .Values.redis.port }} -r 1 -i 1 info; then export state=1; else sleep 3; fi; done"]
+          resources:
+            limits:
+              cpu: 200m
+              memory: 384Mi
+            requests:
+              cpu: 50m
+              memory: 256Mi
       containers:
         - name: tasker
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
