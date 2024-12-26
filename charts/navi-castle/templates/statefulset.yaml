@@ -61,6 +61,7 @@ spec:
         - name: {{ include "castle.fullname" . }}-data
           emptyDir: {}
         {{- end }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       containers:
         - name: castle-nginx
