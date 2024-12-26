@@ -140,7 +140,7 @@ nginx:
   httpPort: 8080
   image:
     repository: 2gis-on-premise/nginx
-    tag: 1.21.6
+    tag: 1.25.4
     pullPolicy: IfNotPresent
   resources:
     requests:
