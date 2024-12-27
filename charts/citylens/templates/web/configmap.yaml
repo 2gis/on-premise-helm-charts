@@ -30,9 +30,11 @@ data:
     db_connections:
       postgres: {{ include "citylens.pgDSN"  . | squote }}
       postgres_pool_size: {{ .Values.web.pgPoolSize }}
+      postgres_pool_max_overflow: {{ .Values.web.pgPoolMaxOverflow }}
     kafka:
     {{- with .Values.kafka }}
-      bootstrap_servers: {{  required "A valid .Values.kafka.bootstrap.servers entry required" .bootstrapServer | squote }}
+      bootstrap_servers: {{ required "A valid .Values.kafka.bootstrap.servers entry required" .bootstrapServer | squote }}
+      producer_timeout_seconds: {{ .produceTimeoutSeconds }}
       security:
         security_protocol: 'SASL_PLAINTEXT'
         sasl_mechanism: 'SCRAM-SHA-512'
@@ -107,6 +109,18 @@ data:
           coords: [{{ join "," .coords }}]
       {{- end }}
       initial_project: {{ .Values.map.initialProject | squote }}
+      {{- with .Values.worker.mapMatcher }}
+      {{- if .enabled }}
+      matching:
+        enabled: {{ .enabled }}
+        host: {{ required "A valid .Values.worker.mapMatcher.baseUrl entry required" .baseUrl }}
+        key: {{ required "A valid .Values.worker.mapMatcher.key entry required" .key }}
+        interpolation: {{ .interpolation }}
+        retries_total: {{ .retries }}
+        retries_backoff_factor: 0.8
+        timeout: {{ .timeoutSeconds }}
+      {{- end }}
+      {{- end }}
     register_predictor_ttl_seconds: 600
     enabled_modules:
       header_links:

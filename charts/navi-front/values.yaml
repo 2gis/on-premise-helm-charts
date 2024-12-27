@@ -7,6 +7,7 @@ dgctlDockerRegistry: ''
 
 # @section Common settings
 
+# @param enableServiceLinks Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service)
 # @param replicaCount A replica count for the pod.
 # @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 # @param imagePullSecrets Kubernetes image pull secrets.
@@ -19,6 +20,7 @@ dgctlDockerRegistry: ''
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 
+enableServiceLinks: true
 replicaCount: 1
 revisionHistoryLimit: 3
 imagePullSecrets: []
@@ -41,7 +43,7 @@ affinity: {}
 image:
   repository: 2gis-on-premise/navi-front
   pullPolicy: IfNotPresent
-  tag: 1.24.1
+  tag: 1.25.2
 
 
 # @section Navi-Front service settings

@@ -21,7 +21,7 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 | `nodejs.image.tag`        | Floors backend image tag.        | `1.1.0`                         |
 | `nginx.image.repository`  | Floors nginx image repository.   | `2gis-on-premise/nginx`         |
 | `nginx.image.pullPolicy`  | Floors nginx pull policy.        | `IfNotPresent`                  |
-| `nginx.image.tag`         | Floors nginx image tag.          | `1.21.6`                        |
+| `nginx.image.tag`         | Floors nginx image tag.          | `1.25.4`                        |
 
 ### Deployment Artifacts Storage settings
 
@@ -35,19 +35,21 @@ Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premi
 
 ### Common settings
 
-| Name                   | Description                                                                                                                                    | Value |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `replicaCount`         | A replica count for the pod.                                                                                                                   | `1`   |
-| `revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `imagePullSecrets`     | Kubernetes image pull secrets.                                                                                                                 | `[]`  |
-| `nameOverride`         | Base name to use in all the Kubernetes entities deployed by this chart.                                                                        | `""`  |
-| `fullnameOverride`     | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                    | `""`  |
-| `podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                  | `{}`  |
-| `podSecurityContext`   | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                 | `{}`  |
-| `securityContext`      | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                     | `{}`  |
-| `nodeSelector`         | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                            | `{}`  |
-| `tolerations`          | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                              | `[]`  |
-| `affinity`             | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                    | `{}`  |
+| Name                            | Description                                                                                                                                                               | Value  |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `enableServiceLinks`            | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `true` |
+| `replicaCount`                  | A replica count for the pod.                                                                                                                                              | `1`    |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                            | `3`    |
+| `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)                                                          | `30`   |
+| `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                                            | `[]`   |
+| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                   | `""`   |
+| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                               | `""`   |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                             | `{}`   |
+| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                            | `{}`   |
+| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                                | `{}`   |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                       | `{}`   |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                         | `[]`   |
+| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                               | `{}`   |
 
 ### Service account settings
 

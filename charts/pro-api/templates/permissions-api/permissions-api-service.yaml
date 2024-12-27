@@ -1,4 +1,3 @@
-{{ if .Values.permissions.settings.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -22,4 +21,3 @@ spec:
       appProtocol: http
   selector:
     {{- include "pro-api.permissionsSelectorLabels" . | nindent 4 }}
-{{- end }}

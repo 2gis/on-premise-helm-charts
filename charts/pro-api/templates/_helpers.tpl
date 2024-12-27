@@ -104,3 +104,47 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{- define "pro-api.connectionString" -}}
+{{-  printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
+	(.Values.postgres.api.rw.host | required "A valid .Values.postgres.api.rw.host entry required!")
+	(.Values.postgres.api.rw.port | required "A valid .Values.postgres.api.rw.port entry required!" | int)
+	(.Values.postgres.api.rw.name | required "A valid .Values.postgres.api.rw.name entry required!")
+	(.Values.postgres.api.rw.username | required "A valid .Values.postgres.api.rw.username entry required!")
+	((.Values.postgres.api.rw.poolSize).min | int | default 1)
+	((.Values.postgres.api.rw.poolSize).max | int | default 10)
+	(.Values.postgres.api.rw.timeout | int | default 15)
+-}}
+{{- end -}}
+
+{{- define "pro-api.connectionStringReadOnly" -}}
+{{- if .Values.postgres.api.ro -}}
+{{- printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
+	(.Values.postgres.api.ro.host | required "A valid .Values.postgres.api.ro.host entry required!")
+	(.Values.postgres.api.ro.port | required "A valid .Values.postgres.api.ro.port entry required!" | int)
+	(.Values.postgres.api.ro.name | required "A valid .Values.postgres.api.ro.name entry required!")
+	(.Values.postgres.api.ro.username | required "A valid .Values.postgres.api.ro.username entry required!")
+	((.Values.postgres.api.ro.poolSize).min | int | default 1)
+	((.Values.postgres.api.ro.poolSize).max | int | default 10)
+	(.Values.postgres.api.ro.timeout | int | default 15)
+-}}
+{{- else -}}
+{{ print "" }}
+{{- end -}}
+{{- end -}}
+
+{{- define "pro-tasks.connectionString" -}}
+{{- if .Values.tasks.settings.enabled -}}
+{{- printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
+	(.Values.postgres.tasks.rw.host | required "A valid .Values.postgres.tasks.rw.host entry required!")
+	(.Values.postgres.tasks.rw.port | required "A valid .Values.postgres.tasks.rw.port entry required!" | int)
+	(.Values.postgres.tasks.rw.name | required "A valid .Values.postgres.tasks.rw.name entry required!")
+	(.Values.postgres.tasks.rw.username | required "A valid .Values.postgres.tasks.rw.username entry required!")
+	((.Values.postgres.tasks.rw.poolSize).min | int | default 1)
+	((.Values.postgres.tasks.rw.poolSize).max | int | default 5)
+	(.Values.postgres.tasks.rw.timeout | int | default 15)
+-}}
+{{- else -}}
+{{ print "" }}
+{{- end -}}
+{{- end -}}

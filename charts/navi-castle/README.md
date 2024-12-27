@@ -34,7 +34,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `castle.image.pullPolicy` | Navi-Castle service pull policy.      | `IfNotPresent`                |
 | `castle.image.tag`        | Navi-Castle service image tag.        | `1.9.2`                       |
 | `nginx.image.repository`  | Navi-Front image repository.          | `2gis-on-premise/navi-front`  |
-| `nginx.image.tag`         | Navi-Front image tag.                 | `1.24.1`                      |
+| `nginx.image.tag`         | Navi-Front image tag.                 | `1.25.2`                      |
 
 ### Deployment Artifacts Storage settings
 
@@ -50,19 +50,20 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Common settings
 
-| Name                            | Description                                                                                                                 | Value |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `replicaCount`                  | A replica count for the pod.                                                                                                | `1`   |
-| `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                              | `[]`  |
-| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`  |
-| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`  |
-| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`  |
-| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).              | `{}`  |
-| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                  | `{}`  |
-| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`  |
-| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`  |
-| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`  |
-| `terminationGracePeriodSeconds` | Maximum time allowed for graceful shutdown.                                                                                 | `60`  |
+| Name                            | Description                                                                                                                                                               | Value  |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `enableServiceLinks`            | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `true` |
+| `replicaCount`                  | A replica count for the pod.                                                                                                                                              | `1`    |
+| `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                                            | `[]`   |
+| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                   | `""`   |
+| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                               | `""`   |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                             | `{}`   |
+| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                            | `{}`   |
+| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                                | `{}`   |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                       | `{}`   |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                         | `[]`   |
+| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                               | `{}`   |
+| `terminationGracePeriodSeconds` | Maximum time allowed for graceful shutdown.                                                                                                                               | `60`   |
 
 ### Service account settings
 

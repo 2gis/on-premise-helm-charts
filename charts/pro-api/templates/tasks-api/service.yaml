@@ -20,6 +20,11 @@ spec:
       protocol: TCP
       name: http
       appProtocol: http
+    - port: {{ .Values.tasks.settings.grpcPort }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+      appProtocol: http
   selector:
     {{- include "pro-api.tasksSelectorLabels" . | nindent 4 }}
 {{- end }}

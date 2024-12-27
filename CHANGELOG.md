@@ -1,5 +1,56 @@
 # 2GIS On-Premise Changelog
 
+## [1.33.0] (2024-12-27)
+#### [Breaking-Changes](Breaking-Changes.md#1330)
+#### Images
+```
+citylens
+	- citylens-api:1.15.0
+	+ citylens-api:1.16.4
+	- citylens-database:1.15.0
+	+ citylens-database:1.16.1
+	- citylens-web:1.15.0
+	+ citylens-web:1.16.4
+	- citylens-workers:1.15.0
+	+ citylens-workers:1.16.4
+floors-api
+	- nginx:1.21.6
+	+ nginx:1.25.4
+license
+	- license:2.2.3
+	+ license:2.2.4
+mapgl-js-api
+	- mapgl:1.53.0
+	+ mapgl:1.55.0
+navi-castle
+	- navi-front:1.24.1
+	+ navi-front:1.25.2
+navi-front
+	- navi-front:1.24.1
+	+ navi-front:1.25.2
+pro-api
+	- pro-api:1.50.1
+	+ pro-api:1.54.0
+	- pro-importer:1.50.1
+	+ pro-importer:1.54.0
+	- pro-importer:1.50.1
+	+ pro-importer:1.54.0
+	- pro-permissions-api:1.50.1
+	+ pro-permissions-api:1.54.0
+	- pro-tasks-api:1.50.1
+	+ pro-tasks-api:1.54.0
+pro-ui
+	- pro-importer:1.50.1
+	+ pro-importer:1.54.0
+search-api
+	+ nginx:1.25.4
+	- search-nginx:1.21.6
+traffic-proxy
+	- nginx:1.21.6
+	+ nginx:1.25.4
+
+```
+
 ## [1.32.0] (2024-11-28)
 #### [Breaking-Changes](Breaking-Changes.md#1320)
 #### Images
