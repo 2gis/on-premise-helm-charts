@@ -38,15 +38,15 @@ spec:
     spec:
       initContainers:
       - name: wait-redis
-          image: redis
-          command: ['/bin/bash', '-c', "state=0; while (( $state == 0 )); do if redis-cli -u redis://default:{{ .Values.redis.password }}@{{ include "keys.redis.name" . }}:{{ .Values.redis.port }} -r 1 -i 1 info; then export state=1; else sleep 3; fi; done"]
-          resources:
-            limits:
-              cpu: 200m
-              memory: 384Mi
-            requests:
-              cpu: 50m
-              memory: 256Mi
+        image: redis
+        command: ['/bin/bash', '-c', "state=0; while (( $state == 0 )); do if redis-cli -u redis://default:{{ .Values.redis.password }}@{{ include "keys.redis.name" . }}:{{ .Values.redis.port }} -r 1 -i 1 info; then export state=1; else sleep 3; fi; done"]
+        resources:
+          limits:
+            cpu: 200m
+            memory: 384Mi
+          requests:
+            cpu: 50m
+            memory: 256Mi
       {{- with include "keys.psql.initTLS" . }}
       {{- . | nindent 8 }}
       {{- end }}
