@@ -500,7 +500,7 @@ postgres:
       name: ''
       username: ''
       password: ''
-    ro: null
+    ro: []
 
   # @skip postgres.tasks
   tasks:
@@ -514,7 +514,7 @@ postgres:
       name: ''
       username: ''
       password: ''
-    ro: null
+    ro: []
 
 # @section Kafka settings (supported version 2.7)
 

@@ -134,6 +134,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{- define "pro-tasks.connectionString" -}}
+{{- if .Values.tasks.settings.enabled -}}
 {{- printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
 	(.Values.postgres.tasks.rw.host | required "A valid .Values.postgres.tasks.rw.host entry required!")
 	(.Values.postgres.tasks.rw.port | required "A valid .Values.postgres.tasks.rw.port entry required!" | int)
@@ -143,4 +144,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 	((.Values.postgres.tasks.rw.poolSize).max | int | default 5)
 	(.Values.postgres.tasks.rw.timeout | int | default 15)
 -}}
+{{- else -}}
+{{ print "" }}
+{{- end -}}
 {{- end -}}
