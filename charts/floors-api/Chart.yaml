@@ -3,7 +3,7 @@ name: floors-api
 description: Helm for floors service
 type: application
 
-version: 1.33.0
+version: 1.33.1
 appVersion: 1.1.0
 
 maintainers:

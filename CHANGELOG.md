@@ -1,5 +1,20 @@
 # 2GIS On-Premise Changelog
 
+## [1.33.1] (2025-01-09)
+#### Images
+```
+floors-api
+	- nginx:1.25.4
+	+ nginx:1.25.5
+search-api
+	- nginx:1.25.4
+	+ nginx:1.25.5
+traffic-proxy
+	- nginx:1.25.4
+	+ nginx:1.25.5
+
+```
+
 ## [1.33.0] (2024-12-27)
 #### [Breaking-Changes](Breaking-Changes.md#1330)
 #### Images
