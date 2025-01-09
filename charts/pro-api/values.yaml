@@ -499,7 +499,7 @@ postgres:
       name: ''
       username: ''
       password: ''
-    ro: []
+    ro: {}
 
   # @skip postgres.tasks
   tasks:
@@ -513,7 +513,7 @@ postgres:
       name: ''
       username: ''
       password: ''
-    ro: []
+    ro: {}
 
 # @section Kafka settings (supported version 2.7)
 

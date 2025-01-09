@@ -76,7 +76,7 @@ proxy:
     errorLog:
       level: error
 
-    accessLog: '/dev/null'
+    accessLog: /dev/null
     # accessLog: '/dev/stdout main'
 
   keepaliveTimeout: 65
@@ -109,7 +109,7 @@ proxy:
 
 image:
   repository: 2gis-on-premise/nginx
-  tag: 1.25.4
+  tag: 1.25.5
   pullPolicy: IfNotPresent
 
 

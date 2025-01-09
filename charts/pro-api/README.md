@@ -184,7 +184,7 @@
 | `postgres.api.rw.name`         | PostgreSQL database name. **Required**                                                                               | `""`   |
 | `postgres.api.rw.username`     | PostgreSQL username. **Required**                                                                                    | `""`   |
 | `postgres.api.rw.password`     | PostgreSQL password. **Required**                                                                                    | `""`   |
-| `postgres.api.ro`              | Settings for the read-only access.                                                                                   | `[]`   |
+| `postgres.api.ro`              | Settings for the read-only access.                                                                                   | `{}`   |
 
 ### Kafka settings (supported version 2.7)
 
