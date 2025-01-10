@@ -24,7 +24,7 @@ keycloak
 keys
 	keys-backend:1.89.0
 	keys-redis:6.2.6-alpine3.15
-	keys-ui:0.8.0
+	keys-ui:0.10.3
 license
 	license:2.2.4
 mapgl-js-api
