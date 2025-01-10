@@ -141,6 +141,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.featureFlags.enableAudit }}"
 - name: KEYS_FEATURE_FLAGS_PUBLIC_API_SIGN
   value: "{{ .Values.featureFlags.enablePublicAPISign }}"
+- name: KEYS_FEATURE_FLAGS_EXTERNAL_COMPANIES
+  value: "{{ .Values.featureFlags.enableDefaultPartner }}"
+- name: KEYS_FEATURE_FLAGS_OIDC
+  value: "{{ .Values.featureFlags.enableOIDC }}"
 {{- end }}
 
 {{- define "keys.env.api" -}}
@@ -152,6 +156,20 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     secretKeyRef:
       name: {{ include "keys.secret.deploys.name" . }}
       key: signPrivateKey
+{{- end }}
+{{- if .Values.featureFlags.enableOIDC }}
+- name: KEYS_OIDC_ENDPOINT
+  value: "{{ .Values.api.oidc.url }}"
+- name: KEYS_OIDC_CLIENT_TIMEOUT
+  value: "{{ .Values.api.oidc.timeout }}"
+- name: KEYS_OIDC_CLIENT_RETRY_COUNT
+  value: "{{ .Values.api.oidc.retryCount }}"
+- name: KEYS_OIDC_DEFAULT_PARTNER_ID
+  value: "{{ .Values.api.oidc.defaultPartner.id }}"
+- name: KEYS_OIDC_DEFAULT_PARTNER_NAME
+  value: "{{ .Values.api.oidc.defaultPartner.name }}"
+- name: KEYS_OIDC_DEFAULT_ROLE
+  value: "{{ .Values.api.oidc.defaultPartner.role }}"
 {{- end }}
 {{- end }}
 

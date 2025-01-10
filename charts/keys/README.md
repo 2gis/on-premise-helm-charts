@@ -31,7 +31,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.105.0`                      |
+| `backend.image.tag`        | Backend service image tag.        | `1.108.2`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
 | `admin.image.tag`          | Admin service image tag.          | `0.10.3`                       |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
@@ -39,10 +39,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Flags for enabling/disabling certain features.
 
-| Name                               | Description                             | Value   |
-| ---------------------------------- | --------------------------------------- | ------- |
-| `featureFlags.enableAudit`         | Enable audit logging.                   | `false` |
-| `featureFlags.enablePublicAPISign` | Enable signing responses in Public API. | `false` |
+| Name                                | Description                                                                           | Value   |
+| ----------------------------------- | ------------------------------------------------------------------------------------- | ------- |
+| `featureFlags.enableAudit`          | Enable audit logging.                                                                 | `false` |
+| `featureFlags.enablePublicAPISign`  | Enable signing responses in Public API.                                               | `false` |
+| `featureFlags.enableOIDC`           | Enable OIDC related functionality.                                                    | `false` |
+| `featureFlags.enableDefaultPartner` | Enable functionality of default partner (needed when external OIDC provider is used). | `false` |
 
 ### Admin service settings
 
@@ -88,6 +90,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.adminSessionTTL`                       | TTL of the admin users sessions. Duration string is a sequence of decimal numbers with optional fraction and unit suffix, like `100ms`, `2.3h` or `4h35m`. Valid time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`. | `336h`          |
 | `api.logLevel`                              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                                  | `warning`       |
 | `api.signPrivateKey`                        | RSA-PSS 2048 private key (in PKCS#1 format) for signing responses in Public API.                                                                                                                                           | `""`            |
+| `api.oidc.url`                              | URL of the OIDC provider. **Required**                                                                                                                                                                                     | `""`            |
+| `api.oidc.retryCount`                       | Maximum number of retries for requests to OIDC provider.                                                                                                                                                                   | `3`             |
+| `api.oidc.timeout`                          | Timeout for requests to OIDC provider.                                                                                                                                                                                     | `3s`            |
+| `api.oidc.defaultPartner`                   | **Settings for default partner feature. Info specified here will be returned in responses from Auth API**                                                                                                                  |                 |
+| `api.oidc.defaultPartner.id`                | Default partner's Id.                                                                                                                                                                                                      | `""`            |
+| `api.oidc.defaultPartner.name`              | Default partner's Name.                                                                                                                                                                                                    | `""`            |
+| `api.oidc.defaultPartner.role`              | Role of the user in the default partner. Can be: 'user', 'admin'.                                                                                                                                                          | `admin`         |
 | `api.replicas`                              | A replica count for the pod.                                                                                                                                                                                               | `1`             |
 | `api.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                                             | `3`             |
 | `api.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                                       | `RollingUpdate` |
