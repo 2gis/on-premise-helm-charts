@@ -160,7 +160,7 @@ api:
       # ...
       # -----END CERTIFICATE-----
 
-  # @param api.oidc.url URL of the OIDC provider. **Required**
+  # @param api.oidc.url URL of the OIDC provider.
   # @param api.oidc.retryCount Maximum number of retries for requests to OIDC provider.
   # @param api.oidc.timeout Timeout for requests to OIDC provider.
   # @extra api.oidc.defaultPartner **Settings for default partner feature. Info specified here will be returned in responses from Auth API**

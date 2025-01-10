@@ -159,17 +159,17 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 {{- if .Values.featureFlags.enableOIDC }}
 - name: KEYS_OIDC_ENDPOINT
-  value: "{{ .Values.api.oidc.url }}"
+  value: "{{ required "A valid .Values.api.oidc.url required" .Values.api.oidc.url }}"
 - name: KEYS_OIDC_CLIENT_TIMEOUT
   value: "{{ .Values.api.oidc.timeout }}"
 - name: KEYS_OIDC_CLIENT_RETRY_COUNT
   value: "{{ .Values.api.oidc.retryCount }}"
 - name: KEYS_OIDC_DEFAULT_PARTNER_ID
-  value: "{{ .Values.api.oidc.defaultPartner.id }}"
+  value: "{{ required "A valid .Values.api.oidc.defaultPartner.id required" .Values.api.oidc.defaultPartner.id }}"
 - name: KEYS_OIDC_DEFAULT_PARTNER_NAME
-  value: "{{ .Values.api.oidc.defaultPartner.name }}"
+  value: "{{ required "A valid .Values.api.oidc.defaultPartner.name required" .Values.api.oidc.defaultPartner.name }}"
 - name: KEYS_OIDC_DEFAULT_ROLE
-  value: "{{ .Values.api.oidc.defaultPartner.role }}"
+  value: "{{ required "A valid .Values.api.oidc.defaultPartner.role required" .Values.api.oidc.defaultPartner.role }}"
 {{- end }}
 {{- end }}
 
