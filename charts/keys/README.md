@@ -205,24 +205,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Database access settings
 
-| Name                   | Description                                                                         | Value  |
-| ---------------------- | ----------------------------------------------------------------------------------- | ------ |
-| `postgres.ro`          | **Settings for the read-only access**                                               |        |
-| `postgres.ro.host`     | PostgreSQL hostname or IP. **Required**                                             | `""`   |
-| `postgres.ro.port`     | PostgreSQL port.                                                                    | `5432` |
-| `postgres.ro.timeout`  | PostgreSQL client connection timeout.                                               | `3s`   |
-| `postgres.ro.name`     | PostgreSQL database name. **Required**                                              | `""`   |
-| `postgres.ro.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`   |
-| `postgres.ro.username` | PostgreSQL username. **Required**                                                   | `""`   |
-| `postgres.ro.password` | PostgreSQL password. **Required**                                                   | `""`   |
-| `postgres.rw`          | **Settings for the read-write access**                                              |        |
-| `postgres.rw.host`     | PostgreSQL hostname or IP. **Required**                                             | `""`   |
-| `postgres.rw.port`     | PostgreSQL port.                                                                    | `5432` |
-| `postgres.rw.timeout`  | PostgreSQL client connection timeout.                                               | `3s`   |
-| `postgres.rw.name`     | PostgreSQL database name. **Required**                                              | `""`   |
-| `postgres.rw.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`   |
-| `postgres.rw.username` | PostgreSQL username. **Required**                                                   | `""`   |
-| `postgres.rw.password` | PostgreSQL password. **Required**                                                   | `""`   |
+| Name                   | Description                                                                                                      | Value  |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------- | ------ |
+| `postgres.ro`          | **Settings for the read-only access**                                                                            |        |
+| `postgres.ro.host`     | PostgreSQL one or multiple hostnames or IPs separated by comma (e.g. 'host1,host2,10.0.0.1').  **Required**      | `""`   |
+| `postgres.ro.port`     | PostgreSQL one or multiple ports (one for each host). Values must be separated by comma (e.g. '1234,4567,5432'). | `5432` |
+| `postgres.ro.timeout`  | PostgreSQL client connection timeout.                                                                            | `3s`   |
+| `postgres.ro.name`     | PostgreSQL database name. **Required**                                                                           | `""`   |
+| `postgres.ro.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.                              | `""`   |
+| `postgres.ro.username` | PostgreSQL username. **Required**                                                                                | `""`   |
+| `postgres.ro.password` | PostgreSQL password. **Required**                                                                                | `""`   |
+| `postgres.rw`          | **Settings for the read-write access**                                                                           |        |
+| `postgres.rw.host`     | PostgreSQL one or multiple hostnames or IPs separated by comma (e.g. 'host1,host2,host3').  **Required**         | `""`   |
+| `postgres.rw.port`     | PostgreSQL one or multiple ports (one for each host). Values must be separated by comma (e.g. '1234,4567,5432'). | `5432` |
+| `postgres.rw.timeout`  | PostgreSQL client connection timeout.                                                                            | `3s`   |
+| `postgres.rw.name`     | PostgreSQL database name. **Required**                                                                           | `""`   |
+| `postgres.rw.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.                              | `""`   |
+| `postgres.rw.username` | PostgreSQL username. **Required**                                                                                | `""`   |
+| `postgres.rw.password` | PostgreSQL password. **Required**                                                                                | `""`   |
 
 ### Kafka settings
 
