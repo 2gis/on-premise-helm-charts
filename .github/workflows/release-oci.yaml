@@ -34,12 +34,12 @@ jobs:
       - name: Checkout repository at specified tag
         uses: actions/checkout@v4
         with:
-          ref: $TAG_VERSION
+          ref: ${{ env.TAG_VERSION }}
 
       # ШАГ 3. Подтверждаем, что переключение на тег прошло успешно
       - name: Confirm current tag
         run: |
-          echo "Checked out to tag: $TAG_VERSION"
+          echo "Checked out to tag: ${{ env.TAG_VERSION }}"
           git rev-parse HEAD
           git describe --tags
 
@@ -47,20 +47,24 @@ jobs:
       - name: Setup Helm
         uses: azure/setup-helm@v3
         with:
-          version: v3.15.2  # Версия Helm
+          version: latest # Используем последнюю стабильную версию Helm
 
       # ШАГ 5. Обрабатываем все чарты в директории ./charts
       - name: Find and package Helm charts
         run: |
-          echo "Using version: $TAG_VERSION"
+          echo "Using version: ${{ env.TAG_VERSION }}"
+
+          # Создаем директорию для упакованных чартов
+          mkdir -p ./packaged
 
           # Ищем все Chart.yaml внутри папки ./charts
           for chart_path in $(find ./charts -name 'Chart.yaml'); do
-            chart_dir=$(dirname $chart_path) # Переходим в директорию чарта
+            chart_dir=$(dirname $chart_path) # Директория чарта
             echo "Processing chart in directory: $chart_dir"
 
             # Обновляем версию в Chart.yaml на основе тега
-            sed -i "s/^version:.*/version: ${TAG_VERSION}/" $chart_path
+            sed -i -E "s/^version:.*/version: ${TAG_VERSION}/" $chart_path
+            echo "Updated Chart.yaml:"
             cat $chart_path # Выводим файл для проверки
 
             # Упаковываем чарт
