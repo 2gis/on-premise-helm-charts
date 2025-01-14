@@ -34,12 +34,12 @@ jobs:
       - name: Checkout repository at specified tag
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.TAG_VERSION }}
+          ref: $TAG_VERSION
 
       # ШАГ 3. Подтверждаем, что переключение на тег прошло успешно
       - name: Confirm current tag
         run: |
-          echo "Checked out to tag: ${{ env.TAG_VERSION }}"
+          echo "Checked out to tag: $TAG_VERSION"
           git rev-parse HEAD
           git describe --tags
 
