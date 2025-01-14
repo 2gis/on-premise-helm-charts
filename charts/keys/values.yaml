@@ -24,14 +24,18 @@ imagePullPolicy: IfNotPresent
 featureFlags:
   # @param featureFlags.enableAudit Enable audit logging.
   # @param featureFlags.enablePublicAPISign Enable signing responses in Public API.
+  # @param featureFlags.enableOIDC Enable OIDC related functionality.
+  # @param featureFlags.enableSignlePartnerMode Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).
 
   enableAudit: false
   enablePublicAPISign: false
+  enableOIDC: false
+  enableSignlePartnerMode: false
 
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.105.0
+    tag: 1.108.2
 
 # @section Admin service settings
 
@@ -155,6 +159,23 @@ api:
       # -----BEGIN CERTIFICATE-----
       # ...
       # -----END CERTIFICATE-----
+
+  # @param api.oidc.url URL of the OIDC provider.
+  # @param api.oidc.retryCount Maximum number of retries for requests to OIDC provider.
+  # @param api.oidc.timeout Timeout for requests to OIDC provider.
+  # @extra api.oidc.defaultPartner **Settings for single partner mode feature. Info specified here will be returned in responses from Auth API**
+  # @param api.oidc.defaultPartner.id Default partner's Id.
+  # @param api.oidc.defaultPartner.name Default partner's Name.
+  # @param api.oidc.defaultPartner.role Role of the user in the default partner. Can be: 'user', 'admin'.
+
+  oidc:
+    url: ''
+    retryCount: 3
+    timeout: 3s
+    defaultPartner:
+      id: ''
+      name: ''
+      role: 'admin'
 
   # @param api.replicas A replica count for the pod.
 
