@@ -3,7 +3,7 @@ name: Publish Helm Charts to ghcr.io
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+      - \d+\.\d+\.\d+
   workflow_dispatch: # Также можно вручную запускать workflow.
     inputs:
       tag:
