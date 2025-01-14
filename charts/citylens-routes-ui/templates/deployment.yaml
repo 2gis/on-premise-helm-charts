@@ -58,12 +58,21 @@ spec:
               value: {{ .Values.env.MAPGL_COPYRIGHT_VARIANT | quote }}
             - name: MAPGL_STYLE_ID
               value: {{ .Values.env.MAPGL_STYLE_ID | quote }}
+            - name: PLATFORM_MANAGER_API_URL
+              value: {{ .Values.env.PLATFORM_MANAGER_API_URL | quote }}
+            - name: PLATFORM_MANAGER_CLIENT_ID
+              value: {{ .Values.env.PLATFORM_MANAGER_CLIENT_ID | quote }}
             - name: ROUTES_API_URL
               value: {{ required "A valid .Values.env.ROUTES_API_URL entry required" .Values.env.ROUTES_API_URL | quote }}
             - name: MAPGL_KEY
               valueFrom:
                 secretKeyRef:
                   key: MAPGL_KEY
+                  name: {{ include "citylens-ui.name" . }}-secret
+            - name: PLATFORM_MANAGER_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: PLATFORM_MANAGER_CLIENT_SECRET
                   name: {{ include "citylens-ui.name" . }}-secret
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:

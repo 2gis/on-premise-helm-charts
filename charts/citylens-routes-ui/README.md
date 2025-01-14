@@ -21,18 +21,21 @@
 | Name               | Description | Value                                |
 | ------------------ | ----------- | ------------------------------------ |
 | `image.repository` | Repository  | `2gis-on-premise/citylens-routes-ui` |
-| `image.tag`        | Tag         | `latest`                             |
+| `image.tag`        | Tag         | `0.0.17`                             |
 
 ### Environment
 
-| Name                          | Description                                         | Value |
-| ----------------------------- | --------------------------------------------------- | ----- |
-| `env.CATALOG_API_URL`         | Catalog API base URL **Required**                   | `""`  |
-| `env.MAPGL_API_URL`           | Map API base URL **Required**                       | `""`  |
-| `env.MAPGL_COPYRIGHT_VARIANT` | Copyright variant, can be '2gis', 'urbi' or empty   | `""`  |
-| `env.MAPGL_KEY`               | API key for mapgl **Required**                      | `""`  |
-| `env.MAPGL_STYLE_ID`          | Map style ID                                        | `""`  |
-| `env.ROUTES_API_URL`          | Backend (citylens-routes-api) base URL **Required** | `""`  |
+| Name                                 | Description                                                | Value |
+| ------------------------------------ | ---------------------------------------------------------- | ----- |
+| `env.CATALOG_API_URL`                | Catalog API base URL **Required**                          | `""`  |
+| `env.MAPGL_API_URL`                  | Map API base URL **Required**                              | `""`  |
+| `env.MAPGL_COPYRIGHT_VARIANT`        | Copyright variant, can be '2gis', 'urbi' or empty          | `""`  |
+| `env.MAPGL_KEY`                      | API key for mapgl **Required**                             | `""`  |
+| `env.MAPGL_STYLE_ID`                 | Map style ID                                               | `""`  |
+| `env.PLATFORM_MANAGER_API_URL`       | Platform manager API base URL **Required**                 | `""`  |
+| `env.PLATFORM_MANAGER_CLIENT_ID`     | OpenID client identifier for Platform manager **Required** | `""`  |
+| `env.PLATFORM_MANAGER_CLIENT_SECRET` | OpenID client identifier for Platform manager **Required** | `""`  |
+| `env.ROUTES_API_URL`                 | Backend (citylens-routes-api) base URL **Required**        | `""`  |
 
 ### Common deployment settings
 
