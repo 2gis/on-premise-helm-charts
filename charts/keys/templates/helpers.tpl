@@ -142,7 +142,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_FEATURE_FLAGS_PUBLIC_API_SIGN
   value: "{{ .Values.featureFlags.enablePublicAPISign }}"
 - name: KEYS_FEATURE_FLAGS_EXTERNAL_COMPANIES
-  value: "{{ .Values.featureFlags.enableDefaultPartner }}"
+  value: "{{ .Values.featureFlags.enableSignlePartnerMode }}"
 - name: KEYS_FEATURE_FLAGS_OIDC
   value: "{{ .Values.featureFlags.enableOIDC }}"
 {{- end }}

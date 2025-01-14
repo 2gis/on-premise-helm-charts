@@ -25,12 +25,12 @@ featureFlags:
   # @param featureFlags.enableAudit Enable audit logging.
   # @param featureFlags.enablePublicAPISign Enable signing responses in Public API.
   # @param featureFlags.enableOIDC Enable OIDC related functionality.
-  # @param featureFlags.enableDefaultPartner Enable functionality of default partner (needed when external OIDC provider is used).
+  # @param featureFlags.enableSignlePartnerMode Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).
 
   enableAudit: false
   enablePublicAPISign: false
   enableOIDC: false
-  enableDefaultPartner: false
+  enableSignlePartnerMode: false
 
 backend:
   image:
@@ -163,7 +163,7 @@ api:
   # @param api.oidc.url URL of the OIDC provider.
   # @param api.oidc.retryCount Maximum number of retries for requests to OIDC provider.
   # @param api.oidc.timeout Timeout for requests to OIDC provider.
-  # @extra api.oidc.defaultPartner **Settings for default partner feature. Info specified here will be returned in responses from Auth API**
+  # @extra api.oidc.defaultPartner **Settings for single partner mode feature. Info specified here will be returned in responses from Auth API**
   # @param api.oidc.defaultPartner.id Default partner's Id.
   # @param api.oidc.defaultPartner.name Default partner's Name.
   # @param api.oidc.defaultPartner.role Role of the user in the default partner. Can be: 'user', 'admin'.

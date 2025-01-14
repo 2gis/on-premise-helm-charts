@@ -39,12 +39,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Flags for enabling/disabling certain features.
 
-| Name                                | Description                                                                           | Value   |
-| ----------------------------------- | ------------------------------------------------------------------------------------- | ------- |
-| `featureFlags.enableAudit`          | Enable audit logging.                                                                 | `false` |
-| `featureFlags.enablePublicAPISign`  | Enable signing responses in Public API.                                               | `false` |
-| `featureFlags.enableOIDC`           | Enable OIDC related functionality.                                                    | `false` |
-| `featureFlags.enableDefaultPartner` | Enable functionality of default partner (needed when external OIDC provider is used). | `false` |
+| Name                                   | Description                                                                                                                 | Value   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `featureFlags.enableAudit`             | Enable audit logging.                                                                                                       | `false` |
+| `featureFlags.enablePublicAPISign`     | Enable signing responses in Public API.                                                                                     | `false` |
+| `featureFlags.enableOIDC`              | Enable OIDC related functionality.                                                                                          | `false` |
+| `featureFlags.enableSignlePartnerMode` | Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used). | `false` |
 
 ### Admin service settings
 
@@ -93,7 +93,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.oidc.url`                              | URL of the OIDC provider.                                                                                                                                                                                                  | `""`            |
 | `api.oidc.retryCount`                       | Maximum number of retries for requests to OIDC provider.                                                                                                                                                                   | `3`             |
 | `api.oidc.timeout`                          | Timeout for requests to OIDC provider.                                                                                                                                                                                     | `3s`            |
-| `api.oidc.defaultPartner`                   | **Settings for default partner feature. Info specified here will be returned in responses from Auth API**                                                                                                                  |                 |
+| `api.oidc.defaultPartner`                   | **Settings for single partner mode feature. Info specified here will be returned in responses from Auth API**                                                                                                              |                 |
 | `api.oidc.defaultPartner.id`                | Default partner's Id.                                                                                                                                                                                                      | `""`            |
 | `api.oidc.defaultPartner.name`              | Default partner's Name.                                                                                                                                                                                                    | `""`            |
 | `api.oidc.defaultPartner.role`              | Role of the user in the default partner. Can be: 'user', 'admin'.                                                                                                                                                          | `admin`         |
