@@ -1,5 +1,5 @@
 name: Publish Helm Charts to ghcr.io
-run-name: "Publish Helm Charts for Tag ${{ inputs.tag }} ${GITHUB_REF#refs/tags/} Event: ${{ github.event_name }} (Run #${{ github.run_number }})"
+run-name: "Publish Helm Charts for Tag ${{ inputs.tag }} ${GITHUB_REF#refs/tags/} (Run #${{ github.run_number }})"
 
 on:
   push:
