@@ -98,13 +98,14 @@ jobs:
       # ШАГ 8. Обновляем описание workflow
       - name: Update Workflow Run Description
         if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          RUN_NUMBER: ${{ github.run_number }}
+          REPO: ${{ github.repository }}
+          TAG_VERSION: ${{ env.TAG_VERSION }}
+          EVENT: ${{ github.event_name }}
+          STATUS: ${{ job.status }}
         run: |
-          RUN_ID=${{ github.run_id }}
-          RUN_NUMBER=${{ github.run_number }}
-          REPO=${{ github.repository }}
-          TAG_VERSION=${{ env.TAG_VERSION }}
-          EVENT=${{ github.event_name }}
-          STATUS=${{ job.status }}
 
           echo "Updating workflow run description with tag: $TAG and run number: $RUN_NUMBER"
 
@@ -112,4 +113,4 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/$REPO/actions/runs/$RUN_ID \
-            -d "{\"name\":\"Publish Helm Charts #$RUN_NUMBER - $TAG_VERSION\",\"description\":\"Workflow status: $STATUS Deployed Helm charts for version $TAG_VERSION Event: $EVENT\"}"
+            -d "{\"name\":\"Publish Helm Charts $RUN_NUMBER - $TAG_VERSION\",\"description\":\"Workflow status: $STATUS Deployed Helm charts for version $TAG_VERSION Event: $EVENT\"}"
