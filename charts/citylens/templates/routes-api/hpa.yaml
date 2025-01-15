@@ -1,0 +1,42 @@
+{{- with .Values.routes.api }}
+{{- if .hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "citylens.routes.api.name" $ }}
+  labels:
+      {{- include "citylens.routes.api.labels" $ | nindent 4 }}
+    {{- with .labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "citylens.routes.api.name" $ }}
+  minReplicas: {{ .hpa.minReplicas }}
+  maxReplicas: {{ .hpa.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: {{ .hpa.scaleUpStabilizationWindowSeconds }}
+    scaleDown:
+      stabilizationWindowSeconds: {{ .hpa.scaleDownStabilizationWindowSeconds }}
+  metrics:
+  {{- with .hpa.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
+  {{- end }}
+  {{- with .hpa.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
+  {{- end }}
+{{- end }}
+{{- end }}
