@@ -1,4 +1,5 @@
 name: Publish Helm Charts to ghcr.io
+run-name: "Publish Helm Charts for Tag ${{ inputs.tag }}${GITHUB_REF#refs/tags/} Event: ${{ github.event_name }} (Run #${{ github.run_number }})"
 
 on:
   push:
@@ -15,7 +16,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    run-name: "Publish Helm Charts for Tag ${{ inputs.tag }}${GITHUB_REF#refs/tags/} Event: ${{ github.event_name }} (Run #${{ github.run_number }})"
 
     steps:
       # ШАГ 1. Узнаем, откуда пришел workflow (пуш тега или ручной запуск)
