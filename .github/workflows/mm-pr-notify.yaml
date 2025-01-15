@@ -22,7 +22,7 @@ jobs:
           MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
           TEXT: |
             Создан Pull Request [${{ github.event.pull_request.title }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }})
-            Автор:  ${{ github.triggering_actor }}
+            Автор:  ${{ github.actor }}
       - uses: mattermost/action-mattermost-notify@master
         if: ${{ (github.event.pull_request.draft == false && startsWith(github.event.pull_request.title, 'WIP:') == false && github.event.action == 'edited'  &&  startsWith(github.event.changes.title.from, 'WIP:') == true ) ||  github.event.action == 'ready_for_review'}}
         with:
@@ -31,4 +31,4 @@ jobs:
           MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
           TEXT: |
             Pull Request готов к проверке [${{ github.event.pull_request.title }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }})
-            Автор:  ${{ github.triggering_actor }}
+            Автор:  ${{ github.actor }}
