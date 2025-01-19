@@ -32,7 +32,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | ------------------------- | ------------------------------------- | ----------------------------- |
 | `castle.image.repository` | Navi-Castle service image repository. | `2gis-on-premise/navi-castle` |
 | `castle.image.pullPolicy` | Navi-Castle service pull policy.      | `IfNotPresent`                |
-| `castle.image.tag`        | Navi-Castle service image tag.        | `1.9.5`                       |
+| `castle.image.tag`        | Navi-Castle service image tag.        | `1.9.8`                       |
 | `nginx.image.repository`  | Navi-Front image repository.          | `2gis-on-premise/navi-front`  |
 | `nginx.image.tag`         | Navi-Front image tag.                 | `1.25.2`                      |
 
@@ -166,24 +166,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
 | `rtr.enabled`                   | If the RTR is enabled.                                                                                                        | `false`                                         |
 | `rtr.http.baseDir`              | Base dir on server.                                                                                                           | `export-restrictions-json`                      |
-| `rtr.http.serverUrl`            | Server URL.                                                                                                                   | `http://server`                                 |
-| `rtr.kafka.topic`               | Name of the topic.                                                                                                            | `rtr.topic`                                     |
+| `rtr.http.serverUrl`            | Server URL.                                                                                                                   | `""`                                            |
+| `rtr.kafka.topic`               | Name of the topic.                                                                                                            | `""`                                            |
 | `rtr.kafka.groupId`             | Kafka consumer group id.                                                                                                      | `castle-rtr`                                    |
 | `rtr.kafka.properties`          | Properties as supported by kafka-python. Refer to inline comments for details.                                                |                                                 |
 | `rtr.kafka.sensitiveProperties` | As rtr.kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                                            |
 | `rtr.kafka.fileProperties`      | As rtr.kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                                            |
 | `rtr.buildFtp.baseDir`          | Base dir on build ftp.                                                                                                        | `trafficedro`                                   |
-| `rtr.buildFtp.login`            | Login on build ftp.                                                                                                           | `login`                                         |
-| `rtr.buildFtp.password`         | Password on build ftp.                                                                                                        | `password`                                      |
-| `rtr.buildFtp.serverUrl`        | URL build ftp.                                                                                                                | `http://buildftp/`                              |
+| `rtr.buildFtp.login`            | Login on build ftp.                                                                                                           | `""`                                            |
+| `rtr.buildFtp.password`         | Password on build ftp.                                                                                                        | `""`                                            |
+| `rtr.buildFtp.serverUrl`        | URL build ftp.                                                                                                                | `""`                                            |
 | `rtr.prometheus.baseDir`        | Base dir on premtheus.                                                                                                        | `api/private/Export/segmentGrid/freezeVersions` |
-| `rtr.prometheus.serverUrl`      | URL premtheus.                                                                                                                | `http://prometheus/`                            |
+| `rtr.prometheus.serverUrl`      | URL premtheus.                                                                                                                | `""`                                            |
 | `rtr.puzzle.baseDir`            | Base dir on puzzle.                                                                                                           | `api/segments-to-download?version=%version%`    |
-| `rtr.puzzle.serverUrl`          | URL puzzle.                                                                                                                   | `http://puzzle/`                                |
+| `rtr.puzzle.serverUrl`          | URL puzzle.                                                                                                                   | `""`                                            |
 | `rtr.puzzleSegments.baseDir`    | Base dir on puzzle segments.                                                                                                  | `api/segments/%code%?version=%version%`         |
-| `rtr.puzzleSegments.serverUrl`  | URL puzzle segments.                                                                                                          | `http://puzzle/`                                |
+| `rtr.puzzleSegments.serverUrl`  | URL puzzle segments.                                                                                                          | `""`                                            |
 | `rtr.webapi.baseDir`            | Base dir on webapi.                                                                                                           | `/2.0/region/list?fields=*&type=segment,region` |
-| `rtr.webapi.serverUrl`          | URL webapi.                                                                                                                   | `http://catalog/`                               |
+| `rtr.webapi.serverUrl`          | URL webapi.                                                                                                                   | `""`                                            |
 
 ### customCAs **Custom Certificate Authority**
 

@@ -255,31 +255,31 @@ rtr:
   enabled: false
   http:
     baseDir: export-restrictions-json
-    serverUrl: http://server
+    serverUrl: ''
   kafka:
     groupId: castle-rtr
     properties:
-      bootstrap.servers: kafka:9092
+      bootstrap.servers: ''
       security.protocol: PLAINTEXT
     sensitiveProperties: {}
     fileProperties: {}
-    topic: rtr.topic
+    topic: ''
   buildFtp:
-    serverUrl: http://buildftp/
+    serverUrl: ''
     baseDir: trafficedro
-    login: login
-    password: password
+    login: ''
+    password: ''
   webapi:
-    serverUrl: http://catalog/
+    serverUrl: ''
     baseDir: /2.0/region/list?fields=*&type=segment,region
   puzzle:
-    serverUrl: http://puzzle/
+    serverUrl: ''
     baseDir: api/segments-to-download?version=%version%
   puzzleSegments:
-    serverUrl: http://puzzle/
+    serverUrl: ''
     baseDir: api/segments/%code%?version=%version%
   prometheus:
-    serverUrl: http://prometheus/
+    serverUrl: ''
     baseDir: api/private/Export/segmentGrid/freezeVersions
 
 # More on Kafka properties.
