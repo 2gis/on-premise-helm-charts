@@ -78,7 +78,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.29.2.2`                  |
+| `image.tag`        | Tag         | `7.33.0.5`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings
@@ -172,6 +172,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.hierarchies.volume`                           | Hierarchies local cache specification. Leave empty for default emptydir.                                                                                                                                            | `{}`                                     |
 | `naviback.etaScheduleIndex.enabled`                     | If Schedule Index available                                                                                                                                                                                         | `false`                                  |
 | `naviback.etaScheduleIndex.url`                         | Schedule Index remote url                                                                                                                                                                                           | `""`                                     |
+| `naviback.etaScheduleIndex.etaScheduleNodes`            | ETA Schedule nodes                                                                                                                                                                                                  | `""`                                     |
 
 ### Envoy settings, ignored if not `transmitter.enabled`. Leave with defaults, FOR FUTURE RELEASE.
 
@@ -319,6 +320,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `routesharing.topic`                | Topic to use for route sharing                                          | `sharing-kafka-topic` |
 | `routesharing.kafka.properties`     | Properties as supported by librdkafka, see `kafka` section and comments |                       |
 | `routesharing.kafka.fileProperties` | Properties stored in file, see `kafka` section and comments             | `{}`                  |
+
+### Traffic lights processing. Leave with defaults, FOR FUTURE RELEASE
+
+| Name                                 | Description                                                             | Value                  |
+| ------------------------------------ | ----------------------------------------------------------------------- | ---------------------- |
+| `trafficLights.enabled`              | If traffic lights processing enabled                                    | `false`                |
+| `trafficLights.projects`             | List of projects, for which traffic lights are processed                | `[]`                   |
+| `trafficLights.topic`                | Topic to use for traffic lights processing                              | `traffic-lights-topic` |
+| `trafficLights.kafka.properties`     | Properties as supported by librdkafka, see `kafka` section and comments |                        |
+| `trafficLights.kafka.fileProperties` | Properties stored in file, see `kafka` section and comments             | `{}`                   |
 
 ### License settings
 

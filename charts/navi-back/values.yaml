@@ -106,7 +106,7 @@ args: []
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.29.2.2
+  tag: 7.33.0.5
 
 
 # @section Navi-Back application settings
@@ -229,6 +229,7 @@ image:
 # @param naviback.hierarchies.volume Hierarchies local cache specification. Leave empty for default emptydir.
 # @param naviback.etaScheduleIndex.enabled If Schedule Index available
 # @param naviback.etaScheduleIndex.url Schedule Index remote url
+# @param naviback.etaScheduleIndex.etaScheduleNodes ETA Schedule nodes
 # @skip rules
 
 naviback:
@@ -367,6 +368,7 @@ naviback:
   etaScheduleIndex:
     enabled: false
     url: ''
+    etaScheduleNodes: ''
 
 rules: []
 
@@ -640,6 +642,25 @@ dataGroup:
 routesharing:
   enabled: false
   topic: sharing-kafka-topic
+  kafka:
+    properties:
+      bootstrap.servers: kafka.host:9092
+      security.protocol: PLAINTEXT
+    fileProperties: {}
+
+# @section Traffic lights processing. Leave with defaults, FOR FUTURE RELEASE
+# @param trafficLights.enabled If traffic lights processing enabled
+# @param trafficLights.projects List of projects, for which traffic lights are processed
+# @param trafficLights.topic Topic to use for traffic lights processing
+# @extra trafficLights.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
+# @skip trafficLights.kafka.properties.bootstrap.servers
+# @skip trafficLights.kafka.properties.security.protocol
+# @param trafficLights.kafka.fileProperties Properties stored in file, see `kafka` section and comments
+
+trafficLights:
+  enabled: false
+  projects: []
+  topic: traffic-lights-topic
   kafka:
     properties:
       bootstrap.servers: kafka.host:9092

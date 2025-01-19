@@ -468,7 +468,7 @@ data:
         {{- end }}{{- /* .Values.naviback.indices.snImport.enabled */}}
         {{- if .Values.naviback.indices.routeAsUsual.enabled }}
         "route_as_usual": {
-          "update_period": 0,
+          "update_period": 28800,
           "nodes": [
             "{{ .Values.naviback.routeAsUsualUrl }}"
           ],
@@ -649,11 +649,32 @@ data:
         },
         "eta_schedule": {
           "update_period": 0,
+          {{- if .Values.naviback.etaScheduleIndex.etaScheduleNodes }}
+          "nodes": [
+            "{{ .Values.naviback.etaScheduleIndex.etaScheduleNodes }}"
+          ],
+          {{- end }}{{/* if .Values.naviback.etaScheduleIndex.etaScheduleNodes */}}
           "timeout_seconds": {
             "count": 5
           }
         },
         {{- end }}{{- /* if .Values.naviback.etaScheduleIndex.enabled */}}
+        {{- if .Values.trafficLights.enabled }}
+        "traffic_lights_kafka": {
+          {{- $kafkaProperties := dict -}}
+          {{- range $key, $_ := .Values.trafficLights.kafka.fileProperties -}}
+          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
+          {{- end -}}
+          {{- $kafkaProperties := mustMerge $kafkaProperties .Values.trafficLights.kafka.properties }}
+          "kafka_properties":
+            {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
+          "topic": "{{ .Values.trafficLights.topic }}",
+          {{- with .Values.trafficLights.projects }}
+          "projects":
+            {{ . | mustToPrettyJson | nindent 12 }}
+          {{- end }}
+        },
+        {{- end }}{{/* .Values.trafficLigths.enabled */}}
         {{- if .Values.naviback.additionalSections }}
           {{- include "tplvalues.render" ( dict "value" .Values.naviback.additionalSections "context" $) | nindent 8 }}
         {{- end }}
