@@ -73,7 +73,9 @@ data:
 
         http:
         {
-            server: '{{ .Values.castle.restrictions.host }}',
+            {{- /* backward compatibility to be removed later since
+                 * restrictions.host renamed to restrictions.url */}}
+            server: '{{ .Values.castle.restrictions.url | default .Values.castle.restrictions.host }}',
             base_dir: '',
             api_key: '{{ .Values.castle.restrictions.key }}',
             timeout: 5  #sec
