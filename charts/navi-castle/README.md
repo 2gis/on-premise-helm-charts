@@ -103,23 +103,23 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Castle service settings
 
-| Name                                   | Description                                                                                                                                                            | Value                          |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| `castle.castleDataPath`                | Path to the data directory.                                                                                                                                            | `/opt/castle/data/`            |
-| `castle.excludeProjects`               | Array of project labels to exclude                                                                                                                                     | `[]`                           |
-| `castle.restrictions`                  | Section ignored if castle.restriction.enabled=false                                                                                                                    |                                |
-| `castle.restrictions.host`             | Restrictions API base URL.                                                                                                                                             | `http://restrictions-api.host` |
-| `castle.restrictions.key`              | Restrictions API key.                                                                                                                                                  | `""`                           |
-| `castle.jobs`                          | Number of parallel downloading jobs.                                                                                                                                   | `1`                            |
-| `castle.logLevel`                      | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                                                          | `INFO`                         |
-| `castle.startupProbe`                  | Settings for startup probes                                                                                                                                            |                                |
-| `castle.startupProbe.periodSeconds`    | Check period for startup probes.                                                                                                                                       | `5`                            |
-| `castle.startupProbe.failureThreshold` | Threshold for startup probes.                                                                                                                                          | `180`                          |
-| `castle.storePeriod`                   | Retention period for the corresponding data if enabled, ref. `cron`, `init` and `rtr` sections. Supported values: `day`, `month`, `week` or a specific number of days. |                                |
-| `castle.storePeriod.import`            | Retention period for `import` job data, ref. `cron/init.enabled.import`                                                                                                | `month`                        |
-| `castle.storePeriod.restriction`       | Retention period for `restriction` job data, ref. `cron/init.enabled.restriction`                                                                                      | `week`                         |
-| `castle.storePeriod.restrictionImport` | Retention period for `restrictionImport` job data, ref. `cron/init.enabled.restrictionImport`                                                                          | `week`                         |
-| `castle.storePeriod.rtr`               | Retention period for `rtr` data, ref. `rtr.enabled`                                                                                                                    | `week`                         |
+| Name                                   | Description                                                                                                                                                            | Value               |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `castle.castleDataPath`                | Path to the data directory.                                                                                                                                            | `/opt/castle/data/` |
+| `castle.excludeProjects`               | Array of project labels to exclude                                                                                                                                     | `[]`                |
+| `castle.restrictions`                  | Section ignored if castle.restriction.enabled=false                                                                                                                    |                     |
+| `castle.restrictions.host`             | Restrictions API base URL.                                                                                                                                             | `""`                |
+| `castle.restrictions.key`              | Restrictions API key.                                                                                                                                                  | `""`                |
+| `castle.jobs`                          | Number of parallel downloading jobs.                                                                                                                                   | `1`                 |
+| `castle.logLevel`                      | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                                                          | `INFO`              |
+| `castle.startupProbe`                  | Settings for startup probes                                                                                                                                            |                     |
+| `castle.startupProbe.periodSeconds`    | Check period for startup probes.                                                                                                                                       | `5`                 |
+| `castle.startupProbe.failureThreshold` | Threshold for startup probes.                                                                                                                                          | `180`               |
+| `castle.storePeriod`                   | Retention period for the corresponding data if enabled, ref. `cron`, `init` and `rtr` sections. Supported values: `day`, `month`, `week` or a specific number of days. |                     |
+| `castle.storePeriod.import`            | Retention period for `import` job data, ref. `cron/init.enabled.import`                                                                                                | `month`             |
+| `castle.storePeriod.restriction`       | Retention period for `restriction` job data, ref. `cron/init.enabled.restriction`                                                                                      | `week`              |
+| `castle.storePeriod.restrictionImport` | Retention period for `restrictionImport` job data, ref. `cron/init.enabled.restrictionImport`                                                                          | `week`              |
+| `castle.storePeriod.rtr`               | Retention period for `rtr` data, ref. `rtr.enabled`                                                                                                                    | `week`              |
 
 ### Navi-Front settings
 
@@ -156,7 +156,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | ------------------------------- | ------------------------------------------------------------------------------------- | ------------------- |
 | `persistentVolume.enabled`      | If Kubernetes persistence volume should be enabled for Castle.                        | `false`             |
 | `persistentVolume.accessModes`  | Volume access mode.                                                                   | `["ReadWriteOnce"]` |
-| `persistentVolume.storageClass` | Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/). | `ceph-csi-rbd`      |
+| `persistentVolume.storageClass` | Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/). | `""`                |
 | `persistentVolume.size`         | Volume size.                                                                          | `5Gi`               |
 | `persistentVolume.type`         | Volume type `pvc` or `ephemeral`.                                                     | `pvc`               |
 
