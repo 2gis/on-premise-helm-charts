@@ -123,7 +123,7 @@ resources: {}
 # @param castle.castleDataPath Path to the data directory.
 # @param castle.excludeProjects Array of project labels to exclude
 # @extra castle.restrictions Section ignored if castle.restriction.enabled=false
-# @param castle.restrictions.host Restrictions API base URL.
+# @param castle.restrictions.url Restrictions API base URL.
 # @param castle.restrictions.key Restrictions API key.
 # @param castle.jobs Number of parallel downloading jobs.
 # @param castle.logLevel Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.
@@ -141,9 +141,9 @@ castle:
     repository: 2gis-on-premise/navi-castle
     pullPolicy: IfNotPresent
     tag: 1.9.8
-  castleDataPath: /opt/castle/data/
+  castleDataPath: /opt/castle/data
   restrictions:
-    host: ''
+    url: ''
     key: ''
   excludeProjects: []
   jobs: 1
