@@ -143,7 +143,7 @@ castle:
     tag: 1.9.8
   castleDataPath: /opt/castle/data/
   restrictions:
-    host: http://restrictions-api.host
+    host: ''
     key: ''
   excludeProjects: []
   jobs: 1
@@ -223,7 +223,7 @@ persistentVolume:
   type: pvc
   accessModes:
   - ReadWriteOnce
-  storageClass: ceph-csi-rbd
+  storageClass: ''
   size: 5Gi
 
 # @section RTR settings. Leave with defaults, FOR FUTURE RELEASE.
