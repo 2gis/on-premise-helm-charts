@@ -6,7 +6,6 @@ spec:
   concurrencyPolicy: Forbid
   schedule: "0 18 29 2 6"
   suspend: true
-  successfulJobsHistoryLimit: {{ .Values.taskProcessor.successfulJobsHistoryLimit }}
   jobTemplate:
     spec:
       backoffLimit: {{ .Values.taskProcessor.backoffLimit }}
@@ -30,7 +29,11 @@ spec:
           containers:
             - name: {{ include "task-processor-job.name" . }}
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.taskProcessor.repository }}:{{ .Values.taskProcessor.tag }}
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: {{ .Values.taskProcessor.imagePullPolicy }}
+              {{- with .Values.taskProcessor.imagePullSecrets }}
+              imagePullSecrets:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               resources:
                 {{- toYaml .Values.taskProcessor.resources | nindent 16 }}
               volumeMounts:
