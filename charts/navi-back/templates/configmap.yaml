@@ -565,7 +565,7 @@ data:
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.routesharing.kafka.properties }}
           "kafka_properties":
             {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
-          "topic": {{ .Values.routesharing.topic | quote }}
+          "topic": {{ .Values.routesharing.kafka.topic | required "routesharing.kafka.topic is not set" | quote }}
         },
         {{- end }}{{/* .Values.routesharing.enabled */}}
         {{- if and .Values.naviback.bss.enabled .Values.naviback.bss.client.serviceRemoteAddress }}
@@ -668,7 +668,7 @@ data:
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.trafficLights.kafka.properties }}
           "kafka_properties":
             {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
-          "topic": "{{ .Values.trafficLights.topic }}",
+          "topic": {{ .Values.trafficLights.kafka.topic | required "trafficLights.kafka.topic is not set" | quote }},
           {{- with .Values.trafficLights.projects }}
           "projects":
             {{ . | mustToPrettyJson | nindent 12 }}

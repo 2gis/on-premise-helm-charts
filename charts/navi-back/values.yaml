@@ -534,7 +534,7 @@ kafka:
   groupId: navi_back
   handlersNumber: 2
   properties:
-    bootstrap.servers: kafka.host:9092
+    bootstrap.servers: ''
     security.protocol: PLAINTEXT
   fileProperties: {}
   distanceMatrix:
@@ -633,7 +633,7 @@ dataGroup:
 # @section Route sharing properties. Leave with defaults, FOR FUTURE RELEASE
 
 # @param routesharing.enabled If route sharing enabled
-# @param routesharing.topic Topic to use for route sharing
+# @param routesharing.kafka.topic Topic to use for route sharing
 # @extra routesharing.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
 # @skip routesharing.kafka.properties.bootstrap.servers
 # @skip routesharing.kafka.properties.security.protocol
@@ -641,17 +641,17 @@ dataGroup:
 
 routesharing:
   enabled: false
-  topic: sharing-kafka-topic
   kafka:
+    topic: ''
     properties:
-      bootstrap.servers: kafka.host:9092
+      bootstrap.servers: ''
       security.protocol: PLAINTEXT
     fileProperties: {}
 
 # @section Traffic lights processing. Leave with defaults, FOR FUTURE RELEASE
 # @param trafficLights.enabled If traffic lights processing enabled
 # @param trafficLights.projects List of projects, for which traffic lights are processed
-# @param trafficLights.topic Topic to use for traffic lights processing
+# @param trafficLights.kafka.topic Topic to use for traffic lights processing
 # @extra trafficLights.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
 # @skip trafficLights.kafka.properties.bootstrap.servers
 # @skip trafficLights.kafka.properties.security.protocol
@@ -660,10 +660,10 @@ routesharing:
 trafficLights:
   enabled: false
   projects: []
-  topic: traffic-lights-topic
   kafka:
+    topic: ''
     properties:
-      bootstrap.servers: kafka.host:9092
+      bootstrap.servers: ''
       security.protocol: PLAINTEXT
     fileProperties: {}
 

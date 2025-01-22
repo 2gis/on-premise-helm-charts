@@ -314,22 +314,22 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Route sharing properties. Leave with defaults, FOR FUTURE RELEASE
 
-| Name                                | Description                                                             | Value                 |
-| ----------------------------------- | ----------------------------------------------------------------------- | --------------------- |
-| `routesharing.enabled`              | If route sharing enabled                                                | `false`               |
-| `routesharing.topic`                | Topic to use for route sharing                                          | `sharing-kafka-topic` |
-| `routesharing.kafka.properties`     | Properties as supported by librdkafka, see `kafka` section and comments |                       |
-| `routesharing.kafka.fileProperties` | Properties stored in file, see `kafka` section and comments             | `{}`                  |
+| Name                                | Description                                                             | Value   |
+| ----------------------------------- | ----------------------------------------------------------------------- | ------- |
+| `routesharing.enabled`              | If route sharing enabled                                                | `false` |
+| `routesharing.kafka.topic`          | Topic to use for route sharing                                          | `""`    |
+| `routesharing.kafka.properties`     | Properties as supported by librdkafka, see `kafka` section and comments |         |
+| `routesharing.kafka.fileProperties` | Properties stored in file, see `kafka` section and comments             | `{}`    |
 
 ### Traffic lights processing. Leave with defaults, FOR FUTURE RELEASE
 
-| Name                                 | Description                                                             | Value                  |
-| ------------------------------------ | ----------------------------------------------------------------------- | ---------------------- |
-| `trafficLights.enabled`              | If traffic lights processing enabled                                    | `false`                |
-| `trafficLights.projects`             | List of projects, for which traffic lights are processed                | `[]`                   |
-| `trafficLights.topic`                | Topic to use for traffic lights processing                              | `traffic-lights-topic` |
-| `trafficLights.kafka.properties`     | Properties as supported by librdkafka, see `kafka` section and comments |                        |
-| `trafficLights.kafka.fileProperties` | Properties stored in file, see `kafka` section and comments             | `{}`                   |
+| Name                                 | Description                                                             | Value   |
+| ------------------------------------ | ----------------------------------------------------------------------- | ------- |
+| `trafficLights.enabled`              | If traffic lights processing enabled                                    | `false` |
+| `trafficLights.projects`             | List of projects, for which traffic lights are processed                | `[]`    |
+| `trafficLights.kafka.topic`          | Topic to use for traffic lights processing                              | `""`    |
+| `trafficLights.kafka.properties`     | Properties as supported by librdkafka, see `kafka` section and comments |         |
+| `trafficLights.kafka.fileProperties` | Properties stored in file, see `kafka` section and comments             | `{}`    |
 
 ### License settings
 
