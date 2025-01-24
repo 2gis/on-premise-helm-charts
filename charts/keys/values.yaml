@@ -31,7 +31,7 @@ featureFlags:
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.105.0
+    tag: 1.108.2
 
 # @section Admin service settings
 
@@ -155,6 +155,27 @@ api:
       # -----BEGIN CERTIFICATE-----
       # ...
       # -----END CERTIFICATE-----
+
+  # @param api.oidc.enable If OIDC authentication is enabled.
+  # @param api.oidc.enableSignlePartnerMode Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).
+  # @param api.oidc.url URL of the OIDC provider.
+  # @param api.oidc.retryCount Maximum number of retries for requests to OIDC provider.
+  # @param api.oidc.timeout Timeout for requests to OIDC provider.
+  # @extra api.oidc.defaultPartner **Settings for single partner mode feature. Info specified here will be returned in responses from Auth API**
+  # @param api.oidc.defaultPartner.id Default partner's Id.
+  # @param api.oidc.defaultPartner.name Default partner's Name.
+  # @param api.oidc.defaultPartner.role Role of the user in the default partner. Can be: 'user', 'admin'.
+
+  oidc:
+    enable: false
+    enableSignlePartnerMode: false
+    url: ''
+    retryCount: 3
+    timeout: 3s
+    defaultPartner:
+      id: ''
+      name: ''
+      role: ''
 
   # @param api.replicas A replica count for the pod.
 
