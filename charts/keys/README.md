@@ -31,7 +31,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.89.0`                       |
+| `backend.image.tag`        | Backend service image tag.        | `1.105.0`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
 | `admin.image.tag`          | Admin service image tag.          | `0.10.3`                       |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
@@ -234,15 +234,21 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Kafka settings
 
-| Name                                  | Description                                                                                                                                                | Value  |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `kafka.audit`                         | **Settings for sending audit messages.**                                                                                                                   |        |
-| `kafka.audit.bootstrapServers`        | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`   |
-| `kafka.audit.username`                | Username for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`   |
-| `kafka.audit.password`                | Password for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`   |
-| `kafka.audit.topic`                   | Topic to produce audit messages.                                                                                                                           | `""`   |
-| `kafka.audit.produce.retryCount`      | Number of retries to produce a message.                                                                                                                    | `5`    |
-| `kafka.audit.produce.idempotentWrite` | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true` |
+| Name                                    | Description                                                                                                                                                | Value       |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `kafka.bootstrapServers`                | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093'). **Required**               | `""`        |
+| `kafka.securityProtocol`                | Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.                                 | `PLAINTEXT` |
+| `kafka.saslMechanism`                   | Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.       | `PLAIN`     |
+| `kafka.username`                        | Username for authorization (SASL).                                                                                                                         | `""`        |
+| `kafka.password`                        | Password for authorization (SASL).                                                                                                                         | `""`        |
+| `kafka.tls.skipServerCertificateVerify` | Controls whether a client verifies the server's certificate chain and host name.                                                                           | `false`     |
+| `kafka.tls.serverCA`                    | Server's root certificate.                                                                                                                                 | `""`        |
+| `kafka.tls.clientCert`                  | Client certificate.                                                                                                                                        | `""`        |
+| `kafka.tls.clientKey`                   | Client key.                                                                                                                                                | `""`        |
+| `kafka.audit`                           | **Settings for sending audit messages.**                                                                                                                   |             |
+| `kafka.audit.topic`                     | Topic to produce audit messages. **Required**                                                                                                              | `""`        |
+| `kafka.audit.produce.retryCount`        | Number of retries to produce a message.                                                                                                                    | `5`         |
+| `kafka.audit.produce.idempotentWrite`   | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true`      |
 
 ### LDAP connection settings
 
