@@ -407,7 +407,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_KAFKA_AUDIT_PASSWORD
   valueFrom:
     secretKeyRef:
-      name: {{ include "keys.kafka.name" . }}
+      name: {{ include "keys.name" . }}-kafka
       key: password
 {{- end }}
 - name: KEYS_KAFKA_AUDIT_SECURITY_PROTOCOL
@@ -590,7 +590,7 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- if has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL") -}}
 - name: tls-kafka-raw
   secret:
-    secretName: {{ include "keys.name" . }}-tls-kafka
+    secretName: {{ include "keys.name" . }}-kafka
     items:
     {{- if .Values.kafka.tls.serverCA }}
       - key: kafka-ca.crt
@@ -639,6 +639,11 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- end -}}
 
 {{- define "keys.initTLS" -}}
+{{- if or
+    (has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL"))
+    (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+    (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+}}
 - name: copy-certs
   image: {{ .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
   command:
@@ -673,4 +678,5 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
     - name: tls-kafka
       mountPath: /etc/ssl/private
   {{- end }}
+{{- end }}
 {{- end -}}
