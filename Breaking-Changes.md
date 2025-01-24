@@ -1,9 +1,15 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.34.0]
+
+### keys
+- A temporary flag, `--migrate-data`, has been added for this release. This flag triggers the data migration required for the Routing API data in the service.
+- Ensure that `keys` service is upgraded prior to upgrading any of the `navi` services.
+
 ## [1.33.0]
 
 ### pro-api
-- permissions.settings.enabled was removed, permissions api is now always mandatory 
+- permissions.settings.enabled was removed, permissions api is now always mandatory
 - postgres.connectionString, postgres.connectionStringReadonly, postgres.password were changed to postgres.api.rw / postgres.api.ro settings
 
 

@@ -31,7 +31,7 @@ featureFlags:
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.105.0
+    tag: 1.108.2
 
 # @section Admin service settings
 
@@ -155,6 +155,27 @@ api:
       # -----BEGIN CERTIFICATE-----
       # ...
       # -----END CERTIFICATE-----
+
+  # @param api.oidc.enable If OIDC authentication is enabled.
+  # @param api.oidc.enableSignlePartnerMode Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).
+  # @param api.oidc.url URL of the OIDC provider.
+  # @param api.oidc.retryCount Maximum number of retries for requests to OIDC provider.
+  # @param api.oidc.timeout Timeout for requests to OIDC provider.
+  # @extra api.oidc.defaultPartner **Settings for single partner mode feature. Info specified here will be returned in responses from Auth API**
+  # @param api.oidc.defaultPartner.id Default partner's Id.
+  # @param api.oidc.defaultPartner.name Default partner's Name.
+  # @param api.oidc.defaultPartner.role Role of the user in the default partner. Can be: 'user', 'admin'.
+
+  oidc:
+    enable: false
+    enableSignlePartnerMode: false
+    url: ''
+    retryCount: 3
+    timeout: 3s
+    defaultPartner:
+      id: ''
+      name: ''
+      role: ''
 
   # @param api.replicas A replica count for the pod.
 
@@ -497,8 +518,8 @@ postgres:
 
   # @extra postgres.ro **Settings for the read-only access**
 
-  # @param postgres.ro.host PostgreSQL hostname or IP. **Required**
-  # @param postgres.ro.port PostgreSQL port.
+  # @param postgres.ro.host PostgreSQL one or multiple hostnames or IPs separated by comma (e.g. 'host1,host2,10.0.0.1').  **Required**
+  # @param postgres.ro.port PostgreSQL one or multiple ports (one for each host). Values must be separated by comma (e.g. '1234,4567,5432').
   # @param postgres.ro.timeout PostgreSQL client connection timeout.
   # @param postgres.ro.name PostgreSQL database name. **Required**
   # @param postgres.ro.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
@@ -511,7 +532,7 @@ postgres:
 
   ro:
     host: ''
-    port: 5432
+    port: '5432'
     timeout: 3s
     name: ''
     schema: ''
@@ -525,8 +546,8 @@ postgres:
 
   # @extra postgres.rw **Settings for the read-write access**
 
-  # @param postgres.rw.host PostgreSQL hostname or IP. **Required**
-  # @param postgres.rw.port PostgreSQL port.
+  # @param postgres.rw.host PostgreSQL one or multiple hostnames or IPs separated by comma (e.g. 'host1,host2,host3').  **Required**
+  # @param postgres.rw.port PostgreSQL one or multiple ports (one for each host). Values must be separated by comma (e.g. '1234,4567,5432').
   # @param postgres.rw.timeout PostgreSQL client connection timeout.
   # @param postgres.rw.name PostgreSQL database name. **Required**
   # @param postgres.rw.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
@@ -539,7 +560,7 @@ postgres:
 
   rw:
     host: ''
-    port: 5432
+    port: '5432'
     timeout: 3s
     name: ''
     schema: ''
