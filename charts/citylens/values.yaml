@@ -1062,6 +1062,9 @@ customCAs:
 # @section Navi integration
 # @param routes.navi.url NAVI GATEWAY URL (used for getting navigation).
 
+# @section Gefest integration
+# @param routes.gefest.url GEFEST BACKEND URL (used for getting oidc auth).
+
 routes:
 
   environment: ''
@@ -1209,4 +1212,7 @@ routes:
           workersCount: 10
 
   navi:
+    url: ''
+
+  gefest:
     url: ''
