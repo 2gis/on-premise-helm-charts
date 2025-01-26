@@ -657,3 +657,9 @@ See the [documentation]() to learn about:
 | Name              | Description                                     | Value |
 | ----------------- | ----------------------------------------------- | ----- |
 | `routes.navi.url` | NAVI GATEWAY URL (used for getting navigation). | `""`  |
+
+### Gefest integration
+
+| Name                | Description                                      | Value |
+| ------------------- | ------------------------------------------------ | ----- |
+| `routes.gefest.url` | GEFEST BACKEND URL (used for getting oidc auth). | `""`  |
