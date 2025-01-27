@@ -6,7 +6,7 @@ keywords:
 - navi
 - back
 - backend
-version: 1.33.1
+version: 1.34.0
 appVersion: 7.33.0.5
 dependencies:
 - name: generic-chart

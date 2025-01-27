@@ -1,6 +1,6 @@
 catalog-api
-	catalog-api:3.625.0
-	catalog-importer:1.7.0
+	catalog-api:3.641.0
+	catalog-importer:1.11.0
 citylens
 	citylens-api:1.16.4
 	citylens-database:1.16.1
@@ -22,7 +22,7 @@ keycloak
 	keycloak-themes:0.0.8
 	keycloak:21.1.1-debian-11-r4
 keys
-	keys-backend:1.89.0
+	keys-backend:1.108.2
 	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.10.3
 license
@@ -36,9 +36,9 @@ navi-async-matrix
 navi-back
 	envoy:v1.27.0
 	metrics-aggregator:
-	navi-back:7.29.2.2
+	navi-back:7.33.0.5
 navi-castle
-	navi-castle:1.9.2
+	navi-castle:1.9.8
 	navi-front:1.25.2
 navi-front
 	navi-front:1.25.2
@@ -46,7 +46,7 @@ navi-restrictions
 	navi-restrictions-api:1.0.1
 	navi-restrictions-syncer:1.0.1
 navi-router
-	navi-router:6.24.0.3
+	navi-router:6.28.0.3
 navi-splitter
 	navi-splitter:1.0.1
 platform
