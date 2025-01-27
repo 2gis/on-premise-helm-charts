@@ -2,6 +2,9 @@
 {{ $ctx := .ctx }}
 {{ $job := .job }}
 spec:
+  {{- if ($job).activeDeadlineSeconds }}
+  activeDeadlineSeconds: {{ ($job).activeDeadlineSeconds }}
+  {{- end }}
   {{- if ($job).backoffLimit }}
   backoffLimit: {{ ($job).backoffLimit }}
   {{- end }}
