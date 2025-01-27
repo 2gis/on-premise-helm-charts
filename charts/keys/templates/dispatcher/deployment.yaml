@@ -36,7 +36,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- with include "keys.psql.initTLS" . }}
+      {{- with include "keys.initTLS" . }}
       initContainers:
       {{- . | nindent 8 }}
       {{- end }}
@@ -60,11 +60,13 @@ spec:
           {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
           {{- include "keys.psql.volumeMount" . | nindent 12 }}
+          {{- include "keys.tls.kafka.volumeMount" . | nindent 12 }}
       volumes:
       {{- if .Values.customCAs.bundle }}
       {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
       {{- end }}
       {{- include "keys.psql.volume" . | nindent 8 }}
+      {{- include "keys.tls.kafka.volume" . | nindent 8 }}
       {{- with .Values.dispatcher.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
