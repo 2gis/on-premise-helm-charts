@@ -1,5 +1,29 @@
 # 2GIS On-Premise Changelog
 
+## [1.34.0] (2025-01-27)
+#### [Breaking-Changes](Breaking-Changes.md#1340)
+#### Images
+```
+catalog-api
+	- catalog-api:3.625.0
+	+ catalog-api:3.641.0
+	- catalog-importer:1.7.0
+	+ catalog-importer:1.11.0
+keys
+	- keys-backend:1.89.0
+	+ keys-backend:1.108.2
+navi-back
+	- navi-back:7.29.2.2
+	+ navi-back:7.33.0.5
+navi-castle
+	- navi-castle:1.9.2
+	+ navi-castle:1.9.8
+navi-router
+	- navi-router:6.24.0.3
+	+ navi-router:6.28.0.3
+
+```
+
 ## [1.33.1] (2025-01-09)
 #### Images
 ```

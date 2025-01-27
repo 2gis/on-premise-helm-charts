@@ -3,7 +3,7 @@ name: styles-api
 type: application
 description: A Helm chart for Kubernetes to deploy API Styles service
 
-version: 1.33.1
+version: 1.34.0
 appVersion: 0.30.0
 
 maintainers:
