@@ -3,8 +3,13 @@
 ## [1.34.0]
 
 ### keys
-- A temporary flag, `--migrate-data`, has been added for this release. This flag triggers the data migration required for the Routing API data in the service.
+- Before upgrading to the next version, make sure to update to the current version (1.34.0).
 - Ensure that `keys` service is upgraded prior to upgrading any of the `navi` services.
+- A temporary flag, `--migrate-data`, has been added for this release. This flag triggers the data migration required for the Routing API data in the service.
+
+### navi-castle
+- `castle.restrictions.host` renamed to `castle.restrictions.url` and empty by default
+- `persistentVolume.storageClass` is now empty by default
 
 ## [1.33.0]
 
