@@ -53,10 +53,14 @@ spec:
               - /opt/config_builder.conf
               - --service={{ include "castle.serviceParameter" ( dict "flavor" $flavor ) }}
               - --jobs={{ $.Values.castle.jobs | default 1 | int }}
-              {{- if $.Values.customCAs.bundle }}
               env:
+              {{- if $.Values.customCAs.bundle }}
               - name: SSL_CERT_FILE
                 value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+              {{- end }}
+              {{- if $.Values.castle.excludeProjects }}
+              - name: CASTLE_EXCLUDE_PROJECTS
+                value: {{ join "," $.Values.castle.excludeProjects | quote }}
               {{- end }}
               volumeMounts:
               - name: {{ include "castle.fullname" $ }}-builder-config

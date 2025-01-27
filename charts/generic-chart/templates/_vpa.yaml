@@ -18,6 +18,7 @@ spec:
   resourcePolicy:
     containerPolicies:
       - containerName: {{ include "generic-chart.containerName" $ctx }}
+        controlledValues: {{ .controlledValues }}
         mode: Auto
         {{- with .minAllowed }}
         minAllowed:

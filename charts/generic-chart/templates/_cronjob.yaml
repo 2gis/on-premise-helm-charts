@@ -17,16 +17,16 @@ metadata:
 spec:
   schedule: {{ required "A valid cronJob.schedule entry required" $cronJob.schedule | quote }}
   suspend: {{ ($cronJob).suspend }}
-  {{- if ($cronJob).startingDeadlineSeconds }}
+  {{- if quote ($cronJob).startingDeadlineSeconds }}
   startingDeadlineSeconds: {{ ($cronJob).startingDeadlineSeconds }}
   {{- end }}
   {{- if ($cronJob).concurrencyPolicy }}
   concurrencyPolicy: {{ ($cronJob).concurrencyPolicy }}
   {{- end }}
-  {{- if ($cronJob).successfulJobsHistoryLimit }}
+  {{- if quote ($cronJob).successfulJobsHistoryLimit }}
   successfulJobsHistoryLimit: {{ ($cronJob).successfulJobsHistoryLimit }}
   {{- end }}
-  {{- if ($cronJob).failedJobsHistoryLimit }}
+  {{- if quote ($cronJob).failedJobsHistoryLimit }}
   failedJobsHistoryLimit: {{ ($cronJob).failedJobsHistoryLimit }}
   {{- end }}
   jobTemplate:

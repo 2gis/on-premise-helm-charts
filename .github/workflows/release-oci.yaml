@@ -1,0 +1,96 @@
+name: Publish Helm Charts to ghcr.io
+run-name: "Publish Helm Charts for Tag ${{ inputs.tag || github.event_name }} (Run #${{ github.run_number }})"
+
+on:
+  push:
+    tags:
+      - \d+\.\d+\.\d+
+  workflow_dispatch: # Также можно вручную запускать workflow.
+    inputs:
+      tag:
+        description: "Tag to process"
+        required: true
+        default: "1.0.0"
+
+jobs:
+  publish-helm-charts:
+    runs-on: ubuntu-latest
+    steps:
+      # ШАГ 1. Узнаем, откуда пришел workflow (пуш тега или ручной запуск)
+      - name: Determine if workflow is running from tag or input
+        id: determine_tag
+        run: |
+          # Определяем, был ли использован workflow_dispatch
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "Using input tag: ${{ inputs.tag }}"
+            echo "TAG_VERSION=${{ inputs.tag }}" >> $GITHUB_ENV
+          else
+            # Используем тег из события пуша
+            echo "Using pushed tag: ${GITHUB_REF#refs/tags/}"
+            echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          fi
+
+      # ШАГ 2. Checkout репозитория на указанный тег
+      - name: Checkout repository at specified tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG_VERSION }}
+
+      # ШАГ 3. Подтверждаем, что переключение на тег прошло успешно
+      - name: Confirm current tag
+        run: |
+          echo "Checked out to tag: ${{ env.TAG_VERSION }}"
+          git rev-parse HEAD
+          git describe --tags
+
+      # ШАГ 4: Установка Helm
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: latest # Используем последнюю стабильную версию Helm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ШАГ 5. Обрабатываем все чарты в директории ./charts
+      - name: Find and package Helm charts
+        run: |
+          echo "Using version: ${{ env.TAG_VERSION }}"
+
+          # Создаем директорию для упакованных чартов
+          mkdir -p ./packaged
+
+          # Ищем все Chart.yaml внутри папки ./charts
+          for chart_path in $(find ./charts -name 'Chart.yaml'); do
+            chart_dir=$(dirname $chart_path) # Директория чарта
+            echo "Processing chart in directory: $chart_dir"
+
+            # Проверяем, соответствует ли версия в Chart.yaml версии тега
+            echo "Checking version in Chart.yaml for $chart_path..."
+            current_version=$(grep '^version:' "$chart_path" | awk '{print $2}') # Извлекаем текущую версию из Chart.yaml
+
+            if [ "$current_version" != "${TAG_VERSION}" ]; then
+              echo "Error: Version mismatch in $chart_path. Expected: ${TAG_VERSION}, Found: ${current_version}"
+              exit 1
+            fi
+
+            echo "Version in $chart_path matches the expected version: ${TAG_VERSION}"
+
+            # Обновляем зависимости чарта
+            echo "Updating dependencies for chart: $chart_dir"
+            helm dependency update "$chart_dir"
+
+            # Упаковываем чарт
+            helm package $chart_dir --destination ./packaged
+          done
+
+      # ШАГ 6: Входим в GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # ШАГ 7. Публикуем чарты
+      - name: Push packaged Helm charts to ghcr.io
+        run: |
+          for chart in ./packaged/*.tgz; do
+            echo "Pushing chart: $chart -> ghcr.io/${{ github.repository_owner }}/charts"
+            helm push $chart oci://ghcr.io/${{ github.repository_owner }}/charts
+          done
