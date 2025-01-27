@@ -141,7 +141,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       name: {{ include "keys.secret.deploys.name" . }}
       key: signPrivateKey
 {{- end }}
-{{- if .Values.featureFlags.enableOIDC }}
+{{- if .Values.api.oidc.enable }}
 - name: KEYS_OIDC_ENDPOINT
   value: "{{ required "A valid .Values.api.oidc.url required" .Values.api.oidc.url }}"
 - name: KEYS_OIDC_CLIENT_TIMEOUT
