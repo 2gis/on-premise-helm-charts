@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+##
+
+### navi-castle
+- `castle.restrictions.host` renamed to `castle.restrictions.url` and empty by default
+- `persistentVolume.storageClass` is now empty by default
+
 ## [1.33.0]
 
 ### pro-api
