@@ -1,0 +1,336 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+
+# @section Common settings
+
+# @param replicaCount A replica count for the pod.
+# @param revisionHistoryLimit Number of replica sets to keep for deployment rollbacks
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param labels Custom labels to set to Deployment resource.
+# @param priorityClassName Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name.
+# @param preStopDelay Delay in seconds before terminating container.
+# @param terminationGracePeriodSeconds Maximum time allowed for graceful shutdown.
+
+replicaCount: 1
+revisionHistoryLimit: 1
+imagePullSecrets: []
+nameOverride: ''
+fullnameOverride: ''
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+labels: {}
+priorityClassName: ''
+preStopDelay: 5
+terminationGracePeriodSeconds: 60
+
+
+# @section Deployment settings
+
+# @param image.repository Repository
+# @param image.tag Tag
+# @param image.pullPolicy Pull Policy
+
+image:
+  repository: 2gis-on-premise/navi-vrp-task-manager
+  pullPolicy: IfNotPresent
+  tag: 1.12.0
+
+
+# @section Navi VRP Task Manager application settings
+
+# @skip vrpTaskManager.appPort
+# @param vrpTaskManager.logLevel Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.
+# @skip vrpTaskManager.logSerialize
+
+vrpTaskManager:
+  appPort: 8002
+  logLevel: INFO
+  logSerialize: 0
+
+# @section Service account settings
+
+# @param serviceAccount.create Specifies whether a service account should be created.
+# @param serviceAccount.annotations Annotations to add to the service account.
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ''
+
+
+# @section Service settings
+
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.clusterIP Controls Service cluster IP allocation. Cannot be changed after resource creation.
+# @param service.port Service port.
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+service:
+  type: ClusterIP
+  clusterIP: ''
+  port: 80
+  annotations: {}
+  labels:
+
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+# @param ingress.className Name of the Ingress controller class
+# @param ingress.enabled If Ingress is enabled for the service
+# @param ingress.hosts[0].host Hostname for the Ingress service
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service
+# @param ingress.tls TLS configuration
+ingress:
+  className: nginx
+  enabled: false
+  hosts:
+  - host: navi-vrp-task-manager.example.com
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - navi-vrp-task-manager.example.com
+  #   secretName: secret.tls
+
+
+# @section Limits
+
+# @param resources [nullable] Container resources requirements structure.
+# @param resources.requests.cpu [nullable] CPU request, recommended value `1000m`.
+# @param resources.requests.memory [nullable] Memory request, recommended value `2Gi`.
+# @param resources.limits.cpu [nullable] CPU limit, recommended value `3000m`.
+# @param resources.limits.memory [nullable] Memory limit, recommended value `8Gi`.
+
+resources: {}
+
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+# @param hpa.enabled If HPA is enabled for the service.
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.scaleUp Behavior settings for scaleUp.
+# @param hpa.scaleDown Behavior settings for scaleDown.
+
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ''
+  scaleUp:
+  scaleDown:
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+# @param vpa.enabled If VPA is enabled for the service.
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @extra vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @extra vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @extra vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @extra vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+# @extra vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+# @extra vpa.containerName Custom container name for VPA.
+
+vpa:
+  enabled: false
+  updateMode: Auto
+
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+pdb:
+  enabled: false
+  minAvailable: ''
+  maxUnavailable: 1
+
+# @section Multi-DC settings
+
+# @param multiDc.enabled If multi-DC functionality enabled. For future releases, leave default.
+# @param multiDc.location Primary DC identifier.
+# @param multiDc.redirectHeader HTTP header to tell requests original from redirected. Set empty to skip the check.
+# @param multiDc.secondaryTopics.statusTopic Name of `statusTopic` in secondary DC.
+# @param multiDc.secondaryTopics.messageBusTopic Name of `messageBusTopic` in secondary DC.
+
+multiDc:
+  enabled: false
+  location: default
+  redirectHeader: ''
+  secondaryTopics:
+    statusTopic: ''
+    messageBusTopic: ''
+
+# @section Kafka settings
+
+# @param kafka.solver.groupId Navi VRP Task Manager group identifier.
+# @extra kafka.solver.properties Properties as supported by kafka-python. Refer to inline comments for details.
+# @param kafka.solver.properties.bootstrap.servers Kafka bootstrap connection string. **Required**
+# @skip kafka.solver.properties.security.protocol
+# @param kafka.solver.fileProperties As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
+# @param kafka.solver.sensitiveProperties As kafka.properties, but kept in Secrets. Refer to inlines comments for details.
+# @param kafka.solver.fileProperties As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
+# @param kafka.solver.consumerOverrides.properties Consumer specific properties as simple key-value pairs.
+# @param kafka.solver.consumerOverrides.sensitiveProperties Consumer specific properties mounted as secrets.
+# @param kafka.solver.consumerOverrides.fileProperties Consumer specific properties mounted as regular files.
+# @param kafka.solver.producerOverrides.properties Consumer specific properties as simple key-value pairs.
+# @param kafka.solver.producerOverrides.sensitiveProperties Consumer specific properties mounted as secrets.
+# @param kafka.solver.producerOverrides.fileProperties Consumer specific properties mounted as regular files.
+# @param kafka.taskTopic Name of the topic for sending tasks. **Required**
+# @param kafka.statusTopic Name of the topic for obtaining results. **Required**
+# @param kafka.messageBusTopic Name of the topic for communication with DM Async service. **Required**
+# @param kafka.dm.groupId Navi VRP Task Manager group identifier.
+# @extra kafka.dm.properties Properties as supported by kafka-python. Refer to inline comments for details.
+# @param kafka.dm.properties.bootstrap.servers Kafka bootstrap connection string. **Required**
+# @skip kafka.dm.properties.security.protocol
+# @param kafka.dm.fileProperties As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
+# @param kafka.dm.sensitiveProperties As kafka.properties, but kept in Secrets. Refer to inlines comments for details.
+# @param kafka.dm.fileProperties As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
+
+kafka:
+  solver:
+    groupId: navi_vrp_task_manager
+    properties:
+      bootstrap.servers: ''
+      security.protocol: PLAINTEXT
+    sensitiveProperties: {}
+    fileProperties: {}
+    consumerOverrides:
+      properties: {}
+      sensitiveProperties: {}
+      fileProperties: {}
+    producerOverrides:
+      properties: {}
+      sensitiveProperties: {}
+      fileProperties: {}
+  dm:
+    groupId: navi_vrp_task_manager
+    properties:
+      bootstrap.servers: ''
+      security.protocol: PLAINTEXT
+    sensitiveProperties: {}
+    fileProperties: {}
+  taskTopic: ''
+  statusTopic: ''
+  messageBusTopic: ''
+
+# Kafka properties for common use-cases:
+#
+# Note that <Set-by-CI from user.p12> means that actual content passed from
+# file user.p12 with --set-file (especially binary data), e.g.:
+#
+#   $ helm install navi-back . --set-file 'kafka.fileProperties.ssl\.keystore\.location=user.p12'
+#
+# 1. SSL authentication with key file protected with password 123:
+#
+#  properties:
+#    bootstrap.servers: kafka.host:9092
+#    security.protocol: SSL
+#    ssl.keystore.password: '123'
+#  fileProperties:
+#    ssl.ca.location: '<Set-by-CI from ca.crt>'
+#    ssl.certificate.location: '<Set-by-CI from user.crt>'
+#    ssl.key.location: '<Set-by-CI from user.pem>'
+#
+# 2. login/password SASL as test-username/123:
+#
+#  properties:
+#    bootstrap.servers: kafka.host:9092
+#    security.protocol: SASL_PLAINTEXT
+#    sasl.mechanism: SCRAM-SHA-512
+#    sasl.username: test-username
+#    sasl.password: '123'
+#
+# 3. Unauthenticated:
+#
+#  properties:
+#    bootstrap.servers: kafka.host:9092
+#    security.protocol: PLAINTEXT
+
+
+# @section S3-compatible storage settings
+
+# @param s3.url S3 endpoint URL. **Required**
+# @param s3.publicUrl Announce proxy URL for S3 results instead of s3.url if not empty.
+# @param s3.vrp.bucket S3 bucket name for VRP results. **Required**
+# @param s3.vrp.accessKey S3 access key for accessing the bucket. **Required**
+# @param s3.vrp.secretKey S3 secret key for accessing the bucket. **Required**
+
+s3:
+  url: ''
+  publicUrl: ''
+  vrp:
+    bucket: ''
+    accessKey: ''
+    secretKey: ''
+
+
+# @section Database settings
+
+# @param db.host PostgreSQL host. **Required**
+# @param db.port PostgreSQL port.
+# @param db.name PostgreSQL database name.
+# @param db.user PostgreSQL username.
+# @param db.password PostgreSQL password.
+# @param db.schema PostgreSQL scheme.
+
+db:
+  host: ''
+  port: 5432
+  name: ''
+  user: ''
+  password: ''
+  schema: public
+
+
+# @section API keys service
+
+# @param keys.url API keys service URL, ex: http://keys-api.svc/service/v1/keys. **Required**
+# @param keys.token API token to authorize at the service. **Required**
+# @param keys.pollPeriod Period for poll information from API keys.
+
+keys:
+  url: ''
+  token: ''
+  pollPeriod: 20
+
+
+# @section API Distance Matrix Async service
+
+# @param dm.url Distance Matrix Async service URL. **Required**
+# @param dm.key API key to authorize at the service. **Required**
+
+dm:
+  url: ''
+  key: ''
+
+# @skip bss.enabled
+# @skip bss.url
+# @skip bss.version
+
+bss:
+  enabled: false
+  url: ''

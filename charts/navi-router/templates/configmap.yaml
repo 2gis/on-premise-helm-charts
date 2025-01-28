@@ -16,7 +16,8 @@ data:
           "UploadData",
           "Download"
         ],
-        "format": "Json"
+        "format": "Json",
+        "json_message_field_name": {{ .Values.router.logMessageField | quote }}
       },
       "service": {
         "pid_file": "/var/run/2gis/router.pid"
@@ -58,12 +59,20 @@ data:
         "server_info": {
           "server_id": "{{ include "router.fullname" . }}"
         },
-        "local_restrictions_for_keys": {
-            "distance_between_points_km": [
-                {"type" : "directions-api", "value" : 50},
-                {"type" : "distance-matrix-api", "value" : 50},
-                {"type" : "pairs-directions-api", "value" : 50}
-            ]
+        "local_restrictions_for_demo_keys": {
+          "distance_between_points_km": [
+              {"type" : "directions-api", "value" : 50},
+              {"type" : "distance-matrix-api", "value" : 50},
+              {"type" : "pairs-directions-api", "value" : 50}
+          ]
+        },
+        "local_restrictions":{
+          "distance_between_points_km":
+            {{- .Values.router.localRestrictions.distanceBetweenPointsKm | mustToPrettyJson | nindent 8 }},
+          "points_count":
+            {{- .Values.router.localRestrictions.pointsCount | mustToPrettyJson | nindent 8 }},
+          "matrix_size":
+            {{- .Values.router.localRestrictions.matrixSize | mustToPrettyJson | nindent 8 }}
         }
         {{- with .Values.keys }}
         {{- if .enabled }}
@@ -76,10 +85,25 @@ data:
         }
         {{- end }}
         {{- end }}
-        {{ if .Values.router.additionalSections }}
+        {{- if .Values.router.additionalSections }}
         {{ println "," }}
          {{- include "tplvalues.render" ( dict "value" .Values.router.additionalSections "context" $) | nindent 8 }}
-        {{ end }}
+        {{- end }}
+        {{- if (.Values.requestsSignCheck).enabledKeys }}
+        {{ println "," }}
+        "requests_sign_check" :
+        {
+          "data":
+            {{- (.Values.requestsSignCheck).enabledKeys | mustToPrettyJson | nindent 12 }}
+        }
+        {{- else if (.Values.requestsSignCheck).keys }}
+        {{ println "," }}
+        "requests_sign_check" :
+        {
+          "enabled_for_keys" :
+            {{- (.Values.requestsSignCheck).keys | mustToPrettyJson | nindent 12 }}
+        }
+        {{- end }}
       }
     }
   rules.conf: |-
