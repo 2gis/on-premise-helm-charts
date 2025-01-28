@@ -13,6 +13,7 @@ spec:
   schedule: {{ .Values.cron.schedule | quote }}
   concurrencyPolicy: {{ .Values.cron.concurrencyPolicy }}
   successfulJobsHistoryLimit: {{ .Values.cron.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.cron.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:

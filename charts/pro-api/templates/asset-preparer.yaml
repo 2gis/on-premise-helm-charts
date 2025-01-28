@@ -7,6 +7,7 @@ spec:
   concurrencyPolicy: Forbid
   schedule: {{ .Values.assetPreparer.schedule }}
   successfulJobsHistoryLimit: {{ .Values.assetPreparer.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.assetPreparer.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       backoffLimit: {{ .Values.assetPreparer.backoffLimit }}
