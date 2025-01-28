@@ -130,17 +130,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Cron settings
 
-| Name                              | Description                                                         | Value         |
-| --------------------------------- | ------------------------------------------------------------------- | ------------- |
-| `cron.enabled.import`             | If the `import` cron job is enabled.                                | `false`       |
-| `cron.enabled.restriction`        | If restrictions API enabled, incompatible with `restrictionImport`. | `false`       |
-| `cron.enabled.restrictionImport`  | If restrictions import enabled, incompatible with `restriction`.    | `false`       |
-| `cron.schedule.import`            | Cron job schedule for `import`.                                     | `11 * * * *`  |
-| `cron.schedule.restriction`       | Cron job schedule for `restriction`.                                | `*/5 * * * *` |
-| `cron.schedule.restrictionImport` | Cron job schedule for `restrictionImport`.                          | `*/5 * * * *` |
-| `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`.                   | `Forbid`      |
-| `cron.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept.                  | `3`           |
-| `cron.prometheusPort`             | Container port for supercronic prometheus                           | `9476`        |
+| Name                              | Description                                                                                                                                                  | Value         |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
+| `cron.enabled.import`             | If the `import` cron job is enabled.                                                                                                                         | `false`       |
+| `cron.enabled.restriction`        | If restrictions API enabled, incompatible with `restrictionImport`.                                                                                          | `false`       |
+| `cron.enabled.restrictionImport`  | If restrictions import enabled, incompatible with `restriction`.                                                                                             | `false`       |
+| `cron.schedule.import`            | Cron job schedule for `import`.                                                                                                                              | `11 * * * *`  |
+| `cron.schedule.restriction`       | Cron job schedule for `restriction`.                                                                                                                         | `*/5 * * * *` |
+| `cron.schedule.restrictionImport` | Cron job schedule for `restrictionImport`.                                                                                                                   | `*/5 * * * *` |
+| `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`.                                                                                                            | `Forbid`      |
+| `cron.successfulJobsHistoryLimit` | How many completed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits). | `3`           |
+| `cron.failedJobsHistoryLimit`     | How many failed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).    | `3`           |
+| `cron.prometheusPort`             | Container port for supercronic prometheus                                                                                                                    | `9476`        |
 
 ### Init settings
 
