@@ -39,22 +39,35 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 
 ### UI service settings
 
-| Name         | Description                                                                                                                                                                                                                                                        | Value  |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| `ui.appPort` | Service port.                                                                                                                                                                                                                                                      | `3000` |
-| `ui.brand`   | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                                    | `""`   |
-| `ui.pages`   | A list of pages available in application. Values must be written with a comma. Possible values: `"status"`, `"playground", "map_styles"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones. | `""`   |
+| Name         | Description                                                                                                                                                                                                                                                                                                                                                                                    | Value  |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `ui.appPort` | Service port.                                                                                                                                                                                                                                                                                                                                                                                  | `3000` |
+| `ui.brand`   | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                                                                                                                                                                | `""`   |
+| `ui.pages`   | A list of pages available in application. Values must be written with a comma. Possible values: `"status"`, `"playground"`, `"map_styles"`, `"keys"`, `"profile"`, `"signup"`. E.g. `"status, playground"`. The first page in a list is the one a user's going to be redirected to from deactivated ones. For the pages: keys, profile, signup — you have to configure `ui.oauth` parameters.  | `""`   |
 
-### Statuses for services. A value is a string containing pairs of label and healthcheck URL for a service. Pairs must be divided with a comma. Each pair must be connected with a symbol "=", e.g. `mapgl: 'MapGL JS=https://example.com/healthcheck'`. URL must be an absolute. You can specify only one URL, e.g. `mapgl: 'https://example.com/healthcheck'`.
+### OIDC
 
-| Name                    | Description                                     | Value |
-| ----------------------- | ----------------------------------------------- | ----- |
-| `ui.status.mapgl`       | Status list within MapGL service.               | `""`  |
-| `ui.status.search`      | Status list within Search service.              | `""`  |
-| `ui.status.navi`        | Status list within Navigation service.          | `""`  |
-| `ui.status.pro`         | Status list within Pro UI and Pro API services. | `""`  |
-| `ui.status.gisPlatform` | Status list within GIS Platform service.        | `""`  |
-| `ui.status.keys`        | Status list within Keys service.                | `""`  |
+| Name                    | Description                                                                                                                    | Value  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| `ui.oauth`              | A list of parameters for an OIDC provider integration.                                                                         |        |
+| `ui.oauth.wellknownUrl` | URL to a wellknown configuration. E.g. `"http://hostname/api/.well-known/openid-configuration"`.                               | `""`   |
+| `ui.oauth.clientId`     | OIDC client ID.                                                                                                                | `""`   |
+| `ui.oauth.clientSecret` | OIDC client secret for token exchange.                                                                                         | `""`   |
+| `ui.oauth.codeUrl`      | URL that is used to exchange a code for a token. Use the app's actual host to build a URL: `host/api/auth/code`.               | `""`   |
+| `ui.oauth.safeHosts`    | A string with a regular expression that validates a host being used to redirect back to an application after a token exchange. | `.*`   |
+| `ui.oauth.secure`       | This flag determines whether to enable or disable HTTPS for authentication tokens. Possible values are: `true` or `false`.     | `true` |
+
+### Statuses for services
+
+| Name                    | Description                                                                                                                                                                                                                                                                                                                              | Value |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ui.status`             | Each value is a string containing pairs of label and healthcheck URL for a service. Pairs must be divided with a comma. Each pair must be connected with a symbol "=", e.g. `mapgl: 'MapGL JS=https://example.com/healthcheck'`. URL must be an absolute. You can specify only one URL, e.g. `mapgl: 'https://example.com/healthcheck'`. |       |
+| `ui.status.mapgl`       | Status list within MapGL service.                                                                                                                                                                                                                                                                                                        | `""`  |
+| `ui.status.search`      | Status list within Search service.                                                                                                                                                                                                                                                                                                       | `""`  |
+| `ui.status.navi`        | Status list within Navigation service.                                                                                                                                                                                                                                                                                                   | `""`  |
+| `ui.status.pro`         | Status list within Pro UI and Pro API services.                                                                                                                                                                                                                                                                                          | `""`  |
+| `ui.status.gisPlatform` | Status list within GIS Platform service.                                                                                                                                                                                                                                                                                                 | `""`  |
+| `ui.status.keys`        | Status list within Keys service.                                                                                                                                                                                                                                                                                                         | `""`  |
 
 ### MapGL JS API settings
 

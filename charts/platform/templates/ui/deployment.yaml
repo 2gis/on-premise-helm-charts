@@ -97,7 +97,17 @@ spec:
               value: {{ .Values.ui.status.gisPlatform | quote }}
             - name: KEYS_STATUS
               value: {{ .Values.ui.status.keys | quote }}
+            - name: MAP_STYLES_STATUS
+              value: {{ .Values.ui.status.mapStyles | quote }}
+            - name: GOD_MODE
+              value: {{ .Values.ui.godmode | default "false" | quote }}
+            - name: REDIRECT_SAFE_DOMAINS
+              value: {{ .Values.ui.redirectSafeDomains }}
+            - name: PLAYGROUNDS
+              value: {{ .Values.ui.playgrounds | quote }}
             {{- if .Values.ui.oauth}}
+            - name: OAUTH_WELLKNOWN_URL
+              value: {{ .Values.ui.oauth.wellknownUrl | quote }}
             - name: OAUTH_API_URL
               value: {{ .Values.ui.oauth.url | quote }}
             - name: OAUTH_IDENTITY_PROVIDER_URL
@@ -106,6 +116,14 @@ spec:
               value: {{ .Values.ui.oauth.clientId | quote }}
             - name: OAUTH_CLIENT_SECRET
               value: {{ .Values.ui.oauth.clientSecret | quote }}
+            {{- if .Values.ui.oauth.scope }}
+            - name: OAUTH_SCOPE
+              value: {{ .Values.ui.oauth.scope | quote }}
+            {{- end }}
+            {{- if .Values.ui.oauth.provider }}
+            - name: OAUTH_PROVIDER
+              value: {{ .Values.ui.oauth.provider | quote }}
+            {{- end }}
             - name: OAUTH_CODE_URL
               value: {{ .Values.ui.oauth.codeUrl | quote }}
             - name: OAUTH_SAFE_HOSTS
