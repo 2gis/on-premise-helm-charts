@@ -656,10 +656,10 @@ See the [documentation]() to learn about:
 
 | Name              | Description                                     | Value |
 | ----------------- | ----------------------------------------------- | ----- |
-| `routes.navi.url` | NAVI GATEWAY URL (used for getting navigation). | `""`  |
+| `routes.navi.url` | Navi gateway url (used for getting navigation). | `""`  |
 
-### Gefest integration
+### Keys integration
 
-| Name                | Description                                      | Value |
-| ------------------- | ------------------------------------------------ | ----- |
-| `routes.gefest.url` | GEFEST BACKEND URL (used for getting oidc auth). | `""`  |
+| Name              | Description                                                                  | Value |
+| ----------------- | ---------------------------------------------------------------------------- | ----- |
+| `routes.keys.url` | API Keys endpoint url, ex: http://keys-api.svc (used for getting oidc auth). | `""`  |

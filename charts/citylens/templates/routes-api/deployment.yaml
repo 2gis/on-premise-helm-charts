@@ -159,8 +159,15 @@ spec:
               value: "true"
             - name: Clients__Navigation__Url
               value: "{{ $.Values.routes.navi.url }}"
+            - name: Clients__Navigation__TimeoutSeconds
+              value: "{{ $.Values.routes.navi.timeout }}"
 
-            - name: Clients__Gefest__Enabled
+            - name: Clients__Keys__Enabled
               value: "true"
-            - name: Clients__Gefest__Url
-              value: "{{ $.Values.routes.gefest.url }}"
+            - name: Clients__Keys__Url
+              value: "{{ $.Values.routes.keys.url }}"
+
+            - name: Features__AuthorizationEnabled
+              value: "{{ $.Values.routes.features.authorizationEnabled }}"
+            - name: Features__OidcMobileAuthorizationEnabled
+              value: "{{ $.Values.routes.features.oidcMobileAuthorizationEnabled }}"
