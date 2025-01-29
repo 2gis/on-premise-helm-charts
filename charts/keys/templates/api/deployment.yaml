@@ -38,6 +38,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
+      terminationGracePeriodSeconds: 60
       {{- with include "keys.psql.initTLS" . }}
       initContainers:
       {{- . | nindent 8 }}
@@ -54,6 +55,10 @@ spec:
             httpGet:
               path: /healthcheck
               port: http
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 30s" ]
           resources:
             {{- toYaml .Values.api.resources | nindent 12 }}
           env:
