@@ -546,7 +546,7 @@ See the [documentation]() to learn about:
 | Name                          | Description  | Value                                 |
 | ----------------------------- | ------------ | ------------------------------------- |
 | `routes.api.image.repository` | Repository.  | `2gis-on-premise/citylens-routes-api` |
-| `routes.api.image.tag`        | Tag.         | `1.12.0`                              |
+| `routes.api.image.tag`        | Tag.         | `1.0.3`                               |
 | `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        |
 
 ### Resources settings
@@ -635,7 +635,7 @@ See the [documentation]() to learn about:
 | Name                             | Description  | Value                                     |
 | -------------------------------- | ------------ | ----------------------------------------- |
 | `routes.worker.image.repository` | Repository.  | `2gis-on-premise/citylens-worker-service` |
-| `routes.worker.image.tag`        | Tag.         | `1.12.0`                                  |
+| `routes.worker.image.tag`        | Tag.         | `1.0.3`                                   |
 | `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            |
 
 ### Resources settings
@@ -659,34 +659,42 @@ See the [documentation]() to learn about:
 
 ### Metadata settings
 
-| Name                           | Description                                                                                                                 | Value  |
-|--------------------------------|-----------------------------------------------------------------------------------------------------------------------------|--------|
-| `routes.worker.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
-| `routes.worker.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
-| `routes.worker.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
-| `routes.worker.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
-| `routes.worker.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`   |
-| `routes.worker.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`   |
-| `routes.worker.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`   |
-| `routes.worker.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp` |
+| Name                           | Description                                                                                                                 | Value         |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `routes.worker.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.worker.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.worker.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.worker.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.worker.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
+| `routes.worker.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
+| `routes.worker.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
+| `routes.worker.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp`        |
+| `routes.worker.logging`        | Routes **Logging** settings                                                                                                 |               |
+| `routes.worker.logging.level`  | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
 
-### Logging
+### Bus configuration settings
 
-| Name                          | Description                                                                   | Value |
-|-------------------------------|-------------------------------------------------------------------------------|-------|
-| `routes.worker.logging.level` | Log message level. Trace, Debug, Information, Warning, Error, Critical, None. | `""`  |
+| Name                                                       | Description                           | Value |
+| ---------------------------------------------------------- | ------------------------------------- | ----- |
+| `routes.worker.busConfig`                                  | Bus configuration                     |       |
+| `routes.worker.busConfig.consumers`                        | Consumers for the bus configuration   |       |
+| `routes.worker.busConfig.consumers.appEvents`              | App events for the consumers          |       |
+| `routes.worker.busConfig.consumers.appEvents.topic`        | The topic for the app events.         | `""`  |
+| `routes.worker.busConfig.consumers.appEvents.groupId`      | The group ID for the app events.      | `""`  |
+| `routes.worker.busConfig.consumers.appEvents.bufferSize`   | The buffer size for the app events.   | `100` |
+| `routes.worker.busConfig.consumers.appEvents.workersCount` | The workers count for the app events. | `10`  |
 
-### Kafka Bus settings
+### Citylens routes Clients
 
-| Name                                                           | Description                                     | Value |
-|----------------------------------------------------------------|-------------------------------------------------|-------|
-| `routes.worker.busConfig.brokers`                              | A list of brokers for the bus configuration     | `[]`  |
-| `routes.worker.busConfigsecurityInformation.saslUsername`      | The username for SASL authentication            | `""`  |
-| `routes.worker.busConfig.securityInformation.saslPassword`     | The password for SASL authentication            | `""`  |
-| `routes.worker.busConfig.securityInformation.saslMechanism`    | The mechanism for SASL authentication           | `""`  |
-| `routes.worker.busConfig.securityInformation.securityProtocol` | The security protocol for the bus configuration | `""`  |
-| `routes.worker.busConfig.consumers.appEvents`                  | App events for the consumers                    | `""`  |
-| `routes.worker.busConfig.consumers.appEvents.topic`            | The topic for the app events                    | `""`  |
-| `routes.worker.busConfig.consumers.appEvents.groupId`          | The group ID for the app events                 | `""`  |
-| `routes.worker.busConfig.consumers.appEvents.bufferSize`       | The buffer size for the app events              | `100` |
-| `routes.worker.busConfig.consumers.appEvents.workersCount`     | The workers count for the app events            | `10`  |
+
+### Navi integration
+
+| Name              | Description                                     | Value |
+| ----------------- | ----------------------------------------------- | ----- |
+| `routes.navi.url` | Navi gateway url (used for getting navigation). | `""`  |
+
+### Keys integration
+
+| Name              | Description                                                                  | Value |
+| ----------------- | ---------------------------------------------------------------------------- | ----- |
+| `routes.keys.url` | API Keys endpoint url, ex: http://keys-api.svc (used for getting oidc auth). | `""`  |
