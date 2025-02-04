@@ -75,6 +75,10 @@ data:
             js_content bundle.geo_coding;
         }
 
+        location ^~ /route_planner  {
+            js_content bundle.geo_coding;
+        }
+
         location ^~ /free_roam {
             gzip on;
             gzip_vary on;
