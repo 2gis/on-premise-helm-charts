@@ -37,18 +37,23 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
-      {{- $kafkaVolumeMounted := (
-              .Values.kafka.fileProperties |
-              or (.Values.kafka.consumerOverrides).fileProperties |
-              or (.Values.kafka.producerOverrides).fileProperties
+      {{- $kafkaSolverVolumeMounted := (
+              .Values.kafka.solver.fileProperties |
+              or (.Values.kafka.solver.consumerOverrides).fileProperties |
+              or (.Values.kafka.solver.producerOverrides).fileProperties
             ) }}
-      {{- if $kafkaVolumeMounted }}
-        - name: {{ printf "%s-consumer" (include "generic-chart.fullname" .) | quote }}
+      {{- if $kafkaSolverVolumeMounted }}
+        - name: {{ printf "%s-consumer-solver" (include "generic-chart.fullname" .) | quote }}
           secret:
-            secretName: {{ printf "%s-consumer" (include "generic-chart.fullname" .) | quote }}
-        - name: {{ printf "%s-producer" (include "generic-chart.fullname" .) | quote }}
+            secretName: {{ printf "%s-consumer-solver" (include "generic-chart.fullname" .) | quote }}
+        - name: {{ printf "%s-producer-solver" (include "generic-chart.fullname" .) | quote }}
           secret:
-            secretName: {{ printf "%s-producer" (include "generic-chart.fullname" .) | quote }}
+            secretName: {{ printf "%s-producer-solver" (include "generic-chart.fullname" .) | quote }}
+      {{- end }}
+      {{- if .Values.kafka.dm.fileProperties }}
+        - name: {{ printf "%s-consumer-dm" (include "generic-chart.fullname" .) | quote }}
+          secret:
+            secretName: {{ printf "%s-consumer-dm" (include "generic-chart.fullname" .) | quote }}
       {{- end }}
       containers:
         - name: {{ include "generic-chart.containerName" . }}
@@ -79,13 +84,15 @@ spec:
             timeoutSeconds: 3
             failureThreshold: 5
           volumeMounts:
-          {{- if $kafkaVolumeMounted }}
-          - name: {{ printf "%s-vrp-consumer" (include "generic-chart.fullname" .) | quote }}
-            mountPath: /etc/2gis/secret/vrp-consumer/
-          - name: {{ printf "%s-vrp-producer" (include "generic-chart.fullname" .) | quote }}
-            mountPath: /etc/2gis/secret/vrp-producer/
-          - name: {{ printf "%s-dm-consumer" (include "generic-chart.fullname" .) | quote }}
-            mountPath: /etc/2gis/secret/dm-consumer/
+          {{- if $kafkaSolverVolumeMounted }}
+          - name: {{ printf "%s-consumer-solver" (include "generic-chart.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/consumer-solver/
+          - name: {{ printf "%s-producer-solver" (include "generic-chart.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/producer-solver/
+          {{- end }}
+          {{- if .Values.kafka.dm.fileProperties }}
+          - name: {{ printf "%s-consumer-dm" (include "generic-chart.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/consumer-dm/
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

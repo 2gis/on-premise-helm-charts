@@ -40,11 +40,11 @@
 
 ### Deployment settings
 
-| Name               | Description | Value                              |
-| ------------------ | ----------- | ---------------------------------- |
-| `image.repository` | Repository  | `2gis-on-premise/vrp-task-manager` |
-| `image.tag`        | Tag         | `1.12.0`                           |
-| `image.pullPolicy` | Pull Policy | `IfNotPresent`                     |
+| Name               | Description | Value                                   |
+| ------------------ | ----------- | --------------------------------------- |
+| `image.repository` | Repository  | `2gis-on-premise/navi-vrp-task-manager` |
+| `image.tag`        | Tag         | `1.12.0`                                |
+| `image.pullPolicy` | Pull Policy | `IfNotPresent`                          |
 
 ### Navi VRP Task Manager application settings
 
@@ -72,10 +72,14 @@
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value                   |
-| ----------------------- | -------------------------------------- | ----------------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`                 |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `vrp-task-manager.host` |
+| Name                                 | Description                              | Value                               |
+| ------------------------------------ | ---------------------------------------- | ----------------------------------- |
+| `ingress.className`                  | Name of the Ingress controller class     | `nginx`                             |
+| `ingress.enabled`                    | If Ingress is enabled for the service    | `false`                             |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service         | `navi-vrp-task-manager.example.com` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service | `/`                                 |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service | `Prefix`                            |
+| `ingress.tls`                        | TLS configuration                        | `[]`                                |
 
 ### Limits
 
@@ -172,8 +176,8 @@
 | ------------- | ----------------------------- | -------- |
 | `db.host`     | PostgreSQL host. **Required** | `""`     |
 | `db.port`     | PostgreSQL port.              | `5432`   |
-| `db.name`     | PostgreSQL database name.     | `dm`     |
-| `db.user`     | PostgreSQL username.          | `dbuser` |
+| `db.name`     | PostgreSQL database name.     | `""`     |
+| `db.user`     | PostgreSQL username.          | `""`     |
 | `db.password` | PostgreSQL password.          | `""`     |
 | `db.schema`   | PostgreSQL scheme.            | `public` |
 

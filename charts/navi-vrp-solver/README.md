@@ -40,11 +40,11 @@
 
 ### Deployment settings
 
-| Name               | Description | Value                        |
-| ------------------ | ----------- | ---------------------------- |
-| `image.repository` | Repository  | `2gis-on-premise/vrp-solver` |
-| `image.tag`        | Tag         | `1.12.0`                     |
-| `image.pullPolicy` | Pull Policy | `IfNotPresent`               |
+| Name               | Description | Value                             |
+| ------------------ | ----------- | --------------------------------- |
+| `image.repository` | Repository  | `2gis-on-premise/navi-vrp-solver` |
+| `image.tag`        | Tag         | `1.12.0`                          |
+| `image.pullPolicy` | Pull Policy | `IfNotPresent`                    |
 
 ### Navi VRP Solver application settings
 
@@ -73,10 +73,14 @@
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value             |
-| ----------------------- | -------------------------------------- | ----------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`           |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `vrp-solver.host` |
+| Name                                 | Description                              | Value                         |
+| ------------------------------------ | ---------------------------------------- | ----------------------------- |
+| `ingress.className`                  | Name of the Ingress controller class     | `nginx`                       |
+| `ingress.enabled`                    | If Ingress is enabled for the service    | `false`                       |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service         | `navi-vrp-solver.example.com` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service | `/`                           |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service | `Prefix`                      |
+| `ingress.tls`                        | TLS configuration                        | `[]`                          |
 
 ### Limits
 
