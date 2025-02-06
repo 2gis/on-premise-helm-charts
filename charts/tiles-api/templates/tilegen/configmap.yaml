@@ -41,7 +41,7 @@ data:
 
       keyspaces:
         - tileset: userdata
-          keyspace: userdata
+          keyspace: dgis_userdata
           type: ald_v3
           default: true
           partition-size: 4

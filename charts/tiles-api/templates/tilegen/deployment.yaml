@@ -109,6 +109,22 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
 
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: api
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: api
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+            failureThreshold: 6
+
           env:
             - name: CONFIG_PATH
               value: /config/importer.yaml

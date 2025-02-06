@@ -161,7 +161,7 @@ tilegen:
 
   terminationGracePeriodSeconds: 30
   containerPort: 5000
-    
+
   resources:
     requests:
       cpu: 50m
@@ -198,7 +198,7 @@ tilegen:
     limits:
       cpu: 2
       memory: 2048Mi
-        
+
 # @section API Keys proxy settings
 
 # @extra proxy **Common settings**
