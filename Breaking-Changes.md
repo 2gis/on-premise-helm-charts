@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+##
+
+### pro-api
+- api.settings.allowAnyOrigin was removed, api.settings.corsOrigins was added instead
+- assetImporter.enabled was removed, assetImporter is now always mandatory 
+
 ## [1.33.0]
 
 ### pro-api

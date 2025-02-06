@@ -73,9 +73,14 @@ app.kubernetes.io/name: {{ include "pro-api.permissions-name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}-permissions
 {{- end -}}
 
-{{- define "pro-api.tasksSelectorLabels" -}}
-app.kubernetes.io/name: {{ include "pro-api.tasks-name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}-tasks
+{{- define "pro-api.tasksApiSelectorLabels" -}}
+app.kubernetes.io/name: {{ include "pro-api.tasks-name" . }}-api
+app.kubernetes.io/instance: {{ .Release.Name }}-tasks-api
+{{- end -}}
+
+{{- define "pro-api.tasksWorkerSelectorLabels" -}}
+app.kubernetes.io/name: {{ include "pro-api.tasks-name" . }}-worker
+app.kubernetes.io/instance: {{ .Release.Name }}-tasks-worker
 {{- end -}}
 
 {{- define "pro-api.labels" -}}
@@ -96,9 +101,18 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
-{{- define "pro-api.tasksLabels" -}}
+{{- define "pro-api.tasksApiLabels" -}}
 helm.sh/chart: {{ include "pro-api.chart" . }}
-{{ include "pro-api.tasksSelectorLabels" . }}
+{{ include "pro-api.tasksApiSelectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{- define "pro-api.tasksWorkerLabels" -}}
+helm.sh/chart: {{ include "pro-api.chart" . }}
+{{ include "pro-api.tasksWorkerSelectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -134,7 +148,6 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{- define "pro-tasks.connectionString" -}}
-{{- if .Values.tasks.settings.enabled -}}
 {{- printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
 	(.Values.postgres.tasks.rw.host | required "A valid .Values.postgres.tasks.rw.host entry required!")
 	(.Values.postgres.tasks.rw.port | required "A valid .Values.postgres.tasks.rw.port entry required!" | int)
@@ -144,7 +157,4 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 	((.Values.postgres.tasks.rw.poolSize).max | int | default 5)
 	(.Values.postgres.tasks.rw.timeout | int | default 15)
 -}}
-{{- else -}}
-{{ print "" }}
-{{- end -}}
 {{- end -}}
