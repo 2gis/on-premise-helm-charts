@@ -1,5 +1,22 @@
 # 2GIS On-Premise Breaking-Changes
 
+## ...
+
+### navi-async-matrix
+
+- Existing DBs need task status type updated, in case public schema used:
+
+
+  ```
+  ALTER TYPE public."statusvalues" ADD VALUE 'ATTRACT_PUSHED';
+  ALTER TYPE public."statusvalues" ADD VALUE 'ATTRACT_READY';
+  ALTER TYPE public."statusvalues" ADD VALUE 'ATTRACT_PROCESSED';
+  ALTER TYPE public."statusvalues" ADD VALUE 'ONE_TO_MANY_PUSHED';
+  ALTER TYPE public."statusvalues" ADD VALUE 'ONE_TO_MANY_READY';
+  ALTER TYPE public."statusvalues" ADD VALUE 'MERGER_PUSHED';
+  ALTER TYPE public."statusvalues" ADD VALUE 'MERGER_IN_PROGRESS';
+  ```
+
 ## [1.34.0]
 
 ### keys
