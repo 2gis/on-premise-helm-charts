@@ -1059,6 +1059,7 @@ customCAs:
 
 # @skip routes.features.authorizationEnabled
 # @skip routes.features.oidcMobileAuthorizationEnabled
+# @skip routes.features.proxyNaviKeyEnabled
 
 # @section Citylens routes Clients
 
@@ -1219,6 +1220,7 @@ routes:
   features:
     authorizationEnabled: true
     oidcMobileAuthorizationEnabled: true
+    proxyNaviKeyEnabled: true
 
   navi:
     url: ''

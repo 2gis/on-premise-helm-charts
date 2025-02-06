@@ -173,3 +173,5 @@ spec:
               value: "{{ $.Values.routes.features.authorizationEnabled }}"
             - name: Features__OidcMobileAuthorizationEnabled
               value: "{{ $.Values.routes.features.oidcMobileAuthorizationEnabled }}"
+            - name: Features__ProxyNaviKeyEnabled
+              value: "{{ $.Values.routes.features.proxyNaviKeyEnabled }}"
