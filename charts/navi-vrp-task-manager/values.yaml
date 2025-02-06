@@ -47,7 +47,7 @@ terminationGracePeriodSeconds: 60
 # @param image.pullPolicy Pull Policy
 
 image:
-  repository: 2gis-on-premise/vrp-task-manager
+  repository: 2gis-on-premise/navi-vrp-task-manager
   pullPolicy: IfNotPresent
   tag: 1.12.0
 
@@ -92,14 +92,24 @@ service:
 
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
-
-# @param ingress.enabled If Ingress is enabled for the service.
-# @param ingress.hosts[0].host Hostname for the Ingress service.
-
+# @param ingress.className Name of the Ingress controller class
+# @param ingress.enabled If Ingress is enabled for the service
+# @param ingress.hosts[0].host Hostname for the Ingress service
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service
+# @param ingress.tls TLS configuration
 ingress:
+  className: nginx
   enabled: false
   hosts:
-  - host: vrp-task-manager.host
+  - host: navi-vrp-task-manager.example.com
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - navi-vrp-task-manager.example.com
+  #   secretName: secret.tls
 
 
 # @section Limits
@@ -290,8 +300,8 @@ s3:
 db:
   host: ''
   port: 5432
-  name: dm
-  user: dbuser
+  name: ''
+  user: ''
   password: ''
   schema: public
 
