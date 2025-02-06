@@ -1065,6 +1065,7 @@ customCAs:
 # @section Navi integration
 # @param routes.navi.url Navi gateway url (used for getting navigation).
 # @skip routes.navi.timeout
+# @param routes.navi.key Navi Api Key.
 
 # @section Keys integration
 # @param routes.keys.url API Keys endpoint url, ex: http://keys-api.svc (used for getting oidc auth).
@@ -1222,6 +1223,7 @@ routes:
   navi:
     url: ''
     timeout: 120
+    key: ''
 
   keys:
     url: ''

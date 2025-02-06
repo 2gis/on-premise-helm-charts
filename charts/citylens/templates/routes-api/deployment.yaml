@@ -161,6 +161,8 @@ spec:
               value: "{{ $.Values.routes.navi.url }}"
             - name: Clients__Navigation__TimeoutSeconds
               value: "{{ $.Values.routes.navi.timeout }}"
+            - name: Clients__Navigation__ApiKey
+              value: "{{ $.Values.routes.navi.key }}"
 
             - name: Clients__Keys__Enabled
               value: "true"

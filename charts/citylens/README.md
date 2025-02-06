@@ -692,6 +692,7 @@ See the [documentation]() to learn about:
 | Name              | Description                                     | Value |
 | ----------------- | ----------------------------------------------- | ----- |
 | `routes.navi.url` | Navi gateway url (used for getting navigation). | `""`  |
+| `routes.navi.key` | Navi Api Key.                                   | `""`  |
 
 ### Keys integration
 
