@@ -89,6 +89,116 @@ cassandra:
   consistencyLevelRead: LOCAL_QUORUM
   consistencyLevelWrite: LOCAL_QUORUM
 
+# @section Custom generated tiles API settings
+
+# @extra tilegen **Common settings**
+
+# @param tilegen.enabled If Tilegen API is enabled for the service.
+
+# @param tilegen.logLevelOverride A custom api logging level. Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
+# @param tilegen.logFormatOverride A custom api logging format. Allowed options: text|json. If not defined, 'json' format will be used.
+
+# @param tilegen.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param tilegen.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param tilegen.replicaCount A replica count for the pod.
+# @param tilegen.revisionHistory Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param tilegen.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param tilegen.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param tilegen.terminationGracePeriodSeconds Duration in seconds the Tiles API service pod needs to terminate gracefully.
+# @param tilegen.containerPort Tiles API container port.
+# @param tilegen.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param tilegen.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param tilegen.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+# @extra tilegen.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @param tilegen.resources.requests.cpu A CPU request.
+# @param tilegen.resources.requests.memory A memory request.
+# @param tilegen.resources.limits.cpu A CPU limit.
+# @param tilegen.resources.limits.memory A memory limit.
+
+# @param tilegen.workerNum Number of parallel import processes (workers).
+# @param tilegen.writerNum Number of write processes per import process (worker).
+
+tilegen:
+  enabled: false
+
+  logLevelOverride:
+  logFormatOverride:
+
+  # @extra tilegen.image **Docker image settings**
+  # @param tilegen.image.repository Docker Repository.
+  # @param tilegen.image.tag Docker image tag.
+  # @param tilegen.image.pullPolicy Kubernetes pull policy for the service's Docker image.
+  # @param tilegen.imagePullSecrets Kubernetes image pull secrets.
+  image:
+    repository: 2gis-on-premise/tiles-api-utils
+    tag: 4.45.0
+    pullPolicy: IfNotPresent
+
+  imagePullSecrets: {}
+
+  labels: {}
+  annotations: {}
+
+  replicaCount: 3
+  revisionHistory: 1
+
+  # @extra tilegen.strategy.rollingUpdate **Service's Rolling Update strategy settings**
+  # @param tilegen.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param tilegen.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  podLabels: {}
+  podAnnotations: {}
+
+  tolerations: {}
+  nodeSelector: {}
+  affinity: {}
+
+  terminationGracePeriodSeconds: 30
+  containerPort: 5000
+    
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
+
+  workerNum: 6
+  writerNum: 8
+
+  # @extra tilegen.service **Kubernetes [service settings](https://kubernetes.io/docs/concepts/services-networking/service/) to expose the service**
+  # @param tilegen.service.port Service port.
+  # @param tilegen.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param tilegen.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param tilegen.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  service:
+    port: 80
+    type: ClusterIP
+    annotations: {}
+    labels: {}
+
+  # @extra tilegen.workerResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the workers**
+  # @param tilegen.workerResources.requests.cpu A CPU request.
+  # @param tilegen.workerResources.requests.memory A memory request.
+  # @param tilegen.workerResources.limits.cpu A CPU limit.
+  # @param tilegen.workerResources.limits.memory A memory limit.
+
+  workerResources:
+    requests:
+      cpu: 256m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2048Mi
+        
 # @section API Keys proxy settings
 
 # @extra proxy **Common settings**

@@ -1,0 +1,103 @@
+---
+
+{{- with $.Values.tilegen }}
+{{- if .enabled }}
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name:  {{ include "tiles.fullname" $ }}-tilegen-migrate
+  labels:
+    {{- include "tiles.labels" $ | nindent 4 }}
+    {{- include "tiles.tilegen.label" $ | nindent 4 }}
+  annotations:
+    {{- include "importer.removable-hook-annotations" $ | nindent 4 }}
+    "helm.sh/hook-weight": "1"
+
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "tiles.fullname" $ }}-tilegen-migrate
+      labels:
+        {{- include "tiles.labels" $ | nindent 8 }}
+    spec:
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+
+        - name: config-volume
+          configMap:
+            name: {{ include "tiles.fullname" $ }}-tilegen
+
+        {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
+          configMap:
+            name: {{ include "tiles.fullname" . }}-custom-ca
+        {{- end }}
+
+      {{- with .nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      containers:
+        - name: migrator
+
+          image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
+          imagePullPolicy: {{ .image.pullPolicy }}
+          command: ["/selfimporter", "migrate"]
+
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+
+            - mountPath: "/config"
+              name: config-volume
+
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "tiles.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
+            {{- end }}
+
+          {{- with .resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          env:
+            - name: CONFIG_PATH
+              value: /config/importer.yaml
+
+            - name: CASSANDRA_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-tilegen
+                  key: cassandraUser
+
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-tilegen
+                  key: cassandraPassword
+
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "tiles.customCA.mountPath" $ }}
+            {{- end }}
+
+      restartPolicy: Never
+
+{{- end }}
+{{- end }}

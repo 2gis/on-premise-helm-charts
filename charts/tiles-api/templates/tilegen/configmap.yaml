@@ -1,0 +1,143 @@
+---
+
+{{- with $.Values.tilegen }}
+{{- if .enabled }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "tiles.fullname" $ }}-tilegen
+  labels:
+    {{- include "tiles.labels" $ | nindent 4 }}
+    {{- include "tiles.tilegen.label" $ | nindent 4 }}
+  
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+
+data:
+  importer.yaml: |
+    api:
+      host: 0.0.0.0
+      port: {{ .containerPort }}
+
+    migrations-path: /migrations
+    
+    ssl:
+      enabled: {{ $.Values.cassandra.ssl.enabled }}
+
+    {{- with $.Values.cassandra }}
+    cassandra:
+      name: local
+      num-retries: 2
+      reconnect-interval: 30s
+      timeout: {{ .timeout }}
+      replication-factor: {{ .replicaFactor }}
+      consistency-level-read: {{ .consistencyLevelRead }}
+      consistency-level-write: {{ .consistencyLevelWrite }}
+
+      hosts:
+        {{- toYaml .hosts | nindent 8 }}
+
+      keyspaces:
+        - tileset: userdata
+          keyspace: userdata
+          type: ald_v3
+          default: true
+          partition-size: 4
+          periodic-cleanup: 
+            enable: true
+
+    {{- end }}
+
+    workers: {{ .workerNum }}
+
+    k8s:
+      job-template-file-path: /config/job.yaml
+      namespace: {{ $.Release.Namespace }}
+
+    worker:
+      temp-dir: /tmp
+      writer-num: {{ .writerNum }}
+
+    log-level: {{ .logLevelOverride | default $.Values.logLevel | default "info" }}
+    log-format: {{ .logFormatOverride | default $.Values.logFormat | default "json" }}
+  job.yaml: |
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: {{ include "tiles.fullname" $ }}-import-
+
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          volumes:
+            - name: tmp-volume
+              emptyDir: {}
+
+            - name: config-volume
+              configMap:
+                name: {{ include "tiles.fullname" $ }}-tilegen
+
+            {{- if $.Values.customCAs.bundle }}
+            - configMap:
+                name: {{ include "tiles.fullname" $ }}-custom-ca
+              name: custom-ca
+            {{- end }}
+            
+          {{- with .imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+
+          containers:
+            - name: import-worker
+              image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
+              command: ["/selfimporter", "worker"]
+              imagePullPolicy: {{ .image.pullPolicy }}
+
+              volumeMounts:
+                - name: tmp-volume
+                  mountPath: /tmp
+
+                - mountPath: "/config"
+                  name: config-volume
+
+                {{- if $.Values.customCAs.bundle }}
+                - mountPath: {{ include "tiles.customCA.mountPath" $ }}
+                  name: custom-ca
+                  readOnly: true
+                {{- end }}
+                
+              {{- with .workerResources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+
+              env:
+                - name: CONFIG_PATH
+                  value: /config/importer.yaml
+
+                - name: CASSANDRA_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "tiles.fullname" $ }}-tilegen
+                      key: cassandraUser
+
+                - name: CASSANDRA_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "tiles.fullname" $ }}-tilegen
+                      key: cassandraPassword
+
+                {{- if $.Values.customCAs.bundle }}
+                - name: SSL_CERT_DIR
+                  value: {{ include "tiles.customCA.mountPath" $ }}
+                {{- end }}
+
+
+          restartPolicy: Never
+
+{{- end}}
+{{- end}}

@@ -1,0 +1,133 @@
+---
+
+{{- with $.Values.tilegen }}
+{{- if .enabled }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tiles.fullname" $ }}-tilegen
+  labels:
+    {{- include "tiles.labels" $ | nindent 4 }}
+    {{- include "tiles.tilegen.label" $ | nindent 4 }}
+    {{- if .labels }}
+    {{- toYaml .labels | nindent 4 }}
+    {{- end }}
+
+  {{- if .annotations }}
+  annotations:
+    {{- toYaml .annotations | nindent 4 }}
+  {{- end }}
+
+spec:
+  replicas: {{ .replicaCount }}
+  revisionHistoryLimit: {{ .revisionHistory }}
+  
+  selector:
+    matchLabels:
+      {{- include "tiles.selectorLabels" $ | nindent 6 }}
+      {{- include "tiles.tilegen.label" $ | nindent 6 }}
+
+  {{- with .strategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  template:
+    metadata:
+      labels:
+        {{- include "tiles.selectorLabels" $ | nindent 8 }}
+        {{- include "tiles.tilegen.label" $ | nindent 8 }}
+        {{- with .podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+
+      annotations:
+        checksum/config: {{ include "tiles.checksum" (merge (dict "path" "/tilegen/configmap.yaml") $) }}
+
+      {{- with .podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+    spec:
+      serviceAccountName: {{ include "tilegen.serviceAccount" $ }}
+      terminationGracePeriodSeconds: {{ .terminationGracePeriodSeconds }}
+    
+      volumes:
+        - configMap:
+            name: {{ include "tiles.fullname" $ }}-tilegen
+          name: config-volume
+
+        {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
+          configMap:
+            name: {{ include "tiles.fullname" . }}-custom-ca
+        {{- end }}
+
+      {{- with .nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      containers:
+
+        - name: api
+          image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
+          imagePullPolicy: {{ .image.pullPolicy }}
+          command: ["/selfimporter", "api"]
+          ports:
+            - name: api
+              containerPort: {{ .containerPort }}
+
+          volumeMounts:
+            - mountPath: "/config"
+              name: config-volume
+
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "tiles.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
+            {{- end }}
+
+          {{- with .resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          env:
+            - name: CONFIG_PATH
+              value: /config/importer.yaml
+
+            - name: CASSANDRA_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-tilegen
+                  key: cassandraUser
+
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-tilegen
+                  key: cassandraPassword
+
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "tiles.customCA.mountPath" $ }}
+            {{- end }}
+{{- end}}
+{{- end}}
