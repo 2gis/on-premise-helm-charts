@@ -155,3 +155,13 @@ spec:
               value: "{{ .Values.routes.worker.busConfig.consumers.appEvents.bufferSize }}"
             - name: BusConfig__Consumers__AppEvents__WorkersCount
               value: "{{ .Values.routes.worker.busConfig.consumers.appEvents.workersCount }}"
+
+            - name: Clients__ProClient__Enabled
+              value: "true"
+            - name: Clients__ProClient__Url
+              value: "{{ $.Values.pro.baseUrl }}"
+            - name: Clients__ProClient__AuthorizationToken
+              value: "{{ $.Values.routes.pro.authorizationToken }}"
+
+            - name: Features__CoverageRatioEnabled
+              value: "{{ $.Values.routes.features.coverageRatioEnabled }}"

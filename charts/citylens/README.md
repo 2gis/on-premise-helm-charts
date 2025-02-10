@@ -546,7 +546,7 @@ See the [documentation]() to learn about:
 | Name                          | Description  | Value                                 |
 | ----------------------------- | ------------ | ------------------------------------- |
 | `routes.api.image.repository` | Repository.  | `2gis-on-premise/citylens-routes-api` |
-| `routes.api.image.tag`        | Tag.         | `1.0.3`                               |
+| `routes.api.image.tag`        | Tag.         | `1.0.8`                               |
 | `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        |
 
 ### Resources settings
@@ -635,7 +635,7 @@ See the [documentation]() to learn about:
 | Name                             | Description  | Value                                     |
 | -------------------------------- | ------------ | ----------------------------------------- |
 | `routes.worker.image.repository` | Repository.  | `2gis-on-premise/citylens-worker-service` |
-| `routes.worker.image.tag`        | Tag.         | `1.0.3`                                   |
+| `routes.worker.image.tag`        | Tag.         | `1.0.8`                                   |
 | `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            |
 
 ### Resources settings
@@ -693,6 +693,12 @@ See the [documentation]() to learn about:
 | ----------------- | ----------------------------------------------- | ----- |
 | `routes.navi.url` | Navi gateway url (used for getting navigation). | `""`  |
 | `routes.navi.key` | Navi Api Key.                                   | `""`  |
+
+### Pro integration
+
+| Name                            | Description                                         | Value |
+| ------------------------------- | --------------------------------------------------- | ----- |
+| `routes.pro.authorizationToken` | Pro Authorization Token (need for creating assets). | `""`  |
 
 ### Keys integration
 
