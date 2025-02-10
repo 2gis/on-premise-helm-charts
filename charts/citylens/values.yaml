@@ -1234,6 +1234,6 @@ routes:
 
   pro:
     authorizationToken: ''
-    
+
   keys:
     url: ''
