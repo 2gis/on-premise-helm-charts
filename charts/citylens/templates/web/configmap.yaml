@@ -148,26 +148,22 @@ data:
       {{- end }}
       visual_localization:
         enabled: false
-      reporters:
-      {{- range .Values.reporters }}
-        - name: {{ .name }}
+      reporters: {{ if not (or .Values.worker.reporterPro.enabled .Values.worker.detectionsLocalizer.enabled) }}[]{{ end }}
+      {{- with .Values.worker.reporterPro }}
+      {{- if .enabled }}
+        - name: 'pro'
+          timeout: {{ .trackTimeoutDays }}
           predictors:
             {{- toYaml .predictors | nindent 12 }}
-        {{- if eq .name "pro" }}
-          {{- if .trackTimeoutDays }}
-          timeout: {{ .trackTimeoutDays }}
-          {{- end }}
-        {{- end }}
       {{- end }}
-      {{- if .Values.worker.detectionsLocalizer.enabled }}
+      {{- end }}
       {{- with .Values.worker.detectionsLocalizer }}
+      {{- if .enabled }}
         - name: 'detections-localizer'
+          timeout: {{ $.Values.worker.reporterPro.trackTimeoutDays }}
           predictors:
             {{- toYaml .predictors | nindent 12 }}
           force_naive_localization: true
-          {{- if .trackTimeoutDays }}
-          timeout: {{ .trackTimeoutDays }}
-          {{- end }}
       {{- end }}
       {{- end }}
       predictors:

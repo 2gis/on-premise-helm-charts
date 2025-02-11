@@ -283,19 +283,22 @@ See the [documentation]() to learn about:
 
 ### Citylens Reporter Pro worker's settings (synchronization with Pro)
 
-| Name                                      | Description                                                                                                                                    | Value |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `worker.reporterPro.replicas`             | A replica count for the pod.                                                                                                                   | `1`   |
-| `worker.reporterPro.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `worker.reporterPro.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.reporterPro.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.reporterPro.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.reporterPro.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.reporterPro.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.reporterPro.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
-| `worker.reporterPro.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
+| Name                                      | Description                                                                                                                                    | Value        |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `worker.reporterPro.enabled`              | If integration with Pro is enabled for the service.                                                                                            | `true`       |
+| `worker.reporterPro.predictors`           | From what sources detections should be localized.                                                                                              | `["camcom"]` |
+| `worker.reporterPro.trackTimeoutDays`     | Timeout in days for track to be considered being uploading.                                                                                    | `1`          |
+| `worker.reporterPro.replicas`             | A replica count for the pod.                                                                                                                   | `1`          |
+| `worker.reporterPro.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`          |
+| `worker.reporterPro.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
+| `worker.reporterPro.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
+| `worker.reporterPro.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
+| `worker.reporterPro.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
+| `worker.reporterPro.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`         |
+| `worker.reporterPro.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`         |
+| `worker.reporterPro.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`         |
 
-### Citylens Reporter Pro Tracks worker's settings (track status actualization)
+### Citylens Reporter Pro Tracks worker's settings (track status actualization, requires Reporter Pro)
 
 | Name                                            | Description                                                                                                                                    | Value |
 | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
@@ -484,14 +487,11 @@ See the [documentation]() to learn about:
 
 ### Custom settings
 
-| Name                            | Description                                                                                                      | Value                                         |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `dashboardDomain`               | Link to Citylens web address. **Required**                                                                       | `""`                                          |
-| `locale`                        | Locale language (en by default).                                                                                 | `en`                                          |
-| `headerLinks`                   | List of links for navbar.                                                                                        | `["drivers","tracks","interest_zones","map"]` |
-| `reporters[0].name`             | Reporter name.                                                                                                   | `pro`                                         |
-| `reporters[0].predictors`       | Predictor used by reporter.                                                                                      | `["camcom"]`                                  |
-| `reporters[0].trackTimeoutDays` | Time in days to wait for track completion and receiving frames prediction before marking as not synced with Pro. | `1`                                           |
+| Name              | Description                                | Value                                         |
+| ----------------- | ------------------------------------------ | --------------------------------------------- |
+| `dashboardDomain` | Link to Citylens web address. **Required** | `""`                                          |
+| `locale`          | Locale language (en by default).           | `en`                                          |
+| `headerLinks`     | List of links for navbar.                  | `["drivers","tracks","interest_zones","map"]` |
 
 ### PRO integration (only when Pro reporter enabled)
 

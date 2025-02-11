@@ -456,6 +456,10 @@ worker:
 
 # @section Citylens Reporter Pro worker's settings (synchronization with Pro)
 
+# @param worker.reporterPro.enabled If integration with Pro is enabled for the service.
+# @param worker.reporterPro.predictors From what sources detections should be localized.
+# @param worker.reporterPro.trackTimeoutDays Timeout in days for track to be considered being uploading.
+
 # @param worker.reporterPro.replicas A replica count for the pod.
 
 # @param worker.reporterPro.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
@@ -471,6 +475,11 @@ worker:
 
   reporterPro:
 
+    enabled: true
+
+    predictors: [camcom]
+    trackTimeoutDays: 1
+
     replicas: 1
 
     revisionHistoryLimit: 3
@@ -483,7 +492,7 @@ worker:
     affinity: {}
     tolerations: {}
 
-# @section Citylens Reporter Pro Tracks worker's settings (track status actualization)
+# @section Citylens Reporter Pro Tracks worker's settings (track status actualization, requires Reporter Pro)
 
 # @param worker.reporterProTracks.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
@@ -868,9 +877,6 @@ map:
 # @param dashboardDomain Link to Citylens web address. **Required**
 # @param locale Locale language (en by default).
 # @param headerLinks List of links for navbar.
-# @param reporters[0].name Reporter name.
-# @param reporters[0].predictors Predictor used by reporter.
-# @param reporters[0].trackTimeoutDays Time in days to wait for track completion and receiving frames prediction before marking as not synced with Pro.
 
 dashboardDomain: ''
 
@@ -881,11 +887,6 @@ headerLinks:
 - tracks
 - interest_zones
 - map
-
-reporters:
-- name: pro
-  predictors: [camcom]
-  trackTimeoutDays: 1
 
 # @section PRO integration (only when Pro reporter enabled)
 
