@@ -6,6 +6,7 @@
 - Before installing new version of citylens it is required to prepare database manually:
     `update tracks set localization_status = 2006;`
   This is required as in on-premise environments this column was newer user before, and may contain unexpected values.
+- Values section `.Values.reporters` replaced with `.Values.worker.reporterPro.enabled` field.
 
 ## [1.34.0]
 
