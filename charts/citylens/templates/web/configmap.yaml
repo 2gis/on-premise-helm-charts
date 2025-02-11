@@ -109,18 +109,6 @@ data:
           coords: [{{ join "," .coords }}]
       {{- end }}
       initial_project: {{ .Values.map.initialProject | squote }}
-      {{- with .Values.worker.mapMatcher }}
-      {{- if .enabled }}
-      matching:
-        enabled: {{ .enabled }}
-        host: {{ required "A valid .Values.worker.mapMatcher.baseUrl entry required" .baseUrl }}
-        key: {{ required "A valid .Values.worker.mapMatcher.key entry required" .key }}
-        interpolation: {{ .interpolation }}
-        retries_total: {{ .retries }}
-        retries_backoff_factor: 0.8
-        timeout: {{ .timeoutSeconds }}
-      {{- end }}
-      {{- end }}
     register_predictor_ttl_seconds: 600
     enabled_modules:
       header_links:
@@ -144,16 +132,37 @@ data:
         unified_predictions_topic: {{ required "A valid .Values.kafka.topics.predictions entry required" .Values.kafka.topics.predictions | squote }}
       logs_saver:
         logs_topic: {{ .Values.kafka.topics.logs }}
+      {{- with .Values.worker.mapMatcher }}
+      {{- if .enabled }}
+      matching:
+        enabled: {{ .enabled }}
+        host: {{ required "A valid .Values.worker.mapMatcher.baseUrl entry required" .baseUrl }}
+        key: {{ required "A valid .Values.worker.mapMatcher.key entry required" .key }}
+        interpolation: {{ .interpolation }}
+        retries_total: {{ .retries }}
+        retries_backoff_factor: 0.8
+        timeout: {{ .timeoutSeconds }}
+      {{- end }}
+      {{- end }}
+      visual_localization:
+        enabled: false
       reporters:
       {{- range .Values.reporters }}
         - name: {{ .name }}
           predictors:
             {{- toYaml .predictors | nindent 12 }}
-      {{- if eq .name "pro" }}
+        {{- if eq .name "pro" }}
           {{- if .trackTimeoutDays }}
           timeout: {{ .trackTimeoutDays }}
           {{- end }}
         {{- end }}
       {{- end }}
+      {{- if .Values.worker.detectionsLocalizer.enabled }}
+        - name: 'detections-localizer'
+          force_naive_localization: true
+          {{- if .Values.worker.detectionsLocalizer.trackTimeoutDays }}
+          timeout: {{ .Values.worker.detectionsLocalizer.trackTimeoutDays }}
+          {{- end }}
+        {{- end }}
       predictors:
         {{- toYaml (.Values.kafka.predictorsExtraTopics | default list) | nindent 8 }}

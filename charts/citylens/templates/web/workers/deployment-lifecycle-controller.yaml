@@ -1,22 +1,23 @@
+{{- if .Values.worker.detectionsLocalizer.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "citylens.reporter-pro-tracks.name" . }}
-  {{- if .Values.worker.reporterProTracks.annotations }}
+  name: {{ include "citylens.lifecycle-controller.name" . }}
+  {{- if .Values.worker.lifecycleController.annotations }}
   annotations:
-    {{- toYaml .Values.worker.reporterProTracks.annotations | nindent 4 }}
+    {{- toYaml .Values.worker.lifecycleController.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "citylens.reporter-pro-tracks.labels" . | nindent 4 }}
-  {{- if .Values.worker.reporterProTracks.labels }}
-    {{- toYaml .Values.worker.reporterProTracks.labels | nindent 4 }}
+    {{- include "citylens.lifecycle-controller.labels" . | nindent 4 }}
+  {{- if .Values.worker.lifecycleController.labels }}
+    {{- toYaml .Values.worker.lifecycleController.labels | nindent 4 }}
   {{- end }}
 spec:
   replicas: 1
-  revisionHistoryLimit: {{ .Values.worker.reporterProTracks.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.worker.lifecycleController.revisionHistoryLimit }}
   selector:
     matchLabels:
-      {{- include "citylens.reporter-pro-tracks.selectorLabels" . | nindent 6 }}
+      {{- include "citylens.lifecycle-controller.selectorLabels" . | nindent 6 }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -27,21 +28,29 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
         checksum/custom-ca: {{ include "citylens.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
-      {{- with .Values.worker.reporterProTracks.podAnnotations }}
+      {{- with .Values.worker.lifecycleController.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "citylens.reporter-pro-tracks.labels" . | nindent 8 }}
+        {{- include "citylens.lifecycle-controller.labels" . | nindent 8 }}
     spec:
       containers:
-        - name: {{ include "citylens.reporter-pro-tracks.name" . }}
+        - name: {{ include "citylens.lifecycle-controller.name" . }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
           imagePullPolicy: {{ .Values.web.image.pullPolicy }}
           command: [ "/bin/sh", "-c" ]
-          args: [ "flask reporter run-pro-tracks" ]
+          args: [ "flask reporter lifecycle_controller" ]
           env:
             - name: CONFIG_PATH
               value: /opt/worker/config/dashboard_config.yaml
+            - name: LIFECYCLE_CONTROLLER_SUSPEND_TIME
+              value: '10' # seconds
+            - name: SCHEDULED_LOCALIZATION_TIMEOUT_MINUTES
+              value: {{ .Values.worker.lifecycleController.scheduledLocalizationTimeoutMinutes | squote }}
+            - name: UPLOADING_TRACK_MIN_LOCALIZATION_INTERVAL_MINUTES
+              value: {{ .Values.worker.lifecycleController.minTrackLocalizationIntervalMinutes | squote }}
+            - name: UPLOADED_TRACK_MIN_LOCALIZATION_INTERVAL_MINUTES
+              value: {{ .Values.worker.lifecycleController.minTrackLocalizationIntervalMinutes | squote }}
             {{- if $.Values.customCAs.bundle }}
             - name: SSL_CERT_DIR
               value: {{ include "citylens.customCA.mountPath" $ }}
@@ -65,15 +74,16 @@ spec:
           configMap:
             name: {{ include "citylens.name" $ }}-custom-ca-configmap
         {{- end }}
-      {{- with .Values.worker.reporterProTracks.nodeSelector }}
+      {{- with .Values.worker.lifecycleController.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.worker.reporterProTracks.affinity }}
+      {{- with .Values.worker.lifecycleController.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.worker.reporterProTracks.tolerations }}
+      {{- with .Values.worker.lifecycleController.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}

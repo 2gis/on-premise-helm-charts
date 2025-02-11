@@ -99,7 +99,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.16.4
+    tag: 1.17.0
 
   replicas: 4
 
@@ -485,8 +485,6 @@ worker:
 
 # @section Citylens Reporter Pro Tracks worker's settings (track status actualization)
 
-# @param worker.reporterProTracks.enabled Deploy worker or not.
-
 # @param worker.reporterProTracks.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
 # @param worker.reporterProTracks.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -499,8 +497,6 @@ worker:
 # @param worker.reporterProTracks.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
 
   reporterProTracks:
-
-    enabled: true
 
     revisionHistoryLimit: 3
 
@@ -632,6 +628,68 @@ worker:
     tolerations: {}
 
 
+# @section Citylens Detections Localizer worker's settings
+
+# @param worker.detectionsLocalizer.enabled If Detections Localizer worker is enabled for the service.
+
+# @param worker.detectionsLocalizer.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+# @param worker.detectionsLocalizer.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.detectionsLocalizer.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.detectionsLocalizer.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.detectionsLocalizer.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.detectionsLocalizer.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.detectionsLocalizer.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.detectionsLocalizer.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  detectionsLocalizer:
+
+    enabled: false
+
+    revisionHistoryLimit: 3
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+
+# @section Citylens Lifecycle Controller worker's settings (depends on Detections Localizer worker)
+
+# @param worker.lifecycleController.scheduledLocalizationTimeoutMinutes Timeout in minutes after that track localization will be rescheduled if it was scheduled and not done.
+# @param worker.lifecycleController.minTrackLocalizationIntervalMinutes Interval in minutes between scheduling track detections localization again.
+
+# @param worker.lifecycleController.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+# @param worker.lifecycleController.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.lifecycleController.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.lifecycleController.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.lifecycleController.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.lifecycleController.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.lifecycleController.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.lifecycleController.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  lifecycleController:
+
+    scheduledLocalizationTimeoutMinutes: 1380  # 23h
+    minTrackLocalizationIntervalMinutes: 10
+
+    revisionHistoryLimit: 3
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+
 # @section Citylens Dashboard batch events worker's settings
 
 # @param worker.dashboardBatchEvents.replicas A replica count for the pod.
@@ -662,7 +720,7 @@ worker:
     image:
       repository: 2gis-on-premise/citylens-workers
       pullPolicy: IfNotPresent
-      tag: 1.16.4
+      tag: 1.17.0
 
     revisionHistoryLimit: 3
 
@@ -698,7 +756,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.16.1
+    tag: 1.17.0
 
   resources:
     requests:

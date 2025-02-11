@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.16.4`                       |
+| `api.image.tag`        | Tag.         | `1.17.0`                       |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -297,17 +297,16 @@ See the [documentation]() to learn about:
 
 ### Citylens Reporter Pro Tracks worker's settings (track status actualization)
 
-| Name                                            | Description                                                                                                                                    | Value  |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `worker.reporterProTracks.enabled`              | Deploy worker or not.                                                                                                                          | `true` |
-| `worker.reporterProTracks.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`    |
-| `worker.reporterProTracks.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
-| `worker.reporterProTracks.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`   |
-| `worker.reporterProTracks.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
-| `worker.reporterProTracks.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`   |
-| `worker.reporterProTracks.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`   |
-| `worker.reporterProTracks.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`   |
-| `worker.reporterProTracks.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`   |
+| Name                                            | Description                                                                                                                                    | Value |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `worker.reporterProTracks.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
+| `worker.reporterProTracks.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
+| `worker.reporterProTracks.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
+| `worker.reporterProTracks.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
+| `worker.reporterProTracks.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
+| `worker.reporterProTracks.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
+| `worker.reporterProTracks.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
+| `worker.reporterProTracks.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
 
 ### Citylens Track Metadata Saver worker's settings
 
@@ -362,6 +361,35 @@ See the [documentation]() to learn about:
 | `worker.mapMatcher.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                  | `{}`    |
 | `worker.mapMatcher.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                            | `{}`    |
 
+### Citylens Detections Localizer worker's settings
+
+| Name                                              | Description                                                                                                                                    | Value   |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `worker.detectionsLocalizer.enabled`              | If Detections Localizer worker is enabled for the service.                                                                                     | `false` |
+| `worker.detectionsLocalizer.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
+| `worker.detectionsLocalizer.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`    |
+| `worker.detectionsLocalizer.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`    |
+| `worker.detectionsLocalizer.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`    |
+| `worker.detectionsLocalizer.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`    |
+| `worker.detectionsLocalizer.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`    |
+| `worker.detectionsLocalizer.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`    |
+| `worker.detectionsLocalizer.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`    |
+
+### Citylens Lifecycle Controller worker's settings (depends on Detections Localizer worker)
+
+| Name                                                             | Description                                                                                                                                    | Value  |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `worker.lifecycleController.scheduledLocalizationTimeoutMinutes` | Timeout in minutes after that track localization will be rescheduled if it was scheduled and not done.                                         | `1380` |
+| `worker.lifecycleController.minTrackLocalizationIntervalMinutes` | Interval in minutes between scheduling track detections localization again.                                                                    | `10`   |
+| `worker.lifecycleController.revisionHistoryLimit`                | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`    |
+| `worker.lifecycleController.annotations`                         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
+| `worker.lifecycleController.labels`                              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`   |
+| `worker.lifecycleController.podAnnotations`                      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
+| `worker.lifecycleController.podLabels`                           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`   |
+| `worker.lifecycleController.nodeSelector`                        | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`   |
+| `worker.lifecycleController.tolerations`                         | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`   |
+| `worker.lifecycleController.affinity`                            | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`   |
+
 ### Citylens Dashboard batch events worker's settings
 
 | Name                                   | Description                  | Value |
@@ -373,7 +401,7 @@ See the [documentation]() to learn about:
 | Name                                               | Description                                                                                                                                    | Value                              |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `worker.dashboardBatchEvents.image.repository`     | Repository.                                                                                                                                    | `2gis-on-premise/citylens-workers` |
-| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.16.4`                           |
+| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.17.0`                           |
 | `worker.dashboardBatchEvents.image.pullPolicy`     | Pull Policy.                                                                                                                                   | `IfNotPresent`                     |
 | `worker.dashboardBatchEvents.logLevel`             | Worker's log level.                                                                                                                            | `INFO`                             |
 | `worker.dashboardBatchEvents.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`                                |
@@ -391,7 +419,7 @@ See the [documentation]() to learn about:
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.16.1`                            |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.17.0`                            |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |

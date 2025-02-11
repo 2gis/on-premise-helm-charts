@@ -4,7 +4,10 @@ metadata:
   name: {{ include "citylens.workers.name" . }}-configmap
 data:
   workers_config.yaml: |
-    pg_connection_url: {{ include "citylens.pgDSN"  . | squote }}
+    pg:
+      connection_url: {{ include "citylens.pgDSN"  . | squote }}
+      pool_size: {{ .Values.web.pgPoolSize }}
+      pool_max_overflow: {{ .Values.web.pgPoolMaxOverflow }}
 
     image_service:
     {{- with .Values.s3 }}
@@ -19,14 +22,15 @@ data:
       tracks_lifecycle_topic: {{ required "A valid .Values.kafka.topics.tracksLifecycle entry required" .tracksLifecycle | squote }}
     {{- end }}
     log_level: {{ .Values.worker.dashboardBatchEvents.logLevel }}
+    visual_localization: null
     {{- with .Values.kafka }}
     kafka:
       broker: {{ .bootstrapServer }}
       is_credentials_enabled: true
       credentials:
         mechanism: 'SCRAM-SHA-512'
-        username: {{ .username }}
-        password: {{ .password }}
+        username: {{ .username | squote }}
+        password: {{ .password | squote }}
       advanced:
         stream_wait_empty: true
         topic_allow_declare: false
