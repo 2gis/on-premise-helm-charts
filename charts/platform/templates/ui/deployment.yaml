@@ -63,6 +63,8 @@ spec:
             - name: PLATFORM_API_URL
               value: {{ .Values.ui.platform.api.url | quote }}
             {{- end }}
+            - name: SHOW_LEGAL_AGREEMENTS
+              value: {{ .Values.ui.legal.showLegalAgreements | quote }}
             - name: GOOGLE_ANALYTICS_ID
               value: {{ .Values.ui.googleAnalyticsId | quote}}
             - name: GOOGLE_TAG_MANAGER_ID
