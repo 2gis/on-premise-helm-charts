@@ -631,6 +631,7 @@ worker:
 # @section Citylens Detections Localizer worker's settings
 
 # @param worker.detectionsLocalizer.enabled If Detections Localizer worker is enabled for the service.
+# @param worker.detectionsLocalizer.predictors From what sources detections should be localized.
 
 # @param worker.detectionsLocalizer.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
@@ -646,6 +647,8 @@ worker:
   detectionsLocalizer:
 
     enabled: false
+
+    predictors: [camcom]
 
     revisionHistoryLimit: 3
 

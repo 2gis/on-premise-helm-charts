@@ -160,10 +160,13 @@ data:
         {{- end }}
       {{- end }}
       {{- if .Values.worker.detectionsLocalizer.enabled }}
+      {{- with .Values.worker.detectionsLocalizer }}
         - name: 'detections-localizer'
+          predictors:
+            {{- toYaml .predictors | nindent 12 }}
           force_naive_localization: true
-          {{- if .Values.worker.detectionsLocalizer.trackTimeoutDays }}
-          timeout: {{ .Values.worker.detectionsLocalizer.trackTimeoutDays }}
+          {{- if .trackTimeoutDays }}
+          timeout: {{ .trackTimeoutDays }}
           {{- end }}
         {{- end }}
       predictors:
