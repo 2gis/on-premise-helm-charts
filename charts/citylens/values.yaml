@@ -777,6 +777,7 @@ migrations:
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
 # @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
 # @param kafka.topics.pro Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**
+# @param kafka.topics.proObjects Topic for localized detections synchronization with Pro (used by Reporter pro worker, requires Detections Localizer worker). **Required**
 # @param kafka.topics.proDrivers Topic for drivers tracks synchronization with Pro (used by Reporter pro worker). **Required**
 # @param kafka.topics.uploader Topic for Uploader worker. **Required**
 # @param kafka.topics.logs Topic for citylens mobile app logs, uploaded via citylens-api. **Required**
@@ -795,6 +796,7 @@ kafka:
     frames: ''
     tracks: ''
     pro: ''
+    proObjects: ''
     proDrivers: ''
     logs: ''
     uploader: ''
@@ -887,13 +889,15 @@ reporters:
 # @param pro.baseUrl PRO API URL. Ex: http(s)://pro-api.svc
 # @param pro.key PRO API auth token
 # @param pro.verifySsl Set to `false` if pro.baseUrl must be accessed via https without certificate validation. **Required**
-# @param pro.framesAssetId PRO frames asset id (used for filters actualization). Ex: your_asset_name
+# @param pro.framesAssetId PRO Frames asset id (used for filters actualization). Ex: your_frames_asset_name
+# @param pro.objectsAssetId PRO Objects asset id (used for filters actualization). Ex: your_objects_asset_name
 
 pro:
   baseUrl: ''
   key: ''
   verifySsl: true
   framesAssetId: ''
+  objectsAssetId: ''
 
 # @section **Custom Certificate Authority**
 

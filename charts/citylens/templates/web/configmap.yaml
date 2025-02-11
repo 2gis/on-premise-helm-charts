@@ -95,9 +95,11 @@ data:
       {{- end }}
       topics:
         frames: {{ .Values.kafka.topics.pro }}
+        objects: {{ .Values.kafka.topics.proObjects }}
         drivers: {{ .Values.kafka.topics.proDrivers }}
       assets:
         frames: {{ .Values.pro.framesAssetId }}
+        objects: {{ .Values.pro.objectsAssetId }}
     map:
       tileserver_url_template: {{ required "A valid .Values.map.tileserverUrl entry required" .Values.map.tileserverUrl }}/tiles?x={x}&y={y}&z={z}
       mapgl:
