@@ -29,10 +29,12 @@ cassandra-clusters:
       {{- end }}
 
       {{- if $.Values.tilegen.enabled }}
-      - tileset: userdata
-        keyspace: dgis_userdata
+      {{- with $.Values.tilegen.tileset }}
+      - tileset: {{ .name }}
+        keyspace: {{ .keyspace }}
         type: ald_v3
         partition-size: 4
+      {{- end}}
       {{- end }}
 
     {{- with .Values.cassandra }}

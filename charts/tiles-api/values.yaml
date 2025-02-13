@@ -98,6 +98,9 @@ cassandra:
 # @param tilegen.logLevelOverride A custom api logging level. Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
 # @param tilegen.logFormatOverride A custom api logging format. Allowed options: text|json. If not defined, 'json' format will be used.
 
+# @param tilegen.tileset.name Name for the tileset
+# @param tilegen.tileset.keyspace Name for keyspace in database
+
 # @param tilegen.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 # @param tilegen.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param tilegen.replicaCount A replica count for the pod.
@@ -125,6 +128,10 @@ tilegen:
   logLevelOverride:
   logFormatOverride:
 
+  tileset:
+    name: userdata
+    keyspace: dgis_userdata
+    
   # @extra tilegen.image **Docker image settings**
   # @param tilegen.image.repository Docker Repository.
   # @param tilegen.image.tag Docker image tag.
@@ -141,7 +148,7 @@ tilegen:
   annotations: {}
 
   replicaCount: 3
-  revisionHistory: 1
+  revisionHistory: 3
 
   # @extra tilegen.strategy.rollingUpdate **Service's Rolling Update strategy settings**
   # @param tilegen.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).

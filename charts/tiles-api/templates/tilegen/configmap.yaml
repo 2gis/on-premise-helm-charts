@@ -40,13 +40,15 @@ data:
         {{- toYaml .hosts | nindent 8 }}
 
       keyspaces:
-        - tileset: userdata
-          keyspace: dgis_userdata
+        {{- with .tileset }}
+        - tileset: {{ .name }}
+          keyspace: {{ .keyspace }}
           type: ald_v3
           default: true
           partition-size: 4
           periodic-cleanup: 
             enable: true
+        {{- end}}
 
     {{- end }}
 
