@@ -112,6 +112,12 @@ data:
       {{- end }}
       initial_project: {{ .Values.map.initialProject | squote }}
     register_predictor_ttl_seconds: 600
+    clusterization_params:
+      nearest_objects_select_radius: 20
+      is_latest_latlon: true
+      default_thresholds:
+        cluster_objects_distance_thr: 20
+        dbscan_eps: 20
     enabled_modules:
       header_links:
         {{- toYaml .Values.headerLinks | nindent 8 }}
