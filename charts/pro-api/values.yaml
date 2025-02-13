@@ -348,7 +348,8 @@ tasks:
 # @param assetImporter.tag Docker image tag.
 # @param assetImporter.schedule Import job schedule.
 # @param assetImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
-# @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
+# @param assetImporter.successfulJobsHistoryLimit How many completed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
+# @param assetImporter.failedJobsHistoryLimit How many failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
 # @param assetImporter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @extra assetImporter.resources **Limits for the import job**
 # @param assetImporter.resources.requests.cpu A CPU request.
@@ -375,6 +376,7 @@ assetImporter:
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
   nodeSelector: {}
   resources:
     requests:
@@ -408,6 +410,7 @@ assetPreparer:
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
   nodeSelector: {}
   resources:
     requests:
