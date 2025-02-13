@@ -131,7 +131,7 @@ tilegen:
   tileset:
     name: userdata
     keyspace: dgis_userdata
-    
+
   # @extra tilegen.image **Docker image settings**
   # @param tilegen.image.repository Docker Repository.
   # @param tilegen.image.tag Docker image tag.
