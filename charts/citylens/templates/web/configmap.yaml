@@ -114,7 +114,6 @@ data:
     register_predictor_ttl_seconds: 600
     clusterization_params:
       nearest_objects_select_radius: 20
-      is_latest_latlon: true
       default_thresholds:
         cluster_objects_distance_thr: 20
         dbscan_eps: 20
