@@ -147,8 +147,13 @@ spec:
                 secretKeyRef:
                   key: busConfigSaslPassword
                   name: {{ include "citylens.routes.api.name" . }}-secret
+            - name: BusConfig__SecurityInformation__SaslMechanism
+              value: "{{ .Values.routes.worker.busConfig.securityInformation.saslMechanism }}"
+            - name: BusConfig__SecurityInformation__SecurityProtocol
+              value: "{{ .Values.routes.worker.busConfig.securityInformation.securityProtocol }}"
+
             - name: BusConfig__Consumers__AppEvents__Topic
-              value: "{{ .Values.routes.worker.busConfig.consumers.appEvents.topic }}"
+              value: "{{ .Values.kafka.topics.tracks }}"
             - name: BusConfig__Consumers__AppEvents__GroupId
               value: "{{ .Values.routes.worker.busConfig.consumers.appEvents.groupId }}"
             - name: BusConfig__Consumers__AppEvents__BufferSize

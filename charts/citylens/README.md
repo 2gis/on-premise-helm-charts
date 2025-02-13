@@ -546,7 +546,7 @@ See the [documentation]() to learn about:
 | Name                          | Description  | Value                                 |
 | ----------------------------- | ------------ | ------------------------------------- |
 | `routes.api.image.repository` | Repository.  | `2gis-on-premise/citylens-routes-api` |
-| `routes.api.image.tag`        | Tag.         | `1.0.8`                               |
+| `routes.api.image.tag`        | Tag.         | `1.0.9`                               |
 | `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        |
 
 ### Resources settings
@@ -635,7 +635,7 @@ See the [documentation]() to learn about:
 | Name                             | Description  | Value                                     |
 | -------------------------------- | ------------ | ----------------------------------------- |
 | `routes.worker.image.repository` | Repository.  | `2gis-on-premise/citylens-worker-service` |
-| `routes.worker.image.tag`        | Tag.         | `1.0.8`                                   |
+| `routes.worker.image.tag`        | Tag.         | `1.0.9`                                   |
 | `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            |
 
 ### Resources settings
@@ -672,17 +672,19 @@ See the [documentation]() to learn about:
 | `routes.worker.logging`        | Routes **Logging** settings                                                                                                 |               |
 | `routes.worker.logging.level`  | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
 
-### Bus configuration settings
+### Kafka Bus configuration settings. Based on Kafka values
 
-| Name                                                       | Description                           | Value |
-| ---------------------------------------------------------- | ------------------------------------- | ----- |
-| `routes.worker.busConfig`                                  | Bus configuration                     |       |
-| `routes.worker.busConfig.consumers`                        | Consumers for the bus configuration   |       |
-| `routes.worker.busConfig.consumers.appEvents`              | App events for the consumers          |       |
-| `routes.worker.busConfig.consumers.appEvents.topic`        | The topic for the app events.         | `""`  |
-| `routes.worker.busConfig.consumers.appEvents.groupId`      | The group ID for the app events.      | `""`  |
-| `routes.worker.busConfig.consumers.appEvents.bufferSize`   | The buffer size for the app events.   | `100` |
-| `routes.worker.busConfig.consumers.appEvents.workersCount` | The workers count for the app events. | `10`  |
+| Name                                                           | Description                                                                                                                                                  | Value           |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| `routes.worker.busConfig`                                      | Bus configuration                                                                                                                                            |                 |
+| `routes.worker.busConfig.securityInformation`                  | SecurityInformation for the bus configuration                                                                                                                |                 |
+| `routes.worker.busConfig.securityInformation.saslMechanism`    | Authentication mechanism when security_protocol is configured. Valid values are: Gssapi, Plain, ScramSha256, ScramSha512, OAuthBearer. Default: ScramSha512. | `ScramSha512`   |
+| `routes.worker.busConfig.securityInformation.securityProtocol` | Valid values are: Plaintext, Ssl, SaslPlaintext, SaslSsl. Default: SaslPlaintext.                                                                            | `SaslPlaintext` |
+| `routes.worker.busConfig.consumers`                            | Consumers for the bus configuration.                                                                                                                         |                 |
+| `routes.worker.busConfig.consumers.appEvents`                  | App events for the consumers.                                                                                                                                |                 |
+| `routes.worker.busConfig.consumers.appEvents.groupId`          | The group ID for the app events.                                                                                                                             | `""`            |
+| `routes.worker.busConfig.consumers.appEvents.bufferSize`       | The buffer size for the app events.                                                                                                                          | `100`           |
+| `routes.worker.busConfig.consumers.appEvents.workersCount`     | The workers count for the app events.                                                                                                                        | `10`            |
 
 ### Citylens routes Clients
 
