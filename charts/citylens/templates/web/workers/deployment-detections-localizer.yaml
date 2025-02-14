@@ -1,23 +1,23 @@
-{{- if .Values.worker.reporterPro.enabled }}
+{{- if .Values.worker.detectionsLocalizer.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "citylens.reporter-pro.name" . }}
-  {{- if .Values.worker.reporterPro.annotations }}
+  name: {{ include "citylens.detections-localizer.name" . }}
+  {{- if .Values.worker.detectionsLocalizer.annotations }}
   annotations:
-    {{- toYaml .Values.worker.reporterPro.annotations | nindent 4 }}
+    {{- toYaml .Values.worker.detectionsLocalizer.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "citylens.reporter-pro.labels" . | nindent 4 }}
-  {{- if .Values.worker.reporterPro.labels }}
-    {{- toYaml .Values.worker.reporterPro.labels | nindent 4 }}
+    {{- include "citylens.detections-localizer.labels" . | nindent 4 }}
+  {{- if .Values.worker.detectionsLocalizer.labels }}
+    {{- toYaml .Values.worker.detectionsLocalizer.labels | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.worker.reporterPro.replicas }}
-  revisionHistoryLimit: {{ .Values.worker.reporterPro.revisionHistoryLimit }}
+  replicas: 1
+  revisionHistoryLimit: {{ .Values.worker.detectionsLocalizer.revisionHistoryLimit }}
   selector:
     matchLabels:
-      {{- include "citylens.reporter-pro.selectorLabels" . | nindent 6 }}
+      {{- include "citylens.detections-localizer.selectorLabels" . | nindent 6 }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -28,21 +28,22 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
         checksum/custom-ca: {{ include "citylens.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
-      {{- with .Values.worker.reporterPro.podAnnotations }}
+      {{- with .Values.worker.detectionsLocalizer.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "citylens.reporter-pro.labels" . | nindent 8 }}
+        {{- include "citylens.detections-localizer.labels" . | nindent 8 }}
     spec:
       containers:
-        - name: {{ include "citylens.reporter-pro.name" . }}
+        - name: {{ include "citylens.detections-localizer.name" . }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
           imagePullPolicy: {{ .Values.web.image.pullPolicy }}
           command: [ "/bin/sh", "-c" ]
-          args: [ "flask reporter run-pro" ]
+          args: [ "flask detections localize" ]
           env:
             - name: CONFIG_PATH
               value: /opt/worker/config/dashboard_config.yaml
+            {{- include "citylens.env.dsLibrariesEnvs" . | nindent 12 }}
             {{- if $.Values.customCAs.bundle }}
             - name: SSL_CERT_DIR
               value: {{ include "citylens.customCA.mountPath" $ }}
@@ -66,15 +67,15 @@ spec:
           configMap:
             name: {{ include "citylens.name" $ }}-custom-ca-configmap
         {{- end }}
-      {{- with .Values.worker.reporterPro.nodeSelector }}
+      {{- with .Values.worker.detectionsLocalizer.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.worker.reporterPro.affinity }}
+      {{- with .Values.worker.detectionsLocalizer.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.worker.reporterPro.tolerations }}
+      {{- with .Values.worker.detectionsLocalizer.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
