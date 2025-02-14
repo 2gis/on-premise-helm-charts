@@ -805,8 +805,8 @@ kafka:
   bootstrapServer: ''
   username: ''
   password: ''
-  securityProtocol: 'SASL_PLAINTEXT'
-  saslMechanism: 'SCRAM-SHA-512'
+  securityProtocol: SASL_PLAINTEXT
+  saslMechanism: SCRAM-SHA-512
   produceTimeoutSeconds: 5
   topics:
     frames: ''
