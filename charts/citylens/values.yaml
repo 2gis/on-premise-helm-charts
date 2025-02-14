@@ -785,6 +785,8 @@ migrations:
 # @param kafka.bootstrapServer A Kafka broker endpoint. **Required**
 # @param kafka.username A Kafka username for connection. **Required**
 # @param kafka.password A Kafka password for connection. **Required**
+# @param kafka.securityProtocol Protocol used to communicate with brokers. Currently supported: SASL_PLAINTEXT.
+# @param kafka.saslMechanism Authentication mechanism. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.
 # @param kafka.produceTimeoutSeconds Timeout for producer.
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
 # @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
@@ -803,6 +805,8 @@ kafka:
   bootstrapServer: ''
   username: ''
   password: ''
+  securityProtocol: 'SASL_PLAINTEXT'
+  saslMechanism: 'SCRAM-SHA-512'
   produceTimeoutSeconds: 5
   topics:
     frames: ''

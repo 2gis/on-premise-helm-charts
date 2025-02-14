@@ -433,23 +433,25 @@ See the [documentation]() to learn about:
 
 ### Kafka settings
 
-| Name                           | Description                                                                                                                               | Value |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `kafka.bootstrapServer`        | A Kafka broker endpoint. **Required**                                                                                                     | `""`  |
-| `kafka.username`               | A Kafka username for connection. **Required**                                                                                             | `""`  |
-| `kafka.password`               | A Kafka password for connection. **Required**                                                                                             | `""`  |
-| `kafka.produceTimeoutSeconds`  | Timeout for producer.                                                                                                                     | `5`   |
-| `kafka.topics.frames`          | List of topics for Frames saver worker. **Required**                                                                                      | `""`  |
-| `kafka.topics.tracks`          | List of topics for Tracks metadata worker. **Required**                                                                                   | `""`  |
-| `kafka.topics.pro`             | Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**                                                     | `""`  |
-| `kafka.topics.proObjects`      | Topic for localized detections synchronization with Pro (used by Reporter pro worker, requires Detections Localizer worker). **Required** | `""`  |
-| `kafka.topics.proDrivers`      | Topic for drivers tracks synchronization with Pro (used by Reporter pro worker). **Required**                                             | `""`  |
-| `kafka.topics.uploader`        | Topic for Uploader worker. **Required**                                                                                                   | `""`  |
-| `kafka.topics.logs`            | Topic for citylens mobile app logs, uploaded via citylens-api. **Required**                                                               | `""`  |
-| `kafka.topics.framesLifecycle` | Topic for frames lifecycle events. **Required**                                                                                           | `""`  |
-| `kafka.topics.tracksLifecycle` | Topic for tracks lifecycle events. **Required**                                                                                           | `""`  |
-| `kafka.topics.predictions`     | Topic for predictions events from detectors. **Required**                                                                                 | `""`  |
-| `kafka.consumerGroups.prefix`  | Kafka topics prefix. **Required**                                                                                                         | `""`  |
+| Name                           | Description                                                                                                                               | Value            |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `kafka.bootstrapServer`        | A Kafka broker endpoint. **Required**                                                                                                     | `""`             |
+| `kafka.username`               | A Kafka username for connection. **Required**                                                                                             | `""`             |
+| `kafka.password`               | A Kafka password for connection. **Required**                                                                                             | `""`             |
+| `kafka.securityProtocol`       | Protocol used to communicate with brokers. Currently supported: SASL_PLAINTEXT.                                                           | `SASL_PLAINTEXT` |
+| `kafka.saslMechanism`          | Authentication mechanism. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.                                                          | `SCRAM-SHA-512`  |
+| `kafka.produceTimeoutSeconds`  | Timeout for producer.                                                                                                                     | `5`              |
+| `kafka.topics.frames`          | List of topics for Frames saver worker. **Required**                                                                                      | `""`             |
+| `kafka.topics.tracks`          | List of topics for Tracks metadata worker. **Required**                                                                                   | `""`             |
+| `kafka.topics.pro`             | Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**                                                     | `""`             |
+| `kafka.topics.proObjects`      | Topic for localized detections synchronization with Pro (used by Reporter pro worker, requires Detections Localizer worker). **Required** | `""`             |
+| `kafka.topics.proDrivers`      | Topic for drivers tracks synchronization with Pro (used by Reporter pro worker). **Required**                                             | `""`             |
+| `kafka.topics.uploader`        | Topic for Uploader worker. **Required**                                                                                                   | `""`             |
+| `kafka.topics.logs`            | Topic for citylens mobile app logs, uploaded via citylens-api. **Required**                                                               | `""`             |
+| `kafka.topics.framesLifecycle` | Topic for frames lifecycle events. **Required**                                                                                           | `""`             |
+| `kafka.topics.tracksLifecycle` | Topic for tracks lifecycle events. **Required**                                                                                           | `""`             |
+| `kafka.topics.predictions`     | Topic for predictions events from detectors. **Required**                                                                                 | `""`             |
+| `kafka.consumerGroups.prefix`  | Kafka topics prefix. **Required**                                                                                                         | `""`             |
 
 ### S3 settings
 

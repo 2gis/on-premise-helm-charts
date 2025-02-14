@@ -28,9 +28,9 @@ data:
       broker: {{ .bootstrapServer }}
       is_credentials_enabled: true
       credentials:
-        mechanism: 'SCRAM-SHA-512'
-        username: {{ .username | squote }}
-        password: {{ .password | squote }}
+        mechanism: {{ required "A valid .Values.kafka.saslMechanism entry required" .saslMechanism | squote }}
+        username: {{ required "A valid .Values.kafka.username entry required" .username | squote }}
+        password: {{ required "A valid .Values.kafka.password entry required" .password | squote }}
       advanced:
         stream_wait_empty: true
         topic_allow_declare: false
