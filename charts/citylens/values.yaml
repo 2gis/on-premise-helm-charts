@@ -796,6 +796,7 @@ migrations:
 # @param kafka.topics.uploader Topic for Uploader worker. **Required**
 # @param kafka.topics.logs Topic for citylens mobile app logs, uploaded via citylens-api. **Required**
 # @param kafka.topics.framesLifecycle Topic for frames lifecycle events. **Required**
+# @param kafka.topics.objectsLifecycle Topic for objects lifecycle events. **Required**
 # @param kafka.topics.tracksLifecycle Topic for tracks lifecycle events. **Required**
 # @param kafka.topics.predictions Topic for predictions events from detectors. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
@@ -817,6 +818,7 @@ kafka:
     logs: ''
     uploader: ''
     framesLifecycle: ''
+    objectsLifecycle: ''
     tracksLifecycle: ''
     predictions: ''
   consumerGroups:
