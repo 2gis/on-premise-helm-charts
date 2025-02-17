@@ -66,12 +66,12 @@
             "secure",
             "safeHosts",
             "codeUrl",
+            "brand",
             "clientId",
             "clientSecret",
             "oAuthProvider",
             "identityProviderUrl",
             "oAuthApiUrl",
-            "userDataApiUrl",
             "turnOffCertValidation"
           ],
           "properties": {
@@ -85,6 +85,9 @@
               "type": "string"
             },
             "codeUrl": {
+              "type": "string"
+            },
+            "brand": {
               "type": "string"
             },
             "clientId": {
@@ -106,7 +109,7 @@
             "oAuthApiUrl": {
               "type": "string"
             },
-            "userDataApiUrl": {
+            "platformManagerHost": {
               "type": "string"
             },
             "turnOffCertValidation": {
