@@ -40,7 +40,7 @@ data:
         {{- toYaml .hosts | nindent 8 }}
 
       keyspaces:
-        {{- with .tileset }}
+        {{- with $.Values.tilegen.tileset }}
         - tileset: {{ .name }}
           keyspace: {{ .keyspace }}
           type: ald_v3
