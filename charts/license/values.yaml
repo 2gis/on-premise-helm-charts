@@ -83,6 +83,12 @@ license:
   statusPort: 8080
   apiPort: 8443
 
+  # @param license.log.level Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`, `panic`.
+  # @param license.log.format Log format for the service. Can be: `text`, `json`.
+  log:
+    level: 'info'
+    format: 'text'
+
 # @section Service settings
 
 # @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).

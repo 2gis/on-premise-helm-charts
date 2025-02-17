@@ -59,11 +59,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 
 ### License service application settings
 
-| Name                      | Description                                                                                                                                                                                                    | Value |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `license.type`            | License type. Should be auto generated with `dgctl pull --generate-values`.                                                                                                                                    | `""`  |
-| `license.retryPeriod`     | Duration how often service should try to fetch license from storage if previous attempts were failing. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration]. | `30s` |
-| `license.softBlockPeriod` | Duration until the license expiration time when license service should respond with 'soft' block status. For this duration additional time units 'd' for days and 'w' for weeks are supported.                 | `2w`  |
+| Name                      | Description                                                                                                                                                                                                    | Value  |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `license.type`            | License type. Should be auto generated with `dgctl pull --generate-values`.                                                                                                                                    | `""`   |
+| `license.retryPeriod`     | Duration how often service should try to fetch license from storage if previous attempts were failing. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration]. | `30s`  |
+| `license.softBlockPeriod` | Duration until the license expiration time when license service should respond with 'soft' block status. For this duration additional time units 'd' for days and 'w' for weeks are supported.                 | `2w`   |
+| `license.log.level`       | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`, `panic`.                                                                                                             | `info` |
+| `license.log.format`      | Log format for the service. Can be: `text`, `json`.                                                                                                                                                            | `text` |
 
 ### Service settings
 
