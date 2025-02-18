@@ -62,6 +62,8 @@ spec:
               value: {{ .Values.env.PLATFORM_MANAGER_API_URL | quote }}
             - name: PLATFORM_MANAGER_CLIENT_ID
               value: {{ .Values.env.PLATFORM_MANAGER_CLIENT_ID | quote }}
+            - name: PLATFORM_MANAGER_SCOPE
+              value: {{ required "A valid .Values.env.PLATFORM_MANAGER_SCOPE entry required" .Values.env.PLATFORM_MANAGER_SCOPE | quote }}
             - name: ROUTES_API_URL
               value: {{ required "A valid .Values.env.ROUTES_API_URL entry required" .Values.env.ROUTES_API_URL | quote }}
             - name: MAPGL_KEY

@@ -21,7 +21,7 @@
 | Name               | Description | Value                                |
 | ------------------ | ----------- | ------------------------------------ |
 | `image.repository` | Repository  | `2gis-on-premise/citylens-routes-ui` |
-| `image.tag`        | Tag         | `0.0.18`                             |
+| `image.tag`        | Tag         | `0.0.21`                             |
 
 ### Environment
 
@@ -35,6 +35,7 @@
 | `env.PLATFORM_MANAGER_API_URL`       | Platform manager API base URL **Required**                 | `""`  |
 | `env.PLATFORM_MANAGER_CLIENT_ID`     | OpenID client identifier for Platform manager **Required** | `""`  |
 | `env.PLATFORM_MANAGER_CLIENT_SECRET` | OpenID client identifier for Platform manager **Required** | `""`  |
+| `env.PLATFORM_MANAGER_SCOPE`         | OpenID scope for Platform manager **Required**             | `""`  |
 | `env.ROUTES_API_URL`                 | Backend (citylens-routes-api) base URL **Required**        | `""`  |
 
 ### Common deployment settings
