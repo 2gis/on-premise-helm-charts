@@ -127,10 +127,14 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                       | Description                            | Value   |
-| -------------------------- | -------------------------------------- | ------- |
-| `ui.ingress.enabled`       | If Ingress is enabled for the service. | `false` |
-| `ui.ingress.hosts[0].host` | Hostname for the Ingress service.      | `""`    |
+| Name                                    | Description                               | Value                     |
+| --------------------------------------- | ----------------------------------------- | ------------------------- |
+| `ui.ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                   |
+| `ui.ingress.className`                  | Name of the Ingress controller class.     | `nginx`                   |
+| `ui.ingress.hosts[0].host`              | Hostname for the Ingress service.         | `platform-ui.example.com` |
+| `ui.ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                       |
+| `ui.ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                  |
+| `ui.ingress.tls`                        | TLS configuration                         | `[]`                      |
 
 ### Limits
 
