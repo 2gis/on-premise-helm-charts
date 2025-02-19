@@ -73,6 +73,12 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | `ui.status.keys`        | Status list within Keys service.                                                                                                                                                                                                                                                                                                      | `""`  |
 | `ui.status.mapStyles`   | Status list within Map Styles API service.                                                                                                                                                                                                                                                                                            | `""`  |
 
+### Platform
+
+| Name                  | Description                                                                                     | Value |
+| --------------------- | ----------------------------------------------------------------------------------------------- | ----- |
+| `ui.platform.api.url` | URL to [API Keys service](https://docs.2gis.com/en/on-premise/architecture/services/keys) host. | `""`  |
+
 ### MapGL JS API settings
 
 | Name                  | Description                                                                                                                                                   | Value     |

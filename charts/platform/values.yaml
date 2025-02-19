@@ -105,6 +105,14 @@ ui:
     keys: ''
     mapStyles: ''
 
+  # @section Platform
+
+  # @param ui.platform.api.url URL to [API Keys service](https://docs.2gis.com/en/on-premise/architecture/services/keys) host.
+
+  platform:
+    api:
+      url: ''
+
   # @section MapGL JS API settings
 
   # @param ui.mapgl.url URL to [MapGL JS API](https://docs.2gis.com/en/on-premise/map) host.
