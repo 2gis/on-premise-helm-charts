@@ -168,5 +168,14 @@ spec:
             - name: Clients__ProClient__AuthorizationToken
               value: "{{ $.Values.routes.pro.authorizationToken }}"
 
+            - name: Clients__Navigation__Enabled
+              value: "true"
+            - name: Clients__Navigation__Url
+              value: "{{ $.Values.routes.navi.url }}"
+            - name: Clients__Navigation__TimeoutSeconds
+              value: "{{ $.Values.routes.navi.timeout }}"
+            - name: Clients__Navigation__ApiKey
+              value: "{{ $.Values.routes.navi.key }}"
+
             - name: Features__CoverageRatioEnabled
               value: "{{ $.Values.routes.features.coverageRatioEnabled }}"
