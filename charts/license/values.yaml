@@ -65,7 +65,7 @@ imagePullSecrets: []
 
 image:
   repository: 2gis-on-premise/license
-  tag: 2.2.4
+  tag: 2.4.0
   pullPolicy: IfNotPresent
 
 # @section License service application settings
