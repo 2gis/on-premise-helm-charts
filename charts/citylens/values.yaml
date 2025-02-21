@@ -159,7 +159,7 @@ api:
   podLabels: {}
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
 # @section Citylens web service settings
 
@@ -291,7 +291,7 @@ web:
   podLabels: {}
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
 # @section Citylens workers service settings
 
@@ -339,7 +339,7 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {}
+    tolerations: []
 
 # @section Citylens Camcom sender worker's settings
 
@@ -394,7 +394,7 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {}
+    tolerations: []
 
 # @section Citylens Predictions Saver worker's settings
 
@@ -423,7 +423,7 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {}
+    tolerations: []
 
 # @section Citylens Logs Saver worker's settings
 
@@ -452,7 +452,7 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {}
+    tolerations: []
 
 # @section Citylens Reporter Pro worker's settings (synchronization with Pro)
 
@@ -490,7 +490,7 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {}
+    tolerations: []
 
 # @section Citylens Reporter Pro Tracks worker's settings (track status actualization, requires Reporter Pro)
 
@@ -515,7 +515,7 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {}
+    tolerations: []
 
 # @section Citylens Track Metadata Saver worker's settings
 
@@ -544,7 +544,7 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {}
+    tolerations: []
 
 
 # @section Citylens Tracks Uploader worker's settings
@@ -588,7 +588,7 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {}
+    tolerations: []
 
 
 # @section Citylens Map Matcher worker's settings
@@ -634,7 +634,7 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {}
+    tolerations: []
 
 
 # @section Citylens Detections Localizer worker's settings
@@ -667,7 +667,7 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {}
+    tolerations: []
 
 
 # @section Citylens Lifecycle Controller worker's settings (depends on Detections Localizer worker)
@@ -699,7 +699,7 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {}
+    tolerations: []
 
 
 # @section Citylens Dashboard batch events worker's settings
@@ -744,7 +744,7 @@ worker:
     podLabels: {}
     nodeSelector: {}
     affinity: {}
-    tolerations: {}
+    tolerations: []
 
 
 # @section Migration job settings
