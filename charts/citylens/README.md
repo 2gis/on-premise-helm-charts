@@ -122,7 +122,7 @@ See the [documentation]() to learn about:
 | `api.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
 | `api.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
 | `api.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`  |
-| `api.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`  |
+| `api.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`  |
 | `api.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
 
 ### Citylens web service settings
@@ -201,7 +201,7 @@ See the [documentation]() to learn about:
 | `web.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
 | `web.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
 | `web.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`  |
-| `web.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`  |
+| `web.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`  |
 | `web.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
 
 ### Citylens workers service settings
@@ -227,7 +227,7 @@ See the [documentation]() to learn about:
 | `worker.framesSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
 | `worker.framesSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
 | `worker.framesSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.framesSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
+| `worker.framesSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
 | `worker.framesSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
 
 ### Citylens Camcom sender worker's settings
@@ -250,7 +250,7 @@ See the [documentation]() to learn about:
 | `worker.camcomSender.podAnnotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`    |
 | `worker.camcomSender.podLabels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`    |
 | `worker.camcomSender.nodeSelector`            | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`    |
-| `worker.camcomSender.tolerations`             | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`    |
+| `worker.camcomSender.tolerations`             | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`    |
 | `worker.camcomSender.affinity`                | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`    |
 
 ### Citylens Predictions Saver worker's settings
@@ -264,7 +264,7 @@ See the [documentation]() to learn about:
 | `worker.predictionsSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
 | `worker.predictionsSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
 | `worker.predictionsSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.predictionsSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
+| `worker.predictionsSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
 | `worker.predictionsSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
 
 ### Citylens Logs Saver worker's settings
@@ -278,7 +278,7 @@ See the [documentation]() to learn about:
 | `worker.logsSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
 | `worker.logsSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
 | `worker.logsSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.logsSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
+| `worker.logsSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
 | `worker.logsSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
 
 ### Citylens Reporter Pro worker's settings (synchronization with Pro)
@@ -295,7 +295,7 @@ See the [documentation]() to learn about:
 | `worker.reporterPro.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
 | `worker.reporterPro.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
 | `worker.reporterPro.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`         |
-| `worker.reporterPro.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`         |
+| `worker.reporterPro.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`         |
 | `worker.reporterPro.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`         |
 
 ### Citylens Reporter Pro Tracks worker's settings (track status actualization, requires Reporter Pro)
@@ -308,7 +308,7 @@ See the [documentation]() to learn about:
 | `worker.reporterProTracks.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
 | `worker.reporterProTracks.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
 | `worker.reporterProTracks.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.reporterProTracks.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
+| `worker.reporterProTracks.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
 | `worker.reporterProTracks.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
 
 ### Citylens Track Metadata Saver worker's settings
@@ -322,7 +322,7 @@ See the [documentation]() to learn about:
 | `worker.trackMetadataSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
 | `worker.trackMetadataSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
 | `worker.trackMetadataSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.trackMetadataSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
+| `worker.trackMetadataSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
 | `worker.trackMetadataSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
 
 ### Citylens Tracks Uploader worker's settings
@@ -341,7 +341,7 @@ See the [documentation]() to learn about:
 | `worker.tracksUploader.podAnnotations`            | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`    |
 | `worker.tracksUploader.podLabels`                 | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`    |
 | `worker.tracksUploader.nodeSelector`              | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`    |
-| `worker.tracksUploader.tolerations`               | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`    |
+| `worker.tracksUploader.tolerations`               | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`    |
 | `worker.tracksUploader.affinity`                  | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`    |
 
 ### Citylens Map Matcher worker's settings
@@ -361,7 +361,7 @@ See the [documentation]() to learn about:
 | `worker.mapMatcher.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                              | `{}`    |
 | `worker.mapMatcher.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                        | `{}`    |
 | `worker.mapMatcher.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                | `{}`    |
-| `worker.mapMatcher.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                  | `{}`    |
+| `worker.mapMatcher.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                  | `[]`    |
 | `worker.mapMatcher.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                            | `{}`    |
 
 ### Citylens Detections Localizer worker's settings
@@ -376,7 +376,7 @@ See the [documentation]() to learn about:
 | `worker.detectionsLocalizer.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
 | `worker.detectionsLocalizer.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
 | `worker.detectionsLocalizer.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`         |
-| `worker.detectionsLocalizer.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`         |
+| `worker.detectionsLocalizer.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`         |
 | `worker.detectionsLocalizer.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`         |
 
 ### Citylens Lifecycle Controller worker's settings (depends on Detections Localizer worker)
@@ -391,7 +391,7 @@ See the [documentation]() to learn about:
 | `worker.lifecycleController.podAnnotations`                      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
 | `worker.lifecycleController.podLabels`                           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`   |
 | `worker.lifecycleController.nodeSelector`                        | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`   |
-| `worker.lifecycleController.tolerations`                         | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`   |
+| `worker.lifecycleController.tolerations`                         | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`   |
 | `worker.lifecycleController.affinity`                            | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`   |
 
 ### Citylens Dashboard batch events worker's settings
@@ -414,7 +414,7 @@ See the [documentation]() to learn about:
 | `worker.dashboardBatchEvents.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`                               |
 | `worker.dashboardBatchEvents.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`                               |
 | `worker.dashboardBatchEvents.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`                               |
-| `worker.dashboardBatchEvents.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`                               |
+| `worker.dashboardBatchEvents.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`                               |
 | `worker.dashboardBatchEvents.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`                               |
 
 ### Migration job settings
