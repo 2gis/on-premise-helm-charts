@@ -97,7 +97,7 @@ admin:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
   # @param admin.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param admin.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -221,7 +221,7 @@ api:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
   # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -284,6 +284,8 @@ import:
 
   nodeSelector: {}
 
+  # @param import.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  tolerations: []
 
 # @section Migrate service settings
 
@@ -307,6 +309,9 @@ migrate:
   # @param migrate.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 
   nodeSelector: {}
+
+  # @param migrate.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  tolerations: []
 
 
 # @section Tasker service settings
@@ -360,7 +365,7 @@ tasker:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
 
 # @section Dispatcher settings
@@ -421,7 +426,7 @@ dispatcher:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
 
   # @extra dispatcher.cleaner **Settings for cronjob that cleans sent messages from database**
@@ -511,7 +516,7 @@ redis:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
 
 # @section Database access settings

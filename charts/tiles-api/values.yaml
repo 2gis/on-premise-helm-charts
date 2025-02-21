@@ -208,7 +208,7 @@ api:
   podLabels: {}
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
   imagePullSecrets: []
 
@@ -379,7 +379,7 @@ importer:
   retryInterval: 5s
   retryCount: 3
 
-  tolerations: {}
+  tolerations: []
   imagePullSecrets: []
   nodeSelector: {}
 
