@@ -405,7 +405,7 @@ assetImporter:
 
 # @skip assetPreparer
 
-assetPreparer:  
+assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
   tag: 1.54.0
