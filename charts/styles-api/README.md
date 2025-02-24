@@ -126,16 +126,19 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 
 ### S3 like storage access settings
 
-| Name                 | Description                                                                         | Value |
-| -------------------- | ----------------------------------------------------------------------------------- | ----- |
-| `s3.host`            | S3 host as `host:port`. **Required**                                                | `""`  |
-| `s3.accessKey`       | S3 access key. **Required**                                                         | `""`  |
-| `s3.secretKey`       | S3 secret key. **Required**                                                         | `""`  |
-| `s3.bucket`          | S3 bucket name, for example 'styles'. **Required**                                  | `""`  |
-| `s3.publicDomain`    | S3 public access domain. Uses https access. **Required**                            | `""`  |
-| `s3.connectTimeout`  | S3 management client connection timeout. If not specified, the default value is 3s. | `3s`  |
-| `s3.requestTimeout`  | S3 management client request timeout. If not specified, the default value is 30s.   | `5s`  |
-| `s3.responseTimeout` | S3 management client response timeout. If not specified, the default value is 3s.   | `5s`  |
+| Name                 | Description                                                                         | Value   |
+| -------------------- | ----------------------------------------------------------------------------------- | ------- |
+| `s3.host`            | S3 host as `host:port`. **Required**                                                | `""`    |
+| `s3.accessKey`       | S3 access key. **Required**                                                         | `""`    |
+| `s3.secretKey`       | S3 secret key. **Required**                                                         | `""`    |
+| `s3.bucket`          | S3 bucket name, for example 'styles'. **Required**                                  | `""`    |
+| `s3.publicDomain`    | S3 public access domain. Uses https access. **Required**                            | `""`    |
+| `s3.region`          | S3 region name. Default empty.                                                      | `""`    |
+| `s3.secure`          | S3 use secure HTTPS protocol. Default false.                                        | `false` |
+| `s3.verifySsl`       | S3 verifySsl SSL connection. Default false.                                         | `false` |
+| `s3.connectTimeout`  | S3 management client connection timeout. If not specified, the default value is 3s. | `3s`    |
+| `s3.requestTimeout`  | S3 management client request timeout. If not specified, the default value is 30s.   | `5s`    |
+| `s3.responseTimeout` | S3 management client response timeout. If not specified, the default value is 3s.   | `5s`    |
 
 ### customCAs **Custom Certificate Authority**
 
