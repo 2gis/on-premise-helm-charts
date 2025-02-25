@@ -378,7 +378,6 @@ assetImporter:
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
-  failedJobsHistoryLimit: 3
   nodeSelector: {}
   resources:
     requests:
