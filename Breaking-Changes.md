@@ -1,11 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
-## ...
+### platform
+- Added `ui.playgrounds` for enable playgrounds on the playground page
 
 ### navi-async-matrix
 
 - Existing DBs need task status type updated, in case public schema used:
-
 
   ```
   ALTER TYPE public."statusvalues" ADD VALUE 'ATTRACT_PUSHED';

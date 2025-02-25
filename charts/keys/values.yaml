@@ -157,7 +157,8 @@ api:
       # -----END CERTIFICATE-----
 
   # @param api.oidc.enable If OIDC authentication is enabled.
-  # @param api.oidc.enableSignlePartnerMode Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).
+  # @param api.oidc.enableSinglePartnerMode Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).
+  # @param api.oidc.enableExternalProvider Enable external oidc provider: do not have access to manage users.
   # @param api.oidc.url URL of the OIDC provider.
   # @param api.oidc.retryCount Maximum number of retries for requests to OIDC provider.
   # @param api.oidc.timeout Timeout for requests to OIDC provider.
@@ -168,7 +169,8 @@ api:
 
   oidc:
     enable: false
-    enableSignlePartnerMode: false
+    enableSinglePartnerMode: false
+    enableExternalProvider: false
     url: ''
     retryCount: 3
     timeout: 3s
