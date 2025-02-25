@@ -397,7 +397,7 @@ assetImporter:
     externalLinksAllowedHosts: ''
     esMetricsEnabled: false
     failedImportJobsLimit: 0
-    ttlSecondsAfterFinished: 86400 # 1 day
+    ttlSecondsAfterFinished: 86400  # 1 day
 
 
 # @section asset preparer settings
