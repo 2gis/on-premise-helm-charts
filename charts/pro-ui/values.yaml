@@ -115,7 +115,7 @@ ui:
     secure: true
     safeHosts: .*
     codeUrl: ''
-    brand: 'urbi'
+    brand: ''
     clientId: ''
     clientSecret: ''
     oAuthProvider: keycloak
