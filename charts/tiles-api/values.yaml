@@ -138,7 +138,7 @@ tilegen:
   # @param tilegen.image.pullPolicy Kubernetes pull policy for the service's Docker image.
   # @param tilegen.imagePullSecrets Kubernetes image pull secrets.
   image:
-    repository: 2gis-on-premise/tiles-api-utils
+    repository: 2gis-on-premise/tiles-api-importer
     tag: 4.64.1
     pullPolicy: IfNotPresent
 
