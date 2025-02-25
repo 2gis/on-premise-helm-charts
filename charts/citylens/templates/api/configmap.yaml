@@ -28,7 +28,11 @@ data:
       verify_ssl: {{ .verifySsl }}
       {{- if .realm }}
       realm: {{ .realm | quote }}
-      {{- end}}
+      {{- end }}
+      {{- if .storeOIDCUserinfoFields }}
+      store_oidc_userinfo_fields:
+        {{- .storeOIDCUserinfoFields | toYaml | nindent 8 }}
+      {{- end }}
       predictor_tokens:
         {{- .predictorsTokens | toYaml | nindent 8 }}
       {{- end }}

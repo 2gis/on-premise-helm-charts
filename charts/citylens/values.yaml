@@ -67,6 +67,7 @@ dgctlStorage:
 
 # @param api.auth.enabled If authentication is needed.
 # @param api.auth.authServerUrl API URL of authentication service, OIDC-compatibility expected. Ex.: `http(s)://keycloak.ingress.host/`. **Required**
+# @param api.auth.storeOIDCUserinfoFields List of fields from OIDC userinfo_endpoint response to store for users, uploading tracks. Ex.: `['en_name', 'id_no']`.
 # @param api.auth.realm Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: CityLens_app
 # @param api.auth.verifySsl Enable\Disable SSL check.
 
@@ -99,7 +100,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.17.4
+    tag: 1.17.5
 
   replicas: 4
 
@@ -140,6 +141,7 @@ api:
     enabled: true
     authServerUrl: ''
     realm: ''
+    storeOIDCUserinfoFields: []
     verifySsl: true
     predictorsTokens:
       camcom: ''
@@ -232,7 +234,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.17.4
+    tag: 1.17.5
 
   replicas: 1
 
@@ -732,7 +734,7 @@ worker:
     image:
       repository: 2gis-on-premise/citylens-workers
       pullPolicy: IfNotPresent
-      tag: 1.17.4
+      tag: 1.17.5
 
     revisionHistoryLimit: 3
 
@@ -768,7 +770,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.17.0
+    tag: 1.17.1
 
   resources:
     requests:
