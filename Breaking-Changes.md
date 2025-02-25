@@ -22,6 +22,9 @@
     `update tracks set localization_status = 2006;`
   This is required as in on-premise environments this column was newer user before, and may contain unexpected values.
 - Values section `.Values.reporters` replaced with `.Values.worker.reporterPro.enabled` field.
+- Worker `.Values.worker.detectionsLocalizer` requires
+  - Asset "Objects" in Pro and topic `.Values.kafka.topics.proObjects` to be tied to that asset
+  - topic `.Values.kafka.topics.objectsLifecycle`
 
 ## [1.34.0]
 
