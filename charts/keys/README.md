@@ -31,9 +31,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.89.0`                       |
+| `backend.image.tag`        | Backend service image tag.        | `1.108.2`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.          | `0.8.0`                        |
+| `admin.image.tag`          | Admin service image tag.          | `0.10.3`                       |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
 | `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
 
@@ -88,6 +88,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.adminSessionTTL`                       | TTL of the admin users sessions. Duration string is a sequence of decimal numbers with optional fraction and unit suffix, like `100ms`, `2.3h` or `4h35m`. Valid time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`. | `336h`          |
 | `api.logLevel`                              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                                  | `warning`       |
 | `api.signPrivateKey`                        | RSA-PSS 2048 private key (in PKCS#1 format) for signing responses in Public API.                                                                                                                                           | `""`            |
+| `api.oidc.enable`                           | If OIDC authentication is enabled.                                                                                                                                                                                         | `false`         |
+| `api.oidc.enableSignlePartnerMode`          | Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).                                                                                                | `false`         |
+| `api.oidc.url`                              | URL of the OIDC provider.                                                                                                                                                                                                  | `""`            |
+| `api.oidc.retryCount`                       | Maximum number of retries for requests to OIDC provider.                                                                                                                                                                   | `3`             |
+| `api.oidc.timeout`                          | Timeout for requests to OIDC provider.                                                                                                                                                                                     | `3s`            |
+| `api.oidc.defaultPartner`                   | **Settings for single partner mode feature. Info specified here will be returned in responses from Auth API**                                                                                                              |                 |
+| `api.oidc.defaultPartner.id`                | Default partner's Id.                                                                                                                                                                                                      | `""`            |
+| `api.oidc.defaultPartner.name`              | Default partner's Name.                                                                                                                                                                                                    | `""`            |
+| `api.oidc.defaultPartner.role`              | Role of the user in the default partner. Can be: 'user', 'admin'.                                                                                                                                                          | `""`            |
 | `api.replicas`                              | A replica count for the pod.                                                                                                                                                                                               | `1`             |
 | `api.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                                             | `3`             |
 | `api.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                                       | `RollingUpdate` |
@@ -182,6 +191,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `dispatcher.cleaner.auditEvents.retentionDuration`   | Retention period for successfully sent audit messages.                                                                                                                                                   | `4320h`         |
 | `dispatcher.cleaner.cron.schedule`                   | Cron job schedule.                                                                                                                                                                                       | `0 1 * * *`     |
 | `dispatcher.cleaner.cron.successfulJobsHistoryLimit` | Specifies the number of successful finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).                           | `3`             |
+| `dispatcher.cleaner.cron.failedJobsHistoryLimit`     | Specifies the number of failed finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).                               | `3`             |
 | `dispatcher.cleaner.cron.suspend`                    | You can suspend execution of Jobs for a CronJob, by setting the field to true. See [schedule suspension](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension).      | `false`         |
 | `dispatcher.cleaner.nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
 
@@ -208,8 +218,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | Name                         | Description                                                                                                                                                                          | Value     |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
 | `postgres.ro`                | **Settings for the read-only access**                                                                                                                                                |           |
-| `postgres.ro.host`           | PostgreSQL hostname or IP. **Required**                                                                                                                                              | `""`      |
-| `postgres.ro.port`           | PostgreSQL port.                                                                                                                                                                     | `5432`    |
+| `postgres.ro.host`           | PostgreSQL one or multiple hostnames or IPs separated by comma (e.g. 'host1,host2,10.0.0.1').  **Required**                                                                          | `""`      |
+| `postgres.ro.port`           | PostgreSQL one or multiple ports (one for each host). Values must be separated by comma (e.g. '1234,4567,5432').                                                                     | `5432`    |
 | `postgres.ro.timeout`        | PostgreSQL client connection timeout.                                                                                                                                                | `3s`      |
 | `postgres.ro.name`           | PostgreSQL database name. **Required**                                                                                                                                               | `""`      |
 | `postgres.ro.schema`         | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.                                                                                                  | `""`      |
@@ -220,8 +230,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `postgres.ro.tls.clientCert` | client certificate. **Required for mode `verify-full`**.                                                                                                                             | `""`      |
 | `postgres.ro.tls.clientKey`  | client private key. **Required for mode `verify-full`**.                                                                                                                             | `""`      |
 | `postgres.rw`                | **Settings for the read-write access**                                                                                                                                               |           |
-| `postgres.rw.host`           | PostgreSQL hostname or IP. **Required**                                                                                                                                              | `""`      |
-| `postgres.rw.port`           | PostgreSQL port.                                                                                                                                                                     | `5432`    |
+| `postgres.rw.host`           | PostgreSQL one or multiple hostnames or IPs separated by comma (e.g. 'host1,host2,host3').  **Required**                                                                             | `""`      |
+| `postgres.rw.port`           | PostgreSQL one or multiple ports (one for each host). Values must be separated by comma (e.g. '1234,4567,5432').                                                                     | `5432`    |
 | `postgres.rw.timeout`        | PostgreSQL client connection timeout.                                                                                                                                                | `3s`      |
 | `postgres.rw.name`           | PostgreSQL database name. **Required**                                                                                                                                               | `""`      |
 | `postgres.rw.schema`         | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.                                                                                                  | `""`      |
@@ -234,15 +244,21 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Kafka settings
 
-| Name                                  | Description                                                                                                                                                | Value  |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `kafka.audit`                         | **Settings for sending audit messages.**                                                                                                                   |        |
-| `kafka.audit.bootstrapServers`        | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`   |
-| `kafka.audit.username`                | Username for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`   |
-| `kafka.audit.password`                | Password for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`   |
-| `kafka.audit.topic`                   | Topic to produce audit messages.                                                                                                                           | `""`   |
-| `kafka.audit.produce.retryCount`      | Number of retries to produce a message.                                                                                                                    | `5`    |
-| `kafka.audit.produce.idempotentWrite` | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true` |
+| Name                                    | Description                                                                                                                                                | Value       |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `kafka.bootstrapServers`                | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093'). **Required**               | `""`        |
+| `kafka.securityProtocol`                | Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.                                 | `PLAINTEXT` |
+| `kafka.saslMechanism`                   | Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.       | `PLAIN`     |
+| `kafka.username`                        | Username for authorization (SASL).                                                                                                                         | `""`        |
+| `kafka.password`                        | Password for authorization (SASL).                                                                                                                         | `""`        |
+| `kafka.tls.skipServerCertificateVerify` | Controls whether a client verifies the server's certificate chain and host name.                                                                           | `false`     |
+| `kafka.tls.serverCA`                    | Server's root certificate.                                                                                                                                 | `""`        |
+| `kafka.tls.clientCert`                  | Client certificate.                                                                                                                                        | `""`        |
+| `kafka.tls.clientKey`                   | Client key.                                                                                                                                                | `""`        |
+| `kafka.audit`                           | **Settings for sending audit messages.**                                                                                                                   |             |
+| `kafka.audit.topic`                     | Topic to produce audit messages. **Required**                                                                                                              | `""`        |
+| `kafka.audit.produce.retryCount`        | Number of retries to produce a message.                                                                                                                    | `5`         |
+| `kafka.audit.produce.idempotentWrite`   | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true`      |
 
 ### LDAP connection settings
 

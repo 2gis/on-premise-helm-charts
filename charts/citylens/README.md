@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.16.4`                       |
+| `api.image.tag`        | Tag.         | `1.17.4`                       |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -133,7 +133,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.16.4`                       |
+| `web.image.tag`        | Tag.         | `1.17.4`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -283,31 +283,33 @@ See the [documentation]() to learn about:
 
 ### Citylens Reporter Pro worker's settings (synchronization with Pro)
 
-| Name                                      | Description                                                                                                                                    | Value |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `worker.reporterPro.replicas`             | A replica count for the pod.                                                                                                                   | `1`   |
-| `worker.reporterPro.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `worker.reporterPro.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.reporterPro.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.reporterPro.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.reporterPro.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.reporterPro.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.reporterPro.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
-| `worker.reporterPro.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
+| Name                                      | Description                                                                                                                                    | Value        |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `worker.reporterPro.enabled`              | If integration with Pro is enabled for the service.                                                                                            | `true`       |
+| `worker.reporterPro.predictors`           | From what sources detections should be localized.                                                                                              | `["camcom"]` |
+| `worker.reporterPro.trackTimeoutDays`     | Timeout in days for track to be considered being uploading.                                                                                    | `1`          |
+| `worker.reporterPro.replicas`             | A replica count for the pod.                                                                                                                   | `1`          |
+| `worker.reporterPro.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`          |
+| `worker.reporterPro.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
+| `worker.reporterPro.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
+| `worker.reporterPro.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
+| `worker.reporterPro.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
+| `worker.reporterPro.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`         |
+| `worker.reporterPro.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`         |
+| `worker.reporterPro.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`         |
 
-### Citylens Reporter Pro Tracks worker's settings (track status actualization)
+### Citylens Reporter Pro Tracks worker's settings (track status actualization, requires Reporter Pro)
 
-| Name                                            | Description                                                                                                                                    | Value  |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `worker.reporterProTracks.enabled`              | Deploy worker or not.                                                                                                                          | `true` |
-| `worker.reporterProTracks.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`    |
-| `worker.reporterProTracks.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
-| `worker.reporterProTracks.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`   |
-| `worker.reporterProTracks.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
-| `worker.reporterProTracks.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`   |
-| `worker.reporterProTracks.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`   |
-| `worker.reporterProTracks.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`   |
-| `worker.reporterProTracks.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`   |
+| Name                                            | Description                                                                                                                                    | Value |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `worker.reporterProTracks.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
+| `worker.reporterProTracks.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
+| `worker.reporterProTracks.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
+| `worker.reporterProTracks.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
+| `worker.reporterProTracks.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
+| `worker.reporterProTracks.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
+| `worker.reporterProTracks.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
+| `worker.reporterProTracks.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
 
 ### Citylens Track Metadata Saver worker's settings
 
@@ -362,6 +364,36 @@ See the [documentation]() to learn about:
 | `worker.mapMatcher.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                  | `{}`    |
 | `worker.mapMatcher.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                            | `{}`    |
 
+### Citylens Detections Localizer worker's settings
+
+| Name                                              | Description                                                                                                                                    | Value        |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `worker.detectionsLocalizer.enabled`              | If Detections Localizer worker is enabled for the service.                                                                                     | `false`      |
+| `worker.detectionsLocalizer.predictors`           | From what sources detections should be localized.                                                                                              | `["camcom"]` |
+| `worker.detectionsLocalizer.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`          |
+| `worker.detectionsLocalizer.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
+| `worker.detectionsLocalizer.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
+| `worker.detectionsLocalizer.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
+| `worker.detectionsLocalizer.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
+| `worker.detectionsLocalizer.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`         |
+| `worker.detectionsLocalizer.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`         |
+| `worker.detectionsLocalizer.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`         |
+
+### Citylens Lifecycle Controller worker's settings (depends on Detections Localizer worker)
+
+| Name                                                             | Description                                                                                                                                    | Value  |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `worker.lifecycleController.scheduledLocalizationTimeoutMinutes` | Timeout in minutes after that track localization will be rescheduled if it was scheduled and not done.                                         | `1380` |
+| `worker.lifecycleController.minTrackLocalizationIntervalMinutes` | Interval in minutes between scheduling track detections localization again.                                                                    | `10`   |
+| `worker.lifecycleController.revisionHistoryLimit`                | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`    |
+| `worker.lifecycleController.annotations`                         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
+| `worker.lifecycleController.labels`                              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`   |
+| `worker.lifecycleController.podAnnotations`                      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
+| `worker.lifecycleController.podLabels`                           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`   |
+| `worker.lifecycleController.nodeSelector`                        | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`   |
+| `worker.lifecycleController.tolerations`                         | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`   |
+| `worker.lifecycleController.affinity`                            | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`   |
+
 ### Citylens Dashboard batch events worker's settings
 
 | Name                                   | Description                  | Value |
@@ -373,7 +405,7 @@ See the [documentation]() to learn about:
 | Name                                               | Description                                                                                                                                    | Value                              |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `worker.dashboardBatchEvents.image.repository`     | Repository.                                                                                                                                    | `2gis-on-premise/citylens-workers` |
-| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.16.4`                           |
+| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.17.4`                           |
 | `worker.dashboardBatchEvents.image.pullPolicy`     | Pull Policy.                                                                                                                                   | `IfNotPresent`                     |
 | `worker.dashboardBatchEvents.logLevel`             | Worker's log level.                                                                                                                            | `INFO`                             |
 | `worker.dashboardBatchEvents.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`                                |
@@ -391,7 +423,7 @@ See the [documentation]() to learn about:
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.16.1`                            |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.17.0`                            |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |
@@ -401,22 +433,26 @@ See the [documentation]() to learn about:
 
 ### Kafka settings
 
-| Name                           | Description                                                                                   | Value |
-| ------------------------------ | --------------------------------------------------------------------------------------------- | ----- |
-| `kafka.bootstrapServer`        | A Kafka broker endpoint. **Required**                                                         | `""`  |
-| `kafka.username`               | A Kafka username for connection. **Required**                                                 | `""`  |
-| `kafka.password`               | A Kafka password for connection. **Required**                                                 | `""`  |
-| `kafka.produceTimeoutSeconds`  | Timeout for producer.                                                                         | `5`   |
-| `kafka.topics.frames`          | List of topics for Frames saver worker. **Required**                                          | `""`  |
-| `kafka.topics.tracks`          | List of topics for Tracks metadata worker. **Required**                                       | `""`  |
-| `kafka.topics.pro`             | Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**         | `""`  |
-| `kafka.topics.proDrivers`      | Topic for drivers tracks synchronization with Pro (used by Reporter pro worker). **Required** | `""`  |
-| `kafka.topics.uploader`        | Topic for Uploader worker. **Required**                                                       | `""`  |
-| `kafka.topics.logs`            | Topic for citylens mobile app logs, uploaded via citylens-api. **Required**                   | `""`  |
-| `kafka.topics.framesLifecycle` | Topic for frames lifecycle events. **Required**                                               | `""`  |
-| `kafka.topics.tracksLifecycle` | Topic for tracks lifecycle events. **Required**                                               | `""`  |
-| `kafka.topics.predictions`     | Topic for predictions events from detectors. **Required**                                     | `""`  |
-| `kafka.consumerGroups.prefix`  | Kafka topics prefix. **Required**                                                             | `""`  |
+| Name                            | Description                                                                                                                               | Value            |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `kafka.bootstrapServer`         | A Kafka broker endpoint. **Required**                                                                                                     | `""`             |
+| `kafka.username`                | A Kafka username for connection. **Required**                                                                                             | `""`             |
+| `kafka.password`                | A Kafka password for connection. **Required**                                                                                             | `""`             |
+| `kafka.securityProtocol`        | Protocol used to communicate with brokers. Currently supported: SASL_PLAINTEXT.                                                           | `SASL_PLAINTEXT` |
+| `kafka.saslMechanism`           | Authentication mechanism. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.                                                          | `SCRAM-SHA-512`  |
+| `kafka.produceTimeoutSeconds`   | Timeout for producer.                                                                                                                     | `5`              |
+| `kafka.topics.frames`           | List of topics for Frames saver worker. **Required**                                                                                      | `""`             |
+| `kafka.topics.tracks`           | List of topics for Tracks metadata worker. **Required**                                                                                   | `""`             |
+| `kafka.topics.pro`              | Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**                                                     | `""`             |
+| `kafka.topics.proObjects`       | Topic for localized detections synchronization with Pro (used by Reporter pro worker, requires Detections Localizer worker). **Required** | `""`             |
+| `kafka.topics.proDrivers`       | Topic for drivers tracks synchronization with Pro (used by Reporter pro worker). **Required**                                             | `""`             |
+| `kafka.topics.uploader`         | Topic for Uploader worker. **Required**                                                                                                   | `""`             |
+| `kafka.topics.logs`             | Topic for citylens mobile app logs, uploaded via citylens-api. **Required**                                                               | `""`             |
+| `kafka.topics.framesLifecycle`  | Topic for frames lifecycle events. **Required**                                                                                           | `""`             |
+| `kafka.topics.objectsLifecycle` | Topic for objects lifecycle events. **Required**                                                                                          | `""`             |
+| `kafka.topics.tracksLifecycle`  | Topic for tracks lifecycle events. **Required**                                                                                           | `""`             |
+| `kafka.topics.predictions`      | Topic for predictions events from detectors. **Required**                                                                                 | `""`             |
+| `kafka.consumerGroups.prefix`   | Kafka topics prefix. **Required**                                                                                                         | `""`             |
 
 ### S3 settings
 
@@ -454,23 +490,21 @@ See the [documentation]() to learn about:
 
 ### Custom settings
 
-| Name                            | Description                                                                                                      | Value                                         |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `dashboardDomain`               | Link to Citylens web address. **Required**                                                                       | `""`                                          |
-| `locale`                        | Locale language (en by default).                                                                                 | `en`                                          |
-| `headerLinks`                   | List of links for navbar.                                                                                        | `["drivers","tracks","interest_zones","map"]` |
-| `reporters[0].name`             | Reporter name.                                                                                                   | `pro`                                         |
-| `reporters[0].predictors`       | Predictor used by reporter.                                                                                      | `["camcom"]`                                  |
-| `reporters[0].trackTimeoutDays` | Time in days to wait for track completion and receiving frames prediction before marking as not synced with Pro. | `1`                                           |
+| Name              | Description                                | Value                                         |
+| ----------------- | ------------------------------------------ | --------------------------------------------- |
+| `dashboardDomain` | Link to Citylens web address. **Required** | `""`                                          |
+| `locale`          | Locale language (en by default).           | `en`                                          |
+| `headerLinks`     | List of links for navbar.                  | `["drivers","tracks","interest_zones","map"]` |
 
 ### PRO integration (only when Pro reporter enabled)
 
-| Name                | Description                                                                                           | Value  |
-| ------------------- | ----------------------------------------------------------------------------------------------------- | ------ |
-| `pro.baseUrl`       | PRO API URL. Ex: http(s)://pro-api.svc                                                                | `""`   |
-| `pro.key`           | PRO API auth token                                                                                    | `""`   |
-| `pro.verifySsl`     | Set to `false` if pro.baseUrl must be accessed via https without certificate validation. **Required** | `true` |
-| `pro.framesAssetId` | PRO frames asset id (used for filters actualization). Ex: your_asset_name                             | `""`   |
+| Name                 | Description                                                                                           | Value  |
+| -------------------- | ----------------------------------------------------------------------------------------------------- | ------ |
+| `pro.baseUrl`        | PRO API URL. Ex: http(s)://pro-api.svc                                                                | `""`   |
+| `pro.key`            | PRO API auth token                                                                                    | `""`   |
+| `pro.verifySsl`      | Set to `false` if pro.baseUrl must be accessed via https without certificate validation. **Required** | `true` |
+| `pro.framesAssetId`  | PRO Frames asset id (used for filters actualization). Ex: your_frames_asset_name                      | `""`   |
+| `pro.objectsAssetId` | PRO Objects asset id (used for filters actualization). Ex: your_objects_asset_name                    | `""`   |
 
 ### **Custom Certificate Authority**
 

@@ -1,15 +1,47 @@
 # 2GIS On-Premise Breaking-Changes
 
-##
+## ...
 
 ### pro-api
 - api.settings.allowAnyOrigin was removed, api.settings.corsOrigins was added instead
 - assetImporter.enabled was removed, assetImporter is now always mandatory 
 
+### navi-async-matrix
+
+- Existing DBs need task status type updated, in case public schema used:
+
+
+  ```
+  ALTER TYPE public."statusvalues" ADD VALUE 'ATTRACT_PUSHED';
+  ALTER TYPE public."statusvalues" ADD VALUE 'ATTRACT_READY';
+  ALTER TYPE public."statusvalues" ADD VALUE 'ATTRACT_PROCESSED';
+  ALTER TYPE public."statusvalues" ADD VALUE 'ONE_TO_MANY_PUSHED';
+  ALTER TYPE public."statusvalues" ADD VALUE 'ONE_TO_MANY_READY';
+  ALTER TYPE public."statusvalues" ADD VALUE 'MERGER_PUSHED';
+  ALTER TYPE public."statusvalues" ADD VALUE 'MERGER_IN_PROGRESS';
+  ```
+
+### citylens
+- Before installing new version of citylens it is required to prepare database manually:
+    `update tracks set localization_status = 2006;`
+  This is required as in on-premise environments this column was newer user before, and may contain unexpected values.
+- Values section `.Values.reporters` replaced with `.Values.worker.reporterPro.enabled` field.
+
+## [1.34.0]
+
+### keys
+- Before upgrading to the next version, make sure to update to the current version (1.34.0).
+- Ensure that `keys` service is upgraded prior to upgrading any of the `navi` services.
+- A temporary flag, `--migrate-data`, has been added for this release. This flag triggers the data migration required for the Routing API data in the service.
+
+### navi-castle
+- `castle.restrictions.host` renamed to `castle.restrictions.url` and empty by default
+- `persistentVolume.storageClass` is now empty by default
+
 ## [1.33.0]
 
 ### pro-api
-- permissions.settings.enabled was removed, permissions api is now always mandatory 
+- permissions.settings.enabled was removed, permissions api is now always mandatory
 - postgres.connectionString, postgres.connectionStringReadonly, postgres.password were changed to postgres.api.rw / postgres.api.ro settings
 
 

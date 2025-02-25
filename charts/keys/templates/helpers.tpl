@@ -125,6 +125,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.featureFlags.enableAudit }}"
 - name: KEYS_FEATURE_FLAGS_PUBLIC_API_SIGN
   value: "{{ .Values.featureFlags.enablePublicAPISign }}"
+- name: KEYS_FEATURE_FLAGS_EXTERNAL_COMPANIES
+  value: "{{ .Values.api.oidc.enableSignlePartnerMode }}"
+- name: KEYS_FEATURE_FLAGS_OIDC
+  value: "{{ .Values.api.oidc.enable }}"
 {{- end }}
 
 {{- define "keys.env.api" -}}
@@ -136,6 +140,20 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     secretKeyRef:
       name: {{ include "keys.secret.deploys.name" . }}
       key: signPrivateKey
+{{- end }}
+{{- if .Values.api.oidc.enable }}
+- name: KEYS_OIDC_ENDPOINT
+  value: "{{ required "A valid .Values.api.oidc.url required" .Values.api.oidc.url }}"
+- name: KEYS_OIDC_CLIENT_TIMEOUT
+  value: "{{ .Values.api.oidc.timeout }}"
+- name: KEYS_OIDC_CLIENT_RETRY_COUNT
+  value: "{{ .Values.api.oidc.retryCount }}"
+- name: KEYS_OIDC_DEFAULT_PARTNER_ID
+  value: "{{ required "A valid .Values.api.oidc.defaultPartner.id required" .Values.api.oidc.defaultPartner.id }}"
+- name: KEYS_OIDC_DEFAULT_PARTNER_NAME
+  value: "{{ required "A valid .Values.api.oidc.defaultPartner.name required" .Values.api.oidc.defaultPartner.name }}"
+- name: KEYS_OIDC_DEFAULT_ROLE
+  value: "{{ required "A valid .Values.api.oidc.defaultPartner.role required" .Values.api.oidc.defaultPartner.role }}"
 {{- end }}
 {{- end }}
 
@@ -382,13 +400,32 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.kafka.audit" -}}
 - name: KEYS_KAFKA_AUDIT_BROKERS
-  value: "{{ .Values.kafka.audit.bootstrapServers }}"
+  value: "{{ required "A valid .Values.kafka.bootstrapServers entry required" .Values.kafka.bootstrapServers }}"
 - name: KEYS_KAFKA_AUDIT_USERNAME
-  value: "{{ .Values.kafka.audit.username }}"
+  value: "{{ .Values.kafka.username }}"
+{{- if .Values.kafka.password }}
 - name: KEYS_KAFKA_AUDIT_PASSWORD
-  value: "{{ .Values.kafka.audit.password }}"
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.name" . }}-kafka
+      key: password
+{{- end }}
+- name: KEYS_KAFKA_AUDIT_SECURITY_PROTOCOL
+  value: "{{ .Values.kafka.securityProtocol }}"
+- name: KEYS_KAFKA_AUDIT_SASL_MECHANISM
+  value: "{{ .Values.kafka.saslMechanism }}"
+{{- if has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL") }}
+- name: KEYS_KAFKA_AUDIT_TLS_SKIP_SERVER_CERTIFICATE_VERIFY
+  value: "{{ .Values.kafka.tls.skipServerCertificateVerify }}"
+- name: KEYS_KAFKA_AUDIT_TLS_CLIENT_CERTIFICATE_PATH
+  value: "/etc/ssl/private/kafka-client.crt"
+- name: KEYS_KAFKA_AUDIT_TLS_CLIENT_KEY_PATH
+  value: "/etc/ssl/private/kafka-client.key"
+- name: KEYS_KAFKA_AUDIT_TLS_CA_CERT_PATH
+  value: "/etc/ssl/private/kafka-ca.crt"
+{{- end }}
 - name: KEYS_KAFKA_AUDIT_TOPIC
-  value: "{{ .Values.kafka.audit.topic }}"
+  value: "{{ required "A valid .Values.kafka.audit.topic entry required" .Values.kafka.audit.topic }}"
 - name: KEYS_KAFKA_AUDIT_PRODUCE_RETRY_COUNT
   value: "{{ .Values.kafka.audit.produce.retryCount }}"
 - name: KEYS_KAFKA_AUDIT_PRODUCE_IDEMPOTENT_WRITE
@@ -534,6 +571,44 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- end }}
 {{- end -}}
 
+{{- define "keys.tls.kafka.checks" -}}
+{{- if has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL") }}
+{{ $testVar := required "You should set .Values.kafka.tls.serverCA for selected mode" .Values.kafka.tls.serverCA }}
+{{ $testVar := required "You should set .Values.kafka.tls.clientCert for selected mode" .Values.kafka.tls.clientCert }}
+{{ $testVar := required "You should set .Values.kafka.tls.clientKey for selected mode" .Values.kafka.tls.clientKey }}
+{{- end }}
+{{- end -}}
+
+{{- define "keys.tls.kafka.volumeMount" -}}
+{{- if has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL") -}}
+- name: tls-kafka
+  mountPath: /etc/ssl/private
+{{- end }}
+{{- end -}}
+
+{{- define "keys.tls.kafka.volume" -}}
+{{- if has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL") -}}
+- name: tls-kafka-raw
+  secret:
+    secretName: {{ include "keys.name" . }}-kafka
+    items:
+    {{- if .Values.kafka.tls.serverCA }}
+      - key: kafka-ca.crt
+        path: kafka-ca.crt
+    {{- end }}
+    {{- if .Values.kafka.tls.clientKey }}
+      - key: kafka-client.key
+        path: kafka-client.key
+    {{- end }}
+    {{- if .Values.kafka.tls.clientCert }}
+      - key: kafka-client.crt
+        path: kafka-client.crt
+    {{- end }}
+- name: tls-kafka
+  emptyDir: {}
+{{- end }}
+{{- end -}}
+
 {{- define "keys.psql.initTLS" -}}
 {{- if or 
   (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
@@ -561,4 +636,47 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
     - name: tls
       mountPath: /etc/ssl/psql
 {{- end -}}
+{{- end -}}
+
+{{- define "keys.initTLS" -}}
+{{- if or
+    (has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL"))
+    (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+    (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+}}
+- name: copy-certs
+  image: {{ .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+  command:
+    - /bin/sh
+    - -c
+    - |-
+      cp /tls/psql/* /etc/ssl/psql/ || true
+      cp /tls/kafka/* /etc/ssl/private || true
+      chmod 0400 /etc/ssl/psql/psql-ro-client.key || true
+      chmod 0400 /etc/ssl/psql/psql-rw-client.key || true
+      chmod 0400 /etc/ssl/private/kafka-client.key || true
+  resources:
+    requests:
+      cpu: 20m
+      memory: 16Mi
+    limits:
+      cpu: 20m
+      memory: 16Mi
+  volumeMounts:
+  {{ if or
+      (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+      (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+  }}
+    - name: tls-raw
+      mountPath: /tls/psql
+    - name: tls
+      mountPath: /etc/ssl/psql
+  {{- end }}
+  {{ if (has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL")) }}
+    - name: tls-kafka-raw
+      mountPath: /tls/kafka
+    - name: tls-kafka
+      mountPath: /etc/ssl/private
+  {{- end }}
+{{- end }}
 {{- end -}}

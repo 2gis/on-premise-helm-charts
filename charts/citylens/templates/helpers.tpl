@@ -57,6 +57,14 @@ Expand the name of the chart.
 {{ include "citylens.name" . }}-workers
 {{- end }}
 
+{{- define "citylens.detections-localizer.name" -}}
+{{ include "citylens.name" . }}-detections-localizer
+{{- end }}
+
+{{- define "citylens.lifecycle-controller.name" -}}
+{{ include "citylens.name" . }}-lifecycle-controller
+{{- end }}
+
 {{- define "citylens.dashboard-batch-events.name" -}}
 {{ include "citylens.name" . }}-dashboard-batch-events
 {{- end }}
@@ -186,6 +194,26 @@ app.kubernetes.io/instance: {{ include "citylens.track-metadata-saver.name" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "citylens.detections-localizer.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.detections-localizer.name" . }}
+{{- end }}
+
+{{- define "citylens.detections-localizer.labels" -}}
+{{ include "citylens.detections-localizer.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "citylens.lifecycle-controller.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.lifecycle-controller.name" . }}
+{{- end }}
+
+{{- define "citylens.lifecycle-controller.labels" -}}
+{{ include "citylens.lifecycle-controller.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
 {{- define "citylens.migration.labels" -}}
 app.kubernetes.io/name: {{ include "citylens.api.name" . }}
 app.kubernetes.io/instance: {{ .Chart.Name }}-db-migration
@@ -218,6 +246,27 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: DGCTL_MANIFEST_DATA_TYPE
   value: "data_migration"
 {{- end }}
+
+{{- define "citylens.env.dsLibrariesNumThreads" -}}
+1
+{{- end }}
+
+{{- define "citylens.env.dsLibrariesEnvs" -}}
+- name: OMP_NUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+- name: OPENBLAS_NUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+- name: MKL_NUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+- name: BLIS_NUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+- name: VECLIB_MAXIMUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+- name: NUMBA_NUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+- name: NUMEXPR_NUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+{{- end}}
 
 {{/*
 Checksum for configmap or secret
