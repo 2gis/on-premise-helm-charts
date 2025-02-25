@@ -1,5 +1,8 @@
 # 2GIS On-Premise Breaking-Changes
 
+### platform
+- Added `ui.playgrounds` for enable playgrounds on the playground page
+
 ## [1.34.0]
 
 ### keys
