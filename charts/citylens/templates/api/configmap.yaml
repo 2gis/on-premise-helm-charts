@@ -8,8 +8,8 @@ data:
     {{- with .Values.kafka }}
       bootstrap_servers: {{  required "A valid .Values.kafka.bootstrap.servers entry required" .bootstrapServer | squote }}
       security:
-        security_protocol: 'SASL_PLAINTEXT'
-        sasl_mechanism: 'SCRAM-SHA-512'
+        security_protocol: {{ required "A valid .Values.kafka.securityProtocol entry required" .securityProtocol | squote }}
+        sasl_mechanism: {{ required "A valid .Values.kafka.saslMechanism entry required" .saslMechanism | squote }}
         sasl_plain_username: {{ required "A valid .Values.kafka.username entry required" .username | squote }}
         sasl_plain_password: {{ required "A valid .Values.kafka.password entry required" .password | squote }}
     topics:

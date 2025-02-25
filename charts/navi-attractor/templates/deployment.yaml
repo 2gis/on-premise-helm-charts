@@ -1,0 +1,174 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "generic-chart.fullname" . }}
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+    rule: {{ .Values.attractor.app_rule | default "" | quote  }}
+    navigroup: {{ .Values.navigroup | default "" | quote }}
+    {{- if .Values.dataGroup.enabled }}
+    dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
+    dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+    {{- end }}{{- /* dataGroup.enabled */}}
+    {{- with .Values.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if not .Values.hpa.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- include "tplvalues.render" ( dict "value" .Values.strategy "context" $) | nindent 6 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "generic-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "generic-chart.selectorLabels" . | nindent 8 }}
+        navigroup: {{ .Values.navigroup | default "" | quote }}
+        {{- if .Values.dataGroup.enabled }}
+        dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
+        dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "generic-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+      - name: {{ include "generic-chart.fullname" . }}-configmap
+        configMap:
+          name: {{ include "generic-chart.fullname" . }}-configmap
+      {{- if .Values.extraVolumes }}
+      {{- include "tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.kafka.fileProperties }}
+      - name: {{ include "generic-chart.fullname" . }}-secret
+        secret:
+          secretName: {{ include "generic-chart.fullname" . }}-secret
+      {{- end }}
+      {{- if .Values.initContainers }}
+      initContainers:
+        {{- include "tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+{{- /* generic-chart.containerName redefined in _helpers.tpl */}}
+        - name: {{ include "generic-chart.containerName" . }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.command }}
+          command:
+            {{- include "tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args:
+            {{- include "tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          - name: {{ include "generic-chart.fullname" . }}-configmap
+            mountPath: /etc/2gis/mosesd/attractord.conf
+            subPath: attractord.conf
+          - name: {{ include "generic-chart.fullname" . }}-configmap
+            mountPath: /etc/2gis/mosesd/rules.conf
+            subPath: rules.conf
+          {{- if .Values.extraVolumeMounts }}
+          {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.kafka.fileProperties }}
+          - name: {{ include "generic-chart.fullname" . }}-secret
+            mountPath: /etc/2gis/mosesd/secret/
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.attractor.appPort }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ .Values.attractor.grpcPort }}
+              protocol: TCP
+          {{- if .Values.customStartupProbe }}
+          startupProbe:
+            {{- include "tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.startupProbe.enabled }}
+          startupProbe:
+            grpc:
+              port: {{ .Values.attractor.grpcPort }}
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.customLivenessProbe }}
+          livenessProbe:
+            {{- include "tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.startupProbe.enabled }}
+          livenessProbe:
+            grpc:
+              port: {{ .Values.attractor.grpcPort }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.customReadinessProbe }}
+          readinessProbe:
+            {{- include "tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            grpc:
+              port: {{ .Values.attractor.grpcPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          {{ if ne .Values.attractor.type "schedule" }}
+          - name: RULE
+            value: {{ .Values.attractor.app_rule | default "" | quote  }}
+          {{- else -}}
+          - name: RULE
+            value: ""
+          {{ end }}
+          - name: PROJECT
+            value: {{ .Values.app_project | default "" | quote }}
+          - name: PORT_GRPC
+            value: {{ .Values.attractor.grpc_port | quote }}
+          lifecycle:
+            # wait for the endpoint removal process
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep {{ .Values.preStopDelay | default 5 | int }}"]
+        {{- if .Values.sidecars }}
+        {{- include "tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 60 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

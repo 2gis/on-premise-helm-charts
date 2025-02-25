@@ -1,22 +1,6 @@
-apiVersion: v1
-kind: Service
+{{- define "front.service" }}
 metadata:
-  name: {{ include "front.fullname" . }}
   labels:
-    {{- include "front.labels" . | nindent 4 }}
-    {{- if .Values.service.labels }}
-    {{- include "tplvalues.render" ( dict "value" .Values.service.labels "context" $) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.service.annotations }}
-  annotations:
-   {{- include "tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
-  {{- end }}
-spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.front.port }}
-      protocol: TCP
-      name: http
-  selector:
-    {{- include "front.selectorLabels" . | nindent 4 }}
+    navigroup: {{ .Values.navigroup | default "" | quote }}
+{{- end }}{{- /* define "front.service" */}}
+{{- template "generic-chart.merge" (list . "front.service" "generic-chart.service.tpl") }}

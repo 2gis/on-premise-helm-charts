@@ -3,6 +3,26 @@
 ### platform
 - Added `ui.playgrounds` for enable playgrounds on the playground page
 
+### navi-async-matrix
+
+- Existing DBs need task status type updated, in case public schema used:
+
+  ```
+  ALTER TYPE public."statusvalues" ADD VALUE 'ATTRACT_PUSHED';
+  ALTER TYPE public."statusvalues" ADD VALUE 'ATTRACT_READY';
+  ALTER TYPE public."statusvalues" ADD VALUE 'ATTRACT_PROCESSED';
+  ALTER TYPE public."statusvalues" ADD VALUE 'ONE_TO_MANY_PUSHED';
+  ALTER TYPE public."statusvalues" ADD VALUE 'ONE_TO_MANY_READY';
+  ALTER TYPE public."statusvalues" ADD VALUE 'MERGER_PUSHED';
+  ALTER TYPE public."statusvalues" ADD VALUE 'MERGER_IN_PROGRESS';
+  ```
+
+### citylens
+- Before installing new version of citylens it is required to prepare database manually:
+    `update tracks set localization_status = 2006;`
+  This is required as in on-premise environments this column was newer user before, and may contain unexpected values.
+- Values section `.Values.reporters` replaced with `.Values.worker.reporterPro.enabled` field.
+
 ## [1.34.0]
 
 ### keys

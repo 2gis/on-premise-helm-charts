@@ -99,7 +99,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.16.4
+    tag: 1.17.4
 
   replicas: 4
 
@@ -232,7 +232,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.16.4
+    tag: 1.17.4
 
   replicas: 1
 
@@ -456,6 +456,10 @@ worker:
 
 # @section Citylens Reporter Pro worker's settings (synchronization with Pro)
 
+# @param worker.reporterPro.enabled If integration with Pro is enabled for the service.
+# @param worker.reporterPro.predictors From what sources detections should be localized.
+# @param worker.reporterPro.trackTimeoutDays Timeout in days for track to be considered being uploading.
+
 # @param worker.reporterPro.replicas A replica count for the pod.
 
 # @param worker.reporterPro.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
@@ -471,6 +475,11 @@ worker:
 
   reporterPro:
 
+    enabled: true
+
+    predictors: [camcom]
+    trackTimeoutDays: 1
+
     replicas: 1
 
     revisionHistoryLimit: 3
@@ -483,9 +492,7 @@ worker:
     affinity: {}
     tolerations: {}
 
-# @section Citylens Reporter Pro Tracks worker's settings (track status actualization)
-
-# @param worker.reporterProTracks.enabled Deploy worker or not.
+# @section Citylens Reporter Pro Tracks worker's settings (track status actualization, requires Reporter Pro)
 
 # @param worker.reporterProTracks.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
@@ -499,8 +506,6 @@ worker:
 # @param worker.reporterProTracks.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
 
   reporterProTracks:
-
-    enabled: true
 
     revisionHistoryLimit: 3
 
@@ -632,6 +637,71 @@ worker:
     tolerations: {}
 
 
+# @section Citylens Detections Localizer worker's settings
+
+# @param worker.detectionsLocalizer.enabled If Detections Localizer worker is enabled for the service.
+# @param worker.detectionsLocalizer.predictors From what sources detections should be localized.
+
+# @param worker.detectionsLocalizer.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+# @param worker.detectionsLocalizer.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.detectionsLocalizer.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.detectionsLocalizer.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.detectionsLocalizer.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.detectionsLocalizer.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.detectionsLocalizer.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.detectionsLocalizer.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  detectionsLocalizer:
+
+    enabled: false
+
+    predictors: [camcom]
+
+    revisionHistoryLimit: 3
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+
+# @section Citylens Lifecycle Controller worker's settings (depends on Detections Localizer worker)
+
+# @param worker.lifecycleController.scheduledLocalizationTimeoutMinutes Timeout in minutes after that track localization will be rescheduled if it was scheduled and not done.
+# @param worker.lifecycleController.minTrackLocalizationIntervalMinutes Interval in minutes between scheduling track detections localization again.
+
+# @param worker.lifecycleController.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+# @param worker.lifecycleController.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.lifecycleController.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.lifecycleController.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.lifecycleController.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.lifecycleController.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.lifecycleController.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.lifecycleController.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  lifecycleController:
+
+    scheduledLocalizationTimeoutMinutes: 1380  # 23h
+    minTrackLocalizationIntervalMinutes: 10
+
+    revisionHistoryLimit: 3
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+
 # @section Citylens Dashboard batch events worker's settings
 
 # @param worker.dashboardBatchEvents.replicas A replica count for the pod.
@@ -662,7 +732,7 @@ worker:
     image:
       repository: 2gis-on-premise/citylens-workers
       pullPolicy: IfNotPresent
-      tag: 1.16.4
+      tag: 1.17.4
 
     revisionHistoryLimit: 3
 
@@ -698,7 +768,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.16.1
+    tag: 1.17.0
 
   resources:
     requests:
@@ -715,14 +785,18 @@ migrations:
 # @param kafka.bootstrapServer A Kafka broker endpoint. **Required**
 # @param kafka.username A Kafka username for connection. **Required**
 # @param kafka.password A Kafka password for connection. **Required**
+# @param kafka.securityProtocol Protocol used to communicate with brokers. Currently supported: SASL_PLAINTEXT.
+# @param kafka.saslMechanism Authentication mechanism. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.
 # @param kafka.produceTimeoutSeconds Timeout for producer.
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
 # @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
 # @param kafka.topics.pro Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**
+# @param kafka.topics.proObjects Topic for localized detections synchronization with Pro (used by Reporter pro worker, requires Detections Localizer worker). **Required**
 # @param kafka.topics.proDrivers Topic for drivers tracks synchronization with Pro (used by Reporter pro worker). **Required**
 # @param kafka.topics.uploader Topic for Uploader worker. **Required**
 # @param kafka.topics.logs Topic for citylens mobile app logs, uploaded via citylens-api. **Required**
 # @param kafka.topics.framesLifecycle Topic for frames lifecycle events. **Required**
+# @param kafka.topics.objectsLifecycle Topic for objects lifecycle events. **Required**
 # @param kafka.topics.tracksLifecycle Topic for tracks lifecycle events. **Required**
 # @param kafka.topics.predictions Topic for predictions events from detectors. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
@@ -732,15 +806,19 @@ kafka:
   bootstrapServer: ''
   username: ''
   password: ''
+  securityProtocol: SASL_PLAINTEXT
+  saslMechanism: SCRAM-SHA-512
   produceTimeoutSeconds: 5
   topics:
     frames: ''
     tracks: ''
     pro: ''
+    proObjects: ''
     proDrivers: ''
     logs: ''
     uploader: ''
     framesLifecycle: ''
+    objectsLifecycle: ''
     tracksLifecycle: ''
     predictions: ''
   consumerGroups:
@@ -805,9 +883,6 @@ map:
 # @param dashboardDomain Link to Citylens web address. **Required**
 # @param locale Locale language (en by default).
 # @param headerLinks List of links for navbar.
-# @param reporters[0].name Reporter name.
-# @param reporters[0].predictors Predictor used by reporter.
-# @param reporters[0].trackTimeoutDays Time in days to wait for track completion and receiving frames prediction before marking as not synced with Pro.
 
 dashboardDomain: ''
 
@@ -819,23 +894,20 @@ headerLinks:
 - interest_zones
 - map
 
-reporters:
-- name: pro
-  predictors: [camcom]
-  trackTimeoutDays: 1
-
 # @section PRO integration (only when Pro reporter enabled)
 
 # @param pro.baseUrl PRO API URL. Ex: http(s)://pro-api.svc
 # @param pro.key PRO API auth token
 # @param pro.verifySsl Set to `false` if pro.baseUrl must be accessed via https without certificate validation. **Required**
-# @param pro.framesAssetId PRO frames asset id (used for filters actualization). Ex: your_asset_name
+# @param pro.framesAssetId PRO Frames asset id (used for filters actualization). Ex: your_frames_asset_name
+# @param pro.objectsAssetId PRO Objects asset id (used for filters actualization). Ex: your_objects_asset_name
 
 pro:
   baseUrl: ''
   key: ''
   verifySsl: true
   framesAssetId: ''
+  objectsAssetId: ''
 
 # @section **Custom Certificate Authority**
 
