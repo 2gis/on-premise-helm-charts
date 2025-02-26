@@ -36,8 +36,8 @@ data:
       bootstrap_servers: {{ required "A valid .Values.kafka.bootstrap.servers entry required" .bootstrapServer | squote }}
       producer_timeout_seconds: {{ .produceTimeoutSeconds }}
       security:
-        security_protocol: 'SASL_PLAINTEXT'
-        sasl_mechanism: 'SCRAM-SHA-512'
+        security_protocol: {{ required "A valid .Values.kafka.securityProtocol entry required" .securityProtocol | squote }}
+        sasl_mechanism: {{ required "A valid .Values.kafka.saslMechanism entry required" .saslMechanism | squote }}
         sasl_plain_username: {{ required "A valid .Values.kafka.username entry required" .username | squote }}
         sasl_plain_password: {{ required "A valid .Values.kafka.password entry required" .password | squote }}
       consumer_groups:
@@ -95,9 +95,11 @@ data:
       {{- end }}
       topics:
         frames: {{ .Values.kafka.topics.pro }}
+        objects: {{ .Values.kafka.topics.proObjects }}
         drivers: {{ .Values.kafka.topics.proDrivers }}
       assets:
         frames: {{ .Values.pro.framesAssetId }}
+        objects: {{ .Values.pro.objectsAssetId }}
     map:
       tileserver_url_template: {{ required "A valid .Values.map.tileserverUrl entry required" .Values.map.tileserverUrl }}/tiles?x={x}&y={y}&z={z}
       mapgl:
@@ -109,19 +111,12 @@ data:
           coords: [{{ join "," .coords }}]
       {{- end }}
       initial_project: {{ .Values.map.initialProject | squote }}
-      {{- with .Values.worker.mapMatcher }}
-      {{- if .enabled }}
-      matching:
-        enabled: {{ .enabled }}
-        host: {{ required "A valid .Values.worker.mapMatcher.baseUrl entry required" .baseUrl }}
-        key: {{ required "A valid .Values.worker.mapMatcher.key entry required" .key }}
-        interpolation: {{ .interpolation }}
-        retries_total: {{ .retries }}
-        retries_backoff_factor: 0.8
-        timeout: {{ .timeoutSeconds }}
-      {{- end }}
-      {{- end }}
     register_predictor_ttl_seconds: 600
+    clusterization_params:
+      nearest_objects_select_radius: 20
+      default_thresholds:
+        cluster_objects_distance_thr: 20
+        dbscan_eps: 20
     enabled_modules:
       header_links:
         {{- toYaml .Values.headerLinks | nindent 8 }}
@@ -140,20 +135,42 @@ data:
         frames_topics: {{ .Values.kafka.topics.frames }}
         metadata_topics: {{ .Values.kafka.topics.tracks }}
         frames_lifecycle_topic: {{ required "A valid .Values.kafka.topics.framesLifecycle entry required" .Values.kafka.topics.framesLifecycle | squote }}
+        objects_lifecycle_topic: {{ required "A valid .Values.kafka.topics.objectsLifecycle entry required" .Values.kafka.topics.objectsLifecycle | squote }}
         tracks_lifecycle_topic: {{ required "A valid .Values.kafka.topics.tracksLifecycle entry required" .Values.kafka.topics.tracksLifecycle | squote }}
         unified_predictions_topic: {{ required "A valid .Values.kafka.topics.predictions entry required" .Values.kafka.topics.predictions | squote }}
       logs_saver:
         logs_topic: {{ .Values.kafka.topics.logs }}
-      reporters:
-      {{- range .Values.reporters }}
-        - name: {{ .name }}
+      {{- with .Values.worker.mapMatcher }}
+      {{- if .enabled }}
+      matching:
+        enabled: {{ .enabled }}
+        host: {{ required "A valid .Values.worker.mapMatcher.baseUrl entry required" .baseUrl }}
+        key: {{ required "A valid .Values.worker.mapMatcher.key entry required" .key }}
+        interpolation: {{ .interpolation }}
+        retries_total: {{ .retries }}
+        retries_backoff_factor: 0.8
+        timeout: {{ .timeoutSeconds }}
+      {{- end }}
+      {{- end }}
+      visual_localization:
+        enabled: false
+      reporters: {{ if not (or .Values.worker.reporterPro.enabled .Values.worker.detectionsLocalizer.enabled) }}[]{{ end }}
+      {{- with .Values.worker.reporterPro }}
+      {{- if .enabled }}
+        - name: 'pro'
+          timeout: {{ .trackTimeoutDays }}
           predictors:
             {{- toYaml .predictors | nindent 12 }}
-      {{- if eq .name "pro" }}
-          {{- if .trackTimeoutDays }}
-          timeout: {{ .trackTimeoutDays }}
-          {{- end }}
-        {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.worker.detectionsLocalizer }}
+      {{- if .enabled }}
+        - name: 'detections-localizer'
+          timeout: {{ $.Values.worker.reporterPro.trackTimeoutDays }}
+          predictors:
+            {{- toYaml .predictors | nindent 12 }}
+          force_naive_localization: true
+      {{- end }}
       {{- end }}
       predictors:
         {{- toYaml (.Values.kafka.predictorsExtraTopics | default list) | nindent 8 }}

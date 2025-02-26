@@ -167,7 +167,7 @@ nginx:
   port: 8080
   image:
     repository: 2gis-on-premise/navi-front
-    tag: 1.25.2
+    tag: 1.26.0
   nodeHeader: false
 
 
@@ -180,7 +180,8 @@ nginx:
 # @param cron.schedule.restriction Cron job schedule for `restriction`.
 # @param cron.schedule.restrictionImport Cron job schedule for `restrictionImport`.
 # @param cron.concurrencyPolicy Cron job concurrency policy: `Allow` or `Forbid`.
-# @param cron.successfulJobsHistoryLimit How many completed and failed jobs should be kept.
+# @param cron.successfulJobsHistoryLimit How many completed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
+# @param cron.failedJobsHistoryLimit How many failed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
 # @param cron.prometheusPort Container port for supercronic prometheus
 
 cron:
@@ -189,11 +190,12 @@ cron:
     restriction: false
     restrictionImport: false
   schedule:
-    import: '11 * * * *'
+    import: 11 * * * *
     restriction: '*/5 * * * *'
     restrictionImport: '*/5 * * * *'
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
   prometheusPort: 9476
 
 

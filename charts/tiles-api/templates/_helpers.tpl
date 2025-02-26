@@ -160,3 +160,17 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- print "autoscaling/v2" -}}
 {{- end -}}
 {{- end -}}
+
+{{/* Tilegen */}}
+
+{{- define "tiles.tilegen.label" -}}
+app.kubernetes.io/component: tilegen
+{{- end -}}
+
+{{- define "tilegen.serviceAccount" -}}
+{{- if empty $.Values.tilegen.serviceAccountOverride }}
+{{- include "tiles.fullname" . }}
+{{- else }}
+{{- $.Values.tilegen.serviceAccountOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}

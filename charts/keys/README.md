@@ -31,9 +31,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.108.2`                      |
+| `backend.image.tag`        | Backend service image tag.        | `1.112.2`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.          | `0.10.3`                       |
+| `admin.image.tag`          | Admin service image tag.          | `0.10.5`                       |
 | `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
 | `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
 
@@ -89,7 +89,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.logLevel`                              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                                  | `warning`       |
 | `api.signPrivateKey`                        | RSA-PSS 2048 private key (in PKCS#1 format) for signing responses in Public API.                                                                                                                                           | `""`            |
 | `api.oidc.enable`                           | If OIDC authentication is enabled.                                                                                                                                                                                         | `false`         |
-| `api.oidc.enableSignlePartnerMode`          | Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).                                                                                                | `false`         |
+| `api.oidc.enableSinglePartnerMode`          | Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).                                                                                                | `false`         |
+| `api.oidc.enableExternalProvider`           | Enable external oidc provider: do not have access to manage users.                                                                                                                                                         | `false`         |
 | `api.oidc.url`                              | URL of the OIDC provider.                                                                                                                                                                                                  | `""`            |
 | `api.oidc.retryCount`                       | Maximum number of retries for requests to OIDC provider.                                                                                                                                                                   | `3`             |
 | `api.oidc.timeout`                          | Timeout for requests to OIDC provider.                                                                                                                                                                                     | `3s`            |
@@ -191,6 +192,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `dispatcher.cleaner.auditEvents.retentionDuration`   | Retention period for successfully sent audit messages.                                                                                                                                                   | `4320h`         |
 | `dispatcher.cleaner.cron.schedule`                   | Cron job schedule.                                                                                                                                                                                       | `0 1 * * *`     |
 | `dispatcher.cleaner.cron.successfulJobsHistoryLimit` | Specifies the number of successful finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).                           | `3`             |
+| `dispatcher.cleaner.cron.failedJobsHistoryLimit`     | Specifies the number of failed finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).                               | `3`             |
 | `dispatcher.cleaner.cron.suspend`                    | You can suspend execution of Jobs for a CronJob, by setting the field to true. See [schedule suspension](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension).      | `false`         |
 | `dispatcher.cleaner.nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
 

@@ -1,5 +1,81 @@
 # 2GIS On-Premise Changelog
 
+## [1.35.0] (2025-02-26)
+#### [Breaking-Changes](Breaking-Changes.md#1350)
+#### Images
+```
+citylens
+	- citylens-api:1.16.4
+	+ citylens-api:1.17.5
+	- citylens-database:1.16.1
+	+ citylens-database:1.17.1
+	+ citylens-routes-api:1.0.12
+	- citylens-web:1.16.4
+	+ citylens-web:1.17.5
+	+ citylens-worker-service:1.0.12
+	- citylens-workers:1.16.4
+	+ citylens-workers:1.17.5
+citylens-routes-ui
+	+ citylens-routes-ui:0.0.21
+keys
+	- keys-backend:1.108.2
+	+ keys-backend:1.112.2
+	- keys-ui:0.10.3
+	+ keys-ui:0.10.5
+mapgl-js-api
+	- mapgl:1.55.0
+	+ mapgl:1.56.0
+navi-async-matrix
+	+ navi-archiver-async-matrix:1.4.1
+	- navi-async-matrix:1.11.2
+	+ navi-async-matrix:1.12.1
+navi-attractor
+	+ navi-attractor:7.27.1.2
+navi-castle
+	- navi-front:1.25.2
+	+ navi-front:1.26.0
+navi-front
+	- navi-front:1.25.2
+	+ navi-front:1.26.0
+navi-router
+	- navi-router:6.28.0.3
+	+ navi-router:6.29.0.6
+platform
+	- platform-ui:0.15.1
+	+ platform-ui:1.2.0
+pro-api
+	- pro-api:1.54.0
+	+ pro-api:2.2.1
+	- pro-importer:1.54.0
+	+ pro-importer:2.2.1
+	- pro-importer:1.54.0
+	+ pro-importer:2.2.1
+	- pro-permissions-api:1.54.0
+	+ pro-permissions-api:2.2.1
+	- pro-tasks-api:1.54.0
+	+ pro-tasks-api:2.2.1
+pro-ui
+	- pro-importer:1.54.0
+	+ pro-importer:2.2.1
+	- pro-ui:3.5.0
+	+ pro-ui:4.5.0
+styles-api
+	- styles-api:0.30.0
+	+ styles-api:0.38.0
+tilegen-api
+	+ tilegen-api:1.1.8
+	+ tilegen-processor:1.1.8
+tiles-api
+	- tiles-api-importer:4.61.0
+	+ tiles-api-importer:4.64.1
+	+ tiles-api-importer:4.64.1
+	- tiles-api-proxy:4.61.0
+	+ tiles-api-proxy:4.64.1
+	- tiles-api:4.61.0
+	+ tiles-api:4.64.1
+
+```
+
 ## [1.34.0] (2025-01-27)
 #### [Breaking-Changes](Breaking-Changes.md#1340)
 #### Images

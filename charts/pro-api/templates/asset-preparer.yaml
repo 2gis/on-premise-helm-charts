@@ -7,6 +7,7 @@ spec:
   concurrencyPolicy: Forbid
   schedule: {{ .Values.assetPreparer.schedule }}
   successfulJobsHistoryLimit: {{ .Values.assetPreparer.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.assetPreparer.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       backoffLimit: {{ .Values.assetPreparer.backoffLimit }}
@@ -25,6 +26,10 @@ spec:
             - name: {{ include "pro-api.asset-preparer-name" . }}
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.assetPreparer.repository }}:{{ .Values.assetPreparer.tag }}
               imagePullPolicy: IfNotPresent
+              {{- with .Values.assetPreparer.imagePullSecrets }}
+              imagePullSecrets:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               resources:
                 {{- toYaml .Values.assetPreparer.resources | nindent 16 }}
               volumeMounts:

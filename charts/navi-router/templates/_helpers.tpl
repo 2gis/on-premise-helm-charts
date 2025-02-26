@@ -91,45 +91,19 @@ Usage:
     {{- end -}}
 {{- end -}}
 
-{{/* vim: set filetype=mustache: */}}
-
-{{/*
-Return the target Kubernetes version
-*/}}
-{{- define "capabilities.kubeVersion" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.kubeVersion }}
-    {{- .Values.global.kubeVersion -}}
-    {{- else }}
-    {{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
-    {{- end -}}
-{{- else }}
-{{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for Horizontal Pod Autoscaler.
-*/}}
-{{- define "capabilities.hpa.apiVersion" -}}
-{{- if semverCompare "<1.23-0" (include "capabilities.kubeVersion" .) -}}
-{{- if .beta2 -}}
-{{- print "autoscaling/v2beta2" -}}
-{{- else -}}
-{{- print "autoscaling/v2beta1" -}}
-{{- end -}}
-{{- else -}}
-{{- print "autoscaling/v2" -}}
-{{- end -}}
-{{- end -}}
-
 {{/*
 Check for deprecated values
 */}}
-{{- define "check.deprecated.values" -}}
-{{- if not ("1.19.0" | get ((.Values.debug).disableDeprecationChecks | default dict) ) }}
-{{- if .Values.router.keyManagementService -}}{{ fail "[after 1.19.0] .Values.router.keyManagementService renamed to .Values.keys" }}{{- end }}
-{{- if .Values.keys.host -}}{{ fail "[after 1.19.0] .Values.router.keys.host renamed to .Values.keys.url" }}{{- end }}
-{{- if .Values.router.castleHost -}}{{ fail "[after 1.19.0] .Values.castleHost renamed to .Values.castleUrl" }}{{- end }}
-{{- end }} {{/* 1.19.0 */}}
+{{- define "check.values" -}}
+{{/* deprecations */}}
+{{- if .Values.router.keyManagementService -}}{{ fail ".Values.router.keyManagementService renamed to .Values.keys" }}{{- end }}
+{{- if .Values.keys.host -}}{{ fail ".Values.router.keys.host renamed to .Values.keys.url" }}{{- end }}
+{{- if .Values.router.castleHost -}}{{ fail ".Values.router.castleHost renamed to .Values.router.castleUrl" }}{{- end }}
+{{/* consistency checks */}}
+{{- if and (.Values.requestsSignCheck).keys (not (.Values.requestsSignCheck).salt) }}
+    {{- fail "`requestsSignCheck.keys` requires `requestsSignCheck.salt`" }}
 {{- end }}
+{{- if and  (.Values.requestsSignCheck).enabledKeys (not (.Values.requestsSignCheck).hashSalt) }}
+    {{- fail "`requestsSignCheck.enabledKeys` requires `requestsSignCheck.hashSalt`" }}
+{{- end }}
+{{- end }}{{/* check.values */}}
