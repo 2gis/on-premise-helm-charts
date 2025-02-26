@@ -1181,7 +1181,7 @@ routes:
     tempPath: /tmp
 
     logging:
-      level: 'information'
+      level: information
 
   worker:
     image:
@@ -1217,12 +1217,12 @@ routes:
     tempPath: /tmp
 
     logging:
-      level: 'information'
+      level: information
 
     busConfig:
       securityInformation:
-        saslMechanism: 'ScramSha512'
-        securityProtocol: 'SaslPlaintext'
+        saslMechanism: ScramSha512
+        securityProtocol: SaslPlaintext
       consumers:
         appEvents:
           groupId: ''

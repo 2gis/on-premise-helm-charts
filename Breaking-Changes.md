@@ -1,6 +1,6 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [NEW_VER]
+## [1.35.0]
 
 ### platform
 - Added `ui.playgrounds` for enable playgrounds on the playground page
@@ -11,7 +11,7 @@
 
 ### pro-api
 - api.settings.allowAnyOrigin was removed, api.settings.corsOrigins was added instead
-- assetImporter.enabled was removed, assetImporter is now always mandatory 
+- assetImporter.enabled was removed, assetImporter is now always mandatory
 
 ### navi-async-matrix
 
