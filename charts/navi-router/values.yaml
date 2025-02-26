@@ -73,15 +73,15 @@ router:
   castleUrl: ''
   localRestrictions:
     distanceBetweenPointsKm:
-      - type: "distance-matrix-api"
-        value: 2000
+    - type: distance-matrix-api
+      value: 2000
     pointsCount:
-      - type: "pairs-directions-api"
-        value: 50
+    - type: pairs-directions-api
+      value: 50
     matrixSize:
-      - type: "distance-matrix-api"
-        sources_count: 25
-        targets_count: 30
+    - type: distance-matrix-api
+      sources_count: 25
+      targets_count: 30
 
 # @param keys.enabled Disable or enable key management service
 # @param keys.url key management service server URL

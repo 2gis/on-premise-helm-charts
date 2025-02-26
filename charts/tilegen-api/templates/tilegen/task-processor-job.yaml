@@ -11,6 +11,7 @@ spec:
       backoffLimit: {{ .Values.taskProcessor.backoffLimit }}
       activeDeadlineSeconds: 43200
       ttlSecondsAfterFinished: {{ .Values.taskProcessor.ttlSecondsAfterFinished }}
+      parallelism: {{ .Values.taskProcessor.maxParallelJobs }}
       template:
         spec:
           {{- with .Values.taskProcessor.nodeSelector }}
@@ -18,7 +19,6 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           restartPolicy: Never
-          parallelism: "{{ .Values.taskProcessor.maxParallelJobs }}"
           serviceAccountName: {{ include "api.service-account-name" . }}
           volumes:
             - name: temp-volume

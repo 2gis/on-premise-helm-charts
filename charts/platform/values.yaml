@@ -81,7 +81,7 @@ ui:
     clientSecret: ''
     scope: ''
     codeUrl: ''
-    safeHosts: '.*'
+    safeHosts: .*
     secure: true
 
   # @section Statuses for services
@@ -189,10 +189,10 @@ ui:
     enabled: false
     className: nginx
     hosts:
-      - host: platform-ui.example.com
-        paths:
-          - path: /
-            pathType: Prefix
+    - host: platform-ui.example.com
+      paths:
+      - path: /
+        pathType: Prefix
     tls: []
 
   # @section Limits
