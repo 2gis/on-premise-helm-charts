@@ -3,6 +3,10 @@
 ### platform
 - Added `ui.playgrounds` for enable playgrounds on the playground page
 
+### pro-api
+- api.settings.allowAnyOrigin was removed, api.settings.corsOrigins was added instead
+- assetImporter.enabled was removed, assetImporter is now always mandatory 
+
 ### navi-async-matrix
 
 - Existing DBs need task status type updated, in case public schema used:
