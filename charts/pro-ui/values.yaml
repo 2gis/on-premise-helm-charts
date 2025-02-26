@@ -89,7 +89,7 @@ ui:
   # @param ui.auth.safeHosts a string with regExp, which checks incoming authCodeUrl
   # @param ui.auth.codeUrl an URL, which is used to exchange code to token: host/api/auth/code
   # Ex: http(s)://pro-ui.ingress.host/api/auth/code
-  # @param ui.auth.brand Fill in the brand if you are using integration with the Platform Manager. The brand is defined in the Platform Manager space, they should be the same. The application will use the brand to define the realm on the Platform Manager's side. If you're not using integration with the Platform Manager, leave it empty.
+  # @skip ui.auth.brand
   # @param ui.auth.clientId a client_id from keycloack
   # @param ui.auth.clientSecret a client_secret from keycloack
   # @param ui.auth.oAuthProvider a provider name. Possible values: "keycloak" | "openid"
@@ -103,8 +103,7 @@ ui:
   # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/auth
   # @param ui.auth.oAuthApiUrl an oAuth provider base URL
   # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/
-  # @param ui.auth.platformManagerHost Fill in the Platform Manager host if you're using integration with it. Application will use it for redirecting to the SignUp page. Without protocol we will put App's protocol. If you're not using integration with the Platform Manager, leave it empty.
-  # Ex: http(s)://platform-manager.ingress.host
+  # @skip ui.auth.platformManagerHost
   # @param ui.auth.turnOffCertValidation Flag to turn off certificate validation. Possible values: `"true"` or `"false"`.
   # @param ui.auth.openIdWellKnownUrlListUrl URL to OpenID Connect Discovery data
   # specs: https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
