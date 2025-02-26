@@ -195,6 +195,16 @@
             "configUrl": { "type": "string" },
             "s3Bucket": { "type": "string" }
           }
+        },
+        "zenith": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "protocol": { "type": "string" },
+            "host": { "type": "string" },
+            "tileSet": { "type": "string" },
+            "subdomains": { "type": "string" }
+          }
         }
       }
     },
