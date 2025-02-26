@@ -124,7 +124,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 | Name                   | Description                                                                                                                  | Value |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `ui.zenith.protocol`   | Optional. Possible values http or http.                                                                                      | `""`  |
+| `ui.zenith.protocol`   | Optional. Possible values http or https.                                                                                     | `""`  |
 | `ui.zenith.host`       | Optional FQDN (domain or IP) for the Zenith service without protocol.                                                        | `""`  |
 | `ui.zenith.tileSet`    | Optional. Name of the tileSet. Please use the same name for the tileSet as in the pro-api (see userDataTileSet).             | `""`  |
 | `ui.zenith.subdomains` | Optional. variable holds a list of additional backup subdomains for the Zenith server. Please use «,» (commas) as separator. | `""`  |
