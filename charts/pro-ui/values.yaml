@@ -27,7 +27,7 @@ strategy:
 # @param image.tag Tag
 image:
   repository: 2gis-on-premise/pro-ui
-  tag: 3.5.0
+  tag: 4.5.0
 
 # @section Common deployment settings
 
@@ -70,7 +70,7 @@ ui:
   # @param ui.appTheme Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
   # @param ui.appLocale Language in the app. Possible values: `"ar_AE"`, `"en_AE"` or `"ru_RU"`.
   # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).
-  # @param ui.supportDocumentationLink Product online documentation link. Ex.: 'https://docs.urbi.ae/en/pro/start', 'https://docs.2gis.com/ru/pro/start'
+  # @param ui.supportDocumentationLink Product online documentation root link. Ex.: 'https://docs.urbi.ae/en/pro', 'https://docs.2gis.com/ru/pro'
   # @param ui.immersiveModels A string value for config to enabling 3D-models. Possible values: [{"id":4,"name":"Ground","mapOptions":{"center":[53.287567,23.564967],"styleZoom":19.2,"pitch":45,"rotation":0},"objects":[{"buildingIds":[],"coords":[53.284762,23.569323],"scale":90,"rotateX":0.5,"rotateY":0,"moveX":0,"moveY":0,"moveZ":0,"models":[{"path":"/static/models/adnoc/ground.glb","name":"Ground","displayName":"Ground"}]}]}]
   # @param ui.publicS3Url Optional URL of public S3 where style data will be placed. Example: https://s3.domain.example.com/
 
@@ -89,11 +89,13 @@ ui:
   # @param ui.auth.safeHosts a string with regExp, which checks incoming authCodeUrl
   # @param ui.auth.codeUrl an URL, which is used to exchange code to token: host/api/auth/code
   # Ex: http(s)://pro-ui.ingress.host/api/auth/code
+  # @param ui.auth.brand Fill in the brand if you are using integration with the Platform Manager. The brand is defined in the Platform Manager space, they should be the same. The application will use the brand to define the realm on the Platform Manager's side. If you're not using integration with the Platform Manager, leave it empty.
   # @param ui.auth.clientId a client_id from keycloack
   # @param ui.auth.clientSecret a client_secret from keycloack
-  # @param ui.auth.oAuthProvider a provider name. Possible values: "keycloak" | "ugc" | "openid"
-  # if oAuthProvider == 'openid', identityProviderUrl, oAuthApiUrl and userDataApiUrl params
+  # @param ui.auth.oAuthProvider a provider name. Possible values: "keycloak" | "openid"
+  # if oAuthProvider == 'openid', identityProviderUrl and oAuthApiUrl params
   # will be ignored, cause these URL will be loaded via openIdWellKnownUrlListUrl
+  # ui.auth.oAuthProvider == 'keycloak' is deprecated.
   # @param ui.auth.oAuthScopes scopes for openid connect. Possible values:
   # any of: name, email, phone, avatar, openid
   # Ex.: "name email openid"
@@ -101,7 +103,7 @@ ui:
   # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/auth
   # @param ui.auth.oAuthApiUrl an oAuth provider base URL
   # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/
-  # @param ui.auth.userDataApiUrl an user data provider URL
+  # @skip ui.auth.platformManagerHost
   # @param ui.auth.turnOffCertValidation Flag to turn off certificate validation. Possible values: `"true"` or `"false"`.
   # @param ui.auth.openIdWellKnownUrlListUrl URL to OpenID Connect Discovery data
   # specs: https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
@@ -112,13 +114,14 @@ ui:
     secure: true
     safeHosts: .*
     codeUrl: ''
+    brand: ''
     clientId: ''
     clientSecret: ''
     oAuthProvider: keycloak
     oAuthScopes: ''
     identityProviderUrl: ''
     oAuthApiUrl: ''
-    userDataApiUrl: ''
+    platformManagerHost: ''
     turnOffCertValidation: false
     openIdWellKnownUrlListUrl: ''
   # @section 2GIS Pro API settings

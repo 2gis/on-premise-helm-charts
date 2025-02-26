@@ -1,7 +1,13 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [NEW_VER]
+
 ### platform
 - Added `ui.playgrounds` for enable playgrounds on the playground page
+
+### pro-ui
+- You need to upgrade MapGL to version 1.54.1
+- Updated ui.auth.oAuthProvider. Removed "ugc" value. Now possible values: "keycloak" | "openid". "keycloak" value is deprecated.
 
 ### pro-api
 - api.settings.allowAnyOrigin was removed, api.settings.corsOrigins was added instead
