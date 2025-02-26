@@ -5,9 +5,7 @@
 ### pro-ui
 - You need to upgrade MapGL to version 1.54.1
 - Updated ui.auth.oAuthProvider. Removed "ugc" value. Now possible values: "keycloak" | "openid". "keycloak" value is deprecated.
-- Added ui.auth.brand Fill in the brand if you are using integration with the Platform Manager. The brand is defined in the Platform Manager space, they should be the same. The application will use the brand to define the realm on the Platform Manager's side. If you're not using integration with the Platform Manager, leave it empty.
-- Added ui.auth.platformManagerHost Fill in the Platform Manager host if you're using integration with it. Application will use it for redirecting to the SignUp page. Without protocol we will put App's protocol. If you're not using integration with the Platform Manager, leave it empty.
-- Changed ui.supportDocumentationLink. Now need to use ROOT link.
+
 
 ### navi-async-matrix
 
