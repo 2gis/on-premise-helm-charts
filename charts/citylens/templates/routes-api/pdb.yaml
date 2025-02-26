@@ -1,0 +1,27 @@
+{{- with .Values.routes.api }}
+{{- if .pdb.enabled }}
+
+---
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "citylens.routes.api.name" $ }}
+  labels:
+    {{- include "citylens.routes.api.labels" $ | nindent 4 }}
+  {{- with .labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .pdb.minAvailable }}
+  minAvailable: {{ .pdb.minAvailable }}
+  {{- end }}
+  {{- if .pdb.maxUnavailable }}
+  maxUnavailable: {{ .pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "citylens.routes.api.selectorLabels" $ | nindent 6 }}
+
+{{- end }}
+{{- end }}

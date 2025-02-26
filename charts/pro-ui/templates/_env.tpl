@@ -92,6 +92,14 @@
   value: "{{ .Values.ui.whiteLabel.s3Bucket }}"
 - name: WHITE_LABEL_CONFIG_URL
   value: "{{ .Values.ui.whiteLabel.configUrl | default "/static/theme/urbi.json" }}"
+- name: ZENITH_HOST
+  value: "{{ .Values.ui.zenith.host }}"
+- name: ZENITH_TILE_SET
+  value: "{{ .Values.ui.zenith.tileSet }}"
+- name: ZENITH_PROTOCOL
+  value: "{{ .Values.ui.zenith.protocol }}"
+- name: ZENITH_SUBDOMAINS
+  value: "{{ .Values.ui.zenith.subdomains }}"
 {{- if .Values.ui.extraEnvVars }}
 {{- range $key, $val := .Values.ui.extraEnvVars }}
 - name: {{ $key }}

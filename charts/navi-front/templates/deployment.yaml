@@ -1,44 +1,19 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ include "front.fullname" . }}
-  labels:
-    {{- include "front.labels" . | nindent 4 }}
+{{- define "front.deployment" }}
 spec:
-  {{- if not .Values.hpa.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
-  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
-  selector:
-    matchLabels:
-      {{- include "front.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
         checksum/configBase: {{ include (print $.Template.BasePath "/configmap-base.yaml") . | sha256sum }}
         checksum/configExtra: {{ include (print $.Template.BasePath "/configmap-extra.yaml") . | sha256sum }}
-      {{- with .Values.podAnnotations }}
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      labels:
-        {{- include "front.selectorLabels" . | nindent 8 }}
     spec:
-      enableServiceLinks: {{ .Values.enableServiceLinks }}
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "front.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
-      - name: {{ include "front.fullname" . }}-base
+      - name: {{ include "generic-chart.fullname" . }}-base
         configMap:
-          name: {{ include "front.fullname" . }}-base
+          name: {{ include "generic-chart.fullname" . }}-base
       {{- if or .Values.serverBlock .Values.locationsBlock }}
-      - name: {{ include "front.fullname" . }}-extra
+      - name: {{ include "generic-chart.fullname" . }}-extra
         configMap:
-          name: {{ include "front.fullname" . }}-extra
+          name: {{ include "generic-chart.fullname" . }}-extra
           items:
           {{- if or .Values.serverBlock }}
             - key: server-block.conf
@@ -50,22 +25,42 @@ spec:
           {{- end }}
       {{- end }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ include "generic-chart.containerName" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.nginx.opentracing.enabled }}
+          env:
+            - name: JAEGER_SERVICE_NAME
+              value: {{ .Values.nginx.opentracing.serviceName | quote }}
+            - name: JAEGER_SAMPLER_TYPE
+              value: {{ .Values.nginx.opentracing.samplerType | quote }}
+            - name: JAEGER_SAMPLER_PARAM
+              value: {{ .Values.nginx.opentracing.samplerParam | quote }}
+            - name: JAEGER_AGENT_PORT
+              value: {{ .Values.nginx.opentracing.port | quote }}
+            - name: JAEGER_AGENT_HOST
+              {{- if .Values.nginx.opentracing.host }}
+              value: {{ .Values.nginx.opentracing.host | quote }}
+              {{- else }}
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.hostIP
+              {{- end }}
+          {{- end }}
           volumeMounts:
-          - name: {{ include "front.fullname" . }}-base
+          - name: {{ include "generic-chart.fullname" . }}-base
             mountPath: /etc/nginx/conf.d/front.conf
             subPath: front.conf
           {{- if or .Values.serverBlock .Values.locationsBlock }}
-          - name: {{ include "front.fullname" . }}-extra
+          - name: {{ include "generic-chart.fullname" . }}-extra
             mountPath: /etc/nginx/conf.d/extra
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.front.port | default 8080 }}
+              containerPort: 8080
               protocol: TCP
           lifecycle:
             preStop:
@@ -79,16 +74,10 @@ spec:
             httpGet:
               path: /healthcheck
               port: http
-
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      affinity:
-        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}{{- /* define "front.deployment" */}}
+{{- template "generic-chart.merge" (list . "front.deployment" "generic-chart.deployment.tpl") }}

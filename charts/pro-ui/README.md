@@ -120,6 +120,15 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `ui.whiteLabel.configUrl` | Optional URL for whitelabel config file                                                                                                                                                              | `""`  |
 | `ui.whiteLabel.s3Bucket`  | Optional S3 bucket name for whitelabel files. Bucket must be public. If set with ui.publicS3Url all relative URL in config will be replaced to ui.publicS3Url + ui.whiteLabel.s3Bucket + originalURL | `""`  |
 
+### Zenith2 config settings
+
+| Name                   | Description                                                                                                                  | Value |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ui.zenith.protocol`   | Optional. Possible values http or https.                                                                                     | `""`  |
+| `ui.zenith.host`       | Optional FQDN (domain or IP) for the Zenith service without protocol.                                                        | `""`  |
+| `ui.zenith.tileSet`    | Optional. Name of the tileSet. Please use the same name for the tileSet as in the pro-api (see userDataTileSet).             | `""`  |
+| `ui.zenith.subdomains` | Optional. variable holds a list of additional backup subdomains for the Zenith server. Please use «,» (commas) as separator. | `""`  |
+
 ### Service settings
 
 | Name                  | Description                                                                                                                    | Value       |

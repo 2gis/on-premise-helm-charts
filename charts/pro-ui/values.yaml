@@ -187,6 +187,18 @@ ui:
     configUrl: ''
     s3Bucket: ''
 
+  # @section Zenith2 config settings
+  #
+  # @param ui.zenith.protocol Optional. Possible values http or https.
+  # @param ui.zenith.host Optional FQDN (domain or IP) for the Zenith service without protocol.
+  # @param ui.zenith.tileSet Optional. Name of the tileSet. Please use the same name for the tileSet as in the pro-api (see userDataTileSet).
+  # @param ui.zenith.subdomains Optional. variable holds a list of additional backup subdomains for the Zenith server. Please use «,» (commas) as separator.
+  zenith:
+    protocol: ''
+    host: ''
+    tileSet: ''
+    subdomains: ''
+
 # @section Service settings
 
 # @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).

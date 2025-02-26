@@ -2,15 +2,20 @@
 
 ## [NEW_VER]
 
+### platform
+- Added `ui.playgrounds` for enable playgrounds on the playground page
+
 ### pro-ui
 - You need to upgrade MapGL to version 1.54.1
 - Updated ui.auth.oAuthProvider. Removed "ugc" value. Now possible values: "keycloak" | "openid". "keycloak" value is deprecated.
 
+### pro-api
+- api.settings.allowAnyOrigin was removed, api.settings.corsOrigins was added instead
+- assetImporter.enabled was removed, assetImporter is now always mandatory 
 
 ### navi-async-matrix
 
 - Existing DBs need task status type updated, in case public schema used:
-
 
   ```
   ALTER TYPE public."statusvalues" ADD VALUE 'ATTRACT_PUSHED';
@@ -27,6 +32,14 @@
     `update tracks set localization_status = 2006;`
   This is required as in on-premise environments this column was newer user before, and may contain unexpected values.
 - Values section `.Values.reporters` replaced with `.Values.worker.reporterPro.enabled` field.
+- Worker `.Values.worker.detectionsLocalizer` requires
+  - Asset "Objects" in Pro and topic `.Values.kafka.topics.proObjects` to be tied to that asset
+  - topic `.Values.kafka.topics.objectsLifecycle` required
+- Added new services: `citylens-routes-api` and `citylens-worker-service`
+- Added new required parameters:
+  - `.Values.routes.postgres.database`
+  - `.Values.routes.hangfire.postgres.database`
+  - `.Values.routes.navi.url`
 
 ## [1.34.0]
 
