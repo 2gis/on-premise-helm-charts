@@ -79,7 +79,7 @@ See the [documentation]() to learn about:
 | `api.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                                               |
 | `api.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                                                  |
 | `api.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `{"nginx.ingress.kubernetes.io/proxy-body-size":"0"}` |
-| `api.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-api.host`                                   |
+| `api.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-api.example.com`                            |
 | `api.ingress.hosts[0].paths[0].path`                                  | Endpoint of host.                                                                                                     | `/`                                                   |
 | `api.ingress.hosts[0].paths[0].pathType`                              | Path type of endpoint.                                                                                                | `Prefix`                                              |
 | `api.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                                                  |
@@ -167,7 +167,7 @@ See the [documentation]() to learn about:
 | `web.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                                               |
 | `web.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                                                  |
 | `web.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `{"nginx.ingress.kubernetes.io/proxy-body-size":"0"}` |
-| `web.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.web'.                                                                | `citylens-web.host`                                   |
+| `web.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.web'.                                                                | `citylens-web.example.com`                            |
 | `web.ingress.hosts[0].paths[0].path`                                  | Endpoint of host.                                                                                                     | `/`                                                   |
 | `web.ingress.hosts[0].paths[0].pathType`                              | Path type of endpoint.                                                                                                | `Prefix`                                              |
 | `web.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                                                  |
@@ -553,7 +553,7 @@ See the [documentation]() to learn about:
 
 | Name                                   | Description                                                                                                                                    | Value   |
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `routes.api.replicaCount`              | A replica count for the pod.                                                                                                                   | `2`     |
+| `routes.api.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`     |
 | `routes.api.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
 | `routes.api.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`  |
 | `routes.api.resources.requests.memory` | A memory request.                                                                                                                              | `256M`  |
@@ -571,15 +571,15 @@ See the [documentation]() to learn about:
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                                            | Description                                                                                                           | Value                      |
-| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `routes.api.ingress.enabled`                    | If Ingress is enabled for the service.                                                                                | `false`                    |
-| `routes.api.ingress.className`                  | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                       |
-| `routes.api.ingress.annotations`                | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).             | `{}`                       |
-| `routes.api.ingress.hosts[0].host`              | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-routes-api.host` |
-| `routes.api.ingress.hosts[0].paths[0].path`     | Endpoint of host.                                                                                                     | `/`                        |
-| `routes.api.ingress.hosts[0].paths[0].pathType` | Path type of endpoint.                                                                                                | `Prefix`                   |
-| `routes.api.ingress.tls`                        | Tls settings for https.                                                                                               | `[]`                       |
+| Name                                            | Description                                                                                                           | Value                             |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `routes.api.ingress.enabled`                    | If Ingress is enabled for the service.                                                                                | `false`                           |
+| `routes.api.ingress.className`                  | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                              |
+| `routes.api.ingress.annotations`                | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).             | `{}`                              |
+| `routes.api.ingress.hosts[0].host`              | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-routes-api.example.com` |
+| `routes.api.ingress.hosts[0].paths[0].path`     | Endpoint of host.                                                                                                     | `/`                               |
+| `routes.api.ingress.hosts[0].paths[0].pathType` | Path type of endpoint.                                                                                                | `Prefix`                          |
+| `routes.api.ingress.tls`                        | Tls settings for https.                                                                                               | `[]`                              |
 
 ### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
@@ -691,10 +691,10 @@ See the [documentation]() to learn about:
 
 ### Navi integration
 
-| Name              | Description                                     | Value |
-| ----------------- | ----------------------------------------------- | ----- |
-| `routes.navi.url` | Navi gateway url (used for getting navigation). | `""`  |
-| `routes.navi.key` | Navi Api Key.                                   | `""`  |
+| Name              | Description                                                  | Value |
+| ----------------- | ------------------------------------------------------------ | ----- |
+| `routes.navi.url` | Navi gateway url (used for getting navigation). **Required** | `""`  |
+| `routes.navi.key` | Navi Api Key.                                                | `""`  |
 
 ### Pro integration
 

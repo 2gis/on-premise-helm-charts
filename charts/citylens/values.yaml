@@ -128,14 +128,14 @@ api:
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: '0'
     hosts:
-    - host: citylens-api.host
+    - host: citylens-api.example.com
       paths:
       - path: /
         pathType: Prefix
     tls: []
-      # - hosts:
-      #    host: 'citylens-api.host'
-      #  secretName: ''
+    # - hosts:
+    #   - citylens-api.example.com
+    #   secretName: secret.tls
 
   auth:
     enabled: true
@@ -263,14 +263,14 @@ web:
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: '0'
     hosts:
-    - host: citylens-web.host
+    - host: citylens-web.example.com
       paths:
       - path: /
         pathType: Prefix
     tls: []
-      # - hosts:
-      #    host: 'citylens-web.host'
-      #  secretName: ''
+    # - hosts:
+    #   - citylens-web.example.com
+    #   secretName: secret.tls
 
   auth:
     enabled: false
@@ -1067,7 +1067,7 @@ customCAs:
 # @section Citylens routes Clients
 
 # @section Navi integration
-# @param routes.navi.url Navi gateway url (used for getting navigation).
+# @param routes.navi.url Navi gateway url (used for getting navigation). **Required**
 # @skip routes.navi.timeout
 # @param routes.navi.key Navi Api Key.
 
@@ -1114,7 +1114,7 @@ routes:
       tag: 1.0.12
       pullPolicy: IfNotPresent
 
-    replicaCount: 2
+    replicaCount: 1
 
     revisionHistoryLimit: 3
 
@@ -1136,12 +1136,15 @@ routes:
       enabled: false
       annotations: {}
       className: ''
-      tls: []
       hosts:
-        - host: citylens-routes-api.host
-          paths:
-            - path: /
-              pathType: Prefix
+      - host: citylens-routes-api.example.com
+        paths:
+        - path: /
+          pathType: Prefix
+      tls: []
+      # - hosts:
+      #   - citylens-routes-api.example.com
+      #   secretName: secret.tls
 
     pdb:
       enabled: true
