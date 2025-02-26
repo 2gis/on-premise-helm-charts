@@ -1,0 +1,84 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "task-processor-job.name" . }}
+spec:
+  concurrencyPolicy: Forbid
+  schedule: "0 18 29 2 6"
+  suspend: true
+  jobTemplate:
+    spec:
+      backoffLimit: {{ .Values.taskProcessor.backoffLimit }}
+      activeDeadlineSeconds: 43200
+      ttlSecondsAfterFinished: {{ .Values.taskProcessor.ttlSecondsAfterFinished }}
+      template:
+        spec:
+          {{- with .Values.taskProcessor.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          restartPolicy: Never
+          parallelism: "{{ .Values.taskProcessor.maxParallelJobs }}"
+          serviceAccountName: {{ include "api.service-account-name" . }}
+          volumes:
+            - name: temp-volume
+              {{- if gt (len .Values.taskProcessor.tempVolume) 0 }}
+              {{- toYaml .Values.taskProcessor.tempVolume | nindent 14 }}
+              {{- else }}
+              {{- fail "A valid .Values.taskProcessor.tempVolume entry is required and must not be empty" }}
+              {{- end }}
+          containers:
+            - name: {{ include "task-processor-job.name" . }}
+              image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.taskProcessor.repository }}:{{ .Values.taskProcessor.tag }}
+              imagePullPolicy: {{ .Values.taskProcessor.imagePullPolicy }}
+              {{- with .Values.taskProcessor.imagePullSecrets }}
+              imagePullSecrets:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              resources:
+                {{- toYaml .Values.taskProcessor.resources | nindent 16 }}
+              volumeMounts:
+                - mountPath: "{{ .Values.api.tempPath }}"
+                  name: temp-volume
+              env:
+                - name: Common__TempPath
+                  value: "{{ .Values.api.tempPath }}"
+                - name: MODE
+                  value: "Skip"
+                - name: S3__Url
+                  value: {{ required "A valid .Values.s3.host entry required" $.Values.s3.host }}
+                - name: S3__VectorTilesBucket
+                  value: {{ required "A valid .Values.s3.vectorTilesBucket entry required" $.Values.s3.vectorTilesBucket }}
+                - name: S3__AccessKey
+                  valueFrom:
+                    secretKeyRef:
+                      key: s3AccessKey
+                      name: {{ include "api.name" . }}-secret
+                - name: S3__SecretKey
+                  valueFrom:
+                    secretKeyRef:
+                      key: s3SecretKey
+                      name: {{ include "api.name" . }}-secret
+                - name: API_URL
+                  value: http://{{ include "api.name" . }}
+                - name: Common__Logging__Format
+                  value: "{{ .Values.api.logging.format }}"
+                - name: TileServer__Importer__Secure
+                  value: "{{ .Values.tilesImporter.secure }}"
+                - name: TileServer__Importer__Hosts
+                  value: {{ required "A valid .Values.tilesImporter.hosts entry required" $.Values.tilesImporter.hosts }}
+                - name: Redis__Host
+                  value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
+                - name: Redis__Port
+                  value: "{{ .Values.redis.port }}"
+                - name: Redis__DatabaseId
+                  value: "{{ .Values.redis.databaseId }}"
+                - name: Redis__Username
+                  value: {{ $.Values.redis.username }}
+                {{ if .Values.redis.password }}
+                - name: Redis__Password
+                  valueFrom:
+                    secretKeyRef:
+                      key: redisPassword
+                      name: {{ include "api.name" . }}-secret
+                {{ end }}

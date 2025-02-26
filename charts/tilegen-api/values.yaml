@@ -1,0 +1,220 @@
+﻿# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+# @section **Common settings**
+# @param appName Name of the service.
+# @param replicaCount A replica count for the pod.
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
+# @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+
+appName: tilegen-api
+replicaCount: 1
+imagePullSecrets: []
+nameOverride: ''
+fullnameOverride: ''
+nodeSelector: {}
+affinity: {}
+priorityClassName: ''
+terminationGracePeriodSeconds: 60
+tolerations: []
+podAnnotations: {}
+podLabels: {}
+annotations: {}
+labels: {}
+revisionHistoryLimit: 3
+
+# @extra Strategy settings
+
+# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
+# @extra Service settings
+
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.port PRO API service port.
+
+service:
+  annotations: {}
+  labels: {}
+  type: ClusterIP
+  port: 80
+
+# @extra Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+# @param vpa.enabled If VPA is enabled for the service.
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @param vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @param vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @param vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+
+vpa:
+  enabled: false
+  updateMode: Auto
+  minAllowed:
+    cpu: 100m
+    memory: 256M
+  maxAllowed:
+    cpu: 1
+    memory: 1024M
+
+# @extra Deployment settings
+
+# @param image.repository Repository
+# @param image.tag Tag
+# @param image.pullPolicy Pull Policy
+
+image:
+  repository: 2gis-on-premise/tilegen-api
+  tag: 1.1.8
+  pullPolicy: IfNotPresent
+
+# @extra TileGen Storage configuration
+
+# @param s3.host S3 endpoint. Format: `host:port`. **Required**
+# @param s3.accessKey S3 access key for accessing the bucket. **Required**
+# @param s3.secretKey S3 secret key for accessing the bucket. **Required**
+# @param s3.vectorTilesBucket S3 bucket for storing vector tiles data. **Required**
+
+s3:
+  host: ''
+  accessKey: ''
+  secretKey: ''
+  vectorTilesBucket: ''
+
+# @extra TileGen Api configuration
+
+# @param api.serviceAccount  Kubernetes service account
+# @param api.tempPath Path to directory used for temp data
+# @param api.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
+# @extra api.logging Logging settings
+# @param api.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
+# @param api.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
+
+api:
+  serviceAccount: runner
+  tempPath: /tmp
+  allowAnyOrigin: false
+  logging:
+    format: simple
+    targets: ''
+
+# @extra Redis settings (supported version 6.x)
+
+# @param redis.host Redis host address. **Required**
+# @param redis.port Redis port. **Required**
+# @skip redis.databaseId
+# @param redis.username Username used to connect to Redis
+# @param redis.password Password used to connect to Redis
+
+redis:
+  host: ''
+  port: 6379
+  databaseId: 0
+  username: ''
+  password: ''
+
+# @extra Tile server importer settings
+
+# @param tilesImporter.secure Uses https protocol
+# @param tilesImporter.hosts Comma separated tile server importer hosts. Example: `tiles1.importer.host,tiles2.importer.host` **Required**
+tilesImporter:
+  secure: false
+  hosts: ''
+
+# @extra TileGen processor job settings
+
+# @param taskProcessor.repository Docker Repository Image.
+# @param taskProcessor.tag Docker image tag.
+# @param taskProcessor.imagePullPolicy Image pull Policy.
+# @param taskProcessor.imagePullSecrets Image pull secrets.
+# @param taskProcessor.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
+# @param taskProcessor.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param taskProcessor.tempVolume Temporary data storage volume
+# @extra taskProcessor.resources **Limits for the tile processor job**
+# @param taskProcessor.resources.requests.cpu A CPU request.
+# @param taskProcessor.resources.requests.memory A memory request.
+# @param taskProcessor.resources.limits.cpu A CPU limit.
+# @param taskProcessor.resources.limits.memory A memory limit.
+# @param taskProcessor.maxParallelJobs How many import jobs can be run simultaneously
+# @param taskProcessor.ttlSecondsAfterFinished Kubernetes [time-to-live setting] (https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished)
+
+taskProcessor:
+  repository: 2gis-on-premise/tilegen-processor
+  tag: 1.1.8
+  imagePullPolicy: IfNotPresent
+  imagePullSecrets: []
+  backoffLimit: 1
+  nodeSelector: {}
+  tempVolume: {}
+  resources:
+    requests:
+      cpu: 1
+      memory: 1Gi
+    limits:
+      cpu: 4
+      memory: 24Gi
+  maxParallelJobs: 1
+  ttlSecondsAfterFinished: 43200
+
+# @extra Limits
+
+# @extra resources **Limits for the application service**
+# @param resources.requests.cpu A CPU request.
+# @param resources.requests.memory A memory request.
+# @param resources.limits.cpu A CPU limit.
+# @param resources.limits.memory A memory limit.
+
+resources:
+  requests:
+    cpu: 400m
+    memory: 256M
+  limits:
+    cpu: 1
+    memory: 1024M
+
+# @extra Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Name of the Ingress controller class.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration.
+
+ingress:
+  enabled: false
+  className: nginx
+  hosts:
+  - host: tilegen-api.host
+    paths:
+      - path: /
+        pathType: Prefix
+  tls: []
+    # - hosts:
+    #   - tilegen-api.example.com
+    #   secretName: secret.tls
