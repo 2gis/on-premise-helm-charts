@@ -24,7 +24,12 @@
 - Values section `.Values.reporters` replaced with `.Values.worker.reporterPro.enabled` field.
 - Worker `.Values.worker.detectionsLocalizer` requires
   - Asset "Objects" in Pro and topic `.Values.kafka.topics.proObjects` to be tied to that asset
-  - topic `.Values.kafka.topics.objectsLifecycle`
+  - topic `.Values.kafka.topics.objectsLifecycle` required
+- Added new services: `citylens-routes-api` and `citylens-worker-service`
+- Added new required parameters:
+  - `.Values.routes.postgres.database`
+  - `.Values.routes.hangfire.postgres.database`
+  - `.Values.routes.navi.url`
 
 ## [1.34.0]
 

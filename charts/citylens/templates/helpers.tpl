@@ -305,3 +305,72 @@ S3 key templates for frames & frames crops
 {{- define "citylens.s3_constants.crop_frame_key_template" -}}
 {track_uuid}/{frame_timestamp_ms}_{theta}.jpg
 {{- end -}}
+
+{{/*
+Citylens routes chart name
+*/}}
+
+{{- define "app.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Citylens routes name defines
+*/}}
+
+{{- define "citylens.routes" -}}
+{{ include "citylens.name" . }}-routes
+{{- end -}}
+
+{{- define "citylens.routes.api.name" -}}
+{{ include "citylens.routes" . }}{{- printf "-%s-%s" "api" .Values.routes.environment | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "citylens.routes.worker.name" -}}
+{{ include "citylens.routes" . }}{{- printf "-%s-%s" "worker" .Values.routes.environment | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "citylens.routes.migration.name" -}}
+{{ include "citylens.routes" . }}{{- printf "-%s-%s" "migration" .Values.routes.environment | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Citylens routes deployment labels
+*/}}
+
+{{- define "citylens.routes.api.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name | quote }}
+app.kubernetes.io/instance: {{ include "citylens.routes.api.name" . | quote }}
+{{- end -}}
+
+{{- define "citylens.routes.worker.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name | quote }}
+app.kubernetes.io/instance: {{ include "citylens.routes.worker.name" . | quote }}
+{{- end -}}
+
+{{- define "citylens.routes.api.labels" -}}
+helm.sh/chart: {{ include "app.chart" . }}
+{{ include "citylens.routes.api.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+{{- end -}}
+
+{{- define "citylens.routes.worker.labels" -}}
+helm.sh/chart: {{ include "app.chart" . }}
+{{ include "citylens.routes.worker.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+{{- end -}}
+
+{{- define "citylens.routes.migration.labels" -}}
+app.kubernetes.io/name: {{ .Release.Name | quote }}
+app.kubernetes.io/instance: {{ include "citylens.routes.migration.name" . | quote }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+{{- end -}}
