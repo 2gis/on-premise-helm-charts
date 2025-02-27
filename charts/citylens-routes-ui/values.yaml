@@ -1,0 +1,202 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+dgctlDockerRegistry: ''
+
+# @param imagePullPolicy Pull Policy
+# @param imagePullSecrets Kubernetes image pull secrets.
+imagePullPolicy: IfNotPresent
+imagePullSecrets: []
+
+# @section Strategy settings
+
+# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
+# @section Deployment settings
+
+# @param image.repository Repository
+# @param image.tag Tag
+image:
+  repository: 2gis-on-premise/citylens-routes-ui
+  tag: 0.0.21
+
+# @section Environment
+
+# @param env.CATALOG_API_URL Catalog API base URL **Required**
+# @param env.MAPGL_API_URL Map API base URL **Required**
+# @param env.MAPGL_COPYRIGHT_VARIANT Copyright variant, can be '2gis', 'urbi' or empty
+# @param env.MAPGL_KEY API key for mapgl **Required**
+# @param env.MAPGL_STYLE_ID Map style ID
+# @param env.PLATFORM_MANAGER_API_URL Platform manager API base URL **Required**
+# @param env.PLATFORM_MANAGER_CLIENT_ID OpenID client identifier for Platform manager **Required**
+# @param env.PLATFORM_MANAGER_CLIENT_SECRET OpenID client identifier for Platform manager **Required**
+# @param env.PLATFORM_MANAGER_SCOPE OpenID scope for Platform manager **Required**
+# @param env.ROUTES_API_URL Backend (citylens-routes-api) base URL **Required**
+env:
+  CATALOG_API_URL: ''
+  MAPGL_API_URL: ''
+  MAPGL_COPYRIGHT_VARIANT: ''
+  MAPGL_KEY: ''
+  MAPGL_STYLE_ID: ''
+  PLATFORM_MANAGER_API_URL: ''
+  PLATFORM_MANAGER_CLIENT_ID: ''
+  PLATFORM_MANAGER_CLIENT_SECRET: ''
+  PLATFORM_MANAGER_SCOPE: ''
+  ROUTES_API_URL: ''
+
+# @section Common deployment settings
+
+# @param replicas A replica count for the pod.
+# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param terminationGracePeriodSeconds Seconds pod needs to [terminate](https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods) gracefully
+# @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param healthcheckPath Application http path for health check
+# @param readinessProbe.enabled Enable [readinessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)
+# @param livenessProbe.enabled Enable [livenessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)
+# @param containerPort Port on which application listen connection in container
+replicas: 1
+revisionHistoryLimit: 3
+terminationGracePeriodSeconds: 60
+nodeSelector: {}
+affinity: {}
+tolerations: []
+podAnnotations: {}
+podLabels: {}
+annotations: {}
+labels: {}
+healthcheckPath: /health
+readinessProbe:
+  enabled: true
+livenessProbe:
+  enabled: true
+containerPort: 3000
+
+# @section Logs
+
+# @param log.formats List of log formats to be used in NGINX configuration, has `name`, `escape` and `format` properties
+# @param log.errorLog.level Error log level. Allowed values: `debug`, `info`, `notice`, `warn`, `error`, `crit`, `alert`, `emerg`.
+# @param log.accessLog NGINX access log definition. To enable add log path and format name, for example: '/dev/stdout main'
+log:
+  formats: []
+  #    - name: small
+  #      escape: json
+  #      format: |
+  #        '{"time_local":"$time_local",'
+  #        '"remote_addr":"$remote_addr",'
+  #        '"request":"$request",'
+  #        '"status":"$status",'
+  #        '"host":"$host"}'
+  errorLog:
+    level: debug
+  accessLog: /dev/null
+#  accessLog: '/dev/stdout main'
+
+# @section Service settings
+
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param service.port Service port.
+service:
+  annotations: {}
+  labels: {}
+  type: ClusterIP
+  port: 80
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param ingress.className Name of the Ingress controller class.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration
+ingress:
+  enabled: false
+  annotations: {}
+  className: nginx
+  hosts:
+  - host: citylens-routes-ui.example.com
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - citylens-routes-ui.example.com
+  #   secretName: secret.tls
+
+# @section Limits
+
+# @param resources.requests.cpu A CPU request.
+# @param resources.requests.memory A memory request.
+# @param resources.limits.cpu A CPU limit.
+# @param resources.limits.memory A memory limit.
+resources:
+  requests:
+    cpu: 300m
+    memory: 256Mi
+  limits:
+    cpu: 1
+    memory: 384Mi
+
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param pdb.enabled If PDB is enabled for the service
+# @param pdb.minAvailable How many pods must be available after the eviction
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction
+
+pdb:
+  enabled: false
+  minAvailable: ''
+  maxUnavailable: 1
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+# @param hpa.enabled If HPA is enabled for the service
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up
+# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window
+# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used
+# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used
+
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  scaleDownStabilizationWindowSeconds: ''
+  scaleUpStabilizationWindowSeconds: ''
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ''
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+# @param vpa.enabled If VPA is enabled for the service.
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @param vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @param vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @param vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+vpa:
+  enabled: false
+  updateMode: Auto
+  minAllowed:
+    cpu: 500m
+    memory: 128Mi
+  maxAllowed:
+    cpu: 2000
+    memory: 512Mi

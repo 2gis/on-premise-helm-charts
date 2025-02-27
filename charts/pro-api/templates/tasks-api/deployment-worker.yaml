@@ -8,7 +8,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "pro-api.tasksLabels" . | nindent 4 }}
+    {{- include "pro-api.tasksWorkerLabels" . | nindent 4 }}
   {{- with .Values.tasks.pod.labels }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -21,7 +21,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "pro-api.tasksSelectorLabels" . | nindent 6 }}
+      {{- include "pro-api.tasksWorkerLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -30,7 +30,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "pro-api.tasksLabels" . | nindent 8 }}
+        {{- include "pro-api.tasksWorkerLabels" . | nindent 8 }}
       {{- with .Values.tasks.pod.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -118,6 +118,13 @@ spec:
                 secretKeyRef:
                   key: tasksDbConnectionPwd
                   name: {{ include "pro-api.name" . }}-secret
+            {{- if .Values.postgres.tasks.ro.password }}
+            - name: Postgres__PasswordRo
+              valueFrom:
+                secretKeyRef:
+                  key: tasksDbConnectionPwdRo
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
             - name: Common__Logging__Format
               value: "{{ .Values.tasks.settings.logging.format }}"
             - name: Common__Logging__Targets

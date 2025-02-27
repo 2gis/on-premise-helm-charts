@@ -12,7 +12,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.permissions.pod.replicaCount }}
   revisionHistoryLimit: {{ .Values.permissions.pod.revisionHistoryLimit }}
   selector:
     matchLabels:
@@ -104,8 +104,6 @@ spec:
           env:
             - name: DEBUG
               value: "{{ .Values.api.settings.debug }}"
-            - name: ALLOW_ANY_ORIGIN
-              value: "{{ .Values.api.settings.allowAnyOrigin }}"
             - name: ENV
               value: "{{ .Values.api.settings.env }}"
             - name: Postgres__ConnectionString
@@ -117,6 +115,13 @@ spec:
                 secretKeyRef:
                   key: dbConnectionPwd
                   name: {{ include "pro-api.name" . }}-secret
+            {{- if .Values.postgres.api.ro.password }}
+            - name: Postgres__PasswordRo
+              valueFrom:
+                secretKeyRef:
+                  key: dbConnectionPwdRo
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
             - name: API_URL
               value: http://{{ include "pro-api.name" . }}
             - name: API_TOKEN
@@ -133,13 +138,13 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             - name: KEYS_SERVICE_URL
               value: "{{ .Values.keys.url }}"
-            {{ if .Values.keys.token }}
+            {{- if .Values.keys.token }}
             - name: KEYS_SERVICE_TOKEN
               valueFrom:
                 secretKeyRef:
                   key: keysServiceToken
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
+            {{- end }}
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
@@ -148,13 +153,13 @@ spec:
               value: "{{ .Values.redis.enabled }}"
             - name: Redis__Username
               value: {{ $.Values.redis.username }}
-            {{ if .Values.redis.password }}
+            {{- if .Values.redis.password }}
             - name: Redis__Password
               valueFrom:
                 secretKeyRef:
                   key: redisPassword
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
+            {{- end }}
             - name: Common__Logging__Format
               value: "{{ .Values.api.settings.logging.format }}"
             - name: Common__Logging__Targets
@@ -167,13 +172,13 @@ spec:
               value: {{ $.Values.kafka.sasl.mechanism }}
             - name: Kafka__SaslUsername
               value: {{ $.Values.kafka.sasl.username }}
-            {{ if .Values.kafka.sasl.password }}
+            {{- if .Values.kafka.sasl.password }}
             - name: Kafka__SaslPassword
               valueFrom:
                 secretKeyRef:
                   key: kafkaSaslPassword
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
+            {{- end }}
             - name: Kafka__PermissionsTopicSettings__Name
               value: "{{ $.Values.kafka.permissionsTopic.name }}"
             - name: Kafka__PermissionsTopicSettings__ReaderGroupId

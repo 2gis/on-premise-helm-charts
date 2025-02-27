@@ -125,8 +125,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.featureFlags.enableAudit }}"
 - name: KEYS_FEATURE_FLAGS_PUBLIC_API_SIGN
   value: "{{ .Values.featureFlags.enablePublicAPISign }}"
-- name: KEYS_FEATURE_FLAGS_EXTERNAL_COMPANIES
-  value: "{{ .Values.api.oidc.enableSignlePartnerMode }}"
+- name: KEYS_FEATURE_FLAGS_SINGLE_PARTNER_MODE
+  value: "{{ .Values.api.oidc.enableSinglePartnerMode }}"
+- name: KEYS_FEATURE_FLAGS_EXTERNAL_OIDC
+  value: "{{ .Values.api.oidc.enableExternalProvider }}"
 - name: KEYS_FEATURE_FLAGS_OIDC
   value: "{{ .Values.api.oidc.enable }}"
 {{- end }}

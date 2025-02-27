@@ -27,6 +27,10 @@ spec:
         - name: {{ include "pro-api.asset-importer-name" . }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.assetImporter.repository }}:{{ .Values.assetImporter.tag }}
           imagePullPolicy: IfNotPresent
+          {{- with .Values.assetImporter.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 16 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.assetImporter.resources | nindent 16 }}
           volumeMounts:
@@ -103,6 +107,8 @@ spec:
               value: "{{ .Values.api.settings.logging.targets }}"
             - name: Common__FailJobOnError
               value: "true"
+            - name: Common__TtlSecondsAfterFinished
+              value: "{{ .Values.assetImporter.settings.ttlSecondsAfterFinished }}"
             - name: Navi__Url
               value: {{ .Values.navi.url }}
             - name: Navi__Key

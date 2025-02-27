@@ -15,7 +15,7 @@ imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 image:
   repository: 2gis-on-premise/styles-api
-  tag: 0.30.0
+  tag: 0.38.0
 
 # @section API service settings
 
@@ -232,6 +232,9 @@ s3:
   # @param s3.secretKey S3 secret key. **Required**
   # @param s3.bucket S3 bucket name, for example 'styles'. **Required**
   # @param s3.publicDomain S3 public access domain. Uses https access. **Required**
+  # @param s3.region S3 region name. Default empty.
+  # @param s3.secure S3 use secure HTTPS protocol. Default false.
+  # @param s3.verifySsl S3 verifySsl SSL connection. Default false.
   # @param s3.connectTimeout S3 management client connection timeout. If not specified, the default value is 3s.
   # @param s3.requestTimeout S3 management client request timeout. If not specified, the default value is 30s.
   # @param s3.responseTimeout S3 management client response timeout. If not specified, the default value is 3s.
@@ -241,6 +244,9 @@ s3:
   secretKey: ''
   bucket: ''
   publicDomain: ''
+  region: ''
+  secure: false
+  verifySsl: false
   connectTimeout: 3s
   requestTimeout: 5s
   responseTimeout: 5s

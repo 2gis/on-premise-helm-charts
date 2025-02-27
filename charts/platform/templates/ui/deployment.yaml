@@ -59,9 +59,11 @@ spec:
               value: {{ required ".Values.ui.brand is required" .Values.ui.brand | quote }}
             - name: PAGES
               value: {{ required ".Values.ui.pages is required" .Values.ui.pages | quote }}
-            {{- if .Values.ui.platform }}
             - name: PLATFORM_API_URL
               value: {{ .Values.ui.platform.api.url | quote }}
+            {{- if .Values.ui.legal }}
+            - name: SHOW_LEGAL_AGREEMENTS
+              value: {{ .Values.ui.legal.showLegalAgreements | quote }}
             {{- end }}
             - name: GOOGLE_ANALYTICS_ID
               value: {{ .Values.ui.googleAnalyticsId | quote}}
@@ -97,24 +99,28 @@ spec:
               value: {{ .Values.ui.status.gisPlatform | quote }}
             - name: KEYS_STATUS
               value: {{ .Values.ui.status.keys | quote }}
-            {{- if .Values.ui.oauth}}
-            - name: OAUTH_API_URL
-              value: {{ .Values.ui.oauth.url | quote }}
-            - name: OAUTH_IDENTITY_PROVIDER_URL
-              value: {{ .Values.ui.oauth.identityProviderUrl | quote }}
+            - name: MAP_STYLES_STATUS
+              value: {{ .Values.ui.status.mapStyles | quote }}
+            - name: GOD_MODE
+              value: {{ .Values.ui.godmode | default "false" | quote }}
+            - name: REDIRECT_SAFE_DOMAINS
+              value: {{ .Values.ui.redirectSafeDomains }}
+            - name: PLAYGROUNDS
+              value: {{ .Values.ui.playgrounds | quote }}
+            - name: OAUTH_WELLKNOWN_URL
+              value: {{ .Values.ui.oauth.wellknownUrl | quote }}
             - name: OAUTH_CLIENT_ID
               value: {{ .Values.ui.oauth.clientId | quote }}
             - name: OAUTH_CLIENT_SECRET
               value: {{ .Values.ui.oauth.clientSecret | quote }}
+            - name: OAUTH_SCOPE
+              value: {{ .Values.ui.oauth.scope | quote }}
             - name: OAUTH_CODE_URL
               value: {{ .Values.ui.oauth.codeUrl | quote }}
             - name: OAUTH_SAFE_HOSTS
               value: {{ .Values.ui.oauth.safeHosts }}
             - name: OAUTH_SECURE
               value: {{ .Values.ui.oauth.secure | quote }}
-            - name: OAUTH_SIGNUP_MAIL_TEMPLATE_PATH
-              value: {{ .Values.ui.oauth.signupMailTemplatePath | quote }}
-            {{- end }}
             - name: HOME
               value: "/tmp"
       {{- with .Values.ui.nodeSelector }}

@@ -1,5 +1,4 @@
-﻿{{ if .Values.assetImporter.enabled }}
-apiVersion: batch/v1
+﻿apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ include "pro-api.asset-importer-name" . }}
@@ -31,6 +30,10 @@ spec:
             - name: {{ include "pro-api.asset-importer-name" . }}
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.assetImporter.repository }}:{{ .Values.assetImporter.tag }}
               imagePullPolicy: IfNotPresent
+              {{- with .Values.assetImporter.imagePullSecrets }}
+              imagePullSecrets:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               resources:
                 {{- toYaml .Values.assetImporter.resources | nindent 16 }}
               volumeMounts:
@@ -101,9 +104,9 @@ spec:
                 - name: FILES
                   value: "{{ .Values.assetImporter.settings.files}}"
                 {{- end }}
-                - name: DB_CONNECTION_STRING
-                  value: {{ include "pro-api.connectionString" . }}
-                - name: DB_CONNECTION_PWD
+                - name: Postgres__ConnectionString
+                  value: {{ include "pro-tasks.connectionString" . }}
+                - name: Postgres__Password
                   valueFrom:
                     secretKeyRef:
                       key: dbConnectionPwd
@@ -114,6 +117,8 @@ spec:
                   value: "{{ .Values.api.settings.logging.targets }}"
                 - name: Common__EsMetricsEnabled
                   value: "{{ .Values.assetImporter.settings.esMetricsEnabled }}"
+                - name: Common__TtlSecondsAfterFinished
+                  value: "{{ .Values.assetImporter.settings.ttlSecondsAfterFinished }}"
                 - name: Digger__Address
                   value: "{{ .Values.digger.url}}"
                 - name: Digger__UserName
@@ -136,4 +141,3 @@ spec:
                   value: "{{ .Values.tileGen.url }}"
                 - name: TileGen__UserDataTileSet
                   value: "{{ .Values.tileGen.userDataTileSet }}"
-{{ end }}

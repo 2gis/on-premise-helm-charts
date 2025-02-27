@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 1.54.0
+    tag: 2.2.1
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -112,7 +112,6 @@ api:
 
   # @param api.settings.licenseKey License key. **Required**
   # @param api.settings.tempPath Path to directory used for temp data
-  # @param api.settings.allowAnyOrigin Cors policy: allow any origin to perform requests to pro-api service
   # @skip api.settings.logEsQueries
   # @skip api.settings.debug
   # @skip api.settings.env
@@ -126,7 +125,6 @@ api:
   # @param api.settings.rateLimiter.windowSizeInSeconds the size of time windows to count and limit incoming requests
   # @skip api.settings.localCache.enabled
   # @skip api.settings.localCache.trackStatistics
-  # @skip api.settings.openApi.servers
   # @param api.settings.auth.type Authentication type: 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol. **Required**
   # @param api.settings.auth.url API URL of authentication service. Example: `http(s)://keycloak.ingress.host`. **Required**
   # @param api.settings.auth.userInfoEndpoint The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`
@@ -139,10 +137,11 @@ api:
   # @param api.settings.backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
   # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount Maximum number of points in a layer for generating isochrones.
   # @skip api.settings.tasksApi.useForLayerDataPreparation
+  # @param api.settings.corsOrigins Cors policy: allow any origin if empty. Example: `https://*.host.ae;https://*.host.ru;`
   settings:
     licenseKey: ''
     tempPath: /tmp
-    allowAnyOrigin: false
+    corsOrigins: ''
     logEsQueries: false
     debug: false
     env: ''
@@ -157,8 +156,6 @@ api:
     localCache:
       enabled: true
       trackStatistics: false
-    openApi:
-      servers: []
     auth:
       type: openid10
       url: ''
@@ -185,7 +182,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 1.54.0
+    tag: 2.2.1
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -205,6 +202,7 @@ permissions:
     tls: []
     #   secretName: secret.tls
 
+  # @param permissions.pod.replicaCount A replica count for the pod.
   # @param permissions.pod.imagePullSecrets Kubernetes image pull secrets.
   # @param permissions.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param permissions.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
@@ -222,6 +220,7 @@ permissions:
   # @param permissions.pod.resources.limits.cpu A CPU limit.
   # @param permissions.pod.resources.limits.memory A memory limit.
   pod:
+    replicaCount: 1
     imagePullSecrets: []
     nodeSelector: {}
     affinity: {}
@@ -270,7 +269,7 @@ tasks:
 
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 1.54.0
+    tag: 2.2.1
     pullPolicy: IfNotPresent
 
   ingress:
@@ -346,9 +345,10 @@ tasks:
 # @param assetImporter.appName Data Import job name.
 # @param assetImporter.repository Docker Repository Image.
 # @param assetImporter.tag Docker image tag.
+# @param assetImporter.imagePullSecrets Kubernetes image pull secrets.
 # @param assetImporter.schedule Import job schedule.
 # @param assetImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
-# @param assetImporter.successfulJobsHistoryLimit How many completed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
+# @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
 # @param assetImporter.failedJobsHistoryLimit How many failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
 # @param assetImporter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param assetImporter.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -357,7 +357,6 @@ tasks:
 # @param assetImporter.resources.requests.memory A memory request.
 # @param assetImporter.resources.limits.cpu A CPU limit.
 # @param assetImporter.resources.limits.memory A memory limit.
-# @param assetImporter.enabled If assetImporter is enabled for the service.
 # @skip assetImporter.suspended
 # @param assetImporter.startOnDeploy Indicates that asset import should start when service installed or updated
 # @param assetImporter.startOnDeployMode Import mode: 'ScheduleManifest' - copy data from manifest and schedule import, 'ManifestData' - just copy data from manifest.
@@ -369,11 +368,13 @@ tasks:
 # @param assetImporter.settings.externalLinksAllowedHosts Comma separated hosts, i.e. 'someserver.com,someserver2.com' )
 # @skip assetImporter.settings.esMetricsEnabled
 # @param assetImporter.settings.failedImportJobsLimit How many import jobs can fail before scheduler stops creating new imports
+# @param assetImporter.settings.ttlSecondsAfterFinished Kubernetes [time-to-live setting] (https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished)
 
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 1.54.0
+  tag: 2.2.1
+  imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -387,7 +388,6 @@ assetImporter:
     limits:
       cpu: 1000m
       memory: 8Gi
-  enabled: true
   suspended: false
   startOnDeploy: true
   startOnDeployMode: ScheduleManifest
@@ -399,6 +399,7 @@ assetImporter:
     externalLinksAllowedHosts: ''
     esMetricsEnabled: false
     failedImportJobsLimit: 0
+    ttlSecondsAfterFinished: 86400  # 1 day
 
 
 # @section asset preparer settings
@@ -408,11 +409,12 @@ assetImporter:
 assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
-  tag: 1.54.0
+  tag: 2.2.1
+  imagePullSecrets: []
   schedule: 0 16 * * 6
   backoffLimit: 2
   successfulJobsHistoryLimit: 1
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
   nodeSelector: {}
   tolerations: []
   resources:
@@ -525,6 +527,7 @@ postgres:
 
 # @param kafka.bootstrapServers Kafka bootstrap servers. Format: 'host1:port1,host2:port2'
 # @param kafka.securityProtocol Kafka security protocol. Supported options: SaslPlaintext.
+# @param kafka.createTopics Automatically create topics in their absence.
 # @extra kafka.sasl **Kafka sasl settings** (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config))
 # @param kafka.sasl.mechanism Kafka sasl mechanism. Supported options: ScramSha512.
 # @param kafka.sasl.username Kafka sasl username.
@@ -545,6 +548,7 @@ postgres:
 kafka:
   bootstrapServers: ''
   securityProtocol: SaslPlaintext
+  createTopics: true
   sasl:
     mechanism: ScramSha512
     username: ''

@@ -3,10 +3,10 @@ name: navi-attractor
 description: Attractor Helm chart
 type: application
 keywords:
-  - navi
-  - attractor
-version: 0.1.0
-appVersion: 7.33.0.5
+- navi
+- attractor
+version: 1.35.0
+appVersion: 7.27.1.2
 dependencies:
 - name: generic-chart
   version: '*'
