@@ -20074,6 +20074,21 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/tilegen-1.35.0/tilegen-1.35.0.tgz
     version: 1.35.0
+  tilegen-api:
+  - apiVersion: v2
+    appVersion: 1.1.8
+    created: "2025-02-28T09:16:31.74676794Z"
+    description: API for generating vector tiles from user data
+    digest: 55af710d5fc1870bddc3a2f939011b0c4245d28952f51a61c4cb29ec6fb3f1c1
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: tilegen-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/tilegen-api-1.35.0/tilegen-api-1.35.0.tgz
+    version: 1.35.0
   tiles-api:
   - apiVersion: v2
     appVersion: 4.64.1
@@ -22403,4 +22418,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/zookeeper-1.5.2/zookeeper-1.5.2.tgz
     version: 1.5.2
-generated: "2025-02-26T13:49:49.778544431Z"
+generated: "2025-02-28T09:16:32.305301192Z"
