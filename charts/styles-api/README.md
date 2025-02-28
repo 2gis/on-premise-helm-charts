@@ -47,7 +47,7 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 | `api.podLabels`                                                       | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                  | `{}`                                                      |
 | `api.nodeSelector`                                                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                  | `{}`                                                      |
 | `api.affinity`                                                        | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                          | `{}`                                                      |
-| `api.tolerations`                                                     | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                    | `{}`                                                      |
+| `api.tolerations`                                                     | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                    | `[]`                                                      |
 | `api.service.annotations`                                             | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                    | `{}`                                                      |
 | `api.service.labels`                                                  | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                              | `{}`                                                      |
 | `api.service.type`                                                    | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                       | `ClusterIP`                                               |
@@ -87,7 +87,7 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 | `worker.podLabels`                 | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`    |
 | `worker.nodeSelector`              | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`    |
 | `worker.affinity`                  | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`    |
-| `worker.tolerations`               | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`    |
+| `worker.tolerations`               | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`    |
 
 ### Migrate service settings
 
@@ -104,6 +104,7 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 | `migrate.resources.limits.cpu`      | A CPU limit.                                                                                                        | `100m` |
 | `migrate.resources.limits.memory`   | A memory limit.                                                                                                     | `64Mi` |
 | `migrate.nodeSelector`              | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`   |
+| `migrate.tolerations`               | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.   | `[]`   |
 
 ### Logging settings
 

@@ -69,7 +69,7 @@ api:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
   # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -162,7 +162,7 @@ worker:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
 # @section Migrate service settings
 
@@ -189,6 +189,9 @@ migrate:
   # @param migrate.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 
   nodeSelector: {}
+
+  # @param migrate.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  tolerations: []
 
 # @section Logging settings
 

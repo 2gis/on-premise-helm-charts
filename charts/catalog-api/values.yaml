@@ -264,6 +264,7 @@ license:
 
 # @extra importer **Common settings**
 # @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param importer.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
 # @param importer.workerNum Number of parallel import processes (workers)
 # @param importer.initialDelaySeconds Number of seconds after the container has started before liveness or readiness probes are initiated
 # @param importer.retry.download.maxAttempts The maximum number of retries download before stopping
@@ -273,6 +274,8 @@ license:
 
 importer:
   nodeSelector: {}
+  tolerations: []
+
   workerNum: 3
   initialDelaySeconds: 1
   retry:

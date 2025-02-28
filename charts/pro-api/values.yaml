@@ -351,6 +351,7 @@ tasks:
 # @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
 # @param assetImporter.failedJobsHistoryLimit How many failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
 # @param assetImporter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param assetImporter.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @extra assetImporter.resources **Limits for the import job**
 # @param assetImporter.resources.requests.cpu A CPU request.
 # @param assetImporter.resources.requests.memory A memory request.
@@ -379,6 +380,7 @@ assetImporter:
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
   nodeSelector: {}
+  tolerations: []
   resources:
     requests:
       cpu: 700m
@@ -414,6 +416,7 @@ assetPreparer:
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 3
   nodeSelector: {}
+  tolerations: []
   resources:
     requests:
       cpu: 300m

@@ -44,6 +44,10 @@ spec:
             configMap:
               name: {{ include "castle.fullname" $ }}-ca
           {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           containers:
             - name: castle-cron
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag | default $.Chart.AppVersion }}
