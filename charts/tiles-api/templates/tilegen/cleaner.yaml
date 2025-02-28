@@ -91,5 +91,5 @@ spec:
               - name: SSL_CERT_DIR
                 value: {{ include "tiles.customCA.mountPath" $ }}
               {{- end }}
-{{- end}}
-{{- end}}
+{{- end }}
+{{- end }}
