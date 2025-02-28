@@ -48,7 +48,7 @@ data:
           partition-size: 4
           periodic-cleanup: 
             enable: true
-        {{- end}}
+        {{- end }}
 
     {{- end }}
 
@@ -141,5 +141,5 @@ data:
 
           restartPolicy: Never
 
-{{- end}}
-{{- end}}
+{{- end }}
+{{- end }}

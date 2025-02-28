@@ -118,7 +118,7 @@ spec:
               value: {{ include "tiles.customCA.mountPath" $ }}
             {{- end }}
 
-          {{- end}}
+          {{- end }}
 
       restartPolicy: Never
 {{- end }}
