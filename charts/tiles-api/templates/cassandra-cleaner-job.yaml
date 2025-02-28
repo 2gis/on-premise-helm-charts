@@ -61,7 +61,7 @@ spec:
           image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
           imagePullPolicy: {{ .image.pullPolicy }}
           command: [ "/selfimporter", "clear" ]
-          {{- end}}
+          {{- end }}
 
           volumeMounts:
             - name: tmp-volume
