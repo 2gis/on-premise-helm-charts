@@ -82,18 +82,49 @@ make charts/navi-back
 
   ```yaml
   kafka:
-    enabled: false
     groupId: example_group
     bootstrapServers: ''
-    securityProtocol: SaslPlaintext
-    sasl:
-      mechanism: ScramSha512
-      username: ''
-      password: ''
+    securityProtocol: PLAINTEXT # тут не нужно оставлять хардкодом, нужно иметь возможность в несколько разных протоколов
+    saslMechanism: PLAIN
+    username: ''
+    password: ''
+    tls:
+      skipServerCertificateVerify: false
+      serverCA: ''
+      clientCert: ''
+      clientKey: ''
   ```
 
-  - Настройки S3: `host`, `bucket`, `accessKey`, `secretKey`, `region`.
-  - Настройки PostgreSQL: `host`, `port`, `name`, `username`, `password`.
+  - Настройки S3: `host`, `region`, `secure`, `verifySsl`, `bucket`, `accessKey`, `secretKey`.
+
+  ```yaml
+  s3:
+    host: ''
+    region: ''
+    secure: false
+    verifySsl: true
+    bucket: ''
+    accessKey: ''
+    secretKey: ''
+  ```
+
+  - Настройки PostgreSQL: `host`, `port`, `name`, `username`, `password`, `tls`.
+
+  ```yaml
+  postgres:
+    host: ''
+    port: 5432
+    name: ''
+    username: ''
+    password: ''
+    tls:
+      enabled: false
+      rootCert: ''
+      cert: ''
+      key: ''
+      mode: verify-full
+  ```
+
   - Настройки Ingress: `enabled`, `host`. Другие настройки Ingress не описываем.
   - horizontalPodAutoscaler - hpa
   - verticalPodAutoscaler - vpa
