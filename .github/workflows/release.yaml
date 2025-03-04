@@ -9,6 +9,8 @@ on:
 env:
   CHART_RELEASER_VERSION: v1.3.0
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CHART_RELEASER_OWNER: ${{ github.repository_owner }}
+  CHART_RELEASER_REPO: ${{ github.event.repository.name }}
 
 jobs:
   release:
@@ -62,9 +64,6 @@ jobs:
           done
 
       - name: Upload releases
-        env:
-          CHART_RELEASER_OWNER: ${{ github.repository_owner }}
-          CHART_RELEASER_REPO: ${{ github.event.repository.name }}
         run: |
           cr upload \
             -o "$CHART_RELEASER_OWNER" \
@@ -73,10 +72,6 @@ jobs:
             -t "$GITHUB_TOKEN"
 
       - name: Update index
-        env:
-          CHART_RELEASER_OWNER: ${{ github.repository_owner }}
-          CHART_RELEASER_REPO: ${{ github.event.repository.name }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cr index \
             -o "$CHART_RELEASER_OWNER" \
