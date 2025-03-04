@@ -107,6 +107,8 @@ keys:
     public-transport-api: ''
     truck-directions-api: ''
     truck-distance-matrix-api: ''
+    routing-api: ''
+    route-planner-api: ''
 
 
 # @section Service account settings
