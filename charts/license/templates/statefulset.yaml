@@ -114,6 +114,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "license.fullname" $ }}
                   key: persistenceS3SecretKey
+            - name: LOG_LEVEL
+              value: {{ $.Values.license.log.level }}
+            - name: LOG_FORMAT
+              value: {{ $.Values.license.log.format }}
             {{- if $.Values.customCAs.bundle }}
             - name: SSL_CERT_DIR
               value: {{ include "license.customCA.mountPath" $ }}

@@ -65,7 +65,7 @@ imagePullSecrets: []
 
 image:
   repository: 2gis-on-premise/license
-  tag: 2.2.4
+  tag: 2.4.1
   pullPolicy: IfNotPresent
 
 # @section License service application settings
@@ -82,6 +82,12 @@ license:
   softBlockPeriod: 2w
   statusPort: 8080
   apiPort: 8443
+
+  # @param license.log.level Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`, `panic`.
+  # @param license.log.format Log format for the service. Can be: `text`, `json`.
+  log:
+    level: 'info'
+    format: 'text'
 
 # @section Service settings
 
