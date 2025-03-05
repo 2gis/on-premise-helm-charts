@@ -26,10 +26,6 @@
 {{ include "keys.name" . }}-import
 {{- end }}
 
-{{- define "keys.redis.name" -}}
-{{ include "keys.name" . }}-redis
-{{- end }}
-
 {{- define "keys.admin.name" -}}
 {{ include "keys.name" . }}-admin
 {{- end }}
@@ -65,16 +61,6 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.migrate.labels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-migrate
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-
-{{- define "keys.redis.selectorLabels" -}}
-app.kubernetes.io/name: {{ .Chart.Name }}-redis
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{- define "keys.redis.labels" -}}
-{{ include "keys.redis.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
@@ -286,15 +272,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.redis" -}}
-{{- if .Values.redis.useExternalRedis -}}
 - name: KEYS_REDIS_HOST
   value: "{{ .Values.redis.host }}"
 - name: KEYS_REDIS_DB
   value: "{{ .Values.redis.db }}"
-{{- else  -}}
-- name: KEYS_REDIS_HOST
-  value: "{{ include "keys.redis.name" . }}"
-{{- end  }}
 - name: KEYS_REDIS_PORT
   value: "{{ .Values.redis.port }}"
 {{- if .Values.redis.password }}
@@ -518,7 +499,7 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- end -}}
 
 {{- define "keys.psql.volumeMount" -}}
-{{- if or 
+{{- if or
   (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
   (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
 -}}
@@ -528,7 +509,7 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- end -}}
 
 {{- define "keys.psql.volume" -}}
-{{- if or 
+{{- if or
   (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
   (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
 -}}
@@ -612,7 +593,7 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- end -}}
 
 {{- define "keys.psql.initTLS" -}}
-{{- if or 
+{{- if or
   (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
   (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
 -}}
