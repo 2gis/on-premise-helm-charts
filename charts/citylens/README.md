@@ -546,7 +546,7 @@ See the [documentation]() to learn about:
 | Name                          | Description  | Value                                 |
 | ----------------------------- | ------------ | ------------------------------------- |
 | `routes.api.image.repository` | Repository.  | `2gis-on-premise/citylens-routes-api` |
-| `routes.api.image.tag`        | Tag.         | `1.0.14`                              |
+| `routes.api.image.tag`        | Tag.         | `1.0.15`                              |
 | `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        |
 
 ### Resources settings
@@ -635,7 +635,7 @@ See the [documentation]() to learn about:
 | Name                             | Description  | Value                                     |
 | -------------------------------- | ------------ | ----------------------------------------- |
 | `routes.worker.image.repository` | Repository.  | `2gis-on-premise/citylens-worker-service` |
-| `routes.worker.image.tag`        | Tag.         | `1.0.14`                                  |
+| `routes.worker.image.tag`        | Tag.         | `1.0.15`                                  |
 | `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            |
 
 ### Resources settings
@@ -682,7 +682,7 @@ See the [documentation]() to learn about:
 | `routes.worker.busConfig.securityInformation.securityProtocol` | Valid values are: Plaintext, Ssl, SaslPlaintext, SaslSsl. Default: SaslPlaintext.                                                                            | `SaslPlaintext` |
 | `routes.worker.busConfig.consumers`                            | Consumers for the bus configuration.                                                                                                                         |                 |
 | `routes.worker.busConfig.consumers.appEvents`                  | App events for the consumers.                                                                                                                                |                 |
-| `routes.worker.busConfig.consumers.appEvents.groupId`          | The group ID for the app events.                                                                                                                             | `""`            |
+| `routes.worker.busConfig.consumers.appEvents.groupId`          | The group ID for the app events. **Required**                                                                                                                | `""`            |
 | `routes.worker.busConfig.consumers.appEvents.bufferSize`       | The buffer size for the app events.                                                                                                                          | `100`           |
 | `routes.worker.busConfig.consumers.appEvents.workersCount`     | The workers count for the app events.                                                                                                                        | `10`            |
 
