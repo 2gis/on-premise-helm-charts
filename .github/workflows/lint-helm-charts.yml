@@ -35,40 +35,37 @@ jobs:
           chmod +x kubeconform
           sudo mv kubeconform /usr/local/bin/
 
-      - name: Determine Charts to Lint
-        id: charts-list
+      - name: Generate `values-auto.yaml` for all charts
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            # Ручной запуск: проверяем все чарты
-            CHARTS=$(ls -d charts/*/ | sed 's|charts/||' | sed 's|/||')
-          else
-            # PR: анализируем измененные чарты относительно origin/develop
-            CHANGED_FILES=$(git diff --name-only origin/${{ env.MAIN_BRANCH }} HEAD -- charts/)
-            CHARTS=$(echo "$CHANGED_FILES" | grep -oP 'charts/\K[^/]+' | sort | uniq)
-          fi
+          for chart in charts/*; do
+            if [[ -d "$chart" ]]; then
+              chart_name=$(basename "$chart")
+              echo "Processing chart: $chart_name"
 
-          if [ -z "$CHARTS" ]; then
-            echo "No charts to lint."
-            echo "charts=" >> $GITHUB_ENV
-          else
-            echo "Linting charts: $CHARTS"
-            echo "charts=$CHARTS" >> $GITHUB_ENV
-          fi
+              helm show values "$chart" > "$chart/values-auto.yaml"
+
+              # Заменяем `: ''` на `ключ-example`
+              awk '
+                function key_example(key) {
+                  gsub(/\./, "_", key)
+                  return key "-example"
+                }
+                /: *'\'''\''/ { sub(/'\'''\''/, "\"" key_example($1) "\"") } 1
+              ' "$chart/values-auto.yaml" > "$chart/values-auto.yaml.tmp" && mv "$chart/values-auto.yaml.tmp" "$chart/values-auto.yaml"
+            fi
+          done
 
       - name: Lint and Validate Charts
-        if: env.charts != ''
         run: |
-          mkdir -p rendered
-          for CHART in ${{ env.charts }}; do
-            echo "Linting chart: $CHART"
-            helm lint charts/$CHART
+          for chart in charts/*; do
+            if [[ -d "$chart" ]]; then
+              echo "Linting chart: $(basename "$chart")"
+              helm lint "$chart"
 
-            echo "Running chart-testing on: $CHART"
-            ct lint --charts charts/$CHART
+              echo "Running chart-testing on: $(basename "$chart")"
+              ct lint --charts "$chart"
 
-            echo "Generating Kubernetes manifests for validation"
-            helm template charts/$CHART > rendered/$CHART.yaml
-
-            echo "Validating Kubernetes manifests with kubeconform"
-            kubeconform -summary -output json rendered/$CHART.yaml
+              echo "Validating chart: $(basename "$chart")"
+              helm template "$chart" -f "$chart/values-auto.yaml" | kubeconform -summary -output json
+            fi
           done
