@@ -1,5 +1,5 @@
 apiVersion: v2
-name: tilegen
+name: tilegen-api
 description: API for generating vector tiles from user data
 
 type: application

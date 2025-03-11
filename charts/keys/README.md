@@ -34,8 +34,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `backend.image.tag`        | Backend service image tag.        | `1.112.2`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
 | `admin.image.tag`          | Admin service image tag.          | `0.10.5`                       |
-| `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
-| `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
 
 ### Flags for enabling/disabling certain features.
 
@@ -200,21 +198,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Redis settings
 
-| Name                     | Description                                                                                                                 | Value             |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `redis.port`             | HTTP port for Redis to listen.                                                                                              | `6379`            |
-| `redis.configPath`       | Path to Redis configuration file.                                                                                           | `/opt/redis.conf` |
-| `redis.password`         | Redis password. Empty string if no authentication is required.                                                              | `""`              |
-| `redis.useExternalRedis` | If true, external Redis server will be used.                                                                                | `false`           |
-| `redis.host`             | External Redis hostname or IP.                                                                                              | `""`              |
-| `redis.db`               | External Redis database number.                                                                                             | `1`               |
-| `redis.annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`              |
-| `redis.labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`              |
-| `redis.podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`              |
-| `redis.podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`              |
-| `redis.nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`              |
-| `redis.affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`              |
-| `redis.tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`              |
+| Name             | Description                                                    | Value  |
+| ---------------- | -------------------------------------------------------------- | ------ |
+| `redis.host`     | Redis hostname or IP.                                          | `""`   |
+| `redis.port`     | Redis port.                                                    | `6379` |
+| `redis.db`       | Redis database number.                                         | `1`    |
+| `redis.password` | Redis password. Empty string if no authentication is required. | `""`   |
 
 ### Database access settings
 
@@ -343,11 +332,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `dispatcher.cleaner.resources.requests.memory` | A memory request.                     | `32Mi`  |
 | `dispatcher.cleaner.resources.limits.cpu`      | A CPU limit.                          | `100m`  |
 | `dispatcher.cleaner.resources.limits.memory`   | A memory limit.                       | `64Mi`  |
-| `redis.resources`                              | **Limits for Redis**                  |         |
-| `redis.resources.requests.cpu`                 | A CPU request.                        | `50m`   |
-| `redis.resources.requests.memory`              | A memory request.                     | `32Mi`  |
-| `redis.resources.limits.cpu`                   | A CPU limit.                          | `1`     |
-| `redis.resources.limits.memory`                | A memory limit.                       | `256Mi` |
 
 ### customCAs **Custom Certificate Authority**
 

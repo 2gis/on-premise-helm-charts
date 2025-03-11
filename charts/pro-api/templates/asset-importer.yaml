@@ -105,7 +105,7 @@ spec:
                   value: "{{ .Values.assetImporter.settings.files}}"
                 {{- end }}
                 - name: Postgres__ConnectionString
-                  value: {{ include "pro-tasks.connectionString" . }}
+                  value: {{ include "pro-api.connectionString" . }}
                 - name: Postgres__Password
                   valueFrom:
                     secretKeyRef:
