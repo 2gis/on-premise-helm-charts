@@ -1,11 +1,9 @@
 # 2GIS On-Premise Breaking-Changes
 
-## 1.36.0
+## [1.36.0]
 
-## keys
-The in-chart Redis deployment has been **removed**. You must configure an **external Redis instance** for the application to function **before upgrading**.
-
-If you were using the in-chart Redis instance for additional tasks, make sure to **migrate those workloads** to a different Redis instance before proceeding with the upgrade.
+### keys
+- The in-chart Redis deployment has been **removed**. You must configure an **external Redis instance** for the application to function **before upgrading**.  If you were using the in-chart Redis instance for additional tasks, make sure to **migrate those workloads** to a different Redis instance before proceeding with the upgrade.
 
 ## [1.35.0]
 
