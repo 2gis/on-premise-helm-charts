@@ -13,8 +13,6 @@ dgctlDockerRegistry: ''
 # @param backend.image.tag Backend service image tag.
 # @param admin.image.repository Admin service image repository.
 # @param admin.image.tag Admin service image tag.
-# @param redis.image.repository Redis image repository.
-# @param redis.image.tag Redis image tag.
 
 imagePullSecrets: []
 imagePullPolicy: IfNotPresent
@@ -97,7 +95,7 @@ admin:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
   # @param admin.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param admin.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -223,7 +221,7 @@ api:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
   # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -286,6 +284,8 @@ import:
 
   nodeSelector: {}
 
+  # @param import.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  tolerations: []
 
 # @section Migrate service settings
 
@@ -309,6 +309,9 @@ migrate:
   # @param migrate.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 
   nodeSelector: {}
+
+  # @param migrate.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  tolerations: []
 
 
 # @section Tasker service settings
@@ -362,7 +365,7 @@ tasker:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
 
 # @section Dispatcher settings
@@ -423,7 +426,7 @@ dispatcher:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
 
   # @extra dispatcher.cleaner **Settings for cronjob that cleans sent messages from database**
@@ -465,56 +468,15 @@ dispatcher:
 # @section Redis settings
 
 redis:
-  image:
-    repository: 2gis-on-premise/keys-redis
-    tag: 6.2.6-alpine3.15
-
-  resources:
-    requests:
-      cpu: 50m
-      memory: 32Mi
-    limits:
-      cpu: 1
-      memory: 256Mi
-
-  # @param redis.port HTTP port for Redis to listen.
-  # @param redis.configPath Path to Redis configuration file.
-
-  port: 6379
-  configPath: /opt/redis.conf
-
+  # @param redis.host Redis hostname or IP.
+  # @param redis.port Redis port.
+  # @param redis.db Redis database number.
   # @param redis.password Redis password. Empty string if no authentication is required.
 
-  password: ''
-
-  # @param redis.useExternalRedis If true, external Redis server will be used.
-  # @param redis.host External Redis hostname or IP.
-  # @param redis.db External Redis database number.
-
-  useExternalRedis: false
   host: ''
+  port: 6379
   db: 1
-
-  # @param redis.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-  # @param redis.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-
-  annotations: {}
-  labels: {}
-
-  # @param redis.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-  # @param redis.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-
-  podAnnotations: {}
-  podLabels: {}
-
-  # @param redis.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-  # @param redis.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
-  # @param redis.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-
-  nodeSelector: {}
-  affinity: {}
-  tolerations: {}
-
+  password: ''
 
 # @section Database access settings
 
@@ -731,12 +693,6 @@ dgctlStorage:
 # @param dispatcher.cleaner.resources.requests.memory A memory request.
 # @param dispatcher.cleaner.resources.limits.cpu A CPU limit.
 # @param dispatcher.cleaner.resources.limits.memory A memory limit.
-
-# @extra redis.resources **Limits for Redis**
-# @param redis.resources.requests.cpu A CPU request.
-# @param redis.resources.requests.memory A memory request.
-# @param redis.resources.limits.cpu A CPU limit.
-# @param redis.resources.limits.memory A memory limit.
 
 # @section customCAs **Custom Certificate Authority**
 

@@ -34,8 +34,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `backend.image.tag`        | Backend service image tag.        | `1.112.2`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
 | `admin.image.tag`          | Admin service image tag.          | `0.10.5`                       |
-| `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
-| `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
 
 ### Flags for enabling/disabling certain features.
 
@@ -63,7 +61,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `admin.podLabels`                             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`            |
 | `admin.nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
 | `admin.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
-| `admin.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `{}`            |
+| `admin.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `[]`            |
 | `admin.service.annotations`                   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                        | `{}`            |
 | `admin.service.labels`                        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                  | `{}`            |
 | `admin.service.type`                          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                           | `ClusterIP`     |
@@ -109,7 +107,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.podLabels`                             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                        | `{}`            |
 | `api.nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                                        | `{}`            |
 | `api.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                                                | `{}`            |
-| `api.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                                          | `{}`            |
+| `api.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                                          | `[]`            |
 | `api.service.annotations`                   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                          | `{}`            |
 | `api.service.labels`                        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                    | `{}`            |
 | `api.service.type`                          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                                             | `ClusterIP`     |
@@ -140,6 +138,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | --------------------- | ------------------------------------------------------------------------------------------------------------------- | --------- |
 | `import.logLevel`     | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                           | `warning` |
 | `import.nodeSelector` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`      |
+| `import.tolerations`  | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.   | `[]`      |
 
 ### Migrate service settings
 
@@ -148,6 +147,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `migrate.logLevel`            | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                           | `warning` |
 | `migrate.initialDelaySeconds` | Delay in seconds at the service startup.                                                                            | `0`       |
 | `migrate.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`      |
+| `migrate.tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.   | `[]`      |
 
 ### Tasker service settings
 
@@ -165,7 +165,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `tasker.podLabels`                             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`            |
 | `tasker.nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
 | `tasker.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
-| `tasker.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `{}`            |
+| `tasker.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `[]`            |
 
 ### Dispatcher settings
 
@@ -186,7 +186,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `dispatcher.podLabels`                               | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`            |
 | `dispatcher.nodeSelector`                            | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
 | `dispatcher.affinity`                                | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
-| `dispatcher.tolerations`                             | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `{}`            |
+| `dispatcher.tolerations`                             | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `[]`            |
 | `dispatcher.cleaner`                                 | **Settings for cronjob that cleans sent messages from database**                                                                                                                                         |                 |
 | `dispatcher.cleaner.logLevel`                        | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                | `warning`       |
 | `dispatcher.cleaner.auditEvents.retentionDuration`   | Retention period for successfully sent audit messages.                                                                                                                                                   | `4320h`         |
@@ -198,21 +198,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Redis settings
 
-| Name                     | Description                                                                                                                 | Value             |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `redis.port`             | HTTP port for Redis to listen.                                                                                              | `6379`            |
-| `redis.configPath`       | Path to Redis configuration file.                                                                                           | `/opt/redis.conf` |
-| `redis.password`         | Redis password. Empty string if no authentication is required.                                                              | `""`              |
-| `redis.useExternalRedis` | If true, external Redis server will be used.                                                                                | `false`           |
-| `redis.host`             | External Redis hostname or IP.                                                                                              | `""`              |
-| `redis.db`               | External Redis database number.                                                                                             | `1`               |
-| `redis.annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`              |
-| `redis.labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`              |
-| `redis.podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`              |
-| `redis.podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`              |
-| `redis.nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`              |
-| `redis.affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`              |
-| `redis.tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`              |
+| Name             | Description                                                    | Value  |
+| ---------------- | -------------------------------------------------------------- | ------ |
+| `redis.host`     | Redis hostname or IP.                                          | `""`   |
+| `redis.port`     | Redis port.                                                    | `6379` |
+| `redis.db`       | Redis database number.                                         | `1`    |
+| `redis.password` | Redis password. Empty string if no authentication is required. | `""`   |
 
 ### Database access settings
 
@@ -341,11 +332,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `dispatcher.cleaner.resources.requests.memory` | A memory request.                     | `32Mi`  |
 | `dispatcher.cleaner.resources.limits.cpu`      | A CPU limit.                          | `100m`  |
 | `dispatcher.cleaner.resources.limits.memory`   | A memory limit.                       | `64Mi`  |
-| `redis.resources`                              | **Limits for Redis**                  |         |
-| `redis.resources.requests.cpu`                 | A CPU request.                        | `50m`   |
-| `redis.resources.requests.memory`              | A memory request.                     | `32Mi`  |
-| `redis.resources.limits.cpu`                   | A CPU limit.                          | `1`     |
-| `redis.resources.limits.memory`                | A memory limit.                       | `256Mi` |
 
 ### customCAs **Custom Certificate Authority**
 
