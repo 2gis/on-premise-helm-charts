@@ -107,19 +107,19 @@ spec:
             - name: ENV
               value: "{{ .Values.api.settings.env }}"
             - name: Postgres__ConnectionString
-              value: {{ include "pro-api.connectionString" . }}
+              value: {{ include "pro-permissions-api.connectionString" . }}
             - name: Postgres__ConnectionStringReadonly
-              value: {{ include "pro-api.connectionStringReadOnly" . }}
+              value: {{ include "pro-permissions-api.connectionStringReadOnly" . }}
             - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
-                  key: dbConnectionPwd
+                  key: permissionsDbConnectionPwd
                   name: {{ include "pro-api.name" . }}-secret
-            {{- if .Values.postgres.api.ro.password }}
+            {{- if .Values.postgres.permissions.ro.password }}
             - name: Postgres__PasswordRo
               valueFrom:
                 secretKeyRef:
-                  key: dbConnectionPwdRo
+                  key: permissionsDbConnectionPwdRo
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
             - name: API_URL

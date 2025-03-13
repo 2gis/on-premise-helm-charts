@@ -147,6 +147,34 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 {{- end -}}
 
+{{- define "pro-permissions-api.connectionString" -}}
+{{-  printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
+	(.Values.postgres.permissions.rw.host | required "A valid .Values.postgres.permissions.rw.host entry required!")
+	(.Values.postgres.permissions.rw.port | required "A valid .Values.postgres.permissions.rw.port entry required!" | int)
+	(.Values.postgres.permissions.rw.name | required "A valid .Values.postgres.permissions.rw.name entry required!")
+	(.Values.postgres.permissions.rw.username | required "A valid .Values.postgres.permissions.rw.username entry required!")
+	((.Values.postgres.permissions.rw.poolSize).min | int | default 1)
+	((.Values.postgres.permissions.rw.poolSize).max | int | default 10)
+	(.Values.postgres.permissions.rw.timeout | int | default 15)
+-}}
+{{- end -}}
+
+{{- define "pro-permissions-api.connectionStringReadOnly" -}}
+{{- if .Values.postgres.permissions.ro -}}
+{{- printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
+	(.Values.postgres.permissions.ro.host | required "A valid .Values.postgres.permissions.ro.host entry required!")
+	(.Values.postgres.permissions.ro.port | required "A valid .Values.postgres.permissions.ro.port entry required!" | int)
+	(.Values.postgres.permissions.ro.name | required "A valid .Values.postgres.permissions.ro.name entry required!")
+	(.Values.postgres.permissions.ro.username | required "A valid .Values.postgres.permissions.ro.username entry required!")
+	((.Values.postgres.permissions.ro.poolSize).min | int | default 1)
+	((.Values.postgres.permissions.ro.poolSize).max | int | default 10)
+	(.Values.postgres.permissions.ro.timeout | int | default 15)
+-}}
+{{- else -}}
+{{ print "" }}
+{{- end -}}
+{{- end -}}
+
 {{- define "pro-tasks.connectionString" -}}
 {{- if .Values.tasks.settings.enabled -}}
 {{- printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
