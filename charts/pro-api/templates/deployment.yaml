@@ -7,6 +7,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
+    manifest: {{ include "pro-api.manifestCode" . }}
     {{- include "pro-api.labels" . | nindent 4 }}
   {{- with .Values.api.pod.labels }}
     {{- toYaml . | nindent 4 }}

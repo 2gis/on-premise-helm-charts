@@ -11,9 +11,10 @@ metadata:
     {{- end }}
     {{- with .Values.annotations }}
     {{- toYaml . | nindent 4 }}
-    {{- end }}    
+    {{- end }}
   {{- end }}
   labels:
+    manifest: {{ include "search_api.manifestCode" . }}
     {{- include "search_api.labels" . | nindent 4 }}
   {{- if .Values.labels }}
     {{- toYaml .Values.labels | nindent 4 }}

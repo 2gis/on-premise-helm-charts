@@ -12,6 +12,7 @@ metadata:
     {{- end }}
   {{- end }}
   labels:
+    manifest: {{ include "catalog.manifestCode" . }}
     {{- include "catalog.labels" . | nindent 4 }}
     {{- if .Values.labels }}
     {{- toYaml .Values.labels | nindent 4 }}

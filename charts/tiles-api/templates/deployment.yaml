@@ -5,6 +5,7 @@ kind: Deployment
 metadata:
   name: {{ include "tiles.fullname" . }}
   labels:
+    manifest: {{ include "tiles.manifestCode" . }}
     {{- include "tiles.labels" . | nindent 4 }}
     {{- include "tiles.api.label" $ | nindent 4 }}
     {{- if $.Values.api.labels }}

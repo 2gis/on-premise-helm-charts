@@ -12,6 +12,7 @@ metadata:
     {{- end }}
   {{- end }}
   labels:
+    manifest: {{ include "twins.manifestCode" . }}
     {{- include "twins.api.labels" . | nindent 4 }}
     {{- with .Values.api.labels }}
     {{- toYaml . | nindent 4 }}

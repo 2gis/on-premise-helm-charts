@@ -43,3 +43,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 "helm.sh/hook": pre-install,pre-upgrade
 "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 {{- end -}}
+
+{{/*
+Manifest name
+*/}}
+{{- define "pro.ui.manifestCode" -}}
+{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- end }}

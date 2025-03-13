@@ -7,6 +7,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
+    manifest: {{ include "citylens.manifestCode" . }}
     {{- include "citylens.routes.api.labels" . | nindent 4 }}
   {{- with .Values.routes.api.labels }}
     {{- toYaml . | nindent 4 }}

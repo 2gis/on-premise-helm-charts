@@ -9,6 +9,7 @@ metadata:
     {{- toYaml .Values.annotations | nindent 4 }}
   {{- end }}
   labels:
+    manifest: {{ include "castle.manifestCode" . }}
     {{- include "castle.labels" . | nindent 4 }}
   {{- if .Values.labels }}
     {{- toYaml .Values.labels | nindent 4 }}

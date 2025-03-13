@@ -663,3 +663,10 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
   {{- end }}
 {{- end }}
 {{- end -}}
+
+{{/*
+Manifest name
+*/}}
+{{- define "keys.manifestCode" -}}
+{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- end }}
