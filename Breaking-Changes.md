@@ -1,5 +1,12 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [NEW_VER]
+
+### pro-api
+- tasksApi.useForLayerDataPreparation is true by default
+- added tasks settings, tasks.settings.enabled is true by default
+- elastic settings are set to standard, hot must contain only the host, secure and port are mandatory, username and password can be set if needed, credentials is removed
+
 ## [1.36.0]
 
 ### keys

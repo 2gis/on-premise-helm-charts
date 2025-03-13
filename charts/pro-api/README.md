@@ -225,7 +225,7 @@
 | `s3.snapshotBucket`       | S3 bucket for storing snapshots of inclemental data updates. **Required**   | `""`  |
 | `s3.resourcesBucket`      | S3 bucket for storing static resources. **Required**                        | `""`  |
 
-### PostgreSQL settings (minimum supported version 15)
+### PostgreSQL settings
 
 | Name                                   | Description                                                                                                                  | Value  |
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------ |

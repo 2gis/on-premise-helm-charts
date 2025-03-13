@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.8.0
+    tag: 2.8.1
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -186,7 +186,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.8.0
+    tag: 2.8.1
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -275,7 +275,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.8.0
+    tag: 2.8.1
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -425,7 +425,7 @@ tasks:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.8.0
+  tag: 2.8.1
   imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2
@@ -451,7 +451,7 @@ assetImporter:
     externalLinksAllowedHosts: ''
     esMetricsEnabled: false
     failedImportJobsLimit: 0
-    ttlSecondsAfterFinished: 86400 # 1 day
+    ttlSecondsAfterFinished: 86400  # 1 day
 
 
 # @section asset preparer settings
@@ -461,7 +461,7 @@ assetImporter:
 assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.8.0
+  tag: 2.8.1
   imagePullSecrets: []
   schedule: 0 16 * * 6
   backoffLimit: 2
@@ -529,7 +529,7 @@ s3:
   resourcesBucket: ''
 
 
-# @section PostgreSQL settings (minimum supported version 15)
+# @section PostgreSQL settings
 
 postgres:
 
@@ -614,7 +614,7 @@ postgres:
       name: ''
       username: ''
       password: ''
-    ro: { }
+    ro: {}
 
 # @section Kafka settings (supported version 2.7)
 
