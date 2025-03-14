@@ -139,58 +139,66 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Distance Matrix Async API settings
 
-| Name                           | Description                                                                                                                                             | Value                                        |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| `dm.port`                      | Distance Matrix Async API HTTP port.                                                                                                                    | `8000`                                       |
-| `dm.configType`                | Configuration type. Must always be `env`.                                                                                                               | `env`                                        |
-| `dm.logLevel`                  | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                                           | `INFO`                                       |
-| `dm.workerCount`               | Number of Distance Matrix Async workers.                                                                                                                | `4`                                          |
-| `dm.citiesUrl`                 | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required**                           | `""`                                         |
-| `dm.citiesUpdatePeriod`        | Period (in seconds) between requesting data from `citiesUrl`.                                                                                           | `3600`                                       |
-| `dm.taskSplitSize`             | Minimum size of matrix to get split in archiver job.                                                                                                    | `5000`                                       |
-| `dm.compositeTaskTimeoutSec`   | Timeout for executing split tasks.                                                                                                                      | `3600`                                       |
-| `dm.archiver.enabled`          | Enables archiver post-processor job. Required for `truck` routing. Requires API access, enable `rbac` and `serviceAccount` for automatic configuration. | `false`                                      |
-| `dm.archiver.image.repository` | Image repository for archiver.                                                                                                                          | `2gis-on-premise/navi-archiver-async-matrix` |
-| `dm.archiver.image.tag`        | Image tag for archiver.                                                                                                                                 | `1.4.1`                                      |
+| Name                                    | Description                                                                                                                                                  | Value                                        |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------- |
+| `dm.port`                               | Distance Matrix Async API HTTP port.                                                                                                                         | `8000`                                       |
+| `dm.configType`                         | Configuration type. Must always be `env`.                                                                                                                    | `env`                                        |
+| `dm.logLevel`                           | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                                                | `INFO`                                       |
+| `dm.workerCount`                        | Number of Distance Matrix Async workers.                                                                                                                     | `4`                                          |
+| `dm.citiesUrl`                          | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required**                                | `""`                                         |
+| `dm.citiesUpdatePeriod`                 | Period (in seconds) between requesting data from `citiesUrl`.                                                                                                | `3600`                                       |
+| `dm.taskSplitSize`                      | Minimum size of matrix to get split in archiver job.                                                                                                         | `5000`                                       |
+| `dm.compositeTaskTimeoutSec`            | Timeout for executing split tasks.                                                                                                                           | `3600`                                       |
+| `dm.archiver.enabled`                   | Enables archiver post-processor job. Required for `truck` routing. Ensure `serviceAccount` and `rbac` are properly set up to spawn up `archiver` is enabled. | `true`                                       |
+| `dm.archiver.fetchLogs`                 | Whether archiver job logs fetching by parent async-matrix needed.                                                                                            | `false`                                      |
+| `dm.archiver.image.repository`          | Image repository for archiver.                                                                                                                               | `2gis-on-premise/navi-archiver-async-matrix` |
+| `dm.archiver.image.pullPolicy`          | Image pull policy for archiver.                                                                                                                              | `IfNotPresent`                               |
+| `dm.archiver.image.tag`                 | Image tag for archiver.                                                                                                                                      | `1.4.1`                                      |
+| `dm.archiver.resources.requests.cpu`    | Archiver job CPU request. 1CPU recommended.                                                                                                                  |                                              |
+| `dm.archiver.resources.requests.memory` | Archiver job memory request. 10Gi recommended.                                                                                                               |                                              |
+| `dm.archiver.resources.limits.cpu`      | Archiver job CPU limit. 1CPU recommended.                                                                                                                    |                                              |
+| `dm.archiver.resources.limits.memory`   | Archiver job memory limit. 20Gi recommended.                                                                                                                 |                                              |
 
 ### Database settings
 
-| Name              | Description                                 | Value         |
-| ----------------- | ------------------------------------------- | ------------- |
-| `db.host`         | PostgreSQL hostname or IP. **Required**     | `""`          |
-| `db.port`         | PostgreSQL port.                            | `5432`        |
-| `db.name`         | PostgreSQL database name. **Required**      | `""`          |
-| `db.user`         | PostgreSQL username. **Required**           | `""`          |
-| `db.password`     | PostgreSQL password. **Required**           | `""`          |
-| `db.schema`       | PostgreSQL schema.                          | `public`      |
-| `db.tls.enabled`  | If tls connection to postgresql is enabled. | `false`       |
-| `db.tls.rootCert` | Root certificate file.                      | `""`          |
-| `db.tls.cert`     | Certificate of postgresql server.           | `""`          |
-| `db.tls.key`      | Key of postgresql server.                   | `""`          |
-| `db.tls.mode`     | Level of protection.                        | `verify-full` |
+| Name                     | Description                                       | Value         |
+| ------------------------ | ------------------------------------------------- | ------------- |
+| `db.host`                | PostgreSQL hostname or IP. **Required**           | `""`          |
+| `db.port`                | PostgreSQL port.                                  | `5432`        |
+| `db.name`                | PostgreSQL database name. **Required**            | `""`          |
+| `db.user`                | PostgreSQL username. **Required**                 | `""`          |
+| `db.password`            | PostgreSQL password. **Required**                 | `""`          |
+| `db.schema`              | PostgreSQL schema.                                | `public`      |
+| `db.tls.enabled`         | If tls connection to postgresql is enabled.       | `false`       |
+| `db.tls.rootCert`        | Root certificate file.                            | `""`          |
+| `db.tls.cert`            | Certificate of postgresql server.                 | `""`          |
+| `db.tls.key`             | Key of postgresql server.                         | `""`          |
+| `db.tls.mode`            | Level of protection.                              | `verify-full` |
+| `db.expirationSec`       | How many seconds to store results. (0 - disable)  | `0`           |
+| `db.expirationPeriodSec` | Period of checking the need to clear the results. | `86400`       |
 
 ### Multi-DC settings
 
-| Name                                   | Description                                                                         | Value     |
-| -------------------------------------- | ----------------------------------------------------------------------------------- | --------- |
-| `multiDc.enabled`                      | If multi-DC functionality enabled                                                   | `false`   |
-| `multiDc.location`                     | Primary DC identifier. Arbitrary identifier, unique per DC installation.            | `default` |
-| `multiDc.redirectHeader`               | HTTP header to tell requests original from redirected. Set empty to skip the check. | `""`      |
-| `multiDc.secondaryTopics.statusTopic`  | Name of `statusTopic` in secondary DC.                                              | `""`      |
-| `multiDc.secondaryTopics.cancelTopic`  | Name of `cancelTopic` in secondary DC.                                              | `""`      |
-| `multiDc.secondaryTopics.archiveTopic` | Name of `archiveTopic` in secondary DC.                                             | `""`      |
+| Name                                   | Description                                                                                   | Value           |
+| -------------------------------------- | --------------------------------------------------------------------------------------------- | --------------- |
+| `multiDc.enabled`                      | If multi-DC functionality enabled                                                             | `false`         |
+| `multiDc.location`                     | Primary DC identifier. Any arbitrary string ID is good as long as it is different across DCs. | `default`       |
+| `multiDc.redirectHeader`               | HTTP header to tell requests original from redirected. Set empty to skip the check.           | `""`            |
+| `multiDc.secondaryTopics.statusTopic`  | Name of `statusTopic` in secondary DC.                                                        | `status_topic`  |
+| `multiDc.secondaryTopics.cancelTopic`  | Name of `cancelTopic` in secondary DC.                                                        | `cancel_topic`  |
+| `multiDc.secondaryTopics.archiveTopic` | Name of `archiveTopic` in secondary DC.                                                       | `archive_topic` |
 
 ### Kafka settings
 
 | Name                                          | Description                                                                                                               | Value               |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `kafka.groupId`                               | Distance Matrix Async API group identifier.                                                                               | `navi_async_matrix` |
-| `kafka.statusTopic`                           | Name of the topic for sending new tasks to.                                                                               | `""`                |
-| `kafka.cancelTopic`                           | Name of the topic for canceling or receiving information about finished tasks.                                            | `""`                |
-| `kafka.archiveTopic`                          | Name of the topic for archiving tasks.                                                                                    | `""`                |
+| `kafka.statusTopic`                           | Name of the topic for sending new tasks to.                                                                               | `status_topic`      |
+| `kafka.cancelTopic`                           | Name of the topic for canceling or receiving information about finished tasks.                                            | `cancel_topic`      |
+| `kafka.archiveTopic`                          | Name of the topic for archiving tasks.                                                                                    | `archive_topic`     |
 | `kafka.attractTopic`                          | Name of the topic for for attract tasks results                                                                           | `""`                |
 | `kafka.oneToManyTopic`                        | Name of the topic for oneToMany tasks results                                                                             | `""`                |
-| `kafka.vrpStatusTopic`                        | Name of the topic for VRP service integration                                                                             | `""`                |
+| `kafka.vrpStatusTopic`                        | Name of the topic for VRP service integration. VRP will be available in future releases.                                  | `""`                |
 | `kafka.properties`                            | Properties as supported by kafka-python. Refer to inline comments for details.                                            |                     |
 | `kafka.sensitiveProperties`                   | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                |
 | `kafka.fileProperties`                        | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                |
@@ -213,14 +221,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### S3-compatible storage settings
 
-| Name              | Description                                                                                    | Value |
-| ----------------- | ---------------------------------------------------------------------------------------------- | ----- |
-| `s3.host`         | S3 endpoint URL, ex: http://async-matrix-s3.host. **Required**                                 | `""`  |
-| `s3.bucket`       | S3 bucket name. **Required**                                                                   | `""`  |
-| `s3.region`       | S3 region.                                                                                     | `""`  |
-| `s3.accessKey`    | S3 access key for accessing the bucket. **Required**                                           | `""`  |
-| `s3.secretKey`    | S3 secret key for accessing the bucket. **Required**                                           | `""`  |
-| `s3.publicNetloc` | Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://` | `nil` |
+| Name                | Description                                                                                    | Value |
+| ------------------- | ---------------------------------------------------------------------------------------------- | ----- |
+| `s3.host`           | S3 endpoint URL, ex: http://async-matrix-s3.host. **Required**                                 | `""`  |
+| `s3.bucket`         | S3 bucket name. **Required**                                                                   | `""`  |
+| `s3.region`         | S3 region.                                                                                     | `""`  |
+| `s3.accessKey`      | S3 access key for accessing the bucket. **Required**                                           | `""`  |
+| `s3.secretKey`      | S3 secret key for accessing the bucket. **Required**                                           | `""`  |
+| `s3.publicNetloc`   | Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://` | `nil` |
+| `s3.expirationDays` | How many days to store results                                                                 | `14`  |
 
 ### API keys service
 
