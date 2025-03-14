@@ -4,12 +4,12 @@ catalog-api
 citylens
 	citylens-api:1.17.5
 	citylens-database:1.17.1
-	citylens-routes-api:1.0.12
+	citylens-routes-api:1.0.15
 	citylens-web:1.17.5
-	citylens-worker-service:1.0.12
+	citylens-worker-service:1.0.15
 	citylens-workers:1.17.5
 citylens-routes-ui
-	citylens-routes-ui:0.0.21
+	citylens-routes-ui:0.0.22
 dgtt
 	dgtt:0.2.27-b188673e09
 floors-api
@@ -27,12 +27,11 @@ keycloak
 	keycloak:21.1.1-debian-11-r4
 keys
 	keys-backend:1.112.2
-	keys-redis:6.2.6-alpine3.15
 	keys-ui:0.10.5
 license
-	license:2.2.4
+	license:2.4.1
 mapgl-js-api
-	mapgl:1.56.0
+	mapgl:1.57.0
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
