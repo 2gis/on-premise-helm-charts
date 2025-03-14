@@ -77,14 +77,18 @@ make charts/navi-back
     Manifest name
     */}}
     {{- define "<svc_name>.manifestCode" -}}
-    {{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+    {{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
     {{- end }}
     ```
 
   2. В раздел `metadata.labels` добавить метку:
 
     ```yaml
-    manifest: {{ include "<svc_name>.manifestCode" . }}
+    {{- if .Values.dgctlStorage.manifest }}
+    {{- with (include "<svc_name>.manifestCode" .) }}
+    manifest: {{ . }}
+    {{- end }}
+    {{- end }}
     ```
 
   Это необходимо для корректной работы скриптов очистки манифестов в отдельных случаях
