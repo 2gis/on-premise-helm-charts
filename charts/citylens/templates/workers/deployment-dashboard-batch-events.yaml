@@ -7,7 +7,6 @@ metadata:
     {{- toYaml .Values.worker.dashboardBatchEvents.podAnnotations | nindent 4 }}
   {{- end }}
   labels:
-    manifest: {{ include "citylens.manifestCode" . }}
     {{- include "citylens.dashboard-batch-events.labels" . | nindent 4 }}
   {{- if .Values.worker.dashboardBatchEvents.labels }}
     {{- toYaml .Values.worker.dashboardBatchEvents.labels | nindent 4 }}
