@@ -195,9 +195,16 @@ vpa:
 # @param dm.citiesUpdatePeriod Period (in seconds) between requesting data from `citiesUrl`.
 # @param dm.taskSplitSize Minimum size of matrix to get split in archiver job.
 # @param dm.compositeTaskTimeoutSec Timeout for executing split tasks.
-# @param dm.archiver.enabled Enables archiver post-processor job. Required for `truck` routing. Requires API access, enable `rbac` and `serviceAccount` for automatic configuration.
+# @param dm.archiver.enabled Enables archiver post-processor job. Required for `truck` routing. Ensure `serviceAccount` and `rbac` are properly set up to spawn up `archiver` is enabled.
+# @param dm.archiver.fetchLogs Whether archiver job logs fetching by parent async-matrix needed.
 # @param dm.archiver.image.repository Image repository for archiver.
+# @param dm.archiver.image.pullPolicy Image pull policy for archiver.
 # @param dm.archiver.image.tag Image tag for archiver.
+# @skip dm.archiver.resources
+# @extra dm.archiver.resources.requests.cpu Archiver job CPU request. 1CPU recommended.
+# @extra dm.archiver.resources.requests.memory Archiver job memory request. 10Gi recommended.
+# @extra dm.archiver.resources.limits.cpu Archiver job CPU limit. 1CPU recommended.
+# @extra dm.archiver.resources.limits.memory Archiver job memory limit. 20Gi recommended.
 # @skip dm.host
 # @skip dm.labels
 # @skip dm.annotations
@@ -213,10 +220,13 @@ dm:
   taskSplitSize: 5000
   compositeTaskTimeoutSec: 3600
   archiver:
-    enabled: false
+    enabled: true
+    fetchLogs: false
     image:
       repository: 2gis-on-premise/navi-archiver-async-matrix
+      pullPolicy: IfNotPresent
       tag: 1.4.1
+    resources: {}
   labels: {}
   annotations: {}
 
@@ -234,6 +244,8 @@ dm:
 # @param db.tls.cert Certificate of postgresql server.
 # @param db.tls.key Key of postgresql server.
 # @param db.tls.mode Level of protection.
+# @param db.expirationSec How many seconds to store results. (0 - disable)
+# @param db.expirationPeriodSec Period of checking the need to clear the results.
 
 db:
   host: ''
@@ -248,12 +260,14 @@ db:
     cert: ''
     key: ''
     mode: verify-full
+  expirationSec: 0
+  expirationPeriodSec: 86400
 
 
 # @section Multi-DC settings
 
 # @param multiDc.enabled If multi-DC functionality enabled
-# @param multiDc.location Primary DC identifier. Arbitrary identifier, unique per DC installation.
+# @param multiDc.location Primary DC identifier. Any arbitrary string ID is good as long as it is different across DCs.
 # @param multiDc.redirectHeader HTTP header to tell requests original from redirected. Set empty to skip the check.
 # @param multiDc.secondaryTopics.statusTopic Name of `statusTopic` in secondary DC.
 # @param multiDc.secondaryTopics.cancelTopic Name of `cancelTopic` in secondary DC.
@@ -264,9 +278,9 @@ multiDc:
   location: default
   redirectHeader: ''
   secondaryTopics:
-    statusTopic: ''
-    cancelTopic: ''
-    archiveTopic: ''
+    statusTopic: status_topic
+    cancelTopic: cancel_topic
+    archiveTopic: archive_topic
 
 
 # @section Kafka settings
@@ -277,7 +291,7 @@ multiDc:
 # @param kafka.archiveTopic Name of the topic for archiving tasks.
 # @param kafka.attractTopic Name of the topic for for attract tasks results
 # @param kafka.oneToManyTopic Name of the topic for oneToMany tasks results
-# @param kafka.vrpStatusTopic Name of the topic for VRP service integration
+# @param kafka.vrpStatusTopic Name of the topic for VRP service integration. VRP will be available in future releases.
 # @extra kafka.properties Properties as supported by kafka-python. Refer to inline comments for details.
 # @skip kafka.properties.bootstrap.servers
 # @skip kafka.properties.security.protocol
@@ -311,9 +325,9 @@ multiDc:
 
 kafka:
   groupId: navi_async_matrix
-  statusTopic: ''
-  cancelTopic: ''
-  archiveTopic: ''
+  statusTopic: status_topic
+  cancelTopic: cancel_topic
+  archiveTopic: archive_topic
   attractTopic: ''
   oneToManyTopic: ''
   vrpStatusTopic: ''
@@ -413,6 +427,7 @@ kafka:
 # @param s3.accessKey S3 access key for accessing the bucket. **Required**
 # @param s3.secretKey S3 secret key for accessing the bucket. **Required**
 # @param s3.publicNetloc Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://`
+# @param s3.expirationDays How many days to store results
 
 s3:
   host: ''
@@ -421,6 +436,7 @@ s3:
   accessKey: ''
   secretKey: ''
   publicNetloc:
+  expirationDays: 14
 
 # @skip bss.enabled
 # @skip bss.url
