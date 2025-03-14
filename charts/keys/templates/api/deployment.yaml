@@ -12,7 +12,7 @@ metadata:
     {{- end }}
   {{- end }}
   labels:
-    {{- if .Values.dgctlStorage.manifest }}
+    {{ if (.Values.dgctlStorage).manifest }}
     {{- with (include "keys.manifestCode" .) }}
     manifest: {{ . }}
     {{- end }}
