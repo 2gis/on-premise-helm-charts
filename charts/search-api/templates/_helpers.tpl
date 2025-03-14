@@ -93,5 +93,5 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 Manifest name
 */}}
 {{- define "search_api.manifestCode" -}}
-{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}

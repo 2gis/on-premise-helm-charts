@@ -379,5 +379,5 @@ app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 Manifest name
 */}}
 {{- define "citylens.manifestCode" -}}
-{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}

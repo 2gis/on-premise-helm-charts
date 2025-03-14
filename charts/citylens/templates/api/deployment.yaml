@@ -7,7 +7,11 @@ metadata:
     {{- toYaml .Values.api.annotations | nindent 4 }}
   {{- end }}
   labels:
-    manifest: {{ include "citylens.manifestCode" . }}
+    {{- if .Values.dgctlStorage.manifest }}
+    {{- with (include "citylens.manifestCode" .) }}
+    manifest: {{ . }}
+    {{- end }}
+    {{- end }}
     {{- include "citylens.api.labels" . | nindent 4 }}
   {{- if .Values.api.labels }}
     {{- toYaml .Values.api.annotations | nindent 4 }}

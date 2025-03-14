@@ -83,5 +83,5 @@ Mount directory for custom CA
 Manifest name
 */}}
 {{- define "floors.manifestCode" -}}
-{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}

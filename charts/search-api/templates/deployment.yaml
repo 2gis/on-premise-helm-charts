@@ -14,7 +14,11 @@ metadata:
     {{- end }}
   {{- end }}
   labels:
-    manifest: {{ include "search_api.manifestCode" . }}
+    {{- if .Values.dgctlStorage.manifest }}
+    {{- with (include "search_api.manifestCode" .) }}
+    manifest: {{ . }}
+    {{- end }}
+    {{- end }}
     {{- include "search_api.labels" . | nindent 4 }}
   {{- if .Values.labels }}
     {{- toYaml .Values.labels | nindent 4 }}

@@ -211,5 +211,5 @@ Usage:
 Manifest name
 */}}
 {{- define "castle.manifestCode" -}}
-{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}

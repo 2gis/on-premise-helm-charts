@@ -167,5 +167,5 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Manifest name
 */}}
 {{- define "pro-api.manifestCode" -}}
-{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}

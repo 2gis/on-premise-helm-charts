@@ -48,5 +48,5 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 Manifest name
 */}}
 {{- define "pro.ui.manifestCode" -}}
-{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}
