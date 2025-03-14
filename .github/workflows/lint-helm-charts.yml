@@ -64,6 +64,10 @@ jobs:
               echo "Running chart-testing on: $(basename "$chart")"
               ct lint --charts "$chart"
 
+              # Обновляем зависимости чарта
+              echo "Updating dependencies for chart: $chart"
+              helm dependency update "$chart"
+
               echo "Validating chart: $(basename "$chart")"
               helm template "$chart" -f "$chart/values-auto.yaml" | kubeconform -summary -output json
             fi
