@@ -143,10 +143,14 @@ spec:
               path: /healthcheck
               port: http
             failureThreshold: 5
-            initialDelaySeconds: 5
             periodSeconds: 15
             timeoutSeconds: 5
-          readinessProbe: *healthProbe
+          readinessProbe:
+            <<: *healthProbe
+            failureThreshold: 3
+          startupProbe:
+            <<: *healthProbe
+            failureThreshold: 60
           volumeMounts:
           {{- if .Values.dm.archiver.enabled }}
           - name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
@@ -189,6 +193,8 @@ spec:
               value: {{ required "A valid .Values.s3.bucket entry required" .Values.s3.bucket | quote }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__REGION_NAME
               value: {{ .Values.s3.region | quote }}
+            - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__EXPIRATION_IN_DAYS
+              value: {{ .Values.s3.expirationDays | quote }}
             - name: DM_ASYNC_SERVICE_LOGGER_SETTING__LEVEL
               value: {{ .Values.dm.logLevel | quote }}
             {{- if .Values.s3.publicNetloc }}
@@ -298,6 +304,12 @@ spec:
                 secretKeyRef:
                   name: {{ include "navi-async-matrix.fullname" . | quote }}
                   key: dbDsn
+            {{- if .Values.db.expirationSec }}
+            - name: DM_ASYNC_SERVICE_DB_EXPIRATION_IN_SEC
+              value: {{ .Values.db.expirationSec | quote }}
+            - name: DM_ASYNC_SERVICE_DB_EXPIRATION_CHECK_PERIOD
+              value: {{ .Values.db.expirationPeriodSec | quote }}
+            {{- end }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
