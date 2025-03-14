@@ -1,8 +1,8 @@
-{{- define "search_api.name" -}}
+{{- define "search-api.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "search_api.fullname" -}}
+{{- define "search-api.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -15,18 +15,18 @@
 {{- end -}}
 {{- end -}}
 
-{{- define "search_api.chart" -}}
+{{- define "search-api.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "search_api.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "search_api.name" . }}
+{{- define "search-api.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "search-api.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
-{{- define "search_api.labels" -}}
-helm.sh/chart: {{ include "search_api.name" . }}
-{{ include "search_api.selectorLabels" . }}
+{{- define "search-api.labels" -}}
+helm.sh/chart: {{ include "search-api.name" . }}
+{{ include "search-api.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -37,26 +37,26 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .registry (printf "%s:%s" .username .password | b64enc) | b64enc }}
 {{- end }}
 
-{{- define "search_api.env.custom.ca.path" -}}
+{{- define "search-api.env.custom.ca.path" -}}
 - name: SSL_CERT_FILE
-  value: {{ include "search_api.custom.ca.mountPath" . }}/custom-ca.crt
+  value: {{ include "search-api.custom.ca.mountPath" . }}/custom-ca.crt
 {{- end }}
 
-{{- define "search_api.custom.ca.mountPath" -}}
+{{- define "search-api.custom.ca.mountPath" -}}
 {{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
 {{- end -}}
 
-{{- define "search_api.custom.ca.volumeMounts" -}}
+{{- define "search-api.custom.ca.volumeMounts" -}}
 - name: custom-ca
-  mountPath: {{ include "search_api.custom.ca.mountPath" . }}/custom-ca.crt
+  mountPath: {{ include "search-api.custom.ca.mountPath" . }}/custom-ca.crt
   subPath: custom-ca.crt
   readOnly: true
 {{- end -}}
 
-{{- define "search_api.custom.ca.deploys.volumes" -}}
+{{- define "search-api.custom.ca.deploys.volumes" -}}
 - name: custom-ca
   configMap:
-    name: {{ include "search_api.fullname" . }}
+    name: {{ include "search-api.fullname" . }}
 {{- end -}}
 
 {{/*
@@ -92,6 +92,6 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{/*
 Manifest name
 */}}
-{{- define "search_api.manifestCode" -}}
+{{- define "search-api.manifestCode" -}}
 {{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}
