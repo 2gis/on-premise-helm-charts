@@ -84,7 +84,7 @@ make charts/navi-back
   2. В раздел `metadata.labels` добавить метку:
 
     ```yaml
-    {{- if .Values.dgctlStorage.manifest }}
+    {{ if (.Values.dgctlStorage).manifest }}
     {{- with (include "<svc_name>.manifestCode" .) }}
     manifest: {{ . }}
     {{- end }}
