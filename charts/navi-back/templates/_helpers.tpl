@@ -373,6 +373,16 @@ Usage:
    {{- end -}}
 {{- end -}}
 
+Set long speed forecasts URL
+Usage:
+{{ include "config.setLongForecastUrl" $ }}
+*/}}
+{{- define "config.setLongForecastUrl" -}}
+   {{- if .Values.naviback.longForecastUrl -}}
+   {{- printf .Values.naviback.longForecastUrl -}}
+   {{- end -}}
+{{- end -}}
+
 {{/*
 Set castle url
 Usage:
