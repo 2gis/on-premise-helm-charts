@@ -117,6 +117,17 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `service.port`        | Service port.                                                                                                                                  | `80`        |
 | `service.nodePort`    | Node port if type NodePort.                                                                                                                    | `nil`       |
 
+#### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+| Name                                 | Description                               | Value                       |
+| ------------------------------------ | ----------------------------------------- | --------------------------- |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                     |
+| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`                     |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `generic-chart.example.com` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                         |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                    |
+| `ingress.tls`                        | TLS configuration                         | `[]`                        |
+
 #### [Service account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
 
 | Name                         | Description                                                                                                             | Value  |
