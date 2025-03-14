@@ -9,6 +9,7 @@ metadata:
     {{- toYaml .Values.annotations | nindent 4 }}
   {{- end }}
   labels:
+    manifest: {{ include "floors.manifestCode" . }}
     {{- include "floors.labels" . | nindent 4 }}
   {{- if .Values.labels }}
     {{- toYaml .Values.labels | nindent 4 }}

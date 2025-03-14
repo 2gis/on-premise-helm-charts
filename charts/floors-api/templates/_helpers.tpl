@@ -78,3 +78,10 @@ Mount directory for custom CA
 {{- define "floors.checksum" -}}
 {{ (include (print $.Template.BasePath .path) $ | fromYaml).data | toYaml | sha256sum }}
 {{- end }}
+
+{{/*
+Manifest name
+*/}}
+{{- define "floors.manifestCode" -}}
+{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- end }}
