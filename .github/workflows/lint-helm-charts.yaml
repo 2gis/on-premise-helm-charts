@@ -54,6 +54,9 @@ jobs:
             fi
           done
 
+      - name: Add Helm repository
+        run: helm repo add 2gis https://2gis.github.io/on-premise-helm-charts
+
       - name: Lint and Validate Charts
         run: |
           for chart in charts/*; do
