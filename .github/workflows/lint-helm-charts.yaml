@@ -40,14 +40,12 @@ jobs:
             if [[ -d "$chart" ]]; then
               chart_name=$(basename "$chart")
               echo "Processing chart: $chart_name"
-
               helm show values "$chart" > "$chart/values-auto.yaml"
-
-              # Заменяем `: ''` на `ключ-example`
+              # Заменяем `: ''` на `http://ключ.example`
               awk '
                 function key_example(key) {
                   gsub(/\./, "_", key)
-                  return key "-example"
+                  return "http://" key ".example"
                 }
                 /: *'\'''\''/ { sub(/'\'''\''/, "\"" key_example($1) "\"") } 1
               ' "$chart/values-auto.yaml" > "$chart/values-auto.yaml.tmp" && mv "$chart/values-auto.yaml.tmp" "$chart/values-auto.yaml"
