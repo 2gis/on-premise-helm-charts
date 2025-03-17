@@ -59,10 +59,8 @@ jobs:
           for chart in charts/*; do
             if [[ -d "$chart" ]]; then
               echo "########################################################################################################"
-              # echo "### Build dependencies for chart: $chart"
-              # helm dependency build "$chart"
-              echo "### Updating dependencies for chart: $chart_dir"
-              helm dependency update "$chart_dir"
+              echo "### Build dependencies for chart: $chart"
+              helm dependency build "$chart"
               echo
 
               echo "########################################################################################################"
