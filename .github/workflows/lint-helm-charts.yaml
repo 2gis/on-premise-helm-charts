@@ -58,22 +58,24 @@ jobs:
         run: |
           for chart in charts/*; do
             if [[ -d "$chart" ]]; then
-              echo "####################################################"
-              echo "### Build dependencies for chart: $chart"
-              helm dependency build "$chart"
+              echo "########################################################################################################"
+              # echo "### Build dependencies for chart: $chart"
+              # helm dependency build "$chart"
+              echo "### Updating dependencies for chart: $chart_dir"
+              helm dependency update "$chart_dir"
               echo
 
-              echo "####################################################"
+              echo "########################################################################################################"
               echo "### Linting chart: $(basename "$chart")"
               helm lint "$chart"
               echo
 
-              echo "####################################################"
+              echo "########################################################################################################"
               echo "### Running chart-testing on: $(basename "$chart")"
               ct lint --charts "$chart"
               echo
 
-              echo "####################################################"
+              echo "########################################################################################################"
               echo "### Validating chart: $(basename "$chart")"
               helm template "$chart" -f "$chart/values-auto.yaml" | kubeconform -summary -output json
               echo
