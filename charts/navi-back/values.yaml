@@ -114,6 +114,7 @@ image:
 # @extra naviback.ecaHost DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.ecaUrl URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.longForecastUrl URL of Traffic long forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.walkingUserSpeedsUrl URL of walking user speeds
 # @extra naviback.routeAsUsualUrl URL of route as usual
 # @skip naviback.appPort
@@ -158,6 +159,9 @@ image:
 # @skip naviback.indices.etaCorrectionCores.enabled
 # @skip naviback.indices.forecastedSpeeds.enabled
 # @skip naviback.indices.forecastedSpeedsIndex.enabled
+# @skip naviback.indices.forecastedLongSpeeds.enabled
+# @skip naviback.indices.forecastedLongSpeedsIndex.enabled
+# @skip naviback.indices.forecastedLongSpeedsIndex.updatePeriod
 # @skip naviback.indices.geoImport.enabled
 # @skip naviback.indices.onlineSpeeds.enabled
 # @skip naviback.indices.onlineTaxiSpeeds.enabled
@@ -281,6 +285,11 @@ naviback:
       enabled: false
     forecastedSpeedsIndex:
       enabled: false
+    forecastedLongSpeeds:
+      enabled: false
+    forecastedLongSpeedsIndex:
+      enabled: false
+      updatePeriod: 86400
     geoImport:
       enabled: false
     onlineSpeeds:
@@ -604,6 +613,8 @@ s3:
 # @param transmitter.host attractor service
 # @param transmitter.port attractor port
 # @param transmitter.responseTimeoutMs response waiting timeout
+# @param transmitter.connectTimeout Establish connection [timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-connect-timeout)
+# @param transmitter.clusterTimeout Response [timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-timeout)
 # @param transmitter.retry.enabled Enable retry failed requests
 # @param transmitter.retry.retryOn Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)
 # @param transmitter.retry.numRetries Specifies the allowed number of retries
@@ -614,6 +625,8 @@ transmitter:
   host: http://navi-attractor.host
   port: 50051
   responseTimeoutMs: 2000
+  connectTimeout: 2s
+  clusterTimeout: 120s
   retry:
     enabled: false
     retryOn: internal,unavailable
@@ -664,6 +677,31 @@ trafficLights:
     topic: ''
     properties:
       bootstrap.servers: ''
+      security.protocol: PLAINTEXT
+    fileProperties: {}
+
+# @section Road locks processing. Leave with defaults, FOR FUTURE RELEASE
+# @param roadLocks.enabled If road locks processing enabled
+# @param roadLocks.modifications_limit_for_merge Max amount of modifications for a single road lock before getting merged
+# @param roadLocks.merge_timeout_limit_ms Max timeout in ms for a single road lock before getting merged
+# @param roadLocks.kafka_messages_queue_size_limit Max Kafka messages queue size
+# @param roadLocks.merge_poll_ms Timeout in ms for checking if merge (of modifications) is needed
+# @param roadLocks.kafka_group_id_prefix Prefix for kafka groud_id
+# @extra roadLocks.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
+# @skip roadLocks.kafka.properties.bootstrap.servers
+# @skip roadLocks.kafka.properties.security.protocol
+# @param roadLocks.kafka.fileProperties Properties stored in file, see `kafka` section and comments
+
+roadLocks:
+  enabled: false
+  modifications_limit_for_merge: 1000
+  merge_timeout_limit_ms: 300000
+  merge_poll_ms: 5000
+  kafka_messages_queue_size_limit: 1000
+  kafka_group_id_prefix: ''
+  kafka:
+    properties:
+      bootstrap.servers: kafka.host:9092
       security.protocol: PLAINTEXT
     fileProperties: {}
 
