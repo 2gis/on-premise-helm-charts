@@ -7,10 +7,10 @@ type: application
 version: 1.36.0
 appVersion: 2023.8.3-0
 
-dependencies:
-- name: zookeeper
-  version: 1.5.2
-  repository: https://2gis.github.io/on-premise-helm-charts
+# dependencies:
+# - name: zookeeper
+#   version: 1.5.2
+#   repository: https://2gis.github.io/on-premise-helm-charts
 
 maintainers:
 - name: 2gis
