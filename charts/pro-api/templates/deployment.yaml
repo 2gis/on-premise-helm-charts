@@ -7,6 +7,11 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "pro-api.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}
+    {{- end }}
     {{- include "pro-api.labels" . | nindent 4 }}
   {{- with .Values.api.pod.labels }}
     {{- toYaml . | nindent 4 }}

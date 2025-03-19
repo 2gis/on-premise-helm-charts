@@ -69,6 +69,30 @@ make charts/navi-back
     failedJobsHistoryLimit: 3
   ```
 
+- Если в развёртываемом сервисе используется манифест, то необходимо (`<svc_name>` - наименование развёртываемого сервиса):
+  1. В `helpers.tpl` добавить раздел:
+
+    ```yaml
+    {{/*
+    Manifest name
+    */}}
+    {{- define "<svc_name>.manifestCode" -}}
+    {{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
+    {{- end }}
+    ```
+
+  2. В раздел `metadata.labels` добавить метку:
+
+    ```yaml
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "<svc_name>.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}
+    {{- end }}
+    ```
+
+  Это необходимо для корректной работы скриптов очистки манифестов в отдельных случаях
+
 ## Именование настроек
 
 - В названиях настроек используем camelCase. Названия начинаем с маленькой буквы. Например: `accessKey`, `dgctlDockerRegistry`.
@@ -141,7 +165,7 @@ make charts/navi-back
 
   Примеры:
 
-  - Не `autoscaling.enabled`, а ` hpa.enabled`.
+  - Не `autoscaling.enabled`, а `hpa.enabled`.
   - Не `verticalscaling.enabled`, а `vpa.enabled`.
   - Не `podDisruptionBudget.enabled`, а `pdb.enabled`.
 
@@ -209,6 +233,7 @@ host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStora
 
 Поскольку в разных случаях нужно использовать урлы к сервисам либо внутри k8s, либо снаружи (ingess),
 то этот факт нужно отразить в документации параметра. Например, нужно использовать один из шаблонов:
+
 - `http://{service-name}.svc` или `{service-name}.svc` - если нужен внутренний адрес сервиса
 - `http(s)://{service-name}.ingress.host` - если нужен внешний адрес сервиса
 - `{service-name}.host` - если сервис может находится где угодно

@@ -5,6 +5,11 @@ kind: Deployment
 metadata:
   name: {{ include "tiles.fullname" . }}
   labels:
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "tiles.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}
+    {{- end }}
     {{- include "tiles.labels" . | nindent 4 }}
     {{- include "tiles.api.label" $ | nindent 4 }}
     {{- if $.Values.api.labels }}
