@@ -16,12 +16,19 @@ access:
   enabled: {{ .access.enabled }}
   sync-period: {{ .access.syncPeriod }}
   host: {{ .access.url }}
-  token: {{ .access.token }}
+  
   bss:
     enabled: {{ .access.stat.enabled }}
     {{- if .access.stat.enabled }}
     host: {{ required "Valid .Values.proxy.access.stat.url required!" .access.stat.url }}
     {{- end }}
+
+  vector:
+    token: {{ .access.vector.token }}
+  mapbox:
+    token: {{ .access.vector.token }}
+  raster:
+    token: {{ .access.raster.token }}
 
 storage:
   enabled: false
