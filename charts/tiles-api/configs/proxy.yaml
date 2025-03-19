@@ -16,7 +16,6 @@ access:
   enabled: {{ .access.enabled }}
   sync-period: {{ .access.syncPeriod }}
   host: {{ .access.url }}
-  
   bss:
     enabled: {{ .access.stat.enabled }}
     {{- if .access.stat.enabled }}
