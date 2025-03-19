@@ -40,35 +40,43 @@ jobs:
             if [[ -d "$chart" ]]; then
               chart_name=$(basename "$chart")
               echo "Processing chart: $chart_name"
-
               helm show values "$chart" > "$chart/values-auto.yaml"
-
-              # Заменяем `: ''` на `ключ-example`
+              # Заменяем `: ''` на `http://ключ.example`
               awk '
                 function key_example(key) {
                   gsub(/\./, "_", key)
-                  return key "-example"
+                  return "http://" key ".example"
                 }
                 /: *'\'''\''/ { sub(/'\'''\''/, "\"" key_example($1) "\"") } 1
               ' "$chart/values-auto.yaml" > "$chart/values-auto.yaml.tmp" && mv "$chart/values-auto.yaml.tmp" "$chart/values-auto.yaml"
             fi
           done
 
+      - name: Add Helm repository
+        run: helm repo add 2gis https://2gis.github.io/on-premise-helm-charts
+
       - name: Lint and Validate Charts
         run: |
           for chart in charts/*; do
             if [[ -d "$chart" ]]; then
-              echo "Linting chart: $(basename "$chart")"
-              helm lint "$chart"
-
-              echo "Running chart-testing on: $(basename "$chart")"
-              ct lint --charts "$chart"
-
-              # Обновляем зависимости чарта
-              echo "Build dependencies for chart: $chart"
+              echo "########################################################################################################"
+              echo "### Build dependencies for chart: $chart"
               helm dependency build "$chart"
+              echo
 
-              echo "Validating chart: $(basename "$chart")"
+              echo "########################################################################################################"
+              echo "### Linting chart: $(basename "$chart")"
+              helm lint "$chart"
+              echo
+
+              echo "########################################################################################################"
+              echo "### Running chart-testing on: $(basename "$chart")"
+              ct lint --charts "$chart"
+              echo
+
+              echo "########################################################################################################"
+              echo "### Validating chart: $(basename "$chart")"
               helm template "$chart" -f "$chart/values-auto.yaml" | kubeconform -summary -output json
+              echo
             fi
           done
