@@ -5,7 +5,7 @@ kind: Deployment
 metadata:
   name: {{ include "tiles.fullname" . }}
   labels:
-    {{ if (.Values.dgctlStorage).manifest }}
+    {{- if (.Values.dgctlStorage).manifest }}
     {{- with (include "tiles.manifestCode" .) }}
     manifest: {{ . | quote }}
     {{- end }}

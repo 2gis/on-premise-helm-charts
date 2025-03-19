@@ -9,7 +9,7 @@ metadata:
     {{- toYaml .Values.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{ if (.Values.dgctlStorage).manifest }}
+    {{- if (.Values.dgctlStorage).manifest }}
     {{- with (include "castle.manifestCode" .) }}
     manifest: {{ . | quote }}
     {{- end }}
