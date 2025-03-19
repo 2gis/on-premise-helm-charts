@@ -8,8 +8,7 @@ metadata:
   {{- end }}
   labels:
     {{- if (.Values.dgctlStorage).manifest }}
-    {{- with (include "pro.ui.manifestCode" .) }}
-    manifest: {{ . }}
+    manifest: {{ . | quote }}
     {{- end }}
     {{- end }}
     {{- include "pro.ui.labels" . | nindent 4 }}

@@ -14,7 +14,7 @@ metadata:
   labels:
     {{- if (.Values.dgctlStorage).manifest }}
     {{- with (include "twins.manifestCode" .) }}
-    manifest: {{ . }}
+    manifest: {{ . | quote }}
     {{- end }}
     {{- end }}
     {{- include "twins.api.labels" . | nindent 4 }}
