@@ -9,7 +9,7 @@ metadata:
   labels:
     {{ if (.Values.dgctlStorage).manifest }}
     {{- with (include "pro-api.manifestCode" .) }}
-    manifest: {{ . }}
+    manifest: {{ . | quote }}
     {{- end }}
     {{- end }}
     {{- include "pro-api.labels" . | nindent 4 }}

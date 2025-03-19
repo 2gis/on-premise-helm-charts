@@ -86,7 +86,7 @@ make charts/navi-back
     ```yaml
     {{ if (.Values.dgctlStorage).manifest }}
     {{- with (include "<svc_name>.manifestCode" .) }}
-    manifest: {{ . }}
+    manifest: {{ . | quote }}
     {{- end }}
     {{- end }}
     ```

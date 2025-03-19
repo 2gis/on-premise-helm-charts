@@ -11,7 +11,7 @@ metadata:
   labels:
     {{ if (.Values.dgctlStorage).manifest }}
     {{- with (include "castle.manifestCode" .) }}
-    manifest: {{ . }}
+    manifest: {{ . | quote }}
     {{- end }}
     {{- end }}
     {{- include "castle.labels" . | nindent 4 }}

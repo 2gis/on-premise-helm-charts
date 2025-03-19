@@ -16,7 +16,7 @@ metadata:
   labels:
     {{ if (.Values.dgctlStorage).manifest }}
     {{- with (include "search-api.manifestCode" .) }}
-    manifest: {{ . }}
+    manifest: {{ . | quote }}
     {{- end }}
     {{- end }}
     {{- include "search-api.labels" . | nindent 4 }}
