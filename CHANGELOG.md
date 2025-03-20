@@ -1,5 +1,28 @@
 # 2GIS On-Premise Changelog
 
+## [1.36.0] (2025-03-11)
+#### [Breaking-Changes](Breaking-Changes.md#1360)
+#### Images
+```
+citylens
+	- citylens-routes-api:1.0.12
+	+ citylens-routes-api:1.0.15
+	- citylens-worker-service:1.0.12
+	+ citylens-worker-service:1.0.15
+citylens-routes-ui
+	- citylens-routes-ui:0.0.21
+	+ citylens-routes-ui:0.0.22
+keys
+	- keys-redis:6.2.6-alpine3.15
+license
+	- license:2.2.4
+	+ license:2.4.1
+mapgl-js-api
+	- mapgl:1.56.0
+	+ mapgl:1.57.0
+
+```
+
 ## [1.35.0] (2025-02-26)
 #### [Breaking-Changes](Breaking-Changes.md#1350)
 #### Images
