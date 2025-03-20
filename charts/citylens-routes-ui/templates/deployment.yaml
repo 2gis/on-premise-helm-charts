@@ -53,7 +53,7 @@ spec:
             - name: CATALOG_API_URL
               value: {{ required "A valid .Values.env.CATALOG_API_URL entry required" .Values.env.CATALOG_API_URL | quote }}
             - name: MAPGL_API_URL
-              value: {{ required "A valid .Values.env.MAPGL_API_URL entry required" .Values.env.MAPGL_API_URL | quote }}
+              value: {{ printf "%s/api/js" (required "A valid .Values.env.MAPGL_API_URL entry required" .Values.env.MAPGL_API_URL) | quote }}
             - name: MAPGL_COPYRIGHT_VARIANT
               value: {{ .Values.env.MAPGL_COPYRIGHT_VARIANT | quote }}
             - name: MAPGL_STYLE_ID
