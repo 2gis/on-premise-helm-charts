@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.17.6`                       |
+| `api.image.tag`        | Tag.         | `1.17.7`                       |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -108,11 +108,11 @@ See the [documentation]() to learn about:
 
 ### Custom settings
 
-| Name                 | Description                                            | Value          |
-| -------------------- | ------------------------------------------------------ | -------------- |
-| `api.showDocs`       | Show documentation link if needed.                     | `false`        |
-| `api.logLevel`       | Log level.                                             | `INFO`         |
-| `api.metricsAppName` | Value for service prometheus metrics label "app_name". | `citylens-api` |
+| Name                 | Description                                                 | Value          |
+| -------------------- | ----------------------------------------------------------- | -------------- |
+| `api.showDocs`       | Show documentation link if needed.                          | `false`        |
+| `api.logLevel`       | Log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'. | `INFO`         |
+| `api.metricsAppName` | Value for service prometheus metrics label "app_name".      | `citylens-api` |
 
 ### Metadata settings
 
@@ -134,7 +134,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.17.6`                       |
+| `web.image.tag`        | Tag.         | `1.17.7`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -188,7 +188,7 @@ See the [documentation]() to learn about:
 
 | Name                    | Description                                                                                 | Value          |
 | ----------------------- | ------------------------------------------------------------------------------------------- | -------------- |
-| `web.logLevel`          | Log level.                                                                                  | `WARNING`      |
+| `web.logLevel`          | Log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.                                 | `WARNING`      |
 | `web.metricsAppName`    | Value for service prometheus metrics label "app_name".                                      | `citylens-web` |
 | `web.pgPoolSize`        | Postgres: maximum number of connections in connections pool to maintain.                    | `5`            |
 | `web.pgPoolMaxOverflow` | Postgres: maximum number of extra connections in connections pool (relative of pgPoolSize). | `10`           |
@@ -406,9 +406,9 @@ See the [documentation]() to learn about:
 | Name                                               | Description                                                                                                                                    | Value                              |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `worker.dashboardBatchEvents.image.repository`     | Repository.                                                                                                                                    | `2gis-on-premise/citylens-workers` |
-| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.17.6`                           |
+| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.17.7`                           |
 | `worker.dashboardBatchEvents.image.pullPolicy`     | Pull Policy.                                                                                                                                   | `IfNotPresent`                     |
-| `worker.dashboardBatchEvents.logLevel`             | Worker's log level.                                                                                                                            | `INFO`                             |
+| `worker.dashboardBatchEvents.logLevel`             | Worker's log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.                                                                           | `INFO`                             |
 | `worker.dashboardBatchEvents.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`                                |
 | `worker.dashboardBatchEvents.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`                               |
 | `worker.dashboardBatchEvents.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`                               |

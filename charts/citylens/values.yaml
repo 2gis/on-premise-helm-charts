@@ -82,7 +82,7 @@ dgctlStorage:
 # @section Custom settings
 
 # @param api.showDocs Show documentation link if needed.
-# @param api.logLevel Log level.
+# @param api.logLevel Log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.
 # @param api.metricsAppName Value for service prometheus metrics label "app_name".
 
 # @section Metadata settings
@@ -100,7 +100,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.17.6
+    tag: 1.17.7
 
   replicas: 4
 
@@ -214,7 +214,7 @@ api:
 
 # @section Custom settings
 
-# @param web.logLevel Log level.
+# @param web.logLevel Log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.
 # @param web.metricsAppName Value for service prometheus metrics label "app_name".
 # @param web.pgPoolSize Postgres: maximum number of connections in connections pool to maintain.
 # @param web.pgPoolMaxOverflow Postgres: maximum number of extra connections in connections pool (relative of pgPoolSize).
@@ -234,7 +234,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.17.6
+    tag: 1.17.7
 
   replicas: 1
 
@@ -714,7 +714,7 @@ worker:
 # @param worker.dashboardBatchEvents.image.tag Tag.
 # @param worker.dashboardBatchEvents.image.pullPolicy Pull Policy.
 
-# @param worker.dashboardBatchEvents.logLevel Worker's log level.
+# @param worker.dashboardBatchEvents.logLevel Worker's log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.
 
 # @param worker.dashboardBatchEvents.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
@@ -734,7 +734,7 @@ worker:
     image:
       repository: 2gis-on-premise/citylens-workers
       pullPolicy: IfNotPresent
-      tag: 1.17.6
+      tag: 1.17.7
 
     revisionHistoryLimit: 3
 
