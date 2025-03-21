@@ -188,6 +188,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----- |
 | `importer`                            | **Common settings**                                                                                                |       |
 | `importer.nodeSelector`               | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) | `{}`  |
+| `importer.tolerations`                | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings   | `[]`  |
 | `importer.workerNum`                  | Number of parallel import processes (workers)                                                                      | `3`   |
 | `importer.initialDelaySeconds`        | Number of seconds after the container has started before liveness or readiness probes are initiated                | `1`   |
 | `importer.retry.download.maxAttempts` | The maximum number of retries download before stopping                                                             | `3`   |
