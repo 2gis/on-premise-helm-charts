@@ -1,5 +1,21 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [NEW VERSION]
+
+### navi-async-matrix
+
+- Now attraction works only through an external attractor.
+
+```yml
+  attractTopicRules:
+  - topic: attract_car_task_topic
+    default: true
+    type: car
+  - topic: attract_truck_task_topic
+    default: true
+    type: truck
+```
+
 ## [1.36.0]
 
 ### keys
