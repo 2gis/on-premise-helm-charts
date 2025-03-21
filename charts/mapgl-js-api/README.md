@@ -46,9 +46,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 ### Deployment settings
 
 | Name               | Description | Value                   |
-| ------------------ | ----------- | ----------------------- |
+| ------------------ | ----------- |-------------------------|
 | `image.repository` | Repository  | `2gis-on-premise/mapgl` |
-| `image.tag`        | Tag         | `1.57.0`                |
+| `image.tag`        | Tag         | `1.58.0`                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
 
 ### Environment variables
