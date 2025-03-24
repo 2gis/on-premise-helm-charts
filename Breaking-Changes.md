@@ -1,5 +1,13 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [NEW_VER]
+
+### pro-api
+- tasksApi.useForLayerDataPreparation is true by default
+- added tasks settings, tasks.settings.enabled is true by default
+- added required postgres settings for tasks and permissions: host, port, name, username, password
+- elastic settings are set to standard, host must contain only the host, secure and port are mandatory, username and password can be set if needed, credentials is removed
+
 ## [1.36.0]
 
 ### keys
