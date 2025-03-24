@@ -29,7 +29,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name               | Description | Value                    |
 | ------------------ | ----------- | ------------------------ |
 | `image.repository` | Repository  | `2gis-on-premise/pro-ui` |
-| `image.tag`        | Tag         | `4.5.0`                  |
+| `image.tag`        | Tag         | `4.9.0`                  |
 
 ### Common deployment settings
 
@@ -197,7 +197,6 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `stylesImporter.resources.requests.memory` | A memory request.                                                                                                                                      | `768M`                         |
 | `stylesImporter.resources.limits.cpu`      | A CPU limit.                                                                                                                                           | `1000m`                        |
 | `stylesImporter.resources.limits.memory`   | A memory limit.                                                                                                                                        | `8Gi`                          |
-
 
 ## Maintainers
 
