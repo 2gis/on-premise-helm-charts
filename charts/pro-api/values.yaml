@@ -1,4 +1,4 @@
-# @section Geo API configuration & settings
+﻿# @section Geo API configuration & settings
 
 api:
 
@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.2.1
+    tag: 2.8.2
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -117,6 +117,7 @@ api:
   # @skip api.settings.env
   # @skip api.settings.filterByZoneCodes
   # @skip api.settings.esDataCentersCount
+  # @skip api.settings.dataCenterId
   # @extra api.settings.logging Logging settings
   # @param api.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
   # @param api.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
@@ -133,6 +134,7 @@ api:
   # @skip api.settings.auth.autoRegisterUsers
   # @param api.settings.auth.turnOffCertValidation Turn off certificate validation for auth.url
   # @param api.settings.auth.shareKeys Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`
+  # @param api.settings.auth.skipShareLinksPermissionsCheck If true, then the permissions check for the possibility of making a request for data is not performed.
   # @param api.settings.backgroundJobs.enableUserAssetsImporter If user data importer job is enabled for the service.
   # @param api.settings.backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
   # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount Maximum number of points in a layer for generating isochrones.
@@ -147,6 +149,7 @@ api:
     env: ''
     filterByZoneCodes: false
     esDataCentersCount: 1
+    dataCenterId: ''
     logging:
       format: simple
       targets: ''
@@ -165,13 +168,14 @@ api:
       autoRegisterUsers: true
       turnOffCertValidation: false
       shareKeys: []
+      skipShareLinksPermissionsCheck: false
     backgroundJobs:
       enableUserAssetsImporter: true
       enableAssetsStreaming: false
     layerGeneration:
       isochroneLayerMaxPointsCount: 500
     tasksApi:
-      useForLayerDataPreparation: false
+      useForLayerDataPreparation: true
 
 # @section Permissions API configuration & settings
 
@@ -182,7 +186,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.2.1
+    tag: 2.8.2
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -263,15 +267,23 @@ permissions:
       apiKey: ''
 
 # @section Tasks API configuration & settings
-# @skip tasks
 
 tasks:
 
+  # @param tasks.image.repository Repository
+  # @param tasks.image.tag Tag
+  # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.2.1
+    tag: 2.8.2
     pullPolicy: IfNotPresent
 
+  # @param tasks.ingress.enabled If Ingress is enabled for the service
+  # @param tasks.ingress.className Name of the Ingress controller class
+  # @param tasks.ingress.hosts[0].host Hostname for the Ingress service
+  # @param tasks.ingress.hosts[0].paths[0].path Path of the host for the Ingress service
+  # @param tasks.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service
+  # @param tasks.ingress.tls TLS configuration
   ingress:
     enabled: false
     className: nginx
@@ -283,6 +295,27 @@ tasks:
     tls: []
     #   secretName: secret.tls
 
+  # @param tasks.pod.apiReplicaCount A replica count for the api pod.
+  # @param tasks.pod.workerReplicaCount A replica count for the worker pod.
+  # @param tasks.pod.imagePullSecrets Kubernetes image pull secrets.
+  # @param tasks.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param tasks.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param tasks.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
+  # @param tasks.pod.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
+  # @param tasks.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  # @param tasks.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param tasks.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param tasks.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param tasks.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param tasks.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @extra tasks.pod.resources **Limits for the application service**
+  # @param tasks.pod.resources.requests.cpu A CPU request.
+  # @param tasks.pod.resources.requests.memory A memory request.
+  # @param tasks.pod.resources.limits.cpu A CPU limit.
+  # @param tasks.pod.resources.limits.memory A memory limit.
+  # @param tasks.pod.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param tasks.pod.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param tasks.pod.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
   pod:
     apiReplicaCount: 1
     workerReplicaCount: 1
@@ -310,6 +343,12 @@ tasks:
         maxUnavailable: 0
         maxSurge: 1
 
+  # @param tasks.vpa.enabled If VPA is enabled for the service.
+  # @param tasks.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+  # @param tasks.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+  # @param tasks.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+  # @param tasks.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+  # @param tasks.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
   vpa:
     enabled: false
     updateMode: Auto
@@ -320,25 +359,38 @@ tasks:
       cpu: 1
       memory: 1024M
 
+  # @param tasks.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+  # @param tasks.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param tasks.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param tasks.service.port Tasks API service port.
   service:
     annotations: {}
     labels: {}
     type: ClusterIP
     port: 80
 
+  # @param tasks.settings.enabled If Tasks API is disabled it will not be deployed to k8s
+  # @skip tasks.settings.env
+  # @param tasks.settings.tempPath Path to directory used for temp data
+  # @param tasks.settings.httpPort Http port for interaction via the rest api
+  # @param tasks.settings.grpcPort Grpc port for interaction via the grpc api
+  # @extra tasks.settings.logging Logging settings
+  # @param tasks.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
+  # @param tasks.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
+  # @param tasks.settings.worker.resourceIntensiveTasksWorkersCount Number of threads that will be used by Hangfire-server to performs resource-intensive tasks
+  # @param tasks.settings.worker.regularTasksWorkersCount Number of threads that will be used by Hangfire-server to performs other tasks
   settings:
-    enabled: false
+    enabled: true
     env: ''
     tempPath: /tmp
+    httpPort: 8082
+    grpcPort: 8083
     logging:
       format: simple
       targets: ''
     worker:
       resourceIntensiveTasksWorkersCount: 5
       regularTasksWorkersCount: 5
-    httpPort: 8082
-    grpcPort: 8083
-
 
 # @section asset importer settings
 
@@ -373,7 +425,7 @@ tasks:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.2.1
+  tag: 2.8.2
   imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2
@@ -409,7 +461,7 @@ assetImporter:
 assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.2.1
+  tag: 2.8.2
   imagePullSecrets: []
   schedule: 0 16 * * 6
   backoffLimit: 2
@@ -509,8 +561,49 @@ postgres:
       password: ''
     ro: {}
 
-  # @skip postgres.tasks
+  # @extra postgres.tasks. Settings for Tasks API database connection
+
   tasks:
+
+    # @extra postgres.tasks.rw. Settings for the read-write access. Same settings for read-only access can be added, if necessary (postgres.tasks.ro).
+    # @param postgres.tasks.rw.host PostgreSQL hostname or IP. **Required**
+    # @param postgres.tasks.rw.port PostgreSQL port. **Required**
+    # @param postgres.tasks.rw.timeout PostgreSQL client connection timeout in seconds.
+    # @extra postgres.tasks.rw.poolSize. Settings for the pool size.
+    # @param postgres.tasks.rw.poolSize.min PostgreSQL minimum connection pool size. 0 means no minimal bound.
+    # @param postgres.tasks.rw.poolSize.max PostgreSQL maximum connection pool size.
+    # @param postgres.tasks.rw.name PostgreSQL database name. **Required**
+    # @param postgres.tasks.rw.username PostgreSQL username. **Required**
+    # @param postgres.tasks.rw.password PostgreSQL password. **Required**
+    # @param postgres.tasks.ro Settings for the read-only access.
+
+    rw:
+      host: ''
+      port: 5432
+      timeout: 15
+      poolSize:
+        min: 1
+        max: 5
+      name: ''
+      username: ''
+      password: ''
+    ro: {}
+
+  # @extra permissions.tasks. Settings for Permissions API database connection
+  permissions:
+
+    # @extra postgres.permissions.rw. Settings for the read-write access. Same settings for read-only access can be added, if necessary (postgres.permissions.ro).
+    # @param postgres.permissions.rw.host PostgreSQL hostname or IP. **Required**
+    # @param postgres.permissions.rw.port PostgreSQL port. **Required**
+    # @param postgres.permissions.rw.timeout PostgreSQL client connection timeout in seconds.
+    # @extra postgres.permissions.rw.poolSize. Settings for the pool size.
+    # @param postgres.permissions.rw.poolSize.min PostgreSQL minimum connection pool size. 0 means no minimal bound.
+    # @param postgres.permissions.rw.poolSize.max PostgreSQL maximum connection pool size.
+    # @param postgres.permissions.rw.name PostgreSQL database name. **Required**
+    # @param postgres.permissions.rw.username PostgreSQL username. **Required**
+    # @param postgres.permissions.rw.password PostgreSQL password. **Required**
+    # @param postgres.permissions.ro Settings for the read-only access.
+
     rw:
       host: ''
       port: 5432
@@ -569,15 +662,23 @@ kafka:
   useReplicaTopics: false
 
 
-# @section ElasticSearch settings (supported version 7.x)
+# @section ElasticSearch settings (supported version 8.x)
 
-# @param elastic.host ElasticSearch host address. Format: `http(s)://HOST:PORT`
-# @param elastic.credentials User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD`
-# @skip elastic.indexPrefix
+# @param elastic.host ElasticSearch host address. **Required**
+# @param elastic.secure Set to `true` if elastic.host must be accessed via https. **Required**
+# @param elastic.port ElasticSearch port. **Required**
+# @param elastic.username Username used to connect to ElasticSearch
+# @param elastic.password Password used to connect to ElasticSearch
+# @param elastic.enableHttpCompression Use http-level compression. Must be enabled in the ElasticSearch configuration
+# @param elastic.indexPrefix Prefix for indexes created in the ElasticSearch. Сan be used to separate different environments
 
 elastic:
   host: ''
-  credentials: ''
+  secure: false
+  port: 9200
+  username: ''
+  password: ''
+  enableHttpCompression: false
   indexPrefix: ''
 
 

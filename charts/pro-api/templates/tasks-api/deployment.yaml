@@ -157,5 +157,7 @@ spec:
               value: "{{ .Values.tasks.settings.httpPort }}"
             - name: Common__GrpcPort
               value: "{{ .Values.tasks.settings.grpcPort }}"
+            - name: Common__DataCenterId
+              value: "{{ .Values.api.settings.dataCenterId }}"
 
 {{- end }}
