@@ -139,7 +139,7 @@ tilegen:
   # @param tilegen.imagePullSecrets Kubernetes image pull secrets.
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.64.1
+    tag: 4.69.0
     pullPolicy: IfNotPresent
 
   imagePullSecrets: {}
@@ -228,8 +228,9 @@ tilegen:
 # @extra proxy.access **API Keys service access settings**
 # @param proxy.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
 # @param proxy.access.url API Keys endpoint url, ex: http://keys-api.svc. **Required**
-# @param proxy.access.token Service key for Keys API. **Required**
 # @param proxy.access.syncPeriod Proxy sync period.
+# @param proxy.access.raster.token Service key for raster data in Keys API **Required**
+# @param proxy.access.vector.token Service key for vector data in Keys API. **Required**
 
 # @extra proxy.access.stat **Statistics receiver settings**
 # @param proxy.access.stat.enabled If statistics receiver is enabled.
@@ -241,7 +242,7 @@ proxy:
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.64.1
+    tag: 4.69.0
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -258,11 +259,15 @@ proxy:
   access:
     enabled: false
     url: ''
-    token: ''
     syncPeriod: 2m
     stat:
       enabled: false
       url: ''
+
+    vector:
+      token: ''
+    raster:
+      token: ''
 
 # @section Tiles API settings
 
@@ -298,7 +303,7 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.64.1
+    tag: 4.69.0
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
@@ -456,7 +461,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.64.1
+    tag: 4.69.0
     pullPolicy: IfNotPresent
 
 
