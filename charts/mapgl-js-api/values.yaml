@@ -50,7 +50,6 @@ image:
 # @param env.MAPGL_TILESET Tileset of the Tiles API service to use.
 # @param env.MAPGL_IMMERSIVE_TILESET Additional immersive tileset of the Tiles API service to use.
 # @param env.MAPGL_TRAFFICSERVER Domain name of the Traffic Proxy service, e.g. 'https://traffic-proxy.ingress.host'
-# @param env.MAPGL_FLOORSSERVER URL of the Floors API service, e.g. 'https://floors-api.ingress.host'
 # @param env.MAPGL_STYLESERVER URL of the Styles API service, e.g. 'https://styles.ingress.host'
 # @param env.MAPGL_ICONSPATH URL of the icons directory, e.g. 'https://styles.ingress.host/styles/assets/icons'
 # @param env.MAPGL_MODELSPATH URL of the models directory, e.g. 'https://styles.ingress.host/styles/assets/models'
@@ -66,7 +65,6 @@ env:
   MAPGL_TILESET: web
   MAPGL_IMMERSIVE_TILESET: web_immersive
   MAPGL_TRAFFICSERVER: 'https://traffic-proxy.ingress.host'
-  MAPGL_FLOORSSERVER: ''
   MAPGL_STYLESERVER: ''
   MAPGL_ICONSPATH: ''
   MAPGL_MODELSPATH: ''
