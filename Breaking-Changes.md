@@ -1,7 +1,7 @@
 # 2GIS On-Premise Breaking-Changes
 
 
-## [NEW_VER]
+## [1.37.0]
 
 ### pro-ui
 - Updated a config verification code. If the config is not valid your application will be stopped.
