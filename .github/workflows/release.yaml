@@ -7,7 +7,7 @@ on:
       - '*'
 
 env:
-  CHART_RELEASER_VERSION: v1.3.0
+  CHART_RELEASER_VERSION: v1.7.0
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CHART_RELEASER_OWNER: ${{ github.repository_owner }}
   CHART_RELEASER_REPO: ${{ github.event.repository.name }}
