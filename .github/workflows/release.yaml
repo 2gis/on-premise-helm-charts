@@ -24,12 +24,9 @@ jobs:
         run: |
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-      - name: Install chart-releaser
+      - name: Setup chart-releaser
+        uses: helm/chart-releaser-action@{{ env.CHART_RELEASER_VERSION }}
         run: |
-          arch=$(uname -m)
-          cache_dir="$RUNNER_TOOL_CACHE/ct/$CHART_RELEASER_VERSION/$arch"
-          mkdir -p "$cache_dir"
-          curl -sSLo cr.tar.gz "https://github.com/helm/chart-releaser/releases/download/$CHART_RELEASER_VERSION/chart-releaser_${CHART_RELEASER_VERSION#v}_linux_amd64.tar.gz"
           tar -xzf cr.tar.gz -C "$cache_dir"
           rm -f cr.tar.gz
           echo "$cache_dir" >> $GITHUB_PATH
