@@ -4,7 +4,7 @@ description: GIS Platform
 
 type: application
 
-version: 1.36.0
+version: 1.37.0
 appVersion: 2023.8.3-0
 
 dependencies:
