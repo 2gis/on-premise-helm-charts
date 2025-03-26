@@ -18,6 +18,10 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.assetImporter.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       restartPolicy: Never
       serviceAccountName: {{ include "pro-api.service-account-name" . }}
       volumes:
@@ -27,10 +31,6 @@ spec:
         - name: {{ include "pro-api.asset-importer-name" . }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.assetImporter.repository }}:{{ .Values.assetImporter.tag }}
           imagePullPolicy: IfNotPresent
-          {{- with .Values.assetImporter.imagePullSecrets }}
-          imagePullSecrets:
-            {{- toYaml . | nindent 16 }}
-          {{- end }}
           resources:
             {{- toYaml .Values.assetImporter.resources | nindent 16 }}
           volumeMounts:
@@ -77,17 +77,27 @@ spec:
                 secretKeyRef:
                   key: s3SecretKey
                   name: {{ include "pro-api.name" . }}-secret
-            - name: ES_HOST
+
+            - name: Elastic__Host
               value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
-            {{- if .Values.elastic.credentials }}
-            - name: ES_CREDENTIALS
+            - name: Elastic__Secure
+              value: "{{ $.Values.elastic.secure }}"
+            - name: Elastic__Port
+              value: "{{ $.Values.elastic.port }}"
+            - name: Elastic__Username
+              value: "{{ $.Values.elastic.username }}"
+            {{ if .Values.elastic.password }}
+            - name: Elastic__Password
               valueFrom:
                 secretKeyRef:
-                  key: esCredentials
+                  key: esPassword
                   name: {{ include "pro-api.name" . }}-secret
-            {{- end }}
-            - name: ES_INDEX_PREFIX
-              value: "{{ .Values.elastic.indexPrefix }}"
+            {{ end }}
+            - name: Elastic__IndexPrefix
+              value: "{{ $.Values.elastic.indexPrefix }}"
+            - name: Elastic__EnableHttpCompression
+              value: "{{ $.Values.elastic.enableHttpCompression }}"
+
             - name: API_URL
               value: http://{{ include "pro-api.name" . }}
             {{- if .Values.api.settings.auth.apiKey }}

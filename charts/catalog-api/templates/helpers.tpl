@@ -64,7 +64,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "catalog.manifestCode" -}}
 {{- if .Values.importer.postgres.schemaSwitchEnabled }}
-{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- else -}}
 onprem
 {{- end }}

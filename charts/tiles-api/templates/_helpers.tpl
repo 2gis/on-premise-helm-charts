@@ -21,7 +21,7 @@ app.kubernetes.io/component: api
 {{- end -}}
 
 {{- define "tiles.manifestCode" -}}
-{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}
 
 {{- define "tiles.name" -}}
