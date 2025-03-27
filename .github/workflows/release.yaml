@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Set up Helm
         run: |
@@ -62,6 +64,11 @@ jobs:
               cr package --package-path .cr-release-packages "$chart"
             fi
           done
+          
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Upload releases
         run: |
