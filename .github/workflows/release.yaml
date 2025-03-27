@@ -64,7 +64,7 @@ jobs:
               cr package --package-path .cr-release-packages "$chart"
             fi
           done
-          
+
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
@@ -81,8 +81,9 @@ jobs:
       - name: Update index
         run: |
           cr index \
+            -t "$GITHUB_TOKEN" \
             -o "$CHART_RELEASER_OWNER" \
             -r "$CHART_RELEASER_REPO" \
             -c "https://${CHART_RELEASER_OWNER}.github.io/${CHART_RELEASER_REPO}" \
             --push
-            -t "$GITHUB_TOKEN"
+            
