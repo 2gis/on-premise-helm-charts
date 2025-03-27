@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Set up Helm
         run: |
@@ -63,6 +65,11 @@ jobs:
             fi
           done
 
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
       - name: Upload releases
         run: |
           cr upload \
@@ -74,8 +81,9 @@ jobs:
       - name: Update index
         run: |
           cr index \
+            -t "$GITHUB_TOKEN" \
             -o "$CHART_RELEASER_OWNER" \
             -r "$CHART_RELEASER_REPO" \
             -c "https://${CHART_RELEASER_OWNER}.github.io/${CHART_RELEASER_REPO}" \
             --push
-            -t "$GITHUB_TOKEN"
+            
