@@ -71,11 +71,9 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       volumes:
-      {{- if .Values.dm.archiver.enabled }}
         - name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
           configMap:
             name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
-      {{- end }}
       {{- $kafkaVolumeMounted := (
               .Values.kafka.fileProperties |
               or (.Values.kafka.consumerOverrides).fileProperties |
@@ -143,16 +141,18 @@ spec:
               path: /healthcheck
               port: http
             failureThreshold: 5
-            initialDelaySeconds: 5
             periodSeconds: 15
             timeoutSeconds: 5
-          readinessProbe: *healthProbe
+          readinessProbe:
+            <<: *healthProbe
+            failureThreshold: 3
+          startupProbe:
+            <<: *healthProbe
+            failureThreshold: 60
           volumeMounts:
-          {{- if .Values.dm.archiver.enabled }}
           - name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /app/src/composite_task_result_archiver/manifests/archive_pod_manifest.json
             subPath: archive_pod_manifest.json
-          {{- end }}
           {{- if $kafkaVolumeMounted }}
           - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /etc/2gis/secret/consumer/
@@ -189,6 +189,8 @@ spec:
               value: {{ required "A valid .Values.s3.bucket entry required" .Values.s3.bucket | quote }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__REGION_NAME
               value: {{ .Values.s3.region | quote }}
+            - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__EXPIRATION_IN_DAYS
+              value: {{ .Values.s3.expirationDays | quote }}
             - name: DM_ASYNC_SERVICE_LOGGER_SETTING__LEVEL
               value: {{ .Values.dm.logLevel | quote }}
             {{- if .Values.s3.publicNetloc }}
@@ -227,11 +229,10 @@ spec:
             - name: DM_ASYNC_SERVICE_SUBSCRIBER_TOPIC
               value: {{ .Values.kafka.vrpStatusTopic | quote }}
             {{- end }}
-            {{- if .Values.dm.archiver.enabled }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ARCHIVE_RESPONSE_TOPIC
               value: {{ .Values.kafka.archiveTopic | quote }}
             - name: DM_ASYNC_SERVICE_DEBUG_MODE
-              value: {{ .Values.dm.archiver.fetchLogs | ternary "true" "false" | quote }}
+              value: {{ .Values.dm.archiver.fetchLogs | default false | ternary "true" "false" | quote }}
             - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__NAMESPACE
               value: {{ .Release.Namespace | quote }}
             - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__CONFIG_TYPE
@@ -245,7 +246,6 @@ spec:
               value: {{ .Values.dm.taskSplitSize | quote }}
             - name: DM_ASYNC_SERVICE_COMPOSITE_TASK_TIMEOUT_IN_SECONDS
               value: {{ .Values.dm.compositeTaskTimeoutSec | quote }}
-            {{- end }}{{- /* .Values.dm.archiver.enabled */}}
             {{- if .Values.multiDc.enabled }}
             - name: DM_ASYNC_SERVICE_APP__LOCATION
               value: {{ .Values.multiDc.location | quote }}
@@ -255,10 +255,8 @@ spec:
               value: {{ .Values.multiDc.secondaryTopics.statusTopic | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_CANCEL_TOPIC
               value: {{ .Values.multiDc.secondaryTopics.cancelTopic | quote }}
-            {{- if .Values.dm.archiver.enabled }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ARCHIVE_RESPONSE_TOPIC
               value: {{ .Values.multiDc.secondaryTopics.archiveTopic | quote }}
-            {{- end }}{{- /* .Values.dm.archiver.enabled */}}
             {{- end }}{{- /* .Values.kafka.secondaryTopics */}}
             - name: DM_ASYNC_SERVICE_NODE_ID
               valueFrom:
@@ -298,6 +296,12 @@ spec:
                 secretKeyRef:
                   name: {{ include "navi-async-matrix.fullname" . | quote }}
                   key: dbDsn
+            {{- if .Values.db.expirationSec }}
+            - name: DM_ASYNC_SERVICE_DB_EXPIRATION_IN_SEC
+              value: {{ .Values.db.expirationSec | quote }}
+            - name: DM_ASYNC_SERVICE_DB_EXPIRATION_CHECK_PERIOD
+              value: {{ .Values.db.expirationPeriodSec | quote }}
+            {{- end }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:

@@ -1,5 +1,22 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [NEW_VER]
+
+### navi-async-matrix
+
+- Now attraction works only through an external attractor.
+
+```yml
+  attractTopicRules:
+  - topic: attract_car_task_topic
+    default: true
+    type: car
+  - topic: attract_truck_task_topic
+    default: true
+    type: truck
+```
+
+- Archiver always enabled. Required `serviceAccount` and `rbac`.
 
 ## [1.37.0]
 
@@ -11,7 +28,6 @@
 - added tasks settings, tasks.settings.enabled is true by default
 - added required postgres settings for tasks and permissions: host, port, name, username, password
 - elastic settings are set to standard, host must contain only the host, secure and port are mandatory, username and password can be set if needed, credentials is removed
-
 
 ## [1.36.0]
 

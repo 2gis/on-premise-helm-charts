@@ -1,4 +1,3 @@
-{{- if .Values.dm.archiver.enabled }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -94,4 +93,3 @@ data:
         "restartPolicy": "Never"
       }
     }
-{{- end }}
