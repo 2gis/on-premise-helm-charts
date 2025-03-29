@@ -20,7 +20,7 @@ jobs:
         id: nextrelease
         run: |
           if [[ $(date +%d) -gt "17" ]]; then nextdate=$(date +%Y%m%d -d `date +%Y%m25`'+1 month'); else nextdate=$(date +%Y%m25); fi;
-          dow=$(date +%u -d $nextdate);if [[ $dow -gt "5" ]]; then per=$( expr 8 - $dow ); nextdate=$(date +%Y%m%d -d $nextdate'+'$per' day'); fi;
+          dow=$(date +%u -d $nextdate);if [[ $dow -gt "4" ]]; then per=$( expr 8 - $dow ); nextdate=$(date +%Y%m%d -d $nextdate'+'$per' day'); fi;
           echo "nextdate=$(date +%d.%m.%Y -d $nextdate)" >> $GITHUB_OUTPUT
           echo "startdate=$(date +%d.%m.%Y -d $nextdate'-1 week')" >> $GITHUB_OUTPUT
           
