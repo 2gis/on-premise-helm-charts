@@ -35,10 +35,10 @@
           "type": "string",
           "anyOf": [
             {
-              "enum": ["ar-AE", "en-AE", "ru-RU"]
+              "enum": ["ar-AE", "en-AE", "ru-RU", "en-OM", "ar-OM"]
             },
             {
-              "enum": ["ar_AE", "en_AE", "ru_RU"],
+              "enum": ["ar_AE", "en_AE", "ru_RU", "en_OM", "ar_OM"],
               "deprecated": true
             }
           ]
