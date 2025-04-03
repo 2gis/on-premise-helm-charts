@@ -23,7 +23,6 @@ jobs:
           dow=$(date +%u -d $nextdate);if [[ $dow -gt "5" ]]; then per=$( expr 8 - $dow ); nextdate=$(date +%Y%m%d -d $nextdate'+'$per' day'); fi;
           echo "nextdate=$(date +%d.%m.%Y -d $nextdate)" >> $GITHUB_OUTPUT
           echo "startdate=$(date +%d.%m.%Y -d $nextdate'-1 week')" >> $GITHUB_OUTPUT
-          
 
       - uses: mattermost/action-mattermost-notify@master
         if: ${{ github.event.workflow_run.conclusion == 'success' }}

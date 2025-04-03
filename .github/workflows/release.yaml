@@ -86,4 +86,3 @@ jobs:
             -r "$CHART_RELEASER_REPO" \
             -c "https://${CHART_RELEASER_OWNER}.github.io/${CHART_RELEASER_REPO}" \
             --push
-            
