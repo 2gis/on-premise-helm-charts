@@ -59,9 +59,9 @@ spec:
             - name: MAPGL_STYLE_ID
               value: {{ .Values.env.MAPGL_STYLE_ID | quote }}
             - name: SSO_API_URL
-              value: {{ .Values.env.SSO_API_URL | quote }}
+              value: {{ required "A valid .Values.env.SSO_API_URL entry required" .Values.env.SSO_API_URL | quote }}
             - name: SSO_CLIENT_ID
-              value: {{ .Values.env.SSO_CLIENT_ID | quote }}
+              value: {{ required "A valid .Values.env.SSO_CLIENT_ID entry required" .Values.env.SSO_CLIENT_ID | quote }}
             - name: SSO_PROXY_ENABLED
               value: {{ .Values.env.SSO_PROXY_ENABLED | quote }}
             - name: SSO_SCOPE
