@@ -9,6 +9,14 @@
 - env.PLATFORM_MANAGER_CLIENT_SECRET renamed to env.SSO_CLIENT_SECRET
 - env.PLATFORM_MANAGER_SCOPE renamed to env.SSO_SCOPE
 
+### mapgl-js-api
+
+- env.MAPGL_FLOORSSERVER was removed
+
+### floors-api
+
+- Chart floors-api was removed
+
 ## [1.37.0]
 
 ### pro-ui
