@@ -1,20 +1,70 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.37.1]
+
+### citylens-routes-ui
+
+- env.PLATFORM_MANAGER_API_URL renamed to env.SSO_API_URL
+- env.PLATFORM_MANAGER_CLIENT_ID renamed to env.SSO_CLIENT_ID
+- env.PLATFORM_MANAGER_CLIENT_SECRET renamed to env.SSO_CLIENT_SECRET
+- env.PLATFORM_MANAGER_SCOPE renamed to env.SSO_SCOPE
+
+### mapgl-js-api
+
+- env.MAPGL_FLOORSSERVER was removed
+
+### floors-api
+
+- Chart floors-api was removed
+
+### navi-async-matrix
+
+- Now attraction works only through an external attractor.
+
+```yml
+  attractTopicRules:
+  - topic: attract_car_task_topic
+    default: true
+    type: car
+  - topic: attract_truck_task_topic
+    default: true
+    type: truck
+```
+
+- Archiver always enabled. Required `serviceAccount` and `rbac`.
+
+## [1.37.0]
+
+### pro-ui
+
+- Updated a config verification code. If the config is not valid your application will be stopped.
+
+### pro-api
+
+- tasksApi.useForLayerDataPreparation is true by default
+- added tasks settings, tasks.settings.enabled is true by default
+- added required postgres settings for tasks and permissions: host, port, name, username, password
+- elastic settings are set to standard, host must contain only the host, secure and port are mandatory, username and password can be set if needed, credentials is removed
+
 ## [1.36.0]
 
 ### keys
-- The in-chart Redis deployment has been **removed**. You must configure an **external Redis instance** for the application to function **before upgrading**.  If you were using the in-chart Redis instance for additional tasks, make sure to **migrate those workloads** to a different Redis instance before proceeding with the upgrade.
+
+- The in-chart Redis deployment has been **removed**. You must configure an **external Redis instance** for the application to function **before upgrading**. If you were using the in-chart Redis instance for additional tasks, make sure to **migrate those workloads** to a different Redis instance before proceeding with the upgrade.
 
 ## [1.35.0]
 
 ### platform
+
 - Added `ui.playgrounds` for enable playgrounds on the playground page
 
 ### pro-ui
+
 - You need to upgrade MapGL to version 1.54.1
 - Updated ui.auth.oAuthProvider. Removed "ugc" value. Now possible values: "keycloak" | "openid". "keycloak" value is deprecated.
 
 ### pro-api
+
 - api.settings.allowAnyOrigin was removed, api.settings.corsOrigins was added instead
 - assetImporter.enabled was removed, assetImporter is now always mandatory
 
@@ -33,8 +83,9 @@
   ```
 
 ### citylens
+
 - Before installing new version of citylens it is required to prepare database manually:
-    `update tracks set localization_status = 2006;`
+  `update tracks set localization_status = 2006;`
   This is required as in on-premise environments this column was newer user before, and may contain unexpected values.
 - Values section `.Values.reporters` replaced with `.Values.worker.reporterPro.enabled` field.
 - Worker `.Values.worker.detectionsLocalizer` requires
@@ -49,30 +100,34 @@
 ## [1.34.0]
 
 ### keys
+
 - Before upgrading to the next version, make sure to update to the current version (1.34.0).
 - Ensure that `keys` service is upgraded prior to upgrading any of the `navi` services.
 - A temporary flag, `--migrate-data`, has been added for this release. This flag triggers the data migration required for the Routing API data in the service.
 
 ### navi-castle
+
 - `castle.restrictions.host` renamed to `castle.restrictions.url` and empty by default
 - `persistentVolume.storageClass` is now empty by default
 
 ## [1.33.0]
 
 ### pro-api
+
 - permissions.settings.enabled was removed, permissions api is now always mandatory
 - postgres.connectionString, postgres.connectionStringReadonly, postgres.password were changed to postgres.api.rw / postgres.api.ro settings
-
 
 ## [1.32.0]
 
 ### tiles-api
+
 - proxy.access.bss.enabled renamed to proxy.access.stat.enabled
 - proxy.access.bss.url renamed to proxy.access.stat.url
 
 ## [1.30.0]
 
 ### pro-api
+
 - api.pod.appName renamed api.appName
 - api.settings.enableUserAssetsImporter renamed to api.settings.backgroundJobs.enableUserAssetsImporter
 - api.settings.enableAssetsStreaming renamed to api.settings.backgroundJobs.enableAssetsStreaming
@@ -81,10 +136,12 @@
 ## [1.29.0]
 
 ### mapgl-js-api
+
 - MAPGL_ICONSPATH renamed to MAPGL_ICONS_URL
 - MAPGL_MODELSPATH renamed to MAPGL_MODELS_URL
 
 ### pro-api
+
 - appName renamed to api.appName
 - image renamed to api.image
 - ingress renamed to api.ingress
@@ -120,15 +177,18 @@
 ## [1.28.0]
 
 ### navi-async-matric
+
 - `s3.publicNetloc` now MUST start with `http://` or `https://` scheme
 
 ## [1.27.0]
 
 ### catalog-api
+
 - Backward compatibility with `license` versions before `2.0.0` (on-premise version `1.8.0`) is broken.
 - License v2 over HTTPS is required.
 
 ### pro-ui
+
 - ui.strategy renamed to strategy
 - ui.image renamed to image
 - ui.replicas renamed to replicas
@@ -152,6 +212,7 @@
 ## [1.26.0]
 
 ### citylens
+
 - Added new worker `worker.dashboardBatchEvents`
 - Added new kafka topics
   - `kafka.topics.tracksLifecycle` - tracks lifecycle events
@@ -160,23 +221,28 @@
 ## [1.24.0]
 
 ### pro-api
+
 - Added new required parameters: licenseKey, license.url
 - Removed api.licensePartner
 
 ### citylens
+
 - Parameter `pro.url` replaced with `pro.baseUrl` and `pro.framesAssetId` (ex: `pro.url: "http://pro-api:8080/my_asset/filters"` -> `pro.baseUrl: "http://pro-api:8080"` , `pro.framesAssetId: "my_asset"`)
 
 ## [1.22.0]
 
 ## citylens
+
 - `kafka.predictors` is removed. Topics `kafka.predictors[0].topic` (`camcom` in values example), `kafka.predictors[1].topic` (`manual` in values example) replaced with single topic `kafka.topics.predictions`.
 
 ### pro-api
+
 - Added new required parameters: kafka.eventsTopic.name, kafka.eventsTopic.readerGroupId
 
 ## [1.21.0]
 
 ### navi-restrictions
+
 - `api.api_key` renamed to `api.key`
 - `api.is_init_db` renamed to `api.isInitDb`
 - `db` renamed to `postgres`
@@ -185,11 +251,13 @@
 - New values required `naviBackHost`, `naviCastleHost`
 
 ### citylens
+
 - `worker.reporterProTracks.replicas` replaced with `worker.reporterProTracks.enabled`. One replica will be deployed if enabled.
 
 ## [1.20.0]
 
 ### navi-router
+
 - `router.keyManagementService.host` renamed to `router.keyManagementService.url`
 - `router.keyManagementService` renamed to `keys`
 - `router.castleHost` renamed to `router.castleUrl`
@@ -221,12 +289,9 @@
   --- # old
   persistence:
     type: s3
-    s3:
-      ...
-
+    s3: ...
   --- # new
-  persistence:
-    ...
+  persistence: ...
   ```
 
 ### navi-back
@@ -426,7 +491,6 @@ types:
 
 - Rename `api_key` to `api.api_key`
 
-
 ## [1.4.7]
 
 ### catalog-api
@@ -449,7 +513,6 @@ types:
 ### pro-ui
 
 - Renamed `api.host` to `api.url`
-
 
 ## [1.4.5]
 

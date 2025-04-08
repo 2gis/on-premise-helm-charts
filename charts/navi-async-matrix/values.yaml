@@ -51,14 +51,14 @@ prometheusEnabled: true
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  tag: 1.12.1
+  tag: 1.15.2
 
 
 # @section Service account settings
 
 # @param serviceAccount.create Specifies whether a service account should be created.
 # @param serviceAccount.annotations Annotations to add to the service account.
-# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template. It is required for the archiver to work.
 
 serviceAccount:
   create: false
@@ -68,7 +68,7 @@ serviceAccount:
 
 # @section RBAC parameters
 
-# @param rbac.create Whether to create and use RBAC resources or not
+# @param rbac.create Whether to create and use RBAC resources or not. It is required for the archiver to work
 # @param rbac.annotations Role and RoleBinding annotations
 # @param rbac.labels Role and RoleBinding additional labels
 
@@ -195,9 +195,13 @@ vpa:
 # @param dm.citiesUpdatePeriod Period (in seconds) between requesting data from `citiesUrl`.
 # @param dm.taskSplitSize Minimum size of matrix to get split in archiver job.
 # @param dm.compositeTaskTimeoutSec Timeout for executing split tasks.
-# @param dm.archiver.enabled Enables archiver post-processor job. Required for `truck` routing. Requires API access, enable `rbac` and `serviceAccount` for automatic configuration.
 # @param dm.archiver.image.repository Image repository for archiver.
 # @param dm.archiver.image.tag Image tag for archiver.
+# @skip dm.archiver.resources
+# @extra dm.archiver.resources.requests.cpu Archiver job CPU request. 1CPU recommended.
+# @extra dm.archiver.resources.requests.memory Archiver job memory request. 10Gi recommended.
+# @extra dm.archiver.resources.limits.cpu Archiver job CPU limit. 1CPU recommended.
+# @extra dm.archiver.resources.limits.memory Archiver job memory limit. 20Gi recommended.
 # @skip dm.host
 # @skip dm.labels
 # @skip dm.annotations
@@ -213,10 +217,10 @@ dm:
   taskSplitSize: 5000
   compositeTaskTimeoutSec: 3600
   archiver:
-    enabled: false
     image:
       repository: 2gis-on-premise/navi-archiver-async-matrix
-      tag: 1.4.1
+      tag: 1.15.2
+    resources: {}
   labels: {}
   annotations: {}
 
@@ -225,6 +229,7 @@ dm:
 
 # @param db.host PostgreSQL hostname or IP. **Required**
 # @param db.port PostgreSQL port.
+# @param db.extraHosts List of PostgreSQL extra hosts and ports. For more details, see values.yaml.
 # @param db.name PostgreSQL database name. **Required**
 # @param db.user PostgreSQL username. **Required**
 # @param db.password PostgreSQL password. **Required**
@@ -234,10 +239,19 @@ dm:
 # @param db.tls.cert Certificate of postgresql server.
 # @param db.tls.key Key of postgresql server.
 # @param db.tls.mode Level of protection.
+# @param db.expirationSec How many seconds to store results. (0 - disable)
+# @param db.expirationPeriodSec Period of checking the need to clear the results.
 
 db:
   host: ''
   port: 5432
+  extraHosts: []
+  # Example:
+  # extraHosts:
+  #   # if port is empty db.port is used
+  #   - host: host1.tld
+  #   - host: host2.tld
+  #     port: 5433
   name: ''
   user: ''
   password: ''
@@ -248,6 +262,8 @@ db:
     cert: ''
     key: ''
     mode: verify-full
+  expirationSec: 0
+  expirationPeriodSec: 86400
 
 
 # @section Multi-DC settings
@@ -413,6 +429,7 @@ kafka:
 # @param s3.accessKey S3 access key for accessing the bucket. **Required**
 # @param s3.secretKey S3 secret key for accessing the bucket. **Required**
 # @param s3.publicNetloc Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://`
+# @param s3.expirationDays How many days to store results
 
 s3:
   host: ''
@@ -421,6 +438,7 @@ s3:
   accessKey: ''
   secretKey: ''
   publicNetloc:
+  expirationDays: 14
 
 # @skip bss.enabled
 # @skip bss.url

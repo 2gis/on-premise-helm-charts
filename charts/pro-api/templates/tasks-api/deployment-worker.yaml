@@ -154,19 +154,27 @@ spec:
               value: "{{ $.Values.tasks.settings.worker.resourceIntensiveTasksWorkersCount }}"
             - name: Common__Worker__DefaultWorkersCount
               value: "{{ $.Values.tasks.settings.worker.regularTasksWorkersCount }}"
-            - name: ES_HOST
+
+            - name: Elastic__Host
               value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
-            - name: ES_INDEX_PREFIX
-              value: "{{ .Values.elastic.indexPrefix }}"
-            {{ if .Values.elastic.credentials }}
-            - name: ES_CREDENTIALS
+            - name: Elastic__Secure
+              value: "{{ $.Values.elastic.secure }}"
+            - name: Elastic__Port
+              value: "{{ $.Values.elastic.port }}"
+            - name: Elastic__Username
+              value: "{{ $.Values.elastic.username }}"
+            {{ if .Values.elastic.password }}
+            - name: Elastic__Password
               valueFrom:
                 secretKeyRef:
-                  key: esCredentials
+                  key: esPassword
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}
-            - name: LOG_ES_QUERIES
-              value: "{{ .Values.api.settings.logEsQueries }}"
+            - name: Elastic__IndexPrefix
+              value: "{{ $.Values.elastic.indexPrefix }}"
+            - name: Elastic__EnableHttpCompression
+              value: "{{ $.Values.elastic.enableHttpCompression }}"
+
             - name: S3Settings__Url
               value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
             - name: S3Settings__Secure
@@ -202,4 +210,6 @@ spec:
                 secretKeyRef:
                   key: apiKey
                   name: {{ include "pro-api.name" . }}-secret
+            - name: Common__DataCenterId
+              value: "{{ .Values.api.settings.dataCenterId }}"
 {{- end }}

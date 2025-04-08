@@ -48,7 +48,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | Name               | Description | Value                   |
 | ------------------ | ----------- | ----------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/mapgl` |
-| `image.tag`        | Tag         | `1.57.0`                |
+| `image.tag`        | Tag         | `1.58.1`                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
 
 ### Environment variables
@@ -61,7 +61,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `env.MAPGL_TILESET`             | Tileset of the Tiles API service to use.                                                                                                          | `web`                                                                                             |
 | `env.MAPGL_IMMERSIVE_TILESET`   | Additional immersive tileset of the Tiles API service to use.                                                                                     | `web_immersive`                                                                                   |
 | `env.MAPGL_TRAFFICSERVER`       | Domain name of the Traffic Proxy service, e.g. 'https://traffic-proxy.ingress.host'                                                               | `https://traffic-proxy.ingress.host`                                                              |
-| `env.MAPGL_FLOORSSERVER`        | URL of the Floors API service, e.g. 'https://floors-api.ingress.host'                                                                             | `""`                                                                                              |
 | `env.MAPGL_STYLESERVER`         | URL of the Styles API service, e.g. 'https://styles.ingress.host'                                                                                 | `""`                                                                                              |
 | `env.MAPGL_ICONS_URL`           | URL of the icons directory, e.g. 'https://s3.ingress.host/styles/assets/icons'. This s3 URL must be public available (accessible from browser).   | `""`                                                                                              |
 | `env.MAPGL_MODELS_URL`          | URL of the models directory, e.g. 'https://s3.ingress.host/styles/assets/models'. This s3 URL must be public available (accessible from browser). | `""`                                                                                              |
