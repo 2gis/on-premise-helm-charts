@@ -99,9 +99,10 @@ naviCastleHost: ''
 naviCastleHostScheme: http
 
 # @param api.key API key **required**
-# @param api.debug If the debug mode is enabled
+# @param api.debug If the debug mode is enabled, changes database name if `true`, for testing purposes only
 # @param api.isInitDb If `true` and the database does not exist, it will be created
 # @param api.attractorUri Attractor URI of Navi-Back service
+# @param api.logLevel Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL
 # @param api.securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
 api:
@@ -109,13 +110,14 @@ api:
   debug: false
   isInitDb: true
   attractorUri: attract/1.0.0/global/
+  logLevel: INFO
 
   securityContext: {}
 
   image:
     repository: 2gis-on-premise/navi-restrictions-api
     pullPolicy: IfNotPresent
-    tag: 1.0.1
+    tag: 1.0.2
 
   resources:
     limits:
@@ -221,8 +223,8 @@ postgres:
 # @param cron.enabled If Cron job is enabled
 # @param cron.schedule Cron job schedule
 # @param cron.concurrencyPolicy Cron job concurrency policy: `Allow` or `Forbid`
-# @param cron.successfulJobsHistoryLimit How many completed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
-# @param cron.failedJobsHistoryLimit How many failed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
+# @param cron.successfulJobsHistoryLimit How many completed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits)
+# @param cron.failedJobsHistoryLimit How many failed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits)
 # @param cron.containerPort Cron container port
 # @param cron.edgesUriTemplate URL template for getting edges
 # @param cron.edgeAttributesUriTemplate URL template for getting an edge's details
