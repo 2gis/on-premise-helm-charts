@@ -12,6 +12,11 @@ metadata:
     {{- end }}
   {{- end }}
   labels:
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "catalog.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}
+    {{- end }}
     {{- include "catalog.labels" . | nindent 4 }}
     {{- if .Values.labels }}
     {{- toYaml .Values.labels | nindent 4 }}

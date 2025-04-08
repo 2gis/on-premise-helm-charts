@@ -29,7 +29,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name               | Description | Value                    |
 | ------------------ | ----------- | ------------------------ |
 | `image.repository` | Repository  | `2gis-on-premise/pro-ui` |
-| `image.tag`        | Tag         | `4.5.0`                  |
+| `image.tag`        | Tag         | `4.9.0`                  |
 
 ### Common deployment settings
 
@@ -188,7 +188,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
 | `stylesImporter.name`                      | Styles Import job name.                                                                                                                                | `styles-importer`              |
 | `stylesImporter.image.repository`          | Docker Repository Image.                                                                                                                               | `2gis-on-premise/pro-importer` |
-| `stylesImporter.image.tag`                 | Docker image tag.                                                                                                                                      | `2.2.1`                        |
+| `stylesImporter.image.tag`                 | Docker image tag.                                                                                                                                      | `2.8.2`                        |
 | `stylesImporter.backoffLimit`              | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed. | `2`                            |
 | `stylesImporter.nodeSelector`              | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                    | `{}`                           |
 | `stylesImporter.maxParallelJobs`           | How many import jobs can be run simultaneously                                                                                                         | `1`                            |
@@ -197,7 +197,6 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `stylesImporter.resources.requests.memory` | A memory request.                                                                                                                                      | `768M`                         |
 | `stylesImporter.resources.limits.cpu`      | A CPU limit.                                                                                                                                           | `1000m`                        |
 | `stylesImporter.resources.limits.memory`   | A memory limit.                                                                                                                                        | `8Gi`                          |
-
 
 ## Maintainers
 

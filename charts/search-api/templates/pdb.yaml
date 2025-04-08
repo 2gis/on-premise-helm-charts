@@ -4,9 +4,9 @@
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "search_api.fullname" $ }}
+  name: {{ include "search-api.fullname" $ }}
   labels:
-    {{- include "search_api.labels" $ | nindent 4 }}
+    {{- include "search-api.labels" $ | nindent 4 }}
 spec:
   {{- if .minAvailable }}
   minAvailable: {{ .minAvailable }}
@@ -16,6 +16,6 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "search_api.selectorLabels" $ | nindent 6 }}
+      {{- include "search-api.selectorLabels" $ | nindent 6 }}
 {{- end }}
 {{- end }}

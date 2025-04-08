@@ -7,6 +7,11 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "pro-api.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}
+    {{- end }}
     {{- include "pro-api.labels" . | nindent 4 }}
   {{- with .Values.api.pod.labels }}
     {{- toYaml . | nindent 4 }}
@@ -138,19 +143,27 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             - name: SEARCH_API_URL
               value: {{ .Values.search.url }}
-            - name: ES_HOST
+
+            - name: Elastic__Host
               value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
-            - name: ES_INDEX_PREFIX
-              value: "{{ .Values.elastic.indexPrefix }}"
-            {{ if .Values.elastic.credentials }}
-            - name: ES_CREDENTIALS
+            - name: Elastic__Secure
+              value: "{{ $.Values.elastic.secure }}"
+            - name: Elastic__Port
+              value: "{{ $.Values.elastic.port }}"
+            - name: Elastic__Username
+              value: "{{ $.Values.elastic.username }}"
+            {{ if .Values.elastic.password }}
+            - name: Elastic__Password
               valueFrom:
                 secretKeyRef:
-                  key: esCredentials
+                  key: esPassword
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}
-            - name: LOG_ES_QUERIES
-              value: "{{ .Values.api.settings.logEsQueries }}"
+            - name: Elastic__IndexPrefix
+              value: "{{ $.Values.elastic.indexPrefix }}"
+            - name: Elastic__EnableHttpCompression
+              value: "{{ $.Values.elastic.enableHttpCompression }}"
+
             - name: ENV
               value: "{{ .Values.api.settings.env }}"
             - name: Common__CorsOrigins
@@ -266,6 +279,8 @@ spec:
             - name: Auth__ShareKeys__{{$i}}
               value: "{{ $s }}"
             {{- end }}
+            - name: Auth__SkipShareLinksPermissionsCheck
+              value: "{{ .Values.api.settings.auth.skipShareLinksPermissionsCheck }}"
             - name: License__Key
               value: {{ required "A valid .Values.api.settings.licenseKey entry required" $.Values.api.settings.licenseKey }}
             - name: KEYS_SERVICE_URL
