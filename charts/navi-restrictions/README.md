@@ -94,6 +94,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `api.isInitDb`            | If `true` and the database does not exist, it will be created                                                                 | `true`                  |
 | `api.attractorUri`        | Attractor URI of Navi-Back service                                                                                            | `attract/1.0.0/global/` |
 | `api.logLevel`            | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL                                                                  | `INFO`                  |
+| `api.logJson`             | Logging in JSON                                                                                                               | `true`                  |
 | `api.securityContext`     | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                     | `{}`                    |
 | `api.service`             | **Service settings.**                                                                                                         |                         |
 | `api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) | `ClusterIP`             |
