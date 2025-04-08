@@ -1,6 +1,21 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [NEW_VER]
+## [1.37.1]
+
+### citylens-routes-ui
+
+- env.PLATFORM_MANAGER_API_URL renamed to env.SSO_API_URL
+- env.PLATFORM_MANAGER_CLIENT_ID renamed to env.SSO_CLIENT_ID
+- env.PLATFORM_MANAGER_CLIENT_SECRET renamed to env.SSO_CLIENT_SECRET
+- env.PLATFORM_MANAGER_SCOPE renamed to env.SSO_SCOPE
+
+### mapgl-js-api
+
+- env.MAPGL_FLOORSSERVER was removed
+
+### floors-api
+
+- Chart floors-api was removed
 
 ### navi-async-matrix
 
@@ -21,9 +36,11 @@
 ## [1.37.0]
 
 ### pro-ui
+
 - Updated a config verification code. If the config is not valid your application will be stopped.
 
 ### pro-api
+
 - tasksApi.useForLayerDataPreparation is true by default
 - added tasks settings, tasks.settings.enabled is true by default
 - added required postgres settings for tasks and permissions: host, port, name, username, password
