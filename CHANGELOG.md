@@ -1,6 +1,7 @@
 # 2GIS On-Premise Changelog
 
 ## [1.37.1] (2025-04-10)
+#### [Breaking-Changes](Breaking-Changes.md#1371)
 #### Images
 ```
 citylens-routes-ui
