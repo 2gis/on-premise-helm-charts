@@ -22,7 +22,7 @@ metadata:
 spec:
   replicas: {{ .replicaCount }}
   revisionHistoryLimit: {{ .revisionHistory }}
-  
+
   selector:
     matchLabels:
       {{- include "tiles.selectorLabels" $ | nindent 6 }}
@@ -52,7 +52,7 @@ spec:
     spec:
       serviceAccountName: {{ include "tilegen.serviceAccount" $ }}
       terminationGracePeriodSeconds: {{ .terminationGracePeriodSeconds }}
-    
+
       volumes:
         - configMap:
             name: {{ include "tiles.fullname" $ }}-tilegen

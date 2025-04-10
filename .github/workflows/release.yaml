@@ -30,4 +30,3 @@ jobs:
       - name: Release chart
         # https://helm.sh/docs/howto/chart_releaser_action/#github-actions-workflow
         uses: helm/chart-releaser-action@v1.7.0
-        
