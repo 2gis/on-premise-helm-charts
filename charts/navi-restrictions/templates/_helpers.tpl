@@ -85,7 +85,7 @@ Check for deprecated values
 {{- if .Values.cron.edge_attributes_url_template -}}{{ fail "[after 1.20.2] .Values.cron.edge_attributes_url_template is deprecated, use .Values.naviBackHost and .Values.cron.edgeAttributesUriTemplate" }}{{- end }}
 {{- if .Values.cron.max_attributes_fetcher_rps -}}{{ fail "[after 1.20.2] .Values.cron.max_attributes_fetcher_rps is deprecated, use .Values.cron.maxAttributesFetcherRps" }}{{- end }}
 {{- if .Values.db -}}{{ fail "[after 1.20.2] .Values.db renamed to .Values.postgres" }}{{- end }}
-{{- end }} {{/* 1.20.2 */}}
+{{- end -}} {{/* 1.20.2 */}}
 {{- end }}
 
 {{/*

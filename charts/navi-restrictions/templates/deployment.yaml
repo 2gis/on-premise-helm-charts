@@ -107,9 +107,13 @@ spec:
           {{- end }}
           env:
             - name: DEBUG
-              value: "{{ .Values.api.debug | ternary "True" "False" }}"
+              value: {{ .Values.api.debug | ternary "True" "False" | quote }}
+            - name: LOG_LEVEL
+              value: {{ .Values.api.logLevel | quote }}
+            - name: LOG_JSON
+              value: {{ .Values.api.logJson | ternary "True" "False" | quote }}
             - name: IS_INIT_DB
-              value: "{{ .Values.api.isInitDb | ternary "True" "False" }}"
+              value: {{ .Values.api.isInitDb | ternary "True" "False" | quote }}
             - name: DB_HOST
               value: {{ required "A valid .Values.postgres.host entry required" .Values.postgres.host | quote }}
             - name: DB_PORT
