@@ -142,9 +142,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `proxy.access`                    | **API Keys service access settings**                                                                                          |                                   |
 | `proxy.access.enabled`            | If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.                                     | `false`                           |
 | `proxy.access.url`                | API Keys endpoint url, ex: http://keys-api.svc. **Required**                                                                  | `""`                              |
+| `proxy.access.token`              | Service key for Keys API. **Required**                                                                                        | `""`                              |
 | `proxy.access.syncPeriod`         | Proxy sync period.                                                                                                            | `2m`                              |
-| `proxy.access.raster.token`       | Service key for raster data in Keys API **Required**                                                                          | `""`                              |
-| `proxy.access.vector.token`       | Service key for vector data in Keys API. **Required**                                                                         | `""`                              |
 | `proxy.access.stat`               | **Statistics receiver settings**                                                                                              |                                   |
 | `proxy.access.stat.enabled`       | If statistics receiver is enabled.                                                                                            | `false`                           |
 | `proxy.access.stat.url`           | Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**                                                  | `""`                              |
