@@ -1,5 +1,30 @@
 # 2GIS On-Premise Changelog
 
+## [1.37.1] (2025-04-10)
+#### [Breaking-Changes](Breaking-Changes.md#1371)
+#### Images
+```
+citylens-routes-ui
+	- citylens-routes-ui:0.0.22
+	+ citylens-routes-ui:0.0.25
+floors-api
+	- floors-importer:1.1.0
+	- floors-nodejs:1.1.0
+	- nginx:1.25.5
+mapgl-js-api
+	- mapgl:1.57.0
+	+ mapgl:1.58.1
+navi-async-matrix
+	- navi-archiver-async-matrix:1.4.1
+	+ navi-archiver-async-matrix:1.15.2
+	- navi-async-matrix:1.12.1
+	+ navi-async-matrix:1.15.2
+navi-attractor
+	- navi-attractor:7.27.1.2
+	+ navi-attractor:7.33.0.5
+
+```
+
 ## [1.37.0] (2025-03-26)
 #### [Breaking-Changes](Breaking-Changes.md#1370)
 #### Images

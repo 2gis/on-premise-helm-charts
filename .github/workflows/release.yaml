@@ -7,10 +7,10 @@ on:
       - '*'
 
 env:
-  CHART_RELEASER_VERSION: v1.3.0
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CHART_RELEASER_OWNER: ${{ github.repository_owner }}
   CHART_RELEASER_REPO: ${{ github.event.repository.name }}
+  CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   release:
@@ -18,72 +18,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Set up Helm
-        run: |
-          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
-      - name: Install chart-releaser
-        run: |
-          arch=$(uname -m)
-          cache_dir="$RUNNER_TOOL_CACHE/ct/$CHART_RELEASER_VERSION/$arch"
-          mkdir -p "$cache_dir"
-          curl -sSLo cr.tar.gz "https://github.com/helm/chart-releaser/releases/download/$CHART_RELEASER_VERSION/chart-releaser_${CHART_RELEASER_VERSION#v}_linux_amd64.tar.gz"
-          tar -xzf cr.tar.gz -C "$cache_dir"
-          rm -f cr.tar.gz
-          echo "$cache_dir" >> $GITHUB_PATH
-
-      - name: Ensure chart versions match tag
-        run: |
-          exit_code=0
-          for chart in ./charts/* ; do
-            if [ -d "$chart" ] ; then
-              chart_version=$(sed -n -e "s|^version: \(.*\)|\1|gp" "$chart/Chart.yaml")
-              if ! [ "$chart_version" = "$GITHUB_REF_NAME" ] ; then
-                echo "Version ($chart_version) of the chart $chart does not match the tag ($GITHUB_REF_NAME)"
-                exit_code=1
-              fi
-            fi
-          done
-          if [ "$exit_code" -ne 0 ] ; then
-            exit "$exit_code"
-          fi
-
-      - name: Package charts
-        run: |
-          rm -rf .cr-release-packages
-          mkdir -p .cr-release-packages
-          rm -rf .cr-index
-          mkdir -p .cr-index
-          for chart in ./charts/* ; do
-            if [ -d "$chart" ] ; then
-              echo "Packaging chart $chart"
-              cr package --package-path .cr-release-packages "$chart"
-            fi
-          done
 
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Upload releases
-        run: |
-          cr upload \
-            -o "$CHART_RELEASER_OWNER" \
-            -r "$CHART_RELEASER_REPO" \
-            -c "$(git rev-parse HEAD)" \
-            -t "$GITHUB_TOKEN"
-
-      - name: Update index
-        run: |
-          cr index \
-            -t "$GITHUB_TOKEN" \
-            -o "$CHART_RELEASER_OWNER" \
-            -r "$CHART_RELEASER_REPO" \
-            -c "https://${CHART_RELEASER_OWNER}.github.io/${CHART_RELEASER_REPO}" \
-            --push
-            
+      - name: Release chart
+        # https://helm.sh/docs/howto/chart_releaser_action/#github-actions-workflow
+        uses: helm/chart-releaser-action@v1.7.0

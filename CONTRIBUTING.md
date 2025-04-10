@@ -36,9 +36,9 @@ Once your PR is approved, it will be merged. Thank you for your contribution!
 - New appVersion (or tag) specified
 - The title of the PR begins with the services name, the addition feature/bugfix is welcome, and the short description of the feature follows. Good examples of PR names:
   > LICENSE Feature: add super license;
-  
+
   > [tiles-api] Upgraded version and added breaking changes
-  
+
   > navi-back: upstream sync
 - The PRs description clearly explains the feature and how to check it.
 Good example of the description:

@@ -25,7 +25,7 @@ strategy:
 # @param image.tag Tag
 image:
   repository: 2gis-on-premise/citylens-routes-ui
-  tag: 0.0.22
+  tag: 0.0.25
 
 # @section Environment
 
@@ -34,22 +34,24 @@ image:
 # @param env.MAPGL_COPYRIGHT_VARIANT Copyright variant, can be '2gis', 'urbi' or empty
 # @param env.MAPGL_KEY API key for mapgl **Required**
 # @param env.MAPGL_STYLE_ID Map style ID
-# @param env.PLATFORM_MANAGER_API_URL Platform manager API base URL **Required**
-# @param env.PLATFORM_MANAGER_CLIENT_ID OpenID client identifier for Platform manager **Required**
-# @param env.PLATFORM_MANAGER_CLIENT_SECRET OpenID client identifier for Platform manager **Required**
-# @param env.PLATFORM_MANAGER_SCOPE OpenID scope for Platform manager **Required**
 # @param env.ROUTES_API_URL Backend (citylens-routes-api) base URL **Required**
+# @param env.SSO_API_URL Single sign-on API URL **Required**
+# @param env.SSO_CLIENT_ID OpenID client identifier for single sign-on **Required**
+# @param env.SSO_CLIENT_SECRET OpenID client identifier for single sign-on **Required**
+# @param env.SSO_PROXY_ENABLED Enable proxy to fix CORS errors in SSO
+# @param env.SSO_SCOPE OpenID scope for single sign-on **Required**
 env:
   CATALOG_API_URL: ''
   MAPGL_API_URL: ''
   MAPGL_COPYRIGHT_VARIANT: ''
   MAPGL_KEY: ''
   MAPGL_STYLE_ID: ''
-  PLATFORM_MANAGER_API_URL: ''
-  PLATFORM_MANAGER_CLIENT_ID: ''
-  PLATFORM_MANAGER_CLIENT_SECRET: ''
-  PLATFORM_MANAGER_SCOPE: ''
   ROUTES_API_URL: ''
+  SSO_API_URL: ''
+  SSO_CLIENT_ID: ''
+  SSO_CLIENT_SECRET: ''
+  SSO_PROXY_ENABLED: false
+  SSO_SCOPE: ''
 
 # @section Common deployment settings
 

@@ -3,7 +3,7 @@ name: citylens
 type: application
 description: A Helm chart for Kubernetes to deploy Citylens service
 
-version: 1.37.0
+version: 1.37.1
 appVersion: 1.17.8
 
 maintainers:
