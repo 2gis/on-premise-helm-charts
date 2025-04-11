@@ -78,7 +78,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.33.0.5`                  |
+| `image.tag`        | Tag         | `7.36.1`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings
@@ -88,6 +88,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.ecaHost`                                      | DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster |                                          |
 | `naviback.ecaUrl`                                       | URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster                                          |                                          |
 | `naviback.forecastHost`                                 | URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster            |                                          |
+| `naviback.longForecastUrl`                              | URL of Traffic long forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster       |                                          |
 | `naviback.walkingUserSpeedsUrl`                         | URL of walking user speeds                                                                                                                                                                                          |                                          |
 | `naviback.routeAsUsualUrl`                              | URL of route as usual                                                                                                                                                                                               |                                          |
 | `naviback.dmSourcesLimit`                               | Size limit for source matrices                                                                                                                                                                                      | `1000`                                   |
@@ -150,6 +151,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.rtr.enabled`                                  | Enable real time restrictions                                                                                                                                                                                       | `false`                                  |
 | `naviback.rtr.url`                                      | URL real time restrictions server                                                                                                                                                                                   | `http://rtr`                             |
 | `naviback.rtr.updatePeriod`                             | Update period from real time restrictions server                                                                                                                                                                    | `60`                                     |
+| `naviback.rtr.timeoutSeconds`                           | Timeout seconds for restrictions server                                                                                                                                                                             | `60`                                     |
 | `naviback.validation.enabled`                           | Enable validation responses and requests (used for internal tests)                                                                                                                                                  | `false`                                  |
 | `naviback.validation.ctx.schemasFolder`                 | Path to folder with ctx JSON schemas                                                                                                                                                                                | `/usr/share/2gis/schemas/nsr_schemas`    |
 | `naviback.validation.ctx.requestSchemaName`             | Name of ctx request validation schema                                                                                                                                                                               | `CTXRequestModel.json`                   |
@@ -173,6 +175,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.etaScheduleIndex.enabled`                     | If Schedule Index available                                                                                                                                                                                         | `false`                                  |
 | `naviback.etaScheduleIndex.url`                         | Schedule Index remote url                                                                                                                                                                                           | `""`                                     |
 | `naviback.etaScheduleIndex.etaScheduleNodes`            | ETA Schedule nodes                                                                                                                                                                                                  | `""`                                     |
+| `navigroup`                                             | Service group identifier, allows multiple stacks deployed to the same namespace.                                                                                                                                    | `""`                                     |
 
 ### Envoy settings, ignored if not `transmitter.enabled`. Leave with defaults, FOR FUTURE RELEASE.
 
@@ -293,16 +296,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Settings for attractor connection. Leave with defaults, FOR FUTURE RELEASE.
 
-| Name                            | Description                                                                                                                               | Value                        |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `transmitter.enabled`           | if attractor connection required                                                                                                          | `false`                      |
-| `transmitter.type`              | connection type one of: grpc, grpc-async, grpc-stream, ws, ws-async                                                                       | `grpc-async-stream`          |
-| `transmitter.host`              | attractor service                                                                                                                         | `http://navi-attractor.host` |
-| `transmitter.port`              | attractor port                                                                                                                            | `50051`                      |
-| `transmitter.responseTimeoutMs` | response waiting timeout                                                                                                                  | `2000`                       |
-| `transmitter.retry.enabled`     | Enable retry failed requests                                                                                                              | `false`                      |
-| `transmitter.retry.retryOn`     | Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) | `internal,unavailable`       |
-| `transmitter.retry.numRetries`  | Specifies the allowed number of retries                                                                                                   | `5`                          |
+| Name                            | Description                                                                                                                                                                     | Value                        |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `transmitter.enabled`           | if attractor connection required                                                                                                                                                | `false`                      |
+| `transmitter.type`              | connection type one of: grpc, grpc-async, grpc-stream, ws, ws-async                                                                                                             | `grpc-async-stream`          |
+| `transmitter.host`              | attractor service                                                                                                                                                               | `http://navi-attractor.host` |
+| `transmitter.port`              | attractor port                                                                                                                                                                  | `50051`                      |
+| `transmitter.responseTimeoutMs` | response waiting timeout                                                                                                                                                        | `2000`                       |
+| `transmitter.connectTimeout`    | Establish connection [timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-connect-timeout) | `2s`                         |
+| `transmitter.clusterTimeout`    | Response [timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-timeout)            | `120s`                       |
+| `transmitter.retry.enabled`     | Enable retry failed requests                                                                                                                                                    | `false`                      |
+| `transmitter.retry.retryOn`     | Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)                                       | `internal,unavailable`       |
+| `transmitter.retry.numRetries`  | Specifies the allowed number of retries                                                                                                                                         | `5`                          |
 
 ### Back-end and attractor group properties. Leave with defaults, FOR FUTURE RELEASE.
 
@@ -331,6 +336,19 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `trafficLights.kafka.properties`     | Properties as supported by librdkafka, see `kafka` section and comments |         |
 | `trafficLights.kafka.fileProperties` | Properties stored in file, see `kafka` section and comments             | `{}`    |
 
+### Road locks processing. Leave with defaults, FOR FUTURE RELEASE
+
+| Name                                        | Description                                                              | Value    |
+| ------------------------------------------- | ------------------------------------------------------------------------ | -------- |
+| `roadLocks.enabled`                         | If road locks processing enabled                                         | `false`  |
+| `roadLocks.modifications_limit_for_merge`   | Max amount of modifications for a single road lock before getting merged | `1000`   |
+| `roadLocks.merge_timeout_limit_ms`          | Max timeout in ms for a single road lock before getting merged           | `300000` |
+| `roadLocks.kafka_messages_queue_size_limit` | Max Kafka messages queue size                                            | `1000`   |
+| `roadLocks.merge_poll_ms`                   | Timeout in ms for checking if merge (of modifications) is needed         | `5000`   |
+| `roadLocks.kafka_group_id_prefix`           | Prefix for kafka groud_id                                                | `""`     |
+| `roadLocks.kafka.properties`                | Properties as supported by librdkafka, see `kafka` section and comments  |          |
+| `roadLocks.kafka.fileProperties`            | Properties stored in file, see `kafka` section and comments              | `{}`     |
+
 ### License settings
 
 | Name          | Description                                                | Value |
@@ -358,7 +376,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
 | `customCAs.certsPath` | Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"          | `""`  |
-
 
 ## Maintainers
 
