@@ -102,9 +102,9 @@ args: []
 # @param image.tag Tag
 
 image:
-  repository: 2gis-on-premise/navi-attractor
+  repository: 2gis-on-premise/attractord
   pullPolicy: IfNotPresent
-  tag: 7.33.0.5
+  tag: 7.36.1
 
 
 # @section Service account settings
@@ -153,25 +153,13 @@ service:
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-# @param ingress.className Name of the Ingress controller class
-# @param ingress.enabled If Ingress is enabled for the service
-# @param ingress.hosts[0].host Hostname for the Ingress service
-# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service
-# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service
-# @param ingress.tls TLS configuration
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
 
 ingress:
-  className: nginx
   enabled: false
   hosts:
-  - host: navi-attractor.example.com
-    paths:
-    - path: /
-      pathType: Prefix
-  tls: []
-  # - hosts:
-  #   - navi-back.example.com
-  #   secretName: secret.tls
+  - host: navi-attractor.host
 
 
 # @section Limits
@@ -259,10 +247,9 @@ pdb:
 # @param attractor.rtr.enabled Enable real time restrictions.
 # @param attractor.rtr.url URL real time restrictions server.
 # @param attractor.rtr.updatePeriod Update period from real time restrictions server.
+# @param attractor.rtr.timeoutSeconds Timeout seconds for restrictions server
 # @param attractor.tilesMetricsThreshold The value at which we send tiles metrics (used for internal tests).
-# @param navigroup Routing group identifier, needed only if multiple navi-front/navi-router installations performed to the same namespace.
-# @param app_rule Item name from `rules` list to load rules from.
-# @param app_project Do not use, configure with `rules` and `app_rule` instead.
+# @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
 # @skip rules
 
 attractor:
@@ -302,13 +289,12 @@ attractor:
   overrideConfig: ''
   rtr:
     enabled: false
-    url: ''
+    url: http://rtr
     updatePeriod: 60
+    timeoutSeconds: 60
   tilesMetricsThreshold: 0
 
 navigroup: ''
-app_rule: ''
-app_project: ''
 rules: []
 
 # @section Kafka settings for interacting with Distance Matrix Async Service
@@ -334,13 +320,13 @@ kafka:
   groupId: navi_attractor
   handlersNumber: 2
   properties:
-    bootstrap.servers: ''
+    bootstrap.servers: kafka.host:9092
     security.protocol: PLAINTEXT
   fileProperties: {}
   distanceMatrix:
-    taskTopic: ''
-    cancelTopic: ''
-    statusTopic: ''
+    taskTopic: task_topic
+    cancelTopic: cancel_topic
+    statusTopic: status_topic
     updateTaskStatusPeriodSec: 120
     messageExpiredPeriodSec: 3600
     requestDownloadTimeoutSec: 20
@@ -406,3 +392,28 @@ dataGroup:
   enabled: false
   prefix: sampleGroup
   timestamp: no-default
+
+# @section Road locks processing. Leave with defaults, FOR FUTURE RELEASE
+# @param roadLocks.enabled If road locks processing enabled
+# @param roadLocks.modifications_limit_for_merge Max amount of modifications for a single road lock before getting merged
+# @param roadLocks.merge_timeout_limit_ms Max timeout in ms for a single road lock before getting merged
+# @param roadLocks.kafka_messages_queue_size_limit Max Kafka messages queue size
+# @param roadLocks.kafka_group_id_prefix Prefix for kafka group_id
+# @param roadLocks.merge_poll_ms Timeout in ms for checking if merge (of modifications) is needed
+# @extra roadLocks.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
+# @skip roadLocks.kafka.properties.bootstrap.servers
+# @skip roadLocks.kafka.properties.security.protocol
+# @param roadLocks.kafka.fileProperties Properties stored in file, see `kafka` section and comments
+
+roadLocks:
+  enabled: false
+  modifications_limit_for_merge: 1000
+  merge_timeout_limit_ms: 300000
+  merge_poll_ms: 5000
+  kafka_messages_queue_size_limit: 1000
+  kafka_group_id_prefix: ''
+  kafka:
+    properties:
+      bootstrap.servers: kafka.host:9092
+      security.protocol: PLAINTEXT
+    fileProperties: {}
