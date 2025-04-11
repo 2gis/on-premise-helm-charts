@@ -111,6 +111,7 @@ data:
           {{- end }}{{- /* if .Values.naviback.hierarchies.enabled */}}
           "REMOTE_PATH": "{{ include "config.setCastleUrl" $ }}",
           "REMOTE_FORECAST": "{{ .Values.naviback.forecastHost }}",
+          "REMOTE_LONG_FORECAST": "{{ include "config.setLongForecastUrl" $ }}",
           "REMOTE_ECA": "{{ include "config.setEcaUrl" $ }}"
         },
         "rules": {
@@ -167,6 +168,17 @@ data:
           }
         },
         {{- end }}{{- /* .Values.naviback.indices.forecastedSpeedsIndex.enabled */}}
+        {{- if and .Values.naviback.indices.forecastedLongSpeedsIndex.enabled .Values.naviback.longForecastUrl }}
+        "forecasted_long_speeds_index": {
+          "update_period": {{ .Values.naviback.indices.forecastedLongSpeedsIndex.updatePeriod }},
+          "nodes": [
+            "https://{REMOTE_LONG_FORECAST}/index.json"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
+        {{- end }}{{- /* .Values.naviback.indices.forecastedLongSpeedsIndex.enabled */}}
         {{- if and .Values.naviback.indices.forecastedSpeeds.enabled .Values.naviback.forecastHost }}
         "forecasted_speeds": {
           "update_period": 0,
@@ -178,6 +190,17 @@ data:
           }
         },
         {{- end }}{{- /* .Values.naviback.indices.forecastedSpeeds.enabled */}}
+        {{- if and .Values.naviback.indices.forecastedLongSpeeds.enabled .Values.naviback.longForecastUrl }}
+        "forecasted_long_speeds": {
+          "update_period": 0,
+          "nodes": [
+            "https://{REMOTE_LONG_FORECAST}/"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
+        {{- end }}{{- /* .Values.naviback.indices.forecastedLongSpeeds.enabled */}}
         {{- if .Values.naviback.indices.etaCorrectionCores.enabled }}
         "eta_correction_cores": {
           "update_period": 0,
@@ -291,7 +314,7 @@ data:
             "{{ include "config.setRestrictionUrl" $ }}/"
           ],
           "timeout_seconds": {
-            "count": 30
+            "count": {{ .Values.naviback.rtr.timeoutSeconds | int }}
           }
         },
         {{- if .Values.naviback.indices.entrances.enabled }}
@@ -517,7 +540,7 @@ data:
           "fmm": {
             "k": "24",
             "radius": "4000",
-            "gps_error": "3000",
+            "gps_error": "2000",
             "vmax": "40",
             "factor": "1.5",
             "reverse_tolerance": "0.1"
@@ -560,7 +583,7 @@ data:
         "sharing": {
           {{- $kafkaProperties := dict -}}
           {{- range $key, $_ := .Values.routesharing.kafka.fileProperties -}}
-          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
+          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret-routesharing/%s" $key) -}}
           {{- end -}}
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.routesharing.kafka.properties }}
           "kafka_properties":
@@ -592,7 +615,7 @@ data:
             "{{ .Values.naviback.rtr.url }}/restrictions_index.json.zip"
           ],
           "timeout_seconds": {
-            "count": 30
+            "count": {{ .Values.naviback.rtr.timeoutSeconds | int }}
           },
           "cache_path_": "file://{LOCAL_PATH}/{project_name}/restrictions_index.json.zip"
         },
@@ -663,7 +686,7 @@ data:
         "traffic_lights_kafka": {
           {{- $kafkaProperties := dict -}}
           {{- range $key, $_ := .Values.trafficLights.kafka.fileProperties -}}
-          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
+          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret-trafficLights/%s" $key) -}}
           {{- end -}}
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.trafficLights.kafka.properties }}
           "kafka_properties":
@@ -675,6 +698,24 @@ data:
           {{- end }}
         },
         {{- end }}{{/* .Values.trafficLigths.enabled */}}
+
+        {{- if .Values.roadLocks.enabled }}
+        "road_locks": {
+          {{- $kafkaProperties := dict -}}
+          {{- range $key, $_ := .Values.roadLocks.kafka.fileProperties -}}
+          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret-roadLocks/%s" $key) -}}
+          {{- end -}}
+          {{- $kafkaProperties := mustMerge $kafkaProperties .Values.roadLocks.kafka.properties }}
+          "kafka_properties":
+            {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
+          "modifications_limit_for_merge": "{{ .Values.roadLocks.modifications_limit_for_merge }}",
+          "merge_timeout_limit_ms": "{{ .Values.roadLocks.merge_timeout_limit_ms }}",
+          "merge_poll_ms": "{{ .Values.roadLocks.merge_poll_ms }}",
+          "kafka_messages_queue_size_limit": "{{ .Values.roadLocks.kafka_messages_queue_size_limit }}",
+          "kafka_group_id_prefix": "{{ .Values.roadLocks.kafka_group_id_prefix }}"
+        },
+        {{- end }}{{/* .Values.roadLocks.enabled */}}
+
         {{- if .Values.naviback.additionalSections }}
           {{- include "tplvalues.render" ( dict "value" .Values.naviback.additionalSections "context" $) | nindent 8 }}
         {{- end }}
@@ -741,18 +782,24 @@ data:
           },
           "traffic_color_options": {
             "from_0_to_5_km": {
+              "deep_green_jam_ratio": 40,
               "green_jam_ratio": 50,
               "yellow_jam_minutes": 10,
+              "orange_jam_minutes": 15,
               "deep_red_jam_minutes": 20
             },
             "from_5_to_10_km": {
+              "deep_green_jam_ratio": 30,
               "green_jam_ratio": 40,
               "yellow_jam_minutes": 15,
+              "orange_jam_minutes": 20,
               "deep_red_jam_minutes": 25
             },
             "from_10_km": {
+              "deep_green_jam_ratio": 20,
               "green_jam_ratio": 30,
               "yellow_jam_minutes": 20,
+              "orange_jam_minutes": 25,
               "deep_red_jam_minutes": 30
             }
           }
@@ -797,10 +844,15 @@ data:
                       prefix: "/"
                     route:
                       cluster: attractor
+                      timeout: {{ .Values.transmitter.clusterTimeout }}
                       {{- if .Values.transmitter.retry.enabled }}
                       retry_policy:
                         retry_on: {{ .Values.transmitter.retry.retryOn | quote }}
                         num_retries: {{ .Values.transmitter.retry.numRetries | int }}
+                        retry_host_predicate:
+                          - name: envoy.retry_host_predicates.previous_hosts
+                            typed_config:
+                              "@type": type.googleapis.com/envoy.extensions.retry.host.previous_hosts.v3.PreviousHostsPredicate
                       {{- end }}
               http_filters:
               - name: envoy.router
@@ -808,7 +860,7 @@ data:
                   "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
       clusters:
       - name: attractor
-        connect_timeout: 1s
+        connect_timeout: {{ .Values.transmitter.connectTimeout }}
         type: STRICT_DNS
         dns_lookup_family: V4_ONLY
         lb_policy: ROUND_ROBIN
