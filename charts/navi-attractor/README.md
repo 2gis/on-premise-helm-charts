@@ -145,29 +145,33 @@ Attractor не имеет смысла без сервиса navi-back.
 
 ### Navi-Attractor application settings
 
-| Name                              | Description                                                                      | Value             |
-| --------------------------------- | -------------------------------------------------------------------------------- | ----------------- |
-| `attractor.appPort`               | Container port for HTTP interface                                                | `8080`            |
-| `attractor.handlersNumber`        | Total number of HTTP/GRPC handlers.                                              | `20`              |
-| `attractor.maxProcessTime`        | Maximum processing time limit in minutes.                                        | `20`              |
-| `attractor.responseTimelimit`     | Maximum response time limit in minutes.                                          | `120`             |
-| `attractor.requestTimeout`        | Maximum request time limit in minutes.                                           | `120`             |
-| `attractor.dump.result`           | Dump results in logs.                                                            | `true`            |
-| `attractor.dump.query`            | Dump queries in logs.                                                            | `true`            |
-| `attractor.dump.answer`           | Dump answers in logs.                                                            | `false`           |
-| `attractor.logLevel`              | Logging level, one of: Verbose, Info, Warning, Error, Fatal.                     | `Info`            |
-| `attractor.logMessageField`       | Field name in logs for messages data.                                            | `custom.navi_msg` |
-| `attractor.grpcPort`              | Container port for gRPC interface                                                | `50051`           |
-| `attractor.indexFilename`         | Name of the index file on Castle                                                 | `index.json.zip`  |
-| `attractor.citiesFilename`        | Name of the cities file on Castle                                                | `cities.conf.zip` |
-| `attractor.indices`               | List of dynamic indices kill switches.                                           |                   |
-| `attractor.overrideConfig`        | Complete config override. For test purposes only.                                | `""`              |
-| `attractor.rtr.enabled`           | Enable real time restrictions.                                                   | `false`           |
-| `attractor.rtr.url`               | URL real time restrictions server.                                               | `http://rtr`      |
-| `attractor.rtr.updatePeriod`      | Update period from real time restrictions server.                                | `60`              |
-| `attractor.rtr.timeoutSeconds`    | Timeout seconds for restrictions server                                          | `60`              |
-| `attractor.tilesMetricsThreshold` | The value at which we send tiles metrics (used for internal tests).              | `0`               |
-| `navigroup`                       | Service group identifier, allows multiple stacks deployed to the same namespace. | `""`              |
+| Name                              | Description                                                                                                                                                                              | Value             |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `attractor.appPort`               | Container port for HTTP interface                                                                                                                                                        | `8080`            |
+| `attractor.handlersNumber`        | Total number of HTTP/GRPC handlers.                                                                                                                                                      | `20`              |
+| `attractor.maxProcessTime`        | Maximum processing time limit in minutes.                                                                                                                                                | `20`              |
+| `attractor.responseTimelimit`     | Maximum response time limit in minutes.                                                                                                                                                  | `120`             |
+| `attractor.requestTimeout`        | Maximum request time limit in minutes.                                                                                                                                                   | `120`             |
+| `attractor.dump.result`           | Dump results in logs.                                                                                                                                                                    | `true`            |
+| `attractor.dump.query`            | Dump queries in logs.                                                                                                                                                                    | `true`            |
+| `attractor.dump.answer`           | Dump answers in logs.                                                                                                                                                                    | `false`           |
+| `attractor.logLevel`              | Logging level, one of: Verbose, Info, Warning, Error, Fatal.                                                                                                                             | `Info`            |
+| `attractor.logMessageField`       | Field name in logs for messages data.                                                                                                                                                    | `custom.navi_msg` |
+| `attractor.grpcPort`              | Container port for gRPC interface                                                                                                                                                        | `50051`           |
+| `attractor.indexFilename`         | Name of the index file on Castle                                                                                                                                                         | `index.json.zip`  |
+| `attractor.citiesFilename`        | Name of the cities file on Castle                                                                                                                                                        | `cities.conf.zip` |
+| `attractor.indices`               | List of dynamic indices kill switches.                                                                                                                                                   |                   |
+| `attractor.overrideConfig`        | Complete config override. For test purposes only.                                                                                                                                        | `""`              |
+| `attractor.rtr.enabled`           | Enable real time restrictions.                                                                                                                                                           | `false`           |
+| `attractor.rtr.url`               | URL real time restrictions server.                                                                                                                                                       | `http://rtr`      |
+| `attractor.rtr.updatePeriod`      | Update period from real time restrictions server.                                                                                                                                        | `60`              |
+| `attractor.rtr.timeoutSeconds`    | Timeout seconds for restrictions server                                                                                                                                                  | `60`              |
+| `attractor.tilesMetricsThreshold` | The value at which we send tiles metrics (used for internal tests).                                                                                                                      | `0`               |
+| `navigroup`                       | Service group identifier, allows multiple stacks deployed to the same namespace.                                                                                                         | `""`              |
+| `navigroup`                       | Routing group identifier, needed only if multiple navi-front/navi-router installations performed to the same namespace.                                                                  | `""`              |
+| `app_rule`                        | Item name from `rules` list to load rules from.                                                                                                                                          | `""`              |
+| `app_project`                     | Do not use, configure with `rules` and `app_rule` instead.                                                                                                                               | `""`              |
+| `rules`                           | List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details | `[]`              |
 
 ### Kafka settings for interacting with Distance Matrix Async Service
 
