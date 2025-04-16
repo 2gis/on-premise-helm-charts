@@ -77,13 +77,16 @@ spec:
                 secretKeyRef:
                   key: s3SecretKey
                   name: {{ include "pro-api.name" . }}-secret
-
-            - name: Elastic__Host
-              value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
+            - name: Elastic__InstanceName
+              value: {{ $.Values.elastic.instanceName | default $.Values.elastic.host }}
+            {{- range $i, $s := $.Values.elastic.nodes}}
+            - name: Elastic__Nodes__{{$i}}__Host
+              value: {{ $s.host }}
+            - name: Elastic__Nodes__{{$i}}__Port
+              value: "{{ $s.port }}"
+            {{ end }}
             - name: Elastic__Secure
               value: "{{ $.Values.elastic.secure }}"
-            - name: Elastic__Port
-              value: "{{ $.Values.elastic.port }}"
             - name: Elastic__Username
               value: "{{ $.Values.elastic.username }}"
             {{ if .Values.elastic.password }}
