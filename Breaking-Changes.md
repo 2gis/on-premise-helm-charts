@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [NEW_VER]
+
+### pro-ui
+- elastic.host and elastic.port were removed, elastic.nodes was added instead.
+- Minimum supported Postgres version is now 15
+
 ## [1.37.1]
 
 ### citylens-routes-ui
