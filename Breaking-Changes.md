@@ -9,6 +9,30 @@
 - env.PLATFORM_MANAGER_CLIENT_SECRET renamed to env.SSO_CLIENT_SECRET
 - env.PLATFORM_MANAGER_SCOPE renamed to env.SSO_SCOPE
 
+### mapgl-js-api
+
+- env.MAPGL_FLOORSSERVER was removed
+
+### floors-api
+
+- Chart floors-api was removed
+
+### navi-async-matrix
+
+- Now attraction works only through an external attractor.
+
+```yml
+  attractTopicRules:
+  - topic: attract_car_task_topic
+    default: true
+    type: car
+  - topic: attract_truck_task_topic
+    default: true
+    type: truck
+```
+
+- Archiver always enabled. Required `serviceAccount` and `rbac`.
+
 ## [1.37.0]
 
 ### pro-ui

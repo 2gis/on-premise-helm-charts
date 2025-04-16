@@ -132,10 +132,10 @@ ingress:
   annotations: {}
   className: nginx
   hosts:
-    - host: citylens-routes-ui.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  - host: citylens-routes-ui.example.com
+    paths:
+    - path: /
+      pathType: Prefix
   tls: []
   # - hosts:
   #   - citylens-routes-ui.example.com

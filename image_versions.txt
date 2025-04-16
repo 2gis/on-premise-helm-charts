@@ -9,13 +9,9 @@ citylens
 	citylens-worker-service:1.0.15
 	citylens-workers:1.17.8
 citylens-routes-ui
-	citylens-routes-ui:0.0.22
+	citylens-routes-ui:0.0.25
 dgtt
 	dgtt:0.2.27-b188673e09
-floors-api
-	floors-importer:1.1.0
-	floors-nodejs:1.1.0
-	nginx:1.25.5
 generic-chart
 gis-platform
 	gis_platform_portal:2023.8.3-0
@@ -31,14 +27,14 @@ keys
 license
 	license:2.4.1
 mapgl-js-api
-	mapgl:1.57.0
+	mapgl:1.58.1
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
-	navi-archiver-async-matrix:1.4.1
-	navi-async-matrix:1.12.1
+	navi-archiver-async-matrix:1.15.2
+	navi-async-matrix:1.15.2
 navi-attractor
-	navi-attractor:7.27.1.2
+	navi-attractor:7.33.0.5
 navi-back
 	envoy:v1.27.0
 	metrics-aggregator:
