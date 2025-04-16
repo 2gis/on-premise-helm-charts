@@ -176,6 +176,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.etaScheduleIndex.url`                         | Schedule Index remote url                                                                                                                                                                                           | `""`                                     |
 | `naviback.etaScheduleIndex.etaScheduleNodes`            | ETA Schedule nodes                                                                                                                                                                                                  | `""`                                     |
 | `navigroup`                                             | Service group identifier, allows multiple stacks deployed to the same namespace.                                                                                                                                    | `""`                                     |
+| `rules`                                                 | List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details                            | `[]`                                     |
 
 ### Envoy settings, ignored if not `transmitter.enabled`. Leave with defaults, FOR FUTURE RELEASE.
 
