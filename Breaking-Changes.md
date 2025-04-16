@@ -2,7 +2,7 @@
 
 ## [NEW_VER]
 
-### pro-ui
+### pro-api
 - elastic.host and elastic.port were removed, elastic.nodes was added instead.
 - Minimum supported Postgres version is now 15
 
