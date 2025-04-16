@@ -54,20 +54,21 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Router service settings
 
-| Name                                               | Description                                                                                                     | Value             |
-| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `router.appPort`                                   | Navi-Router service HTTP port                                                                                   | `8080`            |
-| `router.logLevel`                                  | Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`                                 | `Warning`         |
-| `router.logMessageField`                           | Field name in logs                                                                                              | `custom.navi_msg` |
-| `router.additionalSections`                        | Additional configurations sections for the Navi-Router service                                                  | `""`              |
-| `router.castleUrl`                                 | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster | `""`              |
-| `router.localRestrictions.distanceBetweenPointsKm` | Max allowed distance between points                                                                             |                   |
-| `router.localRestrictions.pointsCount`             | Max allowed points count                                                                                        |                   |
-| `router.localRestrictions.matrixSize`              | Max allowed matrix size                                                                                         |                   |
-| `router.backupPorts`                               | Optional creation of backup ports duplicating the service                                                       |                   |
-| `router.backupPorts.base`                          | Backup ports start with `base` and assignd sequentially up                                                      | `50000`           |
-| `router.backupPorts.number`                        | Number of backup ports created                                                                                  | `0`               |
-| `navigroup`                                        | Service group identifier, allows multiple stacks deployed to the same namespace.                                | `""`              |
+| Name                                               | Description                                                                                                                                                  | Value             |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| `router.appPort`                                   | Navi-Router service HTTP port                                                                                                                                | `8080`            |
+| `router.logLevel`                                  | Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`                                                                              | `Warning`         |
+| `router.logMessageField`                           | Field name in logs                                                                                                                                           | `custom.navi_msg` |
+| `router.additionalSections`                        | Additional configurations sections for the Navi-Router service                                                                                               | `""`              |
+| `router.castleUrl`                                 | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster                                              | `""`              |
+| `router.localRestrictions.distanceBetweenPointsKm` | Max allowed distance between points                                                                                                                          |                   |
+| `router.localRestrictions.pointsCount`             | Max allowed points count                                                                                                                                     |                   |
+| `router.localRestrictions.matrixSize`              | Max allowed matrix size                                                                                                                                      |                   |
+| `router.backupPorts`                               | Optional creation of backup ports duplicating the service                                                                                                    |                   |
+| `router.backupPorts.base`                          | Backup ports start with `base` and assignd sequentially up                                                                                                   | `50000`           |
+| `router.backupPorts.number`                        | Number of backup ports created                                                                                                                               | `0`               |
+| `navigroup`                                        | Service group identifier, allows multiple stacks deployed to the same namespace.                                                                             | `""`              |
+| `rules`                                            | List of routing rules, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details | `[]`              |
 
 ### Key management service settings
 

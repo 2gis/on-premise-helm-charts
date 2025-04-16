@@ -68,7 +68,7 @@ image:
 # @param router.backupPorts.base Backup ports start with `base` and assignd sequentially up
 # @param router.backupPorts.number Number of backup ports created
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
-# @skip rules
+# @param rules List of routing rules, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
 
 router:
   appPort: 8080
