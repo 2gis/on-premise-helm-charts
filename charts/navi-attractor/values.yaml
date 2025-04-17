@@ -170,7 +170,7 @@ ingress:
       pathType: Prefix
   tls: []
   # - hosts:
-  #   - navi-back.example.com
+  #   - navi-attractor.example.com
   #   secretName: secret.tls
 
 
