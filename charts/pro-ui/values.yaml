@@ -103,7 +103,6 @@ ui:
   # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/auth
   # @param ui.auth.oAuthApiUrl an oAuth provider base URL
   # Ex.: http(s)://keycloak.ingress.host/realms/URBI_Pro/protocol/openid-connect/
-  # @skip ui.auth.platformManagerHost
   # @param ui.auth.turnOffCertValidation Flag to turn off certificate validation. Possible values: `"true"` or `"false"`.
   # @param ui.auth.openIdWellKnownUrlListUrl URL to OpenID Connect Discovery data
   # specs: https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
@@ -121,7 +120,6 @@ ui:
     oAuthScopes: ''
     identityProviderUrl: ''
     oAuthApiUrl: ''
-    platformManagerHost: ''
     turnOffCertValidation: false
     openIdWellKnownUrlListUrl: ''
   # @section 2GIS Pro API settings
@@ -227,10 +225,10 @@ ingress:
   enabled: false
   className: nginx
   hosts:
-  - host: pro-ui.example.com
-    paths:
-    - path: /
-      pathType: Prefix
+    - host: pro-ui.example.com
+      paths:
+        - path: /
+          pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-ui.example.com
@@ -294,6 +292,7 @@ dgctlStorage:
 # @param stylesImporter.image.repository Docker Repository Image.
 # @param stylesImporter.image.tag Docker image tag.
 # @param stylesImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
+# @param stylesImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
 # @param stylesImporter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param stylesImporter.maxParallelJobs How many import jobs can be run simultaneously
 # @param stylesImporter.startOnDeploy Indicates that styles import should start when service installed or updated
@@ -308,6 +307,7 @@ stylesImporter:
     repository: 2gis-on-premise/pro-importer
     tag: 2.8.2
   backoffLimit: 2
+  successfulJobsHistoryLimit: 3
   nodeSelector: {}
   resources:
     requests:
