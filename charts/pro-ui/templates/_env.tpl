@@ -1,3 +1,4 @@
+
 {{- define "pro.env.ui" -}}
 - name: NETWORK_TIMEOUT
   value: "{{ required "A valid .Values.ui.api.timeout" .Values.ui.api.timeout }}"
@@ -46,8 +47,6 @@
   value: "{{ required "A valid .Values.ui.auth.oAuthProvider entry required" .Values.ui.auth.oAuthProvider }}"
 - name: O_AUTH_SCOPES
   value: "{{ .Values.ui.auth.oAuthScopes }}"
-- name: AUTH_PLATFORM_MANAGER_HOST
-  value: "{{ .Values.ui.auth.platformManagerHost }}"
 {{- if eq .Values.ui.auth.oAuthProvider "openid" }}
 - name: OPEN_ID_WELL_KNOWN_URL_LIST_URL
   value: "{{ required "A valid .Values.ui.auth.openIdWellKnownUrlListUrl entry required" .Values.ui.auth.openIdWellKnownUrlListUrl }}"
