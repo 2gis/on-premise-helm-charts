@@ -104,6 +104,9 @@ spec:
             - name: Common__Logging__LogLevel
               value: "{{ .Values.routes.worker.logging.level }}"
 
+            - name: RoutesSettings__RoutePointsMatchDistanceMeters
+              value: "{{ .Values.routes.worker.routesSettings.routePointsMatchDistanceMeters }}"
+
             - name: PgSettings__Host
               value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
             - name: PgSettings__Port
@@ -155,11 +158,18 @@ spec:
             - name: BusConfig__Consumers__AppEvents__Topic
               value: "{{ .Values.kafka.topics.tracks }}"
             - name: BusConfig__Consumers__AppEvents__GroupId
-              value: "{{ required "A valid .Values.routes.worker.busConfig.consumers.appEvents.groupId entry required" $.Values.routes.worker.busConfig.consumers.appEvents.groupId }}"
+              value: "{{ .Values.routes.worker.busConfig.consumers.appEvents.groupId }}"
             - name: BusConfig__Consumers__AppEvents__BufferSize
               value: "{{ .Values.routes.worker.busConfig.consumers.appEvents.bufferSize }}"
             - name: BusConfig__Consumers__AppEvents__WorkersCount
               value: "{{ .Values.routes.worker.busConfig.consumers.appEvents.workersCount }}"
+
+            - name: TasksAssetSettings__SystemAccessToken
+              value: "{{ $.Values.routes.tasksAssetSettings.systemAccessToken }}"
+            - name: TasksAssetSettings__PlannedTasksAssetId
+              value: "{{ $.Values.routes.tasksAssetSettings.plannedTasksAssetId }}"
+            - name: TasksAssetSettings__CompletedTasksAssetId
+              value: "{{ $.Values.routes.tasksAssetSettings.completedTasksAssetId }}"
 
             - name: Clients__ProClient__Enabled
               value: "true"
@@ -181,3 +191,5 @@ spec:
 
             - name: Features__CoverageRatioEnabled
               value: "{{ $.Values.routes.features.coverageRatioEnabled }}"
+            - name: Features__TasksAssetEnabled
+              value: "{{ $.Values.routes.features.tasksAssetEnabled }}"
