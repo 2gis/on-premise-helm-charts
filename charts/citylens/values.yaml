@@ -1063,11 +1063,12 @@ customCAs:
 # @param routes.worker.busConfig.consumers.appEvents.bufferSize The buffer size for the app events.
 # @param routes.worker.busConfig.consumers.appEvents.workersCount The workers count for the app events.
 
-# routes.features.authorizationEnabled Enable authorization. (If false used default user).
+# @section routes.features Feature settings.
+# @param routes.features.authorizationEnabled Enable authorization. (If false used default user).
 # @skip routes.features.oidcMobileAuthorizationEnabled
 # @skip routes.features.proxyNaviKeyEnabled
 # @skip routes.features.coverageRatioEnabled
-# routes.features.tasksAssetEnabled Enable sending data to PRO for tasks.
+# @param routes.features.tasksAssetEnabled Enable sending data to PRO for tasks.
 
 # section routes.tasksAssetSettings PRO asset config.
 # @param routes.tasksAssetSettings.systemAccessToken Route task asset token. 
