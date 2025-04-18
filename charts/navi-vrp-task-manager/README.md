@@ -43,7 +43,7 @@
 | Name               | Description | Value                                   |
 | ------------------ | ----------- | --------------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-vrp-task-manager` |
-| `image.tag`        | Tag         | `1.12.0`                                |
+| `image.tag`        | Tag         | `1.13.0`                                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                          |
 
 ### Navi VRP Task Manager application settings
