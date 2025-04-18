@@ -235,8 +235,8 @@ image:
 # @param naviback.etaScheduleIndex.enabled If Schedule Index available
 # @param naviback.etaScheduleIndex.url Schedule Index remote url
 # @param naviback.etaScheduleIndex.etaScheduleNodes ETA Schedule nodes
+# @param naviback.app_rule Item name from `rules` list to load rules from.
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
-# @param app_rule Item name from `rules` list to load rules from.
 # @param app_project Do not use, configure with `rules` and `app_rule` instead.
 # @param rules List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
 
@@ -383,9 +383,9 @@ naviback:
     enabled: false
     url: ''
     etaScheduleNodes: ''
+  app_rule: ''
 
 navigroup: ''
-app_rule: ''
 app_project: ''
 rules: []
 
