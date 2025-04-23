@@ -166,7 +166,7 @@ api:
   nodeSelector: {}
   affinity: {}
   tolerations: []
-  
+
   routesApiBaseUrl: ''
 
 # @section Citylens web service settings
