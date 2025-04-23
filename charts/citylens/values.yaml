@@ -96,6 +96,10 @@ dgctlStorage:
 # @param api.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param api.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
 
+# @section Routes Planner integration
+
+# @param api.routesApiBaseUrl ROUTES PLANNER API URL. Ex: http(s)://routes-api.svc
+
 api:
   image:
     repository: 2gis-on-premise/citylens-api
@@ -162,6 +166,8 @@ api:
   nodeSelector: {}
   affinity: {}
   tolerations: []
+  
+  routesApiBaseUrl: ''
 
 # @section Citylens web service settings
 

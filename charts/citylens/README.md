@@ -126,6 +126,12 @@ See the [documentation]() to learn about:
 | `api.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`  |
 | `api.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
 
+### Routes Planner integration
+
+| Name                   | Description                                          | Value |
+| ---------------------- | ---------------------------------------------------- | ----- |
+| `api.routesApiBaseUrl` | ROUTES PLANNER API URL. Ex: http(s)://routes-api.svc | `""`  |
+
 ### Citylens web service settings
 
 
