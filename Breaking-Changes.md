@@ -41,10 +41,6 @@
 
 - Archiver always enabled. Required `serviceAccount` and `rbac`.
 
-### tiles-api
-
-- Updated description for `proxy.access.raster.token` and `proxy.access.vector.token` parameters. Added clarification about service behavior when Keys API is unavailable or tokens are empty/invalid - in this case tile service will continue to work without key validation (with warning in logs).
-
 ## [1.37.0]
 
 ### pro-ui
