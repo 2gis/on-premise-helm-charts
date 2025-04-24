@@ -1,5 +1,13 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.38.0]
+
+### tiles-api
+
+- Single `proxy.access.token` has been split into two separate tokens:
+  - `proxy.access.raster.token` - for raster data authentication
+  - `proxy.access.vector.token` - for vector data authentication
+
 ## [1.37.1]
 
 ### citylens-routes-ui
