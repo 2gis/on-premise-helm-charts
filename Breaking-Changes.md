@@ -1,5 +1,13 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.38.0]
+
+### tiles-api
+
+- Breaking change in authentication configuration: single `proxy.access.token` has been split into two separate tokens:
+  - `proxy.access.raster.token` - for raster data authentication
+  - `proxy.access.vector.token` - for vector data authentication
+
 ## [1.37.1]
 
 ### citylens-routes-ui
@@ -32,6 +40,10 @@
 ```
 
 - Archiver always enabled. Required `serviceAccount` and `rbac`.
+
+### tiles-api
+
+- Updated description for `proxy.access.raster.token` and `proxy.access.vector.token` parameters. Added clarification about service behavior when Keys API is unavailable or tokens are empty/invalid - in this case tile service will continue to work without key validation (with warning in logs).
 
 ## [1.37.0]
 
