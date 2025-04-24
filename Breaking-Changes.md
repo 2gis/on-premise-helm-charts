@@ -4,7 +4,7 @@
 
 ### tiles-api
 
-- Breaking change in authentication configuration: single `proxy.access.token` has been split into two separate tokens:
+- Single `proxy.access.token` has been split into two separate tokens:
   - `proxy.access.raster.token` - for raster data authentication
   - `proxy.access.vector.token` - for vector data authentication
 
