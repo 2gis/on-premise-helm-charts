@@ -15,5 +15,5 @@ maintainers:
 - name: 2gis
   url: https://github.com/2gis
   email: on-premise@2gis.com
-version: 1.26.0
+version: 1.37.1
 appVersion: 1.0.1

@@ -28,41 +28,46 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 ### Common settings
 
-| Name                   | Description                                                                                                                                    | Value |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `replicaCount`         | A replica count for the pod.                                                                                                                   | `1`   |
-| `revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `imagePullSecrets`     | Kubernetes image pull secrets.                                                                                                                 | `[]`  |
-| `nameOverride`         | Base name to use in all the Kubernetes entities deployed by this chart.                                                                        | `""`  |
-| `fullnameOverride`     | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                    | `""`  |
-| `nodeSelector`         | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                            | `{}`  |
-| `affinity`             | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                    | `{}`  |
-| `tolerations`          | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                              | `[]`  |
-| `podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                  | `{}`  |
-| `podLabels`            | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                            | `{}`  |
+| Name                            | Description                                                                                                                                                               | Value  |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `enableServiceLinks`            | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `true` |
+| `replicaCount`                  | A replica count for the pod.                                                                                                                                              | `1`    |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                            | `3`    |
+| `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)                                                          | `30`   |
+| `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                                            | `[]`   |
+| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                   | `""`   |
+| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                               | `""`   |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                       | `{}`   |
+| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                               | `{}`   |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                         | `[]`   |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                             | `{}`   |
+| `podLabels`                     | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                       | `{}`   |
 
 ### Deployment settings
 
 | Name               | Description | Value                   |
 | ------------------ | ----------- | ----------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/mapgl` |
-| `image.tag`        | Tag         | `1.49.0`                |
+| `image.tag`        | Tag         | `1.58.1`                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
 
 ### Environment variables
 
-| Name                            | Description                                                   | Value                                                                                             |
-| ------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `env.MAPGL_HOST`                | URL for MapGL JS API service.                                 | `https://mapgl-api.ingress.host`                                                                  |
-| `env.MAPGL_TILES_API`           | URL of the Tiles API service.                                 | `https://tiles-api.ingress.host`                                                                  |
-| `env.MAPGL_TILESET`             | Tileset of the Tiles API service to use.                      | `web`                                                                                             |
-| `env.MAPGL_IMMERSIVE_TILESET`   | Additional immersive tileset of the Tiles API service to use. | `web_immersive`                                                                                   |
-| `env.MAPGL_TRAFFICSERVER`       | Domain name of the Traffic Proxy service.                     | `https://traffic-proxy.ingress.host`                                                              |
-| `env.MAPGL_FLOORSSERVER`        | URL of the Floors API service.                                | `https://floors-api.ingress.host`                                                                 |
-| `env.MAPGL_KEYSERVER`           | URL of the API Keys service.                                  | `https://keys-api.ingress.host/public/v1/keys/{keyID}/services/mapgl-js-api`                      |
-| `env.MAPGL_RTLPLUGIN`           | URL of the plugin for right-to-left languages support.        | `https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js`                                     |
-| `env.MAPGL_RTLPLUGINHASH`       | SHA512 hash of the RTL plugin.                                | `sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==` |
-| `env.MAPGL_INVALID_KEY_MESSAGE` | Custom error message for invalid MapGL key.                   | `Your MapGL key is invalid. Please contact support to get valid key.`                             |
+| Name                            | Description                                                                                                                                       | Value                                                                                             |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `env.MAPGL_DEMO_KEY`            | token from 'keys-api' service. Defines access for map through MAPGL_HOST.                                                                         | `""`                                                                                              |
+| `env.MAPGL_HOST`                | URL for MapGL JS API service, e.g. 'https://mapgl-api.ingress.host'                                                                               | `""`                                                                                              |
+| `env.MAPGL_TILES_API`           | URL of the Tiles API service, e.g. 'https://tiles-api.ingress.host'                                                                               | `""`                                                                                              |
+| `env.MAPGL_TILESET`             | Tileset of the Tiles API service to use.                                                                                                          | `web`                                                                                             |
+| `env.MAPGL_IMMERSIVE_TILESET`   | Additional immersive tileset of the Tiles API service to use.                                                                                     | `web_immersive`                                                                                   |
+| `env.MAPGL_TRAFFICSERVER`       | Domain name of the Traffic Proxy service, e.g. 'https://traffic-proxy.ingress.host'                                                               | `https://traffic-proxy.ingress.host`                                                              |
+| `env.MAPGL_STYLESERVER`         | URL of the Styles API service, e.g. 'https://styles.ingress.host'                                                                                 | `""`                                                                                              |
+| `env.MAPGL_ICONS_URL`           | URL of the icons directory, e.g. 'https://s3.ingress.host/styles/assets/icons'. This s3 URL must be public available (accessible from browser).   | `""`                                                                                              |
+| `env.MAPGL_MODELS_URL`          | URL of the models directory, e.g. 'https://s3.ingress.host/styles/assets/models'. This s3 URL must be public available (accessible from browser). | `""`                                                                                              |
+| `env.MAPGL_KEYSERVER`           | URL of the API Keys service, e.g. 'https://keys-api.ingress.host/public/v1/keys/{keyID}/services/mapgl-js-api'                                    | `""`                                                                                              |
+| `env.MAPGL_RTLPLUGIN`           | URL of the plugin for right-to-left languages support, e.g. 'https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js'                         | `""`                                                                                              |
+| `env.MAPGL_RTLPLUGINHASH`       | SHA512 hash of the RTL plugin.                                                                                                                    | `sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==` |
+| `env.MAPGL_INVALID_KEY_MESSAGE` | Custom error message for invalid MapGL key.                                                                                                       | `Your MapGL key is invalid. Please contact support to get valid key.`                             |
 
 ### Strategy settings
 

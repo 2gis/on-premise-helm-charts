@@ -9,6 +9,11 @@ metadata:
     {{- toYaml .Values.annotations | nindent 4 }}
   {{- end }}
   labels:
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "castle.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}
+    {{- end }}
     {{- include "castle.labels" . | nindent 4 }}
   {{- if .Values.labels }}
     {{- toYaml .Values.labels | nindent 4 }}
@@ -22,9 +27,13 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configbuilder: {{ include (print $.Template.BasePath "/configmapbuilder.yaml") . | sha256sum }}
-        checksum/configbuilder-runnable: {{ include (print $.Template.BasePath "/configmapbuilder-runnable.yaml") . | sha256sum }}
-        checksum/confignginx: {{ include (print $.Template.BasePath "/configmapnginx.yaml") . | sha256sum }}
+        checksum/configbuilder: {{ (include (print $.Template.BasePath "/configmapbuilder.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/configbuilder-runnable: {{ (include (print $.Template.BasePath "/configmapbuilder-runnable.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/confignginx: {{ (include (print $.Template.BasePath "/configmapnginx.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- if .Values.customCAs.bundle }}
+        checksum/custom-ca: {{ (include (print $.Template.BasePath "/configmap-ca.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- end }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -34,6 +43,10 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: {{ include "castle.fullname" . }}-builder-config
           configMap:
@@ -45,14 +58,42 @@ spec:
         - name: {{ include "castle.fullname" . }}-castle-nginx-config
           configMap:
             name: {{ include "castle.fullname" . }}-castle-nginx-config
+        {{- if .Values.customCAs.bundle }}
+        - name: {{ include "castle.fullname" $ }}-ca
+          configMap:
+            name: {{ include "castle.fullname" $ }}-ca
+        {{- end }}
         {{- if (not .Values.persistentVolume.enabled) }}
         - name: {{ include "castle.fullname" . }}-data
           emptyDir: {}
         {{- end }}
+        {{- if and .Values.persistentVolume.enabled (eq .Values.persistentVolume.type "ephemeral") }}
+        - name: {{ include "castle.fullname" . }}-pvc
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                labels:
+                  {{- include "castle.labels" . | nindent 18 }}
+              spec:
+                {{- with .Values.persistentVolume.accessModes }}
+                accessModes:
+                  {{- toYaml . | nindent 18 }}
+                {{- end }}
+                storageClassName: {{ .Values.persistentVolume.storageClass }}
+                resources:
+                  requests:
+                    storage: {{ .Values.persistentVolume.size }}
+        {{- end }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       containers:
         - name: castle-nginx
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}
+          imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
@@ -80,9 +121,19 @@ spec:
             failureThreshold: 2
         - name: castle-cron
           image: {{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}
+          imagePullPolicy: {{ .Values.castle.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           command: ["/tini","--"]
           args:
           - /opt/update_services_init.sh
+          env:
+          {{- if .Values.customCAs.bundle }}
+          - name: SSL_CERT_FILE
+            value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+          {{- end }}
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
           startupProbe:
@@ -123,6 +174,107 @@ spec:
           - name: {{ include "castle.fullname" . }}-data
             mountPath: {{ .Values.castle.castleDataPath }}
           {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          - name: {{ include "castle.fullname" $ }}-ca
+            mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+            subPath: custom-ca.crt
+          {{- end }}
+        {{- if .Values.rtr.enabled }}
+        - name: castle-rtr
+          image: {{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}
+          imagePullPolicy: {{ .Values.castle.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          command:
+            - /opt/configuration_builder
+          args:
+            - --config
+            - /opt/config_builder.conf
+            - --service=restriction_json
+            - --daemon
+          resources:
+            {{- toYaml $.Values.resources | nindent 12 }}
+          volumeMounts:
+          - name: {{ include "castle.fullname" $ }}-builder-config
+            mountPath: /opt/config_builder.conf
+            subPath: config_builder_rtr.conf
+          {{- if .Values.persistentVolume.enabled }}
+          - name: {{ include "castle.fullname" . }}-pvc
+            mountPath: {{ .Values.castle.castleDataPath }}
+          {{- else }}
+          - name: {{ include "castle.fullname" . }}-data
+            mountPath: {{ .Values.castle.castleDataPath }}
+          {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          - name: {{ include "castle.fullname" $ }}-ca
+            mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+            subPath: custom-ca.crt
+          {{- end }}
+          env:
+            {{- range $kafkaRole, $overridesProperty := (dict
+                  "CONSUMER" "consumerOverrides"
+                ) -}}
+            {{- $overrides := dict }}
+            {{- /* if override property key exists in values */}}
+            {{- if (hasKey $.Values.rtr.kafka $overridesProperty) }}
+              {{- $overrides = $overridesProperty | get ($overridesProperty | get $.Values.kafka.rtr)}}
+            {{- end }}
+            {{- $kafkaPropertiesEnv := include "castle.kafkaPropertiesEnv" (dict
+                  "kafka" $.Values.rtr.kafka
+                  "overrides" $overrides
+                  "secretname" (print
+                      (include "castle.fullname" $)
+                      "-rtr"
+                    )
+                  "mountpoint" "/etc/2gis/secret/rtr"
+                  "prefix" "CASTLE_RESTRICTION_JSON_KAFKA_"
+                ) | fromYaml }}
+            {{- get $kafkaPropertiesEnv "ret" | toYaml | nindent 12 }}
+            {{- end }}{{- /* range */}}
+            - name: CASTLE_HTTP_PWD
+              valueFrom:
+                secretKeyRef:
+                  key: rtr.webapi.password
+                  name: {{ print (include "castle.fullname" $) "-rtr" }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CASTLE_RESTRICTION_JSON_KAFKA_GROUP_ID
+              value: "{{ .Values.rtr.kafka.groupId }}-$(POD_NAME)"
+            {{- if .Values.castle.excludeProjects }}
+            - name: CASTLE_EXCLUDE_PROJECTS
+              value: {{ join "," .Values.castle.excludeProjects | quote }}
+            {{- end }}
+            {{- if .Values.customCAs.bundle }}
+            - name: SSL_CERT_FILE
+              value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.nginx.port }}
+              protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+                - bash
+                - -c
+                - test -e /var/run/2gis/castle_connect_kafka.lock
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+          startupProbe:
+            exec:
+              command:
+                - bash
+                - -c
+                - test -e /var/run/2gis/castle_connect_kafka.lock
+            failureThreshold: {{ (.Values.castle.startupProbe).failureThreshold | default 180 | int }}
+            periodSeconds: {{ (.Values.castle.startupProbe).periodSeconds | default 5 | int }}
+        {{- end }}{{- /* .Values.rtr.enabled */}}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -137,7 +289,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-  {{- if .Values.persistentVolume.enabled }}
+  {{- if and .Values.persistentVolume.enabled (eq .Values.persistentVolume.type "pvc") }}
   volumeClaimTemplates:
     - metadata:
         name: {{ include "castle.fullname" . }}-pvc

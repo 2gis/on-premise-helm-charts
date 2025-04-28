@@ -7,13 +7,23 @@ spec:
   concurrencyPolicy: Forbid
   schedule: {{ .Values.assetPreparer.schedule }}
   successfulJobsHistoryLimit: {{ .Values.assetPreparer.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.assetPreparer.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       backoffLimit: {{ .Values.assetPreparer.backoffLimit }}
+      activeDeadlineSeconds: 172800
       template:
         spec:
           {{- with .Values.assetPreparer.nodeSelector }}
           nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.assetPreparer.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.assetPreparer.imagePullSecrets }}
+          imagePullSecrets:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           restartPolicy: Never
@@ -27,7 +37,7 @@ spec:
               resources:
                 {{- toYaml .Values.assetPreparer.resources | nindent 16 }}
               volumeMounts:
-                - mountPath: "{{ .Values.api.tempPath }}"
+                - mountPath: "{{ .Values.api.settings.tempPath }}"
                   name: temp-volume
               env:
                 - name: JOB_NAME
@@ -39,7 +49,7 @@ spec:
                 - name: MODE
                   value: "PrepareData"
                 - name: MAX_PARALLEL_JOBS
-                  value: "{{ .Values.assetPreparer.maxParallelJobs }}"
+                  value: "{{ .Values.assetPreparer.settings.maxParallelJobs }}"
                 - name: S3Settings__Url
                   value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
                 - name: S3Settings__Secure
@@ -64,34 +74,44 @@ spec:
                     secretKeyRef:
                       key: s3SecretKey
                       name: {{ include "pro-api.name" . }}-secret
-                - name: ES_HOST
+
+                - name: Elastic__Host
                   value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
-                {{ if .Values.elastic.credentials }}
-                - name: ES_CREDENTIALS
+                - name: Elastic__Secure
+                  value: "{{ $.Values.elastic.secure }}"
+                - name: Elastic__Port
+                  value: "{{ $.Values.elastic.port }}"
+                - name: Elastic__Username
+                  value: "{{ $.Values.elastic.username }}"
+                {{ if .Values.elastic.password }}
+                - name: Elastic__Password
                   valueFrom:
                     secretKeyRef:
-                      key: esCredentials
+                      key: esPassword
                       name: {{ include "pro-api.name" . }}-secret
                 {{ end }}
-                - name: ES_INDEX_PREFIX
-                  value: "{{ .Values.elastic.indexPrefix }}"
+                - name: Elastic__IndexPrefix
+                  value: "{{ $.Values.elastic.indexPrefix }}"
+                - name: Elastic__EnableHttpCompression
+                  value: "{{ $.Values.elastic.enableHttpCompression }}"
+
                 - name: API_URL
                   value: http://{{ include "pro-api.name" . }}
-                {{ if .Values.auth.apiKey }}
+                {{ if .Values.api.settings.auth.apiKey }}
                 - name: API_TOKEN
                   valueFrom:
                     secretKeyRef:
                       key: apiKey
                       name: {{ include "pro-api.name" . }}-secret
                 {{ end }}
-                {{ if .Values.assetPreparer.files }}
+                {{ if .Values.assetPreparer.settings.files }}
                 - name: FILES
-                  value: "{{ .Values.assetPreparer.files}}"
+                  value: "{{ .Values.assetPreparer.settings.files}}"
                 {{ end }}
                 - name: Common__Logging__Format
-                  value: "{{ .Values.api.logging.format }}"
+                  value: "{{ .Values.api.settings.logging.format }}"
                 - name: Common__Logging__Targets
-                  value: "{{ .Values.api.logging.targets }}"
+                  value: "{{ .Values.api.settings.logging.targets }}"
                 - name: Digger__Address
                   value: "{{ .Values.digger.url}}"
                 - name: Digger__UserName

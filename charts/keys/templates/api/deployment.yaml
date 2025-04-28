@@ -12,6 +12,11 @@ metadata:
     {{- end }}
   {{- end }}
   labels:
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "keys.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}
+    {{- end }}
     {{- include "keys.api.labels" . | nindent 4 }}
     {{- with .Values.api.labels }}
     {{- toYaml . | nindent 4 }}
@@ -38,6 +43,11 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
+      terminationGracePeriodSeconds: 60
+      {{- with include "keys.psql.initTLS" . }}
+      initContainers:
+      {{- . | nindent 8 }}
+      {{- end }}
       containers:
         - name: keys-api
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
@@ -50,6 +60,10 @@ spec:
             httpGet:
               path: /healthcheck
               port: http
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 30s" ]
           resources:
             {{- toYaml .Values.api.resources | nindent 12 }}
           env:
@@ -58,18 +72,19 @@ spec:
             {{- include "keys.env.db.deploys" . | nindent 12 }}
             {{- include "keys.env.redis" . | nindent 12 }}
             {{- include "keys.env.auth" . | nindent 12 }}
-            {{- include "keys.env.kafka.audit" . | nindent 12 }}
             {{- if .Values.customCAs.bundle }}
             {{- include "keys.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
-          {{- if .Values.customCAs.bundle }}
           volumeMounts:
-            {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- if .Values.customCAs.bundle }}
+          {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
-      {{- if .Values.customCAs.bundle }}
+          {{- include "keys.psql.volumeMount" . | nindent 12 }}
       volumes:
-        {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
+      {{- if .Values.customCAs.bundle }}
+      {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
       {{- end }}
+      {{- include "keys.psql.volume" . | nindent 8 }}
       {{- with .Values.api.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

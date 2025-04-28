@@ -17,14 +17,15 @@ spec:
         {{- include "keys.migrate.labels" . | nindent 8 }}
     spec:
       restartPolicy: Never
-      {{- if .Values.migrate.initialDelaySeconds }}
       initContainers:
+      {{- if .Values.migrate.initialDelaySeconds }}
         - name: delay
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           command: [ "sh", "-c", "sleep {{ .Values.migrate.initialDelaySeconds }}" ]
           resources:
             {{- toYaml .Values.migrate.resources | nindent 12 }}
       {{- end }}
+      {{- include "keys.psql.initTLS" . | nindent 8 }}
       containers:
         - name: migrate
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
@@ -39,15 +40,21 @@ spec:
             {{- if .Values.customCAs.bundle }}
             {{- include "keys.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
-          {{- if .Values.customCAs.bundle }}
           volumeMounts:
-            {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- if .Values.customCAs.bundle }}
+          {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
-      {{- if .Values.customCAs.bundle }}
+          {{- include "keys.psql.volumeMount" . | nindent 12 }}
       volumes:
-        {{- include "keys.custom.ca.jobs.volumes" . | nindent 8 }}
+      {{- if .Values.customCAs.bundle }}
+      {{- include "keys.custom.ca.jobs.volumes" . | nindent 8 }}
       {{- end }}
+      {{- include "keys.psql.volume" . | nindent 8 }}
       {{- with .Values.migrate.nodeSelector }}
       nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.migrate.tolerations }}
+      tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

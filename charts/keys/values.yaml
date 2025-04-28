@@ -13,8 +13,6 @@ dgctlDockerRegistry: ''
 # @param backend.image.tag Backend service image tag.
 # @param admin.image.repository Admin service image repository.
 # @param admin.image.tag Admin service image tag.
-# @param redis.image.repository Redis image repository.
-# @param redis.image.tag Redis image tag.
 
 imagePullSecrets: []
 imagePullPolicy: IfNotPresent
@@ -31,14 +29,14 @@ featureFlags:
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.87.0
+    tag: 1.112.2
 
 # @section Admin service settings
 
 admin:
   image:
     repository: 2gis-on-premise/keys-ui
-    tag: 0.8.0
+    tag: 0.10.5
 
   # @param admin.replicas A replica count for the pod.
 
@@ -97,7 +95,7 @@ admin:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
   # @param admin.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param admin.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -156,6 +154,29 @@ api:
       # ...
       # -----END CERTIFICATE-----
 
+  # @param api.oidc.enable If OIDC authentication is enabled.
+  # @param api.oidc.enableSinglePartnerMode Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).
+  # @param api.oidc.enableExternalProvider Enable external oidc provider: do not have access to manage users.
+  # @param api.oidc.url URL of the OIDC provider.
+  # @param api.oidc.retryCount Maximum number of retries for requests to OIDC provider.
+  # @param api.oidc.timeout Timeout for requests to OIDC provider.
+  # @extra api.oidc.defaultPartner **Settings for single partner mode feature. Info specified here will be returned in responses from Auth API**
+  # @param api.oidc.defaultPartner.id Default partner's Id.
+  # @param api.oidc.defaultPartner.name Default partner's Name.
+  # @param api.oidc.defaultPartner.role Role of the user in the default partner. Can be: 'user', 'admin'.
+
+  oidc:
+    enable: false
+    enableSinglePartnerMode: false
+    enableExternalProvider: false
+    url: ''
+    retryCount: 3
+    timeout: 3s
+    defaultPartner:
+      id: ''
+      name: ''
+      role: ''
+
   # @param api.replicas A replica count for the pod.
 
   replicas: 1
@@ -200,7 +221,7 @@ api:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
   # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -263,6 +284,8 @@ import:
 
   nodeSelector: {}
 
+  # @param import.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  tolerations: []
 
 # @section Migrate service settings
 
@@ -286,6 +309,9 @@ migrate:
   # @param migrate.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 
   nodeSelector: {}
+
+  # @param migrate.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  tolerations: []
 
 
 # @section Tasker service settings
@@ -339,62 +365,118 @@ tasker:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
+
+
+# @section Dispatcher settings
+
+dispatcher:
+
+  # @param dispatcher.enabled If dispatcher worker is deployed.
+  enabled: false
+
+  # @param dispatcher.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
+
+  # @param dispatcher.replicas A replica count for the pod.
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+  # @param dispatcher.auditEvents.sendInterval Send audit events interval
+  # @param dispatcher.auditEvents.batchMaxSize Max batch size when sending audit events
+  # @param dispatcher.auditEvents.holdDuration In case of an unsuccessful attempt to send messages, the service will not resend it for a given duration
+
+  auditEvents:
+    sendInterval: 1m
+    batchMaxSize: 1000
+    holdDuration: 10m
+
+  # @param dispatcher.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param dispatcher.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param dispatcher.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  # @param dispatcher.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param dispatcher.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  annotations: {}
+  labels: {}
+
+  # @param dispatcher.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param dispatcher.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  podAnnotations: {}
+  podLabels: {}
+
+  # @param dispatcher.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param dispatcher.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param dispatcher.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+
+
+  # @extra dispatcher.cleaner **Settings for cronjob that cleans sent messages from database**
+
+  cleaner:
+
+    # @param dispatcher.cleaner.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+    logLevel: warning
+
+    # @param dispatcher.cleaner.auditEvents.retentionDuration Retention period for successfully sent audit messages.
+
+    auditEvents:
+      retentionDuration: 4320h
+
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 64Mi
+
+    # @param dispatcher.cleaner.cron.schedule Cron job schedule.
+    # @param dispatcher.cleaner.cron.successfulJobsHistoryLimit Specifies the number of successful finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
+    # @param dispatcher.cleaner.cron.failedJobsHistoryLimit Specifies the number of failed finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
+    # @param dispatcher.cleaner.cron.suspend You can suspend execution of Jobs for a CronJob, by setting the field to true. See [schedule suspension](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension).
+
+    cron:
+      schedule: 0 1 * * *
+      successfulJobsHistoryLimit: 3
+      failedJobsHistoryLimit: 3
+      suspend: false
+
+    # @param dispatcher.cleaner.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+
+    nodeSelector: {}
 
 
 # @section Redis settings
 
 redis:
-  image:
-    repository: 2gis-on-premise/keys-redis
-    tag: 6.2.6-alpine3.15
-
-  resources:
-    requests:
-      cpu: 50m
-      memory: 32Mi
-    limits:
-      cpu: 1
-      memory: 256Mi
-
-  # @param redis.port HTTP port for Redis to listen.
-  # @param redis.configPath Path to Redis configuration file.
-
-  port: 6379
-  configPath: /opt/redis.conf
-
+  # @param redis.host Redis hostname or IP.
+  # @param redis.port Redis port.
+  # @param redis.db Redis database number.
   # @param redis.password Redis password. Empty string if no authentication is required.
 
-  password: ''
-
-  # @param redis.useExternalRedis If true, external Redis server will be used.
-  # @param redis.host External Redis hostname or IP.
-  # @param redis.db External Redis database number.
-
-  useExternalRedis: false
   host: ''
+  port: 6379
   db: 1
-
-  # @param redis.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-  # @param redis.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-
-  annotations: {}
-  labels: {}
-
-  # @param redis.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-  # @param redis.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-
-  podAnnotations: {}
-  podLabels: {}
-
-  # @param redis.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-  # @param redis.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
-  # @param redis.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-
-  nodeSelector: {}
-  affinity: {}
-  tolerations: {}
-
+  password: ''
 
 # @section Database access settings
 
@@ -402,60 +484,92 @@ postgres:
 
   # @extra postgres.ro **Settings for the read-only access**
 
-  # @param postgres.ro.host PostgreSQL hostname or IP. **Required**
-  # @param postgres.ro.port PostgreSQL port.
+  # @param postgres.ro.host PostgreSQL one or multiple hostnames or IPs separated by comma (e.g. 'host1,host2,10.0.0.1').  **Required**
+  # @param postgres.ro.port PostgreSQL one or multiple ports (one for each host). Values must be separated by comma (e.g. '1234,4567,5432').
   # @param postgres.ro.timeout PostgreSQL client connection timeout.
   # @param postgres.ro.name PostgreSQL database name. **Required**
   # @param postgres.ro.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
   # @param postgres.ro.username PostgreSQL username. **Required**
   # @param postgres.ro.password PostgreSQL password. **Required**
+  # @param postgres.ro.tls.mode PostgreSQL ssl [connection mode](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION). Available modes: `disable`, `require`, `verify-ca` and `verify-full`.
+  # @param postgres.ro.tls.serverCA PostgreSQL CA certificate for server CA verify. **Required for mode `verify-ca` or `verify-full`**.
+  # @param postgres.ro.tls.clientCert client certificate. **Required for mode `verify-full`**.
+  # @param postgres.ro.tls.clientKey client private key. **Required for mode `verify-full`**.
 
   ro:
     host: ''
-    port: 5432
+    port: '5432'
     timeout: 3s
     name: ''
     schema: ''
     username: ''
     password: ''
+    tls:
+      mode: disable
+      serverCA: ''
+      clientCert: ''
+      clientKey: ''
 
   # @extra postgres.rw **Settings for the read-write access**
 
-  # @param postgres.rw.host PostgreSQL hostname or IP. **Required**
-  # @param postgres.rw.port PostgreSQL port.
+  # @param postgres.rw.host PostgreSQL one or multiple hostnames or IPs separated by comma (e.g. 'host1,host2,host3').  **Required**
+  # @param postgres.rw.port PostgreSQL one or multiple ports (one for each host). Values must be separated by comma (e.g. '1234,4567,5432').
   # @param postgres.rw.timeout PostgreSQL client connection timeout.
   # @param postgres.rw.name PostgreSQL database name. **Required**
   # @param postgres.rw.schema PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.
   # @param postgres.rw.username PostgreSQL username. **Required**
   # @param postgres.rw.password PostgreSQL password. **Required**
+  # @param postgres.rw.tls.mode PostgreSQL ssl [connection mode](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION). Available modes: `disable`, `require`, `verify-ca` and `verify-full`.
+  # @param postgres.rw.tls.serverCA PostgreSQL CA certificate for server CA verify. **Required for mode `verify-ca` or `verify-full`**.
+  # @param postgres.rw.tls.clientCert client certificate. **Required for mode `verify-full`**.
+  # @param postgres.rw.tls.clientKey client private key. **Required for mode `verify-full`**.
 
   rw:
     host: ''
-    port: 5432
+    port: '5432'
     timeout: 3s
     name: ''
     schema: ''
     username: ''
     password: ''
-
+    tls:
+      mode: disable
+      serverCA: ''
+      clientCert: ''
+      clientKey: ''
 
 # @section Kafka settings
 
 kafka:
 
+  # @param kafka.bootstrapServers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093'). **Required**
+  # @param kafka.securityProtocol Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.
+  # @param kafka.saslMechanism Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.
+  # @param kafka.username Username for authorization (SASL).
+  # @param kafka.password Password for authorization (SASL).
+  # @param kafka.tls.skipServerCertificateVerify Controls whether a client verifies the server's certificate chain and host name.
+  # @param kafka.tls.serverCA Server's root certificate.
+  # @param kafka.tls.clientCert Client certificate.
+  # @param kafka.tls.clientKey Client key.
+
+  bootstrapServers: ''
+  securityProtocol: PLAINTEXT
+  saslMechanism: PLAIN
+  username: ''
+  password: ''
+  tls:
+    skipServerCertificateVerify: false
+    serverCA: ''
+    clientCert: ''
+    clientKey: ''
+
   # @extra kafka.audit **Settings for sending audit messages.**
 
-  # @param kafka.audit.bootstrapServers Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').
-  # @param kafka.audit.username Username for authorization (SASL/PLAINTEXT SHA-512).
-  # @param kafka.audit.password Password for authorization (SASL/PLAINTEXT SHA-512).
-  # @param kafka.audit.topic Topic to produce audit messages.
+  # @param kafka.audit.topic Topic to produce audit messages. **Required**
   # @param kafka.audit.produce.retryCount Number of retries to produce a message.
   # @param kafka.audit.produce.idempotentWrite Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence).
 
   audit:
-    bootstrapServers: ''
-    username: ''
-    password: ''
     topic: ''
     produce:
       retryCount: 5
@@ -531,10 +645,10 @@ dgctlStorage:
   region: ''
   secure: false
   verifySsl: true
-  bucket: keys
+  bucket: ''
   accessKey: ''
   secretKey: ''
-  manifest: manifest.json
+  manifest: ''
 
 # @section Limits
 
@@ -568,11 +682,17 @@ dgctlStorage:
 # @param tasker.resources.limits.cpu A CPU limit.
 # @param tasker.resources.limits.memory A memory limit.
 
-# @extra redis.resources **Limits for Redis**
-# @param redis.resources.requests.cpu A CPU request.
-# @param redis.resources.requests.memory A memory request.
-# @param redis.resources.limits.cpu A CPU limit.
-# @param redis.resources.limits.memory A memory limit.
+# @extra dispatcher.resources **Limits for the Dispatcher service**
+# @param dispatcher.resources.requests.cpu A CPU request.
+# @param dispatcher.resources.requests.memory A memory request.
+# @param dispatcher.resources.limits.cpu A CPU limit.
+# @param dispatcher.resources.limits.memory A memory limit.
+
+# @extra dispatcher.cleaner.resources **Limits for the Cleaner service**
+# @param dispatcher.cleaner.resources.requests.cpu A CPU request.
+# @param dispatcher.cleaner.resources.requests.memory A memory request.
+# @param dispatcher.cleaner.resources.limits.cpu A CPU limit.
+# @param dispatcher.cleaner.resources.limits.memory A memory limit.
 
 # @section customCAs **Custom Certificate Authority**
 

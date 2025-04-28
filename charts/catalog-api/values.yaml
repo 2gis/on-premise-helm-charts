@@ -13,6 +13,7 @@ dgctlDockerRegistry: ''
 # @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 # @param imagePullSecrets Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 nodeSelector: {}
@@ -21,6 +22,7 @@ tolerations: []
 annotations: {}
 podAnnotations: {}
 podLabels: {}
+podSecurityContext: {}
 imagePullSecrets: []
 
 
@@ -88,7 +90,7 @@ api:
 
   image:
     repository: 2gis-on-premise/catalog-api
-    tag: 3.619.0
+    tag: 3.647.0
     pullPolicy: IfNotPresent
 
 
@@ -250,7 +252,7 @@ keys:
 
 # @section License settings
 
-# @param license.url Address of the License service v1. Ex: http://license.svc **Required**
+# @param license.url Address of the License service v2. Ex: https://license.svc **Required**
 # @param license.requestTimeout Timeout for requests to the License service
 
 license:
@@ -314,6 +316,7 @@ stat:
 
 # @extra importer **Common settings**
 # @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param importer.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
 # @param importer.workerNum Number of parallel import processes (workers)
 # @param importer.initialDelaySeconds Number of seconds after the container has started before liveness or readiness probes are initiated
 # @param importer.retry.download.maxAttempts The maximum number of retries download before stopping
@@ -323,6 +326,8 @@ stat:
 
 importer:
   nodeSelector: {}
+  tolerations: []
+
   workerNum: 3
   initialDelaySeconds: 1
   retry:
@@ -341,7 +346,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/catalog-importer
-    tag: 1.7.0
+    tag: 1.12.1
     pullPolicy: IfNotPresent
 
   # @section importer.postgres **Database settings**

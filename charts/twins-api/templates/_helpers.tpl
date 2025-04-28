@@ -55,7 +55,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "twins.manifestCode" -}}
-{{- base $.Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}
 
 {{- define "twins.env.loglevel" -}}
@@ -153,6 +153,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.importer.postgres.schemaSwitchEnabled }}"
 - name: TWINS_S3_ENDPOINT
   value: "{{ .Values.dgctlStorage.host }}"
+- name: TWINS_S3_REGION
+  value: "{{ .Values.dgctlStorage.region }}"
+- name: TWINS_S3_SECURE
+  value: "{{ .Values.dgctlStorage.secure }}"
+- name: TWINS_S3_VERIFY_SSL
+  value: "{{ .Values.dgctlStorage.verifySsl }}"
 - name: TWINS_S3_BUCKET
   value: "{{ .Values.dgctlStorage.bucket }}"
 - name: TWINS_S3_ACCESS_KEY

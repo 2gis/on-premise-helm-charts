@@ -6,17 +6,19 @@ dgctlDockerRegistry: ''
 
 # @section Deployment Artifacts Storage settings
 
-# @param dgctlStorage.host S3 endpoint. Format: `host:port`.
-# @param dgctlStorage.secure If S3 uses https.
-# @param dgctlStorage.bucket S3 bucket name.
-# @param dgctlStorage.accessKey S3 access key for accessing the bucket.
-# @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
-# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate.
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
+# @param dgctlStorage.bucket S3 bucket name. **Required**
+# @param dgctlStorage.region AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
 
 dgctlStorage:
   host: ''
   secure: false
   bucket: ''
+  region: ''
   accessKey: ''
   secretKey: ''
   manifest: ''
@@ -63,8 +65,8 @@ types:
 # @param cassandra.timeout Timeout for connect attempts to the database.
 
 # @extra cassandra.credentials **Credentials for accessing Apache Cassandra**
-# @param cassandra.credentials.user User name to connect to the database.
-# @param cassandra.credentials.password User password to connect to the database.
+# @param cassandra.credentials.user User name to connect to the database. **Required**
+# @param cassandra.credentials.password User password to connect to the database. **Required**
 # @param cassandra.credentials.jmxUser JMX user name to be used by the Kubernetes Importer Job's cleaner process.
 # @param cassandra.credentials.jmxPassword JMX password to be used by the Kubernetes Importer Job's cleaner process.
 
@@ -86,6 +88,123 @@ cassandra:
   replicaFactor: 3
   consistencyLevelRead: LOCAL_QUORUM
   consistencyLevelWrite: LOCAL_QUORUM
+
+# @section Custom generated tiles API settings
+
+# @extra tilegen **Common settings**
+
+# @param tilegen.enabled If Tilegen API is enabled for the service.
+
+# @param tilegen.logLevelOverride A custom api logging level. Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
+# @param tilegen.logFormatOverride A custom api logging format. Allowed options: text|json. If not defined, 'json' format will be used.
+
+# @param tilegen.tileset.name Name for the tileset
+# @param tilegen.tileset.keyspace Name for keyspace in database
+
+# @param tilegen.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param tilegen.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param tilegen.replicaCount A replica count for the pod.
+# @param tilegen.revisionHistory Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param tilegen.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param tilegen.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param tilegen.terminationGracePeriodSeconds Duration in seconds the Tiles API service pod needs to terminate gracefully.
+# @param tilegen.containerPort Tiles API container port.
+# @param tilegen.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param tilegen.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param tilegen.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+# @extra tilegen.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @param tilegen.resources.requests.cpu A CPU request.
+# @param tilegen.resources.requests.memory A memory request.
+# @param tilegen.resources.limits.cpu A CPU limit.
+# @param tilegen.resources.limits.memory A memory limit.
+
+# @param tilegen.workerNum Number of parallel import processes (workers).
+# @param tilegen.writerNum Number of write processes per import process (worker).
+
+tilegen:
+  enabled: false
+
+  logLevelOverride:
+  logFormatOverride:
+
+  tileset:
+    name: userdata
+    keyspace: dgis_userdata
+
+  # @extra tilegen.image **Docker image settings**
+  # @param tilegen.image.repository Docker Repository.
+  # @param tilegen.image.tag Docker image tag.
+  # @param tilegen.image.pullPolicy Kubernetes pull policy for the service's Docker image.
+  # @param tilegen.imagePullSecrets Kubernetes image pull secrets.
+  image:
+    repository: 2gis-on-premise/tiles-api-importer
+    tag: 4.71.1
+    pullPolicy: IfNotPresent
+
+  imagePullSecrets: {}
+
+  labels: {}
+  annotations: {}
+
+  replicaCount: 3
+  revisionHistory: 3
+
+  # @extra tilegen.strategy.rollingUpdate **Service's Rolling Update strategy settings**
+  # @param tilegen.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param tilegen.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  podLabels: {}
+  podAnnotations: {}
+
+  tolerations: {}
+  nodeSelector: {}
+  affinity: {}
+
+  terminationGracePeriodSeconds: 30
+  containerPort: 5000
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
+
+  workerNum: 6
+  writerNum: 8
+
+  # @extra tilegen.service **Kubernetes [service settings](https://kubernetes.io/docs/concepts/services-networking/service/) to expose the service**
+  # @param tilegen.service.port Service port.
+  # @param tilegen.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param tilegen.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param tilegen.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  service:
+    port: 80
+    type: ClusterIP
+    annotations: {}
+    labels: {}
+
+  # @extra tilegen.workerResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the workers**
+  # @param tilegen.workerResources.requests.cpu A CPU request.
+  # @param tilegen.workerResources.requests.memory A memory request.
+  # @param tilegen.workerResources.limits.cpu A CPU limit.
+  # @param tilegen.workerResources.limits.memory A memory limit.
+
+  workerResources:
+    requests:
+      cpu: 256m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2048Mi
 
 # @section API Keys proxy settings
 
@@ -109,12 +228,13 @@ cassandra:
 # @extra proxy.access **API Keys service access settings**
 # @param proxy.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
 # @param proxy.access.url API Keys endpoint url, ex: http://keys-api.svc. **Required**
-# @param proxy.access.token Service key for Keys API. **Required**
 # @param proxy.access.syncPeriod Proxy sync period.
+# @param proxy.access.raster.token Service key for raster data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs). **Required**
+# @param proxy.access.vector.token Service key for vector data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs). **Required**
 
-# @extra proxy.access.bss **BSS statistics receiver settings**
-# @param proxy.access.bss.enabled If statistics receiver is enabled.
-# @param proxy.access.bss.url BSS statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
+# @extra proxy.access.stat **Statistics receiver settings**
+# @param proxy.access.stat.enabled If statistics receiver is enabled.
+# @param proxy.access.stat.url Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
 
 proxy:
   logLevelOverride:
@@ -122,7 +242,7 @@ proxy:
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.54.0
+    tag: 4.71.1
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -139,11 +259,15 @@ proxy:
   access:
     enabled: false
     url: ''
-    token: ''
     syncPeriod: 2m
-    bss:
+    stat:
       enabled: false
       url: ''
+
+    vector:
+      token: ''
+    raster:
+      token: ''
 
 # @section Tiles API settings
 
@@ -179,7 +303,7 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.54.0
+    tag: 4.71.1
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
@@ -206,7 +330,7 @@ api:
   podLabels: {}
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
   imagePullSecrets: []
 
@@ -312,7 +436,7 @@ api:
 # @param importer.logFormatOverride A custom importer logging format. Allowed options: text|json. If not defined, 'json' format will be used.
 # @param importer.workerNum Number of parallel import processes (workers).
 # @param importer.writerNum Number of write processes per import process (worker).
-# @param importer.workerNumAttempts Number of attempts for import process (worker) if it is failing.
+# @param importer.workerNumAttempts Number of attempts for import process (worker) if it is failing. **Required**
 
 # @param importer.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
@@ -337,7 +461,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.54.0
+    tag: 4.71.1
     pullPolicy: IfNotPresent
 
 
@@ -377,7 +501,7 @@ importer:
   retryInterval: 5s
   retryCount: 3
 
-  tolerations: {}
+  tolerations: []
   imagePullSecrets: []
   nodeSelector: {}
 
@@ -410,7 +534,7 @@ importer:
 
 # @section License service settings
 
-# @param license.url Address of the License service. Ex: https://license.svc
+# @param license.url Address of the License service. Ex: https://license.svc **Required**
 # @param license.retryPeriod Duration how often tiles server should try to update license status if it is failing to get it.
 
 license:

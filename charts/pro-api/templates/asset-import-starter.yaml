@@ -14,6 +14,14 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.assetImporter.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.assetImporter.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       restartPolicy: Never
       serviceAccountName: {{ include "pro-api.service-account-name" . }}
       volumes:
@@ -26,19 +34,19 @@ spec:
           resources:
             {{- toYaml .Values.assetImporter.resources | nindent 16 }}
           volumeMounts:
-            - mountPath: "{{ .Values.api.tempPath }}"
+            - mountPath: "{{ .Values.api.settings.tempPath }}"
               name: temp-volume
           env:
             - name: JOB_NAME
               value: {{ include "pro-api.asset-importer-name" . }}
             - name: TEMP_PATH
-              value: "{{ .Values.api.tempPath }}"
+              value: "{{ .Values.api.settings.tempPath }}"
             - name: ENV
-              value: "{{ .Values.api.env }}"
+              value: "{{ .Values.api.settings.env }}"
             - name: MODE
               value: "{{ .Values.assetImporter.startOnDeployMode }}"
             - name: MAX_PARALLEL_JOBS
-              value: "{{ .Values.assetImporter.maxParallelJobs }}"
+              value: "{{ .Values.assetImporter.settings.maxParallelJobs }}"
             - name: manifest_filename
               value: "{{ .Values.dgctlStorage.manifest }}"
             - name: S3Settings__Url
@@ -69,36 +77,48 @@ spec:
                 secretKeyRef:
                   key: s3SecretKey
                   name: {{ include "pro-api.name" . }}-secret
-            - name: ES_HOST
+
+            - name: Elastic__Host
               value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
-            {{- if .Values.elastic.credentials }}
-            - name: ES_CREDENTIALS
+            - name: Elastic__Secure
+              value: "{{ $.Values.elastic.secure }}"
+            - name: Elastic__Port
+              value: "{{ $.Values.elastic.port }}"
+            - name: Elastic__Username
+              value: "{{ $.Values.elastic.username }}"
+            {{ if .Values.elastic.password }}
+            - name: Elastic__Password
               valueFrom:
                 secretKeyRef:
-                  key: esCredentials
+                  key: esPassword
                   name: {{ include "pro-api.name" . }}-secret
-            {{- end }}
-            - name: ES_INDEX_PREFIX
-              value: "{{ .Values.elastic.indexPrefix }}"
+            {{ end }}
+            - name: Elastic__IndexPrefix
+              value: "{{ $.Values.elastic.indexPrefix }}"
+            - name: Elastic__EnableHttpCompression
+              value: "{{ $.Values.elastic.enableHttpCompression }}"
+
             - name: API_URL
               value: http://{{ include "pro-api.name" . }}
-            {{- if .Values.auth.apiKey }}
+            {{- if .Values.api.settings.auth.apiKey }}
             - name: API_TOKEN
               valueFrom:
                 secretKeyRef:
                   key: apiKey
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
-            {{- if .Values.assetImporter.files }}
+            {{- if .Values.assetImporter.settings.files }}
             - name: FILES
-              value: "{{ .Values.assetImporter.files}}"
+              value: "{{ .Values.assetImporter.settings.files}}"
             {{- end }}
             - name: Common__Logging__Format
-              value: "{{ .Values.api.logging.format }}"
+              value: "{{ .Values.api.settings.logging.format }}"
             - name: Common__Logging__Targets
-              value: "{{ .Values.api.logging.targets }}"
+              value: "{{ .Values.api.settings.logging.targets }}"
             - name: Common__FailJobOnError
               value: "true"
+            - name: Common__TtlSecondsAfterFinished
+              value: "{{ .Values.assetImporter.settings.ttlSecondsAfterFinished }}"
             - name: Navi__Url
               value: {{ .Values.navi.url }}
             - name: Navi__Key

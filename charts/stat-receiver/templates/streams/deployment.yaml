@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "bss-receiver-streams.name" . }}
+  name: {{ include "stat-receiver-streams.name" . }}
   {{- if .Values.streams.annotations }}
   annotations:
     {{- toYaml .Values.streams.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "bss-receiver-streams.labels" . | nindent 4 }}
+    {{- include "stat-receiver-streams.labels" . | nindent 4 }}
     {{- if .Values.streams.labels }}
     {{- toYaml .Values.streams.labels | nindent 4 }}
     {{- end }}
@@ -21,11 +21,11 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      {{- include "bss-receiver-streams.selectorLabels" . | nindent 6 }}
+      {{- include "stat-receiver-streams.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "bss-receiver-streams.labels" . | nindent 8 }}
+        {{- include "stat-receiver-streams.labels" . | nindent 8 }}
         {{- if .Values.streams.labels }}
         {{- toYaml .Values.streams.labels | nindent 8 }}
         {{- end }}
@@ -100,7 +100,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: {{ include "bss-receiver-streams.name" . }}
+            name: {{ include "stat-receiver-streams.name" . }}
         - name: data-volume
           emptyDir:
             sizeLimit: {{ .Values.streams.storageSize }}

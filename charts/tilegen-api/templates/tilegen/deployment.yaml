@@ -1,0 +1,147 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "api.name" . }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "api.labels" . | nindent 4 }}
+  {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- toYaml .Values.strategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/tilegen/secrets.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "api.labels" . | nindent 8 }}
+      {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      serviceAccountName: {{ include "api.service-account-name" . }}
+      volumes:
+        - name: temp-volume
+          emptyDir: {}
+      containers:
+        - name: {{ include "api.name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "{{ .Values.api.tempPath }}"
+              name: temp-volume
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 5
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 20
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5"]
+          env:
+            - name: DEBUG
+              value: "{{ .Values.api.debug }}"
+            - name: Processor__JobName
+              value: {{ include "task-processor-job.name" . }}
+            - name: Common__TempPath
+              value: "{{ .Values.api.tempPath }}"
+            - name: Common__AllowAnyOrigin
+              value: "{{ .Values.api.allowAnyOrigin }}"
+            - name: S3__Url
+              value: {{ required "A valid .Values.s3.host entry required" $.Values.s3.host }}
+            - name: S3__VectorTilesBucket
+              value: {{ required "A valid .Values.s3.vectorTilesBucket entry required" $.Values.s3.vectorTilesBucket }}
+            - name: S3__AccessKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3AccessKey
+                  name: {{ include "api.name" . }}-secret
+            - name: S3__SecretKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3SecretKey
+                  name: {{ include "api.name" . }}-secret
+            - name: Redis__Host
+              value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
+            - name: Redis__Port
+              value: "{{ .Values.redis.port }}"
+            - name: Redis__DatabaseId
+              value: "{{ .Values.redis.databaseId }}"
+            - name: Redis__Username
+              value: {{ $.Values.redis.username }}
+            {{ if .Values.redis.password }}
+            - name: Redis__Password
+              valueFrom:
+                secretKeyRef:
+                  key: redisPassword
+                  name: {{ include "api.name" . }}-secret
+            {{- end }}
+            - name: Common__Logging__Format
+              value: "{{ .Values.api.logging.format }}"

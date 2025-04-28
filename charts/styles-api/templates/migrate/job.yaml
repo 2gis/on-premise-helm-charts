@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "styles.migrate.name" . }}
+  labels:
+    {{- include "styles.migrate.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-10"
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "styles.migrate.name" . }}
+      labels:
+        {{- include "styles.migrate.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      {{- if .Values.migrate.initialDelaySeconds }}
+      initContainers:
+        - name: delay
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          command: [ "sh", "-c", "sleep {{ .Values.migrate.initialDelaySeconds }}" ]
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+      {{- end }}
+      containers:
+        - name: migrate
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: [ "mgs", "migrate" ]
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+          env:
+            {{- include "styles.env.migrate" . | nindent 12 }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "styles.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            {{- include "styles.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+      {{- if .Values.customCAs.bundle }}
+      volumes:
+        {{- include "styles.custom.ca.jobs.volumes" . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.migrate.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.migrate.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

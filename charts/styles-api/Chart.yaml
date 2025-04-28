@@ -1,0 +1,12 @@
+apiVersion: v2
+name: styles-api
+type: application
+description: A Helm chart for Kubernetes to deploy API Styles service
+
+version: 1.37.1
+appVersion: 0.38.0
+
+maintainers:
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

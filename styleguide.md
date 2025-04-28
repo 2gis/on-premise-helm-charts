@@ -10,7 +10,7 @@
 
 Файлы `README.md` формируются полуавтоматически. Для каждого чарта сначала необходимо создать файл `README.md` с общим описанием сервиса и пустым разделом «Values», а затем запустить инструмент [`readme-generator-for-helm`](https://github.com/bitnami-labs/readme-generator-for-helm) от Bitnami, чтобы автоматически заполнить раздел «Values» описаниями настроек на основе комментариев из `values.yaml`. Подробнее об использовании генератора можно прочитать в [документе](https://docs.google.com/document/d/1iEPG8tcCYu9q5iZssTAPOd43xh8uCQhNXyXhFPUTir8/edit).
 
-Генератор можно запускать напрямую или с помощью [`Makefile`](Makefile), например:
+Генератор можно запускать напрямую или с помощью [`Makefile`](Makefile) (лучше это делать на linux. На windows были замечены проблемы с лишними пустыми строками при генерации README.md), например:
 
 ```sh
 make prepare
@@ -49,8 +49,8 @@ make charts/navi-back
 - В переменных, где предполагается конечный список значений, всегда его явно перечисляем.
 
   ```yaml
-  # @param LOG_LEVEL Log level: `error`, `warn`, `info` or `debug`.
-  LOG_LEVEL: error
+  # @param logLevel Log level: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: error
   ```
 
 - Константы или переменные, которые никогда не меняются при типовом использовании сервиса, следует скрывать из `README.md` при помощи тэга `@skip`.
@@ -58,6 +58,40 @@ make charts/navi-back
   Обратите внимание, что из-за особенностей генератора описание не может начинаться со ссылки (любая конструкция в квадратных скобках в начале описания будет принята за декларацию типа). Формулируйте описания настроек и секций так, чтобы ссылки были не в начале.
 
 - Во всех случаях, где в значениях по умолчанию должен фигурировать какой-либо город, используем Москву.
+
+- В случае, если в чарте присутствует `CronJob`, необходимо добавить параметры `successfulJobsHistoryLimit` и `failedJobsHistoryLimit` с дефолтными значениями например 3-3.
+
+  ```yaml
+  # @param cron.successfulJobsHistoryLimit How many completed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
+  # @param cron.failedJobsHistoryLimit How many failed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
+  cron:
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 3
+  ```
+
+- Если в развёртываемом сервисе используется манифест, то необходимо (`<svc_name>` - наименование развёртываемого сервиса):
+  1. В `helpers.tpl` добавить раздел:
+
+    ```yaml
+    {{/*
+    Manifest name
+    */}}
+    {{- define "<svc_name>.manifestCode" -}}
+    {{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
+    {{- end }}
+    ```
+
+  2. В раздел `metadata.labels` добавить метку:
+
+    ```yaml
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "<svc_name>.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}
+    {{- end }}
+    ```
+
+  Это необходимо для корректной работы скриптов очистки манифестов в отдельных случаях
 
 ## Именование настроек
 
@@ -72,23 +106,57 @@ make charts/navi-back
 
   ```yaml
   kafka:
-    enabled: false
     groupId: example_group
     bootstrapServers: ''
-    securityProtocol: SaslPlaintext
-    sasl:
-      mechanism: ScramSha512
-      username: ''
-      password: ''
+    securityProtocol: PLAINTEXT # тут не нужно оставлять хардкодом, нужно иметь возможность в несколько разных протоколов
+    saslMechanism: PLAIN
+    username: ''
+    password: ''
+    tls:
+      skipServerCertificateVerify: false
+      serverCA: ''
+      clientCert: ''
+      clientKey: ''
   ```
 
-  - Настройки S3: `host`, `bucket`, `accessKey`, `secretKey`, `region`.
-  - Настройки PostgreSQL: `host`, `port`, `name`, `username`, `password`.
+  - Настройки S3: `host`, `region`, `secure`, `verifySsl`, `bucket`, `accessKey`, `secretKey`.
+
+  ```yaml
+  s3:
+    host: ''
+    region: ''
+    secure: false
+    verifySsl: true
+    bucket: ''
+    accessKey: ''
+    secretKey: ''
+  ```
+
+  - Настройки PostgreSQL: `host`, `port`, `name`, `username`, `password`, `tls`.
+
+  ```yaml
+  postgres:
+    host: ''
+    port: 5432
+    name: ''
+    username: ''
+    password: ''
+    tls:
+      enabled: false
+      rootCert: ''
+      cert: ''
+      key: ''
+      mode: verify-full
+  ```
+
   - Настройки Ingress: `enabled`, `host`. Другие настройки Ingress не описываем.
   - horizontalPodAutoscaler - hpa
   - verticalPodAutoscaler - vpa
   - podDisruptionBudget - pdb
   - serviceAccount.yaml - serviceAccount
+  - Настройки логгирования:
+    - logLevel: `trace`, `debug`, `info`, `warning`, `error`, `fatal`
+    - logFormat: `json`, `plaintext`
 
 - Группы настроек называем везде одинаково. Предпочтение отдаём не сокращённым, а полным названиям. По возможности используем [официальные названия](https://github.com/helm/helm/blob/main/pkg/releaseutil/kind_sorter.go#L72).
   - Исключения: hpa, vpa, pdb
@@ -97,7 +165,7 @@ make charts/navi-back
 
   Примеры:
 
-  - Не `autoscaling.enabled`, а ` hpa.enabled`.
+  - Не `autoscaling.enabled`, а `hpa.enabled`.
   - Не `verticalscaling.enabled`, а `vpa.enabled`.
   - Не `podDisruptionBudget.enabled`, а `pdb.enabled`.
 
@@ -165,6 +233,7 @@ host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStora
 
 Поскольку в разных случаях нужно использовать урлы к сервисам либо внутри k8s, либо снаружи (ingess),
 то этот факт нужно отразить в документации параметра. Например, нужно использовать один из шаблонов:
+
 - `http://{service-name}.svc` или `{service-name}.svc` - если нужен внутренний адрес сервиса
 - `http(s)://{service-name}.ingress.host` - если нужен внешний адрес сервиса
 - `{service-name}.host` - если сервис может находится где угодно

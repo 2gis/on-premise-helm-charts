@@ -1,0 +1,163 @@
+{{ if .Values.tasks.settings.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pro-api.tasks-name" . }}
+  {{- with .Values.tasks.pod.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "pro-api.tasksApiLabels" . | nindent 4 }}
+  {{- with .Values.tasks.pod.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.tasks.pod.apiReplicaCount }}
+  revisionHistoryLimit: {{ .Values.tasks.pod.revisionHistoryLimit }}
+  {{- if .Values.tasks.pod.strategy }}
+  strategy:
+    {{- toYaml .Values.tasks.pod.strategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pro-api.tasksApiSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+      {{- with .Values.tasks.pod.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pro-api.tasksApiLabels" . | nindent 8 }}
+      {{- with .Values.tasks.pod.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.tasks.pod.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tasks.pod.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tasks.pod.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tasks.pod.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tasks.pod.priorityClassName }}
+      priorityClassName: {{ .Values.tasks.pod.priorityClassName }}
+      {{- end }}
+      {{- with .Values.tasks.pod.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.tasks.pod.terminationGracePeriodSeconds }}
+      serviceAccountName: {{ include "pro-api.service-account-name" . }}
+      volumes:
+        - name: temp-volume
+          emptyDir: {}
+      containers:
+        - name: {{ include "pro-api.tasks-name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.tasks.image.repository }}:{{ .Values.tasks.image.tag }}
+          imagePullPolicy: {{ .Values.tasks.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.tasks.settings.httpPort }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ .Values.tasks.settings.grpcPort }}
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "{{ .Values.tasks.settings.tempPath }}"
+              name: temp-volume
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 5
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 20
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.tasks.pod.resources | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5"]
+          env:
+            - name: ENV
+              value: "{{ .Values.tasks.settings.env }}"
+            - name: TEMP_PATH
+              value: "{{ .Values.tasks.settings.tempPath }}"
+            - name: Postgres__ConnectionString
+              value: {{ include "pro-tasks.connectionString" . }}
+            - name: Postgres__Password
+              valueFrom:
+                secretKeyRef:
+                  key: tasksDbConnectionPwd
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- if .Values.postgres.tasks.ro.password }}
+            - name: Postgres__PasswordRo
+              valueFrom:
+                secretKeyRef:
+                  key: tasksDbConnectionPwdRo
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
+            - name: Common__Logging__Format
+              value: "{{ .Values.tasks.settings.logging.format }}"
+            - name: Common__Logging__Targets
+              value: "{{ .Values.tasks.settings.logging.targets }}"
+            - name: Kafka__BootstrapServers
+              value: {{ $.Values.kafka.bootstrapServers }}
+            - name: Kafka__SecurityProtocol
+              value: {{ $.Values.kafka.securityProtocol }}
+            - name: Kafka__SaslMechanism
+              value: {{ $.Values.kafka.sasl.mechanism }}
+            - name: Kafka__SaslUsername
+              value: {{ $.Values.kafka.sasl.username }}
+            {{- if .Values.kafka.sasl.password }}
+            - name: Kafka__SaslPassword
+              valueFrom:
+                secretKeyRef:
+                  key: kafkaSaslPassword
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
+            - name: Kafka__EventsTopicSettings__Name
+              value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
+            - name: Kafka__UseReplicaTopics
+              value: "{{ $.Values.kafka.useReplicaTopics }}"
+            - name: Common__Mode
+              value: "Api"
+            - name: Common__HttpPort
+              value: "{{ .Values.tasks.settings.httpPort }}"
+            - name: Common__GrpcPort
+              value: "{{ .Values.tasks.settings.grpcPort }}"
+            - name: Common__DataCenterId
+              value: "{{ .Values.api.settings.dataCenterId }}"
+
+{{- end }}

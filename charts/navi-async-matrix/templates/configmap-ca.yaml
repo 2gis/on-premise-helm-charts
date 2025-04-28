@@ -1,0 +1,9 @@
+{{- if .Values.customCAs.bundle }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "navi-async-matrix.fullname" . }}-ca
+data:
+  custom-ca.crt: |-
+    {{- .Values.customCAs.bundle | nindent 4 }}
+{{- end }}

@@ -13,6 +13,7 @@ spec:
   schedule: {{ .Values.cron.schedule | quote }}
   concurrencyPolicy: {{ .Values.cron.concurrencyPolicy }}
   successfulJobsHistoryLimit: {{ .Values.cron.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.cron.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:
@@ -32,6 +33,12 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         spec:
+          {{- if .Values.customCAs.bundle }}
+          volumes:
+            - name: {{ include "navi-restrictions.fullname" $ }}-ca
+              configMap:
+                name: {{ include "navi-restrictions.fullname" $ }}-ca
+          {{- end }}
           {{- with .Values.imagePullSecrets }}
           imagePullSecrets:
             {{- toYaml . | nindent 12 }}
@@ -83,4 +90,14 @@ spec:
                     secretKeyRef:
                       name: {{ include "navi-restrictions.fullname" . }}
                       key: keysApi
+                {{- if .Values.customCAs.bundle }}
+                - name: SSL_CERT_FILE
+                  value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+                {{- end }}
+              {{- if .Values.customCAs.bundle }}
+              volumeMounts:
+                - name: {{ include "navi-restrictions.fullname" $ }}-ca
+                  mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+                  subPath: custom-ca.crt
+              {{- end }}
 {{- end }}

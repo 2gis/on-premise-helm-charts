@@ -31,11 +31,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.87.0`                       |
+| `backend.image.tag`        | Backend service image tag.        | `1.112.2`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.          | `0.8.0`                        |
-| `redis.image.repository`   | Redis image repository.           | `2gis-on-premise/keys-redis`   |
-| `redis.image.tag`          | Redis image tag.                  | `6.2.6-alpine3.15`             |
+| `admin.image.tag`          | Admin service image tag.          | `0.10.5`                       |
 
 ### Flags for enabling/disabling certain features.
 
@@ -63,7 +61,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `admin.podLabels`                             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`            |
 | `admin.nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
 | `admin.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
-| `admin.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `{}`            |
+| `admin.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `[]`            |
 | `admin.service.annotations`                   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                        | `{}`            |
 | `admin.service.labels`                        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                  | `{}`            |
 | `admin.service.type`                          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                           | `ClusterIP`     |
@@ -88,6 +86,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.adminSessionTTL`                       | TTL of the admin users sessions. Duration string is a sequence of decimal numbers with optional fraction and unit suffix, like `100ms`, `2.3h` or `4h35m`. Valid time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`. | `336h`          |
 | `api.logLevel`                              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                                  | `warning`       |
 | `api.signPrivateKey`                        | RSA-PSS 2048 private key (in PKCS#1 format) for signing responses in Public API.                                                                                                                                           | `""`            |
+| `api.oidc.enable`                           | If OIDC authentication is enabled.                                                                                                                                                                                         | `false`         |
+| `api.oidc.enableSinglePartnerMode`          | Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).                                                                                                | `false`         |
+| `api.oidc.enableExternalProvider`           | Enable external oidc provider: do not have access to manage users.                                                                                                                                                         | `false`         |
+| `api.oidc.url`                              | URL of the OIDC provider.                                                                                                                                                                                                  | `""`            |
+| `api.oidc.retryCount`                       | Maximum number of retries for requests to OIDC provider.                                                                                                                                                                   | `3`             |
+| `api.oidc.timeout`                          | Timeout for requests to OIDC provider.                                                                                                                                                                                     | `3s`            |
+| `api.oidc.defaultPartner`                   | **Settings for single partner mode feature. Info specified here will be returned in responses from Auth API**                                                                                                              |                 |
+| `api.oidc.defaultPartner.id`                | Default partner's Id.                                                                                                                                                                                                      | `""`            |
+| `api.oidc.defaultPartner.name`              | Default partner's Name.                                                                                                                                                                                                    | `""`            |
+| `api.oidc.defaultPartner.role`              | Role of the user in the default partner. Can be: 'user', 'admin'.                                                                                                                                                          | `""`            |
 | `api.replicas`                              | A replica count for the pod.                                                                                                                                                                                               | `1`             |
 | `api.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                                             | `3`             |
 | `api.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                                       | `RollingUpdate` |
@@ -99,7 +107,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.podLabels`                             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                        | `{}`            |
 | `api.nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                                        | `{}`            |
 | `api.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                                                | `{}`            |
-| `api.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                                          | `{}`            |
+| `api.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                                          | `[]`            |
 | `api.service.annotations`                   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                          | `{}`            |
 | `api.service.labels`                        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                    | `{}`            |
 | `api.service.type`                          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                                             | `ClusterIP`     |
@@ -130,6 +138,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | --------------------- | ------------------------------------------------------------------------------------------------------------------- | --------- |
 | `import.logLevel`     | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                           | `warning` |
 | `import.nodeSelector` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`      |
+| `import.tolerations`  | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.   | `[]`      |
 
 ### Migrate service settings
 
@@ -138,6 +147,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `migrate.logLevel`            | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                           | `warning` |
 | `migrate.initialDelaySeconds` | Delay in seconds at the service startup.                                                                            | `0`       |
 | `migrate.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`      |
+| `migrate.tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.   | `[]`      |
 
 ### Tasker service settings
 
@@ -155,58 +165,92 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `tasker.podLabels`                             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`            |
 | `tasker.nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
 | `tasker.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
-| `tasker.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `{}`            |
+| `tasker.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `[]`            |
+
+### Dispatcher settings
+
+| Name                                                 | Description                                                                                                                                                                                              | Value           |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `dispatcher.enabled`                                 | If dispatcher worker is deployed.                                                                                                                                                                        | `false`         |
+| `dispatcher.logLevel`                                | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                | `warning`       |
+| `dispatcher.replicas`                                | A replica count for the pod.                                                                                                                                                                             | `1`             |
+| `dispatcher.auditEvents.sendInterval`                | Send audit events interval                                                                                                                                                                               | `1m`            |
+| `dispatcher.auditEvents.batchMaxSize`                | Max batch size when sending audit events                                                                                                                                                                 | `1000`          |
+| `dispatcher.auditEvents.holdDuration`                | In case of an unsuccessful attempt to send messages, the service will not resend it for a given duration                                                                                                 | `10m`           |
+| `dispatcher.strategy.type`                           | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
+| `dispatcher.strategy.rollingUpdate.maxUnavailable`   | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
+| `dispatcher.strategy.rollingUpdate.maxSurge`         | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
+| `dispatcher.annotations`                             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                | `{}`            |
+| `dispatcher.labels`                                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                          | `{}`            |
+| `dispatcher.podAnnotations`                          | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                            | `{}`            |
+| `dispatcher.podLabels`                               | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`            |
+| `dispatcher.nodeSelector`                            | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
+| `dispatcher.affinity`                                | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
+| `dispatcher.tolerations`                             | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `[]`            |
+| `dispatcher.cleaner`                                 | **Settings for cronjob that cleans sent messages from database**                                                                                                                                         |                 |
+| `dispatcher.cleaner.logLevel`                        | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                | `warning`       |
+| `dispatcher.cleaner.auditEvents.retentionDuration`   | Retention period for successfully sent audit messages.                                                                                                                                                   | `4320h`         |
+| `dispatcher.cleaner.cron.schedule`                   | Cron job schedule.                                                                                                                                                                                       | `0 1 * * *`     |
+| `dispatcher.cleaner.cron.successfulJobsHistoryLimit` | Specifies the number of successful finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).                           | `3`             |
+| `dispatcher.cleaner.cron.failedJobsHistoryLimit`     | Specifies the number of failed finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).                               | `3`             |
+| `dispatcher.cleaner.cron.suspend`                    | You can suspend execution of Jobs for a CronJob, by setting the field to true. See [schedule suspension](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension).      | `false`         |
+| `dispatcher.cleaner.nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
 
 ### Redis settings
 
-| Name                     | Description                                                                                                                 | Value             |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `redis.port`             | HTTP port for Redis to listen.                                                                                              | `6379`            |
-| `redis.configPath`       | Path to Redis configuration file.                                                                                           | `/opt/redis.conf` |
-| `redis.password`         | Redis password. Empty string if no authentication is required.                                                              | `""`              |
-| `redis.useExternalRedis` | If true, external Redis server will be used.                                                                                | `false`           |
-| `redis.host`             | External Redis hostname or IP.                                                                                              | `""`              |
-| `redis.db`               | External Redis database number.                                                                                             | `1`               |
-| `redis.annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`              |
-| `redis.labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`              |
-| `redis.podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`              |
-| `redis.podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`              |
-| `redis.nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`              |
-| `redis.affinity`         | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`              |
-| `redis.tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `{}`              |
+| Name             | Description                                                    | Value  |
+| ---------------- | -------------------------------------------------------------- | ------ |
+| `redis.host`     | Redis hostname or IP.                                          | `""`   |
+| `redis.port`     | Redis port.                                                    | `6379` |
+| `redis.db`       | Redis database number.                                         | `1`    |
+| `redis.password` | Redis password. Empty string if no authentication is required. | `""`   |
 
 ### Database access settings
 
-| Name                   | Description                                                                         | Value  |
-| ---------------------- | ----------------------------------------------------------------------------------- | ------ |
-| `postgres.ro`          | **Settings for the read-only access**                                               |        |
-| `postgres.ro.host`     | PostgreSQL hostname or IP. **Required**                                             | `""`   |
-| `postgres.ro.port`     | PostgreSQL port.                                                                    | `5432` |
-| `postgres.ro.timeout`  | PostgreSQL client connection timeout.                                               | `3s`   |
-| `postgres.ro.name`     | PostgreSQL database name. **Required**                                              | `""`   |
-| `postgres.ro.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`   |
-| `postgres.ro.username` | PostgreSQL username. **Required**                                                   | `""`   |
-| `postgres.ro.password` | PostgreSQL password. **Required**                                                   | `""`   |
-| `postgres.rw`          | **Settings for the read-write access**                                              |        |
-| `postgres.rw.host`     | PostgreSQL hostname or IP. **Required**                                             | `""`   |
-| `postgres.rw.port`     | PostgreSQL port.                                                                    | `5432` |
-| `postgres.rw.timeout`  | PostgreSQL client connection timeout.                                               | `3s`   |
-| `postgres.rw.name`     | PostgreSQL database name. **Required**                                              | `""`   |
-| `postgres.rw.schema`   | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used. | `""`   |
-| `postgres.rw.username` | PostgreSQL username. **Required**                                                   | `""`   |
-| `postgres.rw.password` | PostgreSQL password. **Required**                                                   | `""`   |
+| Name                         | Description                                                                                                                                                                          | Value     |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
+| `postgres.ro`                | **Settings for the read-only access**                                                                                                                                                |           |
+| `postgres.ro.host`           | PostgreSQL one or multiple hostnames or IPs separated by comma (e.g. 'host1,host2,10.0.0.1').  **Required**                                                                          | `""`      |
+| `postgres.ro.port`           | PostgreSQL one or multiple ports (one for each host). Values must be separated by comma (e.g. '1234,4567,5432').                                                                     | `5432`    |
+| `postgres.ro.timeout`        | PostgreSQL client connection timeout.                                                                                                                                                | `3s`      |
+| `postgres.ro.name`           | PostgreSQL database name. **Required**                                                                                                                                               | `""`      |
+| `postgres.ro.schema`         | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.                                                                                                  | `""`      |
+| `postgres.ro.username`       | PostgreSQL username. **Required**                                                                                                                                                    | `""`      |
+| `postgres.ro.password`       | PostgreSQL password. **Required**                                                                                                                                                    | `""`      |
+| `postgres.ro.tls.mode`       | PostgreSQL ssl [connection mode](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION). Available modes: `disable`, `require`, `verify-ca` and `verify-full`. | `disable` |
+| `postgres.ro.tls.serverCA`   | PostgreSQL CA certificate for server CA verify. **Required for mode `verify-ca` or `verify-full`**.                                                                                  | `""`      |
+| `postgres.ro.tls.clientCert` | client certificate. **Required for mode `verify-full`**.                                                                                                                             | `""`      |
+| `postgres.ro.tls.clientKey`  | client private key. **Required for mode `verify-full`**.                                                                                                                             | `""`      |
+| `postgres.rw`                | **Settings for the read-write access**                                                                                                                                               |           |
+| `postgres.rw.host`           | PostgreSQL one or multiple hostnames or IPs separated by comma (e.g. 'host1,host2,host3').  **Required**                                                                             | `""`      |
+| `postgres.rw.port`           | PostgreSQL one or multiple ports (one for each host). Values must be separated by comma (e.g. '1234,4567,5432').                                                                     | `5432`    |
+| `postgres.rw.timeout`        | PostgreSQL client connection timeout.                                                                                                                                                | `3s`      |
+| `postgres.rw.name`           | PostgreSQL database name. **Required**                                                                                                                                               | `""`      |
+| `postgres.rw.schema`         | PostgreSQL database schema. If not specified, schema from SEARCH_PATH will be used.                                                                                                  | `""`      |
+| `postgres.rw.username`       | PostgreSQL username. **Required**                                                                                                                                                    | `""`      |
+| `postgres.rw.password`       | PostgreSQL password. **Required**                                                                                                                                                    | `""`      |
+| `postgres.rw.tls.mode`       | PostgreSQL ssl [connection mode](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION). Available modes: `disable`, `require`, `verify-ca` and `verify-full`. | `disable` |
+| `postgres.rw.tls.serverCA`   | PostgreSQL CA certificate for server CA verify. **Required for mode `verify-ca` or `verify-full`**.                                                                                  | `""`      |
+| `postgres.rw.tls.clientCert` | client certificate. **Required for mode `verify-full`**.                                                                                                                             | `""`      |
+| `postgres.rw.tls.clientKey`  | client private key. **Required for mode `verify-full`**.                                                                                                                             | `""`      |
 
 ### Kafka settings
 
-| Name                                  | Description                                                                                                                                                | Value  |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `kafka.audit`                         | **Settings for sending audit messages.**                                                                                                                   |        |
-| `kafka.audit.bootstrapServers`        | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093').                            | `""`   |
-| `kafka.audit.username`                | Username for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`   |
-| `kafka.audit.password`                | Password for authorization (SASL/PLAINTEXT SHA-512).                                                                                                       | `""`   |
-| `kafka.audit.topic`                   | Topic to produce audit messages.                                                                                                                           | `""`   |
-| `kafka.audit.produce.retryCount`      | Number of retries to produce a message.                                                                                                                    | `5`    |
-| `kafka.audit.produce.idempotentWrite` | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true` |
+| Name                                    | Description                                                                                                                                                | Value       |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `kafka.bootstrapServers`                | Comma-separated list of host and port pairs that are the addresses of the Kafka brokers (e.g. 'localhost:9092,localhost:9093'). **Required**               | `""`        |
+| `kafka.securityProtocol`                | Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL. Default: PLAINTEXT.                                 | `PLAINTEXT` |
+| `kafka.saslMechanism`                   | Authentication mechanism when security_protocol is configured for SASL_PLAINTEXT or SASL_SSL. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.       | `PLAIN`     |
+| `kafka.username`                        | Username for authorization (SASL).                                                                                                                         | `""`        |
+| `kafka.password`                        | Password for authorization (SASL).                                                                                                                         | `""`        |
+| `kafka.tls.skipServerCertificateVerify` | Controls whether a client verifies the server's certificate chain and host name.                                                                           | `false`     |
+| `kafka.tls.serverCA`                    | Server's root certificate.                                                                                                                                 | `""`        |
+| `kafka.tls.clientCert`                  | Client certificate.                                                                                                                                        | `""`        |
+| `kafka.tls.clientKey`                   | Client key.                                                                                                                                                | `""`        |
+| `kafka.audit`                           | **Settings for sending audit messages.**                                                                                                                   |             |
+| `kafka.audit.topic`                     | Topic to produce audit messages. **Required**                                                                                                              | `""`        |
+| `kafka.audit.produce.retryCount`        | Number of retries to produce a message.                                                                                                                    | `5`         |
+| `kafka.audit.produce.idempotentWrite`   | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true`      |
 
 ### LDAP connection settings
 
@@ -238,51 +282,56 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                                                              | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                           | `""`            |
-| `dgctlStorage.region`    | S3 region name.                                                                                                                                                                                                                                          | `""`            |
-| `dgctlStorage.secure`    | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                              | `false`         |
-| `dgctlStorage.verifySsl` | Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**                                                                                                                                              | `true`          |
-| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `keys`          |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                     | `""`            |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                     | `""`            |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. | `manifest.json` |
+| Name                     | Description                                                                                                                                                                                                                                              | Value   |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                           | `""`    |
+| `dgctlStorage.region`    | S3 region name.                                                                                                                                                                                                                                          | `""`    |
+| `dgctlStorage.secure`    | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                              | `false` |
+| `dgctlStorage.verifySsl` | Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**                                                                                                                                              | `true`  |
+| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `""`    |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                     | `""`    |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                     | `""`    |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. | `""`    |
 
 ### Limits
 
-| Name                                | Description                        | Value   |
-| ----------------------------------- | ---------------------------------- | ------- |
-| `admin.resources`                   | **Limits for the Admin service**   |         |
-| `admin.resources.requests.cpu`      | A CPU request.                     | `300m`  |
-| `admin.resources.requests.memory`   | A memory request.                  | `256Mi` |
-| `admin.resources.limits.cpu`        | A CPU limit.                       | `1`     |
-| `admin.resources.limits.memory`     | A memory limit.                    | `384Mi` |
-| `api.resources`                     | **Limits for the API service**     |         |
-| `api.resources.requests.cpu`        | A CPU request.                     | `50m`   |
-| `api.resources.requests.memory`     | A memory request.                  | `128Mi` |
-| `api.resources.limits.cpu`          | A CPU limit.                       | `1`     |
-| `api.resources.limits.memory`       | A memory limit.                    | `256Mi` |
-| `import.resources`                  | **Limits for the Import service**  |         |
-| `import.resources.requests.cpu`     | A CPU request.                     | `10m`   |
-| `import.resources.requests.memory`  | A memory request.                  | `32Mi`  |
-| `import.resources.limits.cpu`       | A CPU limit.                       | `100m`  |
-| `import.resources.limits.memory`    | A memory limit.                    | `64Mi`  |
-| `migrate.resources`                 | **Limits for the Migrate service** |         |
-| `migrate.resources.requests.cpu`    | A CPU request.                     | `10m`   |
-| `migrate.resources.requests.memory` | A memory request.                  | `32Mi`  |
-| `migrate.resources.limits.cpu`      | A CPU limit.                       | `100m`  |
-| `migrate.resources.limits.memory`   | A memory limit.                    | `64Mi`  |
-| `tasker.resources`                  | **Limits for the Tasker service**  |         |
-| `tasker.resources.requests.cpu`     | A CPU request.                     | `10m`   |
-| `tasker.resources.requests.memory`  | A memory request.                  | `32Mi`  |
-| `tasker.resources.limits.cpu`       | A CPU limit.                       | `100m`  |
-| `tasker.resources.limits.memory`    | A memory limit.                    | `64Mi`  |
-| `redis.resources`                   | **Limits for Redis**               |         |
-| `redis.resources.requests.cpu`      | A CPU request.                     | `50m`   |
-| `redis.resources.requests.memory`   | A memory request.                  | `32Mi`  |
-| `redis.resources.limits.cpu`        | A CPU limit.                       | `1`     |
-| `redis.resources.limits.memory`     | A memory limit.                    | `256Mi` |
+| Name                                           | Description                           | Value   |
+| ---------------------------------------------- | ------------------------------------- | ------- |
+| `admin.resources`                              | **Limits for the Admin service**      |         |
+| `admin.resources.requests.cpu`                 | A CPU request.                        | `300m`  |
+| `admin.resources.requests.memory`              | A memory request.                     | `256Mi` |
+| `admin.resources.limits.cpu`                   | A CPU limit.                          | `1`     |
+| `admin.resources.limits.memory`                | A memory limit.                       | `384Mi` |
+| `api.resources`                                | **Limits for the API service**        |         |
+| `api.resources.requests.cpu`                   | A CPU request.                        | `50m`   |
+| `api.resources.requests.memory`                | A memory request.                     | `128Mi` |
+| `api.resources.limits.cpu`                     | A CPU limit.                          | `1`     |
+| `api.resources.limits.memory`                  | A memory limit.                       | `256Mi` |
+| `import.resources`                             | **Limits for the Import service**     |         |
+| `import.resources.requests.cpu`                | A CPU request.                        | `10m`   |
+| `import.resources.requests.memory`             | A memory request.                     | `32Mi`  |
+| `import.resources.limits.cpu`                  | A CPU limit.                          | `100m`  |
+| `import.resources.limits.memory`               | A memory limit.                       | `64Mi`  |
+| `migrate.resources`                            | **Limits for the Migrate service**    |         |
+| `migrate.resources.requests.cpu`               | A CPU request.                        | `10m`   |
+| `migrate.resources.requests.memory`            | A memory request.                     | `32Mi`  |
+| `migrate.resources.limits.cpu`                 | A CPU limit.                          | `100m`  |
+| `migrate.resources.limits.memory`              | A memory limit.                       | `64Mi`  |
+| `tasker.resources`                             | **Limits for the Tasker service**     |         |
+| `tasker.resources.requests.cpu`                | A CPU request.                        | `10m`   |
+| `tasker.resources.requests.memory`             | A memory request.                     | `32Mi`  |
+| `tasker.resources.limits.cpu`                  | A CPU limit.                          | `100m`  |
+| `tasker.resources.limits.memory`               | A memory limit.                       | `64Mi`  |
+| `dispatcher.resources`                         | **Limits for the Dispatcher service** |         |
+| `dispatcher.resources.requests.cpu`            | A CPU request.                        | `10m`   |
+| `dispatcher.resources.requests.memory`         | A memory request.                     | `32Mi`  |
+| `dispatcher.resources.limits.cpu`              | A CPU limit.                          | `100m`  |
+| `dispatcher.resources.limits.memory`           | A memory limit.                       | `64Mi`  |
+| `dispatcher.cleaner.resources`                 | **Limits for the Cleaner service**    |         |
+| `dispatcher.cleaner.resources.requests.cpu`    | A CPU request.                        | `10m`   |
+| `dispatcher.cleaner.resources.requests.memory` | A memory request.                     | `32Mi`  |
+| `dispatcher.cleaner.resources.limits.cpu`      | A CPU limit.                          | `100m`  |
+| `dispatcher.cleaner.resources.limits.memory`   | A memory limit.                       | `64Mi`  |
 
 ### customCAs **Custom Certificate Authority**
 

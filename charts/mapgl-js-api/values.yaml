@@ -7,8 +7,10 @@ dgctlDockerRegistry: ''
 
 # @section Common settings
 
+# @param enableServiceLinks Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service)
 # @param replicaCount A replica count for the pod.
 # @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
 # @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
@@ -18,8 +20,10 @@ dgctlDockerRegistry: ''
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
+enableServiceLinks: true
 replicaCount: 1
 revisionHistoryLimit: 3
+terminationGracePeriodSeconds: 30
 imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
@@ -38,34 +42,38 @@ podLabels: {}
 
 image:
   repository: 2gis-on-premise/mapgl
-  tag: 1.49.0
+  tag: 1.58.1
   pullPolicy: IfNotPresent
 
 
 # @section Environment variables
 
-# @skip env.MAPGL_DEMO_KEY
-# @param env.MAPGL_HOST URL for MapGL JS API service.
-# @param env.MAPGL_TILES_API URL of the Tiles API service.
+# @param env.MAPGL_DEMO_KEY token from 'keys-api' service. Defines access for map through MAPGL_HOST.
+# @param env.MAPGL_HOST URL for MapGL JS API service, e.g. 'https://mapgl-api.ingress.host'
+# @param env.MAPGL_TILES_API URL of the Tiles API service, e.g. 'https://tiles-api.ingress.host'
 # @param env.MAPGL_TILESET Tileset of the Tiles API service to use.
 # @param env.MAPGL_IMMERSIVE_TILESET Additional immersive tileset of the Tiles API service to use.
-# @param env.MAPGL_TRAFFICSERVER Domain name of the Traffic Proxy service.
-# @param env.MAPGL_FLOORSSERVER URL of the Floors API service.
-# @param env.MAPGL_KEYSERVER URL of the API Keys service.
-# @param env.MAPGL_RTLPLUGIN URL of the plugin for right-to-left languages support.
+# @param env.MAPGL_TRAFFICSERVER Domain name of the Traffic Proxy service, e.g. 'https://traffic-proxy.ingress.host'
+# @param env.MAPGL_STYLESERVER URL of the Styles API service, e.g. 'https://styles.ingress.host'
+# @param env.MAPGL_ICONS_URL URL of the icons directory, e.g. 'https://s3.ingress.host/styles/assets/icons'. This s3 URL must be public available (accessible from browser).
+# @param env.MAPGL_MODELS_URL URL of the models directory, e.g. 'https://s3.ingress.host/styles/assets/models'. This s3 URL must be public available (accessible from browser).
+# @param env.MAPGL_KEYSERVER URL of the API Keys service, e.g. 'https://keys-api.ingress.host/public/v1/keys/{keyID}/services/mapgl-js-api'
+# @param env.MAPGL_RTLPLUGIN URL of the plugin for right-to-left languages support, e.g. 'https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js'
 # @param env.MAPGL_RTLPLUGINHASH SHA512 hash of the RTL plugin.
 # @param env.MAPGL_INVALID_KEY_MESSAGE Custom error message for invalid MapGL key.
 
 env:
-  MAPGL_DEMO_KEY: empty
-  MAPGL_HOST: https://mapgl-api.ingress.host
-  MAPGL_TILES_API: https://tiles-api.ingress.host
+  MAPGL_DEMO_KEY: ''
+  MAPGL_HOST: ''
+  MAPGL_TILES_API: ''
   MAPGL_TILESET: web
   MAPGL_IMMERSIVE_TILESET: web_immersive
   MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
-  MAPGL_FLOORSSERVER: https://floors-api.ingress.host
-  MAPGL_KEYSERVER: https://keys-api.ingress.host/public/v1/keys/{keyID}/services/mapgl-js-api
-  MAPGL_RTLPLUGIN: https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js
+  MAPGL_STYLESERVER: ''
+  MAPGL_ICONS_URL: ''
+  MAPGL_MODELS_URL: ''
+  MAPGL_KEYSERVER: ''
+  MAPGL_RTLPLUGIN: ''
   MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
   MAPGL_INVALID_KEY_MESSAGE: Your MapGL key is invalid. Please contact support to get valid key.
 

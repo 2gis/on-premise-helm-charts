@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "search_api.fullname" . }}
+  name: {{ include "search-api.fullname" . }}
   {{- if or .Values.annotations .Values.customCAs.bundle }}
   annotations:
     {{- if .Values.customCAs.bundle }}
@@ -11,10 +11,15 @@ metadata:
     {{- end }}
     {{- with .Values.annotations }}
     {{- toYaml . | nindent 4 }}
-    {{- end }}    
+    {{- end }}
   {{- end }}
   labels:
-    {{- include "search_api.labels" . | nindent 4 }}
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "search-api.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}
+    {{- end }}
+    {{- include "search-api.labels" . | nindent 4 }}
   {{- if .Values.labels }}
     {{- toYaml .Values.labels | nindent 4 }}
   {{- end }}
@@ -27,7 +32,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "search_api.selectorLabels" . | nindent 6 }}
+      {{- include "search-api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -37,11 +42,12 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "search_api.labels" . | nindent 8 }}
+        {{- include "search-api.labels" . | nindent 8 }}
       {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       initContainers:
         - name: init
@@ -51,15 +57,15 @@ spec:
           - name: STORAGE_ACCESS_KEY
             valueFrom:
               secretKeyRef:
-                name: {{ include "search_api.fullname" . }}
+                name: {{ include "search-api.fullname" . }}
                 key: s3AccessKey
           - name: STORAGE_SECRET_KEY
             valueFrom:
               secretKeyRef:
-                name: {{ include "search_api.fullname" . }}
+                name: {{ include "search-api.fullname" . }}
                 key: s3SecretKey
           {{- if .Values.customCAs.bundle }}
-          {{- include "search_api.env.custom.ca.path" . | nindent 10 }}
+          {{- include "search-api.env.custom.ca.path" . | nindent 10 }}
           {{- end }}
           command:
             - importer
@@ -76,12 +82,12 @@ spec:
           resources:
             {{- toYaml .Values.api.resources | nindent 12 }}
           volumeMounts:
-            - name: {{ include "search_api.name" $ }}-configmap
+            - name: {{ include "search-api.name" $ }}-configmap
               mountPath: /etc/2gis
             - name: search-api-data
               mountPath: {{ .Values.api.dataDir }}
           {{- if .Values.customCAs.bundle }}
-            {{- include "search_api.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
       containers:
         - name: api
@@ -95,18 +101,18 @@ spec:
               exec:
                 command: ["/bin/sh", "-c", "sleep 15"]
           volumeMounts:
-            - name: {{ include "search_api.name" $ }}-configmap
+            - name: {{ include "search-api.name" $ }}-configmap
               mountPath: /etc/2gis
             - name: search-api-data
               mountPath: {{ .Values.api.dataDir }}
           {{- if .Values.customCAs.bundle }}
-            {{- include "search_api.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
           env:
             - name: REDEPLOY_LABEL
               value: "{{ .Values.redeployLabel }}"
             {{- if .Values.customCAs.bundle }}
-            {{- include "search_api.env.custom.ca.path" . | nindent 12 }}
+            {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
 
         - name: nginx
@@ -138,19 +144,19 @@ spec:
               exec:
                 command: ["/bin/sh", "-c", "sleep 15"]
           volumeMounts:
-            - name: {{ include "search_api.name" $ }}-configmap
+            - name: {{ include "search-api.name" $ }}-configmap
               mountPath: /etc/2gis
           {{- if .Values.customCAs.bundle }}
-            {{- include "search_api.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
           env:
             {{- if .Values.customCAs.bundle }}
-            {{- include "search_api.env.custom.ca.path" . | nindent 12 }}
+            {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
       volumes:
-        - name: {{ include "search_api.name" . }}-configmap
+        - name: {{ include "search-api.name" . }}-configmap
           configMap:
-            name: {{ include "search_api.fullname" . }}
+            name: {{ include "search-api.fullname" . }}
             items:
               - key: search_api_config
                 path: Sapphire2.xml
@@ -159,7 +165,7 @@ spec:
         - name: search-api-data
           emptyDir: {}
         {{- if .Values.customCAs.bundle }}
-        {{- include "search_api.custom.ca.deploys.volumes" . | nindent 8 }}
+        {{- include "search-api.custom.ca.deploys.volumes" . | nindent 8 }}
         {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

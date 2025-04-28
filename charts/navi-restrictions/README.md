@@ -147,17 +147,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 
 ### Cron job settings
 
-| Name                              | Description                                                           | Value                                                          |
-| --------------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------- |
-| `cron.enabled`                    | If Cron job is enabled                                                | `false`                                                        |
-| `cron.schedule`                   | Cron job schedule                                                     | `1 * * * *`                                                    |
-| `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`                      | `Forbid`                                                       |
-| `cron.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept                     | `3`                                                            |
-| `cron.containerPort`              | Cron container port                                                   | `8000`                                                         |
-| `cron.edgesUriTemplate`           | URL template for getting edges                                        | `restrictions_json/{project}/{date_str}_{hour}.json`           |
-| `cron.edgeAttributesUriTemplate`  | URL template for getting an edge's details                            | `develop/edge?edge_id={edge_id}&offset=200&routing=carrouting` |
-| `cron.projects`                   | List of projects to get data for                                      | `["moscow"]`                                                   |
-| `cron.maxAttributesFetcherRps`    | Maximum amount oif requests to `edgeAttributesUrlTemplate` per second | `25`                                                           |
+| Name                              | Description                                                                                                                                                  | Value                                                          |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------- |
+| `cron.enabled`                    | If Cron job is enabled                                                                                                                                       | `false`                                                        |
+| `cron.schedule`                   | Cron job schedule                                                                                                                                            | `1 * * * *`                                                    |
+| `cron.concurrencyPolicy`          | Cron job concurrency policy: `Allow` or `Forbid`                                                                                                             | `Forbid`                                                       |
+| `cron.successfulJobsHistoryLimit` | How many completed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits). | `3`                                                            |
+| `cron.failedJobsHistoryLimit`     | How many failed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).    | `3`                                                            |
+| `cron.containerPort`              | Cron container port                                                                                                                                          | `8000`                                                         |
+| `cron.edgesUriTemplate`           | URL template for getting edges                                                                                                                               | `restrictions_json/{project}/{date_str}_{hour}.json`           |
+| `cron.edgeAttributesUriTemplate`  | URL template for getting an edge's details                                                                                                                   | `develop/edge?edge_id={edge_id}&offset=200&routing=carrouting` |
+| `cron.projects`                   | List of projects to get data for                                                                                                                             | `["moscow"]`                                                   |
+| `cron.maxAttributesFetcherRps`    | Maximum amount oif requests to `edgeAttributesUrlTemplate` per second                                                                                        | `25`                                                           |
 
 ### Limits
 
@@ -173,6 +174,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | `cron.resources.requests.memory` | A memory request                | `256Mi`  |
 | `cron.resources.limits.cpu`      | A CPU limit                     | `1000m`  |
 | `cron.resources.limits.memory`   | A memory limit                  | `1024Mi` |
+
+### customCAs **Custom Certificate Authority**
+
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"          | `""`  |
 
 
 ## Maintainers

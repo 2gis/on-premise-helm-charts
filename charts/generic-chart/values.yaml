@@ -67,6 +67,7 @@ hpa:
 # @param vpa.enabled If VPA is enabled for the service
 # @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start)
 # @param vpa.containerName Name of a container to measure utilization for
+# @param vpa.controlledValues Controlled values, one of: RequestsOnly or RequestsAndLimits
 # @extra vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down
 # @extra vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down
 # @extra vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up
@@ -76,6 +77,7 @@ vpa:
   enabled: false
   updateMode: Auto
   containerName: ''
+  controlledValues: RequestsOnly
 
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
@@ -97,6 +99,7 @@ pdb:
 # @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 # @param service.clusterIP Controls Service cluster IP allocation. Cannot be changed after resource creation.
 # @param service.port Service port.
+# @param service.nodePort Node port if type NodePort.
 
 service:
   labels: {}
@@ -104,7 +107,7 @@ service:
   type: ClusterIP
   clusterIP: ''
   port: 80
-
+  nodePort:
 
 # @section [Service account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
 
@@ -138,6 +141,7 @@ cronJob:
 
 # @section [Job](https://kubernetes.io/docs/concepts/workloads/controllers/job/) settings
 
+# @param job.activeDeadlineSeconds Number of seconds active deadline.
 # @param job.backoffLimit Number of retries before considering a Job as failed.
 # @param job.backoffLimitPerIndex Maximal number of pod failures per index.
 # @param job.podFailurePolicy Pod failure policy.
@@ -147,6 +151,7 @@ cronJob:
 # @param job.restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
 
 job:
+  activeDeadlineSeconds: ''
   backoffLimit: ''
   backoffLimitPerIndex: ''
   podFailurePolicy: ''
@@ -154,3 +159,20 @@ job:
   completionMode: ''
   parallelism: ''
   restartPolicy: ''
+
+# @section Network Policy configuration
+
+# @param networkPolicy.ingress.enabled Enable creation of NetworkPolicy resources for ingress rules
+# @param networkPolicy.ingress.explicitNamespacesSelector Explict namespace selector for default rule ingress
+# @param networkPolicy.ingress.additionalRules Array of additional ingress rules
+# @param networkPolicy.egress.enabled Enable creation of NetworkPolicy resources for egress rules
+# @param networkPolicy.egress.config Array of egress rules
+
+networkPolicy:
+  ingress:
+    enabled: false
+    explicitNamespacesSelector: {}
+    additionalRules: []
+  egress:
+    enabled: false
+    config: []

@@ -1,4 +1,4 @@
-{{- if .Values.vpa.enabled }}
+{{- if .Values.api.vpa.enabled }}
 ---
 
 apiVersion: autoscaling.k8s.io/v1
@@ -13,17 +13,17 @@ spec:
     kind: Deployment
     name: {{ include "pro-api.name" . }}
   updatePolicy:
-    updateMode: {{ .Values.vpa.updateMode }}
+    updateMode: {{ .Values.api.vpa.updateMode }}
   resourcePolicy:
     containerPolicies:
       - containerName: {{ .Chart.Name }}
         controlledValues: RequestsOnly
         mode: Auto
-        {{- with .Values.vpa.minAllowed }}
+        {{- with .Values.api.vpa.minAllowed }}
         minAllowed:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-        {{- with .Values.vpa.maxAllowed }}
+        {{- with .Values.api.vpa.maxAllowed }}
         maxAllowed:
           {{- toYaml . | nindent 10 }}
         {{- end }}

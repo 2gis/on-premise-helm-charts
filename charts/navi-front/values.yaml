@@ -7,6 +7,7 @@ dgctlDockerRegistry: ''
 
 # @section Common settings
 
+# @param enableServiceLinks Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service)
 # @param replicaCount A replica count for the pod.
 # @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 # @param imagePullSecrets Kubernetes image pull secrets.
@@ -18,7 +19,15 @@ dgctlDockerRegistry: ''
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+# @param sidecars List of additional sidecar containers
+# Example:
+# sidecars:
+#   - name: your-image-name
+#     image: your-image
+#     imagePullPolicy: Always
+#
 
+enableServiceLinks: false
 replicaCount: 1
 revisionHistoryLimit: 3
 imagePullSecrets: []
@@ -30,6 +39,7 @@ securityContext: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
+sidecars: []
 
 
 # @section Deployment settings
@@ -41,20 +51,44 @@ affinity: {}
 image:
   repository: 2gis-on-premise/navi-front
   pullPolicy: IfNotPresent
-  tag: 1.24.1
+  tag: 1.26.0
 
 
 # @section Navi-Front service settings
 
-# @param front.port Navi-Front service HTTP port.
-# @param front.router.discover Enable/disable router autodiscovery.
-# @param front.router.host Set router address if autodiscovery is disabled.
+# @param front.port Navi-Front service HTTP port
+# @param front.router.discover Enable/disable router autodiscovery
+# @param front.router.host Set router address if autodiscovery is disabled
+# @param front.tsp_carrouting.enabled Enable/disable carrouting TSP
+# @param front.tsp_carrouting.host Set carrouting TSP hostname
+# @param front.multimod.enabled Add multimodal routing service location
+# @param front.multimod.host Multimodal routing service hostname
+# @param front.keepalive.enabled Enable keepalive (for upstreams)
+# @param front.keepalive.connections Maximum number of idle keepalive connections (per upstream)
+# @param front.keepalive.requests Maximum number of requests that can be served through one keepalive connection
+# @param front.keepalive.time Maximum time for one keepalive connection
+# @param front.keepalive.timeout Timeout for idle keepalive connection
+# @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
 
 front:
   port: 8080
   router:
     discover: true
     host: localhost
+  tsp_carrouting:
+    enabled: false
+    host: ''
+  multimod:
+    enabled: false
+    host: ''
+  keepalive:
+    enabled: false
+    connections: 50
+    requests: 100
+    time: 1h
+    timeout: 60s
+
+navigroup: ''
 
 
 # @section Service account settings
@@ -118,19 +152,19 @@ resources: {}
 # @param hpa.enabled If HPA is enabled for the service.
 # @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
 # @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
-# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window.
-# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window.
 # @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
 # @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.scaleUp To configure separate scale-up [policy](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies)
+# @param hpa.scaleDown To configure separate scale-down [policy](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies)
 
 hpa:
   enabled: false
   minReplicas: 1
   maxReplicas: 100
-  scaleDownStabilizationWindowSeconds: ''
-  scaleUpStabilizationWindowSeconds: ''
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: ''
+  scaleUp: {}
+  scaleDown: {}
 
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
@@ -143,3 +177,52 @@ pdb:
   enabled: false
   minAvailable: ''
   maxUnavailable: 1
+
+
+# @section Nginx container
+
+# @param nginx.setRealIpFrom Defines trusted addresses that are known to send correct replacement addresses
+# @param nginx.opentracing.enabled If opentracing enabled for nginx requests
+# @param nginx.opentracing.serviceName Service name sent to jaeger
+# @param nginx.opentracing.host Jaeger agent host. If empty than used status.hostIP
+# @param nginx.opentracing.port Jaeger agent port
+# @param nginx.opentracing.samplerType Sampler type: const, probabilistic, ratelimiting, remote. [Doc](https://www.jaegertracing.io/docs/1.56/sampling/#client-sampling-configuration)
+# @param nginx.opentracing.samplerParam Sampler parameter
+# @extra nginx.opentracing.tags Sets tags for span
+# @skip nginx.opentracing.tags.app
+# @param nginx.hideBackendHostname Do not pass X-Back-Hostname header from navi-back to client
+# @extra nginx.protectInternalLocations
+# @param nginx.protectInternalLocations.allowedNetworks CIDR blocks to allow access to internal locations from. For debug purposes only
+# @param nginx.connectTimeout.geocoding Timeout for connections to navi-router, nginx [time](http://nginx.org/en/docs/syntax.html#time) string
+
+nginx:
+  setRealIpFrom: 127.0.0.1
+  opentracing:
+    enabled: false
+    serviceName: navi-front
+    host: ''
+    port: 6831
+    samplerType: const
+    samplerParam: 1
+    tags:
+      app: navi-front
+  hideBackendHostname: true
+  protectInternalLocations:
+    allowedNetworks: []
+  connectTimeout:
+    geocoding: ''
+
+
+# @section Location overrides
+
+# @param locationBlock Optional nginx config block with additional locations
+# @param carroutingLocation Override for default /carrouting
+# @param distMatrixCtxLocation Override for default /get_dist_matrix_ctx
+# @param hullLocation Override for default /get_hull
+# @param multimodLocation Override for default /ctx_multi_mod and /find_platforms if enabled with `front.multimod.enabled`
+
+locationBlock: ''
+carroutingLocation: ''
+distMatrixCtxLocation: ''
+hullLocation: ''
+multimodLocation: ''

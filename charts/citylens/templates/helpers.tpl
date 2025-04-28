@@ -25,6 +25,10 @@ Expand the name of the chart.
 {{ include "citylens.name" . }}-logs-saver
 {{- end }}
 
+{{- define "citylens.map-matcher.name" -}}
+{{ include "citylens.name" . }}-map-matcher
+{{- end }}
+
 {{- define "citylens.predictions-saver.name" -}}
 {{ include "citylens.name" . }}-predictions-saver
 {{- end }}
@@ -51,6 +55,14 @@ Expand the name of the chart.
 
 {{- define "citylens.workers.name" -}}
 {{ include "citylens.name" . }}-workers
+{{- end }}
+
+{{- define "citylens.detections-localizer.name" -}}
+{{ include "citylens.name" . }}-detections-localizer
+{{- end }}
+
+{{- define "citylens.lifecycle-controller.name" -}}
+{{ include "citylens.name" . }}-lifecycle-controller
 {{- end }}
 
 {{- define "citylens.dashboard-batch-events.name" -}}
@@ -109,6 +121,16 @@ app.kubernetes.io/instance: {{ include "citylens.logs-saver.name" . }}
 
 {{- define "citylens.logs-saver.labels" -}}
 {{ include "citylens.logs-saver.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "citylens.map-matcher.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.map-matcher.name" . }}
+{{- end }}
+
+{{- define "citylens.map-matcher.labels" -}}
+{{ include "citylens.map-matcher.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
@@ -172,6 +194,26 @@ app.kubernetes.io/instance: {{ include "citylens.track-metadata-saver.name" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "citylens.detections-localizer.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.detections-localizer.name" . }}
+{{- end }}
+
+{{- define "citylens.detections-localizer.labels" -}}
+{{ include "citylens.detections-localizer.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "citylens.lifecycle-controller.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.lifecycle-controller.name" . }}
+{{- end }}
+
+{{- define "citylens.lifecycle-controller.labels" -}}
+{{ include "citylens.lifecycle-controller.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
 {{- define "citylens.migration.labels" -}}
 app.kubernetes.io/name: {{ include "citylens.api.name" . }}
 app.kubernetes.io/instance: {{ .Chart.Name }}-db-migration
@@ -205,6 +247,27 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "data_migration"
 {{- end }}
 
+{{- define "citylens.env.dsLibrariesNumThreads" -}}
+1
+{{- end }}
+
+{{- define "citylens.env.dsLibrariesEnvs" -}}
+- name: OMP_NUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+- name: OPENBLAS_NUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+- name: MKL_NUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+- name: BLIS_NUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+- name: VECLIB_MAXIMUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+- name: NUMBA_NUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+- name: NUMEXPR_NUM_THREADS
+  value: {{ include "citylens.env.dsLibrariesNumThreads" . | squote }}
+{{- end}}
+
 {{/*
 Checksum for configmap or secret
 */}}
@@ -233,8 +296,88 @@ postgresql://{{ required "A valid .Values.postgres.username entry required" .use
 {{- end -}}
 
 {{/*
-S3 key template for frames
+S3 key templates for frames & frames crops
 */}}
 {{- define "citylens.s3_constants.frame_key_template" -}}
 {track_uuid}/{frame_timestamp_ms}.jpg
 {{- end -}}
+
+{{- define "citylens.s3_constants.crop_frame_key_template" -}}
+{track_uuid}/{frame_timestamp_ms}_{theta}.jpg
+{{- end -}}
+
+{{/*
+Citylens routes chart name
+*/}}
+
+{{- define "app.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Citylens routes name defines
+*/}}
+
+{{- define "citylens.routes" -}}
+{{ include "citylens.name" . }}-routes
+{{- end -}}
+
+{{- define "citylens.routes.api.name" -}}
+{{ include "citylens.routes" . }}{{- printf "-%s-%s" "api" .Values.routes.environment | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "citylens.routes.worker.name" -}}
+{{ include "citylens.routes" . }}{{- printf "-%s-%s" "worker" .Values.routes.environment | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "citylens.routes.migration.name" -}}
+{{ include "citylens.routes" . }}{{- printf "-%s-%s" "migration" .Values.routes.environment | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Citylens routes deployment labels
+*/}}
+
+{{- define "citylens.routes.api.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name | quote }}
+app.kubernetes.io/instance: {{ include "citylens.routes.api.name" . | quote }}
+{{- end -}}
+
+{{- define "citylens.routes.worker.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name | quote }}
+app.kubernetes.io/instance: {{ include "citylens.routes.worker.name" . | quote }}
+{{- end -}}
+
+{{- define "citylens.routes.api.labels" -}}
+helm.sh/chart: {{ include "app.chart" . }}
+{{ include "citylens.routes.api.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+{{- end -}}
+
+{{- define "citylens.routes.worker.labels" -}}
+helm.sh/chart: {{ include "app.chart" . }}
+{{ include "citylens.routes.worker.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+{{- end -}}
+
+{{- define "citylens.routes.migration.labels" -}}
+app.kubernetes.io/name: {{ .Release.Name | quote }}
+app.kubernetes.io/instance: {{ include "citylens.routes.migration.name" . | quote }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+{{- end -}}
+
+{{/*
+Manifest name
+*/}}
+{{- define "citylens.manifestCode" -}}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- end }}

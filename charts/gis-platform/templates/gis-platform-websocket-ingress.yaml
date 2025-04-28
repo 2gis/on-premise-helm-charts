@@ -11,7 +11,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-connect-timeout: {{ .Values.portal.websocket.timeout | quote }}
     nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.portal.websocket.timeout | quote }}
     nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.portal.websocket.timeout | quote }}
-    nginx.org/websocket-services: websocket
+    nginx.org/websocket-services: {{ $fullName }}
   {{- if .Values.ingress.annotations }}
     {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}

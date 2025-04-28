@@ -45,10 +45,13 @@ Create the name of the service account to use
 {{- end }}
 
 {{- define "navi-async-matrix.dbDsnParams" -}}
+{{- $params := printf "?%s" (include "navi-async-matrix.dbHosts" .) }}
 {{- if .Values.db.tls.enabled }}
-{{- printf "?sslcert=/etc/2gis/secret/psql/client.crt&sslkey=/etc/2gis/secret/psql/client.key&sslrootcert=/etc/2gis/secret/psql/ca.crt&sslmode=%s"
-               ( required "A valid db.tls.mode entry required" .Values.db.tls.mode) -}}
+{{- $params = printf "%s&sslcert=/etc/2gis/secret/psql/client.crt&sslkey=/etc/2gis/secret/psql/client.key&sslrootcert=/etc/2gis/secret/psql/ca.crt&sslmode=%s"
+              $params
+              (required "A valid db.tls.mode entry required" .Values.db.tls.mode) -}}
 {{- end }}
+{{- print $params -}}
 {{- end }}
 
 
@@ -211,4 +214,33 @@ Name for psql secret and volume
 
 {{- define "navi-async-matrix.fullname-psql" -}}
 {{- printf "%s-psql" (include "navi-async-matrix.fullname" .) -}}
+{{- end }}
+
+{{/*
+Set custom CAs mount path
+Usage:
+{{ include "custom.ca.mountPath" $ }}
+*/}}
+{{- define "custom.ca.mountPath" -}}
+{{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
+{{- end -}}
+
+{{/*
+Generate database hosts connection string.
+If `db.extraHosts` is set, it constructs a &-separated list of `host:port` pairs.
+
+Usage:
+{{ include "navi-async-matrix.dbHosts" $ }}
+*/}}
+
+{{- define "navi-async-matrix.dbHosts" -}}
+  {{- $hosts := list (printf "host=%s:%d" (required "A valid db.host entry required" .Values.db.host) (.Values.db.port | int)) }}
+  {{- if .Values.db.extraHosts }}
+    {{- range $host := .Values.db.extraHosts }}
+      {{- $hosts = append $hosts (printf "host=%s:%d" $host.host ($host.port | default $.Values.db.port | int)) }}
+    {{- end }}
+    {{- $hosts = append $hosts "target_session_attrs=read-write" }}
+  {{- else }}
+  {{- end }}
+  {{- join "&" $hosts }}
 {{- end }}

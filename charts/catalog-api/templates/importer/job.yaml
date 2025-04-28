@@ -16,6 +16,10 @@ spec:
       labels:
         {{- include "catalog.importer.labels" . | nindent 8 }}
     spec:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       restartPolicy: Never
       {{- if or .Values.importer.initialDelaySeconds .Values.importer.postgres.tls.enabled }}
       initContainers:
@@ -91,5 +95,9 @@ spec:
       {{- end }}
       {{- with .Values.importer.nodeSelector }}
       nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.importer.tolerations }}
+      tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

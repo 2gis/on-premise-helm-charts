@@ -28,16 +28,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Common settings
 
-| Name                   | Description                                                                                                                                    | Value |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                   | `{}`  |
-| `podLabels`            | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                                             | `{}`  |
-| `replicaCount`         | A replica count for the pod                                                                                                                    | `1`   |
-| `revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `nodeSelector`         | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                             | `{}`  |
-| `affinity`             | Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                              | `{}`  |
-| `tolerations`          | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                               | `[]`  |
-| `redeployLabel`        | If this label is changed since the last deployment, the whole chart will be redeployed                                                         | `""`  |
+| Name                            | Description                                                                                                                                                               | Value  |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `enableServiceLinks`            | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `true` |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                                              | `{}`   |
+| `podLabels`                     | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                                                                        | `{}`   |
+| `replicaCount`                  | A replica count for the pod                                                                                                                                               | `1`    |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                            | `3`    |
+| `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)                                                          | `30`   |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                                                        | `{}`   |
+| `affinity`                      | Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                                                         | `{}`   |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                                                          | `[]`   |
+| `redeployLabel`                 | If this label is changed since the last deployment, the whole chart will be redeployed                                                                                    | `""`   |
 
 ### Deployment Artifacts Storage settings
 
@@ -56,7 +58,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description                                                                                   | Value                        |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ---------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/search-api` |
-| `api.image.tag`        | Tag                                                                                           | `7.78.0`                     |
+| `api.image.tag`        | Tag                                                                                           | `7.90.0`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`               |
 
 ### API settings
@@ -72,12 +74,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### NGINX settings
 
-| Name                     | Description                                                                                   | Value                          |
-| ------------------------ | --------------------------------------------------------------------------------------------- | ------------------------------ |
-| `nginx.image.repository` | Docker Repository                                                                             | `2gis-on-premise/search-nginx` |
-| `nginx.image.tag`        | Docker image tag                                                                              | `1.21.6`                       |
-| `nginx.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                 |
-| `nginx.httpPort`         | HTTP port on which NGINX will be listening                                                    | `8080`                         |
+| Name                     | Description                                                                                   | Value                   |
+| ------------------------ | --------------------------------------------------------------------------------------------- | ----------------------- |
+| `nginx.image.repository` | Docker Repository                                                                             | `2gis-on-premise/nginx` |
+| `nginx.image.tag`        | Docker image tag                                                                              | `1.25.5`                |
+| `nginx.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`          |
+| `nginx.httpPort`         | HTTP port on which NGINX will be listening                                                    | `8080`                  |
 
 ### Strategy settings
 

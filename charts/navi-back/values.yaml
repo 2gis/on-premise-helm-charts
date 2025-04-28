@@ -106,7 +106,7 @@ args: []
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.25.0.3
+  tag: 7.33.0.5
 
 
 # @section Navi-Back application settings
@@ -114,6 +114,8 @@ image:
 # @extra naviback.ecaHost DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.ecaUrl URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.walkingUserSpeedsUrl URL of walking user speeds
+# @extra naviback.routeAsUsualUrl URL of route as usual
 # @skip naviback.appPort
 # @param naviback.dmSourcesLimit Size limit for source matrices
 # @param naviback.dmTargetsLimit Size limit for target matrices
@@ -126,6 +128,7 @@ image:
 # @param naviback.timeoutIncrementSec Downloading time increment after failures
 # @param naviback.totalRetryDurationSec Downloading timeout with all failure retries
 # @param naviback.initialRetryIntervalSec Initial timeout for a failure retry
+# @param naviback.clearCacheThreshold Memory usage percentage threshold to run cache cleanup
 # @param naviback.dump.result Dump results in logs
 # @param naviback.dump.query Dump queries in logs
 # @param naviback.dump.answer Dump answers in logs
@@ -173,6 +176,8 @@ image:
 # @skip naviback.indices.tugc2gisIndex.enabled
 # @skip naviback.indices.tugcUsers.enabled
 # @skip naviback.indices.tugcUsersIndex.enabled
+# @skip naviback.indices.routeAsUsual.enabled
+# @skip naviback.indices.walkingUserSpeeds.enabled
 # @extra naviback.additionalSections Optinal JSON block to be added to config file as-is
 # @skip naviback.simpleNetwork
 # @extra naviback.simpleNetwork.bicycle Enable simple network for bicycle routing
@@ -216,11 +221,15 @@ image:
 # @param naviback.validation.isochrone.requestSchemaName Name of isochrone request validation schema
 # @param naviback.validation.isochrone.responseSchemaName Name of isochrone response validation schema
 # @param naviback.tilesMetricsThreshold The value at which we send tiles metrics (used for internal tests)
-# @param naviback.hierarchies.enabled If hierarchies cache available
-# @param naviback.hierarchies.skipPatches Skip patches in hierarchies cache
+# @param naviback.engineUpdatePeriodSec The time interval between engine updates
+# @param naviback.hierarchies.enabled If SN cache available
+# @param naviback.hierarchies.skipPatches Skip patches in hierarchies cache, ignored if skipShortcuts set
+# @param naviback.hierarchies.skipShortcuts Skip shortcuts in SN cache
 # @param naviback.hierarchies.s3path Hierarchies cache remote location
+# @param naviback.hierarchies.volume Hierarchies local cache specification. Leave empty for default emptydir.
 # @param naviback.etaScheduleIndex.enabled If Schedule Index available
 # @param naviback.etaScheduleIndex.url Schedule Index remote url
+# @param naviback.etaScheduleIndex.etaScheduleNodes ETA Schedule nodes
 # @skip rules
 
 naviback:
@@ -236,6 +245,7 @@ naviback:
   timeoutIncrementSec: 140
   totalRetryDurationSec: 2400
   initialRetryIntervalSec: 2
+  clearCacheThreshold: 90
   dump:
     result: false
     query: false
@@ -307,6 +317,10 @@ naviback:
       enabled: false
     tugcUsersIndex:
       enabled: false
+    routeAsUsual:
+      enabled: false
+    walkingUserSpeeds:
+      enabled: false
   simpleNetwork:
     emergency: false
   attractor: {}
@@ -344,13 +358,17 @@ naviback:
       requestSchemaName: IsochroneApiRequestModel.json
       responseSchemaName: IsochroneApiResponseModel.json
   tilesMetricsThreshold: 0
+  engineUpdatePeriodSec: 30
   hierarchies:
     enabled: false
     skipPatches: false
+    skipShortcuts: false
     s3path: ''
+    volume: {}
   etaScheduleIndex:
     enabled: false
     url: ''
+    etaScheduleNodes: ''
 
 rules: []
 
@@ -360,6 +378,7 @@ rules: []
 # @param envoy.image.repository Repository
 # @param envoy.image.tag Tag
 # @param envoy.image.pullPolicy Pull Policy
+# @param envoy.concurrency The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0`
 # @param envoy.resources [nullable] Container resources requirements structure
 # @param envoy.resources.requests.cpu [nullable] CPU request, recommended value `100m`
 # @param envoy.resources.requests.memory [nullable] Memory request, recommended value `100Mi`
@@ -371,6 +390,7 @@ envoy:
     repository: 2gis-on-premise/envoy
     pullPolicy: IfNotPresent
     tag: v1.27.0
+  concurrency: ''
   resources: {}
 
 
@@ -514,7 +534,7 @@ kafka:
   groupId: navi_back
   handlersNumber: 2
   properties:
-    bootstrap.servers: kafka.host:9092
+    bootstrap.servers: ''
     security.protocol: PLAINTEXT
   fileProperties: {}
   distanceMatrix:
@@ -613,7 +633,7 @@ dataGroup:
 # @section Route sharing properties. Leave with defaults, FOR FUTURE RELEASE
 
 # @param routesharing.enabled If route sharing enabled
-# @param routesharing.topic Topic to use for route sharing
+# @param routesharing.kafka.topic Topic to use for route sharing
 # @extra routesharing.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
 # @skip routesharing.kafka.properties.bootstrap.servers
 # @skip routesharing.kafka.properties.security.protocol
@@ -621,10 +641,29 @@ dataGroup:
 
 routesharing:
   enabled: false
-  topic: sharing-kafka-topic
   kafka:
+    topic: ''
     properties:
-      bootstrap.servers: kafka.host:9092
+      bootstrap.servers: ''
+      security.protocol: PLAINTEXT
+    fileProperties: {}
+
+# @section Traffic lights processing. Leave with defaults, FOR FUTURE RELEASE
+# @param trafficLights.enabled If traffic lights processing enabled
+# @param trafficLights.projects List of projects, for which traffic lights are processed
+# @param trafficLights.kafka.topic Topic to use for traffic lights processing
+# @extra trafficLights.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
+# @skip trafficLights.kafka.properties.bootstrap.servers
+# @skip trafficLights.kafka.properties.security.protocol
+# @param trafficLights.kafka.fileProperties Properties stored in file, see `kafka` section and comments
+
+trafficLights:
+  enabled: false
+  projects: []
+  kafka:
+    topic: ''
+    properties:
+      bootstrap.servers: ''
       security.protocol: PLAINTEXT
     fileProperties: {}
 
@@ -656,3 +695,16 @@ metrics:
     tag: ''
   port: 9090
   resources: {}
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"
+
+customCAs:
+  bundle: ''
+# bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
+  certsPath: ''

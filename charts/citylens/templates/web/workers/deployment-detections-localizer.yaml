@@ -1,0 +1,82 @@
+{{- if .Values.worker.detectionsLocalizer.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "citylens.detections-localizer.name" . }}
+  {{- if .Values.worker.detectionsLocalizer.annotations }}
+  annotations:
+    {{- toYaml .Values.worker.detectionsLocalizer.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "citylens.detections-localizer.labels" . | nindent 4 }}
+  {{- if .Values.worker.detectionsLocalizer.labels }}
+    {{- toYaml .Values.worker.detectionsLocalizer.labels | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: {{ .Values.worker.detectionsLocalizer.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "citylens.detections-localizer.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
+        checksum/custom-ca: {{ include "citylens.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
+      {{- with .Values.worker.detectionsLocalizer.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "citylens.detections-localizer.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "citylens.detections-localizer.name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
+          imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+          command: [ "/bin/sh", "-c" ]
+          args: [ "flask detections localize" ]
+          env:
+            - name: CONFIG_PATH
+              value: /opt/worker/config/dashboard_config.yaml
+            {{- include "citylens.env.dsLibrariesEnvs" . | nindent 12 }}
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "citylens.customCA.mountPath" $ }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/worker/config
+            {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "citylens.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
+            {{- end }}
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "citylens.web.name" . }}-configmap
+        {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
+          configMap:
+            name: {{ include "citylens.name" $ }}-custom-ca-configmap
+        {{- end }}
+      {{- with .Values.worker.detectionsLocalizer.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.detectionsLocalizer.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.detectionsLocalizer.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

@@ -2,21 +2,26 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "pro-api.name" . }}
-  {{- with .Values.annotations }}
+  {{- with .Values.api.pod.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "pro-api.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}
+    {{- end }}
     {{- include "pro-api.labels" . | nindent 4 }}
-  {{- with .Values.labels }}
+  {{- with .Values.api.pod.labels }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
-  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
-  {{- if .Values.strategy }}
+  replicas: {{ .Values.api.pod.replicaCount }}
+  revisionHistoryLimit: {{ .Values.api.pod.revisionHistoryLimit }}
+  {{- if .Values.api.pod.strategy }}
   strategy:
-    {{- toYaml .Values.strategy | nindent 4 }}
+    {{- toYaml .Values.api.pod.strategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels:
@@ -25,61 +30,58 @@ spec:
     metadata:
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.api.pod.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "pro-api.labels" . | nindent 8 }}
-      {{- with .Values.podLabels }}
+      {{- with .Values.api.pod.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with .Values.api.pod.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.api.pod.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.api.pod.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.api.pod.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.priorityClassName }}
-      priorityClassName: {{ .Values.priorityClassName }}
+      {{- if .Values.api.pod.priorityClassName }}
+      priorityClassName: {{ .Values.api.pod.priorityClassName }}
       {{- end }}
-      {{- with .Values.podSecurityContext }}
+      {{- with .Values.api.pod.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.api.pod.terminationGracePeriodSeconds }}
       serviceAccountName: {{ include "pro-api.service-account-name" . }}
       volumes:
         - name: temp-volume
           emptyDir: {}
       containers:
         - name: {{ include "pro-api.name" . }}
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
-            - name: management
-              containerPort: 8090
-              protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.api.tempPath }}"
+            - mountPath: "{{ .Values.api.settings.tempPath }}"
               name: temp-volume
           livenessProbe:
             httpGet:
               path: /health/live
-              port: management
+              port: http
             failureThreshold: 5
             initialDelaySeconds: 5
             periodSeconds: 15
@@ -88,7 +90,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health/ready
-              port: management
+              port: http
             failureThreshold: 3
             initialDelaySeconds: 5
             periodSeconds: 5
@@ -97,32 +99,34 @@ spec:
           startupProbe:
             httpGet:
               path: /health/live
-              port: management
+              port: http
             failureThreshold: 20
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 5
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.api.pod.resources | nindent 12 }}
           lifecycle:
             preStop:
               exec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           env:
             - name: DEBUG
-              value: "{{ .Values.api.debug }}"
+              value: "{{ .Values.api.settings.debug }}"
             - name: Import__EnableUserAssetsImporter
-              value: "{{ .Values.backgroundJobs.enableUserAssetsImporter }}"
+              value: "{{ .Values.api.settings.backgroundJobs.enableUserAssetsImporter }}"
             - name: Import__EnableAssetsStreaming
-              value: "{{ .Values.backgroundJobs.enableAssetsStreaming }}"
+              value: "{{ .Values.api.settings.backgroundJobs.enableAssetsStreaming }}"
             - name: Import__AssetImporterJobName
               value: {{ include "pro-api.asset-importer-name" . }}
             - name: Import__ExternalLinksProxyUrl
-              value: "{{ .Values.assetImporter.externalLinksProxyUrl }}"
+              value: "{{ .Values.assetImporter.settings.externalLinksProxyUrl }}"
             - name: Import__ExternalLinksAllowedHosts
-              value: "{{ .Values.assetImporter.externalLinksAllowedHosts }}"
+              value: "{{ .Values.assetImporter.settings.externalLinksAllowedHosts }}"
+            - name: Import__TtlSecondsAfterFinished
+              value: "{{ .Values.assetImporter.settings.ttlSecondsAfterFinished }}"
             - name: TEMP_PATH
-              value: "{{ .Values.api.tempPath }}"
+              value: "{{ .Values.api.settings.tempPath }}"
             - name: CATALOG_API_2GIS_URL
               value: "{{ .Values.catalog.url }}"
             - name: CATALOG_API_2GIS_KEY
@@ -139,36 +143,49 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             - name: SEARCH_API_URL
               value: {{ .Values.search.url }}
-            - name: ES_HOST
+
+            - name: Elastic__Host
               value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
-            - name: ES_INDEX_PREFIX
-              value: "{{ .Values.elastic.indexPrefix }}"
-            {{ if .Values.elastic.credentials }}
-            - name: ES_CREDENTIALS
+            - name: Elastic__Secure
+              value: "{{ $.Values.elastic.secure }}"
+            - name: Elastic__Port
+              value: "{{ $.Values.elastic.port }}"
+            - name: Elastic__Username
+              value: "{{ $.Values.elastic.username }}"
+            {{ if .Values.elastic.password }}
+            - name: Elastic__Password
               valueFrom:
                 secretKeyRef:
-                  key: esCredentials
+                  key: esPassword
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}
-            - name: LOG_ES_QUERIES
-              value: "{{ .Values.api.logEsQueries }}"
-            - name: ALLOW_ANY_ORIGIN
-              value: "{{ .Values.api.allowAnyOrigin }}"
+            - name: Elastic__IndexPrefix
+              value: "{{ $.Values.elastic.indexPrefix }}"
+            - name: Elastic__EnableHttpCompression
+              value: "{{ $.Values.elastic.enableHttpCompression }}"
+
             - name: ENV
-              value: "{{ .Values.api.env }}"
+              value: "{{ .Values.api.settings.env }}"
+            - name: Common__CorsOrigins
+              value: "{{ .Values.api.settings.corsOrigins }}"
             - name: Common__FilterByZoneCodes
-              value: "{{ .Values.api.filterByZoneCodes }}"
-            - name: DB_CONNECTION_STRING
-              value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
-            {{ if .Values.postgres.connectionStringReadonly }}
-            - name: DB_CONNECTION_STRING_READONLY
-              value: "{{ .Values.postgres.connectionStringReadonly }}"
-            {{ end }}
-            - name: DB_CONNECTION_PWD
+              value: "{{ .Values.api.settings.filterByZoneCodes }}"
+            - name: Postgres__ConnectionString
+              value: {{ include "pro-api.connectionString" . }}
+            - name: Postgres__ConnectionStringReadonly
+              value: {{ include "pro-api.connectionStringReadOnly" . }}
+            - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
                   key: dbConnectionPwd
                   name: {{ include "pro-api.name" . }}-secret
+            {{- if .Values.postgres.api.ro.password }}
+            - name: Postgres__PasswordRo
+              valueFrom:
+                secretKeyRef:
+                  key: dbConnectionPwdRo
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
             - name: S3Settings__Url
               value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
             - name: S3Settings__Secure
@@ -205,15 +222,17 @@ spec:
               value: {{ $.Values.kafka.sasl.mechanism }}
             - name: Kafka__SaslUsername
               value: {{ $.Values.kafka.sasl.username }}
-            {{ if .Values.kafka.sasl.password }}
+            {{- if .Values.kafka.sasl.password }}
             - name: Kafka__SaslPassword
               valueFrom:
                 secretKeyRef:
                   key: kafkaSaslPassword
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
+            {{- end }}
             - name: Kafka__AssetTopicsReaderGroupId
               value: {{ $.Values.kafka.assetTopicsReaderGroupId }}
+            - name: Kafka__CreateTopics
+              value: "{{ $.Values.kafka.createTopics }}"
             - name: Kafka__RefreshAssetsIntervalMinutes
               value: "{{ $.Values.kafka.refreshAssetsIntervalMinutes }}"
             - name: Kafka__ImportTasksTopicSettings__Name
@@ -226,49 +245,53 @@ spec:
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
             - name: Kafka__EventsTopicSettings__ReaderGroupId
               value: {{ required "A valid .Values.kafka.eventsTopic.readerGroupId entry required" $.Values.kafka.eventsTopic.readerGroupId }}
+            - name: Kafka__UseReplicaTopics
+              value: "{{ $.Values.kafka.useReplicaTopics }}"
             - name: Auth__Type
-              value: "{{ .Values.auth.type }}"
+              value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
             - name: Auth__Url
-              value: "{{ .Values.auth.url }}"
+              value: {{ required "A valid .Values.api.settings.auth.url entry required" $.Values.api.settings.auth.url }}
             - name: Auth__UserInfoEndpoint
-              value: "{{ .Values.auth.userInfoEndpoint }}"
+              value: "{{ .Values.api.settings.auth.userInfoEndpoint }}"
             - name: Auth__WellKnownConfigEndpoint
-              value: "{{ .Values.auth.wellKnownConfigEndpoint }}"
+              value: "{{ .Values.api.settings.auth.wellKnownConfigEndpoint }}"
             - name: Auth__AutoRegisterUsers
-              value: "{{ .Values.auth.autoRegisterUsers }}"
+              value: "{{ .Values.api.settings.auth.autoRegisterUsers }}"
             - name: Auth__TurnOffCertValidation
-              value: "{{ .Values.auth.turnOffCertValidation }}"
-            {{ if .Values.auth.apiKey }}
+              value: "{{ .Values.api.settings.auth.turnOffCertValidation }}"
+            {{- if .Values.api.settings.auth.apiKey }}
             - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
                   key: apiKey
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
+            {{- end }}
             - name: Auth__PermissionsApiUrl
               value: {{ include "pro-api.permissions-url" . }}
-            {{ if .Values.auth.permissionsApiKey }}
+            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
-            {{- range $i, $s := .Values.auth.shareKeys }}
+            {{- end }}
+            {{- range $i, $s := .Values.api.settings.auth.shareKeys }}
             - name: Auth__ShareKeys__{{$i}}
               value: "{{ $s }}"
             {{- end }}
+            - name: Auth__SkipShareLinksPermissionsCheck
+              value: "{{ .Values.api.settings.auth.skipShareLinksPermissionsCheck }}"
             - name: License__Key
-              value: {{ required "A valid .Values.licenseKey entry required" $.Values.licenseKey }}
+              value: {{ required "A valid .Values.api.settings.licenseKey entry required" $.Values.api.settings.licenseKey }}
             - name: KEYS_SERVICE_URL
               value: "{{ .Values.keys.url }}"
-            {{ if .Values.keys.token }}
+            {{- if .Values.keys.token }}
             - name: KEYS_SERVICE_TOKEN
               valueFrom:
                 secretKeyRef:
                   key: keysServiceToken
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
+            {{- end }}
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
@@ -277,30 +300,42 @@ spec:
               value: "{{ .Values.redis.enabled }}"
             - name: Redis__Username
               value: {{ $.Values.redis.username }}
-            {{ if .Values.redis.password }}
+            {{- if .Values.redis.password }}
             - name: Redis__Password
               valueFrom:
                 secretKeyRef:
                   key: redisPassword
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
+            {{- end }}
             - name: Common__Logging__Format
-              value: "{{ .Values.api.logging.format }}"
+              value: "{{ .Values.api.settings.logging.format }}"
             - name: Common__Logging__Targets
-              value: "{{ .Values.api.logging.targets }}"
+              value: "{{ .Values.api.settings.logging.targets }}"
             - name: Common__EsDataCentersCount
-              value: "{{ .Values.api.esDataCentersCount }}"
+              value: "{{ .Values.api.settings.esDataCentersCount }}"
             - name: RateLimiter__RequestsLimit
-              value: "{{ .Values.api.rateLimiter.requestsLimit }}"
+              value: "{{ .Values.api.settings.rateLimiter.requestsLimit }}"
             - name: RateLimiter__WindowSizeInSeconds
-              value: "{{ .Values.api.rateLimiter.windowSizeInSeconds }}"
+              value: "{{ .Values.api.settings.rateLimiter.windowSizeInSeconds }}"
             - name: LocalCache__Enabled
-              value: "{{ .Values.api.localCache.enabled }}"
+              value: "{{ .Values.api.settings.localCache.enabled }}"
             - name: LocalCache__TrackStatistics
-              value: "{{ .Values.api.localCache.trackStatistics }}"
+              value: "{{ .Values.api.settings.localCache.trackStatistics }}"
             - name: LicensingService__BaseUri
               value: {{ required "A valid .Values.license.url entry required" $.Values.license.url }}
-            {{- range $i, $s := .Values.api.openApi.servers }}
-            - name: OpenApi__Servers__{{$i}}
-              value: "{{ $s }}"
-            {{- end }}
+            - name: LayerGeneration__IsochroneLayerMaxPointsCount
+              value: "{{ .Values.api.settings.layerGeneration.isochroneLayerMaxPointsCount }}"
+            - name: TasksApi__Url
+              value: http://{{ include "pro-api.tasks-name" . }}:{{ .Values.tasks.settings.grpcPort }}
+            - name: TasksApi__UseForLayerDataPreparation
+              value: "{{ .Values.api.settings.tasksApi.useForLayerDataPreparation }}"
+            - name: BackgroundJobs__InitOnStartupJob__Enabled
+              value: "{{ ne .Values.api.settings.backgroundJobs.enableInitOnStartupJob false }}"
+            - name: BackgroundJobs__LayerDataPrepareJob__Enabled
+              value: "{{ ne .Values.api.settings.backgroundJobs.enableLayerDataPrepareJob false }}"
+            - name: BackgroundJobs__ClearCacheJob__Enabled
+              value: "{{ ne .Values.api.settings.backgroundJobs.enableClearCacheJob false }}"
+            - name: BackgroundJobs__ClearMetadataAndStorageJob__Enabled
+              value: "{{ ne .Values.api.settings.backgroundJobs.enableClearMetadataAndStorageJob false }}"
+            - name: BackgroundJobs__MetricsCollectionJob__Enabled
+              value: "{{ ne .Values.api.settings.backgroundJobs.enableMetricsCollectionJob false }}"

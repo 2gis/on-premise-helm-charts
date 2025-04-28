@@ -1,4 +1,6 @@
 .idea
+.vscode
+.venv
 .DS_Store
 readme-generator-for-helm
 Chart.lock

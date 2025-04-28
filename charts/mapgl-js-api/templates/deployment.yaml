@@ -35,6 +35,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       containers:
         - name: {{ .Chart.Name }}
@@ -42,29 +43,31 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: PUBLIC_HOST
-              value: "{{ .Values.env.MAPGL_HOST }}"
+              value: {{ .Values.env.MAPGL_HOST | quote }}
             - name: DEMO_KEY
-              value: "{{ .Values.env.MAPGL_DEMO_KEY }}"
+              value: {{ .Values.env.MAPGL_DEMO_KEY | quote }}
             - name: MAPGL_TILESERVER
-              value: "{{ .Values.env.MAPGL_TILES_API }}"
+              value: {{ required "A valid .Values.env.MAPGL_TILES_API entry required" .Values.env.MAPGL_TILES_API | quote }}
             - name: MAPGL_TILESET
-              value: "{{ .Values.env.MAPGL_TILESET }}"
+              value: {{ .Values.env.MAPGL_TILESET | quote }}
             - name: MAPGL_MODELS_TILESET
-              value: "{{ .Values.env.MAPGL_IMMERSIVE_TILESET }}"
+              value: {{ .Values.env.MAPGL_IMMERSIVE_TILESET | quote }}
             - name: MAPGL_TRAFFICSERVER
-              value: "{{ .Values.env.MAPGL_TRAFFICSERVER }}"
-            - name: MAPGL_FLOORSSERVER
-              value: "{{ .Values.env.MAPGL_FLOORSSERVER }}"
-            - name: MAPGL_FLOORSSERVER_HOST
-              value: "{{ .Values.env.MAPGL_FLOORSSERVER }}"
+              value: {{ .Values.env.MAPGL_TRAFFICSERVER | quote }}
+            - name: MAPGL_STYLESERVER
+              value: {{ .Values.env.MAPGL_STYLESERVER | quote }}
+            - name: MAPGL_ICONSPATH
+              value: {{ .Values.env.MAPGL_ICONS_URL | quote }}
+            - name: MAPGL_MODELSPATH
+              value: {{ .Values.env.MAPGL_MODELS_URL | quote }}
             - name: MAPGL_KEYSERVER
-              value: "{{ .Values.env.MAPGL_KEYSERVER }}"
+              value: {{ .Values.env.MAPGL_KEYSERVER | quote }}
             - name: MAPGL_RTLPLUGIN
-              value: "{{ .Values.env.MAPGL_RTLPLUGIN }}"
+              value: {{ .Values.env.MAPGL_RTLPLUGIN | quote }}
             - name: MAPGL_RTLPLUGINHASH
-              value: "{{ .Values.env.MAPGL_RTLPLUGINHASH }}"
+              value: {{ .Values.env.MAPGL_RTLPLUGINHASH | quote }}
             - name: MAPGL_INVALID_KEY_MESSAGE
-              value: "{{ .Values.env.MAPGL_INVALID_KEY_MESSAGE }}"
+              value: {{ .Values.env.MAPGL_INVALID_KEY_MESSAGE | quote }}
           ports:
             - name: http
               containerPort: 8080

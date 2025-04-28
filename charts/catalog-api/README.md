@@ -28,15 +28,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Common settings
 
-| Name               | Description                                                                                                                                         | Value |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `nodeSelector`     | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                                  | `{}`  |
-| `affinity`         | Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                                   | `{}`  |
-| `tolerations`      | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                                    | `[]`  |
-| `annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                           | `{}`  |
-| `podAnnotations`   | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                        | `{}`  |
-| `podLabels`        | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                                                  | `{}`  |
-| `imagePullSecrets` | Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) | `[]`  |
+| Name                 | Description                                                                                                                                         | Value |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `nodeSelector`       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                                  | `{}`  |
+| `affinity`           | Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                                   | `{}`  |
+| `tolerations`        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                                    | `[]`  |
+| `annotations`        | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                           | `{}`  |
+| `podAnnotations`     | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                        | `{}`  |
+| `podLabels`          | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                                                  | `{}`  |
+| `podSecurityContext` | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                       | `{}`  |
+| `imagePullSecrets`   | Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) | `[]`  |
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
@@ -80,7 +81,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description                                                                                   | Value                         |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ----------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag                                                                                           | `3.619.0`                     |
+| `api.image.tag`        | Tag                                                                                           | `3.647.0`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
@@ -176,10 +177,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### License settings
 
-| Name                     | Description                                                            | Value |
-| ------------------------ | ---------------------------------------------------------------------- | ----- |
-| `license.url`            | Address of the License service v1. Ex: http://license.svc **Required** | `""`  |
-| `license.requestTimeout` | Timeout for requests to the License service                            | `1s`  |
+| Name                     | Description                                                             | Value |
+| ------------------------ | ----------------------------------------------------------------------- | ----- |
+| `license.url`            | Address of the License service v2. Ex: https://license.svc **Required** | `""`  |
+| `license.requestTimeout` | Timeout for requests to the License service                             | `1s`  |
 
 ### Statistic settings
 
@@ -213,6 +214,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----- |
 | `importer`                            | **Common settings**                                                                                                |       |
 | `importer.nodeSelector`               | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) | `{}`  |
+| `importer.tolerations`                | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings   | `[]`  |
 | `importer.workerNum`                  | Number of parallel import processes (workers)                                                                      | `3`   |
 | `importer.initialDelaySeconds`        | Number of seconds after the container has started before liveness or readiness probes are initiated                | `1`   |
 | `importer.retry.download.maxAttempts` | The maximum number of retries download before stopping                                                             | `3`   |
@@ -225,7 +227,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                        | Description                                                                                   | Value                              |
 | --------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `importer.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`        | Tag                                                                                           | `1.7.0`                            |
+| `importer.image.tag`        | Tag                                                                                           | `1.12.1`                           |
 | `importer.image.pullPolicy` | Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                     |
 
 ### importer.postgres **Database settings**

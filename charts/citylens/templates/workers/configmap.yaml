@@ -4,13 +4,17 @@ metadata:
   name: {{ include "citylens.workers.name" . }}-configmap
 data:
   workers_config.yaml: |
-    pg_connection_url: {{ include "citylens.pgDSN"  . | squote }}
+    pg:
+      connection_url: {{ include "citylens.pgDSN"  . | squote }}
+      pool_size: {{ .Values.web.pgPoolSize }}
+      pool_max_overflow: {{ .Values.web.pgPoolMaxOverflow }}
 
     image_service:
     {{- with .Values.s3 }}
       s3_endpoint: {{ required "A valid .Values.s3.endpoint entry required" .endpoint | squote }}
       bucket_prefix: {{ required "A valid .Values.s3.bucketPrefix entry required" .bucketPrefix | squote }}
       frame_key_template:  {{ include "citylens.s3_constants.frame_key_template" . | squote }}
+      crop_frame_key_template:  {{ include "citylens.s3_constants.crop_frame_key_template" . | squote }}
     {{- end }}
     topics:
     {{- with .Values.kafka.topics }}
@@ -18,14 +22,15 @@ data:
       tracks_lifecycle_topic: {{ required "A valid .Values.kafka.topics.tracksLifecycle entry required" .tracksLifecycle | squote }}
     {{- end }}
     log_level: {{ .Values.worker.dashboardBatchEvents.logLevel }}
+    visual_localization: null
     {{- with .Values.kafka }}
     kafka:
       broker: {{ .bootstrapServer }}
       is_credentials_enabled: true
       credentials:
-        mechanism: 'SCRAM-SHA-512'
-        username: {{ .username }}
-        password: {{ .password }}
+        mechanism: {{ required "A valid .Values.kafka.saslMechanism entry required" .saslMechanism | squote }}
+        username: {{ required "A valid .Values.kafka.username entry required" .username | squote }}
+        password: {{ required "A valid .Values.kafka.password entry required" .password | squote }}
       advanced:
         stream_wait_empty: true
         topic_allow_declare: false

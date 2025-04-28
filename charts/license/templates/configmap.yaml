@@ -21,12 +21,14 @@ data:
     storage:
       host: {{ required "A valid $.Values.dgctlStorage.host entry is required" .host }}
       secure: {{ .secure }}
+      region: {{ .region }}
       bucket: {{ required "A valid $.Values.dgctlStorage.bucket entry is required" .bucket }}
     {{- end }}
     {{- with .persistence }}
     persistence:
       host: {{ .host }}
       secure: {{ .secure }}
+      region: {{ .region }}
       bucket: {{ .bucket }}
       root: {{ .root }}
     {{- end }}

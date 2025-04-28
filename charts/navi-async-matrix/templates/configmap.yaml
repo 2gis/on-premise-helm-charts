@@ -1,4 +1,3 @@
-{{- if .Values.dm.archiver.enabled }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -68,6 +67,10 @@ data:
                 "value": {{ .Values.s3.bucket | mustToJson }}
               },
               {
+                "name": "S3_REGION_NAME",
+                "value": {{ .Values.s3.region | mustToJson }}
+              },
+              {
                 "name": "S3_ACCESS_KEY",
                 "value": {{ .Values.s3.accessKey | mustToJson }}
               },
@@ -90,4 +93,3 @@ data:
         "restartPolicy": "Never"
       }
     }
-{{- end }}

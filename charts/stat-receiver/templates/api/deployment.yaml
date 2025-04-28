@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "bss-receiver-api.name" . }}
+  name: {{ include "stat-receiver-api.name" . }}
   {{- if .Values.api.annotations }}
   annotations:
     {{- toYaml .Values.api.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "bss-receiver-api.labels" . | nindent 4 }}
+    {{- include "stat-receiver-api.labels" . | nindent 4 }}
     {{- if .Values.api.labels }}
     {{- toYaml .Values.api.labels | nindent 4 }}
     {{- end }}
@@ -21,11 +21,11 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      {{- include "bss-receiver-api.selectorLabels" . | nindent 6 }}
+      {{- include "stat-receiver-api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "bss-receiver-api.labels" . | nindent 8 }}
+        {{- include "stat-receiver-api.labels" . | nindent 8 }}
         {{- if .Values.api.labels }}
         {{- toYaml .Values.api.labels | nindent 8 }}
         {{- end }}
@@ -95,7 +95,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: {{ include "bss-receiver-api.name" . }}
+            name: {{ include "stat-receiver-api.name" . }}
         {{- if .Values.kafka.truststore.enabled }}
         - name: kafka-truststore
           secret:

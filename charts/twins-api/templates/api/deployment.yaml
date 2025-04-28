@@ -12,6 +12,11 @@ metadata:
     {{- end }}
   {{- end }}
   labels:
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "twins.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}
+    {{- end }}
     {{- include "twins.api.labels" . | nindent 4 }}
     {{- with .Values.api.labels }}
     {{- toYaml . | nindent 4 }}
@@ -22,7 +27,7 @@ spec:
   {{- end }}
   revisionHistoryLimit: {{ .Values.api.revisionHistoryLimit }}
   strategy:
-    {{- toYaml .Values.strategy | nindent 4 }}
+    {{- toYaml .Values.api.strategy | nindent 4 }}
   selector:
     matchLabels:
       {{- include "twins.api.selectorLabels" . | nindent 6 }}

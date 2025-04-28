@@ -1,0 +1,35 @@
+---
+
+name: Send release notification to Mattermost
+
+on:
+  workflow_run:
+    workflows:
+      - "Release Charts"
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate next release date
+        id: nextrelease
+        run: |
+          if [[ $(date +%d) -gt "17" ]]; then nextdate=$(date +%Y%m%d -d `date +%Y%m25`'+1 month'); else nextdate=$(date +%Y%m25); fi;
+          dow=$(date +%u -d $nextdate);if [[ $dow -gt "4" ]]; then per=$( expr 8 - $dow ); nextdate=$(date +%Y%m%d -d $nextdate'+'$per' day'); fi;
+          echo "nextdate=$(date +%d.%m.%Y -d $nextdate)" >> $GITHUB_OUTPUT
+          echo "startdate=$(date +%d.%m.%Y -d $nextdate'-1 week')" >> $GITHUB_OUTPUT
+
+      - uses: mattermost/action-mattermost-notify@master
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        with:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WH_ON_PREMISE_RELEASE }}
+          MATTERMOST_USERNAME: Github
+          MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
+          TEXT: |
+            Опубликован On-Premise: ${{ github.event.workflow_run.head_branch }}
+            Документация: https://confluence.2gis.ru/display/ONPREM/Release+${{ github.event.workflow_run.head_branch }}+On-Premise
+            Дата следующего планового релиза: ${{ steps.nextrelease.outputs.nextdate }}
+            Дата формирования списка кандидатов релиза: ${{ steps.nextrelease.outputs.startdate }}
+            Актуальная информация по датам и содержанию релизов: https://jira.2gis.ru/projects/ONPREM?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased

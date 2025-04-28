@@ -1,0 +1,73 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "citylens-ui.name" . }}
+  labels:
+    {{- include "citylens-ui.labels" . | nindent 4 }}
+data:
+  nginx.conf: |
+    worker_processes auto;
+
+    pid /var/run/nginx.pid;
+
+    events {
+      worker_connections 1024;
+    }
+
+    http {
+      include /etc/nginx/mime.types;
+      default_type application/octet-stream;
+
+      {{ range .Values.log.formats }}
+      log_format {{ .name }} escape={{ .escape }} {{ .format | nindent 36 | trim }};
+      {{- end }}
+
+      access_log {{ required "A valid .Values.log.accessLog" .Values.log.accessLog }};
+      error_log /dev/stderr {{ required "A valid .Values.log.errorLog.level required" .Values.log.errorLog.level }};
+
+      sendfile on;
+      tcp_nopush on;
+      keepalive_timeout 65;
+
+      include /etc/nginx/conf.d/*.conf;
+    }
+
+  default.conf.template: |
+    server {
+      listen 3000;
+      root /usr/share/nginx/html;
+      error_page 500 502 503 504 /50x.html;
+      gzip_static on;
+
+      location ~ \.(css|js|svg|woff|woff2|ico|ttf|eot|jpe?g|png|txt|mp3|json|svg|otf|wasm)$ {
+        try_files $uri $uri/ =404;
+        expires 1y;
+        add_header Cache-Control "public";
+      }
+
+      location / {
+        try_files $uri $uri/ /index.html;
+        add_header Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0";
+        add_header Pragma "no-cache";
+        if_modified_since off;
+        expires -1;
+        etag off;
+      }
+
+      location /health {
+        access_log off;
+        add_header 'Content-Type' 'text/plain';
+        return 200 "UP";
+      }
+
+      {{- if .Values.env.SSO_PROXY_ENABLED }}
+      location ~ ^/auth/(.*)$ {
+        proxy_pass {{ .Values.env.SSO_API_URL }}/$1;
+        proxy_ssl_server_name on;
+        proxy_http_version 1.1;
+        resolver ${NGINX_LOCAL_RESOLVERS} valid=300s;
+      }
+      {{- end }}
+    }

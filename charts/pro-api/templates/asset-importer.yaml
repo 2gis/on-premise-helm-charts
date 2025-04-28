@@ -1,5 +1,4 @@
-﻿{{ if .Values.assetImporter.enabled }}
-apiVersion: batch/v1
+﻿apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ include "pro-api.asset-importer-name" . }}
@@ -7,6 +6,7 @@ spec:
   concurrencyPolicy: Forbid
   schedule: "{{ .Values.assetImporter.schedule }}"
   successfulJobsHistoryLimit: {{ .Values.assetImporter.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.assetImporter.failedJobsHistoryLimit }}
   suspend: {{ .Values.assetImporter.suspended }}
   jobTemplate:
     spec:
@@ -15,6 +15,14 @@ spec:
         spec:
           {{- with .Values.assetImporter.nodeSelector }}
           nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.assetImporter.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.assetImporter.imagePullSecrets }}
+          imagePullSecrets:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           restartPolicy: Never
@@ -29,19 +37,19 @@ spec:
               resources:
                 {{- toYaml .Values.assetImporter.resources | nindent 16 }}
               volumeMounts:
-                - mountPath: "{{ .Values.api.tempPath }}"
+                - mountPath: "{{ .Values.api.settings.tempPath }}"
                   name: temp-volume
               env:
                 - name: JOB_NAME
                   value: {{ include "pro-api.asset-importer-name" . }}
                 - name: TEMP_PATH
-                  value: "{{ .Values.api.tempPath }}"
+                  value: "{{ .Values.api.settings.tempPath }}"
                 - name: ENV
-                  value: "{{ .Values.api.env }}"
+                  value: "{{ .Values.api.settings.env }}"
                 - name: MODE
                   value: "Schedule"
                 - name: MAX_PARALLEL_JOBS
-                  value: "{{ .Values.assetImporter.maxParallelJobs }}"
+                  value: "{{ .Values.assetImporter.settings.maxParallelJobs }}"
                 - name: manifest
                   value: "{{ .Values.dgctlStorage.manifest }}"
                 - name: S3Settings__Url
@@ -72,43 +80,55 @@ spec:
                     secretKeyRef:
                       key: s3SecretKey
                       name: {{ include "pro-api.name" . }}-secret
-                - name: ES_HOST
+
+                - name: Elastic__Host
                   value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
-                {{- if .Values.elastic.credentials }}
-                - name: ES_CREDENTIALS
+                - name: Elastic__Secure
+                  value: "{{ $.Values.elastic.secure }}"
+                - name: Elastic__Port
+                  value: "{{ $.Values.elastic.port }}"
+                - name: Elastic__Username
+                  value: "{{ $.Values.elastic.username }}"
+                {{ if .Values.elastic.password }}
+                - name: Elastic__Password
                   valueFrom:
                     secretKeyRef:
-                      key: esCredentials
+                      key: esPassword
                       name: {{ include "pro-api.name" . }}-secret
-                {{- end }}
-                - name: ES_INDEX_PREFIX
-                  value: "{{ .Values.elastic.indexPrefix }}"
+                {{ end }}
+                - name: Elastic__IndexPrefix
+                  value: "{{ $.Values.elastic.indexPrefix }}"
+                - name: Elastic__EnableHttpCompression
+                  value: "{{ $.Values.elastic.enableHttpCompression }}"
+
                 - name: API_URL
                   value: http://{{ include "pro-api.name" . }}
-                {{- if .Values.auth.apiKey }}
+                {{- if .Values.api.settings.auth.apiKey }}
                 - name: API_TOKEN
                   valueFrom:
                     secretKeyRef:
                       key: apiKey
                       name: {{ include "pro-api.name" . }}-secret
                 {{- end }}
-                {{- if .Values.assetImporter.files }}
+                {{- if .Values.assetImporter.settings.files }}
                 - name: FILES
-                  value: "{{ .Values.assetImporter.files}}"
+                  value: "{{ .Values.assetImporter.settings.files}}"
                 {{- end }}
-                - name: DB_CONNECTION_STRING
-                  value: {{ required "A valid .Values.postgres.connectionString entry required" $.Values.postgres.connectionString }}
-                - name: DB_CONNECTION_PWD
+                - name: Postgres__ConnectionString
+                  value: {{ include "pro-api.connectionString" . }}
+                - name: Postgres__Password
                   valueFrom:
                     secretKeyRef:
                       key: dbConnectionPwd
                       name: {{ include "pro-api.name" . }}-secret
                 - name: Common__Logging__Format
-                  value: "{{ .Values.api.logging.format }}"
+                  value: "{{ .Values.api.settings.logging.format }}"
                 - name: Common__Logging__Targets
-                  value: "{{ .Values.api.logging.targets }}"
+                  value: "{{ .Values.api.settings.logging.targets }}"
                 - name: Common__EsMetricsEnabled
-                  value: "{{ .Values.assetImporter.esMetricsEnabled }}"
+                  value: "{{ .Values.assetImporter.settings.esMetricsEnabled }}"
+                - name: Common__TtlSecondsAfterFinished
+                  value: "{{ .Values.assetImporter.settings.ttlSecondsAfterFinished }}"
                 - name: Digger__Address
                   value: "{{ .Values.digger.url}}"
                 - name: Digger__UserName
@@ -131,4 +151,3 @@ spec:
                   value: "{{ .Values.tileGen.url }}"
                 - name: TileGen__UserDataTileSet
                   value: "{{ .Values.tileGen.userDataTileSet }}"
-{{ end }}

@@ -466,6 +466,28 @@ data:
           }
         },
         {{- end }}{{- /* .Values.naviback.indices.snImport.enabled */}}
+        {{- if .Values.naviback.indices.routeAsUsual.enabled }}
+        "route_as_usual": {
+          "update_period": 28800,
+          "nodes": [
+            "{{ .Values.naviback.routeAsUsualUrl }}"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
+        {{- end }}{{- /* .Values.naviback.indices.routeAsUsual.enabled */}}
+        {{- if .Values.naviback.indices.walkingUserSpeeds.enabled }}
+        "walking_user_speeds": {
+          "update_period": 0,
+          "nodes": [
+            "{{ .Values.naviback.walkingUserSpeedsUrl }}"
+          ],
+          "timeout_seconds": {
+            "count": 60
+          }
+        },
+        {{- end }}{{- /* .Values.naviback.indices.walkingUserSpeeds.enabled */}}
         {{- if .Values.naviback.indices.geoImport.enabled }}
         "geo_import": {
           "update_period": 0,
@@ -543,7 +565,7 @@ data:
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.routesharing.kafka.properties }}
           "kafka_properties":
             {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
-          "topic": {{ .Values.routesharing.topic | quote }}
+          "topic": {{ .Values.routesharing.kafka.topic | required "routesharing.kafka.topic is not set" | quote }}
         },
         {{- end }}{{/* .Values.routesharing.enabled */}}
         {{- if and .Values.naviback.bss.enabled .Values.naviback.bss.client.serviceRemoteAddress }}
@@ -576,11 +598,12 @@ data:
         },
         {{- end }}{{- /* if .Values.naviback.rtr.enabled */}}
         {{- if .Values.naviback.hierarchies.enabled }}
+          {{- if (not .Values.naviback.hierarchies.skipShortcuts) }}
         "hierarchies": {
           "use_hierarchy": true,
-          {{- if (not .Values.naviback.hierarchies.skipPatches) }}
+            {{- if (not .Values.naviback.hierarchies.skipPatches) }}
           "patches_file_name": "{PATCHES_PATH}",
-          {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
+            {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
           "graphs_file_name": "{SHORTCUT_PATH}"
         },
         "hierarchy_shortcuts": {
@@ -592,7 +615,7 @@ data:
             "count": 600
           }
         },
-        {{- if (not .Values.naviback.hierarchies.skipPatches) }}
+          {{- if (not .Values.naviback.hierarchies.skipPatches) }}
         "hierarchy_patches": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
           "nodes": [
@@ -602,7 +625,8 @@ data:
             "count": 600
           }
         },
-        {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
+          {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
+        {{- end }}{{- /* (not .Values.naviback.hierarchies.skipShortcuts) */}}
         "sn_import": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
           "nodes": [
@@ -625,11 +649,32 @@ data:
         },
         "eta_schedule": {
           "update_period": 0,
+          {{- if .Values.naviback.etaScheduleIndex.etaScheduleNodes }}
+          "nodes": [
+            "{{ .Values.naviback.etaScheduleIndex.etaScheduleNodes }}"
+          ],
+          {{- end }}{{/* if .Values.naviback.etaScheduleIndex.etaScheduleNodes */}}
           "timeout_seconds": {
             "count": 5
           }
         },
         {{- end }}{{- /* if .Values.naviback.etaScheduleIndex.enabled */}}
+        {{- if .Values.trafficLights.enabled }}
+        "traffic_lights_kafka": {
+          {{- $kafkaProperties := dict -}}
+          {{- range $key, $_ := .Values.trafficLights.kafka.fileProperties -}}
+          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
+          {{- end -}}
+          {{- $kafkaProperties := mustMerge $kafkaProperties .Values.trafficLights.kafka.properties }}
+          "kafka_properties":
+            {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
+          "topic": {{ .Values.trafficLights.kafka.topic | required "trafficLights.kafka.topic is not set" | quote }},
+          {{- with .Values.trafficLights.projects }}
+          "projects":
+            {{ . | mustToPrettyJson | nindent 12 }}
+          {{- end }}
+        },
+        {{- end }}{{/* .Values.trafficLigths.enabled */}}
         {{- if .Values.naviback.additionalSections }}
           {{- include "tplvalues.render" ( dict "value" .Values.naviback.additionalSections "context" $) | nindent 8 }}
         {{- end }}
@@ -661,7 +706,8 @@ data:
           "dump_answer": {{ mustToJson (.Values.naviback.dump).answer }},
           "max_parallel_workers": 2,
           "use_memory_mapped_vfs": true,
-          "engine_update_period_sec": {{ include "config.setEngineUpdatePeriod" $ | default 30 }},
+          "clear_cache_threshold": {{ .Values.naviback.clearCacheThreshold | int }},
+          "engine_update_period_sec": {{ include "config.setEngineUpdatePeriod" $ | default .Values.naviback.engineUpdatePeriodSec }},
           {{- if .Values.naviback.server_id }}
           "server_id": "{{- include "tplvalues.render" ( dict "value" .Values.naviback.server_id "context" .) }}",
           {{- else }}

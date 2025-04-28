@@ -10,16 +10,20 @@
 {{ include "keys.name" . }}-tasker
 {{- end }}
 
+{{- define "keys.dispatcher.name" -}}
+{{ include "keys.name" . }}-dispatcher
+{{- end }}
+
+{{- define "keys.cleaner.name" -}}
+{{ include "keys.name" . }}-cleaner
+{{- end }}
+
 {{- define "keys.migrate.name" -}}
 {{ include "keys.name" . }}-migrate
 {{- end }}
 
 {{- define "keys.import.name" -}}
 {{ include "keys.name" . }}-import
-{{- end }}
-
-{{- define "keys.redis.name" -}}
-{{ include "keys.name" . }}-redis
 {{- end }}
 
 {{- define "keys.admin.name" -}}
@@ -60,16 +64,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
-{{- define "keys.redis.selectorLabels" -}}
-app.kubernetes.io/name: {{ .Chart.Name }}-redis
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{- define "keys.redis.labels" -}}
-{{ include "keys.redis.selectorLabels" . }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-
 {{- define "keys.tasker.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-tasker
 app.kubernetes.io/instance: {{ .Release.Name }}
@@ -77,6 +71,22 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 
 {{- define "keys.tasker.labels" -}}
 {{ include "keys.tasker.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "keys.dispatcher.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}-dispatcher
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "keys.dispatcher.labels" -}}
+{{ include "keys.dispatcher.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "keys.cleaner.labels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}-cleaner
+app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
@@ -101,6 +111,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.featureFlags.enableAudit }}"
 - name: KEYS_FEATURE_FLAGS_PUBLIC_API_SIGN
   value: "{{ .Values.featureFlags.enablePublicAPISign }}"
+- name: KEYS_FEATURE_FLAGS_SINGLE_PARTNER_MODE
+  value: "{{ .Values.api.oidc.enableSinglePartnerMode }}"
+- name: KEYS_FEATURE_FLAGS_EXTERNAL_OIDC
+  value: "{{ .Values.api.oidc.enableExternalProvider }}"
+- name: KEYS_FEATURE_FLAGS_OIDC
+  value: "{{ .Values.api.oidc.enable }}"
 {{- end }}
 
 {{- define "keys.env.api" -}}
@@ -112,6 +128,20 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     secretKeyRef:
       name: {{ include "keys.secret.deploys.name" . }}
       key: signPrivateKey
+{{- end }}
+{{- if .Values.api.oidc.enable }}
+- name: KEYS_OIDC_ENDPOINT
+  value: "{{ required "A valid .Values.api.oidc.url required" .Values.api.oidc.url }}"
+- name: KEYS_OIDC_CLIENT_TIMEOUT
+  value: "{{ .Values.api.oidc.timeout }}"
+- name: KEYS_OIDC_CLIENT_RETRY_COUNT
+  value: "{{ .Values.api.oidc.retryCount }}"
+- name: KEYS_OIDC_DEFAULT_PARTNER_ID
+  value: "{{ required "A valid .Values.api.oidc.defaultPartner.id required" .Values.api.oidc.defaultPartner.id }}"
+- name: KEYS_OIDC_DEFAULT_PARTNER_NAME
+  value: "{{ required "A valid .Values.api.oidc.defaultPartner.name required" .Values.api.oidc.defaultPartner.name }}"
+- name: KEYS_OIDC_DEFAULT_ROLE
+  value: "{{ required "A valid .Values.api.oidc.defaultPartner.role required" .Values.api.oidc.defaultPartner.role }}"
 {{- end }}
 {{- end }}
 
@@ -132,6 +162,24 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.tasker.delay }}"
 {{- end }}
 
+{{- define "keys.env.dispatcher" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.dispatcher.logLevel }}"
+- name: KEYS_AUDIT_EVENTS_SEND_INTERVAL
+  value: "{{ .Values.dispatcher.auditEvents.sendInterval }}"
+- name: KEYS_AUDIT_EVENTS_BATCH_MAX_SIZE
+  value: "{{ .Values.dispatcher.auditEvents.batchMaxSize }}"
+- name: KEYS_AUDIT_EVENTS_HOLD_DURATION
+  value: "{{ .Values.dispatcher.auditEvents.holdDuration }}"
+{{- end }}
+
+{{- define "keys.env.cleaner" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.dispatcher.cleaner.logLevel }}"
+- name: KEYS_AUDIT_EVENTS_RETENTION_DURATION
+  value: "{{ .Values.dispatcher.cleaner.auditEvents.retentionDuration }}"
+{{- end -}}
+
 {{- define "keys.env.db" -}}
 - name: KEYS_DB_RO_HOST
   value: "{{ required "A valid .Values.postgres.ro.host required" .Values.postgres.ro.host }}"
@@ -145,6 +193,24 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.postgres.ro.timeout }}"
 - name: KEYS_DB_RO_USERNAME
   value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username }}"
+- name: KEYS_DB_RO_SSL_MODE
+  value: {{ .Values.postgres.ro.tls.mode }}
+{{- if has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full") }}
+{{- if .Values.postgres.ro.tls.serverCA }}
+- name: KEYS_DB_RO_SSL_SERVERCERT_PATH
+  value: /etc/ssl/psql/psql-ro-server-ca.crt
+{{- end }}
+{{- if eq .Values.postgres.ro.tls.mode "verify-full" }}
+{{- if .Values.postgres.ro.tls.clientKey }}
+- name: KEYS_DB_RO_SSL_CLIENTKEY_PATH
+  value: /etc/ssl/psql/psql-ro-client.key
+{{- end }}
+{{- if .Values.postgres.ro.tls.clientCert }}
+- name: KEYS_DB_RO_SSL_CLIENTCERT_PATH
+  value: /etc/ssl/psql/psql-ro-client.crt
+{{- end }}
+{{- end }}
+{{- end }}
 - name: KEYS_DB_RW_HOST
   value: "{{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host }}"
 - name: KEYS_DB_RW_PORT
@@ -157,10 +223,28 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.postgres.rw.schema }}"
 - name: KEYS_DB_RW_USERNAME
   value: "{{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username }}"
+- name: KEYS_DB_RW_SSL_MODE
+  value: {{ .Values.postgres.rw.tls.mode }}
+{{- if has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full") }}
+{{- if .Values.postgres.rw.tls.serverCA }}
+- name: KEYS_DB_RW_SSL_SERVERCERT_PATH
+  value: /etc/ssl/psql/psql-rw-server-ca.crt
+{{- end }}
+{{- if eq .Values.postgres.rw.tls.mode "verify-full" }}
+{{- if .Values.postgres.rw.tls.clientKey }}
+- name: KEYS_DB_RW_SSL_CLIENTKEY_PATH
+  value: /etc/ssl/psql/psql-rw-client.key
+{{- end }}
+{{- if .Values.postgres.rw.tls.clientCert }}
+- name: KEYS_DB_RW_SSL_CLIENTCERT_PATH
+  value: /etc/ssl/psql/psql-rw-client.crt
+{{- end }}
+{{- end }}
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.db.deploys" -}}
-{{ include "keys.env.db" . }}
+{{- include "keys.env.db" . }}
 - name: KEYS_DB_RO_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -174,7 +258,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.db.jobs" -}}
-{{ include "keys.env.db" . }}
+{{- include "keys.env.db" . }}
 - name: KEYS_DB_RO_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -188,15 +272,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.redis" -}}
-{{- if .Values.redis.useExternalRedis }}
 - name: KEYS_REDIS_HOST
   value: "{{ .Values.redis.host }}"
 - name: KEYS_REDIS_DB
   value: "{{ .Values.redis.db }}"
-{{- else  }}
-- name: KEYS_REDIS_HOST
-  value: "{{ include "keys.redis.name" . }}"
-{{- end  }}
 - name: KEYS_REDIS_PORT
   value: "{{ .Values.redis.port }}"
 {{- if .Values.redis.password }}
@@ -267,14 +346,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.predef" -}}
-{{ range $service, $key := .Values.predefined.service.keys }}
+{{- range $service, $key := .Values.predefined.service.keys }}
 - name: KEYS_PREDEF_SERVICE_KEY_{{ $service | upper }}
   value: {{ $key }}
-{{ end }}
-{{ range $service, $key := .Values.predefined.service.aliases }}
+{{- end }}
+{{- range $service, $key := .Values.predefined.service.aliases }}
 - name: KEYS_PREDEF_SERVICE_ALIAS_{{ $service | upper }}
   value: {{ $key }}
-{{ end }}
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.dgctlStorage" -}}
@@ -304,13 +383,32 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.kafka.audit" -}}
 - name: KEYS_KAFKA_AUDIT_BROKERS
-  value: "{{ .Values.kafka.audit.bootstrapServers }}"
+  value: "{{ required "A valid .Values.kafka.bootstrapServers entry required" .Values.kafka.bootstrapServers }}"
 - name: KEYS_KAFKA_AUDIT_USERNAME
-  value: "{{ .Values.kafka.audit.username }}"
+  value: "{{ .Values.kafka.username }}"
+{{- if .Values.kafka.password }}
 - name: KEYS_KAFKA_AUDIT_PASSWORD
-  value: "{{ .Values.kafka.audit.password }}"
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.name" . }}-kafka
+      key: password
+{{- end }}
+- name: KEYS_KAFKA_AUDIT_SECURITY_PROTOCOL
+  value: "{{ .Values.kafka.securityProtocol }}"
+- name: KEYS_KAFKA_AUDIT_SASL_MECHANISM
+  value: "{{ .Values.kafka.saslMechanism }}"
+{{- if has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL") }}
+- name: KEYS_KAFKA_AUDIT_TLS_SKIP_SERVER_CERTIFICATE_VERIFY
+  value: "{{ .Values.kafka.tls.skipServerCertificateVerify }}"
+- name: KEYS_KAFKA_AUDIT_TLS_CLIENT_CERTIFICATE_PATH
+  value: "/etc/ssl/private/kafka-client.crt"
+- name: KEYS_KAFKA_AUDIT_TLS_CLIENT_KEY_PATH
+  value: "/etc/ssl/private/kafka-client.key"
+- name: KEYS_KAFKA_AUDIT_TLS_CA_CERT_PATH
+  value: "/etc/ssl/private/kafka-ca.crt"
+{{- end }}
 - name: KEYS_KAFKA_AUDIT_TOPIC
-  value: "{{ .Values.kafka.audit.topic }}"
+  value: "{{ required "A valid .Values.kafka.audit.topic entry required" .Values.kafka.audit.topic }}"
 - name: KEYS_KAFKA_AUDIT_PRODUCE_RETRY_COUNT
   value: "{{ .Values.kafka.audit.produce.retryCount }}"
 - name: KEYS_KAFKA_AUDIT_PRODUCE_IDEMPOTENT_WRITE
@@ -382,3 +480,193 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- define "keys.configmap.deploys.name" -}}
 {{ include "keys.name" . }}-configmap-deploys
 {{- end -}}
+
+{{- define "keys.psql.checks" -}}
+{{- if has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full") }}
+{{ $testVar := required "You should set .Values.postgres.ro.tls.serverCA for selected mode" .Values.postgres.ro.tls.serverCA }}
+{{- end }}
+{{- if eq .Values.postgres.ro.tls.mode "verify-full" }}
+{{ $testVar := required "You should set .Values.postgres.ro.tls.clientCert for selected mode" .Values.postgres.ro.tls.clientCert }}
+{{ $testVar := required "You should set .Values.postgres.ro.tls.clientKey for selected mode" .Values.postgres.ro.tls.clientKey }}
+{{- end }}
+{{- if has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full") }}
+{{ $testVar := required "You should set .Values.postgres.rw.tls.serverCA for selected mode" .Values.postgres.rw.tls.serverCA }}
+{{- end }}
+{{- if eq .Values.postgres.rw.tls.mode "verify-full" }}
+{{ $testVar := required "You should set .Values.postgres.rw.tls.clientCert for selected mode" .Values.postgres.rw.tls.clientCert }}
+{{ $testVar := required "You should set .Values.postgres.rw.tls.clientKey for selected mode" .Values.postgres.rw.tls.clientKey }}
+{{- end }}
+{{- end -}}
+
+{{- define "keys.psql.volumeMount" -}}
+{{- if or
+  (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+  (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+-}}
+- name: tls
+  mountPath: /etc/ssl/psql
+{{- end }}
+{{- end -}}
+
+{{- define "keys.psql.volume" -}}
+{{- if or
+  (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+  (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+-}}
+- name: tls-raw
+  secret:
+    secretName: {{ include "keys.name" . }}-tls
+    items:
+    {{- if has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full") }}
+    {{- if .Values.postgres.ro.tls.serverCA }}
+      - key: psql-ro-server-ca.crt
+        path: psql-ro-server-ca.crt
+    {{- end }}
+    {{- if has .Values.postgres.ro.tls.mode (list "verify-full") }}
+    {{- if .Values.postgres.ro.tls.clientKey }}
+      - key: psql-ro-client.key
+        path: psql-ro-client.key
+    {{- end }}
+    {{- if .Values.postgres.ro.tls.clientCert }}
+      - key: psql-ro-client.crt
+        path: psql-ro-client.crt
+    {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full") }}
+    {{- if .Values.postgres.rw.tls.serverCA }}
+      - key: psql-rw-server-ca.crt
+        path: psql-rw-server-ca.crt
+    {{- end }}
+    {{- if has .Values.postgres.rw.tls.mode (list "verify-full") }}
+    {{- if .Values.postgres.rw.tls.clientKey }}
+      - key: psql-rw-client.key
+        path: psql-rw-client.key
+    {{- end }}
+    {{- if .Values.postgres.rw.tls.clientCert }}
+      - key: psql-rw-client.crt
+        path: psql-rw-client.crt
+    {{- end }}
+    {{- end }}
+    {{- end }}
+- name: tls
+  emptyDir: {}
+{{- end }}
+{{- end -}}
+
+{{- define "keys.tls.kafka.checks" -}}
+{{- if has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL") }}
+{{ $testVar := required "You should set .Values.kafka.tls.serverCA for selected mode" .Values.kafka.tls.serverCA }}
+{{ $testVar := required "You should set .Values.kafka.tls.clientCert for selected mode" .Values.kafka.tls.clientCert }}
+{{ $testVar := required "You should set .Values.kafka.tls.clientKey for selected mode" .Values.kafka.tls.clientKey }}
+{{- end }}
+{{- end -}}
+
+{{- define "keys.tls.kafka.volumeMount" -}}
+{{- if has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL") -}}
+- name: tls-kafka
+  mountPath: /etc/ssl/private
+{{- end }}
+{{- end -}}
+
+{{- define "keys.tls.kafka.volume" -}}
+{{- if has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL") -}}
+- name: tls-kafka-raw
+  secret:
+    secretName: {{ include "keys.name" . }}-kafka
+    items:
+    {{- if .Values.kafka.tls.serverCA }}
+      - key: kafka-ca.crt
+        path: kafka-ca.crt
+    {{- end }}
+    {{- if .Values.kafka.tls.clientKey }}
+      - key: kafka-client.key
+        path: kafka-client.key
+    {{- end }}
+    {{- if .Values.kafka.tls.clientCert }}
+      - key: kafka-client.crt
+        path: kafka-client.crt
+    {{- end }}
+- name: tls-kafka
+  emptyDir: {}
+{{- end }}
+{{- end -}}
+
+{{- define "keys.psql.initTLS" -}}
+{{- if or
+  (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+  (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+-}}
+- name: copy-certs
+  image: {{ .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+  command:
+    - /bin/sh
+    - -c
+    - |-
+      cp /tls/* /etc/ssl/psql/
+      chmod 0400 /etc/ssl/psql/psql-ro-client.key
+      chmod 0400 /etc/ssl/psql/psql-rw-client.key
+  resources:
+    requests:
+      cpu: 20m
+      memory: 16Mi
+    limits:
+      cpu: 20m
+      memory: 16Mi
+  volumeMounts:
+    - name: tls-raw
+      mountPath: /tls
+    - name: tls
+      mountPath: /etc/ssl/psql
+{{- end -}}
+{{- end -}}
+
+{{- define "keys.initTLS" -}}
+{{- if or
+    (has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL"))
+    (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+    (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+}}
+- name: copy-certs
+  image: {{ .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+  command:
+    - /bin/sh
+    - -c
+    - |-
+      cp /tls/psql/* /etc/ssl/psql/ || true
+      cp /tls/kafka/* /etc/ssl/private || true
+      chmod 0400 /etc/ssl/psql/psql-ro-client.key || true
+      chmod 0400 /etc/ssl/psql/psql-rw-client.key || true
+      chmod 0400 /etc/ssl/private/kafka-client.key || true
+  resources:
+    requests:
+      cpu: 20m
+      memory: 16Mi
+    limits:
+      cpu: 20m
+      memory: 16Mi
+  volumeMounts:
+  {{ if or
+      (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+      (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+  }}
+    - name: tls-raw
+      mountPath: /tls/psql
+    - name: tls
+      mountPath: /etc/ssl/psql
+  {{- end }}
+  {{ if (has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL")) }}
+    - name: tls-kafka-raw
+      mountPath: /tls/kafka
+    - name: tls-kafka
+      mountPath: /etc/ssl/private
+  {{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Manifest name
+*/}}
+{{- define "keys.manifestCode" -}}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- end }}

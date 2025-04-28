@@ -28,35 +28,47 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Common settings
 
-| Name                   | Description                                                                                                                                    | Value |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `replicaCount`         | A replica count for the pod.                                                                                                                   | `1`   |
-| `revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `imagePullSecrets`     | Kubernetes image pull secrets.                                                                                                                 | `[]`  |
-| `nameOverride`         | Base name to use in all the Kubernetes entities deployed by this chart.                                                                        | `""`  |
-| `fullnameOverride`     | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                    | `""`  |
-| `podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                  | `{}`  |
-| `podSecurityContext`   | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                 | `{}`  |
-| `securityContext`      | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                     | `{}`  |
-| `nodeSelector`         | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                            | `{}`  |
-| `tolerations`          | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                              | `[]`  |
-| `affinity`             | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                    | `{}`  |
+| Name                   | Description                                                                                                                                                               | Value   |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `enableServiceLinks`   | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `false` |
+| `replicaCount`         | A replica count for the pod.                                                                                                                                              | `1`     |
+| `revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                            | `3`     |
+| `imagePullSecrets`     | Kubernetes image pull secrets.                                                                                                                                            | `[]`    |
+| `nameOverride`         | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                   | `""`    |
+| `fullnameOverride`     | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                               | `""`    |
+| `podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                             | `{}`    |
+| `podSecurityContext`   | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                            | `{}`    |
+| `securityContext`      | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                                | `{}`    |
+| `nodeSelector`         | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                       | `{}`    |
+| `tolerations`          | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                         | `[]`    |
+| `affinity`             | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                               | `{}`    |
+| `sidecars`             | List of additional sidecar containers                                                                                                                                     | `[]`    |
 
 ### Deployment settings
 
 | Name               | Description | Value                        |
 | ------------------ | ----------- | ---------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-front` |
-| `image.tag`        | Tag         | `1.24.1`                     |
+| `image.tag`        | Tag         | `1.26.0`                     |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`               |
 
 ### Navi-Front service settings
 
-| Name                    | Description                                      | Value       |
-| ----------------------- | ------------------------------------------------ | ----------- |
-| `front.port`            | Navi-Front service HTTP port.                    | `8080`      |
-| `front.router.discover` | Enable/disable router autodiscovery.             | `true`      |
-| `front.router.host`     | Set router address if autodiscovery is disabled. | `localhost` |
+| Name                           | Description                                                                      | Value       |
+| ------------------------------ | -------------------------------------------------------------------------------- | ----------- |
+| `front.port`                   | Navi-Front service HTTP port                                                     | `8080`      |
+| `front.router.discover`        | Enable/disable router autodiscovery                                              | `true`      |
+| `front.router.host`            | Set router address if autodiscovery is disabled                                  | `localhost` |
+| `front.tsp_carrouting.enabled` | Enable/disable carrouting TSP                                                    | `false`     |
+| `front.tsp_carrouting.host`    | Set carrouting TSP hostname                                                      | `""`        |
+| `front.multimod.enabled`       | Add multimodal routing service location                                          | `false`     |
+| `front.multimod.host`          | Multimodal routing service hostname                                              | `""`        |
+| `front.keepalive.enabled`      | Enable keepalive (for upstreams)                                                 | `false`     |
+| `front.keepalive.connections`  | Maximum number of idle keepalive connections (per upstream)                      | `50`        |
+| `front.keepalive.requests`     | Maximum number of requests that can be served through one keepalive connection   | `100`       |
+| `front.keepalive.time`         | Maximum time for one keepalive connection                                        | `1h`        |
+| `front.keepalive.timeout`      | Timeout for idle keepalive connection                                            | `60s`       |
+| `navigroup`                    | Service group identifier, allows multiple stacks deployed to the same namespace. | `""`        |
 
 ### Service account settings
 
@@ -96,15 +108,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-| Name                                      | Description                                                                                                                                                          | Value   |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
-| `hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
-| `hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `100`   |
-| `hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
-| `hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
-| `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
-| `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+| Name                                    | Description                                                                                                                                                          | Value   |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `hpa.enabled`                           | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `hpa.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `hpa.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `100`   |
+| `hpa.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `hpa.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+| `hpa.scaleUp`                           | To configure separate scale-up [policy](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies)                                 | `{}`    |
+| `hpa.scaleDown`                         | To configure separate scale-down [policy](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies)                               | `{}`    |
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
@@ -113,6 +125,33 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
 | `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
+
+### Nginx container
+
+| Name                                             | Description                                                                                                                                     | Value        |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `nginx.setRealIpFrom`                            | Defines trusted addresses that are known to send correct replacement addresses                                                                  | `127.0.0.1`  |
+| `nginx.opentracing.enabled`                      | If opentracing enabled for nginx requests                                                                                                       | `false`      |
+| `nginx.opentracing.serviceName`                  | Service name sent to jaeger                                                                                                                     | `navi-front` |
+| `nginx.opentracing.host`                         | Jaeger agent host. If empty than used status.hostIP                                                                                             | `""`         |
+| `nginx.opentracing.port`                         | Jaeger agent port                                                                                                                               | `6831`       |
+| `nginx.opentracing.samplerType`                  | Sampler type: const, probabilistic, ratelimiting, remote. [Doc](https://www.jaegertracing.io/docs/1.56/sampling/#client-sampling-configuration) | `const`      |
+| `nginx.opentracing.samplerParam`                 | Sampler parameter                                                                                                                               | `1`          |
+| `nginx.opentracing.tags`                         | Sets tags for span                                                                                                                              |              |
+| `nginx.hideBackendHostname`                      | Do not pass X-Back-Hostname header from navi-back to client                                                                                     | `true`       |
+| `nginx.protectInternalLocations`                 |                                                                                                                                                 |              |
+| `nginx.protectInternalLocations.allowedNetworks` | CIDR blocks to allow access to internal locations from. For debug purposes only                                                                 | `[]`         |
+| `nginx.connectTimeout.geocoding`                 | Timeout for connections to navi-router, nginx [time](http://nginx.org/en/docs/syntax.html#time) string                                          | `""`         |
+
+### Location overrides
+
+| Name                    | Description                                                                                      | Value |
+| ----------------------- | ------------------------------------------------------------------------------------------------ | ----- |
+| `locationBlock`         | Optional nginx config block with additional locations                                            | `""`  |
+| `carroutingLocation`    | Override for default /carrouting                                                                 | `""`  |
+| `distMatrixCtxLocation` | Override for default /get_dist_matrix_ctx                                                        | `""`  |
+| `hullLocation`          | Override for default /get_hull                                                                   | `""`  |
+| `multimodLocation`      | Override for default /ctx_multi_mod and /find_platforms if enabled with `front.multimod.enabled` | `""`  |
 
 
 ## Maintainers

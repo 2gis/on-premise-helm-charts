@@ -18,6 +18,8 @@ dgctlDockerRegistry: ''
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+# @param preStopDelay Delay in seconds before terminating container.
+# @param terminationGracePeriodSeconds Grace period for container shutdown, refer to [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) for details
 
 replicaCount: 1
 revisionHistoryLimit: 3
@@ -30,6 +32,8 @@ securityContext: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
+preStopDelay: 5
+terminationGracePeriodSeconds: 60
 
 
 # @section Deployment settings
@@ -41,21 +45,43 @@ affinity: {}
 image:
   repository: 2gis-on-premise/navi-router
   pullPolicy: IfNotPresent
-  tag: 6.24.0.3
+  tag: 6.29.0.6
 
 
 # @section Navi-Router service settings
 
-# @param router.appPort Navi-Router service HTTP port
+# @param router.appPort Navi-Router service HTTP port.
 # @param router.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`
-# @param router.additionalSections Additional configurations sections for the Navi-Router service
-# @param router.castleUrl URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @param router.logMessageField Field name in logs
+# @param router.additionalSections Additional configurations sections for the Navi-Router service.
+# @param router.castleUrl URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
+# @extra router.localRestrictions.distanceBetweenPointsKm Max allowed distance between points
+# @skip router.localRestrictions.distanceBetweenPointsKm[0]
+# @extra router.localRestrictions.pointsCount Max allowed points count
+# @skip router.localRestrictions.pointsCount[0]
+# @skip router.localRestrictions.pointsCount[1]
+# @extra router.localRestrictions.matrixSize Max allowed matrix size
+# @skip router.localRestrictions.matrixSize[0]
+# @skip router.localRestrictions.matrixSize[1]
+# @skip router.localRestrictions.matrixSize[2]
 
 router:
   appPort: 8080
   logLevel: Warning
+  logMessageField: custom.navi_msg
   additionalSections: ''
   castleUrl: ''
+  localRestrictions:
+    distanceBetweenPointsKm:
+    - type: distance-matrix-api
+      value: 2000
+    pointsCount:
+    - type: pairs-directions-api
+      value: 50
+    matrixSize:
+    - type: distance-matrix-api
+      sources_count: 25
+      targets_count: 30
 
 # @param keys.enabled Disable or enable key management service
 # @param keys.url key management service server URL
@@ -81,6 +107,8 @@ keys:
     public-transport-api: ''
     truck-directions-api: ''
     truck-distance-matrix-api: ''
+    routing-api: ''
+    route-planner-api: ''
 
 
 # @section Service account settings
@@ -162,19 +190,19 @@ resources: {}
 # @param hpa.enabled If HPA is enabled for the service
 # @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down
 # @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up
-# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window
-# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window
 # @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used
 # @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used
+# @param hpa.scaleUp To configure separate scale-up [policy](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies).
+# @param hpa.scaleDown To configure separate scale-down [policy](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies).
 
 hpa:
   enabled: false
   minReplicas: 1
   maxReplicas: 100
-  scaleDownStabilizationWindowSeconds: ''
-  scaleUpStabilizationWindowSeconds: ''
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: ''
+  scaleUp: {}
+  scaleDown: {}
 
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
@@ -207,3 +235,17 @@ vpa:
   maxAllowed:
     cpu: 2000
     memory: 512Mi
+
+
+# @section Requests sign check. **FOR FUTURE RELEASE**
+
+# @param requestsSignCheck.enabledKeys Array of keys and salt id mappings
+# @param requestsSignCheck.hashSalt id:salt mappings for verifying requests signature
+# @param requestsSignCheck.keys List of keys for verifying requests sign **DEPRECATED**
+# @param requestsSignCheck.salt Salt for verifying requests sign. **DEPRECATED**
+
+requestsSignCheck:
+  enabledKeys: []
+  hashSalt: {}
+  keys: []
+  salt: ''

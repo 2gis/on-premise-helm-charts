@@ -30,6 +30,9 @@ spec:
       annotations:
         checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
         checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- if .Values.customCAs.bundle }}
+        checksum/custom-ca: {{ (include (print $.Template.BasePath "/configmap-ca.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- end }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -52,6 +55,11 @@ spec:
       - name: {{ include "generic-chart.fullname" . }}-configmap
         configMap:
           name: {{ include "generic-chart.fullname" . }}-configmap
+      {{- if .Values.customCAs.bundle }}
+      - name: {{ include "generic-chart.fullname" . }}-configmap-ca
+        configMap:
+          name: {{ include "generic-chart.fullname" . }}-configmap-ca
+      {{- end }}
       {{- if .Values.kafka.fileProperties }}
       - name: {{ include "generic-chart.fullname" . }}-secret
         secret:
@@ -63,7 +71,11 @@ spec:
       {{- end }}
       {{- if .Values.naviback.hierarchies.enabled }}
       - name: hierarchies-volume
+        {{- if .Values.naviback.hierarchies.volume }}
+        {{- toYaml .Values.naviback.hierarchies.volume | nindent 8 }}
+        {{- else }}
         emptyDir: {}
+        {{- end }}{{- /* if .Values.naviback.hierarchies.volume */}}
       {{- end }}
       {{- if .Values.extraVolumes }}
       {{- include "tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
@@ -83,10 +95,29 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.envoy.image.repository }}:{{ .Values.envoy.image.tag }}
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
+          args:
+            - -c
+            - /etc/envoy/envoy.yaml
+          {{- if and (kindIs "string" .Values.envoy.concurrency) (eq "" .Values.envoy.concurrency) }}
+          {{/* envoy.concurrency = '', skip */}}
+          {{- else }}
+            - "--concurrency"
+            - {{ include "envoy.get-concurrency" . | quote }}
+          {{- end }}
           volumeMounts:
             - name: {{ include "generic-chart.fullname" . }}-configmap
               mountPath: /etc/envoy/envoy.yaml
               subPath: envoy.yaml
+            {{- if .Values.customCAs.bundle }}
+            - name: {{ include "generic-chart.fullname" . }}-configmap-ca
+              mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+              subPath: custom-ca.crt
+            {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          env:
+            - name: SSL_CERT_FILE
+              value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+          {{- end }}
           {{- if (.Values.envoy).resources }}
           resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
           {{- end }}
@@ -168,27 +199,32 @@ spec:
           - /etc/2gis/mosesd/navi-back.conf
           {{- end }}
           volumeMounts:
-          - name: {{ include "generic-chart.fullname" . }}-configmap
-            mountPath: /etc/2gis/mosesd/navi-back.conf
-            subPath: navi-back.conf
-          - name: {{ include "generic-chart.fullname" . }}-configmap
-            mountPath: /etc/2gis/mosesd/rules.conf
-            subPath: rules.conf
-          {{- if .Values.kafka.fileProperties }}
-          - name: {{ include "generic-chart.fullname" . }}-secret
-            mountPath: /etc/2gis/mosesd/secret/
-          {{- end }}
-          {{- if .Values.naviback.sentry.enabled }}
-          - name: sentry-volume
-            mountPath: {{ .Values.naviback.sentry.reportPath | default "/tmp/sentry" | quote }}
-          {{- end }}
-          {{- if .Values.naviback.hierarchies.enabled }}
-          - name: hierarchies-volume
-            mountPath: "/tmp/hierarchies"
-          {{- end }}
-          {{- if .Values.extraVolumeMounts }}
-          {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 10 }}
-          {{- end }}
+            - name: {{ include "generic-chart.fullname" . }}-configmap
+              mountPath: /etc/2gis/mosesd/navi-back.conf
+              subPath: navi-back.conf
+            - name: {{ include "generic-chart.fullname" . }}-configmap
+              mountPath: /etc/2gis/mosesd/rules.conf
+              subPath: rules.conf
+            {{- if .Values.kafka.fileProperties }}
+            - name: {{ include "generic-chart.fullname" . }}-secret
+              mountPath: /etc/2gis/mosesd/secret/
+            {{- end }}
+            {{- if .Values.naviback.sentry.enabled }}
+            - name: sentry-volume
+              mountPath: {{ .Values.naviback.sentry.reportPath | default "/tmp/sentry" | quote }}
+            {{- end }}
+            {{- if .Values.naviback.hierarchies.enabled }}
+            - name: hierarchies-volume
+              mountPath: "/tmp/hierarchies"
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.customCAs.bundle }}
+            - name: {{ include "generic-chart.fullname" . }}-configmap-ca
+              mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+              subPath: custom-ca.crt
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.naviback.appPort }}
@@ -243,10 +279,14 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-          - name: RULE
-            value: {{ .Values.naviback.app_rule | default "" | quote  }}
-          - name: PROJECT
-            value: {{ .Values.app_project | default "" | quote }}
+            - name: RULE
+              value: {{ .Values.naviback.app_rule | default "" | quote  }}
+            - name: PROJECT
+              value: {{ .Values.app_project | default "" | quote }}
+          {{- if .Values.customCAs.bundle }}
+            - name: SSL_CERT_FILE
+              value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+          {{- end }}
           lifecycle:
             # wait for the endpoint removal process
             preStop:

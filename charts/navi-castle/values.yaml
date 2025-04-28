@@ -36,6 +36,7 @@ dgctlStorage:
 
 # @section Common settings
 
+# @param enableServiceLinks Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service)
 # @param replicaCount A replica count for the pod.
 # @param imagePullSecrets Kubernetes image pull secrets.
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
@@ -48,6 +49,7 @@ dgctlStorage:
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param terminationGracePeriodSeconds Maximum time allowed for graceful shutdown.
 
+enableServiceLinks: true
 replicaCount: 1
 imagePullSecrets: []
 nameOverride: ''
@@ -119,38 +121,54 @@ resources: {}
 # @section Navi-Castle service settings
 
 # @param castle.castleDataPath Path to the data directory.
+# @param castle.excludeProjects Array of project labels to exclude
 # @extra castle.restrictions Section ignored if castle.restriction.enabled=false
-# @param castle.restrictions.host Restrictions API base URL.
+# @param castle.restrictions.url Restrictions API base URL.
 # @param castle.restrictions.key Restrictions API key.
 # @param castle.jobs Number of parallel downloading jobs.
+# @param castle.logLevel Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.
 # @extra castle.startupProbe [nullable] Settings for startup probes
 # @param castle.startupProbe.periodSeconds Check period for startup probes.
 # @param castle.startupProbe.failureThreshold Threshold for startup probes.
+# @extra castle.storePeriod [nullable] Retention period for the corresponding data if enabled, ref. `cron`, `init` and `rtr` sections. Supported values: `day`, `month`, `week` or a specific number of days.
+# @param castle.storePeriod.import Retention period for `import` job data, ref. `cron/init.enabled.import`
+# @param castle.storePeriod.restriction Retention period for `restriction` job data, ref. `cron/init.enabled.restriction`
+# @param castle.storePeriod.restrictionImport Retention period for `restrictionImport` job data, ref. `cron/init.enabled.restrictionImport`
+# @param castle.storePeriod.rtr Retention period for `rtr` data, ref. `rtr.enabled`
 
 castle:
   image:
     repository: 2gis-on-premise/navi-castle
     pullPolicy: IfNotPresent
-    tag: 1.9.2
-  castleDataPath: /opt/castle/data/
+    tag: 1.9.8
+  castleDataPath: /opt/castle/data
   restrictions:
-    host: http://restrictions-api.host
+    url: ''
     key: ''
+  excludeProjects: []
   jobs: 1
+  logLevel: INFO
   startupProbe:
     periodSeconds: 5
     failureThreshold: 180
+  storePeriod:
+    import: month
+    restriction: week
+    restrictionImport: week
+    rtr: week
 
 
 # @section Navi-Front settings
 
 # @param nginx.port HTTP port on which Navi-Front will be listening.
+# @param nginx.nodeHeader Enable header with node name (X-Node).
 
 nginx:
   port: 8080
   image:
     repository: 2gis-on-premise/navi-front
-    tag: 1.24.1
+    tag: 1.26.0
+  nodeHeader: false
 
 
 # @section Cron settings
@@ -162,7 +180,8 @@ nginx:
 # @param cron.schedule.restriction Cron job schedule for `restriction`.
 # @param cron.schedule.restrictionImport Cron job schedule for `restrictionImport`.
 # @param cron.concurrencyPolicy Cron job concurrency policy: `Allow` or `Forbid`.
-# @param cron.successfulJobsHistoryLimit How many completed and failed jobs should be kept.
+# @param cron.successfulJobsHistoryLimit How many completed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
+# @param cron.failedJobsHistoryLimit How many failed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
 # @param cron.prometheusPort Container port for supercronic prometheus
 
 cron:
@@ -176,6 +195,7 @@ cron:
     restrictionImport: '*/5 * * * *'
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
   prometheusPort: 9476
 
 
@@ -194,14 +214,147 @@ init:
 
 # @section Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
 
-# @param persistentVolume.enabled If Kubernetes persistence volume should be enabled for ZooKeeper.
+# @param persistentVolume.enabled If Kubernetes persistence volume should be enabled for Castle.
 # @param persistentVolume.accessModes Volume access mode.
 # @param persistentVolume.storageClass Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/).
 # @param persistentVolume.size Volume size.
+# @param persistentVolume.type Volume type `pvc` or `ephemeral`.
 
 persistentVolume:
   enabled: false
+  type: pvc
   accessModes:
   - ReadWriteOnce
-  storageClass: ceph-csi-rbd
+  storageClass: ''
   size: 5Gi
+
+# @section RTR settings. Leave with defaults, FOR FUTURE RELEASE.
+
+# @param rtr.enabled If the RTR is enabled.
+# @param rtr.http.baseDir Base dir on server.
+# @param rtr.http.serverUrl Server URL.
+# @param rtr.kafka.topic Name of the topic.
+# @param rtr.kafka.groupId Kafka consumer group id.
+# @extra rtr.kafka.properties Properties as supported by kafka-python. Refer to inline comments for details.
+# @skip rtr.kafka.properties.bootstrap.servers
+# @skip rtr.kafka.properties.security.protocol
+# @param rtr.kafka.sensitiveProperties As rtr.kafka.properties, but kept in Secrets. Refer to inlines comments for details.
+# @param rtr.kafka.fileProperties As rtr.kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
+# @param rtr.buildFtp.baseDir Base dir on build ftp.
+# @param rtr.buildFtp.login Login on build ftp.
+# @param rtr.buildFtp.password Password on build ftp.
+# @param rtr.buildFtp.serverUrl URL build ftp.
+# @param rtr.prometheus.baseDir Base dir on premtheus.
+# @param rtr.prometheus.serverUrl URL premtheus.
+# @param rtr.puzzle.baseDir Base dir on puzzle.
+# @param rtr.puzzle.serverUrl URL puzzle.
+# @param rtr.puzzleSegments.baseDir Base dir on puzzle segments.
+# @param rtr.puzzleSegments.serverUrl URL puzzle segments.
+# @param rtr.webapi.baseDir Base dir on webapi.
+# @param rtr.webapi.serverUrl URL webapi.
+
+rtr:
+  enabled: false
+  http:
+    baseDir: export-restrictions-json
+    serverUrl: ''
+  kafka:
+    groupId: castle-rtr
+    properties:
+      bootstrap.servers: ''
+      security.protocol: PLAINTEXT
+    sensitiveProperties: {}
+    fileProperties: {}
+    topic: ''
+  buildFtp:
+    serverUrl: ''
+    baseDir: trafficedro
+    login: ''
+    password: ''
+  webapi:
+    serverUrl: ''
+    baseDir: /2.0/region/list?fields=*&type=segment,region
+  puzzle:
+    serverUrl: ''
+    baseDir: api/segments-to-download?version=%version%
+  puzzleSegments:
+    serverUrl: ''
+    baseDir: api/segments/%code%?version=%version%
+  prometheus:
+    serverUrl: ''
+    baseDir: api/private/Export/segmentGrid/freezeVersions
+
+# More on Kafka properties.
+#
+# kafka.properties, kafka.sensitiveProperties and kafka.fileProperties are sections to specify
+# Kafka properties as supported by kafka-python:
+# https://buildmedia.readthedocs.org/media/pdf/kafka-python/master/kafka-python.pdf
+#
+# Properties are case-insensitive, '.' and '_' can be used interchangeably, i.e.
+# the following ones mean the same thing:
+# - bootstrap.servers
+# - bootstrap_servers
+# - BOOTstrap.SERVErs
+# Even though kafka-python native word splitter is '_', there '.' is rather used for similiarity
+# with corresponding settings in navi-back.
+#
+# Both kafka.properties and kafka.sensitiveProperties pass values through to the application,
+# the difference is that kafka.properties are openly disclosed in Pod specification, while
+# kafka.sensitiveProperties is kept in Secrets and never disclosed.
+#
+# kafka.fileProperties keep their values in Secrets the same way as kafka.sensitiveProperties,
+# but these secrets get mounted in application container as files. Application gets pathnames
+# to these files instead of actual values.
+#
+# Kafka properties for common use-cases:
+#
+# Note that <Set-by-CI from user.p12> means that actual content passed from
+# file user.p12 with --set-file (especially binary data), e.g.:
+#
+#   $ helm install navi-back . --set-file 'kafka.fileProperties.ssl\.keystore\.location=user.p12'
+#
+# 1. SSL authentication with key file protected with password 'password':
+#
+#  properties:
+#    bootstrap.servers: kafka:9092
+#    security.protocol: SSL
+#  sensitiveProperties:
+#    ssl.password: "password"
+#  fileProperties:
+#    ssl.cafile: "<Set-by-CI from ca.crt>"
+#    ssl.certfile: "<Set-by-CI from user.crt>"
+#    ssl.keyfile: "<Set-by-CI from user.pem>"
+#
+# 2. login/password SASL as kafkauser/123:
+#
+#  properties:
+#    bootstrap.servers: kafka:9092
+#    security.protocol: SASL_PLAINTEXT
+#    sasl.mechanism: SCRAM-SHA-512
+#    sasl.plain.username: user
+#  sensitiveProperties:
+#    sasl.plain.password: "password"
+#
+# 3. Unauthenticated:
+#
+#  properties:
+#    bootstrap.servers: kafka:9092
+#    security.protocol: PLAINTEXT
+#
+# Note that .p12 or .jks formats are not supported, they need to be
+# converted to PEM/RSA with openssl or other utility:
+#   https://github.com/dpkp/kafka-python/issues/2052
+
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"
+
+customCAs:
+  bundle: ''
+# bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
+  certsPath: ''

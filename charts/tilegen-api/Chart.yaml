@@ -1,0 +1,13 @@
+apiVersion: v2
+name: tilegen-api
+description: API for generating vector tiles from user data
+
+type: application
+
+version: 1.37.1
+appVersion: 1.1.8
+
+maintainers:
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

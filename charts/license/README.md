@@ -28,6 +28,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | ------------------------ | --------------------------------------- | ------- |
 | `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.       | `""`    |
 | `dgctlStorage.secure`    | If S3 uses https.                       | `false` |
+| `dgctlStorage.region`    | S3 region.                              | `""`    |
 | `dgctlStorage.bucket`    | S3 bucket name.                         | `""`    |
 | `dgctlStorage.accessKey` | S3 access key for accessing the bucket. | `""`    |
 | `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. | `""`    |
@@ -53,16 +54,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | Name               | Description  | Value                     |
 | ------------------ | ------------ | ------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/license` |
-| `image.tag`        | Tag.         | `2.2.1`                   |
+| `image.tag`        | Tag.         | `2.4.1`                   |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`            |
 
 ### License service application settings
 
-| Name                      | Description                                                                                                                                                                                                    | Value |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `license.type`            | License type. Should be auto generated with `dgctl pull --generate-values`.                                                                                                                                    | `""`  |
-| `license.retryPeriod`     | Duration how often service should try to fetch license from storage if previous attempts were failing. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration]. | `30s` |
-| `license.softBlockPeriod` | Duration until the license expiration time when license service should respond with 'soft' block status. For this duration additional time units 'd' for days and 'w' for weeks are supported.                 | `2w`  |
+| Name                      | Description                                                                                                                                                                                                    | Value  |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `license.type`            | License type. Should be auto generated with `dgctl pull --generate-values`.                                                                                                                                    | `""`   |
+| `license.retryPeriod`     | Duration how often service should try to fetch license from storage if previous attempts were failing. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration]. | `30s`  |
+| `license.softBlockPeriod` | Duration until the license expiration time when license service should respond with 'soft' block status. For this duration additional time units 'd' for days and 'w' for weeks are supported.                 | `2w`   |
+| `license.log.level`       | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`, `panic`.                                                                                                             | `info` |
+| `license.log.format`      | Log format for the service. Can be: `text`, `json`.                                                                                                                                                            | `text` |
 
 ### Service settings
 
@@ -100,6 +103,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | ----------------------- | --------------------------------------- | ------- |
 | `persistence.host`      | S3 endpoint. Format: `host:port`.       | `""`    |
 | `persistence.secure`    | If S3 uses https.                       | `false` |
+| `persistence.region`    | S3 region.                              | `""`    |
 | `persistence.bucket`    | S3 bucket name.                         | `""`    |
 | `persistence.root`      | Root directory in S3 bucket.            | `""`    |
 | `persistence.accessKey` | S3 access key for accessing the bucket. | `""`    |

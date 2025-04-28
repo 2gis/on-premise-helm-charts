@@ -2,32 +2,205 @@
 
 ## Values
 
+### Geo API configuration & settings
+
+| Name                                                        | Description                                                                                                                                                                                                                                            | Value                     |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
+| `api.appName`                                               | Name of the service                                                                                                                                                                                                                                    | `pro-api`                 |
+| `api.image.repository`                                      | Repository                                                                                                                                                                                                                                             | `2gis-on-premise/pro-api` |
+| `api.image.tag`                                             | Tag                                                                                                                                                                                                                                                    | `2.8.2`                   |
+| `api.image.pullPolicy`                                      | Pull Policy                                                                                                                                                                                                                                            | `IfNotPresent`            |
+| `api.ingress.enabled`                                       | If Ingress is enabled for the service.                                                                                                                                                                                                                 | `false`                   |
+| `api.ingress.className`                                     | Name of the Ingress controller class.                                                                                                                                                                                                                  | `nginx`                   |
+| `api.ingress.hosts[0].host`                                 | Hostname for the Ingress service.                                                                                                                                                                                                                      | `pro-api.example.com`     |
+| `api.ingress.hosts[0].paths[0].path`                        | Path of the host for the Ingress service.                                                                                                                                                                                                              | `/`                       |
+| `api.ingress.hosts[0].paths[0].pathType`                    | Type of the path for the Ingress service.                                                                                                                                                                                                              | `Prefix`                  |
+| `api.ingress.tls`                                           | TLS configuration                                                                                                                                                                                                                                      | `[]`                      |
+| `api.pod.replicaCount`                                      | A replica count for the pod.                                                                                                                                                                                                                           | `2`                       |
+| `api.pod.imagePullSecrets`                                  | Kubernetes image pull secrets.                                                                                                                                                                                                                         | `[]`                      |
+| `api.pod.nameOverride`                                      | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                                                                                                | `""`                      |
+| `api.pod.fullnameOverride`                                  | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                                                                                                            | `""`                      |
+| `api.pod.nodeSelector`                                      | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                                                                    | `{}`                      |
+| `api.pod.affinity`                                          | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                                                                            | `{}`                      |
+| `api.pod.priorityClassName`                                 | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                                                                                                                                           | `""`                      |
+| `api.pod.terminationGracePeriodSeconds`                     | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds                                                                                                       | `300`                     |
+| `api.pod.tolerations`                                       | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                                                                      | `[]`                      |
+| `api.pod.podAnnotations`                                    | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                                                          | `{}`                      |
+| `api.pod.podLabels`                                         | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                                                    | `{}`                      |
+| `api.pod.annotations`                                       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                                                              | `{}`                      |
+| `api.pod.labels`                                            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                                                        | `{}`                      |
+| `api.pod.revisionHistoryLimit`                              | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                                                                         | `3`                       |
+| `api.pod.resources`                                         | **Limits for the application service**                                                                                                                                                                                                                 |                           |
+| `api.pod.resources.requests.cpu`                            | A CPU request.                                                                                                                                                                                                                                         | `400m`                    |
+| `api.pod.resources.requests.memory`                         | A memory request.                                                                                                                                                                                                                                      | `256M`                    |
+| `api.pod.resources.limits.cpu`                              | A CPU limit.                                                                                                                                                                                                                                           | `1`                       |
+| `api.pod.resources.limits.memory`                           | A memory limit.                                                                                                                                                                                                                                        | `1024M`                   |
+| `api.pod.strategy.type`                                     | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                                                                   | `RollingUpdate`           |
+| `api.pod.strategy.rollingUpdate.maxUnavailable`             | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).                                               | `0`                       |
+| `api.pod.strategy.rollingUpdate.maxSurge`                   | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                                                                   | `1`                       |
+| `api.vpa.enabled`                                           | If VPA is enabled for the service.                                                                                                                                                                                                                     | `false`                   |
+| `api.vpa.updateMode`                                        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).                                                                                                                                           | `Auto`                    |
+| `api.vpa.minAllowed.cpu`                                    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                                                                                                                                                             | `400m`                    |
+| `api.vpa.minAllowed.memory`                                 | Lower limit for the RAM size to which the autoscaler can scale down.                                                                                                                                                                                   | `256M`                    |
+| `api.vpa.maxAllowed.cpu`                                    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                                                                                                                                                               | `1`                       |
+| `api.vpa.maxAllowed.memory`                                 | Upper limit for the RAM size to which the autoscaler can scale up.                                                                                                                                                                                     | `1024M`                   |
+| `api.service.annotations`                                   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                                                                                                                       | `{}`                      |
+| `api.service.labels`                                        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                                                | `{}`                      |
+| `api.service.type`                                          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                                                                         | `ClusterIP`               |
+| `api.service.port`                                          | PRO API service port.                                                                                                                                                                                                                                  | `80`                      |
+| `api.service.serviceAccount`                                | Kubernetes service account                                                                                                                                                                                                                             | `runner`                  |
+| `api.service.serviceAccountOverride`                        | The name of an existing custom service account. If specified, the services in the chart will use this existing service account. If not specified, a new service account will be created and used with the name from the variable `api.serviceAccount`. | `""`                      |
+| `api.settings.licenseKey`                                   | License key. **Required**                                                                                                                                                                                                                              | `""`                      |
+| `api.settings.tempPath`                                     | Path to directory used for temp data                                                                                                                                                                                                                   | `/tmp`                    |
+| `api.settings.logging`                                      | Logging settings                                                                                                                                                                                                                                       |                           |
+| `api.settings.logging.format`                               | Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text                                                                                                                    | `simple`                  |
+| `api.settings.logging.targets`                              | Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).                                                                                                | `""`                      |
+| `api.settings.rateLimiter`                                  | rate limiter settings                                                                                                                                                                                                                                  |                           |
+| `api.settings.rateLimiter.requestsLimit`                    | max number of requests from one user during time window (0 means rate limiter is disabled)                                                                                                                                                             | `1024`                    |
+| `api.settings.rateLimiter.windowSizeInSeconds`              | the size of time windows to count and limit incoming requests                                                                                                                                                                                          | `1`                       |
+| `api.settings.auth.type`                                    | Authentication type: 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol. **Required**                                                         | `openid10`                |
+| `api.settings.auth.url`                                     | API URL of authentication service. Example: `http(s)://keycloak.ingress.host`. **Required**                                                                                                                                                            | `""`                      |
+| `api.settings.auth.userInfoEndpoint`                        | The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`                                                                                                   | `""`                      |
+| `api.settings.auth.wellKnownConfigEndpoint`                 | The [Well-Known Config endpoint](https://openid.net/specs/openid-connect-discovery-1_0.html). Example: `realms/URBI_Pro/.well-known/openid-configuration`                                                                                              | `""`                      |
+| `api.settings.auth.apiKey`                                  | Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`                                                                                                   | `""`                      |
+| `api.settings.auth.turnOffCertValidation`                   | Turn off certificate validation for auth.url                                                                                                                                                                                                           | `false`                   |
+| `api.settings.auth.shareKeys`                               | Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`            | `[]`                      |
+| `api.settings.auth.skipShareLinksPermissionsCheck`          | If true, then the permissions check for the possibility of making a request for data is not performed.                                                                                                                                                 | `false`                   |
+| `api.settings.backgroundJobs.enableUserAssetsImporter`      | If user data importer job is enabled for the service.                                                                                                                                                                                                  | `true`                    |
+| `api.settings.backgroundJobs.enableAssetsStreaming`         | If the streaming data processing job is enabled for the service.                                                                                                                                                                                       | `false`                   |
+| `api.settings.layerGeneration.isochroneLayerMaxPointsCount` | Maximum number of points in a layer for generating isochrones.                                                                                                                                                                                         | `500`                     |
+| `api.settings.corsOrigins`                                  | Cors policy: allow any origin if empty. Example: `https://*.host.ae;https://*.host.ru;`                                                                                                                                                                | `""`                      |
+
+### Permissions API configuration & settings
+
+| Name                                             | Description                                                                                                                                                                    | Value                                 |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
+| `permissions.image.repository`                   | Repository                                                                                                                                                                     | `2gis-on-premise/pro-permissions-api` |
+| `permissions.image.tag`                          | Tag                                                                                                                                                                            | `2.8.2`                               |
+| `permissions.image.pullPolicy`                   | Pull Policy                                                                                                                                                                    | `IfNotPresent`                        |
+| `permissions.ingress.enabled`                    | If Ingress is enabled for the service                                                                                                                                          | `false`                               |
+| `permissions.ingress.className`                  | Name of the Ingress controller class                                                                                                                                           | `nginx`                               |
+| `permissions.ingress.hosts[0].host`              | Hostname for the Ingress service                                                                                                                                               | `pro-permissions-api.example.com`     |
+| `permissions.ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service                                                                                                                                       | `/`                                   |
+| `permissions.ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service                                                                                                                                       | `Prefix`                              |
+| `permissions.ingress.tls`                        | TLS configuration                                                                                                                                                              | `[]`                                  |
+| `permissions.pod.replicaCount`                   | A replica count for the pod.                                                                                                                                                   | `1`                                   |
+| `permissions.pod.imagePullSecrets`               | Kubernetes image pull secrets.                                                                                                                                                 | `[]`                                  |
+| `permissions.pod.nodeSelector`                   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                            | `{}`                                  |
+| `permissions.pod.affinity`                       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                    | `{}`                                  |
+| `permissions.pod.priorityClassName`              | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                                                                   | `""`                                  |
+| `permissions.pod.terminationGracePeriodSeconds`  | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds                               | `60`                                  |
+| `permissions.pod.tolerations`                    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                              | `[]`                                  |
+| `permissions.pod.podAnnotations`                 | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                  | `{}`                                  |
+| `permissions.pod.podLabels`                      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                            | `{}`                                  |
+| `permissions.pod.annotations`                    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                      | `{}`                                  |
+| `permissions.pod.labels`                         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                | `{}`                                  |
+| `permissions.pod.revisionHistoryLimit`           | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                 | `3`                                   |
+| `permissions.pod.resources`                      | **Limits for the application service**                                                                                                                                         |                                       |
+| `permissions.pod.resources.requests.cpu`         | A CPU request.                                                                                                                                                                 | `300m`                                |
+| `permissions.pod.resources.requests.memory`      | A memory request.                                                                                                                                                              | `256M`                                |
+| `permissions.pod.resources.limits.cpu`           | A CPU limit.                                                                                                                                                                   | `1`                                   |
+| `permissions.pod.resources.limits.memory`        | A memory limit.                                                                                                                                                                | `1G`                                  |
+| `permissions.service.annotations`                | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                                               | `{}`                                  |
+| `permissions.service.labels`                     | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                        | `{}`                                  |
+| `permissions.service.type`                       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                 | `ClusterIP`                           |
+| `permissions.service.port`                       | PRO API service port.                                                                                                                                                          | `80`                                  |
+| `permissions.settings.auth.apiKey`               | Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`. **Required** | `""`                                  |
+
+### Tasks API configuration & settings
+
+| Name                                                       | Description                                                                                                                                                                                              | Value                           |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `tasks.image.repository`                                   | Repository                                                                                                                                                                                               | `2gis-on-premise/pro-tasks-api` |
+| `tasks.image.tag`                                          | Tag                                                                                                                                                                                                      | `2.8.2`                         |
+| `tasks.image.pullPolicy`                                   | Pull Policy                                                                                                                                                                                              | `IfNotPresent`                  |
+| `tasks.ingress.enabled`                                    | If Ingress is enabled for the service                                                                                                                                                                    | `false`                         |
+| `tasks.ingress.className`                                  | Name of the Ingress controller class                                                                                                                                                                     | `nginx`                         |
+| `tasks.ingress.hosts[0].host`                              | Hostname for the Ingress service                                                                                                                                                                         | `pro-tasks-api.example.com`     |
+| `tasks.ingress.hosts[0].paths[0].path`                     | Path of the host for the Ingress service                                                                                                                                                                 | `/`                             |
+| `tasks.ingress.hosts[0].paths[0].pathType`                 | Type of the path for the Ingress service                                                                                                                                                                 | `Prefix`                        |
+| `tasks.ingress.tls`                                        | TLS configuration                                                                                                                                                                                        | `[]`                            |
+| `tasks.pod.apiReplicaCount`                                | A replica count for the api pod.                                                                                                                                                                         | `1`                             |
+| `tasks.pod.workerReplicaCount`                             | A replica count for the worker pod.                                                                                                                                                                      | `1`                             |
+| `tasks.pod.imagePullSecrets`                               | Kubernetes image pull secrets.                                                                                                                                                                           | `[]`                            |
+| `tasks.pod.nodeSelector`                                   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`                            |
+| `tasks.pod.affinity`                                       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`                            |
+| `tasks.pod.priorityClassName`                              | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                                                                                             | `""`                            |
+| `tasks.pod.terminationGracePeriodSeconds`                  | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds                                                         | `60`                            |
+| `tasks.pod.tolerations`                                    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `[]`                            |
+| `tasks.pod.podAnnotations`                                 | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                            | `{}`                            |
+| `tasks.pod.podLabels`                                      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`                            |
+| `tasks.pod.annotations`                                    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                | `{}`                            |
+| `tasks.pod.labels`                                         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                          | `{}`                            |
+| `tasks.pod.revisionHistoryLimit`                           | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                           | `3`                             |
+| `tasks.pod.resources`                                      | **Limits for the application service**                                                                                                                                                                   |                                 |
+| `tasks.pod.resources.requests.cpu`                         | A CPU request.                                                                                                                                                                                           | `400m`                          |
+| `tasks.pod.resources.requests.memory`                      | A memory request.                                                                                                                                                                                        | `256M`                          |
+| `tasks.pod.resources.limits.cpu`                           | A CPU limit.                                                                                                                                                                                             | `1`                             |
+| `tasks.pod.resources.limits.memory`                        | A memory limit.                                                                                                                                                                                          | `1024M`                         |
+| `tasks.pod.strategy.type`                                  | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate`                 |
+| `tasks.pod.strategy.rollingUpdate.maxUnavailable`          | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`                             |
+| `tasks.pod.strategy.rollingUpdate.maxSurge`                | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`                             |
+| `tasks.vpa.enabled`                                        | If VPA is enabled for the service.                                                                                                                                                                       | `false`                         |
+| `tasks.vpa.updateMode`                                     | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).                                                                                             | `Auto`                          |
+| `tasks.vpa.minAllowed.cpu`                                 | Lower limit for the number of CPUs to which the autoscaler can scale down.                                                                                                                               | `400m`                          |
+| `tasks.vpa.minAllowed.memory`                              | Lower limit for the RAM size to which the autoscaler can scale down.                                                                                                                                     | `256M`                          |
+| `tasks.vpa.maxAllowed.cpu`                                 | Upper limit for the number of CPUs to which the autoscaler can scale up.                                                                                                                                 | `1`                             |
+| `tasks.vpa.maxAllowed.memory`                              | Upper limit for the RAM size to which the autoscaler can scale up.                                                                                                                                       | `1024M`                         |
+| `tasks.service.annotations`                                | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                                                                         | `{}`                            |
+| `tasks.service.labels`                                     | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                  | `{}`                            |
+| `tasks.service.type`                                       | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                           | `ClusterIP`                     |
+| `tasks.service.port`                                       | Tasks API service port.                                                                                                                                                                                  | `80`                            |
+| `tasks.settings.enabled`                                   | If Tasks API is disabled it will not be deployed to k8s                                                                                                                                                  | `true`                          |
+| `tasks.settings.tempPath`                                  | Path to directory used for temp data                                                                                                                                                                     | `/tmp`                          |
+| `tasks.settings.httpPort`                                  | Http port for interaction via the rest api                                                                                                                                                               | `8082`                          |
+| `tasks.settings.grpcPort`                                  | Grpc port for interaction via the grpc api                                                                                                                                                               | `8083`                          |
+| `tasks.settings.logging`                                   | Logging settings                                                                                                                                                                                         |                                 |
+| `tasks.settings.logging.format`                            | Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text                                                                      | `simple`                        |
+| `tasks.settings.logging.targets`                           | Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).                                                  | `""`                            |
+| `tasks.settings.worker.resourceIntensiveTasksWorkersCount` | Number of threads that will be used by Hangfire-server to performs resource-intensive tasks                                                                                                              | `5`                             |
+| `tasks.settings.worker.regularTasksWorkersCount`           | Number of threads that will be used by Hangfire-server to performs other tasks                                                                                                                           | `5`                             |
+
+### asset importer settings
+
+| Name                                               | Description                                                                                                                                              | Value                          |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `assetImporter.appName`                            | Data Import job name.                                                                                                                                    | `asset-importer`               |
+| `assetImporter.repository`                         | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
+| `assetImporter.tag`                                | Docker image tag.                                                                                                                                        | `2.8.2`                        |
+| `assetImporter.imagePullSecrets`                   | Kubernetes image pull secrets.                                                                                                                           | `[]`                           |
+| `assetImporter.schedule`                           | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
+| `assetImporter.backoffLimit`                       | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
+| `assetImporter.successfulJobsHistoryLimit`         | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
+| `assetImporter.failedJobsHistoryLimit`             | How many failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).               | `3`                            |
+| `assetImporter.nodeSelector`                       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                      | `{}`                           |
+| `assetImporter.tolerations`                        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                        | `[]`                           |
+| `assetImporter.resources`                          | **Limits for the import job**                                                                                                                            |                                |
+| `assetImporter.resources.requests.cpu`             | A CPU request.                                                                                                                                           | `700m`                         |
+| `assetImporter.resources.requests.memory`          | A memory request.                                                                                                                                        | `768M`                         |
+| `assetImporter.resources.limits.cpu`               | A CPU limit.                                                                                                                                             | `1000m`                        |
+| `assetImporter.resources.limits.memory`            | A memory limit.                                                                                                                                          | `8Gi`                          |
+| `assetImporter.startOnDeploy`                      | Indicates that asset import should start when service installed or updated                                                                               | `true`                         |
+| `assetImporter.startOnDeployMode`                  | Import mode: 'ScheduleManifest' - copy data from manifest and schedule import, 'ManifestData' - just copy data from manifest.                            | `ScheduleManifest`             |
+| `Asset`                                            | importer settings                                                                                                                                        |                                |
+| `assetImporter.settings.maxParallelJobs`           | How many import jobs can be run simultaneously                                                                                                           | `1`                            |
+| `assetImporter.settings.imageProxyUrl`             | URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                                 | `""`                           |
+| `assetImporter.settings.externalLinksProxyUrl`     | URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                 | `""`                           |
+| `assetImporter.settings.externalLinksAllowedHosts` | Comma separated hosts, i.e. 'someserver.com,someserver2.com' )                                                                                           | `""`                           |
+| `assetImporter.settings.failedImportJobsLimit`     | How many import jobs can fail before scheduler stops creating new imports                                                                                | `0`                            |
+| `assetImporter.settings.ttlSecondsAfterFinished`   | Kubernetes [time-to-live setting] (https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished)                                           | `86400`                        |
+
+### asset preparer settings
+
+
+### common infrastructure settings
+
+
 ### Docker Registry settings
 
 | Name                  | Description                                                                             | Value |
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
-
-### Common settings
-
-| Name                            | Description                                                                                                                                      | Value     |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
-| `appName`                       | Name of the service.                                                                                                                             | `pro-api` |
-| `licenseKey`                    | License key. **Required**                                                                                                                        | `""`      |
-| `replicaCount`                  | A replica count for the pod.                                                                                                                     | `2`       |
-| `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                   | `[]`      |
-| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                          | `""`      |
-| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                      | `""`      |
-| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                              | `{}`      |
-| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                      | `{}`      |
-| `priorityClassName`             | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                                     | `""`      |
-| `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds | `300`     |
-| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                | `[]`      |
-| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                    | `{}`      |
-| `podLabels`                     | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                              | `{}`      |
-| `annotations`                   | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                        | `{}`      |
-| `labels`                        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                  | `{}`      |
-| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).   | `3`       |
 
 ### Deployment Artifacts Storage settings
 
@@ -42,42 +215,6 @@
 | `dgctlStorage.region`                | AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property                                                                                                                                                               | `""`    |
 | `dgctlStorage.disablePayloadSigning` | Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage                                                                                                                                                                         | `false` |
 
-### Strategy settings
-
-| Name                                    | Description                                                                                                                                                                                              | Value           |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
-| `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
-| `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
-
-### Service settings
-
-| Name                  | Description                                                                                                                    | Value       |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)               | `{}`        |
-| `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
-| `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `service.port`        | PRO API service port.                                                                                                          | `80`        |
-
-### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
-
-| Name                    | Description                                                                                                  | Value   |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
-| `vpa.enabled`           | If VPA is enabled for the service.                                                                           | `false` |
-| `vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). | `Auto`  |
-| `vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                   | `400m`  |
-| `vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         | `256M`  |
-| `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `1`     |
-| `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `1024M` |
-
-### Deployment settings
-
-| Name               | Description | Value                     |
-| ------------------ | ----------- | ------------------------- |
-| `image.repository` | Repository  | `2gis-on-premise/pro-api` |
-| `image.tag`        | Tag         | `1.35.0`                  |
-| `image.pullPolicy` | Pull Policy | `IfNotPresent`            |
-
 ### 2GIS PRO Storage configuration
 
 | Name                      | Description                                                                 | Value |
@@ -88,55 +225,81 @@
 | `s3.snapshotBucket`       | S3 bucket for storing snapshots of inclemental data updates. **Required**   | `""`  |
 | `s3.resourcesBucket`      | S3 bucket for storing static resources. **Required**                        | `""`  |
 
-### 2GIS PRO API configuration
-
-| Name                                  | Description                                                                                                                                                                                                                                            | Value    |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
-| `api.serviceAccount`                  | Kubernetes service account                                                                                                                                                                                                                             | `runner` |
-| `api.serviceAccountOverride`          | The name of an existing custom service account. If specified, the services in the chart will use this existing service account. If not specified, a new service account will be created and used with the name from the variable `api.serviceAccount`. | `""`     |
-| `api.tempPath`                        | Path to directory used for temp data                                                                                                                                                                                                                   | `/tmp`   |
-| `api.allowAnyOrigin`                  | Cors policy: allow any origin to perform requests to pro-api service                                                                                                                                                                                   | `false`  |
-| `api.logging`                         | Logging settings                                                                                                                                                                                                                                       |          |
-| `api.logging.format`                  | Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text                                                                                                                    | `simple` |
-| `api.logging.targets`                 | Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).                                                                                                | `""`     |
-| `api.rateLimiter`                     | rate limiter settings                                                                                                                                                                                                                                  |          |
-| `api.rateLimiter.requestsLimit`       | max number of requests from one user during time window (0 means rate limiter is disabled)                                                                                                                                                             | `1024`   |
-| `api.rateLimiter.windowSizeInSeconds` | the size of time windows to count and limit incoming requests                                                                                                                                                                                          | `1`      |
-
-### Auth configuration
-
-| Name                           | Description                                                                                                                                                                                                                                 | Value   |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `auth.type`                    | Authentication type: 'none' - disabled, 'openid10' - [OpenId 1.0 / OAuth 2.0 authentication protocol](https://openid.net/specs/openid-connect-core-1_0.html), 'urbi' - urbi authentication protocol                                         | `none`  |
-| `auth.url`                     | API URL of authentication service. Example: `http(s)://keycloak.ingress.host`                                                                                                                                                               | `""`    |
-| `auth.userInfoEndpoint`        | The [UserInfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). Example: `realms/URBI_Pro/protocol/openid-connect/userinfo`                                                                                        | `""`    |
-| `auth.wellKnownConfigEndpoint` | The [Well-Known Config endpoint](https://openid.net/specs/openid-connect-discovery-1_0.html). Example: `realms/URBI_Pro/.well-known/openid-configuration`                                                                                   | `""`    |
-| `auth.apiKey`                  | Secret API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`                                                                                        | `""`    |
-| `auth.permissionsApiKey`       | Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`                                                                            | `""`    |
-| `auth.turnOffCertValidation`   | Turn off certificate validation for auth.url                                                                                                                                                                                                | `false` |
-| `auth.shareKeys`               | Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR` | `[]`    |
-
 ### PostgreSQL settings
 
-| Name                                | Description                                                                                                                | Value |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `postgres.connectionString`         | Connection string to the PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;`                  | `""`  |
-| `postgres.connectionStringReadonly` | Connection string to the readonly node of PostgreSQL database. Format: `Server=SERVER_URL;Database=DB_NAME;UID=USER_NAME;` | `""`  |
-| `postgres.password`                 | User password to connect to the PostgreSQL database.                                                                       | `""`  |
+| Name                                   | Description                                                                                                                  | Value  |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `postgres.api.`                        | Settings for Geo API database connection                                                                                     |        |
+| `postgres.api.rw.`                     | Settings for the read-write access. Same settings for read-only access can be added, if necessary (postgres.api.ro).         |        |
+| `postgres.api.rw.host`                 | PostgreSQL hostname or IP. **Required**                                                                                      | `""`   |
+| `postgres.api.rw.port`                 | PostgreSQL port. **Required**                                                                                                | `5432` |
+| `postgres.api.rw.timeout`              | PostgreSQL client connection timeout in seconds.                                                                             | `15`   |
+| `postgres.api.rw.poolSize.`            | Settings for the pool size                                                                                                   |        |
+| `postgres.api.rw.poolSize.min`         | PostgreSQL minimum connection pool size. 0 means no minimal bound.                                                           | `1`    |
+| `postgres.api.rw.poolSize.max`         | PostgreSQL maximum connection pool size                                                                                      | `10`   |
+| `postgres.api.rw.name`                 | PostgreSQL database name. **Required**                                                                                       | `""`   |
+| `postgres.api.rw.username`             | PostgreSQL username. **Required**                                                                                            | `""`   |
+| `postgres.api.rw.password`             | PostgreSQL password. **Required**                                                                                            | `""`   |
+| `postgres.api.ro`                      | Settings for the read-only access.                                                                                           | `{}`   |
+| `postgres.tasks.`                      | Settings for Tasks API database connection                                                                                   |        |
+| `postgres.tasks.rw.`                   | Settings for the read-write access. Same settings for read-only access can be added, if necessary (postgres.tasks.ro).       |        |
+| `postgres.tasks.rw.host`               | PostgreSQL hostname or IP. **Required**                                                                                      | `""`   |
+| `postgres.tasks.rw.port`               | PostgreSQL port. **Required**                                                                                                | `5432` |
+| `postgres.tasks.rw.timeout`            | PostgreSQL client connection timeout in seconds.                                                                             | `15`   |
+| `postgres.tasks.rw.poolSize.`          | Settings for the pool size.                                                                                                  |        |
+| `postgres.tasks.rw.poolSize.min`       | PostgreSQL minimum connection pool size. 0 means no minimal bound.                                                           | `1`    |
+| `postgres.tasks.rw.poolSize.max`       | PostgreSQL maximum connection pool size.                                                                                     | `5`    |
+| `postgres.tasks.rw.name`               | PostgreSQL database name. **Required**                                                                                       | `""`   |
+| `postgres.tasks.rw.username`           | PostgreSQL username. **Required**                                                                                            | `""`   |
+| `postgres.tasks.rw.password`           | PostgreSQL password. **Required**                                                                                            | `""`   |
+| `postgres.tasks.ro`                    | Settings for the read-only access.                                                                                           | `{}`   |
+| `permissions.tasks.`                   | Settings for Permissions API database connection                                                                             |        |
+| `postgres.permissions.rw.`             | Settings for the read-write access. Same settings for read-only access can be added, if necessary (postgres.permissions.ro). |        |
+| `postgres.permissions.rw.host`         | PostgreSQL hostname or IP. **Required**                                                                                      | `""`   |
+| `postgres.permissions.rw.port`         | PostgreSQL port. **Required**                                                                                                | `5432` |
+| `postgres.permissions.rw.timeout`      | PostgreSQL client connection timeout in seconds.                                                                             | `15`   |
+| `postgres.permissions.rw.poolSize.`    | Settings for the pool size.                                                                                                  |        |
+| `postgres.permissions.rw.poolSize.min` | PostgreSQL minimum connection pool size. 0 means no minimal bound.                                                           | `1`    |
+| `postgres.permissions.rw.poolSize.max` | PostgreSQL maximum connection pool size.                                                                                     | `5`    |
+| `postgres.permissions.rw.name`         | PostgreSQL database name. **Required**                                                                                       | `""`   |
+| `postgres.permissions.rw.username`     | PostgreSQL username. **Required**                                                                                            | `""`   |
+| `postgres.permissions.rw.password`     | PostgreSQL password. **Required**                                                                                            | `""`   |
+| `postgres.permissions.ro`              | Settings for the read-only access.                                                                                           | `{}`   |
 
-### Keys Service settings
+### Kafka settings (supported version 2.7)
 
-| Name         | Description                                                                              | Value |
-| ------------ | ---------------------------------------------------------------------------------------- | ----- |
-| `keys.url`   | API URL of service for managing partners' keys to 2GIS services (keys.api). **Required** | `""`  |
-| `keys.token` | keys.api access token. **Required**                                                      | `""`  |
+| Name                                   | Description                                                                                                                       | Value           |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `kafka.bootstrapServers`               | Kafka bootstrap servers. Format: 'host1:port1,host2:port2'                                                                        | `""`            |
+| `kafka.securityProtocol`               | Kafka security protocol. Supported options: SaslPlaintext.                                                                        | `SaslPlaintext` |
+| `kafka.createTopics`                   | Automatically create topics in their absence.                                                                                     | `true`          |
+| `kafka.sasl`                           | **Kafka sasl settings** (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config))                   |                 |
+| `kafka.sasl.mechanism`                 | Kafka sasl mechanism. Supported options: ScramSha512.                                                                             | `ScramSha512`   |
+| `kafka.sasl.username`                  | Kafka sasl username.                                                                                                              | `""`            |
+| `kafka.sasl.password`                  | Kafka sasl password.                                                                                                              | `""`            |
+| `kafka.assetTopicsReaderGroupId`       | Kafka consumer group for reading streaming assets data.                                                                           | `""`            |
+| `kafka.importTasksTopic`               | Kafka topic settings to run import tasks.                                                                                         |                 |
+| `kafka.importTasksTopic.name`          | Kafka topic name.                                                                                                                 | `""`            |
+| `kafka.importTasksTopic.readerGroupId` | Kafka consumer group for reading importing tasks.                                                                                 | `""`            |
+| `kafka.eventsTopic`                    | Kafka topic settings to manage events.                                                                                            |                 |
+| `kafka.eventsTopic.name`               | Kafka events topic name. **Required**                                                                                             | `""`            |
+| `kafka.eventsTopic.readerGroupId`      | Kafka consumer group for reading events. **Required**                                                                             | `""`            |
+| `kafka.assetDataTopic`                 | Kafka topic settings to manage asset data updates.                                                                                |                 |
+| `kafka.assetDataTopic.name`            | Kafka topic name.                                                                                                                 | `""`            |
+| `kafka.refreshAssetsIntervalMinutes`   | Refresh interval for reading streaming assets settings in minutes.                                                                | `60`            |
+| `kafka.useReplicaTopics`               | Use topic replica when using multiple kafka clusters. Each topic in the kafka settings must have a corresponding ".replica" topic | `false`         |
 
-### ElasticSearch settings (supported version 7.x)
+### ElasticSearch settings (supported version 8.x)
 
-| Name                  | Description                                                                          | Value |
-| --------------------- | ------------------------------------------------------------------------------------ | ----- |
-| `elastic.host`        | ElasticSearch host address. Format: `http(s)://HOST:PORT`                            | `""`  |
-| `elastic.credentials` | User name and password to connect to the ElasticSearch. Format: `USER_NAME:PASSWORD` | `""`  |
+| Name                            | Description                                                                                     | Value   |
+| ------------------------------- | ----------------------------------------------------------------------------------------------- | ------- |
+| `elastic.host`                  | ElasticSearch host address. **Required**                                                        | `""`    |
+| `elastic.secure`                | Set to `true` if elastic.host must be accessed via https. **Required**                          | `false` |
+| `elastic.port`                  | ElasticSearch port. **Required**                                                                | `9200`  |
+| `elastic.username`              | Username used to connect to ElasticSearch                                                       | `""`    |
+| `elastic.password`              | Password used to connect to ElasticSearch                                                       | `""`    |
+| `elastic.enableHttpCompression` | Use http-level compression. Must be enabled in the ElasticSearch configuration                  | `false` |
+| `elastic.indexPrefix`           | Prefix for indexes created in the ElasticSearch. Сan be used to separate different environments | `""`    |
 
 ### Redis settings (supported version 6.x)
 
@@ -147,33 +310,18 @@
 | `redis.username` | Username used to connect to Redis | `""`   |
 | `redis.password` | Password used to connect to Redis | `""`   |
 
-### Kafka settings (supported version 2.7)
+### external services
 
-| Name                                   | Description                                                                                                     | Value           |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------- |
-| `kafka.bootstrapServers`               | Kafka bootstrap servers. Format: 'host1:port1,host2:port2'                                                      | `""`            |
-| `kafka.securityProtocol`               | Kafka security protocol. Supported options: SaslPlaintext.                                                      | `SaslPlaintext` |
-| `kafka.sasl`                           | **Kafka sasl settings** (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config)) |                 |
-| `kafka.sasl.mechanism`                 | Kafka sasl mechanism. Supported options: ScramSha512.                                                           | `ScramSha512`   |
-| `kafka.sasl.username`                  | Kafka sasl username.                                                                                            | `""`            |
-| `kafka.sasl.password`                  | Kafka sasl password.                                                                                            | `""`            |
-| `kafka.assetTopicsReaderGroupId`       | Kafka consumer group for reading streaming assets data.                                                         | `""`            |
-| `kafka.importTasksTopic`               | Kafka topic settings to run import tasks.                                                                       |                 |
-| `kafka.importTasksTopic.name`          | Kafka topic name.                                                                                               | `""`            |
-| `kafka.importTasksTopic.readerGroupId` | Kafka consumer group for reading importing tasks.                                                               | `""`            |
-| `kafka.eventsTopic`                    | Kafka topic settings to manage events.                                                                          |                 |
-| `kafka.eventsTopic.name`               | Kafka events topic name. **Required**                                                                           | `""`            |
-| `kafka.eventsTopic.readerGroupId`      | Kafka consumer group for reading events. **Required**                                                           | `""`            |
-| `kafka.assetDataTopic`                 | Kafka topic settings to manage asset data updates.                                                              |                 |
-| `kafka.assetDataTopic.name`            | Kafka topic name.                                                                                               | `""`            |
-| `kafka.refreshAssetsIntervalMinutes`   | Refresh interval for reading streaming assets settings in minutes.                                              | `60`            |
 
-### Import background jobs settings
+### digger settings
 
-| Name                                      | Description                                                      | Value   |
-| ----------------------------------------- | ---------------------------------------------------------------- | ------- |
-| `backgroundJobs.enableUserAssetsImporter` | If user data importer job is enabled for the service.            | `true`  |
-| `backgroundJobs.enableAssetsStreaming`    | If the streaming data processing job is enabled for the service. | `false` |
+
+### Keys Service settings
+
+| Name         | Description                                                                              | Value |
+| ------------ | ---------------------------------------------------------------------------------------- | ----- |
+| `keys.url`   | API URL of service for managing partners' keys to 2GIS services (keys.api). **Required** | `""`  |
+| `keys.token` | keys.api access token. **Required**                                                      | `""`  |
 
 ### Catalog API settings
 
@@ -200,76 +348,6 @@
 | Name         | Description                                                                                      | Value |
 | ------------ | ------------------------------------------------------------------------------------------------ | ----- |
 | `search.url` | URL for [Search API](https://docs.2gis.com/en/on-premise/search). Example: http://search-api.svc | `""`  |
-
-### 2GIS PRO API Job settings
-
-| Name                   | Description           | Value            |
-| ---------------------- | --------------------- | ---------------- |
-| `appAssetImporterName` | Data Import job name. | `asset-importer` |
-
-### 2GIS PRO Permissions API configuration
-
-| Name                     | Description                                   | Value   |
-| ------------------------ | --------------------------------------------- | ------- |
-| `permissionsApi.enabled` | If permissionsApi is enabled for the service. | `false` |
-
-### Import job settings
-
-| Name                                       | Description                                                                                                                                              | Value                          |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| `assetImporter.repository`                 | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `assetImporter.tag`                        | Docker image tag.                                                                                                                                        | `1.35.0`                       |
-| `assetImporter.schedule`                   | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
-| `assetImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
-| `assetImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
-| `assetImporter.nodeSelector`               | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                      | `{}`                           |
-| `assetImporter.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                           | `1`                            |
-| `assetImporter.enabled`                    | If assetImporter is enabled for the service.                                                                                                             | `true`                         |
-| `assetImporter.startOnDeploy`              | Indicates that asset import should start when service installed or updated                                                                               | `true`                         |
-| `assetImporter.startOnDeployMode`          | Import mode: 'ScheduleManifest' - copy data from manifest and schedule import, 'ManifestData' - just copy data from manifest.                            | `ScheduleManifest`             |
-| `assetImporter.imageProxyUrl`              | URL to proxy image links (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                                 | `""`                           |
-| `assetImporter.externalLinksProxyUrl`      | URL to proxy http links from assets data (including query parameters, if any, i.e. 'https://someserver.com/proxy?url=' )                                 | `""`                           |
-| `assetImporter.externalLinksAllowedHosts`  | Comma separated hosts, i.e. 'someserver.com,someserver2.com' )                                                                                           | `""`                           |
-
-### Limits
-
-| Name                                      | Description                            | Value   |
-| ----------------------------------------- | -------------------------------------- | ------- |
-| `resources`                               | **Limits for the application service** |         |
-| `resources.requests.cpu`                  | A CPU request.                         | `400m`  |
-| `resources.requests.memory`               | A memory request.                      | `256M`  |
-| `resources.limits.cpu`                    | A CPU limit.                           | `1`     |
-| `resources.limits.memory`                 | A memory limit.                        | `1024M` |
-| `assetImporter.resources`                 | **Limits for the import job**          |         |
-| `assetImporter.resources.requests.cpu`    | A CPU request.                         | `700m`  |
-| `assetImporter.resources.requests.memory` | A memory request.                      | `768M`  |
-| `assetImporter.resources.limits.cpu`      | A CPU limit.                           | `1000m` |
-| `assetImporter.resources.limits.memory`   | A memory limit.                        | `8Gi`   |
-
-### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
-
-
-### 2GIS PRO API ingress settings
-
-| Name                                 | Description                               | Value                 |
-| ------------------------------------ | ----------------------------------------- | --------------------- |
-| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`               |
-| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`               |
-| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `pro-api.example.com` |
-| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                   |
-| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`              |
-| `ingress.tls`                        | TLS configuration                         | `[]`                  |
-
-### 2GIS PRO Permissions API ingress settings
-
-| Name                                               | Description                               | Value                             |
-| -------------------------------------------------- | ----------------------------------------- | --------------------------------- |
-| `permissionsApiIngress.enabled`                    | If Ingress is enabled for the service.    | `false`                           |
-| `permissionsApiIngress.className`                  | Name of the Ingress controller class.     | `nginx`                           |
-| `permissionsApiIngress.hosts[0].host`              | Hostname for the Ingress service.         | `pro-permissions-api.example.com` |
-| `permissionsApiIngress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                               |
-| `permissionsApiIngress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                          |
-| `permissionsApiIngress.tls`                        | TLS configuration                         | `[]`                              |
 
 
 ## Installing
