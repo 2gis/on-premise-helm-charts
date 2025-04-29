@@ -1,5 +1,22 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.38.0]
+
+### citylens-routes-ui
+
+- env.SSO_PROXY_ENABLED was removed
+
+### pro-api
+- elastic.host and elastic.port were removed, elastic.nodes was added instead.
+- Minimum supported Postgres version is now 15
+- Labels in tasks/deployment-worker.yaml have changed. You need to remove the tasks-worker and install it again.
+
+### tiles-api
+
+- Single `proxy.access.token` has been split into two separate tokens:
+  - `proxy.access.raster.token` - for raster data authentication
+  - `proxy.access.vector.token` - for vector data authentication
+
 ## [1.37.1]
 
 ### citylens-routes-ui

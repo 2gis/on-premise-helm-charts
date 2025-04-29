@@ -26,16 +26,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | --------------------- | --------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`  |
 
-### Deployment settings
-
-| Name                      | Description                           | Value                         |
-| ------------------------- | ------------------------------------- | ----------------------------- |
-| `castle.image.repository` | Navi-Castle service image repository. | `2gis-on-premise/navi-castle` |
-| `castle.image.pullPolicy` | Navi-Castle service pull policy.      | `IfNotPresent`                |
-| `castle.image.tag`        | Navi-Castle service image tag.        | `1.9.8`                       |
-| `nginx.image.repository`  | Navi-Front image repository.          | `2gis-on-premise/navi-front`  |
-| `nginx.image.tag`         | Navi-Front image tag.                 | `1.26.0`                      |
-
 ### Deployment Artifacts Storage settings
 
 | Name                     | Description                                                                                                                                                                                                                                              | Value   |
@@ -50,20 +40,24 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Common settings
 
-| Name                            | Description                                                                                                                                                               | Value  |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `enableServiceLinks`            | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `true` |
-| `replicaCount`                  | A replica count for the pod.                                                                                                                                              | `1`    |
-| `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                                            | `[]`   |
-| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                   | `""`   |
-| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                               | `""`   |
-| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                             | `{}`   |
-| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                            | `{}`   |
-| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                                | `{}`   |
-| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                       | `{}`   |
-| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                         | `[]`   |
-| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                               | `{}`   |
-| `terminationGracePeriodSeconds` | Maximum time allowed for graceful shutdown.                                                                                                                               | `60`   |
+| Name                            | Description                                                                                                                                                               | Value   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `enableServiceLinks`            | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `false` |
+| `replicaCount`                  | A replica count for the pod.                                                                                                                                              | `1`     |
+| `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                                            | `[]`    |
+| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                   | `""`    |
+| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                               | `""`    |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                             | `{}`    |
+| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                            | `{}`    |
+| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                                | `{}`    |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                       | `{}`    |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                         | `[]`    |
+| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                               | `{}`    |
+| `terminationGracePeriodSeconds` | Maximum time allowed for graceful shutdown.                                                                                                                               | `60`    |
+| `initContainers`                | Add additional init containers                                                                                                                                            | `[]`    |
+| `extraVolumes`                  | Optionally specify extra list of additional volumes                                                                                                                       | `[]`    |
+| `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts                                                                                                                  | `[]`    |
+| `extraEnvVarsSecret`            | Optionally map of secret environment variables                                                                                                                            | `{}`    |
 
 ### Service account settings
 
@@ -103,30 +97,36 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Castle service settings
 
-| Name                                   | Description                                                                                                                                                            | Value              |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `castle.castleDataPath`                | Path to the data directory.                                                                                                                                            | `/opt/castle/data` |
-| `castle.excludeProjects`               | Array of project labels to exclude                                                                                                                                     | `[]`               |
-| `castle.restrictions`                  | Section ignored if castle.restriction.enabled=false                                                                                                                    |                    |
-| `castle.restrictions.url`              | Restrictions API base URL.                                                                                                                                             | `""`               |
-| `castle.restrictions.key`              | Restrictions API key.                                                                                                                                                  | `""`               |
-| `castle.jobs`                          | Number of parallel downloading jobs.                                                                                                                                   | `1`                |
-| `castle.logLevel`                      | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                                                          | `INFO`             |
-| `castle.startupProbe`                  | Settings for startup probes                                                                                                                                            |                    |
-| `castle.startupProbe.periodSeconds`    | Check period for startup probes.                                                                                                                                       | `5`                |
-| `castle.startupProbe.failureThreshold` | Threshold for startup probes.                                                                                                                                          | `180`              |
-| `castle.storePeriod`                   | Retention period for the corresponding data if enabled, ref. `cron`, `init` and `rtr` sections. Supported values: `day`, `month`, `week` or a specific number of days. |                    |
-| `castle.storePeriod.import`            | Retention period for `import` job data, ref. `cron/init.enabled.import`                                                                                                | `month`            |
-| `castle.storePeriod.restriction`       | Retention period for `restriction` job data, ref. `cron/init.enabled.restriction`                                                                                      | `week`             |
-| `castle.storePeriod.restrictionImport` | Retention period for `restrictionImport` job data, ref. `cron/init.enabled.restrictionImport`                                                                          | `week`             |
-| `castle.storePeriod.rtr`               | Retention period for `rtr` data, ref. `rtr.enabled`                                                                                                                    | `week`             |
+| Name                                   | Description                                                                                                                                                            | Value                         |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `castle.image.repository`              | Navi-Castle service image repository.                                                                                                                                  | `2gis-on-premise/navi-castle` |
+| `castle.image.pullPolicy`              | Navi-Castle service pull policy.                                                                                                                                       | `IfNotPresent`                |
+| `castle.image.tag`                     | Navi-Castle service image tag.                                                                                                                                         | `1.9.8`                       |
+| `castle.castleDataPath`                | Path to the data directory.                                                                                                                                            | `/opt/castle/data`            |
+| `castle.excludeProjects`               | Array of project labels to exclude                                                                                                                                     | `[]`                          |
+| `castle.restrictions`                  | Section ignored if castle.restriction.enabled=false                                                                                                                    |                               |
+| `castle.restrictions.url`              | Restrictions API base URL.                                                                                                                                             | `""`                          |
+| `castle.restrictions.key`              | Restrictions API key.                                                                                                                                                  | `""`                          |
+| `castle.jobs`                          | Number of parallel downloading jobs.                                                                                                                                   | `1`                           |
+| `castle.logLevel`                      | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                                                          | `INFO`                        |
+| `castle.startupProbe`                  | Settings for startup probes                                                                                                                                            |                               |
+| `castle.startupProbe.periodSeconds`    | Check period for startup probes.                                                                                                                                       | `5`                           |
+| `castle.startupProbe.failureThreshold` | Threshold for startup probes.                                                                                                                                          | `180`                         |
+| `castle.storePeriod`                   | Retention period for the corresponding data if enabled, ref. `cron`, `init` and `rtr` sections. Supported values: `day`, `month`, `week` or a specific number of days. |                               |
+| `castle.storePeriod.import`            | Retention period for `import` job data, ref. `cron/init.enabled.import`                                                                                                | `month`                       |
+| `castle.storePeriod.restriction`       | Retention period for `restriction` job data, ref. `cron/init.enabled.restriction`                                                                                      | `week`                        |
+| `castle.storePeriod.restrictionImport` | Retention period for `restrictionImport` job data, ref. `cron/init.enabled.restrictionImport`                                                                          | `week`                        |
+| `castle.storePeriod.rtr`               | Retention period for `rtr` data, ref. `rtr.enabled`                                                                                                                    | `week`                        |
 
 ### Navi-Front settings
 
-| Name               | Description                                      | Value   |
-| ------------------ | ------------------------------------------------ | ------- |
-| `nginx.port`       | HTTP port on which Navi-Front will be listening. | `8080`  |
-| `nginx.nodeHeader` | Enable header with node name (X-Node).           | `false` |
+| Name                     | Description                                           | Value                        |
+| ------------------------ | ----------------------------------------------------- | ---------------------------- |
+| `nginx.port`             | HTTP port on which Navi-Front will be listening.      | `8080`                       |
+| `nginx.image.repository` | Navi-Front image repository.                          | `2gis-on-premise/navi-front` |
+| `nginx.image.tag`        | Navi-Front image tag.                                 | `1.26.0`                     |
+| `nginx.nodeHeader`       | Enable header with node name (X-Node).                | `false`                      |
+| `nginx.locationsBlock`   | Optional nginx config block with additional locations | `""`                         |
 
 ### Cron settings
 
@@ -192,7 +192,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
 | `customCAs.certsPath` | Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"          | `""`  |
-
 
 ## Maintainers
 

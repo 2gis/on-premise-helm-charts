@@ -228,8 +228,9 @@ tilegen:
 # @extra proxy.access **API Keys service access settings**
 # @param proxy.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
 # @param proxy.access.url API Keys endpoint url, ex: http://keys-api.svc. **Required**
-# @param proxy.access.token Service key for Keys API. **Required**
 # @param proxy.access.syncPeriod Proxy sync period.
+# @param proxy.access.raster.token Service key for raster data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs). **Required**
+# @param proxy.access.vector.token Service key for vector data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs). **Required**
 
 # @extra proxy.access.stat **Statistics receiver settings**
 # @param proxy.access.stat.enabled If statistics receiver is enabled.
@@ -258,11 +259,15 @@ proxy:
   access:
     enabled: false
     url: ''
-    token: ''
     syncPeriod: 2m
     stat:
       enabled: false
       url: ''
+
+    vector:
+      token: ''
+    raster:
+      token: ''
 
 # @section Tiles API settings
 

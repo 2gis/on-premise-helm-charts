@@ -48,6 +48,7 @@ spec:
           tolerations:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          enableServiceLinks: {{ $.Values.enableServiceLinks }}
           containers:
             - name: castle-cron
               image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag | default $.Chart.AppVersion }}
@@ -61,7 +62,7 @@ spec:
               env:
               {{- if $.Values.customCAs.bundle }}
               - name: SSL_CERT_FILE
-                value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+                value: {{ include "custom.ca.mountPath" $ }}/custom-ca.crt
               {{- end }}
               {{- if $.Values.castle.excludeProjects }}
               - name: CASTLE_EXCLUDE_PROJECTS
@@ -76,7 +77,7 @@ spec:
                 subPath: cities_template
               {{- if $.Values.customCAs.bundle }}
               - name: {{ include "castle.fullname" $ }}-ca
-                mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+                mountPath: {{ include "custom.ca.mountPath" $ }}/custom-ca.crt
                 subPath: custom-ca.crt
               {{- end }}
               - name: {{ include "castle.fullname" $ }}-pvc
