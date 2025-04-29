@@ -2,6 +2,10 @@
 
 ## [1.38.0]
 
+### citylens-routes-ui
+
+- env.SSO_PROXY_ENABLED was removed
+
 ### tiles-api
 
 - Single `proxy.access.token` has been split into two separate tokens:

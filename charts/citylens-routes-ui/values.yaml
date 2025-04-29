@@ -25,7 +25,7 @@ strategy:
 # @param image.tag Tag
 image:
   repository: 2gis-on-premise/citylens-routes-ui
-  tag: 0.0.25
+  tag: 1.0.2
 
 # @section Environment
 
@@ -38,7 +38,6 @@ image:
 # @param env.SSO_API_URL Single sign-on API URL **Required**
 # @param env.SSO_CLIENT_ID OpenID client identifier for single sign-on **Required**
 # @param env.SSO_CLIENT_SECRET OpenID client identifier for single sign-on **Required**
-# @param env.SSO_PROXY_ENABLED Enable proxy to fix CORS errors in SSO
 # @param env.SSO_SCOPE OpenID scope for single sign-on **Required**
 env:
   CATALOG_API_URL: ''
@@ -50,7 +49,6 @@ env:
   SSO_API_URL: ''
   SSO_CLIENT_ID: ''
   SSO_CLIENT_SECRET: ''
-  SSO_PROXY_ENABLED: false
   SSO_SCOPE: ''
 
 # @section Common deployment settings
@@ -132,10 +130,10 @@ ingress:
   annotations: {}
   className: nginx
   hosts:
-  - host: citylens-routes-ui.example.com
-    paths:
-    - path: /
-      pathType: Prefix
+    - host: citylens-routes-ui.example.com
+      paths:
+        - path: /
+          pathType: Prefix
   tls: []
   # - hosts:
   #   - citylens-routes-ui.example.com
