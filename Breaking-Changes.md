@@ -5,7 +5,7 @@
 ### pro-api
 - elastic.host and elastic.port were removed, elastic.nodes was added instead.
 - Minimum supported Postgres version is now 15
-- Дabels in tasks/deployment-worker.yaml have changed. You need to remove the tasks-worker and install it again.
+- Labels in tasks/deployment-worker.yaml have changed. You need to remove the tasks-worker and install it again.
 
 ## [1.37.1]
 
