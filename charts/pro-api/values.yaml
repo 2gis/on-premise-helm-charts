@@ -1,4 +1,4 @@
-﻿# @section Geo API configuration & settings
+# @section Geo API configuration & settings
 
 api:
 
@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.13.0
+    tag: 2.8.2
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -186,7 +186,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.13.0
+    tag: 2.8.2
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -300,7 +300,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.13.0
+    tag: 2.8.2
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -450,7 +450,7 @@ tasks:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.13.0
+  tag: 2.8.2
   imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2
@@ -486,7 +486,7 @@ assetImporter:
 assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.13.0
+  tag: 2.8.2
   imagePullSecrets: []
   schedule: 0 16 * * 6
   backoffLimit: 2
@@ -707,8 +707,8 @@ elastic:
   enableHttpCompression: false
   indexPrefix: ''
   nodes:
-    - port: 9200
-      host: ''
+  - port: 9200
+    host: ''
 
 # @section Redis settings (supported version 6.x)
 
