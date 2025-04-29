@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.38.0]
+
+### citylens-routes-ui
+
+- env.SSO_PROXY_ENABLED was removed
+
 ## [1.37.1]
 
 ### citylens-routes-ui
