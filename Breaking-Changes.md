@@ -2,6 +2,10 @@
 
 ## [1.38.0]
 
+### citylens-routes-ui
+
+- env.SSO_PROXY_ENABLED was removed
+
 ### pro-api
 - elastic.host and elastic.port were removed, elastic.nodes was added instead.
 - Minimum supported Postgres version is now 15
