@@ -128,9 +128,6 @@ See the [documentation]() to learn about:
 
 ### Routes Planner integration
 
-| Name                   | Description                                          | Value |
-| ---------------------- | ---------------------------------------------------- | ----- |
-| `api.routesApiBaseUrl` | ROUTES PLANNER API URL. Ex: http(s)://routes-api.svc | `""`  |
 
 ### Citylens web service settings
 

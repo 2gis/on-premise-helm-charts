@@ -98,7 +98,7 @@ dgctlStorage:
 
 # @section Routes Planner integration
 
-# @param api.routesApiBaseUrl ROUTES PLANNER API URL. Ex: http(s)://routes-api.svc
+# @skip api.routesApiBaseUrl
 
 api:
   image:
@@ -1260,8 +1260,8 @@ routes:
 
   tasksAssetSettings:
     systemAccessToken: ''
-    plannedTasksAssetId: 'user_dyn_citylens_planned_tasks'
-    completedTasksAssetId: 'user_dyn_citylens_completed_tasks'
+    plannedTasksAssetId: user_dyn_citylens_planned_tasks
+    completedTasksAssetId: user_dyn_citylens_completed_tasks
 
   navi:
     url: ''
