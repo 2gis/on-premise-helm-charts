@@ -16,7 +16,7 @@ citylens
 	+ citylens-worker-service:1.1.1
 citylens-routes-ui
 	- citylens-routes-ui:0.0.25
-	+ citylens-routes-ui:1.0.0
+	+ citylens-routes-ui:1.0.2
 keys
 	- keys-ui:0.10.5
 	+ keys-ui:0.10.6

@@ -9,7 +9,7 @@ citylens
 	citylens-worker-service:1.1.1
 	citylens-workers:1.17.8
 citylens-routes-ui
-	citylens-routes-ui:1.0.0
+	citylens-routes-ui:1.0.2
 dgtt
 	dgtt:0.2.27-b188673e09
 generic-chart
