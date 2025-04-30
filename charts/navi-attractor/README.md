@@ -68,7 +68,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | ------------------ | ----------- | -------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-attractor` |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                   |
-| `image.tag`        | Tag         | `7.33.0.5`                       |
+| `image.tag`        | Tag         | `7.36.1`                         |
 
 ### Service account settings
 

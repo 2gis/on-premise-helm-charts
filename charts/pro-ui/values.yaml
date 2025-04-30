@@ -225,10 +225,10 @@ ingress:
   enabled: false
   className: nginx
   hosts:
-  - host: pro-ui.example.com
-    paths:
-    - path: /
-      pathType: Prefix
+    - host: pro-ui.example.com
+      paths:
+        - path: /
+          pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-ui.example.com

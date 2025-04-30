@@ -45,7 +45,7 @@ terminationGracePeriodSeconds: 60
 image:
   repository: 2gis-on-premise/navi-router
   pullPolicy: IfNotPresent
-  tag: 6.29.0.6
+  tag: 6.31.0
 
 
 # @section Navi-Router service settings
