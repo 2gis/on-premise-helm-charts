@@ -60,15 +60,6 @@ spec:
         secret:
           secretName: {{ include "generic-chart.fullname" . }}-secret
       {{- end }}
-      {{- range $section := list "roadLocks" }}
-      {{- with $ }}
-      {{- if $section | get .Values | dig "kafka" "fileProperties" (dict) }}
-      - name: {{ include "generic-chart.fullname" . }}-{{ $section }}-secret
-        secret:
-          secretName: {{ include "generic-chart.fullname" . }}-{{ $section }}-secret
-      {{- end }}{{/* if fileProperties */}}
-      {{- end }}{{/* with $*/}}
-      {{- end }}{{/* range section */}}
       {{- if .Values.initContainers }}
       initContainers:
         {{- include "tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -102,16 +93,6 @@ spec:
           - name: {{ include "generic-chart.fullname" . }}-secret
             mountPath: /etc/2gis/mosesd/secret/
           {{- end }}
-          {{- range $section := list "roadLocks" }}
-          {{- with $ }}
-          {{- if $section | get .Values | dig "kafka" "fileProperties" (dict) }}
-          - name: {{ include "generic-chart.fullname" . }}-{{ $section }}-secret
-            mountPath: /etc/2gis/mosesd/secret-{{ $section }}/
-            secret:
-              secretName: {{ include "generic-chart.fullname" . }}-{{ $section }}-secret
-          {{- end }}{{/* if fileProperties */}}
-          {{- end }}{{/* with $*/}}
-          {{- end }}{{/* range section */}}
           ports:
             - name: http
               containerPort: {{ .Values.attractor.appPort }}

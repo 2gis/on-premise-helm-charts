@@ -21,7 +21,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "pro-api.tasksWorkerSelectorLabels" . | nindent 6 }}
+      {{- include "pro-api.tasksWorkerLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -155,15 +155,12 @@ spec:
             - name: Common__Worker__DefaultWorkersCount
               value: "{{ $.Values.tasks.settings.worker.regularTasksWorkersCount }}"
 
-            {{- range $i, $s := $.Values.elastic.nodes}}
-            - name: Elastic__Nodes__{{$i}}__Host
-              value: {{ $s.host }}
-            - name: Elastic__Nodes__{{$i}}__Port
-              value: "{{ $s.port }}"
-            {{ end }}
-
+            - name: Elastic__Host
+              value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
             - name: Elastic__Secure
               value: "{{ $.Values.elastic.secure }}"
+            - name: Elastic__Port
+              value: "{{ $.Values.elastic.port }}"
             - name: Elastic__Username
               value: "{{ $.Values.elastic.username }}"
             {{ if .Values.elastic.password }}
@@ -215,15 +212,4 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             - name: Common__DataCenterId
               value: "{{ .Values.api.settings.dataCenterId }}"
-
-            - name: PermissionsApi__Url
-              value: {{ include "pro-api.permissions-url" . }}
-            {{- if .Values.permissions.settings.auth.apiKey }}
-            - name: PermissionsApi__Key
-              valueFrom:
-                secretKeyRef:
-                  key: permissionsApiKey
-                  name: {{ include "pro-api.name" . }}-secret
-            {{- end }}
-
 {{- end }}

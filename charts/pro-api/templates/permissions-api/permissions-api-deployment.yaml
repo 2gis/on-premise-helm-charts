@@ -149,6 +149,8 @@ spec:
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
               value: "{{ .Values.redis.port }}"
+            - name: Redis__Enabled
+              value: "{{ .Values.redis.enabled }}"
             - name: Redis__Username
               value: {{ $.Values.redis.username }}
             {{- if .Values.redis.password }}
@@ -162,32 +164,6 @@ spec:
               value: "{{ .Values.api.settings.logging.format }}"
             - name: Common__Logging__Targets
               value: "{{ .Values.api.settings.logging.targets }}"
-            - name: Common__DeleteInactiveUsers
-              value: "{{ .Values.permissions.settings.deleteInactiveUsers }}"
-            - name: Common__DefaultPermissions__OpenProUi
-              value: "{{ .Values.permissions.settings.default_permissions.open_pro_ui }}"
-            {{- range $i, $s := .Values.permissions.settings.default_permissions.assets }}
-            - name: Common__DefaultPermissions__Assets__{{$i}}
-              value: "{{ $s }}"
-            {{- end }}
-            {{- range $i, $s := .Values.permissions.settings.default_permissions.analytics }}
-            - name: Common__DefaultPermissions__Analytics__{{$i}}
-              value: "{{ $s }}"
-            {{- end }}
-            {{- range $i, $s := .Values.permissions.settings.default_permissions.territories }}
-            - name: Common__DefaultPermissions__Territories__{{$i}}
-              value: "{{ $s }}"
-            {{- end }}
-            - name: Common__DefaultPermissions__AddUserAssets__Allow
-              value: "{{ .Values.permissions.settings.default_permissions.add_user_assets.allow }}"
-            - name: Common__DefaultPermissions__AddUserAssets__Quantity
-              value: "{{ .Values.permissions.settings.default_permissions.add_user_assets.quantity }}"
-            - name: Common__DefaultPermissions__AddUserAssets__FileSize
-              value: "{{ .Values.permissions.settings.default_permissions.add_user_assets.file_size }}"
-            - name: Common__DefaultPermissions__Isochrones
-              value: "{{ .Values.permissions.settings.default_permissions.isochrones }}"
-            - name: Common__AllowPermissionsToAnyAsset
-              value: "{{ .Values.permissions.settings.allowPermissionsToAnyAsset }}"
             - name: Kafka__BootstrapServers
               value: {{ $.Values.kafka.bootstrapServers }}
             - name: Kafka__SecurityProtocol

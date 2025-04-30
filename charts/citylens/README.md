@@ -126,9 +126,6 @@ See the [documentation]() to learn about:
 | `api.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`  |
 | `api.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
 
-### Routes Planner integration
-
-
 ### Citylens web service settings
 
 
@@ -617,19 +614,18 @@ See the [documentation]() to learn about:
 
 ### Metadata settings
 
-| Name                          | Description                                                                                                                 | Value         |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `routes.api.annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.api.labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.api.podAnnotations`   | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.api.podLabels`        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.api.nodeSelector`     | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
-| `routes.api.tolerations`      | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
-| `routes.api.affinity`         | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
-| `routes.api.tempPath`         | Path to directory used for temp data                                                                                        | `/tmp`        |
-| `routes.api.logging`          | Routes **Logging** settings                                                                                                 |               |
-| `routes.api.logging.level`    | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
-| `routes.api.logging.extended` | Log message level. Enable extend data by logs.                                                                              | `false`       |
+| Name                        | Description                                                                                                                 | Value         |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `routes.api.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.api.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.api.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.api.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.api.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
+| `routes.api.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
+| `routes.api.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
+| `routes.api.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp`        |
+| `routes.api.logging`        | Routes **Logging** settings                                                                                                 |               |
+| `routes.api.logging.level`  | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
 
 ### Citylens routes Worker
 
@@ -663,20 +659,18 @@ See the [documentation]() to learn about:
 
 ### Metadata settings
 
-| Name                                                          | Description                                                                                                                 | Value         |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `routes.worker.annotations`                                   | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.worker.labels`                                        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.worker.podAnnotations`                                | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.worker.podLabels`                                     | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.worker.nodeSelector`                                  | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
-| `routes.worker.tolerations`                                   | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
-| `routes.worker.affinity`                                      | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
-| `routes.worker.tempPath`                                      | Path to directory used for temp data                                                                                        | `/tmp`        |
-| `routes.worker.logging`                                       | Routes **Logging** settings                                                                                                 |               |
-| `routes.worker.logging.level`                                 | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
-| `routes.worker.routesSettings`                                | Routes distance match settings                                                                                              |               |
-| `routes.worker.routesSettings.routePointsMatchDistanceMeters` | Calculation accuracy in meters.                                                                                             | `5`           |
+| Name                           | Description                                                                                                                 | Value         |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `routes.worker.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.worker.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.worker.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.worker.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.worker.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
+| `routes.worker.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
+| `routes.worker.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
+| `routes.worker.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp`        |
+| `routes.worker.logging`        | Routes **Logging** settings                                                                                                 |               |
+| `routes.worker.logging.level`  | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
 
 ### Kafka Bus configuration settings. Based on Kafka values
 
@@ -691,16 +685,6 @@ See the [documentation]() to learn about:
 | `routes.worker.busConfig.consumers.appEvents.groupId`          | The group ID for the app events. **Required**                                                                                                                | `""`            |
 | `routes.worker.busConfig.consumers.appEvents.bufferSize`       | The buffer size for the app events.                                                                                                                          | `100`           |
 | `routes.worker.busConfig.consumers.appEvents.workersCount`     | The workers count for the app events.                                                                                                                        | `10`            |
-
-### routes.features Feature settings.
-
-| Name                                              | Description                                         | Value                               |
-| ------------------------------------------------- | --------------------------------------------------- | ----------------------------------- |
-| `routes.features.authorizationEnabled`            | Enable authorization. (If false used default user). | `true`                              |
-| `routes.features.tasksAssetEnabled`               | Enable sending data to PRO for tasks.               | `false`                             |
-| `routes.tasksAssetSettings.systemAccessToken`     | Route task asset token.                             | `""`                                |
-| `routes.tasksAssetSettings.plannedTasksAssetId`   | Identity to planned route task asset.               | `user_dyn_citylens_planned_tasks`   |
-| `routes.tasksAssetSettings.completedTasksAssetId` | Identity to completed route task asset.             | `user_dyn_citylens_completed_tasks` |
 
 ### Citylens routes Clients
 

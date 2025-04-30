@@ -24,13 +24,7 @@ data:
             autoindex_format json;
         }
 
-        {{- if .Values.nginx.locationsBlock }}
-          {{ .Values.nginx.locationsBlock | nindent 8 }}
-        {{- end }}
-
         location /healthcheck {
-          access_log off;
           return 200 "Ok!";
-          add_header 'Content-Type' 'text/plain';
         }
     }

@@ -103,8 +103,6 @@ spec:
 
             - name: Common__Logging__LogLevel
               value: "{{ .Values.routes.api.logging.level }}"
-            - name: Common__Logging__Extended
-              value: "{{ .Values.routes.api.logging.extended }}"
 
             - name: PgSettings__Host
               value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
@@ -170,8 +168,6 @@ spec:
               value: "true"
             - name: Clients__Keys__Url
               value: "{{ $.Values.routes.keys.url }}"
-            - name: Clients__Keys__Brand
-              value: "{{ $.Values.routes.keys.brand }}"
 
             - name: Clients__ProClient__Enabled
               value: "true"
@@ -179,6 +175,7 @@ spec:
               value: "{{ $.Values.pro.baseUrl }}"
             - name: Clients__ProClient__AuthorizationToken
               value: "{{ $.Values.routes.pro.authorizationToken }}"
+
             - name: Clients__ProClient__MainTerritoryId
               value: "{{ $.Values.routes.pro.mainTerritoryId }}"
 
@@ -190,10 +187,3 @@ spec:
               value: "{{ $.Values.routes.features.proxyNaviKeyEnabled }}"
             - name: Features__CoverageRatioEnabled
               value: "{{ $.Values.routes.features.coverageRatioEnabled }}"
-
-            - name: TasksAssetSettings__SystemAccessToken
-              value: "{{ $.Values.routes.tasksAssetSettings.systemAccessToken }}"
-            - name: TasksAssetSettings__PlannedTasksAssetId
-              value: "{{ $.Values.routes.tasksAssetSettings.plannedTasksAssetId }}"
-            - name: TasksAssetSettings__CompletedTasksAssetId
-              value: "{{ $.Values.routes.tasksAssetSettings.completedTasksAssetId }}"

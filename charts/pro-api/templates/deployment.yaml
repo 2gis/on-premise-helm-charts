@@ -143,16 +143,13 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             - name: SEARCH_API_URL
               value: {{ .Values.search.url }}
-            - name: Elastic__InstanceName
-              value: {{ $.Values.elastic.instanceName }}
-            {{- range $i, $s := required "A valid .Values.elastic.nodes entry required" $.Values.elastic.nodes }}
-            - name: Elastic__Nodes__{{$i}}__Host
-              value: {{ $s.host }}
-            - name: Elastic__Nodes__{{$i}}__Port
-              value: "{{ $s.port }}"
-            {{ end }}
+
+            - name: Elastic__Host
+              value: {{ required "A valid .Values.elastic.host entry required" $.Values.elastic.host }}
             - name: Elastic__Secure
               value: "{{ $.Values.elastic.secure }}"
+            - name: Elastic__Port
+              value: "{{ $.Values.elastic.port }}"
             - name: Elastic__Username
               value: "{{ $.Values.elastic.username }}"
             {{ if .Values.elastic.password }}
@@ -299,6 +296,8 @@ spec:
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
               value: "{{ .Values.redis.port }}"
+            - name: Redis__Enabled
+              value: "{{ .Values.redis.enabled }}"
             - name: Redis__Username
               value: {{ $.Values.redis.username }}
             {{- if .Values.redis.password }}
@@ -340,7 +339,3 @@ spec:
               value: "{{ ne .Values.api.settings.backgroundJobs.enableClearMetadataAndStorageJob false }}"
             - name: BackgroundJobs__MetricsCollectionJob__Enabled
               value: "{{ ne .Values.api.settings.backgroundJobs.enableMetricsCollectionJob false }}"
-            - name: TileGen__Url
-              value: "{{ .Values.tileGen.url }}"
-            - name: TileGen__UserDataTileSet
-              value: "{{ .Values.tileGen.userDataTileSet }}"

@@ -62,12 +62,12 @@ spec:
               value: {{ required "A valid .Values.env.SSO_API_URL entry required" .Values.env.SSO_API_URL | quote }}
             - name: SSO_CLIENT_ID
               value: {{ required "A valid .Values.env.SSO_CLIENT_ID entry required" .Values.env.SSO_CLIENT_ID | quote }}
+            - name: SSO_PROXY_ENABLED
+              value: {{ .Values.env.SSO_PROXY_ENABLED | quote }}
             - name: SSO_SCOPE
               value: {{ required "A valid .Values.env.SSO_SCOPE entry required" .Values.env.SSO_SCOPE | quote }}
             - name: ROUTES_API_URL
               value: {{ required "A valid .Values.env.ROUTES_API_URL entry required" .Values.env.ROUTES_API_URL | quote }}
-            - name: ENV_FLAGS_ENABLE_Q1_FEATURES
-              value: {{ .Values.env.ENV_FLAGS_ENABLE_Q1_FEATURES | quote }}
             - name: MAPGL_KEY
               valueFrom:
                 secretKeyRef:
