@@ -1,15 +1,15 @@
 catalog-api
-	catalog-api:3.643.0
-	catalog-importer:1.11.0
+	catalog-api:3.647.0
+	catalog-importer:1.12.1
 citylens
 	citylens-api:1.17.8
 	citylens-database:1.17.1
-	citylens-routes-api:1.0.15
+	citylens-routes-api:1.1.1
 	citylens-web:1.17.8
-	citylens-worker-service:1.0.15
+	citylens-worker-service:1.1.1
 	citylens-workers:1.17.8
 citylens-routes-ui
-	citylens-routes-ui:0.0.25
+	citylens-routes-ui:1.0.2
 dgtt
 	dgtt:0.2.27-b188673e09
 generic-chart
@@ -34,11 +34,11 @@ navi-async-matrix
 	navi-archiver-async-matrix:1.15.2
 	navi-async-matrix:1.15.2
 navi-attractor
-	navi-attractor:7.33.0.5
+	navi-attractor:7.36.1
 navi-back
 	envoy:v1.27.0
 	metrics-aggregator:
-	navi-back:7.33.0.5
+	navi-back:7.36.1
 navi-castle
 	navi-castle:1.9.8
 	navi-front:1.26.0
@@ -48,20 +48,20 @@ navi-restrictions
 	navi-restrictions-api:1.0.1
 	navi-restrictions-syncer:1.0.1
 navi-router
-	navi-router:6.29.0.6
+	navi-router:6.31.0
 navi-splitter
 	navi-splitter:1.0.1
 platform
 	platform-ui:1.2.0
 pro-api
-	pro-api:2.8.2
-	pro-importer:2.8.2
-	pro-importer:2.8.2
-	pro-permissions-api:2.8.2
-	pro-tasks-api:2.8.2
+	pro-api:2.13.0
+	pro-importer:2.13.0
+	pro-importer:2.13.0
+	pro-permissions-api:2.13.0
+	pro-tasks-api:2.13.0
 pro-ui
-	pro-importer:2.8.2
-	pro-ui:4.9.0
+	pro-importer:2.13.0
+	pro-ui:4.14.0
 search-api
 	nginx:1.25.5
 	search-api:7.90.0
@@ -74,10 +74,10 @@ tilegen-api
 	tilegen-api:1.1.8
 	tilegen-processor:1.1.8
 tiles-api
-	tiles-api-importer:4.64.1
-	tiles-api-importer:4.64.1
-	tiles-api-proxy:4.64.1
-	tiles-api:4.64.1
+	tiles-api-importer:4.71.1
+	tiles-api-importer:4.71.1
+	tiles-api-proxy:4.71.1
+	tiles-api:4.69.0
 traffic-proxy
 	nginx:1.25.5
 twins-api

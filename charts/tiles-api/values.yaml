@@ -303,7 +303,7 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.71.1
+    tag: 4.69.0
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
