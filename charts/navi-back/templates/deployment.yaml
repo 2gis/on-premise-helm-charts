@@ -65,15 +65,6 @@ spec:
         secret:
           secretName: {{ include "generic-chart.fullname" . }}-secret
       {{- end }}
-      {{- range $section := list "routesharing" "trafficLights" "roadLocks" }}
-      {{- with $ }}
-      {{- if $section | get .Values | dig "kafka" "fileProperties" (dict) }}
-      - name: {{ include "generic-chart.fullname" . }}-{{ $section }}-secret
-        secret:
-          secretName: {{ include "generic-chart.fullname" . }}-{{ $section }}-secret
-      {{- end }}
-      {{- end }}{{- /* with $ */}}
-      {{- end }}{{- /* range $section */}}
       {{- if .Values.naviback.sentry.enabled }}
       - name: sentry-volume
         emptyDir: {}
@@ -218,14 +209,6 @@ spec:
             - name: {{ include "generic-chart.fullname" . }}-secret
               mountPath: /etc/2gis/mosesd/secret/
             {{- end }}
-            {{- range $section := list "routesharing" "trafficLights" "roadLocks" }}
-            {{- with $ }}
-            {{- if $section | get .Values | dig "kafka" "fileProperties" (dict) }}
-            - name: {{ include "generic-chart.fullname" . }}-{{ $section }}-secret
-              mountPath: /etc/2gis/mosesd/secret-{{ $section }}/
-            {{- end }}
-            {{- end }}{{- /* with $ */}}
-            {{- end }}{{- /* range $section */}}
             {{- if .Values.naviback.sentry.enabled }}
             - name: sentry-volume
               mountPath: {{ .Values.naviback.sentry.reportPath | default "/tmp/sentry" | quote }}

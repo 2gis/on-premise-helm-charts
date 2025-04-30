@@ -12,7 +12,6 @@ metadata:
     {{- end }}
     rule: {{ .Values.attractor.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
-    type: {{ .Values.attractor.type | quote  }}
     {{- if .Values.dataGroup.enabled }}
     dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
     dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
@@ -21,7 +20,6 @@ metadata:
   annotations:
     {{- include "tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
   {{- end }}
-
 spec:
   type: {{ .Values.service.grpc.type }}
   clusterIP: {{ .Values.service.grpc.clusterIP | default "" | quote }}
@@ -47,7 +45,6 @@ metadata:
     {{- end }}
     rule: {{ .Values.attractor.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
-    type: {{ .Values.attractor.type | quote  }}
     {{- if .Values.dataGroup.enabled }}
     dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
     dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
@@ -59,7 +56,6 @@ metadata:
   {{- if .Values.service.http.annotations }}
     {{- include "tplvalues.render" ( dict "value" .Values.service.http.annotations "context" $) | nindent 4 }}
   {{- end }}
-
 spec:
   type: {{ .Values.service.http.type }}
   clusterIP: {{ .Values.service.http.clusterIP | default "" | quote }}

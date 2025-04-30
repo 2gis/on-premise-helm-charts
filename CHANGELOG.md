@@ -1,15 +1,5 @@
 # 2GIS On-Premise Changelog
 
-## [1.38.0] (2025-04-29)
-#### [Breaking-Changes](Breaking-Changes.md#1380)
-#### Images
-```
-keys
-	- keys-ui:0.10.6
-	+ keys-ui:0.10.5
-
-```
-
 ## [1.37.1] (2025-04-10)
 #### [Breaking-Changes](Breaking-Changes.md#1371)
 #### Images

@@ -96,10 +96,6 @@ dgctlStorage:
 # @param api.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param api.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
 
-# @section Routes Planner integration
-
-# @skip api.routesApiBaseUrl
-
 api:
   image:
     repository: 2gis-on-premise/citylens-api
@@ -166,8 +162,6 @@ api:
   nodeSelector: {}
   affinity: {}
   tolerations: []
-
-  routesApiBaseUrl: ''
 
 # @section Citylens web service settings
 
@@ -1020,7 +1014,6 @@ customCAs:
 
 # @extra routes.api.logging Routes **Logging** settings
 # @param routes.api.logging.level Log message level. verbose, debug, information, warning, error, fatal.
-# @param routes.api.logging.extended Log message level. Enable extend data by logs.
 
 # @section Citylens routes Worker
 
@@ -1055,9 +1048,6 @@ customCAs:
 # @extra routes.worker.logging Routes **Logging** settings
 # @param routes.worker.logging.level Log message level. verbose, debug, information, warning, error, fatal.
 
-# @extra routes.worker.routesSettings Routes distance match settings
-# @param routes.worker.routesSettings.routePointsMatchDistanceMeters Calculation accuracy in meters.
-
 # @section Kafka Bus configuration settings. Based on Kafka values
 # @extra routes.worker.busConfig Bus configuration
 # @extra routes.worker.busConfig.securityInformation SecurityInformation for the bus configuration
@@ -1069,17 +1059,10 @@ customCAs:
 # @param routes.worker.busConfig.consumers.appEvents.bufferSize The buffer size for the app events.
 # @param routes.worker.busConfig.consumers.appEvents.workersCount The workers count for the app events.
 
-# @section routes.features Feature settings.
-# @param routes.features.authorizationEnabled Enable authorization. (If false used default user).
+# @skip routes.features.authorizationEnabled
 # @skip routes.features.oidcMobileAuthorizationEnabled
 # @skip routes.features.proxyNaviKeyEnabled
 # @skip routes.features.coverageRatioEnabled
-# @param routes.features.tasksAssetEnabled Enable sending data to PRO for tasks.
-
-# section routes.tasksAssetSettings PRO asset config.
-# @param routes.tasksAssetSettings.systemAccessToken Route task asset token.
-# @param routes.tasksAssetSettings.plannedTasksAssetId Identity to planned route task asset.
-# @param routes.tasksAssetSettings.completedTasksAssetId Identity to completed route task asset.
 
 # @section Citylens routes Clients
 
@@ -1094,7 +1077,6 @@ customCAs:
 
 # @section Keys integration
 # @param routes.keys.url API Keys endpoint url, ex: http://keys-api.svc (used for getting oidc auth).
-# @skip routes.keys.brand
 
 routes:
 
@@ -1200,7 +1182,6 @@ routes:
 
     logging:
       level: information
-      extended: false
 
   worker:
     image:
@@ -1238,9 +1219,6 @@ routes:
     logging:
       level: information
 
-    routesSettings:
-      routePointsMatchDistanceMeters: 5
-
     busConfig:
       securityInformation:
         saslMechanism: ScramSha512
@@ -1256,12 +1234,6 @@ routes:
     oidcMobileAuthorizationEnabled: true
     proxyNaviKeyEnabled: true
     coverageRatioEnabled: true
-    tasksAssetEnabled: false
-
-  tasksAssetSettings:
-    systemAccessToken: ''
-    plannedTasksAssetId: user_dyn_citylens_planned_tasks
-    completedTasksAssetId: user_dyn_citylens_completed_tasks
 
   navi:
     url: ''
@@ -1274,4 +1246,3 @@ routes:
 
   keys:
     url: ''
-    brand: ''

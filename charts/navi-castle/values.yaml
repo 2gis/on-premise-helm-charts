@@ -5,6 +5,15 @@
 dgctlDockerRegistry: ''
 
 
+# @section Deployment settings
+
+# @param castle.image.repository Navi-Castle service image repository.
+# @param castle.image.pullPolicy Navi-Castle service pull policy.
+# @param castle.image.tag Navi-Castle service image tag.
+# @param nginx.image.repository Navi-Front image repository.
+# @param nginx.image.tag Navi-Front image tag.
+
+
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`.
@@ -39,12 +48,8 @@ dgctlStorage:
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param terminationGracePeriodSeconds Maximum time allowed for graceful shutdown.
-# @param initContainers Add additional init containers
-# @param extraVolumes Optionally specify extra list of additional volumes
-# @param extraVolumeMounts Optionally specify extra list of additional volumeMounts
-# @param extraEnvVarsSecret Optionally map of secret environment variables
 
-enableServiceLinks: false
+enableServiceLinks: true
 replicaCount: 1
 imagePullSecrets: []
 nameOverride: ''
@@ -56,10 +61,6 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 terminationGracePeriodSeconds: 60
-initContainers: []
-extraVolumes: []
-extraVolumeMounts: []
-extraEnvVarsSecret: {}
 
 
 # @section Service account settings
@@ -106,7 +107,6 @@ ingress:
   #    navi-castle.example.com
   #  secretName: secret.tls
 
-
 # @section Limits
 
 # @param resources [nullable] Container resources requirements structure.
@@ -120,9 +120,6 @@ resources: {}
 
 # @section Navi-Castle service settings
 
-# @param castle.image.repository Navi-Castle service image repository.
-# @param castle.image.pullPolicy Navi-Castle service pull policy.
-# @param castle.image.tag Navi-Castle service image tag.
 # @param castle.castleDataPath Path to the data directory.
 # @param castle.excludeProjects Array of project labels to exclude
 # @extra castle.restrictions Section ignored if castle.restriction.enabled=false
@@ -164,10 +161,7 @@ castle:
 # @section Navi-Front settings
 
 # @param nginx.port HTTP port on which Navi-Front will be listening.
-# @param nginx.image.repository Navi-Front image repository.
-# @param nginx.image.tag Navi-Front image tag.
 # @param nginx.nodeHeader Enable header with node name (X-Node).
-# @param nginx.locationsBlock Optional nginx config block with additional locations
 
 nginx:
   port: 8080
@@ -175,7 +169,6 @@ nginx:
     repository: 2gis-on-premise/navi-front
     tag: 1.26.0
   nodeHeader: false
-  locationsBlock: ''
 
 
 # @section Cron settings
@@ -234,7 +227,6 @@ persistentVolume:
   - ReadWriteOnce
   storageClass: ''
   size: 5Gi
-
 
 # @section RTR settings. Leave with defaults, FOR FUTURE RELEASE.
 

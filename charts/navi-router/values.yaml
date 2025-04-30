@@ -8,7 +8,7 @@ dgctlDockerRegistry: ''
 # @section Common settings
 
 # @param replicaCount A replica count for the pod
-# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment)
+# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 # @param imagePullSecrets Kubernetes image pull secrets
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart
 # @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart
@@ -18,7 +18,7 @@ dgctlDockerRegistry: ''
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
-# @param preStopDelay Delay in seconds before terminating container
+# @param preStopDelay Delay in seconds before terminating container.
 # @param terminationGracePeriodSeconds Grace period for container shutdown, refer to [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) for details
 
 replicaCount: 1
@@ -50,11 +50,11 @@ image:
 
 # @section Navi-Router service settings
 
-# @param router.appPort Navi-Router service HTTP port
+# @param router.appPort Navi-Router service HTTP port.
 # @param router.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`
 # @param router.logMessageField Field name in logs
-# @param router.additionalSections Additional configurations sections for the Navi-Router service
-# @param router.castleUrl URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @param router.additionalSections Additional configurations sections for the Navi-Router service.
+# @param router.castleUrl URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster.
 # @extra router.localRestrictions.distanceBetweenPointsKm Max allowed distance between points
 # @skip router.localRestrictions.distanceBetweenPointsKm[0]
 # @extra router.localRestrictions.pointsCount Max allowed points count
@@ -64,11 +64,6 @@ image:
 # @skip router.localRestrictions.matrixSize[0]
 # @skip router.localRestrictions.matrixSize[1]
 # @skip router.localRestrictions.matrixSize[2]
-# @extra router.backupPorts [nullable] Optional creation of backup ports duplicating the service
-# @param router.backupPorts.base Backup ports start with `base` and assignd sequentially up
-# @param router.backupPorts.number Number of backup ports created
-# @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
-# @param rules List of routing rules, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
 
 router:
   appPort: 8080
@@ -87,23 +82,13 @@ router:
     - type: distance-matrix-api
       sources_count: 25
       targets_count: 30
-  backupPorts:
-    base: 50000
-    number: 0
-
-navigroup: ''
-rules: []
-
-
-# @section Key management service settings
 
 # @param keys.enabled Disable or enable key management service
-# @param keys.url Address of key management service server
+# @param keys.url key management service server URL
 # @param keys.refreshIntervalSec Keys refresh interval in seconds
 # @param keys.downloadTimeoutSec Keys download timeout in seconds
 # @param keys.commonToken Mater key to retrieve all per-service API keys, keys.apis ignored, if commonToken set
 # @param keys.apis [nullable] Used API types and their tokens. Format: `type: token`
-
 keys:
   enabled: false
   url: ''
@@ -120,9 +105,9 @@ keys:
     pairs-directions-api: ''
     ppnot-api: ''
     public-transport-api: ''
-    routing-api: ''
     truck-directions-api: ''
     truck-distance-matrix-api: ''
+    routing-api: ''
     route-planner-api: ''
 
 
@@ -190,6 +175,7 @@ ingress:
 
 # @section Limits
 
+
 # @param resources [nullable] Container resources requirements structure
 # @param resources.requests.cpu [nullable] CPU request, recommended value `500m`
 # @param resources.requests.memory [nullable] Memory request, recommended value `384Mi`
@@ -206,8 +192,8 @@ resources: {}
 # @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up
 # @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used
 # @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used
-# @param hpa.scaleUp To configure separate scale-up [policy](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies)
-# @param hpa.scaleDown To configure separate scale-down [policy](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies)
+# @param hpa.scaleUp To configure separate scale-up [policy](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies).
+# @param hpa.scaleDown To configure separate scale-down [policy](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies).
 
 hpa:
   enabled: false

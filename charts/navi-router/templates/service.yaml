@@ -1,19 +1,23 @@
-{{- define "router.service" }}
+apiVersion: v1
+kind: Service
 metadata:
+  name: {{ include "router.fullname" . }}
   labels:
+    {{- include "router.labels" . | nindent 4 }}
+    {{- if .Values.service.labels }}
+    {{- include "tplvalues.render" ( dict "value" .Values.service.labels "context" $) | nindent 4 }}
+    {{- end }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
+  {{- if .Values.service.annotations }}
+  annotations:
+   {{- include "tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
+  type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http
       protocol: TCP
       name: http
-    {{- $ctx := . }}
-    {{- range (.Values.router.backupPorts.number | int | until) }}
-    - port: {{ . | add $ctx.Values.router.backupPorts.base }}
-      targetPort: http
-      protocol: TCP
-      name: http-{{ . | int }}
-    {{- end }}{{- /* range */}}
-{{- end }}{{- /* define "router.service" */}}
-{{- template "generic-chart.merge" (list . "router.service" "generic-chart.service.tpl") }}
+  selector:
+    {{- include "router.selectorLabels" . | nindent 4 }}
