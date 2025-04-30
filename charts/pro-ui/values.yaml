@@ -27,7 +27,7 @@ strategy:
 # @param image.tag Tag
 image:
   repository: 2gis-on-premise/pro-ui
-  tag: 4.9.0
+  tag: 4.14.0
 
 # @section Common deployment settings
 
@@ -225,10 +225,10 @@ ingress:
   enabled: false
   className: nginx
   hosts:
-    - host: pro-ui.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  - host: pro-ui.example.com
+    paths:
+    - path: /
+      pathType: Prefix
   tls: []
   # - hosts:
   #   - pro-ui.example.com
@@ -305,7 +305,7 @@ stylesImporter:
   name: styles-importer
   image:
     repository: 2gis-on-premise/pro-importer
-    tag: 2.8.2
+    tag: 2.13.0
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   nodeSelector: {}

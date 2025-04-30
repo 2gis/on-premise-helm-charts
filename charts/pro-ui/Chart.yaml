@@ -7,6 +7,6 @@ version: 1.38.0
 appVersion: 4.14.0
 
 maintainers:
-  - name: 2gis
-    url: https://github.com/2gis
-    email: on-premise@2gis.com
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

@@ -1,5 +1,62 @@
 # 2GIS On-Premise Changelog
 
+## [1.38.0] (2025-04-30)
+#### [Breaking-Changes](Breaking-Changes.md#1380)
+#### Images
+```
+catalog-api
+	- catalog-api:3.643.0
+	+ catalog-api:3.647.0
+	- catalog-importer:1.11.0
+	+ catalog-importer:1.12.1
+citylens
+	- citylens-routes-api:1.0.15
+	+ citylens-routes-api:1.1.1
+	- citylens-worker-service:1.0.15
+	+ citylens-worker-service:1.1.1
+citylens-routes-ui
+	- citylens-routes-ui:0.0.25
+	+ citylens-routes-ui:1.0.0
+keys
+	- keys-ui:0.10.5
+	+ keys-ui:0.10.6
+navi-attractor
+	- navi-attractor:7.33.0.5
+	+ navi-attractor:7.36.1
+navi-back
+	- navi-back:7.33.0.5
+	+ navi-back:7.36.1
+navi-router
+	- navi-router:6.29.0.6
+	+ navi-router:6.31.0
+pro-api
+	- pro-api:2.8.2
+	+ pro-api:2.13.0
+	- pro-importer:2.8.2
+	+ pro-importer:2.13.0
+	- pro-importer:2.8.2
+	+ pro-importer:2.13.0
+	- pro-permissions-api:2.8.2
+	+ pro-permissions-api:2.13.0
+	- pro-tasks-api:2.8.2
+	+ pro-tasks-api:2.13.0
+pro-ui
+	- pro-importer:2.8.2
+	+ pro-importer:2.13.0
+	- pro-ui:4.9.0
+	+ pro-ui:4.14.0
+tiles-api
+	- tiles-api-importer:4.64.1
+	+ tiles-api-importer:4.71.1
+	- tiles-api-importer:4.64.1
+	+ tiles-api-importer:4.71.1
+	- tiles-api-proxy:4.64.1
+	+ tiles-api-proxy:4.71.1
+	- tiles-api:4.64.1
+	+ tiles-api:4.69.0
+
+```
+
 ## [1.37.1] (2025-04-10)
 #### [Breaking-Changes](Breaking-Changes.md#1371)
 #### Images
