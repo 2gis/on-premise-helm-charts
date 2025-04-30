@@ -125,8 +125,8 @@ location = /eta/eta-predictions/index.json {
   rewrite ^ /api/v1/proxy/navi/eta-predictions-index/index.json break;
   {{- include "proxyParams" . }}
 }
-location ~ ^/eta-predictions/eta-predictor-([0-9])\.eta-predictor/([^/]+)/eta_prediction\.zip$ {
-  rewrite ^/eta-predictions/(.*)$ /api/v1/proxy/eta-predictions/$1 break;
+location ~ ^/eta/eta-predictions/eta-predictor-([0-9])\.eta-predictor/([^/]+)/eta_prediction\.zip$ {
+  rewrite ^/eta/eta-predictions/(.*)$ /api/v1/proxy/eta-predictions/$1 break;
   {{- include "proxyParams" . }}
 }
 {{- end }}
