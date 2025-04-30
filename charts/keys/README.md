@@ -33,7 +33,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
 | `backend.image.tag`        | Backend service image tag.        | `1.112.2`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.          | `0.10.5`                       |
+| `admin.image.tag`          | Admin service image tag.          | `0.10.6`                       |
 
 ### Flags for enabling/disabling certain features.
 
