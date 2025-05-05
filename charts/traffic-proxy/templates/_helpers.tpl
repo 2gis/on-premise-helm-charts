@@ -23,7 +23,9 @@
     proxy_ssl_server_name on;
     proxy_ssl_name     {{ $urlParts.host }};
   {{- end }}
-    proxy_set_header   X-API-Key {{ $.Values.proxy.apiKey }};
+  {{- if and .Values.proxy.apiKey .Values.proxy.locationDG }}
+    proxy_set_header   X-API-Key {{ .Values.proxy.apiKey }};
+  {{- end }}
     proxy_set_header   Upgrade $http_upgrade;
     proxy_set_header   Connection keep-alive;
     proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -72,7 +74,7 @@ location ~ ^/long-forecast/([^/]+)/forecasted_speeds_v2\.zip$ {
 
 {{/*4. Navi-castle endpoints*/}}
 location = /navi-castle/restrictions_index.json.zip {
-  rewrite ^ /api/v1/proxy/navi/navi-castle-index/restrictions_index.json.zip break;
+  rewrite ^ /api/v1/proxy/navi/restrictions-index/restrictions_index.json.zip break;
   {{- include "proxyParams" . }}
 }
 
@@ -81,44 +83,44 @@ location ~ ^/navi-castle/restrictions/([^/]+)/.*-restriction\.json$ {
   {{- include "proxyParams" . }}
 }
 
-{{/*5. navi-castle endpoints*/}}
-location = /navi-castle/index.json.zip {
-  rewrite ^ /api/v1/proxy/navi/navi-castle-index/index.json.zip break;
+{{/*5. navi-castle-cache endpoints*/}}
+location = /navi-castle-cache/index.json.zip {
+  rewrite ^ /api/v1/proxy/navi/restrictions-index/index.json.zip break;
   {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle/eta_correction/ {
-    rewrite ^/navi-castle(/eta_correction/.*)$ /api/v1/proxy/navi$1 break;
-    proxy_pass http://localhost;
+location ~ ^/navi-castle-cache/eta_correction/ {
+    rewrite ^/navi-castle-cache(/eta_correction/.*)$ /api/v1/proxy/navi/eta-correction$1 break;
+    {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle/smatrix/ {
-  rewrite ^/navi-castle(/smatrix/.*)$ /api/v1/proxy/navi$1 break;
+location ~ ^/navi-castle-cache/smatrix/ {
+  rewrite ^/navi-castle-cache(/smatrix/.*)$ /api/v1/proxy/navi/smatrix$1 break;
   {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle/probability_matrix/ {
-  rewrite ^/navi-castle(/probability_matrix/.*)$ /api/v1/proxy/navi$1 break;
+location ~ ^/navi-castle-cache/probability_matrix/ {
+  rewrite ^/navi-castle-cache(/probability_matrix/.*)$ /api/v1/proxy/navi/probability-matrix$1 break;
   {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle/turn_penalties/([^/]+)/([^/]+)\.zip$ {
-  rewrite ^/navi-castle/turn_penalties/(.*)\.zip$ /api/v1/proxy/navi/turn_penalties/$1.json break;
+location ~ ^/navi-castle-cache/turn_penalties/ {
+  rewrite ^/navi-castle-cache(/turn_penalties/.*)$ /api/v1/proxy/navi/turn-penalties$1 break;
   {{- include "proxyParams" . }}
 }
 
-location = /navi-castle/restricted_transport.json.zip {
-  rewrite ^ /api/v1/proxy/navi/restricted_transport-index/restricted_transport.json.zip break;
+location = /navi-castle-cache/restricted_transport.json.zip {
+  rewrite ^ /api/v1/proxy/navi/restricted-transport-index/restricted_transport.json.zip break;
   {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle/restricted_transport/([^/]+)/restricted_transport_platforms\.csv$ {
-  rewrite ^/navi-castle/restricted_transport/(.*)$ /api/v1/proxy/navi/restricted_transport/$1 break;
+location ~ ^/navi-castle-cache/restricted_transport/([^/]+)/restricted_transport_platforms\.csv$ {
+  rewrite ^navi-castle-cache/restricted_transport/(.*)$ /api/v1/proxy/navi/restricted-transport-platforms/restricted_transport/$1 break;
   {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle/restricted_transport/([^/]+)/restricted_transport_routes\.csv$ {
-  rewrite ^/navi-castle/restricted_transport/(.*)$ /api/v1/proxy/navi/restricted_transport/$1 break;
+location ~ ^/navi-castle-cache/restricted_transport/([^/]+)/restricted_transport_routes\.csv$ {
+  rewrite ^/navi-castle-cache/restricted_transport/(.*)$ /api/v1/proxy/navi/restricted-transport-routes/restricted_transport/$1 break;
   {{- include "proxyParams" . }}
 }
 location = /eta/eta-predictions/index.json {
@@ -126,7 +128,7 @@ location = /eta/eta-predictions/index.json {
   {{- include "proxyParams" . }}
 }
 location ~ ^/eta/eta-predictions/eta-predictor-([0-9])\.eta-predictor/([^/]+)/eta_prediction\.zip$ {
-  rewrite ^/eta/eta-predictions/(.*)$ /api/v1/proxy/eta-predictions/$1 break;
+  rewrite ^/eta/eta-predictions/(.*)$ /api/v1/proxy/eta-predictions/eta-predictions/$1 break;
   {{- include "proxyParams" . }}
 }
 {{- end }}
