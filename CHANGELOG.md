@@ -53,7 +53,7 @@ tiles-api
 	- tiles-api-proxy:4.64.1
 	+ tiles-api-proxy:4.71.1
 	- tiles-api:4.64.1
-	+ tiles-api:4.69.0
+	+ tiles-api:4.71.1
 
 ```
 
