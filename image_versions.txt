@@ -77,7 +77,7 @@ tiles-api
 	tiles-api-importer:4.71.1
 	tiles-api-importer:4.71.1
 	tiles-api-proxy:4.71.1
-	tiles-api:4.69.0
+	tiles-api:4.71.1
 traffic-proxy
 	nginx:1.25.5
 twins-api
