@@ -42,35 +42,64 @@ jobs:
       - name: Filter charts by product
         id: filter
         run: |
+          # Создаем временную директорию для отфильтрованных чартов
+          mkdir -p ./release-charts
+          
           case "${{ steps.product.outputs.product }}" in
             "PRO")
-              # Копируем только PRO чарты во временную директорию
-              mkdir -p ./release-charts
-              cp -r charts/pro-* ./release-charts/
+              # Находим и копируем только PRO чарты
+              for chart in charts/pro-*; do
+                if [ -d "$chart" ]; then
+                  chart_name=$(basename "$chart")
+                  mkdir -p "./release-charts/$chart_name"
+                  cp -r "$chart"/* "./release-charts/$chart_name/"
+                  echo "Подготовлен чарт: $chart_name"
+                fi
+              done
               ;;
             "Platform")
-              # Копируем только чарты платформы во временную директорию
-              mkdir -p ./release-charts
-              for chart in $(ls -d charts/* | grep -v 'charts/pro-\|charts/citylens-\|charts/evergis-'); do
-                cp -r $chart ./release-charts/
+              # Находим и копируем только чарты платформы (исключая PRO, Citylens и Evergis)
+              for chart in charts/*; do
+                if [ -d "$chart" ]; then
+                  chart_name=$(basename "$chart")
+                  if [[ ! "$chart_name" =~ ^(pro-|citylens-|evergis-) ]]; then
+                    mkdir -p "./release-charts/$chart_name"
+                    cp -r "$chart"/* "./release-charts/$chart_name/"
+                    echo "Подготовлен чарт: $chart_name"
+                  fi
+                fi
               done
               ;;
             "Citylens")
-              # Копируем только Citylens чарты во временную директорию
-              mkdir -p ./release-charts
-              cp -r charts/citylens-* ./release-charts/
+              # Находим и копируем только Citylens чарты
+              for chart in charts/citylens-*; do
+                if [ -d "$chart" ]; then
+                  chart_name=$(basename "$chart")
+                  mkdir -p "./release-charts/$chart_name"
+                  cp -r "$chart"/* "./release-charts/$chart_name/"
+                  echo "Подготовлен чарт: $chart_name"
+                fi
+              done
               ;;
             "Evergis")
-              # Копируем только Evergis чарты во временную директорию
-              mkdir -p ./release-charts
-              cp -r charts/evergis-* ./release-charts/
+              # Находим и копируем только Evergis чарты
+              for chart in charts/evergis-*; do
+                if [ -d "$chart" ]; then
+                  chart_name=$(basename "$chart")
+                  mkdir -p "./release-charts/$chart_name"
+                  cp -r "$chart"/* "./release-charts/$chart_name/"
+                  echo "Подготовлен чарт: $chart_name"
+                fi
+              done
               ;;
           esac
+          
+          # Выводим список подготовленных чартов для диагностики
+          echo "Список подготовленных чартов для релиза:"
+          ls -la ./release-charts
 
       - name: Release chart
         uses: helm/chart-releaser-action@v1.7.0
         with:
           charts_dir: ./release-charts
           version: ${{ steps.product.outputs.version }}
-          mark_as_latest: true
-          packages_with_index: false 
