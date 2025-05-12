@@ -1,0 +1,65 @@
+---
+name: Release Charts by Product
+
+on:
+  push:
+    tags:
+      - '*-PRO'
+      - '*-Platform'
+      - '*-Citylens'
+      - '*-Evergis'
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CHART_RELEASER_OWNER: ${{ github.repository_owner }}
+  CHART_RELEASER_REPO: ${{ github.event.repository.name }}
+  CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Determine product and version
+        id: product
+        run: |
+          TAG="${{ github.ref_name }}"
+          VERSION=$(echo $TAG | sed -E 's/-[A-Za-z]+$//')
+          PRODUCT=$(echo $TAG | grep -o '[A-Za-z]*$')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "product=$PRODUCT" >> $GITHUB_OUTPUT
+
+      - name: Filter charts by product
+        id: filter
+        run: |
+          case "${{ steps.product.outputs.product }}" in
+            "PRO")
+              echo "charts=pro-*" >> $GITHUB_OUTPUT
+              ;;
+            "Platform")
+              echo "charts=$(ls -d charts/* | grep -v 'charts/pro-\|charts/citylens-\|charts/evergis-' | sed 's|charts/||g' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+              ;;
+            "Citylens")
+              echo "charts=citylens-*" >> $GITHUB_OUTPUT
+              ;;
+            "Evergis")
+              echo "charts=evergis-*" >> $GITHUB_OUTPUT
+              ;;
+          esac
+
+      - name: Release chart
+        uses: helm/chart-releaser-action@v1.7.0
+        with:
+          charts_dir: charts
+          version: ${{ steps.product.outputs.version }}
+          charts: ${{ steps.filter.outputs.charts }} 
