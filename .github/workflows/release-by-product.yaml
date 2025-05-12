@@ -1,5 +1,5 @@
 ---
-name: Release Charts by Product
+name: Release Charts
 
 on:
   push:
@@ -30,76 +30,88 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Determine product and version
-        id: product
+      - name: Filter charts
         run: |
-          TAG="${{ github.ref_name }}"
-          VERSION=$(echo $TAG | sed -E 's/-[A-Za-z]+$//')
-          PRODUCT=$(echo $TAG | grep -o '[A-Za-z]*$')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "product=$PRODUCT" >> $GITHUB_OUTPUT
+          # Извлечение тега из GITHUB_REF (например, refs/tags/1.2.3-PRO)
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "Processing tag: $TAG"
 
-      - name: Filter charts by product
-        id: filter
-        run: |
-          # Создаем временную директорию для отфильтрованных чартов
-          mkdir -p ./release-charts
-          
-          case "${{ steps.product.outputs.product }}" in
+          # Извлечение версии и группы
+          VERSION=$(echo "$TAG" | sed -E 's/-(PRO|Platform|Citylens|Evergis)$//')
+          GROUP=$(echo "$TAG" | grep -oE '(PRO|Platform|Citylens|Evergis)$')
+
+          if [ -z "$VERSION" ] || [ -z "$GROUP" ]; then
+            echo "Error: Invalid tag format. Expected x.y.z-<Group>, got $TAG"
+            exit 1
+          fi
+
+          echo "Version: $VERSION"
+          echo "Group: $GROUP"
+
+          # Определение чартов для сборки
+          CHARTS_DIR="charts"
+          TEMP_DIR="charts_temp"
+          ALL_CHARTS=$(ls -1 "$CHARTS_DIR")
+
+          # Списки чартов по группам
+          PRO_CHARTS=("pro-api" "pro-ui")
+          CITYLENS_CHARTS=("citylens" "citylens-routes-ui")
+          EVERGIS_CHARTS=("gis-platform")
+
+          # Формирование списка чартов для сборки
+          case "$GROUP" in
             "PRO")
-              # Находим и копируем только PRO чарты
-              for chart in charts/pro-*; do
-                if [ -d "$chart" ]; then
-                  chart_name=$(basename "$chart")
-                  mkdir -p "./release-charts/$chart_name"
-                  cp -r "$chart"/* "./release-charts/$chart_name/"
-                  echo "Подготовлен чарт: $chart_name"
-                fi
-              done
-              ;;
-            "Platform")
-              # Находим и копируем только чарты платформы (исключая PRO, Citylens и Evergis)
-              for chart in charts/*; do
-                if [ -d "$chart" ]; then
-                  chart_name=$(basename "$chart")
-                  if [[ ! "$chart_name" =~ ^(pro-|citylens-|evergis-) ]]; then
-                    mkdir -p "./release-charts/$chart_name"
-                    cp -r "$chart"/* "./release-charts/$chart_name/"
-                    echo "Подготовлен чарт: $chart_name"
-                  fi
-                fi
-              done
+              SELECTED_CHARTS=("${PRO_CHARTS[@]}")
               ;;
             "Citylens")
-              # Находим и копируем только Citylens чарты
-              for chart in charts/citylens-*; do
-                if [ -d "$chart" ]; then
-                  chart_name=$(basename "$chart")
-                  mkdir -p "./release-charts/$chart_name"
-                  cp -r "$chart"/* "./release-charts/$chart_name/"
-                  echo "Подготовлен чарт: $chart_name"
-                fi
-              done
+              SELECTED_CHARTS=("${CITYLENS_CHARTS[@]}")
               ;;
             "Evergis")
-              # Находим и копируем только Evergis чарты
-              for chart in charts/evergis-*; do
-                if [ -d "$chart" ]; then
-                  chart_name=$(basename "$chart")
-                  mkdir -p "./release-charts/$chart_name"
-                  cp -r "$chart"/* "./release-charts/$chart_name/"
-                  echo "Подготовлен чарт: $chart_name"
+              SELECTED_CHARTS=("${EVERGIS_CHARTS[@]}")
+              ;;
+            "Platform")
+              # Все чарты, кроме PRO, Citylens, Evergis
+              SELECTED_CHARTS=()
+              for chart in $ALL_CHARTS; do
+                if [[ ! " ${PRO_CHARTS[*]} " =~ " $chart " ]] && \
+                   [[ ! " ${CITYLENS_CHARTS[*]} " =~ " $chart " ]] && \
+                   [[ ! " ${EVERGIS_CHARTS[*]} " =~ " $chart " ]]; then
+                  SELECTED_CHARTS+=("$chart")
                 fi
               done
               ;;
+            *)
+              echo "Error: Unknown group $GROUP"
+              exit 1
+              ;;
           esac
-          
-          # Выводим список подготовленных чартов для диагностики
-          echo "Список подготовленных чартов для релиза:"
-          ls -la ./release-charts
+
+          echo "Selected charts: ${SELECTED_CHARTS[*]}"
+
+          # Создание временной папки для ненужных чартов
+          mkdir -p "$TEMP_DIR"
+
+          # Обновление версии в Chart.yaml и перемещение ненужных чартов
+          for chart in $ALL_CHARTS; do
+            if [[ " ${SELECTED_CHARTS[*]} " =~ " $chart " ]]; then
+              # Обновление версии в Chart.yaml
+              CHART_YAML="$CHARTS_DIR/$chart/Chart.yaml"
+              if [ -f "$CHART_YAML" ]; then
+                sed -i "s/^version: .*/version: $VERSION/" "$CHART_YAML"
+                echo "Updated version to $VERSION in $CHART_YAML"
+              else
+                echo "Warning: Chart.yaml not found for $chart"
+              fi
+            else
+              # Перемещение ненужного чарта во временную папку
+              mv "$CHARTS_DIR/$chart" "$TEMP_DIR/"
+              echo "Moved $chart to $TEMP_DIR"
+            fi
+          done
+
+          # Вывод оставшихся чартов для отладки
+          echo "Charts remaining in $CHARTS_DIR:"
+          ls -1 "$CHARTS_DIR"
 
       - name: Release chart
         uses: helm/chart-releaser-action@v1.7.0
-        with:
-          charts_dir: ./release-charts
-          version: ${{ steps.product.outputs.version }}
