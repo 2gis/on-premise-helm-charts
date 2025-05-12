@@ -1,13 +1,13 @@
 ---
 name: Release Charts by Product
 
-# on:
-#   push:
-#     tags:
-#       - '*-PRO'
-#       - '*-Platform'
-#       - '*-Citylens'
-#       - '*-Evergis'
+on:
+  push:
+    tags:
+      - '*-PRO'
+      - '*-Platform'
+      - '*-Citylens'
+      - '*-Evergis'
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

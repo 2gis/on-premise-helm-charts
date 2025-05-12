@@ -1,10 +1,10 @@
 ---
 name: Release Charts
 
-on:
-  push:
-    tags:
-      - '*'
+# on:
+#   push:
+#     tags:
+#       - '*'
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
