@@ -1,0 +1,164 @@
+---
+name: Release Charts by Changes
+
+# on:
+#   push:
+#     tags:
+#       - '*'
+#     paths-ignore:
+#       - '**.md'
+#       - '.gitignore'
+#       - '.github/**'
+#       - '!.github/workflows/**'
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CHART_RELEASER_OWNER: ${{ github.repository_owner }}
+  CHART_RELEASER_REPO: ${{ github.event.repository.name }}
+  CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      pro_changes: ${{ steps.changes.outputs.pro_changes }}
+      citylens_changes: ${{ steps.changes.outputs.citylens_changes }}
+      evergis_changes: ${{ steps.changes.outputs.evergis_changes }}
+      platform_changes: ${{ steps.changes.outputs.platform_changes }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Get latest tag before current
+        id: prev-tag
+        run: |
+          CURRENT_TAG="${{ github.ref_name }}"
+          PREV_TAG=$(git tag --sort=-creatordate | grep -v "$CURRENT_TAG" | head -n 1)
+          echo "tag=$PREV_TAG" >> $GITHUB_OUTPUT
+      
+      - name: Detect changes by product
+        id: changes
+        run: |
+          # Получаем список измененных файлов между тегами
+          CHANGED_FILES=$(git diff --name-only ${{ steps.prev-tag.outputs.tag }} ${{ github.ref_name }})
+          
+          # Проверяем изменения для каждого продукта
+          if echo "$CHANGED_FILES" | grep -q "charts/pro-"; then
+            echo "pro_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "pro_changes=false" >> $GITHUB_OUTPUT
+          fi
+          
+          if echo "$CHANGED_FILES" | grep -q "charts/citylens-"; then
+            echo "citylens_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "citylens_changes=false" >> $GITHUB_OUTPUT
+          fi
+          
+          if echo "$CHANGED_FILES" | grep -q "charts/evergis-"; then
+            echo "evergis_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "evergis_changes=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # Для платформы проверяем изменения в любых чартах кроме pro, citylens и evergis
+          if echo "$CHANGED_FILES" | grep -q "charts/" | grep -v -E "charts/(pro-|citylens-|evergis-)"; then
+            echo "platform_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "platform_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+  release-pro:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.pro_changes == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      
+      - name: Release PRO charts
+        uses: helm/chart-releaser-action@v1.7.0
+        with:
+          charts_dir: charts
+          version: ${{ github.ref_name }}
+          charts: pro-*
+  
+  release-citylens:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.citylens_changes == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      
+      - name: Release Citylens charts
+        uses: helm/chart-releaser-action@v1.7.0
+        with:
+          charts_dir: charts
+          version: ${{ github.ref_name }}
+          charts: citylens-*
+  
+  release-evergis:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.evergis_changes == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      
+      - name: Release Evergis charts
+        uses: helm/chart-releaser-action@v1.7.0
+        with:
+          charts_dir: charts
+          version: ${{ github.ref_name }}
+          charts: evergis-*
+  
+  release-platform:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.platform_changes == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      
+      - name: Release Platform charts
+        uses: helm/chart-releaser-action@v1.7.0
+        with:
+          charts_dir: charts
+          version: ${{ github.ref_name }}
+          charts: $(ls -d charts/* | grep -v 'charts/pro-\|charts/citylens-\|charts/evergis-' | sed 's|charts/||g' | tr '\n' ' ') 
