@@ -91,19 +91,9 @@ jobs:
           # Создание временной папки для ненужных чартов
           mkdir -p "$TEMP_DIR"
 
-          # Обновление версии в Chart.yaml и перемещение ненужных чартов
+          # Перемещение ненужных чартов
           for chart in $ALL_CHARTS; do
-            if [[ " ${SELECTED_CHARTS[*]} " =~ " $chart " ]]; then
-              # Обновление версии в Chart.yaml
-              CHART_YAML="$CHARTS_DIR/$chart/Chart.yaml"
-              if [ -f "$CHART_YAML" ]; then
-                sed -i "s/^version: .*/version: $VERSION/" "$CHART_YAML"
-                echo "Updated version to $VERSION in $CHART_YAML"
-              else
-                echo "Warning: Chart.yaml not found for $chart"
-              fi
-            else
-              # Перемещение ненужного чарта во временную папку
+            if [[ ! " ${SELECTED_CHARTS[*]} " =~ " $chart " ]]; then
               mv "$CHARTS_DIR/$chart" "$TEMP_DIR/"
               echo "Moved $chart to $TEMP_DIR"
             fi
