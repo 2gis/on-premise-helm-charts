@@ -44,22 +44,33 @@ jobs:
         run: |
           case "${{ steps.product.outputs.product }}" in
             "PRO")
-              echo "charts=pro-*" >> $GITHUB_OUTPUT
+              # Копируем только PRO чарты во временную директорию
+              mkdir -p ./release-charts
+              cp -r charts/pro-* ./release-charts/
               ;;
             "Platform")
-              echo "charts=$(ls -d charts/* | grep -v 'charts/pro-\|charts/citylens-\|charts/evergis-' | sed 's|charts/||g' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+              # Копируем только чарты платформы во временную директорию
+              mkdir -p ./release-charts
+              for chart in $(ls -d charts/* | grep -v 'charts/pro-\|charts/citylens-\|charts/evergis-'); do
+                cp -r $chart ./release-charts/
+              done
               ;;
             "Citylens")
-              echo "charts=citylens-*" >> $GITHUB_OUTPUT
+              # Копируем только Citylens чарты во временную директорию
+              mkdir -p ./release-charts
+              cp -r charts/citylens-* ./release-charts/
               ;;
             "Evergis")
-              echo "charts=evergis-*" >> $GITHUB_OUTPUT
+              # Копируем только Evergis чарты во временную директорию
+              mkdir -p ./release-charts
+              cp -r charts/evergis-* ./release-charts/
               ;;
           esac
 
       - name: Release chart
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          charts_dir: charts
+          charts_dir: ./release-charts
           version: ${{ steps.product.outputs.version }}
-          charts: ${{ steps.filter.outputs.charts }} 
+          mark_as_latest: true
+          packages_with_index: false 
