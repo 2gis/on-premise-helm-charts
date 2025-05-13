@@ -1,0 +1,38 @@
+helmDefaults:
+  createNamespace: false
+  atomic: true
+  wait: true
+  historyMax: 1
+
+repositories:
+- name: 2gis-on-premise
+  url: https://2gis.github.io/on-premise-helm-charts
+
+environments:
+  example-prod:
+    values:
+    - &example_prod
+      version: 1.31.0
+      domain: example.com
+      namespace: default
+      kubeContext: 2gis-staging
+      tlsSecret: secret-tls
+      dgctlDockerRegistry: registry.example.com
+      dgctlStorage:
+        bucket: 'onpremise-artifacts'
+      s3Storage:
+        host: 's3.example.com'
+        secure: false
+        region: 'US'
+        accessKey: 'AKIAIOSFODNN7EXAMPLE'
+        secretKey: 'wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY'
+      trafficProxy: ["first", "second"]
+
+  example-stage:
+    values:
+    - << : *example_prod
+    - version: 1.30.0
+    -   domain: stage.example.com
+    -   dgctlStorage:
+          bucket: 'onpremise-artifacts-stage'
+    -   trafficProxy: ["first"]
