@@ -134,6 +134,21 @@ spec:
             - name: SSL_CERT_DIR
               value: {{ include "tiles.customCA.mountPath" $ }}
             {{- end }}
+            - name: ACCESS_VECTOR_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-api
+                  key: vector_token
+            - name: ACCESS_RASTER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-api
+                  key: raster_token
+            - name: ACCESS_MAPBOX_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-api
+                  key: mapbox_token
         {{- end }}
 
         - name: tiles-api
