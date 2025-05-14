@@ -1,5 +1,4 @@
 # 2GIS On-Premise Changelog
-some changes
 ## [1.38.0] (2025-04-30)
 #### [Breaking-Changes](Breaking-Changes.md#1380)
 #### Images
