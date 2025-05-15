@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.17.8`                       |
+| `api.image.tag`        | Tag.         | `1.17.9`                       |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -128,6 +128,9 @@ See the [documentation]() to learn about:
 
 ### Routes Planner integration
 
+| Name                   | Description                                                                                                                                                                          | Value |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `api.routesApiBaseUrl` | Routes Planner API endpoint - if provided mobile application can access Routes Planner API via citylens-api /routes-api endpoint. Ex.: `http(s)://citylens-routes-api.ingress.host/` | `""`  |
 
 ### Citylens web service settings
 
