@@ -41,94 +41,94 @@
 {{- define "locationDG" -}}
 {{/* 1. ECA endpoints*/}}
 location = /eca/traffic/moses/speeds5.json {
-  rewrite ^ /api/v1/proxy/navi/eca-index/traffic/moses/speeds5.json break;
+  rewrite ^ /api/v1/services/navi/proxy/eca-index/traffic/moses/speeds5.json break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/eca/speeds/calculator-prod\.k8s\.m9\.2gis\.io/ {
-  rewrite ^/eca(/speeds/calculator-prod\.k8s\.m9\.2gis\.io/.*)$ /api/v1/proxy/navi/online-speeds$1 break;
+  rewrite ^/eca(/speeds/calculator-prod\.k8s\.m9\.2gis\.io/.*)$ /api/v1/services/navi/proxy/online-speeds$1 break;
   {{- include "proxyParams" . }}
 }
 
 {{/* 2. Forecast endpoints*/}}
 location = /forecast/index.json {
-  rewrite ^ /api/v1/proxy/navi/forecast-index/index.json break;
+  rewrite ^ /api/v1/services/navi/proxy/forecast-index/index.json break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/forecast/([^/]+)/forecasted_speeds_v2\.zip$ {
-  rewrite ^/forecast/(.*)$ /api/v1/proxy/navi/forecasted-speeds/$1 break;
+  rewrite ^/forecast/(.*)$ /api/v1/services/navi/proxy/forecasted-speeds/$1 break;
   {{- include "proxyParams" . }}
 }
 
 {{/*3. Long forecast endpoints*/}}
 location = /long-forecast/index.json {
-  rewrite ^ /api/v1/proxy/navi/long-forecasted-speeds-index/long_forecast_data/index.json break;
+  rewrite ^ /api/v1/services/navi/proxy/long-forecasted-speeds-index/long_forecast_data/index.json break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/long-forecast/([^/]+)/forecasted_speeds_v2\.zip$ {
-  rewrite ^/long-forecast/(.*)$ /api/v1/proxy/navi/long-forecasted-speeds/long_forecast_data/$1 break;
+  rewrite ^/long-forecast/(.*)$ /api/v1/services/navi/proxy/long-forecasted-speeds/long_forecast_data/$1 break;
   {{- include "proxyParams" . }}
 }
 
 {{/*4. Navi-castle endpoints*/}}
 location = /navi-castle/restrictions_index.json.zip {
-  rewrite ^ /api/v1/proxy/navi/restrictions-index/restrictions_index.json.zip break;
+  rewrite ^ /api/v1/services/navi/proxy/restrictions-index/restrictions_index.json.zip break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/navi-castle/restrictions/([^/]+)/.*-restriction\.json$ {
-  rewrite ^/navi-castle/restrictions/(.*)$ /api/v1/proxy/navi/restrictions/restrictions/$1 break;
+  rewrite ^/navi-castle/restrictions/(.*)$ /api/v1/services/navi/proxy/restrictions/restrictions/$1 break;
   {{- include "proxyParams" . }}
 }
 
 {{/*5. navi-castle-cache endpoints*/}}
 location = /navi-castle-cache/index.json.zip {
-  rewrite ^ /api/v1/proxy/navi/restrictions-index/index.json.zip break;
+  rewrite ^ /api/v1/services/navi/proxy/restrictions-index/index.json.zip break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/navi-castle-cache/eta_correction/ {
-    rewrite ^/navi-castle-cache(/eta_correction/.*)$ /api/v1/proxy/navi/eta-correction$1 break;
+    rewrite ^/navi-castle-cache(/eta_correction/.*)$ /api/v1/services/navi/proxy/eta-correction$1 break;
     {{- include "proxyParams" . }}
 }
 
 location ~ ^/navi-castle-cache/smatrix/ {
-  rewrite ^/navi-castle-cache(/smatrix/.*)$ /api/v1/proxy/navi/smatrix$1 break;
+  rewrite ^/navi-castle-cache(/smatrix/.*)$ /api/v1/services/navi/proxy/smatrix$1 break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/navi-castle-cache/probability_matrix/ {
-  rewrite ^/navi-castle-cache(/probability_matrix/.*)$ /api/v1/proxy/navi/probability-matrix$1 break;
+  rewrite ^/navi-castle-cache(/probability_matrix/.*)$ /api/v1/services/navi/proxy/probability-matrix$1 break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/navi-castle-cache/turn_penalties/ {
-  rewrite ^/navi-castle-cache(/turn_penalties/.*)$ /api/v1/proxy/navi/turn-penalties$1 break;
+  rewrite ^/navi-castle-cache(/turn_penalties/.*)$ /api/v1/services/navi/proxy/turn-penalties$1 break;
   {{- include "proxyParams" . }}
 }
 
 location = /navi-castle-cache/restricted_transport.json.zip {
-  rewrite ^ /api/v1/proxy/navi/restricted-transport-index/restricted_transport.json.zip break;
+  rewrite ^ /api/v1/services/navi/proxy/restricted-transport-index/restricted_transport.json.zip break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/navi-castle-cache/restricted_transport/([^/]+)/restricted_transport_platforms\.csv$ {
-  rewrite ^navi-castle-cache/restricted_transport/(.*)$ /api/v1/proxy/navi/restricted-transport-platforms/restricted_transport/$1 break;
+  rewrite ^navi-castle-cache/restricted_transport/(.*)$ /api/v1/services/navi/proxy/restricted-transport-platforms/restricted_transport/$1 break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/navi-castle-cache/restricted_transport/([^/]+)/restricted_transport_routes\.csv$ {
-  rewrite ^/navi-castle-cache/restricted_transport/(.*)$ /api/v1/proxy/navi/restricted-transport-routes/restricted_transport/$1 break;
+  rewrite ^/navi-castle-cache/restricted_transport/(.*)$ /api/v1/services/navi/proxy/restricted-transport-routes/restricted_transport/$1 break;
   {{- include "proxyParams" . }}
 }
 location = /eta/eta-predictions/index.json {
-  rewrite ^ /api/v1/proxy/navi/eta-predictions-index/index.json break;
+  rewrite ^ /api/v1/services/navi/proxy/eta-predictions-index/index.json break;
   {{- include "proxyParams" . }}
 }
 location ~ ^/eta/eta-predictions/eta-predictor-([0-9])\.eta-predictor/([^/]+)/eta_prediction\.zip$ {
-  rewrite ^/eta/eta-predictions/(.*)$ /api/v1/proxy/eta-predictions/eta-predictions/$1 break;
+  rewrite ^/eta/eta-predictions/(.*)$ /api/v1/services/navi/proxy/eta-predictions/eta-predictions/$1 break;
   {{- include "proxyParams" . }}
 }
 {{- end }}
