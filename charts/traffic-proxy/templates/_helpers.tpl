@@ -85,7 +85,7 @@ location ~ ^/navi-castle/restrictions/([^/]+)/.*-restriction\.json$ {
 
 {{/*5. navi-castle-cache endpoints*/}}
 location = /navi-castle-cache/index.json.zip {
-  rewrite ^ /api/v1/services/navi/proxy/restrictions-index/index.json.zip break;
+  rewrite ^ /api/v1/services/navi/proxy/navi-castle-cache-index/index.json.zip break;
   {{- include "proxyParams" . }}
 }
 
