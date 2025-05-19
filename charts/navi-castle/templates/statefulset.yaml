@@ -147,6 +147,10 @@ spec:
           - name: SSL_CERT_FILE
             value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
           {{- end }}
+          - name: LOG_FORMAT
+            value: {{ .Values.castle.logFormat | quote }}
+          - name: LOG_LEVEL
+            value: {{ .Values.castle.logLevel | quote }}
           {{- if .Values.extraEnvVarsSecret }}
           envFrom:
           - secretRef:
@@ -243,7 +247,7 @@ spec:
             {{- $overrides := dict }}
             {{- /* if override property key exists in values */}}
             {{- if (hasKey $.Values.rtr.kafka $overridesProperty) }}
-              {{- $overrides = $overridesProperty | get ($overridesProperty | get $.Values.kafka.rtr)}}
+              {{- $overrides = $overridesProperty | get ($overridesProperty | get $.Values.rtr.kafka)}}
             {{- end }}
             {{- $kafkaPropertiesEnv := include "castle.kafkaPropertiesEnv" (dict
                   "kafka" $.Values.rtr.kafka
@@ -256,7 +260,27 @@ spec:
                   "prefix" "CASTLE_RESTRICTION_JSON_KAFKA_"
                 ) | fromYaml }}
             {{- get $kafkaPropertiesEnv "ret" | toYaml | nindent 12 }}
-            {{- end }}{{- /* range */}}
+
+            {{- if $.Values.rtr.roadLocks.enabled }}
+            {{- $overridesRoadLocks := dict }}
+            {{- /* if override property key exists in values */}}
+            {{- if (hasKey $.Values.rtr.roadLocks.kafka $overridesProperty) }}
+              {{- $overridesRoadLocks = $overridesProperty | get ($overridesProperty | get $.Values.rtr.roadLocks.kafka)}}
+            {{- end }}
+            {{- $kafkaRoadLocksPropertiesEnv := include "castle.kafkaPropertiesEnv" (dict
+                  "kafka" $.Values.rtr.roadLocks.kafka
+                  "overrides" $overrides
+                  "secretname" (print
+                      (include "castle.fullname" $)
+                      "-rtr"
+                    )
+                  "mountpoint" "/etc/2gis/secret/rtr"
+                  "prefix" "CASTLE_RESTRICTION_JSON_KAFKA_ROAD_LOCKS_"
+                ) | fromYaml }}
+            {{- get $kafkaRoadLocksPropertiesEnv "ret" | toYaml | nindent 12 }}
+            {{- end }}{{- /* .Values.rtr.roadLocks.enabled */}}
+            {{- end }}{{- /* range $kafkaRole, $overridesProperty */}}
+
             - name: CASTLE_HTTP_PWD
               valueFrom:
                 secretKeyRef:
@@ -268,6 +292,8 @@ spec:
                   fieldPath: metadata.name
             - name: CASTLE_RESTRICTION_JSON_KAFKA_GROUP_ID
               value: "{{ .Values.rtr.kafka.groupId }}-$(POD_NAME)"
+            - name: CASTLE_RESTRICTION_JSON_KAFKA_ROAD_LOCKS_GROUP_ID
+              value: "{{ .Values.rtr.roadLocks.kafka.groupId }}-$(POD_NAME)"
             {{- if .Values.castle.excludeProjects }}
             - name: CASTLE_EXCLUDE_PROJECTS
               value: {{ join "," .Values.castle.excludeProjects | quote }}
@@ -276,6 +302,10 @@ spec:
             - name: SSL_CERT_FILE
               value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
             {{- end }}
+            - name: LOG_FORMAT
+              value: {{ .Values.castle.logFormat | quote }}
+            - name: LOG_LEVEL
+              value: {{ .Values.castle.logLevel | quote }}
           {{- if .Values.extraEnvVarsSecret }}
           envFrom:
           - secretRef:

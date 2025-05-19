@@ -8,8 +8,6 @@ data:
     # COMMON CONFIGURATION
     lock_file_location:'/var/run/2gis/%service%.lock'
     service_name: 'castle'
-    # LOGGING
-    log_level: '{{ .Values.castle.logLevel }}'
     # PATHS AND FILE PROPERTIES
     # path to store city data
     data_destination_dir: {{ .Values.castle.castleDataPath | squote }}
@@ -227,7 +225,7 @@ data:
             {{- $overrides := dict }}
             {{- /* if override property key exists in values */}}
             {{- if (hasKey $.Values.rtr.kafka $overridesProperty) }}
-              {{- $overrides = $overridesProperty | get ($overridesProperty | get $.Values.kafka.rtr)}}
+              {{- $overrides = $overridesProperty | get ($overridesProperty | get $.Values.rtr.kafka)}}
             {{- end }}
             {{- include "castle.kafkaPropertiesConfig" (dict
                   "kafka" $.Values.rtr.kafka
@@ -240,7 +238,38 @@ data:
                   "mountpoint" (print "/etc/2gis/secret/" (lower $kafkaRole))
                 ) | nindent 16}}
             {{- end }}{{- /* range */}}
+            },
+            
+            {{- /* if rtr.roadLocks present */}}
+            {{- if .Values.rtr.roadLocks.enabled }}
+            road_locks_topic: '{{ .Values.rtr.roadLocks.kafka.topic }}',
+            road_locks_handler: RestrictionEventLoader,
+            road_locks:
+            {
+                group_id: 'from-env',
+            {{- /* app required config options for override env variables */}}
+            {{- range $kafkaRole, $overridesProperty := (dict
+                  "CONSUMER" "consumerOverrides"
+                ) -}}
+            {{- $overrides := dict }}
+            {{- /* if override property key exists in values */}}
+            {{- if (hasKey $.Values.rtr.roadLocks.kafka $overridesProperty) }}
+              {{- $overrides = $overridesProperty | get ($overridesProperty | get $.Values.rtr.roadLocks.kafka)}}
+            {{- end }}
+            {{- include "castle.kafkaPropertiesConfig" (dict
+                  "kafka" $.Values.rtr.roadLocks.kafka
+                  "overrides" $overrides
+                  "secretname" (print
+                      (include "castle.fullname" $)
+                      "-"
+                      (lower $kafkaRole)
+                    )
+                  "mountpoint" (print "/etc/2gis/secret/" (lower $kafkaRole))
+                ) | nindent 16}}
+            {{- end }}{{- /* range $kafkaRole, $overridesProperty */}}
             }
+            {{- end }}{{- /* .Values.rtr.roadLocks.enabled */}}
+            
         },
         store_period: {{ .Values.castle.storePeriod.rtr | squote }}
     }
