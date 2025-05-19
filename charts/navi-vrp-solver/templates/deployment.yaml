@@ -1,0 +1,155 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "generic-chart.fullname" . }}
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+    {{- with .Values.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if not .Values.hpa.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- include "tplvalues.render" ( dict "value" .Values.strategy "context" $) | nindent 6 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "generic-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "generic-chart.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "generic-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+      {{- $kafkaVolumeMounted := (
+              .Values.kafka.fileProperties |
+              or (.Values.kafka.consumerOverrides).fileProperties |
+              or (.Values.kafka.producerOverrides).fileProperties
+            ) }}
+      {{- if $kafkaVolumeMounted }}
+        - name: {{ printf "%s-consumer" (include "generic-chart.fullname" .) | quote }}
+          secret:
+            secretName: {{ printf "%s-consumer" (include "generic-chart.fullname" .) | quote }}
+        - name: {{ printf "%s-producer" (include "generic-chart.fullname" .) | quote }}
+          secret:
+            secretName: {{ printf "%s-producer" (include "generic-chart.fullname" .) | quote }}
+      {{- end }}
+      containers:
+        - name: {{ include "generic-chart.containerName" . }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.vrpSolver.appPort }}
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+            failureThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            initialDelaySeconds: 45
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+            failureThreshold: 5
+          volumeMounts:
+          {{- if $kafkaVolumeMounted }}
+          - name: {{ printf "%s-consumer" (include "generic-chart.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/consumer/
+          - name: {{ printf "%s-producer" (include "generic-chart.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/producer/
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+            - secretRef:
+                name: {{ include "generic-chart.fullname" . }}-secret-env
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: LOG_LEVEL
+              value: "{{ .Values.vrpSolver.logLevel }}"
+            - name: LOG_SERIALIZE
+              value: "{{ .Values.vrpSolver.logSerialize }}"
+            - name: STORAGE__S3_ENDPOINT_URL
+              value: "{{ .Values.s3.url }}"
+            - name: STORAGE__S3_PUBLIC_URL
+              value: "{{ .Values.s3.publicUrl }}"
+            - name: STORAGE__TYPE
+              value: "S3_STORAGE"
+            - name: VROOM__CPU
+              value: "{{ .Values.vrpSolver.cpu }}"
+            - name: STORAGE__VRP__BUCKET
+              value: "{{ .Values.s3.vrp.bucket }}"
+            - name: STORAGE__DM__BUCKET
+              value: "{{ .Values.s3.dm.bucket }}"
+            - name: MOSES__URL
+              value: "{{ .Values.naviBack.url }}"
+            - name: KAFKA__PRODUCER__TOPIC
+              value: "{{ .Values.kafka.statusTopic }}"
+            - name: KAFKA__CONSUMER__TOPIC
+              value: "{{ .Values.kafka.taskTopic }}"
+            - name: KAFKA__CONSUMER__CONFIG__GROUP_ID
+              value: "{{ .Values.kafka.groupId }}"
+            {{- range $kafkaRole, $overridesProperty := (dict
+                  "PRODUCER" "producerOverrides"
+                  "CONSUMER" "consumerOverrides"
+                ) -}}
+            {{- $kafkaPropertyEnv := print "KAFKA__" $kafkaRole "__CONFIG__" -}}
+            {{- $kafkaPropertiesEnv := include "navi-vrp-solver.kafkaPropertiesEnv" (dict
+                  "kafka" $.Values.kafka
+                  "overrides" ($overridesProperty | get $.Values.kafka)
+                  "secretname" (print
+                      (include "generic-chart.fullname" $)
+                      "-"
+                      (lower $kafkaRole)
+                    )
+                  "mountpoint" (print "/etc/2gis/secret/" (lower $kafkaRole))
+                  "prefix" $kafkaPropertyEnv
+                ) | fromYaml }}
+            {{- get $kafkaPropertiesEnv "ret" | toYaml | nindent 12 }}
+            {{- end }}{{- /* range */}}
+          lifecycle:
+            # wait for the endpoint removal process
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep {{ .Values.preStopDelay | default 5 | int }}"]
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 60 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
