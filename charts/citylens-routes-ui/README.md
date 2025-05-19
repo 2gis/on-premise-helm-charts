@@ -21,7 +21,7 @@
 | Name               | Description | Value                                |
 | ------------------ | ----------- | ------------------------------------ |
 | `image.repository` | Repository  | `2gis-on-premise/citylens-routes-ui` |
-| `image.tag`        | Tag         | `1.0.2`                              |
+| `image.tag`        | Tag         | `1.1.0`                              |
 
 ### Environment
 
