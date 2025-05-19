@@ -98,13 +98,13 @@ dgctlStorage:
 
 # @section Routes Planner integration
 
-# @skip api.routesApiBaseUrl
+# @param api.routesApiBaseUrl Routes Planner API endpoint - if provided mobile application can access Routes Planner API via citylens-api /routes-api endpoint. Ex.: `http(s)://citylens-routes-api.ingress.host/`
 
 api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.17.8
+    tag: 1.17.9
 
   replicas: 4
 
