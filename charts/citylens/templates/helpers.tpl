@@ -69,6 +69,14 @@ Expand the name of the chart.
 {{ include "citylens.name" . }}-dashboard-batch-events
 {{- end }}
 
+{{- define "citylens.jobs.proFilterUpdate.name" -}}
+{{ include "citylens.name" . }}-profilters-job
+{{- end }}
+
+{{- define "citylens.jobs.predictorsSync.name" -}}
+{{ include "citylens.name" . }}-predictorssync-job
+{{- end }}
+
 {{- define "citylens.configmap.labels" -}}
 app.kubernetes.io/name: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -217,6 +225,18 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "citylens.migration.labels" -}}
 app.kubernetes.io/name: {{ include "citylens.api.name" . }}
 app.kubernetes.io/instance: {{ .Chart.Name }}-db-migration
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "citylens.jobs.proFiltersUpdate.labels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.jobs.proFilterUpdate.name" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "citylens.jobs.predictorsSync.labels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.jobs.predictorsSync.name" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
