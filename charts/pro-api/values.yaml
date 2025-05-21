@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.8.2
+    tag: 2.13.0
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -186,7 +186,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.8.2
+    tag: 2.13.0
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -255,16 +255,41 @@ permissions:
     port: 80
 
   # @skip permissions.settings.host
+  # @skip permissions.settings.deleteInactiveUsers
   # @skip permissions.settings.localCache.enabled
   # @skip permissions.settings.localCache.trackStatistics
   # @param permissions.settings.auth.apiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`. **Required**
+  # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
+  # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
   settings:
     host: ''
+    deleteInactiveUsers: false
+    allowPermissionsToAnyAsset: false
     localCache:
       enabled: true
       trackStatistics: false
     auth:
       apiKey: ''
+
+    # @section Default permissions for new users
+    # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
+    # @param permissions.settings.default_permissions.assets Ids of assets to be accessed. Use '*' symbol to allow access to all assets.
+    # @param permissions.settings.default_permissions.analytics Ids of analytics to be accessed. Use '*' symbol to allow access to all analytics.
+    # @param permissions.settings.default_permissions.territories Ids of territories to be accessed. Use '*' symbol to allow access to all territories.
+    # @param permissions.settings.default_permissions.add_user_assets.allow Allow user to add assets.
+    # @param permissions.settings.default_permissions.add_user_assets.quantity Maximum number of assets that can be added by the user.
+    # @param permissions.settings.default_permissions.add_user_assets.file_size Maximum file size of the asset that can be added by the user.
+    # @param permissions.settings.default_permissions.isochrones Maximum number of isochrones that can be created by the user.
+    default_permissions:
+      open_pro_ui: true
+      assets: [branch, building]
+      analytics: ['*']
+      territories: []
+      add_user_assets:
+        allow: true
+        quantity: 100
+        file_size: 100
+      isochrones: 1000
 
 # @section Tasks API configuration & settings
 
@@ -275,7 +300,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.8.2
+    tag: 2.13.0
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -425,7 +450,7 @@ tasks:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.8.2
+  tag: 2.13.0
   imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2
@@ -461,7 +486,7 @@ assetImporter:
 assetPreparer:
   appName: asset-preparer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.8.2
+  tag: 2.13.0
   imagePullSecrets: []
   schedule: 0 16 * * 6
   backoffLimit: 2
@@ -529,7 +554,7 @@ s3:
   resourcesBucket: ''
 
 
-# @section PostgreSQL settings
+# @section PostgreSQL settings (minimum supported version 15)
 
 postgres:
 
@@ -664,36 +689,37 @@ kafka:
 
 # @section ElasticSearch settings (supported version 8.x)
 
-# @param elastic.host ElasticSearch host address. **Required**
+# @skip elastic.instanceName
+
+# @param elastic.nodes[0].host ElasticSearch host. **Required**
+# @param elastic.nodes[0].port ElasticSearch port. **Required**
 # @param elastic.secure Set to `true` if elastic.host must be accessed via https. **Required**
-# @param elastic.port ElasticSearch port. **Required**
 # @param elastic.username Username used to connect to ElasticSearch
 # @param elastic.password Password used to connect to ElasticSearch
 # @param elastic.enableHttpCompression Use http-level compression. Must be enabled in the ElasticSearch configuration
 # @param elastic.indexPrefix Prefix for indexes created in the ElasticSearch. Сan be used to separate different environments
 
 elastic:
-  host: ''
+  instanceName: ''
   secure: false
-  port: 9200
   username: ''
   password: ''
   enableHttpCompression: false
   indexPrefix: ''
-
+  nodes:
+  - port: 9200
+    host: ''
 
 # @section Redis settings (supported version 6.x)
 
 # @param redis.host Redis host address. **Required**
 # @param redis.port Redis port. **Required**
-# @skip redis.enabled
 # @param redis.username Username used to connect to Redis
 # @param redis.password Password used to connect to Redis
 
 redis:
   host: ''
   port: 6379
-  enabled: true
   username: ''
   password: ''
 

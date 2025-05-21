@@ -36,6 +36,7 @@ Usage:
       {{ $rules | toPrettyJson | nindent 6 -}}
 {{- end -}}
 
+
 {{/*
 Check if value exists in rule routing section
 Usage:
@@ -54,6 +55,7 @@ Usage:
    {{- end -}}
    {{- ternary "true" "" $found -}}
 {{- end -}}
+
 
 {{/*
 Check if value exists in rule queries section
@@ -74,6 +76,7 @@ Usage:
    {{- ternary "true" "" $found -}}
 {{- end -}}
 
+
 {{/*
 Set attractor_car parameter in server config section
 Usage:
@@ -86,6 +89,7 @@ Usage:
       (hasKey $.Values.attractor.attractor "car")
    -}}
 {{- end -}}
+
 
 {{/*
 Set attractor_pedestrian parameter in server config section
@@ -102,6 +106,7 @@ Usage:
    -}}
 {{- end -}}
 
+
 {{/*
 Set attractor_taxi parameter in server config section
 Usage:
@@ -115,6 +120,7 @@ Usage:
    -}}
 {{- end -}}
 
+
 {{/*
 Set attractor_truck parameter in server config section
 Usage:
@@ -127,6 +133,7 @@ Usage:
       (hasKey $.Values.attractor.attractor "truck")
    -}}
 {{- end -}}
+
 
 {{/*
 Set attractor_bicycle parameter in server config section
@@ -142,6 +149,7 @@ Usage:
    -}}
 {{- end -}}
 
+
 {{/*
 Check if instance is running in truck mode
 Usage:
@@ -151,6 +159,7 @@ Usage:
    {{- $is_enabled_routing := ( eq "true" (include "rules.inRoutingSection" (dict "routingValue" "truck" "context" $))) -}}
    {{- ternary "true" "" $is_enabled_routing -}}
 {{- end -}}
+
 
 {{/*
 Check if instance is running in ctx mode
@@ -162,6 +171,7 @@ Usage:
    {{- $is_enabled_query := ( or (eq "true" (include "rules.inQueriesSection" (dict "queriesValue" "ctx" "context" $))) (eq "true" (include "rules.inQueriesSection" (dict "queriesValue" "public_transport" "context" $)))) -}}
    {{- ternary "true" "" (or $is_enabled_routing $is_enabled_query) -}}
 {{- end -}}
+
 
 {{/*
 Check if instance is running in taxi mode
@@ -181,6 +191,8 @@ Usage:
 {{- define "config.isMapMatching" -}}
    {{- include "rules.inQueriesSection" (dict "queriesValue" "map_matching" "context" $) -}}
 {{- end -}}
+
+{{/* vim: set filetype=mustache: */}}
 
 {{/*
 Set castle url
