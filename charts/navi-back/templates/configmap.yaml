@@ -125,6 +125,10 @@ data:
         },
         "cities": {
           "update_period": 0,
+          {{- /* search .zip in files */}}
+          {{- if regexMatch ".*\\.zip.*" .Values.naviback.citiesFilename }}
+          "content": "cities.conf",
+          {{- end }}
           "nodes": [
             "{REMOTE_PATH}/{{ .Values.naviback.citiesFilename }}"
           ],
@@ -161,7 +165,7 @@ data:
         "forecasted_speeds_index": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
           "nodes": [
-            "http://{REMOTE_FORECAST}/index.json"
+            "http://{REMOTE_FORECAST}/{{ .Values.naviback.forecastFilename | default "index.json" }}"
           ],
           "timeout_seconds": {
             "count": 30
@@ -354,7 +358,7 @@ data:
         {{- end }}{{- /* .Values.naviback.indices.speedCams.enabled */}}
         {{- if .Values.naviback.indices.tugcUsersIndex.enabled }}
         "tugc_users_index": {
-          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 150 }},
           "nodes": [
             "{REMOTE_PATH}/tugc_users.json.zip"
           ],
@@ -376,7 +380,7 @@ data:
         {{- end }}{{- /* .Values.naviback.indices.tugcUsers.enabled */}}
         {{- if .Values.naviback.indices.tugc2gisIndex.enabled }}
         "tugc_2gis_index": {
-          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
+          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
           "nodes": [
             "{REMOTE_PATH}/tugc_2gis.json.zip"
           ],
@@ -612,12 +616,12 @@ data:
         "restrictions_index": {
           "update_period": {{ .Values.naviback.rtr.updatePeriod | int }},
           "nodes": [
-            "{{ .Values.naviback.rtr.url }}/restrictions_index.json.zip"
+            "{{ .Values.naviback.rtr.url }}/{{ .Values.naviback.rtr.filename | default "restrictions_index.json.zip" }}"
           ],
           "timeout_seconds": {
             "count": {{ .Values.naviback.rtr.timeoutSeconds | int }}
           },
-          "cache_path_": "file://{LOCAL_PATH}/{project_name}/restrictions_index.json.zip"
+          "cache_path_": "file://{LOCAL_PATH}/{project_name}/{{ .Values.naviback.rtr.filename | default "restrictions_index.json.zip" }}"
         },
         {{- end }}{{- /* if .Values.naviback.rtr.enabled */}}
         {{- if .Values.naviback.hierarchies.enabled }}
@@ -727,12 +731,14 @@ data:
           "simple_network_bicycle": {{ include "config.setSimpleNetworkBicycle" $ | default false -}},
           "simple_network_truck": {{ include "config.setSimpleNetworkTruck" $ | default false -}},
           "simple_network_emergency": {{ include "config.setSimpleNetworkEmergency" $ | default false -}},
+          "simple_network_motorcycle": {{ include "config.setSimpleNetworkMotorcycle" $ | default false -}},
           "ctx_only": {{ include "rules.inRoutingSectionOnly" (dict "routingValue" "ctx" "context" $) -}},
           "attractor_car": {{ include "config.setAttractorCar" $ | default false -}},
           "attractor_pedestrian": {{ include "config.setAttractorPedestrian" $ | default false -}},
           "attractor_bicycle": {{ include "config.setAttractorBicycle" $ | default false -}},
           "attractor_taxi": {{ include "config.setAttractorTaxi" $ | default false -}},
           "attractor_truck": {{ include "config.setAttractorTruck" $ | default false -}},
+          "attractor_motorcycle": {{ include "config.setAttractorMotorcycle" $ | default false -}},
           "reduce_edges_optimization_flag": {{ include "config.setReduceEdgesOptimizationFlag" $ | default false -}},
           {{- if ((.Values.resources).limits).cpu }}
           "dist_matrix_thread_pool_size": {{ include "config.setCpuNumber" . }},
