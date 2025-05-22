@@ -172,6 +172,8 @@ spec:
             value: {{ .Values.app_project | default "" | quote }}
           - name: PORT_GRPC
             value: {{ .Values.attractor.grpc_port | quote }}
+          - name: TZ
+            value: {{ .Values.timezone | quote }}
           lifecycle:
             # wait for the endpoint removal process
             preStop:
