@@ -43,6 +43,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                    | `{}`  |
 | `preStopDelay`                  | Delay in seconds before terminating container                                                                                                 | `5`   |
 | `terminationGracePeriodSeconds` | Grace period for container shutdown, refer to [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) for details  | `60`  |
+| `timezone`                      | Timezone for the router container                                                                                                             | `UTC` |
 
 ### Deployment settings
 
