@@ -195,6 +195,20 @@ Usage:
 
 
 {{/*
+Set simple_network_motorcycle parameter in server config section
+Usage:
+{{ include "config.setSimpleNetworkMotorcycle" $ }}
+*/}}
+{{- define "config.setSimpleNetworkMotorcycle" -}}
+   {{-  ternary
+      $.Values.naviback.simpleNetwork.motorcycle
+      (include "rules.inRoutingSection" (dict "routingValue" "motorcycle" "context" $))
+      (hasKey $.Values.naviback.simpleNetwork "motorcycle")
+   -}}
+{{- end -}}
+
+
+{{/*
 Set attractor_car parameter in server config section
 Usage:
 {{ include "config.setAttractorCar" $ }}
@@ -288,6 +302,25 @@ or makes a guess from the routing list.
           (or (include "rules.inRoutingSection" (dict "routingValue" "bicycle" "context" .))
               (include "rules.inRoutingSection" (dict "routingValue" "scooter" "context" .))))
       (or (hasKey .Values.naviback.attractor "bicycle") (hasKey .Values.naviback.attractor "scooter"))
+   -}}
+{{- end -}}
+
+
+{{/*
+Set attractor_motorcycle parameter in server config section
+Usage:
+{{ include "config.setAttractorMotorcycle" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
+*/}}
+{{- define "config.setAttractorMotorcycle" -}}
+   {{- ternary
+      .Values.naviback.attractor.motorcycle
+      (.Values.transmitter.enabled | ternary false
+          (include "rules.inRoutingSection" (dict "routingValue" "motorcycle" "context" .)))
+      (hasKey .Values.naviback.attractor "motorcycle")
    -}}
 {{- end -}}
 
