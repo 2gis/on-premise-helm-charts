@@ -20,6 +20,7 @@ dgctlDockerRegistry: ''
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 # @param preStopDelay Delay in seconds before terminating container
 # @param terminationGracePeriodSeconds Grace period for container shutdown, refer to [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) for details
+# @param timezone Timezone for the router container
 
 replicaCount: 1
 revisionHistoryLimit: 3
@@ -34,6 +35,7 @@ tolerations: []
 affinity: {}
 preStopDelay: 5
 terminationGracePeriodSeconds: 60
+timezone: UTC
 
 
 # @section Deployment settings
