@@ -129,7 +129,7 @@ resources: {}
 # @param castle.restrictions.url Restrictions API base URL.
 # @param castle.restrictions.key Restrictions API key.
 # @param castle.jobs Number of parallel downloading jobs.
-# @param castle.logLevel Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.
+# @param castle.logLevel Logging level, one of: DEBUG, INFO, WARNING, ERROR
 # @param castle.logFormat TEXT or JSON
 # @extra castle.startupProbe [nullable] Settings for startup probes
 # @param castle.startupProbe.periodSeconds Check period for startup probes.
