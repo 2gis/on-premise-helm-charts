@@ -61,7 +61,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | `customStartupProbe`                 | Override default startup probe                                                                                              | `{}`   |
 | `command`                            | Override default command                                                                                                    | `[]`   |
 | `args`                               | Override default args                                                                                                       | `[]`   |
-| `timezone`                           | Timezone for the navi-attractor container                                                                                   | `UTC`  |
+| `timezone`                           | Timezone for the navi-attractor container. Refer to inline comments for details                                             | `UTC`  |
 
 ### Container image settings
 

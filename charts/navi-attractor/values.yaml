@@ -48,7 +48,7 @@ dgctlDockerRegistry: ''
 # @param customStartupProbe Override default startup probe
 # @param command Override default command
 # @param args Override default args
-# @param timezone Timezone for the navi-attractor container
+# @param timezone Timezone for the navi-attractor container. Refer to inline comments for details
 
 replicaCount: 1
 revisionHistoryLimit: 1
@@ -94,6 +94,12 @@ customReadinessProbe: {}
 customStartupProbe: {}
 command: []
 args: []
+# Set the timezone using a valid IANA timezone name, such as "Europe/Moscow" or "America/New_York".
+# Full list of supported timezones: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+#
+# Note: Avoid using POSIX-style timezones like "Etc/GMT+3" — they use inverted signs!
+# For example, "Etc/GMT+3" actually means UTC−3 (3 hours behind UTC), not UTC+3.
+# More info: https://en.wikipedia.org/wiki/Tz_database#Area
 timezone: UTC
 
 
