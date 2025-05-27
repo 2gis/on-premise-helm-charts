@@ -304,6 +304,8 @@ spec:
             - name: SSL_CERT_FILE
               value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
           {{- end }}
+            - name: TZ
+              value: {{ .Values.timezone | quote }}
           lifecycle:
             # wait for the endpoint removal process
             preStop:
