@@ -1,5 +1,15 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.39.0]
+
+### tiles-api
+
+- When updating the Tiles API, it is necessary to run the Tiles Importer to perform migrations. To ensure a seamless update without service interruption, you need to update the data and deploy with the new `dgctlStorage.manifest`. If you attempt to start without updating the data, the migrations will not be triggered and the Tiles API will crash with an error:
+
+```json
+ {"level":"info","msg":"Logging configured with LogFormat=json, LogLevel=info","time":"2025-05-23T09:21:45.235039224Z"} │ │ {"error":"tileset connection 'dgis_tileserver_web_amorozov_1747979082' failed: error reading layers information. Query: SELECT id, linked_id, name, created, updated,\n\t\t\t\t\tpublished, type, region_id, status, hash, hashes_by_dt, default_language,\n\t\t\t\t\tavailable_langua │ │ ges, hash_algo\n\t\t\t\t FROM dgis_tileserver_web_amorozov_1747979082.layers WHERE type=?: Undefined column name hash_algo in table dgis_tileserver_web_amorozov_1747979082.layers","level":"fatal","msg":"Can't create tileset 'web'","time":"2025-05-23T09:21:45.936874638Z"}
+```
+
 ## [1.38.0]
 
 ### citylens-routes-ui
