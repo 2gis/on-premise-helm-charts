@@ -25,7 +25,7 @@ strategy:
 # @param image.tag Tag
 image:
   repository: 2gis-on-premise/citylens-routes-ui
-  tag: 1.1.1
+  tag: 1.1.2
 
 # @section Environment
 
@@ -33,7 +33,7 @@ image:
 # @param env.MAPGL_API_URL Map API base URL **Required**
 # @param env.MAPGL_COPYRIGHT_VARIANT Copyright variant, can be '2gis', 'urbi' or empty
 # @param env.MAPGL_KEY API key for mapgl **Required**
-# @param env.MAPGL_STYLE_ID_GRAYSCALE Map grayscale style ID **Required**
+# @param env.MAPGL_STYLE_ID_GRAYSCALE Map grayscale style ID
 # @param env.MAPGL_STYLE_ID_DAY Map day style ID
 # @param env.MAPGL_STYLE_ID_NIGHT Map night style ID
 # @param env.MAPGL_STYLE_ID_PASTEL Map pastel style ID

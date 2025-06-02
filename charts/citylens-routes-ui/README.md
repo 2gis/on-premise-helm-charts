@@ -21,7 +21,7 @@
 | Name               | Description | Value                                |
 | ------------------ | ----------- | ------------------------------------ |
 | `image.repository` | Repository  | `2gis-on-premise/citylens-routes-ui` |
-| `image.tag`        | Tag         | `1.1.1`                              |
+| `image.tag`        | Tag         | `1.1.2`                              |
 
 ### Environment
 
@@ -31,7 +31,7 @@
 | `env.MAPGL_API_URL`            | Map API base URL **Required**                            | `""`  |
 | `env.MAPGL_COPYRIGHT_VARIANT`  | Copyright variant, can be '2gis', 'urbi' or empty        | `""`  |
 | `env.MAPGL_KEY`                | API key for mapgl **Required**                           | `""`  |
-| `env.MAPGL_STYLE_ID_GRAYSCALE` | Map grayscale style ID **Required**                      | `""`  |
+| `env.MAPGL_STYLE_ID_GRAYSCALE` | Map grayscale style ID                                   | `""`  |
 | `env.MAPGL_STYLE_ID_DAY`       | Map day style ID                                         | `""`  |
 | `env.MAPGL_STYLE_ID_NIGHT`     | Map night style ID                                       | `""`  |
 | `env.MAPGL_STYLE_ID_PASTEL`    | Map pastel style ID                                      | `""`  |
