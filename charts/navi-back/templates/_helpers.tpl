@@ -195,6 +195,20 @@ Usage:
 
 
 {{/*
+Set simple_network_motorcycle parameter in server config section
+Usage:
+{{ include "config.setSimpleNetworkMotorcycle" $ }}
+*/}}
+{{- define "config.setSimpleNetworkMotorcycle" -}}
+   {{-  ternary
+      $.Values.naviback.simpleNetwork.motorcycle
+      (include "rules.inRoutingSection" (dict "routingValue" "motorcycle" "context" $))
+      (hasKey $.Values.naviback.simpleNetwork "motorcycle")
+   -}}
+{{- end -}}
+
+
+{{/*
 Set attractor_car parameter in server config section
 Usage:
 {{ include "config.setAttractorCar" $ }}
@@ -293,6 +307,25 @@ or makes a guess from the routing list.
 
 
 {{/*
+Set attractor_motorcycle parameter in server config section
+Usage:
+{{ include "config.setAttractorMotorcycle" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
+*/}}
+{{- define "config.setAttractorMotorcycle" -}}
+   {{- ternary
+      .Values.naviback.attractor.motorcycle
+      (.Values.transmitter.enabled | ternary false
+          (include "rules.inRoutingSection" (dict "routingValue" "motorcycle" "context" .)))
+      (hasKey .Values.naviback.attractor "motorcycle")
+   -}}
+{{- end -}}
+
+
+{{/*
 Set reduce_edges_optimization_flag to True if queries contains get_dist_matrix value
 Usage:
 {{ include "config.setReduceEdgesOptimizationFlag" $ }}
@@ -346,18 +379,6 @@ Usage:
 */}}
 {{- define "config.isMapMatching" -}}
    {{- include "rules.inQueriesSection" (dict "queriesValue" "map_matching" "context" $) -}}
-{{- end -}}
-
-{{/*
-Set engine_update_period_sec value in config server section
-For pedestrain and bicycle routing type this value will be set in 0
-Usage:
-{{ include "config.setEngineUpdatePeriod" $ }}
-*/}}
-{{- define "config.setEngineUpdatePeriod" -}}
-   {{- if (or (include "config.setSimpleNetworkPedestrian" $) (include "config.setSimpleNetworkBicycle" $)) -}}
-      {{- 0 | int -}}
-   {{- end -}}
 {{- end -}}
 
 {{/*
