@@ -54,6 +54,10 @@ spec:
       {{- end }}
 
     spec:
+      {{- with .Values.api.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       terminationGracePeriodSeconds: {{ .Values.api.terminationGracePeriodSeconds }}
 
       volumes:

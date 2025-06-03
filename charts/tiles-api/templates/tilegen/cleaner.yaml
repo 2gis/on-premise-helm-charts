@@ -21,6 +21,10 @@ spec:
       template:
 
         spec:
+          {{- with .podSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
           serviceAccountName: {{ include "tilegen.serviceAccount" $ }}
           restartPolicy: OnFailure
 

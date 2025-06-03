@@ -52,7 +52,10 @@ spec:
     spec:
       serviceAccountName: {{ include "tilegen.serviceAccount" $ }}
       terminationGracePeriodSeconds: {{ .terminationGracePeriodSeconds }}
-
+      {{- with .podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - configMap:
             name: {{ include "tiles.fullname" $ }}-tilegen
