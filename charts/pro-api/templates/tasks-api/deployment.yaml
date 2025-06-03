@@ -128,6 +128,14 @@ spec:
                   key: tasksDbConnectionPwdRo
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
+            - name: FeatureManagement__AssetDataPreparation
+              value: "{{ $.Values.tasks.settings.features.assetDataPreparation.enabled }}"
+            - name: FeatureManagement__CleanCitylensFrames
+              value: "{{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled }}"
+            - name: FeatureManagement__RemoveUnusedUserAssetFiles
+              value: "{{ $.Values.tasks.settings.features.removeUnusedUserAssetFiles.enabled }}"
+            - name: FeatureManagement__UserManagement
+              value: "{{ $.Values.tasks.settings.features.userManagement.enabled }}"
             - name: Common__Logging__Format
               value: "{{ .Values.tasks.settings.logging.format }}"
             - name: Common__Logging__Targets
@@ -159,5 +167,9 @@ spec:
               value: "{{ .Values.tasks.settings.grpcPort }}"
             - name: Common__DataCenterId
               value: "{{ .Values.api.settings.dataCenterId }}"
+            {{- if .Values.tasks.settings.features.assetDataPreparation.enabled }}
+            - name: AssetDataPreparation__Segments
+              value: "{{ .Values.tasks.settings.features.assetDataPreparation.segments }}"
+            {{- end }}
 
 {{- end }}
