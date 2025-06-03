@@ -240,7 +240,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.18.0
+    tag: 1.18.1
 
   replicas: 1
 

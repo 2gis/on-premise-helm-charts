@@ -137,7 +137,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.18.0`                       |
+| `web.image.tag`        | Tag.         | `1.18.1`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
