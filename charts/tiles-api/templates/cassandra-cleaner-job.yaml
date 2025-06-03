@@ -23,6 +23,10 @@ spec:
         {{- include "tiles.selectorLabels" $ | nindent 8 }}
         {{- include "tiles.cleaner.label" $ | nindent 8 }}
     spec:
+      {{- with $.Values.importer.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ include "importer.serviceAccount" $ }}
 
       volumes:
