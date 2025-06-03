@@ -121,6 +121,8 @@ data:
       default_thresholds:
         cluster_objects_distance_thr: 20
         dbscan_eps: 20
+    localization_distance_thresholds:
+      default: [3, 40]
     enabled_modules:
       header_links:
         {{- toYaml .Values.headerLinks | nindent 8 }}
