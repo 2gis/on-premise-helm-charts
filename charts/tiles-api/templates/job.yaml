@@ -60,7 +60,8 @@ spec:
 
       containers:
         - name: importer
-
+          securityContext:
+            {{- toYaml $.Values.securityContext | nindent 12 }}
           {{- with $.Values.importer }}
           image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
           imagePullPolicy: {{ .image.pullPolicy }}

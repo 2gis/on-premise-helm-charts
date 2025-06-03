@@ -90,6 +90,8 @@ spec:
       containers:
 
         - name: api
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
           imagePullPolicy: {{ .image.pullPolicy }}
           command: ["/selfimporter", "api"]

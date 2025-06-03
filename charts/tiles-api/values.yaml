@@ -31,6 +31,7 @@ dgctlStorage:
 # @param emailManager Account manager contact information that will be used in warning and error messages on raster tiles for all kinds of blocks.
 # @param logLevel Logging level for 'api', 'proxy', 'importer' (can be overridden by {service}.logLevelOverride option). Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
 # @param logFormat Logging format for 'api', 'proxy', 'importer' (can be overridden by {service}.logFormatOverride option). Allowed options: text|json. If not defined, 'json' format will be used.
+# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
 # @extra types **Tiles [types](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture) enabled in Tiles API**
 # @param types[0].kind Kind of tiles, should be one of: web, raster, native, mapbox.
@@ -46,6 +47,7 @@ emailManager: on-premise@2gis.com
 
 logLevel: info
 logFormat: json
+securityContext: {}
 
 types:
 - kind: ''
