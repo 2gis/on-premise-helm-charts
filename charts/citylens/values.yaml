@@ -1167,7 +1167,7 @@ routes:
   api:
     image:
       repository: 2gis-on-premise/citylens-routes-api
-      tag: 1.1.1
+      tag: 1.2.2
       pullPolicy: IfNotPresent
 
     replicaCount: 1
@@ -1243,7 +1243,7 @@ routes:
   worker:
     image:
       repository: 2gis-on-premise/citylens-worker-service
-      tag: 1.1.1
+      tag: 1.2.2
       pullPolicy: IfNotPresent
 
     replicaCount: 1
