@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.17.9`                       |
+| `api.image.tag`        | Tag.         | `1.18.0`                       |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -140,7 +140,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.17.8`                       |
+| `web.image.tag`        | Tag.         | `1.18.1`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -412,7 +412,7 @@ See the [documentation]() to learn about:
 | Name                                               | Description                                                                                                                                    | Value                              |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `worker.dashboardBatchEvents.image.repository`     | Repository.                                                                                                                                    | `2gis-on-premise/citylens-workers` |
-| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.17.8`                           |
+| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.18.0`                           |
 | `worker.dashboardBatchEvents.image.pullPolicy`     | Pull Policy.                                                                                                                                   | `IfNotPresent`                     |
 | `worker.dashboardBatchEvents.logLevel`             | Worker's log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.                                                                           | `INFO`                             |
 | `worker.dashboardBatchEvents.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`                                |
@@ -430,13 +430,23 @@ See the [documentation]() to learn about:
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.17.1`                            |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.18.0`                            |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |
 | `migrations.resources.limits.cpu`      | A CPU limit.                                                                                                            | `200m`                              |
 | `migrations.resources.limits.memory`   | A memory limit.                                                                                                         | `2Gi`                               |
 | `migrations.nodeSelector`              | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`                                |
+
+### Job to update filters in PRO before installing new version of Citylens.
+
+| Name                                              | Description                                                                                                             | Value  |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
+| `jobs.proFiltersUpdate.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m` |
+| `jobs.proFiltersUpdate.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`  |
+| `jobs.proFiltersUpdate.resources.limits.cpu`      | A CPU limit.                                                                                                            | `200m` |
+| `jobs.proFiltersUpdate.resources.limits.memory`   | A memory limit.                                                                                                         | `2Gi`  |
+| `jobs.proFiltersUpdate.nodeSelector`              | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`   |
 
 ### Kafka settings
 
