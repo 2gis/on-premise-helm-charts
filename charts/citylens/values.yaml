@@ -98,7 +98,7 @@ dgctlStorage:
 
 # @section Routes Planner integration
 
-# @skip api.routesApiBaseUrl
+# @param api.routesApiBaseUrl Routes Planner API endpoint - if provided mobile application can access Routes Planner API via citylens-api /routes-api endpoint. Ex.: http://citylens-routes-api.svc
 
 api:
   image:

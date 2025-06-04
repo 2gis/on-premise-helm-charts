@@ -1,4 +1,4 @@
-# @section Geo API configuration & settings
+﻿# @section Geo API configuration & settings
 
 api:
 
@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.13.0
+    tag: 2.16.0
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -41,6 +41,7 @@ api:
   # @param api.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
   # @param api.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param api.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param api.pod.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
   # @param api.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param api.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param api.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
@@ -64,6 +65,7 @@ api:
     tolerations: []
     podAnnotations: {}
     podLabels: {}
+    podSecurityContext: {}
     annotations: {}
     labels: {}
     revisionHistoryLimit: 3
@@ -186,7 +188,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.13.0
+    tag: 2.16.0
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -215,6 +217,7 @@ permissions:
   # @param permissions.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
   # @param permissions.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param permissions.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param permissions.pod.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
   # @param permissions.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param permissions.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param permissions.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
@@ -233,6 +236,7 @@ permissions:
     tolerations: []
     podAnnotations: {}
     podLabels: {}
+    podSecurityContext: {}
     annotations: {}
     labels: {}
     revisionHistoryLimit: 3
@@ -300,7 +304,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.13.0
+    tag: 2.16.0
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -330,6 +334,7 @@ tasks:
   # @param tasks.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
   # @param tasks.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param tasks.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param tasks.pod.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
   # @param tasks.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param tasks.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param tasks.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
@@ -352,6 +357,7 @@ tasks:
     tolerations: []
     podAnnotations: {}
     podLabels: {}
+    podSecurityContext: {}
     annotations: {}
     labels: {}
     revisionHistoryLimit: 3
@@ -404,6 +410,7 @@ tasks:
   # @param tasks.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
   # @param tasks.settings.worker.resourceIntensiveTasksWorkersCount Number of threads that will be used by Hangfire-server to performs resource-intensive tasks
   # @param tasks.settings.worker.regularTasksWorkersCount Number of threads that will be used by Hangfire-server to performs other tasks
+  # @skip tasks.settings.features
   settings:
     enabled: true
     env: ''
@@ -416,6 +423,16 @@ tasks:
     worker:
       resourceIntensiveTasksWorkersCount: 5
       regularTasksWorkersCount: 5
+    features:
+      assetDataPreparation:
+        enabled: false
+        segments: ''
+      cleanCitylensFrames:
+        enabled: false
+      removeUnusedUserAssetFiles:
+        enabled: false
+      userManagement:
+        enabled: true
 
 # @section asset importer settings
 
@@ -450,7 +467,7 @@ tasks:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.13.0
+  tag: 2.16.0
   imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2
@@ -477,35 +494,6 @@ assetImporter:
     esMetricsEnabled: false
     failedImportJobsLimit: 0
     ttlSecondsAfterFinished: 86400  # 1 day
-
-
-# @section asset preparer settings
-
-# @skip assetPreparer
-
-assetPreparer:
-  appName: asset-preparer
-  repository: 2gis-on-premise/pro-importer
-  tag: 2.13.0
-  imagePullSecrets: []
-  schedule: 0 16 * * 6
-  backoffLimit: 2
-  successfulJobsHistoryLimit: 1
-  failedJobsHistoryLimit: 3
-  nodeSelector: {}
-  tolerations: []
-  resources:
-    requests:
-      cpu: 300m
-      memory: 256M
-    limits:
-      cpu: 500m
-      memory: 512M
-  enabled: false
-  settings:
-    files: ''
-    maxParallelJobs: 1
-
 
 # @section common infrastructure settings
 
@@ -707,8 +695,8 @@ elastic:
   enableHttpCompression: false
   indexPrefix: ''
   nodes:
-  - port: 9200
-    host: ''
+    - port: 9200
+      host: ''
 
 # @section Redis settings (supported version 6.x)
 

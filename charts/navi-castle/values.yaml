@@ -129,7 +129,8 @@ resources: {}
 # @param castle.restrictions.url Restrictions API base URL.
 # @param castle.restrictions.key Restrictions API key.
 # @param castle.jobs Number of parallel downloading jobs.
-# @param castle.logLevel Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.
+# @param castle.logLevel Logging level, one of: DEBUG, INFO, WARNING, ERROR
+# @param castle.logFormat TEXT or JSON
 # @extra castle.startupProbe [nullable] Settings for startup probes
 # @param castle.startupProbe.periodSeconds Check period for startup probes.
 # @param castle.startupProbe.failureThreshold Threshold for startup probes.
@@ -151,6 +152,7 @@ castle:
   excludeProjects: []
   jobs: 1
   logLevel: INFO
+  logFormat: TEXT
   startupProbe:
     periodSeconds: 5
     failureThreshold: 180
@@ -197,7 +199,7 @@ cron:
     restriction: false
     restrictionImport: false
   schedule:
-    import: 11 * * * *
+    import: '11 * * * *'
     restriction: '*/5 * * * *'
     restrictionImport: '*/5 * * * *'
   concurrencyPolicy: Forbid
@@ -248,6 +250,14 @@ persistentVolume:
 # @skip rtr.kafka.properties.security.protocol
 # @param rtr.kafka.sensitiveProperties As rtr.kafka.properties, but kept in Secrets. Refer to inlines comments for details.
 # @param rtr.kafka.fileProperties As rtr.kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
+# @param rtr.roadLocks.enabled If the RTR-Kafka is enabled.
+# @param rtr.roadLocks.kafka.topic Name of the topic.
+# @param rtr.roadLocks.kafka.groupId Kafka consumer group id.
+# @extra rtr.roadLocks.kafka.properties Properties as supported by kafka-python. Refer to inline comments for details.
+# @skip rtr.roadLocks.kafka.properties.bootstrap.servers
+# @skip rtr.roadLocks.kafka.properties.security.protocol
+# @param rtr.roadLocks.kafka.sensitiveProperties As rtr.rtr_kafka.properties, but kept in Secrets. Refer to inlines comments for details.
+# @param rtr.roadLocks.kafka.fileProperties As rtr.rtr_kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
 # @param rtr.buildFtp.baseDir Base dir on build ftp.
 # @param rtr.buildFtp.login Login on build ftp.
 # @param rtr.buildFtp.password Password on build ftp.
@@ -274,6 +284,16 @@ rtr:
     sensitiveProperties: {}
     fileProperties: {}
     topic: ''
+  roadLocks:
+    enabled: false
+    kafka:
+      groupId: castle-rtr
+      properties:
+        bootstrap.servers: ''
+        security.protocol: PLAINTEXT
+      sensitiveProperties: {}
+      fileProperties: {}
+      topic: ''
   buildFtp:
     serverUrl: ''
     baseDir: trafficedro

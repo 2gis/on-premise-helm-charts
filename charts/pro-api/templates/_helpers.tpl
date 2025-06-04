@@ -37,15 +37,6 @@
 {{- end -}}
 {{- end -}}
 
-{{- define "pro-api.asset-preparer-name" -}}
-{{- $name := default .Values.assetPreparer.appName -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
 {{- define "pro-api.service-account-name" -}}
 {{- if empty .Values.api.service.serviceAccountOverride }}
   {{- $name := default .Values.api.service.serviceAccount -}}

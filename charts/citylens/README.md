@@ -128,6 +128,9 @@ See the [documentation]() to learn about:
 
 ### Routes Planner integration
 
+| Name                   | Description                                                                                                                                                           | Value |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `api.routesApiBaseUrl` | Routes Planner API endpoint - if provided mobile application can access Routes Planner API via citylens-api /routes-api endpoint. Ex.: http://citylens-routes-api.svc | `""`  |
 
 ### Citylens web service settings
 
