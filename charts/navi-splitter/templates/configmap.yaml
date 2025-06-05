@@ -11,7 +11,7 @@ data:
           protocol: TCP
           address: 127.0.0.1
           port_value: 9901
-    {{- if .Values.envoy.systemLogs.json }}
+    {{- if eq .Values.envoy.systemLogs.logFormat "json" }}
     application_log_config:
       log_format:
         json_format:
@@ -21,7 +21,7 @@ data:
           source_line: "%s:%#"
           level: "%l"
           message: "%j"
-    {{- end }}{{- /* if .Values.envoy.systemLogs.json */}}
+    {{- end }}{{- /* if eq .Values.envoy.systemLogs.logFormat "json" */}}
     static_resources:
       listeners:
       - name: attractor_listener
@@ -52,6 +52,7 @@ data:
                       retry_policy:
                         retry_on: {{ .Values.envoy.retry.retryOn | quote }}
                         num_retries: {{ .Values.envoy.retry.numRetries | int }}
+                        per_try_timeout: {{ .Values.envoy.retry.perTryTimeout }}
                         retry_host_predicate:
                           - name: envoy.retry_host_predicates.previous_hosts
                             typed_config:

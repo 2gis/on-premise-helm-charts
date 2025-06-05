@@ -57,23 +57,23 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Splitter application settings
 
-| Name                          | Description                                                                                    | Value  |
-| ----------------------------- | ---------------------------------------------------------------------------------------------- | ------ |
-| `splitter.logLevel`           | Logging level.                                                                                 | `info` |
-| `splitter.app_rule`           | Rule name of navi-back instance                                                                | `""`   |
-| `splitter.goMaxProcs`         | Number of golang processes.                                                                    | `1`    |
-| `splitter.appPort`            | Application port.                                                                              | `8080` |
-| `splitter.ctxBaseUrl`         | URL of ctx host.                                                                               | `/`    |
-| `splitter.ctxUrl`             | URL of get_dist_matrix_ctx host. Format: `http(s)://HOST:PORT/ctx/2.0/?source=distance_matrix. | `/`    |
-| `splitter.ctxTimeout`         | get_dist_matrix_ctx request timeout.                                                           | `60s`  |
-| `splitter.subrequestRetryN`   | Number of retries to host.                                                                     | `5`    |
-| `splitter.writeTimeout`       | Write timeout.                                                                                 | `10s`  |
-| `splitter.readTimeout`        | Read timeout.                                                                                  | `10s`  |
-| `splitter.idleTimeout`        | Idle timeout.                                                                                  | `60s`  |
-| `splitter.proxyTimeout`       | Proxy timeout.                                                                                 | `15s`  |
-| `splitter.subrequestTimeout`  | Subrequest timeout.                                                                            | `60s`  |
-| `splitter.statHost`           | Statistic receiver host                                                                        | `-`    |
-| `splitter.statThreadPoolSize` | Number of statistic sender threads                                                             | `16`   |
+| Name                          | Description                                                                                          | Value  |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------- | ------ |
+| `splitter.logLevel`           | Logging level.                                                                                       | `info` |
+| `splitter.app_rule`           | Rule name of navi-back instance                                                                      | `""`   |
+| `splitter.goMaxProcs`         | Number of golang processes.                                                                          | `1`    |
+| `splitter.appPort`            | Application port.                                                                                    | `8080` |
+| `splitter.ctxBaseUrl`         | URL of ctx host. Format: `http(s)://HOST:PORT/ctx/2.0`.                                              | `""`   |
+| `splitter.ctxUrl`             | Full URL of get_dist_matrix_ctx host. Format: `http(s)://HOST:PORT/ctx/2.0/?source=distance_matrix`. | `""`   |
+| `splitter.ctxTimeout`         | get_dist_matrix_ctx request timeout.                                                                 | `60s`  |
+| `splitter.subrequestRetryN`   | Number of retries to host.                                                                           | `5`    |
+| `splitter.writeTimeout`       | Write timeout.                                                                                       | `10s`  |
+| `splitter.readTimeout`        | Read timeout.                                                                                        | `10s`  |
+| `splitter.idleTimeout`        | Idle timeout.                                                                                        | `60s`  |
+| `splitter.proxyTimeout`       | Proxy timeout.                                                                                       | `15s`  |
+| `splitter.subrequestTimeout`  | Subrequest timeout.                                                                                  | `60s`  |
+| `splitter.statHost`           | Statistic receiver host. '-' disables statistic                                                      | `-`    |
+| `splitter.statThreadPoolSize` | Number of statistic sender threads                                                                   | `16`   |
 
 ### Service account settings
 
@@ -150,19 +150,19 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Attractor
 
-| Name                | Description                                        | Value                 |
-| ------------------- | -------------------------------------------------- | --------------------- |
-| `attractor.enabled` | If attractor is enabled.                           | `false`               |
-| `attractor.host`    | Attractor host.                                    | `navi-attractor.host` |
-| `attractor.port`    | Attractor port.                                    | `50051`               |
-| `attractor.timeout` | Attractor timeout configured on application level. | `2s`                  |
+| Name                | Description                                        | Value   |
+| ------------------- | -------------------------------------------------- | ------- |
+| `attractor.enabled` | If attractor is enabled.                           | `false` |
+| `attractor.host`    | Attractor host. Ex.: navi-attractor.svc            | `""`    |
+| `attractor.port`    | Attractor port.                                    | `50051` |
+| `attractor.timeout` | Attractor timeout configured on application level. | `2s`    |
 
 ### One to Many (navi-back) host
 
 | Name                | Description                                             | Value |
 | ------------------- | ------------------------------------------------------- | ----- |
 | `oneToMany.enabled` | If one-to-many request (sends to navi-back) is enabled. |       |
-| `oneToMany.host`    | One-to-many(navi-back) host.                            |       |
+| `oneToMany.host`    | One-to-many(navi-back) host. Ex.: navi-back.svc         |       |
 | `oneToMany.port`    | One-to-many(navi-back) port.                            |       |
 
 ### Pass Through (proxy mode)
@@ -176,21 +176,22 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Envoy configuration
 
-| Name                              | Description                                                                                                                                                         | Value                            |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `envoy.resources.requests.cpu`    | A CPU request.                                                                                                                                                      |                                  |
-| `envoy.resources.requests.memory` | A memory request.                                                                                                                                                   |                                  |
-| `envoy.resources.limits.cpu`      | A CPU limit.                                                                                                                                                        |                                  |
-| `envoy.resources.limits.memory`   | A memory limit.                                                                                                                                                     |                                  |
-| `envoy.systemLogs.level`          | System log level: [trace][debug][info][warning|warn][error][critical][off].                                                                                         | `info`                           |
-| `envoy.systemLogs.json`           | If system logs in JSON (in plain-text otherwise).                                                                                                                   | `true`                           |
-| `envoy.accessLogs.enabled`        | if access logging enabled                                                                                                                                           | `false`                          |
-| `envoy.clusterTimeout`            | Cluster timeout.                                                                                                                                                    | `15s`                            |
-| `envoy.connectTimeout`            | Connect timeout.                                                                                                                                                    | `1s`                             |
-| `envoy.concurrency`               | The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0`                                                                        | `""`                             |
-| `envoy.retry.enabled`             | Enable retry failed requests                                                                                                                                        | `false`                          |
-| `envoy.retry.retryOn`             | Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)                           | `internal,unavailable,5xx,reset` |
-| `envoy.retry.numRetries`          | Failed request [retries](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-max-retries). | `1`                              |
+| Name                              | Description                                                                                                                                                                                    | Value                            |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `envoy.resources.requests.cpu`    | A CPU request.                                                                                                                                                                                 |                                  |
+| `envoy.resources.requests.memory` | A memory request.                                                                                                                                                                              |                                  |
+| `envoy.resources.limits.cpu`      | A CPU limit.                                                                                                                                                                                   |                                  |
+| `envoy.resources.limits.memory`   | A memory limit.                                                                                                                                                                                |                                  |
+| `envoy.systemLogs.logLevel`       | System log level: [trace][debug][info][warning|warn][error][critical][off].                                                                                                                    | `info`                           |
+| `envoy.systemLogs.logFormat`      | System log format (if empty — plain-text is used)                                                                                                                                              | `json`                           |
+| `envoy.accessLogs.enabled`        | if access logging enabled                                                                                                                                                                      | `false`                          |
+| `envoy.clusterTimeout`            | Cluster timeout.                                                                                                                                                                               | `15s`                            |
+| `envoy.connectTimeout`            | Connect timeout.                                                                                                                                                                               | `1s`                             |
+| `envoy.concurrency`               | The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0`                                                                                                   | `""`                             |
+| `envoy.retry.enabled`             | Enable retry failed requests                                                                                                                                                                   | `false`                          |
+| `envoy.retry.retryOn`             | Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)                                                      | `internal,unavailable,5xx,reset` |
+| `envoy.retry.numRetries`          | Failed request [retries](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-max-retries)                             | `1`                              |
+| `envoy.retry.perTryTimeout`       | Specifies timeout on each [retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-upstream-rq-per-try-timeout-ms) | `2s`                             |
 
 ### Fixed data group attributes
 

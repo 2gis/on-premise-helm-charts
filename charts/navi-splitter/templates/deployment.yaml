@@ -41,7 +41,7 @@ spec:
             - -c
             - /etc/envoy/envoy.yaml
             - --log-level
-            - {{ .Values.envoy.systemLogs.level | quote }}
+            - {{ .Values.envoy.systemLogs.logLevel | quote }}
           {{- if and (kindIs "string" .Values.envoy.concurrency) (eq "" .Values.envoy.concurrency) }}
           {{/* envoy.concurrency = '', skip */}}
           {{- else }}
