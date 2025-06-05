@@ -61,6 +61,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | `customStartupProbe`                 | Override default startup probe                                                                                              | `{}`   |
 | `command`                            | Override default command                                                                                                    | `[]`   |
 | `args`                               | Override default args                                                                                                       | `[]`   |
+| `timezone`                           | Timezone for the navi-attractor container. Refer to inline comments for details                                             | `UTC`  |
 
 ### Container image settings
 
@@ -68,7 +69,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | ------------------ | ----------- | -------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-attractor` |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                   |
-| `image.tag`        | Tag         | `7.36.1`                         |
+| `image.tag`        | Tag         | `7.39.1.9`                       |
 
 ### Service account settings
 
@@ -168,6 +169,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | `attractor.overrideConfig`        | Complete config override. For test purposes only.                                                                                                                                        | `""`              |
 | `attractor.rtr.enabled`           | Enable real time restrictions.                                                                                                                                                           | `false`           |
 | `attractor.rtr.url`               | URL real time restrictions server.                                                                                                                                                       | `""`              |
+| `attractor.rtr.filename`          | Filename of the real time restrictions                                                                                                                                                   |                   |
 | `attractor.rtr.updatePeriod`      | Update period from real time restrictions server.                                                                                                                                        | `60`              |
 | `attractor.rtr.timeoutSeconds`    | Timeout seconds for restrictions server                                                                                                                                                  | `60`              |
 | `attractor.tilesMetricsThreshold` | The value at which we send tiles metrics (used for internal tests).                                                                                                                      | `0`               |

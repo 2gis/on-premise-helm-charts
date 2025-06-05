@@ -61,6 +61,10 @@ data:
         },
         "cities": {
           "update_period": 0,
+          {{- /* search .zip in files */}}
+          {{- if regexMatch ".*\\.zip.*" .Values.attractor.citiesFilename }}
+          "content": "cities.conf",
+          {{- end }}
           "nodes": [
             "{REMOTE_PATH}/{{ .Values.attractor.citiesFilename }}"
           ],
@@ -226,7 +230,7 @@ data:
         "restrictions_index": {
           "update_period": {{ .Values.attractor.rtr.updatePeriod }},
           "nodes": [
-            "{{ .Values.attractor.rtr.url }}/restrictions_index.json.zip"
+            "{{ .Values.attractor.rtr.url }}/{{ .Values.attractor.rtr.filename | default "restrictions_index.json.zip" }}"
           ],
           "timeout_seconds": {
             "count": {{ .Values.attractor.rtr.timeoutSeconds | int }}
@@ -287,6 +291,8 @@ data:
           "attractor_bicycle" : {{ include "config.setAttractorBicycle" $ | default false -}},
           "attractor_taxi" : {{ include "config.setAttractorTaxi" $ | default false -}},
           "attractor_truck" : {{ include "config.setAttractorTruck" $ | default false -}},
+          "attractor_motorcycle" : {{ include "config.setAttractorMotorcycle" $ | default false -}},
+          "attractor_emergency": {{ include "config.setAttractorEmergency" $ | default false -}},
           {{- if ((.Values.resources).limits).cpu }}
           "dist_matrix_thread_pool_size" : {{ include "config.setCpuNumber" . }},
           "simple_network_build_thread_pool_size" : {{ include "config.setCpuNumber" . }},
