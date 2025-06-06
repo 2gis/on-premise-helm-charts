@@ -21,6 +21,10 @@ spec:
       template:
 
         spec:
+          {{- with .podSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
           serviceAccountName: {{ include "tilegen.serviceAccount" $ }}
           restartPolicy: OnFailure
 
@@ -52,6 +56,8 @@ spec:
 
           containers:
           - name: maintenance
+            securityContext:
+              {{- toYaml .Values.securityContext | nindent 14 }}
             image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
             imagePullPolicy: {{ .image.pullPolicy }}
             command: ["/selfimporter", "gc"]
