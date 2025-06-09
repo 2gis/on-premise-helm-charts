@@ -49,6 +49,7 @@ dgctlDockerRegistry: ''
 # @param customStartupProbe Override default startup probe
 # @param command Override default command
 # @param args Override default args
+# @param timezone Timezone for the navi-back container. Refer to inline comments for details
 
 replicaCount: 1
 revisionHistoryLimit: 1
@@ -95,6 +96,13 @@ customReadinessProbe: {}
 customStartupProbe: {}
 command: []
 args: []
+# Set the timezone using a valid IANA timezone name, such as "Europe/Moscow" or "America/New_York".
+# Full list of supported timezones: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+#
+# Note: Avoid using POSIX-style timezones like "Etc/GMT+3" — they use inverted signs!
+# For example, "Etc/GMT+3" actually means UTC−3 (3 hours behind UTC), not UTC+3.
+# More info: https://en.wikipedia.org/wiki/Tz_database#Area
+timezone: UTC
 
 
 # @section Container image settings
@@ -106,7 +114,7 @@ args: []
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.36.1
+  tag: 7.39.1.9
 
 
 # @section Navi-Back application settings
@@ -114,6 +122,7 @@ image:
 # @extra naviback.ecaHost DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.ecaUrl URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.forecastFilename Filename of the forecast
 # @extra naviback.longForecastUrl URL of Traffic long forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.walkingUserSpeedsUrl URL of walking user speeds
 # @extra naviback.routeAsUsualUrl URL of route as usual
@@ -191,6 +200,7 @@ image:
 # @extra naviback.simpleNetwork.taxi Enable simple network for taxi routing
 # @extra naviback.simpleNetwork.truck Enable simple network for truck routing
 # @extra naviback.simpleNetwork.scooter Enable simple network for scooters routing
+# @extra naviback.simpleNetwork.motorcycle Enable simple network for motorcycle routing
 # @skip naviback.attractor
 # @extra naviback.attractor.bicycle Enable enhanced attractor for bicycle routing
 # @extra naviback.attractor.car Enable enhanced attractor for auto routing
@@ -198,6 +208,7 @@ image:
 # @extra naviback.attractor.taxi Enable enhanced attractor for taxi routing
 # @extra naviback.attractor.truck Enable enhanced attractor for truck routing
 # @extra naviback.attractor.scooter Enable enhanced attractor for scooters routing
+# @extra naviback.attractor.motorcycle Enable enhanced attractor for motorcycle routing
 # @param naviback.bss.enabled Enable sending information on the construction of routes to the business statistics service
 # @param naviback.bss.client.serviceRemoteAddress Remote address business statistics service. Requeruired for enable sending information
 # @param naviback.bss.client.messageCountToFlush Message count to flush
@@ -210,6 +221,7 @@ image:
 # @param naviback.overrideConfig Complete config override. For test purposes only
 # @param naviback.rtr.enabled Enable real time restrictions
 # @param naviback.rtr.url URL real time restrictions server
+# @extra naviback.rtr.filename Filename of the real time restrictions
 # @param naviback.rtr.updatePeriod Update period from real time restrictions server
 # @param naviback.rtr.timeoutSeconds Timeout seconds for restrictions server
 # @param naviback.validation.enabled Enable validation responses and requests (used for internal tests)
