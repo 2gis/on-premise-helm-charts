@@ -31,6 +31,16 @@ data:
     js_var $multi_mod_ctx "none";
     js_var $multi_mod_taxi "none";
 
+    # map router's rule name to the actual CTX upstream
+    map $multi_mod_ctx $multi_mod_ctx_upstream {
+        {{- include "front.mapUpstreams" . | nindent 8 }}
+    }
+
+    # map router's rule name to the actual TAXI upstream
+    map $multi_mod_taxi $multi_mod_taxi_upstream {
+        {{- include "front.mapUpstreams" . | nindent 8 }}
+    }
+
     upstream {{ .Values.front.multimod.host }} {
         server {{ .Values.front.multimod.host }};
         {{- if .Values.front.keepalive.enabled }}
@@ -45,12 +55,16 @@ data:
     {{ include "front.createUpstreams" . | nindent 4 }}
 
     upstream router_{{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }} {
-        server {{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }};
-        {{- if .Values.front.keepalive.enabled }}
-        keepalive {{ .Values.front.keepalive.connections }};
-        keepalive_requests {{ .Values.front.keepalive.requests }};
-        keepalive_time {{ .Values.front.keepalive.time }};
-        keepalive_timeout {{ .Values.front.keepalive.timeout }};
+        server {{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }} max_fails=0;
+        {{- range (.Values.front.router.backupPorts.number | int | until) }}
+        server {{ ternary (include "front.createRouterUpstream" $) $.Values.front.router.host $.Values.front.router.discover }}:{{ . | add $.Values.front.router.backupPorts.base }} max_fails=0;
+        {{- end }}{{- /* range */}}
+        {{- $routerKeepalive := deepCopy .Values.front.keepalive | merge .Values.front.router.keepalive }}
+        {{- if $routerKeepalive.enabled }}
+        keepalive {{ $routerKeepalive.connections }};
+        keepalive_requests {{ $routerKeepalive.requests }};
+        keepalive_time {{ $routerKeepalive.time }};
+        keepalive_timeout {{ $routerKeepalive.timeout }};
         {{- end }}
     }
 
@@ -154,6 +168,9 @@ data:
             add_header X-Region {{ .Values.front.multimod.host }} always;
             proxy_set_header X-Multi-Mod-Taxi $multi_mod_taxi;
             proxy_set_header X-Multi-Mod-Ctx $multi_mod_ctx;
+            # replace those with the below lines once multimod supports that
+            # proxy_set_header X-Multi-Mod-Taxi $multi_mod_taxi_upstream;
+            # proxy_set_header X-Multi-Mod-Ctx $multi_mod_ctx_upstream;
             proxy_set_header X-Region-Id $multi_region_id;
             {{- if .Values.front.keepalive.enabled }}
             proxy_set_header Connection "";
@@ -162,7 +179,6 @@ data:
             proxy_pass http://{{ .Values.front.multimod.host }}$uri$is_args$args;
         }
         location /find_platforms {
-            {{ include "front.getInternalACL" . | nindent 12 }}
             js_content bundle.geo_coding;
         }
         {{- end }}
@@ -172,16 +188,34 @@ data:
             js_content bundle.geo_coding;
         }
 
+        location ~* ^/isochrone  {
+            js_content bundle.geo_coding;
+        }
+
+        location ~* ^/area_clustering {
+            js_content bundle.geo_coding;
+        }
+
         location /geocoding {
             {{ include "front.getInternalACL" . | nindent 12 }}
-            {{- if .Values.nginx.connectTimeout.geocoding }}
-            proxy_connect_timeout {{ .Values.nginx.connectTimeout.geocoding }};
-            {{- end }}
+            proxy_next_upstream_timeout {{ .Values.front.router.proxy.nextUpstreamTimeout }};
+            {{- with .Values.front.router.proxy.connectTimeout }}
+            proxy_connect_timeout {{ . }};
+            {{- end }}{{- /* with .Values.front.router.proxy.connectTimeout */}}
+            {{- with .Values.front.router.proxy.readTimeout }}
+            proxy_read_timeout {{ . }};
+            {{- end }}{{- /* with .Values.front.router.proxy.readTimeout */}}
+            {{- with .Values.front.router.proxy.sendTimeout }}
+            proxy_send_timeout {{ . }};
+            {{- end }}{{- /* with .Values.front.router.proxy.sendTimeout */}}
             rewrite ^/geocoding(.*)$ $1 break;
             {{- if .Values.front.keepalive.enabled }}
             proxy_set_header Connection "";
             proxy_http_version 1.1;
             {{- end }}
+            # retries limited by request timeout
+            proxy_next_upstream_tries 1024;
+            proxy_next_upstream {{ .Values.front.router.proxy.nextUpstream }};
             proxy_pass http://router_{{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }};
         }
 
