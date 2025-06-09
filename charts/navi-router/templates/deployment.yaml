@@ -80,6 +80,8 @@ spec:
                   name: {{ include "generic-chart.fullname" . | quote }}
                   key: hash_salt
             {{- end }}
+            - name: TZ
+              value: {{ .Values.timezone | quote }}
           lifecycle:
             # wait for the endpoint removal process
             preStop:
