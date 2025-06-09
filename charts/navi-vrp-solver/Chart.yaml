@@ -7,7 +7,7 @@ keywords:
 - vrp
 - tsp
 - solver
-version: 1.34.0
+version: 1.39.0
 appVersion: 1.13.0
 dependencies:
 - name: generic-chart
