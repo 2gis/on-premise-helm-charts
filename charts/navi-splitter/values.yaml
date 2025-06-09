@@ -261,9 +261,9 @@ passThrough:
 
 envoy:
   image:
-    repository: 2gis-on-premise/navi-envoy
+    repository: on-premise/navi-envoy
     pullPolicy: IfNotPresent
-    tag: 1.27.0
+    tag: v1.27.0
   resources: {}
   systemLogs:
     logLevel: info
