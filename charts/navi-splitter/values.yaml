@@ -64,7 +64,7 @@ image:
 # @param splitter.idleTimeout Idle timeout.
 # @param splitter.proxyTimeout Proxy timeout.
 # @param splitter.subrequestTimeout Subrequest timeout.
-# @param splitter.statHost Statistic receiver host. '-' disables statistic
+# @param splitter.statHost Statistic receiver host.
 # @param splitter.statThreadPoolSize Number of statistic sender threads
 
 splitter:
@@ -81,7 +81,7 @@ splitter:
   idleTimeout: 60s
   proxyTimeout: 15s
   subrequestTimeout: 60s
-  statHost: '-'
+  statHost: ''
   statThreadPoolSize: 16
 
 
@@ -233,18 +233,21 @@ oneToMany:
 passThrough:
   enabled: false
   # leave empty to use oneToMany.host
-  host: ""
+  host: ''
   port: 80
   scheme: http
 
 
 # @section Envoy configuration
 
+# @param envoy.image.repository Repository
+# @param envoy.image.tag Tag
+# @param envoy.image.pullPolicy Pull Policy
 # @skip envoy.resources
-# @extra envoy.resources.requests.cpu A CPU request.
-# @extra envoy.resources.requests.memory A memory request.
-# @extra envoy.resources.limits.cpu A CPU limit.
-# @extra envoy.resources.limits.memory A memory limit.
+# @param envoy.resources.requests.cpu [nullable] CPU request, recommended value `100m`
+# @param envoy.resources.requests.memory [nullable] Memory request, recommended value `100Mi`
+# @param envoy.resources.limits.cpu [nullable] CPU limit, recommended value `100m`
+# @param envoy.resources.limits.memory [nullable] Memory limit, recommended value `100Mi`
 # @param envoy.systemLogs.logLevel System log level: [trace][debug][info][warning|warn][error][critical][off].
 # @param envoy.systemLogs.logFormat System log format (if empty — plain-text is used)
 # @param envoy.accessLogs.enabled if access logging enabled
@@ -257,6 +260,10 @@ passThrough:
 # @param envoy.retry.perTryTimeout Specifies timeout on each [retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-upstream-rq-per-try-timeout-ms)
 
 envoy:
+  image:
+    repository: 2gis-on-premise/navi-envoy
+    pullPolicy: IfNotPresent
+    tag: 1.27.0
   resources: {}
   systemLogs:
     logLevel: info
@@ -301,7 +308,7 @@ dataGroup:
 metrics:
   enabled: false
   image:
-    repository: 2gis/metrics-aggregator
+    repository: 2gis-on-premise/navi-metrics-aggregator
     pullPolicy: IfNotPresent
     tag: 1.0.0
   port: 9090

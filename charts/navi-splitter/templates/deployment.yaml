@@ -23,8 +23,8 @@ spec:
         - name: {{ include "generic-chart.containerName" . }}-envoy
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: envoyproxy/envoy:v1.27.0
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.envoy.image.repository }}:{{ .Values.envoy.image.tag }}
+          imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
           volumeMounts:
             - name: envoy-config
               mountPath: /etc/envoy/envoy.yaml
@@ -107,7 +107,7 @@ spec:
             - name: SUBREQUEST_TIMEOUT
               value: {{ .Values.splitter.subrequestTimeout | quote }}
             - name: STATISTIC_HOST
-              value: {{ .Values.splitter.statHost | quote }}
+              value: {{ .Values.splitter.statHost | default "-" | quote }}
             - name: STATISTIC_THREAD_POOL_SIZE
               value: {{ .Values.splitter.statThreadPoolSize | quote }}
             - name: STATISTIC_TYPE

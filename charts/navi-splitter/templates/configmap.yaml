@@ -24,6 +24,7 @@ data:
     {{- end }}{{- /* if eq .Values.envoy.systemLogs.logFormat "json" */}}
     static_resources:
       listeners:
+      {{- if .Values.attractor.enabled }}
       - name: attractor_listener
         address:
           socket_address:
@@ -96,6 +97,8 @@ data:
                       x_forwarded_for: "%REQ(X-FORWARDED-FOR)%"
                       message: "%LOCAL_REPLY_BODY%"
               {{- end }}{{- /* .Values.envoy.accessLogs.enabled */}}
+      {{- end }}{{- /* if Values.attractor.enabled */}}
+      {{- if .Values.oneToMany.enabled }}
       - name: oneToMany_listener
         address:
           socket_address:
@@ -136,7 +139,9 @@ data:
               {{- if .Values.envoy.accessLogs.enabled }}
               access_log: *access_log
               {{- end }}{{- /* .Values.envoy.accessLogs.enabled */}}
+      {{- end }}{{- /* if Values.oneToMany.enabled */}}
       clusters:
+      {{- if .Values.attractor.enabled }}
       - name: attractor
         connect_timeout: {{ .Values.envoy.connectTimeout }}
         type: STRICT_DNS
@@ -153,6 +158,8 @@ data:
                   socket_address:
                     address: {{ .Values.attractor.host | quote }}
                     port_value: {{ .Values.attractor.port | int }}
+      {{- end }}{{- /* if Values.attractor.enabled */}}
+      {{- if .Values.oneToMany.enabled }}
       - name: oneToMany
         connect_timeout: {{ .Values.envoy.connectTimeout }}
         type: STRICT_DNS
@@ -169,3 +176,4 @@ data:
                   socket_address:
                     address: {{ .Values.oneToMany.host | quote }}
                     port_value: {{ .Values.oneToMany.port | int }}
+      {{- end }}{{- /* if Values.oneToMany.enabled */}}

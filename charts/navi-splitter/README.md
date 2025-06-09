@@ -72,7 +72,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `splitter.idleTimeout`        | Idle timeout.                                                                                        | `60s`  |
 | `splitter.proxyTimeout`       | Proxy timeout.                                                                                       | `15s`  |
 | `splitter.subrequestTimeout`  | Subrequest timeout.                                                                                  | `60s`  |
-| `splitter.statHost`           | Statistic receiver host. '-' disables statistic                                                      | `-`    |
+| `splitter.statHost`           | Statistic receiver host.                                                                             | `""`   |
 | `splitter.statThreadPoolSize` | Number of statistic sender threads                                                                   | `16`   |
 
 ### Service account settings
@@ -178,10 +178,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 | Name                              | Description                                                                                                                                                                                    | Value                            |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `envoy.resources.requests.cpu`    | A CPU request.                                                                                                                                                                                 |                                  |
-| `envoy.resources.requests.memory` | A memory request.                                                                                                                                                                              |                                  |
-| `envoy.resources.limits.cpu`      | A CPU limit.                                                                                                                                                                                   |                                  |
-| `envoy.resources.limits.memory`   | A memory limit.                                                                                                                                                                                |                                  |
+| `envoy.image.repository`          | Repository                                                                                                                                                                                     | `2gis-on-premise/navi-envoy`     |
+| `envoy.image.tag`                 | Tag                                                                                                                                                                                            | `1.27.0`                         |
+| `envoy.image.pullPolicy`          | Pull Policy                                                                                                                                                                                    | `IfNotPresent`                   |
+| `envoy.resources.requests.cpu`    | CPU request, recommended value `100m`                                                                                                                                                          | `undefined`                      |
+| `envoy.resources.requests.memory` | Memory request, recommended value `100Mi`                                                                                                                                                      | `undefined`                      |
+| `envoy.resources.limits.cpu`      | CPU limit, recommended value `100m`                                                                                                                                                            | `undefined`                      |
+| `envoy.resources.limits.memory`   | Memory limit, recommended value `100Mi`                                                                                                                                                        | `undefined`                      |
 | `envoy.systemLogs.logLevel`       | System log level: [trace][debug][info][warning|warn][error][critical][off].                                                                                                                    | `info`                           |
 | `envoy.systemLogs.logFormat`      | System log format (if empty — plain-text is used)                                                                                                                                              | `json`                           |
 | `envoy.accessLogs.enabled`        | if access logging enabled                                                                                                                                                                      | `false`                          |
@@ -202,18 +205,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Metrics aggregator container
 
-| Name                                | Description                                     | Value                     |
-| ----------------------------------- | ----------------------------------------------- | ------------------------- |
-| `metrics.enabled`                   | Enable metrics container and scrape annotations | `false`                   |
-| `metrics.image.repository`          | Repository                                      | `2gis/metrics-aggregator` |
-| `metrics.image.tag`                 | Tag                                             | `1.0.0`                   |
-| `metrics.image.pullPolicy`          | Pull Policy                                     | `IfNotPresent`            |
-| `metrics.port`                      | Port of container.                              | `9090`                    |
-| `metrics.resources`                 | Container resources requirements structure.     | `{}`                      |
-| `metrics.resources.requests.cpu`    | CPU request, recommended value `10m`.           | `undefined`               |
-| `metrics.resources.requests.memory` | Memory request, recommended value `10Mi`.       |                           |
-| `metrics.resources.limits.cpu`      | CPU limit, recommended value `100m`.            |                           |
-| `metrics.resources.limits.memory`   | Memory limit, recommended value `10Mi`.         |                           |
+| Name                                | Description                                     | Value                                     |
+| ----------------------------------- | ----------------------------------------------- | ----------------------------------------- |
+| `metrics.enabled`                   | Enable metrics container and scrape annotations | `false`                                   |
+| `metrics.image.repository`          | Repository                                      | `2gis-on-premise/navi-metrics-aggregator` |
+| `metrics.image.tag`                 | Tag                                             | `1.0.0`                                   |
+| `metrics.image.pullPolicy`          | Pull Policy                                     | `IfNotPresent`                            |
+| `metrics.port`                      | Port of container.                              | `9090`                                    |
+| `metrics.resources`                 | Container resources requirements structure.     | `{}`                                      |
+| `metrics.resources.requests.cpu`    | CPU request, recommended value `10m`.           | `undefined`                               |
+| `metrics.resources.requests.memory` | Memory request, recommended value `10Mi`.       |                                           |
+| `metrics.resources.limits.cpu`      | CPU limit, recommended value `100m`.            |                                           |
+| `metrics.resources.limits.memory`   | Memory limit, recommended value `10Mi`.         |                                           |
 
 ## Maintainers
 
