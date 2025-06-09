@@ -98,13 +98,13 @@ dgctlStorage:
 
 # @section Routes Planner integration
 
-# @skip api.routesApiBaseUrl
+# @param api.routesApiBaseUrl Routes Planner API endpoint - if provided mobile application can access Routes Planner API via citylens-api /routes-api endpoint. Ex.: http://citylens-routes-api.svc
 
 api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.17.8
+    tag: 1.18.0
 
   replicas: 4
 
@@ -240,7 +240,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.17.8
+    tag: 1.18.1
 
   replicas: 1
 
@@ -740,7 +740,7 @@ worker:
     image:
       repository: 2gis-on-premise/citylens-workers
       pullPolicy: IfNotPresent
-      tag: 1.17.8
+      tag: 1.18.0
 
     revisionHistoryLimit: 3
 
@@ -776,7 +776,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.17.1
+    tag: 1.18.0
 
   resources:
     requests:
@@ -787,6 +787,44 @@ migrations:
       memory: 2Gi
 
   nodeSelector: {}
+
+
+# @section Job to update filters in PRO before installing new version of Citylens.
+
+# @param jobs.proFiltersUpdate.resources.requests.cpu A CPU request.
+# @param jobs.proFiltersUpdate.resources.requests.memory A memory request.
+# @param jobs.proFiltersUpdate.resources.limits.cpu A CPU limit.
+# @param jobs.proFiltersUpdate.resources.limits.memory A memory limit.
+# @param jobs.proFiltersUpdate.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+
+# @skip jobs.predictorsSync.resources.requests.cpu
+# @skip jobs.predictorsSync.resources.requests.memory
+# @skip jobs.predictorsSync.resources.limits.cpu
+# @skip jobs.predictorsSync.resources.limits.memory
+# @skip jobs.predictorsSync.nodeSelector
+
+jobs:
+  proFiltersUpdate:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 1Gi
+      limits:
+        cpu: 200m
+        memory: 2Gi
+
+    nodeSelector: {}
+
+  predictorsSync:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 1Gi
+      limits:
+        cpu: 200m
+        memory: 2Gi
+
+    nodeSelector: {}
 
 # @section Kafka settings
 
@@ -1129,7 +1167,7 @@ routes:
   api:
     image:
       repository: 2gis-on-premise/citylens-routes-api
-      tag: 1.1.1
+      tag: 1.2.2
       pullPolicy: IfNotPresent
 
     replicaCount: 1
@@ -1205,7 +1243,7 @@ routes:
   worker:
     image:
       repository: 2gis-on-premise/citylens-worker-service
-      tag: 1.1.1
+      tag: 1.2.2
       pullPolicy: IfNotPresent
 
     replicaCount: 1

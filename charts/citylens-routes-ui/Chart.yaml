@@ -2,8 +2,8 @@ apiVersion: v2
 name: citylens-routes-ui
 description: A Helm chart for Kubernetes to deploy Citylens UI service
 type: application
-version: 1.38.0
-appVersion: 1.0.2
+version: 1.39.0
+appVersion: 1.1.3
 dependencies:
 - name: generic-chart
   version: '>=0'
