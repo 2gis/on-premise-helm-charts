@@ -1,4 +1,4 @@
-﻿# @section Geo API configuration & settings
+# @section Geo API configuration & settings
 
 api:
 
@@ -695,8 +695,8 @@ elastic:
   enableHttpCompression: false
   indexPrefix: ''
   nodes:
-    - port: 9200
-      host: ''
+  - port: 9200
+    host: ''
 
 # @section Redis settings (supported version 6.x)
 

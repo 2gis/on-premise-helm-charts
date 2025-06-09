@@ -248,4 +248,3 @@ Usage:
    {{- printf (include "config.setCastleUrl" $) -}}
    {{- end -}}
 {{- end -}}
-
