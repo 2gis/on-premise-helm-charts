@@ -38,6 +38,8 @@ podLabels: {}
 
 # @param proxy.host URL for the proxy server to serve, ex: https://traffic0.edromaps.2gis.com. **Required**
 # @param proxy.listen Port for the proxy server to listen.
+# @param proxy.locationDG Enable location for datagateway.api.2gis.com.
+# @skip proxy.apiKey
 # @skip proxy.protocol
 # @skip proxy.upstreams
 # @param proxy.cache.enabled If caching should be enabled for the proxy server.
@@ -53,6 +55,8 @@ podLabels: {}
 proxy:
   host: ''
   listen: 8080
+  locationDG: false
+  apiKey: ''
   protocol: https  # don't document
   upstreams: []  # don't document
   cache:
