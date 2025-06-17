@@ -15,5 +15,5 @@ maintainers:
 - name: 2gis
   url: https://github.com/2gis
   email: on-premise@2gis.com
-version: 1.39.0
+version: 1.39.1
 appVersion: 1.8.9
