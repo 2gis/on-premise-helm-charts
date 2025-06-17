@@ -31,7 +31,6 @@ spec:
         {{- if .Values.prometheusEnabled }}
         prometheus.io/scrape: "true"
         {{- end }}
-        checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
         checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
         {{- if .Values.customCAs.bundle }}
         checksum/custom-ca: {{ (include (print $.Template.BasePath "/configmap-ca.yaml") . | fromYaml).data | toYaml | sha256sum }}
@@ -150,9 +149,6 @@ spec:
             <<: *healthProbe
             failureThreshold: 60
           volumeMounts:
-          - name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
-            mountPath: /app/src/composite_task_result_archiver/manifests/archive_pod_manifest.json
-            subPath: archive_pod_manifest.json
           {{- if $kafkaVolumeMounted }}
           - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /etc/2gis/secret/consumer/
@@ -204,44 +200,29 @@ spec:
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC_URL
               value: {{ .Values.s3.publicNetloc | quote }}
             {{- end }}
-            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_TASK_TOPIC
-              value: {{ .Values.kafka.statusTopic | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CANCEL_TOPIC
-              value: {{ .Values.kafka.cancelTopic | quote }}
+              value: {{ required "A valid kafka.cancelTopic entry required" .Values.kafka.cancelTopic | quote }}
+            - name: DM_ASYNC_SERVICE_MERGER_TOPIC_RULES
+              value: {{ include "navi-async-matrix.mergerTopicRules" $ | squote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CONFIG__GROUP_ID
               value: {{ .Values.kafka.groupId | quote }}
             - name: DM_ASYNC_SERVICE_TOPIC_RULES
               {{- /* topicRules is a structure, hence mustToJson */}}
               value: {{ .Values.kafka.taskTopicRules | mustToJson | quote }}
-            {{- if .Values.kafka.attractTopic }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ATTRACT_TOPIC
-              value: {{ .Values.kafka.attractTopic | quote }}
-            {{- end }}
-            {{- if .Values.kafka.oneToManyTopic }}
+              value: {{ required "A valid kafka.attractTopic entry required" .Values.kafka.attractTopic | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ONE_TO_MANY_TOPIC
-              value: {{ .Values.kafka.oneToManyTopic | quote }}
-            {{- end }}
-            {{- if .Values.kafka.attractTopicRules }}
+              value: {{ required "A valid kafka.oneToManyTopic entry required" .Values.kafka.oneToManyTopic | quote }}
             - name: DM_ASYNC_SERVICE_ATTRACT_TOPIC_RULES
-              value: {{ .Values.kafka.attractTopicRules | mustToJson | quote }}
-            {{- end }}
+              value: {{ required "A valid kafka.attractTopicRules entry required" .Values.kafka.attractTopicRules | mustToJson | quote }}
             {{- if .Values.kafka.vrpStatusTopic }}
             - name: DM_ASYNC_SERVICE_SUBSCRIBER_TOPIC
               value: {{ .Values.kafka.vrpStatusTopic | quote }}
             {{- end }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ARCHIVE_RESPONSE_TOPIC
-              value: {{ .Values.kafka.archiveTopic | quote }}
-            - name: DM_ASYNC_SERVICE_DEBUG_MODE
-              value: {{ .Values.dm.archiver.fetchLogs | default false | ternary "true" "false" | quote }}
-            - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__NAMESPACE
-              value: {{ .Release.Namespace | quote }}
+              value: {{ required "A valid kafka.mergerStatusTopic entry required" .Values.kafka.mergerStatusTopic | quote }}
             - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__CONFIG_TYPE
-              value: cluster
-            {{- /* master-uri and token used in local runs only */}}
-            - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__MASTER_URI
-              value: ""
-            - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__TOKEN
-              value: ""
+              value: default
             - name: DM_ASYNC_SERVICE_TASK_SPLIT_SIZE
               value: {{ .Values.dm.taskSplitSize | quote }}
             - name: DM_ASYNC_SERVICE_COMPOSITE_TASK_TIMEOUT_IN_SECONDS
@@ -251,12 +232,12 @@ spec:
               value: {{ .Values.multiDc.location | quote }}
             - name: DM_ASYNC_SERVICE_REDIRECT_HEADER
               value: {{ .Values.multiDc.redirectHeader | default "" | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_TASK_TOPIC
-              value: {{ .Values.multiDc.secondaryTopics.statusTopic | quote }}
-            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_CANCEL_TOPIC
-              value: {{ .Values.multiDc.secondaryTopics.cancelTopic | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ATTRACT_TOPIC
+              value: {{ required "A valid multiDc.secondaryTopics.attractTopic entry required" .Values.multiDc.secondaryTopics.attractTopic | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ONE_TO_MANY_TOPIC
+              value: {{ required "A valid multiDc.secondaryTopics.oneToManyTopic entry required" .Values.multiDc.secondaryTopics.oneToManyTopic | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ARCHIVE_RESPONSE_TOPIC
-              value: {{ .Values.multiDc.secondaryTopics.archiveTopic | quote }}
+              value: {{ required "A valid multiDc.secondaryTopics.mergerStatusTopic entry required" .Values.multiDc.secondaryTopics.mergerStatusTopic | quote }}
             {{- end }}{{- /* .Values.kafka.secondaryTopics */}}
             - name: DM_ASYNC_SERVICE_NODE_ID
               valueFrom:
