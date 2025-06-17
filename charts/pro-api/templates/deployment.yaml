@@ -254,6 +254,10 @@ spec:
               value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
             - name: Auth__Url
               value: {{ required "A valid .Values.api.settings.auth.url entry required" $.Values.api.settings.auth.url }}
+            - name: Auth__ClientId
+              value: "{{ .Values.api.settings.auth.clientId }}"
+            - name: Auth__ClientSecret
+              value: "{{ .Values.api.settings.auth.clientSecret }}"
             - name: Auth__UserInfoEndpoint
               value: "{{ .Values.api.settings.auth.userInfoEndpoint }}"
             - name: Auth__WellKnownConfigEndpoint
@@ -344,3 +348,11 @@ spec:
               value: "{{ .Values.tileGen.url }}"
             - name: TileGen__UserDataTileSet
               value: "{{ .Values.tileGen.userDataTileSet }}"
+            - name: SberEcommerceApi__Enabled
+              value: "{{ .Values.sberEcommerce.enabled }}"
+            - name: SberEcommerceApi__Url
+              value: "{{ .Values.sberEcommerce.url }}"
+            - name: SberEcommerceApi__UserName
+              value: "{{ .Values.sberEcommerce.username }}"
+            - name: SberEcommerceApi__Password
+              value: "{{ .Values.sberEcommerce.password }}"

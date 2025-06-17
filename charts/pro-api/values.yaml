@@ -1,4 +1,4 @@
-# @section Geo API configuration & settings
+﻿# @section Geo API configuration & settings
 
 api:
 
@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.16.0
+    tag: 2.19.2
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -137,6 +137,8 @@ api:
   # @param api.settings.auth.turnOffCertValidation Turn off certificate validation for auth.url
   # @param api.settings.auth.shareKeys Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`
   # @param api.settings.auth.skipShareLinksPermissionsCheck If true, then the permissions check for the possibility of making a request for data is not performed.
+  # @skip api.settings.auth.clientId
+  # @skip api.settings.auth.clientSecret
   # @param api.settings.backgroundJobs.enableUserAssetsImporter If user data importer job is enabled for the service.
   # @param api.settings.backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
   # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount Maximum number of points in a layer for generating isochrones.
@@ -164,6 +166,8 @@ api:
     auth:
       type: openid10
       url: ''
+      clientId: ''
+      clientSecret: ''
       userInfoEndpoint: ''
       wellKnownConfigEndpoint: ''
       apiKey: ''
@@ -188,7 +192,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.16.0
+    tag: 2.19.2
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -304,7 +308,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.16.0
+    tag: 2.19.2
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -431,6 +435,8 @@ tasks:
         enabled: false
       removeUnusedUserAssetFiles:
         enabled: false
+      emailNotifications:
+        enabled: false
       userManagement:
         enabled: true
 
@@ -467,7 +473,7 @@ tasks:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.16.0
+  tag: 2.19.2
   imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2
@@ -695,8 +701,8 @@ elastic:
   enableHttpCompression: false
   indexPrefix: ''
   nodes:
-  - port: 9200
-    host: ''
+    - port: 9200
+      host: ''
 
 # @section Redis settings (supported version 6.x)
 
@@ -770,9 +776,31 @@ license:
 search:
   url: ''
 
-
 # @skip tileGen
 
 tileGen:
   url: ''
   userDataTileSet: ''
+
+# @skip mailerAdmin
+
+mailerAdmin:
+  enabled: false
+  url: ''
+  username: ''
+  password: ''
+
+# @skip mailerSender
+
+mailerSender:
+  enabled: false
+  url: ''
+  apiKey: ''
+
+# @skip sberEcommerce
+
+sberEcommerce:
+  enabled: false
+  url: ''
+  username: ''
+  password: ''

@@ -132,6 +132,8 @@ spec:
               value: "{{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled }}"
             - name: FeatureManagement__RemoveUnusedUserAssetFiles
               value: "{{ $.Values.tasks.settings.features.removeUnusedUserAssetFiles.enabled }}"
+            - name: FeatureManagement__EmailNotifications
+              value: "{{ $.Values.tasks.settings.features.emailNotifications.enabled }}"
             - name: FeatureManagement__UserManagement
               value: "{{ $.Values.tasks.settings.features.userManagement.enabled }}"
             - name: Common__Logging__Format
@@ -251,5 +253,18 @@ spec:
               value: "{{ .Values.tasks.settings.features.assetDataPreparation.segments }}"
             {{- end }}
 
-
+            - name: MailerAdminClient__Enabled
+              value: "{{ .Values.mailerAdmin.enabled }}"
+            - name: MailerAdminClient__Url
+              value: "{{ .Values.mailerAdmin.url }}"
+            - name: MailerAdminClient__Username
+              value: "{{ .Values.mailerAdmin.username }}"
+            - name: MailerAdminClient__Password
+              value: "{{ .Values.mailerAdmin.password }}"
+            - name: MailerSenderClient__Enabled
+              value: "{{ .Values.mailerSender.enabled }}"
+            - name: MailerSenderClient__Url
+              value: "{{ .Values.mailerSender.url }}"
+            - name: MailerSenderClient__ApiKey
+              value: "{{ .Values.mailerSender.apiKey }}"
 {{- end }}
