@@ -1,5 +1,12 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [new]
+
+### navi-async-matrix
+
+- `kafka.statusTopic` and `kafka.archiveTopic` were no longer used
+- new required params `kafka.mergerStatusTopic` and `kafka.mergerTaskTopic`
+
 ## [1.38.0]
 
 ### citylens-routes-ui

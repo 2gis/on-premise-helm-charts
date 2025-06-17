@@ -51,31 +51,19 @@ prometheusEnabled: true
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  tag: 1.15.2
+  tag: 1.16.0
 
 
 # @section Service account settings
 
 # @param serviceAccount.create Specifies whether a service account should be created.
 # @param serviceAccount.annotations Annotations to add to the service account.
-# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template. It is required for the archiver to work.
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
 
 serviceAccount:
   create: false
   annotations: {}
   name: ''
-
-
-# @section RBAC parameters
-
-# @param rbac.create Whether to create and use RBAC resources or not. It is required for the archiver to work
-# @param rbac.annotations Role and RoleBinding annotations
-# @param rbac.labels Role and RoleBinding additional labels
-
-rbac:
-  create: false
-  annotations: {}
-  labels: {}
 
 
 # @section Strategy settings
@@ -193,15 +181,16 @@ vpa:
 # @param dm.workerCount Number of Distance Matrix Async workers.
 # @param dm.citiesUrl URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required**
 # @param dm.citiesUpdatePeriod Period (in seconds) between requesting data from `citiesUrl`.
-# @param dm.taskSplitSize Minimum size of matrix to get split in archiver job.
+# @param dm.taskSplitSize Minimum size of matrix to get split in merger job.
 # @param dm.compositeTaskTimeoutSec Timeout for executing split tasks.
-# @param dm.archiver.image.repository Image repository for archiver.
-# @param dm.archiver.image.tag Image tag for archiver.
-# @skip dm.archiver.resources
-# @extra dm.archiver.resources.requests.cpu Archiver job CPU request. 1CPU recommended.
-# @extra dm.archiver.resources.requests.memory Archiver job memory request. 10Gi recommended.
-# @extra dm.archiver.resources.limits.cpu Archiver job CPU limit. 1CPU recommended.
-# @extra dm.archiver.resources.limits.memory Archiver job memory limit. 20Gi recommended.
+# @param dm.merger.image.repository Image repository for merger.
+# @param dm.merger.image.tag Image tag for merger.
+# @param dm.merger.replicaCount A replica count for the arhiver.
+# @skip dm.merger.resources
+# @extra dm.merger.resources.requests.cpu Merger CPU request. 1CPU recommended.
+# @extra dm.merger.resources.requests.memory Merger memory request. 10Gi recommended.
+# @extra dm.merger.resources.limits.cpu Merger CPU limit. 1CPU recommended.
+# @extra dm.merger.resources.limits.memory Merger memory limit. 20Gi recommended.
 # @skip dm.host
 # @skip dm.labels
 # @skip dm.annotations
@@ -216,10 +205,11 @@ dm:
   citiesUpdatePeriod: 3600
   taskSplitSize: 5000
   compositeTaskTimeoutSec: 3600
-  archiver:
+  merger:
+    replicaCount: 1
     image:
-      repository: 2gis-on-premise/navi-archiver-async-matrix
-      tag: 1.15.2
+      repository: 2gis-on-premise/navi-merger-async-matrix
+      tag: 1.16.0
     resources: {}
   labels: {}
   annotations: {}
@@ -271,26 +261,27 @@ db:
 # @param multiDc.enabled If multi-DC functionality enabled
 # @param multiDc.location Primary DC identifier. Arbitrary identifier, unique per DC installation.
 # @param multiDc.redirectHeader HTTP header to tell requests original from redirected. Set empty to skip the check.
-# @param multiDc.secondaryTopics.statusTopic Name of `statusTopic` in secondary DC.
-# @param multiDc.secondaryTopics.cancelTopic Name of `cancelTopic` in secondary DC.
-# @param multiDc.secondaryTopics.archiveTopic Name of `archiveTopic` in secondary DC.
+# @param multiDc.secondaryTopics.attractTopic Name of `attractTopic` in secondary DC.
+# @param multiDc.secondaryTopics.mergerStatusTopic Name of `mergerStatusTopic` in secondary DC.
+# @param multiDc.secondaryTopics.oneToManyTopic Name of `oneToManyTopic` in secondary DC.
 
 multiDc:
   enabled: false
   location: default
   redirectHeader: ''
   secondaryTopics:
-    statusTopic: ''
-    cancelTopic: ''
-    archiveTopic: ''
+    attractTopic: ''
+    mergerStatusTopic: ''
+    oneToManyTopic: ''
 
 
 # @section Kafka settings
 
 # @param kafka.groupId Distance Matrix Async API group identifier.
-# @param kafka.statusTopic Name of the topic for sending new tasks to.
 # @param kafka.cancelTopic Name of the topic for canceling or receiving information about finished tasks.
-# @param kafka.archiveTopic Name of the topic for archiving tasks.
+# @param kafka.mergerGroupId Group identifier for merger tasks.
+# @param kafka.mergerStatusTopic Name of the topic for status merger tasks.
+# @param kafka.mergerTaskTopic Name of the topic for merger tasks.
 # @param kafka.attractTopic Name of the topic for for attract tasks results
 # @param kafka.oneToManyTopic Name of the topic for oneToMany tasks results
 # @param kafka.vrpStatusTopic Name of the topic for VRP service integration
@@ -327,9 +318,10 @@ multiDc:
 
 kafka:
   groupId: navi_async_matrix
-  statusTopic: ''
   cancelTopic: ''
-  archiveTopic: ''
+  mergerGroupId: navi_async_matrix_merger
+  mergerStatusTopic: ''
+  mergerTaskTopic: ''
   attractTopic: ''
   oneToManyTopic: ''
   vrpStatusTopic: ''
