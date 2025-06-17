@@ -134,6 +134,8 @@ spec:
               value: "{{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled }}"
             - name: FeatureManagement__RemoveUnusedUserAssetFiles
               value: "{{ $.Values.tasks.settings.features.removeUnusedUserAssetFiles.enabled }}"
+            - name: FeatureManagement__EmailNotifications
+              value: "{{ $.Values.tasks.settings.features.emailNotifications.enabled }}"
             - name: FeatureManagement__UserManagement
               value: "{{ $.Values.tasks.settings.features.userManagement.enabled }}"
             - name: Common__Logging__Format
