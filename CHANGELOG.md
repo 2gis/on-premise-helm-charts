@@ -1,5 +1,17 @@
 # 2GIS On-Premise Changelog
 
+## [1.39.1] (2025-06-17)
+#### [Breaking-Changes](Breaking-Changes.md#1391)
+#### Images
+```
+navi-async-matrix
+	- navi-archiver-async-matrix:1.15.2
+	- navi-async-matrix:1.15.2
+	+ navi-async-matrix:1.16.0
+	+ navi-merger-async-matrix:1.16.0
+
+```
+
 ## [1.39.0] (2025-06-09)
 #### Images
 ```

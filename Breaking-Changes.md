@@ -1,11 +1,12 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [new]
+## [1.39.1]
 
 ### navi-async-matrix
 
 - `kafka.statusTopic` and `kafka.archiveTopic` were no longer used
 - new required params `kafka.mergerStatusTopic` and `kafka.mergerTaskTopic`
+- `rbac` was removed
 
 ## [1.38.0]
 
