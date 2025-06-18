@@ -18,10 +18,12 @@ metadata:
     {{- if .Values.naviback.behindSplitter }}
     behindSplitter: "true"
     {{- end }}
-  {{- if .Values.service.annotations }}
   annotations:
+    maxProcessTime: {{ include "config.getMaxProcessTime" . | int | quote }}
+    queries: {{ include "rules.getQueriesString" (dict "context" $) }}
+    {{- if .Values.service.annotations }}
     {{- include "tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
-  {{- end }}
+    {{- end }}
 spec:
   type: {{ .Values.service.type }}
   clusterIP: {{ .Values.service.clusterIP | default "" | quote }}
@@ -64,10 +66,12 @@ metadata:
     {{- end }}
     {{- /* pretend to be behind splitter to get ignored by mfront */}}
     behindSplitter: "true"
-  {{- if .Values.service.headless.annotations }}
   annotations:
+    maxProcessTime: {{ include "config.getMaxProcessTime" . | int | quote }}
+    queries: {{ include "rules.getQueriesString" (dict "context" $) }}
+    {{- if .Values.service.headless.annotations }}
     {{- include "tplvalues.render" ( dict "value" .Values.service.headless.annotations "context" $) | nindent 4 }}
-  {{- end }}
+    {{- end }}
 spec:
   type: "ClusterIP"
   clusterIP: "None"
