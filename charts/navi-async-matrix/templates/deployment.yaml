@@ -1,0 +1,127 @@
+{{- define "merger.deployment" }}
+metadata:
+  name: {{ include "generic-chart.fullname" . }}-merger
+  labels:
+    navigroup: {{ .Values.navigroup | default "" | quote }}
+spec:
+  replicas: {{ .Values.dm.merger.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "generic-chart.name" . }}-merger
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- if .Values.customCAs.bundle }}
+        checksum/custom-ca: {{ (include (print $.Template.BasePath "/configmap-ca.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- end }}
+      labels:
+        app.kubernetes.io/name: {{ include "generic-chart.name" . }}-merger
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      volumes:
+      {{- $kafkaVolumeMounted := (
+              .Values.kafka.fileProperties |
+              or (.Values.kafka.consumerOverrides).fileProperties |
+              or (.Values.kafka.producerOverrides).fileProperties
+            ) }}
+      {{- if $kafkaVolumeMounted }}
+        - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+          secret:
+            secretName: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+        - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+          secret:
+            secretName: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+      {{- end }}
+      {{- if .Values.customCAs.bundle }}
+        - name: {{ include "navi-async-matrix.fullname" . }}-ca
+          configMap:
+            name: {{ include "navi-async-matrix.fullname" . }}-ca
+      {{- end }}
+      # TODO: SA name from generic-chart
+      serviceAccountName: {{ include "navi-async-matrix.serviceAccountName" . }}
+      containers:
+        - name: {{ .Chart.Name }}-merger
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.dm.merger.image.repository }}:{{ .Values.dm.merger.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 8003
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 8003
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.dm.merger.resources | nindent 12 }}
+          env:
+            - name: CONFIG_TYPE
+              value: env
+            - name: LOGGER_SETTING__level
+              value: {{ .Values.dm.logLevel | quote }}
+            - name: LOGGER_SETTING__SERIALIZE
+              value: "false"
+            - name: LOGGER_SETTING__VERBOSE
+              value: "true"
+            - name: S3_ENDPOINT_URL
+              value: {{ required "A valid s3.host entry required" .Values.s3.host | quote }}
+            - name: S3_BUCKET
+              value: {{ required "A valid s3.bucket entry required" .Values.s3.bucket | quote }}
+            - name: S3_REGION_NAME
+              value: {{ .Values.s3.region | quote }}
+            - name: S3_ACCESS_KEY
+              value: {{ required "A valid s3.accessKey entry required" .Values.s3.accessKey | quote }}
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  key: s3key
+            - name: KAFKA_PRODUCER_SETTING__TOPIC
+              value: {{ required "A valid kafka.mergerStatusTopic entry required" .Values.kafka.mergerStatusTopic | quote }}
+            - name: KAFKA_CONSUMER_SETTING__TOPIC
+              value: {{ required "A valid kafka.mergerTaskTopic entry required" .Values.kafka.mergerTaskTopic | quote }}
+            - name: KAFKA_CONSUMER_SETTING__CONFIG__GROUP_ID
+              value: {{ .Values.kafka.mergerGroupId | quote }}
+              {{- range $kafkaRole, $overridesProperty := (dict
+                  "PRODUCER" "producerOverrides"
+                  "CONSUMER" "consumerOverrides"
+                ) -}}
+              {{- $kafkaPropertyEnv := print "KAFKA_" $kafkaRole "_SETTING__CONFIG__" -}}
+              {{- $kafkaPropertiesEnv := include "navi-async-matrix.kafkaPropertiesEnv" (dict
+                    "kafka" $.Values.kafka
+                    "overrides" ($overridesProperty | get $.Values.kafka)
+                    "secretname" (print
+                        (include "navi-async-matrix.fullname" $)
+                        "-"
+                        (lower $kafkaRole)
+                      )
+                    "mountpoint" (print "/etc/2gis/secret/" (lower $kafkaRole))
+                    "prefix" $kafkaPropertyEnv
+                  ) | fromYaml }}
+              {{- get $kafkaPropertiesEnv "ret" | toYaml | nindent 12 }}
+              {{- end }}{{- /* range */}}
+          volumeMounts:
+          {{- if $kafkaVolumeMounted }}
+          - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/consumer/
+          - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+            mountPath: /etc/2gis/secret/producer/
+          {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          - name: {{ include "navi-async-matrix.fullname" . }}-ca
+            mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+            subPath: custom-ca.crt
+          {{- end }}
+{{- end }}{{- /* define "merger.deployment" */}}
+{{- template "generic-chart.merge" (list . "merger.deployment" "generic-chart.deployment.tpl") }}

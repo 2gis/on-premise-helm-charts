@@ -22,6 +22,10 @@ spec:
       labels:
         {{- include "tiles.labels" $ | nindent 8 }}
     spec:
+      {{- with $.Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: tmp-volume
           emptyDir: {}
@@ -53,7 +57,10 @@ spec:
 
       containers:
         - name: migrator
-
+          {{- with $.Values.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{ end -}}
           image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
           imagePullPolicy: {{ .image.pullPolicy }}
           command: ["/selfimporter", "migrate"]
