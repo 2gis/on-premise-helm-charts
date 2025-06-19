@@ -59,6 +59,16 @@ image:
 # @param front.port Navi-Front service HTTP port
 # @param front.router.discover Enable/disable router autodiscovery
 # @param front.router.host Set router address if autodiscovery is disabled
+# @extra front.router.backupPorts [nullable] Support for backup ports on router
+# @param front.router.backupPorts.base Backup router ports start with `base` and assignd sequentially up
+# @param front.router.backupPorts.number Number of backup router ports
+# @param front.router.keepalive Allows router upstream overrides to front.keepalive settings
+# @extra front.router.proxy [nullable] Settings for router proxy rule
+# @param front.router.proxy.nextUpstreamTimeout nginx [proxy_next_upstream_timeout](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream_timeout)
+# @param front.router.proxy.connectTimeout nginx [proxy_connect_timeout](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_connect_timeout)
+# @param front.router.proxy.readTimeout nginx [proxy_read_timeout](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout)
+# @param front.router.proxy.sendTimeout nginx [proxy_send_timeout](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_send_timeout)
+# @param front.router.proxy.nextUpstream nginx [proxy_next_upstream](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream)
 # @param front.tsp_carrouting.enabled Enable/disable carrouting TSP
 # @param front.tsp_carrouting.host Set carrouting TSP hostname
 # @param front.multimod.enabled Add multimodal routing service location
@@ -68,6 +78,8 @@ image:
 # @param front.keepalive.requests Maximum number of requests that can be served through one keepalive connection
 # @param front.keepalive.time Maximum time for one keepalive connection
 # @param front.keepalive.timeout Timeout for idle keepalive connection
+# @param front.locationExtraProxyHeaders Additional headers to pass to backend `locationExtraProxyHeaders: { header1: value1, header2: 'value 2'}`
+# @param front.queryTimeouts Per-query timeout in seconds. If back service supports multiple queries then use max `queryTimeouts: {route_planner: 60, routing: 20}`
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
 
 front:
@@ -75,6 +87,16 @@ front:
   router:
     discover: true
     host: localhost
+    backupPorts:
+      base: 50000
+      number: 0
+    keepalive: {}
+    proxy:
+      nextUpstreamTimeout: 750ms
+      connectTimeout: 100ms
+      readTimeout: 500ms
+      sendTimeout: 500ms
+      nextUpstream: error timeout non_idempotent http_502 http_504
   tsp_carrouting:
     enabled: false
     host: ''
@@ -87,6 +109,8 @@ front:
     requests: 100
     time: 1h
     timeout: 60s
+  locationExtraProxyHeaders: {}
+  queryTimeouts: {}
 
 navigroup: ''
 
@@ -193,7 +217,6 @@ pdb:
 # @param nginx.hideBackendHostname Do not pass X-Back-Hostname header from navi-back to client
 # @extra nginx.protectInternalLocations
 # @param nginx.protectInternalLocations.allowedNetworks CIDR blocks to allow access to internal locations from. For debug purposes only
-# @param nginx.connectTimeout.geocoding Timeout for connections to navi-router, nginx [time](http://nginx.org/en/docs/syntax.html#time) string
 
 nginx:
   setRealIpFrom: 127.0.0.1
@@ -209,8 +232,6 @@ nginx:
   hideBackendHostname: true
   protectInternalLocations:
     allowedNetworks: []
-  connectTimeout:
-    geocoding: ''
 
 
 # @section Location overrides
