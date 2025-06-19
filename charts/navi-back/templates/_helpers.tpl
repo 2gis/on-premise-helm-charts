@@ -105,6 +105,22 @@ Usage:
    {{- ternary "true" "" $found -}}
 {{- end -}}
 
+{{/*
+Get a string containing comma-separated list of all queries supported by app_rule
+Usage:
+{{ include "rules.getQueriesString" (dict "context" $) }}
+*/}}
+{{- define "rules.getQueriesString" }}
+  {{- $result := "" }}
+  {{- if $.context.Values.rules }}
+    {{- range $.context.Values.rules }}
+        {{- if eq .name $.context.Values.naviback.app_rule -}}
+            {{- $result = (.queries | uniq | sortAlpha | join ",") }}
+        {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- $result | quote -}}
+{{- end }}
 
 {{/*
 Set simple_network_car parameter in server config section
@@ -451,4 +467,17 @@ Calculate envoy --concurrency value
     {{- else }}
         {{- printf "1" -}}
     {{- end }}
+{{- end }}
+
+{{/*
+Calculate maximum processing time
+*/}}
+{{- define "config.getMaxProcessTime" -}}
+  {{- $result := (get .Values.naviback "maxProcessTime") | default 20}}
+  {{- range $query, $timeout := .Values.naviback.queryTimeouts }}
+    {{- if (eq "true" (include "rules.inQueriesSection" (dict "queriesValue" $query "context" $))) }}
+        {{- $result = max $result $timeout }}
+    {{- end }}
+  {{- end }}
+  {{- $result }}
 {{- end }}

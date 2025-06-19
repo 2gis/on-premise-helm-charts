@@ -34,7 +34,7 @@ data:
         "handlers_number": {{ .Values.naviback.handlersNumber | int }},
         "queue_size": {{ .Values.naviback.queueSize | int }},
         "log_verbose": false,
-        "max_process_time": {{ .Values.naviback.maxProcessTime | default 20 | int }},
+        "max_process_time": {{ include "config.getMaxProcessTime" . | int }},
         "response_timelimit": {{ .Values.naviback.responseTimelimit | default 120 | int }},
         "request_timeout": {{ .Values.naviback.requestTimeout | default 120 | int }},
         "timeout_limit_sec": {{ .Values.naviback.timeoutLimitSec | default 1200 | int }},
@@ -855,6 +855,7 @@ data:
                       retry_policy:
                         retry_on: {{ .Values.transmitter.retry.retryOn | quote }}
                         num_retries: {{ .Values.transmitter.retry.numRetries | int }}
+                        per_try_timeout: {{ .Values.transmitter.retry.perTryTimeout }}
                         retry_host_predicate:
                           - name: envoy.retry_host_predicates.previous_hosts
                             typed_config:
