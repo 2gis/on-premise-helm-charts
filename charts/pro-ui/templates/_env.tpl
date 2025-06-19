@@ -95,10 +95,14 @@
   value: "{{ .Values.ui.zenith.host }}"
 - name: ZENITH_TILE_SET
   value: "{{ .Values.ui.zenith.tileSet }}"
+- name: ZENITH_HAS_ADM_DIVS_LAYERS
+  value: "{{ .Values.ui.zenith.hasAdmDivsLayers }}"
 - name: ZENITH_PROTOCOL
   value: "{{ .Values.ui.zenith.protocol }}"
 - name: ZENITH_SUBDOMAINS
   value: "{{ .Values.ui.zenith.subdomains }}"
+- name: APP_VERSION
+  value: "{{ .Values.image.tag }}"
 {{- if .Values.ui.extraEnvVars }}
 {{- range $key, $val := .Values.ui.extraEnvVars }}
 - name: {{ $key }}
