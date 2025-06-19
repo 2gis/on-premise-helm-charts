@@ -54,7 +54,7 @@ spec:
       {{- end }}
 
     spec:
-      {{- with .Values.api.podSecurityContext }}
+      {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -94,8 +94,10 @@ spec:
 
         {{- with $.Values.proxy }}
         - name: tiles-api-proxy
+          {{- with $.Values.containerSecurityContext }}
           securityContext:
-            {{- toYaml $.Values.securityContext | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
+          {{ end -}}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}
           imagePullPolicy: {{ .image.pullPolicy }}
 
@@ -158,8 +160,10 @@ spec:
         {{- end }}
 
         - name: tiles-api
+          {{- with $.Values.containerSecurityContext }}
           securityContext:
-            {{- toYaml $.Values.securityContext | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
+          {{ end -}}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
 

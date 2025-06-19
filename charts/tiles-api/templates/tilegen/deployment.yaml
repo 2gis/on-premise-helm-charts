@@ -52,7 +52,7 @@ spec:
     spec:
       serviceAccountName: {{ include "tilegen.serviceAccount" $ }}
       terminationGracePeriodSeconds: {{ .terminationGracePeriodSeconds }}
-      {{- with .podSecurityContext }}
+      {{- with $.Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -90,8 +90,10 @@ spec:
       containers:
 
         - name: api
+          {{- with $.Values.containerSecurityContext }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
+          {{ end -}}
           image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
           imagePullPolicy: {{ .image.pullPolicy }}
           command: ["/selfimporter", "api"]

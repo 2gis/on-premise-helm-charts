@@ -20,7 +20,7 @@ spec:
         {{- include "tiles.importer.label" . | nindent 8 }}
 
     spec:
-      {{- with .Values.importer.podSecurityContext }}
+      {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
