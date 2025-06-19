@@ -23,6 +23,10 @@ spec:
         {{- include "tiles.selectorLabels" $ | nindent 8 }}
         {{- include "tiles.importer.label" $ | nindent 8 }}
     spec:
+      {{- with $.Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ include "importer.serviceAccount" $ }}
 
       volumes:
@@ -56,7 +60,10 @@ spec:
 
       containers:
         - name: importer
-
+          {{- with $.Values.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{ end -}}
           {{- with $.Values.importer }}
           image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
           imagePullPolicy: {{ .image.pullPolicy }}
