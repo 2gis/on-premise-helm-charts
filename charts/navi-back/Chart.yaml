@@ -7,7 +7,7 @@ keywords:
 - back
 - backend
 version: 1.39.1
-appVersion: 7.39.1.9
+appVersion: 7.39.2.2
 dependencies:
 - name: generic-chart
   version: '*'

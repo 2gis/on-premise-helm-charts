@@ -4,7 +4,7 @@
 apiVersion: {{ include "generic-chart.capabilities.cronjob.apiVersion" $ctx }}
 kind: CronJob
 metadata:
-  name: {{ include "generic-chart.fullname" $ctx }}{{ include "generic-chart.getSuffix" $cronJob  }}
+  name: {{ include "generic-chart.fullname" $ctx }}{{ include "generic-chart.getSuffix" (dict "suffix" $cronJob.suffix "ctx" $ctx)  }}
   labels:
     {{- include "generic-chart.labels" $ctx | nindent 4 }}
   {{- with $ctx.labels }}
