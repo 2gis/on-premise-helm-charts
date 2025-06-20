@@ -42,6 +42,8 @@ spec:
           env:
             - name: CONFIG_PATH
               value: /opt/workers/config/workers_config.yaml
+            - name: CITYLENS_CONFIG_PATH
+              value: /opt/workers/citylens-config/dashboard_config.yaml
             {{- if $.Values.customCAs.bundle }}
             - name: SSL_CERT_DIR
               value: {{ include "citylens.customCA.mountPath" $ }}
@@ -51,6 +53,8 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /opt/workers/config
+            - name: citylens-config-volume
+              mountPath: /opt/workers/citylens-config
             {{- if $.Values.customCAs.bundle }}
             - mountPath: {{ include "citylens.customCA.mountPath" $ }}
               name: custom-ca
@@ -60,6 +64,9 @@ spec:
         - name: config-volume
           configMap:
             name: {{ include "citylens.workers.name" . }}-configmap
+        - name: citylens-config-volume
+          configMap:
+            name: {{ include "citylens.web.name" . }}-configmap
         {{- if $.Values.customCAs.bundle }}
         - name: custom-ca
           configMap:

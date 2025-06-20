@@ -43,7 +43,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: {{ include "citylens.web.name" . }}-configmap
+            name: {{ include "citylens.web.name" . }}-jobs-configmap
         {{- if $.Values.customCAs.bundle }}
         - name: custom-ca
           configMap:
