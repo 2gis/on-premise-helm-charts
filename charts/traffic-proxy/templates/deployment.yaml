@@ -3,13 +3,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "traffic-proxy.fullname" . }}
+  name: {{ include "generic-chart.fullname" . }}
   {{- if .Values.annotations }}
   annotations:
     {{- toYaml .Values.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "traffic-proxy.labels" . | nindent 4 }}
+    {{- include "generic-chart.labels" . | nindent 4 }}
   {{- if .Values.labels }}
     {{- toYaml .Values.labels | nindent 4 }}
   {{- end }}
@@ -22,7 +22,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "traffic-proxy.selectorLabels" . | nindent 6 }}
+      {{- include "generic-chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -31,7 +31,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "traffic-proxy.selectorLabels" . | nindent 8 }}
+        {{- include "generic-chart.selectorLabels" . | nindent 8 }}
       {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -44,7 +44,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ required "A valid .Values.proxy.listen" .Values.proxy.listen }}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -71,7 +71,7 @@ spec:
               exec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           volumeMounts:
-            - name: {{ include "traffic-proxy.name" $ }}-configmap
+            - name: {{ include "generic-chart.name" $ }}-configmap
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
           {{- if .Values.proxy.cache.enabled }}
@@ -79,9 +79,9 @@ spec:
               mountPath: /var/cache/nginx/trafficcache
           {{- end }}
       volumes:
-        - name: {{ include "traffic-proxy.name" . }}-configmap
+        - name: {{ include "generic-chart.name" . }}-configmap
           configMap:
-            name: {{ include "traffic-proxy.fullname" . }}
+            name: {{ include "generic-chart.fullname" . }}
             items:
               - key: nginx.conf
                 path: nginx.conf
