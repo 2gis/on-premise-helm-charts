@@ -1,44 +1,80 @@
----
-apiVersion: apps/v1
-kind: Deployment
+{{- define "splitter.deployment" }}
 metadata:
-  name: {{ include "splitter.fullname" . }}
   labels:
-    {{- include "splitter.labels" . | nindent 4 }}
-    rule: {{ .Values.splitter.app_rule | default "" | quote  }}
+    rule: {{ .Values.splitter.app_rule | quote }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
-  {{- with .Values.labels }}
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- if .Values.dataGroup.enabled }}
+    dataGroupTimestamp: {{ .Values.dataGroup.timestamp | quote }}
+    dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+    {{- end }}{{- /* dataGroup.enabled */}}
 spec:
-  {{- if not .Values.hpa.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
-  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
-  {{- if .Values.updateStrategy }}
-  strategy:
-    {{- include "tplvalues.render" ( dict "value" .Values.updateStrategy "context" $) | nindent 6 }}
-  {{- end }}
-  selector:
-    matchLabels: {{- include "splitter.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "splitter.selectorLabels" . | nindent 8 }}
+        navigroup: {{ .Values.navigroup | default "" | quote }}
+        {{- if .Values.dataGroup.enabled }}
+        dataGroupTimestamp: {{ .Values.dataGroup.timestamp | quote }}
+        dataGroupPrefix: {{ .Values.dataGroup.prefix | quote }}
+        {{- end }}{{- /* dataGroup.enabled */}}
       annotations:
-        {{- with .Values.podAnnotations }}
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "splitter.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ include "generic-chart.containerName" . }}-envoy
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.envoy.image.repository }}:{{ .Values.envoy.image.tag }}
+          imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
+          volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy/envoy.yaml
+              subPath: envoy.yaml
+          {{- if .Values.envoy.resources }}
+          resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
+          {{- end }}
+          lifecycle:
+            # wait for the main container to shutdown
+            preStop:
+              exec:
+                command: ["/bin/bash", "-c", "while cat < /dev/tcp/127.0.0.1/{{ .Values.splitter.appPort }} ; do sleep 5 ; done"]
+          args:
+            - -c
+            - /etc/envoy/envoy.yaml
+            - --log-level
+            - {{ .Values.envoy.systemLogs.logLevel | quote }}
+          {{- if and (kindIs "string" .Values.envoy.concurrency) (eq "" .Values.envoy.concurrency) }}
+          {{/* envoy.concurrency = '', skip */}}
+          {{- else }}
+            - '--concurrency'
+            - {{ include "envoy.get-concurrency" . | quote }}
+          {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics-aggregator
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
+          env:
+            - name: METRICS_AGGREGATOR_PORT
+              value: "{{ .Values.metrics.port }}"
+            - name: METRICS_AGGREGATOR_SOURCES
+              value: "http://localhost:{{ .Values.splitter.appPort }}/metrics,http://localhost:9901/stats/prometheus"
+            - name: GOMAXPROCS
+              value: "1"
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: {{ .Values.metrics.port }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: {{ .Values.metrics.port }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.metrics.resources | nindent 12 }}
+        {{- end }}
+        - name: {{ include "generic-chart.containerName" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
@@ -47,32 +83,54 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: PORT
-              value: {{ .Values.appPort | default "8080" | quote }}
+              value: {{ .Values.splitter.appPort | quote }}
+            - name: BASE_CTX_URL
+              value: {{ .Values.splitter.ctxBaseUrl | quote }}
             - name: CTX_URL
-              value: {{ required "A valid .Values.splitter.ctxUrl required!" (.Values.splitter).ctxUrl | quote }}
+              value: {{ .Values.splitter.ctxUrl | quote }}
             - name: CTX_TIMEOUT
-              value: {{ (.Values.splitter).ctxTimeout | default "60s" | quote }}
+              value: {{ .Values.splitter.ctxTimeout | quote }}
             - name: LOG_LEVEL
-              value: {{ (.Values.splitter).logLevel | default "info" | quote }}
+              value: {{ .Values.splitter.logLevel | quote }}
             - name: SUBREQUEST_RETRY_N
-              value: {{ (.Values.splitter).subrequestRetryN | default 5 | quote }}
+              value: {{ .Values.splitter.subrequestRetryN | quote }}
             - name: READ_TIMEOUT
-              value: {{ (.Values.splitter).readTimeout | default "10s" | quote }}
+              value: {{ .Values.splitter.readTimeout | quote }}
             - name: WRITE_TIMEOUT
-              value: {{ (.Values.splitter).writeTimeout | default "10s" | quote }}
+              value: {{ .Values.splitter.writeTimeout | quote }}
             - name: IDLE_TIMEOUT
-              value: {{ (.Values.splitter).idleTimeout | default "60s"  | quote}}
+              value: {{ .Values.splitter.idleTimeout | quote }}
             - name: GOMAXPROCS
-              value: {{ (.Values.splitter).goMaxProcs | default 1  | quote }}
+              value: {{ .Values.splitter.goMaxProcs | quote }}
+            - name: PROXY_TIMEOUT
+              value: {{ .Values.splitter.proxyTimeout | quote }}
+            - name: SUBREQUEST_TIMEOUT
+              value: {{ .Values.splitter.subrequestTimeout | quote }}
             - name: STATISTIC_HOST
-              value: {{ (.Values.splitter).statHost | default "-" | quote }}
+              value: {{ .Values.splitter.statHost | default "-" | quote }}
             - name: STATISTIC_THREAD_POOL_SIZE
-              value: {{ (.Values.splitter).statThreadPoolSize | default 16 | quote }}
+              value: {{ .Values.splitter.statThreadPoolSize | quote }}
             - name: STATISTIC_TYPE
-              value: {{ (.Values.splitter).statType | default 401 | quote }}
+              value: {{ .Values.splitter.statType | default 401 | quote }}
+            {{- if .Values.attractor.enabled }}
+            - name: ATTRACT_URL
+              value: 127.0.0.1:9999
+            - name: ATTRACT_TIMEOUT
+              value: {{ .Values.attractor.timeout | quote }}
+            {{- end }}
+            {{- if .Values.oneToMany.enabled }}
+            - name: ONE_TO_MANY_URL
+              value: 127.0.0.1:9998
+            - name: ONE_TO_MANY_TIMEOUT
+              value: {{ .Values.oneToMany.timeout | quote }}
+            {{- end }}
+            {{- if .Values.passThrough.enabled }}
+            - name: MOSES_URL
+              value: '{{ .Values.passThrough.scheme }}://{{ coalesce .Values.passThrough.host .Values.oneToMany.host }}:{{ .Values.passThrough.port }}'
+            {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.appPort | default "8080" }}
+              containerPort: {{ .Values.splitter.appPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -93,15 +151,16 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+          lifecycle:
+            # wait for the endpoint removal process
+            preStop:
+              exec:
+                command:
+                  - sleep
+                  - {{ .Values.preStopDelay | quote }}
+      volumes:
+        - name: envoy-config
+          configMap:
+            name: {{ include "generic-chart.fullname" . }}-configmap
+{{- end }}{{- /* define "splitter.deployment" */}}
+{{- template "generic-chart.merge" (list . "splitter.deployment" "generic-chart.deployment.tpl") }}
