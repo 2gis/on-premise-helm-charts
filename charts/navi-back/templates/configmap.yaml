@@ -609,8 +609,13 @@ data:
         {{- end }}{{- /* .Values.naviback.bss.enabled */}}
         {{- if not .Values.license.notSupported }}
         {{- $licenseUrl := .Values.license.url | required "Valid license.url required!" }}
-        "pasportool_client":
-          {{- toPrettyJson .Values.license | nindent 8 -}},
+        "pasportool_client": {
+          "url": {{ .Values.license.url | quote }},
+          "additional_time_after_connection_lost": {{ .Values.license.licenseCheckInterval | default 3600 | int }},
+          {{- /* these parameters are not publicly useful, left undocumented intentionally */}}
+          "is_enabled": {{ .Values.license.isEnabled | default "" | quote }},
+          "license_check_interval": {{ .Values.license.licenseCheckInterval | default 120 | int }}
+        },
         {{- end }}{{- /* if not .Values.license.notSupported */}}
         {{- if .Values.naviback.rtr.enabled }}
         "restrictions_index": {
@@ -808,6 +813,10 @@ data:
               "orange_jam_minutes": 25,
               "deep_red_jam_minutes": 30
             }
+          {{- if .Values.naviback.excludedAreasLimit -}}
+            ,
+            "excluded_areas_limit": {{ .Values.naviback.excludedAreasLimit | int }}
+          {{- end }}{{- /* .Values.naviback.excludedAreasLimit */}}
           }
           {{- if .Values.naviback.serverAdditionalSections -}}
             ,{{- include "tplvalues.render" ( dict "value" .Values.naviback.serverAdditionalSections "context" $) | nindent 10 }}

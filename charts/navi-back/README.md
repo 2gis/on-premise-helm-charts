@@ -182,6 +182,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.etaScheduleIndex.url`                         | Schedule Index remote url                                                                                                                                                                                              | `""`                                     |
 | `naviback.etaScheduleIndex.etaScheduleNodes`            | ETA Schedule nodes                                                                                                                                                                                                     | `""`                                     |
 | `naviback.app_rule`                                     | Item name from `rules` list to load rules from.                                                                                                                                                                        | `""`                                     |
+| `naviback.excludedAreasLimit`                           | Maximum number of excluded areas                                                                                                                                                                                       |                                          |
 | `navigroup`                                             | Service group identifier, allows multiple stacks deployed to the same namespace.                                                                                                                                       | `""`                                     |
 | `app_project`                                           | Do not use, configure with `rules` and `app_rule` instead.                                                                                                                                                             | `""`                                     |
 | `rules`                                                 | List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details                               | `[]`                                     |
@@ -361,10 +362,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### License settings
 
-| Name                                            | Description                                                               | Value  |
-| ----------------------------------------------- | ------------------------------------------------------------------------- | ------ |
-| `license.url`                                   | Address of the License service v2. Ex: https://license.svc                | `""`   |
-| `license.additional_time_after_connection_lost` | License service unavailability grace period in seconds, cannot exceed 24h | `3600` |
+| Name                                        | Description                                                               | Value  |
+| ------------------------------------------- | ------------------------------------------------------------------------- | ------ |
+| `license.url`                               | Address of the License service v2. Ex: https://license.svc                | `""`   |
+| `license.additionalTimeAfterConnectionLost` | License service unavailability grace period in seconds, cannot exceed 24h | `3600` |
 
 ### Metrics aggregator container. Leave with defaults, FOR FUTURE RELEASE.
 

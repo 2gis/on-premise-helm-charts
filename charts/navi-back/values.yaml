@@ -249,6 +249,7 @@ image:
 # @param naviback.etaScheduleIndex.url Schedule Index remote url
 # @param naviback.etaScheduleIndex.etaScheduleNodes ETA Schedule nodes
 # @param naviback.app_rule Item name from `rules` list to load rules from.
+# @extra naviback.excludedAreasLimit Maximum number of excluded areas
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
 # @param app_project Do not use, configure with `rules` and `app_rule` instead.
 # @param rules List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
@@ -732,11 +733,11 @@ roadLocks:
 # @section License settings
 
 # @param license.url Address of the License service v2. Ex: https://license.svc
-# @param license.additional_time_after_connection_lost License service unavailability grace period in seconds, cannot exceed 24h
+# @param license.additionalTimeAfterConnectionLost License service unavailability grace period in seconds, cannot exceed 24h
 
 license:
   url: ''
-  additional_time_after_connection_lost: 3600
+  additionalTimeAfterConnectionLost: 3600
 
 # @section Metrics aggregator container. Leave with defaults, FOR FUTURE RELEASE.
 
