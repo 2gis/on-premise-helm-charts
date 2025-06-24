@@ -611,7 +611,7 @@ data:
         {{- $licenseUrl := .Values.license.url | required "Valid license.url required!" }}
         "pasportool_client": {
           "url": {{ .Values.license.url | quote }},
-          "additional_time_after_connection_lost": {{ .Values.license.licenseCheckInterval | default 3600 | int }},
+          "additional_time_after_connection_lost": {{ .Values.license.additionalTimeAfterConnectionLost | default 3600 | int }},
           {{- /* these parameters are not publicly useful, left undocumented intentionally */}}
           "is_enabled": {{ .Values.license.isEnabled | default "" | quote }},
           "license_check_interval": {{ .Values.license.licenseCheckInterval | default 120 | int }}
