@@ -419,9 +419,9 @@ rules: []
 
 envoy:
   image:
-    repository: 2gis-on-premise/envoy
+    repository: 2gis-on-premise/navi-envoy
     pullPolicy: IfNotPresent
-    tag: v1.27.0
+    tag: 1.27.0
   concurrency: ''
   resources: {}
 
