@@ -189,17 +189,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Envoy settings, ignored if not `transmitter.enabled`.
 
-| Name                              | Description                                                                                  | Value                   |
-| --------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------- |
-| `envoy.image.repository`          | Repository                                                                                   | `2gis-on-premise/envoy` |
-| `envoy.image.tag`                 | Tag                                                                                          | `v1.27.0`               |
-| `envoy.image.pullPolicy`          | Pull Policy                                                                                  | `IfNotPresent`          |
-| `envoy.concurrency`               | The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0` | `""`                    |
-| `envoy.resources`                 | Container resources requirements structure                                                   | `{}`                    |
-| `envoy.resources.requests.cpu`    | CPU request, recommended value `100m`                                                        | `undefined`             |
-| `envoy.resources.requests.memory` | Memory request, recommended value `100Mi`                                                    | `undefined`             |
-| `envoy.resources.limits.cpu`      | CPU limit, recommended value `100m`                                                          | `undefined`             |
-| `envoy.resources.limits.memory`   | Memory limit, recommended value `100Mi`                                                      | `undefined`             |
+| Name                              | Description                                                                                  | Value                        |
+| --------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------- |
+| `envoy.image.repository`          | Repository                                                                                   | `2gis-on-premise/navi-envoy` |
+| `envoy.image.tag`                 | Tag                                                                                          | `1.27.0`                     |
+| `envoy.image.pullPolicy`          | Pull Policy                                                                                  | `IfNotPresent`               |
+| `envoy.concurrency`               | The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0` | `""`                         |
+| `envoy.resources`                 | Container resources requirements structure                                                   | `{}`                         |
+| `envoy.resources.requests.cpu`    | CPU request, recommended value `100m`                                                        | `undefined`                  |
+| `envoy.resources.requests.memory` | Memory request, recommended value `100Mi`                                                    | `undefined`                  |
+| `envoy.resources.limits.cpu`      | CPU limit, recommended value `100m`                                                          | `undefined`                  |
+| `envoy.resources.limits.memory`   | Memory limit, recommended value `100Mi`                                                      | `undefined`                  |
 
 ### Service account settings
 
