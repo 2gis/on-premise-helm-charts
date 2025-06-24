@@ -43,14 +43,18 @@ data:
           "nodes": [
             "{REMOTE_PATH}/cities.conf.zip"
           ],
-          "timeout_seconds": 60
+          "timeout_seconds": {
+            "count": 60
+          }
         },
         "rules": {
           "update_period": 600,
           "nodes": [
             "file://{LOCAL_ETC}/rules.conf"
           ],
-          "timeout_seconds": 60
+          "timeout_seconds": {
+            "count": 60
+          }
         },
         "server_info": {
           "server_id": "{{ include "generic-chart.fullname" . }}"
