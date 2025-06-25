@@ -1,11 +1,14 @@
+{{- define "citylens.web.configmaptemplate" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "citylens.web.name" . }}-configmap
+  name: {{ include "citylens.web.name" . }}{{ .postfix }}-configmap
+  {{- if .useHooks }}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
     "helm.sh/hook-weight": "-10"
+  {{- end }}
 data:
   {{- if .Values.web.auth.enabled }}
   {{- with .Values.web.auth }}
@@ -27,7 +30,7 @@ data:
   {{- end }}
     {{- end }}
   dashboard_config.yaml: |
-    dashboard_domain: {{ required "A valid .Values.dashboardDomain. entry required" .Values.dashboardDomain | squote }}
+    dashboard_domain: {{ required "A valid .Values.dashboardDomain entry required" .Values.dashboardDomain | squote }}
     default_locale: {{ .Values.locale | squote }}
     log_level: {{ .Values.web.logLevel | squote }}
     metrics_app_name: {{ .Values.web.metricsAppName }}
@@ -180,3 +183,11 @@ data:
       {{- end }}
       predictors:
         {{- toYaml (.Values.kafka.predictorsExtraTopics | default list) | nindent 8 }}
+{{- end }}
+
+{{- $cm1 := dict "postfix" "-jobs" "useHooks" true | merge . }}
+{{ include "citylens.web.configmaptemplate" $cm1 }}
+
+---
+{{- $cm2 := dict "postfix" "" "useHooks" false | merge . }}
+{{ include "citylens.web.configmaptemplate" $cm2 }}
