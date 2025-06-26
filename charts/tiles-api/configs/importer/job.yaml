@@ -58,7 +58,7 @@ spec:
           {{- with .Values.containerSecurityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
-          {{ end -}}
+          {{- end }}
           image: {{`{{.image_path}}`}}
           command: ["/selfimporter", "worker"]
 
