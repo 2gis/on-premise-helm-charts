@@ -19,7 +19,6 @@ spec:
   jobTemplate:
     spec:
       template:
-
         spec:
           serviceAccountName: {{ include "tilegen.serviceAccount" $ }}
           restartPolicy: OnFailure
@@ -60,6 +59,11 @@ spec:
             imagePullPolicy: {{ .image.pullPolicy }}
             command: ["/selfimporter", "gc"]
 
+            {{- with $.Values.containerSecurityContext }}
+            securityContext:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+
             volumeMounts:
               - mountPath: "/config"
                 name: config-volume
@@ -74,12 +78,6 @@ spec:
             resources:
               {{- toYaml . | nindent 14 }}
             {{- end }}
-
-          {{- with $.Values.podSecurityContext }}
-          securityContext:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-
 
             env:
               - name: CONFIG_PATH
