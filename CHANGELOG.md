@@ -1,5 +1,46 @@
 # 2GIS On-Premise Changelog
 
+## [1.40.0] (2025-06-26)
+#### Images
+```
+citylens
+	- citylens-api:1.18.0
+	+ citylens-api:1.18.3
+	- citylens-web:1.18.1
+	+ citylens-web:1.18.3
+	- citylens-workers:1.18.0
+	+ citylens-workers:1.18.3
+mapgl-js-api
+	- mapgl:1.60.0
+	+ mapgl:1.61.0
+navi-attractor
+	- navi-attractor:7.39.1.9
+	+ navi-attractor:7.39.2.2
+navi-back
+	- envoy:v1.27.0
+	- navi-back:7.39.1.9
+	+ navi-back:7.39.2.2
+	+ navi-envoy:1.27.0
+navi-splitter
+	+ navi-envoy:1.27.0
+	+ navi-metrics-aggregator:1.0.0
+pro-api
+	- pro-api:2.16.0
+	+ pro-api:2.19.2
+	- pro-importer:2.16.0
+	+ pro-importer:2.19.2
+	- pro-permissions-api:2.16.0
+	+ pro-permissions-api:2.19.2
+	- pro-tasks-api:2.16.0
+	+ pro-tasks-api:2.19.2
+pro-ui
+	- pro-importer:2.16.0
+	+ pro-importer:2.19.2
+	- pro-ui:4.16.0
+	+ pro-ui:4.19.0
+
+```
+
 ## [1.39.1] (2025-06-17)
 #### [Breaking-Changes](Breaking-Changes.md#1391)
 #### Images

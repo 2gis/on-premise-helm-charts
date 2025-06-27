@@ -2,12 +2,12 @@ catalog-api
 	catalog-api:3.647.0
 	catalog-importer:1.12.1
 citylens
-	citylens-api:1.18.0
+	citylens-api:1.18.3
 	citylens-database:1.18.0
 	citylens-routes-api:1.2.2
-	citylens-web:1.18.1
+	citylens-web:1.18.3
 	citylens-worker-service:1.2.2
-	citylens-workers:1.18.0
+	citylens-workers:1.18.3
 citylens-routes-ui
 	citylens-routes-ui:1.1.3
 dgtt
@@ -27,18 +27,18 @@ keys
 license
 	license:2.4.1
 mapgl-js-api
-	mapgl:1.60.0
+	mapgl:1.61.0
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
 	navi-async-matrix:1.16.0
 	navi-merger-async-matrix:1.16.0
 navi-attractor
-	navi-attractor:7.39.1.9
+	navi-attractor:7.39.2.2
 navi-back
-	envoy:v1.27.0
 	metrics-aggregator:
-	navi-back:7.39.1.9
+	navi-back:7.39.2.2
+	navi-envoy:1.27.0
 navi-castle
 	navi-castle:1.9.8
 	navi-front:1.26.0
@@ -50,6 +50,8 @@ navi-restrictions
 navi-router
 	navi-router:6.31.0.2
 navi-splitter
+	navi-envoy:1.27.0
+	navi-metrics-aggregator:1.0.0
 	navi-splitter:1.8.9
 navi-vrp-solver
 	navi-vrp-solver:1.13.0
@@ -58,13 +60,13 @@ navi-vrp-task-manager
 platform
 	platform-ui:1.2.0
 pro-api
-	pro-api:2.16.0
-	pro-importer:2.16.0
-	pro-permissions-api:2.16.0
-	pro-tasks-api:2.16.0
+	pro-api:2.19.2
+	pro-importer:2.19.2
+	pro-permissions-api:2.19.2
+	pro-tasks-api:2.19.2
 pro-ui
-	pro-importer:2.16.0
-	pro-ui:4.16.0
+	pro-importer:2.19.2
+	pro-ui:4.19.0
 search-api
 	nginx:1.25.5
 	search-api:7.90.0
