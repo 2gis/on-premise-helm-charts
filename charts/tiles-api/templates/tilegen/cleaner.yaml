@@ -19,10 +19,13 @@ spec:
   jobTemplate:
     spec:
       template:
-
         spec:
           serviceAccountName: {{ include "tilegen.serviceAccount" $ }}
           restartPolicy: OnFailure
+          {{- with $.Values.podSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
 
           volumes:
             - name: config-volume
@@ -55,6 +58,11 @@ spec:
             image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
             imagePullPolicy: {{ .image.pullPolicy }}
             command: ["/selfimporter", "gc"]
+
+            {{- with $.Values.containerSecurityContext }}
+            securityContext:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
 
             volumeMounts:
               - mountPath: "/config"

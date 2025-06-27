@@ -23,6 +23,7 @@ Tsp-carrouting requires splitter
 */}}
 {{- define "front.renderLocation" -}}
     {{- $service := .service -}}
+    {{- $services:= .services }}
     {{- $rule := get $service.metadata.labels "rule" }}
     {{- $ctx := .context -}}
     {{- if (ne $rule "") -}}
@@ -32,12 +33,20 @@ Tsp-carrouting requires splitter
         {{- printf "\n" }}
         {{- printf "    rewrite ^/%s(.*)$ $1 break;\n" $rule }}
         {{- printf "    add_header X-Region %s always;\n" $service.metadata.name }}
+        {{- range $header, $value := $ctx.Values.front.locationExtraProxyHeaders }}
+        {{- printf "    proxy_set_header %s \"%s\";\n" $header $value }}
+        {{- end }}
         {{- if $ctx.Values.front.keepalive.enabled -}}
         {{- printf "    proxy_set_header Connection \"\";\n" }}
         {{- printf "    proxy_http_version 1.1;\n" }}
         {{- end -}}
+        {{- $proxy_read_timeout := include "front.getProxyReadTimeout" (dict "name" $service.metadata.name "services" $services) | int }}
+        {{- if $proxy_read_timeout }}
+        {{- printf "    proxy_read_timeout %d;\n" $proxy_read_timeout }}
+        {{- end }}
         {{- printf "    proxy_pass http://%s$uri$is_args$args;\n" $service.metadata.name }}
         {{- printf "}\n" }}
+      {{- /* TSP location */}}
         {{- if $ctx.Values.front.tsp_carrouting.enabled -}}
         {{- if hasSuffix "splitter" $service.metadata.name -}}
         {{- $back_host := $service.metadata.name | replace "-splitter" "-back" -}}
@@ -47,12 +56,19 @@ Tsp-carrouting requires splitter
         {{- printf "\n" }}
         {{- printf "    rewrite ^/tsp_%s(.*)$ $1 break;\n" $rule }}
         {{- printf "    add_header X-Region %s always;\n" $service.metadata.name }}
+        {{- range $header, $value := $ctx.Values.front.locationExtraProxyHeaders }}
+        {{- printf "    proxy_set_header %s \"%s\";\n" $header $value }}
+        {{- end }}
         {{- printf "    proxy_set_header X-Splitter-Host http://%s;\n" $service.metadata.name }}
         {{- printf "    proxy_set_header X-Moses-Host http://%s;\n" $back_host }}
         {{- if $ctx.Values.front.keepalive.enabled -}}
         {{- printf "    proxy_set_header Connection \"\";\n" }}
         {{- printf "    proxy_http_version 1.1;\n" }}
         {{- end -}}
+        {{- $proxy_read_timeout := include "front.getProxyReadTimeout" (dict "name" $service.metadata.name "services" $services) | int }}
+        {{- if $proxy_read_timeout }}
+        {{- printf "    proxy_read_timeout %d;\n" $proxy_read_timeout }}
+        {{- end }}
         {{- printf "    proxy_pass http://%s$uri$is_args$args;\n" $ctx.Values.front.tsp_carrouting.host }}
         {{- printf "}\n" }}
         {{- end -}}
@@ -67,7 +83,7 @@ Checking that the back service is valid
     {{- $service := .service -}}
     {{- $is_valid := false -}}
     {{- $navigroup := default "" .context.Values.navigroup -}}
-    {{/* Supported back implementations: navi-back, mock, splitter */}}
+    {{- /* Supported back implementations: navi-back, mock, splitter */ -}}
     {{- if
     and
     (has (get $service.metadata.labels "app.kubernetes.io/name") (list "navi-back" "mock" "splitter" "navi-splitter"))
@@ -101,10 +117,15 @@ Create locations for rules upstreams
 */}}
 {{- define "front.createLocations" -}}
 {{- $ns := print .Release.Namespace -}}
-{{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
+{{- $svc_lookup := (lookup "v1" "Service" $ns "").items -}}
+{{- $services := dict }}
+{{- range $index, $service := $svc_lookup }}
+    {{- $_ := set $services $service.metadata.name (deepCopy $service) }}
+{{- end }}
+{{- range $_, $service := $services -}}
     {{- if kindIs "map" $service.metadata.labels }}
         {{- if (include "front.isValidBackService" (dict "service" $service "context" $)) }}
-            {{- include "front.renderLocation" (dict "service" $service "context" $) -}}
+            {{- include "front.renderLocation" (dict "service" $service "context" $ "services" $services) -}}
         {{- end }}
     {{- end }}
 {{- end }}
@@ -123,6 +144,24 @@ Create upstreams for running navi-back in the namespace
     {{- end }}
 {{- end }}
 {{- end }}
+
+{{/*
+Map names of rules to the actual upstreams
+
+TODO there is the same services lookup runs four times
+*/}}
+{{- define "front.mapUpstreams" -}}
+{{- $ns := print .Release.Namespace -}}
+{{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
+    {{- if kindIs "map" $service.metadata.labels -}}
+        {{- if (include "front.isValidBackService" ( dict "service" $service "context" $)) -}}
+            {{- if get $service.metadata.labels "rule" -}}
+                {{- printf "%s\t%s;\n" (get $service.metadata.labels "rule" | quote) ($service.metadata.name | quote) }}
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
 
 {{/*
 Create upstreams for running navi-router in the namespace
@@ -155,3 +194,12 @@ Render ACL for private locations
     {{- end -}}{{/* .Values.nginx.protectInternalLocations.allowedNetworks */}}
 {{- end -}}{{/* .Values.nginx.protectInternalLocations.disabled */}}
 {{- end -}}
+
+{{/*
+Looks for back service and returns its maxProcessTime label. For splitter service looks for corresponding back
+*/}}
+{{- define "front.getProxyReadTimeout" }}
+{{- $name := replace "-splitter" "-back" .name }}
+{{- $timeout := default 0 (dig $name "metadata" "annotations" "maxProcessTime" "" .services) }}
+{{- $timeout }}
+{{- end }}

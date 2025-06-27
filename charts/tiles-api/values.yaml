@@ -31,6 +31,8 @@ dgctlStorage:
 # @param emailManager Account manager contact information that will be used in warning and error messages on raster tiles for all kinds of blocks.
 # @param logLevel Logging level for 'api', 'proxy', 'importer' (can be overridden by {service}.logLevelOverride option). Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
 # @param logFormat Logging format for 'api', 'proxy', 'importer' (can be overridden by {service}.logFormatOverride option). Allowed options: text|json. If not defined, 'json' format will be used.
+# @param containerSecurityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
 # @extra types **Tiles [types](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture) enabled in Tiles API**
 # @param types[0].kind Kind of tiles, should be one of: web, raster, native, mapbox.
@@ -46,6 +48,8 @@ emailManager: on-premise@2gis.com
 
 logLevel: info
 logFormat: json
+containerSecurityContext: {}
+podSecurityContext: {}
 
 types:
 - kind: ''
@@ -107,6 +111,7 @@ cassandra:
 # @param tilegen.revisionHistory Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 # @param tilegen.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param tilegen.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
 # @param tilegen.terminationGracePeriodSeconds Duration in seconds the Tiles API service pod needs to terminate gracefully.
 # @param tilegen.containerPort Tiles API container port.
 # @param tilegen.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
@@ -125,8 +130,8 @@ cassandra:
 tilegen:
   enabled: false
 
-  logLevelOverride:
-  logFormatOverride:
+  logLevelOverride: info
+  logFormatOverride: json
 
   tileset:
     name: userdata
@@ -237,8 +242,8 @@ tilegen:
 # @param proxy.access.stat.url Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
 
 proxy:
-  logLevelOverride:
-  logFormatOverride:
+  logLevelOverride: info
+  logFormatOverride: json
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
@@ -309,8 +314,8 @@ api:
   terminationGracePeriodSeconds: 30
   containerPort: 8000
 
-  logLevelOverride:
-  logFormatOverride:
+  logLevelOverride: info
+  logFormatOverride: json
 
   labels: {}
   annotations: {}
@@ -328,6 +333,7 @@ api:
 
   podAnnotations: {}
   podLabels: {}
+
   nodeSelector: {}
   affinity: {}
   tolerations: []
@@ -450,8 +456,8 @@ api:
 importer:
   enabled: true
   serviceAccountOverride: ''
-  logLevelOverride:
-  logFormatOverride:
+  logLevelOverride: info
+  logFormatOverride: json
 
   # @extra importer.image **Docker image settings**
   # @param importer.image.repository Docker Repository.
