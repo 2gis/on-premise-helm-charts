@@ -126,5 +126,46 @@ spec:
               value: "{{ $.Values.routes.worker.busConfig.consumers.appEvents.bufferSize }}"
             - name: BusConfig__Consumers__AppEvents__WorkersCount
               value: "{{ $.Values.routes.worker.busConfig.consumers.appEvents.workersCount }}"
+              
+        - name: realtime-data-api-migrate
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.routes.realtimeDataApi.image.repository }}:{{ .Values.routes.realtimeDataApi.image.tag }}
+          imagePullPolicy: {{ .Values.routes.realtimeDataApi.image.pullPolicy }}
+          args: [ "migrate" ]
+          resources:
+            {{- toYaml .Values.routes.realtimeDataApi.resources | nindent 12 }}
+          env:
+            - name: PgSettings__Host
+              value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
+            - name: PgSettings__Port
+              value: "{{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port }}"
+            - name: PgSettings__UserName
+              value: "{{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username }}"
+            - name: PgSettings__Password
+              valueFrom:
+                secretKeyRef:
+                  key: postgresPassword
+                  name: {{ include "citylens.routes.migration.name" . }}-secret
+
+            - name: PgSettings__Api__Database
+              value: "{{ required "A valid .Values.routes.realtimeData.postgres.database entry required" $.Values.routes.realtimeDataApi.postgres.database }}"
+            - name: PgSettings__Api__Timeout
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.timeout }}"
+            - name: PgSettings__Api__CommandTimeout
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.commandTimeout }}"
+            - name: PgSettings__Api__MaxPoolSize
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.maxPoolSize }}"
+            - name: PgSettings__Api__Pooling
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.pooling }}"
+
+            - name: PgSettings__Hangfire__Database
+              value: "{{ required "A valid .Values.routes.realtimeData.postgres.database entry required" $.Values.routes.realtimeDataApi.postgres.database }}"
+            - name: PgSettings__Hangfire__Timeout
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.timeout }}"
+            - name: PgSettings__Hangfire__CommandTimeout
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.commandTimeout }}"
+            - name: PgSettings__Hangfire__MaxPoolSize
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.maxPoolSize }}"
+            - name: PgSettings__Hangfire__Pooling
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.pooling }}"
 
 {{- end }}

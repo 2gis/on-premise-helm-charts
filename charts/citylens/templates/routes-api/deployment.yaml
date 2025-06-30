@@ -179,15 +179,11 @@ spec:
               value: "{{ $.Values.pro.baseUrl }}"
             - name: Clients__ProClient__AuthorizationToken
               value: "{{ $.Values.routes.pro.authorizationToken }}"
-            - name: Clients__ProClient__MainTerritoryId
-              value: "{{ $.Values.routes.pro.mainTerritoryId }}"
 
             - name: Features__AuthorizationEnabled
               value: "{{ $.Values.routes.features.authorizationEnabled }}"
             - name: Features__OidcMobileAuthorizationEnabled
               value: "{{ $.Values.routes.features.oidcMobileAuthorizationEnabled }}"
-            - name: Features__ProxyNaviKeyEnabled
-              value: "{{ $.Values.routes.features.proxyNaviKeyEnabled }}"
             - name: Features__CoverageRatioEnabled
               value: "{{ $.Values.routes.features.coverageRatioEnabled }}"
 
