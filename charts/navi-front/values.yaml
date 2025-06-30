@@ -79,7 +79,6 @@ image:
 # @param front.keepalive.time Maximum time for one keepalive connection
 # @param front.keepalive.timeout Timeout for idle keepalive connection
 # @param front.locationExtraProxyHeaders Additional headers to pass to backend `locationExtraProxyHeaders: { header1: value1, header2: 'value 2'}`
-# @param front.queryTimeouts Per-query timeout in seconds. If back service supports multiple queries then use max `queryTimeouts: {route_planner: 60, routing: 20}`
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
 
 front:
@@ -110,7 +109,6 @@ front:
     time: 1h
     timeout: 60s
   locationExtraProxyHeaders: {}
-  queryTimeouts: {}
 
 navigroup: ''
 
