@@ -256,8 +256,13 @@ spec:
               value: {{ required "A valid .Values.api.settings.auth.url entry required" $.Values.api.settings.auth.url }}
             - name: Auth__ClientId
               value: "{{ .Values.api.settings.auth.clientId }}"
+            {{- if .Values.api.settings.auth.clientSecret }}
             - name: Auth__ClientSecret
-              value: "{{ .Values.api.settings.auth.clientSecret }}"
+              valueFrom:
+                secretKeyRef:
+                  key: authClientSecret
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
             - name: Auth__UserInfoEndpoint
               value: "{{ .Values.api.settings.auth.userInfoEndpoint }}"
             - name: Auth__WellKnownConfigEndpoint

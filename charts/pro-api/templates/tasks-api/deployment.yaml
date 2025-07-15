@@ -116,6 +116,8 @@ spec:
               value: "{{ .Values.tasks.settings.tempPath }}"
             - name: Postgres__ConnectionString
               value: {{ include "pro-tasks.connectionString" . }}
+            - name: Postgres__ConnectionStringReadonly
+              value: {{ include "pro-tasks.connectionStringReadOnly" . }}
             - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
@@ -173,5 +175,13 @@ spec:
             - name: AssetDataPreparation__Segments
               value: "{{ .Values.tasks.settings.features.assetDataPreparation.segments }}"
             {{- end }}
-
+            - name: Auth__Admin__Enabled
+              value: "{{ .Values.tasks.settings.auth.admin.enabled }}"
+            {{- if .Values.api.settings.auth.apiKey }}
+            - name: Auth__Admin__Password
+              valueFrom:
+                secretKeyRef:
+                  key: apiKey
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
 {{- end }}

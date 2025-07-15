@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.19.2
+    tag: 2.24.0
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -192,7 +192,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.19.2
+    tag: 2.24.0
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -308,7 +308,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.19.2
+    tag: 2.24.0
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -414,6 +414,8 @@ tasks:
   # @param tasks.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
   # @param tasks.settings.worker.resourceIntensiveTasksWorkersCount Number of threads that will be used by Hangfire-server to performs resource-intensive tasks
   # @param tasks.settings.worker.regularTasksWorkersCount Number of threads that will be used by Hangfire-server to performs other tasks
+  # @param tasks.settings.worker.longRunningTasksWorkersCount Number of threads that will be used by Hangfire-server to performs heavy tasks
+  # @param tasks.settings.auth.admin.enabled Enable admin access to the hangfire dashboard
   # @skip tasks.settings.features
   settings:
     enabled: true
@@ -427,6 +429,10 @@ tasks:
     worker:
       resourceIntensiveTasksWorkersCount: 5
       regularTasksWorkersCount: 5
+      longRunningTasksWorkersCount: 1
+    auth:
+      admin:
+        enabled: false
     features:
       assetDataPreparation:
         enabled: false
@@ -473,7 +479,7 @@ tasks:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.19.2
+  tag: 2.24.0
   imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2

@@ -113,6 +113,8 @@ spec:
               value: "{{ .Values.tasks.settings.tempPath }}"
             - name: Postgres__ConnectionString
               value: {{ include "pro-tasks.connectionString" . }}
+            - name: Postgres__ConnectionStringReadonly
+              value: {{ include "pro-tasks.connectionStringReadOnly" . }}
             - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
@@ -165,6 +167,8 @@ spec:
               value: "{{ $.Values.tasks.settings.worker.resourceIntensiveTasksWorkersCount }}"
             - name: Common__Worker__DefaultWorkersCount
               value: "{{ $.Values.tasks.settings.worker.regularTasksWorkersCount }}"
+            - name: Common__Worker__LongRunningTasksWorkersCount
+              value: "{{ $.Values.tasks.settings.worker.longRunningTasksWorkersCount }}"
 
             {{- range $i, $s := $.Values.elastic.nodes}}
             - name: Elastic__Nodes__{{$i}}__Host
