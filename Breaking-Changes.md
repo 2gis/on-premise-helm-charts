@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [NEW_VERSION]
+
+### pro-ui
+
+- You need to upgrade MapGL to version 1.61.0
+
 ## [1.39.1]
 
 ### navi-async-matrix
