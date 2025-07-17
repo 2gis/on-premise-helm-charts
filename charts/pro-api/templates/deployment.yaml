@@ -354,10 +354,10 @@ spec:
             - name: TileGen__UserDataTileSet
               value: "{{ .Values.tileGen.userDataTileSet }}"
             - name: SberEcommerceApi__Enabled
-              value: "{{ .Values.sberEcommerce.enabled }}"
+              value: "{{ .Values.ecommerce.enabled }}"
             - name: SberEcommerceApi__Url
-              value: "{{ .Values.sberEcommerce.url }}"
+              value: "{{ .Values.ecommerce.url }}"
             - name: SberEcommerceApi__UserName
-              value: "{{ .Values.sberEcommerce.username }}"
+              value: "{{ .Values.ecommerce.username }}"
             - name: SberEcommerceApi__Password
-              value: "{{ .Values.sberEcommerce.password }}"
+              value: "{{ .Values.ecommerce.password }}"

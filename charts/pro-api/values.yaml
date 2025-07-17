@@ -803,9 +803,9 @@ mailerSender:
   url: ''
   apiKey: ''
 
-# @skip sberEcommerce
+# @skip ecommerce
 
-sberEcommerce:
+ecommerce:
   enabled: false
   url: ''
   username: ''
