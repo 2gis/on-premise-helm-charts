@@ -1,5 +1,10 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.41.0]
+
+### pro-api
+- if you are using nginx.ingress.kubernetes.io/cors-allow-headers, you need to add the "pragma" header
+
 ## [1.39.1]
 
 ### navi-async-matrix
