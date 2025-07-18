@@ -1357,7 +1357,7 @@ routes:
 
   realtimeDataApi:
     image:
-      repository: 2gis-on-premise/realtime-data-api
+      repository: 2gis-on-premise/citylens-realtime-data-api
       tag: 1.3.3
       pullPolicy: IfNotPresent
 

@@ -710,11 +710,11 @@ See the [documentation]() to learn about:
 
 ### Image settings
 
-| Name                                      | Description  | Value                               |
-| ----------------------------------------- | ------------ | ----------------------------------- |
-| `routes.realtimeDataApi.image.repository` | Repository.  | `2gis-on-premise/realtime-data-api` |
-| `routes.realtimeDataApi.image.tag`        | Tag.         | `1.3.3`                             |
-| `routes.realtimeDataApi.image.pullPolicy` | Pull Policy. | `IfNotPresent`                      |
+| Name                                      | Description  | Value                                        |
+| ----------------------------------------- | ------------ | -------------------------------------------- |
+| `routes.realtimeDataApi.image.repository` | Repository.  | `2gis-on-premise/citylens-realtime-data-api` |
+| `routes.realtimeDataApi.image.tag`        | Tag.         | `1.3.3`                                      |
+| `routes.realtimeDataApi.image.pullPolicy` | Pull Policy. | `IfNotPresent`                               |
 
 ### Resources settings
 
