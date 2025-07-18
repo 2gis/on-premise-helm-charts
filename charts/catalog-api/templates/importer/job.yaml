@@ -61,11 +61,15 @@ spec:
             {{- if .Values.customCAs.bundle }}
             {{- include "catalog.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
-          {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle .Values.importer.postgres.tls.enabled }}
+          {{- include "catalog.importer.validateStorage" . | nindent 10 }}
+          {{- if or (or .Values.customCAs.bundle .Values.importer.postgres.tls.enabled) (or .Values.importer.persistentVolume.enabled .Values.importer.emptyDir.enabled) }}
           volumeMounts:
             {{- if .Values.importer.persistentVolume.enabled }}
             - name: {{ include "catalog.importer.name" . }}-pv
               mountPath: "/tmp"
+            {{- else if .Values.importer.emptyDir.enabled }}
+            - name: {{ include "catalog.importer.name" . }}-empty-dir
+              mountPath: {{ .Values.importer.emptyDir.mountPath | default "/tmp" }}
             {{- end }}
             {{- if .Values.importer.postgres.tls.enabled }}
             - name: {{ printf "%s-psql" (include "catalog.importer.name" .) | quote }}
@@ -75,15 +79,31 @@ spec:
             {{- include "catalog.custom.ca.volumeMounts" . | nindent 12 }}
             {{- end }}
           {{- end }}
-      {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle .Values.importer.postgres.tls.enabled }}
+      {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle .Values.importer.postgres.tls.enabled .Values.importer.emptyDir.enabled }}
       volumes:
       {{- if .Values.importer.persistentVolume.enabled }}
         - name: {{ include "catalog.importer.name" . }}-pv
           persistentVolumeClaim:
             claimName: {{ include "catalog.importer.name" . }}
+      {{- else if .Values.importer.emptyDir.enabled }}
+        - name: {{ include "catalog.importer.name" . }}-empty-dir
+          {{- if .Values.importer.emptyDir.medium }}
+          emptyDir:
+            medium: {{ .Values.importer.emptyDir.medium }}
+            sizeLimit: {{ required "A valid .Values.importer.emptyDir.sizeLimit entry required" .Values.importer.emptyDir.sizeLimit }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
       {{- end }}
       {{- if .Values.customCAs.bundle }}
         {{- include "catalog.custom.ca.jobs.volumes" . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.importer.postgres.tls.enabled }}
+        - name: {{ include "catalog.importer.name-psql-raw" . | quote }}
+          secret:
+            secretName: {{ include "catalog.importer.name-psql" . | quote }}
+        - name: {{ include "catalog.importer.name-psql" . | quote }}
+          emptyDir: {}
       {{- end }}
       {{- if .Values.importer.postgres.tls.enabled }}
         - name: {{ include "catalog.importer.name-psql-raw" . | quote }}
