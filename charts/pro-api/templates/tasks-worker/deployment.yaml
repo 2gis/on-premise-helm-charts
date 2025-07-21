@@ -130,6 +130,8 @@ spec:
 
             - name: FeatureManagement__AssetDataPreparation
               value: "{{ $.Values.tasks.settings.features.assetDataPreparation.enabled }}"
+            - name: FeatureManagement__AuditLogging
+              value: "{{ $.Values.tasks.settings.features.auditLogging.enabled }}"
             - name: FeatureManagement__CleanCitylensFrames
               value: "{{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled }}"
             - name: FeatureManagement__RemoveUnusedUserAssetFiles
@@ -138,6 +140,7 @@ spec:
               value: "{{ $.Values.tasks.settings.features.emailNotifications.enabled }}"
             - name: FeatureManagement__UserManagement
               value: "{{ $.Values.tasks.settings.features.userManagement.enabled }}"
+
             - name: Common__Logging__Format
               value: "{{ .Values.tasks.settings.logging.format }}"
             - name: Common__Logging__Targets
