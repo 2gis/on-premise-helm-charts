@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.41.0]
+
+### catalog-api
+
+- added default `emptyDir` to job importer
+
 ## [1.39.1]
 
 ### navi-async-matrix
