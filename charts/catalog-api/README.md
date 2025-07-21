@@ -229,6 +229,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.persistentVolume.accessModes`  | Persistent Volume [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)       | `["ReadWriteOnce"]` |
 | `importer.persistentVolume.storageClass` | Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)                          | `topolvm-ext4`      |
 | `importer.persistentVolume.size`         | Volume size                                                                                                         | `50Gi`              |
+| `importer.emptyDir.enabled`              | If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) is enabled for the service   | `true`              |
+| `importer.emptyDir.medium`               | The emptyDir.medium field controls where emptyDir volumes are stored                                                | `""`                |
+| `importer.emptyDir.sizeLimit`            | Volume memory size                                                                                                  | `""`                |
 
 ### importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 

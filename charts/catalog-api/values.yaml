@@ -342,13 +342,13 @@ importer:
     size: 50Gi
 
   # @param importer.emptyDir.enabled If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) is enabled for the service
-  # @param importer.emptyDir.medium
-  # @param importer.emptyDir.storageClass sizeLimit
+  # @param importer.emptyDir.medium The emptyDir.medium field controls where emptyDir volumes are stored
+  # @param importer.emptyDir.sizeLimit Volume memory size
 
   emptyDir:
-    enabled: false
-    medium: ""
-    sizeLimit: ""
+    enabled: true
+    medium: ''
+    sizeLimit: ''
 
   # @section importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
   # @param importer.resources.requests.cpu A CPU request
