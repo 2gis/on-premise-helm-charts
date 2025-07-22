@@ -416,7 +416,7 @@ tasks:
   # @param tasks.settings.worker.regularTasksWorkersCount Number of threads that will be used by Hangfire-server to performs other tasks
   # @param tasks.settings.worker.longRunningTasksWorkersCount Number of threads that will be used by Hangfire-server to performs long tasks
   # @param tasks.settings.features.auditLogging.enabled Enable audit log feature
-  # @param tasks.settings.admin.auth.schema Authentication scheme for Tasks Admin UI (Basic, OIDC)
+  # @param tasks.settings.admin.auth.schema Authentication scheme for Tasks Admin UI (Basic, OIDC, Undefined)
   # @param tasks.settings.admin.auth.basic.username Username for Basic authentication scheme
   # @param tasks.settings.admin.auth.basic.password Password for Basic authentication scheme
   # @param tasks.settings.admin.auth.oidc.authority Authority of the OpenID Connect (OIDC) identity provider
@@ -445,7 +445,7 @@ tasks:
       longRunningTasksWorkersCount: 1
     admin:
       auth:
-        schema: 'Basic'
+        schema: 'Undefined'
         basic:
           username: admin
           password: ''
