@@ -4,7 +4,7 @@ type: application
 description: A Helm chart for Kubernetes to deploy 2GIS Pro UI service
 
 version: 1.40.0
-appVersion: 4.26.0
+appVersion: 4.27.0
 
 maintainers:
 - name: 2gis
