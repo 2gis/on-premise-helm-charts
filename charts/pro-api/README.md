@@ -342,6 +342,13 @@
 ### digger settings
 
 
+### Keys Service settings
+
+| Name         | Description                                                                              | Value |
+| ------------ | ---------------------------------------------------------------------------------------- | ----- |
+| `keys.url`   | API URL of service for managing partners' keys to 2GIS services (keys.api). **Required** | `""`  |
+| `keys.token` | keys.api access token. **Required**                                                      | `""`  |
+
 ### Catalog API settings
 
 | Name          | Description                                                                                        | Value |
