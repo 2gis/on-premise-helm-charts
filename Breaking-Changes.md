@@ -1,5 +1,16 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.41.0]
+
+### citylens
+
+- Added new service: `citylens-routes-realtime-data-api`
+- Added new required parameters:
+  - `.Values.routes.realtimeDataApi.postgres.database`
+  - `.Values.routes.realtimeData.url`
+- `.Values.routes.features.proxyNaviKeyEnabled` was removed
+- `.Values.routes.pro.mainTerritoryId` was removed
+
 ## [1.39.1]
 
 ### navi-async-matrix

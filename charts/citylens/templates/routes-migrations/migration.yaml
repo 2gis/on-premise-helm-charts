@@ -126,7 +126,7 @@ spec:
               value: "{{ $.Values.routes.worker.busConfig.consumers.appEvents.bufferSize }}"
             - name: BusConfig__Consumers__AppEvents__WorkersCount
               value: "{{ $.Values.routes.worker.busConfig.consumers.appEvents.workersCount }}"
-              
+
         - name: realtime-data-api-migrate
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.routes.realtimeDataApi.image.repository }}:{{ .Values.routes.realtimeDataApi.image.tag }}
           imagePullPolicy: {{ .Values.routes.realtimeDataApi.image.pullPolicy }}

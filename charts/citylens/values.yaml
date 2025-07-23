@@ -1198,7 +1198,7 @@ customCAs:
 # @skip routes.keys.brand
 
 # @section RealtimeData integration
-# @param routes.realtimeData.url API RealtimeData endpoint url, ex: http://realtime-data-api.svc (used for getting drivers locations in real time).
+# @param routes.realtimeData.url API RealtimeData endpoint url, ex: http://citylens-routes-realtime-data-api.svc (used for getting drivers locations in real time).**Required**
 
 routes:
 

@@ -823,6 +823,6 @@ See the [documentation]() to learn about:
 
 ### RealtimeData integration
 
-| Name                      | Description                                                                                                        | Value |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----- |
-| `routes.realtimeData.url` | API RealtimeData endpoint url, ex: http://realtime-data-api.svc (used for getting drivers locations in real time). | `""`  |
+| Name                      | Description                                                                                                                                    | Value |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `routes.realtimeData.url` | API RealtimeData endpoint url, ex: http://citylens-routes-realtime-data-api.svc (used for getting drivers locations in real time).**Required** | `""`  |

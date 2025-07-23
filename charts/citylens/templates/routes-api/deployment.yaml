@@ -183,8 +183,8 @@ spec:
             - name: Clients__RealTimeData__Enabled
               value: "true"
             - name: Clients__RealTimeData__Url
-              value: "{{ $.Values.routes.realtimeData.url }}"
-              
+              value: "{{ required "A valid .Values.routes.realtimeData.url entry required" $.Values.routes.realtimeData.url }}"
+
             - name: Features__AuthorizationEnabled
               value: "{{ $.Values.routes.features.authorizationEnabled }}"
             - name: Features__OidcMobileAuthorizationEnabled
