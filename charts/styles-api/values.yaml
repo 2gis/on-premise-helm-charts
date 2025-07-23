@@ -94,7 +94,7 @@ api:
     enabled: false
     className: nginx
     annotations:
-      nginx.ingress.kubernetes.io/proxy-body-size: 100mb
+      nginx.ingress.kubernetes.io/proxy-body-size: 100m
     hosts:
     - host: styles.example.com
       paths:
