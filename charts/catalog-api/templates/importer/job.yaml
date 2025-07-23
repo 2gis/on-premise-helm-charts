@@ -69,7 +69,7 @@ spec:
               mountPath: "/tmp"
             {{- else if .Values.importer.emptyDir.enabled }}
             - name: {{ include "catalog.importer.name" . }}-empty-dir
-              mountPath: {{ .Values.importer.emptyDir.mountPath | default "/tmp" }}
+              mountPath: "/tmp"
             {{- end }}
             {{- if .Values.importer.postgres.tls.enabled }}
             - name: {{ printf "%s-psql" (include "catalog.importer.name" .) | quote }}
