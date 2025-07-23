@@ -762,6 +762,16 @@ digger:
   password: ''
 
 
+# @section Keys Service settings
+
+# @param keys.url API URL of service for managing partners' keys to 2GIS services (keys.api). **Required**
+# @param keys.token keys.api access token. **Required**
+
+keys:
+  url: ''
+  token: ''
+
+
 # @section Catalog API settings
 
 # @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc

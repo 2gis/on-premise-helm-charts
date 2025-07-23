@@ -295,6 +295,15 @@ spec:
               value: "{{ .Values.api.settings.auth.skipShareLinksPermissionsCheck }}"
             - name: License__Key
               value: {{ required "A valid .Values.api.settings.licenseKey entry required" $.Values.api.settings.licenseKey }}
+            - name: KEYS_SERVICE_URL
+              value: "{{ .Values.keys.url }}"
+            {{- if .Values.keys.token }}
+            - name: KEYS_SERVICE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: keysServiceToken
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
