@@ -61,7 +61,7 @@ spec:
             {{- if .Values.customCAs.bundle }}
             {{- include "catalog.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
-          {{- include "catalog.importer.validateStorage" . | nindent 10 }}
+          {{- include "catalog.importer.validateStorage" . }}
           {{- if or (or .Values.customCAs.bundle .Values.importer.postgres.tls.enabled) (or .Values.importer.persistentVolume.enabled .Values.importer.emptyDir.enabled) }}
           volumeMounts:
             {{- if .Values.importer.persistentVolume.enabled }}
@@ -87,13 +87,9 @@ spec:
             claimName: {{ include "catalog.importer.name" . }}
       {{- else if .Values.importer.emptyDir.enabled }}
         - name: {{ include "catalog.importer.name" . }}-empty-dir
-          {{- if .Values.importer.emptyDir.medium }}
           emptyDir:
             medium: {{ .Values.importer.emptyDir.medium }}
-            sizeLimit: {{ required "A valid .Values.importer.emptyDir.sizeLimit entry required" .Values.importer.emptyDir.sizeLimit }}
-          {{- else }}
-          emptyDir: {}
-          {{- end }}
+            sizeLimit: {{ .Values.importer.emptyDir.sizeLimit }}
       {{- end }}
       {{- if .Values.customCAs.bundle }}
         {{- include "catalog.custom.ca.jobs.volumes" . | nindent 8 }}

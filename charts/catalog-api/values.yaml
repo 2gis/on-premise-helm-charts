@@ -342,8 +342,8 @@ importer:
     size: 50Gi
 
   # @param importer.emptyDir.enabled If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) is enabled for the service
-  # @param importer.emptyDir.medium The emptyDir.medium field controls where emptyDir volumes are stored
-  # @param importer.emptyDir.sizeLimit Volume memory size
+  # @param importer.emptyDir.medium The medium field controls where emptyDir volumes are stored
+  # @param importer.emptyDir.sizeLimit Volume size
 
   emptyDir:
     enabled: true
