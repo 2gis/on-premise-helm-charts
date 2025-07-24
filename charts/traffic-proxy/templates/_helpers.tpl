@@ -57,18 +57,18 @@ location = /forecast/index.json {
 }
 
 location ~ ^/forecast/([^/]+)/forecasted_speeds_v2\.zip$ {
-  rewrite ^/forecast/(.*)$ /api/v1/services/navi/proxy/forecasted-speeds/$1 break;
+  rewrite ^/forecast/(.*)$ /api/v1/services/navi/proxy/forecast-speeds/$1 break;
   {{- include "proxyParams" . }}
 }
 
 {{/*3. Long forecast endpoints*/}}
 location = /long-forecast/index.json {
-  rewrite ^ /api/v1/services/navi/proxy/long-forecasted-speeds-index/long_forecast_data/index.json break;
+  rewrite ^ /api/v1/services/navi/proxy/long-forecast-speeds-index/long_forecast_data/index.json break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/long-forecast/([^/]+)/forecasted_speeds_v2\.zip$ {
-  rewrite ^/long-forecast/(.*)$ /api/v1/services/navi/proxy/long-forecasted-speeds/long_forecast_data/$1 break;
+  rewrite ^/long-forecast/(.*)$ /api/v1/services/navi/proxy/long-forecast-speeds/long_forecast_data/$1 break;
   {{- include "proxyParams" . }}
 }
 
@@ -115,7 +115,7 @@ location = /navi-castle-cache/restricted_transport.json.zip {
 }
 
 location ~ ^/navi-castle-cache/restricted_transport/([^/]+)/restricted_transport_platforms\.csv$ {
-  rewrite ^navi-castle-cache/restricted_transport/(.*)$ /api/v1/services/navi/proxy/restricted-transport-platforms/restricted_transport/$1 break;
+  rewrite ^/navi-castle-cache/restricted_transport/(.*)$ /api/v1/services/navi/proxy/restricted-transport-platforms/restricted_transport/$1 break;
   {{- include "proxyParams" . }}
 }
 
