@@ -1,4 +1,4 @@
-# @section Geo API configuration & settings
+﻿# @section Geo API configuration & settings
 
 api:
 
@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.19.2
+    tag: 2.26.0
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -192,7 +192,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.19.2
+    tag: 2.26.0
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -308,7 +308,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.19.2
+    tag: 2.26.0
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -414,7 +414,22 @@ tasks:
   # @param tasks.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
   # @param tasks.settings.worker.resourceIntensiveTasksWorkersCount Number of threads that will be used by Hangfire-server to performs resource-intensive tasks
   # @param tasks.settings.worker.regularTasksWorkersCount Number of threads that will be used by Hangfire-server to performs other tasks
-  # @skip tasks.settings.features
+  # @param tasks.settings.worker.longRunningTasksWorkersCount Number of threads that will be used by Hangfire-server to performs long tasks
+  # @param tasks.settings.features.auditLogging.enabled Enable audit log feature
+  # @param tasks.settings.admin.auth.schema Authentication scheme for Tasks Admin UI (Basic, OIDC, Undefined)
+  # @param tasks.settings.admin.auth.basic.username Username for Basic authentication scheme
+  # @param tasks.settings.admin.auth.basic.password Password for Basic authentication scheme
+  # @param tasks.settings.admin.auth.oidc.authority Authority of the OpenID Connect (OIDC) identity provider
+  # @param tasks.settings.admin.auth.oidc.clientId Client of application
+  # @param tasks.settings.admin.auth.oidc.clientSecret Client secret of application
+  # @param tasks.settings.admin.auth.oidc.nameClaim Property name in OIDC profile for name claim
+  # @param tasks.settings.admin.auth.oidc.roleClaim Property name in OIDC profile for role claim
+  # @param tasks.settings.admin.auth.oidc.requiredRole Required role for Tasks Admin UI
+  # @skip tasks.settings.features.assetDataPreparation
+  # @skip tasks.settings.features.cleanCitylensFrames
+  # @skip tasks.settings.features.removeUnusedUserAssetFiles
+  # @skip tasks.settings.features.emailNotifications
+  # @skip tasks.settings.features.userManagement
   settings:
     enabled: true
     env: ''
@@ -427,10 +442,26 @@ tasks:
     worker:
       resourceIntensiveTasksWorkersCount: 5
       regularTasksWorkersCount: 5
+      longRunningTasksWorkersCount: 1
+    admin:
+      auth:
+        schema: Undefined
+        basic:
+          username: admin
+          password: ''
+        oidc:
+          authority: ''
+          clientId: ''
+          clientSecret: ''
+          nameClaim: ''
+          roleClaim: ''
+          requiredRole: ''
     features:
       assetDataPreparation:
         enabled: false
         segments: ''
+      auditLogging:
+        enabled: false
       cleanCitylensFrames:
         enabled: false
       removeUnusedUserAssetFiles:
@@ -473,7 +504,7 @@ tasks:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.19.2
+  tag: 2.26.0
   imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2
@@ -797,9 +828,9 @@ mailerSender:
   url: ''
   apiKey: ''
 
-# @skip sberEcommerce
+# @skip ecommerce
 
-sberEcommerce:
+ecommerce:
   enabled: false
   url: ''
   username: ''

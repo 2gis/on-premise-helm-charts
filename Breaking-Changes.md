@@ -2,6 +2,9 @@
 
 ## [1.41.0]
 
+### pro-api
+- if you are using nginx.ingress.kubernetes.io/cors-allow-headers, you need to add the "pragma" header
+
 ### citylens
 
 - Added new service: `citylens-routes-realtime-data-api`
