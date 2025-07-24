@@ -169,6 +169,14 @@ spec:
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
 
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: {{ .Values.api.containerPort }}
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+
           livenessProbe:
             httpGet:
               path: /healthcheck

@@ -5,6 +5,15 @@
 ### pro-api
 - if you are using nginx.ingress.kubernetes.io/cors-allow-headers, you need to add the "pragma" header
 
+### citylens
+
+- Added new service: `citylens-routes-realtime-data-api`
+- Added new required parameters:
+  - `.Values.routes.realtimeDataApi.postgres.database`
+  - `.Values.routes.realtimeData.url`
+- `.Values.routes.features.proxyNaviKeyEnabled` was removed
+- `.Values.routes.pro.mainTerritoryId` was removed
+
 ## [1.39.1]
 
 ### navi-async-matrix
