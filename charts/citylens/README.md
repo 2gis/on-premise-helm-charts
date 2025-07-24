@@ -562,7 +562,7 @@ See the [documentation]() to learn about:
 | Name                          | Description  | Value                                 |
 | ----------------------------- | ------------ | ------------------------------------- |
 | `routes.api.image.repository` | Repository.  | `2gis-on-premise/citylens-routes-api` |
-| `routes.api.image.tag`        | Tag.         | `1.2.2`                               |
+| `routes.api.image.tag`        | Tag.         | `1.3.3`                               |
 | `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        |
 
 ### Resources settings
@@ -642,7 +642,7 @@ See the [documentation]() to learn about:
 | `routes.api.tempPath`         | Path to directory used for temp data                                                                                        | `/tmp`        |
 | `routes.api.logging`          | Routes **Logging** settings                                                                                                 |               |
 | `routes.api.logging.level`    | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
-| `routes.api.logging.extended` | Log message level. Enable extend data by logs.                                                                              | `false`       |
+| `routes.api.logging.extended` | Extended log message. Include http metadata requests.                                                                       | `false`       |
 
 ### Citylens routes Worker
 
@@ -652,7 +652,7 @@ See the [documentation]() to learn about:
 | Name                             | Description  | Value                                     |
 | -------------------------------- | ------------ | ----------------------------------------- |
 | `routes.worker.image.repository` | Repository.  | `2gis-on-premise/citylens-worker-service` |
-| `routes.worker.image.tag`        | Tag.         | `1.2.2`                                   |
+| `routes.worker.image.tag`        | Tag.         | `1.3.3`                                   |
 | `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            |
 
 ### Resources settings
@@ -705,6 +705,90 @@ See the [documentation]() to learn about:
 | `routes.worker.busConfig.consumers.appEvents.bufferSize`       | The buffer size for the app events.                                                                                                                          | `100`           |
 | `routes.worker.busConfig.consumers.appEvents.workersCount`     | The workers count for the app events.                                                                                                                        | `10`            |
 
+### Citylens RealtimeData API
+
+
+### Image settings
+
+| Name                                      | Description  | Value                                        |
+| ----------------------------------------- | ------------ | -------------------------------------------- |
+| `routes.realtimeDataApi.image.repository` | Repository.  | `2gis-on-premise/citylens-realtime-data-api` |
+| `routes.realtimeDataApi.image.tag`        | Tag.         | `1.3.3`                                      |
+| `routes.realtimeDataApi.image.pullPolicy` | Pull Policy. | `IfNotPresent`                               |
+
+### Resources settings
+
+| Name                                               | Description                                                                                                                                    | Value   |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `routes.realtimeDataApi.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`     |
+| `routes.realtimeDataApi.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
+| `routes.realtimeDataApi.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`  |
+| `routes.realtimeDataApi.resources.requests.memory` | A memory request.                                                                                                                              | `256M`  |
+| `routes.realtimeDataApi.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`     |
+| `routes.realtimeDataApi.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024M` |
+
+### Service settings
+
+| Name                                         | Description                                                                                                                    | Value       |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `routes.realtimeDataApi.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `routes.realtimeDataApi.service.port`        | Service port.                                                                                                                  | `80`        |
+| `routes.realtimeDataApi.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
+| `routes.realtimeDataApi.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
+
+### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+| Name                                        | Description                                          | Value  |
+| ------------------------------------------- | ---------------------------------------------------- | ------ |
+| `routes.realtimeDataApi.pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
+| `routes.realtimeDataApi.pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
+| `routes.realtimeDataApi.pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
+
+### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+| Name                                                             | Description                                                                                                                                                          | Value   |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `routes.realtimeDataApi.hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `routes.realtimeDataApi.hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `routes.realtimeDataApi.hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `1`     |
+| `routes.realtimeDataApi.hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
+| `routes.realtimeDataApi.hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
+| `routes.realtimeDataApi.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `50`    |
+| `routes.realtimeDataApi.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+
+### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+| Name                                           | Description                                                                                                  | Value   |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
+| `routes.realtimeDataApi.vpa.enabled`           | If VPA is enabled for the service.                                                                           | `false` |
+| `routes.realtimeDataApi.vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). | `Auto`  |
+| `routes.realtimeDataApi.vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                   | `100m`  |
+| `routes.realtimeDataApi.vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         | `128Mi` |
+| `routes.realtimeDataApi.vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `1`     |
+| `routes.realtimeDataApi.vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `512Mi` |
+
+### Metadata settings
+
+| Name                                             | Description                                                                                                                  | Value         |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `routes.realtimeDataApi.annotations`             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                    | `{}`          |
+| `routes.realtimeDataApi.labels`                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                              | `{}`          |
+| `routes.realtimeDataApi.podAnnotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                    | `{}`          |
+| `routes.realtimeDataApi.podLabels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                              | `{}`          |
+| `routes.realtimeDataApi.nodeSelector`            | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).      | `{}`          |
+| `routes.realtimeDataApi.tolerations`             | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.        | `[]`          |
+| `routes.realtimeDataApi.affinity`                | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.  | `{}`          |
+| `routes.realtimeDataApi.tempPath`                | Path to directory used for temp data                                                                                         | `/tmp`        |
+| `routes`                                         | **Postgres**                                                                                                                 |               |
+| `routes.realtimeDataApi.postgres.database`       | PostgreSQL database name. **Required**                                                                                       | `""`          |
+| `routes.realtimeDataApi.postgres.timeout`        | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error. | `15`          |
+| `routes.realtimeDataApi.postgres.commandTimeout` | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.      | `30`          |
+| `routes.realtimeDataApi.postgres.maxPoolSize`    | The maximum connection pool size.                                                                                            | `30`          |
+| `routes.realtimeDataApi.postgres.pooling`        | Whether connection pooling should be used.                                                                                   | `true`        |
+| `routes.realtimeDataApi.logging`                 | Routes **Logging** settings                                                                                                  |               |
+| `routes.realtimeDataApi.logging.level`           | Log message level. verbose, debug, information, warning, error, fatal.                                                       | `information` |
+| `routes.realtimeDataApi.daysToLeaveData`         | Storage of information in days.                                                                                              | `30`          |
+
 ### routes.features Feature settings.
 
 | Name                                              | Description                                         | Value                               |
@@ -727,13 +811,18 @@ See the [documentation]() to learn about:
 
 ### Pro integration
 
-| Name                            | Description                                              | Value |
-| ------------------------------- | -------------------------------------------------------- | ----- |
-| `routes.pro.authorizationToken` | Pro Authorization Token (need for creating assets).      | `""`  |
-| `routes.pro.mainTerritoryId`    | Available territory identity (need for creating assets). | `""`  |
+| Name                            | Description                                         | Value |
+| ------------------------------- | --------------------------------------------------- | ----- |
+| `routes.pro.authorizationToken` | Pro Authorization Token (used for creating assets). | `""`  |
 
 ### Keys integration
 
 | Name              | Description                                                                  | Value |
 | ----------------- | ---------------------------------------------------------------------------- | ----- |
 | `routes.keys.url` | API Keys endpoint url, ex: http://keys-api.svc (used for getting oidc auth). | `""`  |
+
+### RealtimeData integration
+
+| Name                      | Description                                                                                                                                    | Value |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `routes.realtimeData.url` | API RealtimeData endpoint url, ex: http://citylens-routes-realtime-data-api.svc (used for getting drivers locations in real time).**Required** | `""`  |
