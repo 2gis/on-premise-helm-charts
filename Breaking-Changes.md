@@ -5,6 +5,7 @@
 ### pro-ui
 
 - You need to upgrade MapGL to version 1.61.0
+- You need to update the data to use new styles
 
 ## [1.39.1]
 
