@@ -445,7 +445,7 @@ tasks:
       longRunningTasksWorkersCount: 1
     admin:
       auth:
-        schema: 'Undefined'
+        schema: Undefined
         basic:
           username: admin
           password: ''
