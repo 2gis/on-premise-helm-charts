@@ -461,7 +461,7 @@ tasks:
         enabled: false
         segments: ''
       auditLogging:
-        enabled: true
+        enabled: false
       cleanCitylensFrames:
         enabled: false
       removeUnusedUserAssetFiles:
