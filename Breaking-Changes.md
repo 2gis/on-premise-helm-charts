@@ -2,6 +2,10 @@
 
 ## [1.41.0]
 
+### catalog-api
+
+- Added default `emptyDir` to job importer
+
 ### pro-api
 
 - If you are using nginx.ingress.kubernetes.io/cors-allow-headers, you need to add the "pragma" header
