@@ -116,6 +116,8 @@ spec:
               value: "{{ .Values.tasks.settings.tempPath }}"
             - name: Postgres__ConnectionString
               value: {{ include "pro-tasks.connectionString" . }}
+            - name: Postgres__ConnectionStringReadonly
+              value: {{ include "pro-tasks.connectionStringReadOnly" . }}
             - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
@@ -130,6 +132,8 @@ spec:
             {{- end }}
             - name: FeatureManagement__AssetDataPreparation
               value: "{{ $.Values.tasks.settings.features.assetDataPreparation.enabled }}"
+            - name: FeatureManagement__AuditLogging
+              value: "{{ $.Values.tasks.settings.features.auditLogging.enabled }}"
             - name: FeatureManagement__CleanCitylensFrames
               value: "{{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled }}"
             - name: FeatureManagement__RemoveUnusedUserAssetFiles
@@ -138,6 +142,7 @@ spec:
               value: "{{ $.Values.tasks.settings.features.emailNotifications.enabled }}"
             - name: FeatureManagement__UserManagement
               value: "{{ $.Values.tasks.settings.features.userManagement.enabled }}"
+
             - name: Common__Logging__Format
               value: "{{ .Values.tasks.settings.logging.format }}"
             - name: Common__Logging__Targets
@@ -174,4 +179,44 @@ spec:
               value: "{{ .Values.tasks.settings.features.assetDataPreparation.segments }}"
             {{- end }}
 
+            - name: Admin__Auth__Schema
+              value: "{{ .Values.tasks.settings.admin.auth.schema }}"
+            {{- if .Values.tasks.settings.admin.auth.basic.username }}
+            - name: Admin__Auth__Basic__Username
+              value: "{{ .Values.tasks.settings.admin.auth.basic.username }}"
+            {{- end }}
+            {{- if eq .Values.tasks.settings.admin.auth.schema "Basic"}}
+            - name: Admin__Auth__Basic__Password
+              valueFrom:
+                secretKeyRef:
+                  key: tasksAdminAuthBasicPassword
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
+            {{- if .Values.tasks.settings.admin.auth.oidc.authority }}
+            - name: Admin__Auth__Oidc__Authority
+              value: "{{ .Values.tasks.settings.admin.auth.oidc.authority }}"
+            {{- end }}
+            {{- if .Values.tasks.settings.admin.auth.oidc.clientId }}
+            - name: Admin__Auth__Oidc__ClientId
+              value: "{{ .Values.tasks.settings.admin.auth.oidc.clientId }}"
+            {{- end }}
+            {{- if .Values.tasks.settings.admin.auth.oidc.clientSecret }}
+            - name: Admin__Auth__Oidc__ClientSecret
+              valueFrom:
+                secretKeyRef:
+                  key: tasksAdminAuthOidcClientSecret
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
+            {{- if .Values.tasks.settings.admin.auth.oidc.nameClaim }}
+            - name: Admin__Auth__Oidc__NameClaim
+              value: "{{ .Values.tasks.settings.admin.auth.oidc.nameClaim }}"
+            {{- end }}
+            {{- if .Values.tasks.settings.admin.auth.oidc.roleClaim }}
+            - name: Admin__Auth__Oidc__RoleClaim
+              value: "{{ .Values.tasks.settings.admin.auth.oidc.roleClaim }}"
+            {{- end }}
+            {{- if .Values.tasks.settings.admin.auth.oidc.requiredRole }}
+            - name: Admin__Auth__Oidc__RequiredRole
+              value: "{{ .Values.tasks.settings.admin.auth.oidc.requiredRole }}"
+            {{- end }}
 {{- end }}

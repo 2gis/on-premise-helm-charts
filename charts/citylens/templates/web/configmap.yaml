@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "citylens.web.name" . }}{{ .postfix }}-configmap
-  {{- if .useHooks }}
+  name: {{ include "citylens.web.name" . }}{{ .cmPostfix }}-configmap
+  {{- if .cmUseHooks }}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
@@ -185,9 +185,9 @@ data:
         {{- toYaml (.Values.kafka.predictorsExtraTopics | default list) | nindent 8 }}
 {{- end }}
 
-{{- $cm1 := dict "postfix" "-jobs" "useHooks" true | merge . }}
+{{- $cm1 := mergeOverwrite (deepCopy .) (dict "cmPostfix" "-jobs" "cmUseHooks" true) }}
 {{ include "citylens.web.configmaptemplate" $cm1 }}
 
 ---
-{{- $cm2 := dict "postfix" "" "useHooks" false | merge . }}
+{{- $cm2 := mergeOverwrite (deepCopy .) (dict "cmPostfix" "" "cmUseHooks" false) }}
 {{ include "citylens.web.configmaptemplate" $cm2 }}

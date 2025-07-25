@@ -123,7 +123,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{- define "pro-api.connectionStringReadOnly" -}}
-{{- if .Values.postgres.api.ro -}}
+{{- if .Values.postgres.api.ro.host -}}
 {{- printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
 	(.Values.postgres.api.ro.host | required "A valid .Values.postgres.api.ro.host entry required!")
 	(.Values.postgres.api.ro.port | required "A valid .Values.postgres.api.ro.port entry required!" | int)
@@ -151,7 +151,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{- define "pro-permissions-api.connectionStringReadOnly" -}}
-{{- if .Values.postgres.permissions.ro -}}
+{{- if .Values.postgres.permissions.ro.host -}}
 {{- printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
 	(.Values.postgres.permissions.ro.host | required "A valid .Values.postgres.permissions.ro.host entry required!")
 	(.Values.postgres.permissions.ro.port | required "A valid .Values.postgres.permissions.ro.port entry required!" | int)
@@ -176,6 +176,22 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 	((.Values.postgres.tasks.rw.poolSize).min | int | default 1)
 	((.Values.postgres.tasks.rw.poolSize).max | int | default 5)
 	(.Values.postgres.tasks.rw.timeout | int | default 15)
+-}}
+{{- else -}}
+{{ print "" }}
+{{- end -}}
+{{- end -}}
+
+{{- define "pro-tasks.connectionStringReadOnly" -}}
+{{- if and .Values.tasks.settings.enabled .Values.postgres.tasks.ro.host  -}}
+{{- printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
+	(.Values.postgres.tasks.ro.host | required "A valid .Values.postgres.tasks.ro.host entry required!")
+	(.Values.postgres.tasks.ro.port | required "A valid .Values.postgres.tasks.ro.port entry required!" | int)
+	(.Values.postgres.tasks.ro.name | required "A valid .Values.postgres.tasks.ro.name entry required!")
+	(.Values.postgres.tasks.ro.username | required "A valid .Values.postgres.tasks.ro.username entry required!")
+	((.Values.postgres.tasks.ro.poolSize).min | int | default 1)
+	((.Values.postgres.tasks.ro.poolSize).max | int | default 5)
+	(.Values.postgres.tasks.ro.timeout | int | default 15)
 -}}
 {{- else -}}
 {{ print "" }}
