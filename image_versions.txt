@@ -4,12 +4,13 @@ catalog-api
 citylens
 	citylens-api:1.18.3
 	citylens-database:1.18.0
-	citylens-routes-api:1.2.2
+	citylens-realtime-data-api:1.3.3
+	citylens-routes-api:1.3.3
 	citylens-web:1.18.3
-	citylens-worker-service:1.2.2
+	citylens-worker-service:1.3.3
 	citylens-workers:1.18.3
 citylens-routes-ui
-	citylens-routes-ui:1.1.3
+	citylens-routes-ui:1.3.1
 dgtt
 	dgtt:0.2.27-b188673e09
 generic-chart
@@ -27,7 +28,7 @@ keys
 license
 	license:2.4.1
 mapgl-js-api
-	mapgl:1.61.0
+	mapgl:1.62.0
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
@@ -60,13 +61,13 @@ navi-vrp-task-manager
 platform
 	platform-ui:1.2.0
 pro-api
-	pro-api:2.19.2
-	pro-importer:2.19.2
-	pro-permissions-api:2.19.2
-	pro-tasks-api:2.19.2
+	pro-api:2.26.0
+	pro-importer:2.26.0
+	pro-permissions-api:2.26.0
+	pro-tasks-api:2.26.0
 pro-ui
-	pro-importer:2.19.2
-	pro-ui:4.19.0
+	pro-importer:2.26.0
+	pro-ui:4.27.0
 search-api
 	nginx:1.25.5
 	search-api:7.90.0
@@ -79,10 +80,10 @@ tilegen-api
 	tilegen-api:1.1.8
 	tilegen-processor:1.1.8
 tiles-api
-	tiles-api-importer:4.73.5
-	tiles-api-importer:4.73.5
-	tiles-api-proxy:4.73.5
-	tiles-api:4.73.5
+	tiles-api-importer:4.75.1
+	tiles-api-importer:4.75.1
+	tiles-api-proxy:4.75.1
+	tiles-api:4.75.1
 traffic-proxy
 	nginx:1.25.5
 twins-api

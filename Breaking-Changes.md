@@ -14,7 +14,7 @@
 
 - You need to upgrade MapGL to version 1.61.0
 - You need to update the data to use new styles
- 
+
 ### citylens
 
 - Added new service: `citylens-routes-realtime-data-api`
