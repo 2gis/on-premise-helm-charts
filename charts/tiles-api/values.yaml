@@ -64,8 +64,8 @@ types:
 # @param cassandra.environment Environment name (`prod`, `stage`, etc).<br>Support for differently named environments allows hosting multiple Tiles API deployments on a single Cassandra cluster.
 # @param cassandra.hosts An array of the one of more IP adresses or hostnames of the Apache Cassandra installation.
 # @param cassandra.replicaFactor Apache Cassandra [replication factor](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html).
-# @param cassandra.consistencyLevelRead Apache Cassandra [read consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels).
-# @param cassandra.consistencyLevelWrite Apache Cassandra [write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels).
+# @param cassandra.consistencyLevelRead Apache Cassandra [read consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels).
+# @param cassandra.consistencyLevelWrite Apache Cassandra [write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels).
 # @param cassandra.timeout Timeout for connect attempts to the database.
 
 # @extra cassandra.credentials **Credentials for accessing Apache Cassandra**
@@ -90,7 +90,7 @@ cassandra:
     enabled: false
 
   replicaFactor: 3
-  consistencyLevelRead: LOCAL_QUORUM
+  consistencyLevelRead: LOCAL_ONE
   consistencyLevelWrite: LOCAL_QUORUM
 
 # @section Custom generated tiles API settings
