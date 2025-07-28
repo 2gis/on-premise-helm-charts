@@ -113,6 +113,8 @@ spec:
               value: "{{ .Values.tasks.settings.tempPath }}"
             - name: Postgres__ConnectionString
               value: {{ include "pro-tasks.connectionString" . }}
+            - name: Postgres__ConnectionStringReadonly
+              value: {{ include "pro-tasks.connectionStringReadOnly" . }}
             - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
@@ -128,6 +130,8 @@ spec:
 
             - name: FeatureManagement__AssetDataPreparation
               value: "{{ $.Values.tasks.settings.features.assetDataPreparation.enabled }}"
+            - name: FeatureManagement__AuditLogging
+              value: "{{ $.Values.tasks.settings.features.auditLogging.enabled }}"
             - name: FeatureManagement__CleanCitylensFrames
               value: "{{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled }}"
             - name: FeatureManagement__RemoveUnusedUserAssetFiles
@@ -136,6 +140,7 @@ spec:
               value: "{{ $.Values.tasks.settings.features.emailNotifications.enabled }}"
             - name: FeatureManagement__UserManagement
               value: "{{ $.Values.tasks.settings.features.userManagement.enabled }}"
+
             - name: Common__Logging__Format
               value: "{{ .Values.tasks.settings.logging.format }}"
             - name: Common__Logging__Targets
@@ -165,6 +170,8 @@ spec:
               value: "{{ $.Values.tasks.settings.worker.resourceIntensiveTasksWorkersCount }}"
             - name: Common__Worker__DefaultWorkersCount
               value: "{{ $.Values.tasks.settings.worker.regularTasksWorkersCount }}"
+            - name: Common__Worker__LongRunningTasksWorkersCount
+              value: "{{ $.Values.tasks.settings.worker.longRunningTasksWorkersCount }}"
 
             {{- range $i, $s := $.Values.elastic.nodes}}
             - name: Elastic__Nodes__{{$i}}__Host
