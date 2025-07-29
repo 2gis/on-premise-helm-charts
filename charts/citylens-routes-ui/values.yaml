@@ -32,6 +32,7 @@ image:
 # @param env.CATALOG_API_URL Catalog API base URL **Required**
 # @param env.MAPGL_API_URL Map API base URL **Required**
 # @param env.MAPGL_COPYRIGHT_VARIANT Copyright variant, can be '2gis', 'urbi' or empty
+# @param env.MAPGL_DEFAULT_CENTER Map center in 'lon,lat' format like '46.72185,24.70996' **Required**
 # @param env.MAPGL_KEY API key for mapgl **Required**
 # @param env.MAPGL_STYLE_ID_GRAYSCALE Map grayscale style ID
 # @param env.MAPGL_STYLE_ID_DAY Map day style ID
@@ -46,6 +47,7 @@ env:
   CATALOG_API_URL: ''
   MAPGL_API_URL: ''
   MAPGL_COPYRIGHT_VARIANT: ''
+  MAPGL_DEFAULT_CENTER: ''
   MAPGL_KEY: ''
   MAPGL_STYLE_ID_GRAYSCALE: ''
   MAPGL_STYLE_ID_DAY: ''
