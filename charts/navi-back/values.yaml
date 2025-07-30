@@ -158,7 +158,7 @@ image:
 # @extra naviback.castleHost DEPRECATED: Use naviback.castleUrl. Domain name of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @param naviback.castleUrl URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.enablePassableBarriers Consider passable barriers
-# @extra naviback.grpcPort GRPC port to serve. Disabled if empty
+# @param naviback.grpcPort GRPC port to serve. Disabled if empty
 # @param naviback.disableUpdates Test switch for disabling runtime background updates
 # @extra naviback.indices List of dynamic indices kill switches
 # @skip naviback.indices.carOptions.enabled
@@ -287,6 +287,7 @@ naviback:
     reportPath: /tmp/sentry
     handler: /usr/sbin/2gis/mosesd/crashpad_handler
   castleUrl: ''
+  grpcPort: 50051
   disableUpdates: false
   indices:
     carOptions:
