@@ -114,16 +114,18 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.39.2.2
+  tag: 7.39.1.9
 
 
 # @section Navi-Back application settings
 
 # @extra naviback.ecaHost DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.ecaUrl URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
-# @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.forecastHost DEPRECATED: naviback.forecastUrl. Use URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.forecastUrl URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.forecastFilename Filename of the forecast
 # @extra naviback.longForecastUrl URL of Traffic long forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.longforecastFilename Filename of the long forecast
 # @extra naviback.walkingUserSpeedsUrl URL of walking user speeds
 # @extra naviback.routeAsUsualUrl URL of route as usual
 # @skip naviback.appPort
@@ -157,16 +159,17 @@ image:
 # @param naviback.sentry.handler Handler file location
 # @extra naviback.castleHost DEPRECATED: Use naviback.castleUrl. Domain name of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @param naviback.castleUrl URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @param naviback.castleUrlProxy URL of Proxy Navi-Castle service. Needs only OnPrem.
 # @extra naviback.enablePassableBarriers Consider passable barriers
-# @extra naviback.grpcPort GRPC port to serve. Disabled if empty
+# @param naviback.grpcPort GRPC port to serve. Disabled if empty
 # @param naviback.disableUpdates Test switch for disabling runtime background updates
 # @extra naviback.indices List of dynamic indices kill switches
 # @skip naviback.indices.carOptions.enabled
 # @skip naviback.indices.carOptions.filename
 # @skip naviback.indices.countryCarOptions.enabled
 # @skip naviback.indices.ctxOptions.enabled
-# @skip naviback.indices.entrances.enabled
-# @skip naviback.indices.etaCorrectionCores.enabled
+# @skip naviback.indices.entrances
+# @skip naviback.indices.etaCorrectionCores
 # @skip naviback.indices.forecastedSpeeds.enabled
 # @skip naviback.indices.forecastedSpeedsIndex.enabled
 # @skip naviback.indices.forecastedLongSpeeds.enabled
@@ -174,18 +177,15 @@ image:
 # @skip naviback.indices.forecastedLongSpeedsIndex.updatePeriod
 # @skip naviback.indices.geoImport.enabled
 # @skip naviback.indices.onlineSpeeds.enabled
-# @skip naviback.indices.onlineTaxiSpeeds.enabled
-# @skip naviback.indices.passZones.enabled
+# @skip naviback.indices.passZones
 # @skip naviback.indices.projectCarOptions.enabled
-# @skip naviback.indices.restrictedTransportIndex.enabled
-# @skip naviback.indices.restrictedTransportPlatforms.enabled
-# @skip naviback.indices.restrictedTransportRoutes.enabled
-# @skip naviback.indices.smatrix.enabled
+# @skip naviback.indices.restrictedTransportIndex
+# @skip naviback.indices.smatrix
 # @skip naviback.indices.snImport.enabled
-# @skip naviback.indices.speedCams.enabled
+# @skip naviback.indices.speedCams
 # @skip naviback.indices.speedIndex.enabled
+# @skip naviback.indices.speedIndex.filename
 # @skip naviback.indices.taxiReferers.enabled
-# @skip naviback.indices.taxiSpeedIndex.enabled
 # @skip naviback.indices.tugc2gis.enabled
 # @skip naviback.indices.tugc2gisIndex.enabled
 # @skip naviback.indices.tugcUsers.enabled
@@ -240,6 +240,7 @@ image:
 # @param naviback.validation.isochrone.responseSchemaName Name of isochrone response validation schema
 # @param naviback.tilesMetricsThreshold The value at which we send tiles metrics (used for internal tests)
 # @param naviback.engineUpdatePeriodSec The time interval between engine updates
+# @param naviback.lightweightMode The service will be started without some resources such as geometry, instructions and etc to reduce memory consumption
 # @param naviback.hierarchies.enabled If SN cache available
 # @param naviback.hierarchies.skipPatches Skip patches in hierarchies cache, ignored if skipShortcuts set
 # @param naviback.hierarchies.skipShortcuts Skip shortcuts in SN cache
@@ -249,6 +250,7 @@ image:
 # @param naviback.etaScheduleIndex.url Schedule Index remote url
 # @param naviback.etaScheduleIndex.etaScheduleNodes ETA Schedule nodes
 # @param naviback.app_rule Item name from `rules` list to load rules from.
+# @param naviback.rulesUrl URL to rules file
 # @extra naviback.excludedAreasLimit Maximum number of excluded areas
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
 # @param app_project Do not use, configure with `rules` and `app_rule` instead.
@@ -287,6 +289,8 @@ naviback:
     reportPath: /tmp/sentry
     handler: /usr/sbin/2gis/mosesd/crashpad_handler
   castleUrl: ''
+  castleUrlProxy: ''
+  grpcPort: 50051
   disableUpdates: false
   indices:
     carOptions:
@@ -298,8 +302,10 @@ naviback:
       enabled: false
     entrances:
       enabled: false
+      proxy: false
     etaCorrectionCores:
       enabled: false
+      proxy: false
     forecastedSpeeds:
       enabled: false
     forecastedSpeedsIndex:
@@ -313,29 +319,25 @@ naviback:
       enabled: false
     onlineSpeeds:
       enabled: false
-    onlineTaxiSpeeds:
-      enabled: false
     passZones:
       enabled: false
+      proxy: false
     projectCarOptions:
       enabled: false
     restrictedTransportIndex:
       enabled: false
-    restrictedTransportPlatforms:
-      enabled: false
-    restrictedTransportRoutes:
-      enabled: false
+      proxy: false
     smatrix:
       enabled: false
+      proxy: false
     snImport:
       enabled: false
     speedCams:
       enabled: false
+      proxy: false
     speedIndex:
       enabled: false
     taxiReferers:
-      enabled: false
-    taxiSpeedIndex:
       enabled: false
     tugc2gis:
       enabled: false
@@ -388,6 +390,7 @@ naviback:
       responseSchemaName: IsochroneApiResponseModel.json
   tilesMetricsThreshold: 0
   engineUpdatePeriodSec: 30
+  lightweightMode: false
   hierarchies:
     enabled: false
     skipPatches: false
@@ -399,6 +402,7 @@ naviback:
     url: ''
     etaScheduleNodes: ''
   app_rule: ''
+  rulesUrl: file://{LOCAL_ETC}/rules.conf
 
 navigroup: ''
 app_project: ''
