@@ -177,8 +177,6 @@ spec:
               value: "{{ $.Values.pro.baseUrl }}"
             - name: Clients__ProClient__AuthorizationToken
               value: "{{ $.Values.routes.pro.authorizationToken }}"
-            - name: Clients__ProClient__MainTerritoryId
-              value: "{{ $.Values.routes.pro.mainTerritoryId }}"
 
             - name: Clients__Navigation__Enabled
               value: "true"

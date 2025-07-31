@@ -1,5 +1,47 @@
 # 2GIS On-Premise Changelog
 
+## [1.41.0] (2025-07-28)
+#### [Breaking-Changes](Breaking-Changes.md#1410)
+#### Images
+```
+citylens
+	+ citylens-realtime-data-api:1.3.3
+	- citylens-routes-api:1.2.2
+	+ citylens-routes-api:1.3.3
+	- citylens-worker-service:1.2.2
+	+ citylens-worker-service:1.3.3
+citylens-routes-ui
+	- citylens-routes-ui:1.1.3
+	+ citylens-routes-ui:1.3.1
+mapgl-js-api
+	- mapgl:1.61.0
+	+ mapgl:1.62.0
+pro-api
+	- pro-api:2.19.2
+	+ pro-api:2.26.0
+	- pro-importer:2.19.2
+	+ pro-importer:2.26.0
+	- pro-permissions-api:2.19.2
+	+ pro-permissions-api:2.26.0
+	- pro-tasks-api:2.19.2
+	+ pro-tasks-api:2.26.0
+pro-ui
+	- pro-importer:2.19.2
+	+ pro-importer:2.26.0
+	- pro-ui:4.19.0
+	+ pro-ui:4.27.0
+tiles-api
+	- tiles-api-importer:4.73.5
+	+ tiles-api-importer:4.75.1
+	- tiles-api-importer:4.73.5
+	+ tiles-api-importer:4.75.1
+	- tiles-api-proxy:4.73.5
+	+ tiles-api-proxy:4.75.1
+	- tiles-api:4.73.5
+	+ tiles-api:4.75.1
+
+```
+
 ## [1.40.0] (2025-06-26)
 #### Images
 ```

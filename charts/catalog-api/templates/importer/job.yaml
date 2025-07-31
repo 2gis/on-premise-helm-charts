@@ -61,10 +61,14 @@ spec:
             {{- if .Values.customCAs.bundle }}
             {{- include "catalog.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
-          {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle .Values.importer.postgres.tls.enabled }}
+          {{- include "catalog.importer.validateStorage" . }}
+          {{- if or (or .Values.customCAs.bundle .Values.importer.postgres.tls.enabled) (or .Values.importer.persistentVolume.enabled .Values.importer.emptyDir.enabled) }}
           volumeMounts:
             {{- if .Values.importer.persistentVolume.enabled }}
             - name: {{ include "catalog.importer.name" . }}-pv
+              mountPath: "/tmp"
+            {{- else if .Values.importer.emptyDir.enabled }}
+            - name: {{ include "catalog.importer.name" . }}-empty-dir
               mountPath: "/tmp"
             {{- end }}
             {{- if .Values.importer.postgres.tls.enabled }}
@@ -75,12 +79,17 @@ spec:
             {{- include "catalog.custom.ca.volumeMounts" . | nindent 12 }}
             {{- end }}
           {{- end }}
-      {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle .Values.importer.postgres.tls.enabled }}
+      {{- if or .Values.importer.persistentVolume.enabled .Values.customCAs.bundle .Values.importer.postgres.tls.enabled .Values.importer.emptyDir.enabled }}
       volumes:
       {{- if .Values.importer.persistentVolume.enabled }}
         - name: {{ include "catalog.importer.name" . }}-pv
           persistentVolumeClaim:
             claimName: {{ include "catalog.importer.name" . }}
+      {{- else if .Values.importer.emptyDir.enabled }}
+        - name: {{ include "catalog.importer.name" . }}-empty-dir
+          emptyDir:
+            medium: {{ .Values.importer.emptyDir.medium }}
+            sizeLimit: {{ .Values.importer.emptyDir.sizeLimit }}
       {{- end }}
       {{- if .Values.customCAs.bundle }}
         {{- include "catalog.custom.ca.jobs.volumes" . | nindent 8 }}

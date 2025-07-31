@@ -27,7 +27,7 @@ strategy:
 # @param image.tag Tag
 image:
   repository: 2gis-on-premise/pro-ui
-  tag: 4.19.0
+  tag: 4.27.0
 
 # @section Common deployment settings
 
@@ -307,7 +307,7 @@ stylesImporter:
   name: styles-importer
   image:
     repository: 2gis-on-premise/pro-importer
-    tag: 2.19.2
+    tag: 2.26.0
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   nodeSelector: {}

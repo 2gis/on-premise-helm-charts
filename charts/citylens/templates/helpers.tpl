@@ -350,6 +350,10 @@ Citylens routes name defines
 {{ include "citylens.routes" . }}{{- printf "-%s-%s" "worker" .Values.routes.environment | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{- define "citylens.routes.realtimeDataApi.name" -}}
+{{ include "citylens.routes" . }}{{- printf "-%s-%s" "realtime-data-api" .Values.routes.environment | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{- define "citylens.routes.migration.name" -}}
 {{ include "citylens.routes" . }}{{- printf "-%s-%s" "migration" .Values.routes.environment | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
@@ -368,6 +372,11 @@ app.kubernetes.io/name: {{ .Release.Name | quote }}
 app.kubernetes.io/instance: {{ include "citylens.routes.worker.name" . | quote }}
 {{- end -}}
 
+{{- define "citylens.routes.realtimeDataApi.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name | quote }}
+app.kubernetes.io/instance: {{ include "citylens.routes.realtimeDataApi.name" . | quote }}
+{{- end -}}
+
 {{- define "citylens.routes.api.labels" -}}
 helm.sh/chart: {{ include "app.chart" . }}
 {{ include "citylens.routes.api.selectorLabels" . }}
@@ -380,6 +389,15 @@ app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 {{- define "citylens.routes.worker.labels" -}}
 helm.sh/chart: {{ include "app.chart" . }}
 {{ include "citylens.routes.worker.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+{{- end -}}
+
+{{- define "citylens.routes.realtimeDataApi.labels" -}}
+helm.sh/chart: {{ include "app.chart" . }}
+{{ include "citylens.routes.realtimeDataApi.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
