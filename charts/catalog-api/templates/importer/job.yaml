@@ -89,7 +89,9 @@ spec:
         - name: {{ include "catalog.importer.name" . }}-empty-dir
           emptyDir:
             medium: {{ .Values.importer.emptyDir.medium }}
-            sizeLimit: {{ .Values.importer.emptyDir.sizeLimit }}
+            {{- if .Values.importer.emptyDir.sizeLimit }}
+            sizeLimit: {{ .Values.importer.emptyDir.sizeLimit | quote }}
+            {{- end }}
       {{- end }}
       {{- if .Values.customCAs.bundle }}
         {{- include "catalog.custom.ca.jobs.volumes" . | nindent 8 }}
