@@ -256,8 +256,8 @@ image:
 
 naviback:
   appPort: 8080
-  dmSourcesLimit: 1000
-  dmTargetsLimit: 1000
+  dmSourcesLimit: 25
+  dmTargetsLimit: 25
   handlersNumber: 1
   queueSize: 128
   maxProcessTime: 20
