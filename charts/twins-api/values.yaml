@@ -37,7 +37,7 @@ dgctlStorage:
 
 image:
   repository: 2gis-on-premise/twins-api
-  tag: 1.18.0
+  tag: 1.20.0
   pullPolicy: IfNotPresent
 
 # @section API service settings
