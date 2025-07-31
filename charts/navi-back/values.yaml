@@ -127,8 +127,8 @@ image:
 # @extra naviback.walkingUserSpeedsUrl URL of walking user speeds
 # @extra naviback.routeAsUsualUrl URL of route as usual
 # @skip naviback.appPort
-# @param naviback.dmSourcesLimit Size limit for source matrices
-# @param naviback.dmTargetsLimit Size limit for target matrices
+# @param naviback.dmSourcesLimit Maximum number of sources in the distance matrix. For synchronous get_dist_matrix calls, the recommended limit is 25 (25x25 matrix max).
+# @param naviback.dmTargetsLimit Maximum number of targets in the distance matrix. For synchronous get_dist_matrix calls, the recommended limit is 25 (25x25 matrix max).
 # @param naviback.handlersNumber Total number of HTTP/GRPC handlers
 # @param naviback.queueSize Internal queue size
 # @param naviback.maxProcessTime Maximum processing time limit in seconds, may be overriden by `naviback.queryTimeouts`
