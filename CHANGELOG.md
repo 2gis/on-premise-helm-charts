@@ -1,5 +1,17 @@
 # 2GIS On-Premise Changelog
 
+## [1.42.0] (2025-08-01)
+#### Images
+```
+citylens-routes-ui
+	- citylens-routes-ui:1.3.1
+	+ citylens-routes-ui:1.3.2
+navi-router
+	- navi-router:6.31.0.2
+	+ navi-router:6.33.0.4
+
+```
+
 ## [1.41.0] (2025-07-28)
 #### [Breaking-Changes](Breaking-Changes.md#1410)
 #### Images
