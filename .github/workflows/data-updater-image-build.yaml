@@ -1,0 +1,64 @@
+name: Publish Helm Charts to ghcr.io
+run-name: "Publish Helm Charts for Tag ${{ inputs.tag || github.event_name }} (Run #${{ github.run_number }})"
+
+on:
+  push:
+    tags:
+      - \d+\.\d+\.\d+
+  workflow_dispatch: # Также можно вручную запускать workflow.
+    inputs:
+      tag:
+        description: "Tag to process"
+        required: true
+        default: "1.0.0"
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      # ШАГ 1. Узнаем, откуда пришел workflow (пуш тега или ручной запуск)
+      - name: Determine if workflow is running from tag or input
+        id: determine_tag
+        run: |
+          # Определяем, был ли использован workflow_dispatch
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "Using input tag: ${{ inputs.tag }}"
+            echo "TAG_VERSION=${{ inputs.tag }}" >> $GITHUB_ENV
+          else
+            # Используем тег из события пуша
+            echo "Using pushed tag: ${GITHUB_REF#refs/tags/}"
+            echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          fi
+
+      # ШАГ 2. Checkout репозитория на указанный тег
+      - name: Checkout repository at specified tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG_VERSION }}
+
+      # ШАГ 3. Подтверждаем, что переключение на тег прошло успешно
+      - name: Confirm current tag
+        run: |
+          echo "Checked out to tag: ${{ env.TAG_VERSION }}"
+          git rev-parse HEAD
+          git describe --tags
+
+      # ШАГ 4: Входим в GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # ШАГ 5. Сборка и пуш Docker-образа в формате OCI
+      - name: Build and push Docker image data-updater
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: dockerfiles/data-updater/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/images/data-updater:${{ env.TAG_VERSION }}
+          labels: |
+            org.opencontainers.image.title=data-updater
+            org.opencontainers.image.description=Data updater
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.version=${{ env.TAG_VERSION }}
+            org.opencontainers.image.revision=${{ github.sha }}
