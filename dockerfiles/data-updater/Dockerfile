@@ -1,4 +1,4 @@
-FROM docker-hub.2gis.ru/docker-io/library/alpine:3.21.3
+FROM alpine:3.21.3
 LABEL maintainer="On-Premise <team-on-premise@2gis.ru>"
 
 ARG KUBECTL_VERSION=1.29.13
