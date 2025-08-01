@@ -246,11 +246,9 @@ spec:
             - name: http
               containerPort: {{ .Values.naviback.appPort }}
               protocol: TCP
-            {{- if .Values.naviback.grpcPort }}
             - name: grpc
               containerPort: {{ .Values.naviback.grpcPort }}
               protocol: TCP
-            {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe:
             {{- include "tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
