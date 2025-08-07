@@ -340,15 +340,15 @@ spec:
             - name: TasksApi__UseForLayerDataPreparation
               value: {{ .Values.api.settings.tasksApi.useForLayerDataPreparation | quote }}
             - name: BackgroundJobs__InitOnStartupJob__Enabled
-              value: "{{ ne .Values.api.settings.backgroundJobs.enableInitOnStartupJob false }}"
+              value: {{ ne .Values.api.settings.backgroundJobs.enableInitOnStartupJob false | quote }}
             - name: BackgroundJobs__LayerDataPrepareJob__Enabled
-              value: "{{ ne .Values.api.settings.backgroundJobs.enableLayerDataPrepareJob false }}"
+              value: {{ ne .Values.api.settings.backgroundJobs.enableLayerDataPrepareJob false | quote }}
             - name: BackgroundJobs__ClearCacheJob__Enabled
-              value: "{{ ne .Values.api.settings.backgroundJobs.enableClearCacheJob false }}"
+              value: {{ ne .Values.api.settings.backgroundJobs.enableClearCacheJob false | quote }}
             - name: BackgroundJobs__ClearMetadataAndStorageJob__Enabled
-              value: "{{ ne .Values.api.settings.backgroundJobs.enableClearMetadataAndStorageJob false }}"
+              value: {{ ne .Values.api.settings.backgroundJobs.enableClearMetadataAndStorageJob false | quote }}
             - name: BackgroundJobs__MetricsCollectionJob__Enabled
-              value: "{{ ne .Values.api.settings.backgroundJobs.enableMetricsCollectionJob false }}"
+              value: {{ ne .Values.api.settings.backgroundJobs.enableMetricsCollectionJob false | quote }}
             - name: TileGen__Url
               value: {{ .Values.tileGen.url | quote }}
             - name: TileGen__UserDataTileSet

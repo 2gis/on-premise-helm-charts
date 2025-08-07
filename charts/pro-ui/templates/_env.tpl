@@ -90,7 +90,7 @@
 - name: S3_WHITE_LABEL_BUCKET
   value: {{ .Values.ui.whiteLabel.s3Bucket | quote }}
 - name: WHITE_LABEL_CONFIG_URL
-  value: "{{ .Values.ui.whiteLabel.configUrl | default "/static/theme/urbi.json" }}"
+  value: {{ .Values.ui.whiteLabel.configUrl | default "/static/theme/urbi.json" | quote }}
 - name: ZENITH_HOST
   value: {{ .Values.ui.zenith.host | quote }}
 - name: ZENITH_TILE_SET
