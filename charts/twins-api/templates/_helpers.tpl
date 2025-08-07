@@ -65,11 +65,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "twins.env.db" -}}
 - name: TWINS_DB_RO_HOST
-  value: "{{ required "A valid .Values.postgres.ro.host required" .Values.postgres.ro.host }}"
+  value: {{ required "A valid .Values.postgres.ro.host required" .Values.postgres.ro.host | quote }}
 - name: TWINS_DB_RO_PORT
   value: {{ .Values.postgres.ro.port | quote }}
 - name: TWINS_DB_RO_NAME
-  value: "{{ required "A valid .Values.postgres.ro.name required" .Values.postgres.ro.name }}"
+  value: {{ required "A valid .Values.postgres.ro.name required" .Values.postgres.ro.name | quote }}
 {{- if .Values.importer.postgres.schemaSwitchEnabled }}
 - name: TWINS_DB_RO_SCHEMA
   value: "{{ include "twins.manifestCode" . }}"
@@ -82,9 +82,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: TWINS_DB_RO_CONNECTION_RETRY
   value: {{ .Values.postgres.ro.retry | quote }}
 - name: TWINS_DB_RO_USERNAME
-  value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username }}"
+  value: {{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username | quote }}
 - name: TWINS_DB_RW_HOST
-  value: "{{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host }}"
+  value: {{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host | quote }}
 - name: TWINS_DB_RW_PORT
   value: {{ .Values.postgres.rw.port | quote }}
 {{- if .Values.importer.postgres.schemaSwitchEnabled }}
@@ -99,9 +99,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: TWINS_DB_RW_CONNECTION_RETRY
   value: {{ .Values.postgres.rw.retry | quote }}
 - name: TWINS_DB_RW_NAME
-  value: "{{ required "A valid .Values.postgres.rw.name required" .Values.postgres.rw.name }}"
+  value: {{ required "A valid .Values.postgres.rw.name required" .Values.postgres.rw.name | quote }}
 - name: TWINS_DB_RW_USERNAME
-  value: "{{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username }}"
+  value: {{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username | quote }}
 {{- end}}
 
 {{- define "twins.env.db.deploys" -}}
@@ -137,7 +137,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{ include "twins.env.loglevel" . }}
 {{ include "twins.env.db.deploys" . }}
 - name: TWINS_AUTH_ENDPOINT
-  value: "{{ required "A valid .Values.api.keys.url required" .Values.api.keys.url }}"
+  value: {{ required "A valid .Values.api.keys.url required" .Values.api.keys.url | quote }}
 - name: TWINS_AUTH_SERVICE_KEY
   valueFrom:
     secretKeyRef:
@@ -172,7 +172,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       name: {{ include "twins.secret.jobs.name" . }}
       key: dgctlStorageSecretKey
 - name: TWINS_IMPORTER_MANIFEST_PATH
-  value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
+  value: {{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest | quote }}
 - name: TWINS_IMPORTER_NUMBER_SCHEMA_BACKUPS
   value: {{ .Values.importer.cleaner.versionLimit | quote }}
 - name: TWINS_S3_RETRY_MAX_ATTEMPTS

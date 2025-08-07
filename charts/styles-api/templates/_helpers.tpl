@@ -65,11 +65,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "styles.env.db" -}}
 - name: MGS_DB_HOST
-  value: "{{ required "A valid .Values.postgres.host required" .Values.postgres.host }}"
+  value: {{ required "A valid .Values.postgres.host required" .Values.postgres.host | quote }}
 - name: MGS_DB_PORT
   value: {{ .Values.postgres.port | quote }}
 - name: MGS_DB_NAME
-  value: "{{ required "A valid .Values.postgres.name required" .Values.postgres.name }}"
+  value: {{ required "A valid .Values.postgres.name required" .Values.postgres.name | quote }}
 - name: MGS_DB_SCHEMA
   value: {{ .Values.postgres.schema | quote }}
 - name: MGS_DB_CONNECTION_TIMEOUT
@@ -77,7 +77,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: MGS_DB_CONNECTION_RETRY
   value: {{ .Values.postgres.retry | quote }}
 - name: MGS_DB_USERNAME
-  value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.username }}"
+  value: {{ required "A valid .Values.postgres.ro.username required" .Values.postgres.username | quote }}
 {{- end}}
 
 {{- define "styles.env.db.deploys" -}}
@@ -100,7 +100,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "styles.env.s3" -}}
 - name: MGS_S3_ENDPOINT
-  value: "{{ required "A valid .Values.s3.host required" .Values.s3.host }}"
+  value: {{ required "A valid .Values.s3.host required" .Values.s3.host | quote }}
 - name: MGS_S3_BUCKET
   value: {{ .Values.s3.bucket | quote }}
 - name: MGS_S3_PUBLIC_DOMAIN

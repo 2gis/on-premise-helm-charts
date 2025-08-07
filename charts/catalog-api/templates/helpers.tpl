@@ -77,7 +77,7 @@ onprem
 
 {{- define "catalog.env.postgres" -}}
 - name: CATALOG_DB_SCHEMA
-  value: "{{ include "catalog.manifestCode" . }},{{ .Values.importer.postgres.schemaExtensions }}"
+  value: {{ printf "%s,%s" (include "catalog.manifestCode" .) .Values.importer.postgres.schemaExtensions | quote }}
 - name: CATALOG_DB_QUERY_TIMEOUT
   value: {{ .Values.api.postgres.queryTimeout | quote }}
 - name: CATALOG_DB_BRANCH_POOL_SIZE
@@ -91,7 +91,7 @@ onprem
 - name: CATALOG_DB_BRANCH_URL
   value: "jdbc:postgresql://{{ required "A valid .Values.api.postgres.host entry required" .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ required "A valid .Values.api.postgres.name entry required" .Values.api.postgres.name }}"
 - name: CATALOG_DB_BRANCH_LOGIN
-  value: "{{ required "A valid .Values.api.postgres.username entry required" .Values.api.postgres.username }}"
+  value: {{ required "A valid .Values.api.postgres.username entry required" .Values.api.postgres.username | quote }}
 - name: CATALOG_DB_BRANCH_PASS
   valueFrom:
     secretKeyRef:
@@ -146,7 +146,7 @@ onprem
 
 {{- define "catalog.env.search" -}}
 - name: CATALOG_SAPPHIRE_URL
-  value: "{{ required "A valid .Values.search.url entry required" .Values.search.url }}"
+  value: {{ required "A valid .Values.search.url entry required" .Values.search.url | quote }}
 - name: CATALOG_SAPPHIRE_CONNECTION_TIMEOUT
   value: {{ .Values.search.connectTimeout | quote }}
 - name: CATALOG_SAPPHIRE_MIN_CONNECTIONS
@@ -159,7 +159,7 @@ onprem
 
 {{- define "catalog.env.keys" -}}
 - name: CATALOG_KEYS_ENDPOINT
-  value: "{{ required "A valid .Values.keys.url entry required" .Values.keys.url }}"
+  value: {{ required "A valid .Values.keys.url entry required" .Values.keys.url | quote }}
 - name: CATALOG_KEYS_SERVICE_KEY
   valueFrom:
     secretKeyRef:
@@ -183,7 +183,7 @@ onprem
 
 {{- define "catalog.env.license" -}}
 - name: CATALOG_PASPORTOOL_ENDPOINT
-  value: "{{ required "A valid .Values.license.url entry required" .Values.license.url }}"
+  value: {{ required "A valid .Values.license.url entry required" .Values.license.url | quote }}
 - name: CATALOG_PASPORTOOL_REQUEST_TIMEOUT
   value: {{ .Values.license.requestTimeout | quote }}
 {{- end }}
@@ -196,13 +196,13 @@ onprem
 - name: IMPORTER_DB_CATALOG_SCHEMA_EXTENSIONS
   value: {{ .Values.importer.postgres.schemaExtensions | quote }}
 - name: IMPORTER_DB_CATALOG_HOST
-  value: "{{ required "A valid .Values.importer.postgres.host entry required" .Values.importer.postgres.host }}"
+  value: {{ required "A valid .Values.importer.postgres.host entry required" .Values.importer.postgres.host | quote }}
 - name: IMPORTER_DB_CATALOG_PORT
   value: {{ .Values.importer.postgres.port | quote }}
 - name: IMPORTER_DB_CATALOG_NAME
-  value: "{{ required "A valid .Values.importer.postgres.name entry required" .Values.importer.postgres.name }}"
+  value: {{ required "A valid .Values.importer.postgres.name entry required" .Values.importer.postgres.name | quote }}
 - name: IMPORTER_DB_CATALOG_USERNAME
-  value: "{{ required "A valid .Values.importer.postgres.username entry required" .Values.importer.postgres.username }}"
+  value: {{ required "A valid .Values.importer.postgres.username entry required" .Values.importer.postgres.username | quote }}
 - name: IMPORTER_DB_CATALOG_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -239,7 +239,7 @@ onprem
       name: {{ include "catalog.secret.jobs.name" . }}
       key: dgctlStorageSecretKey
 - name: IMPORTER_MANIFEST_PATH
-  value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
+  value: {{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest | quote }}
 - name: IMPORTER_WORKER_POOL_SIZE
   value: {{ .Values.importer.workerNum | quote }}
 - name: IMPORTER_NUMBER_SCHEMA_BACKUPS

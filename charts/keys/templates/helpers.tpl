@@ -131,17 +131,17 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 {{- if .Values.api.oidc.enable }}
 - name: KEYS_OIDC_ENDPOINT
-  value: "{{ required "A valid .Values.api.oidc.url required" .Values.api.oidc.url }}"
+  value: {{ required "A valid .Values.api.oidc.url required" .Values.api.oidc.url | quote }}
 - name: KEYS_OIDC_CLIENT_TIMEOUT
   value: {{ .Values.api.oidc.timeout | quote }}
 - name: KEYS_OIDC_CLIENT_RETRY_COUNT
   value: {{ .Values.api.oidc.retryCount | quote }}
 - name: KEYS_OIDC_DEFAULT_PARTNER_ID
-  value: "{{ required "A valid .Values.api.oidc.defaultPartner.id required" .Values.api.oidc.defaultPartner.id }}"
+  value: {{ required "A valid .Values.api.oidc.defaultPartner.id required" .Values.api.oidc.defaultPartner.id | quote }}
 - name: KEYS_OIDC_DEFAULT_PARTNER_NAME
-  value: "{{ required "A valid .Values.api.oidc.defaultPartner.name required" .Values.api.oidc.defaultPartner.name }}"
+  value: {{ required "A valid .Values.api.oidc.defaultPartner.name required" .Values.api.oidc.defaultPartner.name | quote }}
 - name: KEYS_OIDC_DEFAULT_ROLE
-  value: "{{ required "A valid .Values.api.oidc.defaultPartner.role required" .Values.api.oidc.defaultPartner.role }}"
+  value: {{ required "A valid .Values.api.oidc.defaultPartner.role required" .Values.api.oidc.defaultPartner.role | quote }}
 {{- end }}
 {{- end }}
 
@@ -182,17 +182,17 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.db" -}}
 - name: KEYS_DB_RO_HOST
-  value: "{{ required "A valid .Values.postgres.ro.host required" .Values.postgres.ro.host }}"
+  value: {{ required "A valid .Values.postgres.ro.host required" .Values.postgres.ro.host | quote }}
 - name: KEYS_DB_RO_PORT
   value: {{ .Values.postgres.ro.port | quote }}
 - name: KEYS_DB_RO_NAME
-  value: "{{ required "A valid .Values.postgres.ro.name required" .Values.postgres.ro.name }}"
+  value: {{ required "A valid .Values.postgres.ro.name required" .Values.postgres.ro.name | quote }}
 - name: KEYS_DB_RO_SCHEMA
   value: {{ .Values.postgres.ro.schema | quote }}
 - name: KEYS_DB_RO_CONNECTION_TIMEOUT
   value: {{ .Values.postgres.ro.timeout | quote }}
 - name: KEYS_DB_RO_USERNAME
-  value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username }}"
+  value: {{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username | quote }}
 - name: KEYS_DB_RO_SSL_MODE
   value: {{ .Values.postgres.ro.tls.mode }}
 {{- if has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full") }}
@@ -212,17 +212,17 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 {{- end }}
 - name: KEYS_DB_RW_HOST
-  value: "{{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host }}"
+  value: {{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host | quote }}
 - name: KEYS_DB_RW_PORT
   value: {{ .Values.postgres.rw.port | quote }}
 - name: KEYS_DB_RW_CONNECTION_TIMEOUT
   value: {{ .Values.postgres.rw.timeout | quote }}
 - name: KEYS_DB_RW_NAME
-  value: "{{ required "A valid .Values.postgres.rw.name required" .Values.postgres.rw.name }}"
+  value: {{ required "A valid .Values.postgres.rw.name required" .Values.postgres.rw.name | quote }}
 - name: KEYS_DB_RW_SCHEMA
   value: {{ .Values.postgres.rw.schema | quote }}
 - name: KEYS_DB_RW_USERNAME
-  value: "{{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username }}"
+  value: {{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username | quote }}
 - name: KEYS_DB_RW_SSL_MODE
   value: {{ .Values.postgres.rw.tls.mode }}
 {{- if has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full") }}
@@ -378,12 +378,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       name: {{ include "keys.secret.jobs.name" . }}
       key: dgctlStorageSecretKey
 - name: KEYS_MANIFEST_PATH
-  value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
+  value: {{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest | quote }}
 {{- end }}
 
 {{- define "keys.env.kafka.audit" -}}
 - name: KEYS_KAFKA_AUDIT_BROKERS
-  value: "{{ required "A valid .Values.kafka.bootstrapServers entry required" .Values.kafka.bootstrapServers }}"
+  value: {{ required "A valid .Values.kafka.bootstrapServers entry required" .Values.kafka.bootstrapServers | quote }}
 - name: KEYS_KAFKA_AUDIT_USERNAME
   value: {{ .Values.kafka.username | quote }}
 {{- if .Values.kafka.password }}
@@ -408,7 +408,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "/etc/ssl/private/kafka-ca.crt"
 {{- end }}
 - name: KEYS_KAFKA_AUDIT_TOPIC
-  value: "{{ required "A valid .Values.kafka.audit.topic entry required" .Values.kafka.audit.topic }}"
+  value: {{ required "A valid .Values.kafka.audit.topic entry required" .Values.kafka.audit.topic | quote }}
 - name: KEYS_KAFKA_AUDIT_PRODUCE_RETRY_COUNT
   value: {{ .Values.kafka.audit.produce.retryCount | quote }}
 - name: KEYS_KAFKA_AUDIT_PRODUCE_IDEMPOTENT_WRITE

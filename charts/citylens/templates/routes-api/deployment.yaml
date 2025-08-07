@@ -107,11 +107,11 @@ spec:
               value: {{ .Values.routes.api.logging.extended | quote }}
 
             - name: PgSettings__Host
-              value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
+              value: {{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host | quote }}
             - name: PgSettings__Port
-              value: "{{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port }}"
+              value: {{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port | quote }}
             - name: PgSettings__UserName
-              value: "{{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username }}"
+              value: {{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username | quote }}
             - name: PgSettings__Password
               valueFrom:
                 secretKeyRef:
@@ -119,7 +119,7 @@ spec:
                   name: {{ include "citylens.routes.api.name" . }}-secret
 
             - name: PgSettings__Api__Database
-              value: "{{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database }}"
+              value: {{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database | quote }}
             - name: PgSettings__Api__Timeout
               value: {{ $.Values.routes.postgres.timeout | quote }}
             - name: PgSettings__Api__CommandTimeout
@@ -130,7 +130,7 @@ spec:
               value: {{ $.Values.routes.postgres.pooling | quote }}
 
             - name: PgSettings__Hangfire__Database
-              value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
+              value: {{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database | quote }}
             - name: PgSettings__Hangfire__Timeout
               value: {{ $.Values.routes.hangfire.postgres.timeout | quote }}
             - name: PgSettings__Hangfire__CommandTimeout
@@ -141,9 +141,9 @@ spec:
               value: {{ $.Values.routes.hangfire.postgres.pooling | quote }}
 
             - name: S3__BucketPrefix
-              value: "{{ required "A valid .Values.s3.bucketPrefix entry required" $.Values.s3.bucketPrefix }}"
+              value: {{ required "A valid .Values.s3.bucketPrefix entry required" $.Values.s3.bucketPrefix | quote }}
             - name: S3__LogsBucketPrefix
-              value: "{{ required "A valid .Values.s3.logsBucketPrefix entry required" $.Values.s3.logsBucketPrefix }}"
+              value: {{ required "A valid .Values.s3.logsBucketPrefix entry required" $.Values.s3.logsBucketPrefix | quote }}
             - name: S3__AccessKey
               valueFrom:
                 secretKeyRef:
@@ -160,7 +160,7 @@ spec:
             - name: Clients__Navigation__Enabled
               value: "true"
             - name: Clients__Navigation__Url
-              value: "{{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url }}"
+              value: {{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url | quote }}
             - name: Clients__Navigation__TimeoutSeconds
               value: {{ $.Values.routes.navi.timeout | quote }}
             - name: Clients__Navigation__ApiKey
@@ -183,7 +183,7 @@ spec:
             - name: Clients__RealTimeData__Enabled
               value: "true"
             - name: Clients__RealTimeData__Url
-              value: "{{ required "A valid .Values.routes.realtimeData.url entry required" $.Values.routes.realtimeData.url }}"
+              value: {{ required "A valid .Values.routes.realtimeData.url entry required" $.Values.routes.realtimeData.url | quote }}
 
             - name: Features__AuthorizationEnabled
               value: {{ $.Values.routes.features.authorizationEnabled | quote }}

@@ -32,11 +32,11 @@ spec:
             {{- toYaml .Values.routes.api.resources | nindent 12 }}
           env:
             - name: PgSettings__Host
-              value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
+              value: {{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host | quote }}
             - name: PgSettings__Port
-              value: "{{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port }}"
+              value: {{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port | quote }}
             - name: PgSettings__UserName
-              value: "{{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username }}"
+              value: {{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username | quote }}
             - name: PgSettings__Password
               valueFrom:
                 secretKeyRef:
@@ -44,7 +44,7 @@ spec:
                   name: {{ include "citylens.routes.migration.name" . }}-secret
 
             - name: PgSettings__Api__Database
-              value: "{{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database }}"
+              value: {{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database | quote }}
             - name: PgSettings__Api__Timeout
               value: {{ $.Values.routes.postgres.timeout | quote }}
             - name: PgSettings__Api__CommandTimeout
@@ -53,7 +53,7 @@ spec:
               value: {{ $.Values.routes.postgres.maxPoolSize | quote }}
 
             - name: PgSettings__Hangfire__Database
-              value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
+              value: {{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database | quote }}
             - name: PgSettings__Hangfire__Timeout
               value: {{ $.Values.routes.hangfire.postgres.timeout | quote }}
             - name: PgSettings__Hangfire__CommandTimeout
@@ -71,11 +71,11 @@ spec:
             {{- toYaml .Values.routes.worker.resources | nindent 12 }}
           env:
             - name: PgSettings__Host
-              value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
+              value: {{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host | quote }}
             - name: PgSettings__Port
-              value: "{{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port }}"
+              value: {{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port | quote }}
             - name: PgSettings__UserName
-              value: "{{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username }}"
+              value: {{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username | quote }}
             - name: PgSettings__Password
               valueFrom:
                 secretKeyRef:
@@ -83,7 +83,7 @@ spec:
                   name: {{ include "citylens.routes.migration.name" . }}-secret
 
             - name: PgSettings__Api__Database
-              value: "{{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database }}"
+              value: {{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database | quote }}
             - name: PgSettings__Api__Timeout
               value: {{ $.Values.routes.postgres.timeout | quote }}
             - name: PgSettings__Api__CommandTimeout
@@ -94,7 +94,7 @@ spec:
               value: {{ $.Values.routes.postgres.pooling | quote }}
 
             - name: PgSettings__Hangfire__Database
-              value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
+              value: {{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database | quote }}
             - name: PgSettings__Hangfire__Timeout
               value: {{ $.Values.routes.hangfire.postgres.timeout | quote }}
             - name: PgSettings__Hangfire__CommandTimeout
@@ -121,7 +121,7 @@ spec:
             - name: BusConfig__Consumers__AppEvents__Topic
               value: {{ .Values.kafka.topics.tracks | quote }}
             - name: BusConfig__Consumers__AppEvents__GroupId
-              value: "{{ required "A valid .Values.routes.worker.busConfig.consumers.appEvents.groupId entry required" $.Values.routes.worker.busConfig.consumers.appEvents.groupId }}"
+              value: {{ required "A valid .Values.routes.worker.busConfig.consumers.appEvents.groupId entry required" $.Values.routes.worker.busConfig.consumers.appEvents.groupId | quote }}
             - name: BusConfig__Consumers__AppEvents__BufferSize
               value: {{ $.Values.routes.worker.busConfig.consumers.appEvents.bufferSize | quote }}
             - name: BusConfig__Consumers__AppEvents__WorkersCount
@@ -135,11 +135,11 @@ spec:
             {{- toYaml .Values.routes.realtimeDataApi.resources | nindent 12 }}
           env:
             - name: PgSettings__Host
-              value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
+              value: {{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host | quote }}
             - name: PgSettings__Port
-              value: "{{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port }}"
+              value: {{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port | quote }}
             - name: PgSettings__UserName
-              value: "{{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username }}"
+              value: {{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username | quote }}
             - name: PgSettings__Password
               valueFrom:
                 secretKeyRef:
@@ -147,7 +147,7 @@ spec:
                   name: {{ include "citylens.routes.migration.name" . }}-secret
 
             - name: PgSettings__Api__Database
-              value: "{{ required "A valid .Values.routes.realtimeData.postgres.database entry required" $.Values.routes.realtimeDataApi.postgres.database }}"
+              value: {{ required "A valid .Values.routes.realtimeData.postgres.database entry required" $.Values.routes.realtimeDataApi.postgres.database | quote }}
             - name: PgSettings__Api__Timeout
               value: {{ $.Values.routes.realtimeDataApi.postgres.timeout | quote }}
             - name: PgSettings__Api__CommandTimeout
@@ -158,7 +158,7 @@ spec:
               value: {{ $.Values.routes.realtimeDataApi.postgres.pooling | quote }}
 
             - name: PgSettings__Hangfire__Database
-              value: "{{ required "A valid .Values.routes.realtimeData.postgres.database entry required" $.Values.routes.realtimeDataApi.postgres.database }}"
+              value: {{ required "A valid .Values.routes.realtimeData.postgres.database entry required" $.Values.routes.realtimeDataApi.postgres.database | quote }}
             - name: PgSettings__Hangfire__Timeout
               value: {{ $.Values.routes.realtimeDataApi.postgres.timeout | quote }}
             - name: PgSettings__Hangfire__CommandTimeout
