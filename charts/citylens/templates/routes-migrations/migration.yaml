@@ -46,22 +46,22 @@ spec:
             - name: PgSettings__Api__Database
               value: "{{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database }}"
             - name: PgSettings__Api__Timeout
-              value: "{{ $.Values.routes.postgres.timeout }}"
+              value: {{ $.Values.routes.postgres.timeout | quote }}
             - name: PgSettings__Api__CommandTimeout
-              value: "{{ $.Values.routes.postgres.commandTimeout }}"
+              value: {{ $.Values.routes.postgres.commandTimeout | quote }}
             - name: PgSettings__Api__MaxPoolSize
-              value: "{{ $.Values.routes.postgres.maxPoolSize }}"
+              value: {{ $.Values.routes.postgres.maxPoolSize | quote }}
 
             - name: PgSettings__Hangfire__Database
               value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
             - name: PgSettings__Hangfire__Timeout
-              value: "{{ $.Values.routes.hangfire.postgres.timeout }}"
+              value: {{ $.Values.routes.hangfire.postgres.timeout | quote }}
             - name: PgSettings__Hangfire__CommandTimeout
-              value: "{{ $.Values.routes.hangfire.postgres.commandTimeout }}"
+              value: {{ $.Values.routes.hangfire.postgres.commandTimeout | quote }}
             - name: PgSettings__Hangfire__MaxPoolSize
-              value: "{{ $.Values.routes.hangfire.postgres.maxPoolSize }}"
+              value: {{ $.Values.routes.hangfire.postgres.maxPoolSize | quote }}
             - name: PgSettings__Hangfire__Pooling
-              value: "{{ $.Values.routes.hangfire.postgres.pooling }}"
+              value: {{ $.Values.routes.hangfire.postgres.pooling | quote }}
 
         - name: worker-migrate
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.routes.worker.image.repository }}:{{ .Values.routes.worker.image.tag }}
@@ -85,47 +85,47 @@ spec:
             - name: PgSettings__Api__Database
               value: "{{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database }}"
             - name: PgSettings__Api__Timeout
-              value: "{{ $.Values.routes.postgres.timeout }}"
+              value: {{ $.Values.routes.postgres.timeout | quote }}
             - name: PgSettings__Api__CommandTimeout
-              value: "{{ $.Values.routes.postgres.commandTimeout }}"
+              value: {{ $.Values.routes.postgres.commandTimeout | quote }}
             - name: PgSettings__Api__MaxPoolSize
-              value: "{{ $.Values.routes.postgres.maxPoolSize }}"
+              value: {{ $.Values.routes.postgres.maxPoolSize | quote }}
             - name: PgSettings__Api__Pooling
-              value: "{{ $.Values.routes.postgres.pooling }}"
+              value: {{ $.Values.routes.postgres.pooling | quote }}
 
             - name: PgSettings__Hangfire__Database
               value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
             - name: PgSettings__Hangfire__Timeout
-              value: "{{ $.Values.routes.hangfire.postgres.timeout }}"
+              value: {{ $.Values.routes.hangfire.postgres.timeout | quote }}
             - name: PgSettings__Hangfire__CommandTimeout
-              value: "{{ $.Values.routes.hangfire.postgres.commandTimeout }}"
+              value: {{ $.Values.routes.hangfire.postgres.commandTimeout | quote }}
             - name: PgSettings__Hangfire__MaxPoolSize
-              value: "{{ $.Values.routes.hangfire.postgres.maxPoolSize }}"
+              value: {{ $.Values.routes.hangfire.postgres.maxPoolSize | quote }}
             - name: PgSettings__Hangfire__Pooling
-              value: "{{ $.Values.routes.hangfire.postgres.pooling }}"
+              value: {{ $.Values.routes.hangfire.postgres.pooling | quote }}
 
             - name: BusConfig__Broker
-              value: "{{ .Values.kafka.bootstrapServer }}"
+              value: {{ .Values.kafka.bootstrapServer | quote }}
             - name: BusConfig__SecurityInformation__SaslUsername
-              value: "{{ $.Values.kafka.username }}"
+              value: {{ $.Values.kafka.username | quote }}
             - name: BusConfig__SecurityInformation__SaslPassword
               valueFrom:
                 secretKeyRef:
                   key: busConfigSaslPassword
                   name: {{ include "citylens.routes.migration.name" . }}-secret
             - name: BusConfig__SecurityInformation__SaslMechanism
-              value: "{{ .Values.routes.worker.busConfig.securityInformation.saslMechanism }}"
+              value: {{ .Values.routes.worker.busConfig.securityInformation.saslMechanism | quote }}
             - name: BusConfig__SecurityInformation__SecurityProtocol
-              value: "{{ .Values.routes.worker.busConfig.securityInformation.securityProtocol }}"
+              value: {{ .Values.routes.worker.busConfig.securityInformation.securityProtocol | quote }}
 
             - name: BusConfig__Consumers__AppEvents__Topic
-              value: "{{ .Values.kafka.topics.tracks }}"
+              value: {{ .Values.kafka.topics.tracks | quote }}
             - name: BusConfig__Consumers__AppEvents__GroupId
               value: "{{ required "A valid .Values.routes.worker.busConfig.consumers.appEvents.groupId entry required" $.Values.routes.worker.busConfig.consumers.appEvents.groupId }}"
             - name: BusConfig__Consumers__AppEvents__BufferSize
-              value: "{{ $.Values.routes.worker.busConfig.consumers.appEvents.bufferSize }}"
+              value: {{ $.Values.routes.worker.busConfig.consumers.appEvents.bufferSize | quote }}
             - name: BusConfig__Consumers__AppEvents__WorkersCount
-              value: "{{ $.Values.routes.worker.busConfig.consumers.appEvents.workersCount }}"
+              value: {{ $.Values.routes.worker.busConfig.consumers.appEvents.workersCount | quote }}
 
         - name: realtime-data-api-migrate
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.routes.realtimeDataApi.image.repository }}:{{ .Values.routes.realtimeDataApi.image.tag }}
@@ -149,23 +149,23 @@ spec:
             - name: PgSettings__Api__Database
               value: "{{ required "A valid .Values.routes.realtimeData.postgres.database entry required" $.Values.routes.realtimeDataApi.postgres.database }}"
             - name: PgSettings__Api__Timeout
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.timeout }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.timeout | quote }}
             - name: PgSettings__Api__CommandTimeout
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.commandTimeout }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.commandTimeout | quote }}
             - name: PgSettings__Api__MaxPoolSize
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.maxPoolSize }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.maxPoolSize | quote }}
             - name: PgSettings__Api__Pooling
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.pooling }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.pooling | quote }}
 
             - name: PgSettings__Hangfire__Database
               value: "{{ required "A valid .Values.routes.realtimeData.postgres.database entry required" $.Values.routes.realtimeDataApi.postgres.database }}"
             - name: PgSettings__Hangfire__Timeout
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.timeout }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.timeout | quote }}
             - name: PgSettings__Hangfire__CommandTimeout
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.commandTimeout }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.commandTimeout | quote }}
             - name: PgSettings__Hangfire__MaxPoolSize
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.maxPoolSize }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.maxPoolSize | quote }}
             - name: PgSettings__Hangfire__Pooling
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.pooling }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.pooling | quote }}
 
 {{- end }}

@@ -72,22 +72,22 @@ onprem
 
 {{- define "catalog.env.settings" -}}
 - name: CATALOG_LOGBACK_LEVEL
-  value: "{{ .Values.api.logLevel }}"
+  value: {{ .Values.api.logLevel | quote }}
 {{- end }}
 
 {{- define "catalog.env.postgres" -}}
 - name: CATALOG_DB_SCHEMA
   value: "{{ include "catalog.manifestCode" . }},{{ .Values.importer.postgres.schemaExtensions }}"
 - name: CATALOG_DB_QUERY_TIMEOUT
-  value: "{{ .Values.api.postgres.queryTimeout }}"
+  value: {{ .Values.api.postgres.queryTimeout | quote }}
 - name: CATALOG_DB_BRANCH_POOL_SIZE
-  value: "{{ .Values.api.postgres.poolSize.api }}"
+  value: {{ .Values.api.postgres.poolSize.api | quote }}
 - name: CATALOG_DB_REGION_POOL_SIZE
-  value: "{{ .Values.api.postgres.poolSize.preloaders.region }}"
+  value: {{ .Values.api.postgres.poolSize.preloaders.region | quote }}
 - name: CATALOG_DB_RUBRIC_POOL_SIZE
-  value: "{{ .Values.api.postgres.poolSize.preloaders.rubric }}"
+  value: {{ .Values.api.postgres.poolSize.preloaders.rubric | quote }}
 - name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_POOL_SIZE
-  value: "{{ .Values.api.postgres.poolSize.preloaders.additionalAttribute }}"
+  value: {{ .Values.api.postgres.poolSize.preloaders.additionalAttribute | quote }}
 - name: CATALOG_DB_BRANCH_URL
   value: "jdbc:postgresql://{{ required "A valid .Values.api.postgres.host entry required" .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ required "A valid .Values.api.postgres.name entry required" .Values.api.postgres.name }}"
 - name: CATALOG_DB_BRANCH_LOGIN
@@ -101,7 +101,7 @@ onprem
 - name: CATALOG_DB_REGION_URL
   value: "jdbc:postgresql://{{ .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ .Values.api.postgres.name }}"
 - name: CATALOG_DB_REGION_LOGIN
-  value: "{{ .Values.api.postgres.username }}"
+  value: {{ .Values.api.postgres.username | quote }}
 - name: CATALOG_DB_REGION_PASS
   valueFrom:
     secretKeyRef:
@@ -111,7 +111,7 @@ onprem
 - name: CATALOG_DB_RUBRIC_URL
   value: "jdbc:postgresql://{{ .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ .Values.api.postgres.name }}"
 - name: CATALOG_DB_RUBRIC_LOGIN
-  value: "{{ .Values.api.postgres.username }}"
+  value: {{ .Values.api.postgres.username | quote }}
 - name: CATALOG_DB_RUBRIC_PASS
   valueFrom:
     secretKeyRef:
@@ -121,16 +121,16 @@ onprem
 - name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_URL
   value: "jdbc:postgresql://{{ .Values.api.postgres.host }}:{{ .Values.api.postgres.port }}/{{ .Values.api.postgres.name }}"
 - name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_LOGIN
-  value: "{{ .Values.api.postgres.username }}"
+  value: {{ .Values.api.postgres.username | quote }}
 - name: CATALOG_DB_ADDITIONAL_ATTRIBUTE_PASS
   valueFrom:
     secretKeyRef:
       name: {{ include "catalog.secret.deploys.name" . }}
       key: apiDbPassword
 - name: CATALOG_DB_SSL_ENABLED
-  value: "{{ .Values.api.postgres.tls.enabled }}"
+  value: {{ .Values.api.postgres.tls.enabled | quote }}
 - name: CATALOG_DB_SSL_MODE
-  value: "{{ .Values.api.postgres.tls.mode }}"
+  value: {{ .Values.api.postgres.tls.mode | quote }}
 - name: CATALOG_DB_SSL_CLIENTCERT_PATH
   value: "/etc/2gis/secret/psql/client.crt"
 - name: CATALOG_DB_SSL_CLIENTKEY_PATH
@@ -141,20 +141,20 @@ onprem
 
 {{- define "catalog.env.preloaders" -}}
 - name: CATALOG_PRELOADERS_SETTINGS_AWAIT_TIMEOUT
-  value: "{{ .Values.api.preloaders.awaitTimeout }}"
+  value: {{ .Values.api.preloaders.awaitTimeout | quote }}
 {{- end }}
 
 {{- define "catalog.env.search" -}}
 - name: CATALOG_SAPPHIRE_URL
   value: "{{ required "A valid .Values.search.url entry required" .Values.search.url }}"
 - name: CATALOG_SAPPHIRE_CONNECTION_TIMEOUT
-  value: "{{ .Values.search.connectTimeout }}"
+  value: {{ .Values.search.connectTimeout | quote }}
 - name: CATALOG_SAPPHIRE_MIN_CONNECTIONS
-  value: "{{ .Values.search.minConnections }}"
+  value: {{ .Values.search.minConnections | quote }}
 - name: CATALOG_SAPPHIRE_MAX_CONNECTIONS
-  value: "{{ .Values.search.maxConnections }}"
+  value: {{ .Values.search.maxConnections | quote }}
 - name: CATALOG_SAPPHIRE_MAX_OPEN_REQUESTS
-  value: "{{ .Values.search.maxOpenRequests }}"
+  value: {{ .Values.search.maxOpenRequests | quote }}
 {{- end }}
 
 {{- define "catalog.env.keys" -}}
@@ -166,39 +166,39 @@ onprem
       name: {{ include "catalog.secret.deploys.name" . }}
       key: keysServiceToken
 - name: CATALOG_KEYS_CONNECTING_TIMEOUT
-  value: "{{ .Values.keys.client.connectingTimeout }}"
+  value: {{ .Values.keys.client.connectingTimeout | quote }}
 - name: CATALOG_KEYS_IDLE_TIMEOUT
-  value: "{{ .Values.keys.client.idleTimeout }}"
+  value: {{ .Values.keys.client.idleTimeout | quote }}
 - name: CATALOG_KEYS_MAX_RETRIES
-  value: "{{ .Values.keys.client.maxRetries }}"
+  value: {{ .Values.keys.client.maxRetries | quote }}
 - name: CATALOG_KEYS_MAX_CONNECTION_LIFETIME
-  value: "{{ .Values.keys.client.maxConnectionLifetime }}"
+  value: {{ .Values.keys.client.maxConnectionLifetime | quote }}
 - name: CATALOG_KEYS_BASE_CONNECTION_BACKOFF
-  value: "{{ .Values.keys.client.baseConnectionBackoff }}"
+  value: {{ .Values.keys.client.baseConnectionBackoff | quote }}
 - name: CATALOG_KEYS_MAX_CONNECTION_BACKOFF
-  value: "{{ .Values.keys.client.maxConnectionBackoff }}"
+  value: {{ .Values.keys.client.maxConnectionBackoff | quote }}
 - name: CATALOG_KEYS_RESPONSE_TIMEOUT
-  value: "{{ .Values.keys.client.responseTimeout }}"
+  value: {{ .Values.keys.client.responseTimeout | quote }}
 {{- end }}
 
 {{- define "catalog.env.license" -}}
 - name: CATALOG_PASPORTOOL_ENDPOINT
   value: "{{ required "A valid .Values.license.url entry required" .Values.license.url }}"
 - name: CATALOG_PASPORTOOL_REQUEST_TIMEOUT
-  value: "{{ .Values.license.requestTimeout }}"
+  value: {{ .Values.license.requestTimeout | quote }}
 {{- end }}
 
 {{- define "catalog.env.importer" -}}
 - name: IMPORTER_DB_CATALOG_SCHEMA
-  value: "{{ include "catalog.manifestCode" . }}"
+  value: {{ include "catalog.manifestCode" . | quote }}
 - name: IMPORTER_DB_CATALOG_SCHEMA_SWITCH_ENABLED
-  value: "{{ .Values.importer.postgres.schemaSwitchEnabled }}"
+  value: {{ .Values.importer.postgres.schemaSwitchEnabled | quote }}
 - name: IMPORTER_DB_CATALOG_SCHEMA_EXTENSIONS
-  value: "{{ .Values.importer.postgres.schemaExtensions }}"
+  value: {{ .Values.importer.postgres.schemaExtensions | quote }}
 - name: IMPORTER_DB_CATALOG_HOST
   value: "{{ required "A valid .Values.importer.postgres.host entry required" .Values.importer.postgres.host }}"
 - name: IMPORTER_DB_CATALOG_PORT
-  value: "{{ .Values.importer.postgres.port }}"
+  value: {{ .Values.importer.postgres.port | quote }}
 - name: IMPORTER_DB_CATALOG_NAME
   value: "{{ required "A valid .Values.importer.postgres.name entry required" .Values.importer.postgres.name }}"
 - name: IMPORTER_DB_CATALOG_USERNAME
@@ -210,7 +210,7 @@ onprem
       key: importerDbPassword
 {{- if .Values.importer.postgres.tls.enabled }}
 - name: IMPORTER_DB_CATALOG_SSL_MODE
-  value: "{{ .Values.importer.postgres.tls.mode }}"
+  value: {{ .Values.importer.postgres.tls.mode | quote }}
 - name: IMPORTER_DB_CATALOG_SSL_CLIENTCERT_PATH
   value: "/etc/2gis/secret/psql/client.crt"
 - name: IMPORTER_DB_CATALOG_SSL_CLIENTKEY_PATH
@@ -219,15 +219,15 @@ onprem
   value: "/etc/2gis/secret/psql/ca.crt"
 {{- end }}
 - name: IMPORTER_S3_ENDPOINT
-  value: "{{ .Values.dgctlStorage.host }}"
+  value: {{ .Values.dgctlStorage.host | quote }}
 - name: IMPORTER_S3_REGION
-  value: "{{ .Values.dgctlStorage.region }}"
+  value: {{ .Values.dgctlStorage.region | quote }}
 - name: IMPORTER_S3_SECURE
-  value: "{{ .Values.dgctlStorage.secure }}"
+  value: {{ .Values.dgctlStorage.secure | quote }}
 - name: IMPORTER_S3_VERIFY_SSL
-  value: "{{ .Values.dgctlStorage.verifySsl }}"
+  value: {{ .Values.dgctlStorage.verifySsl | quote }}
 - name: IMPORTER_S3_BUCKET
-  value: "{{ .Values.dgctlStorage.bucket }}"
+  value: {{ .Values.dgctlStorage.bucket | quote }}
 - name: IMPORTER_S3_ACCESS_KEY
   valueFrom:
     secretKeyRef:
@@ -241,17 +241,17 @@ onprem
 - name: IMPORTER_MANIFEST_PATH
   value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
 - name: IMPORTER_WORKER_POOL_SIZE
-  value: "{{ .Values.importer.workerNum }}"
+  value: {{ .Values.importer.workerNum | quote }}
 - name: IMPORTER_NUMBER_SCHEMA_BACKUPS
-  value: "{{ .Values.importer.cleaner.versionLimit }}"
+  value: {{ .Values.importer.cleaner.versionLimit | quote }}
 - name: IMPORTER_S3_RETRY_MAX_ATTEMPTS
-  value: "{{ .Values.importer.retry.download.maxAttempts }}"
+  value: {{ .Values.importer.retry.download.maxAttempts | quote }}
 - name: IMPORTER_S3_RETRY_DELAY
-  value: "{{ .Values.importer.retry.download.delay }}"
+  value: {{ .Values.importer.retry.download.delay | quote }}
 - name: IMPORTER_PSQL_RETRY_MAX_ATTEMPTS
-  value: "{{ .Values.importer.retry.execute.maxAttempts }}"
+  value: {{ .Values.importer.retry.execute.maxAttempts | quote }}
 - name: IMPORTER_PSQL_RETRY_DELAY
-  value: "{{ .Values.importer.retry.execute.delay }}"
+  value: {{ .Values.importer.retry.execute.delay | quote }}
 {{- end }}
 
 {{/*

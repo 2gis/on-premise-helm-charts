@@ -60,14 +60,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "twins.env.loglevel" -}}
 - name: TWINS_LOG_LEVEL
-  value: "{{ .Values.api.logLevel }}"
+  value: {{ .Values.api.logLevel | quote }}
 {{- end }}
 
 {{- define "twins.env.db" -}}
 - name: TWINS_DB_RO_HOST
   value: "{{ required "A valid .Values.postgres.ro.host required" .Values.postgres.ro.host }}"
 - name: TWINS_DB_RO_PORT
-  value: "{{ .Values.postgres.ro.port }}"
+  value: {{ .Values.postgres.ro.port | quote }}
 - name: TWINS_DB_RO_NAME
   value: "{{ required "A valid .Values.postgres.ro.name required" .Values.postgres.ro.name }}"
 {{- if .Values.importer.postgres.schemaSwitchEnabled }}
@@ -75,29 +75,29 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ include "twins.manifestCode" . }}"
 {{- else }}
 - name: TWINS_DB_RO_SCHEMA
-  value: "{{ .Values.postgres.ro.schema }}"
+  value: {{ .Values.postgres.ro.schema | quote }}
 {{- end }}
 - name: TWINS_DB_RO_CONNECTION_TIMEOUT
-  value: "{{ .Values.postgres.ro.timeout }}"
+  value: {{ .Values.postgres.ro.timeout | quote }}
 - name: TWINS_DB_RO_CONNECTION_RETRY
-  value: "{{ .Values.postgres.ro.retry }}"
+  value: {{ .Values.postgres.ro.retry | quote }}
 - name: TWINS_DB_RO_USERNAME
   value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username }}"
 - name: TWINS_DB_RW_HOST
   value: "{{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host }}"
 - name: TWINS_DB_RW_PORT
-  value: "{{ .Values.postgres.rw.port }}"
+  value: {{ .Values.postgres.rw.port | quote }}
 {{- if .Values.importer.postgres.schemaSwitchEnabled }}
 - name: TWINS_DB_RW_SCHEMA
   value: "{{ include "twins.manifestCode" . }}"
 {{- else }}
 - name: TWINS_DB_RW_SCHEMA
-  value: "{{ .Values.postgres.rw.schema }}"
+  value: {{ .Values.postgres.rw.schema | quote }}
 {{- end }}
 - name: TWINS_DB_RW_CONNECTION_TIMEOUT
-  value: "{{ .Values.postgres.rw.timeout }}"
+  value: {{ .Values.postgres.rw.timeout | quote }}
 - name: TWINS_DB_RW_CONNECTION_RETRY
-  value: "{{ .Values.postgres.rw.retry }}"
+  value: {{ .Values.postgres.rw.retry | quote }}
 - name: TWINS_DB_RW_NAME
   value: "{{ required "A valid .Values.postgres.rw.name required" .Values.postgres.rw.name }}"
 - name: TWINS_DB_RW_USERNAME
@@ -144,23 +144,23 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       name: {{ include "twins.secret.deploys.name" . }}
       key: keysToken
 - name: TWINS_AUTH_CLIENT_TIMEOUT
-  value: "{{ .Values.api.keys.requestTimeout }}"
+  value: {{ .Values.api.keys.requestTimeout | quote }}
 {{- end }}
 
 {{- define "twins.env.importer" -}}
 {{ include "twins.env.db.jobs" . }}
 - name: TWINS_IMPORTER_DB_SCHEMA_SWITCH_ENABLED
-  value: "{{ .Values.importer.postgres.schemaSwitchEnabled }}"
+  value: {{ .Values.importer.postgres.schemaSwitchEnabled | quote }}
 - name: TWINS_S3_ENDPOINT
-  value: "{{ .Values.dgctlStorage.host }}"
+  value: {{ .Values.dgctlStorage.host | quote }}
 - name: TWINS_S3_REGION
-  value: "{{ .Values.dgctlStorage.region }}"
+  value: {{ .Values.dgctlStorage.region | quote }}
 - name: TWINS_S3_SECURE
-  value: "{{ .Values.dgctlStorage.secure }}"
+  value: {{ .Values.dgctlStorage.secure | quote }}
 - name: TWINS_S3_VERIFY_SSL
-  value: "{{ .Values.dgctlStorage.verifySsl }}"
+  value: {{ .Values.dgctlStorage.verifySsl | quote }}
 - name: TWINS_S3_BUCKET
-  value: "{{ .Values.dgctlStorage.bucket }}"
+  value: {{ .Values.dgctlStorage.bucket | quote }}
 - name: TWINS_S3_ACCESS_KEY
   valueFrom:
     secretKeyRef:
@@ -174,15 +174,15 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: TWINS_IMPORTER_MANIFEST_PATH
   value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
 - name: TWINS_IMPORTER_NUMBER_SCHEMA_BACKUPS
-  value: "{{ .Values.importer.cleaner.versionLimit }}"
+  value: {{ .Values.importer.cleaner.versionLimit | quote }}
 - name: TWINS_S3_RETRY_MAX_ATTEMPTS
-  value: "{{ .Values.importer.retry.download.maxAttempts }}"
+  value: {{ .Values.importer.retry.download.maxAttempts | quote }}
 - name: TWINS_S3_RETRY_DELAY
-  value: "{{ .Values.importer.retry.download.delay }}"
+  value: {{ .Values.importer.retry.download.delay | quote }}
 - name: TWINS_IMPORTER_PSQL_RETRY_MAX_ATTEMPTS
-  value: "{{ .Values.importer.retry.execute.maxAttempts }}"
+  value: {{ .Values.importer.retry.execute.maxAttempts | quote }}
 - name: TWINS_IMPORTER_PSQL_RETRY_DELAY
-  value: "{{ .Values.importer.retry.execute.delay }}"
+  value: {{ .Values.importer.retry.execute.delay | quote }}
 {{- end }}
 
 {{/*

@@ -246,9 +246,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: DGCTL_S3_VERIFY_SSL
   value: "{{ required "A valid Values.dgctlStorage.verifySsl entry required" .Values.dgctlStorage.verifySsl }}"
 - name: DGCTL_S3_BUCKET
-  value: "{{ .Values.dgctlStorage.bucket }}"
+  value: {{ .Values.dgctlStorage.bucket | quote }}
 - name: DGCTL_S3_REGION_NAME
-  value: "{{ .Values.dgctlStorage.region }}"
+  value: {{ .Values.dgctlStorage.region | quote }}
 - name: DGCTL_S3_ACCESS_KEY
   valueFrom:
     secretKeyRef:

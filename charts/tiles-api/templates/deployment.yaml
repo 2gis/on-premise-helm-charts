@@ -207,7 +207,7 @@ spec:
             - name: CONFIG_FILE_PATH
               value: "/config/api.yaml"
             - name: API_PORT
-              value: "{{ .Values.api.containerPort }}"
+              value: {{ .Values.api.containerPort | quote }}
             - name: CASSANDRA_USER
               valueFrom:
                 secretKeyRef:

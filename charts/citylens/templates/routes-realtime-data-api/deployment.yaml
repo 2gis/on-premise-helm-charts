@@ -99,10 +99,10 @@ spec:
                 command: [ "/bin/sh", "-c", "sleep 5" ]
           env:
             - name: Common__TempPath
-              value: "{{ .Values.routes.realtimeDataApi.tempPath }}"
+              value: {{ .Values.routes.realtimeDataApi.tempPath | quote }}
 
             - name: Common__Logging__LogLevel
-              value: "{{ .Values.routes.realtimeDataApi.logging.level }}"
+              value: {{ .Values.routes.realtimeDataApi.logging.level | quote }}
 
             - name: PgSettings__Host
               value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
@@ -119,24 +119,24 @@ spec:
             - name: PgSettings__Api__Database
               value: "{{ required "A valid .Values.routes.realtimeDataApi.postgres.database entry required" $.Values.routes.realtimeDataApi.postgres.database }}"
             - name: PgSettings__Api__Timeout
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.timeout }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.timeout | quote }}
             - name: PgSettings__Api__CommandTimeout
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.commandTimeout }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.commandTimeout | quote }}
             - name: PgSettings__Api__MaxPoolSize
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.maxPoolSize }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.maxPoolSize | quote }}
             - name: PgSettings__Api__Pooling
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.pooling }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.pooling | quote }}
 
             - name: PgSettings__Hangfire__Database
               value: "{{ required "A valid .Values.routes.realtimeData.postgres.database entry required" $.Values.routes.realtimeDataApi.postgres.database }}"
             - name: PgSettings__Hangfire__Timeout
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.timeout }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.timeout | quote }}
             - name: PgSettings__Hangfire__CommandTimeout
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.commandTimeout }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.commandTimeout | quote }}
             - name: PgSettings__Hangfire__MaxPoolSize
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.maxPoolSize }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.maxPoolSize | quote }}
             - name: PgSettings__Hangfire__Pooling
-              value: "{{ $.Values.routes.realtimeDataApi.postgres.pooling }}"
+              value: {{ $.Values.routes.realtimeDataApi.postgres.pooling | quote }}
 
             - name: RealTimeDataSettings__DaysToLeaveData
-              value: "{{ $.Values.routes.realtimeDataApi.daysToLeaveData }}"
+              value: {{ $.Values.routes.realtimeDataApi.daysToLeaveData | quote }}
