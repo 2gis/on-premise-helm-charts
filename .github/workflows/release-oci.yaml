@@ -95,21 +95,15 @@ jobs:
             helm push $chart oci://ghcr.io/${{ github.repository_owner }}/charts
           done
 
-      # ШАГ 8. Сборка и пуш Docker-образа Data Updater в формате OCI
-      - name: Build and push Docker data-updater image
-        uses: docker/build-push-action@v5
+      # ШАГ 8. Триггерим сборку образа data updater
+      - name: Trigger Docker Build Workflow
+        uses: peter-evans/repository-dispatch@v3
         continue-on-error: true
         with:
-          context: .
-          file: dockerfiles/data-updater/Dockerfile
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/images/data-updater:${{ env.TAG_VERSION }}
-          build-args: |
-            ON_PREMISE_RELEASE=${{ env.TAG_VERSION }}
-          labels: |
-            org.opencontainers.image.title=data-updater
-            org.opencontainers.image.description=Data updater
-            org.opencontainers.image.source=https://github.com/${{ github.repository }}
-            org.opencontainers.image.version=${{ env.TAG_VERSION }}
-            org.opencontainers.image.revision=${{ github.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: trigger-docker-build-data-updater
+          client-payload: |
+            {
+              "tag": "${{ env.TAG_VERSION }}",
+              "sha": "${{ github.sha }}"
+            }
