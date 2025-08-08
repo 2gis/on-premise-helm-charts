@@ -94,16 +94,3 @@ jobs:
             echo "Pushing chart: $chart -> ghcr.io/${{ github.repository_owner }}/charts"
             helm push $chart oci://ghcr.io/${{ github.repository_owner }}/charts
           done
-
-      # ШАГ 8. Триггерим сборку образа data updater
-      - name: Trigger Docker Build Workflow
-        uses: peter-evans/repository-dispatch@v3
-        continue-on-error: true
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: trigger-docker-build-data-updater
-          client-payload: |
-            {
-              "tag": "${{ env.TAG_VERSION }}",
-              "sha": "${{ github.sha }}"
-            }

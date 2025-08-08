@@ -1,41 +1,71 @@
 name: Build and Push Data Updater Docker Image
 
+# 🔁 Условия запуска workflow:
 on:
-  repository_dispatch:
-    types: [trigger-docker-build-data-updater]
+  # 1. Автоматически запускается после успешного завершения workflow "Publish Helm Charts to ghcr.io"
+  workflow_run:
+    workflows: ["Publish Helm Charts to ghcr.io"]
+    types:
+      - completed
+
+  # 2. Может быть запущен вручную пользователем через интерфейс GitHub Actions
   workflow_dispatch:
     inputs:
       tag:
-        description: "Tag version to build (e.g. 1.2.3)"
+        description: "Tag of the release to build Docker image for (e.g. 1.2.3)"
         required: true
         default: "1.0.0"
 
 jobs:
-  build-and-push-docker:
+  build-docker:
+    # ✅ Выполняется, если:
+    # - Запущен вручную (workflow_dispatch)
+    # - Либо предшествующий workflow завершился успешно (workflow_run.conclusion == 'success')
+    if: >-
+      ${{
+        github.event_name == 'workflow_dispatch' ||
+        github.event.workflow_run.conclusion == 'success'
+      }}
+
     runs-on: ubuntu-latest
+
     steps:
+      # 🔄 Шаг 1: Клонируем репозиторий на нужную версию исходников (по введённому тегу или по ветке/тегу из предыдущего workflow)
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: >-
+            ${{ github.event_name == 'workflow_dispatch'
+              && format('refs/tags/{0}', inputs.tag)
+              || github.event.workflow_run.head_branch }}
 
-      - name: Set TAG_VERSION and GIT_SHA from event
+      # ✅ Шаг 2: Устанавливаем переменные среды TAG_VERSION и GIT_SHA
+      # - Для ручного запуска: используем inputs.tag и текущий SHA
+      # - Для workflow_run: используем переданный тег и SHA коммита из события
+      - name: Set ENV variables from dispatch or workflow_run
         run: |
-          # Определяем источник запуска: repository_dispatch или workflow_dispatch
-          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
-            echo "TAG_VERSION=${{ github.event.client_payload.tag }}" >> $GITHUB_ENV
-            echo "GIT_SHA=${{ github.event.client_payload.sha }}" >> $GITHUB_ENV
-          else
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "Manual trigger with tag: ${{ inputs.tag }}"
             echo "TAG_VERSION=${{ inputs.tag }}" >> $GITHUB_ENV
             echo "GIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
+          else
+            TAG="${{ github.event.workflow_run.head_branch }}"
+            echo "Triggered by workflow_run with tag: $TAG"
+            echo "TAG_VERSION=${TAG}" >> $GITHUB_ENV
+            echo "GIT_SHA=${{ github.event.workflow_run.head_sha }}" >> $GITHUB_ENV
           fi
+      # ШАГ 3: Входим в GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+      # 🐳 Шаг 4: Сборка и публикация Docker-образа в GitHub Container Registry (ghcr.io)
       - name: Build and push Docker data-updater image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: dockerfiles/data-updater/Dockerfile
           push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/images/data-updater:${{ env.TAG_VERSION }}
+          tags: ghcr.io/${{ github.repository_owner }}/images/data-updater:${{ env.TAG_VERSION }}
           build-args: |
             ON_PREMISE_RELEASE=${{ env.TAG_VERSION }}
           labels: |
