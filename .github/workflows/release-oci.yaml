@@ -2,6 +2,7 @@ name: Publish Helm Charts to ghcr.io
 run-name: "Publish Helm Charts for Tag ${{ inputs.tag || github.event_name }} (Run #${{ github.run_number }})"
 
 # После удачного завершения этого workflow автоматически запускается Build and Push Data Updater Docker Image
+# Запуск происходит на основании имени этого workflow, поэтому менять его нежелательно
 
 on:
   push:
