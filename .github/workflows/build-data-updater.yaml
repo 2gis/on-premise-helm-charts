@@ -61,7 +61,7 @@ jobs:
             ON_PREMISE_RELEASE=${{ env.TAG_VERSION }}
           labels: |
             org.opencontainers.image.title=data-updater
-            org.opencontainers.image.description=Data updater
+            org.opencontainers.image.description="Data updater"
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.version=${{ env.TAG_VERSION }}
             org.opencontainers.image.revision=${{ env.GIT_SHA }}
