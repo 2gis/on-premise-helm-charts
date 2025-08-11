@@ -30,25 +30,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Шаг 1: Клонируем репозиторий на нужную версию исходников (по введённому тегу или по ветке/тегу из предыдущего workflow)
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: >-
-            ${{ github.event_name == 'workflow_dispatch'
-              && format('refs/tags/{0}', inputs.tag)
-              || github.event.workflow_run.head_branch }}
-
-      # Шаг 2: Получаем Dockerfile из ветки develop
-      - name: Checkout Dockerfile from develop branch
-        uses: actions/checkout@v4
-        with:
-          ref: develop
-          sparse-checkout: |
-            dockerfiles/data-updater/Dockerfile
-          path: dockerfile-develop
-
-      # Шаг 3: Устанавливаем переменные среды TAG_VERSION и GIT_SHA
+      # Шаг 1: Устанавливаем переменные среды TAG_VERSION и GIT_SHA
       # - Для ручного запуска: используем inputs.tag и текущий SHA
       # - Для workflow_run: используем переданный тег и SHA коммита из события
       - name: Set ENV variables from dispatch or workflow_run
@@ -63,16 +45,16 @@ jobs:
             echo "TAG_VERSION=${TAG}" >> $GITHUB_ENV
             echo "GIT_SHA=${{ github.event.workflow_run.head_sha }}" >> $GITHUB_ENV
           fi
-      # ШАГ 4: Входим в GitHub Container Registry
+      # ШАГ 2: Входим в GitHub Container Registry
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # Шаг 5: Сборка и публикация Docker-образа в GitHub Container Registry (ghcr.io)
+      # Шаг 3: Сборка и публикация Docker-образа в GitHub Container Registry (ghcr.io)
       - name: Build and push Docker data-updater image
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: dockerfile-develop/dockerfiles/data-updater/Dockerfile
+          file: dockerfiles/data-updater/Dockerfile
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/images/data-updater:${{ env.TAG_VERSION }}
           build-args: |
