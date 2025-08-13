@@ -1,44 +1,18 @@
-apiVersion: apps/v1
-kind: Deployment
+{{- define "router.deployment" }}
 metadata:
-  name: {{ include "router.fullname" . }}
   labels:
-    {{- include "router.labels" . | nindent 4 }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
 spec:
-  {{- if not .Values.hpa.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
-  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
-  {{- if .Values.strategy }}
-  strategy:
-    {{- toYaml .Values.strategy | nindent 4 }}
-  {{- end }}
-  selector:
-    matchLabels:
-      {{- include "router.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
-      {{- with .Values.podAnnotations }}
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      labels:
-        {{- include "router.selectorLabels" . | nindent 8 }}
+        checksum/config: {{ (include (print .Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/secret: {{ (include (print .Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "router.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
-      - name: {{ include "router.fullname" . }}-configmap
+      - name: {{ include "generic-chart.fullname" . }}-configmap
         configMap:
-          name: {{ include "router.fullname" . }}-configmap
+          name: {{ include "generic-chart.fullname" . }}-configmap
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -46,10 +20,10 @@ spec:
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
-          - name: {{ include "router.fullname" . }}-configmap
+          - name: {{ include "generic-chart.fullname" . }}-configmap
             mountPath: /src/etc/router.conf
             subPath: router.conf
-          - name: {{ include "router.fullname" . }}-configmap
+          - name: {{ include "generic-chart.fullname" . }}-configmap
             mountPath: /src/etc/rules.conf
             subPath: rules.conf
           ports:
@@ -75,12 +49,13 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
+            {{- $ctx := . }}
             {{- range $type, $token := (.Values.keys).apis }}
             {{- if $token }}
             - name: {{ $type | replace "-" "_" | upper | quote }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "router.fullname" $ | quote }}
+                  name: {{ include "generic-chart.fullname" $ctx | quote }}
                   key: {{ $type | quote }}
             {{- end }}{{- /* if $token */}}
             {{- end }}{{- /* range $type, $token */}}
@@ -88,23 +63,25 @@ spec:
             - name: COMMON_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "router.fullname" . | quote }}
+                  name: {{ include "generic-chart.fullname" . | quote }}
                   key: common_token
             {{- end }}
             {{- if (.Values.requestsSignCheck).salt }}
             - name: ONLINE_HASH_SALT
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "router.fullname" . | quote }}
+                  name: {{ include "generic-chart.fullname" . | quote }}
                   key: online_hash_salt
             {{- end }}
             {{- if (.Values.requestsSignCheck).hashSalt }}
             - name: HASH_SALT
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "router.fullname" . | quote }}
+                  name: {{ include "generic-chart.fullname" . | quote }}
                   key: hash_salt
             {{- end }}
+            - name: TZ
+              value: {{ .Values.timezone | quote }}
           lifecycle:
             # wait for the endpoint removal process
             preStop:
@@ -112,14 +89,5 @@ spec:
                 command:
                   - sleep
                   - {{ .Values.preStopDelay | quote }}
-      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      affinity:
-        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+{{- end }}{{- /* define "router.deployment" */}}
+{{- template "generic-chart.merge" (list . "router.deployment" "generic-chart.deployment.tpl") }}

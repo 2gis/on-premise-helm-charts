@@ -29,7 +29,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name               | Description | Value                    |
 | ------------------ | ----------- | ------------------------ |
 | `image.repository` | Repository  | `2gis-on-premise/pro-ui` |
-| `image.tag`        | Tag         | `4.9.0`                  |
+| `image.tag`        | Tag         | `4.27.0`                 |
 
 ### Common deployment settings
 
@@ -122,12 +122,13 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### Zenith2 config settings
 
-| Name                   | Description                                                                                                                  | Value |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `ui.zenith.protocol`   | Optional. Possible values http or https.                                                                                     | `""`  |
-| `ui.zenith.host`       | Optional FQDN (domain or IP) for the Zenith service without protocol.                                                        | `""`  |
-| `ui.zenith.tileSet`    | Optional. Name of the tileSet. Please use the same name for the tileSet as in the pro-api (see userDataTileSet).             | `""`  |
-| `ui.zenith.subdomains` | Optional. variable holds a list of additional backup subdomains for the Zenith server. Please use «,» (commas) as separator. | `""`  |
+| Name                         | Description                                                                                                                         | Value   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `ui.zenith.protocol`         | Optional. Possible values http or https.                                                                                            | `""`    |
+| `ui.zenith.host`             | Optional FQDN (domain or IP) for the Zenith service without protocol.                                                               | `""`    |
+| `ui.zenith.tileSet`          | Optional. Name of the tileSet. Please use the same name for the tileSet as in the pro-api (see userDataTileSet).                    | `""`    |
+| `ui.zenith.subdomains`       | Optional. variable holds a list of additional backup subdomains for the Zenith server. Please use «,» (commas) as separator.        | `""`    |
+| `ui.zenith.hasAdmDivsLayers` | Optional. variable signalizes that there are adm_div layers in the Zenith server. Required for "select territories on map" feature. | `false` |
 
 ### Service settings
 
@@ -184,19 +185,20 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### Import job settings
 
-| Name                                       | Description                                                                                                                                            | Value                          |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
-| `stylesImporter.name`                      | Styles Import job name.                                                                                                                                | `styles-importer`              |
-| `stylesImporter.image.repository`          | Docker Repository Image.                                                                                                                               | `2gis-on-premise/pro-importer` |
-| `stylesImporter.image.tag`                 | Docker image tag.                                                                                                                                      | `2.8.2`                        |
-| `stylesImporter.backoffLimit`              | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed. | `2`                            |
-| `stylesImporter.nodeSelector`              | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                    | `{}`                           |
-| `stylesImporter.maxParallelJobs`           | How many import jobs can be run simultaneously                                                                                                         | `1`                            |
-| `stylesImporter.startOnDeploy`             | Indicates that styles import should start when service installed or updated                                                                            | `false`                        |
-| `stylesImporter.resources.requests.cpu`    | A CPU request.                                                                                                                                         | `700m`                         |
-| `stylesImporter.resources.requests.memory` | A memory request.                                                                                                                                      | `768M`                         |
-| `stylesImporter.resources.limits.cpu`      | A CPU limit.                                                                                                                                           | `1000m`                        |
-| `stylesImporter.resources.limits.memory`   | A memory limit.                                                                                                                                        | `8Gi`                          |
+| Name                                        | Description                                                                                                                                              | Value                          |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `stylesImporter.name`                       | Styles Import job name.                                                                                                                                  | `styles-importer`              |
+| `stylesImporter.image.repository`           | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
+| `stylesImporter.image.tag`                  | Docker image tag.                                                                                                                                        | `2.26.0`                       |
+| `stylesImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
+| `stylesImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
+| `stylesImporter.nodeSelector`               | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                      | `{}`                           |
+| `stylesImporter.maxParallelJobs`            | How many import jobs can be run simultaneously                                                                                                           | `1`                            |
+| `stylesImporter.startOnDeploy`              | Indicates that styles import should start when service installed or updated                                                                              | `false`                        |
+| `stylesImporter.resources.requests.cpu`     | A CPU request.                                                                                                                                           | `700m`                         |
+| `stylesImporter.resources.requests.memory`  | A memory request.                                                                                                                                        | `768M`                         |
+| `stylesImporter.resources.limits.cpu`       | A CPU limit.                                                                                                                                             | `1000m`                        |
+| `stylesImporter.resources.limits.memory`    | A memory limit.                                                                                                                                          | `8Gi`                          |
 
 ## Maintainers
 

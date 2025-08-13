@@ -364,3 +364,12 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- define "catalog.configmap.deploys.name" -}}
 {{ include "catalog.name" . }}-configmap-deploys
 {{- end -}}
+
+{{/*
+Validate that both persistentVolume and emptyDir are not enabled at the same time
+*/}}
+{{- define "catalog.importer.validateStorage" -}}
+  {{- if and .Values.importer.persistentVolume.enabled .Values.importer.emptyDir.enabled -}}
+    {{- fail "Both persistentVolume and emptyDir cannot be enabled at the same time for the importer" -}}
+  {{- end -}}
+{{- end -}}

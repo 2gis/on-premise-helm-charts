@@ -9,12 +9,12 @@ metadata:
     {{- toYaml .Values.annotations | nindent 4 }}
   {{- end }}
   labels:
+    {{- include "castle.labels" . | nindent 4 }}
     {{- if (.Values.dgctlStorage).manifest }}
     {{- with (include "castle.manifestCode" .) }}
     manifest: {{ . | quote }}
     {{- end }}
     {{- end }}
-    {{- include "castle.labels" . | nindent 4 }}
   {{- if .Values.labels }}
     {{- toYaml .Values.labels | nindent 4 }}
   {{- end }}
@@ -33,6 +33,9 @@ spec:
         checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
         {{- if .Values.customCAs.bundle }}
         checksum/custom-ca: {{ (include (print $.Template.BasePath "/configmap-ca.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- end }}
+        {{- if .Values.extraEnvVarsSecret }}
+        checksum/secret-extra-env: {{ (include (print $.Template.BasePath "/secret-extra-env.yaml") . | fromYaml).data | toYaml | sha256sum }}
         {{- end }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
@@ -84,8 +87,15 @@ spec:
                   requests:
                     storage: {{ .Values.persistentVolume.size }}
         {{- end }}
-      enableServiceLinks: {{ .Values.enableServiceLinks }}
+        {{- if .Values.extraVolumes }}
+        {{- include "tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- if .Values.initContainers }}
+      initContainers:
+        {{- include "tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: castle-nginx
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}
@@ -106,6 +116,9 @@ spec:
           {{- else }}
           - name: {{ include "castle.fullname" . }}-data
             mountPath: {{ .Values.castle.castleDataPath }}
+          {{- end }}
+          {{- if .Values.extraVolumeMounts }}
+          {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 10 }}
           {{- end }}
           ports:
             - name: http
@@ -133,6 +146,15 @@ spec:
           {{- if .Values.customCAs.bundle }}
           - name: SSL_CERT_FILE
             value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+          {{- end }}
+          - name: LOG_FORMAT
+            value: {{ .Values.castle.logFormat | quote }}
+          - name: LOG_LEVEL
+            value: {{ .Values.castle.logLevel | quote }}
+          {{- if .Values.extraEnvVarsSecret }}
+          envFrom:
+          - secretRef:
+              name: {{ include "castle.fullname" . }}-secret-env
           {{- end }}
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
@@ -179,6 +201,9 @@ spec:
             mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
             subPath: custom-ca.crt
           {{- end }}
+          {{- if .Values.extraVolumeMounts }}
+          {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 10 }}
+          {{- end }}
         {{- if .Values.rtr.enabled }}
         - name: castle-rtr
           image: {{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ $.Values.castle.image.repository }}:{{ $.Values.castle.image.tag }}
@@ -212,6 +237,9 @@ spec:
             mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
             subPath: custom-ca.crt
           {{- end }}
+          {{- if .Values.extraVolumeMounts }}
+          {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 10 }}
+          {{- end }}
           env:
             {{- range $kafkaRole, $overridesProperty := (dict
                   "CONSUMER" "consumerOverrides"
@@ -219,7 +247,7 @@ spec:
             {{- $overrides := dict }}
             {{- /* if override property key exists in values */}}
             {{- if (hasKey $.Values.rtr.kafka $overridesProperty) }}
-              {{- $overrides = $overridesProperty | get ($overridesProperty | get $.Values.kafka.rtr)}}
+              {{- $overrides = $overridesProperty | get ($overridesProperty | get $.Values.rtr.kafka)}}
             {{- end }}
             {{- $kafkaPropertiesEnv := include "castle.kafkaPropertiesEnv" (dict
                   "kafka" $.Values.rtr.kafka
@@ -232,7 +260,27 @@ spec:
                   "prefix" "CASTLE_RESTRICTION_JSON_KAFKA_"
                 ) | fromYaml }}
             {{- get $kafkaPropertiesEnv "ret" | toYaml | nindent 12 }}
-            {{- end }}{{- /* range */}}
+
+            {{- if $.Values.rtr.roadLocks.enabled }}
+            {{- $overridesRoadLocks := dict }}
+            {{- /* if override property key exists in values */}}
+            {{- if (hasKey $.Values.rtr.roadLocks.kafka $overridesProperty) }}
+              {{- $overridesRoadLocks = $overridesProperty | get ($overridesProperty | get $.Values.rtr.roadLocks.kafka)}}
+            {{- end }}
+            {{- $kafkaRoadLocksPropertiesEnv := include "castle.kafkaPropertiesEnv" (dict
+                  "kafka" $.Values.rtr.roadLocks.kafka
+                  "overrides" $overrides
+                  "secretname" (print
+                      (include "castle.fullname" $)
+                      "-rtr"
+                    )
+                  "mountpoint" "/etc/2gis/secret/rtr"
+                  "prefix" "CASTLE_RESTRICTION_JSON_KAFKA_ROAD_LOCKS_"
+                ) | fromYaml }}
+            {{- get $kafkaRoadLocksPropertiesEnv "ret" | toYaml | nindent 12 }}
+            {{- end }}{{- /* .Values.rtr.roadLocks.enabled */}}
+            {{- end }}{{- /* range $kafkaRole, $overridesProperty */}}
+
             - name: CASTLE_HTTP_PWD
               valueFrom:
                 secretKeyRef:
@@ -244,6 +292,8 @@ spec:
                   fieldPath: metadata.name
             - name: CASTLE_RESTRICTION_JSON_KAFKA_GROUP_ID
               value: "{{ .Values.rtr.kafka.groupId }}-$(POD_NAME)"
+            - name: CASTLE_RESTRICTION_JSON_KAFKA_ROAD_LOCKS_GROUP_ID
+              value: "{{ .Values.rtr.roadLocks.kafka.groupId }}-$(POD_NAME)"
             {{- if .Values.castle.excludeProjects }}
             - name: CASTLE_EXCLUDE_PROJECTS
               value: {{ join "," .Values.castle.excludeProjects | quote }}
@@ -252,6 +302,15 @@ spec:
             - name: SSL_CERT_FILE
               value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
             {{- end }}
+            - name: LOG_FORMAT
+              value: {{ .Values.castle.logFormat | quote }}
+            - name: LOG_LEVEL
+              value: {{ .Values.castle.logLevel | quote }}
+          {{- if .Values.extraEnvVarsSecret }}
+          envFrom:
+          - secretRef:
+              name: {{ include "castle.fullname" . }}-secret-env
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.nginx.port }}

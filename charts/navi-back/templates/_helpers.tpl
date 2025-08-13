@@ -105,6 +105,22 @@ Usage:
    {{- ternary "true" "" $found -}}
 {{- end -}}
 
+{{/*
+Get a string containing comma-separated list of all queries supported by app_rule
+Usage:
+{{ include "rules.getQueriesString" (dict "context" $) }}
+*/}}
+{{- define "rules.getQueriesString" }}
+  {{- $result := "" }}
+  {{- if $.context.Values.rules }}
+    {{- range $.context.Values.rules }}
+        {{- if eq .name $.context.Values.naviback.app_rule -}}
+            {{- $result = (.queries | uniq | sortAlpha | join ",") }}
+        {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- $result | quote -}}
+{{- end }}
 
 {{/*
 Set simple_network_car parameter in server config section
@@ -190,6 +206,20 @@ Usage:
       $.Values.naviback.simpleNetwork.emergency
       (include "rules.inRoutingSection" (dict "routingValue" "emergency" "context" $))
       (hasKey $.Values.naviback.simpleNetwork "emergency")
+   -}}
+{{- end -}}
+
+
+{{/*
+Set simple_network_motorcycle parameter in server config section
+Usage:
+{{ include "config.setSimpleNetworkMotorcycle" $ }}
+*/}}
+{{- define "config.setSimpleNetworkMotorcycle" -}}
+   {{-  ternary
+      $.Values.naviback.simpleNetwork.motorcycle
+      (include "rules.inRoutingSection" (dict "routingValue" "motorcycle" "context" $))
+      (hasKey $.Values.naviback.simpleNetwork "motorcycle")
    -}}
 {{- end -}}
 
@@ -293,6 +323,25 @@ or makes a guess from the routing list.
 
 
 {{/*
+Set attractor_motorcycle parameter in server config section
+Usage:
+{{ include "config.setAttractorMotorcycle" $ }}
+
+Sets value from naviback.attractor[] if specified,
+`false` if transmitter.enabled (external attractor given),
+or makes a guess from the routing list.
+*/}}
+{{- define "config.setAttractorMotorcycle" -}}
+   {{- ternary
+      .Values.naviback.attractor.motorcycle
+      (.Values.transmitter.enabled | ternary false
+          (include "rules.inRoutingSection" (dict "routingValue" "motorcycle" "context" .)))
+      (hasKey .Values.naviback.attractor "motorcycle")
+   -}}
+{{- end -}}
+
+
+{{/*
 Set reduce_edges_optimization_flag to True if queries contains get_dist_matrix value
 Usage:
 {{ include "config.setReduceEdgesOptimizationFlag" $ }}
@@ -349,18 +398,6 @@ Usage:
 {{- end -}}
 
 {{/*
-Set engine_update_period_sec value in config server section
-For pedestrain and bicycle routing type this value will be set in 0
-Usage:
-{{ include "config.setEngineUpdatePeriod" $ }}
-*/}}
-{{- define "config.setEngineUpdatePeriod" -}}
-   {{- if (or (include "config.setSimpleNetworkPedestrian" $) (include "config.setSimpleNetworkBicycle" $)) -}}
-      {{- 0 | int -}}
-   {{- end -}}
-{{- end -}}
-
-{{/*
 Set ECA URL
 Usage:
 {{ include "config.setEcaUrl" $ }}
@@ -370,6 +407,16 @@ Usage:
    {{- printf .Values.naviback.ecaUrl -}}
    {{- else if .Values.naviback.ecaHost -}}
    {{- printf "http://%s" .Values.naviback.ecaHost -}}
+   {{- end -}}
+{{- end -}}
+
+Set long speed forecasts URL
+Usage:
+{{ include "config.setLongForecastUrl" $ }}
+*/}}
+{{- define "config.setLongForecastUrl" -}}
+   {{- if .Values.naviback.longForecastUrl -}}
+   {{- printf .Values.naviback.longForecastUrl -}}
    {{- end -}}
 {{- end -}}
 
@@ -420,4 +467,17 @@ Calculate envoy --concurrency value
     {{- else }}
         {{- printf "1" -}}
     {{- end }}
+{{- end }}
+
+{{/*
+Calculate maximum processing time
+*/}}
+{{- define "config.getMaxProcessTime" -}}
+  {{- $result := (get .Values.naviback "maxProcessTime") | default 20}}
+  {{- range $query, $timeout := .Values.naviback.queryTimeouts }}
+    {{- if (eq "true" (include "rules.inQueriesSection" (dict "queriesValue" $query "context" $))) }}
+        {{- $result = max $result $timeout }}
+    {{- end }}
+  {{- end }}
+  {{- $result }}
 {{- end }}

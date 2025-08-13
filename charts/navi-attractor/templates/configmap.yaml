@@ -61,6 +61,10 @@ data:
         },
         "cities": {
           "update_period": 0,
+          {{- /* search .zip in files */}}
+          {{- if regexMatch ".*\\.zip.*" .Values.attractor.citiesFilename }}
+          "content": "cities.conf",
+          {{- end }}
           "nodes": [
             "{REMOTE_PATH}/{{ .Values.attractor.citiesFilename }}"
           ],
@@ -148,7 +152,7 @@ data:
             "{{ include "config.setRestrictionUrl" $ }}/"
           ],
           "timeout_seconds": {
-            "count": 30
+            "count": {{ .Values.attractor.rtr.timeoutSeconds | int }}
           }
         },
         {{- if .Values.attractor.indices.entrances.enabled }}
@@ -189,8 +193,24 @@ data:
         },
         {{- end }}{{- /* .Values.attractor.indices.geoImport.enabled */}}
 
+        {{- if .Values.roadLocks.enabled }}
+        "road_locks": {
+          {{- $kafkaProperties := dict -}}
+          {{- range $key, $_ := .Values.roadLocks.kafka.fileProperties -}}
+          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret-roadLocks/%s" $key) -}}
+          {{- end -}}
+          {{- $kafkaProperties := mustMerge $kafkaProperties .Values.roadLocks.kafka.properties }}
+          "kafka_properties":
+            {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
+          "modifications_limit_for_merge": "{{ .Values.roadLocks.modifications_limit_for_merge }}",
+          "merge_timeout_limit_ms": "{{ .Values.roadLocks.merge_timeout_limit_ms }}",
+          "merge_poll_ms": "{{ .Values.roadLocks.merge_poll_ms }}",
+          "kafka_messages_queue_size_limit": "{{ .Values.roadLocks.kafka_messages_queue_size_limit }}",
+          "kafka_group_id_prefix": "{{ .Values.roadLocks.kafka_group_id_prefix }}"
+        },
+        {{- end }}{{/* .Values.roadLocks.enabled */}}
 
-        {{- if (include "config.setAttractorTruck" $ | default false) }}
+        {{- if eq .Values.attractor.type "truck" }}
         {{- if .Values.attractor.indices.passZones.enabled }}
             "pass_zones":
               {
@@ -210,10 +230,10 @@ data:
         "restrictions_index": {
           "update_period": {{ .Values.attractor.rtr.updatePeriod }},
           "nodes": [
-            "{{ .Values.attractor.rtr.url | required "attractor.rtr.url must be specified" }}/restrictions_index.json.zip"
+            "{{ .Values.attractor.rtr.url }}/{{ .Values.attractor.rtr.filename | default "restrictions_index.json.zip" }}"
           ],
           "timeout_seconds": {
-            "count": 30
+            "count": {{ .Values.attractor.rtr.timeoutSeconds | int }}
           }
         },
         {{- end }}{{- /* if .Values.attractor.rtr.enabled */}}
@@ -223,10 +243,10 @@ data:
               {{- if .Values.s3.suffix }}
               "suffix": {{ .Values.s3.suffix | quote }},
               {{- end }}
-              "endpoint": {{ .Values.s3.host | required "s3.endpoint must be specified" | quote }},
-              "bucket": {{ .Values.s3.bucket | required "s3.bucket must be specified" | quote }},
-              "access_key": {{ .Values.s3.accessKey | required "s3.accessKey must be specified" | quote }},
-              "secret_key": {{ .Values.s3.secretKey | required "s3.secretKey must be specified" | quote }}
+              "endpoint": {{ .Values.s3.host | quote }},
+              "bucket": {{ .Values.s3.bucket | quote }},
+              "access_key": {{ .Values.s3.accessKey | quote }},
+              "secret_key": {{ .Values.s3.secretKey | quote }}
             }
           },
         {{- end }}{{- /* .Values.s3.enabled */}}
@@ -251,9 +271,9 @@ data:
             {{- $kafkaProperties := mustMerge $kafkaProperties .Values.kafka.properties }}
             "kafka_properties": {{ mustToPrettyJson $kafkaProperties | nindent 12 }},
             "distance_matrix": {
-              "task_topic": {{ .Values.kafka.distanceMatrix.taskTopic | required "kafka.distanceMatrix.taskTopic must be specified" | quote }},
-              "cancel_topic":  {{ .Values.kafka.distanceMatrix.cancelTopic | required "kafka.distanceMatrix.cancelTopic must be specified" | quote }},
-              "status_topic":  {{ .Values.kafka.distanceMatrix.statusTopic | required "kafka.distanceMatrix.statusTopic must be specified" | quote }},
+              "task_topic": {{ .Values.kafka.distanceMatrix.taskTopic | quote }},
+              "cancel_topic":  {{ .Values.kafka.distanceMatrix.cancelTopic | quote }},
+              "status_topic":  {{ .Values.kafka.distanceMatrix.statusTopic | quote }},
               "update_task_status_period_sec": {{ .Values.kafka.distanceMatrix.updateTaskStatusPeriodSec | int }},
               "message_expired_period_sec" : {{ .Values.kafka.distanceMatrix.messageExpiredPeriodSec | int }},
               "request_download_timeout_sec" : {{ .Values.kafka.distanceMatrix.requestDownloadTimeoutSec | int }},
@@ -271,6 +291,8 @@ data:
           "attractor_bicycle" : {{ include "config.setAttractorBicycle" $ | default false -}},
           "attractor_taxi" : {{ include "config.setAttractorTaxi" $ | default false -}},
           "attractor_truck" : {{ include "config.setAttractorTruck" $ | default false -}},
+          "attractor_motorcycle" : {{ include "config.setAttractorMotorcycle" $ | default false -}},
+          "attractor_emergency": {{ include "config.setAttractorEmergency" $ | default false -}},
           {{- if ((.Values.resources).limits).cpu }}
           "dist_matrix_thread_pool_size" : {{ include "config.setCpuNumber" . }},
           "simple_network_build_thread_pool_size" : {{ include "config.setCpuNumber" . }},

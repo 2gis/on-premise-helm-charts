@@ -47,7 +47,7 @@ clean-venv:
 prepare:
 	@[ -z $(GENERATOR_TAG) ] \
 	&& [ $(GENERATOR) = $(GENERATOR_DEFAULT) ] \
-	&& docker build --tag readme-generator-for-helm . \
+	&& docker build --tag readme-generator-for-helm $(ROOT)/dockerfiles/readme-generator \
 	|| echo "\nUsing $(GENERATOR) with ID $(GENERATOR_TAG)"
 
 charts/*: prepare

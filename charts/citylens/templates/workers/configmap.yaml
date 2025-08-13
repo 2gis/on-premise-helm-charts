@@ -22,7 +22,6 @@ data:
       tracks_lifecycle_topic: {{ required "A valid .Values.kafka.topics.tracksLifecycle entry required" .tracksLifecycle | squote }}
     {{- end }}
     log_level: {{ .Values.worker.dashboardBatchEvents.logLevel }}
-    visual_localization: null
     {{- with .Values.kafka }}
     kafka:
       broker: {{ .bootstrapServer }}

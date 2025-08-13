@@ -54,21 +54,32 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Front service settings
 
-| Name                           | Description                                                                      | Value       |
-| ------------------------------ | -------------------------------------------------------------------------------- | ----------- |
-| `front.port`                   | Navi-Front service HTTP port                                                     | `8080`      |
-| `front.router.discover`        | Enable/disable router autodiscovery                                              | `true`      |
-| `front.router.host`            | Set router address if autodiscovery is disabled                                  | `localhost` |
-| `front.tsp_carrouting.enabled` | Enable/disable carrouting TSP                                                    | `false`     |
-| `front.tsp_carrouting.host`    | Set carrouting TSP hostname                                                      | `""`        |
-| `front.multimod.enabled`       | Add multimodal routing service location                                          | `false`     |
-| `front.multimod.host`          | Multimodal routing service hostname                                              | `""`        |
-| `front.keepalive.enabled`      | Enable keepalive (for upstreams)                                                 | `false`     |
-| `front.keepalive.connections`  | Maximum number of idle keepalive connections (per upstream)                      | `50`        |
-| `front.keepalive.requests`     | Maximum number of requests that can be served through one keepalive connection   | `100`       |
-| `front.keepalive.time`         | Maximum time for one keepalive connection                                        | `1h`        |
-| `front.keepalive.timeout`      | Timeout for idle keepalive connection                                            | `60s`       |
-| `navigroup`                    | Service group identifier, allows multiple stacks deployed to the same namespace. | `""`        |
+| Name                                     | Description                                                                                                                | Value                                            |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `front.port`                             | Navi-Front service HTTP port                                                                                               | `8080`                                           |
+| `front.router.discover`                  | Enable/disable router autodiscovery                                                                                        | `true`                                           |
+| `front.router.host`                      | Set router address if autodiscovery is disabled                                                                            | `localhost`                                      |
+| `front.router.backupPorts`               | Support for backup ports on router                                                                                         |                                                  |
+| `front.router.backupPorts.base`          | Backup router ports start with `base` and assignd sequentially up                                                          | `50000`                                          |
+| `front.router.backupPorts.number`        | Number of backup router ports                                                                                              | `0`                                              |
+| `front.router.keepalive`                 | Allows router upstream overrides to front.keepalive settings                                                               | `{}`                                             |
+| `front.router.proxy`                     | Settings for router proxy rule                                                                                             |                                                  |
+| `front.router.proxy.nextUpstreamTimeout` | nginx [proxy_next_upstream_timeout](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream_timeout) | `750ms`                                          |
+| `front.router.proxy.connectTimeout`      | nginx [proxy_connect_timeout](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_connect_timeout)             | `100ms`                                          |
+| `front.router.proxy.readTimeout`         | nginx [proxy_read_timeout](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout)                   | `500ms`                                          |
+| `front.router.proxy.sendTimeout`         | nginx [proxy_send_timeout](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_send_timeout)                   | `500ms`                                          |
+| `front.router.proxy.nextUpstream`        | nginx [proxy_next_upstream](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream)                 | `error timeout non_idempotent http_502 http_504` |
+| `front.tsp_carrouting.enabled`           | Enable/disable carrouting TSP                                                                                              | `false`                                          |
+| `front.tsp_carrouting.host`              | Set carrouting TSP hostname                                                                                                | `""`                                             |
+| `front.multimod.enabled`                 | Add multimodal routing service location                                                                                    | `false`                                          |
+| `front.multimod.host`                    | Multimodal routing service hostname                                                                                        | `""`                                             |
+| `front.keepalive.enabled`                | Enable keepalive (for upstreams)                                                                                           | `false`                                          |
+| `front.keepalive.connections`            | Maximum number of idle keepalive connections (per upstream)                                                                | `50`                                             |
+| `front.keepalive.requests`               | Maximum number of requests that can be served through one keepalive connection                                             | `100`                                            |
+| `front.keepalive.time`                   | Maximum time for one keepalive connection                                                                                  | `1h`                                             |
+| `front.keepalive.timeout`                | Timeout for idle keepalive connection                                                                                      | `60s`                                            |
+| `front.locationExtraProxyHeaders`        | Additional headers to pass to backend `locationExtraProxyHeaders: { header1: value1, header2: 'value 2'}`                  | `{}`                                             |
+| `navigroup`                              | Service group identifier, allows multiple stacks deployed to the same namespace.                                           | `""`                                             |
 
 ### Service account settings
 
@@ -141,7 +152,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `nginx.hideBackendHostname`                      | Do not pass X-Back-Hostname header from navi-back to client                                                                                     | `true`       |
 | `nginx.protectInternalLocations`                 |                                                                                                                                                 |              |
 | `nginx.protectInternalLocations.allowedNetworks` | CIDR blocks to allow access to internal locations from. For debug purposes only                                                                 | `[]`         |
-| `nginx.connectTimeout.geocoding`                 | Timeout for connections to navi-router, nginx [time](http://nginx.org/en/docs/syntax.html#time) string                                          | `""`         |
 
 ### Location overrides
 
@@ -152,7 +162,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `distMatrixCtxLocation` | Override for default /get_dist_matrix_ctx                                                        | `""`  |
 | `hullLocation`          | Override for default /get_hull                                                                   | `""`  |
 | `multimodLocation`      | Override for default /ctx_multi_mod and /find_platforms if enabled with `front.multimod.enabled` | `""`  |
-
 
 ## Maintainers
 

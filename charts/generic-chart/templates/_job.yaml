@@ -4,7 +4,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "generic-chart.fullname" $ctx }}{{ include "generic-chart.getSuffix" $job  }}
+  name: {{ include "generic-chart.fullname" $ctx }}{{ include "generic-chart.getSuffix" (dict "suffix" $job.suffix "ctx" $ctx) }}
   labels:
     {{- include "generic-chart.labels" $ctx | nindent 4 }}
   {{- with $ctx.labels }}

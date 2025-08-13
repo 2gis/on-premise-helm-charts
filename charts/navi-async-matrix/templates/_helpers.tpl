@@ -244,3 +244,24 @@ Usage:
   {{- end }}
   {{- join "&" $hosts }}
 {{- end }}
+
+{{/*
+Generate a JSON object with topic rules for the merger task.
+Usage:
+{{ include "navi-async-matrix.mergerTopicRules" $ }}
+*/}}
+
+{{- define "navi-async-matrix.mergerTopicRules" -}}
+{{- $topic := .Values.kafka.mergerTaskTopic }}
+{{- $types := list "car" "truck" "walking" "bicycle" "scooter" }}
+{{- $rules := list }}
+{{- range $i, $type := $types }}
+  {{- $item := dict
+      "default" true
+      "type" $type
+      "topic" $topic
+  }}
+  {{- $rules = append $rules $item }}
+{{- end }}
+{{- $rules | mustToJson }}
+{{- end }}
