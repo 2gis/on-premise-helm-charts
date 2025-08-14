@@ -52,7 +52,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.16.0`                            |
+| `image.tag`        | Tag         | `1.16.1`                            |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings
@@ -142,7 +142,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `dm.taskSplitSize`                    | Minimum size of matrix to get split in merger job.                                                                            | `5000`                                     |
 | `dm.compositeTaskTimeoutSec`          | Timeout for executing split tasks.                                                                                            | `3600`                                     |
 | `dm.merger.image.repository`          | Image repository for merger.                                                                                                  | `2gis-on-premise/navi-merger-async-matrix` |
-| `dm.merger.image.tag`                 | Image tag for merger.                                                                                                         | `1.16.0`                                   |
+| `dm.merger.image.tag`                 | Image tag for merger.                                                                                                         | `1.16.1`                                   |
 | `dm.merger.replicaCount`              | A replica count for the arhiver.                                                                                              | `1`                                        |
 | `dm.merger.resources.requests.cpu`    | Merger CPU request. 1CPU recommended.                                                                                         |                                            |
 | `dm.merger.resources.requests.memory` | Merger memory request. 10Gi recommended.                                                                                      |                                            |
