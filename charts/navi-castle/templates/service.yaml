@@ -19,5 +19,10 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    {{- /* nginx redirects might eventually claim container port */}}
+    - port: {{ .Values.nginx.port }}
+      targetPort: http
+      protocol: TCP
+      name: redirected
   selector:
     {{- include "castle.selectorLabels" . | nindent 4 }}

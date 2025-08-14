@@ -118,6 +118,8 @@ spec:
               value: "{{ .Values.assetImporter.settings.externalLinksProxyUrl }}"
             - name: Import__ExternalLinksAllowedHosts
               value: "{{ .Values.assetImporter.settings.externalLinksAllowedHosts }}"
+            - name: Import__TtlSecondsAfterFinished
+              value: "{{ .Values.assetImporter.settings.ttlSecondsAfterFinished }}"
             - name: TEMP_PATH
               value: "{{ .Values.api.settings.tempPath }}"
             - name: CATALOG_API_2GIS_URL
@@ -149,10 +151,10 @@ spec:
             {{ end }}
             - name: LOG_ES_QUERIES
               value: "{{ .Values.api.settings.logEsQueries }}"
-            - name: ALLOW_ANY_ORIGIN
-              value: "{{ .Values.api.settings.allowAnyOrigin }}"
             - name: ENV
               value: "{{ .Values.api.settings.env }}"
+            - name: Common__CorsOrigins
+              value: "{{ .Values.api.settings.corsOrigins }}"
             - name: Common__FilterByZoneCodes
               value: "{{ .Values.api.settings.filterByZoneCodes }}"
             - name: Postgres__ConnectionString
@@ -164,6 +166,13 @@ spec:
                 secretKeyRef:
                   key: dbConnectionPwd
                   name: {{ include "pro-api.name" . }}-secret
+            {{- if .Values.postgres.api.ro.password }}
+            - name: Postgres__PasswordRo
+              valueFrom:
+                secretKeyRef:
+                  key: dbConnectionPwdRo
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
             - name: S3Settings__Url
               value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
             - name: S3Settings__Secure
@@ -200,15 +209,17 @@ spec:
               value: {{ $.Values.kafka.sasl.mechanism }}
             - name: Kafka__SaslUsername
               value: {{ $.Values.kafka.sasl.username }}
-            {{ if .Values.kafka.sasl.password }}
+            {{- if .Values.kafka.sasl.password }}
             - name: Kafka__SaslPassword
               valueFrom:
                 secretKeyRef:
                   key: kafkaSaslPassword
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
+            {{- end }}
             - name: Kafka__AssetTopicsReaderGroupId
               value: {{ $.Values.kafka.assetTopicsReaderGroupId }}
+            - name: Kafka__CreateTopics
+              value: "{{ $.Values.kafka.createTopics }}"
             - name: Kafka__RefreshAssetsIntervalMinutes
               value: "{{ $.Values.kafka.refreshAssetsIntervalMinutes }}"
             - name: Kafka__ImportTasksTopicSettings__Name
@@ -235,22 +246,22 @@ spec:
               value: "{{ .Values.api.settings.auth.autoRegisterUsers }}"
             - name: Auth__TurnOffCertValidation
               value: "{{ .Values.api.settings.auth.turnOffCertValidation }}"
-            {{ if .Values.api.settings.auth.apiKey }}
+            {{- if .Values.api.settings.auth.apiKey }}
             - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
                   key: apiKey
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
+            {{- end }}
             - name: Auth__PermissionsApiUrl
               value: {{ include "pro-api.permissions-url" . }}
-            {{ if .Values.permissions.settings.auth.apiKey }}
+            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
+            {{- end }}
             {{- range $i, $s := .Values.api.settings.auth.shareKeys }}
             - name: Auth__ShareKeys__{{$i}}
               value: "{{ $s }}"
@@ -259,13 +270,13 @@ spec:
               value: {{ required "A valid .Values.api.settings.licenseKey entry required" $.Values.api.settings.licenseKey }}
             - name: KEYS_SERVICE_URL
               value: "{{ .Values.keys.url }}"
-            {{ if .Values.keys.token }}
+            {{- if .Values.keys.token }}
             - name: KEYS_SERVICE_TOKEN
               valueFrom:
                 secretKeyRef:
                   key: keysServiceToken
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
+            {{- end }}
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
@@ -274,13 +285,13 @@ spec:
               value: "{{ .Values.redis.enabled }}"
             - name: Redis__Username
               value: {{ $.Values.redis.username }}
-            {{ if .Values.redis.password }}
+            {{- if .Values.redis.password }}
             - name: Redis__Password
               valueFrom:
                 secretKeyRef:
                   key: redisPassword
                   name: {{ include "pro-api.name" . }}-secret
-            {{ end }}
+            {{- end }}
             - name: Common__Logging__Format
               value: "{{ .Values.api.settings.logging.format }}"
             - name: Common__Logging__Targets
@@ -299,11 +310,17 @@ spec:
               value: {{ required "A valid .Values.license.url entry required" $.Values.license.url }}
             - name: LayerGeneration__IsochroneLayerMaxPointsCount
               value: "{{ .Values.api.settings.layerGeneration.isochroneLayerMaxPointsCount }}"
-            {{- range $i, $s := .Values.api.settings.openApi.servers }}
-            - name: OpenApi__Servers__{{$i}}
-              value: "{{ $s }}"
-            {{- end }}
             - name: TasksApi__Url
               value: http://{{ include "pro-api.tasks-name" . }}:{{ .Values.tasks.settings.grpcPort }}
             - name: TasksApi__UseForLayerDataPreparation
               value: "{{ .Values.api.settings.tasksApi.useForLayerDataPreparation }}"
+            - name: BackgroundJobs__InitOnStartupJob__Enabled
+              value: "{{ ne .Values.api.settings.backgroundJobs.enableInitOnStartupJob false }}"
+            - name: BackgroundJobs__LayerDataPrepareJob__Enabled
+              value: "{{ ne .Values.api.settings.backgroundJobs.enableLayerDataPrepareJob false }}"
+            - name: BackgroundJobs__ClearCacheJob__Enabled
+              value: "{{ ne .Values.api.settings.backgroundJobs.enableClearCacheJob false }}"
+            - name: BackgroundJobs__ClearMetadataAndStorageJob__Enabled
+              value: "{{ ne .Values.api.settings.backgroundJobs.enableClearMetadataAndStorageJob false }}"
+            - name: BackgroundJobs__MetricsCollectionJob__Enabled
+              value: "{{ ne .Values.api.settings.backgroundJobs.enableMetricsCollectionJob false }}"

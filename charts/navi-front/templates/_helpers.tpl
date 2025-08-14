@@ -1,90 +1,62 @@
 {{/*
-Expand the name of the chart.
-*/}}
-{{- define "front.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "front.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-{{- end }}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "front.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Common labels
-*/}}
-{{- define "front.labels" -}}
-helm.sh/chart: {{ include "front.chart" . }}
-{{ include "front.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "front.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "front.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "front.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "front.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{/*
 Create upstream nginx entry for found navi-back service
 */}}
 {{- define "front.renderUpstream" -}}
-    {{- $service := . -}}
+    {{- $service := .service -}}
     {{- $upstream := $service.metadata.name -}}
+    {{- $ctx := .context -}}
     {{- printf "upstream %s {\n" $upstream }}
-    {{- printf "\tserver %s;\n" $upstream }}
-    {{- println "}" }}
+    {{- printf "    server %s;\n" $upstream }}
+    {{- if $ctx.Values.front.keepalive.enabled -}}
+    {{- printf "    keepalive %d;\n" (int $ctx.Values.front.keepalive.connections) }}
+    {{- printf "    keepalive_requests %d;\n" (int $ctx.Values.front.keepalive.requests) }}
+    {{- printf "    keepalive_time %s;\n" $ctx.Values.front.keepalive.time }}
+    {{- printf "    keepalive_timeout %s;\n" $ctx.Values.front.keepalive.timeout }}
+    {{- end -}}
+    {{- printf "}\n" }}
 {{- end -}}
 
 {{/*
-Create location nginx entry for foun navi-back service
+Create location nginx entry for found navi-back service
 Render location only if rule is not empty string
+Tsp-carrouting requires splitter
 */}}
 {{- define "front.renderLocation" -}}
-    {{- $service := . -}}
+    {{- $service := .service -}}
     {{- $rule := get $service.metadata.labels "rule" }}
+    {{- $ctx := .context -}}
     {{- if (ne $rule "") -}}
         {{- printf "location /%s {\n" $rule }}
-        {{- printf "\trewrite ^/%s(.*)$ $1 break;\n" $rule | indent 4 }}
-        {{- printf "\tadd_header X-Region %s;\n" $service.metadata.name | indent 4 }}
-        {{- printf "\tproxy_pass http://%s$uri$is_args$args;\n" $service.metadata.name | indent 4 }}
-        {{- println "}" }}
+        {{- printf "\n" }}
+        {{- include "front.getInternalACL" $ctx | indent 4 }}
+        {{- printf "\n" }}
+        {{- printf "    rewrite ^/%s(.*)$ $1 break;\n" $rule }}
+        {{- printf "    add_header X-Region %s always;\n" $service.metadata.name }}
+        {{- if $ctx.Values.front.keepalive.enabled -}}
+        {{- printf "    proxy_set_header Connection \"\";\n" }}
+        {{- printf "    proxy_http_version 1.1;\n" }}
+        {{- end -}}
+        {{- printf "    proxy_pass http://%s$uri$is_args$args;\n" $service.metadata.name }}
+        {{- printf "}\n" }}
+        {{- if $ctx.Values.front.tsp_carrouting.enabled -}}
+        {{- if hasSuffix "splitter" $service.metadata.name -}}
+        {{- $back_host := $service.metadata.name | replace "-splitter" "-back" -}}
+        {{- printf "location /tsp_%s {\n" $rule }}
+        {{- printf "\n" }}
+        {{- include "front.getInternalACL" $ctx | indent 4 }}
+        {{- printf "\n" }}
+        {{- printf "    rewrite ^/tsp_%s(.*)$ $1 break;\n" $rule }}
+        {{- printf "    add_header X-Region %s always;\n" $service.metadata.name }}
+        {{- printf "    proxy_set_header X-Splitter-Host http://%s;\n" $service.metadata.name }}
+        {{- printf "    proxy_set_header X-Moses-Host http://%s;\n" $back_host }}
+        {{- if $ctx.Values.front.keepalive.enabled -}}
+        {{- printf "    proxy_set_header Connection \"\";\n" }}
+        {{- printf "    proxy_http_version 1.1;\n" }}
+        {{- end -}}
+        {{- printf "    proxy_pass http://%s$uri$is_args$args;\n" $ctx.Values.front.tsp_carrouting.host }}
+        {{- printf "}\n" }}
+        {{- end -}}
+        {{- end -}}
     {{- end -}}
 {{- end -}}
 
@@ -116,7 +88,7 @@ Checking that the router service is valid
     {{- $navigroup := default "" .context.Values.navigroup -}}
     {{- if
     and
-    (eq (get $service.metadata.labels "app.kubernetes.io/name") "navi-router")
+    (has (get $service.metadata.labels "app.kubernetes.io/name") (list "mrouter" "navi-router"))
     (eq (get $service.metadata.labels "navigroup") $navigroup) -}}
         {{- $is_valid = true -}}
     {{- end -}}
@@ -131,22 +103,22 @@ Create locations for rules upstreams
 {{- $ns := print .Release.Namespace -}}
 {{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
     {{- if kindIs "map" $service.metadata.labels }}
-        {{- if (include "front.isValidBackService" ( dict "service" $service "context" $)) }}
-            {{- include "front.renderLocation" $service -}}
+        {{- if (include "front.isValidBackService" (dict "service" $service "context" $)) }}
+            {{- include "front.renderLocation" (dict "service" $service "context" $) -}}
         {{- end }}
     {{- end }}
 {{- end }}
 {{- end }}
 
 {{/*
-Create upstreams for running navi-back instances in the namespace
+Create upstreams for running navi-back in the namespace
 */}}
 {{- define "front.createUpstreams" -}}
 {{- $ns := print .Release.Namespace }}
 {{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
     {{- if kindIs "map" $service.metadata.labels }}
         {{- if (include "front.isValidBackService" ( dict "service" $service "context" $)) }}
-            {{- include "front.renderUpstream" $service }}
+            {{- include "front.renderUpstream" ( dict "service" $service "context" $) }}
         {{- end }}
     {{- end }}
 {{- end }}
@@ -168,47 +140,18 @@ Create upstreams for running navi-router in the namespace
 {{- end }}
 {{- end }}
 
-
-{{/* vim: set filetype=mustache: */}}
 {{/*
-Renders a value that contains template.
-Usage:
-{{ include "tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $) }}
+Render ACL for private locations
 */}}
-{{- define "tplvalues.render" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
-{{- end -}}
-
-{{/*
-Return the target Kubernetes version
-*/}}
-{{- define "capabilities.kubeVersion" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.kubeVersion }}
-    {{- .Values.global.kubeVersion -}}
-    {{- else }}
-    {{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
-    {{- end -}}
-{{- else }}
-{{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for Horizontal Pod Autoscaler.
-*/}}
-{{- define "capabilities.hpa.apiVersion" -}}
-{{- if semverCompare "<1.23-0" (include "capabilities.kubeVersion" .) -}}
-{{- if .beta2 -}}
-{{- print "autoscaling/v2beta2" -}}
-{{- else -}}
-{{- print "autoscaling/v2beta1" -}}
-{{- end -}}
-{{- else -}}
-{{- print "autoscaling/v2" -}}
-{{- end -}}
+{{- define "front.getInternalACL" }}
+{{- if not (and (hasKey .Values.nginx.protectInternalLocations "disabled") .Values.nginx.protectInternalLocations.disabled) -}}
+    {{- if .Values.nginx.protectInternalLocations.allowedNetworks -}}
+        {{- range .Values.nginx.protectInternalLocations.allowedNetworks -}}
+        {{- printf "allow %s;\n" . }}
+        {{- end -}}{{/* range */}}
+        {{- printf "deny all;\n" }}
+    {{- else -}}
+        {{- printf "internal;\n" }}
+    {{- end -}}{{/* .Values.nginx.protectInternalLocations.allowedNetworks */}}
+{{- end -}}{{/* .Values.nginx.protectInternalLocations.disabled */}}
 {{- end -}}

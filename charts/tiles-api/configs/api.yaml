@@ -28,6 +28,15 @@ cassandra-clusters:
         partition-size: 4
       {{- end }}
 
+      {{- if $.Values.tilegen.enabled }}
+      {{- with $.Values.tilegen.tileset }}
+      - tileset: {{ .name }}
+        keyspace: {{ .keyspace }}
+        type: ald_v3
+        partition-size: 4
+      {{- end}}
+      {{- end }}
+
     {{- with .Values.cassandra }}
     hosts:
        {{- toYaml .hosts | nindent 8 }}

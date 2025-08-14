@@ -59,6 +59,16 @@ make charts/navi-back
 
 - Во всех случаях, где в значениях по умолчанию должен фигурировать какой-либо город, используем Москву.
 
+- В случае, если в чарте присутствует `CronJob`, необходимо добавить параметры `successfulJobsHistoryLimit` и `failedJobsHistoryLimit` с дефолтными значениями например 3-3.
+
+  ```yaml
+  # @param cron.successfulJobsHistoryLimit How many completed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
+  # @param cron.failedJobsHistoryLimit How many failed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
+  cron:
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 3
+  ```
+
 ## Именование настроек
 
 - В названиях настроек используем camelCase. Названия начинаем с маленькой буквы. Например: `accessKey`, `dgctlDockerRegistry`.

@@ -91,7 +91,28 @@ spec:
                   name: {{ include "router.fullname" . | quote }}
                   key: common_token
             {{- end }}
-      terminationGracePeriodSeconds: {{ .Values.termination_grace_period_seconds | default 60 }}
+            {{- if (.Values.requestsSignCheck).salt }}
+            - name: ONLINE_HASH_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "router.fullname" . | quote }}
+                  key: online_hash_salt
+            {{- end }}
+            {{- if (.Values.requestsSignCheck).hashSalt }}
+            - name: HASH_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "router.fullname" . | quote }}
+                  key: hash_salt
+            {{- end }}
+          lifecycle:
+            # wait for the endpoint removal process
+            preStop:
+              exec:
+                command:
+                  - sleep
+                  - {{ .Values.preStopDelay | quote }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

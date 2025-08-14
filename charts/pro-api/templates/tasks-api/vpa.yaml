@@ -4,7 +4,7 @@ kind: VerticalPodAutoscaler
 metadata:
   name: {{ include "pro-api.tasks-name" . }}
   labels:
-    {{- include "pro-api.tasksLabels" . | nindent 4 }}
+    {{- include "pro-api.tasksApiLabels" . | nindent 4 }}
 spec:
   targetRef:
     apiVersion: apps/v1

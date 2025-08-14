@@ -13,6 +13,7 @@ spec:
   schedule: {{ index $.Values.cron.schedule $flavor | quote }}
   concurrencyPolicy: {{ $.Values.cron.concurrencyPolicy }}
   successfulJobsHistoryLimit: {{ $.Values.cron.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ $.Values.cron.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:
@@ -53,10 +54,14 @@ spec:
               - /opt/config_builder.conf
               - --service={{ include "castle.serviceParameter" ( dict "flavor" $flavor ) }}
               - --jobs={{ $.Values.castle.jobs | default 1 | int }}
-              {{- if $.Values.customCAs.bundle }}
               env:
+              {{- if $.Values.customCAs.bundle }}
               - name: SSL_CERT_FILE
                 value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+              {{- end }}
+              {{- if $.Values.castle.excludeProjects }}
+              - name: CASTLE_EXCLUDE_PROJECTS
+                value: {{ join "," $.Values.castle.excludeProjects | quote }}
               {{- end }}
               volumeMounts:
               - name: {{ include "castle.fullname" $ }}-builder-config

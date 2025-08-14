@@ -1,0 +1,189 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "citylens.routes.api.name" . }}
+  {{- with .Values.routes.api.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "citylens.routes.api.labels" . | nindent 4 }}
+  {{- with .Values.routes.api.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.routes.api.replicaCount }}
+  revisionHistoryLimit: {{ .Values.routes.api.revisionHistoryLimit }}
+  {{- if .Values.routes.strategy }}
+  strategy:
+    {{- toYaml .Values.routes.strategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "citylens.routes.api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.routes.yaml") . | sha256sum }}
+      {{- with .Values.routes.api.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "citylens.routes.api.labels" . | nindent 8 }}
+      {{- with .Values.routes.api.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.routes.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.routes.api.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.routes.api.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.routes.api.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.routes.terminationGracePeriodSeconds }}
+      volumes:
+        - name: temp-volume
+          emptyDir: { }
+      containers:
+        - name: {{ include "citylens.routes.api.name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.routes.api.image.repository }}:{{ .Values.routes.api.image.tag }}
+          imagePullPolicy: {{ .Values.routes.api.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "{{ .Values.routes.api.tempPath }}"
+              name: temp-volume
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 5
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 20
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.routes.api.resources | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 5" ]
+          env:
+            - name: Common__TempPath
+              value: "{{ .Values.routes.api.tempPath }}"
+
+            - name: Common__Logging__LogLevel
+              value: "{{ .Values.routes.api.logging.level }}"
+
+            - name: PgSettings__Host
+              value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
+            - name: PgSettings__Port
+              value: "{{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port }}"
+            - name: PgSettings__UserName
+              value: "{{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username }}"
+            - name: PgSettings__Password
+              valueFrom:
+                secretKeyRef:
+                  key: postgresPassword
+                  name: {{ include "citylens.routes.api.name" . }}-secret
+
+            - name: PgSettings__Api__Database
+              value: "{{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database }}"
+            - name: PgSettings__Api__Timeout
+              value: "{{ $.Values.routes.postgres.timeout }}"
+            - name: PgSettings__Api__CommandTimeout
+              value: "{{ $.Values.routes.postgres.commandTimeout }}"
+            - name: PgSettings__Api__MaxPoolSize
+              value: "{{ $.Values.routes.postgres.maxPoolSize }}"
+            - name: PgSettings__Api__Pooling
+              value: "{{ $.Values.routes.postgres.pooling }}"
+
+            - name: PgSettings__Hangfire__Database
+              value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
+            - name: PgSettings__Hangfire__Timeout
+              value: "{{ $.Values.routes.hangfire.postgres.timeout }}"
+            - name: PgSettings__Hangfire__CommandTimeout
+              value: "{{ $.Values.routes.hangfire.postgres.commandTimeout }}"
+            - name: PgSettings__Hangfire__MaxPoolSize
+              value: "{{ $.Values.routes.hangfire.postgres.maxPoolSize }}"
+            - name: PgSettings__Hangfire__Pooling
+              value: "{{ $.Values.routes.hangfire.postgres.pooling }}"
+
+            - name: S3__BucketPrefix
+              value: "{{ required "A valid .Values.s3.bucketPrefix entry required" $.Values.s3.bucketPrefix }}"
+            - name: S3__LogsBucketPrefix
+              value: "{{ required "A valid .Values.s3.logsBucketPrefix entry required" $.Values.s3.logsBucketPrefix }}"
+            - name: S3__AccessKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3AccessKey
+                  name: {{ include "citylens.routes.api.name" . }}-secret
+            - name: S3__SecretAccessKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3SecretAccessKey
+                  name: {{ include "citylens.routes.api.name" . }}-secret
+            - name: S3__Region
+              value: "{{ $.Values.s3.region }}"
+
+            - name: Clients__Navigation__Enabled
+              value: "true"
+            - name: Clients__Navigation__Url
+              value: "{{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url }}"
+            - name: Clients__Navigation__TimeoutSeconds
+              value: "{{ $.Values.routes.navi.timeout }}"
+            - name: Clients__Navigation__ApiKey
+              value: "{{ $.Values.routes.navi.key }}"
+
+            - name: Clients__Keys__Enabled
+              value: "true"
+            - name: Clients__Keys__Url
+              value: "{{ $.Values.routes.keys.url }}"
+
+            - name: Clients__ProClient__Enabled
+              value: "true"
+            - name: Clients__ProClient__Url
+              value: "{{ $.Values.pro.baseUrl }}"
+            - name: Clients__ProClient__AuthorizationToken
+              value: "{{ $.Values.routes.pro.authorizationToken }}"
+
+            - name: Clients__ProClient__MainTerritoryId
+              value: "{{ $.Values.routes.pro.mainTerritoryId }}"
+
+            - name: Features__AuthorizationEnabled
+              value: "{{ $.Values.routes.features.authorizationEnabled }}"
+            - name: Features__OidcMobileAuthorizationEnabled
+              value: "{{ $.Values.routes.features.oidcMobileAuthorizationEnabled }}"
+            - name: Features__ProxyNaviKeyEnabled
+              value: "{{ $.Values.routes.features.proxyNaviKeyEnabled }}"
+            - name: Features__CoverageRatioEnabled
+              value: "{{ $.Values.routes.features.coverageRatioEnabled }}"

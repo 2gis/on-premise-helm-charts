@@ -1,81 +1,141 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "front.fullname" . }}-base
+  name: {{ include "generic-chart.fullname" . }}-base
 data:
   front.conf: |-
+  {{- if .Values.nginx.opentracing.enabled }}
+    opentracing_load_tracer /usr/local/lib/libjaegertracing_plugin.so /etc/nginx/conf.d/jaeger-nginx-config.json;
+    opentracing on;
+    {{- range $key, $value := .Values.nginx.opentracing.tags }}
+    opentracing_tag {{ $key }} {{ $value }};
+    {{- end }}
+  {{- end }}
 
     js_import bundle.js;
 
-{{ include "front.createUpstreams" . | indent 4}}
+    {{- if .Values.front.tsp_carrouting.enabled }}
+    upstream {{ .Values.front.tsp_carrouting.host }} {
+        server {{ .Values.front.tsp_carrouting.host }};
+        {{- if .Values.front.keepalive.enabled }}
+        keepalive {{ .Values.front.keepalive.connections }};
+        keepalive_requests {{ .Values.front.keepalive.requests }};
+        keepalive_time {{ .Values.front.keepalive.time }};
+        keepalive_timeout {{ .Values.front.keepalive.timeout }};
+        {{- end }}
+    }
+    {{- end }}
+
+    {{- if .Values.front.multimod.enabled }}
+    js_var $multi_region_id "none";
+    js_var $multi_mod_ctx "none";
+    js_var $multi_mod_taxi "none";
+
+    upstream {{ .Values.front.multimod.host }} {
+        server {{ .Values.front.multimod.host }};
+        {{- if .Values.front.keepalive.enabled }}
+        keepalive {{ .Values.front.keepalive.connections }};
+        keepalive_requests {{ .Values.front.keepalive.requests }};
+        keepalive_time {{ .Values.front.keepalive.time }};
+        keepalive_timeout {{ .Values.front.keepalive.timeout }};
+        {{- end }}
+    }
+    {{- end }}
+
+    {{ include "front.createUpstreams" . | nindent 4 }}
+
+    upstream router_{{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }} {
+        server {{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }};
+        {{- if .Values.front.keepalive.enabled }}
+        keepalive {{ .Values.front.keepalive.connections }};
+        keepalive_requests {{ .Values.front.keepalive.requests }};
+        keepalive_time {{ .Values.front.keepalive.time }};
+        keepalive_timeout {{ .Values.front.keepalive.timeout }};
+        {{- end }}
+    }
 
     {{- if .Values.serverBlock }}
     include /etc/nginx/conf.d/extra/server-block.conf;
     {{- end }}
 
-
     server {
         listen                      {{ .Values.front.port }};
         server_name                 _;
+
+        real_ip_header X-Forwarded-For;
+        set_real_ip_from {{ .Values.nginx.setRealIpFrom }};
+
+        {{- if .Values.nginx.hideBackendHostname }}
+        proxy_hide_header X-Back-Hostname;
+        {{- end }}
 
         location /favicon.ico {
             log_not_found           off;
             access_log              off;
         }
 
-        {{ if .Values.carroutingLocation }}
-        {{ include "tplvalues.render" ( dict "value" .Values.carroutingLocation "context" $ ) | indent 4 }}
-        {{ else  }}
+        {{- if .Values.carroutingLocation }}
+        {{ include "tplvalues.render" ( dict "value" .Values.carroutingLocation "context" . ) | nindent 8 }}
+        {{- else }}
         location ^~ /carrouting {
             js_content bundle.geo_coding;
         }
         {{- end }}
 
-        {{ if .Values.hullLocation }}
-        {{ include "tplvalues.render" ( dict "value" .Values.hullLocation "context" $ ) | indent 4 }}
-        {{ else  }}
+        {{- if .Values.hullLocation }}
+        {{ include "tplvalues.render" ( dict "value" .Values.hullLocation "context" . ) | nindent 8 }}
+        {{- else }}
         location ^~ /get_hull {
             js_content bundle.geo_coding;
         }
         {{- end }}
 
-        location ^~ /get_dist_matrix {
+        {{- if .Values.locationsBlock }}
+        # comes before default locations taking precedence
+        include /etc/nginx/conf.d/extra/locations-block.conf;
+        {{- end }}
+
+        location ~* ^/get_dist_matrix$ {
             js_content bundle.geo_coding;
         }
 
-        location ^~ /get_dist_matrix_ctx {
+        {{- if .Values.distMatrixCtxLocation }}
+        {{ include "tplvalues.render" ( dict "value" .Values.distMatrixCtxLocation "context" . ) | nindent 8 }}
+        {{- else }}
+        location ~* ^/get_dist_matrix_ctx$ {
+            js_content bundle.geo_coding;
+        }
+        {{- end }}
+
+        location ~* ^/pedestrian {
             js_content bundle.geo_coding;
         }
 
-        location ^~ /pedestrian {
+        location ~* ^/bicycle {
             js_content bundle.geo_coding;
         }
 
-        location ^~ /bicycle {
+        location ~* ^/public_transport {
             js_content bundle.geo_coding;
         }
 
-        location ^~ /public_transport {
+        location ~* ^/routing/ {
             js_content bundle.geo_coding;
         }
 
-        location ^~ /routing/ {
+        location ~* ^/map_matching/ {
             js_content bundle.geo_coding;
         }
 
-        location ^~ /map_matching/ {
+        location ~* ^/get_pairs/ {
             js_content bundle.geo_coding;
         }
 
-        location ^~ /get_pairs/ {
+        location ~* ^/truck/ {
             js_content bundle.geo_coding;
         }
 
-        location ^~ /truck/ {
-            js_content bundle.geo_coding;
-        }
-
-        location ^~ /free_roam {
+        location ~* ^/free_roam {
             gzip on;
             gzip_vary on;
             gzip_proxied any;
@@ -84,18 +144,60 @@ data:
             js_content bundle.geo_coding;
         }
 
+        {{- if .Values.front.multimod.enabled }}
+        {{- if .Values.multimodLocation }}
+        {{ include "tplvalues.render" ( dict "value" .Values.multimodLocation "context" . ) | nindent 8 }}
+        {{- else }}
+        location /ctx_multi_mod {
+            {{ include "front.getInternalACL" . | nindent 12 }}
+            rewrite ^/ctx_multi_mod(.*)$ $1 break;
+            add_header X-Region {{ .Values.front.multimod.host }} always;
+            proxy_set_header X-Multi-Mod-Taxi $multi_mod_taxi;
+            proxy_set_header X-Multi-Mod-Ctx $multi_mod_ctx;
+            proxy_set_header X-Region-Id $multi_region_id;
+            {{- if .Values.front.keepalive.enabled }}
+            proxy_set_header Connection "";
+            proxy_http_version 1.1;
+            {{- end }}
+            proxy_pass http://{{ .Values.front.multimod.host }}$uri$is_args$args;
+        }
+        location /find_platforms {
+            {{ include "front.getInternalACL" . | nindent 12 }}
+            js_content bundle.geo_coding;
+        }
+        {{- end }}
+        {{- end }}
+
+        location ~* ^/route_planner  {
+            js_content bundle.geo_coding;
+        }
+
         location /geocoding {
+            {{ include "front.getInternalACL" . | nindent 12 }}
+            {{- if .Values.nginx.connectTimeout.geocoding }}
+            proxy_connect_timeout {{ .Values.nginx.connectTimeout.geocoding }};
+            {{- end }}
             rewrite ^/geocoding(.*)$ $1 break;
-            proxy_pass http://{{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }};
+            {{- if .Values.front.keepalive.enabled }}
+            proxy_set_header Connection "";
+            proxy_http_version 1.1;
+            {{- end }}
+            proxy_pass http://router_{{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }};
         }
 
         location /healthcheck {
+            {{- if .Values.nginx.opentracing.enabled }}
+            opentracing off;
+            {{- end }}
+            access_log off;
             return 200 "Ok!";
+            add_header 'Content-Type' 'text/plain';
         }
 
-        {{- if .Values.locationsBlock }}
-        include /etc/nginx/conf.d/extra/locations-block.conf;
-        {{- end }}
+        location ^/$ {
+            return 200;
+            add_header 'Content-Type' 'text/plain';
+        }
 
-    {{ include "front.createLocations" . | indent 4 }}
+        {{ include "front.createLocations" . | nindent 8 }}
     }

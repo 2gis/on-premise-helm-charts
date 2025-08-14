@@ -1,0 +1,17 @@
+apiVersion: v2
+name: navi-attractor
+description: Attractor Helm chart
+type: application
+keywords:
+- navi
+- attractor
+version: 1.35.0
+appVersion: 7.27.1.2
+dependencies:
+- name: generic-chart
+  version: '*'
+  repository: file://../generic-chart
+maintainers:
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

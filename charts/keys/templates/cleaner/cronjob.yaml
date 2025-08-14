@@ -9,6 +9,7 @@ spec:
   concurrencyPolicy: Forbid
   schedule: "{{ .Values.dispatcher.cleaner.cron.schedule }}"
   successfulJobsHistoryLimit: {{ .Values.dispatcher.cleaner.cron.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.dispatcher.cleaner.cron.failedJobsHistoryLimit }}
   suspend: {{ .Values.dispatcher.cleaner.cron.suspend }}
   jobTemplate:
     spec:

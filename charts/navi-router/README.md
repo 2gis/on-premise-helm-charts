@@ -28,42 +28,48 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Common settings
 
-| Name                   | Description                                                                                                                                    | Value |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `replicaCount`         | A replica count for the pod                                                                                                                    | `1`   |
-| `revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `imagePullSecrets`     | Kubernetes image pull secrets                                                                                                                  | `[]`  |
-| `nameOverride`         | Base name to use in all the Kubernetes entities deployed by this chart                                                                         | `""`  |
-| `fullnameOverride`     | Base fullname to use in all the Kubernetes entities deployed by this chart                                                                     | `""`  |
-| `podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                   | `{}`  |
-| `podSecurityContext`   | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                  | `{}`  |
-| `securityContext`      | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                      | `{}`  |
-| `nodeSelector`         | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                             | `{}`  |
-| `tolerations`          | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                               | `[]`  |
-| `affinity`             | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                     | `{}`  |
+| Name                            | Description                                                                                                                                    | Value |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `replicaCount`                  | A replica count for the pod                                                                                                                    | `1`   |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
+| `imagePullSecrets`              | Kubernetes image pull secrets                                                                                                                  | `[]`  |
+| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart                                                                         | `""`  |
+| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart                                                                     | `""`  |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                   | `{}`  |
+| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                  | `{}`  |
+| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                      | `{}`  |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                             | `{}`  |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                               | `[]`  |
+| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                     | `{}`  |
+| `preStopDelay`                  | Delay in seconds before terminating container.                                                                                                 | `5`   |
+| `terminationGracePeriodSeconds` | Grace period for container shutdown, refer to [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) for details   | `60`  |
 
 ### Deployment settings
 
 | Name               | Description | Value                         |
 | ------------------ | ----------- | ----------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-router` |
-| `image.tag`        | Tag         | `6.24.0.3`                    |
+| `image.tag`        | Tag         | `6.29.0.6`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
 ### Navi-Router service settings
 
-| Name                        | Description                                                                                                                                 | Value       |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `router.appPort`            | Navi-Router service HTTP port                                                                                                               | `8080`      |
-| `router.logLevel`           | Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`                                                             | `Warning`   |
-| `router.additionalSections` | Additional configurations sections for the Navi-Router service                                                                              | `""`        |
-| `router.castleUrl`          | URL of Navi-Castle service, ex: http://navi-castle.svc. <br> This URL should be accessible from all the pods within your Kubernetes cluster | `""`        |
-| `keys.enabled`              | Disable or enable key management service                                                                                                    | `false`     |
-| `keys.url`                  | key management service server URL                                                                                                           | `""`        |
-| `keys.refreshIntervalSec`   | Keys refresh interval in seconds                                                                                                            | `30`        |
-| `keys.downloadTimeoutSec`   | Keys download timeout in seconds                                                                                                            | `30`        |
-| `keys.commonToken`          | Mater key to retrieve all per-service API keys, keys.apis ignored, if commonToken set                                                       | `""`        |
-| `keys.apis`                 | Used API types and their tokens. Format: `type: token`                                                                                      | `undefined` |
+| Name                                               | Description                                                                                                      | Value             |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `router.appPort`                                   | Navi-Router service HTTP port.                                                                                   | `8080`            |
+| `router.logLevel`                                  | Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`                                  | `Warning`         |
+| `router.logMessageField`                           | Field name in logs                                                                                               | `custom.navi_msg` |
+| `router.additionalSections`                        | Additional configurations sections for the Navi-Router service.                                                  | `""`              |
+| `router.castleUrl`                                 | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster. | `""`              |
+| `router.localRestrictions.distanceBetweenPointsKm` | Max allowed distance between points                                                                              |                   |
+| `router.localRestrictions.pointsCount`             | Max allowed points count                                                                                         |                   |
+| `router.localRestrictions.matrixSize`              | Max allowed matrix size                                                                                          |                   |
+| `keys.enabled`                                     | Disable or enable key management service                                                                         | `false`           |
+| `keys.url`                                         | key management service server URL                                                                                | `""`              |
+| `keys.refreshIntervalSec`                          | Keys refresh interval in seconds                                                                                 | `30`              |
+| `keys.downloadTimeoutSec`                          | Keys download timeout in seconds                                                                                 | `30`              |
+| `keys.commonToken`                                 | Mater key to retrieve all per-service API keys, keys.apis ignored, if commonToken set                            | `""`              |
+| `keys.apis`                                        | Used API types and their tokens. Format: `type: token`                                                           | `undefined`       |
 
 ### Service account settings
 
@@ -113,15 +119,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-| Name                                      | Description                                                                                                                                                         | Value   |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `hpa.enabled`                             | If HPA is enabled for the service                                                                                                                                   | `false` |
-| `hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down                                                                                       | `1`     |
-| `hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up                                                                                         | `100`   |
-| `hpa.scaleDownStabilizationWindowSeconds` | Scale-down window                                                                                                                                                   | `""`    |
-| `hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window                                                                                                                                                     | `""`    |
-| `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used       | `80`    |
-| `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used | `""`    |
+| Name                                    | Description                                                                                                                                                         | Value   |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `hpa.enabled`                           | If HPA is enabled for the service                                                                                                                                   | `false` |
+| `hpa.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down                                                                                       | `1`     |
+| `hpa.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up                                                                                         | `100`   |
+| `hpa.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used       | `80`    |
+| `hpa.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used | `""`    |
+| `hpa.scaleUp`                           | To configure separate scale-up [policy](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies).                               | `{}`    |
+| `hpa.scaleDown`                         | To configure separate scale-down [policy](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies).                             | `{}`    |
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
@@ -141,6 +147,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down                                         | `128Mi` |
 | `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up                                     | `2000`  |
 | `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up                                           | `512Mi` |
+
+### Requests sign check. **FOR FUTURE RELEASE**
+
+| Name                            | Description                                             | Value |
+| ------------------------------- | ------------------------------------------------------- | ----- |
+| `requestsSignCheck.enabledKeys` | Array of keys and salt id mappings                      | `[]`  |
+| `requestsSignCheck.hashSalt`    | id:salt mappings for verifying requests signature       | `{}`  |
+| `requestsSignCheck.keys`        | List of keys for verifying requests sign **DEPRECATED** | `[]`  |
+| `requestsSignCheck.salt`        | Salt for verifying requests sign. **DEPRECATED**        | `""`  |
 
 
 ## Maintainers

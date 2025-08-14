@@ -6,7 +6,7 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "pro-api.tasksLabels" . | nindent 4 }}
+    {{- include "pro-api.tasksApiLabels" . | nindent 4 }}
   {{- with .Values.tasks.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

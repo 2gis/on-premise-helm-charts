@@ -87,15 +87,16 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 #### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
-| Name                    | Description                                                                                                 | Value   |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------- | ------- |
-| `vpa.enabled`           | If VPA is enabled for the service                                                                           | `false` |
-| `vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start) | `Auto`  |
-| `vpa.containerName`     | Name of a container to measure utilization for                                                              | `""`    |
-| `vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down                                   |         |
-| `vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down                                         |         |
-| `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up                                     |         |
-| `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up                                           |         |
+| Name                    | Description                                                                                                 | Value          |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------- | -------------- |
+| `vpa.enabled`           | If VPA is enabled for the service                                                                           | `false`        |
+| `vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start) | `Auto`         |
+| `vpa.containerName`     | Name of a container to measure utilization for                                                              | `""`           |
+| `vpa.controlledValues`  | Controlled values, one of: RequestsOnly or RequestsAndLimits                                                | `RequestsOnly` |
+| `vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down                                   |                |
+| `vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down                                         |                |
+| `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up                                     |                |
+| `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up                                           |                |
 
 #### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
@@ -114,6 +115,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                 | `ClusterIP` |
 | `service.clusterIP`   | Controls Service cluster IP allocation. Cannot be changed after resource creation.                                                             | `""`        |
 | `service.port`        | Service port.                                                                                                                                  | `80`        |
+| `service.nodePort`    | Node port if type NodePort.                                                                                                                    | `nil`       |
 
 #### [Service account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
 
@@ -136,12 +138,23 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 #### [Job](https://kubernetes.io/docs/concepts/workloads/controllers/job/) settings
 
-| Name                       | Description                                                                                                       | Value |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
-| `job.backoffLimit`         | Number of retries before considering a Job as failed.                                                             | `""`  |
-| `job.backoffLimitPerIndex` | Maximal number of pod failures per index.                                                                         | `""`  |
-| `job.podFailurePolicy`     | Pod failure policy.                                                                                               | `""`  |
-| `job.completions`          | Number of successful pods for completion Job.                                                                     | `""`  |
-| `job.completionMode`       | Completion mode (NonIndexed or Indexed).                                                                          | `""`  |
-| `job.parallelism`          | Number of pods running at any instant.                                                                            | `""`  |
-| `job.restartPolicy`        | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy) | `""`  |
+| Name                        | Description                                                                                                       | Value |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
+| `job.activeDeadlineSeconds` | Number of seconds active deadline.                                                                                | `""`  |
+| `job.backoffLimit`          | Number of retries before considering a Job as failed.                                                             | `""`  |
+| `job.backoffLimitPerIndex`  | Maximal number of pod failures per index.                                                                         | `""`  |
+| `job.podFailurePolicy`      | Pod failure policy.                                                                                               | `""`  |
+| `job.completions`           | Number of successful pods for completion Job.                                                                     | `""`  |
+| `job.completionMode`        | Completion mode (NonIndexed or Indexed).                                                                          | `""`  |
+| `job.parallelism`           | Number of pods running at any instant.                                                                            | `""`  |
+| `job.restartPolicy`         | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy) | `""`  |
+
+#### Network Policy configuration
+
+| Name                                               | Description                                                  | Value   |
+| -------------------------------------------------- | ------------------------------------------------------------ | ------- |
+| `networkPolicy.ingress.enabled`                    | Enable creation of NetworkPolicy resources for ingress rules | `false` |
+| `networkPolicy.ingress.explicitNamespacesSelector` | Explict namespace selector for default rule ingress          | `{}`    |
+| `networkPolicy.ingress.additionalRules`            | Array of additional ingress rules                            | `[]`    |
+| `networkPolicy.egress.enabled`                     | Enable creation of NetworkPolicy resources for egress rules  | `false` |
+| `networkPolicy.egress.config`                      | Array of egress rules                                        | `[]`    |

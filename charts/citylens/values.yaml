@@ -67,6 +67,7 @@ dgctlStorage:
 
 # @param api.auth.enabled If authentication is needed.
 # @param api.auth.authServerUrl API URL of authentication service, OIDC-compatibility expected. Ex.: `http(s)://keycloak.ingress.host/`. **Required**
+# @param api.auth.storeOIDCUserinfoFields List of fields from OIDC userinfo_endpoint response to store for users, uploading tracks. Ex.: `['en_name', 'id_no']`.
 # @param api.auth.realm Authentication realm. Used for constructing openid-configuration endpoint: `/realms/realm/.well-known/openid-configuration` if realm defined, `/.well-known/openid-configuration` othervise. Ex: CityLens_app
 # @param api.auth.verifySsl Enable\Disable SSL check.
 
@@ -99,7 +100,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.16.4
+    tag: 1.17.5
 
   replicas: 4
 
@@ -127,19 +128,20 @@ api:
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: '0'
     hosts:
-    - host: citylens-api.host
+    - host: citylens-api.example.com
       paths:
       - path: /
         pathType: Prefix
     tls: []
-      # - hosts:
-      #    host: 'citylens-api.host'
-      #  secretName: ''
+    # - hosts:
+    #   - citylens-api.example.com
+    #   secretName: secret.tls
 
   auth:
     enabled: true
     authServerUrl: ''
     realm: ''
+    storeOIDCUserinfoFields: []
     verifySsl: true
     predictorsTokens:
       camcom: ''
@@ -232,7 +234,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.16.4
+    tag: 1.17.5
 
   replicas: 1
 
@@ -261,14 +263,14 @@ web:
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: '0'
     hosts:
-    - host: citylens-web.host
+    - host: citylens-web.example.com
       paths:
       - path: /
         pathType: Prefix
     tls: []
-      # - hosts:
-      #    host: 'citylens-web.host'
-      #  secretName: ''
+    # - hosts:
+    #   - citylens-web.example.com
+    #   secretName: secret.tls
 
   auth:
     enabled: false
@@ -456,6 +458,10 @@ worker:
 
 # @section Citylens Reporter Pro worker's settings (synchronization with Pro)
 
+# @param worker.reporterPro.enabled If integration with Pro is enabled for the service.
+# @param worker.reporterPro.predictors From what sources detections should be localized.
+# @param worker.reporterPro.trackTimeoutDays Timeout in days for track to be considered being uploading.
+
 # @param worker.reporterPro.replicas A replica count for the pod.
 
 # @param worker.reporterPro.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
@@ -471,6 +477,11 @@ worker:
 
   reporterPro:
 
+    enabled: true
+
+    predictors: [camcom]
+    trackTimeoutDays: 1
+
     replicas: 1
 
     revisionHistoryLimit: 3
@@ -483,9 +494,7 @@ worker:
     affinity: {}
     tolerations: {}
 
-# @section Citylens Reporter Pro Tracks worker's settings (track status actualization)
-
-# @param worker.reporterProTracks.enabled Deploy worker or not.
+# @section Citylens Reporter Pro Tracks worker's settings (track status actualization, requires Reporter Pro)
 
 # @param worker.reporterProTracks.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 
@@ -499,8 +508,6 @@ worker:
 # @param worker.reporterProTracks.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
 
   reporterProTracks:
-
-    enabled: true
 
     revisionHistoryLimit: 3
 
@@ -632,6 +639,71 @@ worker:
     tolerations: {}
 
 
+# @section Citylens Detections Localizer worker's settings
+
+# @param worker.detectionsLocalizer.enabled If Detections Localizer worker is enabled for the service.
+# @param worker.detectionsLocalizer.predictors From what sources detections should be localized.
+
+# @param worker.detectionsLocalizer.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+# @param worker.detectionsLocalizer.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.detectionsLocalizer.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.detectionsLocalizer.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.detectionsLocalizer.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.detectionsLocalizer.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.detectionsLocalizer.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.detectionsLocalizer.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  detectionsLocalizer:
+
+    enabled: false
+
+    predictors: [camcom]
+
+    revisionHistoryLimit: 3
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+
+# @section Citylens Lifecycle Controller worker's settings (depends on Detections Localizer worker)
+
+# @param worker.lifecycleController.scheduledLocalizationTimeoutMinutes Timeout in minutes after that track localization will be rescheduled if it was scheduled and not done.
+# @param worker.lifecycleController.minTrackLocalizationIntervalMinutes Interval in minutes between scheduling track detections localization again.
+
+# @param worker.lifecycleController.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+# @param worker.lifecycleController.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.lifecycleController.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param worker.lifecycleController.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param worker.lifecycleController.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param worker.lifecycleController.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param worker.lifecycleController.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param worker.lifecycleController.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+  lifecycleController:
+
+    scheduledLocalizationTimeoutMinutes: 1380  # 23h
+    minTrackLocalizationIntervalMinutes: 10
+
+    revisionHistoryLimit: 3
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: {}
+
+
 # @section Citylens Dashboard batch events worker's settings
 
 # @param worker.dashboardBatchEvents.replicas A replica count for the pod.
@@ -662,7 +734,7 @@ worker:
     image:
       repository: 2gis-on-premise/citylens-workers
       pullPolicy: IfNotPresent
-      tag: 1.16.4
+      tag: 1.17.5
 
     revisionHistoryLimit: 3
 
@@ -698,7 +770,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.16.1
+    tag: 1.17.1
 
   resources:
     requests:
@@ -715,14 +787,18 @@ migrations:
 # @param kafka.bootstrapServer A Kafka broker endpoint. **Required**
 # @param kafka.username A Kafka username for connection. **Required**
 # @param kafka.password A Kafka password for connection. **Required**
+# @param kafka.securityProtocol Protocol used to communicate with brokers. Currently supported: SASL_PLAINTEXT.
+# @param kafka.saslMechanism Authentication mechanism. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.
 # @param kafka.produceTimeoutSeconds Timeout for producer.
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
 # @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
 # @param kafka.topics.pro Topic for frames synchronization with Pro (used by Reporter pro worker). **Required**
+# @param kafka.topics.proObjects Topic for localized detections synchronization with Pro (used by Reporter pro worker, requires Detections Localizer worker). **Required**
 # @param kafka.topics.proDrivers Topic for drivers tracks synchronization with Pro (used by Reporter pro worker). **Required**
 # @param kafka.topics.uploader Topic for Uploader worker. **Required**
 # @param kafka.topics.logs Topic for citylens mobile app logs, uploaded via citylens-api. **Required**
 # @param kafka.topics.framesLifecycle Topic for frames lifecycle events. **Required**
+# @param kafka.topics.objectsLifecycle Topic for objects lifecycle events. **Required**
 # @param kafka.topics.tracksLifecycle Topic for tracks lifecycle events. **Required**
 # @param kafka.topics.predictions Topic for predictions events from detectors. **Required**
 # @param kafka.consumerGroups.prefix Kafka topics prefix. **Required**
@@ -732,15 +808,19 @@ kafka:
   bootstrapServer: ''
   username: ''
   password: ''
+  securityProtocol: SASL_PLAINTEXT
+  saslMechanism: SCRAM-SHA-512
   produceTimeoutSeconds: 5
   topics:
     frames: ''
     tracks: ''
     pro: ''
+    proObjects: ''
     proDrivers: ''
     logs: ''
     uploader: ''
     framesLifecycle: ''
+    objectsLifecycle: ''
     tracksLifecycle: ''
     predictions: ''
   consumerGroups:
@@ -805,9 +885,6 @@ map:
 # @param dashboardDomain Link to Citylens web address. **Required**
 # @param locale Locale language (en by default).
 # @param headerLinks List of links for navbar.
-# @param reporters[0].name Reporter name.
-# @param reporters[0].predictors Predictor used by reporter.
-# @param reporters[0].trackTimeoutDays Time in days to wait for track completion and receiving frames prediction before marking as not synced with Pro.
 
 dashboardDomain: ''
 
@@ -819,23 +896,20 @@ headerLinks:
 - interest_zones
 - map
 
-reporters:
-- name: pro
-  predictors: [camcom]
-  trackTimeoutDays: 1
-
 # @section PRO integration (only when Pro reporter enabled)
 
 # @param pro.baseUrl PRO API URL. Ex: http(s)://pro-api.svc
 # @param pro.key PRO API auth token
 # @param pro.verifySsl Set to `false` if pro.baseUrl must be accessed via https without certificate validation. **Required**
-# @param pro.framesAssetId PRO frames asset id (used for filters actualization). Ex: your_asset_name
+# @param pro.framesAssetId PRO Frames asset id (used for filters actualization). Ex: your_frames_asset_name
+# @param pro.objectsAssetId PRO Objects asset id (used for filters actualization). Ex: your_objects_asset_name
 
 pro:
   baseUrl: ''
   key: ''
   verifySsl: true
   framesAssetId: ''
+  objectsAssetId: ''
 
 # @section **Custom Certificate Authority**
 
@@ -849,3 +923,326 @@ customCAs:
   #   ...
   #   -----END CERTIFICATE-----
   certsPath: ''
+
+# @section Citylens routes services settings
+
+# @skip routes.environment
+# @param routes.imagePullSecrets Kubernetes image pull secrets.
+# @param routes.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
+# @param routes.migration.enabled If migrations needed.
+
+# @extra routes **Strategy**
+# @param routes.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param routes.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param routes.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+# @extra routes **Postgres**
+# @param routes.postgres.database PostgreSQL database name. **Required**
+# @param routes.postgres.timeout The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.
+# @param routes.postgres.commandTimeout The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.
+# @param routes.postgres.maxPoolSize The maximum connection pool size.
+# @param routes.postgres.pooling Whether connection pooling should be used.
+
+# @extra routes **Hangfire**
+# @param routes.hangfire.postgres.database PostgreSQL database name. **Required**
+# @param routes.hangfire.postgres.timeout The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.
+# @param routes.hangfire.postgres.commandTimeout The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.
+# @param routes.hangfire.postgres.maxPoolSize The maximum connection pool size.
+# @param routes.hangfire.postgres.pooling Whether connection pooling should be used.
+
+# @section Citylens routes API
+
+# @section Image settings
+# @param routes.api.image.repository Repository.
+# @param routes.api.image.tag Tag.
+# @param routes.api.image.pullPolicy Pull Policy.
+
+# @section Resources settings
+# @param routes.api.replicaCount A replica count for the pod.
+# @param routes.api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param routes.api.resources.requests.cpu A CPU request.
+# @param routes.api.resources.requests.memory A memory request.
+# @param routes.api.resources.limits.cpu A CPU limit.
+# @param routes.api.resources.limits.memory A memory limit.
+
+# @section Service settings
+# @param routes.api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param routes.api.service.port Service port.
+# @param routes.api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+# @param routes.api.ingress.enabled If Ingress is enabled for the service.
+# @param routes.api.ingress.className Resource that contains additional configuration including the name of the controller that should implement the class.
+# @param routes.api.ingress.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.api.ingress.hosts[0].host Hostname for the Ingress service. Ex.: 'citylens.api'.
+# @param routes.api.ingress.hosts[0].paths[0].path Endpoint of host.
+# @param routes.api.ingress.hosts[0].paths[0].pathType Path type of endpoint.
+# @param routes.api.ingress.tls Tls settings for https.
+
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @param routes.api.pdb.enabled If PDB is enabled for the service.
+# @param routes.api.pdb.minAvailable How many pods must be available after the eviction.
+# @param routes.api.pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+# @param routes.api.hpa.enabled If HPA is enabled for the service.
+# @param routes.api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param routes.api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param routes.api.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+# @param routes.api.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
+# @param routes.api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @param routes.api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+# @param routes.api.vpa.enabled If VPA is enabled for the service.
+# @param routes.api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param routes.api.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @param routes.api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @param routes.api.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @param routes.api.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+
+# @section Metadata settings
+# @param routes.api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.api.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param routes.api.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.api.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param routes.api.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param routes.api.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param routes.api.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+# @param routes.api.tempPath Path to directory used for temp data
+
+# @extra routes.api.logging Routes **Logging** settings
+# @param routes.api.logging.level Log message level. verbose, debug, information, warning, error, fatal.
+
+# @section Citylens routes Worker
+
+# @section Image settings
+# @param routes.worker.image.repository Repository.
+# @param routes.worker.image.tag Tag.
+# @param routes.worker.image.pullPolicy Pull Policy.
+
+# @section Resources settings
+# @param routes.worker.replicaCount A replica count for the pod.
+# @param routes.worker.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param routes.worker.resources.requests.cpu A CPU request.
+# @param routes.worker.resources.requests.memory A memory request.
+# @param routes.worker.resources.limits.cpu A CPU limit.
+# @param routes.worker.resources.limits.memory A memory limit.
+
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @param routes.worker.pdb.enabled If PDB is enabled for the service.
+# @param routes.worker.pdb.minAvailable How many pods must be available after the eviction.
+# @param routes.worker.pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+# @section Metadata settings
+# @param routes.worker.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.worker.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param routes.worker.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.worker.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param routes.worker.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param routes.worker.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param routes.worker.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+# @param routes.worker.tempPath Path to directory used for temp data
+
+# @extra routes.worker.logging Routes **Logging** settings
+# @param routes.worker.logging.level Log message level. verbose, debug, information, warning, error, fatal.
+
+# @section Kafka Bus configuration settings. Based on Kafka values
+# @extra routes.worker.busConfig Bus configuration
+# @extra routes.worker.busConfig.securityInformation SecurityInformation for the bus configuration
+# @param routes.worker.busConfig.securityInformation.saslMechanism Authentication mechanism when security_protocol is configured. Valid values are: Gssapi, Plain, ScramSha256, ScramSha512, OAuthBearer. Default: ScramSha512.
+# @param routes.worker.busConfig.securityInformation.securityProtocol Valid values are: Plaintext, Ssl, SaslPlaintext, SaslSsl. Default: SaslPlaintext.
+# @extra routes.worker.busConfig.consumers Consumers for the bus configuration.
+# @extra routes.worker.busConfig.consumers.appEvents App events for the consumers.
+# @param routes.worker.busConfig.consumers.appEvents.groupId The group ID for the app events.
+# @param routes.worker.busConfig.consumers.appEvents.bufferSize The buffer size for the app events.
+# @param routes.worker.busConfig.consumers.appEvents.workersCount The workers count for the app events.
+
+# @skip routes.features.authorizationEnabled
+# @skip routes.features.oidcMobileAuthorizationEnabled
+# @skip routes.features.proxyNaviKeyEnabled
+# @skip routes.features.coverageRatioEnabled
+
+# @section Citylens routes Clients
+
+# @section Navi integration
+# @param routes.navi.url Navi gateway url (used for getting navigation). **Required**
+# @skip routes.navi.timeout
+# @param routes.navi.key Navi Api Key.
+
+# @section Pro integration
+# @param routes.pro.authorizationToken Pro Authorization Token (need for creating assets).
+# @param routes.pro.mainTerritoryId Available territory identity (need for creating assets).
+
+# @section Keys integration
+# @param routes.keys.url API Keys endpoint url, ex: http://keys-api.svc (used for getting oidc auth).
+
+routes:
+
+  environment: ''
+  imagePullSecrets: []
+  terminationGracePeriodSeconds: 60
+
+  migration:
+    enabled: true
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  postgres:
+    database: ''
+    timeout: 15
+    commandTimeout: 30
+    maxPoolSize: 30
+    pooling: false
+
+  hangfire:
+    postgres:
+      database: ''
+      timeout: 15
+      commandTimeout: 30
+      maxPoolSize: 30
+      pooling: false
+
+  api:
+    image:
+      repository: 2gis-on-premise/citylens-routes-api
+      tag: 1.0.12
+      pullPolicy: IfNotPresent
+
+    replicaCount: 1
+
+    revisionHistoryLimit: 3
+
+    resources:
+      requests:
+        cpu: 400m
+        memory: 256M
+      limits:
+        cpu: 1
+        memory: 1024M
+
+    service:
+      annotations: {}
+      labels: {}
+      type: ClusterIP
+      port: 80
+
+    ingress:
+      enabled: false
+      annotations: {}
+      className: ''
+      hosts:
+      - host: citylens-routes-api.example.com
+        paths:
+        - path: /
+          pathType: Prefix
+      tls: []
+      # - hosts:
+      #   - citylens-routes-api.example.com
+      #   secretName: secret.tls
+
+    pdb:
+      enabled: true
+      minAvailable: ''
+      maxUnavailable: 1
+
+    hpa:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 1
+      scaleDownStabilizationWindowSeconds: ''
+      scaleUpStabilizationWindowSeconds: ''
+      targetCPUUtilizationPercentage: 50
+      targetMemoryUtilizationPercentage: ''
+
+    vpa:
+      enabled: false
+      updateMode: Auto
+      minAllowed:
+        cpu: 100m
+        memory: 128Mi
+      maxAllowed:
+        cpu: 1
+        memory: 512Mi
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
+
+    tempPath: /tmp
+
+    logging:
+      level: information
+
+  worker:
+    image:
+      repository: 2gis-on-premise/citylens-worker-service
+      tag: 1.0.12
+      pullPolicy: IfNotPresent
+
+    replicaCount: 1
+
+    revisionHistoryLimit: 3
+
+    resources:
+      requests:
+        cpu: 400m
+        memory: 256M
+      limits:
+        cpu: 1
+        memory: 1024M
+
+    pdb:
+      enabled: true
+      minAvailable: ''
+      maxUnavailable: 1
+
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
+
+    tempPath: /tmp
+
+    logging:
+      level: information
+
+    busConfig:
+      securityInformation:
+        saslMechanism: ScramSha512
+        securityProtocol: SaslPlaintext
+      consumers:
+        appEvents:
+          groupId: ''
+          bufferSize: 100
+          workersCount: 10
+
+  features:
+    authorizationEnabled: true
+    oidcMobileAuthorizationEnabled: true
+    proxyNaviKeyEnabled: true
+    coverageRatioEnabled: true
+
+  navi:
+    url: ''
+    timeout: 120
+    key: ''
+
+  pro:
+    authorizationToken: ''
+    mainTerritoryId: ''
+
+  keys:
+    url: ''

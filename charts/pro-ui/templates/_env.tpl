@@ -46,6 +46,8 @@
   value: "{{ required "A valid .Values.ui.auth.oAuthProvider entry required" .Values.ui.auth.oAuthProvider }}"
 - name: O_AUTH_SCOPES
   value: "{{ .Values.ui.auth.oAuthScopes }}"
+- name: AUTH_PLATFORM_MANAGER_HOST
+  value: "{{ .Values.ui.auth.platformManagerHost }}"
 {{- if eq .Values.ui.auth.oAuthProvider "openid" }}
 - name: OPEN_ID_WELL_KNOWN_URL_LIST_URL
   value: "{{ required "A valid .Values.ui.auth.openIdWellKnownUrlListUrl entry required" .Values.ui.auth.openIdWellKnownUrlListUrl }}"
@@ -56,14 +58,14 @@
   value: "{{ required "A valid .Values.ui.auth.identityProviderUrl entry required" .Values.ui.auth.identityProviderUrl }}"
 - name: O_AUTH_API_URL
   value: "{{ required "A valid .Values.ui.auth.oAuthApiUrl entry required" .Values.ui.auth.oAuthApiUrl }}"
-- name: USER_DATA_API_URL
-  value: "{{ .Values.ui.auth.userDataApiUrl }}"
 {{- end }}
 {{- end }}
 - name: APP_LOCALE
   value: "{{ .Values.ui.appLocale }}"
 - name: APP_THEME
   value: "{{ .Values.ui.appTheme }}"
+- name: AUTH_BRAND
+  value: "{{ .Values.ui.auth.brand }}"
 - name: APP_INITIAL_MAP_CENTER
   value: "{{ .Values.ui.appInitialMapCenter }}"
 - name: SUPPORT_DOCUMENTATION_LINK
@@ -90,6 +92,14 @@
   value: "{{ .Values.ui.whiteLabel.s3Bucket }}"
 - name: WHITE_LABEL_CONFIG_URL
   value: "{{ .Values.ui.whiteLabel.configUrl | default "/static/theme/urbi.json" }}"
+- name: ZENITH_HOST
+  value: "{{ .Values.ui.zenith.host }}"
+- name: ZENITH_TILE_SET
+  value: "{{ .Values.ui.zenith.tileSet }}"
+- name: ZENITH_PROTOCOL
+  value: "{{ .Values.ui.zenith.protocol }}"
+- name: ZENITH_SUBDOMAINS
+  value: "{{ .Values.ui.zenith.subdomains }}"
 {{- if .Values.ui.extraEnvVars }}
 {{- range $key, $val := .Values.ui.extraEnvVars }}
 - name: {{ $key }}

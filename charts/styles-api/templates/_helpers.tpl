@@ -105,6 +105,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.s3.bucket }}"
 - name: MGS_S3_PUBLIC_DOMAIN
   value: "{{ .Values.s3.publicDomain }}"
+- name: MGS_S3_REGION
+  value: "{{ .Values.s3.region }}"
+- name: MGS_S3_SECURE
+  value: "{{ .Values.s3.secure }}"
+- name: MGS_S3_VERIFY_SSL
+  value: "{{ .Values.s3.verifySsl }}"
 - name: MGS_S3_CONNECT_TIMEOUT
   value: "{{ .Values.s3.connectTimeout }}"
 - name: MGS_S3_REQUEST_TIMEOUT

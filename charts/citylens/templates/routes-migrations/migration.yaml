@@ -1,0 +1,130 @@
+﻿{{- if .Values.routes.migration.enabled }}
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "citylens.routes.migration.name" . }}-job
+  labels:
+    {{- include "citylens.routes.migration.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-5"
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "citylens.routes.migration.name" . }}
+      labels:
+        {{- include "citylens.routes.migration.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      {{- with .Values.routes.api.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: api-migrate
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.routes.api.image.repository }}:{{ .Values.routes.api.image.tag }}
+          imagePullPolicy: {{ .Values.routes.api.image.pullPolicy }}
+          args: [ "migrate" ]
+          resources:
+            {{- toYaml .Values.routes.api.resources | nindent 12 }}
+          env:
+            - name: PgSettings__Host
+              value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
+            - name: PgSettings__Port
+              value: "{{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port }}"
+            - name: PgSettings__UserName
+              value: "{{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username }}"
+            - name: PgSettings__Password
+              valueFrom:
+                secretKeyRef:
+                  key: postgresPassword
+                  name: {{ include "citylens.routes.migration.name" . }}-secret
+
+            - name: PgSettings__Api__Database
+              value: "{{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database }}"
+            - name: PgSettings__Api__Timeout
+              value: "{{ $.Values.routes.postgres.timeout }}"
+            - name: PgSettings__Api__CommandTimeout
+              value: "{{ $.Values.routes.postgres.commandTimeout }}"
+            - name: PgSettings__Api__MaxPoolSize
+              value: "{{ $.Values.routes.postgres.maxPoolSize }}"
+
+            - name: PgSettings__Hangfire__Database
+              value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
+            - name: PgSettings__Hangfire__Timeout
+              value: "{{ $.Values.routes.hangfire.postgres.timeout }}"
+            - name: PgSettings__Hangfire__CommandTimeout
+              value: "{{ $.Values.routes.hangfire.postgres.commandTimeout }}"
+            - name: PgSettings__Hangfire__MaxPoolSize
+              value: "{{ $.Values.routes.hangfire.postgres.maxPoolSize }}"
+            - name: PgSettings__Hangfire__Pooling
+              value: "{{ $.Values.routes.hangfire.postgres.pooling }}"
+
+        - name: worker-migrate
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.routes.worker.image.repository }}:{{ .Values.routes.worker.image.tag }}
+          imagePullPolicy: {{ .Values.routes.worker.image.pullPolicy }}
+          args: [ "migrate" ]
+          resources:
+            {{- toYaml .Values.routes.worker.resources | nindent 12 }}
+          env:
+            - name: PgSettings__Host
+              value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
+            - name: PgSettings__Port
+              value: "{{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port }}"
+            - name: PgSettings__UserName
+              value: "{{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username }}"
+            - name: PgSettings__Password
+              valueFrom:
+                secretKeyRef:
+                  key: postgresPassword
+                  name: {{ include "citylens.routes.migration.name" . }}-secret
+
+            - name: PgSettings__Api__Database
+              value: "{{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database }}"
+            - name: PgSettings__Api__Timeout
+              value: "{{ $.Values.routes.postgres.timeout }}"
+            - name: PgSettings__Api__CommandTimeout
+              value: "{{ $.Values.routes.postgres.commandTimeout }}"
+            - name: PgSettings__Api__MaxPoolSize
+              value: "{{ $.Values.routes.postgres.maxPoolSize }}"
+            - name: PgSettings__Api__Pooling
+              value: "{{ $.Values.routes.postgres.pooling }}"
+
+            - name: PgSettings__Hangfire__Database
+              value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
+            - name: PgSettings__Hangfire__Timeout
+              value: "{{ $.Values.routes.hangfire.postgres.timeout }}"
+            - name: PgSettings__Hangfire__CommandTimeout
+              value: "{{ $.Values.routes.hangfire.postgres.commandTimeout }}"
+            - name: PgSettings__Hangfire__MaxPoolSize
+              value: "{{ $.Values.routes.hangfire.postgres.maxPoolSize }}"
+            - name: PgSettings__Hangfire__Pooling
+              value: "{{ $.Values.routes.hangfire.postgres.pooling }}"
+
+            - name: BusConfig__Broker
+              value: "{{ .Values.kafka.bootstrapServer }}"
+            - name: BusConfig__SecurityInformation__SaslUsername
+              value: "{{ $.Values.kafka.username }}"
+            - name: BusConfig__SecurityInformation__SaslPassword
+              valueFrom:
+                secretKeyRef:
+                  key: busConfigSaslPassword
+                  name: {{ include "citylens.routes.migration.name" . }}-secret
+            - name: BusConfig__SecurityInformation__SaslMechanism
+              value: "{{ .Values.routes.worker.busConfig.securityInformation.saslMechanism }}"
+            - name: BusConfig__SecurityInformation__SecurityProtocol
+              value: "{{ .Values.routes.worker.busConfig.securityInformation.securityProtocol }}"
+
+            - name: BusConfig__Consumers__AppEvents__Topic
+              value: "{{ .Values.kafka.topics.tracks }}"
+            - name: BusConfig__Consumers__AppEvents__GroupId
+              value: "{{ $.Values.routes.worker.busConfig.consumers.appEvents.groupId }}"
+            - name: BusConfig__Consumers__AppEvents__BufferSize
+              value: "{{ $.Values.routes.worker.busConfig.consumers.appEvents.bufferSize }}"
+            - name: BusConfig__Consumers__AppEvents__WorkersCount
+              value: "{{ $.Values.routes.worker.busConfig.consumers.appEvents.workersCount }}"
+
+{{- end }}

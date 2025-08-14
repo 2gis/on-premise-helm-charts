@@ -8,7 +8,7 @@ metadata:
     {{- toYaml .Values.tasks.service.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "pro-api.tasksLabels" . | nindent 4 }}
+    {{- include "pro-api.tasksApiLabels" . | nindent 4 }}
   {{- if .Values.tasks.service.labels }}
     {{- toYaml .Values.tasks.service.labels | nindent 4 }}
   {{- end }}
@@ -26,5 +26,5 @@ spec:
       name: grpc
       appProtocol: http
   selector:
-    {{- include "pro-api.tasksSelectorLabels" . | nindent 4 }}
+    {{- include "pro-api.tasksApiSelectorLabels" . | nindent 4 }}
 {{- end }}
