@@ -239,7 +239,7 @@ data:
                 ) | nindent 16}}
             {{- end }}{{- /* range */}}
             },
-
+            
             {{- /* if rtr.roadLocks present */}}
             {{- if .Values.rtr.roadLocks.enabled }}
             road_locks_topic: '{{ .Values.rtr.roadLocks.kafka.topic }}',
@@ -269,7 +269,7 @@ data:
             {{- end }}{{- /* range $kafkaRole, $overridesProperty */}}
             }
             {{- end }}{{- /* .Values.rtr.roadLocks.enabled */}}
-
+            
         },
         store_period: {{ .Values.castle.storePeriod.rtr | squote }}
     }
