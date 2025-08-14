@@ -386,7 +386,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_KAFKA_MAIN_PASSWORD
   valueFrom:
     secretKeyRef:
-      name: {{ include "keys.kafka.name" . }}
+      name: {{ include "keys.name" . }}-kafka
       key: password
 {{- end }}
 - name: KEYS_REDIS_RETRIES
