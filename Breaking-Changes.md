@@ -4,19 +4,11 @@
 
 ### navi-attractor
 
-- New config format:
-  - Deleted `index` section
-  - Added `indices` section
-- Changed data type of `timeout_seconds` to Int
-- Renamed `rtr` section to `restrictions`
+- Renamed `attractor.rtr` to `attractor.restrictions`
 
 ### navi-back
 
-- New config format:
-  - Deleted `index` section
-  - Added `indices` section
-- Changed data type of `timeout_seconds` to Int
-- Renamed `rtr` section to `restrictions`
+- Renamed `naviback.rtr` to `naviback.restrictions`
 - `.Values.naviback.grpcPort` always enabled
 
 ## [1.41.0]
