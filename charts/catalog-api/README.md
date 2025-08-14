@@ -186,6 +186,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 | Name                                | Description                                                                                                                                     | Value   |
 | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `stat.enabled`                      | Is integration with statistic service enabled                                                                                                   | `false` |
+| `stat.url`                          | URL of the statistic service. Ex: http(s)://stat.svc                                                                                            | `""`    |
 | `stat.request.enabled`              | If statistic by request is enabled                                                                                                              | `false` |
 | `stat.request.buffer.lifetime`      | Lifetime of request Statistic buffer                                                                                                            | `5s`    |
 | `stat.request.buffer.sendTimeout`   | Timeout between sending request statistic messages                                                                                              | `2s`    |
@@ -194,7 +196,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `stat.search.buffer.lifetime`       | Lifetime of search Statistic buffer                                                                                                             | `5s`    |
 | `stat.search.buffer.sendTimeout`    | Timeout between sending search statistic messages                                                                                               | `2s`    |
 | `stat.search.buffer.sendLimit`      | The maximum number of search messages in the buffer before they are sent to the Statistic                                                       | `256`   |
-| `stat.client.url`                   | URL of the statistic service. Ex: http(s)://stat.svc                                                                                            | `""`    |
 | `stat.client.connectingTimeout`     | The time period within which the TCP connecting process must be completed                                                                       | `500ms` |
 | `stat.client.idleTimeout`           | The time after which an idle connection will be automatically closed                                                                            | `250ms` |
 | `stat.client.minConnections`        | The minimum number of parallel connections that a pool should keep alive ("hot")                                                                | `1`     |

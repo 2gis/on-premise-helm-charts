@@ -261,6 +261,8 @@ license:
 
 # @section Statistic settings
 
+# @param stat.enabled Is integration with statistic service enabled
+# @param stat.url URL of the statistic service. Ex: http(s)://stat.svc
 # @param stat.request.enabled If statistic by request is enabled
 # @param stat.request.buffer.lifetime Lifetime of request Statistic buffer
 # @param stat.request.buffer.sendTimeout Timeout between sending request statistic messages
@@ -269,7 +271,6 @@ license:
 # @param stat.search.buffer.lifetime Lifetime of search Statistic buffer
 # @param stat.search.buffer.sendTimeout Timeout between sending search statistic messages
 # @param stat.search.buffer.sendLimit The maximum number of search messages in the buffer before they are sent to the Statistic
-# @param stat.client.url URL of the statistic service. Ex: http(s)://stat.svc
 # @param stat.client.connectingTimeout The time period within which the TCP connecting process must be completed
 # @param stat.client.idleTimeout The time after which an idle connection will be automatically closed
 # @param stat.client.minConnections The minimum number of parallel connections that a pool should keep alive ("hot")
@@ -284,6 +285,8 @@ license:
 # @param stat.dispatcher.throughput Throughput defines the maximum number of messages to be processed per actor before the thread jumps to the next actor
 
 stat:
+  url: ''
+  enabled: false
   request:
     enabled: false
     buffer:
@@ -297,7 +300,6 @@ stat:
       sendTimeout: 2s
       sendLimit: 256
   client:
-    url: ''
     connectingTimeout: 500ms
     idleTimeout: 250ms
     minConnections: 1

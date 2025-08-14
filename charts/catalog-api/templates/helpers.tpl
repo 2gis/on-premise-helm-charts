@@ -189,6 +189,7 @@ onprem
 {{- end }}
 
 {{- define "catalog.env.stat" -}}
+{{- if .Values.stat.enabled }}
 - name: CATALOG_BSS_ENDPOINT
   value: "{{ .Values.stat.url }}"
 - name: CATALOG_BSS_REQUEST_ENABLED
@@ -210,7 +211,7 @@ onprem
 - name: CATALOG_BSS_CONNECTING_TIMEOUT
   value: "{{ .Values.stat.client.connectingTimeout }}"
 - name: CATALOG_BSS_IDLE_TIMEOUT
-  value: "{{ .Values.stat.client.Idle_timeout }}"
+  value: "{{ .Values.stat.client.idleTimeout }}"
 - name: CATALOG_BSS_MIN_CONNECTIONS
   value: "{{ .Values.stat.client.minConnections }}"
 - name: CATALOG_BSS_MAX_CONNECTIONS
@@ -230,7 +231,8 @@ onprem
 - name: CATALOG_BSS_DISPATCHER_FIXED_POOL_SIZE
   value: "{{ .Values.stat.dispatcher.fixedPoolSize }}"
 - name: CATALOG_BSS_DISPATCHER_THROUGHPUT
-  value: "{{ .Values.stat.dispatcherThroughput }}"
+  value: "{{ .Values.stat.dispatcher.throughput }}"
+{{- end }}
 {{- end }}
 
 {{- define "catalog.env.importer" -}}
