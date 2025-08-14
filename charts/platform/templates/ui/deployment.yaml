@@ -53,6 +53,21 @@ spec:
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}
           env:
+            - name: OAUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "platform.ui.secretName" . }}
+                  key: oauthClientSecret
+            - name: CATALOG_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "platform.ui.secretName" . }}
+                  key: catalogApiKey
+            - name: NAVI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "platform.ui.secretName" . }}
+                  key: naviApiKey
             - name: DEFAULT_LOCALE
               value: {{ .Values.ui.defaultLocale | quote }}
             - name: BRAND
@@ -71,12 +86,8 @@ spec:
               value: {{ .Values.ui.googleTagManagerId | quote }}
             - name: CATALOG_API_URL
               value: {{ .Values.ui.catalog.url | quote }}
-            - name: CATALOG_API_KEY
-              value: {{ .Values.ui.catalog.key | quote }}
             - name: NAVI_API_URL
               value: {{ .Values.ui.navi.url | quote }}
-            - name: NAVI_API_KEY
-              value: {{ .Values.ui.navi.key | quote }}
             - name: MAP_STYLES_API_URL
               value: {{ .Values.ui.mapStyles.url | quote }}
             - name: MAPGL_URL
@@ -111,8 +122,6 @@ spec:
               value: {{ .Values.ui.oauth.wellknownUrl | quote }}
             - name: OAUTH_CLIENT_ID
               value: {{ .Values.ui.oauth.clientId | quote }}
-            - name: OAUTH_CLIENT_SECRET
-              value: {{ .Values.ui.oauth.clientSecret | quote }}
             - name: OAUTH_SCOPE
               value: {{ .Values.ui.oauth.scope | quote }}
             - name: OAUTH_CODE_URL
@@ -121,6 +130,12 @@ spec:
               value: {{ .Values.ui.oauth.safeHosts }}
             - name: OAUTH_SECURE
               value: {{ .Values.ui.oauth.secure | quote }}
+            - name: ANALYTICS_BSS_SECURE
+              value: {{ .Values.ui.analyticsBSS.secure | quote }}
+            - name: ANALYTICS_BSS_URL
+              value: {{ .Values.ui.analyticsBSS.url | quote }}
+            - name: ANALYTICS_BSS_PRODUCT_ID
+              value: {{ .Values.ui.analyticsBSS.productId | quote }}
             - name: HOME
               value: "/tmp"
       {{- with .Values.ui.nodeSelector }}

@@ -39,7 +39,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/platform-ui
-    tag: 1.2.0
+    tag: 1.9.1
 
   # @section UI service settings
 
@@ -81,8 +81,21 @@ ui:
     clientSecret: ''
     scope: ''
     codeUrl: ''
-    safeHosts: .*
+    safeHosts: '.*'
     secure: true
+
+  # @section Analytics BSS
+
+  # @extra ui.analyticsBSS [object] A list of parameters for BSS analytics integration.
+
+  # @param ui.analyticsBSS.endpoint URL that is used to send BSS analytics events`.
+  # @param ui.analyticsBSS.secure If set to `true`, the `pl6_userId` cookie used for BSS user identification will be set with the `Secure` flag, allowing it to be sent only over HTTPS.
+  # @param ui.analyticsBSS.productId Identifier of the product used in BSS analytics. This value is included in every analytics event to distinguish between different products in the system.
+
+  analyticsBSS:
+    url: ''
+    secure: true
+    productId: ''
 
   # @section Statuses for services
 
@@ -178,21 +191,14 @@ ui:
 
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-  # @param ui.ingress.enabled If Ingress is enabled for the service.
-  # @param ui.ingress.className Name of the Ingress controller class.
-  # @param ui.ingress.hosts[0].host Hostname for the Ingress service.
-  # @param ui.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
-  # @param ui.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
-  # @param ui.ingress.tls TLS configuration
-
   ingress:
     enabled: false
     className: nginx
     hosts:
-    - host: platform-ui.example.com
-      paths:
-      - path: /
-        pathType: Prefix
+      - host: platform-ui.example.com
+        paths:
+          - path: /
+            pathType: Prefix
     tls: []
 
   # @section Limits
