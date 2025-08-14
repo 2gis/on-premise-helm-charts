@@ -1,0 +1,142 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "citylens.routes.realtimeDataApi.name" . }}
+  {{- with .Values.routes.realtimeDataApi.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "citylens.routes.realtimeDataApi.labels" . | nindent 4 }}
+  {{- with .Values.routes.realtimeDataApi.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.routes.realtimeDataApi.replicaCount }}
+  revisionHistoryLimit: {{ .Values.routes.realtimeDataApi.revisionHistoryLimit }}
+  {{- if .Values.routes.strategy }}
+  strategy:
+    {{- toYaml .Values.routes.strategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "citylens.routes.realtimeDataApi.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.routes.yaml") . | sha256sum }}
+      {{- with .Values.routes.realtimeDataApi.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "citylens.routes.realtimeDataApi.labels" . | nindent 8 }}
+      {{- with .Values.routes.realtimeDataApi.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.routes.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.routes.realtimeDataApi.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.routes.realtimeDataApi.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.routes.realtimeDataApi.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.routes.terminationGracePeriodSeconds }}
+      volumes:
+        - name: temp-volume
+          emptyDir: { }
+      containers:
+        - name: {{ include "citylens.routes.realtimeDataApi.name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.routes.realtimeDataApi.image.repository }}:{{ .Values.routes.realtimeDataApi.image.tag }}
+          imagePullPolicy: {{ .Values.routes.realtimeDataApi.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "{{ .Values.routes.realtimeDataApi.tempPath }}"
+              name: temp-volume
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 5
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 20
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.routes.realtimeDataApi.resources | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 5" ]
+          env:
+            - name: Common__TempPath
+              value: "{{ .Values.routes.realtimeDataApi.tempPath }}"
+
+            - name: Common__Logging__LogLevel
+              value: "{{ .Values.routes.realtimeDataApi.logging.level }}"
+
+            - name: PgSettings__Host
+              value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
+            - name: PgSettings__Port
+              value: "{{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port }}"
+            - name: PgSettings__UserName
+              value: "{{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username }}"
+            - name: PgSettings__Password
+              valueFrom:
+                secretKeyRef:
+                  key: postgresPassword
+                  name: {{ include "citylens.routes.api.name" . }}-secret
+
+            - name: PgSettings__Api__Database
+              value: "{{ required "A valid .Values.routes.realtimeDataApi.postgres.database entry required" $.Values.routes.realtimeDataApi.postgres.database }}"
+            - name: PgSettings__Api__Timeout
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.timeout }}"
+            - name: PgSettings__Api__CommandTimeout
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.commandTimeout }}"
+            - name: PgSettings__Api__MaxPoolSize
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.maxPoolSize }}"
+            - name: PgSettings__Api__Pooling
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.pooling }}"
+
+            - name: PgSettings__Hangfire__Database
+              value: "{{ required "A valid .Values.routes.realtimeData.postgres.database entry required" $.Values.routes.realtimeDataApi.postgres.database }}"
+            - name: PgSettings__Hangfire__Timeout
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.timeout }}"
+            - name: PgSettings__Hangfire__CommandTimeout
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.commandTimeout }}"
+            - name: PgSettings__Hangfire__MaxPoolSize
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.maxPoolSize }}"
+            - name: PgSettings__Hangfire__Pooling
+              value: "{{ $.Values.routes.realtimeDataApi.postgres.pooling }}"
+
+            - name: RealTimeDataSettings__DaysToLeaveData
+              value: "{{ $.Values.routes.realtimeDataApi.daysToLeaveData }}"

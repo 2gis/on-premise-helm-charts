@@ -5,15 +5,6 @@
 dgctlDockerRegistry: ''
 
 
-# @section Deployment settings
-
-# @param castle.image.repository Navi-Castle service image repository.
-# @param castle.image.pullPolicy Navi-Castle service pull policy.
-# @param castle.image.tag Navi-Castle service image tag.
-# @param nginx.image.repository Navi-Front image repository.
-# @param nginx.image.tag Navi-Front image tag.
-
-
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`.
@@ -48,8 +39,12 @@ dgctlStorage:
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param terminationGracePeriodSeconds Maximum time allowed for graceful shutdown.
+# @param initContainers Add additional init containers
+# @param extraVolumes Optionally specify extra list of additional volumes
+# @param extraVolumeMounts Optionally specify extra list of additional volumeMounts
+# @param extraEnvVarsSecret Optionally map of secret environment variables
 
-enableServiceLinks: true
+enableServiceLinks: false
 replicaCount: 1
 imagePullSecrets: []
 nameOverride: ''
@@ -61,6 +56,10 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 terminationGracePeriodSeconds: 60
+initContainers: []
+extraVolumes: []
+extraVolumeMounts: []
+extraEnvVarsSecret: {}
 
 
 # @section Service account settings
@@ -107,6 +106,7 @@ ingress:
   #    navi-castle.example.com
   #  secretName: secret.tls
 
+
 # @section Limits
 
 # @param resources [nullable] Container resources requirements structure.
@@ -120,13 +120,17 @@ resources: {}
 
 # @section Navi-Castle service settings
 
+# @param castle.image.repository Navi-Castle service image repository.
+# @param castle.image.pullPolicy Navi-Castle service pull policy.
+# @param castle.image.tag Navi-Castle service image tag.
 # @param castle.castleDataPath Path to the data directory.
 # @param castle.excludeProjects Array of project labels to exclude
 # @extra castle.restrictions Section ignored if castle.restriction.enabled=false
 # @param castle.restrictions.url Restrictions API base URL.
 # @param castle.restrictions.key Restrictions API key.
 # @param castle.jobs Number of parallel downloading jobs.
-# @param castle.logLevel Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.
+# @param castle.logLevel Logging level, one of: DEBUG, INFO, WARNING, ERROR
+# @param castle.logFormat TEXT or JSON
 # @extra castle.startupProbe [nullable] Settings for startup probes
 # @param castle.startupProbe.periodSeconds Check period for startup probes.
 # @param castle.startupProbe.failureThreshold Threshold for startup probes.
@@ -148,6 +152,7 @@ castle:
   excludeProjects: []
   jobs: 1
   logLevel: INFO
+  logFormat: TEXT
   startupProbe:
     periodSeconds: 5
     failureThreshold: 180
@@ -161,7 +166,10 @@ castle:
 # @section Navi-Front settings
 
 # @param nginx.port HTTP port on which Navi-Front will be listening.
+# @param nginx.image.repository Navi-Front image repository.
+# @param nginx.image.tag Navi-Front image tag.
 # @param nginx.nodeHeader Enable header with node name (X-Node).
+# @param nginx.locationsBlock Optional nginx config block with additional locations
 
 nginx:
   port: 8080
@@ -169,6 +177,7 @@ nginx:
     repository: 2gis-on-premise/navi-front
     tag: 1.26.0
   nodeHeader: false
+  locationsBlock: ''
 
 
 # @section Cron settings
@@ -228,6 +237,7 @@ persistentVolume:
   storageClass: ''
   size: 5Gi
 
+
 # @section RTR settings. Leave with defaults, FOR FUTURE RELEASE.
 
 # @param rtr.enabled If the RTR is enabled.
@@ -240,6 +250,14 @@ persistentVolume:
 # @skip rtr.kafka.properties.security.protocol
 # @param rtr.kafka.sensitiveProperties As rtr.kafka.properties, but kept in Secrets. Refer to inlines comments for details.
 # @param rtr.kafka.fileProperties As rtr.kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
+# @param rtr.roadLocks.enabled If the RTR-Kafka is enabled.
+# @param rtr.roadLocks.kafka.topic Name of the topic.
+# @param rtr.roadLocks.kafka.groupId Kafka consumer group id.
+# @extra rtr.roadLocks.kafka.properties Properties as supported by kafka-python. Refer to inline comments for details.
+# @skip rtr.roadLocks.kafka.properties.bootstrap.servers
+# @skip rtr.roadLocks.kafka.properties.security.protocol
+# @param rtr.roadLocks.kafka.sensitiveProperties As rtr.rtr_kafka.properties, but kept in Secrets. Refer to inlines comments for details.
+# @param rtr.roadLocks.kafka.fileProperties As rtr.rtr_kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.
 # @param rtr.buildFtp.baseDir Base dir on build ftp.
 # @param rtr.buildFtp.login Login on build ftp.
 # @param rtr.buildFtp.password Password on build ftp.
@@ -266,6 +284,16 @@ rtr:
     sensitiveProperties: {}
     fileProperties: {}
     topic: ''
+  roadLocks:
+    enabled: false
+    kafka:
+      groupId: castle-rtr
+      properties:
+        bootstrap.servers: ''
+        security.protocol: PLAINTEXT
+      sensitiveProperties: {}
+      fileProperties: {}
+      topic: ''
   buildFtp:
     serverUrl: ''
     baseDir: trafficedro

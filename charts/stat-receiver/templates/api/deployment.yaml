@@ -106,4 +106,3 @@ spec:
           secret:
             secretName: {{ .Values.kafka.keystore.secretName }}
         {{- end }}
-        

@@ -81,7 +81,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description                                                                                   | Value                         |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ----------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-api` |
-| `api.image.tag`        | Tag                                                                                           | `3.641.0`                     |
+| `api.image.tag`        | Tag                                                                                           | `3.647.0`                     |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
@@ -188,6 +188,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----- |
 | `importer`                            | **Common settings**                                                                                                |       |
 | `importer.nodeSelector`               | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) | `{}`  |
+| `importer.tolerations`                | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings   | `[]`  |
 | `importer.workerNum`                  | Number of parallel import processes (workers)                                                                      | `3`   |
 | `importer.initialDelaySeconds`        | Number of seconds after the container has started before liveness or readiness probes are initiated                | `1`   |
 | `importer.retry.download.maxAttempts` | The maximum number of retries download before stopping                                                             | `3`   |
@@ -200,7 +201,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                        | Description                                                                                   | Value                              |
 | --------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `importer.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`        | Tag                                                                                           | `1.11.0`                           |
+| `importer.image.tag`        | Tag                                                                                           | `1.12.1`                           |
 | `importer.image.pullPolicy` | Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                     |
 
 ### importer.postgres **Database settings**
@@ -228,6 +229,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.persistentVolume.accessModes`  | Persistent Volume [Access Mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)       | `["ReadWriteOnce"]` |
 | `importer.persistentVolume.storageClass` | Kubernetes [Storage Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/)                          | `topolvm-ext4`      |
 | `importer.persistentVolume.size`         | Volume size                                                                                                         | `50Gi`              |
+| `importer.emptyDir.enabled`              | If [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) is enabled for the service   | `true`              |
+| `importer.emptyDir.medium`               | The medium field controls where emptyDir volumes are stored                                                         | `""`                |
+| `importer.emptyDir.sizeLimit`            | Volume size                                                                                                         | `""`                |
 
 ### importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 

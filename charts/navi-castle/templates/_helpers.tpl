@@ -206,3 +206,10 @@ Usage:
 {{- define "custom.ca.mountPath" -}}
 {{ .Values.customCAs.certsPath | default "/usr/local/share/ca-certificates" }}
 {{- end -}}
+
+{{/*
+Manifest name
+*/}}
+{{- define "castle.manifestCode" -}}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- end }}

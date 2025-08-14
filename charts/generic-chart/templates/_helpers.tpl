@@ -162,7 +162,10 @@ Return the suffix from .suffix.
 */}}
 {{- define "generic-chart.getSuffix" -}}
 {{- if .suffix -}}
-{{- printf "-%s" (toString .suffix) -}}
+  {{- $suffix := include "tplvalues.render" (dict
+                                      "value" .suffix
+                                      "context" .ctx) }}
+  {{- printf "-%s" (toString $suffix) -}}
 {{- end -}}
 {{- end -}}
 
@@ -185,4 +188,31 @@ Based on https://github.com/helm/helm/issues/11376#issuecomment-1256831105
         {{- end -}}
     {{- end -}}
     {{- mulf (float64 $value) $unit -}}
+{{- end -}}
+
+{{/*
+Retrieve secrets from k8s.
+
+Usage:
+{{ include "generic-chart.secrets_lookup" (dict
+    "secret" "secretName"
+    "key" "keyName"
+    "context" $)
+}}
+
+Params:
+  - secret - String - Required - Name of the 'Secret' resource where the secret data is stored.
+  - key - String - Required - Name of the key in the secret.
+  - context - Context - Required - Parent context.
+*/}}
+
+{{- define "generic-chart.secrets-lookup" -}}
+{{- $secretData := "" }}
+{{- $secret := (lookup "v1" "Secret" .context.Release.Namespace .secret) }}
+{{- if $secret }}
+  {{- if index $secret.data .key }}
+  {{- $secretData = index $secret.data .key }}
+  {{- end -}}
+{{- end -}}
+{{- printf "%s" $secretData -}}
 {{- end -}}

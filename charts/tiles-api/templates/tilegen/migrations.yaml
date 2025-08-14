@@ -51,6 +51,11 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
+      {{- with $.Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       containers:
         - name: migrator
 
@@ -70,6 +75,11 @@ spec:
               name: custom-ca
               readOnly: true
             {{- end }}
+
+          {{- with $.Values.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
 
           {{- with .resources }}
           resources:

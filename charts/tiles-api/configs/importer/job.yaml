@@ -20,6 +20,10 @@ spec:
         {{- include "tiles.importer.label" . | nindent 8 }}
 
     spec:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: tmp-volume
           emptyDir: {}
@@ -51,6 +55,10 @@ spec:
 
       containers:
         - name: import-worker
+          {{- with .Values.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           image: {{`{{.image_path}}`}}
           command: ["/selfimporter", "worker"]
 

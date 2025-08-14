@@ -1,0 +1,33 @@
+{{- with .Values.routes.realtimeDataApi.service }}
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: {{ include "citylens.routes.realtimeDataApi.name" $ }}
+
+  annotations:
+    router.deis.io/domains: {{ include "citylens.routes.realtimeDataApi.name" $ }}
+    {{- if .annotations }}
+    {{- toYaml .annotations | nindent 4 }}
+    {{- end }}
+
+  labels:
+    {{- include "citylens.routes.realtimeDataApi.labels" $ | nindent 4 }}
+    {{- if .labels }}
+    {{- toYaml .labels | nindent 4 }}
+    {{- end }}
+
+spec:
+  type: {{ .type }}
+  ports:
+    - port: {{ .port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      appProtocol: http
+
+  selector:
+    {{- include "citylens.routes.realtimeDataApi.selectorLabels" $ | nindent 4 }}
+
+{{- end }}

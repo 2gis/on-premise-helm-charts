@@ -54,8 +54,6 @@ spec:
               value: {{ .Values.env.MAPGL_IMMERSIVE_TILESET | quote }}
             - name: MAPGL_TRAFFICSERVER
               value: {{ .Values.env.MAPGL_TRAFFICSERVER | quote }}
-            - name: MAPGL_FLOORSSERVER
-              value: {{ .Values.env.MAPGL_FLOORSSERVER | quote }}
             - name: MAPGL_STYLESERVER
               value: {{ .Values.env.MAPGL_STYLESERVER | quote }}
             - name: MAPGL_ICONSPATH

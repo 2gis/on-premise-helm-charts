@@ -22,7 +22,8 @@ metadata:
 spec:
   replicas: {{ .replicaCount }}
   revisionHistoryLimit: {{ .revisionHistory }}
-  
+
+
   selector:
     matchLabels:
       {{- include "tiles.selectorLabels" $ | nindent 6 }}
@@ -52,7 +53,12 @@ spec:
     spec:
       serviceAccountName: {{ include "tilegen.serviceAccount" $ }}
       terminationGracePeriodSeconds: {{ .terminationGracePeriodSeconds }}
-    
+
+      {{- with $.Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       volumes:
         - configMap:
             name: {{ include "tiles.fullname" $ }}-tilegen
@@ -109,6 +115,11 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
 
+          {{- with $.Values.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
           readinessProbe:
             httpGet:
               path: /healthcheck
@@ -145,5 +156,5 @@ spec:
             - name: SSL_CERT_DIR
               value: {{ include "tiles.customCA.mountPath" $ }}
             {{- end }}
-{{- end}}
-{{- end}}
+{{- end }}
+{{- end }}

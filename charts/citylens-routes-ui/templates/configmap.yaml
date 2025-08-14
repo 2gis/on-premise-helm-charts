@@ -31,31 +31,34 @@ data:
       tcp_nopush on;
       keepalive_timeout 65;
 
-      server {
-        listen 3000;
-        root /usr/share/nginx/html;
-        error_page 500 502 503 504 /50x.html;
-        gzip_static on;
+      include /etc/nginx/conf.d/*.conf;
+    }
 
-        location ~ \.(css|js|svg|woff|woff2|ico|ttf|eot|jpe?g|png|txt|mp3|json|svg|otf|wasm)$ {
-          try_files $uri $uri/ =404;
-          expires 1y;
-          add_header Cache-Control "public";
-        }
+  default.conf.template: |
+    server {
+      listen 3000;
+      root /usr/share/nginx/html;
+      error_page 500 502 503 504 /50x.html;
+      gzip_static on;
 
-        location / {
-          try_files $uri $uri/ /index.html;
-          add_header Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0";
-          add_header Pragma "no-cache";
-          if_modified_since off;
-          expires -1;
-          etag off;
-        }
+      location ~ \.(css|js|svg|woff|woff2|ico|ttf|eot|jpe?g|png|txt|mp3|json|svg|otf|wasm)$ {
+        try_files $uri $uri/ =404;
+        expires 1y;
+        add_header Cache-Control "public";
+      }
 
-        location /health {
-          access_log off;
-          add_header 'Content-Type' 'text/plain';
-          return 200 "UP";
-        }
+      location / {
+        try_files $uri $uri/ /index.html;
+        add_header Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0";
+        add_header Pragma "no-cache";
+        if_modified_since off;
+        expires -1;
+        etag off;
+      }
+
+      location /health {
+        access_log off;
+        add_header 'Content-Type' 'text/plain';
+        return 200 "UP";
       }
     }

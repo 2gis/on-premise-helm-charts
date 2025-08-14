@@ -37,15 +37,6 @@
 {{- end -}}
 {{- end -}}
 
-{{- define "pro-api.asset-preparer-name" -}}
-{{- $name := default .Values.assetPreparer.appName -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
 {{- define "pro-api.service-account-name" -}}
 {{- if empty .Values.api.service.serviceAccountOverride }}
   {{- $name := default .Values.api.service.serviceAccount -}}
@@ -132,7 +123,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{- define "pro-api.connectionStringReadOnly" -}}
-{{- if .Values.postgres.api.ro -}}
+{{- if .Values.postgres.api.ro.host -}}
 {{- printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
 	(.Values.postgres.api.ro.host | required "A valid .Values.postgres.api.ro.host entry required!")
 	(.Values.postgres.api.ro.port | required "A valid .Values.postgres.api.ro.port entry required!" | int)
@@ -141,6 +132,34 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 	((.Values.postgres.api.ro.poolSize).min | int | default 1)
 	((.Values.postgres.api.ro.poolSize).max | int | default 10)
 	(.Values.postgres.api.ro.timeout | int | default 15)
+-}}
+{{- else -}}
+{{ print "" }}
+{{- end -}}
+{{- end -}}
+
+{{- define "pro-permissions-api.connectionString" -}}
+{{-  printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
+	(.Values.postgres.permissions.rw.host | required "A valid .Values.postgres.permissions.rw.host entry required!")
+	(.Values.postgres.permissions.rw.port | required "A valid .Values.postgres.permissions.rw.port entry required!" | int)
+	(.Values.postgres.permissions.rw.name | required "A valid .Values.postgres.permissions.rw.name entry required!")
+	(.Values.postgres.permissions.rw.username | required "A valid .Values.postgres.permissions.rw.username entry required!")
+	((.Values.postgres.permissions.rw.poolSize).min | int | default 1)
+	((.Values.postgres.permissions.rw.poolSize).max | int | default 10)
+	(.Values.postgres.permissions.rw.timeout | int | default 15)
+-}}
+{{- end -}}
+
+{{- define "pro-permissions-api.connectionStringReadOnly" -}}
+{{- if .Values.postgres.permissions.ro.host -}}
+{{- printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
+	(.Values.postgres.permissions.ro.host | required "A valid .Values.postgres.permissions.ro.host entry required!")
+	(.Values.postgres.permissions.ro.port | required "A valid .Values.postgres.permissions.ro.port entry required!" | int)
+	(.Values.postgres.permissions.ro.name | required "A valid .Values.postgres.permissions.ro.name entry required!")
+	(.Values.postgres.permissions.ro.username | required "A valid .Values.postgres.permissions.ro.username entry required!")
+	((.Values.postgres.permissions.ro.poolSize).min | int | default 1)
+	((.Values.postgres.permissions.ro.poolSize).max | int | default 10)
+	(.Values.postgres.permissions.ro.timeout | int | default 15)
 -}}
 {{- else -}}
 {{ print "" }}
@@ -163,3 +182,25 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 {{- end -}}
 
+{{- define "pro-tasks.connectionStringReadOnly" -}}
+{{- if and .Values.tasks.settings.enabled .Values.postgres.tasks.ro.host  -}}
+{{- printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
+	(.Values.postgres.tasks.ro.host | required "A valid .Values.postgres.tasks.ro.host entry required!")
+	(.Values.postgres.tasks.ro.port | required "A valid .Values.postgres.tasks.ro.port entry required!" | int)
+	(.Values.postgres.tasks.ro.name | required "A valid .Values.postgres.tasks.ro.name entry required!")
+	(.Values.postgres.tasks.ro.username | required "A valid .Values.postgres.tasks.ro.username entry required!")
+	((.Values.postgres.tasks.ro.poolSize).min | int | default 1)
+	((.Values.postgres.tasks.ro.poolSize).max | int | default 5)
+	(.Values.postgres.tasks.ro.timeout | int | default 15)
+-}}
+{{- else -}}
+{{ print "" }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Manifest name
+*/}}
+{{- define "pro-api.manifestCode" -}}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- end }}

@@ -1,3 +1,4 @@
+
 {{- define "pro.env.ui" -}}
 - name: NETWORK_TIMEOUT
   value: "{{ required "A valid .Values.ui.api.timeout" .Values.ui.api.timeout }}"
@@ -46,8 +47,6 @@
   value: "{{ required "A valid .Values.ui.auth.oAuthProvider entry required" .Values.ui.auth.oAuthProvider }}"
 - name: O_AUTH_SCOPES
   value: "{{ .Values.ui.auth.oAuthScopes }}"
-- name: AUTH_PLATFORM_MANAGER_HOST
-  value: "{{ .Values.ui.auth.platformManagerHost }}"
 {{- if eq .Values.ui.auth.oAuthProvider "openid" }}
 - name: OPEN_ID_WELL_KNOWN_URL_LIST_URL
   value: "{{ required "A valid .Values.ui.auth.openIdWellKnownUrlListUrl entry required" .Values.ui.auth.openIdWellKnownUrlListUrl }}"
@@ -96,10 +95,14 @@
   value: "{{ .Values.ui.zenith.host }}"
 - name: ZENITH_TILE_SET
   value: "{{ .Values.ui.zenith.tileSet }}"
+- name: ZENITH_HAS_ADM_DIVS_LAYERS
+  value: "{{ .Values.ui.zenith.hasAdmDivsLayers }}"
 - name: ZENITH_PROTOCOL
   value: "{{ .Values.ui.zenith.protocol }}"
 - name: ZENITH_SUBDOMAINS
   value: "{{ .Values.ui.zenith.subdomains }}"
+- name: APP_VERSION
+  value: "{{ .Values.image.tag }}"
 {{- if .Values.ui.extraEnvVars }}
 {{- range $key, $val := .Values.ui.extraEnvVars }}
 - name: {{ $key }}

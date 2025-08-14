@@ -37,7 +37,7 @@ dgctlStorage:
 
 image:
   repository: 2gis-on-premise/twins-api
-  tag: 1.13.0
+  tag: 1.20.0
   pullPolicy: IfNotPresent
 
 # @section API service settings
@@ -101,7 +101,7 @@ api:
 
   nodeSelector: {}
   affinity: {}
-  tolerations: {}
+  tolerations: []
 
   # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).

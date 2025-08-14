@@ -47,7 +47,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `api.image.repository` | Repository.  | `2gis-on-premise/citylens-api` |
-| `api.image.tag`        | Tag.         | `1.17.5`                       |
+| `api.image.tag`        | Tag.         | `1.18.3`                       |
 | `api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -108,11 +108,11 @@ See the [documentation]() to learn about:
 
 ### Custom settings
 
-| Name                 | Description                                            | Value          |
-| -------------------- | ------------------------------------------------------ | -------------- |
-| `api.showDocs`       | Show documentation link if needed.                     | `false`        |
-| `api.logLevel`       | Log level.                                             | `INFO`         |
-| `api.metricsAppName` | Value for service prometheus metrics label "app_name". | `citylens-api` |
+| Name                 | Description                                                 | Value          |
+| -------------------- | ----------------------------------------------------------- | -------------- |
+| `api.showDocs`       | Show documentation link if needed.                          | `false`        |
+| `api.logLevel`       | Log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'. | `INFO`         |
+| `api.metricsAppName` | Value for service prometheus metrics label "app_name".      | `citylens-api` |
 
 ### Metadata settings
 
@@ -123,8 +123,14 @@ See the [documentation]() to learn about:
 | `api.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
 | `api.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
 | `api.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`  |
-| `api.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`  |
+| `api.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`  |
 | `api.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
+
+### Routes Planner integration
+
+| Name                   | Description                                                                                                                                                           | Value |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `api.routesApiBaseUrl` | Routes Planner API endpoint - if provided mobile application can access Routes Planner API via citylens-api /routes-api endpoint. Ex.: http://citylens-routes-api.svc | `""`  |
 
 ### Citylens web service settings
 
@@ -134,7 +140,7 @@ See the [documentation]() to learn about:
 | Name                   | Description  | Value                          |
 | ---------------------- | ------------ | ------------------------------ |
 | `web.image.repository` | Repository.  | `2gis-on-premise/citylens-web` |
-| `web.image.tag`        | Tag.         | `1.17.5`                       |
+| `web.image.tag`        | Tag.         | `1.18.3`                       |
 | `web.image.pullPolicy` | Pull Policy. | `IfNotPresent`                 |
 
 ### Resources settings
@@ -188,7 +194,7 @@ See the [documentation]() to learn about:
 
 | Name                    | Description                                                                                 | Value          |
 | ----------------------- | ------------------------------------------------------------------------------------------- | -------------- |
-| `web.logLevel`          | Log level.                                                                                  | `WARNING`      |
+| `web.logLevel`          | Log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.                                 | `WARNING`      |
 | `web.metricsAppName`    | Value for service prometheus metrics label "app_name".                                      | `citylens-web` |
 | `web.pgPoolSize`        | Postgres: maximum number of connections in connections pool to maintain.                    | `5`            |
 | `web.pgPoolMaxOverflow` | Postgres: maximum number of extra connections in connections pool (relative of pgPoolSize). | `10`           |
@@ -202,7 +208,7 @@ See the [documentation]() to learn about:
 | `web.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`  |
 | `web.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`  |
 | `web.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`  |
-| `web.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `{}`  |
+| `web.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`  |
 | `web.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`  |
 
 ### Citylens workers service settings
@@ -228,7 +234,7 @@ See the [documentation]() to learn about:
 | `worker.framesSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
 | `worker.framesSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
 | `worker.framesSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.framesSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
+| `worker.framesSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
 | `worker.framesSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
 
 ### Citylens Camcom sender worker's settings
@@ -251,7 +257,7 @@ See the [documentation]() to learn about:
 | `worker.camcomSender.podAnnotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`    |
 | `worker.camcomSender.podLabels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`    |
 | `worker.camcomSender.nodeSelector`            | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`    |
-| `worker.camcomSender.tolerations`             | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`    |
+| `worker.camcomSender.tolerations`             | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`    |
 | `worker.camcomSender.affinity`                | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`    |
 
 ### Citylens Predictions Saver worker's settings
@@ -265,7 +271,7 @@ See the [documentation]() to learn about:
 | `worker.predictionsSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
 | `worker.predictionsSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
 | `worker.predictionsSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.predictionsSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
+| `worker.predictionsSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
 | `worker.predictionsSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
 
 ### Citylens Logs Saver worker's settings
@@ -279,7 +285,7 @@ See the [documentation]() to learn about:
 | `worker.logsSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
 | `worker.logsSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
 | `worker.logsSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.logsSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
+| `worker.logsSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
 | `worker.logsSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
 
 ### Citylens Reporter Pro worker's settings (synchronization with Pro)
@@ -296,7 +302,7 @@ See the [documentation]() to learn about:
 | `worker.reporterPro.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
 | `worker.reporterPro.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
 | `worker.reporterPro.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`         |
-| `worker.reporterPro.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`         |
+| `worker.reporterPro.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`         |
 | `worker.reporterPro.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`         |
 
 ### Citylens Reporter Pro Tracks worker's settings (track status actualization, requires Reporter Pro)
@@ -309,7 +315,7 @@ See the [documentation]() to learn about:
 | `worker.reporterProTracks.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
 | `worker.reporterProTracks.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
 | `worker.reporterProTracks.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.reporterProTracks.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
+| `worker.reporterProTracks.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
 | `worker.reporterProTracks.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
 
 ### Citylens Track Metadata Saver worker's settings
@@ -323,7 +329,7 @@ See the [documentation]() to learn about:
 | `worker.trackMetadataSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
 | `worker.trackMetadataSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
 | `worker.trackMetadataSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.trackMetadataSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`  |
+| `worker.trackMetadataSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
 | `worker.trackMetadataSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
 
 ### Citylens Tracks Uploader worker's settings
@@ -342,7 +348,7 @@ See the [documentation]() to learn about:
 | `worker.tracksUploader.podAnnotations`            | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`    |
 | `worker.tracksUploader.podLabels`                 | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`    |
 | `worker.tracksUploader.nodeSelector`              | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`    |
-| `worker.tracksUploader.tolerations`               | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`    |
+| `worker.tracksUploader.tolerations`               | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`    |
 | `worker.tracksUploader.affinity`                  | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`    |
 
 ### Citylens Map Matcher worker's settings
@@ -362,7 +368,7 @@ See the [documentation]() to learn about:
 | `worker.mapMatcher.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                              | `{}`    |
 | `worker.mapMatcher.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                        | `{}`    |
 | `worker.mapMatcher.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                | `{}`    |
-| `worker.mapMatcher.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                  | `{}`    |
+| `worker.mapMatcher.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                  | `[]`    |
 | `worker.mapMatcher.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                            | `{}`    |
 
 ### Citylens Detections Localizer worker's settings
@@ -377,7 +383,7 @@ See the [documentation]() to learn about:
 | `worker.detectionsLocalizer.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
 | `worker.detectionsLocalizer.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
 | `worker.detectionsLocalizer.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`         |
-| `worker.detectionsLocalizer.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`         |
+| `worker.detectionsLocalizer.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`         |
 | `worker.detectionsLocalizer.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`         |
 
 ### Citylens Lifecycle Controller worker's settings (depends on Detections Localizer worker)
@@ -392,7 +398,7 @@ See the [documentation]() to learn about:
 | `worker.lifecycleController.podAnnotations`                      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
 | `worker.lifecycleController.podLabels`                           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`   |
 | `worker.lifecycleController.nodeSelector`                        | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`   |
-| `worker.lifecycleController.tolerations`                         | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`   |
+| `worker.lifecycleController.tolerations`                         | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`   |
 | `worker.lifecycleController.affinity`                            | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`   |
 
 ### Citylens Dashboard batch events worker's settings
@@ -406,16 +412,16 @@ See the [documentation]() to learn about:
 | Name                                               | Description                                                                                                                                    | Value                              |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `worker.dashboardBatchEvents.image.repository`     | Repository.                                                                                                                                    | `2gis-on-premise/citylens-workers` |
-| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.17.5`                           |
+| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.18.3`                           |
 | `worker.dashboardBatchEvents.image.pullPolicy`     | Pull Policy.                                                                                                                                   | `IfNotPresent`                     |
-| `worker.dashboardBatchEvents.logLevel`             | Worker's log level.                                                                                                                            | `INFO`                             |
+| `worker.dashboardBatchEvents.logLevel`             | Worker's log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.                                                                           | `INFO`                             |
 | `worker.dashboardBatchEvents.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`                                |
 | `worker.dashboardBatchEvents.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`                               |
 | `worker.dashboardBatchEvents.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`                               |
 | `worker.dashboardBatchEvents.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`                               |
 | `worker.dashboardBatchEvents.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`                               |
 | `worker.dashboardBatchEvents.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`                               |
-| `worker.dashboardBatchEvents.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `{}`                               |
+| `worker.dashboardBatchEvents.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`                               |
 | `worker.dashboardBatchEvents.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`                               |
 
 ### Migration job settings
@@ -424,13 +430,23 @@ See the [documentation]() to learn about:
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `migrations.enabled`                   | If migrations needed.                                                                                                   | `true`                              |
 | `migrations.image.repository`          | Repository.                                                                                                             | `2gis-on-premise/citylens-database` |
-| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.17.1`                            |
+| `migrations.image.tag`                 | Tag.                                                                                                                    | `1.18.0`                            |
 | `migrations.image.pullPolicy`          | Pull Policy                                                                                                             | `IfNotPresent`                      |
 | `migrations.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m`                              |
 | `migrations.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`                               |
 | `migrations.resources.limits.cpu`      | A CPU limit.                                                                                                            | `200m`                              |
 | `migrations.resources.limits.memory`   | A memory limit.                                                                                                         | `2Gi`                               |
 | `migrations.nodeSelector`              | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`                                |
+
+### Job to update filters in PRO before installing new version of Citylens.
+
+| Name                                              | Description                                                                                                             | Value  |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
+| `jobs.proFiltersUpdate.resources.requests.cpu`    | A CPU request.                                                                                                          | `100m` |
+| `jobs.proFiltersUpdate.resources.requests.memory` | A memory request.                                                                                                       | `1Gi`  |
+| `jobs.proFiltersUpdate.resources.limits.cpu`      | A CPU limit.                                                                                                            | `200m` |
+| `jobs.proFiltersUpdate.resources.limits.memory`   | A memory limit.                                                                                                         | `2Gi`  |
+| `jobs.proFiltersUpdate.nodeSelector`              | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`   |
 
 ### Kafka settings
 
@@ -546,7 +562,7 @@ See the [documentation]() to learn about:
 | Name                          | Description  | Value                                 |
 | ----------------------------- | ------------ | ------------------------------------- |
 | `routes.api.image.repository` | Repository.  | `2gis-on-premise/citylens-routes-api` |
-| `routes.api.image.tag`        | Tag.         | `1.0.12`                              |
+| `routes.api.image.tag`        | Tag.         | `1.3.3`                               |
 | `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        |
 
 ### Resources settings
@@ -614,18 +630,19 @@ See the [documentation]() to learn about:
 
 ### Metadata settings
 
-| Name                        | Description                                                                                                                 | Value         |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `routes.api.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.api.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.api.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.api.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.api.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
-| `routes.api.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
-| `routes.api.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
-| `routes.api.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp`        |
-| `routes.api.logging`        | Routes **Logging** settings                                                                                                 |               |
-| `routes.api.logging.level`  | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
+| Name                          | Description                                                                                                                 | Value         |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `routes.api.annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.api.labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.api.podAnnotations`   | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.api.podLabels`        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.api.nodeSelector`     | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
+| `routes.api.tolerations`      | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
+| `routes.api.affinity`         | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
+| `routes.api.tempPath`         | Path to directory used for temp data                                                                                        | `/tmp`        |
+| `routes.api.logging`          | Routes **Logging** settings                                                                                                 |               |
+| `routes.api.logging.level`    | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
+| `routes.api.logging.extended` | Extended log message. Include http metadata requests.                                                                       | `false`       |
 
 ### Citylens routes Worker
 
@@ -635,7 +652,7 @@ See the [documentation]() to learn about:
 | Name                             | Description  | Value                                     |
 | -------------------------------- | ------------ | ----------------------------------------- |
 | `routes.worker.image.repository` | Repository.  | `2gis-on-premise/citylens-worker-service` |
-| `routes.worker.image.tag`        | Tag.         | `1.0.12`                                  |
+| `routes.worker.image.tag`        | Tag.         | `1.3.3`                                   |
 | `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            |
 
 ### Resources settings
@@ -659,18 +676,20 @@ See the [documentation]() to learn about:
 
 ### Metadata settings
 
-| Name                           | Description                                                                                                                 | Value         |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `routes.worker.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.worker.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.worker.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.worker.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.worker.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
-| `routes.worker.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
-| `routes.worker.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
-| `routes.worker.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp`        |
-| `routes.worker.logging`        | Routes **Logging** settings                                                                                                 |               |
-| `routes.worker.logging.level`  | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
+| Name                                                          | Description                                                                                                                 | Value         |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `routes.worker.annotations`                                   | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.worker.labels`                                        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.worker.podAnnotations`                                | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.worker.podLabels`                                     | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.worker.nodeSelector`                                  | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
+| `routes.worker.tolerations`                                   | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
+| `routes.worker.affinity`                                      | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
+| `routes.worker.tempPath`                                      | Path to directory used for temp data                                                                                        | `/tmp`        |
+| `routes.worker.logging`                                       | Routes **Logging** settings                                                                                                 |               |
+| `routes.worker.logging.level`                                 | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
+| `routes.worker.routesSettings`                                | Routes distance match settings                                                                                              |               |
+| `routes.worker.routesSettings.routePointsMatchDistanceMeters` | Calculation accuracy in meters.                                                                                             | `5`           |
 
 ### Kafka Bus configuration settings. Based on Kafka values
 
@@ -682,9 +701,103 @@ See the [documentation]() to learn about:
 | `routes.worker.busConfig.securityInformation.securityProtocol` | Valid values are: Plaintext, Ssl, SaslPlaintext, SaslSsl. Default: SaslPlaintext.                                                                            | `SaslPlaintext` |
 | `routes.worker.busConfig.consumers`                            | Consumers for the bus configuration.                                                                                                                         |                 |
 | `routes.worker.busConfig.consumers.appEvents`                  | App events for the consumers.                                                                                                                                |                 |
-| `routes.worker.busConfig.consumers.appEvents.groupId`          | The group ID for the app events.                                                                                                                             | `""`            |
+| `routes.worker.busConfig.consumers.appEvents.groupId`          | The group ID for the app events. **Required**                                                                                                                | `""`            |
 | `routes.worker.busConfig.consumers.appEvents.bufferSize`       | The buffer size for the app events.                                                                                                                          | `100`           |
 | `routes.worker.busConfig.consumers.appEvents.workersCount`     | The workers count for the app events.                                                                                                                        | `10`            |
+
+### Citylens RealtimeData API
+
+
+### Image settings
+
+| Name                                      | Description  | Value                                        |
+| ----------------------------------------- | ------------ | -------------------------------------------- |
+| `routes.realtimeDataApi.image.repository` | Repository.  | `2gis-on-premise/citylens-realtime-data-api` |
+| `routes.realtimeDataApi.image.tag`        | Tag.         | `1.3.3`                                      |
+| `routes.realtimeDataApi.image.pullPolicy` | Pull Policy. | `IfNotPresent`                               |
+
+### Resources settings
+
+| Name                                               | Description                                                                                                                                    | Value   |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `routes.realtimeDataApi.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`     |
+| `routes.realtimeDataApi.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
+| `routes.realtimeDataApi.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`  |
+| `routes.realtimeDataApi.resources.requests.memory` | A memory request.                                                                                                                              | `256M`  |
+| `routes.realtimeDataApi.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`     |
+| `routes.realtimeDataApi.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024M` |
+
+### Service settings
+
+| Name                                         | Description                                                                                                                    | Value       |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `routes.realtimeDataApi.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `routes.realtimeDataApi.service.port`        | Service port.                                                                                                                  | `80`        |
+| `routes.realtimeDataApi.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
+| `routes.realtimeDataApi.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
+
+### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+| Name                                        | Description                                          | Value  |
+| ------------------------------------------- | ---------------------------------------------------- | ------ |
+| `routes.realtimeDataApi.pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
+| `routes.realtimeDataApi.pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
+| `routes.realtimeDataApi.pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
+
+### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+| Name                                                             | Description                                                                                                                                                          | Value   |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `routes.realtimeDataApi.hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `routes.realtimeDataApi.hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `routes.realtimeDataApi.hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `1`     |
+| `routes.realtimeDataApi.hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
+| `routes.realtimeDataApi.hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
+| `routes.realtimeDataApi.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `50`    |
+| `routes.realtimeDataApi.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+
+### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+| Name                                           | Description                                                                                                  | Value   |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
+| `routes.realtimeDataApi.vpa.enabled`           | If VPA is enabled for the service.                                                                           | `false` |
+| `routes.realtimeDataApi.vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). | `Auto`  |
+| `routes.realtimeDataApi.vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                   | `100m`  |
+| `routes.realtimeDataApi.vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         | `128Mi` |
+| `routes.realtimeDataApi.vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `1`     |
+| `routes.realtimeDataApi.vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `512Mi` |
+
+### Metadata settings
+
+| Name                                             | Description                                                                                                                  | Value         |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `routes.realtimeDataApi.annotations`             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                    | `{}`          |
+| `routes.realtimeDataApi.labels`                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                              | `{}`          |
+| `routes.realtimeDataApi.podAnnotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                    | `{}`          |
+| `routes.realtimeDataApi.podLabels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                              | `{}`          |
+| `routes.realtimeDataApi.nodeSelector`            | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).      | `{}`          |
+| `routes.realtimeDataApi.tolerations`             | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.        | `[]`          |
+| `routes.realtimeDataApi.affinity`                | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.  | `{}`          |
+| `routes.realtimeDataApi.tempPath`                | Path to directory used for temp data                                                                                         | `/tmp`        |
+| `routes`                                         | **Postgres**                                                                                                                 |               |
+| `routes.realtimeDataApi.postgres.database`       | PostgreSQL database name. **Required**                                                                                       | `""`          |
+| `routes.realtimeDataApi.postgres.timeout`        | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error. | `15`          |
+| `routes.realtimeDataApi.postgres.commandTimeout` | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.      | `30`          |
+| `routes.realtimeDataApi.postgres.maxPoolSize`    | The maximum connection pool size.                                                                                            | `30`          |
+| `routes.realtimeDataApi.postgres.pooling`        | Whether connection pooling should be used.                                                                                   | `true`        |
+| `routes.realtimeDataApi.logging`                 | Routes **Logging** settings                                                                                                  |               |
+| `routes.realtimeDataApi.logging.level`           | Log message level. verbose, debug, information, warning, error, fatal.                                                       | `information` |
+| `routes.realtimeDataApi.daysToLeaveData`         | Storage of information in days.                                                                                              | `30`          |
+
+### routes.features Feature settings.
+
+| Name                                              | Description                                         | Value                               |
+| ------------------------------------------------- | --------------------------------------------------- | ----------------------------------- |
+| `routes.features.authorizationEnabled`            | Enable authorization. (If false used default user). | `true`                              |
+| `routes.features.tasksAssetEnabled`               | Enable sending data to PRO for tasks.               | `false`                             |
+| `routes.tasksAssetSettings.systemAccessToken`     | Route task asset token.                             | `""`                                |
+| `routes.tasksAssetSettings.plannedTasksAssetId`   | Identity to planned route task asset.               | `user_dyn_citylens_planned_tasks`   |
+| `routes.tasksAssetSettings.completedTasksAssetId` | Identity to completed route task asset.             | `user_dyn_citylens_completed_tasks` |
 
 ### Citylens routes Clients
 
@@ -698,13 +811,18 @@ See the [documentation]() to learn about:
 
 ### Pro integration
 
-| Name                            | Description                                              | Value |
-| ------------------------------- | -------------------------------------------------------- | ----- |
-| `routes.pro.authorizationToken` | Pro Authorization Token (need for creating assets).      | `""`  |
-| `routes.pro.mainTerritoryId`    | Available territory identity (need for creating assets). | `""`  |
+| Name                            | Description                                         | Value |
+| ------------------------------- | --------------------------------------------------- | ----- |
+| `routes.pro.authorizationToken` | Pro Authorization Token (used for creating assets). | `""`  |
 
 ### Keys integration
 
 | Name              | Description                                                                  | Value |
 | ----------------- | ---------------------------------------------------------------------------- | ----- |
 | `routes.keys.url` | API Keys endpoint url, ex: http://keys-api.svc (used for getting oidc auth). | `""`  |
+
+### RealtimeData integration
+
+| Name                      | Description                                                                                                                                    | Value |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `routes.realtimeData.url` | API RealtimeData endpoint url, ex: http://citylens-routes-realtime-data-api.svc (used for getting drivers locations in real time).**Required** | `""`  |

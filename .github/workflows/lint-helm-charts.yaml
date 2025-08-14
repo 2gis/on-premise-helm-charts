@@ -1,0 +1,82 @@
+name: Lint Helm Charts
+
+on:
+  # pull_request:
+  #   branches:
+  #     - develop
+  workflow_dispatch: # Добавлена возможность ручного запуска
+
+env:
+  MAIN_BRANCH: "develop" # Константа для основной ветки
+
+jobs:
+  lint-charts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Получаем всю историю для сравнения изменений
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'v3.17.2'
+
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.7.0 # Устанавливаем chart-testing (ct)
+
+      - name: Install kubeconform
+        run: |
+          KUBECONFORM_VERSION="v0.6.7"
+          curl -LO https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz
+          tar -xzf kubeconform-linux-amd64.tar.gz
+          chmod +x kubeconform
+          sudo mv kubeconform /usr/local/bin/
+
+      - name: Generate `values-auto.yaml` for all charts
+        run: |
+          for chart in charts/*; do
+            if [[ -d "$chart" ]]; then
+              chart_name=$(basename "$chart")
+              echo "Processing chart: $chart_name"
+              helm show values "$chart" > "$chart/values-auto.yaml"
+              # Заменяем `: ''` на `http://ключ.example`
+              awk '
+                function key_example(key) {
+                  gsub(/\./, "_", key)
+                  return "http://" key ".example"
+                }
+                /: *'\'''\''/ { sub(/'\'''\''/, "\"" key_example($1) "\"") } 1
+              ' "$chart/values-auto.yaml" > "$chart/values-auto.yaml.tmp" && mv "$chart/values-auto.yaml.tmp" "$chart/values-auto.yaml"
+            fi
+          done
+
+      - name: Add Helm repository
+        run: helm repo add 2gis https://2gis.github.io/on-premise-helm-charts
+
+      - name: Lint and Validate Charts
+        run: |
+          for chart in charts/*; do
+            if [[ -d "$chart" ]]; then
+              echo "########################################################################################################"
+              echo "### Build dependencies for chart: $chart"
+              helm dependency build "$chart"
+              echo
+
+              echo "########################################################################################################"
+              echo "### Linting chart: $(basename "$chart")"
+              helm lint "$chart"
+              echo
+
+              echo "########################################################################################################"
+              echo "### Running chart-testing on: $(basename "$chart")"
+              ct lint --charts "$chart"
+              echo
+
+              echo "########################################################################################################"
+              echo "### Validating chart: $(basename "$chart")"
+              helm template "$chart" -f "$chart/values-auto.yaml" | kubeconform -summary -output json
+              echo
+            fi
+          done

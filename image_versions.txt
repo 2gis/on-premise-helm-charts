@@ -1,21 +1,18 @@
 catalog-api
-	catalog-api:3.641.0
-	catalog-importer:1.11.0
+	catalog-api:3.647.0
+	catalog-importer:1.12.1
 citylens
-	citylens-api:1.17.5
-	citylens-database:1.17.1
-	citylens-routes-api:1.0.12
-	citylens-web:1.17.5
-	citylens-worker-service:1.0.12
-	citylens-workers:1.17.5
+	citylens-api:1.18.3
+	citylens-database:1.18.0
+	citylens-realtime-data-api:1.3.3
+	citylens-routes-api:1.3.3
+	citylens-web:1.18.3
+	citylens-worker-service:1.3.3
+	citylens-workers:1.18.3
 citylens-routes-ui
-	citylens-routes-ui:0.0.21
+	citylens-routes-ui:1.3.2
 dgtt
 	dgtt:0.2.27-b188673e09
-floors-api
-	floors-importer:1.1.0
-	floors-nodejs:1.1.0
-	nginx:1.25.5
 generic-chart
 gis-platform
 	gis_platform_portal:2023.8.3-0
@@ -27,23 +24,22 @@ keycloak
 	keycloak:21.1.1-debian-11-r4
 keys
 	keys-backend:1.112.2
-	keys-redis:6.2.6-alpine3.15
-	keys-ui:0.10.5
+	keys-ui:0.10.6
 license
-	license:2.2.4
+	license:2.4.1
 mapgl-js-api
-	mapgl:1.56.0
+	mapgl:1.62.0
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
-	navi-archiver-async-matrix:1.4.1
-	navi-async-matrix:1.12.1
+	navi-async-matrix:1.16.0
+	navi-merger-async-matrix:1.16.0
 navi-attractor
-	navi-attractor:7.27.1.2
+	navi-attractor:7.39.2.2
 navi-back
-	envoy:v1.27.0
 	metrics-aggregator:
-	navi-back:7.33.0.5
+	navi-back:7.39.2.2
+	navi-envoy:1.27.0
 navi-castle
 	navi-castle:1.9.8
 	navi-front:1.26.0
@@ -53,23 +49,28 @@ navi-restrictions
 	navi-restrictions-api:1.0.1
 	navi-restrictions-syncer:1.0.1
 navi-router
-	navi-router:6.29.0.6
+	navi-router:6.33.0.4
 navi-splitter
-	navi-splitter:1.0.1
+	navi-envoy:1.27.0
+	navi-metrics-aggregator:1.0.0
+	navi-splitter:1.8.9
+navi-vrp-solver
+	navi-vrp-solver:1.13.0
+navi-vrp-task-manager
+	navi-vrp-task-manager:1.13.0
 platform
 	platform-ui:1.2.0
 pro-api
-	pro-api:2.2.1
-	pro-importer:2.2.1
-	pro-importer:2.2.1
-	pro-permissions-api:2.2.1
-	pro-tasks-api:2.2.1
+	pro-api:2.26.0
+	pro-importer:2.26.0
+	pro-permissions-api:2.26.0
+	pro-tasks-api:2.26.0
 pro-ui
-	pro-importer:2.2.1
-	pro-ui:4.5.0
+	pro-importer:2.26.0
+	pro-ui:4.27.0
 search-api
 	nginx:1.25.5
-	search-api:7.85.0
+	search-api:7.90.0
 stat-receiver
 	stat-receiver-api:1.11.1
 	stat-receiver-streams:1.11.1
@@ -79,11 +80,11 @@ tilegen-api
 	tilegen-api:1.1.8
 	tilegen-processor:1.1.8
 tiles-api
-	tiles-api-importer:4.64.1
-	tiles-api-importer:4.64.1
-	tiles-api-proxy:4.64.1
-	tiles-api:4.64.1
+	tiles-api-importer:4.75.1
+	tiles-api-importer:4.75.1
+	tiles-api-proxy:4.75.1
+	tiles-api:4.75.1
 traffic-proxy
 	nginx:1.25.5
 twins-api
-	twins-api:1.13.0
+	twins-api:1.18.0
