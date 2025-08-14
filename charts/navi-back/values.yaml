@@ -114,7 +114,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.39.2.2
+  tag: 7.42.0.3
 
 
 # @section Navi-Back application settings
@@ -168,7 +168,7 @@ image:
 # @skip naviback.indices.carOptions.filename
 # @skip naviback.indices.countryCarOptions.enabled
 # @skip naviback.indices.ctxOptions.enabled
-# @skip naviback.indices.entrances
+# @skip naviback.indices.entrances.enabled
 # @skip naviback.indices.etaCorrectionCores
 # @skip naviback.indices.forecastedSpeeds.enabled
 # @skip naviback.indices.forecastedSpeedsIndex.enabled
@@ -177,12 +177,12 @@ image:
 # @skip naviback.indices.forecastedLongSpeedsIndex.updatePeriod
 # @skip naviback.indices.geoImport.enabled
 # @skip naviback.indices.onlineSpeeds.enabled
-# @skip naviback.indices.passZones
+# @skip naviback.indices.passZones.enabled
 # @skip naviback.indices.projectCarOptions.enabled
 # @skip naviback.indices.restrictedTransportIndex
 # @skip naviback.indices.smatrix
 # @skip naviback.indices.snImport.enabled
-# @skip naviback.indices.speedCams
+# @skip naviback.indices.speedCams.enabled
 # @skip naviback.indices.speedIndex.enabled
 # @skip naviback.indices.speedIndex.filename
 # @skip naviback.indices.taxiReferers.enabled
@@ -302,7 +302,6 @@ naviback:
       enabled: false
     entrances:
       enabled: false
-      proxy: false
     etaCorrectionCores:
       enabled: false
       proxy: false
@@ -321,7 +320,6 @@ naviback:
       enabled: false
     passZones:
       enabled: false
-      proxy: false
     projectCarOptions:
       enabled: false
     restrictedTransportIndex:
@@ -334,7 +332,6 @@ naviback:
       enabled: false
     speedCams:
       enabled: false
-      proxy: false
     speedIndex:
       enabled: false
     taxiReferers:
