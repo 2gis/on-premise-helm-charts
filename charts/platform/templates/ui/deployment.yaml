@@ -130,12 +130,14 @@ spec:
               value: {{ .Values.ui.oauth.safeHosts }}
             - name: OAUTH_SECURE
               value: {{ .Values.ui.oauth.secure | quote }}
+            {{- if .Values.ui.analyticsBSS }}
             - name: ANALYTICS_BSS_SECURE
               value: {{ .Values.ui.analyticsBSS.secure | quote }}
             - name: ANALYTICS_BSS_URL
               value: {{ .Values.ui.analyticsBSS.url | quote }}
             - name: ANALYTICS_BSS_PRODUCT_ID
               value: {{ .Values.ui.analyticsBSS.productId | quote }}
+            {{- end }}
             - name: HOME
               value: "/tmp"
       {{- with .Values.ui.nodeSelector }}
