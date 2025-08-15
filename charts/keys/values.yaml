@@ -20,16 +20,18 @@ imagePullPolicy: IfNotPresent
 # @section Flags for enabling/disabling certain features.
 
 featureFlags:
-  # @param featureFlags.enableAudit Enable audit logging.
+  # @param featureFlags.enableAudit Enable audit logging for sending to DB.
+  # @param featureFlags.enableAuditKafka Enable audit logging for sending to Kafka.
   # @param featureFlags.enablePublicAPISign Enable signing responses in Public API.
 
   enableAudit: false
+  enableAuditKafka: false
   enablePublicAPISign: false
 
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.112.2
+    tag: 1.132.0
 
 # @section Admin service settings
 
