@@ -541,18 +541,32 @@ See the [documentation]() to learn about:
 | `routes.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
 | `routes.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `routes.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
-| `routes`                                       | **Postgres**                                                                                                                                                                                             |                 |
-| `routes.postgres.database`                     | PostgreSQL database name. **Required**                                                                                                                                                                   | `""`            |
-| `routes.postgres.timeout`                      | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.                                                                             | `15`            |
-| `routes.postgres.commandTimeout`               | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.                                                                                  | `30`            |
-| `routes.postgres.maxPoolSize`                  | The maximum connection pool size.                                                                                                                                                                        | `30`            |
-| `routes.postgres.pooling`                      | Whether connection pooling should be used.                                                                                                                                                               | `false`         |
-| `routes`                                       | **Hangfire**                                                                                                                                                                                             |                 |
-| `routes.hangfire.postgres.database`            | PostgreSQL database name. **Required**                                                                                                                                                                   | `""`            |
-| `routes.hangfire.postgres.timeout`             | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.                                                                             | `15`            |
-| `routes.hangfire.postgres.commandTimeout`      | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.                                                                                  | `30`            |
-| `routes.hangfire.postgres.maxPoolSize`         | The maximum connection pool size.                                                                                                                                                                        | `30`            |
-| `routes.hangfire.postgres.pooling`             | Whether connection pooling should be used.                                                                                                                                                               | `false`         |
+
+### PostgreSQL settings
+
+| Name                                             | Description                                                                                                                  | Value |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `routes.postgres.api`                            | **Api**                                                                                                                      |       |
+| `routes.postgres.api.database`                   | PostgreSQL database name. **Required**                                                                                       | `""`  |
+| `routes.postgres.api.timeout`                    | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error. | `15`  |
+| `routes.postgres.api.commandTimeout`             | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.      | `30`  |
+| `routes.postgres.api.poolSize.`                  | Settings for the pool size                                                                                                   |       |
+| `routes.postgres.api.poolSize.min`               | PostgreSQL minimum connection pool size. 0 means no minimal bound.                                                           | `1`   |
+| `routes.postgres.api.poolSize.max`               | PostgreSQL maximum connection pool size                                                                                      | `10`  |
+| `routes.postgres.hangfire`                       | **Hangfire**                                                                                                                 |       |
+| `routes.postgres.hangfire.database`              | PostgreSQL database name. **Required**                                                                                       | `""`  |
+| `routes.postgres.hangfire.timeout`               | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error. | `15`  |
+| `routes.postgres.hangfire.commandTimeout`        | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.      | `30`  |
+| `routes.postgres.hangfire.poolSize.`             | Settings for the pool size                                                                                                   |       |
+| `routes.postgres.hangfire.poolSize.min`          | PostgreSQL minimum connection pool size. 0 means no minimal bound.                                                           | `1`   |
+| `routes.postgres.hangfire.poolSize.max`          | PostgreSQL maximum connection pool size                                                                                      | `10`  |
+| `routes.postgres.realtimeDataApi`                | **RealtimeDataApi**                                                                                                          |       |
+| `routes.postgres.realtimeDataApi.database`       | PostgreSQL database name. **Required**                                                                                       | `""`  |
+| `routes.postgres.realtimeDataApi.timeout`        | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error. | `15`  |
+| `routes.postgres.realtimeDataApi.commandTimeout` | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.      | `30`  |
+| `routes.postgres.realtimeDataApi.poolSize.`      | Settings for the pool size                                                                                                   |       |
+| `routes.postgres.realtimeDataApi.poolSize.min`   | PostgreSQL minimum connection pool size. 0 means no minimal bound.                                                           | `1`   |
+| `routes.postgres.realtimeDataApi.poolSize.max`   | PostgreSQL maximum connection pool size                                                                                      | `10`  |
 
 ### Citylens routes API
 
@@ -562,7 +576,7 @@ See the [documentation]() to learn about:
 | Name                          | Description  | Value                                 |
 | ----------------------------- | ------------ | ------------------------------------- |
 | `routes.api.image.repository` | Repository.  | `2gis-on-premise/citylens-routes-api` |
-| `routes.api.image.tag`        | Tag.         | `1.3.3`                               |
+| `routes.api.image.tag`        | Tag.         | `1.4.0`                               |
 | `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        |
 
 ### Resources settings
@@ -630,19 +644,20 @@ See the [documentation]() to learn about:
 
 ### Metadata settings
 
-| Name                          | Description                                                                                                                 | Value         |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `routes.api.annotations`      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.api.labels`           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.api.podAnnotations`   | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.api.podLabels`        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.api.nodeSelector`     | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
-| `routes.api.tolerations`      | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
-| `routes.api.affinity`         | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
-| `routes.api.tempPath`         | Path to directory used for temp data                                                                                        | `/tmp`        |
-| `routes.api.logging`          | Routes **Logging** settings                                                                                                 |               |
-| `routes.api.logging.level`    | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
-| `routes.api.logging.extended` | Extended log message. Include http metadata requests.                                                                       | `false`       |
+| Name                                     | Description                                                                                                                 | Value         |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `routes.api.annotations`                 | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.api.labels`                      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.api.podAnnotations`              | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.api.podLabels`                   | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.api.nodeSelector`                | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
+| `routes.api.tolerations`                 | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
+| `routes.api.affinity`                    | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
+| `routes.api.tempPath`                    | Path to directory used for temp data                                                                                        | `/tmp`        |
+| `routes.api.logging`                     | Routes **Logging** settings                                                                                                 |               |
+| `routes.api.logging.level`               | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
+| `routes.api.logging.extendedRestLogging` | Extended log message. Include http metadata requests.                                                                       | `false`       |
+| `routes.api.logging.extendedSqlLogging`  | Extended sql logs. Include sql requests row.                                                                                | `false`       |
 
 ### Citylens routes Worker
 
@@ -652,7 +667,7 @@ See the [documentation]() to learn about:
 | Name                             | Description  | Value                                     |
 | -------------------------------- | ------------ | ----------------------------------------- |
 | `routes.worker.image.repository` | Repository.  | `2gis-on-premise/citylens-worker-service` |
-| `routes.worker.image.tag`        | Tag.         | `1.3.3`                                   |
+| `routes.worker.image.tag`        | Tag.         | `1.4.0`                                   |
 | `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            |
 
 ### Resources settings
@@ -688,6 +703,7 @@ See the [documentation]() to learn about:
 | `routes.worker.tempPath`                                      | Path to directory used for temp data                                                                                        | `/tmp`        |
 | `routes.worker.logging`                                       | Routes **Logging** settings                                                                                                 |               |
 | `routes.worker.logging.level`                                 | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
+| `routes.worker.logging.extendedSqlLogging`                    | Extended sql logs. Include sql requests row.                                                                                | `false`       |
 | `routes.worker.routesSettings`                                | Routes distance match settings                                                                                              |               |
 | `routes.worker.routesSettings.routePointsMatchDistanceMeters` | Calculation accuracy in meters.                                                                                             | `5`           |
 
@@ -713,7 +729,7 @@ See the [documentation]() to learn about:
 | Name                                      | Description  | Value                                        |
 | ----------------------------------------- | ------------ | -------------------------------------------- |
 | `routes.realtimeDataApi.image.repository` | Repository.  | `2gis-on-premise/citylens-realtime-data-api` |
-| `routes.realtimeDataApi.image.tag`        | Tag.         | `1.3.3`                                      |
+| `routes.realtimeDataApi.image.tag`        | Tag.         | `1.4.0`                                      |
 | `routes.realtimeDataApi.image.pullPolicy` | Pull Policy. | `IfNotPresent`                               |
 
 ### Resources settings
@@ -769,25 +785,21 @@ See the [documentation]() to learn about:
 
 ### Metadata settings
 
-| Name                                             | Description                                                                                                                  | Value         |
-| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `routes.realtimeDataApi.annotations`             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                    | `{}`          |
-| `routes.realtimeDataApi.labels`                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                              | `{}`          |
-| `routes.realtimeDataApi.podAnnotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                    | `{}`          |
-| `routes.realtimeDataApi.podLabels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                              | `{}`          |
-| `routes.realtimeDataApi.nodeSelector`            | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).      | `{}`          |
-| `routes.realtimeDataApi.tolerations`             | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.        | `[]`          |
-| `routes.realtimeDataApi.affinity`                | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.  | `{}`          |
-| `routes.realtimeDataApi.tempPath`                | Path to directory used for temp data                                                                                         | `/tmp`        |
-| `routes`                                         | **Postgres**                                                                                                                 |               |
-| `routes.realtimeDataApi.postgres.database`       | PostgreSQL database name. **Required**                                                                                       | `""`          |
-| `routes.realtimeDataApi.postgres.timeout`        | The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error. | `15`          |
-| `routes.realtimeDataApi.postgres.commandTimeout` | The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.      | `30`          |
-| `routes.realtimeDataApi.postgres.maxPoolSize`    | The maximum connection pool size.                                                                                            | `30`          |
-| `routes.realtimeDataApi.postgres.pooling`        | Whether connection pooling should be used.                                                                                   | `true`        |
-| `routes.realtimeDataApi.logging`                 | Routes **Logging** settings                                                                                                  |               |
-| `routes.realtimeDataApi.logging.level`           | Log message level. verbose, debug, information, warning, error, fatal.                                                       | `information` |
-| `routes.realtimeDataApi.daysToLeaveData`         | Storage of information in days.                                                                                              | `30`          |
+| Name                                                 | Description                                                                                                                 | Value         |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `routes.realtimeDataApi.annotations`                 | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.realtimeDataApi.labels`                      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.realtimeDataApi.podAnnotations`              | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
+| `routes.realtimeDataApi.podLabels`                   | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
+| `routes.realtimeDataApi.nodeSelector`                | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
+| `routes.realtimeDataApi.tolerations`                 | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
+| `routes.realtimeDataApi.affinity`                    | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
+| `routes.realtimeDataApi.tempPath`                    | Path to directory used for temp data                                                                                        | `/tmp`        |
+| `routes.realtimeDataApi.logging`                     | Routes **Logging** settings                                                                                                 |               |
+| `routes.realtimeDataApi.logging.level`               | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
+| `routes.realtimeDataApi.logging.extendedRestLogging` | Extended log message. Include http metadata requests.                                                                       | `false`       |
+| `routes.realtimeDataApi.logging.extendedSqlLogging`  | Extended sql logs. Include sql requests row.                                                                                | `false`       |
+| `routes.realtimeDataApi.daysToLeaveData`             | Storage of information in days.                                                                                             | `30`          |
 
 ### routes.features Feature settings.
 

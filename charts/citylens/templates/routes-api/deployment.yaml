@@ -69,28 +69,29 @@ spec:
             httpGet:
               path: /health/live
               port: http
-            failureThreshold: 5
-            initialDelaySeconds: 5
-            periodSeconds: 15
-            successThreshold: 1
+            initialDelaySeconds: 10
+            periodSeconds: 20
             timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           readinessProbe:
             httpGet:
               path: /health/ready
               port: http
-            failureThreshold: 3
             initialDelaySeconds: 5
             periodSeconds: 5
-            successThreshold: 1
             timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           startupProbe:
             httpGet:
               path: /health/live
               port: http
-            failureThreshold: 20
             initialDelaySeconds: 5
-            periodSeconds: 5
+            periodSeconds: 10
             timeoutSeconds: 5
+            failureThreshold: 30
+            successThreshold: 1
           resources:
             {{- toYaml .Values.routes.api.resources | nindent 12 }}
           lifecycle:
@@ -102,43 +103,35 @@ spec:
               value: {{ .Values.routes.api.tempPath | quote }}
 
             - name: Common__Logging__LogLevel
-              value: {{ .Values.routes.api.logging.level | quote }}
-            - name: Common__Logging__Extended
-              value: {{ .Values.routes.api.logging.extended | quote }}
+              value: "{{ .Values.routes.api.logging.level }}"
+            - name: Common__Logging__ExtendedRestLogging
+              value: "{{ .Values.routes.api.logging.extendedRestLogging }}"
+            - name: Common__Logging__ExtendedSqlLogging
+              value: "{{ .Values.routes.api.logging.extendedSqlLogging }}"
 
-            - name: PgSettings__Host
-              value: {{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host | quote }}
-            - name: PgSettings__Port
-              value: {{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port | quote }}
-            - name: PgSettings__UserName
-              value: {{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username | quote }}
-            - name: PgSettings__Password
+            - name: Postgres__ReadWrite__ConnectionString
+              value: {{ include "routes-api.connectionString" . }}
+            - name: Postgres__ReadWrite__Password
               valueFrom:
                 secretKeyRef:
                   key: postgresPassword
                   name: {{ include "citylens.routes.api.name" . }}-secret
 
-            - name: PgSettings__Api__Database
-              value: {{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database | quote }}
-            - name: PgSettings__Api__Timeout
-              value: {{ $.Values.routes.postgres.timeout | quote }}
-            - name: PgSettings__Api__CommandTimeout
-              value: {{ $.Values.routes.postgres.commandTimeout | quote }}
-            - name: PgSettings__Api__MaxPoolSize
-              value: {{ $.Values.routes.postgres.maxPoolSize | quote }}
-            - name: PgSettings__Api__Pooling
-              value: {{ $.Values.routes.postgres.pooling | quote }}
+            - name: Postgres__ReadOnly__ConnectionString
+              value: {{ include "routes-api.connectionString" . }}
+            - name: Postgres__ReadOnly__Password
+              valueFrom:
+                secretKeyRef:
+                  key: postgresPassword
+                  name: {{ include "citylens.routes.api.name" . }}-secret
 
-            - name: PgSettings__Hangfire__Database
-              value: {{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database | quote }}
-            - name: PgSettings__Hangfire__Timeout
-              value: {{ $.Values.routes.hangfire.postgres.timeout | quote }}
-            - name: PgSettings__Hangfire__CommandTimeout
-              value: {{ $.Values.routes.hangfire.postgres.commandTimeout | quote }}
-            - name: PgSettings__Hangfire__MaxPoolSize
-              value: {{ $.Values.routes.hangfire.postgres.maxPoolSize | quote }}
-            - name: PgSettings__Hangfire__Pooling
-              value: {{ $.Values.routes.hangfire.postgres.pooling | quote }}
+            - name: Hangfire__Postgres__ConnectionString
+              value: {{ include "routes-hangfire.connectionString" . }}
+            - name: Hangfire__Postgres__Password
+              valueFrom:
+                secretKeyRef:
+                  key: postgresPassword
+                  name: {{ include "citylens.routes.api.name" . }}-secret
 
             - name: S3__BucketPrefix
               value: {{ required "A valid .Values.s3.bucketPrefix entry required" $.Values.s3.bucketPrefix | quote }}
@@ -160,7 +153,7 @@ spec:
             - name: Clients__Navigation__Enabled
               value: "true"
             - name: Clients__Navigation__Url
-              value: {{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url | quote }}
+              value: "{{ $.Values.routes.navi.url }}"
             - name: Clients__Navigation__TimeoutSeconds
               value: {{ $.Values.routes.navi.timeout | quote }}
             - name: Clients__Navigation__ApiKey
@@ -183,12 +176,14 @@ spec:
             - name: Clients__RealTimeData__Enabled
               value: "true"
             - name: Clients__RealTimeData__Url
-              value: {{ required "A valid .Values.routes.realtimeData.url entry required" $.Values.routes.realtimeData.url | quote }}
+              value: "{{ $.Values.routes.realtimeData.url }}"
 
             - name: Features__AuthorizationEnabled
               value: {{ $.Values.routes.features.authorizationEnabled | quote }}
             - name: Features__OidcMobileAuthorizationEnabled
-              value: {{ $.Values.routes.features.oidcMobileAuthorizationEnabled | quote }}
+              value: "{{ $.Values.routes.features.oidcMobileAuthorizationEnabled }}"
+            - name: Features__ProxyNaviKeyEnabled
+              value: "{{ $.Values.routes.features.proxyNaviKeyEnabled }}"
             - name: Features__CoverageRatioEnabled
               value: {{ $.Values.routes.features.coverageRatioEnabled | quote }}
 
@@ -197,4 +192,4 @@ spec:
             - name: TasksAssetSettings__PlannedTasksAssetId
               value: {{ $.Values.routes.tasksAssetSettings.plannedTasksAssetId | quote }}
             - name: TasksAssetSettings__CompletedTasksAssetId
-              value: {{ $.Values.routes.tasksAssetSettings.completedTasksAssetId | quote }}
+              value: "{{ $.Values.routes.tasksAssetSettings.completedTasksAssetId }}"

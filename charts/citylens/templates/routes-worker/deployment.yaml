@@ -102,44 +102,36 @@ spec:
               value: {{ .Values.routes.worker.tempPath | quote }}
 
             - name: Common__Logging__LogLevel
-              value: {{ .Values.routes.worker.logging.level | quote }}
+              value: "{{ .Values.routes.worker.logging.level }}"
+            - name: Common__Logging__ExtendedSqlLogging
+              value: "{{ .Values.routes.worker.logging.extendedSqlLogging }}"
 
             - name: RoutesSettings__RoutePointsMatchDistanceMeters
               value: {{ .Values.routes.worker.routesSettings.routePointsMatchDistanceMeters | quote }}
 
-            - name: PgSettings__Host
-              value: {{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host | quote }}
-            - name: PgSettings__Port
-              value: {{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port | quote }}
-            - name: PgSettings__UserName
-              value: {{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username | quote }}
-            - name: PgSettings__Password
+            - name: Postgres__ReadWrite__ConnectionString
+              value: {{ include "routes-api.connectionString" . }}
+            - name: Postgres__ReadWrite__Password
               valueFrom:
                 secretKeyRef:
                   key: postgresPassword
                   name: {{ include "citylens.routes.api.name" . }}-secret
 
-            - name: PgSettings__Api__Database
-              value: {{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database | quote }}
-            - name: PgSettings__Api__Timeout
-              value: {{ $.Values.routes.postgres.timeout | quote }}
-            - name: PgSettings__Api__CommandTimeout
-              value: {{ $.Values.routes.postgres.commandTimeout | quote }}
-            - name: PgSettings__Api__MaxPoolSize
-              value: {{ $.Values.routes.postgres.maxPoolSize | quote }}
-            - name: PgSettings__Api__Pooling
-              value: {{ $.Values.routes.postgres.pooling | quote }}
+            - name: Postgres__ReadOnly__ConnectionString
+              value: {{ include "routes-api.connectionString" . }}
+            - name: Postgres__ReadOnly__Password
+              valueFrom:
+                secretKeyRef:
+                  key: postgresPassword
+                  name: {{ include "citylens.routes.api.name" . }}-secret
 
-            - name: PgSettings__Hangfire__Database
-              value: {{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database | quote }}
-            - name: PgSettings__Hangfire__Timeout
-              value: {{ $.Values.routes.hangfire.postgres.timeout | quote }}
-            - name: PgSettings__Hangfire__CommandTimeout
-              value: {{ $.Values.routes.hangfire.postgres.commandTimeout | quote }}
-            - name: PgSettings__Hangfire__MaxPoolSize
-              value: {{ $.Values.routes.hangfire.postgres.maxPoolSize | quote }}
-            - name: PgSettings__Hangfire__Pooling
-              value: {{ $.Values.routes.hangfire.postgres.pooling | quote }}
+            - name: Hangfire__Postgres__ConnectionString
+              value: {{ include "routes-hangfire.connectionString" . }}
+            - name: Hangfire__Postgres__Password
+              valueFrom:
+                secretKeyRef:
+                  key: postgresPassword
+                  name: {{ include "citylens.routes.api.name" . }}-secret
 
             - name: BusConfig__Broker
               value: {{ .Values.kafka.bootstrapServer | quote }}
@@ -158,7 +150,7 @@ spec:
             - name: BusConfig__Consumers__AppEvents__Topic
               value: {{ .Values.kafka.topics.tracks | quote }}
             - name: BusConfig__Consumers__AppEvents__GroupId
-              value: {{ required "A valid .Values.routes.worker.busConfig.consumers.appEvents.groupId entry required" $.Values.routes.worker.busConfig.consumers.appEvents.groupId | quote }}
+              value: "{{ .Values.routes.worker.busConfig.consumers.appEvents.groupId }}"
             - name: BusConfig__Consumers__AppEvents__BufferSize
               value: {{ .Values.routes.worker.busConfig.consumers.appEvents.bufferSize | quote }}
             - name: BusConfig__Consumers__AppEvents__WorkersCount
@@ -181,7 +173,7 @@ spec:
             - name: Clients__Navigation__Enabled
               value: "true"
             - name: Clients__Navigation__Url
-              value: {{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url | quote }}
+              value: "{{ $.Values.routes.navi.url }}"
             - name: Clients__Navigation__TimeoutSeconds
               value: {{ $.Values.routes.navi.timeout | quote }}
             - name: Clients__Navigation__ApiKey
@@ -190,4 +182,4 @@ spec:
             - name: Features__CoverageRatioEnabled
               value: {{ $.Values.routes.features.coverageRatioEnabled | quote }}
             - name: Features__TasksAssetEnabled
-              value: {{ $.Values.routes.features.tasksAssetEnabled | quote }}
+              value: "{{ $.Values.routes.features.tasksAssetEnabled }}"
