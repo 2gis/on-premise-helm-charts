@@ -150,7 +150,7 @@ spec:
             - name: BusConfig__Consumers__AppEvents__Topic
               value: {{ .Values.kafka.topics.tracks | quote }}
             - name: BusConfig__Consumers__AppEvents__GroupId
-              value: "{{ .Values.routes.worker.busConfig.consumers.appEvents.groupId }}"
+              value: "{{ required "A valid .Values.routes.worker.busConfig.consumers.appEvents.groupId entry required" .Values.routes.worker.busConfig.consumers.appEvents.groupId }}"
             - name: BusConfig__Consumers__AppEvents__BufferSize
               value: {{ .Values.routes.worker.busConfig.consumers.appEvents.bufferSize | quote }}
             - name: BusConfig__Consumers__AppEvents__WorkersCount
@@ -173,7 +173,7 @@ spec:
             - name: Clients__Navigation__Enabled
               value: "true"
             - name: Clients__Navigation__Url
-              value: "{{ $.Values.routes.navi.url }}"
+              value: "{{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url }}"
             - name: Clients__Navigation__TimeoutSeconds
               value: {{ $.Values.routes.navi.timeout | quote }}
             - name: Clients__Navigation__ApiKey

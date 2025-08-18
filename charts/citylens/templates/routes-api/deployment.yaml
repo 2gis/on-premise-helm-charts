@@ -153,7 +153,7 @@ spec:
             - name: Clients__Navigation__Enabled
               value: "true"
             - name: Clients__Navigation__Url
-              value: "{{ $.Values.routes.navi.url }}"
+              value: "{{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url }}"
             - name: Clients__Navigation__TimeoutSeconds
               value: {{ $.Values.routes.navi.timeout | quote }}
             - name: Clients__Navigation__ApiKey
@@ -176,14 +176,12 @@ spec:
             - name: Clients__RealTimeData__Enabled
               value: "true"
             - name: Clients__RealTimeData__Url
-              value: "{{ $.Values.routes.realtimeData.url }}"
+              value: "{{ required "A valid .Values.routes.realtimeData.url entry required" $.Values.routes.realtimeData.url }}"
 
             - name: Features__AuthorizationEnabled
               value: {{ $.Values.routes.features.authorizationEnabled | quote }}
             - name: Features__OidcMobileAuthorizationEnabled
               value: "{{ $.Values.routes.features.oidcMobileAuthorizationEnabled }}"
-            - name: Features__ProxyNaviKeyEnabled
-              value: "{{ $.Values.routes.features.proxyNaviKeyEnabled }}"
             - name: Features__CoverageRatioEnabled
               value: {{ $.Values.routes.features.coverageRatioEnabled | quote }}
 
