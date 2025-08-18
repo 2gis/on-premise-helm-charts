@@ -150,7 +150,7 @@ spec:
             - name: BusConfig__Consumers__AppEvents__Topic
               value: {{ .Values.kafka.topics.tracks | quote }}
             - name: BusConfig__Consumers__AppEvents__GroupId
-              value: "{{ required "A valid .Values.routes.worker.busConfig.consumers.appEvents.groupId entry required" .Values.routes.worker.busConfig.consumers.appEvents.groupId }}"
+              value: "{{ required "A valid .Values.routes.worker.busConfig.consumers.appEvents.groupId entry required" $.Values.routes.worker.busConfig.consumers.appEvents.groupId }}"
             - name: BusConfig__Consumers__AppEvents__BufferSize
               value: {{ .Values.routes.worker.busConfig.consumers.appEvents.bufferSize | quote }}
             - name: BusConfig__Consumers__AppEvents__WorkersCount
