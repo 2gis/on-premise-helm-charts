@@ -54,7 +54,7 @@ spec:
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
           env:
             - name: METRICS_AGGREGATOR_PORT
-              value: "{{ .Values.metrics.port }}"
+              value: {{ .Values.metrics.port | quote }}
             - name: METRICS_AGGREGATOR_SOURCES
               value: "http://localhost:{{ .Values.splitter.appPort }}/metrics,http://localhost:9901/stats/prometheus"
             - name: GOMAXPROCS

@@ -60,24 +60,24 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "styles.env.loglevel" -}}
 - name: MGS_LOG_LEVEL
-  value: "{{ .Values.log.level }}"
+  value: {{ .Values.log.level | quote }}
 {{- end }}
 
 {{- define "styles.env.db" -}}
 - name: MGS_DB_HOST
-  value: "{{ required "A valid .Values.postgres.host required" .Values.postgres.host }}"
+  value: {{ required "A valid .Values.postgres.host required" .Values.postgres.host | quote }}
 - name: MGS_DB_PORT
-  value: "{{ .Values.postgres.port }}"
+  value: {{ .Values.postgres.port | quote }}
 - name: MGS_DB_NAME
-  value: "{{ required "A valid .Values.postgres.name required" .Values.postgres.name }}"
+  value: {{ required "A valid .Values.postgres.name required" .Values.postgres.name | quote }}
 - name: MGS_DB_SCHEMA
-  value: "{{ .Values.postgres.schema }}"
+  value: {{ .Values.postgres.schema | quote }}
 - name: MGS_DB_CONNECTION_TIMEOUT
-  value: "{{ .Values.postgres.timeout }}"
+  value: {{ .Values.postgres.timeout | quote }}
 - name: MGS_DB_CONNECTION_RETRY
-  value: "{{ .Values.postgres.retry }}"
+  value: {{ .Values.postgres.retry | quote }}
 - name: MGS_DB_USERNAME
-  value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.username }}"
+  value: {{ required "A valid .Values.postgres.ro.username required" .Values.postgres.username | quote }}
 {{- end}}
 
 {{- define "styles.env.db.deploys" -}}
@@ -100,23 +100,23 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "styles.env.s3" -}}
 - name: MGS_S3_ENDPOINT
-  value: "{{ required "A valid .Values.s3.host required" .Values.s3.host }}"
+  value: {{ required "A valid .Values.s3.host required" .Values.s3.host | quote }}
 - name: MGS_S3_BUCKET
-  value: "{{ .Values.s3.bucket }}"
+  value: {{ .Values.s3.bucket | quote }}
 - name: MGS_S3_PUBLIC_DOMAIN
-  value: "{{ .Values.s3.publicDomain }}"
+  value: {{ .Values.s3.publicDomain | quote }}
 - name: MGS_S3_REGION
-  value: "{{ .Values.s3.region }}"
+  value: {{ .Values.s3.region | quote }}
 - name: MGS_S3_SECURE
-  value: "{{ .Values.s3.secure }}"
+  value: {{ .Values.s3.secure | quote }}
 - name: MGS_S3_VERIFY_SSL
-  value: "{{ .Values.s3.verifySsl }}"
+  value: {{ .Values.s3.verifySsl | quote }}
 - name: MGS_S3_CONNECT_TIMEOUT
-  value: "{{ .Values.s3.connectTimeout }}"
+  value: {{ .Values.s3.connectTimeout | quote }}
 - name: MGS_S3_REQUEST_TIMEOUT
-  value: "{{ .Values.s3.requestTimeout }}"
+  value: {{ .Values.s3.requestTimeout | quote }}
 - name: MGS_S3_RESPONSE_TIMEOUT
-  value: "{{ .Values.s3.responseTimeout }}"
+  value: {{ .Values.s3.responseTimeout | quote }}
 {{- end}}
 
 {{- define "styles.env.s3.deploys" -}}

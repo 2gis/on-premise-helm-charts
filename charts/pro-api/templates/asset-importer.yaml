@@ -4,7 +4,7 @@ metadata:
   name: {{ include "pro-api.asset-importer-name" . }}
 spec:
   concurrencyPolicy: Forbid
-  schedule: "{{ .Values.assetImporter.schedule }}"
+  schedule: {{ .Values.assetImporter.schedule | quote }}
   successfulJobsHistoryLimit: {{ .Values.assetImporter.successfulJobsHistoryLimit }}
   failedJobsHistoryLimit: {{ .Values.assetImporter.failedJobsHistoryLimit }}
   suspend: {{ .Values.assetImporter.suspended }}
@@ -37,29 +37,29 @@ spec:
               resources:
                 {{- toYaml .Values.assetImporter.resources | nindent 16 }}
               volumeMounts:
-                - mountPath: "{{ .Values.api.settings.tempPath }}"
+                - mountPath: {{ .Values.api.settings.tempPath | quote }}
                   name: temp-volume
               env:
                 - name: JOB_NAME
                   value: {{ include "pro-api.asset-importer-name" . }}
                 - name: TEMP_PATH
-                  value: "{{ .Values.api.settings.tempPath }}"
+                  value: {{ .Values.api.settings.tempPath | quote }}
                 - name: ENV
-                  value: "{{ .Values.api.settings.env }}"
+                  value: {{ .Values.api.settings.env | quote }}
                 - name: MODE
                   value: "Schedule"
                 - name: MAX_PARALLEL_JOBS
-                  value: "{{ .Values.assetImporter.settings.maxParallelJobs }}"
+                  value: {{ .Values.assetImporter.settings.maxParallelJobs | quote }}
                 - name: manifest
-                  value: "{{ .Values.dgctlStorage.manifest }}"
+                  value: {{ .Values.dgctlStorage.manifest | quote }}
                 - name: S3Settings__Url
                   value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
                 - name: S3Settings__Secure
-                  value: "{{ .Values.dgctlStorage.secure }}"
+                  value: {{ .Values.dgctlStorage.secure | quote }}
                 - name: S3Settings__Region
                   value: {{ .Values.dgctlStorage.region }}
                 - name: S3Settings__DisablePayloadSigning
-                  value: "{{ .Values.dgctlStorage.disablePayloadSigning }}"
+                  value: {{ .Values.dgctlStorage.disablePayloadSigning | quote }}
                 - name: S3Settings__DgctlStorageBucket
                   value: {{ required "A valid .Values.dgctlStorage.bucket entry required" $.Values.dgctlStorage.bucket }}
                 - name: S3Settings__AssetDataBucket
@@ -86,12 +86,12 @@ spec:
                 - name: Elastic__Nodes__{{$i}}__Host
                   value: {{ $s.host }}
                 - name: Elastic__Nodes__{{$i}}__Port
-                  value: "{{ $s.port }}"
+                  value: {{ $s.port | quote }}
                 {{ end }}
                 - name: Elastic__Secure
-                  value: "{{ $.Values.elastic.secure }}"
+                  value: {{ $.Values.elastic.secure | quote }}
                 - name: Elastic__Username
-                  value: "{{ $.Values.elastic.username }}"
+                  value: {{ $.Values.elastic.username | quote }}
                 {{ if .Values.elastic.password }}
                 - name: Elastic__Password
                   valueFrom:
@@ -100,9 +100,9 @@ spec:
                       name: {{ include "pro-api.name" . }}-secret
                 {{ end }}
                 - name: Elastic__IndexPrefix
-                  value: "{{ $.Values.elastic.indexPrefix }}"
+                  value: {{ $.Values.elastic.indexPrefix | quote }}
                 - name: Elastic__EnableHttpCompression
-                  value: "{{ $.Values.elastic.enableHttpCompression }}"
+                  value: {{ $.Values.elastic.enableHttpCompression | quote }}
 
                 - name: API_URL
                   value: http://{{ include "pro-api.name" . }}
@@ -115,7 +115,7 @@ spec:
                 {{- end }}
                 {{- if .Values.assetImporter.settings.files }}
                 - name: FILES
-                  value: "{{ .Values.assetImporter.settings.files}}"
+                  value: {{ .Values.assetImporter.settings.files | quote }}
                 {{- end }}
                 - name: Postgres__ConnectionString
                   value: {{ include "pro-api.connectionString" . }}
@@ -125,17 +125,17 @@ spec:
                       key: dbConnectionPwd
                       name: {{ include "pro-api.name" . }}-secret
                 - name: Common__Logging__Format
-                  value: "{{ .Values.api.settings.logging.format }}"
+                  value: {{ .Values.api.settings.logging.format | quote }}
                 - name: Common__Logging__Targets
-                  value: "{{ .Values.api.settings.logging.targets }}"
+                  value: {{ .Values.api.settings.logging.targets | quote }}
                 - name: Common__EsMetricsEnabled
-                  value: "{{ .Values.assetImporter.settings.esMetricsEnabled }}"
+                  value: {{ .Values.assetImporter.settings.esMetricsEnabled | quote }}
                 - name: Common__TtlSecondsAfterFinished
-                  value: "{{ .Values.assetImporter.settings.ttlSecondsAfterFinished }}"
+                  value: {{ .Values.assetImporter.settings.ttlSecondsAfterFinished | quote }}
                 - name: Digger__Address
-                  value: "{{ .Values.digger.url}}"
+                  value: {{ .Values.digger.url | quote }}
                 - name: Digger__UserName
-                  value: "{{ .Values.digger.userName}}"
+                  value: {{ .Values.digger.userName | quote }}
                 {{ if .Values.digger.password }}
                 - name: Digger__Password
                   valueFrom:
@@ -151,6 +151,6 @@ spec:
                       key: routingApi2gisKey
                       name: {{ include "pro-api.name" . }}-secret
                 - name: TileGen__Url
-                  value: "{{ .Values.tileGen.url }}"
+                  value: {{ .Values.tileGen.url | quote }}
                 - name: TileGen__UserDataTileSet
-                  value: "{{ .Values.tileGen.userDataTileSet }}"
+                  value: {{ .Values.tileGen.userDataTileSet | quote }}

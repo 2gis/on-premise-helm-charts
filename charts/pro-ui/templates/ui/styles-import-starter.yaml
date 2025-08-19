@@ -46,9 +46,9 @@ spec:
             - name: S3Settings__Region
               value: {{ .Values.dgctlStorage.region }}
             - name: S3Settings__DisablePayloadSigning
-              value: "{{ .Values.dgctlStorage.disablePayloadSigning }}"
+              value: {{ .Values.dgctlStorage.disablePayloadSigning | quote }}
             - name: S3Settings__Secure
-              value: "{{ .Values.dgctlStorage.secure }}"
+              value: {{ .Values.dgctlStorage.secure | quote }}
             - name: S3Settings__DgctlStorageBucket
               value: {{ .Values.dgctlStorage.bucket }}
             - name: S3Settings__AssetDataBucket
