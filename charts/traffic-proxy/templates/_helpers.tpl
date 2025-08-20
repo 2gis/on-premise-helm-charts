@@ -84,43 +84,43 @@ location ~ ^/navi-castle/restrictions/([^/]+)/.*-restriction\.json$ {
 }
 
 {{/*5. navi-castle-cache endpoints*/}}
-location = /navi-castle-cache/index.json.zip {
+location = /navi-castle/index.json.zip {
   rewrite ^ /api/v1/services/navi/proxy/navi-castle-cache-index/index.json.zip break;
   {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle-cache/eta_correction/ {
+location ~ ^/navi-castle/eta_correction/ {
     rewrite ^/navi-castle-cache(/eta_correction/.*)$ /api/v1/services/navi/proxy/eta-correction$1 break;
     {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle-cache/smatrix/ {
+location ~ ^/navi-castle/smatrix/ {
   rewrite ^/navi-castle-cache(/smatrix/.*)$ /api/v1/services/navi/proxy/smatrix$1 break;
   {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle-cache/probability_matrix/ {
+location ~ ^/navi-castle/probability_matrix/ {
   rewrite ^/navi-castle-cache(/probability_matrix/.*)$ /api/v1/services/navi/proxy/probability-matrix$1 break;
   {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle-cache/turn_penalties/ {
+location ~ ^/navi-castle/turn_penalties/ {
   rewrite ^/navi-castle-cache(/turn_penalties/.*)$ /api/v1/services/navi/proxy/turn-penalties$1 break;
   {{- include "proxyParams" . }}
 }
 
-location = /navi-castle-cache/restricted_transport.json.zip {
+location = /navi-castle/restricted_transport.json.zip {
   rewrite ^ /api/v1/services/navi/proxy/restricted-transport-index/restricted_transport.json.zip break;
   {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle-cache/restricted_transport/([^/]+)/restricted_transport_platforms\.csv$ {
-  rewrite ^/navi-castle-cache/restricted_transport/(.*)$ /api/v1/services/navi/proxy/restricted-transport-platforms/restricted_transport/$1 break;
+location ~ ^/navi-castle/restricted_transport/([^/]+)/restricted_transport_platforms\.csv$ {
+  rewrite ^/navi-castle/restricted_transport/(.*)$ /api/v1/services/navi/proxy/restricted-transport-platforms/restricted_transport/$1 break;
   {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle-cache/restricted_transport/([^/]+)/restricted_transport_routes\.csv$ {
-  rewrite ^/navi-castle-cache/restricted_transport/(.*)$ /api/v1/services/navi/proxy/restricted-transport-routes/restricted_transport/$1 break;
+location ~ ^/navi-castle/restricted_transport/([^/]+)/restricted_transport_routes\.csv$ {
+  rewrite ^/navi-castle/restricted_transport/(.*)$ /api/v1/services/navi/proxy/restricted-transport-routes/restricted_transport/$1 break;
   {{- include "proxyParams" . }}
 }
 location = /eta/eta-predictions/index.json {
