@@ -151,6 +151,34 @@ Usage:
 
 
 {{/*
+Set attractor_motorcycle parameter in server config section
+Usage:
+{{ include "config.setAttractorMotorcycle" $ }}
+*/}}
+{{- define "config.setAttractorMotorcycle" -}}
+   {{-  ternary
+      $.Values.attractor.attractor.motorcycle
+      (include "rules.inRoutingSection" (dict "routingValue" "motorcycle" "context" $))
+      (hasKey $.Values.attractor.attractor "motorcycle")
+   -}}
+{{- end -}}
+
+
+{{/*
+Set attractor_emergency parameter in server config section
+Usage:
+{{ include "config.setAttractorEmergency" $ }}
+*/}}
+{{- define "config.setAttractorEmergency" -}}
+   {{-  ternary
+      $.Values.attractor.attractor.emergency
+      (include "rules.inRoutingSection" (dict "routingValue" "emergency" "context" $))
+      (hasKey $.Values.attractor.attractor "emergency")
+   -}}
+{{- end -}}
+
+
+{{/*
 Check if instance is running in truck mode
 Usage:
 {{ include "config.isTruck" $ }}

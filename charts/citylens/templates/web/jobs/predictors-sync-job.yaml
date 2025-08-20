@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "citylens.name" . }}-predictorssync-job
+  labels:
+    {{- include "citylens.jobs.predictorsSync.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-4"
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "citylens.name" . }}-predictorssync-job
+      labels:
+        {{- include "citylens.jobs.predictorsSync.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: sync-config-predictors-db
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
+          imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+          command: [ "/bin/sh", "-c" ]
+          args: [ "flask pre-start sync-predictors" ]
+          resources:
+            {{- toYaml .Values.jobs.predictorsSync.resources | nindent 12 }}
+          env:
+            - name: CONFIG_PATH
+              value: /opt/worker/config/dashboard_config.yaml
+            {{- if $.Values.customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "citylens.customCA.mountPath" $ }}
+            {{- end }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/worker/config
+                {{- if $.Values.customCAs.bundle }}
+            - mountPath: {{ include "citylens.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
+                {{- end }}
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "citylens.web.name" . }}-jobs-configmap
+        {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
+          configMap:
+            name: {{ include "citylens.name" $ }}-custom-ca-configmap
+        {{- end }}
+      {{- with .Values.jobs.predictorsSync.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

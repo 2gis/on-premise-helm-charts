@@ -113,6 +113,8 @@ spec:
               value: "{{ .Values.tasks.settings.tempPath }}"
             - name: Postgres__ConnectionString
               value: {{ include "pro-tasks.connectionString" . }}
+            - name: Postgres__ConnectionStringReadonly
+              value: {{ include "pro-tasks.connectionStringReadOnly" . }}
             - name: Postgres__Password
               valueFrom:
                 secretKeyRef:
@@ -125,6 +127,20 @@ spec:
                   key: tasksDbConnectionPwdRo
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
+
+            - name: FeatureManagement__AssetDataPreparation
+              value: "{{ $.Values.tasks.settings.features.assetDataPreparation.enabled }}"
+            - name: FeatureManagement__AuditLogging
+              value: "{{ $.Values.tasks.settings.features.auditLogging.enabled }}"
+            - name: FeatureManagement__CleanCitylensFrames
+              value: "{{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled }}"
+            - name: FeatureManagement__RemoveUnusedUserAssetFiles
+              value: "{{ $.Values.tasks.settings.features.removeUnusedUserAssetFiles.enabled }}"
+            - name: FeatureManagement__EmailNotifications
+              value: "{{ $.Values.tasks.settings.features.emailNotifications.enabled }}"
+            - name: FeatureManagement__UserManagement
+              value: "{{ $.Values.tasks.settings.features.userManagement.enabled }}"
+
             - name: Common__Logging__Format
               value: "{{ .Values.tasks.settings.logging.format }}"
             - name: Common__Logging__Targets
@@ -154,6 +170,8 @@ spec:
               value: "{{ $.Values.tasks.settings.worker.resourceIntensiveTasksWorkersCount }}"
             - name: Common__Worker__DefaultWorkersCount
               value: "{{ $.Values.tasks.settings.worker.regularTasksWorkersCount }}"
+            - name: Common__Worker__LongRunningTasksWorkersCount
+              value: "{{ $.Values.tasks.settings.worker.longRunningTasksWorkersCount }}"
 
             {{- range $i, $s := $.Values.elastic.nodes}}
             - name: Elastic__Nodes__{{$i}}__Host
@@ -177,6 +195,18 @@ spec:
               value: "{{ $.Values.elastic.indexPrefix }}"
             - name: Elastic__EnableHttpCompression
               value: "{{ $.Values.elastic.enableHttpCompression }}"
+
+            - name: Digger__Address
+              value: "{{ .Values.digger.url}}"
+            - name: Digger__UserName
+              value: "{{ .Values.digger.userName}}"
+            {{ if .Values.digger.password }}
+            - name: Digger__Password
+              valueFrom:
+                secretKeyRef:
+                  key: diggerPassword
+                  name: {{ include "pro-api.name" . }}-secret
+            {{ end }}
 
             - name: S3Settings__Url
               value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
@@ -225,5 +255,23 @@ spec:
                   key: permissionsApiKey
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
+            {{- if .Values.tasks.settings.features.assetDataPreparation.enabled }}
+            - name: AssetDataPreparation__Segments
+              value: "{{ .Values.tasks.settings.features.assetDataPreparation.segments }}"
+            {{- end }}
 
+            - name: MailerAdminClient__Enabled
+              value: "{{ .Values.mailerAdmin.enabled }}"
+            - name: MailerAdminClient__Url
+              value: "{{ .Values.mailerAdmin.url }}"
+            - name: MailerAdminClient__Username
+              value: "{{ .Values.mailerAdmin.username }}"
+            - name: MailerAdminClient__Password
+              value: "{{ .Values.mailerAdmin.password }}"
+            - name: MailerSenderClient__Enabled
+              value: "{{ .Values.mailerSender.enabled }}"
+            - name: MailerSenderClient__Url
+              value: "{{ .Values.mailerSender.url }}"
+            - name: MailerSenderClient__ApiKey
+              value: "{{ .Values.mailerSender.apiKey }}"
 {{- end }}

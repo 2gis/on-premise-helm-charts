@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.13.0
+    tag: 2.26.0
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -41,6 +41,7 @@ api:
   # @param api.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
   # @param api.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param api.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param api.pod.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
   # @param api.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param api.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param api.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
@@ -64,6 +65,7 @@ api:
     tolerations: []
     podAnnotations: {}
     podLabels: {}
+    podSecurityContext: {}
     annotations: {}
     labels: {}
     revisionHistoryLimit: 3
@@ -135,6 +137,8 @@ api:
   # @param api.settings.auth.turnOffCertValidation Turn off certificate validation for auth.url
   # @param api.settings.auth.shareKeys Secret keys for creating and validating shared links. Must contain at least 32 characters. All keys are used for validation. The last one is used for creation. Example: `m7nShlX1a8+IqE9ZcDqRCVjlhEud850ucT0av9bS+tcMTwIwUOUqpNikM+G8teDR`
   # @param api.settings.auth.skipShareLinksPermissionsCheck If true, then the permissions check for the possibility of making a request for data is not performed.
+  # @skip api.settings.auth.clientId
+  # @skip api.settings.auth.clientSecret
   # @param api.settings.backgroundJobs.enableUserAssetsImporter If user data importer job is enabled for the service.
   # @param api.settings.backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
   # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount Maximum number of points in a layer for generating isochrones.
@@ -162,6 +166,8 @@ api:
     auth:
       type: openid10
       url: ''
+      clientId: ''
+      clientSecret: ''
       userInfoEndpoint: ''
       wellKnownConfigEndpoint: ''
       apiKey: ''
@@ -186,7 +192,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.13.0
+    tag: 2.26.0
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -215,6 +221,7 @@ permissions:
   # @param permissions.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
   # @param permissions.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param permissions.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param permissions.pod.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
   # @param permissions.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param permissions.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param permissions.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
@@ -233,6 +240,7 @@ permissions:
     tolerations: []
     podAnnotations: {}
     podLabels: {}
+    podSecurityContext: {}
     annotations: {}
     labels: {}
     revisionHistoryLimit: 3
@@ -300,7 +308,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.13.0
+    tag: 2.26.0
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -330,6 +338,7 @@ tasks:
   # @param tasks.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
   # @param tasks.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param tasks.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param tasks.pod.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
   # @param tasks.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param tasks.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param tasks.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
@@ -352,6 +361,7 @@ tasks:
     tolerations: []
     podAnnotations: {}
     podLabels: {}
+    podSecurityContext: {}
     annotations: {}
     labels: {}
     revisionHistoryLimit: 3
@@ -404,6 +414,22 @@ tasks:
   # @param tasks.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
   # @param tasks.settings.worker.resourceIntensiveTasksWorkersCount Number of threads that will be used by Hangfire-server to performs resource-intensive tasks
   # @param tasks.settings.worker.regularTasksWorkersCount Number of threads that will be used by Hangfire-server to performs other tasks
+  # @param tasks.settings.worker.longRunningTasksWorkersCount Number of threads that will be used by Hangfire-server to performs long tasks
+  # @param tasks.settings.features.auditLogging.enabled Enable audit log feature
+  # @param tasks.settings.admin.auth.schema Authentication scheme for Tasks Admin UI (Basic, OIDC, Undefined)
+  # @param tasks.settings.admin.auth.basic.username Username for Basic authentication scheme
+  # @param tasks.settings.admin.auth.basic.password Password for Basic authentication scheme
+  # @param tasks.settings.admin.auth.oidc.authority Authority of the OpenID Connect (OIDC) identity provider
+  # @param tasks.settings.admin.auth.oidc.clientId Client of application
+  # @param tasks.settings.admin.auth.oidc.clientSecret Client secret of application
+  # @param tasks.settings.admin.auth.oidc.nameClaim Property name in OIDC profile for name claim
+  # @param tasks.settings.admin.auth.oidc.roleClaim Property name in OIDC profile for role claim
+  # @param tasks.settings.admin.auth.oidc.requiredRole Required role for Tasks Admin UI
+  # @skip tasks.settings.features.assetDataPreparation
+  # @skip tasks.settings.features.cleanCitylensFrames
+  # @skip tasks.settings.features.removeUnusedUserAssetFiles
+  # @skip tasks.settings.features.emailNotifications
+  # @skip tasks.settings.features.userManagement
   settings:
     enabled: true
     env: ''
@@ -416,6 +442,34 @@ tasks:
     worker:
       resourceIntensiveTasksWorkersCount: 5
       regularTasksWorkersCount: 5
+      longRunningTasksWorkersCount: 1
+    admin:
+      auth:
+        schema: Undefined
+        basic:
+          username: admin
+          password: ''
+        oidc:
+          authority: ''
+          clientId: ''
+          clientSecret: ''
+          nameClaim: ''
+          roleClaim: ''
+          requiredRole: ''
+    features:
+      assetDataPreparation:
+        enabled: false
+        segments: ''
+      auditLogging:
+        enabled: false
+      cleanCitylensFrames:
+        enabled: false
+      removeUnusedUserAssetFiles:
+        enabled: false
+      emailNotifications:
+        enabled: false
+      userManagement:
+        enabled: true
 
 # @section asset importer settings
 
@@ -450,7 +504,7 @@ tasks:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.13.0
+  tag: 2.26.0
   imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2
@@ -477,35 +531,6 @@ assetImporter:
     esMetricsEnabled: false
     failedImportJobsLimit: 0
     ttlSecondsAfterFinished: 86400  # 1 day
-
-
-# @section asset preparer settings
-
-# @skip assetPreparer
-
-assetPreparer:
-  appName: asset-preparer
-  repository: 2gis-on-premise/pro-importer
-  tag: 2.13.0
-  imagePullSecrets: []
-  schedule: 0 16 * * 6
-  backoffLimit: 2
-  successfulJobsHistoryLimit: 1
-  failedJobsHistoryLimit: 3
-  nodeSelector: {}
-  tolerations: []
-  resources:
-    requests:
-      cpu: 300m
-      memory: 256M
-    limits:
-      cpu: 500m
-      memory: 512M
-  enabled: false
-  settings:
-    files: ''
-    maxParallelJobs: 1
-
 
 # @section common infrastructure settings
 
@@ -782,9 +807,31 @@ license:
 search:
   url: ''
 
-
 # @skip tileGen
 
 tileGen:
   url: ''
   userDataTileSet: ''
+
+# @skip mailerAdmin
+
+mailerAdmin:
+  enabled: false
+  url: ''
+  username: ''
+  password: ''
+
+# @skip mailerSender
+
+mailerSender:
+  enabled: false
+  url: ''
+  apiKey: ''
+
+# @skip ecommerce
+
+ecommerce:
+  enabled: false
+  url: ''
+  username: ''
+  password: ''

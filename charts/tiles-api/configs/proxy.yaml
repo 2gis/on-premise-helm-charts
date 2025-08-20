@@ -8,9 +8,7 @@ log-format: {{ .logFormatOverride | default $.Values.logFormat | default "json" 
 proxy:
   timeout: {{ .timeout }}
   heartbeat: 1m
-  target-hosts:
-    - host: http://127.0.0.1:{{ $.Values.api.containerPort }}
-      weight: 100
+  target-host: http://127.0.0.1:{{ $.Values.api.containerPort }}
 
 access:
   enabled: {{ .access.enabled }}
@@ -21,13 +19,6 @@ access:
     {{- if .access.stat.enabled }}
     host: {{ required "Valid .Values.proxy.access.stat.url required!" .access.stat.url }}
     {{- end }}
-
-  vector:
-    token: {{ .access.vector.token }}
-  mapbox:
-    token: {{ .access.vector.token }}
-  raster:
-    token: {{ .access.raster.token }}
 
 storage:
   enabled: false

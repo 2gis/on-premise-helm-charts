@@ -69,6 +69,14 @@ Expand the name of the chart.
 {{ include "citylens.name" . }}-dashboard-batch-events
 {{- end }}
 
+{{- define "citylens.jobs.proFilterUpdate.name" -}}
+{{ include "citylens.name" . }}-profilters-job
+{{- end }}
+
+{{- define "citylens.jobs.predictorsSync.name" -}}
+{{ include "citylens.name" . }}-predictorssync-job
+{{- end }}
+
 {{- define "citylens.configmap.labels" -}}
 app.kubernetes.io/name: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -220,6 +228,18 @@ app.kubernetes.io/instance: {{ .Chart.Name }}-db-migration
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "citylens.jobs.proFiltersUpdate.labels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.jobs.proFilterUpdate.name" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{- define "citylens.jobs.predictorsSync.labels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "citylens.jobs.predictorsSync.name" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
 {{- define "citylens.env.importer" -}}
 - name: DGCTL_S3_ENDPOINT
   value: "http{{ if .Values.dgctlStorage.secure }}s{{ end }}://{{ required "A valid Values.dgctlStorage.host entry required" .Values.dgctlStorage.host }}"
@@ -330,6 +350,10 @@ Citylens routes name defines
 {{ include "citylens.routes" . }}{{- printf "-%s-%s" "worker" .Values.routes.environment | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{- define "citylens.routes.realtimeDataApi.name" -}}
+{{ include "citylens.routes" . }}{{- printf "-%s-%s" "realtime-data-api" .Values.routes.environment | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{- define "citylens.routes.migration.name" -}}
 {{ include "citylens.routes" . }}{{- printf "-%s-%s" "migration" .Values.routes.environment | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
@@ -348,6 +372,11 @@ app.kubernetes.io/name: {{ .Release.Name | quote }}
 app.kubernetes.io/instance: {{ include "citylens.routes.worker.name" . | quote }}
 {{- end -}}
 
+{{- define "citylens.routes.realtimeDataApi.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name | quote }}
+app.kubernetes.io/instance: {{ include "citylens.routes.realtimeDataApi.name" . | quote }}
+{{- end -}}
+
 {{- define "citylens.routes.api.labels" -}}
 helm.sh/chart: {{ include "app.chart" . }}
 {{ include "citylens.routes.api.selectorLabels" . }}
@@ -360,6 +389,15 @@ app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 {{- define "citylens.routes.worker.labels" -}}
 helm.sh/chart: {{ include "app.chart" . }}
 {{ include "citylens.routes.worker.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+{{- end -}}
+
+{{- define "citylens.routes.realtimeDataApi.labels" -}}
+helm.sh/chart: {{ include "app.chart" . }}
+{{ include "citylens.routes.realtimeDataApi.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}

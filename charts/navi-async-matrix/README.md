@@ -52,24 +52,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.15.2`                            |
+| `image.tag`        | Tag         | `1.16.0`                            |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings
 
-| Name                         | Description                                                                                                                                                      | Value   |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                                                           | `false` |
-| `serviceAccount.annotations` | Annotations to add to the service account.                                                                                                                       | `{}`    |
-| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. It is required for the archiver to work. | `""`    |
-
-### RBAC parameters
-
-| Name               | Description                                                                              | Value   |
-| ------------------ | ---------------------------------------------------------------------------------------- | ------- |
-| `rbac.create`      | Whether to create and use RBAC resources or not. It is required for the archiver to work | `false` |
-| `rbac.annotations` | Role and RoleBinding annotations                                                         | `{}`    |
-| `rbac.labels`      | Role and RoleBinding additional labels                                                   | `{}`    |
+| Name                         | Description                                                                                                             | Value   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
+| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
+| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 
 ### Strategy settings
 
@@ -139,22 +131,23 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Distance Matrix Async API settings
 
-| Name                                    | Description                                                                                                                   | Value                                        |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| `dm.port`                               | Distance Matrix Async API HTTP port.                                                                                          | `8000`                                       |
-| `dm.configType`                         | Configuration type. Must always be `env`.                                                                                     | `env`                                        |
-| `dm.logLevel`                           | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                 | `INFO`                                       |
-| `dm.workerCount`                        | Number of Distance Matrix Async workers.                                                                                      | `4`                                          |
-| `dm.citiesUrl`                          | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`                                         |
-| `dm.citiesUpdatePeriod`                 | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600`                                       |
-| `dm.taskSplitSize`                      | Minimum size of matrix to get split in archiver job.                                                                          | `5000`                                       |
-| `dm.compositeTaskTimeoutSec`            | Timeout for executing split tasks.                                                                                            | `3600`                                       |
-| `dm.archiver.image.repository`          | Image repository for archiver.                                                                                                | `2gis-on-premise/navi-archiver-async-matrix` |
-| `dm.archiver.image.tag`                 | Image tag for archiver.                                                                                                       | `1.15.2`                                     |
-| `dm.archiver.resources.requests.cpu`    | Archiver job CPU request. 1CPU recommended.                                                                                   |                                              |
-| `dm.archiver.resources.requests.memory` | Archiver job memory request. 10Gi recommended.                                                                                |                                              |
-| `dm.archiver.resources.limits.cpu`      | Archiver job CPU limit. 1CPU recommended.                                                                                     |                                              |
-| `dm.archiver.resources.limits.memory`   | Archiver job memory limit. 20Gi recommended.                                                                                  |                                              |
+| Name                                  | Description                                                                                                                   | Value                                      |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| `dm.port`                             | Distance Matrix Async API HTTP port.                                                                                          | `8000`                                     |
+| `dm.configType`                       | Configuration type. Must always be `env`.                                                                                     | `env`                                      |
+| `dm.logLevel`                         | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                 | `INFO`                                     |
+| `dm.workerCount`                      | Number of Distance Matrix Async workers.                                                                                      | `4`                                        |
+| `dm.citiesUrl`                        | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`                                       |
+| `dm.citiesUpdatePeriod`               | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600`                                     |
+| `dm.taskSplitSize`                    | Minimum size of matrix to get split in merger job.                                                                            | `5000`                                     |
+| `dm.compositeTaskTimeoutSec`          | Timeout for executing split tasks.                                                                                            | `3600`                                     |
+| `dm.merger.image.repository`          | Image repository for merger.                                                                                                  | `2gis-on-premise/navi-merger-async-matrix` |
+| `dm.merger.image.tag`                 | Image tag for merger.                                                                                                         | `1.16.0`                                   |
+| `dm.merger.replicaCount`              | A replica count for the arhiver.                                                                                              | `1`                                        |
+| `dm.merger.resources.requests.cpu`    | Merger CPU request. 1CPU recommended.                                                                                         |                                            |
+| `dm.merger.resources.requests.memory` | Merger memory request. 10Gi recommended.                                                                                      |                                            |
+| `dm.merger.resources.limits.cpu`      | Merger CPU limit. 1CPU recommended.                                                                                           |                                            |
+| `dm.merger.resources.limits.memory`   | Merger memory limit. 20Gi recommended.                                                                                        |                                            |
 
 ### Database settings
 
@@ -177,45 +170,46 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Multi-DC settings
 
-| Name                                   | Description                                                                         | Value     |
-| -------------------------------------- | ----------------------------------------------------------------------------------- | --------- |
-| `multiDc.enabled`                      | If multi-DC functionality enabled                                                   | `false`   |
-| `multiDc.location`                     | Primary DC identifier. Arbitrary identifier, unique per DC installation.            | `default` |
-| `multiDc.redirectHeader`               | HTTP header to tell requests original from redirected. Set empty to skip the check. | `""`      |
-| `multiDc.secondaryTopics.statusTopic`  | Name of `statusTopic` in secondary DC.                                              | `""`      |
-| `multiDc.secondaryTopics.cancelTopic`  | Name of `cancelTopic` in secondary DC.                                              | `""`      |
-| `multiDc.secondaryTopics.archiveTopic` | Name of `archiveTopic` in secondary DC.                                             | `""`      |
+| Name                                        | Description                                                                         | Value     |
+| ------------------------------------------- | ----------------------------------------------------------------------------------- | --------- |
+| `multiDc.enabled`                           | If multi-DC functionality enabled                                                   | `false`   |
+| `multiDc.location`                          | Primary DC identifier. Arbitrary identifier, unique per DC installation.            | `default` |
+| `multiDc.redirectHeader`                    | HTTP header to tell requests original from redirected. Set empty to skip the check. | `""`      |
+| `multiDc.secondaryTopics.attractTopic`      | Name of `attractTopic` in secondary DC.                                             | `""`      |
+| `multiDc.secondaryTopics.mergerStatusTopic` | Name of `mergerStatusTopic` in secondary DC.                                        | `""`      |
+| `multiDc.secondaryTopics.oneToManyTopic`    | Name of `oneToManyTopic` in secondary DC.                                           | `""`      |
 
 ### Kafka settings
 
-| Name                                          | Description                                                                                                               | Value               |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `kafka.groupId`                               | Distance Matrix Async API group identifier.                                                                               | `navi_async_matrix` |
-| `kafka.statusTopic`                           | Name of the topic for sending new tasks to.                                                                               | `""`                |
-| `kafka.cancelTopic`                           | Name of the topic for canceling or receiving information about finished tasks.                                            | `""`                |
-| `kafka.archiveTopic`                          | Name of the topic for archiving tasks.                                                                                    | `""`                |
-| `kafka.attractTopic`                          | Name of the topic for for attract tasks results                                                                           | `""`                |
-| `kafka.oneToManyTopic`                        | Name of the topic for oneToMany tasks results                                                                             | `""`                |
-| `kafka.vrpStatusTopic`                        | Name of the topic for VRP service integration                                                                             | `""`                |
-| `kafka.properties`                            | Properties as supported by kafka-python. Refer to inline comments for details.                                            |                     |
-| `kafka.sensitiveProperties`                   | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                |
-| `kafka.fileProperties`                        | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                |
-| `kafka.consumerOverrides.properties`          | Consumer specific properties as simple key-value pairs.                                                                   | `{}`                |
-| `kafka.consumerOverrides.sensitiveProperties` | Consumer specific properties mounted as secrets.                                                                          | `{}`                |
-| `kafka.consumerOverrides.fileProperties`      | Consumer specific properties mounted as regular files.                                                                    | `{}`                |
-| `kafka.producerOverrides.properties`          | Consumer specific properties as simple key-value pairs.                                                                   | `{}`                |
-| `kafka.producerOverrides.sensitiveProperties` | Consumer specific properties mounted as secrets.                                                                          | `{}`                |
-| `kafka.producerOverrides.fileProperties`      | Consumer specific properties mounted as regular files.                                                                    | `{}`                |
-| `kafka.taskTopicRules`                        | **Information about the topics that Distance Matrix Async API will use to send the requests.**                            |                     |
-| `kafka.taskTopicRules[].topic`                | Name of the topic.                                                                                                        |                     |
-| `kafka.taskTopicRules[].default`              | If this topic is used for projects by default.                                                                            |                     |
-| `kafka.taskTopicRules[].type`                 | Routing type for tasks in the topic (`car`, `truck`), defaults to `car`                                                   |                     |
-| `kafka.taskTopicRules[].projects`             | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                     |
-| `kafka.attractTopicRules`                     | ** Rules to map request type to topic for attract tasks **                                                                | `[]`                |
-| `kafka.attractTopicRules[0].topic`            | Name of the topic.                                                                                                        |                     |
-| `kafka.attractTopicRules[0].default`          | If this topic is used for projects by default.                                                                            |                     |
-| `kafka.attractTopicRules[0].type`             | Routing type for tasks in the topic (`car`, `truck`), defaults to `car`                                                   |                     |
-| `kafka.attractTopicRules[0].projects`         | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                     |
+| Name                                          | Description                                                                                                               | Value                      |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `kafka.groupId`                               | Distance Matrix Async API group identifier.                                                                               | `navi_async_matrix`        |
+| `kafka.cancelTopic`                           | Name of the topic for canceling or receiving information about finished tasks.                                            | `""`                       |
+| `kafka.mergerGroupId`                         | Group identifier for merger tasks.                                                                                        | `navi_async_matrix_merger` |
+| `kafka.mergerStatusTopic`                     | Name of the topic for status merger tasks.                                                                                | `""`                       |
+| `kafka.mergerTaskTopic`                       | Name of the topic for merger tasks.                                                                                       | `""`                       |
+| `kafka.attractTopic`                          | Name of the topic for for attract tasks results                                                                           | `""`                       |
+| `kafka.oneToManyTopic`                        | Name of the topic for oneToMany tasks results                                                                             | `""`                       |
+| `kafka.vrpStatusTopic`                        | Name of the topic for VRP service integration                                                                             | `""`                       |
+| `kafka.properties`                            | Properties as supported by kafka-python. Refer to inline comments for details.                                            |                            |
+| `kafka.sensitiveProperties`                   | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                       |
+| `kafka.fileProperties`                        | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                       |
+| `kafka.consumerOverrides.properties`          | Consumer specific properties as simple key-value pairs.                                                                   | `{}`                       |
+| `kafka.consumerOverrides.sensitiveProperties` | Consumer specific properties mounted as secrets.                                                                          | `{}`                       |
+| `kafka.consumerOverrides.fileProperties`      | Consumer specific properties mounted as regular files.                                                                    | `{}`                       |
+| `kafka.producerOverrides.properties`          | Consumer specific properties as simple key-value pairs.                                                                   | `{}`                       |
+| `kafka.producerOverrides.sensitiveProperties` | Consumer specific properties mounted as secrets.                                                                          | `{}`                       |
+| `kafka.producerOverrides.fileProperties`      | Consumer specific properties mounted as regular files.                                                                    | `{}`                       |
+| `kafka.taskTopicRules`                        | **Information about the topics that Distance Matrix Async API will use to send the requests.**                            |                            |
+| `kafka.taskTopicRules[].topic`                | Name of the topic.                                                                                                        |                            |
+| `kafka.taskTopicRules[].default`              | If this topic is used for projects by default.                                                                            |                            |
+| `kafka.taskTopicRules[].type`                 | Routing type for tasks in the topic (`car`, `truck`), defaults to `car`                                                   |                            |
+| `kafka.taskTopicRules[].projects`             | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                            |
+| `kafka.attractTopicRules`                     | ** Rules to map request type to topic for attract tasks **                                                                | `[]`                       |
+| `kafka.attractTopicRules[0].topic`            | Name of the topic.                                                                                                        |                            |
+| `kafka.attractTopicRules[0].default`          | If this topic is used for projects by default.                                                                            |                            |
+| `kafka.attractTopicRules[0].type`             | Routing type for tasks in the topic (`car`, `truck`, `walking`, `bicycle`, `scooter`), defaults to `car`                  |                            |
+| `kafka.attractTopicRules[0].projects`         | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                            |
 
 ### S3-compatible storage settings
 
@@ -243,7 +237,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
 | `customCAs.certsPath` | Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"          | `""`  |
-
 
 ## Maintainers
 

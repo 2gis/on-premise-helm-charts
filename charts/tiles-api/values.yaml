@@ -31,6 +31,8 @@ dgctlStorage:
 # @param emailManager Account manager contact information that will be used in warning and error messages on raster tiles for all kinds of blocks.
 # @param logLevel Logging level for 'api', 'proxy', 'importer' (can be overridden by {service}.logLevelOverride option). Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
 # @param logFormat Logging format for 'api', 'proxy', 'importer' (can be overridden by {service}.logFormatOverride option). Allowed options: text|json. If not defined, 'json' format will be used.
+# @param containerSecurityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
 # @extra types **Tiles [types](https://docs.2gis.com/en/on-premise/map#nav-lvl1@paramArchitecture) enabled in Tiles API**
 # @param types[0].kind Kind of tiles, should be one of: web, raster, native, mapbox.
@@ -46,6 +48,8 @@ emailManager: on-premise@2gis.com
 
 logLevel: info
 logFormat: json
+containerSecurityContext: {}
+podSecurityContext: {}
 
 types:
 - kind: ''
@@ -60,8 +64,8 @@ types:
 # @param cassandra.environment Environment name (`prod`, `stage`, etc).<br>Support for differently named environments allows hosting multiple Tiles API deployments on a single Cassandra cluster.
 # @param cassandra.hosts An array of the one of more IP adresses or hostnames of the Apache Cassandra installation.
 # @param cassandra.replicaFactor Apache Cassandra [replication factor](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/architecture/archDataDistributeReplication.html).
-# @param cassandra.consistencyLevelRead Apache Cassandra [read consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels).
-# @param cassandra.consistencyLevelWrite Apache Cassandra [write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels).
+# @param cassandra.consistencyLevelRead Apache Cassandra [read consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels).
+# @param cassandra.consistencyLevelWrite Apache Cassandra [write consistency level](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels).
 # @param cassandra.timeout Timeout for connect attempts to the database.
 
 # @extra cassandra.credentials **Credentials for accessing Apache Cassandra**
@@ -86,7 +90,7 @@ cassandra:
     enabled: false
 
   replicaFactor: 3
-  consistencyLevelRead: LOCAL_QUORUM
+  consistencyLevelRead: LOCAL_ONE
   consistencyLevelWrite: LOCAL_QUORUM
 
 # @section Custom generated tiles API settings
@@ -107,6 +111,7 @@ cassandra:
 # @param tilegen.revisionHistory Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
 # @param tilegen.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param tilegen.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
 # @param tilegen.terminationGracePeriodSeconds Duration in seconds the Tiles API service pod needs to terminate gracefully.
 # @param tilegen.containerPort Tiles API container port.
 # @param tilegen.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
@@ -125,8 +130,8 @@ cassandra:
 tilegen:
   enabled: false
 
-  logLevelOverride:
-  logFormatOverride:
+  logLevelOverride: info
+  logFormatOverride: json
 
   tileset:
     name: userdata
@@ -139,10 +144,10 @@ tilegen:
   # @param tilegen.imagePullSecrets Kubernetes image pull secrets.
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.71.1
+    tag: 4.75.1
     pullPolicy: IfNotPresent
 
-  imagePullSecrets: {}
+  imagePullSecrets: []
 
   labels: {}
   annotations: {}
@@ -229,20 +234,20 @@ tilegen:
 # @param proxy.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
 # @param proxy.access.url API Keys endpoint url, ex: http://keys-api.svc. **Required**
 # @param proxy.access.syncPeriod Proxy sync period.
-# @param proxy.access.raster.token Service key for raster data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs). **Required**
-# @param proxy.access.vector.token Service key for vector data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs). **Required**
+# @param proxy.access.raster.token Service key for raster data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).
+# @param proxy.access.vector.token Service key for vector data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).
 
 # @extra proxy.access.stat **Statistics receiver settings**
 # @param proxy.access.stat.enabled If statistics receiver is enabled.
 # @param proxy.access.stat.url Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
 
 proxy:
-  logLevelOverride:
-  logFormatOverride:
+  logLevelOverride: info
+  logFormatOverride: json
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.71.1
+    tag: 4.75.1
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -303,14 +308,14 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.69.0
+    tag: 4.75.1
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
   containerPort: 8000
 
-  logLevelOverride:
-  logFormatOverride:
+  logLevelOverride: info
+  logFormatOverride: json
 
   labels: {}
   annotations: {}
@@ -328,6 +333,7 @@ api:
 
   podAnnotations: {}
   podLabels: {}
+
   nodeSelector: {}
   affinity: {}
   tolerations: []
@@ -450,8 +456,8 @@ api:
 importer:
   enabled: true
   serviceAccountOverride: ''
-  logLevelOverride:
-  logFormatOverride:
+  logLevelOverride: info
+  logFormatOverride: json
 
   # @extra importer.image **Docker image settings**
   # @param importer.image.repository Docker Repository.
@@ -461,7 +467,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.71.1
+    tag: 4.75.1
     pullPolicy: IfNotPresent
 
 
