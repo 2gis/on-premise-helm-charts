@@ -90,22 +90,22 @@ location = /navi-castle/index.json.zip {
 }
 
 location ~ ^/navi-castle/eta_correction/ {
-    rewrite ^/navi-castle-cache(/eta_correction/.*)$ /api/v1/services/navi/proxy/eta-correction$1 break;
+    rewrite ^/navi-castle(/eta_correction/.*)$ /api/v1/services/navi/proxy/eta-correction$1 break;
     {{- include "proxyParams" . }}
 }
 
 location ~ ^/navi-castle/smatrix/ {
-  rewrite ^/navi-castle-cache(/smatrix/.*)$ /api/v1/services/navi/proxy/smatrix$1 break;
+  rewrite ^/navi-castle(/smatrix/.*)$ /api/v1/services/navi/proxy/smatrix$1 break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/navi-castle/probability_matrix/ {
-  rewrite ^/navi-castle-cache(/probability_matrix/.*)$ /api/v1/services/navi/proxy/probability-matrix$1 break;
+  rewrite ^/navi-castle(/probability_matrix/.*)$ /api/v1/services/navi/proxy/probability-matrix$1 break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/navi-castle/turn_penalties/ {
-  rewrite ^/navi-castle-cache(/turn_penalties/.*)$ /api/v1/services/navi/proxy/turn-penalties$1 break;
+  rewrite ^/navi-castle(/turn_penalties/.*)$ /api/v1/services/navi/proxy/turn-penalties$1 break;
   {{- include "proxyParams" . }}
 }
 
