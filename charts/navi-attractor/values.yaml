@@ -263,6 +263,7 @@ pdb:
 # @param attractor.sentry.handler Handler file location
 # @param attractor.indexFilename Name of the index file on Castle
 # @param attractor.citiesFilename Name of the cities file on Castle
+# @param attractor.disableUpdates Test switch for disabling runtime background updates
 # @extra attractor.indices List of dynamic indices kill switches.
 # @skip attractor.indices.carOptions.enabled
 # @skip attractor.indices.countryCarOptions.enabled
@@ -311,6 +312,7 @@ attractor:
     handler: /usr/sbin/2gis/mosesd/crashpad_handler
   indexFilename: index.json.zip
   citiesFilename: cities.conf.zip
+  disableUpdates: false
   indices:
     # items in alphabet order
     carOptions:
