@@ -208,7 +208,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `kafka.attractTopicRules`                     | ** Rules to map request type to topic for attract tasks **                                                                | `[]`                       |
 | `kafka.attractTopicRules[0].topic`            | Name of the topic.                                                                                                        |                            |
 | `kafka.attractTopicRules[0].default`          | If this topic is used for projects by default.                                                                            |                            |
-| `kafka.attractTopicRules[0].type`             | Routing type for tasks in the topic (`car`, `truck`), defaults to `car`                                                   |                            |
+| `kafka.attractTopicRules[0].type`             | Routing type for tasks in the topic (`car`, `truck`, `walking`, `bicycle`, `scooter`), defaults to `car`                  |                            |
 | `kafka.attractTopicRules[0].projects`         | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                            |
 
 ### S3-compatible storage settings

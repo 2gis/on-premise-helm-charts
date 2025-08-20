@@ -313,7 +313,7 @@ multiDc:
 # @param kafka.attractTopicRules ** Rules to map request type to topic for attract tasks **
 # @extra kafka.attractTopicRules[0].topic Name of the topic.
 # @extra kafka.attractTopicRules[0].default If this topic is used for projects by default.
-# @extra kafka.attractTopicRules[0].type Routing type for tasks in the topic (`car`, `truck`), defaults to `car`
+# @extra kafka.attractTopicRules[0].type Routing type for tasks in the topic (`car`, `truck`, `walking`, `bicycle`, `scooter`), defaults to `car`
 # @extra kafka.attractTopicRules[0].projects List of projects to use this topic for, e.g., `['moscow']`.
 
 kafka:
