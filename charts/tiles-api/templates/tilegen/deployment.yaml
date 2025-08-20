@@ -23,6 +23,7 @@ spec:
   replicas: {{ .replicaCount }}
   revisionHistoryLimit: {{ .revisionHistory }}
 
+
   selector:
     matchLabels:
       {{- include "tiles.selectorLabels" $ | nindent 6 }}
@@ -52,6 +53,11 @@ spec:
     spec:
       serviceAccountName: {{ include "tilegen.serviceAccount" $ }}
       terminationGracePeriodSeconds: {{ .terminationGracePeriodSeconds }}
+
+      {{- with $.Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 
       volumes:
         - configMap:
@@ -106,6 +112,11 @@ spec:
 
           {{- with .resources }}
           resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          {{- with $.Values.containerSecurityContext }}
+          securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
 

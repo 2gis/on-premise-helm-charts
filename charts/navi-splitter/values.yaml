@@ -19,7 +19,8 @@ dgctlDockerRegistry: ''
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param labels Custom labels to set to Deployment resource.
-
+# @param preStopDelay Delay in seconds before terminating container.
+# @param terminationGracePeriodSeconds Grace period for container shutdown, refer to [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) for details
 
 replicaCount: 1
 revisionHistoryLimit: 3
@@ -34,6 +35,8 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 labels: {}
+preStopDelay: 5
+terminationGracePeriodSeconds: 60
 
 # @section Deployment settings
 
@@ -44,21 +47,24 @@ labels: {}
 image:
   repository: 2gis-on-premise/navi-splitter
   pullPolicy: IfNotPresent
-  tag: 1.0.1
+  tag: 1.11.1
 
 # @section Splitter application settings
 
 # @param splitter.logLevel Logging level.
-# @param splitter.app_rule Rule name of navi-back host.
+# @param splitter.app_rule Rule name of navi-back instance
 # @param splitter.goMaxProcs Number of golang processes.
 # @param splitter.appPort Application port.
-# @param splitter.ctxUrl URL of get_dist_matrix_ctx host. Format: `http(s)://HOST:PORT/ctx/2.0/?source=distance_matrix.
+# @param splitter.ctxBaseUrl URL of ctx host. Format: `http(s)://HOST:PORT/ctx/2.0`.
+# @param splitter.ctxUrl Full URL of get_dist_matrix_ctx host. Format: `http(s)://HOST:PORT/ctx/2.0/?source=distance_matrix`.
 # @param splitter.ctxTimeout get_dist_matrix_ctx request timeout.
 # @param splitter.subrequestRetryN Number of retries to host.
 # @param splitter.writeTimeout Write timeout.
 # @param splitter.readTimeout Read timeout.
 # @param splitter.idleTimeout Idle timeout.
-# @param splitter.statHost Statistic receiver host
+# @param splitter.proxyTimeout Proxy timeout.
+# @param splitter.subrequestTimeout Subrequest timeout.
+# @param splitter.statHost Statistic receiver host.
 # @param splitter.statThreadPoolSize Number of statistic sender threads
 
 splitter:
@@ -66,12 +72,15 @@ splitter:
   app_rule: ''
   goMaxProcs: 1
   appPort: 8080
+  ctxBaseUrl: ''
   ctxUrl: ''
   ctxTimeout: 60s
   subrequestRetryN: 5
   readTimeout: 10s
   writeTimeout: 10s
   idleTimeout: 60s
+  proxyTimeout: 15s
+  subrequestTimeout: 60s
   statHost: ''
   statThreadPoolSize: 16
 
@@ -131,22 +140,14 @@ ingress:
 # @extra resources.limits.cpu A CPU limit.
 # @extra resources.limits.memory A memory limit.
 
-# @param testResources **Limits for test connection.**
-# @extra testResources.requests.cpu A CPU request.
-# @extra testResources.requests.memory A memory request.
-# @extra testResources.limits.cpu A CPU limit.
-# @extra testResources.limits.memory A memory limit.
 
-resources:
-  requests:
-    cpu: 0.5
-    memory: 512Mi
-  limits:
-    cpu: 1
-    memory: 1Gi
+# @param resources [nullable] Container resources requirements structure
+# @param resources.requests.cpu [nullable] CPU request, recommended value `500m`
+# @param resources.requests.memory [nullable] Memory request, recommended value `512Mi`
+# @param resources.limits.cpu [nullable] CPU limit, recommended value `1000m`
+# @param resources.limits.memory [nullable] Memory limit, recommended value `1Gi`
 
-testResources: {}
-
+resources: {}
 
 # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -166,3 +167,149 @@ hpa:
   scaleUpStabilizationWindowSeconds: ''
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: ''
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+# @param vpa.enabled If VPA is enabled for the service.
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @extra vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @extra vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @extra vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @extra vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+
+vpa:
+  enabled: false
+  updateMode: Auto
+
+
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+pdb:
+  enabled: true
+  minAvailable: ''
+  maxUnavailable: 1
+
+
+# @section Attractor
+
+# @param attractor.enabled If attractor is enabled.
+# @param attractor.host Attractor host. Ex.: navi-attractor.svc
+# @param attractor.port Attractor port.
+# @param attractor.timeout Attractor timeout configured on application level.
+
+attractor:
+  enabled: false
+  host: ''
+  port: 50051
+  timeout: 2s
+
+
+# @section One to Many (navi-back) host
+
+# @skip oneToMany
+# @extra oneToMany.enabled If one-to-many request (sends to navi-back) is enabled.
+# @extra oneToMany.host One-to-many(navi-back) host. Ex.: navi-back.svc
+# @extra oneToMany.port One-to-many(navi-back) port.
+
+oneToMany:
+  enabled: false
+  host: ''
+  port: 50051
+  timeout: 5s
+
+
+# @section Pass Through (proxy mode)
+
+# @skip passThrough
+# @extra passThrough.enabled If proxy mode enabled.
+# @extra passThrough.host Proxy destination hostname or IP-address.
+# @extra passThrough.port Proxy destination port number.
+# @extra passThrough.scheme Proxy destination protocol.
+
+passThrough:
+  enabled: false
+  # leave empty to use oneToMany.host
+  host: ''
+  port: 80
+  scheme: http
+
+
+# @section Envoy configuration
+
+# @param envoy.image.repository Repository
+# @param envoy.image.tag Tag
+# @param envoy.image.pullPolicy Pull Policy
+# @skip envoy.resources
+# @param envoy.resources.requests.cpu [nullable] CPU request, recommended value `100m`
+# @param envoy.resources.requests.memory [nullable] Memory request, recommended value `100Mi`
+# @param envoy.resources.limits.cpu [nullable] CPU limit, recommended value `100m`
+# @param envoy.resources.limits.memory [nullable] Memory limit, recommended value `100Mi`
+# @param envoy.systemLogs.logLevel System log level: [trace][debug][info][warning|warn][error][critical][off].
+# @param envoy.systemLogs.logFormat System log format (if empty — plain-text is used)
+# @param envoy.accessLogs.enabled if access logging enabled
+# @param envoy.clusterTimeout Cluster timeout.
+# @param envoy.connectTimeout Connect timeout.
+# @param envoy.concurrency The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0`
+# @param envoy.retry.enabled Enable retry failed requests
+# @param envoy.retry.retryOn Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)
+# @param envoy.retry.numRetries Failed request [retries](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-max-retries)
+# @param envoy.retry.perTryTimeout Specifies timeout on each [retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-upstream-rq-per-try-timeout-ms)
+
+envoy:
+  image:
+    repository: 2gis-on-premise/navi-envoy
+    pullPolicy: IfNotPresent
+    tag: 1.27.0
+  resources: {}
+  systemLogs:
+    logLevel: info
+    logFormat: json
+  accessLogs:
+    enabled: false
+  clusterTimeout: 15s
+  connectTimeout: 1s
+  concurrency: ''
+  retry:
+    enabled: false
+    retryOn: internal,unavailable,5xx,reset
+    numRetries: 1
+    perTryTimeout: 2s
+
+
+# @section Fixed data group attributes
+
+# @skip dataGroup
+# @extra dataGroup.enabled If fixed data topology enabled.
+# @extra dataGroup.prefix Unique name for this data group across the navigroup environment.
+# @skip dataGroup.timestamp
+
+dataGroup:
+  enabled: false
+  prefix: sampleGroup
+  timestamp: no-default
+
+# @section Metrics aggregator container
+
+# @param metrics.enabled Enable metrics container and scrape annotations
+# @param metrics.image.repository Repository
+# @param metrics.image.tag Tag
+# @param metrics.image.pullPolicy Pull Policy
+# @param metrics.port Port of container.
+# @param metrics.resources [nullable] Container resources requirements structure.
+# @param metrics.resources.requests.cpu  [nullable] CPU request, recommended value `10m`.
+# @extra metrics.resources.requests.memory [nullable] Memory request, recommended value `10Mi`.
+# @extra metrics.resources.limits.cpu [nullable] CPU limit, recommended value `100m`.
+# @extra metrics.resources.limits.memory [nullable] Memory limit, recommended value `10Mi`.
+
+metrics:
+  enabled: false
+  image:
+    repository: 2gis-on-premise/navi-metrics-aggregator
+    pullPolicy: IfNotPresent
+    tag: 1.0.0
+  port: 9090
+  resources: {}

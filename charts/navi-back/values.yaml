@@ -49,6 +49,7 @@ dgctlDockerRegistry: ''
 # @param customStartupProbe Override default startup probe
 # @param command Override default command
 # @param args Override default args
+# @param timezone Timezone for the navi-back container. Refer to inline comments for details
 
 replicaCount: 1
 revisionHistoryLimit: 1
@@ -95,6 +96,13 @@ customReadinessProbe: {}
 customStartupProbe: {}
 command: []
 args: []
+# Set the timezone using a valid IANA timezone name, such as "Europe/Moscow" or "America/New_York".
+# Full list of supported timezones: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+#
+# Note: Avoid using POSIX-style timezones like "Etc/GMT+3" — they use inverted signs!
+# For example, "Etc/GMT+3" actually means UTC−3 (3 hours behind UTC), not UTC+3.
+# More info: https://en.wikipedia.org/wiki/Tz_database#Area
+timezone: UTC
 
 
 # @section Container image settings
@@ -106,7 +114,7 @@ args: []
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.36.1
+  tag: 7.39.2.2
 
 
 # @section Navi-Back application settings
@@ -114,6 +122,7 @@ image:
 # @extra naviback.ecaHost DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.ecaUrl URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.forecastHost URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.forecastFilename Filename of the forecast
 # @extra naviback.longForecastUrl URL of Traffic long forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.walkingUserSpeedsUrl URL of walking user speeds
 # @extra naviback.routeAsUsualUrl URL of route as usual
@@ -122,14 +131,15 @@ image:
 # @param naviback.dmTargetsLimit Size limit for target matrices
 # @param naviback.handlersNumber Total number of HTTP/GRPC handlers
 # @param naviback.queueSize Internal queue size
-# @param naviback.maxProcessTime Maximum processing time limit in minutes
-# @param naviback.responseTimelimit Maximum response time limit in minutes
-# @param naviback.requestTimeout Maximum request time limit in minutes
+# @param naviback.maxProcessTime Maximum processing time limit in seconds, may be overriden by `naviback.queryTimeouts`
+# @param naviback.responseTimelimit Maximum response time limit in seconds
+# @param naviback.requestTimeout Maximum request time limit in seconds
 # @param naviback.timeoutLimitSec Maximum downloading time can be reached after failures
 # @param naviback.timeoutIncrementSec Downloading time increment after failures
 # @param naviback.totalRetryDurationSec Downloading timeout with all failure retries
 # @param naviback.initialRetryIntervalSec Initial timeout for a failure retry
 # @param naviback.clearCacheThreshold Memory usage percentage threshold to run cache cleanup
+# @param naviback.queryTimeouts A key-value list of per-query timeouts. If rule permits multiple queries maximum timeout is used. Defaults to `naviback.maxProcessTimeout`. Example `naviback.queryTimeouts: { route_planner: 120, map_matching: 45 }`
 # @param naviback.dump.result Dump results in logs
 # @param naviback.dump.query Dump queries in logs
 # @param naviback.dump.answer Dump answers in logs
@@ -191,6 +201,7 @@ image:
 # @extra naviback.simpleNetwork.taxi Enable simple network for taxi routing
 # @extra naviback.simpleNetwork.truck Enable simple network for truck routing
 # @extra naviback.simpleNetwork.scooter Enable simple network for scooters routing
+# @extra naviback.simpleNetwork.motorcycle Enable simple network for motorcycle routing
 # @skip naviback.attractor
 # @extra naviback.attractor.bicycle Enable enhanced attractor for bicycle routing
 # @extra naviback.attractor.car Enable enhanced attractor for auto routing
@@ -198,6 +209,7 @@ image:
 # @extra naviback.attractor.taxi Enable enhanced attractor for taxi routing
 # @extra naviback.attractor.truck Enable enhanced attractor for truck routing
 # @extra naviback.attractor.scooter Enable enhanced attractor for scooters routing
+# @extra naviback.attractor.motorcycle Enable enhanced attractor for motorcycle routing
 # @param naviback.bss.enabled Enable sending information on the construction of routes to the business statistics service
 # @param naviback.bss.client.serviceRemoteAddress Remote address business statistics service. Requeruired for enable sending information
 # @param naviback.bss.client.messageCountToFlush Message count to flush
@@ -210,6 +222,7 @@ image:
 # @param naviback.overrideConfig Complete config override. For test purposes only
 # @param naviback.rtr.enabled Enable real time restrictions
 # @param naviback.rtr.url URL real time restrictions server
+# @extra naviback.rtr.filename Filename of the real time restrictions
 # @param naviback.rtr.updatePeriod Update period from real time restrictions server
 # @param naviback.rtr.timeoutSeconds Timeout seconds for restrictions server
 # @param naviback.validation.enabled Enable validation responses and requests (used for internal tests)
@@ -236,6 +249,7 @@ image:
 # @param naviback.etaScheduleIndex.url Schedule Index remote url
 # @param naviback.etaScheduleIndex.etaScheduleNodes ETA Schedule nodes
 # @param naviback.app_rule Item name from `rules` list to load rules from.
+# @extra naviback.excludedAreasLimit Maximum number of excluded areas
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
 # @param app_project Do not use, configure with `rules` and `app_rule` instead.
 # @param rules List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
@@ -254,6 +268,7 @@ naviback:
   totalRetryDurationSec: 2400
   initialRetryIntervalSec: 2
   clearCacheThreshold: 90
+  queryTimeouts: {}
   dump:
     result: false
     query: false
@@ -390,7 +405,7 @@ app_project: ''
 rules: []
 
 
-# @section Envoy settings, ignored if not `transmitter.enabled`. Leave with defaults, FOR FUTURE RELEASE.
+# @section Envoy settings, ignored if not `transmitter.enabled`.
 
 # @param envoy.image.repository Repository
 # @param envoy.image.tag Tag
@@ -404,9 +419,9 @@ rules: []
 
 envoy:
   image:
-    repository: 2gis-on-premise/envoy
+    repository: 2gis-on-premise/navi-envoy
     pullPolicy: IfNotPresent
-    tag: v1.27.0
+    tag: 1.27.0
   concurrency: ''
   resources: {}
 
@@ -614,7 +629,7 @@ s3:
   secretKey: ''
   suffix: ''
 
-# @section Settings for attractor connection. Leave with defaults, FOR FUTURE RELEASE.
+# @section Settings for attractor connection.
 
 # @param transmitter.enabled if attractor connection required
 # @param transmitter.type connection type one of: grpc, grpc-async, grpc-stream, ws, ws-async
@@ -625,7 +640,8 @@ s3:
 # @param transmitter.clusterTimeout Response [timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-timeout)
 # @param transmitter.retry.enabled Enable retry failed requests
 # @param transmitter.retry.retryOn Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)
-# @param transmitter.retry.numRetries Specifies the allowed number of retries
+# @param transmitter.retry.numRetries Failed request [retries](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-max-retries)
+# @param transmitter.retry.perTryTimeout Specifies timeout on each [retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-upstream-rq-per-try-timeout-ms)
 
 transmitter:
   enabled: false
@@ -639,6 +655,7 @@ transmitter:
     enabled: false
     retryOn: internal,unavailable
     numRetries: 5
+    perTryTimeout: 2s
 
 # @section Back-end and attractor group properties. Leave with defaults, FOR FUTURE RELEASE.
 
@@ -716,9 +733,11 @@ roadLocks:
 # @section License settings
 
 # @param license.url Address of the License service v2. Ex: https://license.svc
+# @param license.additionalTimeAfterConnectionLost License service unavailability grace period in seconds, cannot exceed 24h
 
 license:
   url: ''
+  additionalTimeAfterConnectionLost: 3600
 
 # @section Metrics aggregator container. Leave with defaults, FOR FUTURE RELEASE.
 

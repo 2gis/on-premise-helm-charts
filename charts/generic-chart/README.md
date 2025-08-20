@@ -44,16 +44,16 @@ Test chart based on generic-chart is located in resources.
 
 Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-/blob/master/pipelines/single-chart.yml). See `.gitlab-ci.yml`.
 
-### Values
+## Values
 
-#### Common settings
+### Common settings
 
 | Name               | Description                                                                 | Value |
 | ------------------ | --------------------------------------------------------------------------- | ----- |
 | `nameOverride`     | Base name to use in all the Kubernetes entities deployed by this chart.     | `""`  |
 | `fullnameOverride` | Base fullname to use in all the Kubernetes entities deployed by this chart. | `""`  |
 
-#### [Deployment](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/) settings
+### [Deployment](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/) settings
 
 | Name                            | Description                                                                                                                          | Value   |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------- |
@@ -73,7 +73,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `enableServiceLinks`            | Services injection into containers environment                                                                                       | `false` |
 | `restartPolicy`                 | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)                    | `""`    |
 
-#### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
 | Name                                    | Description                                                                                                                                                         | Value   |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
@@ -85,7 +85,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `hpa.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used       | `80`    |
 | `hpa.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used | `""`    |
 
-#### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
 | Name                    | Description                                                                                                 | Value          |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------- | -------------- |
@@ -98,7 +98,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up                                     |                |
 | `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up                                           |                |
 
-#### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                 | Description                                          | Value   |
 | -------------------- | ---------------------------------------------------- | ------- |
@@ -106,7 +106,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
 
-#### [Service](https://kubernetes.io/docs/concepts/services-networking/service/) settings
+### [Service](https://kubernetes.io/docs/concepts/services-networking/service/) settings
 
 | Name                  | Description                                                                                                                                    | Value       |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
@@ -117,7 +117,18 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `service.port`        | Service port.                                                                                                                                  | `80`        |
 | `service.nodePort`    | Node port if type NodePort.                                                                                                                    | `nil`       |
 
-#### [Service account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
+### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+| Name                                 | Description                               | Value                       |
+| ------------------------------------ | ----------------------------------------- | --------------------------- |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                     |
+| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`                     |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `generic-chart.example.com` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                         |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                    |
+| `ingress.tls`                        | TLS configuration                         | `[]`                        |
+
+### [Service account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
 
 | Name                         | Description                                                                                                             | Value  |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
@@ -125,7 +136,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`   |
 | `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
 
-#### [CronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) settings
+### [CronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) settings
 
 | Name                                 | Description                                                     | Value   |
 | ------------------------------------ | --------------------------------------------------------------- | ------- |
@@ -136,7 +147,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `cronJob.successfulJobsHistoryLimit` | How many completed Jobs should be kept.                         | `""`    |
 | `cronJob.failedJobsHistoryLimit`     | How many failed Jobs should be kept.                            | `""`    |
 
-#### [Job](https://kubernetes.io/docs/concepts/workloads/controllers/job/) settings
+### [Job](https://kubernetes.io/docs/concepts/workloads/controllers/job/) settings
 
 | Name                        | Description                                                                                                       | Value |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
@@ -149,7 +160,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `job.parallelism`           | Number of pods running at any instant.                                                                            | `""`  |
 | `job.restartPolicy`         | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy) | `""`  |
 
-#### Network Policy configuration
+### Network Policy configuration
 
 | Name                                               | Description                                                  | Value   |
 | -------------------------------------------------- | ------------------------------------------------------------ | ------- |
@@ -158,3 +169,9 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `networkPolicy.ingress.additionalRules`            | Array of additional ingress rules                            | `[]`    |
 | `networkPolicy.egress.enabled`                     | Enable creation of NetworkPolicy resources for egress rules  | `false` |
 | `networkPolicy.egress.config`                      | Array of egress rules                                        | `[]`    |
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| 2gis | <on-premise@2gis.com> | <https://github.com/2gis> |

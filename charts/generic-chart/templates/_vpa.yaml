@@ -14,7 +14,7 @@ spec:
     kind: Deployment
     name: {{ include "generic-chart.fullname" $ctx }}
   updatePolicy:
-    updateMode: {{ default "Auto" .updateMode }}
+    updateMode: {{ .updateMode | default "Auto" | quote }}
   resourcePolicy:
     containerPolicies:
       - containerName: {{ include "generic-chart.containerName" $ctx }}

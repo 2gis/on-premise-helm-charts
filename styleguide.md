@@ -6,6 +6,31 @@
 
 Мы следуем [официальным best practices для helm-чартов](https://helm.sh/docs/chart_best_practices/conventions/).
 
+##  Создание NOTES.txt
+
+Для каждого чарта должен существовать [templates/NOTES.txt](https://helm.sh/docs/chart_template_guide/notes_files/) файл.
+
+Пример (может меняться при необходимости):
+
+```yaml
+{{ .Chart.Name }} is installed by release "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace
+
+You can check the status of the app using command
+
+kubectl get pods -n {{ .Release.Namespace}} -l app.kubernetes.io/name={{ include "<pod_name>.name" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+{{- if .Values.api.ingress.enabled }}
+You can check service using curl
+{{- range $host := .Values.api.ingress.hosts }}
+  http{{ if $.Values.api.ingress.tls }}s{{ end }}://{{ $host.host }}/
+{{- end }}
+{{- else }}
+You should publish the service in your preferred way (ingress, balancer, etc).
+{{- end }}
+```
+
+Где `<pod_name>` - наименование развёртываемого под(а/ов).
+
 ## Генерация README.md
 
 Файлы `README.md` формируются полуавтоматически. Для каждого чарта сначала необходимо создать файл `README.md` с общим описанием сервиса и пустым разделом «Values», а затем запустить инструмент [`readme-generator-for-helm`](https://github.com/bitnami-labs/readme-generator-for-helm) от Bitnami, чтобы автоматически заполнить раздел «Values» описаниями настроек на основе комментариев из `values.yaml`. Подробнее об использовании генератора можно прочитать в [документе](https://docs.google.com/document/d/1iEPG8tcCYu9q5iZssTAPOd43xh8uCQhNXyXhFPUTir8/edit).
@@ -15,6 +40,20 @@
 ```sh
 make prepare
 make charts/navi-back
+```
+
+## Обновление Deployment при обновлении configmap/secret
+
+Для того, чтобы deployment триггерился на обновление configmap и/или secret, обязательно добавить в аннотации хешсумму configmap и/или secret.
+
+Пример:
+
+```yaml
+template:
+  metadata:
+    annotations:
+      checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
+      checksum/secret: {{ (include (print $.Template.BasePath "/secret.yml") . | fromYaml).data | toYaml | sha256sum }}
 ```
 
 ## Описание настроек
@@ -69,7 +108,7 @@ make charts/navi-back
     failedJobsHistoryLimit: 3
   ```
 
-- Если в развёртываемом сервисе используется манифест, то необходимо (`<svc_name>` - наименование развёртываемого сервиса):
+- Если в развёртываемом сервисе используются скачиваемые данные с DataGateway (используется manifest), то необходимо (`<svc_name>` - наименование развёртываемого сервиса):
   1. В `helpers.tpl` добавить раздел:
 
     ```yaml

@@ -1,5 +1,37 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.41.0]
+
+### catalog-api
+
+- Added default `emptyDir` to job importer
+
+### pro-api
+
+- If you are using nginx.ingress.kubernetes.io/cors-allow-headers, you need to add the "pragma" header
+
+### pro-ui
+
+- You need to upgrade MapGL to version 1.61.0
+- You need to update the data to use new styles
+
+### citylens
+
+- Added new service: `citylens-routes-realtime-data-api`
+- Added new required parameters:
+  - `.Values.routes.realtimeDataApi.postgres.database`
+  - `.Values.routes.realtimeData.url`
+- `.Values.routes.features.proxyNaviKeyEnabled` was removed
+- `.Values.routes.pro.mainTerritoryId` was removed
+
+## [1.39.1]
+
+### navi-async-matrix
+
+- `kafka.statusTopic` and `kafka.archiveTopic` were no longer used
+- new required params `kafka.mergerStatusTopic` and `kafka.mergerTaskTopic`
+- `rbac` was removed
+
 ## [1.38.0]
 
 ### citylens-routes-ui

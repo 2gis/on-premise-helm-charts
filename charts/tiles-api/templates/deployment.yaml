@@ -56,6 +56,11 @@ spec:
     spec:
       terminationGracePeriodSeconds: {{ .Values.api.terminationGracePeriodSeconds }}
 
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       volumes:
         - configMap:
             name: {{ include "tiles.fullname" . }}-api
@@ -134,11 +139,43 @@ spec:
             - name: SSL_CERT_DIR
               value: {{ include "tiles.customCA.mountPath" $ }}
             {{- end }}
+            - name: ACCESS_VECTOR_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-api
+                  key: vector_token
+            - name: ACCESS_RASTER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-api
+                  key: raster_token
+            - name: ACCESS_MAPBOX_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tiles.fullname" $ }}-api
+                  key: mapbox_token
+          {{- with $.Values.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         {{- end }}
 
         - name: tiles-api
+          {{- with $.Values.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: {{ .Values.api.containerPort }}
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
 
           livenessProbe:
             httpGet:
