@@ -50,6 +50,11 @@ location ~ ^/eca/speeds/calculator-prod\.k8s\.m9\.2gis\.io/ {
   {{- include "proxyParams" . }}
 }
 
+location ~ ^/eca/speeds_v3/([^/]+)/ {
+  rewrite ^/eca(.*)$ /api/v1/services/navi/proxy/online-speeds-v3$1 break;
+  {{- include "proxyParams" . }}
+}
+
 {{/* 2. Forecast endpoints*/}}
 location = /forecast/index.json {
   rewrite ^ /api/v1/services/navi/proxy/forecast-index/index.json break;
