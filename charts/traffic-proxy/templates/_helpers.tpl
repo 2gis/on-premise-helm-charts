@@ -46,12 +46,12 @@ location = /eca/traffic/moses/speeds5.json {
 }
 
 location ~ ^/eca/speeds/calculator-prod\.k8s\.m9\.2gis\.io/ {
-  rewrite ^/eca(/speeds/calculator-prod\.k8s\.m9\.2gis\.io/.*)$ /api/v1/services/navi/proxy/online-speeds$1 break;
+  rewrite ^/eca(/speeds/calculator-prod\.k8s\.m9\.2gis\.io/.*)$ /api/v1/services/navi/proxy/online-speeds/traffic$1 break;
   {{- include "proxyParams" . }}
 }
 
 location ~ ^/eca/speeds_v3/([^/]+)/ {
-  rewrite ^/eca(.*)$ /api/v1/services/navi/proxy/online-speeds-v3$1 break;
+  rewrite ^/eca(.*)$ /api/v1/services/navi/proxy/online-speeds-v3/traffic$1 break;
   {{- include "proxyParams" . }}
 }
 
