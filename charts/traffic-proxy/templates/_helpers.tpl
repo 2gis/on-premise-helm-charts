@@ -119,15 +119,6 @@ location = /navi-castle/restricted_transport.json.zip {
   {{- include "proxyParams" . }}
 }
 
-location ~ ^/navi-castle/restricted_transport/([^/]+)/restricted_transport_platforms\.csv$ {
-  rewrite ^/navi-castle/restricted_transport/(.*)$ /api/v1/services/navi/proxy/restricted-transport-platforms/restricted_transport/$1 break;
-  {{- include "proxyParams" . }}
-}
-
-location ~ ^/navi-castle/restricted_transport/([^/]+)/restricted_transport_routes\.csv$ {
-  rewrite ^/navi-castle/restricted_transport/(.*)$ /api/v1/services/navi/proxy/restricted-transport-routes/restricted_transport/$1 break;
-  {{- include "proxyParams" . }}
-}
 location = /eta/eta-predictions/index.json {
   rewrite ^ /api/v1/services/navi/proxy/eta-predictions-index/index.json break;
   {{- include "proxyParams" . }}
