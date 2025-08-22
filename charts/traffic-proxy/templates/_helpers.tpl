@@ -120,7 +120,7 @@ location = /navi-castle/restricted_transport.json.zip {
 }
 
 location = /eta/eta-predictions/index.json {
-  rewrite ^ /api/v1/services/navi/proxy/eta-predictions-index/index.json break;
+  rewrite ^ /api/v1/services/navi/proxy/eta-predictions-index/eta-predictions/index.json break;
   {{- include "proxyParams" . }}
 }
 location ~ ^/eta/eta-predictions/eta-predictor-([0-9])\.eta-predictor/([^/]+)/eta_prediction\.zip$ {
