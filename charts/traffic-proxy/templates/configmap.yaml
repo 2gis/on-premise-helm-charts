@@ -3,9 +3,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "traffic-proxy.fullname" . }}
+  name: {{ include "generic-chart.fullname" . }}
   labels:
-    {{- include "traffic-proxy.labels" . | nindent 4 }}
+    {{- include "generic-chart.labels" . | nindent 4 }}
 data:
   nginx.conf: |
     worker_processes {{ .Values.proxy.worker.processes }};
@@ -67,27 +67,17 @@ data:
           server_name _;
 
           location / {
-            {{ if .Values.proxy.upstreams }}
-              proxy_pass         {{ .Values.proxy.protocol }}://backend;
-              proxy_set_header   Host {{ required "A valid .Values.proxy.host required" .Values.proxy.host }};
-            {{ else }}
-              proxy_pass         {{ required "A valid .Values.proxy.host required" .Values.proxy.host }};
-            {{ end }}
-              proxy_set_header   Upgrade $http_upgrade;
-              proxy_set_header   Connection keep-alive;
-              proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header   X-Forwarded-Proto $scheme;
-            {{ if .Values.proxy.cache.enabled }}
-              proxy_cache trafficcache;
-              proxy_cache_valid any {{ .Values.proxy.cache.age }};
-              proxy_cache_bypass $http_upgrade;
-            {{ end }}
+            {{- include "proxyParams" . | nindent 8}}
           }
 
           location /health {
               default_type text/html;
               return 200 "<!DOCTYPE html><h2>OK</h2>\n";
           }
+
+      {{ if .Values.proxy.locationDG }}
+          {{- include "locationDG" . | nindent 10}}
+      {{ end }}
 
       {{ if .Values.proxy.locations }}
         {{ range .Values.proxy.locations }}

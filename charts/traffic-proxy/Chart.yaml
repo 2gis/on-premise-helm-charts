@@ -7,6 +7,11 @@ type: application
 version: 1.42.0
 appVersion: 1.25.5
 
+dependencies:
+  - name: generic-chart
+    version: '*'
+    repository: file://../generic-chart
+
 maintainers:
 - name: 2gis
   url: https://github.com/2gis
