@@ -110,18 +110,17 @@ data:
           "PATCHES_PATH": "/tmp/hierarchies/patches",
           {{- end }}{{- /* if .Values.naviback.hierarchies.enabled */}}
           "REMOTE_PATH": "{{ include "config.setCastleUrl" $ }}",
-          "REMOTE_FORECAST": "{{ .Values.naviback.forecastHost }}",
+          "REMOTE_PATH_PROXY": "{{ .Values.naviback.castleUrlProxy }}",
+          "REMOTE_FORECAST": "{{ include "config.setForecastUrl" $ }}",
           "REMOTE_LONG_FORECAST": "{{ include "config.setLongForecastUrl" $ }}",
           "REMOTE_ECA": "{{ include "config.setEcaUrl" $ }}"
         },
         "rules": {
           "update_period": 0,
           "nodes": [
-            "file://{LOCAL_ETC}/rules.conf"
+            "{{ .Values.naviback.rulesUrl }}"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         "cities": {
           "update_period": 0,
@@ -132,122 +131,154 @@ data:
           "nodes": [
             "{REMOTE_PATH}/{{ .Values.naviback.citiesFilename }}"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
-        "index": {
-          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
-          {{- /* search .zip in files */}}
-          {{- if regexMatch ".*\\.zip.*" .Values.naviback.indexFilename }}
-          "content": "index.json",
+        "indices": [
+          {
+            "index_name": "default",
+            "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
+            {{- /* search .zip in files */}}
+            {{- if regexMatch ".*\\.zip.*" .Values.naviback.indexFilename }}
+            "content": "index.json",
+            {{- end }}
+            "nodes": [
+              "{REMOTE_PATH}/{{ .Values.naviback.indexFilename }}"
+            ],
+            "timeout_seconds": 30
+          }
+          {{- if .Values.naviback.castleUrlProxy -}}
+          ,
+          {
+            "index_name": "proxy",
+            "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
+            {{- /* search .zip in files */}}
+            {{- if regexMatch ".*\\.zip.*" .Values.naviback.indexFilename }}
+            "content": "index.json",
+            {{- end }}
+            "nodes": [
+              "{REMOTE_PATH_PROXY}/{{ .Values.naviback.indexFilename }}"
+            ],
+            "timeout_seconds": 30
+          }
           {{- end }}
-          "nodes": [
-            "{REMOTE_PATH}/{{ .Values.naviback.indexFilename }}"
-          ],
-          "timeout_seconds": {
-            "count": 30
+          {{- if not (include "config.isCTX" $) }}
+          {{- if .Values.naviback.indices.speedIndex.enabled -}}
+          ,
+          {
+            "index_name": "speed_index",
+            "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
+            "nodes": [
+              "{REMOTE_ECA}/{{ .Values.naviback.indices.speedIndex.filename | default "traffic/moses/speeds5.json" }}"
+            ],
+            "timeout_seconds": 60
           }
-        },
+          {{- end }}{{- /* .Values.naviback.indices.speedIndex.enabled */}}
+          {{- if and .Values.naviback.indices.forecastedSpeedsIndex.enabled (or .Values.naviback.forecastHost .Values.naviback.forecastUrl) -}}
+          ,
+          {
+            "index_name": "forecasted_speeds_index",
+            "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
+            "nodes": [
+              "{REMOTE_FORECAST}/{{ .Values.naviback.forecastFilename | default "index.json" }}"
+            ],
+            "timeout_seconds": 30
+          }
+          {{- end }}{{- /* .Values.naviback.indices.forecastedSpeedsIndex.enabled */}}
+          {{- if and .Values.naviback.indices.forecastedLongSpeedsIndex.enabled .Values.naviback.longForecastUrl -}}
+          ,
+          {
+            "index_name": "forecasted_long_speeds_index",
+            "update_period": {{ .Values.naviback.indices.forecastedLongSpeedsIndex.updatePeriod }},
+            "nodes": [
+              "{REMOTE_LONG_FORECAST}/{{ .Values.naviback.longForecastFilename | default "index.json" }}"
+            ],
+            "timeout_seconds": 60
+          }
+          {{- end }}{{- /* .Values.naviback.indices.forecastedLongSpeeds.enabled */}}
+          {{- if .Values.naviback.indices.tugcUsersIndex.enabled -}}
+          ,
+          {
+            "index_name": "tugc_users_index",
+            "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 150 }},
+            "nodes": [
+              "{REMOTE_PATH}/tugc_users.json.zip"
+            ],
+            "timeout_seconds": 30
+          }
+          {{- end }}{{- /* .Values.naviback.indices.tugcUsersIndex.enabled */}}
+          {{- if .Values.naviback.indices.tugc2gisIndex.enabled -}}
+          ,
+          {
+            "index_name": "tugc_2gis_index",
+            "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
+            "nodes": [
+              "{REMOTE_PATH}/tugc_2gis.json.zip"
+            ],
+            "timeout_seconds": 30
+          }
+          {{- end }}{{- /* .Values.naviback.indices.tugc2gisIndex.enabled */}}
+          {{- end }}{{- /* if not (include "config.isCTX" .) */}}
+          {{- if (include "config.isTaxi" . ) }}
+          {{- end }}{{- /* if (include "config.isTaxi" . ) */}}
+          {{- if .Values.naviback.etaScheduleIndex.enabled -}}
+          ,
+          {
+            "index_name": "eta_schedule_index",
+            "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 10 }},
+            "nodes": [
+              "{{ .Values.naviback.etaScheduleIndex.url }}"
+            ],
+            "timeout_seconds": 5
+          }
+          {{- end }}{{- /* if .Values.naviback.etaScheduleIndex.enabled */}}
+          {{- if .Values.naviback.restrictions.enabled -}}
+          ,
+          {
+            "index_name": "restrictions_index",
+            "update_period": {{ .Values.naviback.restrictions.updatePeriod | int }},
+            "nodes": [
+              "{{ include "config.setRestrictionIndexUrl" $ }}"
+            ],
+            "timeout_seconds": {{ .Values.naviback.restrictions.timeoutSeconds | int }}
+          }
+        {{- end }}{{- /* if .Values.naviback.restrictions.enabled */}}
+        ],{{- /* end "indices" */}}
         {{- if not (include "config.isCTX" $) }}
-        {{- if .Values.naviback.indices.speedIndex.enabled }}
-        "speed_index": {
-          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
-          "nodes": [
-            "{REMOTE_ECA}/traffic/moses/speeds5.json"
-          ],
-          "timeout_seconds": {
-            "count": 60
-          }
-        },
-        {{- end }}{{- /* .Values.naviback.indices.speedIndex.enabled */}}
-        {{- if and .Values.naviback.indices.forecastedSpeedsIndex.enabled .Values.naviback.forecastHost }}
-        "forecasted_speeds_index": {
-          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
-          "nodes": [
-            "http://{REMOTE_FORECAST}/{{ .Values.naviback.forecastFilename | default "index.json" }}"
-          ],
-          "timeout_seconds": {
-            "count": 30
-          }
-        },
-        {{- end }}{{- /* .Values.naviback.indices.forecastedSpeedsIndex.enabled */}}
-        {{- if and .Values.naviback.indices.forecastedLongSpeedsIndex.enabled .Values.naviback.longForecastUrl }}
-        "forecasted_long_speeds_index": {
-          "update_period": {{ .Values.naviback.indices.forecastedLongSpeedsIndex.updatePeriod }},
-          "nodes": [
-            "{REMOTE_LONG_FORECAST}/index.json"
-          ],
-          "timeout_seconds": {
-            "count": 60
-          }
-        },
-        {{- end }}{{- /* .Values.naviback.indices.forecastedLongSpeedsIndex.enabled */}}
-        {{- if and .Values.naviback.indices.forecastedSpeeds.enabled .Values.naviback.forecastHost }}
+        {{- if and .Values.naviback.indices.forecastedSpeedsIndex.enabled (or .Values.naviback.forecastHost .Values.naviback.forecastUrl)}}
         "forecasted_speeds": {
+          "index_name": "forecasted_speeds_index",
           "update_period": 0,
           "nodes": [
-            "http://{REMOTE_FORECAST}/"
+            "{REMOTE_FORECAST}/"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.naviback.indices.forecastedSpeeds.enabled */}}
         {{- if and .Values.naviback.indices.forecastedLongSpeeds.enabled .Values.naviback.longForecastUrl }}
         "forecasted_long_speeds": {
+          "index_name": "forecasted_long_speeds_index",
           "update_period": 0,
           "nodes": [
             "{REMOTE_LONG_FORECAST}/"
           ],
-          "timeout_seconds": {
-            "count": 60
-          }
+          "timeout_seconds": 60
         },
         {{- end }}{{- /* .Values.naviback.indices.forecastedLongSpeeds.enabled */}}
         {{- if .Values.naviback.indices.etaCorrectionCores.enabled }}
         "eta_correction_cores": {
+          "index_name": {{ .Values.naviback.indices.etaCorrectionCores.proxy | ternary "proxy" "default" | quote }},
           "update_period": 0,
-          "nodes": [
-            "{REMOTE_PATH}/"
-          ],
-          "timeout_seconds": {
-            "count": 60
-          }
+          "timeout_seconds": 60
         },
         {{- end }}{{- /* .Values.naviback.indices.etaCorrectionCores.enabled */}}
         {{- else }}
-        {{- if .Values.naviback.indices.restrictedTransportRoutes.enabled }}
-        "restricted_transport_routes": {
-          "update_period": 0,
-          "nodes": [
-            "{REMOTE_PATH}/"
-          ],
-          "timeout_seconds": {
-            "count": 10
-          }
-        },
-        {{- end }}{{- /* .Values.naviback.indices.restrictedTransportRoutes.enabled */}}
-        {{- if .Values.naviback.indices.restrictedTransportPlatforms.enabled }}
-        "restricted_transport_platforms": {
-          "update_period": 0,
-          "nodes": [
-            "{REMOTE_PATH}/"
-          ],
-          "timeout_seconds": {
-            "count": 10
-          }
-        },
-        {{- end }}{{- /* .Values.naviback.indices.restrictedTransportPlatforms.enabled */}}
         {{- if .Values.naviback.indices.restrictedTransportIndex.enabled }}
         "restricted_transport_index": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
           "nodes": [
-            "{REMOTE_PATH}/restricted_transport.json.zip"
+            "{{ .Values.naviback.indices.restrictedTransportIndex.proxy | ternary "{REMOTE_PATH_PROXY}" "{REMOTE_PATH}" }}/restricted_transport.json.zip"
           ],
-          "timeout_seconds": {
-            "count": 10
-          }
+          "timeout_seconds": 10
         },
         {{- end }}{{- /* .Values.naviback.indices.restrictedTransportIndex.enabled */}}
         {{- end }}
@@ -257,9 +288,7 @@ data:
           "nodes": [
             "{REMOTE_PATH}/options/ctx_config.json"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.naviback.indices.ctxOptions.enabled */}}
         {{- if .Values.naviback.indices.carOptions.enabled }}
@@ -268,9 +297,7 @@ data:
           "nodes": [
             "{REMOTE_PATH}/options/{{ .Values.naviback.indices.carOptions.filename | default "carrouting.json" }}"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.naviback.indices.carOptions.enabled */}}
         {{- if .Values.naviback.indices.countryCarOptions.enabled }}
@@ -279,137 +306,92 @@ data:
           "nodes": [
             "{REMOTE_PATH}/options/{payload}.json"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.naviback.indices.countryCarOptions.enabled */}}
         {{- if .Values.naviback.indices.projectCarOptions.enabled }}
         "project_car_options": {
+          "index_name": "default",
           "update_period": 0,
           "nodes": [
             "{REMOTE_PATH}/"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.naviback.indices.projectCarOptions.enabled */}}
         "routing_resources": {
           "nodes": [
             "dir:///usr/share/2gis/moses2-routing-resources/"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         "packages": {
+          "index_name": "default",
           "update_period": 0,
-          "nodes": [
-            "{REMOTE_PATH}/"
-          ],
-          "timeout_seconds": {
-            "count": 60
-          }
+          "timeout_seconds": 60
         },
+        {{- if .Values.naviback.restrictions.enabled }}
         "restrictions": {
+          "index_name": "restrictions_index",
           "update_period": 0,
           "nodes": [
             "{{ include "config.setRestrictionUrl" $ }}/"
           ],
-          "timeout_seconds": {
-            "count": {{ .Values.naviback.rtr.timeoutSeconds | int }}
-          }
+          "timeout_seconds": {{ .Values.naviback.restrictions.timeoutSeconds | int }}
         },
+        {{- end }}{{- /* if .Values.naviback.restrictions.enabled */}}
         {{- if .Values.naviback.indices.entrances.enabled }}
         "entrances": {
+          "index_name": "default",
           "update_period": 0,
-          "nodes": [
-            "{REMOTE_PATH}/"
-          ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.naviback.indices.entrances.enabled */}}
         {{- if not (include "config.isCTX" $) }}
 
         {{- if .Values.naviback.indices.smatrix.enabled }}
         "smatrix": {
+          "index_name": {{ .Values.naviback.indices.smatrix.proxy | ternary "proxy" "default" | quote}},
           "update_period": 0,
-          "nodes": [
-            "{REMOTE_PATH}/"
-          ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.naviback.indices.smatrix.enabled */}}
         {{- if .Values.naviback.indices.speedCams.enabled }}
         "speed_cams": {
+          "index_name": "default",
           "update_period": 0,
-          "nodes": [
-            "{REMOTE_PATH}/"
-          ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.naviback.indices.speedCams.enabled */}}
-        {{- if .Values.naviback.indices.tugcUsersIndex.enabled }}
-        "tugc_users_index": {
-          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 150 }},
-          "nodes": [
-            "{REMOTE_PATH}/tugc_users.json.zip"
-          ],
-          "timeout_seconds": {
-            "count": 30
-          }
-        },
-        {{- end }}{{- /* .Values.naviback.indices.tugcUsersIndex.enabled */}}
         {{- if .Values.naviback.indices.tugcUsers.enabled }}
         "tugc_users": {
+          "index_name": "tugc_users_index",
           "update_period": 0,
           "nodes": [
             "{REMOTE_PATH}/"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.naviback.indices.tugcUsers.enabled */}}
-        {{- if .Values.naviback.indices.tugc2gisIndex.enabled }}
-        "tugc_2gis_index": {
-          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 300 }},
-          "nodes": [
-            "{REMOTE_PATH}/tugc_2gis.json.zip"
-          ],
-          "timeout_seconds": {
-            "count": 30
-          }
-        },
-        {{- end }}{{- /* .Values.naviback.indices.tugc2gisIndex.enabled */}}
         {{- if .Values.naviback.indices.tugc2gis.enabled }}
         "tugc_2gis": {
+          "index_name": "tugc_2gis_index",
           "update_period": 0,
           "nodes": [
             "{REMOTE_PATH}/"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.naviback.indices.tugc2gis.enabled */}}
         {{- if .Values.naviback.indices.onlineSpeeds.enabled }}
         "online_speeds": {
+          "index_name": "speed_index",
           "update_period": 0,
           "max_updated_time_diff_minutes": 20,
           "nodes": [
             "{REMOTE_ECA}/"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.naviback.indices.onlineSpeeds.enabled */}}
         {{- end }}
@@ -420,67 +402,28 @@ data:
           "nodes": [
             "{REMOTE_PATH}/options/taxi_referers.json"
           ],
-          "timeout_seconds": {
-            "count": 360
-          }
+          "timeout_seconds": 360
         },
         {{- end }}{{- /* .Values.naviback.indices.taxiReferers.enabled */}}
-        {{- if .Values.naviback.indices.taxiSpeedIndex.enabled }}
-        "taxi_speed_index": {
-          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
-          "nodes": [
-            "{REMOTE_ECA}/traffic/moses/speeds5.json"
-          ],
-          "timeout_seconds": {
-            "count": 60
-          }
-        },
-        {{- end }}{{- /* .Values.naviback.indices.taxiSpeedIndex.enabled */}}
-        {{- if .Values.naviback.indices.onlineTaxiSpeeds.enabled }}
-        "online_taxi_speeds": {
-          "update_period": 0,
-          "max_updated_time_diff_minutes": 20,
-          "nodes": [
-            "{REMOTE_ECA}/"
-          ],
-          "timeout_seconds": {
-            "count": 60
-          }
-        },
-        {{- end }}{{- /* .Values.naviback.indices.onlineTaxiSpeeds.enabled */}}
-        {{- end }}
+        {{- end }}{{- /* if (include "config.isTaxi" .) */}}
         {{- if (include "config.isTruck" $) }}
         {{- if .Values.naviback.indices.passZones.enabled }}
         "pass_zones": {
+          "index_name": "default",
           "update_period": 0,
-          "nodes": [
-            "{REMOTE_PATH}/"
-          ],
-          "timeout_seconds": {
-            "count": 60
-          }
+          "timeout_seconds": 60
         },
         {{- end }}{{- /* .Values.naviback.indices.passZones.enabled */}}
         {{- end }}
         "edge_transition_probability": {
+          "index_name": {{ include "config.setCastleProxyIndex" $ | quote }},
           "update_period": 0,
-          "nodes": [
-            "{REMOTE_PATH}/"
-          ],
-          "timeout_seconds": {
-            "count": 60
-          },
-          "cache_path": "file://{LOCAL_PATH}/{project_name}/edge_transition_probability.json"
+          "timeout_seconds": 60
         },
         "turn_penalties": {
+          "index_name": {{ include "config.setCastleProxyIndex" $ | quote }},
           "update_period": 0,
-          "nodes": [
-            "{REMOTE_PATH}/"
-          ],
-          "timeout_seconds": {
-            "count": 60
-          },
-          "cache_path": "file://{LOCAL_PATH}/{project_name}/turn_penalties.json"
+          "timeout_seconds": 60
         },
         {{- if .Values.naviback.indices.snImport.enabled }}
         "sn_import": {
@@ -488,9 +431,7 @@ data:
           "nodes": [
             "{REMOTE_PATH}/"
           ],
-          "timeout_seconds": {
-            "count": 60
-          }
+          "timeout_seconds": 60
         },
         {{- end }}{{- /* .Values.naviback.indices.snImport.enabled */}}
         {{- if .Values.naviback.indices.routeAsUsual.enabled }}
@@ -499,9 +440,7 @@ data:
           "nodes": [
             "{{ .Values.naviback.routeAsUsualUrl }}"
           ],
-          "timeout_seconds": {
-            "count": 60
-          }
+          "timeout_seconds": 60
         },
         {{- end }}{{- /* .Values.naviback.indices.routeAsUsual.enabled */}}
         {{- if .Values.naviback.indices.walkingUserSpeeds.enabled }}
@@ -510,9 +449,7 @@ data:
           "nodes": [
             "{{ .Values.naviback.walkingUserSpeedsUrl }}"
           ],
-          "timeout_seconds": {
-            "count": 60
-          }
+          "timeout_seconds": 60
         },
         {{- end }}{{- /* .Values.naviback.indices.walkingUserSpeeds.enabled */}}
         {{- if .Values.naviback.indices.geoImport.enabled }}
@@ -521,9 +458,7 @@ data:
           "nodes": [
             "{REMOTE_PATH}/"
           ],
-          "timeout_seconds": {
-            "count": 60
-          }
+          "timeout_seconds": 60
         },
         {{- end }}{{- /* .Values.naviback.indices.geoImport.enabled */}}
         {{- if .Values.s3.enabled }}
@@ -617,18 +552,6 @@ data:
           "license_check_interval": {{ .Values.license.licenseCheckInterval | default 120 | int }}
         },
         {{- end }}{{- /* if not .Values.license.notSupported */}}
-        {{- if .Values.naviback.rtr.enabled }}
-        "restrictions_index": {
-          "update_period": {{ .Values.naviback.rtr.updatePeriod | int }},
-          "nodes": [
-            "{{ .Values.naviback.rtr.url }}/{{ .Values.naviback.rtr.filename | default "restrictions_index.json.zip" }}"
-          ],
-          "timeout_seconds": {
-            "count": {{ .Values.naviback.rtr.timeoutSeconds | int }}
-          },
-          "cache_path_": "file://{LOCAL_PATH}/{project_name}/{{ .Values.naviback.rtr.filename | default "restrictions_index.json.zip" }}"
-        },
-        {{- end }}{{- /* if .Values.naviback.rtr.enabled */}}
         {{- if .Values.naviback.hierarchies.enabled }}
           {{- if (not .Values.naviback.hierarchies.skipShortcuts) }}
         "hierarchies": {
@@ -643,9 +566,7 @@ data:
           "nodes": [
             "{S3_CACHE_PATH}/shortcuts/shortcuts.tar.gz"
           ],
-          "timeout_seconds": {
-            "count": 600
-          }
+          "timeout_seconds": 600
         },
           {{- if (not .Values.naviback.hierarchies.skipPatches) }}
         "hierarchy_patches": {
@@ -653,9 +574,7 @@ data:
           "nodes": [
             "{S3_CACHE_PATH}/patches/patches.tar.gz"
           ],
-          "timeout_seconds": {
-            "count": 600
-          }
+          "timeout_seconds": 600
         },
           {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
         {{- end }}{{- /* (not .Values.naviback.hierarchies.skipShortcuts) */}}
@@ -664,31 +583,19 @@ data:
           "nodes": [
             "{S3_CACHE_PATH}/sn/export_sn.tar.gz"
           ],
-          "timeout_seconds": {
-            "count": 600
-          }
+          "timeout_seconds": 600
         },
         {{- end }}{{- /* if .Values.naviback.hierarchies.enabled */}}
         {{- if .Values.naviback.etaScheduleIndex.enabled }}
-        "eta_schedule_index": {
-          "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 10 }},
-          "nodes": [
-            "{{ .Values.naviback.etaScheduleIndex.url }}"
-          ],
-          "timeout_seconds": {
-            "count": 5
-          }
-        },
         "eta_schedule": {
+          "index_name": "eta_schedule_index",
           "update_period": 0,
           {{- if .Values.naviback.etaScheduleIndex.etaScheduleNodes }}
           "nodes": [
             "{{ .Values.naviback.etaScheduleIndex.etaScheduleNodes }}"
           ],
           {{- end }}{{/* if .Values.naviback.etaScheduleIndex.etaScheduleNodes */}}
-          "timeout_seconds": {
-            "count": 5
-          }
+          "timeout_seconds": 5
         },
         {{- end }}{{- /* if .Values.naviback.etaScheduleIndex.enabled */}}
         {{- if .Values.trafficLights.enabled }}
@@ -760,30 +667,13 @@ data:
           "use_memory_mapped_vfs": true,
           "clear_cache_threshold": {{ .Values.naviback.clearCacheThreshold | int }},
           "engine_update_period_sec": {{ .Values.naviback.engineUpdatePeriodSec }},
+          "lightweight_mode" : {{ .Values.naviback.lightweightMode }},
           {{- if .Values.naviback.server_id }}
           "server_id": "{{- include "tplvalues.render" ( dict "value" .Values.naviback.server_id "context" .) }}",
           {{- else }}
           "server_id": "{{- include "generic-chart.fullname" . }}",
           {{- end }}
           "extended_metrics": [],
-          "dash_colors": [
-            {
-              "ratio": 2,
-              "class": 0
-            },
-            {
-              "ratio": 3.75,
-              "class": 1
-            },
-            {
-              "ratio": 10,
-              "class": 2
-            },
-            {
-              "ratio": 1000,
-              "class": 5
-            }
-          ],
           "dm_sources_limit": {{ .Values.naviback.dmSourcesLimit | int }},
           "dm_targets_limit": {{ .Values.naviback.dmTargetsLimit | int }},
           "carrouting_options": {
@@ -813,13 +703,13 @@ data:
               "orange_jam_minutes": 25,
               "deep_red_jam_minutes": 30
             }
-          {{- if .Values.naviback.excludedAreasLimit -}}
-            ,
-            "excluded_areas_limit": {{ .Values.naviback.excludedAreasLimit | int }}
-          {{- end }}{{- /* .Values.naviback.excludedAreasLimit */}}
           }
+          {{- if .Values.naviback.excludedAreasLimit -}}
+          ,
+          "excluded_areas_limit": {{ .Values.naviback.excludedAreasLimit | int }}
+          {{- end }}{{- /* .Values.naviback.excludedAreasLimit */}}
           {{- if .Values.naviback.serverAdditionalSections -}}
-            ,{{- include "tplvalues.render" ( dict "value" .Values.naviback.serverAdditionalSections "context" $) | nindent 10 }}
+          ,{{- include "tplvalues.render" ( dict "value" .Values.naviback.serverAdditionalSections "context" $) | nindent 10 }}
           {{- end }}
         }
       }

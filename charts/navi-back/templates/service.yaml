@@ -32,15 +32,6 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    {{- /* Only add second port if there is no headless service for it.
-         * This switch works around compexities with Blackbox Exporter probes.
-         */}}
-    {{- if and .Values.naviback.grpcPort (not .Values.service.headless.enabled) }}
-    - port: {{ .Values.service.grpcPort }}
-      targetPort: grpc
-      protocol: TCP
-      name: grpc
-    {{- end }}
     {{- if .Values.service.extraPorts }}
     {{- include "tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
@@ -81,12 +72,10 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    {{- if .Values.naviback.grpcPort }}
     - port: {{ .Values.naviback.grpcPort }}
       targetPort: grpc
       protocol: TCP
       name: grpc
-    {{- end }}
   selector:
     {{- include "generic-chart.selectorLabels" . | nindent 4 }}
 {{- end }}
