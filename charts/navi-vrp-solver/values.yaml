@@ -49,7 +49,7 @@ terminationGracePeriodSeconds: 60
 image:
   repository: 2gis-on-premise/navi-vrp-solver
   pullPolicy: IfNotPresent
-  tag: 1.13.0
+  tag: 1.13.1
 
 
 # @section Navi VRP Solver application settings
