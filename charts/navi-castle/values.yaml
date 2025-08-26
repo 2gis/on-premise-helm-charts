@@ -199,7 +199,7 @@ cron:
     restriction: false
     restrictionImport: false
   schedule:
-    import: 11 * * * *
+    import: '11 * * * *'
     restriction: '*/5 * * * *'
     restrictionImport: '*/5 * * * *'
   concurrencyPolicy: Forbid
