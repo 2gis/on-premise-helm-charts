@@ -90,7 +90,7 @@ api:
 
   image:
     repository: 2gis-on-premise/catalog-api
-    tag: 3.647.0
+    tag: 3.649.0
     pullPolicy: IfNotPresent
 
 
@@ -259,6 +259,60 @@ license:
   url: ''
   requestTimeout: 1s
 
+# @section Statistic settings
+
+# @param stat.enabled Is integration with statistic service enabled
+# @param stat.url URL of the statistic service. Ex: http(s)://stat.svc
+# @param stat.request.enabled If statistic by request is enabled
+# @param stat.request.buffer.lifetime Lifetime of request Statistic buffer
+# @param stat.request.buffer.sendTimeout Timeout between sending request statistic messages
+# @param stat.request.buffer.sendLimit The maximum number of request messages in the buffer before they are sent to the Statistic
+# @param stat.search.enabled If statistic by search is enabled
+# @param stat.search.buffer.lifetime Lifetime of search Statistic buffer
+# @param stat.search.buffer.sendTimeout Timeout between sending search statistic messages
+# @param stat.search.buffer.sendLimit The maximum number of search messages in the buffer before they are sent to the Statistic
+# @param stat.client.connectingTimeout The time period within which the TCP connecting process must be completed
+# @param stat.client.idleTimeout The time after which an idle connection will be automatically closed
+# @param stat.client.minConnections The minimum number of parallel connections that a pool should keep alive ("hot")
+# @param stat.client.maxConnections The maximum number of parallel connections that a connection pool to a single host endpoint is allowed to establish. Must be greater than zero
+# @param stat.client.maxOpenRequests The maximum number of open requests accepted into the pool across all  materializations of any of its client flows
+# @param stat.client.maxRetries The maximum number of times failed requests are attempted again, (if the request can be safely retried) before giving up and returning an error
+# @param stat.client.maxConnectionLifetime The maximum duration for a connection to be kept alive
+# @param stat.client.baseConnectionBackoff The minimum duration to backoff new connection attempts after the previous connection attempt failed
+# @param stat.client.maxConnectionBackoff Maximum backoff duration between failed connection attempts
+# @param stat.client.responseTimeout The time period after the response was dispatched
+# @param stat.dispatcher.fixedPoolSize Fixed number of threads used
+# @param stat.dispatcher.throughput Throughput defines the maximum number of messages to be processed per actor before the thread jumps to the next actor
+
+stat:
+  url: ''
+  enabled: false
+  request:
+    enabled: false
+    buffer:
+      lifetime: 5s
+      sendTimeout: 2s
+      sendLimit: 256
+  search:
+    enabled: false
+    buffer:
+      lifetime: 5s
+      sendTimeout: 2s
+      sendLimit: 256
+  client:
+    connectingTimeout: 500ms
+    idleTimeout: 250ms
+    minConnections: 1
+    maxConnections: 2
+    maxOpenRequests: 4
+    maxRetries: 4
+    maxConnectionLifetime: 5m
+    baseConnectionBackoff: 500ms
+    maxConnectionBackoff: 10s
+    responseTimeout: 250ms
+  dispatcher:
+    fixedPoolSize: 1
+    throughput: 4
 
 # @section Kubernetes Importer job settings
 

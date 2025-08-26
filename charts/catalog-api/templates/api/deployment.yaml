@@ -88,6 +88,7 @@ spec:
             {{- include "catalog.env.search" . | nindent 12 }}
             {{- include "catalog.env.keys" . | nindent 12 }}
             {{- include "catalog.env.license" . | nindent 12 }}
+            {{- include "catalog.env.stat" . | nindent 12 }}
             {{- if .Values.customCAs.bundle }}
             {{- include "catalog.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
