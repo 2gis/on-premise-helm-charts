@@ -6,6 +6,10 @@
 {{ include "platform.name" . }}
 {{- end }}
 
+{{- define "platform.ui.secretName" -}}
+{{ include "platform.name" . }}
+{{- end }}
+
 {{- define "platform.ui.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
 app.kubernetes.io/instance: {{ .Release.Name }}

@@ -109,6 +109,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.env.featureFlags" -}}
 - name: KEYS_FEATURE_FLAGS_AUDIT
   value: "{{ .Values.featureFlags.enableAudit }}"
+- name: KEYS_FEATURE_FLAGS_AUDIT_KAFKA
+  value: "{{ .Values.featureFlags.enableAuditKafka }}"
 - name: KEYS_FEATURE_FLAGS_PUBLIC_API_SIGN
   value: "{{ .Values.featureFlags.enablePublicAPISign }}"
 - name: KEYS_FEATURE_FLAGS_SINGLE_PARTNER_MODE

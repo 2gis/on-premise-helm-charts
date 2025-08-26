@@ -34,18 +34,18 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | Name                  | Description                    | Value                         |
 | --------------------- | ------------------------------ | ----------------------------- |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/platform-ui` |
-| `ui.image.tag`        | Tag                            | `1.2.0`                       |
+| `ui.image.tag`        | Tag                            | `1.9.1`                       |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                          |
 
 ### UI service settings
 
-| Name                     | Description                                                                                                                                                                                                                                                                     | Value  |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `ui.appPort`             | Service port.                                                                                                                                                                                                                                                                   | `3000` |
-| `ui.brand`               | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                                                 | `""`   |
-| `ui.pages`               | A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground", "map_styles"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones. | `""`   |
-| `ui.playgrounds`         | A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder" (requires `ui.catalog.url`), "directions"` (requires `ui.navi.url`).                                                             | `""`   |
-| `ui.redirectSafeDomains` | A regular expression used to determine whether a domain is safe for redirection.                                                                                                                                                                                                | `""`   |
+| Name                     | Description                                                                                                                                                                                                                                                                               | Value  |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `ui.appPort`             | Service port.                                                                                                                                                                                                                                                                             | `3000` |
+| `ui.brand`               | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                                                           | `""`   |
+| `ui.pages`               | A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground", "map_styles"`, `"keys"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones. | `""`   |
+| `ui.playgrounds`         | A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder" (requires `ui.catalog.url`), "directions"` (requires `ui.navi.url`).                                                                       | `""`   |
+| `ui.redirectSafeDomains` | A regular expression used to determine whether a domain is safe for redirection.                                                                                                                                                                                                          | `""`   |
 
 ### OIDC
 
@@ -59,6 +59,15 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | `ui.oauth.codeUrl`      | URL that is used to exchange a code for a token. Use the app's actual host to build the URL: `host/api/auth/code`.          | `""`   |
 | `ui.oauth.safeHosts`    | A string with regular expression that validates a host being used to redirect back to the application after token exchange. | `.*`   |
 | `ui.oauth.secure`       | This flag determines whether to enable or disable HTTPS for authentication tokens. Possible values are: `true` or `false`.  | `true` |
+
+### Analytics BSS
+
+| Name                        | Description                                                                                                                                               | Value  |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `ui.analyticsBSS`           | A list of parameters for BSS analytics integration.                                                                                                       |        |
+| `ui.analyticsBSS.url`       | URL that is used to send BSS analytics events`.                                                                                                           | `""`   |
+| `ui.analyticsBSS.secure`    | If set to `true`, the `pl6_userId` cookie used for BSS user identification will be set with the `Secure` flag, allowing it to be sent only over HTTPS.    | `true` |
+| `ui.analyticsBSS.productId` | Identifier of the product used in BSS analytics. This value is included in every analytics event to distinguish between different products in the system. | `""`   |
 
 ### Statuses for services
 
