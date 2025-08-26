@@ -144,7 +144,7 @@ castle:
   image:
     repository: 2gis-on-premise/navi-castle
     pullPolicy: IfNotPresent
-    tag: 1.9.8
+    tag: 1.9.12
   castleDataPath: /opt/castle/data
   restrictions:
     url: ''
