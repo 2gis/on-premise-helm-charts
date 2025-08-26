@@ -44,20 +44,30 @@ data:
         "response_timelimit": {{ .Values.attractor.responseTimelimit | int }},
         "request_timeout": {{ .Values.attractor.requestTimeout | int }}
       },
+      {{- if .Values.attractor.sentry.enabled }}
+      "error_tracker": {
+        "report_destination_address": {{ .Values.attractor.sentry.address | quote }},
+        "project_name": {{ .Values.attractor.sentry.project | quote }},
+        "user_name": {{ .Values.attractor.sentry.username | quote }},
+        "print_outgoing_messages": {{ .Values.attractor.sentry.printMessages | default false }},
+        "debug": {{ .Values.attractor.sentry.debug | default false }},
+        "path": {{ .Values.attractor.sentry.reportPath | default "/tmp/sentry" | quote }},
+        "handler": {{ .Values.attractor.sentry.handler | default "/usr/sbin/2gis/mosesd/crashpad_handler" | quote }}
+      },
+      {{- end }}
       "context": {
         "variables": {
           "LOCAL_PATH": "/opt/castle",
           "LOCAL_ETC": "/etc/2gis/mosesd",
-          "REMOTE_PATH": "{{ include "config.setCastleUrl" $ }}"
+          "REMOTE_PATH": "{{ include "config.setCastleUrl" $ }}",
+          "REMOTE_PATH_PROXY": "{{ .Values.attractor.castleUrlProxy }}"
         },
       "rules": {
         "update_period" : 0,
           "nodes": [
             "file://{LOCAL_ETC}/rules.conf"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         "cities": {
           "update_period": 0,
@@ -68,32 +78,55 @@ data:
           "nodes": [
             "{REMOTE_PATH}/{{ .Values.attractor.citiesFilename }}"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
-        "index": {
-          "update_period": 600,
-          {{- /* search .zip in files */}}
-          {{- if regexMatch ".*\\.zip.*" .Values.attractor.indexFilename }}
-          "content": "index.json",
+        "indices": [
+          {
+            "index_name": "default",
+            "update_period": 600,
+            {{- /* search .zip in files */}}
+            {{- if regexMatch ".*\\.zip.*" .Values.attractor.indexFilename }}
+            "content": "index.json",
+            {{- end }}
+            "nodes": [
+              "{REMOTE_PATH}/{{ .Values.attractor.indexFilename }}"
+            ],
+            "timeout_seconds": 30
+          }
+          {{- if .Values.attractor.restrictions.enabled -}}
+          ,
+          {
+            "index_name": "restrictions_index",
+            "update_period": {{ .Values.attractor.restrictions.updatePeriod | int }},
+            "nodes": [
+              "{{ include "config.setRestrictionIndexUrl" $ }}"
+            ],
+            "timeout_seconds": {{ .Values.attractor.restrictions.timeoutSeconds | int }}
+          }
+          {{- end }}{{- /* if .Values.attractor.restrictions.enabled */}}
+          {{- if .Values.attractor.castleUrlProxy }}
+          ,
+          {
+            "index_name": "proxy",
+            "update_period": {{ .Values.attractor.disableUpdates | ternary 604800 600 }},
+            {{- /* search .zip in files */}}
+            {{- if regexMatch ".*\\.zip.*" .Values.attractor.indexFilename }}
+            "content": "index.json",
+            {{- end }}
+            "nodes": [
+              "{REMOTE_PATH_PROXY}/{{ .Values.attractor.indexFilename }}"
+            ],
+            "timeout_seconds": 30
+          }
           {{- end }}
-          "nodes": [
-            "{REMOTE_PATH}/{{ .Values.attractor.indexFilename }}"
-          ],
-          "timeout_seconds": {
-            "count": 30
-          }
-        },
+        ],
         {{- if .Values.attractor.indices.ctxOptions.enabled }}
         "ctx_options": {
           "update_period": 0,
           "nodes": [
             "{REMOTE_PATH}/options/ctx_config.json"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.attractor.indices.ctxOptions.enabled */}}
         {{- if .Values.attractor.indices.carOptions.enabled }}
@@ -102,9 +135,7 @@ data:
           "nodes": [
             "{REMOTE_PATH}/options/carrouting.json"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.attractor.indices.carOptions.enabled */}}
         {{- if .Values.attractor.indices.countryCarOptions.enabled }}
@@ -113,9 +144,7 @@ data:
           "nodes": [
             "{REMOTE_PATH}/options/{payload}.json"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.attractor.indices.countryCarOptions.enabled */}}
         {{- if .Values.attractor.indices.projectCarOptions.enabled }}
@@ -124,46 +153,41 @@ data:
           "nodes": [
             "{REMOTE_PATH}/"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.attractor.indices.projectCarOptions.enabled */}}
         "routing_resources": {
           "nodes": [
             "dir:///usr/share/2gis/moses2-routing-resources/"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         "packages": {
+          "index_name": "default",
           "update_period": 0,
           "nodes": [
             "{REMOTE_PATH}/"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
+        {{- if .Values.attractor.restrictions.enabled }}
         "restrictions": {
+          "index_name": "restrictions_index",
           "update_period": 0,
           "nodes": [
             "{{ include "config.setRestrictionUrl" $ }}/"
           ],
-          "timeout_seconds": {
-            "count": {{ .Values.attractor.rtr.timeoutSeconds | int }}
-          }
+          "timeout_seconds": {{ .Values.attractor.restrictions.timeoutSeconds | int }}
         },
+        {{- end }}{{- /* if .Values.attractor.restrictions.enabled */}}
         {{- if .Values.attractor.indices.entrances.enabled }}
         "entrances": {
+          "index_name": "default",
           "update_period": 0,
           "nodes": [
             "{REMOTE_PATH}/"
           ],
-          "timeout_seconds": {
-            "count": 30
-          }
+          "timeout_seconds": 30
         },
         {{- end }}{{- /* .Values.attractor.indices.entrances.enabled */}}
         {{- if .Values.attractor.indices.snImport.enabled }}
@@ -173,10 +197,7 @@ data:
             [
                 "{REMOTE_PATH}/"
             ],
-            "timeout_seconds":
-            {
-                "count": 60
-            }
+            "timeout_seconds": 60
         },
         {{- end }}{{- /* .Values.attractor.indices.snImport.enabled */}}
         {{- if .Values.attractor.indices.geoImport.enabled }}
@@ -186,10 +207,7 @@ data:
             [
                 "{REMOTE_PATH}/"
             ],
-            "timeout_seconds":
-            {
-                "count": 60
-            }
+            "timeout_seconds": 60
         },
         {{- end }}{{- /* .Values.attractor.indices.geoImport.enabled */}}
 
@@ -214,29 +232,16 @@ data:
         {{- if .Values.attractor.indices.passZones.enabled }}
             "pass_zones":
               {
+                "index_name": "default",
                 "update_period": 0,
                 "nodes":
                 [
                   "{REMOTE_PATH}/"
                 ],
-                "timeout_seconds":
-                {
-                  "count": 60
-                }
+                "timeout_seconds": 60
               },
         {{- end }}{{- /* .Values.attractor.indices.passZones.enabled */}}
         {{- end }}
-        {{- if .Values.attractor.rtr.enabled }}
-        "restrictions_index": {
-          "update_period": {{ .Values.attractor.rtr.updatePeriod }},
-          "nodes": [
-            "{{ .Values.attractor.rtr.url }}/{{ .Values.attractor.rtr.filename | default "restrictions_index.json.zip" }}"
-          ],
-          "timeout_seconds": {
-            "count": {{ .Values.attractor.rtr.timeoutSeconds | int }}
-          }
-        },
-        {{- end }}{{- /* if .Values.attractor.rtr.enabled */}}
         {{- if .Values.s3.enabled }}
           "s3": {
             "distance_matrix": {

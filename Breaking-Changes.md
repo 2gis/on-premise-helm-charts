@@ -1,5 +1,16 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [1.43.0]
+
+### navi-attractor
+
+- Renamed `attractor.rtr` to `attractor.restrictions`
+
+### navi-back
+
+- Renamed `naviback.rtr` to `naviback.restrictions`
+- `.Values.naviback.grpcPort` always enabled
+
 ## [1.41.0]
 
 ### catalog-api
