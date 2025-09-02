@@ -73,6 +73,7 @@ spec:
         - name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
           configMap:
             name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
+            defaultMode: 0444
       {{- $kafkaVolumeMounted := (
               .Values.kafka.fileProperties |
               or (.Values.kafka.consumerOverrides).fileProperties |
@@ -82,14 +83,17 @@ spec:
         - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
           secret:
             secretName: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+            defaultMode: 0444
         - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
           secret:
             secretName: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+            defaultMode: 0444
       {{- end }}
       {{- if .Values.db.tls.enabled }}
         - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
           secret:
             secretName: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+            defaultMode: 0444
         - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
           emptyDir: {}
       {{- end }}
@@ -97,6 +101,7 @@ spec:
         - name: {{ include "navi-async-matrix.fullname" . }}-ca
           configMap:
             name: {{ include "navi-async-matrix.fullname" . }}-ca
+            defaultMode: 0444
       {{- end }}
       initContainers:
         {{- if .Values.db.tls.enabled }}
@@ -118,8 +123,10 @@ spec:
           volumeMounts:
             - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
               mountPath: /tmp/certs
+              readOnly: true
             - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
               mountPath: /etc/2gis/secret/psql
+              readOnly: true
         {{- end }}
       containers:
         - name: {{ .Chart.Name }}
@@ -152,18 +159,25 @@ spec:
           {{- if $kafkaVolumeMounted }}
           - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /etc/2gis/secret/consumer/
+            readOnly: true
           - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /etc/2gis/secret/producer/
+            readOnly: true
           {{- end }}
           {{- if .Values.db.tls.enabled }}
           - name: {{ printf "%s-psql" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: /etc/2gis/secret/psql
+            readOnly: true
           {{- end }}
           {{- if .Values.customCAs.bundle }}
           - name: {{ include "navi-async-matrix.fullname" . }}-ca
             mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
             subPath: custom-ca.crt
+            readOnly: true
           {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "navi-async-matrix.fullname" . | quote }}
           env:
             - name: DM_ASYNC_SERVICE_HOST
               value: {{ .Values.dm.host | quote }}
@@ -272,33 +286,11 @@ spec:
             # sensitive data
             - name: DM_ASYNC_SERVICE_DB_SCHEMA
               value: {{ .Values.db.schema | quote }}
-            - name: DM_ASYNC_SERVICE_DB_DSN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "navi-async-matrix.fullname" . | quote }}
-                  key: dbDsn
             {{- if .Values.db.expirationSec }}
             - name: DM_ASYNC_SERVICE_DB_EXPIRATION_IN_SEC
               value: {{ .Values.db.expirationSec | quote }}
             - name: DM_ASYNC_SERVICE_DB_EXPIRATION_CHECK_PERIOD
               value: {{ .Values.db.expirationPeriodSec | quote }}
-            {{- end }}
-            - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "navi-async-matrix.fullname" . | quote }}
-                  key: s3key
-            - name: DM_ASYNC_SERVICE_KMS__DM_ASYNC_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "navi-async-matrix.fullname" . | quote }}
-                  key: dmApiKey
-            {{- if .Values.keys.truckToken }}
-            - name: DM_ASYNC_SERVICE_KMS__TRUCK_DM_ASYNC_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "navi-async-matrix.fullname" . | quote }}
-                  key: dmApiTruckKey
             {{- end }}
             {{- if .Values.customCAs.bundle }}
             - name: SSL_CERT_FILE
