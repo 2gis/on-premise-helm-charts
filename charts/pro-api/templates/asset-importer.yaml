@@ -132,15 +132,13 @@ spec:
                   value: "{{ .Values.assetImporter.settings.esMetricsEnabled }}"
                 - name: Common__TtlSecondsAfterFinished
                   value: "{{ .Values.assetImporter.settings.ttlSecondsAfterFinished }}"
-                - name: Digger__Address
+                - name: Digger__Url
                   value: "{{ .Values.digger.url}}"
-                - name: Digger__UserName
-                  value: "{{ .Values.digger.userName}}"
-                {{ if .Values.digger.password }}
-                - name: Digger__Password
+                {{ if .Values.digger.authToken }}
+                - name: Digger__AuthToken
                   valueFrom:
                     secretKeyRef:
-                      key: diggerPassword
+                      key: diggerAuthToken
                       name: {{ include "pro-api.name" . }}-secret
                 {{ end }}
                 - name: Navi__Url
