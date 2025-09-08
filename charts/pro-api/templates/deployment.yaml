@@ -112,23 +112,23 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           env:
             - name: DEBUG
-              value: "{{ .Values.api.settings.debug }}"
+              value: {{ .Values.api.settings.debug | quote }}
             - name: Import__EnableUserAssetsImporter
-              value: "{{ .Values.api.settings.backgroundJobs.enableUserAssetsImporter }}"
+              value: {{ .Values.api.settings.backgroundJobs.enableUserAssetsImporter | quote }}
             - name: Import__EnableAssetsStreaming
-              value: "{{ .Values.api.settings.backgroundJobs.enableAssetsStreaming }}"
+              value: {{ .Values.api.settings.backgroundJobs.enableAssetsStreaming | quote }}
             - name: Import__AssetImporterJobName
               value: {{ include "pro-api.asset-importer-name" . }}
             - name: Import__ExternalLinksProxyUrl
-              value: "{{ .Values.assetImporter.settings.externalLinksProxyUrl }}"
+              value: {{ .Values.assetImporter.settings.externalLinksProxyUrl | quote }}
             - name: Import__ExternalLinksAllowedHosts
-              value: "{{ .Values.assetImporter.settings.externalLinksAllowedHosts }}"
+              value: {{ .Values.assetImporter.settings.externalLinksAllowedHosts | quote }}
             - name: Import__TtlSecondsAfterFinished
-              value: "{{ .Values.assetImporter.settings.ttlSecondsAfterFinished }}"
+              value: {{ .Values.assetImporter.settings.ttlSecondsAfterFinished | quote }}
             - name: TEMP_PATH
-              value: "{{ .Values.api.settings.tempPath }}"
+              value: {{ .Values.api.settings.tempPath | quote }}
             - name: CATALOG_API_2GIS_URL
-              value: "{{ .Values.catalog.url }}"
+              value: {{ .Values.catalog.url | quote }}
             - name: CATALOG_API_2GIS_KEY
               valueFrom:
                 secretKeyRef:
@@ -149,12 +149,12 @@ spec:
             - name: Elastic__Nodes__{{$i}}__Host
               value: {{ $s.host }}
             - name: Elastic__Nodes__{{$i}}__Port
-              value: "{{ $s.port }}"
+              value: {{ $s.port | quote }}
             {{ end }}
             - name: Elastic__Secure
-              value: "{{ $.Values.elastic.secure }}"
+              value: {{ $.Values.elastic.secure | quote }}
             - name: Elastic__Username
-              value: "{{ $.Values.elastic.username }}"
+              value: {{ $.Values.elastic.username | quote }}
             {{ if .Values.elastic.password }}
             - name: Elastic__Password
               valueFrom:
@@ -163,16 +163,16 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}
             - name: Elastic__IndexPrefix
-              value: "{{ $.Values.elastic.indexPrefix }}"
+              value: {{ $.Values.elastic.indexPrefix | quote }}
             - name: Elastic__EnableHttpCompression
-              value: "{{ $.Values.elastic.enableHttpCompression }}"
+              value: {{ $.Values.elastic.enableHttpCompression | quote }}
 
             - name: ENV
-              value: "{{ .Values.api.settings.env }}"
+              value: {{ .Values.api.settings.env | quote }}
             - name: Common__CorsOrigins
-              value: "{{ .Values.api.settings.corsOrigins }}"
+              value: {{ .Values.api.settings.corsOrigins | quote }}
             - name: Common__FilterByZoneCodes
-              value: "{{ .Values.api.settings.filterByZoneCodes }}"
+              value: {{ .Values.api.settings.filterByZoneCodes | quote }}
             - name: Postgres__ConnectionString
               value: {{ include "pro-api.connectionString" . }}
             - name: Postgres__ConnectionStringReadonly
@@ -192,11 +192,11 @@ spec:
             - name: S3Settings__Url
               value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
             - name: S3Settings__Secure
-              value: "{{ .Values.dgctlStorage.secure }}"
+              value: {{ .Values.dgctlStorage.secure | quote }}
             - name: S3Settings__Region
               value: {{ .Values.dgctlStorage.region }}
             - name: S3Settings__DisablePayloadSigning
-              value: "{{ .Values.dgctlStorage.disablePayloadSigning }}"
+              value: {{ .Values.dgctlStorage.disablePayloadSigning | quote }}
             - name: S3Settings__AssetDataBucket
               value: {{ required "A valid .Values.s3.assetsDataBucket entry required" $.Values.s3.assetsDataBucket }}
             - name: S3Settings__UserAssetDataBucket
@@ -235,9 +235,9 @@ spec:
             - name: Kafka__AssetTopicsReaderGroupId
               value: {{ $.Values.kafka.assetTopicsReaderGroupId }}
             - name: Kafka__CreateTopics
-              value: "{{ $.Values.kafka.createTopics }}"
+              value: {{ $.Values.kafka.createTopics | quote }}
             - name: Kafka__RefreshAssetsIntervalMinutes
-              value: "{{ $.Values.kafka.refreshAssetsIntervalMinutes }}"
+              value: {{ $.Values.kafka.refreshAssetsIntervalMinutes | quote }}
             - name: Kafka__ImportTasksTopicSettings__Name
               value: {{ $.Values.kafka.importTasksTopic.name }}
             - name: Kafka__ImportTasksTopicSettings__ReaderGroupId
@@ -249,13 +249,13 @@ spec:
             - name: Kafka__EventsTopicSettings__ReaderGroupId
               value: {{ required "A valid .Values.kafka.eventsTopic.readerGroupId entry required" $.Values.kafka.eventsTopic.readerGroupId }}
             - name: Kafka__UseReplicaTopics
-              value: "{{ $.Values.kafka.useReplicaTopics }}"
+              value: {{ $.Values.kafka.useReplicaTopics | quote }}
             - name: Auth__Type
               value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
             - name: Auth__Url
               value: {{ required "A valid .Values.api.settings.auth.url entry required" $.Values.api.settings.auth.url }}
             - name: Auth__ClientId
-              value: "{{ .Values.api.settings.auth.clientId }}"
+              value: {{ .Values.api.settings.auth.clientId | quote }}
             {{- if .Values.api.settings.auth.clientSecret }}
             - name: Auth__ClientSecret
               valueFrom:
@@ -264,13 +264,13 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
             - name: Auth__UserInfoEndpoint
-              value: "{{ .Values.api.settings.auth.userInfoEndpoint }}"
+              value: {{ .Values.api.settings.auth.userInfoEndpoint | quote }}
             - name: Auth__WellKnownConfigEndpoint
-              value: "{{ .Values.api.settings.auth.wellKnownConfigEndpoint }}"
+              value: {{ .Values.api.settings.auth.wellKnownConfigEndpoint | quote }}
             - name: Auth__AutoRegisterUsers
-              value: "{{ .Values.api.settings.auth.autoRegisterUsers }}"
+              value: {{ .Values.api.settings.auth.autoRegisterUsers | quote }}
             - name: Auth__TurnOffCertValidation
-              value: "{{ .Values.api.settings.auth.turnOffCertValidation }}"
+              value: {{ .Values.api.settings.auth.turnOffCertValidation | quote }}
             {{- if .Values.api.settings.auth.apiKey }}
             - name: Auth__ApiKey
               valueFrom:
@@ -289,14 +289,14 @@ spec:
             {{- end }}
             {{- range $i, $s := .Values.api.settings.auth.shareKeys }}
             - name: Auth__ShareKeys__{{$i}}
-              value: "{{ $s }}"
+              value: {{ $s | quote }}
             {{- end }}
             - name: Auth__SkipShareLinksPermissionsCheck
-              value: "{{ .Values.api.settings.auth.skipShareLinksPermissionsCheck }}"
+              value: {{ .Values.api.settings.auth.skipShareLinksPermissionsCheck | quote }}
             - name: License__Key
               value: {{ required "A valid .Values.api.settings.licenseKey entry required" $.Values.api.settings.licenseKey }}
             - name: KEYS_SERVICE_URL
-              value: "{{ .Values.keys.url }}"
+              value: {{ .Values.keys.url | quote }}
             {{- if .Values.keys.token }}
             - name: KEYS_SERVICE_TOKEN
               valueFrom:
@@ -307,7 +307,7 @@ spec:
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
-              value: "{{ .Values.redis.port }}"
+              value: {{ .Values.redis.port | quote }}
             - name: Redis__Username
               value: {{ $.Values.redis.username }}
             {{- if .Values.redis.password }}
@@ -318,46 +318,46 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
             - name: Common__Logging__Format
-              value: "{{ .Values.api.settings.logging.format }}"
+              value: {{ .Values.api.settings.logging.format | quote }}
             - name: Common__Logging__Targets
-              value: "{{ .Values.api.settings.logging.targets }}"
+              value: {{ .Values.api.settings.logging.targets | quote }}
             - name: Common__EsDataCentersCount
-              value: "{{ .Values.api.settings.esDataCentersCount }}"
+              value: {{ .Values.api.settings.esDataCentersCount | quote }}
             - name: RateLimiter__RequestsLimit
-              value: "{{ .Values.api.settings.rateLimiter.requestsLimit }}"
+              value: {{ .Values.api.settings.rateLimiter.requestsLimit | quote }}
             - name: RateLimiter__WindowSizeInSeconds
-              value: "{{ .Values.api.settings.rateLimiter.windowSizeInSeconds }}"
+              value: {{ .Values.api.settings.rateLimiter.windowSizeInSeconds | quote }}
             - name: LocalCache__Enabled
-              value: "{{ .Values.api.settings.localCache.enabled }}"
+              value: {{ .Values.api.settings.localCache.enabled | quote }}
             - name: LocalCache__TrackStatistics
-              value: "{{ .Values.api.settings.localCache.trackStatistics }}"
+              value: {{ .Values.api.settings.localCache.trackStatistics | quote }}
             - name: LicensingService__BaseUri
               value: {{ required "A valid .Values.license.url entry required" $.Values.license.url }}
             - name: LayerGeneration__IsochroneLayerMaxPointsCount
-              value: "{{ .Values.api.settings.layerGeneration.isochroneLayerMaxPointsCount }}"
+              value: {{ .Values.api.settings.layerGeneration.isochroneLayerMaxPointsCount | quote }}
             - name: TasksApi__Url
               value: http://{{ include "pro-api.tasks-name" . }}:{{ .Values.tasks.settings.grpcPort }}
             - name: TasksApi__UseForLayerDataPreparation
-              value: "{{ .Values.api.settings.tasksApi.useForLayerDataPreparation }}"
+              value: {{ .Values.api.settings.tasksApi.useForLayerDataPreparation | quote }}
             - name: BackgroundJobs__InitOnStartupJob__Enabled
-              value: "{{ ne .Values.api.settings.backgroundJobs.enableInitOnStartupJob false }}"
+              value: {{ ne .Values.api.settings.backgroundJobs.enableInitOnStartupJob false | quote }}
             - name: BackgroundJobs__LayerDataPrepareJob__Enabled
-              value: "{{ ne .Values.api.settings.backgroundJobs.enableLayerDataPrepareJob false }}"
+              value: {{ ne .Values.api.settings.backgroundJobs.enableLayerDataPrepareJob false | quote }}
             - name: BackgroundJobs__ClearCacheJob__Enabled
-              value: "{{ ne .Values.api.settings.backgroundJobs.enableClearCacheJob false }}"
+              value: {{ ne .Values.api.settings.backgroundJobs.enableClearCacheJob false | quote }}
             - name: BackgroundJobs__ClearMetadataAndStorageJob__Enabled
-              value: "{{ ne .Values.api.settings.backgroundJobs.enableClearMetadataAndStorageJob false }}"
+              value: {{ ne .Values.api.settings.backgroundJobs.enableClearMetadataAndStorageJob false | quote }}
             - name: BackgroundJobs__MetricsCollectionJob__Enabled
-              value: "{{ ne .Values.api.settings.backgroundJobs.enableMetricsCollectionJob false }}"
+              value: {{ ne .Values.api.settings.backgroundJobs.enableMetricsCollectionJob false | quote }}
             - name: TileGen__Url
-              value: "{{ .Values.tileGen.url }}"
+              value: {{ .Values.tileGen.url | quote }}
             - name: TileGen__UserDataTileSet
-              value: "{{ .Values.tileGen.userDataTileSet }}"
+              value: {{ .Values.tileGen.userDataTileSet | quote }}
             - name: SberEcommerceApi__Enabled
-              value: "{{ .Values.ecommerce.enabled }}"
+              value: {{ .Values.ecommerce.enabled | quote }}
             - name: SberEcommerceApi__Url
-              value: "{{ .Values.ecommerce.url }}"
+              value: {{ .Values.ecommerce.url | quote }}
             - name: SberEcommerceApi__UserName
-              value: "{{ .Values.ecommerce.username }}"
+              value: {{ .Values.ecommerce.username | quote }}
             - name: SberEcommerceApi__Password
-              value: "{{ .Values.ecommerce.password }}"
+              value: {{ .Values.ecommerce.password | quote }}

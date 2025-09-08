@@ -99,20 +99,20 @@ spec:
                 command: [ "/bin/sh", "-c", "sleep 5" ]
           env:
             - name: Common__TempPath
-              value: "{{ .Values.routes.worker.tempPath }}"
+              value: {{ .Values.routes.worker.tempPath | quote }}
 
             - name: Common__Logging__LogLevel
-              value: "{{ .Values.routes.worker.logging.level }}"
+              value: {{ .Values.routes.worker.logging.level | quote }}
 
             - name: RoutesSettings__RoutePointsMatchDistanceMeters
-              value: "{{ .Values.routes.worker.routesSettings.routePointsMatchDistanceMeters }}"
+              value: {{ .Values.routes.worker.routesSettings.routePointsMatchDistanceMeters | quote }}
 
             - name: PgSettings__Host
-              value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
+              value: {{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host | quote }}
             - name: PgSettings__Port
-              value: "{{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port }}"
+              value: {{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port | quote }}
             - name: PgSettings__UserName
-              value: "{{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username }}"
+              value: {{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username | quote }}
             - name: PgSettings__Password
               valueFrom:
                 secretKeyRef:
@@ -120,74 +120,74 @@ spec:
                   name: {{ include "citylens.routes.api.name" . }}-secret
 
             - name: PgSettings__Api__Database
-              value: "{{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database }}"
+              value: {{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database | quote }}
             - name: PgSettings__Api__Timeout
-              value: "{{ $.Values.routes.postgres.timeout }}"
+              value: {{ $.Values.routes.postgres.timeout | quote }}
             - name: PgSettings__Api__CommandTimeout
-              value: "{{ $.Values.routes.postgres.commandTimeout }}"
+              value: {{ $.Values.routes.postgres.commandTimeout | quote }}
             - name: PgSettings__Api__MaxPoolSize
-              value: "{{ $.Values.routes.postgres.maxPoolSize }}"
+              value: {{ $.Values.routes.postgres.maxPoolSize | quote }}
             - name: PgSettings__Api__Pooling
-              value: "{{ $.Values.routes.postgres.pooling }}"
+              value: {{ $.Values.routes.postgres.pooling | quote }}
 
             - name: PgSettings__Hangfire__Database
-              value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
+              value: {{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database | quote }}
             - name: PgSettings__Hangfire__Timeout
-              value: "{{ $.Values.routes.hangfire.postgres.timeout }}"
+              value: {{ $.Values.routes.hangfire.postgres.timeout | quote }}
             - name: PgSettings__Hangfire__CommandTimeout
-              value: "{{ $.Values.routes.hangfire.postgres.commandTimeout }}"
+              value: {{ $.Values.routes.hangfire.postgres.commandTimeout | quote }}
             - name: PgSettings__Hangfire__MaxPoolSize
-              value: "{{ $.Values.routes.hangfire.postgres.maxPoolSize }}"
+              value: {{ $.Values.routes.hangfire.postgres.maxPoolSize | quote }}
             - name: PgSettings__Hangfire__Pooling
-              value: "{{ $.Values.routes.hangfire.postgres.pooling }}"
+              value: {{ $.Values.routes.hangfire.postgres.pooling | quote }}
 
             - name: BusConfig__Broker
-              value: "{{ .Values.kafka.bootstrapServer }}"
+              value: {{ .Values.kafka.bootstrapServer | quote }}
             - name: BusConfig__SecurityInformation__SaslUsername
-              value: "{{ .Values.kafka.username }}"
+              value: {{ .Values.kafka.username | quote }}
             - name: BusConfig__SecurityInformation__SaslPassword
               valueFrom:
                 secretKeyRef:
                   key: busConfigSaslPassword
                   name: {{ include "citylens.routes.api.name" . }}-secret
             - name: BusConfig__SecurityInformation__SaslMechanism
-              value: "{{ .Values.routes.worker.busConfig.securityInformation.saslMechanism }}"
+              value: {{ .Values.routes.worker.busConfig.securityInformation.saslMechanism | quote }}
             - name: BusConfig__SecurityInformation__SecurityProtocol
-              value: "{{ .Values.routes.worker.busConfig.securityInformation.securityProtocol }}"
+              value: {{ .Values.routes.worker.busConfig.securityInformation.securityProtocol | quote }}
 
             - name: BusConfig__Consumers__AppEvents__Topic
-              value: "{{ .Values.kafka.topics.tracks }}"
+              value: {{ .Values.kafka.topics.tracks | quote }}
             - name: BusConfig__Consumers__AppEvents__GroupId
-              value: "{{ required "A valid .Values.routes.worker.busConfig.consumers.appEvents.groupId entry required" $.Values.routes.worker.busConfig.consumers.appEvents.groupId }}"
+              value: {{ required "A valid .Values.routes.worker.busConfig.consumers.appEvents.groupId entry required" $.Values.routes.worker.busConfig.consumers.appEvents.groupId | quote }}
             - name: BusConfig__Consumers__AppEvents__BufferSize
-              value: "{{ .Values.routes.worker.busConfig.consumers.appEvents.bufferSize }}"
+              value: {{ .Values.routes.worker.busConfig.consumers.appEvents.bufferSize | quote }}
             - name: BusConfig__Consumers__AppEvents__WorkersCount
-              value: "{{ .Values.routes.worker.busConfig.consumers.appEvents.workersCount }}"
+              value: {{ .Values.routes.worker.busConfig.consumers.appEvents.workersCount | quote }}
 
             - name: TasksAssetSettings__SystemAccessToken
-              value: "{{ $.Values.routes.tasksAssetSettings.systemAccessToken }}"
+              value: {{ $.Values.routes.tasksAssetSettings.systemAccessToken | quote }}
             - name: TasksAssetSettings__PlannedTasksAssetId
-              value: "{{ $.Values.routes.tasksAssetSettings.plannedTasksAssetId }}"
+              value: {{ $.Values.routes.tasksAssetSettings.plannedTasksAssetId | quote }}
             - name: TasksAssetSettings__CompletedTasksAssetId
-              value: "{{ $.Values.routes.tasksAssetSettings.completedTasksAssetId }}"
+              value: {{ $.Values.routes.tasksAssetSettings.completedTasksAssetId | quote }}
 
             - name: Clients__ProClient__Enabled
               value: "true"
             - name: Clients__ProClient__Url
-              value: "{{ $.Values.pro.baseUrl }}"
+              value: {{ $.Values.pro.baseUrl | quote }}
             - name: Clients__ProClient__AuthorizationToken
-              value: "{{ $.Values.routes.pro.authorizationToken }}"
+              value: {{ $.Values.routes.pro.authorizationToken | quote }}
 
             - name: Clients__Navigation__Enabled
               value: "true"
             - name: Clients__Navigation__Url
-              value: "{{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url }}"
+              value: {{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url | quote }}
             - name: Clients__Navigation__TimeoutSeconds
-              value: "{{ $.Values.routes.navi.timeout }}"
+              value: {{ $.Values.routes.navi.timeout | quote }}
             - name: Clients__Navigation__ApiKey
-              value: "{{ $.Values.routes.navi.key }}"
+              value: {{ $.Values.routes.navi.key | quote }}
 
             - name: Features__CoverageRatioEnabled
-              value: "{{ $.Values.routes.features.coverageRatioEnabled }}"
+              value: {{ $.Values.routes.features.coverageRatioEnabled | quote }}
             - name: Features__TasksAssetEnabled
-              value: "{{ $.Values.routes.features.tasksAssetEnabled }}"
+              value: {{ $.Values.routes.features.tasksAssetEnabled | quote }}

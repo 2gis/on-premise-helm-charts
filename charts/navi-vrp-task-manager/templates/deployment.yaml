@@ -105,43 +105,43 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: LOG_LEVEL
-              value: "{{ .Values.vrpTaskManager.logLevel }}"
+              value: {{ .Values.vrpTaskManager.logLevel | quote }}
             - name: LOG_SERIALIZE
-              value: "{{ .Values.vrpTaskManager.logSerialize }}"
+              value: {{ .Values.vrpTaskManager.logSerialize | quote }}
             - name: STORAGE__S3_ENDPOINT_URL
-              value: "{{ .Values.s3.url }}"
+              value: {{ .Values.s3.url | quote }}
             {{- if .Values.s3.publicUrl }}
             - name: STORAGE__S3_PUBLIC_URL
-              value: "{{ .Values.s3.publicUrl }}"
+              value: {{ .Values.s3.publicUrl | quote }}
             {{- end }}
             - name: STORAGE__VRP__BUCKET
-              value: "{{ .Values.s3.vrp.bucket }}"
+              value: {{ .Values.s3.vrp.bucket | quote }}
             - name: STAGE_POLLER_PERIOD
               value: "3"
             {{- if .Values.bss.enabled }}
             - name: BSS__URL
-              value: "{{ .Values.bss.url }}"
+              value: {{ .Values.bss.url | quote }}
             {{- end }}
             - name: KMS__URL
-              value: "{{ .Values.keys.url }}"
+              value: {{ .Values.keys.url | quote }}
             - name: KMS__POLL_PERIOD
-              value: "{{ .Values.keys.pollPeriod }}"
+              value: {{ .Values.keys.pollPeriod | quote }}
             - name: DM_SERVICE_TYPE
               value: "ASYNC"
             - name: DM__URL
-              value: "{{ .Values.dm.url }}"
+              value: {{ .Values.dm.url | quote }}
             - name: DATABASE__SCHEMA_NAME
-              value: "{{ .Values.db.schema }}"
+              value: {{ .Values.db.schema | quote }}
             - name: KAFKA__CONSUMER_SOLVER__CONFIG__GROUP_ID
-              value: "{{ .Values.kafka.solver.groupId }}"
+              value: {{ .Values.kafka.solver.groupId | quote }}
             - name: KAFKA__CONSUMER_DM__CONFIG__GROUP_ID
-              value: "{{ .Values.kafka.dm.groupId }}"
+              value: {{ .Values.kafka.dm.groupId | quote }}
             - name: KAFKA__PRODUCER_SOLVER__TOPIC
-              value: "{{ .Values.kafka.taskTopic }}"
+              value: {{ .Values.kafka.taskTopic | quote }}
             - name: KAFKA__CONSUMER_SOLVER__TOPIC
-              value: "{{ .Values.kafka.statusTopic }}"
+              value: {{ .Values.kafka.statusTopic | quote }}
             - name: KAFKA__CONSUMER_DM__TOPIC
-              value: "{{ .Values.kafka.messageBusTopic }}"
+              value: {{ .Values.kafka.messageBusTopic | quote }}
             {{- if .Values.multiDc.enabled }}
             - name: APP__LOCATION
               value: {{ .Values.multiDc.location | quote }}

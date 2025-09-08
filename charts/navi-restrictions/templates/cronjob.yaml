@@ -76,7 +76,7 @@ spec:
                 {{- toYaml .Values.cron.resources | nindent 16 }}
               env:
                 - name: MAX_ATTRIBUTES_FETCHER_RPS
-                  value: "{{ .Values.cron.maxAttributesFetcherRps }}"
+                  value: {{ .Values.cron.maxAttributesFetcherRps | quote }}
                 - name: EDGES_URL_TEMPLATE
                   value: {{ printf "%s://%s/%s" .Values.naviCastleHostScheme (required "A valid .Values.naviCastleHost entry reuiqred" .Values.naviCastleHost) .Values.cron.edgesUriTemplate | quote }}
                 - name: EDGE_ATTRIBUTES_URL_TEMPLATE

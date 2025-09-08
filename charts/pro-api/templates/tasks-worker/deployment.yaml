@@ -108,9 +108,9 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           env:
             - name: ENV
-              value: "{{ .Values.tasks.settings.env }}"
+              value: {{ .Values.tasks.settings.env | quote }}
             - name: TEMP_PATH
-              value: "{{ .Values.tasks.settings.tempPath }}"
+              value: {{ .Values.tasks.settings.tempPath | quote }}
             - name: Postgres__ConnectionString
               value: {{ include "pro-tasks.connectionString" . }}
             - name: Postgres__ConnectionStringReadonly
@@ -129,22 +129,22 @@ spec:
             {{- end }}
 
             - name: FeatureManagement__AssetDataPreparation
-              value: "{{ $.Values.tasks.settings.features.assetDataPreparation.enabled }}"
+              value: {{ $.Values.tasks.settings.features.assetDataPreparation.enabled | quote }}
             - name: FeatureManagement__AuditLogging
-              value: "{{ $.Values.tasks.settings.features.auditLogging.enabled }}"
+              value: {{ $.Values.tasks.settings.features.auditLogging.enabled | quote }}
             - name: FeatureManagement__CleanCitylensFrames
-              value: "{{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled }}"
+              value: {{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled | quote }}
             - name: FeatureManagement__RemoveUnusedUserAssetFiles
-              value: "{{ $.Values.tasks.settings.features.removeUnusedUserAssetFiles.enabled }}"
+              value: {{ $.Values.tasks.settings.features.removeUnusedUserAssetFiles.enabled | quote }}
             - name: FeatureManagement__EmailNotifications
-              value: "{{ $.Values.tasks.settings.features.emailNotifications.enabled }}"
+              value: {{ $.Values.tasks.settings.features.emailNotifications.enabled | quote }}
             - name: FeatureManagement__UserManagement
-              value: "{{ $.Values.tasks.settings.features.userManagement.enabled }}"
+              value: {{ $.Values.tasks.settings.features.userManagement.enabled | quote }}
 
             - name: Common__Logging__Format
-              value: "{{ .Values.tasks.settings.logging.format }}"
+              value: {{ .Values.tasks.settings.logging.format | quote }}
             - name: Common__Logging__Targets
-              value: "{{ .Values.tasks.settings.logging.targets }}"
+              value: {{ .Values.tasks.settings.logging.targets | quote }}
             - name: Kafka__BootstrapServers
               value: {{ $.Values.kafka.bootstrapServers }}
             - name: Kafka__SecurityProtocol
@@ -163,27 +163,27 @@ spec:
             - name: Kafka__EventsTopicSettings__Name
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
             - name: Kafka__UseReplicaTopics
-              value: "{{ $.Values.kafka.useReplicaTopics }}"
+              value: {{ $.Values.kafka.useReplicaTopics | quote }}
             - name: Common__Mode
               value: "Worker"
             - name: Common__Worker__ResourceIntensiveTasksWorkersCount
-              value: "{{ $.Values.tasks.settings.worker.resourceIntensiveTasksWorkersCount }}"
+              value: {{ $.Values.tasks.settings.worker.resourceIntensiveTasksWorkersCount | quote }}
             - name: Common__Worker__DefaultWorkersCount
-              value: "{{ $.Values.tasks.settings.worker.regularTasksWorkersCount }}"
+              value: {{ $.Values.tasks.settings.worker.regularTasksWorkersCount | quote }}
             - name: Common__Worker__LongRunningTasksWorkersCount
-              value: "{{ $.Values.tasks.settings.worker.longRunningTasksWorkersCount }}"
+              value: {{ $.Values.tasks.settings.worker.longRunningTasksWorkersCount | quote }}
 
             {{- range $i, $s := $.Values.elastic.nodes}}
             - name: Elastic__Nodes__{{$i}}__Host
               value: {{ $s.host }}
             - name: Elastic__Nodes__{{$i}}__Port
-              value: "{{ $s.port }}"
+              value: {{ $s.port | quote }}
             {{ end }}
 
             - name: Elastic__Secure
-              value: "{{ $.Values.elastic.secure }}"
+              value: {{ $.Values.elastic.secure | quote }}
             - name: Elastic__Username
-              value: "{{ $.Values.elastic.username }}"
+              value: {{ $.Values.elastic.username | quote }}
             {{ if .Values.elastic.password }}
             - name: Elastic__Password
               valueFrom:
@@ -192,14 +192,14 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             {{ end }}
             - name: Elastic__IndexPrefix
-              value: "{{ $.Values.elastic.indexPrefix }}"
+              value: {{ $.Values.elastic.indexPrefix | quote }}
             - name: Elastic__EnableHttpCompression
-              value: "{{ $.Values.elastic.enableHttpCompression }}"
+              value: {{ $.Values.elastic.enableHttpCompression | quote }}
 
             - name: Digger__Address
-              value: "{{ .Values.digger.url}}"
+              value: {{ .Values.digger.url | quote }}
             - name: Digger__UserName
-              value: "{{ .Values.digger.userName}}"
+              value: {{ .Values.digger.userName | quote }}
             {{ if .Values.digger.password }}
             - name: Digger__Password
               valueFrom:
@@ -211,11 +211,11 @@ spec:
             - name: S3Settings__Url
               value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
             - name: S3Settings__Secure
-              value: "{{ .Values.dgctlStorage.secure }}"
+              value: {{ .Values.dgctlStorage.secure | quote }}
             - name: S3Settings__Region
               value: {{ .Values.dgctlStorage.region }}
             - name: S3Settings__DisablePayloadSigning
-              value: "{{ .Values.dgctlStorage.disablePayloadSigning }}"
+              value: {{ .Values.dgctlStorage.disablePayloadSigning | quote }}
             - name: S3Settings__AssetDataBucket
               value: {{ required "A valid .Values.s3.assetsDataBucket entry required" $.Values.s3.assetsDataBucket }}
             - name: S3Settings__UserAssetDataBucket
@@ -244,7 +244,7 @@ spec:
                   key: apiKey
                   name: {{ include "pro-api.name" . }}-secret
             - name: Common__DataCenterId
-              value: "{{ .Values.api.settings.dataCenterId }}"
+              value: {{ .Values.api.settings.dataCenterId | quote }}
 
             - name: PermissionsApi__Url
               value: {{ include "pro-api.permissions-url" . }}
@@ -257,21 +257,21 @@ spec:
             {{- end }}
             {{- if .Values.tasks.settings.features.assetDataPreparation.enabled }}
             - name: AssetDataPreparation__Segments
-              value: "{{ .Values.tasks.settings.features.assetDataPreparation.segments }}"
+              value: {{ .Values.tasks.settings.features.assetDataPreparation.segments | quote }}
             {{- end }}
 
             - name: MailerAdminClient__Enabled
-              value: "{{ .Values.mailerAdmin.enabled }}"
+              value: {{ .Values.mailerAdmin.enabled | quote }}
             - name: MailerAdminClient__Url
-              value: "{{ .Values.mailerAdmin.url }}"
+              value: {{ .Values.mailerAdmin.url | quote }}
             - name: MailerAdminClient__Username
-              value: "{{ .Values.mailerAdmin.username }}"
+              value: {{ .Values.mailerAdmin.username | quote }}
             - name: MailerAdminClient__Password
-              value: "{{ .Values.mailerAdmin.password }}"
+              value: {{ .Values.mailerAdmin.password | quote }}
             - name: MailerSenderClient__Enabled
-              value: "{{ .Values.mailerSender.enabled }}"
+              value: {{ .Values.mailerSender.enabled | quote }}
             - name: MailerSenderClient__Url
-              value: "{{ .Values.mailerSender.url }}"
+              value: {{ .Values.mailerSender.url | quote }}
             - name: MailerSenderClient__ApiKey
-              value: "{{ .Values.mailerSender.apiKey }}"
+              value: {{ .Values.mailerSender.apiKey | quote }}
 {{- end }}

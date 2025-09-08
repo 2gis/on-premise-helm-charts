@@ -96,29 +96,29 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: LOG_LEVEL
-              value: "{{ .Values.vrpSolver.logLevel }}"
+              value: {{ .Values.vrpSolver.logLevel | quote }}
             - name: LOG_SERIALIZE
-              value: "{{ .Values.vrpSolver.logSerialize }}"
+              value: {{ .Values.vrpSolver.logSerialize | quote }}
             - name: STORAGE__S3_ENDPOINT_URL
-              value: "{{ .Values.s3.url }}"
+              value: {{ .Values.s3.url | quote }}
             - name: STORAGE__S3_PUBLIC_URL
-              value: "{{ .Values.s3.publicUrl }}"
+              value: {{ .Values.s3.publicUrl | quote }}
             - name: STORAGE__TYPE
               value: "S3_STORAGE"
             - name: VROOM__CPU
-              value: "{{ .Values.vrpSolver.cpu }}"
+              value: {{ .Values.vrpSolver.cpu | quote }}
             - name: STORAGE__VRP__BUCKET
-              value: "{{ .Values.s3.vrp.bucket }}"
+              value: {{ .Values.s3.vrp.bucket | quote }}
             - name: STORAGE__DM__BUCKET
-              value: "{{ .Values.s3.dm.bucket }}"
+              value: {{ .Values.s3.dm.bucket | quote }}
             - name: MOSES__URL
-              value: "{{ .Values.naviBack.url }}"
+              value: {{ .Values.naviBack.url | quote }}
             - name: KAFKA__PRODUCER__TOPIC
-              value: "{{ .Values.kafka.statusTopic }}"
+              value: {{ .Values.kafka.statusTopic | quote }}
             - name: KAFKA__CONSUMER__TOPIC
-              value: "{{ .Values.kafka.taskTopic }}"
+              value: {{ .Values.kafka.taskTopic | quote }}
             - name: KAFKA__CONSUMER__CONFIG__GROUP_ID
-              value: "{{ .Values.kafka.groupId }}"
+              value: {{ .Values.kafka.groupId | quote }}
             {{- range $kafkaRole, $overridesProperty := (dict
                   "PRODUCER" "producerOverrides"
                   "CONSUMER" "consumerOverrides"

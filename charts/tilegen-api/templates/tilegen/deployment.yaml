@@ -107,13 +107,13 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           env:
             - name: DEBUG
-              value: "{{ .Values.api.debug }}"
+              value: {{ .Values.api.debug | quote }}
             - name: Processor__JobName
               value: {{ include "task-processor-job.name" . }}
             - name: Common__TempPath
-              value: "{{ .Values.api.tempPath }}"
+              value: {{ .Values.api.tempPath | quote }}
             - name: Common__AllowAnyOrigin
-              value: "{{ .Values.api.allowAnyOrigin }}"
+              value: {{ .Values.api.allowAnyOrigin | quote }}
             - name: S3__Url
               value: {{ required "A valid .Values.s3.host entry required" $.Values.s3.host }}
             - name: S3__VectorTilesBucket
@@ -131,9 +131,9 @@ spec:
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
-              value: "{{ .Values.redis.port }}"
+              value: {{ .Values.redis.port | quote }}
             - name: Redis__DatabaseId
-              value: "{{ .Values.redis.databaseId }}"
+              value: {{ .Values.redis.databaseId | quote }}
             - name: Redis__Username
               value: {{ $.Values.redis.username }}
             {{ if .Values.redis.password }}
@@ -144,4 +144,4 @@ spec:
                   name: {{ include "api.name" . }}-secret
             {{- end }}
             - name: Common__Logging__Format
-              value: "{{ .Values.api.logging.format }}"
+              value: {{ .Values.api.logging.format | quote }}

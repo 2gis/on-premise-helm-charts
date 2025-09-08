@@ -110,7 +110,7 @@ spec:
           {{- end }}
           env:
             - name: REDEPLOY_LABEL
-              value: "{{ .Values.redeployLabel }}"
+              value: {{ .Values.redeployLabel | quote }}
             {{- if .Values.customCAs.bundle }}
             {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
