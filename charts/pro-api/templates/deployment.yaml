@@ -76,7 +76,7 @@ spec:
               containerPort: 8080
               protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.api.settings.tempPath }}"
+            - mountPath: {{ .Values.api.settings.tempPath | quote }}
               name: temp-volume
           livenessProbe:
             httpGet:
@@ -173,6 +173,8 @@ spec:
               value: {{ .Values.api.settings.corsOrigins | quote }}
             - name: Common__FilterByZoneCodes
               value: {{ .Values.api.settings.filterByZoneCodes | quote }}
+            - name: Common__DataCenterId
+              value: {{ .Values.api.settings.dataCenterId | quote }}
             - name: Postgres__ConnectionString
               value: {{ include "pro-api.connectionString" . }}
             - name: Postgres__ConnectionStringReadonly
@@ -295,15 +297,6 @@ spec:
               value: {{ .Values.api.settings.auth.skipShareLinksPermissionsCheck | quote }}
             - name: License__Key
               value: {{ required "A valid .Values.api.settings.licenseKey entry required" $.Values.api.settings.licenseKey }}
-            - name: KEYS_SERVICE_URL
-              value: {{ .Values.keys.url | quote }}
-            {{- if .Values.keys.token }}
-            - name: KEYS_SERVICE_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  key: keysServiceToken
-                  name: {{ include "pro-api.name" . }}-secret
-            {{- end }}
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
@@ -359,5 +352,10 @@ spec:
               value: {{ .Values.ecommerce.url | quote }}
             - name: SberEcommerceApi__UserName
               value: {{ .Values.ecommerce.username | quote }}
+            {{- if .Values.ecommerce.password }}
             - name: SberEcommerceApi__Password
-              value: {{ .Values.ecommerce.password | quote }}
+              valueFrom:
+                secretKeyRef:
+                  key: ecommercePassword
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
