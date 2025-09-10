@@ -466,6 +466,7 @@ dispatcher:
 
     nodeSelector: {}
 
+# @section Counter settings
 
 counter:
 
@@ -506,16 +507,39 @@ counter:
 
   # @param counter.buffer.size The maximum size of the buffer. When the limit is reached, the data from the buffer is transferred to Redis.
   # @param counter.buffer.delay The maximum interval between data transfer operations from the buffer to Redis.
+  # @param counter.buffer.splitFactor The factor by which the buffer is divided into parts for parallel processing. The higher the value, the smaller the size of each part, but the more frequent the data transfer operations to Redis.
 
   buffer:
     size: 1000
     delay: 1s
+    splitFactor: 2
 
-  # @section Redis settings
+  # @param counter.parallelismFactor Default value for calculating the number of workers. If set to 0, the default value will be equal to the number of CPU cores.
 
-  # @param counter.redis.retries
-  # @param counter.redis.minRetryBackoff
-  # @param counter.redis.maxRetryBackoff
+  parallelismFactor: 0
+
+  # @extra counter.workers **Number of workers for each processing stage. If set to 0, `counter.parallelismFactor` will be used.**
+
+  # @param counter.workers.eventParser Number of event parser workers.
+  # @param counter.workers.eventFilterer Number of event filterer workers.
+  # @param counter.workers.eventMetricGatherer Number of event metric gatherer workers.
+  # @param counter.workers.eventConverter Number of event converter workers.
+  # @param counter.workers.incrementFilterer Number of increment filterer workers.
+  # @param counter.workers.incrementSaver Number of increment saver workers.
+
+  workers:
+    eventParser: 0
+    eventFilterer: 0
+    eventMetricGatherer: 0
+    eventConverter: 0
+    incrementFilterer: 0
+    incrementSaver: 0
+
+  # @extra counter.redis **Redis settings**
+
+  # @param counter.redis.retries Number of retries for Redis operations.
+  # @param counter.redis.minRetryBackoff Minimum backoff between each retry.
+  # @param counter.redis.maxRetryBackoff Maximum backoff between each retry.
 
   redis:
     retries: 5
@@ -781,6 +805,12 @@ dgctlStorage:
 # @param dispatcher.cleaner.resources.requests.memory A memory request.
 # @param dispatcher.cleaner.resources.limits.cpu A CPU limit.
 # @param dispatcher.cleaner.resources.limits.memory A memory limit.
+
+# @extra counter.resources **Limits for the Counter service**
+# @param counter.resources.requests.cpu A CPU request.
+# @param counter.resources.requests.memory A memory request.
+# @param counter.resources.limits.cpu A CPU limit.
+# @param counter.resources.limits.memory A memory limit.
 
 # @section customCAs **Custom Certificate Authority**
 

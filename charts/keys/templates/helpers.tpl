@@ -368,10 +368,28 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.counter.buffer.size }}"
 - name: KEYS_COUNTER_BUFFER_DELAY
   value: "{{ .Values.counter.buffer.delay }}"
+- name: KEYS_COUNTER_BUFFER_SPLIT_FACTOR
+  value: "{{ .Values.counter.buffer.splitFactor }}"
 - name: KEYS_COUNTER_PRELOADER_REFRESH_TICK
   value: "{{ .Values.counter.preloader.refreshTick }}"
 - name: KEYS_COUNTER_UPDATE_STATUS_QUERY_TIMEOUT
   value: "{{ .Values.counter.updateStatusQueryTimeout }}"
+{{- if .Values.counter.parallelismFactor }}
+- name: KEYS_COUNTER_PARALLELISM_FACTOR
+  value: "{{ .Values.counter.parallelismFactor }}"
+{{- end }}
+- name: KEYS_COUNTER_EVENT_PARSER_WORKERS
+  value: "{{ .Values.counter.workers.eventParser }}"
+- name: KEYS_COUNTER_EVENT_FILTERER_WORKERS
+  value: "{{ .Values.counter.workers.eventFilterer }}"
+- name: KEYS_COUNTER_EVENT_METRIC_GATHERER_WORKERS
+  value: "{{ .Values.counter.workers.eventMetricGatherer }}"
+- name: KEYS_COUNTER_EVENT_EVENT_CONVERTER_WORKERS
+  value: "{{ .Values.counter.workers.eventConverter }}"
+- name: KEYS_COUNTER_INCREMENT_FILTERER_WORKERS
+  value: "{{ .Values.counter.workers.incrementFilterer }}"
+- name: KEYS_COUNTER_INCREMENT_SAVER_WORKERS
+  value: "{{ .Values.counter.workers.incrementSaver }}"
 - name: KEYS_KAFKA_MAIN_BROKERS
   value: "{{ required "A valid .Values.kafka.bootstrapServers entry required" .Values.kafka.bootstrapServers }}"
 - name: KEYS_KAFKA_MAIN_GROUP_ID
