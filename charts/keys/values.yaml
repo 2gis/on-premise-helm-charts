@@ -514,7 +514,7 @@ counter:
     delay: 1s
     splitFactor: 2
 
-  # @param counter.parallelismFactor Default value for calculating the number of workers. If set to 0, the default value will be equal to the number of CPU cores.
+  # @param counter.parallelismFactor Default value for calculating the number of workers. If set to 0, the default value will be equal to the Linux container CPU quota.
 
   parallelismFactor: 0
 
