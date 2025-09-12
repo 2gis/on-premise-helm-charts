@@ -540,11 +540,17 @@ counter:
   # @param counter.redis.retries Number of retries for Redis operations.
   # @param counter.redis.minRetryBackoff Minimum backoff between each retry.
   # @param counter.redis.maxRetryBackoff Maximum backoff between each retry.
+  # @param counter.redis.dialTimeout Dial timeout for establishing new connections.
+  # @param counter.redis.writeTimeout Write timeout for Redis commands.
+  # @param counter.redis.readTimeout Read timeout for Redis commands.
 
   redis:
     retries: 5
     minRetryBackoff: 100ms
     maxRetryBackoff: 3s
+    dialTimeout: 3s
+    writeTimeout: 10s
+    readTimeout: 10s
 
   # @param counter.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param counter.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -669,11 +675,19 @@ kafka:
   # @param kafka.stats.topic Topic to consume stat messages from. **Required**
   # @param kafka.stats.groupId Name of the consumer group to use. **Required**
   # @param kafka.stats.clientId Client id. If empty hostname will be used.
+  # @param kafka.stats.fetchDefault Default fetch size. KB, MB, GB refers to 2^10, 2^20, 2^30 bytes respectively. Plain number refers to bytes.
+  # @param kafka.stats.fetchMin Minimum fetch size. KB, MB, GB refers to 2^10, 2^20, 2^30 bytes respectively. Plain number refers to bytes.
+  # @param kafka.stats.fetchMax Maximum fetch size. KB, MB, GB refers to 2^10, 2^20, 2^30 bytes respectively. Plain number refers to bytes. '0' means no limit.
+  # @param kafka.stats.fetchMaxWaitTime Maximum wait time for fetch response.
 
   stats:
     topic: ''
     groupId: ''
     clientId: ''
+    fetchDefault: 1MB
+    fetchMin: 100KB
+    fetchMax: 0
+    fetchMaxWaitTime: 250ms
 
   # @extra kafka.audit **Settings for sending audit messages.**
 

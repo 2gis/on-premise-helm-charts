@@ -398,6 +398,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.kafka.stats.clientId }}"
 - name: KEYS_KAFKA_MAIN_STATS_TOPIC
   value: "{{ required "A valid .Values.kafka.stats.topic entry required" .Values.kafka.stats.topic }}"
+- name: KEYS_KAFKA_MAIN_FETCH_DEFAULT
+  value: "{{ .Values.kafka.stats.fetchDefault }}"
+- name: KEYS_KAFKA_MAIN_FETCH_MIN
+  value: "{{ .Values.kafka.stats.fetchMin }}"
+- name: KEYS_KAFKA_MAIN_FETCH_MAX
+  value: "{{ .Values.kafka.stats.fetchMax }}"
+- name: KEYS_KAFKA_MAIN_FETCH_MAX_WAIT_TIME
+  value: "{{ .Values.kafka.stats.fetchMaxWaitTime }}"
 - name: KEYS_KAFKA_MAIN_USERNAME
   value: "{{ .Values.kafka.username }}"
 {{- if .Values.kafka.password }}
@@ -413,6 +421,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "{{ .Values.counter.redis.minRetryBackoff }}"
 - name: KEYS_REDIS_MAX_RETRY_BACKOFF
   value: "{{ .Values.counter.redis.maxRetryBackoff }}"
+- name: KEYS_REDIS_DIAL_TIMEOUT
+  value: "{{ .Values.counter.redis.dialTimeout }}"
+- name: KEYS_REDIS_WRITE_TIMEOUT
+  value: "{{ .Values.counter.redis.writeTimeout }}"
+- name: KEYS_REDIS_READ_TIMEOUT
+  value: "{{ .Values.counter.redis.readTimeout }}"
 - name: KEYS_KAFKA_MAIN_SECURITY_PROTOCOL
   value: "{{ .Values.kafka.securityProtocol }}"
 - name: KEYS_KAFKA_MAIN_SASL_MECHANISM
