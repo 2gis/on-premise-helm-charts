@@ -60,15 +60,6 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | `ui.oauth.safeHosts`    | A string with regular expression that validates a host being used to redirect back to the application after token exchange. | `.*`   |
 | `ui.oauth.secure`       | This flag determines whether to enable or disable HTTPS for authentication tokens. Possible values are: `true` or `false`.  | `true` |
 
-### Analytics BSS
-
-| Name                        | Description                                                                                                                                               | Value  |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `ui.analyticsBSS`           | A list of parameters for BSS analytics integration.                                                                                                       |        |
-| `ui.analyticsBSS.url`       | URL that is used to send BSS analytics events`.                                                                                                           | `""`   |
-| `ui.analyticsBSS.secure`    | If set to `true`, the `pl6_userId` cookie used for BSS user identification will be set with the `Secure` flag, allowing it to be sent only over HTTPS.    | `true` |
-| `ui.analyticsBSS.productId` | Identifier of the product used in BSS analytics. This value is included in every analytics event to distinguish between different products in the system. | `""`   |
-
 ### Statuses for services
 
 | Name                    | Description                                                                                                                                                                                                                                                                                                                           | Value |
