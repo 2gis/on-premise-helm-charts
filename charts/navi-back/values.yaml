@@ -348,7 +348,7 @@ naviback:
       enabled: false
     walkingUserSpeeds:
       enabled: false
-  naviback.simpleNetwork: {}
+  simpleNetwork: {}
   attractor: {}
   bss:
     enabled: false
