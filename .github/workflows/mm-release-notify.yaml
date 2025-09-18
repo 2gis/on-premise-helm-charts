@@ -16,7 +16,7 @@ jobs:
       - name: Extract tag information
         id: extract_tag
         run: |
-          TAG=$(echo "${{ github.event.workflow_run.head_branch }}" | grep -oE '^(PRO|Platform|Citylens|Evergis)')
+          TAG=$(echo "${{ github.event.workflow_run.head_branch }}" | grep -oE '^(PRO|Platform|Citylens|Evergis|Core)')
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Generate next release date
@@ -49,4 +49,4 @@ jobs:
           TEXT: |
             Опубликован On-Premise: ${{ github.event.workflow_run.head_branch }}
             Документация: https://confluence.2gis.ru/display/ONPREM/Release+${{ github.event.workflow_run.head_branch }}+On-Premise
-            Актуальная информация по датам и содержанию релизов: https://jira.2gis.ru/projects/ONPREM?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased
+            Актуальная информация по содержанию релиза: https://jira.2gis.ru/projects/ONPREM?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased
