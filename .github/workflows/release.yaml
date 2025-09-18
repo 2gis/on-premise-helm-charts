@@ -4,7 +4,11 @@ name: Release Charts
 on:
   push:
     tags:
-      - '*'
+      - 'PRO-*'
+      - 'Platform-*'
+      - 'Citylens-*'
+      - 'Evergis-*'
+      - 'Core-*'
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -27,6 +31,84 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
+      - name: Filter charts
+        run: |
+          # Извлечение тега из GITHUB_REF (например, refs/tags/PRO-1.2.3)
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "Processing tag: $TAG"
+
+          # Извлечение версии и группы
+          GROUP=$(echo "$TAG" | grep -oE '^(PRO|Platform|Citylens|Evergis|Core)')
+          VERSION=$(echo "$TAG" | sed -E 's/^(PRO|Platform|Citylens|Evergis|Core)-//')
+
+          # Проверка формата версии на соответствие семантическому версионированию
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$ ]]; then
+            echo "Error: Invalid version format. Expected semantic version (x.y.z), got $VERSION"
+            exit 1
+          fi
+
+          echo "Version: $VERSION"
+          echo "Group: $GROUP"
+
+          # Определение чартов для сборки
+          CHARTS_DIR="charts"
+          TEMP_DIR="charts_temp"
+          ALL_CHARTS=$(ls -1 "$CHARTS_DIR")
+
+          # Списки чартов по группам
+          PRO_CHARTS=("pro-api" "pro-ui")
+          CITYLENS_CHARTS=("citylens" "citylens-routes-ui")
+          EVERGIS_CHARTS=("gis-platform")
+          CORE_CHARTS=("keys" "license" "keycloak")
+
+          # Формирование списка чартов для сборки
+          case "$GROUP" in
+            "PRO")
+              SELECTED_CHARTS=("${PRO_CHARTS[@]}")
+              ;;
+            "Citylens")
+              SELECTED_CHARTS=("${CITYLENS_CHARTS[@]}")
+              ;;
+            "Evergis")
+              SELECTED_CHARTS=("${EVERGIS_CHARTS[@]}")
+              ;;
+            "Core")
+              SELECTED_CHARTS=("${CORE_CHARTS[@]}")
+              ;;
+            "Platform")
+              # Все чарты, кроме PRO, Citylens, Evergis, Core
+              SELECTED_CHARTS=()
+              for chart in $ALL_CHARTS; do
+                if [[ ! " ${PRO_CHARTS[*]} " =~ " $chart " ]] && \
+                   [[ ! " ${CITYLENS_CHARTS[*]} " =~ " $chart " ]] && \
+                   [[ ! " ${CORE_CHARTS[*]} " =~ " $chart " ]] && \
+                   [[ ! " ${EVERGIS_CHARTS[*]} " =~ " $chart " ]]; then
+                  SELECTED_CHARTS+=("$chart")
+                fi
+              done
+              ;;
+            *)
+              echo "Error: Unknown group $GROUP"
+              exit 1
+              ;;
+          esac
+
+          echo "Selected charts: ${SELECTED_CHARTS[*]}"
+
+          # Создание временной папки для ненужных чартов
+          mkdir -p "$TEMP_DIR"
+
+          # Перемещение ненужных чартов
+          for chart in $ALL_CHARTS; do
+            if [[ ! " ${SELECTED_CHARTS[*]} " =~ " $chart " ]]; then
+              mv "$CHARTS_DIR/$chart" "$TEMP_DIR/"
+              echo "Moved $chart to $TEMP_DIR"
+            fi
+          done
+
+          # Вывод оставшихся чартов для отладки
+          echo "Charts remaining in $CHARTS_DIR:"
+          ls -1 "$CHARTS_DIR"
+
       - name: Release chart
-        # https://helm.sh/docs/howto/chart_releaser_action/#github-actions-workflow
         uses: helm/chart-releaser-action@v1.7.0
