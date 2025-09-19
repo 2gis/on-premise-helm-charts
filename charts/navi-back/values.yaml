@@ -348,8 +348,7 @@ naviback:
       enabled: false
     walkingUserSpeeds:
       enabled: false
-  simpleNetwork:
-    emergency: false
+  simpleNetwork: {}
   attractor: {}
   bss:
     enabled: false
