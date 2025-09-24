@@ -130,8 +130,8 @@ cassandra:
 tilegen:
   enabled: false
 
-  logLevelOverride:
-  logFormatOverride:
+  logLevelOverride: ''
+  logFormatOverride: ''
 
   tileset:
     name: userdata
@@ -242,8 +242,8 @@ tilegen:
 # @param proxy.access.stat.url Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
 
 proxy:
-  logLevelOverride:
-  logFormatOverride:
+  logLevelOverride: ''
+  logFormatOverride: ''
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
@@ -314,8 +314,8 @@ api:
   terminationGracePeriodSeconds: 30
   containerPort: 8000
 
-  logLevelOverride:
-  logFormatOverride:
+  logLevelOverride: ''
+  logFormatOverride: ''
 
   labels: {}
   annotations: {}
@@ -456,8 +456,8 @@ api:
 importer:
   enabled: true
   serviceAccountOverride: ''
-  logLevelOverride:
-  logFormatOverride:
+  logLevelOverride: ''
+  logFormatOverride: ''
 
   # @extra importer.image **Docker image settings**
   # @param importer.image.repository Docker Repository.
