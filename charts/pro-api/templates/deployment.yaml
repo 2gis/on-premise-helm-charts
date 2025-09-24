@@ -173,6 +173,8 @@ spec:
               value: "{{ .Values.api.settings.corsOrigins }}"
             - name: Common__FilterByZoneCodes
               value: "{{ .Values.api.settings.filterByZoneCodes }}"
+            - name: Common__DataCenterId
+              value: "{{ .Values.api.settings.dataCenterId }}"
             - name: Postgres__ConnectionString
               value: {{ include "pro-api.connectionString" . }}
             - name: Postgres__ConnectionStringReadonly
@@ -295,15 +297,6 @@ spec:
               value: "{{ .Values.api.settings.auth.skipShareLinksPermissionsCheck }}"
             - name: License__Key
               value: {{ required "A valid .Values.api.settings.licenseKey entry required" $.Values.api.settings.licenseKey }}
-            - name: KEYS_SERVICE_URL
-              value: "{{ .Values.keys.url }}"
-            {{- if .Values.keys.token }}
-            - name: KEYS_SERVICE_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  key: keysServiceToken
-                  name: {{ include "pro-api.name" . }}-secret
-            {{- end }}
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
@@ -359,5 +352,10 @@ spec:
               value: "{{ .Values.ecommerce.url }}"
             - name: SberEcommerceApi__UserName
               value: "{{ .Values.ecommerce.username }}"
+            {{- if .Values.ecommerce.password }}
             - name: SberEcommerceApi__Password
-              value: "{{ .Values.ecommerce.password }}"
+              valueFrom:
+                secretKeyRef:
+                  key: ecommercePassword
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
