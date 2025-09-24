@@ -19,6 +19,8 @@ access:
     {{- if .access.stat.enabled }}
     host: {{ required "Valid .Values.proxy.access.stat.url required!" .access.stat.url }}
     {{- end }}
+  skip-access-key-check-origin-regexp: {{ .access.skipAccessKeyCheckOriginRegexp | quote }}
+  send-statistics-host-regexp: {{ .access.sendStatisticsHostRegexp | quote }}
 
 storage:
   enabled: false
