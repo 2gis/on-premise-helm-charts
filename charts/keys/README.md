@@ -31,16 +31,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.112.2`                      |
+| `backend.image.tag`        | Backend service image tag.        | `1.135.1`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.          | `0.10.6`                       |
+| `admin.image.tag`          | Admin service image tag.          | `1.4.0`                        |
 
 ### Flags for enabling/disabling certain features.
 
-| Name                               | Description                             | Value   |
-| ---------------------------------- | --------------------------------------- | ------- |
-| `featureFlags.enableAudit`         | Enable audit logging.                   | `false` |
-| `featureFlags.enablePublicAPISign` | Enable signing responses in Public API. | `false` |
+| Name                               | Description                                | Value   |
+| ---------------------------------- | ------------------------------------------ | ------- |
+| `featureFlags.enableAudit`         | Enable audit logging for sending to DB.    | `false` |
+| `featureFlags.enableAuditKafka`    | Enable audit logging for sending to Kafka. | `false` |
+| `featureFlags.enablePublicAPISign` | Enable signing responses in Public API.    | `false` |
 
 ### Admin service settings
 
@@ -196,6 +197,46 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `dispatcher.cleaner.cron.suspend`                    | You can suspend execution of Jobs for a CronJob, by setting the field to true. See [schedule suspension](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension).      | `false`         |
 | `dispatcher.cleaner.nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
 
+### Counter settings
+
+| Name                                  | Description                                                                                                                                                                                         | Value     |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| `counter.enabled`                     | Counter worker is enabled.                                                                                                                                                                          | `false`   |
+| `counter.replicas`                    | A replica count for the pod.                                                                                                                                                                        | `1`       |
+| `counter.resources.requests.cpu`      | A CPU request.                                                                                                                                                                                      | `20m`     |
+| `counter.resources.requests.memory`   | A memory request.                                                                                                                                                                                   | `32Mi`    |
+| `counter.resources.limits.cpu`        | A CPU limit.                                                                                                                                                                                        | `1000m`   |
+| `counter.resources.limits.memory`     | A memory limit.                                                                                                                                                                                     | `512Mi`   |
+| `counter.logLevel`                    | Log level for the worker. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                            | `warning` |
+| `counter.preloader.refreshTick`       | Refresh interval for in-memory cache with keys limitations info. The smaller the interval, the faster the worker will know about changes in limitations.                                            | `1m`      |
+| `counter.updateStatusQueryTimeout`    | Timeout for database queries to update key status.                                                                                                                                                  | `1s`      |
+| `counter.buffer`                      | **Settings for in-memory buffer for statistics data.**                                                                                                                                              |           |
+| `counter.buffer.size`                 | The maximum size of the buffer. When the limit is reached, the data from the buffer is transferred to Redis.                                                                                        | `1000`    |
+| `counter.buffer.delay`                | The maximum interval between data transfer operations from the buffer to Redis.                                                                                                                     | `1s`      |
+| `counter.buffer.splitFactor`          | The factor by which the buffer is divided into parts for parallel processing. The higher the value, the smaller the size of each part, but the more frequent the data transfer operations to Redis. | `2`       |
+| `counter.parallelismFactor`           | Default value for calculating the number of workers. If set to 0, the default value will be equal to the Linux container CPU quota.                                                                 | `0`       |
+| `counter.workers`                     | **Number of workers for each processing stage. If set to 0, `counter.parallelismFactor` will be used.**                                                                                             |           |
+| `counter.workers.eventParser`         | Number of event parser workers.                                                                                                                                                                     | `0`       |
+| `counter.workers.eventFilterer`       | Number of event filterer workers.                                                                                                                                                                   | `0`       |
+| `counter.workers.eventMetricGatherer` | Number of event metric gatherer workers.                                                                                                                                                            | `0`       |
+| `counter.workers.eventConverter`      | Number of event converter workers.                                                                                                                                                                  | `0`       |
+| `counter.workers.incrementFilterer`   | Number of increment filterer workers.                                                                                                                                                               | `0`       |
+| `counter.workers.incrementSaver`      | Number of increment saver workers.                                                                                                                                                                  | `0`       |
+| `counter.redis`                       | **Redis settings**                                                                                                                                                                                  |           |
+| `counter.redis.retries`               | Number of retries for Redis operations.                                                                                                                                                             | `5`       |
+| `counter.redis.minRetryBackoff`       | Minimum backoff between each retry.                                                                                                                                                                 | `100ms`   |
+| `counter.redis.maxRetryBackoff`       | Maximum backoff between each retry.                                                                                                                                                                 | `3s`      |
+| `counter.redis.dialTimeout`           | Dial timeout for establishing new connections.                                                                                                                                                      | `3s`      |
+| `counter.redis.writeTimeout`          | Write timeout for Redis commands.                                                                                                                                                                   | `10s`     |
+| `counter.redis.readTimeout`           | Read timeout for Redis commands.                                                                                                                                                                    | `10s`     |
+| `counter.annotations`                 | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                           | `{}`      |
+| `counter.labels`                      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                     | `{}`      |
+| `counter.podAnnotations`              | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                       | `{}`      |
+| `counter.podLabels`                   | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                 | `{}`      |
+| `counter.nodeSelector`                | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                 | `{}`      |
+| `counter.affinity`                    | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                         | `{}`      |
+| `counter.tolerations`                 | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                   | `{}`      |
+
 ### Redis settings
 
 | Name             | Description                                                    | Value  |
@@ -247,6 +288,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `kafka.tls.serverCA`                    | Server's root certificate.                                                                                                                                 | `""`        |
 | `kafka.tls.clientCert`                  | Client certificate.                                                                                                                                        | `""`        |
 | `kafka.tls.clientKey`                   | Client key.                                                                                                                                                | `""`        |
+| `kafka.stats`                           | **Settings for consuming key's usage statistics messages.**                                                                                                |             |
+| `kafka.stats.topic`                     | Topic to consume stat messages from. **Required**                                                                                                          | `""`        |
+| `kafka.stats.groupId`                   | Name of the consumer group to use. **Required**                                                                                                            | `""`        |
+| `kafka.stats.clientId`                  | Client id. If empty hostname will be used.                                                                                                                 | `""`        |
+| `kafka.stats.fetchDefault`              | Default fetch size. KB, MB, GB refers to 2^10, 2^20, 2^30 bytes respectively. Plain number refers to bytes.                                                | `1MB`       |
+| `kafka.stats.fetchMin`                  | Minimum fetch size. KB, MB, GB refers to 2^10, 2^20, 2^30 bytes respectively. Plain number refers to bytes.                                                | `100KB`     |
+| `kafka.stats.fetchMax`                  | Maximum fetch size. KB, MB, GB refers to 2^10, 2^20, 2^30 bytes respectively. Plain number refers to bytes. '0' means no limit.                            | `0`         |
+| `kafka.stats.fetchMaxWaitTime`          | Maximum wait time for fetch response.                                                                                                                      | `250ms`     |
 | `kafka.audit`                           | **Settings for sending audit messages.**                                                                                                                   |             |
 | `kafka.audit.topic`                     | Topic to produce audit messages. **Required**                                                                                                              | `""`        |
 | `kafka.audit.produce.retryCount`        | Number of retries to produce a message.                                                                                                                    | `5`         |
@@ -332,6 +381,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `dispatcher.cleaner.resources.requests.memory` | A memory request.                     | `32Mi`  |
 | `dispatcher.cleaner.resources.limits.cpu`      | A CPU limit.                          | `100m`  |
 | `dispatcher.cleaner.resources.limits.memory`   | A memory limit.                       | `64Mi`  |
+| `counter.resources`                            | **Limits for the Counter service**    |         |
+| `counter.resources.requests.cpu`               | A CPU request.                        | `20m`   |
+| `counter.resources.requests.memory`            | A memory request.                     | `32Mi`  |
+| `counter.resources.limits.cpu`                 | A CPU limit.                          | `1000m` |
+| `counter.resources.limits.memory`              | A memory limit.                       | `512Mi` |
 
 ### customCAs **Custom Certificate Authority**
 
