@@ -414,6 +414,49 @@ app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 {{- end -}}
 
 {{/*
+Citylens Rotues connectionString builder
+*/}}
+
+{{- define "routes-api.connectionString" -}}
+{{-  printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Command Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
+	(.Values.postgres.host | required "A valid .Values.postgres.host required!")
+	(.Values.postgres.port | required "A valid .Values.postgres.port entry required!" | int)
+	(.Values.routes.postgres.api.database | required "A valid .Values.routes.postgres.api.database entry required!")
+	(.Values.postgres.username | required "A valid .Values.postgres.username entry required!")
+	((.Values.routes.postgres.api.poolSize).min | int | default 1)
+	((.Values.routes.postgres.api.poolSize).max | int | default 10)
+	(.Values.routes.postgres.api.timeout | int | default 15)
+	(.Values.routes.postgres.api.commandTimeout | int | default 30)
+-}}
+{{- end -}}
+
+{{- define "routes-hangfire.connectionString" -}}
+{{-  printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Command Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
+	(.Values.postgres.host | required "A valid .Values.postgres.host required!")
+	(.Values.postgres.port | required "A valid .Values.postgres.port entry required!" | int)
+	(.Values.routes.postgres.hangfire.database | required "A valid .Values.routes.postgres.hangfire.database entry required!")
+	(.Values.postgres.username | required "A valid .Values.postgres.username entry required!")
+	((.Values.routes.postgres.hangfire.poolSize).min | int | default 1)
+	((.Values.routes.postgres.hangfire.poolSize).max | int | default 10)
+	(.Values.routes.postgres.hangfire.timeout | int | default 15)
+	(.Values.routes.postgres.hangfire.commandTimeout | int | default 30)
+-}}
+{{- end -}}
+
+{{- define "routes-realtime-data-api.connectionString" -}}
+{{-  printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Command Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
+	(.Values.postgres.host | required "A valid .Values.postgres.host required!")
+	(.Values.postgres.port | required "A valid .Values.postgres.port entry required!" | int)
+	(.Values.routes.postgres.realtimeDataApi.database | required "A valid .Values.routes.postgres.realtimeDataApi.database entry required!")
+	(.Values.postgres.username | required "A valid .Values.postgres.username entry required!")
+	((.Values.routes.postgres.realtimeDataApi.poolSize).min | int | default 1)
+	((.Values.routes.postgres.realtimeDataApi.poolSize).max | int | default 10)
+	(.Values.routes.postgres.realtimeDataApi.timeout | int | default 15)
+	(.Values.routes.postgres.realtimeDataApi.commandTimeout | int | default 30)
+-}}
+{{- end -}}
+
+{{/*
 Manifest name
 */}}
 {{- define "citylens.manifestCode" -}}

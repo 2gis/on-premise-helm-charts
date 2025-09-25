@@ -980,19 +980,31 @@ customCAs:
 # @param routes.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
 # @param routes.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
 
-# @extra routes **Postgres**
-# @param routes.postgres.database PostgreSQL database name. **Required**
-# @param routes.postgres.timeout The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.
-# @param routes.postgres.commandTimeout The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.
-# @param routes.postgres.maxPoolSize The maximum connection pool size.
-# @param routes.postgres.pooling Whether connection pooling should be used.
+# @section PostgreSQL settings
 
-# @extra routes **Hangfire**
-# @param routes.hangfire.postgres.database PostgreSQL database name. **Required**
-# @param routes.hangfire.postgres.timeout The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.
-# @param routes.hangfire.postgres.commandTimeout The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.
-# @param routes.hangfire.postgres.maxPoolSize The maximum connection pool size.
-# @param routes.hangfire.postgres.pooling Whether connection pooling should be used.
+# @extra routes.postgres.api **Api**
+# @param routes.postgres.api.database PostgreSQL database name. **Required**
+# @param routes.postgres.api.timeout The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.
+# @param routes.postgres.api.commandTimeout The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.
+# @extra routes.postgres.api.poolSize. Settings for the pool size
+# @param routes.postgres.api.poolSize.min PostgreSQL minimum connection pool size. 0 means no minimal bound.
+# @param routes.postgres.api.poolSize.max PostgreSQL maximum connection pool size
+
+# @extra routes.postgres.hangfire **Hangfire**
+# @param routes.postgres.hangfire.database PostgreSQL database name. **Required**
+# @param routes.postgres.hangfire.timeout The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.
+# @param routes.postgres.hangfire.commandTimeout The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.
+# @extra routes.postgres.hangfire.poolSize. Settings for the pool size
+# @param routes.postgres.hangfire.poolSize.min PostgreSQL minimum connection pool size. 0 means no minimal bound.
+# @param routes.postgres.hangfire.poolSize.max PostgreSQL maximum connection pool size
+
+# @extra routes.postgres.realtimeDataApi **RealtimeDataApi**
+# @param routes.postgres.realtimeDataApi.database PostgreSQL database name. **Required**
+# @param routes.postgres.realtimeDataApi.timeout The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.
+# @param routes.postgres.realtimeDataApi.commandTimeout The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.
+# @extra routes.postgres.realtimeDataApi.poolSize. Settings for the pool size
+# @param routes.postgres.realtimeDataApi.poolSize.min PostgreSQL minimum connection pool size. 0 means no minimal bound.
+# @param routes.postgres.realtimeDataApi.poolSize.max PostgreSQL maximum connection pool size
 
 # @section Citylens routes API
 
@@ -1058,7 +1070,8 @@ customCAs:
 
 # @extra routes.api.logging Routes **Logging** settings
 # @param routes.api.logging.level Log message level. verbose, debug, information, warning, error, fatal.
-# @param routes.api.logging.extended Extended log message. Include http metadata requests.
+# @param routes.api.logging.extendedRestLogging Extended log message. Include http metadata requests.
+# @param routes.api.logging.extendedSqlLogging Extended sql logs. Include sql requests row.
 
 # @section Citylens routes Worker
 
@@ -1092,6 +1105,7 @@ customCAs:
 
 # @extra routes.worker.logging Routes **Logging** settings
 # @param routes.worker.logging.level Log message level. verbose, debug, information, warning, error, fatal.
+# @param routes.worker.logging.extendedSqlLogging Extended sql logs. Include sql requests row.
 
 # @extra routes.worker.routesSettings Routes distance match settings
 # @param routes.worker.routesSettings.routePointsMatchDistanceMeters Calculation accuracy in meters.
@@ -1160,15 +1174,10 @@ customCAs:
 # @param routes.realtimeDataApi.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
 # @param routes.realtimeDataApi.tempPath Path to directory used for temp data
 
-# @extra routes **Postgres**
-# @param routes.realtimeDataApi.postgres.database PostgreSQL database name. **Required**
-# @param routes.realtimeDataApi.postgres.timeout The time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.
-# @param routes.realtimeDataApi.postgres.commandTimeout The time to wait (in seconds) while trying to execute a command before terminating the attempt and generating an error.
-# @param routes.realtimeDataApi.postgres.maxPoolSize The maximum connection pool size.
-# @param routes.realtimeDataApi.postgres.pooling Whether connection pooling should be used.
-
 # @extra routes.realtimeDataApi.logging Routes **Logging** settings
 # @param routes.realtimeDataApi.logging.level Log message level. verbose, debug, information, warning, error, fatal.
+# @param routes.realtimeDataApi.logging.extendedRestLogging Extended log message. Include http metadata requests.
+# @param routes.realtimeDataApi.logging.extendedSqlLogging Extended sql logs. Include sql requests row.
 
 # @param routes.realtimeDataApi.daysToLeaveData Storage of information in days.
 
@@ -1216,24 +1225,34 @@ routes:
       maxSurge: 1
 
   postgres:
-    database: ''
-    timeout: 15
-    commandTimeout: 30
-    maxPoolSize: 30
-    pooling: false
-
-  hangfire:
-    postgres:
+    api:
       database: ''
       timeout: 15
       commandTimeout: 30
-      maxPoolSize: 30
-      pooling: false
+      poolSize:
+        min: 1
+        max: 10
+
+    hangfire:
+      database: ''
+      timeout: 15
+      commandTimeout: 30
+      poolSize:
+        min: 1
+        max: 10
+
+    realtimeDataApi:
+      database: ''
+      timeout: 15
+      commandTimeout: 30
+      poolSize:
+        min: 1
+        max: 10
 
   api:
     image:
       repository: 2gis-on-premise/citylens-routes-api
-      tag: 1.3.3
+      tag: 1.4.2
       pullPolicy: IfNotPresent
 
     replicaCount: 1
@@ -1304,12 +1323,13 @@ routes:
 
     logging:
       level: information
-      extended: false
+      extendedRestLogging: false
+      extendedSqlLogging: false
 
   worker:
     image:
       repository: 2gis-on-premise/citylens-worker-service
-      tag: 1.3.3
+      tag: 1.4.2
       pullPolicy: IfNotPresent
 
     replicaCount: 1
@@ -1341,6 +1361,7 @@ routes:
 
     logging:
       level: information
+      extendedSqlLogging: false
 
     routesSettings:
       routePointsMatchDistanceMeters: 5
@@ -1358,7 +1379,7 @@ routes:
   realtimeDataApi:
     image:
       repository: 2gis-on-premise/citylens-realtime-data-api
-      tag: 1.3.3
+      tag: 1.4.2
       pullPolicy: IfNotPresent
 
     replicaCount: 1
@@ -1411,17 +1432,12 @@ routes:
     affinity: {}
     tolerations: []
 
-    postgres:
-      database: ''
-      timeout: 15
-      commandTimeout: 30
-      maxPoolSize: 30
-      pooling: true
-
     tempPath: /tmp
 
     logging:
       level: information
+      extendedRestLogging: false
+      extendedSqlLogging: false
 
     daysToLeaveData: 30
 
