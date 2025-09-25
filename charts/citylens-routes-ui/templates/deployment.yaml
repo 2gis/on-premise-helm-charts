@@ -56,6 +56,8 @@ spec:
               value: {{ printf "%s/api/js" (required "A valid .Values.env.MAPGL_API_URL entry required" .Values.env.MAPGL_API_URL) | quote }}
             - name: MAPGL_COPYRIGHT_VARIANT
               value: {{ .Values.env.MAPGL_COPYRIGHT_VARIANT | quote }}
+            - name: MAPGL_DEFAULT_CENTER
+              value: {{ required "A valid .Values.env.MAPGL_DEFAULT_CENTER entry required" .Values.env.MAPGL_DEFAULT_CENTER | quote }}
             - name: MAPGL_STYLE_ID_GRAYSCALE
               value: {{ .Values.env.MAPGL_STYLE_ID_GRAYSCALE | quote }}
             - name: MAPGL_STYLE_ID_DAY
@@ -64,6 +66,8 @@ spec:
               value: {{ .Values.env.MAPGL_STYLE_ID_NIGHT | quote }}
             - name: MAPGL_STYLE_ID_PASTEL
               value: {{ .Values.env.MAPGL_STYLE_ID_PASTEL | quote }}
+            - name: METRICS_API_URL
+              value: {{ .Values.env.METRICS_API_URL | quote }}
             - name: SSO_API_URL
               value: {{ required "A valid .Values.env.SSO_API_URL entry required" .Values.env.SSO_API_URL | quote }}
             - name: SSO_CLIENT_ID
