@@ -65,7 +65,7 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | `api.jvmXmx`                    | Memory allocation options for JVM.                                                                                                             | `-Xmx1500m`                         |
 | `api.image`                     | **Deployment settings**                                                                                                                        |                                     |
 | `api.image.repository`          | Repository                                                                                                                                     | `2gis-on-premise/stat-receiver-api` |
-| `api.image.tag`                 | Tag                                                                                                                                            | `1.11.1`                            |
+| `api.image.tag`                 | Tag                                                                                                                                            | `1.15.21`                           |
 | `api.image.pullPolicy`          | Pull Policy                                                                                                                                    | `IfNotPresent`                      |
 | `api.service`                   | **Service settings**                                                                                                                           |                                     |
 | `api.service.type`              | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                 | `ClusterIP`                         |
@@ -90,7 +90,7 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | `streams.storageSize`               | Size of ephemeral disk that holds temporary files                                                                                              | `500Mi`                                 |
 | `streams.image`                     | **Deployment settings**                                                                                                                        |                                         |
 | `streams.image.repository`          | Repository                                                                                                                                     | `2gis-on-premise/stat-receiver-streams` |
-| `streams.image.tag`                 | Tag                                                                                                                                            | `1.11.1`                                |
+| `streams.image.tag`                 | Tag                                                                                                                                            | `1.15.21`                               |
 | `streams.image.pullPolicy`          | Pull Policy                                                                                                                                    | `IfNotPresent`                          |
 | `streams.resources`                 | **Limits for the Streams service**                                                                                                             |                                         |
 | `streams.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `1`                                     |
@@ -130,10 +130,14 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                    | Description                            | Value                |
-| ----------------------- | -------------------------------------- | -------------------- |
-| `ingress.enabled`       | If Ingress is enabled for the service. | `false`              |
-| `ingress.hosts[0].host` | Hostname for the Ingress service.      | `stat-receiver.host` |
+| Name                                 | Description                               | Value                       |
+| ------------------------------------ | ----------------------------------------- | --------------------------- |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                     |
+| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`                     |
+| `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `stat-receiver.example.com` |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                         |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                    |
+| `ingress.tls`                        | TLS configuration                         | `[]`                        |
 
 ### stat-receiver parameters
 
