@@ -29,8 +29,8 @@ dgctlStorage:
 # @param warningText Warning message on raster tiles for 'soft' block. Should contain '%d' for the number of days until the 'hard' block and '%s' for the account manager contact information.
 # @param errorText Error message on raster tiles for 'hard' block. Should contain '%s' for the account manager contact information.
 # @param emailManager Account manager contact information that will be used in warning and error messages on raster tiles for all kinds of blocks.
-# @param logLevel Logging level for 'api', 'proxy', 'importer' (can be overridden by {service}.logLevelOverride option). Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
-# @param logFormat Logging format for 'api', 'proxy', 'importer' (can be overridden by {service}.logFormatOverride option). Allowed options: text|json. If not defined, 'json' format will be used.
+# @param logLevel Logging level for 'api', 'proxy', 'importer', 'tilegen' (can be overridden by {service}.logLevelOverride option). Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
+# @param logFormat Logging format for 'api', 'proxy', 'importer', 'tilegen' (can be overridden by {service}.logFormatOverride option). Allowed options: text|json. If not defined, 'json' format will be used.
 # @param containerSecurityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 # @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
@@ -99,8 +99,8 @@ cassandra:
 
 # @param tilegen.enabled If Tilegen API is enabled for the service.
 
-# @param tilegen.logLevelOverride A custom api logging level. Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
-# @param tilegen.logFormatOverride A custom api logging format. Allowed options: text|json. If not defined, 'json' format will be used.
+# @param tilegen.logLevelOverride A custom api logging level. Allowed options: info|warn|debug|error. If not defined, default logLevel will be used.
+# @param tilegen.logFormatOverride A custom api logging format. Allowed options: text|json. If not defined, default logFormat will be used.
 
 # @param tilegen.tileset.name Name for the tileset
 # @param tilegen.tileset.keyspace Name for keyspace in database
@@ -130,8 +130,8 @@ cassandra:
 tilegen:
   enabled: false
 
-  logLevelOverride: info
-  logFormatOverride: json
+  logLevelOverride: ''
+  logFormatOverride: ''
 
   tileset:
     name: userdata
@@ -214,8 +214,8 @@ tilegen:
 # @section API Keys proxy settings
 
 # @extra proxy **Common settings**
-# @param proxy.logLevelOverride A custom proxy logging level. Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
-# @param proxy.logFormatOverride A custom proxy logging format. Allowed options: text|json. If not defined, 'json' format will be used.
+# @param proxy.logLevelOverride A custom proxy logging level. Allowed options: info|warn|debug|error. If not defined, default logLevel will be used.
+# @param proxy.logFormatOverride A custom proxy logging format. Allowed options: text|json. If not defined, default logFormat will be used.
 # @param proxy.containerPort Port the proxy listens on.
 # @param proxy.timeout Proxy timeout, in seconds.
 
@@ -242,8 +242,8 @@ tilegen:
 # @param proxy.access.stat.url Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
 
 proxy:
-  logLevelOverride: info
-  logFormatOverride: json
+  logLevelOverride: ''
+  logFormatOverride: ''
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
@@ -280,8 +280,8 @@ proxy:
 
 # @param api.terminationGracePeriodSeconds Duration in seconds the Tiles API service pod needs to terminate gracefully.
 # @param api.containerPort Tiles API container port.
-# @param api.logLevelOverride A custom api logging level. Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
-# @param api.logFormatOverride A custom api logging format. Allowed options: text|json. If not defined, 'json' format will be used.
+# @param api.logLevelOverride A custom api logging level. Allowed options: info|warn|debug|error. If not defined, default logLevel will be used.
+# @param api.logFormatOverride A custom api logging format. Allowed options: text|json. If not defined, default logFormat will be used.
 # @param api.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 # @param api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param api.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -314,8 +314,8 @@ api:
   terminationGracePeriodSeconds: 30
   containerPort: 8000
 
-  logLevelOverride: info
-  logFormatOverride: json
+  logLevelOverride: ''
+  logFormatOverride: ''
 
   labels: {}
   annotations: {}
@@ -438,8 +438,8 @@ api:
 
 # @param importer.enabled If Importer job is enabled.
 # @param importer.serviceAccountOverride A custom service account for creating import/cleaning processes. If not defined it will be created automatically.
-# @param importer.logLevelOverride A custom importer logging level. Allowed options: info|warn|debug|error. If not defined, 'info' level will be used.
-# @param importer.logFormatOverride A custom importer logging format. Allowed options: text|json. If not defined, 'json' format will be used.
+# @param importer.logLevelOverride A custom importer logging level. Allowed options: info|warn|debug|error. If not defined, default logLevel will be used.
+# @param importer.logFormatOverride A custom importer logging format. Allowed options: text|json. If not defined, default logFormat will be used.
 # @param importer.workerNum Number of parallel import processes (workers).
 # @param importer.writerNum Number of write processes per import process (worker).
 # @param importer.workerNumAttempts Number of attempts for import process (worker) if it is failing. **Required**
@@ -456,8 +456,8 @@ api:
 importer:
   enabled: true
   serviceAccountOverride: ''
-  logLevelOverride: info
-  logFormatOverride: json
+  logLevelOverride: ''
+  logFormatOverride: ''
 
   # @extra importer.image **Docker image settings**
   # @param importer.image.repository Docker Repository.

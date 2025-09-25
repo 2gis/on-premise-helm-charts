@@ -1,6 +1,6 @@
 # 2GIS On-Premise Breaking-Changes
 
-## [1.xx.x]
+## [1.43.0]
 
 ### navi-attractor
 

@@ -5,7 +5,7 @@ type: application
 keywords:
 - navi
 - attractor
-version: 1.42.0
+version: 1.43.0
 appVersion: 7.42.0.3
 dependencies:
 - name: generic-chart
