@@ -234,14 +234,20 @@ tilegen:
 # @param proxy.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
 # @param proxy.access.url API Keys endpoint url, ex: http://keys-api.svc. **Required**
 # @param proxy.access.syncPeriod Proxy sync period.
-# @param proxy.access.skipAccessKeyCheckOriginRegexp If set, all requests from origins matching this regular expression will skip access key check.
-# @param proxy.access.sendStatisticsHostRegexp If set, requests to hosts matching this regular expression will be registered to bss statistics. If not set, all requests will be registered.
 # @param proxy.access.raster.token Service key for raster data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).
 # @param proxy.access.vector.token Service key for vector data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).
+
+# @extra proxy.access.skipExactOrigins **Exact origins that will skip access key check**
+# @param proxy.access.skipExactOrigins.enabled If exact origins skipping is enabled.
+# @param proxy.access.skipExactOrigins.originRegexpPattern Regular expression for matching origins that will skip access key check. **Required**
 
 # @extra proxy.access.stat **Statistics receiver settings**
 # @param proxy.access.stat.enabled If statistics receiver is enabled.
 # @param proxy.access.stat.url Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
+
+# @extra proxy.access.stat.registerExactHosts **Exact hosts that will be registered to statistics**
+# @param proxy.access.stat.registerExactHosts.enabled If exact hosts registration is enabled.
+# @param proxy.access.stat.registerExactHosts.hostRegexpPattern Regular expression for matching hosts that will be registered to statistics. **Required**
 
 proxy:
   logLevelOverride: ''
@@ -270,8 +276,15 @@ proxy:
     stat:
       enabled: false
       url: ''
-    skipAccessKeyCheckOriginRegexp: ''
-    sendStatisticsHostRegexp: ''
+
+      registerExactHosts:
+        enabled: false
+        hostRegexpPattern: ''
+
+    skipExactOrigins:
+      enabled: false
+      originRegexpPattern: ''
+
     vector:
       token: ''
     raster:
