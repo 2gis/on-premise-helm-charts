@@ -239,6 +239,7 @@ tilegen:
 
 # @extra proxy.access.skipExactOrigins **Exact origins that will skip access key check**
 # @param proxy.access.skipExactOrigins.enabled If exact origins skipping is enabled.
+# @param proxy.access.skipExactOrigins.useDefaultValue If default 2gis regular expression is used.
 # @param proxy.access.skipExactOrigins.originRegexpPattern Regular expression for matching origins that will skip access key check. **Required**
 
 # @extra proxy.access.stat **Statistics receiver settings**
@@ -247,6 +248,7 @@ tilegen:
 
 # @extra proxy.access.stat.registerExactHosts **Exact hosts that will be registered to statistics**
 # @param proxy.access.stat.registerExactHosts.enabled If exact hosts registration is enabled.
+# @param proxy.access.stat.registerExactHosts.useDefaultValue If default 2gis regular expression is used.
 # @param proxy.access.stat.registerExactHosts.hostRegexpPattern Regular expression for matching hosts that will be registered to statistics. **Required**
 
 proxy:
@@ -279,10 +281,12 @@ proxy:
 
       registerExactHosts:
         enabled: false
+        useDefaultValue: false
         hostRegexpPattern: ''
 
     skipExactOrigins:
       enabled: false
+      useDefaultValue: false
       originRegexpPattern: ''
 
     vector:
