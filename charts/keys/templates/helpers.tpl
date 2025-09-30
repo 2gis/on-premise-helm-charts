@@ -159,7 +159,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_LOG_LEVEL
   value: {{ .Values.tasker.logLevel | quote }}
 - name: KEYS_TASKER_DELAY
-  value: {{ .Values.tasker.delay }}
+  value: {{ .Values.tasker.delay | quote }}
 {{- end }}
 
 {{- define "keys.env.dispatcher" -}}
