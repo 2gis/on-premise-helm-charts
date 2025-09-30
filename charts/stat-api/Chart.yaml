@@ -1,0 +1,7 @@
+apiVersion: v2
+name: stat-api
+type: application
+description: A Helm chart for Kubernetes to deploy Stat service
+
+version: 1.43.0
+appVersion: "1.0.0"

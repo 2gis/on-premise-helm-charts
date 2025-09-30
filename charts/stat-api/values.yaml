@@ -1,0 +1,270 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+# @section Common settings
+
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param imagePullPolicy Pull policy.
+# @param api.image.repository API service image repository.
+# @param api.image.tag API service image tag.
+# @param migrate.image.repository Migrate tool image repository.
+# @param migrate.image.tag Migrate tool image tag.
+
+imagePullSecrets: []
+imagePullPolicy: IfNotPresent
+
+# @section Kubernetes [Service Account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
+
+# @param serviceAccount.create Specifies whether a service account should be created
+# @param serviceAccount.automount Automatically mount a ServiceAccount's API credentials?
+# @param serviceAccount.annotations Annotations to add to the service account
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template
+
+serviceAccount:
+  create: false
+  automount: false
+  annotations: {}
+  name: ""
+
+# @section API service settings
+
+api:
+  image:
+    repository: 2gis-on-premise/stat-api
+    tag: 1.0.0
+
+  # @param api.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+
+  logLevel: warning
+
+  # @param api.clickhouse.clientName Name that will be used in client requests to ClickHouse.
+
+  clickhouse:
+    clientName: 'stat-api'
+
+  # @param api.replicas A replica count for the pod.
+
+  replicas: 1
+
+  # @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+  revisionHistoryLimit: 3
+
+  # @param api.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param api.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 256Mi
+
+  # @param api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  annotations: {}
+  labels: {}
+
+  # @param api.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  podAnnotations: {}
+  podLabels: {}
+
+  # @param api.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param api.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param api.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+
+  # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param api.service.port Service port.
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+  # @param api.ingress.tls TLS configuration
+
+  ingress:
+    enabled: false
+    hosts:
+    - host: stat-api.host
+      paths:
+      - path: /
+        pathType: Prefix
+    tls: []
+    # - hosts:
+    #   - stat-api.example.com
+    #   secretName: secret.tls
+
+  # @section Kubernetes [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) settings
+
+  # @param api.httpRoute.enabled If HTTPRoute is enabled for the service.
+  # @param api.httpRoute.hostnames Array of [Hostnames](https://gateway-api.sigs.k8s.io/reference/spec/#hostname) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/spec/#httproutespec).
+  # @param api.httpRoute.parentRefs Array of [ParentReferences](https://gateway-api.sigs.k8s.io/reference/spec/#parentreference) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/spec/#httproutespec).
+
+  httpRoute:
+    enabled: false
+    hostnames: []
+    parentRefs: []
+
+  # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+  # @param api.hpa.enabled If HPA is enabled for the service.
+  # @param api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+  # @param api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+  # @param api.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+  # @param api.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
+  # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+  # @param api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    scaleDownStabilizationWindowSeconds: ''
+    scaleUpStabilizationWindowSeconds: ''
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: ''
+
+# @section Migrate tool settings
+
+migrate:
+  image:
+    repository: 2gis-on-premise/stat-api-migrate
+    tag: 1.0.0
+
+  # @param migrate.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: info
+
+
+  # @param migrate.clickhouse.clientName Name that will be used in client requests to ClickHouse.
+
+  clickhouse:
+    clientName: 'stat-api-migrate'
+
+  # @param migrate.initialDelaySeconds Delay in seconds at the service startup.
+
+  initialDelaySeconds: 0
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+  # @param migrate.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+
+  nodeSelector: {}
+
+  # @param migrate.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  tolerations: []
+
+# @section ClickHouse settings
+
+# @param clickhouse.servers Comma-separated list of ClickHouse server addresses. Format: `host1:port1,host2:port2`.
+# @param clickhouse.cluster ClickHouse cluster name for distributed queries, migrations.
+# @param clickhouse.database ClickHouse database name to connect to.
+# @param clickhouse.username ClickHouse username for authentication.
+# @param clickhouse.password ClickHouse password for authentication.
+
+clickhouse:
+  servers: ''
+  cluster: ''
+  database: ''
+  username: ''
+  password: ''
+
+  # @param clickhouse.maxQueryExecutionTime Query [maximum execution time](https://clickhouse.com/docs/operations/settings/settings#max_execution_time) in seconds.
+  # @param clickhouse.maxOpenConnections Maximum number of open connections to ClickHouse.
+  # @param clickhouse.maxIdleConnections Maximum number of idle connections in the pool.
+
+  maxQueryExecutionTime: 60
+  maxOpenConnections: 10
+  maxIdleConnections: 5
+
+  # @param clickhouse.connectionTimeout Connection timeout duration (e.g., `10s`, `1m`).
+  # @param clickhouse.connectionMaxLifetime Maximum lifetime of a connection (e.g., `1h`, `30m`).
+  # @param clickhouse.connectionOpenStrategy Connection opening strategy configures algorithm with which it will be decided that server to use for a new connection. Can be: `in_order`, `round_robin`, `random`.
+  # @param clickhouse.connectionTimeout Connection timeout duration (e.g., `10s`, `1m`).
+  # @param clickhouse.connectionMaxLifetime Maximum lifetime of a connection (e.g., `1h`, `30m`).
+  # @param clickhouse.connectionOpenStrategy Connection opening strategy for multiple servers. Can be: `in_order`, `round_robin`, `random`.
+
+  connectionTimeout: 10s
+  connectionMaxLifetime: 1h
+  connectionOpenStrategy: in_order
+
+  # @param clickhouse.pingMaxRetries Maximum number of ping retries during connection attempts.
+  # @param clickhouse.pingRetryDelay Delay between ping retries (e.g., `3s`, `5s`).
+
+  pingMaxRetries: 5
+  pingRetryDelay: 3s
+
+  # @section ClickHouse TLS settings
+
+  # @param clickhouse.tls.enabled Enable TLS/SSL connection to ClickHouse.
+  # @param clickhouse.tls.skipServerCertificateVerify Skip server certificate verification (insecure). When `true`, the client will not verify the server's certificate chain and host name.
+  # @param clickhouse.tls.serverCA ClickHouse server CA certificate in PEM format. If not provided, system root CAs will be used for server certificate verification.
+  # @param clickhouse.tls.clientCert ClickHouse client certificate in PEM format for mutual TLS authentication. **Required for mutual TLS**.
+  # @param clickhouse.tls.clientKey ClickHouse client private key in PEM format for mutual TLS authentication. **Required for mutual TLS**.
+
+  tls:
+    enabled: false
+    skipServerCertificateVerify: false
+    serverCA: ''
+    clientCert: ''
+    clientKey: ''
+
+# @section Limits
+
+# @extra api.resources **Limits for the API service**
+# @param api.resources.requests.cpu A CPU request.
+# @param api.resources.requests.memory A memory request.
+# @param api.resources.limits.cpu A CPU limit.
+# @param api.resources.limits.memory A memory limit.
+
+# @extra migrate.resources **Limits for the Migrate tool**
+# @param migrate.resources.requests.cpu A CPU request.
+# @param migrate.resources.requests.memory A memory request.
+# @param migrate.resources.limits.cpu A CPU limit.
+# @param migrate.resources.limits.memory A memory limit.
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container.
+
+customCAs:
+  bundle: ''
+# bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
+  certsPath: ''
