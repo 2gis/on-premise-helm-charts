@@ -234,12 +234,14 @@ Sets value from naviback.attractor[] if specified,
 or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorCar" -}}
-   {{- ternary
-      .Values.naviback.attractor.car
-      (.Values.transmitter.enabled | ternary false
-          (include "rules.inRoutingSection" (dict "routingValue" "driving" "context" .)))
-      (hasKey .Values.naviback.attractor "car")
-   -}}
+    {{-
+        dig "car"
+        (.Values.transmitter.enabled | ternary
+            false
+            (include "rules.inRoutingSection" (dict "routingValue" "driving" "context" .))
+        )
+        .Values.naviback.attractor
+    -}}
 {{- end -}}
 
 
@@ -253,14 +255,16 @@ Sets value from naviback.attractor[] if specified,
 or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorPedestrian" -}}
-   {{- ternary
-      .Values.naviback.attractor.pedestrian
-      (.Values.transmitter.enabled | ternary false
-          (or (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" .))
-              (include "rules.inRoutingSection" (dict "routingValue" "public_transport" "context" .))
-              (include "rules.inRoutingSection" (dict "routingValue" "pedestrian" "context" .))))
-      (hasKey .Values.naviback.attractor "pedestrian")
-   -}}
+    {{-
+        dig "pedestrian"
+        (.Values.transmitter.enabled | ternary
+            false
+            (or (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" .))
+                (include "rules.inRoutingSection" (dict "routingValue" "public_transport" "context" .))
+                (include "rules.inRoutingSection" (dict "routingValue" "pedestrian" "context" .)))
+        )
+        .Values.naviback.attractor
+    -}}
 {{- end -}}
 
 
@@ -274,12 +278,14 @@ Sets value from naviback.attractor[] if specified,
 or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorTaxi" -}}
-   {{- ternary
-      .Values.naviback.attractor.taxi
-      (.Values.transmitter.enabled | ternary false
-          (include "rules.inRoutingSection" (dict "routingValue" "taxi" "context" .)))
-      (hasKey .Values.naviback.attractor "taxi")
-   -}}
+    {{-
+        dig "taxi"
+        (.Values.transmitter.enabled | ternary
+            false
+            (include "rules.inRoutingSection" (dict "routingValue" "taxi" "context" .))
+        )
+        .Values.naviback.attractor
+    -}}
 {{- end -}}
 
 
@@ -293,12 +299,14 @@ Sets value from naviback.attractor[] if specified,
 or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorTruck" -}}
-   {{- ternary
-      .Values.naviback.attractor.truck
-      (.Values.transmitter.enabled | ternary false
-          (include "rules.inRoutingSection" (dict "routingValue" "truck" "context" .)))
-      (hasKey .Values.naviback.attractor "truck")
-   -}}
+    {{-
+        dig "truck"
+        (.Values.transmitter.enabled | ternary
+            false
+            (include "rules.inRoutingSection" (dict "routingValue" "truck" "context" .))
+        )
+        .Values.naviback.attractor
+    -}}
 {{- end -}}
 
 
@@ -312,13 +320,19 @@ Sets value from naviback.attractor[] if specified,
 or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorBicycle" -}}
-   {{- ternary
-      (or (.Values.naviback.attractor).bicycle (.Values.naviback.attractor).scooter)
-      ( .Values.transmitter.enabled | ternary false
-          (or (include "rules.inRoutingSection" (dict "routingValue" "bicycle" "context" .))
-              (include "rules.inRoutingSection" (dict "routingValue" "scooter" "context" .))))
-      (or (hasKey .Values.naviback.attractor "bicycle") (hasKey .Values.naviback.attractor "scooter"))
-   -}}
+    {{- $has_bicycle_or_scooter := (or (hasKey .Values.naviback.attractor "bicycle") (hasKey .Values.naviback.attractor "scooter")) -}}
+    {{- $bicycle := .Values.naviback.attractor.bicycle | default false -}}
+    {{- $scooter := .Values.naviback.attractor.scooter | default false -}}
+    {{-
+        $has_bicycle_or_scooter | ternary
+            (or $bicycle $scooter)
+            (.Values.transmitter.enabled | ternary
+                false
+                (or (include "rules.inRoutingSection" (dict "routingValue" "bicycle" "context" .))
+                    (include "rules.inRoutingSection" (dict "routingValue" "scooter" "context" .))
+                )
+            )
+    -}}
 {{- end -}}
 
 
@@ -332,12 +346,14 @@ Sets value from naviback.attractor[] if specified,
 or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorMotorcycle" -}}
-   {{- ternary
-      .Values.naviback.attractor.motorcycle
-      (.Values.transmitter.enabled | ternary false
-          (include "rules.inRoutingSection" (dict "routingValue" "motorcycle" "context" .)))
-      (hasKey .Values.naviback.attractor "motorcycle")
-   -}}
+    {{-
+        dig "motorcycle"
+        (.Values.transmitter.enabled | ternary
+            false
+            (include "rules.inRoutingSection" (dict "routingValue" "motorcycle" "context" .))
+        )
+        .Values.naviback.attractor
+    -}}
 {{- end -}}
 
 
@@ -410,6 +426,7 @@ Usage:
    {{- end -}}
 {{- end -}}
 
+{{/*
 Set long speed forecasts URL
 Usage:
 {{ include "config.setLongForecastUrl" $ }}
@@ -417,6 +434,19 @@ Usage:
 {{- define "config.setLongForecastUrl" -}}
    {{- if .Values.naviback.longForecastUrl -}}
    {{- printf .Values.naviback.longForecastUrl -}}
+   {{- end -}}
+{{- end -}}
+
+{{/*
+Set speed forecasts URL
+Usage:
+{{ include "config.setForecastUrl" $ }}
+*/}}
+{{- define "config.setForecastUrl" -}}
+   {{- if .Values.naviback.forecastUrl -}}
+   {{- printf .Values.naviback.forecastUrl -}}
+   {{ else if .Values.naviback.forecastHost -}}
+   {{- printf "http://%s" .Values.naviback.forecastHost -}}
    {{- end -}}
 {{- end -}}
 
@@ -434,16 +464,52 @@ Usage:
 {{- end -}}
 
 {{/*
+Set index name for castleProxy
+Usage:
+{{ include "config.setCastleProxyIndex" $ }}
+*/}}
+{{- define "config.setCastleProxyIndex" -}}
+   {{- if .Values.naviback.castleUrlProxy -}}
+   {{- print "proxy" -}}
+   {{- else -}}
+   {{- print "default" -}}
+   {{- end -}}
+{{- end -}}
+
+{{/*
 Set restriction url
-If rtr enabled return naviback.rtr.url, else return naviback.castleUrl
+If naviback.castleUrlProxy set return naviback.castleUrlProxy,
+else if naviback.restrictions.url set return naviback.restrictions.url,
+else return naviback.castleUrl.
 Usage:
 {{ include "config.setRestrictionUrl" $ }}
 */}}
 {{- define "config.setRestrictionUrl" -}}
-   {{- if .Values.naviback.rtr.enabled -}}
-   {{- printf .Values.naviback.rtr.url -}}
-   {{- else  -}}
-   {{- printf (include "config.setCastleUrl" $) -}}
+   {{- if .Values.naviback.castleUrlProxy -}}
+      {{- printf .Values.naviback.castleUrlProxy -}}
+   {{- else if .Values.naviback.restrictions.url -}}
+      {{- printf .Values.naviback.restrictions.url -}}
+   {{- else -}}
+      {{- printf (include "config.setCastleUrl" $) -}}
+   {{- end -}}
+{{- end -}}
+
+{{/*
+Set restriction index url
+If castleUrlProxy set return naviback.castleUrlProxy/naviback.restrictions.filename (or default restrictions_index.json.zip),
+else if naviback.restrictions.url set return naviback.restrictions.url/naviback.restrictions.filename (or default restrictions_index.json.zip),
+else return naviback.castleUrl/naviback.restrictions.filename (or default restrictions_index.json.zip).
+Usage:
+{{ include "config.setRestrictionIndexUrl" $ }}
+*/}}
+{{- define "config.setRestrictionIndexUrl" -}}
+   {{- $filename := .Values.naviback.restrictions.filename | default "restrictions_index.json.zip" -}}
+   {{- if .Values.naviback.castleUrlProxy -}}
+      {{- printf "%s/%s" .Values.naviback.castleUrlProxy $filename -}}
+   {{- else if .Values.naviback.restrictions.url -}}
+      {{- printf "%s/%s" .Values.naviback.restrictions.url $filename -}}
+   {{- else -}}
+      {{- printf "%s/%s" (include "config.setCastleUrl" $) $filename -}}
    {{- end -}}
 {{- end -}}
 

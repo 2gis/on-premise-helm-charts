@@ -144,7 +144,7 @@ castle:
   image:
     repository: 2gis-on-premise/navi-castle
     pullPolicy: IfNotPresent
-    tag: 1.9.8
+    tag: 1.9.12
   castleDataPath: /opt/castle/data
   restrictions:
     url: ''
@@ -199,7 +199,7 @@ cron:
     restriction: false
     restrictionImport: false
   schedule:
-    import: 11 * * * *
+    import: '11 * * * *'
     restriction: '*/5 * * * *'
     restrictionImport: '*/5 * * * *'
   concurrencyPolicy: Forbid

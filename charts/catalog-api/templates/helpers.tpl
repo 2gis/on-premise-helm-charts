@@ -188,6 +188,53 @@ onprem
   value: {{ .Values.license.requestTimeout | quote }}
 {{- end }}
 
+{{- define "catalog.env.stat" -}}
+{{- if .Values.stat.enabled }}
+- name: CATALOG_BSS_ENDPOINT
+  value: "{{ .Values.stat.url }}"
+- name: CATALOG_BSS_REQUEST_ENABLED
+  value: "{{ .Values.stat.request.enabled }}"
+- name: CATALOG_BSS_REQUEST_BUFFER_LIFETIME
+  value: "{{ .Values.stat.request.buffer.lifetime }}"
+- name: CATALOG_BSS_REQUEST_BUFFER_SEND_TIMEOUT
+  value: "{{ .Values.stat.request.buffer.sendTimeout }}"
+- name: CATALOG_BSS_REQUEST_BUFFER_SEND_LIMIT
+  value: "{{ .Values.stat.request.buffer.sendLimit }}"
+- name: CATALOG_BSS_SEARCH_ENABLED
+  value: "{{ .Values.stat.search.enabled }}"
+- name: CATALOG_BSS_SEARCH_BUFFER_LIFETIME
+  value: "{{ .Values.stat.search.buffer.lifetime }}"
+- name: CATALOG_BSS_SEARCH_BUFFER_SEND_TIMEOUT
+  value: "{{ .Values.stat.search.buffer.sendTimeout }}"
+- name: CATALOG_BSS_SEARCH_BUFFER_SEND_LIMIT
+  value: "{{ .Values.stat.search.buffer.sendLimit }}"
+- name: CATALOG_BSS_CONNECTING_TIMEOUT
+  value: "{{ .Values.stat.client.connectingTimeout }}"
+- name: CATALOG_BSS_IDLE_TIMEOUT
+  value: "{{ .Values.stat.client.idleTimeout }}"
+- name: CATALOG_BSS_MIN_CONNECTIONS
+  value: "{{ .Values.stat.client.minConnections }}"
+- name: CATALOG_BSS_MAX_CONNECTIONS
+  value: "{{ .Values.stat.client.maxConnections }}"
+- name: CATALOG_BSS_MAX_OPEN_REQUESTS
+  value: "{{ .Values.stat.client.maxOpenRequests }}"
+- name: CATALOG_BSS_MAX_RETRIES
+  value: "{{ .Values.stat.client.maxRetries }}"
+- name: CATALOG_BSS_CONNECTION_LIFETIME
+  value: "{{ .Values.stat.client.maxConnectionLifetime }}"
+- name: CATALOG_BSS_BASE_CONNECTION_BACKOFF
+  value: "{{ .Values.stat.client.baseConnectionBackoff }}"
+- name: CATALOG_BSS_MAX_CONNECTION_BACKOFF
+  value: "{{ .Values.stat.client.maxConnectionBackoff }}"
+- name: CATALOG_BSS_RESPONSE_TIMEOUT
+  value: "{{ .Values.stat.client.responseTimeout }}"
+- name: CATALOG_BSS_DISPATCHER_FIXED_POOL_SIZE
+  value: "{{ .Values.stat.dispatcher.fixedPoolSize }}"
+- name: CATALOG_BSS_DISPATCHER_THROUGHPUT
+  value: "{{ .Values.stat.dispatcher.throughput }}"
+{{- end }}
+{{- end }}
+
 {{- define "catalog.env.importer" -}}
 - name: IMPORTER_DB_CATALOG_SCHEMA
   value: {{ include "catalog.manifestCode" . | quote }}

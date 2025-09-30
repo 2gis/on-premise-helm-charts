@@ -235,16 +235,40 @@ Usage:
    {{- end -}}
 {{- end -}}
 
+
 {{/*
 Set restriction url
-If rtr enabled return attractor.rtr.url, else return attractor.castleUrl
+If attractor.castleUrlProxy set return attractor.castleUrlProxy,
+else if attractor.restrictions.url set return attractor.restrictions.url,
+else return attractor.castleUrl.
 Usage:
 {{ include "config.setRestrictionUrl" $ }}
 */}}
 {{- define "config.setRestrictionUrl" -}}
-   {{- if .Values.attractor.rtr.enabled -}}
-   {{- printf .Values.attractor.rtr.url -}}
-   {{- else  -}}
-   {{- printf (include "config.setCastleUrl" $) -}}
+   {{- if .Values.attractor.castleUrlProxy -}}
+      {{- printf .Values.attractor.castleUrlProxy -}}
+   {{- else if .Values.attractor.restrictions.url -}}
+      {{- printf .Values.attractor.restrictions.url -}}
+   {{- else -}}
+      {{- printf (include "config.setCastleUrl" $) -}}
+   {{- end -}}
+{{- end -}}
+
+{{/*
+Set restriction index url
+If castleUrlProxy set return attractor.castleUrlProxy/attractor.restrictions.filename (or default restrictions_index.json.zip),
+else if attractor.restrictions.url set return attractor.restrictions.url/attractor.restrictions.filename (or default restrictions_index.json.zip),
+else return attractor.castleUrl/attractor.restrictions.filename (or default restrictions_index.json.zip).
+Usage:
+{{ include "config.setRestrictionIndexUrl" $ }}
+*/}}
+{{- define "config.setRestrictionIndexUrl" -}}
+   {{- $filename := .Values.attractor.restrictions.filename | default "restrictions_index.json.zip" -}}
+   {{- if .Values.attractor.castleUrlProxy -}}
+      {{- printf "%s/%s" .Values.attractor.castleUrlProxy $filename -}}
+   {{- else if .Values.attractor.restrictions.url -}}
+      {{- printf "%s/%s" .Values.attractor.restrictions.url $filename -}}
+   {{- else -}}
+      {{- printf "%s/%s" (include "config.setCastleUrl" $) $filename -}}
    {{- end -}}
 {{- end -}}

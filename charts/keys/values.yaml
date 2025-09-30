@@ -20,23 +20,25 @@ imagePullPolicy: IfNotPresent
 # @section Flags for enabling/disabling certain features.
 
 featureFlags:
-  # @param featureFlags.enableAudit Enable audit logging.
+  # @param featureFlags.enableAudit Enable audit logging for sending to DB.
+  # @param featureFlags.enableAuditKafka Enable audit logging for sending to Kafka.
   # @param featureFlags.enablePublicAPISign Enable signing responses in Public API.
 
   enableAudit: false
+  enableAuditKafka: false
   enablePublicAPISign: false
 
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.112.2
+    tag: 1.135.1
 
 # @section Admin service settings
 
 admin:
   image:
     repository: 2gis-on-premise/keys-ui
-    tag: 0.10.6
+    tag: 1.4.0
 
   # @param admin.replicas A replica count for the pod.
 
@@ -464,6 +466,111 @@ dispatcher:
 
     nodeSelector: {}
 
+# @section Counter settings
+
+counter:
+
+  # @param counter.enabled Counter worker is enabled.
+
+  enabled: false
+
+  # @param counter.replicas A replica count for the pod.
+
+  replicas: 1
+
+  # @param counter.resources.requests.cpu A CPU request.
+  # @param counter.resources.requests.memory A memory request.
+  # @param counter.resources.limits.cpu A CPU limit.
+  # @param counter.resources.limits.memory A memory limit.
+
+  resources:
+    requests:
+      cpu: 20m
+      memory: 32Mi
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+
+  # @param counter.logLevel Log level for the worker. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  logLevel: warning
+
+  # @param counter.preloader.refreshTick Refresh interval for in-memory cache with keys limitations info. The smaller the interval, the faster the worker will know about changes in limitations.
+
+  preloader:
+    refreshTick: 1m
+
+  # @param counter.updateStatusQueryTimeout Timeout for database queries to update key status.
+
+  updateStatusQueryTimeout: 1s
+
+  # @extra counter.buffer **Settings for in-memory buffer for statistics data.**
+
+  # @param counter.buffer.size The maximum size of the buffer. When the limit is reached, the data from the buffer is transferred to Redis.
+  # @param counter.buffer.delay The maximum interval between data transfer operations from the buffer to Redis.
+  # @param counter.buffer.splitFactor The factor by which the buffer is divided into parts for parallel processing. The higher the value, the smaller the size of each part, but the more frequent the data transfer operations to Redis.
+
+  buffer:
+    size: 1000
+    delay: 1s
+    splitFactor: 2
+
+  # @param counter.parallelismFactor Default value for calculating the number of workers. If set to 0, the default value will be equal to the Linux container CPU quota.
+
+  parallelismFactor: 0
+
+  # @extra counter.workers **Number of workers for each processing stage. If set to 0, `counter.parallelismFactor` will be used.**
+
+  # @param counter.workers.eventParser Number of event parser workers.
+  # @param counter.workers.eventFilterer Number of event filterer workers.
+  # @param counter.workers.eventMetricGatherer Number of event metric gatherer workers.
+  # @param counter.workers.eventConverter Number of event converter workers.
+  # @param counter.workers.incrementFilterer Number of increment filterer workers.
+  # @param counter.workers.incrementSaver Number of increment saver workers.
+
+  workers:
+    eventParser: 0
+    eventFilterer: 0
+    eventMetricGatherer: 0
+    eventConverter: 0
+    incrementFilterer: 0
+    incrementSaver: 0
+
+  # @extra counter.redis **Redis settings**
+
+  # @param counter.redis.retries Number of retries for Redis operations.
+  # @param counter.redis.minRetryBackoff Minimum backoff between each retry.
+  # @param counter.redis.maxRetryBackoff Maximum backoff between each retry.
+  # @param counter.redis.dialTimeout Dial timeout for establishing new connections.
+  # @param counter.redis.writeTimeout Write timeout for Redis commands.
+  # @param counter.redis.readTimeout Read timeout for Redis commands.
+
+  redis:
+    retries: 5
+    minRetryBackoff: 100ms
+    maxRetryBackoff: 3s
+    dialTimeout: 3s
+    writeTimeout: 10s
+    readTimeout: 10s
+
+  # @param counter.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param counter.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  annotations: {}
+  labels: {}
+
+  # @param counter.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param counter.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  podAnnotations: {}
+  podLabels: {}
+
+  # @param counter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param counter.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param counter.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
 
 # @section Redis settings
 
@@ -562,6 +669,25 @@ kafka:
     serverCA: ''
     clientCert: ''
     clientKey: ''
+
+  # @extra kafka.stats **Settings for consuming key's usage statistics messages.**
+
+  # @param kafka.stats.topic Topic to consume stat messages from. **Required**
+  # @param kafka.stats.groupId Name of the consumer group to use. **Required**
+  # @param kafka.stats.clientId Client id. If empty hostname will be used.
+  # @param kafka.stats.fetchDefault Default fetch size. KB, MB, GB refers to 2^10, 2^20, 2^30 bytes respectively. Plain number refers to bytes.
+  # @param kafka.stats.fetchMin Minimum fetch size. KB, MB, GB refers to 2^10, 2^20, 2^30 bytes respectively. Plain number refers to bytes.
+  # @param kafka.stats.fetchMax Maximum fetch size. KB, MB, GB refers to 2^10, 2^20, 2^30 bytes respectively. Plain number refers to bytes. '0' means no limit.
+  # @param kafka.stats.fetchMaxWaitTime Maximum wait time for fetch response.
+
+  stats:
+    topic: ''
+    groupId: ''
+    clientId: ''
+    fetchDefault: 1MB
+    fetchMin: 100KB
+    fetchMax: 0
+    fetchMaxWaitTime: 250ms
 
   # @extra kafka.audit **Settings for sending audit messages.**
 
@@ -693,6 +819,12 @@ dgctlStorage:
 # @param dispatcher.cleaner.resources.requests.memory A memory request.
 # @param dispatcher.cleaner.resources.limits.cpu A CPU limit.
 # @param dispatcher.cleaner.resources.limits.memory A memory limit.
+
+# @extra counter.resources **Limits for the Counter service**
+# @param counter.resources.requests.cpu A CPU request.
+# @param counter.resources.requests.memory A memory request.
+# @param counter.resources.limits.cpu A CPU limit.
+# @param counter.resources.limits.memory A memory limit.
 
 # @section customCAs **Custom Certificate Authority**
 
