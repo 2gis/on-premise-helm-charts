@@ -124,7 +124,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_FEATURE_FLAGS_AUDIT
   value: {{ .Values.featureFlags.enableAudit | quote }}
 - name: KEYS_FEATURE_FLAGS_AUDIT_KAFKA
-  value: "{{ .Values.featureFlags.enableAuditKafka | quote }}"
+  value: {{ .Values.featureFlags.enableAuditKafka | quote }}
 - name: KEYS_FEATURE_FLAGS_PUBLIC_API_SIGN
   value: {{ .Values.featureFlags.enablePublicAPISign | quote }}
 - name: KEYS_FEATURE_FLAGS_SINGLE_PARTNER_MODE
