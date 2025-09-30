@@ -75,7 +75,7 @@ spec:
               containerPort: {{ .Values.tasks.settings.grpcPort }}
               protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.tasks.settings.tempPath }}"
+            - mountPath: {{ .Values.tasks.settings.tempPath | quote }}
               name: temp-volume
           livenessProbe:
             httpGet:
@@ -111,9 +111,9 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           env:
             - name: ENV
-              value: "{{ .Values.tasks.settings.env }}"
+              value: {{ .Values.tasks.settings.env | quote }}
             - name: TEMP_PATH
-              value: "{{ .Values.tasks.settings.tempPath }}"
+              value: {{ .Values.tasks.settings.tempPath | quote }}
             - name: Postgres__ConnectionString
               value: {{ include "pro-tasks.connectionString" . }}
             - name: Postgres__ConnectionStringReadonly
@@ -131,22 +131,22 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
             - name: FeatureManagement__AssetDataPreparation
-              value: "{{ $.Values.tasks.settings.features.assetDataPreparation.enabled }}"
+              value: {{ $.Values.tasks.settings.features.assetDataPreparation.enabled | quote }}
             - name: FeatureManagement__AuditLogging
-              value: "{{ $.Values.tasks.settings.features.auditLogging.enabled }}"
+              value: {{ $.Values.tasks.settings.features.auditLogging.enabled | quote }}
             - name: FeatureManagement__CleanCitylensFrames
-              value: "{{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled }}"
+              value: {{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled | quote }}
             - name: FeatureManagement__RemoveUnusedUserAssetFiles
-              value: "{{ $.Values.tasks.settings.features.removeUnusedUserAssetFiles.enabled }}"
+              value: {{ $.Values.tasks.settings.features.removeUnusedUserAssetFiles.enabled | quote }}
             - name: FeatureManagement__EmailNotifications
-              value: "{{ $.Values.tasks.settings.features.emailNotifications.enabled }}"
+              value: {{ $.Values.tasks.settings.features.emailNotifications.enabled | quote }}
             - name: FeatureManagement__UserManagement
-              value: "{{ $.Values.tasks.settings.features.userManagement.enabled }}"
+              value: {{ $.Values.tasks.settings.features.userManagement.enabled | quote }}
 
             - name: Common__Logging__Format
-              value: "{{ .Values.tasks.settings.logging.format }}"
+              value: {{ .Values.tasks.settings.logging.format | quote }}
             - name: Common__Logging__Targets
-              value: "{{ .Values.tasks.settings.logging.targets }}"
+              value: {{ .Values.tasks.settings.logging.targets | quote }}
             - name: Kafka__BootstrapServers
               value: {{ $.Values.kafka.bootstrapServers }}
             - name: Kafka__SecurityProtocol
@@ -165,25 +165,25 @@ spec:
             - name: Kafka__EventsTopicSettings__Name
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
             - name: Kafka__UseReplicaTopics
-              value: "{{ $.Values.kafka.useReplicaTopics }}"
+              value: {{ $.Values.kafka.useReplicaTopics | quote }}
             - name: Common__Mode
               value: "Api"
             - name: Common__HttpPort
-              value: "{{ .Values.tasks.settings.httpPort }}"
+              value: {{ .Values.tasks.settings.httpPort | quote }}
             - name: Common__GrpcPort
-              value: "{{ .Values.tasks.settings.grpcPort }}"
+              value: {{ .Values.tasks.settings.grpcPort | quote }}
             - name: Common__DataCenterId
-              value: "{{ .Values.api.settings.dataCenterId }}"
+              value: {{ .Values.api.settings.dataCenterId | quote }}
             {{- if .Values.tasks.settings.features.assetDataPreparation.enabled }}
             - name: AssetDataPreparation__Segments
-              value: "{{ .Values.tasks.settings.features.assetDataPreparation.segments }}"
+              value: {{ .Values.tasks.settings.features.assetDataPreparation.segments | quote }}
             {{- end }}
 
             - name: Admin__Auth__Schema
-              value: "{{ .Values.tasks.settings.admin.auth.schema }}"
+              value: {{ .Values.tasks.settings.admin.auth.schema | quote }}
             {{- if .Values.tasks.settings.admin.auth.basic.username }}
             - name: Admin__Auth__Basic__Username
-              value: "{{ .Values.tasks.settings.admin.auth.basic.username }}"
+              value: {{ .Values.tasks.settings.admin.auth.basic.username | quote }}
             {{- end }}
             {{- if eq .Values.tasks.settings.admin.auth.schema "Basic"}}
             - name: Admin__Auth__Basic__Password
@@ -194,11 +194,11 @@ spec:
             {{- end }}
             {{- if .Values.tasks.settings.admin.auth.oidc.authority }}
             - name: Admin__Auth__Oidc__Authority
-              value: "{{ .Values.tasks.settings.admin.auth.oidc.authority }}"
+              value: {{ .Values.tasks.settings.admin.auth.oidc.authority | quote }}
             {{- end }}
             {{- if .Values.tasks.settings.admin.auth.oidc.clientId }}
             - name: Admin__Auth__Oidc__ClientId
-              value: "{{ .Values.tasks.settings.admin.auth.oidc.clientId }}"
+              value: {{ .Values.tasks.settings.admin.auth.oidc.clientId | quote }}
             {{- end }}
             {{- if .Values.tasks.settings.admin.auth.oidc.clientSecret }}
             - name: Admin__Auth__Oidc__ClientSecret
@@ -209,14 +209,14 @@ spec:
             {{- end }}
             {{- if .Values.tasks.settings.admin.auth.oidc.nameClaim }}
             - name: Admin__Auth__Oidc__NameClaim
-              value: "{{ .Values.tasks.settings.admin.auth.oidc.nameClaim }}"
+              value: {{ .Values.tasks.settings.admin.auth.oidc.nameClaim | quote }}
             {{- end }}
             {{- if .Values.tasks.settings.admin.auth.oidc.roleClaim }}
             - name: Admin__Auth__Oidc__RoleClaim
-              value: "{{ .Values.tasks.settings.admin.auth.oidc.roleClaim }}"
+              value: {{ .Values.tasks.settings.admin.auth.oidc.roleClaim | quote }}
             {{- end }}
             {{- if .Values.tasks.settings.admin.auth.oidc.requiredRole }}
             - name: Admin__Auth__Oidc__RequiredRole
-              value: "{{ .Values.tasks.settings.admin.auth.oidc.requiredRole }}"
+              value: {{ .Values.tasks.settings.admin.auth.oidc.requiredRole | quote }}
             {{- end }}
 {{- end }}

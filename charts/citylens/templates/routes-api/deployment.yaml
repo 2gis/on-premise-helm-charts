@@ -99,19 +99,19 @@ spec:
                 command: [ "/bin/sh", "-c", "sleep 5" ]
           env:
             - name: Common__TempPath
-              value: "{{ .Values.routes.api.tempPath }}"
+              value: {{ .Values.routes.api.tempPath | quote }}
 
             - name: Common__Logging__LogLevel
-              value: "{{ .Values.routes.api.logging.level }}"
+              value: {{ .Values.routes.api.logging.level | quote }}
             - name: Common__Logging__Extended
-              value: "{{ .Values.routes.api.logging.extended }}"
+              value: {{ .Values.routes.api.logging.extended | quote }}
 
             - name: PgSettings__Host
-              value: "{{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host }}"
+              value: {{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host | quote }}
             - name: PgSettings__Port
-              value: "{{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port }}"
+              value: {{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port | quote }}
             - name: PgSettings__UserName
-              value: "{{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username }}"
+              value: {{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username | quote }}
             - name: PgSettings__Password
               valueFrom:
                 secretKeyRef:
@@ -119,31 +119,31 @@ spec:
                   name: {{ include "citylens.routes.api.name" . }}-secret
 
             - name: PgSettings__Api__Database
-              value: "{{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database }}"
+              value: {{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database | quote }}
             - name: PgSettings__Api__Timeout
-              value: "{{ $.Values.routes.postgres.timeout }}"
+              value: {{ $.Values.routes.postgres.timeout | quote }}
             - name: PgSettings__Api__CommandTimeout
-              value: "{{ $.Values.routes.postgres.commandTimeout }}"
+              value: {{ $.Values.routes.postgres.commandTimeout | quote }}
             - name: PgSettings__Api__MaxPoolSize
-              value: "{{ $.Values.routes.postgres.maxPoolSize }}"
+              value: {{ $.Values.routes.postgres.maxPoolSize | quote }}
             - name: PgSettings__Api__Pooling
-              value: "{{ $.Values.routes.postgres.pooling }}"
+              value: {{ $.Values.routes.postgres.pooling | quote }}
 
             - name: PgSettings__Hangfire__Database
-              value: "{{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database }}"
+              value: {{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database | quote }}
             - name: PgSettings__Hangfire__Timeout
-              value: "{{ $.Values.routes.hangfire.postgres.timeout }}"
+              value: {{ $.Values.routes.hangfire.postgres.timeout | quote }}
             - name: PgSettings__Hangfire__CommandTimeout
-              value: "{{ $.Values.routes.hangfire.postgres.commandTimeout }}"
+              value: {{ $.Values.routes.hangfire.postgres.commandTimeout | quote }}
             - name: PgSettings__Hangfire__MaxPoolSize
-              value: "{{ $.Values.routes.hangfire.postgres.maxPoolSize }}"
+              value: {{ $.Values.routes.hangfire.postgres.maxPoolSize | quote }}
             - name: PgSettings__Hangfire__Pooling
-              value: "{{ $.Values.routes.hangfire.postgres.pooling }}"
+              value: {{ $.Values.routes.hangfire.postgres.pooling | quote }}
 
             - name: S3__BucketPrefix
-              value: "{{ required "A valid .Values.s3.bucketPrefix entry required" $.Values.s3.bucketPrefix }}"
+              value: {{ required "A valid .Values.s3.bucketPrefix entry required" $.Values.s3.bucketPrefix | quote }}
             - name: S3__LogsBucketPrefix
-              value: "{{ required "A valid .Values.s3.logsBucketPrefix entry required" $.Values.s3.logsBucketPrefix }}"
+              value: {{ required "A valid .Values.s3.logsBucketPrefix entry required" $.Values.s3.logsBucketPrefix | quote }}
             - name: S3__AccessKey
               valueFrom:
                 secretKeyRef:
@@ -155,46 +155,46 @@ spec:
                   key: s3SecretAccessKey
                   name: {{ include "citylens.routes.api.name" . }}-secret
             - name: S3__Region
-              value: "{{ $.Values.s3.region }}"
+              value: {{ $.Values.s3.region | quote }}
 
             - name: Clients__Navigation__Enabled
               value: "true"
             - name: Clients__Navigation__Url
-              value: "{{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url }}"
+              value: {{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url | quote }}
             - name: Clients__Navigation__TimeoutSeconds
-              value: "{{ $.Values.routes.navi.timeout }}"
+              value: {{ $.Values.routes.navi.timeout | quote }}
             - name: Clients__Navigation__ApiKey
-              value: "{{ $.Values.routes.navi.key }}"
+              value: {{ $.Values.routes.navi.key | quote }}
 
             - name: Clients__Keys__Enabled
               value: "true"
             - name: Clients__Keys__Url
-              value: "{{ $.Values.routes.keys.url }}"
+              value: {{ $.Values.routes.keys.url | quote }}
             - name: Clients__Keys__Brand
-              value: "{{ $.Values.routes.keys.brand }}"
+              value: {{ $.Values.routes.keys.brand | quote }}
 
             - name: Clients__ProClient__Enabled
               value: "true"
             - name: Clients__ProClient__Url
-              value: "{{ $.Values.pro.baseUrl }}"
+              value: {{ $.Values.pro.baseUrl | quote }}
             - name: Clients__ProClient__AuthorizationToken
-              value: "{{ $.Values.routes.pro.authorizationToken }}"
+              value: {{ $.Values.routes.pro.authorizationToken | quote }}
 
             - name: Clients__RealTimeData__Enabled
               value: "true"
             - name: Clients__RealTimeData__Url
-              value: "{{ required "A valid .Values.routes.realtimeData.url entry required" $.Values.routes.realtimeData.url }}"
+              value: {{ required "A valid .Values.routes.realtimeData.url entry required" $.Values.routes.realtimeData.url | quote }}
 
             - name: Features__AuthorizationEnabled
-              value: "{{ $.Values.routes.features.authorizationEnabled }}"
+              value: {{ $.Values.routes.features.authorizationEnabled | quote }}
             - name: Features__OidcMobileAuthorizationEnabled
-              value: "{{ $.Values.routes.features.oidcMobileAuthorizationEnabled }}"
+              value: {{ $.Values.routes.features.oidcMobileAuthorizationEnabled | quote }}
             - name: Features__CoverageRatioEnabled
-              value: "{{ $.Values.routes.features.coverageRatioEnabled }}"
+              value: {{ $.Values.routes.features.coverageRatioEnabled | quote }}
 
             - name: TasksAssetSettings__SystemAccessToken
-              value: "{{ $.Values.routes.tasksAssetSettings.systemAccessToken }}"
+              value: {{ $.Values.routes.tasksAssetSettings.systemAccessToken | quote }}
             - name: TasksAssetSettings__PlannedTasksAssetId
-              value: "{{ $.Values.routes.tasksAssetSettings.plannedTasksAssetId }}"
+              value: {{ $.Values.routes.tasksAssetSettings.plannedTasksAssetId | quote }}
             - name: TasksAssetSettings__CompletedTasksAssetId
-              value: "{{ $.Values.routes.tasksAssetSettings.completedTasksAssetId }}"
+              value: {{ $.Values.routes.tasksAssetSettings.completedTasksAssetId | quote }}
