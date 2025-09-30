@@ -53,11 +53,13 @@ spec:
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}
           env:
+            {{- if .Values.ui.oauth.clientSecret}}
             - name: OAUTH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ include "platform.ui.secretName" . }}
                   key: oauthClientSecret
+            {{- end}}
             - name: CATALOG_API_KEY
               valueFrom:
                 secretKeyRef:
