@@ -38,11 +38,11 @@ spec:
               resources:
                 {{- toYaml .Values.taskProcessor.resources | nindent 16 }}
               volumeMounts:
-                - mountPath: "{{ .Values.api.tempPath }}"
+                - mountPath: {{ .Values.api.tempPath | quote }}
                   name: temp-volume
               env:
                 - name: Common__TempPath
-                  value: "{{ .Values.api.tempPath }}"
+                  value: {{ .Values.api.tempPath | quote }}
                 - name: MODE
                   value: "Skip"
                 - name: S3__Url
@@ -62,17 +62,17 @@ spec:
                 - name: API_URL
                   value: http://{{ include "api.name" . }}
                 - name: Common__Logging__Format
-                  value: "{{ .Values.api.logging.format }}"
+                  value: {{ .Values.api.logging.format | quote }}
                 - name: TileServer__Importer__Secure
-                  value: "{{ .Values.tilesImporter.secure }}"
+                  value: {{ .Values.tilesImporter.secure | quote }}
                 - name: TileServer__Importer__Hosts
                   value: {{ required "A valid .Values.tilesImporter.hosts entry required" $.Values.tilesImporter.hosts }}
                 - name: Redis__Host
                   value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
                 - name: Redis__Port
-                  value: "{{ .Values.redis.port }}"
+                  value: {{ .Values.redis.port | quote }}
                 - name: Redis__DatabaseId
-                  value: "{{ .Values.redis.databaseId }}"
+                  value: {{ .Values.redis.databaseId | quote }}
                 - name: Redis__Username
                   value: {{ $.Values.redis.username }}
                 {{ if .Values.redis.password }}

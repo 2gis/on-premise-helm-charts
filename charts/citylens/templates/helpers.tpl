@@ -244,11 +244,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: DGCTL_S3_ENDPOINT
   value: "http{{ if .Values.dgctlStorage.secure }}s{{ end }}://{{ required "A valid Values.dgctlStorage.host entry required" .Values.dgctlStorage.host }}"
 - name: DGCTL_S3_VERIFY_SSL
-  value: "{{ required "A valid Values.dgctlStorage.verifySsl entry required" .Values.dgctlStorage.verifySsl }}"
+  value: {{ required "A valid Values.dgctlStorage.verifySsl entry required" .Values.dgctlStorage.verifySsl | quote }}
 - name: DGCTL_S3_BUCKET
-  value: "{{ .Values.dgctlStorage.bucket }}"
+  value: {{ .Values.dgctlStorage.bucket | quote }}
 - name: DGCTL_S3_REGION_NAME
-  value: "{{ .Values.dgctlStorage.region }}"
+  value: {{ .Values.dgctlStorage.region | quote }}
 - name: DGCTL_S3_ACCESS_KEY
   valueFrom:
     secretKeyRef:
@@ -260,7 +260,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       name: {{ include "citylens.secret.import.name" . }}
       key: dgctlStorageSecretKey
 - name: DGCTL_MANIFEST_PATH
-  value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
+  value: {{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest | quote }}
 - name: DGCTL_MANIFEST_APP_NAME
   value: "citylens"
 - name: DGCTL_MANIFEST_DATA_TYPE

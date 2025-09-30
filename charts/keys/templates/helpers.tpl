@@ -18,6 +18,10 @@
 {{ include "keys.name" . }}-cleaner
 {{- end }}
 
+{{- define "keys.counter.name" -}}
+{{ include "keys.name" . }}-counter
+{{- end }}
+
 {{- define "keys.migrate.name" -}}
 {{ include "keys.name" . }}-migrate
 {{- end }}
@@ -90,6 +94,16 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "keys.counter.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}-counter
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "keys.counter.labels" -}}
+{{ include "keys.counter.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
 {{- define "keys.import.labels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-import
 app.kubernetes.io/instance: {{ .Release.Name }}
@@ -108,20 +122,22 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.featureFlags" -}}
 - name: KEYS_FEATURE_FLAGS_AUDIT
-  value: "{{ .Values.featureFlags.enableAudit }}"
+  value: {{ .Values.featureFlags.enableAudit | quote }}
+- name: KEYS_FEATURE_FLAGS_AUDIT_KAFKA
+  value: {{ .Values.featureFlags.enableAuditKafka | quote }}
 - name: KEYS_FEATURE_FLAGS_PUBLIC_API_SIGN
-  value: "{{ .Values.featureFlags.enablePublicAPISign }}"
+  value: {{ .Values.featureFlags.enablePublicAPISign | quote }}
 - name: KEYS_FEATURE_FLAGS_SINGLE_PARTNER_MODE
-  value: "{{ .Values.api.oidc.enableSinglePartnerMode }}"
+  value: {{ .Values.api.oidc.enableSinglePartnerMode | quote }}
 - name: KEYS_FEATURE_FLAGS_EXTERNAL_OIDC
-  value: "{{ .Values.api.oidc.enableExternalProvider }}"
+  value: {{ .Values.api.oidc.enableExternalProvider | quote }}
 - name: KEYS_FEATURE_FLAGS_OIDC
-  value: "{{ .Values.api.oidc.enable }}"
+  value: {{ .Values.api.oidc.enable | quote }}
 {{- end }}
 
 {{- define "keys.env.api" -}}
 - name: KEYS_LOG_LEVEL
-  value: "{{ .Values.api.logLevel }}"
+  value: {{ .Values.api.logLevel | quote }}
 {{- if .Values.featureFlags.enablePublicAPISign }}
 - name: KEYS_SIGN_PRIVATE_KEY
   valueFrom:
@@ -131,68 +147,68 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 {{- if .Values.api.oidc.enable }}
 - name: KEYS_OIDC_ENDPOINT
-  value: "{{ required "A valid .Values.api.oidc.url required" .Values.api.oidc.url }}"
+  value: {{ required "A valid .Values.api.oidc.url required" .Values.api.oidc.url | quote }}
 - name: KEYS_OIDC_CLIENT_TIMEOUT
-  value: "{{ .Values.api.oidc.timeout }}"
+  value: {{ .Values.api.oidc.timeout | quote }}
 - name: KEYS_OIDC_CLIENT_RETRY_COUNT
-  value: "{{ .Values.api.oidc.retryCount }}"
+  value: {{ .Values.api.oidc.retryCount | quote }}
 - name: KEYS_OIDC_DEFAULT_PARTNER_ID
-  value: "{{ required "A valid .Values.api.oidc.defaultPartner.id required" .Values.api.oidc.defaultPartner.id }}"
+  value: {{ required "A valid .Values.api.oidc.defaultPartner.id required" .Values.api.oidc.defaultPartner.id | quote }}
 - name: KEYS_OIDC_DEFAULT_PARTNER_NAME
-  value: "{{ required "A valid .Values.api.oidc.defaultPartner.name required" .Values.api.oidc.defaultPartner.name }}"
+  value: {{ required "A valid .Values.api.oidc.defaultPartner.name required" .Values.api.oidc.defaultPartner.name | quote }}
 - name: KEYS_OIDC_DEFAULT_ROLE
-  value: "{{ required "A valid .Values.api.oidc.defaultPartner.role required" .Values.api.oidc.defaultPartner.role }}"
+  value: {{ required "A valid .Values.api.oidc.defaultPartner.role required" .Values.api.oidc.defaultPartner.role | quote }}
 {{- end }}
 {{- end }}
 
 {{- define "keys.env.import" -}}
 - name: KEYS_LOG_LEVEL
-  value: "{{ .Values.import.logLevel }}"
+  value: {{ .Values.import.logLevel | quote }}
 {{- end }}
 
 {{- define "keys.env.migrate" -}}
 - name: KEYS_LOG_LEVEL
-  value: "{{ .Values.migrate.logLevel }}"
+  value: {{ .Values.migrate.logLevel | quote }}
 {{- end }}
 
 {{- define "keys.env.tasker" -}}
 - name: KEYS_LOG_LEVEL
-  value: "{{ .Values.tasker.logLevel }}"
+  value: {{ .Values.tasker.logLevel | quote }}
 - name: KEYS_TASKER_DELAY
-  value: "{{ .Values.tasker.delay }}"
+  value: {{ .Values.tasker.delay | quote }}
 {{- end }}
 
 {{- define "keys.env.dispatcher" -}}
 - name: KEYS_LOG_LEVEL
-  value: "{{ .Values.dispatcher.logLevel }}"
+  value: {{ .Values.dispatcher.logLevel | quote }}
 - name: KEYS_AUDIT_EVENTS_SEND_INTERVAL
-  value: "{{ .Values.dispatcher.auditEvents.sendInterval }}"
+  value: {{ .Values.dispatcher.auditEvents.sendInterval | quote }}
 - name: KEYS_AUDIT_EVENTS_BATCH_MAX_SIZE
-  value: "{{ .Values.dispatcher.auditEvents.batchMaxSize }}"
+  value: {{ .Values.dispatcher.auditEvents.batchMaxSize | quote }}
 - name: KEYS_AUDIT_EVENTS_HOLD_DURATION
-  value: "{{ .Values.dispatcher.auditEvents.holdDuration }}"
+  value: {{ .Values.dispatcher.auditEvents.holdDuration | quote }}
 {{- end }}
 
 {{- define "keys.env.cleaner" -}}
 - name: KEYS_LOG_LEVEL
-  value: "{{ .Values.dispatcher.cleaner.logLevel }}"
+  value: {{ .Values.dispatcher.cleaner.logLevel | quote }}
 - name: KEYS_AUDIT_EVENTS_RETENTION_DURATION
-  value: "{{ .Values.dispatcher.cleaner.auditEvents.retentionDuration }}"
+  value: {{ .Values.dispatcher.cleaner.auditEvents.retentionDuration | quote }}
 {{- end -}}
 
 {{- define "keys.env.db" -}}
 - name: KEYS_DB_RO_HOST
-  value: "{{ required "A valid .Values.postgres.ro.host required" .Values.postgres.ro.host }}"
+  value: {{ required "A valid .Values.postgres.ro.host required" .Values.postgres.ro.host | quote }}
 - name: KEYS_DB_RO_PORT
-  value: "{{ .Values.postgres.ro.port }}"
+  value: {{ .Values.postgres.ro.port | quote }}
 - name: KEYS_DB_RO_NAME
-  value: "{{ required "A valid .Values.postgres.ro.name required" .Values.postgres.ro.name }}"
+  value: {{ required "A valid .Values.postgres.ro.name required" .Values.postgres.ro.name | quote }}
 - name: KEYS_DB_RO_SCHEMA
-  value: "{{ .Values.postgres.ro.schema }}"
+  value: {{ .Values.postgres.ro.schema | quote }}
 - name: KEYS_DB_RO_CONNECTION_TIMEOUT
-  value: "{{ .Values.postgres.ro.timeout }}"
+  value: {{ .Values.postgres.ro.timeout | quote }}
 - name: KEYS_DB_RO_USERNAME
-  value: "{{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username }}"
+  value: {{ required "A valid .Values.postgres.ro.username required" .Values.postgres.ro.username | quote }}
 - name: KEYS_DB_RO_SSL_MODE
   value: {{ .Values.postgres.ro.tls.mode }}
 {{- if has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full") }}
@@ -212,17 +228,17 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 {{- end }}
 - name: KEYS_DB_RW_HOST
-  value: "{{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host }}"
+  value: {{ required "A valid .Values.postgres.rw.host required" .Values.postgres.rw.host | quote }}
 - name: KEYS_DB_RW_PORT
-  value: "{{ .Values.postgres.rw.port }}"
+  value: {{ .Values.postgres.rw.port | quote }}
 - name: KEYS_DB_RW_CONNECTION_TIMEOUT
-  value: "{{ .Values.postgres.rw.timeout }}"
+  value: {{ .Values.postgres.rw.timeout | quote }}
 - name: KEYS_DB_RW_NAME
-  value: "{{ required "A valid .Values.postgres.rw.name required" .Values.postgres.rw.name }}"
+  value: {{ required "A valid .Values.postgres.rw.name required" .Values.postgres.rw.name | quote }}
 - name: KEYS_DB_RW_SCHEMA
-  value: "{{ .Values.postgres.rw.schema }}"
+  value: {{ .Values.postgres.rw.schema | quote }}
 - name: KEYS_DB_RW_USERNAME
-  value: "{{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username }}"
+  value: {{ required "A valid .Values.postgres.rw.username required" .Values.postgres.rw.username | quote }}
 - name: KEYS_DB_RW_SSL_MODE
   value: {{ .Values.postgres.rw.tls.mode }}
 {{- if has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full") }}
@@ -273,11 +289,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.redis" -}}
 - name: KEYS_REDIS_HOST
-  value: "{{ .Values.redis.host }}"
+  value: {{ .Values.redis.host | quote }}
 - name: KEYS_REDIS_DB
-  value: "{{ .Values.redis.db }}"
+  value: {{ .Values.redis.db | quote }}
 - name: KEYS_REDIS_PORT
-  value: "{{ .Values.redis.port }}"
+  value: {{ .Values.redis.port | quote }}
 {{- if .Values.redis.password }}
 - name: KEYS_REDIS_PASSWORD
   valueFrom:
@@ -296,53 +312,135 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       key: apiAdminUsers
 {{- end }}
 - name: KEYS_ADMIN_SESSION_TTL
-  value: "{{ .Values.api.adminSessionTTL }}"
+  value: {{ .Values.api.adminSessionTTL | quote }}
 - name: KEYS_LDAP_HOST
-  value: "{{ .Values.ldap.host }}"
+  value: {{ .Values.ldap.host | quote }}
 - name: KEYS_LDAP_PORT
-  value: "{{ .Values.ldap.port }}"
+  value: {{ .Values.ldap.port | quote }}
 - name: KEYS_LDAP_USE_STARTTLS
-  value: "{{ .Values.ldap.useStartTLS }}"
+  value: {{ .Values.ldap.useStartTLS | quote }}
 - name: KEYS_LDAP_USE_LDAPS
-  value: "{{ .Values.ldap.useLDAPS }}"
+  value: {{ .Values.ldap.useLDAPS | quote }}
 - name: KEYS_LDAP_SKIP_SERVER_CERTIFICATE_VERIFY
-  value: "{{ .Values.ldap.skipServerCertificateVerify }}"
+  value: {{ .Values.ldap.skipServerCertificateVerify | quote }}
 - name: KEYS_LDAP_SERVER_NAME
-  value: "{{ .Values.ldap.serverName }}"
+  value: {{ .Values.ldap.serverName | quote }}
 - name: KEYS_LDAP_CLIENT_CERTIFICATE_PATH
-  value: "{{ .Values.ldap.clientCertificatePath }}"
+  value: {{ .Values.ldap.clientCertificatePath | quote }}
 - name: KEYS_LDAP_CLIENT_KEY_PATH
-  value: "{{ .Values.ldap.clientKeyPath }}"
+  value: {{ .Values.ldap.clientKeyPath | quote }}
 - name: KEYS_LDAP_ROOT_CERTIFICATE_AUTHORITIES_PATH
-  value: "{{ .Values.ldap.rootCertificateAuthoritiesPath }}"
+  value: {{ .Values.ldap.rootCertificateAuthoritiesPath | quote }}
 - name: KEYS_LDAP_BIND_DN
-  value: "{{ .Values.ldap.bind.dn }}"
+  value: {{ .Values.ldap.bind.dn | quote }}
 - name: KEYS_LDAP_BIND_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "keys.secret.deploys.name" . }}
       key: ldapBindPassword
 - name: KEYS_LDAP_SEARCH_BASE_DN
-  value: "{{ .Values.ldap.search.baseDN }}"
+  value: {{ .Values.ldap.search.baseDN | quote }}
 - name: KEYS_LDAP_SEARCH_FILTER
-  value: "{{ .Values.ldap.search.filter }}"
+  value: {{ .Values.ldap.search.filter | quote }}
 {{- end }}
 
 {{- define "keys.env.admin" -}}
 - name: APP_HOST
-  value: "{{ .Values.admin.host }}"
+  value: {{ .Values.admin.host | quote }}
 - name: API_URL
 {{- if .Values.admin.apiOverride }}
-  value: "{{ .Values.admin.apiOverride }}"
+  value: {{ .Values.admin.apiOverride | quote }}
 {{- else }}
   value: "http://{{ include "keys.api.name" . }}"
 {{- end }}
 - name: BADGE_TITLE
-  value: "{{ .Values.admin.badge.title }}"
+  value: {{ .Values.admin.badge.title | quote }}
 - name: BADGE_TITLE_COLOR
-  value: "{{ .Values.admin.badge.titleColor }}"
+  value: {{ .Values.admin.badge.titleColor | quote }}
 - name: BADGE_BACKGROUND_COLOR
-  value: "{{ .Values.admin.badge.backgroundColor }}"
+  value: {{ .Values.admin.badge.backgroundColor | quote }}
+{{- end }}
+
+{{- define "keys.env.counter" -}}
+- name: KEYS_LOG_LEVEL
+  value: "{{ .Values.counter.logLevel }}"
+- name: KEYS_COUNTER_BUFFER_SIZE
+  value: "{{ .Values.counter.buffer.size }}"
+- name: KEYS_COUNTER_BUFFER_DELAY
+  value: "{{ .Values.counter.buffer.delay }}"
+- name: KEYS_COUNTER_BUFFER_SPLIT_FACTOR
+  value: "{{ .Values.counter.buffer.splitFactor }}"
+- name: KEYS_COUNTER_PRELOADER_REFRESH_TICK
+  value: "{{ .Values.counter.preloader.refreshTick }}"
+- name: KEYS_COUNTER_UPDATE_STATUS_QUERY_TIMEOUT
+  value: "{{ .Values.counter.updateStatusQueryTimeout }}"
+{{- if .Values.counter.parallelismFactor }}
+- name: KEYS_COUNTER_PARALLELISM_FACTOR
+  value: "{{ .Values.counter.parallelismFactor }}"
+{{- end }}
+- name: KEYS_COUNTER_EVENT_PARSER_WORKERS
+  value: "{{ .Values.counter.workers.eventParser }}"
+- name: KEYS_COUNTER_EVENT_FILTERER_WORKERS
+  value: "{{ .Values.counter.workers.eventFilterer }}"
+- name: KEYS_COUNTER_EVENT_METRIC_GATHERER_WORKERS
+  value: "{{ .Values.counter.workers.eventMetricGatherer }}"
+- name: KEYS_COUNTER_EVENT_EVENT_CONVERTER_WORKERS
+  value: "{{ .Values.counter.workers.eventConverter }}"
+- name: KEYS_COUNTER_INCREMENT_FILTERER_WORKERS
+  value: "{{ .Values.counter.workers.incrementFilterer }}"
+- name: KEYS_COUNTER_INCREMENT_SAVER_WORKERS
+  value: "{{ .Values.counter.workers.incrementSaver }}"
+- name: KEYS_KAFKA_MAIN_BROKERS
+  value: "{{ required "A valid .Values.kafka.bootstrapServers entry required" .Values.kafka.bootstrapServers }}"
+- name: KEYS_KAFKA_MAIN_GROUP_ID
+  value: "{{ required "A valid .Values.kafka.stats.groupId entry required" .Values.kafka.stats.groupId }}"
+- name: KEYS_KAFKA_MAIN_CLIENT_ID
+  value: "{{ .Values.kafka.stats.clientId }}"
+- name: KEYS_KAFKA_MAIN_STATS_TOPIC
+  value: "{{ required "A valid .Values.kafka.stats.topic entry required" .Values.kafka.stats.topic }}"
+- name: KEYS_KAFKA_MAIN_FETCH_DEFAULT
+  value: "{{ .Values.kafka.stats.fetchDefault }}"
+- name: KEYS_KAFKA_MAIN_FETCH_MIN
+  value: "{{ .Values.kafka.stats.fetchMin }}"
+- name: KEYS_KAFKA_MAIN_FETCH_MAX
+  value: "{{ .Values.kafka.stats.fetchMax }}"
+- name: KEYS_KAFKA_MAIN_FETCH_MAX_WAIT_TIME
+  value: "{{ .Values.kafka.stats.fetchMaxWaitTime }}"
+- name: KEYS_KAFKA_MAIN_USERNAME
+  value: "{{ .Values.kafka.username }}"
+{{- if .Values.kafka.password }}
+- name: KEYS_KAFKA_MAIN_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.name" . }}-kafka
+      key: password
+{{- end }}
+- name: KEYS_REDIS_RETRIES
+  value: "{{ .Values.counter.redis.retries }}"
+- name: KEYS_REDIS_MIN_RETRY_BACKOFF
+  value: "{{ .Values.counter.redis.minRetryBackoff }}"
+- name: KEYS_REDIS_MAX_RETRY_BACKOFF
+  value: "{{ .Values.counter.redis.maxRetryBackoff }}"
+- name: KEYS_REDIS_DIAL_TIMEOUT
+  value: "{{ .Values.counter.redis.dialTimeout }}"
+- name: KEYS_REDIS_WRITE_TIMEOUT
+  value: "{{ .Values.counter.redis.writeTimeout }}"
+- name: KEYS_REDIS_READ_TIMEOUT
+  value: "{{ .Values.counter.redis.readTimeout }}"
+- name: KEYS_KAFKA_MAIN_SECURITY_PROTOCOL
+  value: "{{ .Values.kafka.securityProtocol }}"
+- name: KEYS_KAFKA_MAIN_SASL_MECHANISM
+  value: "{{ .Values.kafka.saslMechanism }}"
+{{- if has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL") }}
+- name: KEYS_KAFKA_MAIN_TLS_SKIP_SERVER_CERTIFICATE_VERIFY
+  value: "{{ .Values.kafka.tls.skipServerCertificateVerify }}"
+- name: KEYS_KAFKA_MAIN_TLS_CLIENT_CERTIFICATE_PATH
+  value: "/etc/2gis/secret/kafka/client.crt"
+- name: KEYS_KAFKA_MAIN_TLS_CLIENT_KEY_PATH
+  value: "/etc/2gis/secret/kafka/client.key"
+- name: KEYS_KAFKA_MAIN_TLS_CA_CERT_PATH
+  value: "/etc/2gis/secret/kafka/ca.crt"
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.predef" -}}
@@ -358,15 +456,15 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 
 {{- define "keys.env.dgctlStorage" -}}
 - name: KEYS_S3_ENDPOINT
-  value: "{{ .Values.dgctlStorage.host }}"
+  value: {{ .Values.dgctlStorage.host | quote }}
 - name: KEYS_S3_REGION
-  value: "{{ .Values.dgctlStorage.region }}"
+  value: {{ .Values.dgctlStorage.region | quote }}
 - name: KEYS_S3_SECURE
-  value: "{{ .Values.dgctlStorage.secure }}"
+  value: {{ .Values.dgctlStorage.secure | quote }}
 - name: KEYS_S3_VERIFY_SSL
-  value: "{{ .Values.dgctlStorage.verifySsl }}"
+  value: {{ .Values.dgctlStorage.verifySsl | quote }}
 - name: KEYS_S3_BUCKET
-  value: "{{ .Values.dgctlStorage.bucket }}"
+  value: {{ .Values.dgctlStorage.bucket | quote }}
 - name: KEYS_S3_ACCESS_KEY
   valueFrom:
     secretKeyRef:
@@ -378,14 +476,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       name: {{ include "keys.secret.jobs.name" . }}
       key: dgctlStorageSecretKey
 - name: KEYS_MANIFEST_PATH
-  value: "{{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest }}"
+  value: {{ required "A valid .Values.dgctlStorage.manifest entry required" .Values.dgctlStorage.manifest | quote }}
 {{- end }}
 
 {{- define "keys.env.kafka.audit" -}}
 - name: KEYS_KAFKA_AUDIT_BROKERS
-  value: "{{ required "A valid .Values.kafka.bootstrapServers entry required" .Values.kafka.bootstrapServers }}"
+  value: {{ required "A valid .Values.kafka.bootstrapServers entry required" .Values.kafka.bootstrapServers | quote }}
 - name: KEYS_KAFKA_AUDIT_USERNAME
-  value: "{{ .Values.kafka.username }}"
+  value: {{ .Values.kafka.username | quote }}
 {{- if .Values.kafka.password }}
 - name: KEYS_KAFKA_AUDIT_PASSWORD
   valueFrom:
@@ -394,12 +492,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       key: password
 {{- end }}
 - name: KEYS_KAFKA_AUDIT_SECURITY_PROTOCOL
-  value: "{{ .Values.kafka.securityProtocol }}"
+  value: {{ .Values.kafka.securityProtocol | quote }}
 - name: KEYS_KAFKA_AUDIT_SASL_MECHANISM
-  value: "{{ .Values.kafka.saslMechanism }}"
+  value: {{ .Values.kafka.saslMechanism | quote }}
 {{- if has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL") }}
 - name: KEYS_KAFKA_AUDIT_TLS_SKIP_SERVER_CERTIFICATE_VERIFY
-  value: "{{ .Values.kafka.tls.skipServerCertificateVerify }}"
+  value: {{ .Values.kafka.tls.skipServerCertificateVerify | quote }}
 - name: KEYS_KAFKA_AUDIT_TLS_CLIENT_CERTIFICATE_PATH
   value: "/etc/ssl/private/kafka-client.crt"
 - name: KEYS_KAFKA_AUDIT_TLS_CLIENT_KEY_PATH
@@ -408,11 +506,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: "/etc/ssl/private/kafka-ca.crt"
 {{- end }}
 - name: KEYS_KAFKA_AUDIT_TOPIC
-  value: "{{ required "A valid .Values.kafka.audit.topic entry required" .Values.kafka.audit.topic }}"
+  value: {{ required "A valid .Values.kafka.audit.topic entry required" .Values.kafka.audit.topic | quote }}
 - name: KEYS_KAFKA_AUDIT_PRODUCE_RETRY_COUNT
-  value: "{{ .Values.kafka.audit.produce.retryCount }}"
+  value: {{ .Values.kafka.audit.produce.retryCount | quote }}
 - name: KEYS_KAFKA_AUDIT_PRODUCE_IDEMPOTENT_WRITE
-  value: "{{ .Values.kafka.audit.produce.idempotentWrite }}"
+  value: {{ .Values.kafka.audit.produce.idempotentWrite | quote }}
 {{- end }}
 
 {{/*

@@ -66,7 +66,7 @@ spec:
               containerPort: 8081
               protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.api.settings.tempPath }}"
+            - mountPath: {{ .Values.api.settings.tempPath | quote }}
               name: temp-volume
           livenessProbe:
             httpGet:
@@ -103,9 +103,9 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           env:
             - name: DEBUG
-              value: "{{ .Values.api.settings.debug }}"
+              value: {{ .Values.api.settings.debug | quote }}
             - name: ENV
-              value: "{{ .Values.api.settings.env }}"
+              value: {{ .Values.api.settings.env | quote }}
             - name: Postgres__ConnectionString
               value: {{ include "pro-permissions-api.connectionString" . }}
             - name: Postgres__ConnectionStringReadonly
@@ -137,7 +137,7 @@ spec:
                   key: permissionsApiKey
                   name: {{ include "pro-api.name" . }}-secret
             - name: KEYS_SERVICE_URL
-              value: "{{ .Values.keys.url }}"
+              value: {{ .Values.keys.url | quote }}
             {{- if .Values.keys.token }}
             - name: KEYS_SERVICE_TOKEN
               valueFrom:
@@ -148,7 +148,7 @@ spec:
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
-              value: "{{ .Values.redis.port }}"
+              value: {{ .Values.redis.port | quote }}
             - name: Redis__Username
               value: {{ $.Values.redis.username }}
             {{- if .Values.redis.password }}
@@ -159,35 +159,35 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
             - name: Common__Logging__Format
-              value: "{{ .Values.api.settings.logging.format }}"
+              value: {{ .Values.api.settings.logging.format | quote }}
             - name: Common__Logging__Targets
-              value: "{{ .Values.api.settings.logging.targets }}"
+              value: {{ .Values.api.settings.logging.targets | quote }}
             - name: Common__DeleteInactiveUsers
-              value: "{{ .Values.permissions.settings.deleteInactiveUsers }}"
+              value: {{ .Values.permissions.settings.deleteInactiveUsers | quote }}
             - name: Common__DefaultPermissions__OpenProUi
-              value: "{{ .Values.permissions.settings.default_permissions.open_pro_ui }}"
+              value: {{ .Values.permissions.settings.default_permissions.open_pro_ui | quote }}
             {{- range $i, $s := .Values.permissions.settings.default_permissions.assets }}
             - name: Common__DefaultPermissions__Assets__{{$i}}
-              value: "{{ $s }}"
+              value: {{ $s | quote }}
             {{- end }}
             {{- range $i, $s := .Values.permissions.settings.default_permissions.analytics }}
             - name: Common__DefaultPermissions__Analytics__{{$i}}
-              value: "{{ $s }}"
+              value: {{ $s | quote }}
             {{- end }}
             {{- range $i, $s := .Values.permissions.settings.default_permissions.territories }}
             - name: Common__DefaultPermissions__Territories__{{$i}}
-              value: "{{ $s }}"
+              value: {{ $s | quote }}
             {{- end }}
             - name: Common__DefaultPermissions__AddUserAssets__Allow
-              value: "{{ .Values.permissions.settings.default_permissions.add_user_assets.allow }}"
+              value: {{ .Values.permissions.settings.default_permissions.add_user_assets.allow | quote }}
             - name: Common__DefaultPermissions__AddUserAssets__Quantity
-              value: "{{ .Values.permissions.settings.default_permissions.add_user_assets.quantity }}"
+              value: {{ .Values.permissions.settings.default_permissions.add_user_assets.quantity | quote }}
             - name: Common__DefaultPermissions__AddUserAssets__FileSize
-              value: "{{ .Values.permissions.settings.default_permissions.add_user_assets.file_size }}"
+              value: {{ .Values.permissions.settings.default_permissions.add_user_assets.file_size | quote }}
             - name: Common__DefaultPermissions__Isochrones
-              value: "{{ .Values.permissions.settings.default_permissions.isochrones }}"
+              value: {{ .Values.permissions.settings.default_permissions.isochrones | quote }}
             - name: Common__AllowPermissionsToAnyAsset
-              value: "{{ .Values.permissions.settings.allowPermissionsToAnyAsset }}"
+              value: {{ .Values.permissions.settings.allowPermissionsToAnyAsset | quote }}
             - name: Kafka__BootstrapServers
               value: {{ $.Values.kafka.bootstrapServers }}
             - name: Kafka__SecurityProtocol
@@ -204,14 +204,14 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
             - name: Kafka__PermissionsTopicSettings__Name
-              value: "{{ $.Values.kafka.permissionsTopic.name }}"
+              value: {{ $.Values.kafka.permissionsTopic.name | quote }}
             - name: Kafka__PermissionsTopicSettings__ReaderGroupId
-              value: "{{ $.Values.kafka.permissionsTopic.readerGroupId }}"
+              value: {{ $.Values.kafka.permissionsTopic.readerGroupId | quote }}
             - name: Kafka__EventsTopicSettings__Name
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
             - name: Kafka__UseReplicaTopics
-              value: "{{ $.Values.kafka.useReplicaTopics }}"
+              value: {{ $.Values.kafka.useReplicaTopics | quote }}
             - name: LocalCache__Enabled
-              value: "{{ .Values.permissions.settings.localCache.enabled }}"
+              value: {{ .Values.permissions.settings.localCache.enabled | quote }}
             - name: LocalCache__TrackStatistics
-              value: "{{ .Values.permissions.settings.localCache.trackStatistics }}"
+              value: {{ .Values.permissions.settings.localCache.trackStatistics | quote }}

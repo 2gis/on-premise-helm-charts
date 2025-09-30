@@ -39,7 +39,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/platform-ui
-    tag: 1.2.0
+    tag: 1.9.1
 
   # @section UI service settings
 
@@ -49,7 +49,7 @@ ui:
 
   # @param ui.brand Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
   # @skip ui.defaultLocale
-  # @param ui.pages A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground", "map_styles"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
+  # @param ui.pages A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground", "map_styles"`, `"keys"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
   # @param ui.playgrounds A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder" (requires `ui.catalog.url`), "directions"` (requires `ui.navi.url`).
   # @skip ui.googleAnalyticsId
   # @skip ui.googleTagManagerId
@@ -81,7 +81,7 @@ ui:
     clientSecret: ''
     scope: ''
     codeUrl: ''
-    safeHosts: .*
+    safeHosts: '.*'
     secure: true
 
   # @section Statuses for services
@@ -189,10 +189,10 @@ ui:
     enabled: false
     className: nginx
     hosts:
-    - host: platform-ui.example.com
-      paths:
-      - path: /
-        pathType: Prefix
+      - host: platform-ui.example.com
+        paths:
+          - path: /
+            pathType: Prefix
     tls: []
 
   # @section Limits
