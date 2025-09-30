@@ -112,7 +112,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-attractor
   pullPolicy: IfNotPresent
-  tag: 7.39.2.2
+  tag: 7.42.0.3
 
 
 # @section Service account settings
@@ -241,6 +241,8 @@ pdb:
 # @section Navi-Attractor application settings
 
 # @param attractor.appPort Container port for HTTP interface
+# @param attractor.castleUrl URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @param attractor.castleUrlProxy URL of Proxy Navi-Castle service. Needs only OnPrem. More priority than attractor.castleUrl and attractor.restrictions.url.
 # @param attractor.handlersNumber Total number of HTTP/GRPC handlers.
 # @param attractor.maxProcessTime Maximum processing time limit in minutes.
 # @param attractor.responseTimelimit Maximum response time limit in minutes.
@@ -251,8 +253,17 @@ pdb:
 # @param attractor.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal.
 # @param attractor.logMessageField Field name in logs for messages data.
 # @param attractor.grpcPort Container port for gRPC interface
+# @param attractor.sentry.enabled If sending crash dumps to Sentry needed
+# @param attractor.sentry.address Sentry URL
+# @param attractor.sentry.project Sentry project ID
+# @param attractor.sentry.username Sentry username
+# @param attractor.sentry.printMessages If outgoing messages needed
+# @param attractor.sentry.debug Debugging switch
+# @param attractor.sentry.reportPath Local directory to dump
+# @param attractor.sentry.handler Handler file location
 # @param attractor.indexFilename Name of the index file on Castle
 # @param attractor.citiesFilename Name of the cities file on Castle
+# @param attractor.disableUpdates Test switch for disabling runtime background updates
 # @extra attractor.indices List of dynamic indices kill switches.
 # @skip attractor.indices.carOptions.enabled
 # @skip attractor.indices.countryCarOptions.enabled
@@ -264,11 +275,11 @@ pdb:
 # @skip attractor.indices.snImport.enabled
 # @skip attractor.attractor
 # @param attractor.overrideConfig Complete config override. For test purposes only.
-# @param attractor.rtr.enabled Enable real time restrictions.
-# @param attractor.rtr.url URL real time restrictions server.
-# @extra attractor.rtr.filename Filename of the real time restrictions
-# @param attractor.rtr.updatePeriod Update period from real time restrictions server.
-# @param attractor.rtr.timeoutSeconds Timeout seconds for restrictions server
+# @param attractor.restrictions.enabled Enable restrictions.
+# @param attractor.restrictions.url URL of restrictions server. More priority than attractor.castleUrl.
+# @extra attractor.restrictions.filename Filename of the restrictions.
+# @param attractor.restrictions.updatePeriod Update period from restrictions server.
+# @param attractor.restrictions.timeoutSeconds Timeout seconds for restrictions server
 # @param attractor.tilesMetricsThreshold The value at which we send tiles metrics (used for internal tests).
 # @param attractor.app_rule Item name from `rules` list to load rules from.
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
@@ -277,6 +288,8 @@ pdb:
 
 attractor:
   appPort: 8080
+  castleUrl: ''
+  castleUrlProxy: ''
   handlersNumber: 20
   maxProcessTime: 20
   responseTimelimit: 120
@@ -288,8 +301,18 @@ attractor:
   logLevel: Info
   logMessageField: custom.navi_msg
   grpcPort: 50051
+  sentry:
+    enabled: false
+    address: sentry.local
+    project: attractor
+    username: navi
+    printMessages: false
+    debug: false
+    reportPath: /tmp/sentry
+    handler: /usr/sbin/2gis/mosesd/crashpad_handler
   indexFilename: index.json.zip
   citiesFilename: cities.conf.zip
+  disableUpdates: false
   indices:
     # items in alphabet order
     carOptions:
@@ -310,7 +333,7 @@ attractor:
       enabled: false
   attractor: {}
   overrideConfig: ''
-  rtr:
+  restrictions:
     enabled: false
     url: ''
     updatePeriod: 60

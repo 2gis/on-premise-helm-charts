@@ -47,7 +47,7 @@ terminationGracePeriodSeconds: 60
 image:
   repository: 2gis-on-premise/navi-splitter
   pullPolicy: IfNotPresent
-  tag: 1.8.9
+  tag: 1.11.1
 
 # @section Splitter application settings
 

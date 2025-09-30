@@ -1,5 +1,41 @@
 # 2GIS On-Premise Changelog
 
+## [1.43.0] (2025-08-26)
+#### [Breaking-Changes](Breaking-Changes.md#1430)
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.62.0
+	+ mapgl:1.63.0
+navi-async-matrix
+	- navi-async-matrix:1.16.0
+	+ navi-async-matrix:1.16.1
+	- navi-merger-async-matrix:1.16.0
+	+ navi-merger-async-matrix:1.16.1
+navi-attractor
+	- navi-attractor:7.39.2.2
+	+ navi-attractor:7.42.0.3
+navi-back
+	- navi-back:7.39.2.2
+	+ navi-back:7.42.0.3
+navi-castle
+	- navi-castle:1.9.8
+	+ navi-castle:1.9.12
+navi-splitter
+	- navi-splitter:1.8.9
+	+ navi-splitter:1.11.1
+navi-vrp-solver
+	- navi-vrp-solver:1.13.0
+	+ navi-vrp-solver:1.13.1
+navi-vrp-task-manager
+	- navi-vrp-task-manager:1.13.0
+	+ navi-vrp-task-manager:1.13.1
+twins-api
+	- twins-api:1.18.0
+	+ twins-api:1.20.0
+
+```
+
 ## [1.42.0] (2025-08-01)
 #### Images
 ```
