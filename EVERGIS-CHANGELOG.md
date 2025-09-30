@@ -1,0 +1,11 @@
+## [2.0.0] (2025-09-30)
+
+#### Images
+```
+gis-platform
+	+ gis_platform_portal:2023.8.3-0
+	+ gis_platform_spcore:2023.8.3-0
+	+ zookeeper:3.7.0-debian-10-r265
+
+```
+
