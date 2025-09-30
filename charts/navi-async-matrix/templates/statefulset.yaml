@@ -223,8 +223,6 @@ spec:
               value: {{ required "A valid kafka.mergerStatusTopic entry required" .Values.kafka.mergerStatusTopic | quote }}
             - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__CONFIG_TYPE
               value: default
-            - name: DM_ASYNC_SERVICE_TASK_SPLIT_SIZE
-              value: {{ .Values.dm.taskSplitSize | quote }}
             - name: DM_ASYNC_SERVICE_COMPOSITE_TASK_TIMEOUT_IN_SECONDS
               value: {{ .Values.dm.compositeTaskTimeoutSec | quote }}
             {{- if .Values.multiDc.enabled }}
