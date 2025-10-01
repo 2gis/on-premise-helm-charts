@@ -138,9 +138,9 @@ jobs:
         run: |
           cr upload \
             --owner ${{ github.repository_owner }} \
-            --repo ${{ github.event.repository.name }} \
+            --git-repo ${{ github.event.repository.name }} \
             --token ${{ secrets.GITHUB_TOKEN }} \
-            --packages .cr-release-packages \
+            --package-path .cr-release-packages \
             --skip-existing
 
       # Обновление index.yaml и пуш в gh-pages
@@ -148,9 +148,9 @@ jobs:
         run: |
           cr index \
             --owner ${{ github.repository_owner }} \
-            --repo ${{ github.event.repository.name }} \
+            --git-repo ${{ github.event.repository.name }} \
             --token ${{ secrets.GITHUB_TOKEN }} \
-            --packages .cr-release-packages \
+            --package-path .cr-release-packages \
             --index-path index.yaml \
             --pages-branch gh-pages \
             --push
