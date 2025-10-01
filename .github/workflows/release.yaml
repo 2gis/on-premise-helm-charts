@@ -113,5 +113,27 @@ jobs:
           echo "Charts remaining in $CHARTS_DIR:"
           ls -1 "$CHARTS_DIR"
 
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: latest
+
+      - name: Package charts manually
+        run: |
+          mkdir -p .cr-release-packages
+          for chart_path in $(find ./charts -name 'Chart.yaml'); do
+            chart_dir=$(dirname "$chart_path")
+            echo "Packaging chart: $chart_dir"
+            helm dependency update "$chart_dir"
+            helm package "$chart_dir" --destination .cr-release-packages
+          done
+
       - name: Release chart
         uses: helm/chart-releaser-action@v1.7.0
+        with:
+          release_packages: .cr-release-packages
+          skip_packaging: true
+          skip_existing: false
+          mark_as_latest: true
+          packages_with_index: true
+          pages_branch: gh-pages
