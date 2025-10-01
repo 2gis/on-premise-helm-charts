@@ -32,15 +32,12 @@ jobs:
 
       - name: Filter charts
         run: |
-          # Извлечение тега из GITHUB_REF (например, refs/tags/PRO-1.2.3)
           TAG=${GITHUB_REF#refs/tags/}
           echo "Processing tag: $TAG"
 
-          # Извлечение версии и группы
           GROUP=$(echo "$TAG" | grep -oE '^(PRO|Platform|Citylens|Evergis|Core)')
           VERSION=$(echo "$TAG" | sed -E 's/^(PRO|Platform|Citylens|Evergis|Core)-//')
 
-          # Проверка формата версии на соответствие семантическому версионированию
           if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$ ]]; then
             echo "Error: Invalid version format. Expected semantic version (x.y.z), got $VERSION"
             exit 1
@@ -49,21 +46,17 @@ jobs:
           echo "Version: $VERSION"
           echo "Group: $GROUP"
 
-          # Определение чартов для сборки
           CHARTS_DIR="charts"
           TEMP_DIR="charts_temp"
           ALL_CHARTS=$(ls -1 "$CHARTS_DIR")
 
-          # Списки чартов по группам
           PRO_CHARTS=("pro-api" "pro-ui")
           CITYLENS_CHARTS=("citylens" "citylens-routes-ui")
           EVERGIS_CHARTS=("gis-platform")
           CORE_CHARTS=("keys" "license" "keycloak")
 
-          # Универсальная зависимость
           UNIVERSAL_DEPENDENCY="generic-chart"
 
-          # Формирование списка чартов для сборки
           case "$GROUP" in
             "PRO")
               SELECTED_CHARTS=("${PRO_CHARTS[@]}")
@@ -78,7 +71,6 @@ jobs:
               SELECTED_CHARTS=("${CORE_CHARTS[@]}")
               ;;
             "Platform")
-              # Все чарты, кроме PRO, Citylens, Evergis, Core
               SELECTED_CHARTS=()
               for chart in $ALL_CHARTS; do
                 if [[ ! " ${PRO_CHARTS[*]} " =~ " $chart " ]] && \
@@ -98,10 +90,8 @@ jobs:
           echo "Selected charts: ${SELECTED_CHARTS[*]}"
           echo "Universal dependency: $UNIVERSAL_DEPENDENCY"
 
-          # Создание временной папки для ненужных чартов
           mkdir -p "$TEMP_DIR"
 
-          # Перемещение ненужных чартов (оставляем выбранные и универсальную зависимость)
           for chart in $ALL_CHARTS; do
             if [[ ! " ${SELECTED_CHARTS[*]} " =~ " $chart " ]] && [[ "$chart" != "$UNIVERSAL_DEPENDENCY" ]]; then
               mv "$CHARTS_DIR/$chart" "$TEMP_DIR/"
@@ -109,9 +99,30 @@ jobs:
             fi
           done
 
-          # Вывод оставшихся чартов для отладки
           echo "Charts remaining in $CHARTS_DIR:"
           ls -1 "$CHARTS_DIR"
 
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: latest
+
+      - name: Package charts manually
+        run: |
+          mkdir -p .cr-release-packages
+          for chart_path in $(find ./charts -name 'Chart.yaml'); do
+            chart_dir=$(dirname "$chart_path")
+            echo "Packaging chart: $chart_dir"
+            helm dependency update "$chart_dir"
+            helm package "$chart_dir" --destination .cr-release-packages
+          done
+
       - name: Release chart
         uses: helm/chart-releaser-action@v1.7.0
+        with:
+          release_packages: .cr-release-packages
+          skip_packaging: true
+          skip_existing: false
+          mark_as_latest: true
+          packages_with_index: true
+          pages_branch: gh-pages
