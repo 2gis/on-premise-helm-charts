@@ -133,6 +133,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: {{ .Values.api.oidc.enableExternalProvider | quote }}
 - name: KEYS_FEATURE_FLAGS_OIDC
   value: {{ .Values.api.oidc.enable | quote }}
+- name: KEYS_FEATURE_FLAGS_STAT_API
+  value: {{ .Values.statApi.enable | quote }}
 {{- end }}
 
 {{- define "keys.env.api" -}}
@@ -342,6 +344,17 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: {{ .Values.ldap.search.baseDN | quote }}
 - name: KEYS_LDAP_SEARCH_FILTER
   value: {{ .Values.ldap.search.filter | quote }}
+{{- end }}
+
+{{- define "keys.env.stat-api"}}
+{{- if .Values.statApi.enable }}
+- name: KEYS_STATAPI_ENDPOINT
+  value: {{ .Values.statApi.url | quote }}
+- name: KEYS_STATAPI_STATAPI_TIMEOUT
+  value: {{ .Values.statApi.timeout | quote }}
+- name: KEYS_STATAPI_RETRY_COUNT
+  value: {{ .Values.statApi.retryCount | quote }}
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.admin" -}}
