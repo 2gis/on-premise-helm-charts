@@ -57,7 +57,7 @@ jobs:
 
           # Списки чартов по группам
           PRO_CHARTS=("pro-api" "pro-ui")
-          CITYLENS_CHARTS=("citylens" "citylens-routes-ui")
+          CITYLENS_CHARTS=("citylens" "citylens-routes-ui" "generic-chart")
           EVERGIS_CHARTS=("gis-platform")
           CORE_CHARTS=("keys" "license" "keycloak")
 
