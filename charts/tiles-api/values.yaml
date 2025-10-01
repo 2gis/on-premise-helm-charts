@@ -246,7 +246,7 @@ tilegen:
 # @param proxy.access.stat.url Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
 
 # @extra proxy.access.stat.registerExactHosts **Register requests to BSS for exact hosts feature settings**
-# @param proxy.access.stat.registerExactHosts.enabled If disabled, all requests will be registered in BSS, otherwise the only exact hosts that matches regexp will be registered.
+# @param proxy.access.stat.registerExactHosts.enabled If disabled, all requests will be registered in BSS, otherwise the only requests to exact hosts that matches regexp will be registered (hosts of tiles-api).
 # @param proxy.access.stat.registerExactHosts.regexpPattern Regular expression for matching hosts that will be registered to statistics. **Required**
 
 proxy:
@@ -279,10 +279,12 @@ proxy:
 
       registerExactHosts:
         enabled: false
+        # example: '^example\\.ru$'
         regexpPattern: ''
 
     skipExactOrigins:
       enabled: false
+      # example: '^https://example\\.ru$'
       regexpPattern: ''
 
     vector:
