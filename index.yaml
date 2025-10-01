@@ -3815,6 +3815,24 @@ entries:
   gis-platform:
   - apiVersion: v2
     appVersion: 2023.8.3-0
+    created: "2025-10-01T09:24:23.977711015Z"
+    dependencies:
+    - name: zookeeper
+      repository: https://2gis.github.io/on-premise-helm-charts
+      version: 1.5.2
+    description: GIS Platform
+    digest: 8e8c2dec9d0757885f2a2779ec7593c8106cd8b6fab2d833d72e432941ada0ea
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: gis-platform
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/gis-platform-2.0.0/gis-platform-2.0.0.tgz
+    version: 2.0.0
+  - apiVersion: v2
+    appVersion: 2023.8.3-0
     created: "2025-08-26T09:31:31.825304127Z"
     dependencies:
     - name: zookeeper
@@ -27842,4 +27860,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/zookeeper-1.5.2/zookeeper-1.5.2.tgz
     version: 1.5.2
-generated: "2025-10-01T06:58:57.58263043Z"
+generated: "2025-10-01T09:24:23.979913746Z"
