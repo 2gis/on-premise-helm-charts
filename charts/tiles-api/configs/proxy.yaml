@@ -21,12 +21,10 @@ access:
     {{- end }}
     register-exact-hosts:
       enabled: {{ access.stat.registerExactHosts.enabled }}
-      use-default-value: {{ access.stat.registerExactHosts.useDefaultValue }}
-      host-regexp-pattern: {{ access.stat.registerExactHosts.hostRegexpPattern | quote }}
+      regexp-pattern: {{ access.stat.registerExactHosts.regexpPattern | quote }}
   skip-exact-origins:
     enabled: {{ access.skipExactOrigins.enabled }}
-    use-default-value: {{ access.skipExactOrigins.useDefaultValue }}
-    origin-regexp-pattern: {{ access.skipExactOrigins.originRegexpPattern | quote }}
+    regexp-pattern: {{ access.skipExactOrigins.regexpPattern | quote }}
 
 storage:
   enabled: false
