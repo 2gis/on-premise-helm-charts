@@ -16,8 +16,11 @@ jobs:
       - name: Extract tag information
         id: extract_tag
         run: |
-          TAG=$(echo "${{ github.event.workflow_run.head_branch }}" | grep -oE '^(PRO|Platform|Citylens|Evergis|Core)')
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          FULL_TAG="${{ github.event.workflow_run.head_branch }}"
+          PRODUCT=$(echo "$FULL_TAG" | grep -oE '^(PRO|Platform|Citylens|Evergis|Core)')
+          VERSION=$(echo "$FULL_TAG" | sed -E 's/^(PRO|Platform|Citylens|Evergis|Core)-//')
+          echo "tag=$PRODUCT" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Generate next release date
         id: nextrelease
@@ -34,8 +37,8 @@ jobs:
           MATTERMOST_USERNAME: Github
           MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
           TEXT: |
-            Опубликован On-Premise: ${{ github.event.workflow_run.head_branch }}
-            Документация: https://confluence.2gis.ru/display/ONPREM/Release+Platform+${{ github.event.workflow_run.head_branch }}+On-Premise
+            Опубликован On-Premise: ${{ steps.extract_tag.outputs.tag }} ${{ steps.extract_tag.outputs.version }}
+            Документация: https://confluence.2gis.ru/display/ONPREM/Release+Platform+${{ steps.extract_tag.outputs.version }}+On-Premise
             Дата следующего планового релиза: ${{ steps.nextrelease.outputs.nextdate }}
             Дата формирования списка кандидатов релиза: ${{ steps.nextrelease.outputs.startdate }}
             Актуальная информация по датам и содержанию релизов: https://jira.2gis.ru/projects/ONPREM?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased
@@ -47,6 +50,6 @@ jobs:
           MATTERMOST_USERNAME: Github
           MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
           TEXT: |
-            Опубликован On-Premise: ${{ github.event.workflow_run.head_branch }}
-            Документация: https://confluence.2gis.ru/display/ONPREM/Release+${{ steps.extract_tag.outputs.tag }}+${{ github.event.workflow_run.head_branch }}+On-Premise
+            Опубликован On-Premise: ${{ steps.extract_tag.outputs.tag }} ${{ steps.extract_tag.outputs.version }}
+            Документация: https://confluence.2gis.ru/display/ONPREM/Release+${{ steps.extract_tag.outputs.tag }}+${{ steps.extract_tag.outputs.version }}+On-Premise
             Актуальная информация по содержанию релиза: https://jira.2gis.ru/projects/ONPREM?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased
