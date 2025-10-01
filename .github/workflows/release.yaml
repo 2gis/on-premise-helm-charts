@@ -1,4 +1,3 @@
----
 name: Release Charts
 
 on:
@@ -57,9 +56,12 @@ jobs:
 
           # Списки чартов по группам
           PRO_CHARTS=("pro-api" "pro-ui")
-          CITYLENS_CHARTS=("citylens" "citylens-routes-ui" "generic-chart")
+          CITYLENS_CHARTS=("citylens" "citylens-routes-ui")
           EVERGIS_CHARTS=("gis-platform")
           CORE_CHARTS=("keys" "license" "keycloak")
+
+          # Универсальная зависимость
+          UNIVERSAL_DEPENDENCY="generic-chart"
 
           # Формирование списка чартов для сборки
           case "$GROUP" in
@@ -94,13 +96,14 @@ jobs:
           esac
 
           echo "Selected charts: ${SELECTED_CHARTS[*]}"
+          echo "Universal dependency: $UNIVERSAL_DEPENDENCY"
 
           # Создание временной папки для ненужных чартов
           mkdir -p "$TEMP_DIR"
 
-          # Перемещение ненужных чартов
+          # Перемещение ненужных чартов (оставляем выбранные и универсальную зависимость)
           for chart in $ALL_CHARTS; do
-            if [[ ! " ${SELECTED_CHARTS[*]} " =~ " $chart " ]]; then
+            if [[ ! " ${SELECTED_CHARTS[*]} " =~ " $chart " ]] && [[ "$chart" != "$UNIVERSAL_DEPENDENCY" ]]; then
               mv "$CHARTS_DIR/$chart" "$TEMP_DIR/"
               echo "Moved $chart to $TEMP_DIR"
             fi
