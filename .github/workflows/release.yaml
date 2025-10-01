@@ -118,6 +118,11 @@ jobs:
         with:
           version: latest
 
+      - name: Install chart-releaser CLI
+        run: |
+          curl -sSL https://github.com/helm/chart-releaser/releases/download/v1.7.0/chart-releaser_1.7.0_linux_amd64.tar.gz | tar -xz
+          sudo mv cr /usr/local/bin
+
       - name: Package charts manually
         run: |
           mkdir -p .cr-release-packages
@@ -128,12 +133,24 @@ jobs:
             helm package "$chart_dir" --destination .cr-release-packages
           done
 
-      - name: Release chart
-        uses: helm/chart-releaser-action@v1.7.0
-        with:
-          version: v1.7.0
-          skip_packaging: true
-          skip_existing: false
-          mark_as_latest: true
-          packages_with_index: true
-          pages_branch: gh-pages
+      # Загрузка пакетов в GitHub Releases
+      - name: Upload charts to GitHub Releases
+        run: |
+          cr upload \
+            --owner ${{ github.repository_owner }} \
+            --repo ${{ github.event.repository.name }} \
+            --token ${{ secrets.GITHUB_TOKEN }} \
+            --packages .cr-release-packages \
+            --skip-existing
+
+      # Обновление index.yaml и пуш в gh-pages
+      - name: Update index.yaml and push to gh-pages
+        run: |
+          cr index \
+            --owner ${{ github.repository_owner }} \
+            --repo ${{ github.event.repository.name }} \
+            --token ${{ secrets.GITHUB_TOKEN }} \
+            --packages .cr-release-packages \
+            --index-path index.yaml \
+            --pages-branch gh-pages \
+            --push
