@@ -131,7 +131,7 @@ jobs:
       - name: Release chart
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          release_packages: .cr-release-packages
+          version: v1.7.0
           skip_packaging: true
           skip_existing: false
           mark_as_latest: true
