@@ -1,43 +1,57 @@
----
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "search-api.fullname" . }}
+  name: {{ include "big-search.fullname" . }}
   labels:
-    {{- include "search-api.labels" . | nindent 4 }}
+    {{- include "big-search.labels" . | nindent 4 -}}
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "big-search.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}{{- /* .Values.dgctlStorage).manifest */}}
+    {{- end }}{{- /* include "big-search.labels" */}}
 data:
-  search_api_config: |
-    <?xml version='1.0' encoding='UTF-8' ?>
-    <sapphire>
-            <!-- Alert|Critical|Error|Warning|Notice|Info|Debug -->
-            <log_level>{{ .Values.api.logLevel }}</log_level>
-            <log_type>stdout</log_type>
-            <!-- json/plaintext -->
-            <log_format>{{ .Values.api.logFormat }}</log_format>
+  nginx.conf: |
+  {{- if .Values.onpremise }}
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
 
-            <socket_path>:{{ .Values.api.fcgiPort }}</socket_path>
-            <socket_backlog_size>128</socket_backlog_size>
-            <worker_threads>64</worker_threads>
+    keepalive_requests 100;
+    keepalive_timeout 10;
+    types_hash_max_size 2048;
 
-            <status_path>/run/</status_path>
+    include /etc/nginx/mime.types;
 
-            <index_path>{{ .Values.api.dataDir }}/indexes</index_path>
-            <ads_path>{{ .Values.api.dataDir }}/ads</ads_path>
-            <rtw_path>{{ .Values.api.dataDir }}/rtw</rtw_path>
-            <feature_flags_path>{{ .Values.api.dataDir }}</feature_flags_path>
+    gzip on;
+    gzip_types application/json;
+    gzip_min_length 512;
 
-            <search_timeout>{{ .Values.api.timeout }}</search_timeout>
-            <is_container>1</is_container>
-            <slow_search_request_threshold>2000</slow_search_request_threshold>
-            <segment_geometry_source>segments</segment_geometry_source>
-            {{- range .Values.api.configOpt }}
-            {{ . }}
-            {{- end }}
-    </sapphire>
+    access_log off;
+    error_log stderr;
 
-  nginx_config: |
-    daemon off;
+    server {
+        listen {{ .Values.head.nginx.ports.http }};
+
+        location / {
+            proxy_pass http://127.0.0.1:{{ .Values.head.head.ports.http }};
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+
+            gzip on;
+            gzip_types application/json;
+        }
+        location /metrics {
+            proxy_pass http://127.0.0.1:{{ .Values.magg.ports.metrics }}/metrics;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+    {{ else }}
+    user www-data;
     worker_processes 2;
     pid /run/nginx.pid;
 
@@ -49,32 +63,769 @@ data:
         sendfile on;
         tcp_nopush on;
         tcp_nodelay on;
+        server_tokens off;
 
-        keepalive_requests 100;
+        # akka клиент, который используют вебапи и казино
+        # пытается отправлять запросы по "горячему" соединению
+        # из-за чего запросы неравномерно распределяются между
+        # сапфирами. Чем больше keepalive_requests - тем хуже
+        # будет распределение
+        keepalive_requests {{ .Values.head.nginx.keepAliveCount }};
         keepalive_timeout 10;
         types_hash_max_size 2048;
 
         include /etc/nginx/mime.types;
+        types {
+            text/plain csv yml yaml;
+        }
+        default_type application/octet-stream;
+
+        error_log  /dev/stderr  error;
 
         gzip on;
-        gzip_types application/json;
+        gzip_disable "msie6";
         gzip_min_length 512;
 
-        access_log off;
-        error_log stderr;
+        index hints.html index.html;
+
+      {{- if .Values.head.nginx.enableAccessLog }}
+        access_log /dev/stdout;
+      {{- end }}{{- /* .Values.head.nginx.enableAccessLog */}}
+        error_log /dev/stdout {{ .Values.head.nginx.logLevel }};
+
+        large_client_header_buffers 4 32k;
 
         server {
-            listen {{ .Values.nginx.httpPort }};
+            listen {{ .Values.head.nginx.ports.http }};
 
             location / {
-                    fastcgi_pass 127.0.0.1:{{ .Values.api.fcgiPort }};
-                    fastcgi_keep_conn on;
-                    fastcgi_param URI $request_uri;
-                    include /etc/nginx/fastcgi_params;
+                proxy_pass http://127.0.0.1:{{ .Values.head.head.ports.http }};
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+
+                gzip on;
+                gzip_types application/json;
+            }
+
+            location /metrics {
+                proxy_pass http://127.0.0.1:{{ .Values.magg.ports.metrics }}/metrics;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+
+            location /doc {
+                charset utf-8;
+                include mime.types;
+                types {
+                    text/plain yml yaml;
+                }
+                root /var/www;
+            }
+
+            location = / {
+                return 302 doc/;
+            }
+
+            location = /doc {
+                return 302 doc/;
+            }
+
+            location /version {
+                alias /var/www/version.txt;
+                add_header Content-Type text/plain;
+            }
+
+            location /sapphire {
+                alias /var/2gis/;
+                autoindex on;
+                autoindex_exact_size off;
+                autoindex_localtime on;
+                charset utf-8;
+            }
+
+            location /index_json_format/sapphire {
+                alias /var/2gis/;
+                autoindex on;
+                autoindex_exact_size off;
+                autoindex_format json;
+                autoindex_localtime on;
+                charset utf-8;
+            }
+
+            location /index_maker {
+                proxy_pass http://127.0.0.1:8002/;
+            }
+
+            location /index_maker_cfg {
+                alias /etc/2gis-cm/;
+                autoindex on;
+                autoindex_exact_size off;
+                autoindex_localtime on;
+                charset utf-8;
+            }
+
+            location /index_maker_log/ {
+                include mime.types;
+                types {
+                    text/plain log;
+                }
+
+                alias /var/log/index_maker/;
+
+                autoindex on;
+                autoindex_exact_size off;
+                autoindex_localtime on;
+                charset utf-8;
             }
         }
     }
+  {{- end -}}{{- /* .Values.onpremise */}}
+  envoy.yaml: |
+    admin:
+      address:
+        socket_address:
+          protocol: TCP
+          address: 0.0.0.0
+          port_value: {{ .Values.head.envoy.ports.admin }}
+    layered_runtime:
+      layers:
+        - name: admin
+          admin_layer: {}
+    static_resources:
+      listeners:
+        - name: workers_listener
+          address:
+            socket_address:
+              protocol: TCP
+              address: 127.0.0.1
+              port_value: {{ .Values.head.envoy.ports.grpc }}
+          filter_chains:
+            - filters:
+                - name: envoy.http_connection_manager
+                  typed_config:
+                    "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                    stat_prefix: ingress_http
+                  {{- if .Values.head.envoy.enableAccessLog }}
+                    access_log:
+                      - name: envoy.access_loggers.stdout
+                        typed_config:
+                          "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+                  {{- end }}{{- /* .Values.head.envoy.enableAccessLog */}}
+                    route_config:
+                      name: local_route
+                      virtual_hosts:
+                        {{ if .Values.onpremise -}}
+                        - name: local_service
+                          domains: [ "*" ]
+                          routes:
+                            - match:
+                                prefix: "/"
+                              route:
+                                cluster: workers
+                        {{- else -}}
+                        - name: local_service
+                          domains: [ "*" ]
+                          routes:
+                            - match:
+                                prefix: "/unisearch.proto.Worker/"
+                              route:
+                                cluster: workers
+                                auto_host_rewrite: true
+                                retry_policy:
+                                  retry_on: "connect-failure,refused-stream,reset,unavailable,resource-exhausted,cancelled,internal"
+                                  num_retries: {{ .Values.head.head.workerRetryAttempts }}
+                            {{- if (and (index .Values.head.envoy.faultInjection.clients "worker") (.Values.head.envoy.faultInjection.enabled)) }}
+                              typed_per_filter_config:
+                                envoy.filters.http.fault:
+                                  "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
+                                  {{- toYaml .Values.head.envoy.faultInjection.clients.worker | nindent 34 }}
+                            {{- end }}
+                            - match:
+                                prefix: "/querytransformer.QueryTransformer/"
+                              route:
+                                cluster: qt
+                                auto_host_rewrite: true
+                            {{- if (and (index .Values.head.envoy.faultInjection.clients "qt") (.Values.head.envoy.faultInjection.enabled)) }}
+                              typed_per_filter_config:
+                                envoy.filters.http.fault:
+                                  "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
+                                  {{- toYaml .Values.head.envoy.faultInjection.clients.qt | nindent 34 }}
+                            {{- end }}
+                            - match:
+                                prefix: "/metasearch.MetaWorker/"
+                              route:
+                                cluster: ai_vector_search
+                                auto_host_rewrite: true
+                            {{- if (and (index .Values.head.envoy.faultInjection.clients "ai") (.Values.head.envoy.faultInjection.enabled)) }}
+                              typed_per_filter_config:
+                                envoy.filters.http.fault:
+                                  "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
+                                  {{- toYaml .Values.head.envoy.faultInjection.clients.ai | nindent 34 }}
+                            {{- end }}
+                        {{- end }}{{- /* .Values.onpremise */}}
+                    http_filters:
+                    {{- if .Values.head.envoy.faultInjection.enabled }}
+                      - name: envoy.filters.http.fault
+                        typed_config:
+                          "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
+                    {{- end }}
+                      - name: envoy.router
+                        typed_config:
+                          "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+      clusters:
+        - name: workers
+          connect_timeout: 1s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          dns_refresh_rate: 1s
+          lb_policy: {{ .Values.head.envoy.policy }}
+          http2_protocol_options: { }
+          load_assignment:
+            cluster_name: workers
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          port_value: {{ .Values.worker.ports.grpc }}
+                          address: {{ include "big-search.fullname" . }}-worker
+        {{ if not .Values.onpremise -}}
+        - name: qt
+          connect_timeout: 1s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          dns_refresh_rate: 1s
+          lb_policy: {{ .Values.head.envoy.policy }}
+          http2_protocol_options: { }
+          load_assignment:
+            cluster_name: qt
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                        {{- if .Values.queryTransformerMock.enabled }}
+                          port_value: {{ .Values.queryTransformerMock.ports.grpc }}
+                          address: "{{ include "big-search.fullname" . }}-query-transformer-mock"
+                        {{- else }}
+                          port_value: {{ .Values.head.queryTransformer.endpoint.port }}
+                          address: {{ .Values.head.queryTransformer.endpoint.address }}
+                        {{- end }}
+        {{- if and .Values.head.queryTransformer.endpoint.ssl (not .Values.queryTransformerMock.enabled)  }}
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+        {{- end }}
+        - name: ai_vector_search
+          connect_timeout: 1s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          dns_refresh_rate: 1s
+          lb_policy: {{ .Values.head.envoy.policy }}
+          http2_protocol_options: { }
+          load_assignment:
+            cluster_name: ai_vector_search
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          port_value: {{ .Values.head.aiVectorSearch.endpoint.port }}
+                          address: "{{ .Values.head.aiVectorSearch.endpoint.address }}"
+        {{- if .Values.head.aiVectorSearch.endpoint.ssl }}
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+        {{- end }}{{- /* .Values.head.aiVectorSearch.endpoint.ssl */}}
+        {{- end }}{{- /* .Values.onpremise */}}
+
+  head_vars.yaml: |
+    server-port: {{ .Values.head.head.ports.http }}
+    monitor-port: {{ .Values.head.head.ports.monitor }}
+    sapphire-threads: 4
+    sapphire-fs-threads: 2
+    sapphire-bg-threads: 1
+    sapphire-grpc-threads: 1
+    sapphire-mon-threads: 1
+    logger-level: {{ .Values.head.head.loggerLevel }}
+    logger-format: {{ .Values.head.head.loggerFormat }}
+    ads-enable: {{ .Values.head.head.adsEnable }}
+    data-update-frequency-sec: 60
+    big-search-mode-update-frequency-sec: 30
+    search-default-timeout-ms: 5000
+    search-worker-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
+    search-worker-queries-count: {{ .Values.head.head.workerQueriesCount }}
+    search-worker-timeout-ms: {{ .Values.head.head.workerTimeoutMs }}
+    search-grpc-client-factory-name: 'grpc-client-factory'
+    search-global-search-mode: {{ .Values.head.head.bigSearchMode }}
+    testsuite-enabled: false
+    search-global-searchers:
+      {{- toYaml .Values.head.head.bigSearchSearchers | nindent 6 -}}
+  {{ if .Values.onpremise }}
+    search-allow-extended-params: false
+    search-exclude-segments: []
+    search-execute-debug-commands: false
+    search-query-transformer-enabled: false
+    search-query-transformer-searchers: []
+    search-query-transformer-timeout-ms: 20
+    search-query-transformer-url: "mock"
+    throttle-enabled: false
+    throttle-engage-factor: {{ .Values.head.head.throttle.engageFactor }}
+    throttle-input-metric-calculate-for-periods: {{ .Values.head.head.throttle.inputMetric.calculateForPeriods }}
+    throttle-input-metric-update-interval-seconds: {{ .Values.head.head.throttle.inputMetric.updateIntervalSeconds }}
+    throttle-release-factor: {{ .Values.head.head.throttle.releaseFactor }}
+    throttle-threshold: {{.Values.head.head.throttle.threshold }}
+    throttle-update-interval-seconds: {{ .Values.head.head.throttle.updateIntervalSeconds }}
+    ai-vector-search-enabled: false
+    ai-vector-search-url: '127.0.0.1:1234'
+    ai-vector-search-timeout-ms: 2
+    ai-vector-search-searchers: []
+    ai-vector-search-grpc-client-factory-name:  'grpc-client-factory'
+    ads-enable: false
+    grpc-client-circuit-breaker-clients: []
+  {{- else }}
+    search-exclude-segments:
+      {{- toYaml .Values.head.head.bigSearchExcludeSegments | nindent 6 }}
+    search-allow-extended-params: {{ .Values.head.head.allowSearchExtendedParams }}
+    search-execute-debug-commands: {{ .Values.head.head.executeDebugCommands }}
+    search-query-transformer-enabled: {{ .Values.head.queryTransformer.enabled }}
+    throttle-enabled: {{.Values.head.head.throttle.enabled }}
+    throttle-engage-factor: {{ .Values.head.head.throttle.engageFactor }}
+    throttle-input-metric-calculate-for-periods: {{ .Values.head.head.throttle.inputMetric.calculateForPeriods }}
+    throttle-input-metric-update-interval-seconds: {{ .Values.head.head.throttle.inputMetric.updateIntervalSeconds }}
+    throttle-release-factor: {{ .Values.head.head.throttle.releaseFactor }}
+    throttle-threshold: {{.Values.head.head.throttle.threshold }}
+    throttle-update-interval-seconds: {{ .Values.head.head.throttle.updateIntervalSeconds }}
+    ai-vector-search-enabled: {{ .Values.head.aiVectorSearch.enabled }}
+    ai-vector-search-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
+    ai-vector-search-timeout-ms: {{ .Values.head.aiVectorSearch.timeout_ms }}
+    ai-vector-search-searchers:
+      {{- toYaml .Values.head.aiVectorSearch.searchers | nindent 6 }}
+    ai-vector-search-grpc-client-factory-name:  'grpc-client-factory'
+
+    search-query-transformer-searchers:
+      {{- toYaml .Values.head.queryTransformer.searchersList | nindent 6 }}
+    search-query-transformer-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
+    search-query-transformer-timeout-ms: {{ .Values.head.queryTransformer.timeoutMs }}
+
+    grpc-client-circuit-breaker-clients:
+      {{- toYaml .Values.head.grpcClientCircuitBreaker.clients | nindent 6 }}
+  {{- end -}}{{- /* .Values.onpremise */}}
+  worker_vars.yaml: |
+    server-grpc-port: {{ .Values.worker.ports.grpc }}
+    worker-grpc-threads: 2
+    server-port: {{ .Values.worker.ports.http }}
+    worker-main-threads: {{ .Values.worker.workerMainThreads }}
+    worker-fb-threads: {{ .Values.worker.workerFbThreads }}
+    worker-fs-threads: 2
+    worker-bg-threads: 1
+    logger-level: {{ .Values.worker.loggerLevel }}
+    logger-format: {{ .Values.worker.loggerFormat }}
+    data-update-frequency-sec: {{ .Values.worker.dataUpdateFrequencySec }}
+  {{- if .Values.onpremise }}
+    rtw-lifetime-sec: 0
+  {{- else }}
+    rtw-lifetime-sec: {{ .Values.worker.rtw.lifeTime }}
+  {{- end }}{{- /* .Values.onpremise */}}
+    execute-debug-commands: {{ .Values.worker.executeDebugCommands }}
+    queue-limit: {{ .Values.worker.queueLimit }}
+  syncer-head.yaml: |
+    server:
+      address: ":{{ .Values.syncer.ports.http }}"
+    app:
+      log_level: {{ .Values.syncer.loglevel }}
+      manifest: {{ .Values.dgctlStorage.manifest }}
+      indices:
+        enable: true
+      {{- if empty .Values.indexerServices.externalFilesStorageUrl }}
+        download_url: "http://{{ include "big-search.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/download/index/%s/%s"
+        uploaded_url: "http://{{ include "big-search.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/list/index/%s"
+        stats_url: "http://{{ include "big-search.fullname" . }}-controller:{{ .Values.service.filesStorage.port }}/stats"
+      {{- else }}
+        download_url: "{{ .Values.indexerServices.externalFilesStorageUrl }}/download/index/%s/%s?force=true"
+        uploaded_url: "{{ .Values.indexerServices.externalFilesStorageUrl }}/list/index/%s?force=true"
+      {{- if empty .Values.indexerServices.externalControllerUrl }}
+        stats_url: "https://big-search-controller.istio.k8s.2gis.dev/stats"
+      {{- else }}
+        stats_url: "{{ .Values.indexerServices.externalControllerUrl }}/stats"        
+      {{- end }}{{- /* empty .Values.indexerServices.externalControllerUrl */}}
+      {{- end }}{{- /* empty .Values.indexerServices.externalFilesStorageUrl */}}
+        dst: /data/indexes
+      rtw:
+        enable: false
+      {{- if not .Values.onpremise }}
+        dst: /data/rtw
+        download_url: {{ .Values.syncer.endpoints.rtw | quote }}
+      {{- end }}{{- /* not .Values.onpremise */}}
+      ads:
+    {{- if .Values.onpremise }}
+        enable: false
+    {{- else }}
+        enable: true
+        dst: /data/ads
+      {{- if empty .Values.indexerServices.externalFilesStorageUrl }}
+        download_url: "http://{{ include "big-search.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/download/ad/%s/%s"
+        uploaded_url: "http://{{ include "big-search.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/list/ad/%s"
+      {{- else }}
+        download_url: "{{ .Values.indexerServices.externalFilesStorageUrl }}/download/ad/%s/%s?force=true"
+        uploaded_url: "{{ .Values.indexerServices.externalFilesStorageUrl }}/list/ad/%s?force=true"
+      {{- end }}{{- /* empty .Values.indexerServices.externalFilesStorageUrl */}}
+    {{- end }}{{- /* .Values.onpremise */}}
+      ai_suggested_queries:
+    {{- if .Values.onpremise }}
+        enable: false
+    {{- else }}
+        enable: {{ .Values.head.head.aiSuggestedQueries.enabled }}
+        dst: /data/ai_suggested_queries
+        download_url: {{ .Values.syncer.endpoints.aiSuggestedQueries | quote }}
+    {{- end }}{{- /* .Values.onpremise */}}
+      poll_interval:
+        min: 300
+        max: 600
+  syncer-worker.yaml: |
+    server:
+      address: ":{{ .Values.syncer.ports.http }}"
+    app:
+      log_level: {{ .Values.syncer.loglevel }}
+      manifest: {{ .Values.dgctlStorage.manifest }}
+      indices:
+        enable: true
+      {{- if empty .Values.indexerServices.externalFilesStorageUrl }}
+        download_url: "http://{{ include "big-search.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/download/index/%s/%s"
+        uploaded_url: "http://{{ include "big-search.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/list/index/%s"
+        stats_url: "http://{{ include "big-search.fullname" . }}-controller:{{ .Values.service.filesStorage.port }}/stats"
+      {{- else }}
+        download_url: "{{ .Values.indexerServices.externalFilesStorageUrl }}/download/index/%s/%s?force=true"
+        uploaded_url: "{{ .Values.indexerServices.externalFilesStorageUrl }}/list/index/%s?force=true"
+      {{- if empty .Values.indexerServices.externalControllerUrl }}
+        stats_url: "https://big-search-controller.istio.k8s.2gis.dev/stats"
+      {{- else }}
+        stats_url: "{{ .Values.indexerServices.externalControllerUrl }}/stats"
+      {{- end }}{{- /* empty .Values.indexerServices.externalControllerUrl */}}
+      {{- end }}{{- /* empty .Values.indexerServices.externalFilesStorageUrl */}}
+        dst: /data/indexes
+      rtw:
+      {{- if not .Values.onpremise }}
+        enable: true
+        dst: /data/rtw
+        download_url: {{ .Values.syncer.endpoints.rtw | quote }}
+      {{ else }}
+        enable: false
+      {{- end }}{{- /* not .Values.onpremise */}}
+      ads:
+        enable: false
+      {{- if not .Values.onpremise }}
+        dst: /data/ads
+        download_url: ""
+        uploaded_url: ""
+      {{- end }}{{- /* not .Values.onpremise */}}
+      poll_interval:
+        min: 10
+        max: 120
+  files-storage.yaml: |
+    server:
+      address: ":{{ .Values.filesStorage.ports.http }}"
+    app:
+      manifest: {{ .Values.dgctlStorage.manifest }}
+      files_dir: /data
+      cleanup_interval: 1m
+      version_ttl: {{ .Values.filesStorage.version_ttl }}
+      log_level: {{ .Values.filesStorage.loglevel }}
+  controller.yaml: |
+    app:
+      log_level: {{ .Values.controller.loglevel }}
+      manifest: {{ .Values.dgctlStorage.manifest }}
+    server:
+      address: ":{{ .Values.controller.ports.http }}"
+    worker:
+      user: {{ .Values.controller.user | quote }}
+      password: {{ .Values.controller.password | quote }}
+      project_list_url: {{ .Values.controller.projectListUrl | quote }}
+      uploaded_indices_url: "http://{{ include "big-search.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/list/index/%s"
+      delete_index_url: "http://{{ include "big-search.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/delete/index/%s/%s"
+      model: {{ .Values.controller.model | quote }}
+      domain: {{ .Values.controller.domain | quote }}
+      interval: {{ .Values.controller.interval }}
+      task_timeout: {{ .Values.controller.task_timeout }}
+    {{- if .Values.onpremise }}
+      not_allowed_project_keys: []
+      extra_projects: []
+    ads:
+      upload_ad_url: ''
+      ad_weights:
+        enable: false
+      monthly_ad_weights:
+        enable: false
+      interval: 1s
+    s3_client:
+      enable: true
+      endpoint: {{ .Values.dgctlStorage.host | quote }}
+      access_key_id: {{ .Values.dgctlStorage.accessKey | quote }}
+      secret_access_key: {{ .Values.dgctlStorage.secretKey | quote }}
+      bucket: {{ .Values.dgctlStorage.bucket }}
+      use_ssl: {{ .Values.dgctlStorage.secure }}
+    {{ else }}
+      not_allowed_project_keys: {{- toYaml .Values.controller.notAllowedProjectKeys | nindent 8 }}
+      extra_projects:
+        {{- toYaml .Values.controller.extra_projects | nindent 8 }}
+    ads:
+      upload_ad_url: "http://{{ include "big-search.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/upload/ad"
+      ad_weights:
+        enable: {{ .Values.controller.adWeightsEnable }}
+        url: {{ .Values.controller.adWeightsUrl | quote }}
+        excluded_projects: [ 993, 994, 995, 998, 999, 65536 ]
+        blocked_all_rubrics_for_ru: [5, 159, 171, 173, 207, 208, 209, 211, 253, 254, 360, 361, 367, 372, 375, 384, 567, 1059, 1204, 1232, 1233, 10904, 15707, 16491, 19288, 19290, 24504, 51352, 52243]
+      monthly_ad_weights:
+        enable: {{ .Values.controller.monthlyAdWeightsEnable }}
+        targetings_url: {{ .Values.controller.monthlyAdWeightsTargetingsUrl | quote }}
+        url: {{ .Values.controller.monthlyAdWeightsUrl | quote }}
+        excluded_projects: [ 993, 994, 995, 998, 999, 65536 ]
+      interval: 15m
+    s3_client:
+      enable: {{ .Values.s3Client.enabled }}
+      endpoint: {{ .Values.s3Client.endpoint | quote }}
+      access_key_id: {{ .Values.s3Client.accessKeyId | quote }}
+      secret_access_key: {{ .Values.s3Client.secretAccessKey | quote }}
+      bucket: {{ .Values.s3Client.bucket }}
+      use_ssl: {{ .Values.s3Client.useSsl }}
+    {{ end }}{{- /* .Values.onpremise */}}
+  indexer.yaml: |
+    app:
+      log_level: {{ .Values.indexer.loglevel }}
+      manifest: {{ .Values.dgctlStorage.manifest }}
+    server:
+      address: ":{{ .Values.indexer.ports.http }}"
+    worker:
+      unisearch_path: "/app/bin/unisearch"
+      seo_path: "/app/Seo"
+      build_index_script_path: "/app/PyTools/build_index.py"
+      acquire_task_url: "http://{{ include "big-search.fullname" . }}-controller:{{ .Values.service.controller.port }}/acquire_task/%s"
+      upload_index_url: "http://{{ include "big-search.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/upload/index"
+    {{- if .Values.onpremise }}
+    s3_client:
+      enable: true
+      endpoint: {{ .Values.dgctlStorage.host | quote }}
+      access_key_id: {{ .Values.dgctlStorage.accessKey | quote }}
+      secret_access_key: {{ .Values.dgctlStorage.secretKey | quote }}
+      bucket: {{ .Values.dgctlStorage.bucket }}
+      use_ssl: {{ .Values.dgctlStorage.secure }}
+    {{ else }}
+    s3_client:
+      enable: {{ .Values.s3Client.enabled }}
+      endpoint: {{ .Values.s3Client.endpoint | quote }}
+      access_key_id: {{ .Values.s3Client.accessKeyId }}
+      secret_access_key: {{ .Values.s3Client.secretAccessKey }}
+      bucket: {{ .Values.s3Client.bucket }}
+      use_ssl: {{ .Values.s3Client.useSsl }}
+    {{ end }}{{- /* .Values.onpremise */}}
+
+  {{- if .Values.ingress_router.enabled }}
+  ingress_service_envoy.yaml: |
+    admin:
+      address:
+        socket_address:
+          protocol: TCP
+          address: 0.0.0.0
+          port_value: 9901
+    static_resources:
+      listeners:
+        - name: ab_listener
+          address:
+            socket_address:
+              address: 127.0.0.1
+              port_value: {{ .Values.ingress_router.envoy.ports.grpc }}
+          filter_chains:
+            - filters:
+                - name: envoy.filters.network.http_connection_manager
+                  typed_config:
+                    "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                    stat_prefix: ingress_http
+                    route_config:
+                      name: local_route
+                      virtual_hosts:
+                        - name: ab-services
+                          domains: [ "*" ]
+                          routes:
+                          - match:
+                              prefix: "/"
+                              headers:
+                                - name: {{ .Values.ingress_router.headers | quote }}
+                                  exact_match: {{ .Values.ingress_router.ab.contour1.exact_match | quote }}
+                            route:
+                              cluster: exp-1
+                          - match:
+                              prefix: "/"
+                              headers:
+                                - name: {{ .Values.ingress_router.headers | quote }}
+                                  exact_match: {{ .Values.ingress_router.ab.contour2.exact_match | quote }}
+                            route:
+                              cluster: exp-2
+                          - match:
+                              prefix: "/"
+                              headers:
+                                - name: {{ .Values.ingress_router.headers | quote }}
+                                  exact_match: {{ .Values.ingress_router.ab.contour3.exact_match | quote }}
+                            route:
+                              cluster: exp-3
+                          - match:
+                              prefix: "/"
+                              headers:
+                                - name: {{ .Values.ingress_router.headers | quote }}
+                                  exact_match: {{ .Values.ingress_router.ab.sapphire_base.exact_match | quote }}
+                            route:
+                              cluster: sapphire_base
+                          - match:
+                              prefix: "/geodetector.GeoDetector/"
+                            route:
+                              cluster: geodetectors
+                              auto_host_rewrite: true
+                    http_filters:
+                      - name: envoy.filters.http.router
+                        typed_config:
+                          "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+      clusters:
+        - name: sapphire_base
+          connect_timeout: 1s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          dns_refresh_rate: 1s
+          lb_policy: ROUND_ROBIN
+          load_assignment:
+            cluster_name: sapphire_base
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                         port_value: {{ .Values.ingress_router.ab.sapphire_base.port }}
+                         address: {{ include "big-search.fullname" . }}-head
+        - name: exp-1
+          connect_timeout: 1s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          dns_refresh_rate: 1s
+          lb_policy: ROUND_ROBIN
+          load_assignment:
+            cluster_name: exp-1
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          port_value: {{ .Values.ingress_router.ab.contour1.port }}
+                          address: {{ .Values.ingress_router.ab.contour1.address }}
+        - name: exp-2
+          connect_timeout: 1s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          dns_refresh_rate: 1s
+          lb_policy: ROUND_ROBIN
+          load_assignment:
+            cluster_name: exp-2
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          port_value: {{ .Values.ingress_router.ab.contour2.port }}
+                          address: {{ .Values.ingress_router.ab.contour2.address }}
+        - name: exp-3
+          connect_timeout: 1s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          dns_refresh_rate: 1s
+          lb_policy: ROUND_ROBIN
+          load_assignment:
+            cluster_name: exp-3
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          port_value: {{ .Values.ingress_router.ab.contour3.port }}
+                          address: {{ .Values.ingress_router.ab.contour3.address }}
+        - name: geodetectors
+          connect_timeout: 1s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          dns_refresh_rate: 1s
+          lb_policy: {{ .Values.head.envoy.policy }}
+          http2_protocol_options: { }
+          load_assignment:
+            cluster_name: geodetectors
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          port_value: {{ .Values.geodetector.ports.grpc }}
+                          address: {{ include "big-search.fullname" . }}-geodetector
+
+  ingress_router_vars.yaml: |
+    server-port: {{ .Values.ingress_router.ports.http }}
+    monitor-port: {{ .Values.ingress_router.ports.monitor }}
+    ingress-router-main-threads: 4
+    ingress-router-fs-threads: 2
+    ingress-router-grpc-threads: 1
+    ingress-router-mon-threads: 1
+    ingress-router-rate-limiting-threads: 1
+    logger-level: {{ .Values.ingress_router.loggerLevel }}
+    logger-format: {{ .Values.ingress_router.loggerFormat }}
+    experiment-enabled: {{ .Values.ingress_router.experimentComponent.enabled }}
+    rate-limit-enabled: {{ .Values.ingress_router.rateLimitComponent.enabled }}
+    data-update-frequency-sec: 60
+    {{- if empty .Values.ingress_router.sapphire_url }}
+    sapphire-address: "http://127.0.0.1:{{ .Values.ingress_router.envoy.ports.grpc }}"
+    {{ else }}
+    sapphire-address: {{ .Values.ingress_router.sapphire_url }}
+    {{ end }}
+    sapphire-request-timeout-ms: {{ .Values.ingress_router.sapphire_request_timeout_ms }}
+    geodetector-service-url: '127.0.0.1:{{ .Values.ingress_router.envoy.ports.grpc }}'
+    prometheus-url: {{ .Values.ingress_router.prometheus_url }}
+    rate-limit-rules:
+      {{- toYaml .Values.ingress_router.rate_limit_rules | nindent 6 }}
+    testsuite-enabled: false
+
+  experiment_config.json: |
+    {
+        "version": "0.1",
+        "enable": false,
+        "meta": {
+            "segments": {
+            },
+            "device_keys": {
+            }
+        },
+        "tests": [
+            {
+            }
+        ]
+    }
+  {{- end }}
+
+  {{- if .Values.geodetector.enabled }}
+  geodetector_vars.yaml: |
+    server-grpc-port: {{ .Values.geodetector.ports.grpc }}
+    monitor-port: {{ .Values.geodetector.ports.monitor }}
+    server-port: {{ .Values.geodetector.ports.server }}
+    geodetector-grpc-threads: {{ .Values.geodetector.geodetector_grpc_threads }}
+    data-update-frequency-sec: {{ .Values.geodetector.data_update_frequency_sec }}
+    geodetector-main-threads: {{ .Values.geodetector.geodetector_main_threads }}
+    geodetector-fs-threads: {{ .Values.geodetector.geodetector_fs_threads }}
+    logger-level: {{ .Values.geodetector.loggerLevel }}
+    logger-format: {{ .Values.geodetector.loggerFormat }}
+    execute-debug-commands: {{ .Values.geodetector.executeDebugCommands }}
+    geodetector-mon-threads: {{ .Values.geodetector.geodetector_mon_threads }}
+  {{- end }}
+
+  GIN_MODE: {{ .Values.GIN_MODE }}
 {{- if .Values.customCAs.bundle }}
   custom-ca.crt: |-
 {{- .Values.customCAs.bundle | nindent 4 }}
-{{- end }}
+{{- end }}{{- /* .Values.customCAs.bundle */}}

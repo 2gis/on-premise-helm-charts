@@ -1,0 +1,22 @@
+{{- if .Values.queryTransformerMock.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "big-search.fullname" . }}-query-transformer-mock
+  labels:
+    {{- include "big-search.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.head.type }}
+  ports:
+    - port: {{ .Values.service.queryTransformerMock.ports.grpc }}
+      targetPort: {{ .Values.queryTransformerMock.ports.grpc }}
+      protocol: TCP
+      name: grpc
+    - port: {{ .Values.service.queryTransformerMock.ports.http }}
+      targetPort: {{ .Values.queryTransformerMock.ports.http }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "big-search.selectorLabels" . | nindent 4 }}
+    search/part: query-transformer-mock
+  {{- end }}

@@ -1,0 +1,21 @@
+{{- if .Values.service.head.external.enable }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "big-search.fullname" . }}-external-head
+  labels:
+    {{- include "big-search.labels" . | nindent 4 }}
+    {{- toYaml .Values.service.head.external.labels | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.service.head.external.annotations | nindent 4 }}
+spec:
+  type: {{ .Values.service.head.type }}
+  ports:
+    - port: 80
+      targetPort: {{ .Values.head.nginx.ports.http }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "big-search.selectorLabels" . | nindent 4 }}
+    search/part: head
+    {{- end }}

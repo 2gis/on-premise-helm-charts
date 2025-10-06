@@ -1,0 +1,17 @@
+{{- if .Values.geodetector.enabled }}
+{{- if .Values.geodetector.vpa.enabled }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "big-search.fullname" . }}-geodetector
+  labels:
+    {{- include "big-search.labels" . | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "big-search.fullname" . }}-geodetector
+  updatePolicy:
+    updateMode: {{ .Values.geodetector.vpa.updateMode | quote }}
+{{- end }}{{- /* .Values.geodetector.vpa.enabled */}}
+{{- end }}{{- /* .Values.geodetector.enabled */}}

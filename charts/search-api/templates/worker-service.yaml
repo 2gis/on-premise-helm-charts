@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "big-search.fullname" . }}-worker
+  labels:
+    {{- include "big-search.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: {{ .Values.service.worker.port }}
+      targetPort: {{ .Values.worker.ports.grpc }}
+      protocol: TCP
+      name: grpc
+  selector:
+    {{- include "big-search.selectorLabels" . | nindent 4 }}
+    search/part: worker
