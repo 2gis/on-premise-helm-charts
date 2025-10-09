@@ -1,0 +1,8 @@
+pro-api
+	pro-api:2.31.1
+	pro-importer:2.31.1
+	pro-permissions-api:2.31.1
+	pro-tasks-api:2.31.1
+pro-ui
+	pro-importer:2.31.1
+	pro-ui:4.33.0

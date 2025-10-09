@@ -1,8 +1,12 @@
 # 2GIS On-Premise Changelog
 
+## [2025-10-09] Release: Pro:2.1.0
+
+  [CHANGELOG](changelogs/pro/PRO-CHANGELOG.md)
+
 ## [2.\*.\*] (2025-09-30)
 In the new versions, releases are organized into groups. Version details and breaking changes are now maintained within the files specific to each group:
-#### [Core](CORE-CHANGELOG.md)
+#### [Core](changelogs/core/CORE-CHANGELOG.md)
 #### [Platform](PLATFORM-CHANGELOG.md)
 #### [PRO](PRO-CHANGELOG.md)
 #### [CITYLENS](CITYLENS-CHANGELOG.md)
