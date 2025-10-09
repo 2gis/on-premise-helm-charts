@@ -1,5 +1,13 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [2.\*.\*] (2025-09-30)
+In the new versions, releases are organized into groups. Version details and breaking changes are now maintained within the files specific to each group:
+#### [Core](changelogs/core/CORE-Breaking-Changes.md)
+#### [Platform](changelogs/platform/PLATFORM-Breaking-Changes.md)
+#### [PRO](changelogs/pro/PRO-Breaking-Changes.md)
+#### [CITYLENS](changelogs/citylens/CITYLENS-Breaking-Changes.md)
+#### [EVERGIS](changelogs/evergis/EVERGIS-Breaking-Changes.md)
+
 ## [1.43.0]
 
 ### navi-attractor

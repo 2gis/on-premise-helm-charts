@@ -142,6 +142,8 @@ spec:
               value: {{ $.Values.tasks.settings.features.emailNotifications.enabled | quote }}
             - name: FeatureManagement__UserManagement
               value: {{ $.Values.tasks.settings.features.userManagement.enabled | quote }}
+            - name: FeatureManagement__RemoveExpiredSmbDashboards
+              value: {{ $.Values.tasks.settings.features.removeExpiredSmbDashboards.enabled | quote }}
 
             - name: Common__Logging__Format
               value: {{ .Values.tasks.settings.logging.format | quote }}
@@ -164,6 +166,8 @@ spec:
             {{- end }}
             - name: Kafka__EventsTopicSettings__Name
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
+            - name: Kafka__EventsTopicSettings__ReaderGroupId
+              value: {{ required "A valid .Values.kafka.eventsTopic.readerGroupId entry required" $.Values.kafka.eventsTopic.readerGroupId }}
             - name: Kafka__UseReplicaTopics
               value: {{ $.Values.kafka.useReplicaTopics | quote }}
             - name: Common__Mode
@@ -218,5 +222,19 @@ spec:
             {{- if .Values.tasks.settings.admin.auth.oidc.requiredRole }}
             - name: Admin__Auth__Oidc__RequiredRole
               value: {{ .Values.tasks.settings.admin.auth.oidc.requiredRole | quote }}
+            {{- end }}
+
+            - name: Redis__Host
+              value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
+            - name: Redis__Port
+              value: {{ .Values.redis.port | quote }}
+            - name: Redis__Username
+              value: {{ $.Values.redis.username }}
+            {{- if .Values.redis.password }}
+            - name: Redis__Password
+              valueFrom:
+                secretKeyRef:
+                  key: redisPassword
+                  name: {{ include "pro-api.name" . }}-secret
             {{- end }}
 {{- end }}

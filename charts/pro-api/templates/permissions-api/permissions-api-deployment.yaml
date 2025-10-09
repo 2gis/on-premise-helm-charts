@@ -136,15 +136,6 @@ spec:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.name" . }}-secret
-            - name: KEYS_SERVICE_URL
-              value: {{ .Values.keys.url | quote }}
-            {{- if .Values.keys.token }}
-            - name: KEYS_SERVICE_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  key: keysServiceToken
-                  name: {{ include "pro-api.name" . }}-secret
-            {{- end }}
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
