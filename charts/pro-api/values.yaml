@@ -1,4 +1,4 @@
-# @section Geo API configuration & settings
+﻿# @section Geo API configuration & settings
 
 api:
 
@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.26.0
+    tag: 2.31.1
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -192,7 +192,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.26.0
+    tag: 2.31.1
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -308,7 +308,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.26.0
+    tag: 2.31.1
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -430,6 +430,7 @@ tasks:
   # @skip tasks.settings.features.removeUnusedUserAssetFiles
   # @skip tasks.settings.features.emailNotifications
   # @skip tasks.settings.features.userManagement
+  # @skip tasks.settings.features.removeExpiredSmbDashboards
   settings:
     enabled: true
     env: ''
@@ -445,7 +446,7 @@ tasks:
       longRunningTasksWorkersCount: 1
     admin:
       auth:
-        schema: Undefined
+        schema: 'Undefined'
         basic:
           username: admin
           password: ''
@@ -461,7 +462,7 @@ tasks:
         enabled: false
         segments: ''
       auditLogging:
-        enabled: false
+        enabled: true
       cleanCitylensFrames:
         enabled: false
       removeUnusedUserAssetFiles:
@@ -470,6 +471,8 @@ tasks:
         enabled: false
       userManagement:
         enabled: true
+      removeExpiredSmbDashboards:
+        enabled: false
 
 # @section asset importer settings
 
@@ -504,7 +507,7 @@ tasks:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.26.0
+  tag: 2.31.1
   imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2
@@ -758,19 +761,7 @@ redis:
 
 digger:
   url: ''
-  userName: ''
-  password: ''
-
-
-# @section Keys Service settings
-
-# @param keys.url API URL of service for managing partners' keys to 2GIS services (keys.api). **Required**
-# @param keys.token keys.api access token. **Required**
-
-keys:
-  url: ''
-  token: ''
-
+  authToken: ''
 
 # @section Catalog API settings
 
