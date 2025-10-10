@@ -1,0 +1,18 @@
+{{- if empty .Values.indexerServices.externalFilesStorageUrl }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "big-search.fullname" . }}-files-storage
+  labels:
+    {{- include "big-search.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.service.filesStorage.port }}
+      targetPort: {{ .Values.filesStorage.ports.http }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "big-search.selectorLabels" . | nindent 4 }}
+    search/part: files-storage
+{{- end }}

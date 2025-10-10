@@ -1,10 +1,21 @@
-Search api service is released as "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace.
+You have just deployed a helm chart for the new version of search.
+You can run a test query:
+1. wait until all pods are in the Ready status:
+kubectl get pod -n {{ .Release.Namespace }}
+
+2. You can forward a port like this:
+{{- if .Values.ingress_router.enabled }}
+kubectl port-forward svc/{{ include "big-search.fullname" . }}-ingress-router {{ .Values.service.ingress_router.port }}:http -n {{ .Release.Namespace }}
+or directly to head service
+{{- end }}{{- /* if .Values.ingress_router.enabled */}}
+kubectl port-forward svc/{{ include "big-search.fullname" . }}-head {{ .Values.service.head.port }}:http -n {{ .Release.Namespace }}
+
+3. Send a test request:
+curl http://localhost:8080/v2/search?fmt=plain&end=10&seg=1&q=kafe
 
 {{- if .Values.ingress.enabled }}
-You can check service using curl
+Or you can send a request to the ingress address.
 {{- range $host := .Values.ingress.hosts }}
-  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}/v2/status
-{{- end }}
-{{- else }}
-You should publish the service in your preferred way (ingress, balancer, etc).
-{{ end }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}/v2/search?fmt=plain&end=10&seg=1&q=kafe
+{{- end }}{{- /* range $host := .Values.ingress.hosts */}}
+{{- end }}{{- /* if .Values.ingress.enabled */}}

@@ -1,0 +1,26 @@
+{{- if .Values.ingress_router.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "big-search.fullname" . }}-ingress-router
+  labels:
+    {{- include "big-search.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "big-search.fullname" . }}-ingress-router
+  minReplicas: {{ .Values.ingress_router.hpa.minReplicas }}
+  maxReplicas: {{ .Values.ingress_router.hpa.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: AverageValue
+          averageValue: {{ .Values.ingress_router.hpa.averageCPUValue }}
+  {{- if .Values.ingress_router.hpa.behavior }}
+  behavior:
+    {{- .Values.ingress_router.hpa.behavior | toYaml | nindent 4 }}
+  {{- end }}{{- /* .Values.ingress-router.hpa.behavior */}}
+{{- end }}{{- /* .Values.ingress-router.hpa.enabled */}}
