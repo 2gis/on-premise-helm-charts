@@ -43,7 +43,7 @@ api:
   # @param api.clickhouse.clientName Name that will be used in client requests to ClickHouse.
 
   clickhouse:
-    clientName: 'stat-api'
+    clientName: stat-api
 
   # @param api.replicas A replica count for the pod.
 
