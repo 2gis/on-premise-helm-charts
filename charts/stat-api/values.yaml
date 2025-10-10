@@ -166,7 +166,7 @@ migrate:
   # @param migrate.clickhouse.clientName Name that will be used in client requests to ClickHouse.
 
   clickhouse:
-    clientName: 'stat-api-migrate'
+    clientName: stat-api-migrate
 
   # @param migrate.initialDelaySeconds Delay in seconds at the service startup.
 
