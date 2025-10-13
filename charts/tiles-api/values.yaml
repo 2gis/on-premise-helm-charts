@@ -144,7 +144,7 @@ tilegen:
   # @param tilegen.imagePullSecrets Kubernetes image pull secrets.
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.75.9
+    tag: 4.77.0
     pullPolicy: IfNotPresent
 
   imagePullSecrets: []
@@ -326,7 +326,7 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.75.9
+    tag: 4.77.0
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
@@ -485,7 +485,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.75.9
+    tag: 4.77.0
     pullPolicy: IfNotPresent
 
 
