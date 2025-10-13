@@ -245,8 +245,8 @@ tilegen:
 # @param proxy.access.stat.enabled If statistics receiver is enabled.
 # @param proxy.access.stat.url Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
 
-# @extra proxy.access.stat.registerExactHosts **Register requests to BSS for exact hosts feature settings**
-# @param proxy.access.stat.registerExactHosts.enabled If disabled, all requests will be registered in BSS, otherwise the only requests to exact hosts that matches regexp will be registered (hosts of tiles-api).
+# @extra proxy.access.stat.registerExactHosts **Register requests to stat-receiver for exact hosts feature settings**
+# @param proxy.access.stat.registerExactHosts.enabled If disabled, all requests will be registered in stat-receiver, otherwise the only requests to exact hosts that matches regexp will be registered (hosts of tiles-api).
 # @param proxy.access.stat.registerExactHosts.regexpPattern Regular expression for matching hosts that will be registered to statistics. **Required**
 
 proxy:
@@ -255,7 +255,7 @@ proxy:
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.75.9
+    tag: 4.77.0
     pullPolicy: IfNotPresent
 
   containerPort: 5000
