@@ -24,7 +24,8 @@ fullnameOverride: ''
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
 # @param enableServiceLinks Services injection into containers environment
 # @param restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
-
+# @param updateStrategy Kubernetes StatefulSet [update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies)
+# @param volumeClaimTemplates Kubernetes StatefulSet [volue claim template](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#volume-claim-templates)
 labels: {}
 annotations: {}
 replicaCount: 1
@@ -40,6 +41,8 @@ affinity: {}
 tolerations: []
 enableServiceLinks: false
 restartPolicy: ''
+updateStrategy: {}
+volumeClaimTemplates: []
 
 
 # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
@@ -165,6 +168,7 @@ cronJob:
 # @section [Job](https://kubernetes.io/docs/concepts/workloads/controllers/job/) settings
 
 # @param job.activeDeadlineSeconds Number of seconds active deadline.
+# @param job.ttlSecondsAfterFinished A time-to-live mechanism to clean up old Jobs that have finished execution.
 # @param job.backoffLimit Number of retries before considering a Job as failed.
 # @param job.backoffLimitPerIndex Maximal number of pod failures per index.
 # @param job.podFailurePolicy Pod failure policy.
@@ -175,6 +179,7 @@ cronJob:
 
 job:
   activeDeadlineSeconds: ''
+  ttlSecondsAfterFinished: ''
   backoffLimit: ''
   backoffLimitPerIndex: ''
   podFailurePolicy: ''
