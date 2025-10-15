@@ -63,7 +63,7 @@ spec:
               containerPort: 8080
               protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.routes.realtimeDataApi.tempPath }}"
+            - mountPath: {{ .Values.routes.realtimeDataApi.tempPath | quote }}
               name: temp-volume
           livenessProbe:
             httpGet:
@@ -102,11 +102,11 @@ spec:
               value: {{ .Values.routes.realtimeDataApi.tempPath | quote }}
 
             - name: Common__Logging__LogLevel
-              value: "{{ .Values.routes.realtimeDataApi.logging.level }}"
+              value: {{ .Values.routes.realtimeDataApi.logging.level | quote }}
             - name: Common__Logging__ExtendedRestLogging
-              value: "{{ .Values.routes.realtimeDataApi.logging.extendedRestLogging }}"
+              value: {{ .Values.routes.realtimeDataApi.logging.extendedRestLogging | quote }}
             - name: Common__Logging__ExtendedSqlLogging
-              value: "{{ .Values.routes.realtimeDataApi.logging.extendedSqlLogging }}"
+              value: {{ .Values.routes.realtimeDataApi.logging.extendedSqlLogging | quote }}
 
             - name: Postgres__ReadWrite__ConnectionString
               value: {{ include "routes-realtime-data-api.connectionString" . }}
@@ -133,4 +133,4 @@ spec:
                   name: {{ include "citylens.routes.api.name" . }}-secret
 
             - name: RealTimeDataSettings__DaysToLeaveData
-              value: "{{ $.Values.routes.realtimeDataApi.daysToLeaveData }}"
+              value: {{ $.Values.routes.realtimeDataApi.daysToLeaveData | quote }}

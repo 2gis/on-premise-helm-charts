@@ -63,7 +63,7 @@ spec:
               containerPort: 8080
               protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.routes.api.tempPath }}"
+            - mountPath: {{ .Values.routes.api.tempPath | quote }}
               name: temp-volume
           livenessProbe:
             httpGet:
@@ -103,11 +103,11 @@ spec:
               value: {{ .Values.routes.api.tempPath | quote }}
 
             - name: Common__Logging__LogLevel
-              value: "{{ .Values.routes.api.logging.level }}"
+              value: {{ .Values.routes.api.logging.level | quote }}
             - name: Common__Logging__ExtendedRestLogging
-              value: "{{ .Values.routes.api.logging.extendedRestLogging }}"
+              value: {{ .Values.routes.api.logging.extendedRestLogging | quote }}
             - name: Common__Logging__ExtendedSqlLogging
-              value: "{{ .Values.routes.api.logging.extendedSqlLogging }}"
+              value: {{ .Values.routes.api.logging.extendedSqlLogging | quote }}
 
             - name: Postgres__ReadWrite__ConnectionString
               value: {{ include "routes-api.connectionString" . }}
@@ -153,7 +153,7 @@ spec:
             - name: Clients__Navigation__Enabled
               value: "true"
             - name: Clients__Navigation__Url
-              value: "{{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url }}"
+              value: {{ required "A valid .Values.routes.navi.url entry required" $.Values.routes.navi.url | quote }}
             - name: Clients__Navigation__TimeoutSeconds
               value: {{ $.Values.routes.navi.timeout | quote }}
             - name: Clients__Navigation__ApiKey
@@ -176,12 +176,12 @@ spec:
             - name: Clients__RealTimeData__Enabled
               value: "true"
             - name: Clients__RealTimeData__Url
-              value: "{{ required "A valid .Values.routes.realtimeData.url entry required" $.Values.routes.realtimeData.url }}"
+              value: {{ required "A valid .Values.routes.realtimeData.url entry required" $.Values.routes.realtimeData.url | quote }}
 
             - name: Features__AuthorizationEnabled
               value: {{ $.Values.routes.features.authorizationEnabled | quote }}
             - name: Features__OidcMobileAuthorizationEnabled
-              value: "{{ $.Values.routes.features.oidcMobileAuthorizationEnabled }}"
+              value: {{ $.Values.routes.features.oidcMobileAuthorizationEnabled | quote }}
             - name: Features__CoverageRatioEnabled
               value: {{ $.Values.routes.features.coverageRatioEnabled | quote }}
 
@@ -190,4 +190,4 @@ spec:
             - name: TasksAssetSettings__PlannedTasksAssetId
               value: {{ $.Values.routes.tasksAssetSettings.plannedTasksAssetId | quote }}
             - name: TasksAssetSettings__CompletedTasksAssetId
-              value: "{{ $.Values.routes.tasksAssetSettings.completedTasksAssetId }}"
+              value: {{ $.Values.routes.tasksAssetSettings.completedTasksAssetId | quote }}
