@@ -21,25 +21,27 @@
 | Name               | Description | Value                                |
 | ------------------ | ----------- | ------------------------------------ |
 | `image.repository` | Repository  | `2gis-on-premise/citylens-routes-ui` |
-| `image.tag`        | Tag         | `1.3.2`                              |
+| `image.tag`        | Tag         | `1.4.0`                              |
 
 ### Environment
 
-| Name                           | Description                                              | Value |
-| ------------------------------ | -------------------------------------------------------- | ----- |
-| `env.CATALOG_API_URL`          | Catalog API base URL **Required**                        | `""`  |
-| `env.MAPGL_API_URL`            | Map API base URL **Required**                            | `""`  |
-| `env.MAPGL_COPYRIGHT_VARIANT`  | Copyright variant, can be '2gis', 'urbi' or empty        | `""`  |
-| `env.MAPGL_KEY`                | API key for mapgl **Required**                           | `""`  |
-| `env.MAPGL_STYLE_ID_GRAYSCALE` | Map grayscale style ID                                   | `""`  |
-| `env.MAPGL_STYLE_ID_DAY`       | Map day style ID                                         | `""`  |
-| `env.MAPGL_STYLE_ID_NIGHT`     | Map night style ID                                       | `""`  |
-| `env.MAPGL_STYLE_ID_PASTEL`    | Map pastel style ID                                      | `""`  |
-| `env.ROUTES_API_URL`           | Backend (citylens-routes-api) base URL **Required**      | `""`  |
-| `env.SSO_API_URL`              | Single sign-on API URL **Required**                      | `""`  |
-| `env.SSO_CLIENT_ID`            | OpenID client identifier for single sign-on **Required** | `""`  |
-| `env.SSO_CLIENT_SECRET`        | OpenID client identifier for single sign-on **Required** | `""`  |
-| `env.SSO_SCOPE`                | OpenID scope for single sign-on **Required**             | `""`  |
+| Name                           | Description                                                          | Value |
+| ------------------------------ | -------------------------------------------------------------------- | ----- |
+| `env.CATALOG_API_URL`          | Catalog API base URL **Required**                                    | `""`  |
+| `env.MAPGL_API_URL`            | Map API base URL **Required**                                        | `""`  |
+| `env.MAPGL_COPYRIGHT_VARIANT`  | Copyright variant, can be '2gis', 'urbi' or empty                    | `""`  |
+| `env.MAPGL_DEFAULT_CENTER`     | Map center in 'lon,lat' format like '46.72185,24.70996' **Required** | `""`  |
+| `env.MAPGL_KEY`                | API key for mapgl **Required**                                       | `""`  |
+| `env.MAPGL_STYLE_ID_GRAYSCALE` | Map grayscale style ID                                               | `""`  |
+| `env.MAPGL_STYLE_ID_DAY`       | Map day style ID                                                     | `""`  |
+| `env.MAPGL_STYLE_ID_NIGHT`     | Map night style ID                                                   | `""`  |
+| `env.MAPGL_STYLE_ID_PASTEL`    | Map pastel style ID                                                  | `""`  |
+| `env.METRICS_API_URL`          | Metrics service endpoint                                             | `""`  |
+| `env.ROUTES_API_URL`           | Backend (citylens-routes-api) base URL **Required**                  | `""`  |
+| `env.SSO_API_URL`              | Single sign-on API URL **Required**                                  | `""`  |
+| `env.SSO_CLIENT_ID`            | OpenID client identifier for single sign-on **Required**             | `""`  |
+| `env.SSO_CLIENT_SECRET`        | OpenID client identifier for single sign-on **Required**             | `""`  |
+| `env.SSO_SCOPE`                | OpenID scope for single sign-on **Required**                         | `""`  |
 
 ### Common deployment settings
 
