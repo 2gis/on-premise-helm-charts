@@ -1,5 +1,9 @@
 # 2GIS On-Premise Changelog
 
+## [2025-10-16] Release: Citylens:2.1.0
+
+  [CHANGELOG](changelogs/citylens/CITYLENS-CHANGELOG.md)
+
 ## [2025-10-09] Release: Pro:2.1.0
 
   [CHANGELOG](changelogs/pro/PRO-CHANGELOG.md)
