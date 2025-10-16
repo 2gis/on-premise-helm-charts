@@ -19,6 +19,12 @@ access:
     {{- if .access.stat.enabled }}
     host: {{ required "Valid .Values.proxy.access.stat.url required!" .access.stat.url }}
     {{- end }}
+    register-exact-hosts:
+      enabled: {{ .access.stat.registerExactHosts.enabled }}
+      regexp-pattern: {{ .access.stat.registerExactHosts.regexpPattern | quote }}
+  skip-exact-origins:
+    enabled: {{ .access.skipExactOrigins.enabled }}
+    regexp-pattern: {{ .access.skipExactOrigins.regexpPattern | quote }}
 
 storage:
   enabled: false
