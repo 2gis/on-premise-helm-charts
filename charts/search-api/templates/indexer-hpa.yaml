@@ -1,0 +1,26 @@
+{{- if and (.Values.indexer.hpa.enabled) (empty .Values.indexerServices.externalFilesStorageUrl) }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "big-search.fullname" . }}-indexer
+  labels:
+    {{- include "big-search.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "big-search.fullname" . }}-indexer
+  minReplicas: {{ .Values.indexer.hpa.minReplicas }}
+  maxReplicas: {{ .Values.indexer.hpa.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: AverageValue
+          averageValue: {{ .Values.indexer.hpa.averageCPUValue }}
+  {{- if .Values.indexer.hpa.behavior }}
+  behavior:
+    {{- .Values.indexer.hpa.behavior | toYaml | nindent 4 }}
+  {{- end }}{{- /* .Values.indexer.hpa.behavior */}}
+{{- end }}{{- /* if and (.Values.indexer.hpa.enabled) (empty .Values.indexerServices.externalFilesStorageUrl) */}}

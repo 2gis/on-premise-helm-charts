@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "big-search.fullname" . }}-head
+  labels:
+    {{- include "big-search.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.head.type }}
+  ports:
+    - port: {{ .Values.service.head.port }}
+      targetPort: {{ .Values.head.nginx.ports.http }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "big-search.selectorLabels" . | nindent 4 }}
+    search/part: head
