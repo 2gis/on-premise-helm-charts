@@ -32,29 +32,35 @@ data:
         "request_timeout": 60,
         "server" : "0.0.0.0"
       },
+      {{- if .Values.router.sentry.enabled }}
+      "error_tracker": {
+        "report_destination_address": {{ .Values.router.sentry.address | quote }},
+        "project_name": {{ .Values.router.sentry.project | quote }},
+        "user_name": {{ .Values.router.sentry.username | quote }},
+        "print_outgoing_messages": {{ .Values.router.sentry.printMessages | default false }},
+        "debug": {{ .Values.router.sentry.debug | default false }},
+        "path": {{ .Values.router.sentry.reportPath | default "/tmp/sentry" | quote }},
+        "handler": {{ .Values.router.sentry.handler | default "/usr/sbin/2gis/mosesd/crashpad_handler" | quote }}
+      },
+      {{- end }}
       "context": {
         "variables": {
-          "LOCAL_ETC": "/src/etc",
           "REMOTE_PATH": "{{ required "A valid .Values.router.castleUrl  entry required!" .Values.router.castleUrl }}",
           "LOCAL_PATH": "/var/lib/2gis/castle/"
         },
         "cities": {
           "update_period": 600,
           "nodes": [
-            "{REMOTE_PATH}/cities.conf.zip"
+            "{REMOTE_PATH}/{{ .Values.router.citiesFilename }}"
           ],
-          "timeout_seconds": {
-            "count": 60
-          }
+          "timeout_seconds": 60
         },
         "rules": {
           "update_period": 600,
           "nodes": [
-            "file://{LOCAL_ETC}/rules.conf"
+            "{{ .Values.router.rulesUrl | default "file:///src/etc/rules.conf" }}"
           ],
-          "timeout_seconds": {
-            "count": 60
-          }
+          "timeout_seconds": 60
         },
         "server_info": {
           "server_id": "{{ include "generic-chart.fullname" . }}"
@@ -64,6 +70,13 @@ data:
               {"type" : "directions-api", "value" : 50},
               {"type" : "distance-matrix-api", "value" : 50},
               {"type" : "pairs-directions-api", "value" : 50}
+          ],
+          "polygon_size": [
+            {
+              "type": "route-planner-api",
+              "length": 5,
+              "width": 5
+            }
           ]
         },
         "local_restrictions":{
@@ -72,7 +85,9 @@ data:
           "points_count":
             {{- .Values.router.localRestrictions.pointsCount | mustToPrettyJson | nindent 8 }},
           "matrix_size":
-            {{- .Values.router.localRestrictions.matrixSize | mustToPrettyJson | nindent 8 }}
+            {{- .Values.router.localRestrictions.matrixSize | mustToPrettyJson | nindent 8 }},
+          "private_routing_walking_distance_km":
+            {{- .Values.router.localRestrictions.privateRoutingWalkingDistanceKm | mustToPrettyJson | nindent 8 }}
         }
         {{- with .Values.keys }}
         {{- if .enabled }}
