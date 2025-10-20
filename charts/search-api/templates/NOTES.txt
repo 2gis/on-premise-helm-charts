@@ -4,11 +4,11 @@ You can run a test query:
 kubectl get pod -n {{ .Release.Namespace }}
 
 2. You can forward a port like this:
-{{- if .Values.ingress_router.enabled }}
-kubectl port-forward svc/{{ include "big-search.fullname" . }}-ingress-router {{ .Values.service.ingress_router.port }}:http -n {{ .Release.Namespace }}
+{{- if .Values.ingressRouter.enabled }}
+kubectl port-forward svc/{{ include "search-api.fullname" . }}-ingress-router {{ .Values.service.ingressRouter.port }}:http -n {{ .Release.Namespace }}
 or directly to head service
-{{- end }}{{- /* if .Values.ingress_router.enabled */}}
-kubectl port-forward svc/{{ include "big-search.fullname" . }}-head {{ .Values.service.head.port }}:http -n {{ .Release.Namespace }}
+{{- end }}{{- /* if .Values.ingressRouter.enabled */}}
+kubectl port-forward svc/{{ include "search-api.fullname" . }}-head {{ .Values.service.head.port }}:http -n {{ .Release.Namespace }}
 
 3. Send a test request:
 curl http://localhost:8080/v2/search?fmt=plain&end=10&seg=1&q=kafe

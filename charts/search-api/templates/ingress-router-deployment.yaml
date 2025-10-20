@@ -1,64 +1,64 @@
-{{- if .Values.ingress_router.enabled }}
+{{- if .Values.ingressRouter.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "big-search.fullname" . }}-ingress-router
+  name: {{ include "search-api.fullname" . }}-ingress-router
   labels:
-    {{- include "big-search.labels" . | nindent 4 }}
+    {{- include "search-api.labels" . | nindent 4 }}
     search/part: ingress-router
     {{- if (.Values.dgctlStorage).manifest }}
-    {{- with (include "big-search.manifestCode" .) }}
+    {{- with (include "search-api.manifestCode" .) }}
     manifest: {{ . | quote }}
-    {{- end }}{{- /* include "big-search.manifestCode" */}}
+    {{- end }}{{- /* include "search-api.manifestCode" */}}
     {{- end }}{{- /* .Values.dgctlStorage */}}
 spec:
-  {{- if not .Values.ingress_router.hpa.enabled }}
-  replicas: {{ .Values.ingress_router.replicaCount }}
-  {{- end }}{{- /* not .Values.ingress_router.hpa.enabled */}}
+  {{- if not .Values.ingressRouter.hpa.enabled }}
+  replicas: {{ .Values.ingressRouter.replicaCount }}
+  {{- end }}{{- /* not .Values.ingressRouter.hpa.enabled */}}
   selector:
     matchLabels:
-      {{- include "big-search.selectorLabels" . | nindent 6 }}
-    {{- with .Values.ingress_router.matchLabels }}
+      {{- include "search-api.selectorLabels" . | nindent 6 }}
+    {{- with .Values.ingressRouter.matchLabels }}
       {{- toYaml . | nindent 6 }}
-    {{- end }}{{- /* .Values.ingress_router.matchLabels */}}
+    {{- end }}{{- /* .Values.ingressRouter.matchLabels */}}
       search/part: ingress-router
   template:
     metadata:
       annotations:
-      {{- with .Values.ingress_router.podAnnotations }}
+      {{- with .Values.ingressRouter.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.ingress_router.podAnnotations */}}
+      {{- end }}{{- /* .Values.ingressRouter.podAnnotations */}}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         prometheus.io/path: "/metrics"
         prometheus.io/port: {{ .Values.magg.ports.metrics | quote }}
         prometheus.io/scrape: "true"
       labels:
-        {{- include "big-search.labels" . | nindent 8 }}
-      {{- with .Values.ingress_router.podLabels }}
+        {{- include "search-api.labels" . | nindent 8 }}
+      {{- with .Values.ingressRouter.podLabels }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.ingress_router.podLabels */}}
+      {{- end }}{{- /* .Values.ingressRouter.podLabels */}}
         search/part: ingress-router
     spec:
       volumes:
         - name: ingresrouter-config
           configMap:
-            name: {{ include "big-search.fullname" . }}
+            name: {{ include "search-api.fullname" . }}
             defaultMode: 420
       containers:
         - name: ingress-router
           securityContext:
-            {{- toYaml .Values.ingress_router.securityContext | nindent 12 }}
-          image: {{ .Values.ingress_router.image.repository }}:{{ .Values.ingress_router.image.tag | default .Chart.AppVersion }}
-          imagePullPolicy: {{ .Values.ingress_router.image.pullPolicy }}
+            {{- toYaml .Values.ingressRouter.securityContext | nindent 12 }}
+          image: {{ .Values.ingressRouter.image.repository }}:{{ .Values.ingressRouter.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.ingressRouter.image.pullPolicy }}
           resources:
-            {{- toYaml .Values.ingress_router.resources | nindent 12 }}
+            {{- toYaml .Values.ingressRouter.resources | nindent 12 }}
           {{- if .Values.customCAs.bundle }}
           env:
-            {{- include "big-search.env.custom.ca.path" . | nindent 12 }}
+            {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
           ports:
             - name: ingress-router
-              containerPort: {{ .Values.ingress_router.ports.http }}
+              containerPort: {{ .Values.ingressRouter.ports.http }}
               protocol: TCP
           volumeMounts:
             - name: ingresrouter-config
@@ -68,21 +68,21 @@ spec:
               mountPath: /data/experiment_config.json
               subPath:  experiment_config.json
           {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
-          {{- if .Values.ingress_router.livenessProbe.enabled }}
+          {{- if .Values.ingressRouter.livenessProbe.enabled }}
           livenessProbe:
-            {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingress_router.livenessProbe "enabled") "context" $) | nindent 12 -}}
-          {{ end -}}{{- /* .Values.ingress_router.livenessProbe.enabled */}}
-          {{- if .Values.ingress_router.readinessProbe.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressRouter.livenessProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.ingressRouter.livenessProbe.enabled */}}
+          {{- if .Values.ingressRouter.readinessProbe.enabled }}
           readinessProbe:
-            {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingress_router.readinessProbe "enabled") "context" $) | nindent 12 -}}
-          {{ end -}}{{- /* .Values.ingress_router.readinessProbe.enabled */}}
-          {{- if .Values.ingress_router.startupProbe.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressRouter.readinessProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.ingressRouter.readinessProbe.enabled */}}
+          {{- if .Values.ingressRouter.startupProbe.enabled }}
           startupProbe:
-            {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingress_router.startupProbe "enabled") "context" $) | nindent 12 -}}
-          {{ end -}}{{- /* .Values.ingress_router.startupProbe.enabled */}}
-          {{- if .Values.ingress_router.prestopHook.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressRouter.startupProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.ingressRouter.startupProbe.enabled */}}
+          {{- if .Values.ingressRouter.prestopHook.enabled }}
           lifecycle:
             preStop:
               exec:
@@ -90,28 +90,28 @@ spec:
                   - /bin/sh
                   - '-c'
                   - sleep 30
-          {{- end }}{{- /* .Values.ingress_router.prestopHook.enabled */}}
+          {{- end }}{{- /* .Values.ingressRouter.prestopHook.enabled */}}
         - name: envoy
           securityContext:
-            {{- toYaml .Values.ingress_router.envoy.securityContext | nindent 12 }}
-          image: "{{ .Values.ingress_router.envoy.image.repository }}:{{ .Values.ingress_router.envoy.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.ingress_router.envoy.image.pullPolicy }}
+            {{- toYaml .Values.ingressRouter.envoy.securityContext | nindent 12 }}
+          image: "{{ .Values.ingressRouter.envoy.image.repository }}:{{ .Values.ingressRouter.envoy.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.ingressRouter.envoy.image.pullPolicy }}
           command: ["envoy"]
           args: ["-c", "/etc/envoy/ingress_service_envoy.yaml"]
           ports:
             - name: admin
-              containerPort: {{ .Values.ingress_router.envoy.ports.admin }}
+              containerPort: {{ .Values.ingressRouter.envoy.ports.admin }}
               protocol: TCP
           resources:
-            {{- toYaml .Values.ingress_router.envoy.resources | nindent 12 }}
+            {{- toYaml .Values.ingressRouter.envoy.resources | nindent 12 }}
           volumeMounts:
             - name: ingresrouter-config
               mountPath: /etc/envoy/ingress_service_envoy.yaml
               subPath: ingress_service_envoy.yaml
           {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
-          {{- if .Values.ingress_router.prestopHook.enabled }}
+          {{- if .Values.ingressRouter.prestopHook.enabled }}
           lifecycle:
             preStop:
               exec:
@@ -119,7 +119,7 @@ spec:
                   - /bin/bash
                   - '-c'
                   - while cat < /dev/tcp/127.0.0.1/8080 ; do sleep 5 ; done
-          {{- end }}{{- /* .Values.ingress_router.prestopHook.enabled */}}  
+          {{- end }}{{- /* .Values.ingressRouter.prestopHook.enabled */}}
           startupProbe:
             httpGet:
               path: /ready
@@ -148,39 +148,39 @@ spec:
             - name: METRICS_AGGREGATOR_PORT
               value: {{ .Values.magg.ports.metrics | quote }}
             - name: METRICS_AGGREGATOR_SOURCES
-              value: "http://127.0.0.1:{{ .Values.ingress_router.ports.monitor }}/metrics"
+              value: "http://127.0.0.1:{{ .Values.ingressRouter.ports.monitor }}/metrics"
             - name: GOMAXPROCS
               value: "1"
             {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.env.custom.ca.path" . | nindent 12 }}
+            {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}
           {{- if .Values.customCAs.bundle }}
           volumeMounts:
-            {{- include "big-search.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
           ports:
             - containerPort: {{ .Values.magg.ports.metrics }}
           resources:
             {{- toYaml .Values.magg.resources | nindent 12 }}
         {{ end }}{{- /* .Values.magg.enabled */}}
-      {{- with .Values.ingress_router.nodeSelector }}
+      {{- with .Values.ingressRouter.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.ingress_router.nodeSelector */}}
-      {{- with .Values.ingress_router.affinity }}
+      {{- end }}{{- /* .Values.ingressRouter.nodeSelector */}}
+      {{- with .Values.ingressRouter.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.ingress_router.affinity */}}
-      {{- with .Values.ingress_router.tolerations }}
+      {{- end }}{{- /* .Values.ingressRouter.affinity */}}
+      {{- with .Values.ingressRouter.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.ingress_router.tolerations */}}
-      serviceAccountName: {{ include "big-search.serviceAccountName" . }}
-      securityContext: {{- toYaml .Values.ingress_router.podSecurityContext | nindent 8 }}
-      {{- with .Values.ingress_router.imagePullSecrets }}
+      {{- end }}{{- /* .Values.ingressRouter.tolerations */}}
+      serviceAccountName: {{ include "search-api.serviceAccountName" . }}
+      securityContext: {{- toYaml .Values.ingressRouter.podSecurityContext | nindent 8 }}
+      {{- with .Values.ingressRouter.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.ingress_router.imagePullSecrets */}}
+      {{- end }}{{- /* .Values.ingressRouter.imagePullSecrets */}}
   strategy:
-  {{- .Values.ingress_router.strategy | toYaml | nindent 4 }}
-{{ end }}{{- /* .Values.ingress_router.enabled */}}
+  {{- .Values.ingressRouter.strategy | toYaml | nindent 4 }}
+{{ end }}{{- /* .Values.ingressRouter.enabled */}}

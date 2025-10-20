@@ -1,11 +1,11 @@
-{{- if .Values.service.ingress_router.external.enable }}
+{{- if .Values.service.ingressRouter.external.enable }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: {{ include "big-search.fullname" . }}-external
+  name: {{ include "search-api.fullname" . }}-external
 spec:
   hostnames:
-  - {{ .Values.service.ingress_router.external.host }}
+  - {{ .Values.service.ingressRouter.external.host }}
   parentRefs:
   - group: gateway.networking.k8s.io
     kind: Gateway
@@ -23,8 +23,8 @@ spec:
   - backendRefs:
     - group: ""
       kind: Service
-      name: {{ include "big-search.fullname" . }}-ingress-router
-      port: {{ .Values.service.ingress_router.port }}
+      name: {{ include "search-api.fullname" . }}-ingress-router
+      port: {{ .Values.service.ingressRouter.port }}
       weight: 1
     matches:
     - path:

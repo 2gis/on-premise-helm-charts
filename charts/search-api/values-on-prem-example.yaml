@@ -19,7 +19,7 @@ worker:
     fsGroup: 100000000
   image:
     repository: docker-hub.2gis.ru/on-premise/bs-worker
-    tag: vx-dev_43296
+#    tag: vx-dev_43296
 #  livenessProbe: {}
 #  readinessProbe: {}
   startupProbe:
@@ -44,7 +44,7 @@ head:
   head:
     image:
       repository: docker-hub.2gis.ru/on-premise/bs-head
-      tag: vx-dev_43296
+#      tag: vx-dev_43296
     startupProbe:
       enabled: true
       initialDelaySeconds: 30
@@ -62,29 +62,29 @@ head:
     adsEnable: false
   nginx:
     image:
-    #  repository: docker-hub.2gis.ru/2gis-on-premise/nginx
-      repository: docker-hub.2gis.ru/usrch/nginx
-      tag: "1.25.11"
+      repository: docker-hub.2gis.ru/on-premise/bs-nginx
+#      repository: docker-hub.2gis.ru/usrch/nginx
+#      tag: 1.25.11
   data:
     storageClassName: "topolvm-ext4"
     persistent:
       enabled: false
 
 service:
-  ingress_router:
+  ingressRouter:
     external:
       enable: false
       host: 'zhukov-op-ir.istio.k8s.2gis.dev'
 
-ingress_router:
+ingressRouter:
   # enabled: false
   image:
-    repository: docker-hub.2gis.ru/on-premise/bs-ingress_router
-    tag: vx-dev_43296
-  podSecurityContext:
-    runAsUser: 100000000
-    runAsGroup: 100000000
-    fsGroup: 100000000
+    repository: docker-hub.2gis.ru/on-premise/bs-ingress-router
+#    tag: vx-dev_43296
+  # podSecurityContext:
+  #   runAsUser: 100000000
+  #   runAsGroup: 100000000
+  #   fsGroup: 100000000
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -98,15 +98,25 @@ ingress_router:
   prestopHook:
     enabled: false
   experimentComponent:
-    enabled: true
+    enabled: false
   rateLimitComponent:
     enabled: false
+  ab:
+    sapphire_base:
+      port: "8080"
+      exact_match: "0"
+    contour1:
+      address: 'big-search-stg-green-ingress-router'
+    contour2:
+      address: 'big-search-stg-blue-ingress-router'
+    contour3:
+      address: 'big-search-stg-yellow-ingress-router'
 # вот этого блока быть не должно, так как rateLimitComponent is NOT enabled
 # но пока не умеем работать с пустыми параметрами
-  prometheus_url: "https://prometheus.2gis.io/prometheus/api/v1/query_range"
-  rate_limit_rules:
+  prometheusUrl: "https://prometheus.2gis.io/prometheus/api/v1/query_range"
+  rateLimitRules:
   - name: 'cpu_usage'
-    query: 'sum(increase(sapphire_cpu_usage_total{cluster="production-k8s", kubernetes_namespace="search", app=~"big-search-(blue|green)", search_part="head"}[15m])) by (api_key)'
+    query: 'sum(increase(sapphire_cpu_usage_total{cluster="production-k8s", kubernetes_namespace="search", app=~"search-api-(blue|green)", search_part="head"}[15m])) by (api_key)'
     limit: 200000000
     ttl_sec: 60
     update_frequency_sec: 10
@@ -117,7 +127,7 @@ ingress_router:
 geodetector:
   image:
     repository: docker-hub.2gis.ru/on-premise/bs-geodetector
-    tag: vx-dev_43296
+#    tag: vx-dev_43296
   enabled: false
   data:
     storageClassName: "topolvm-ext4"
@@ -137,11 +147,11 @@ geodetector:
 syncer:
   image:
     repository: docker-hub.2gis.ru/on-premise/bs-syncer_new
-    tag: vx-dev_43296
+#    tag: vx-dev_43296
 indexer:
   image:
     repository: docker-hub.2gis.ru/on-premise/bs-indexer
-    tag: vx-dev_43296
+#    tag: vx-dev_43296
   hpa:
     enabled: true
   podSecurityContext:
@@ -152,8 +162,10 @@ indexer:
 queryTransformerMock:
   enabled: false
 
-# magg:
-#   enabled: false
+magg:
+  enabled: true
+  image:
+    repository: docker-hub.2gis.ru/on-premise/bs-metrics-aggregator
 
 controller:
   podSecurityContext:
@@ -162,10 +174,10 @@ controller:
     fsGroup: 100000000
   image:
     repository: docker-hub.2gis.ru/on-premise/bs-controller
-    tag: vx-dev_43296
+#    tag: vx-dev_43296
 #  projectListUrl: "https://s3.2gis.one/usrch/test-projects-list.json"
   projectListUrl: "http://catalog.k8s.n3.2gis.io/2.0/region/list?key=1c35663a-4e3e-4c83-a1d4-ecbc187043dc&type=region,segment,universe&fields=items.last_imported_data_source,items.country_code,items.allow_for_indexing,items.allow_for_delete"
-  extra_projects:
+  extraProjects:
     - project_id: 9
       language: ru
       location: ru
@@ -192,7 +204,7 @@ filesStorage:
     fsGroup: 100000000
   image:
     repository: docker-hub.2gis.ru/on-premise/bs-files_storage
-    tag: vx-dev_43296
+#    tag: vx-dev_43296
 #   livenessProbe:
 #     enabled: false
 #   readinessProbe:
@@ -214,8 +226,8 @@ filesStorage:
     resources:
       requests:
         storage: 30Gi
-  version_ttl: 168h
-  
+  versionTTL: 168h
+
 customCAs:
   bundle: ''
   # bundle: |

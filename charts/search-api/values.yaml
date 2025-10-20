@@ -106,14 +106,14 @@ worker:
   podSecurityContext: {}
   imagePullSecrets: []
   image:
-    repository: docker-hub.2gis.ru/usrch/bs-worker
+    repository: 2gis-on-premise/bs-worker
     pullPolicy: IfNotPresent
-    tag: 0.1
+    tag: 8.14.6
   ports:
     http: 8092
     grpc: 8091
-  loggerLevel: "info"
-  loggerFormat: "json"
+  loggerLevel: info
+  loggerFormat: json
   workerMainThreads: 4
   workerFbThreads: 4
   dataUpdateFrequencySec: 60
@@ -185,8 +185,8 @@ worker:
             periodSeconds: 15
         stabilizationWindowSeconds: 30
   vpa:
-    enabled: true
-    updateMode: "Off"
+    enabled: false
+    updateMode: Off
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -273,7 +273,7 @@ head:
 # @param head.head.workerRetryAttempts Number of retry attempts to contact a worker
 # @param head.head.workerTimeoutMs Timeout (in milliseconds) for waiting for a response from a worker
 # @param head.head.adsEnable Enable or disable advertising
-# @param head.head.bigSearchMode Enable or disable big search (`on`, `off`, or `default`)
+# @param head.head.bigSearchMode Enable or disable big search (`on`, `off`)
 # @param head.head.bigSearchSearchers List of searchers for which big search is enabled
 # @skip head.head.bigSearchExcludeSegments List of projects to exclude from indexing
 # @param head.head.aiSuggestedQueries.enabled Enable or disable AI Suggested Queries
@@ -289,9 +289,9 @@ head:
 
   head:
     image:
-      repository: docker-hub.2gis.ru/usrch/bs-head
+      repository: 2gis-on-premise/bs-head
       pullPolicy: IfNotPresent
-      tag: 0.1
+      tag: 8.14.6
     ports:
       http: 9090
       monitor: 9091
@@ -303,8 +303,8 @@ head:
       limits:
         cpu: 2000m
         memory: 8Gi
-    loggerLevel: "info"
-    loggerFormat: "json"
+    loggerLevel: info
+    loggerFormat: json
     livenessProbe:
       enabled: true
       httpGet:
@@ -377,9 +377,9 @@ head:
 
   nginx:
     image:
-      repository: nginx
+      repository: 2gis-on-premise/bs-nginx
       pullPolicy: IfNotPresent
-      tag: "1.25.3"
+      tag: 1.25.11
     ports:
       http: 8080
     securityContext: {}
@@ -419,7 +419,7 @@ head:
     image:
       repository: envoyproxy/envoy
       pullPolicy: IfNotPresent
-      tag: "v1.28.0"
+      tag: v1.28.0
     ports:
       admin: 9901
       grpc: 8091
@@ -503,8 +503,8 @@ head:
         stabilizationWindowSeconds: 30
         selectPolicy: Max
   vpa:
-    enabled: true
-    updateMode: "Off"
+    enabled: false
+    updateMode: Off
 
 # @param head.queryTransformer.enabled Enable or disable the queryTransformer
 # @param head.queryTransformer.searchersList List of searchers for which the queryTransformer will be enabled
@@ -527,17 +527,17 @@ head:
 # @param head.aiVectorSearch.endpoint.port Port of the aiVectorSearch service
 # @param head.aiVectorSearch.endpoint.ssl Enable or disable TLS encryption for the aiVectorSearch service
 # @param head.aiVectorSearch.clientFactoryName Client factory name for the aiVectorSearch client (used to enable/disable SSL when debugging locally)
-# @param head.aiVectorSearch.timeout_ms Connection timeout (in milliseconds) for the aiVectorSearch service
+# @param head.aiVectorSearch.timeoutMs Connection timeout (in milliseconds) for the aiVectorSearch service
 # @param head.aiVectorSearch.searchers List of searchers for which aiVectorSearch will be enabled
 
   aiVectorSearch:
     enabled: false
     endpoint:
-      address: "router-grpc-service.nlp.svc.cluster.local"
+      address: ''
       port: 50051
       ssl: false
-    clientFactoryName: 'grpc-client-factory'
-    timeout_ms: 500
+    clientFactoryName: grpc-client-factory
+    timeoutMs: 500
     searchers:
       - ExpandingSearcher
 
@@ -623,7 +623,7 @@ indexerServices:
 # @param filesStorage.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
 # @param filesStorage.readinessProbe.initialDelaySeconds Initial delay (in seconds) before starting the readiness probe
 
-# @param filesStorage.version_ttl Time to live for old (unused) index versions
+# @param filesStorage.versionTTL Time to live for old (unused) index versions
 # @param filesStorage.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
 
 # @param filesStorage.data.persistent.enabled Enable or disable a persistent volume for the service
@@ -637,9 +637,9 @@ filesStorage:
   ports:
     http: 8080
   image:
-    repository: docker-hub.2gis.ru/usrch/bs-files_storage
+    repository: 2gis-on-premise/bs-files_storage
     pullPolicy: IfNotPresent
-    tag: 0.3
+    tag: 8.14.6
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -670,7 +670,7 @@ filesStorage:
     timeoutSeconds: 1
     failureThreshold: 3
     initialDelaySeconds: 10
-  version_ttl: 168h
+  versionTTL: 168h
   loglevel: "info"
   data:
     persistent:
@@ -724,13 +724,13 @@ filesStorage:
 # @param controller.model Part of the index name
 # @param controller.domain Part of the index name
 # @param controller.interval Indexing task synchronization interval
-# @param controller.task_timeout Timeout for completing an indexing task; after this time, the task is returned to the queue if not completed successfully
-# @param controller.extra_projects Additional list of projects with their URLs
+# @param controller.taskTimeout Timeout for completing an indexing task; after this time, the task is returned to the queue if not completed successfully
+# @param controller.extraProjects Additional list of projects with their URLs
 # @param controller.adWeightsEnable Enable or disable updating of ad weights
-# @param controller.adWeightsUrl URL of the ad weights source
-# @param controller.monthlyAdWeightsEnable Enable monthly update of ad targeting
-# @param controller.monthlyAdWeightsTargetingsUrl URL of the monthly ad targeting source
-# @param controller.monthlyAdWeightsUrl URL of a specific monthly ad weight target
+# @skip controller.adWeightsUrl URL of the ad weights source
+# @skip controller.monthlyAdWeightsEnable Enable monthly update of ad targeting
+# @skip controller.monthlyAdWeightsTargetingsUrl URL of the monthly ad targeting source
+# @skip controller.monthlyAdWeightsUrl URL of a specific monthly ad weight target
 # @param controller.data.persistent.enabled Enable or disable a persistent volume for the service
 # @param controller.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
 # @param controller.data.resources.requests.storage Requested storage volume size
@@ -743,9 +743,9 @@ controller:
   ports:
     http: 8080
   image:
-    repository: docker-hub.2gis.ru/usrch/bs-controller
+    repository: 2gis-on-premise/bs-controller
     pullPolicy: IfNotPresent
-    tag: 0.3
+    tag: 8.14.6
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -783,13 +783,13 @@ controller:
   model: "gis"
   domain: "v4"
   interval: 15s
-  task_timeout: 20m
-  extra_projects: []
+  taskTimeout: 20m
+  extraProjects: []
   adWeightsEnable: true
-  adWeightsUrl: "https://delivery.api.2gis.ru/api/1.0/options?segment_id=%d&options=serp_weight_value,suggestor_weight_value,target"
+  adWeightsUrl: ''
   monthlyAdWeightsEnable: false
-  monthlyAdWeightsTargetingsUrl: "https://casino-oracle-uploader-production.k8s.n3.2gis.io/ads_weights/targetings"
-  monthlyAdWeightsUrl: "https://casino-oracle-uploader-production.k8s.n3.2gis.io/ads_weights/"
+  monthlyAdWeightsTargetingsUrl: ''
+  monthlyAdWeightsUrl: ''
   data:
     persistent:
       enabled: false
@@ -866,9 +866,9 @@ indexer:
     http: 8080
   loglevel: "info"
   image:
-    repository: docker-hub.2gis.ru/usrch/bs-indexer
+    repository: 2gis-on-premise/bs-indexer
     pullPolicy: IfNotPresent
-    tag: 0.3
+    tag: 8.14.6
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -919,8 +919,8 @@ indexer:
         stabilizationWindowSeconds: 0
         selectPolicy: Max
   vpa:
-    enabled: true
-    updateMode: "Off"
+    enabled: false
+    updateMode: Off
 
 # @section s3Client settings
 
@@ -968,9 +968,9 @@ syncer:
     http: 8088
   loglevel: "info"
   image:
-    repository: docker-hub.2gis.ru/usrch/bs-syncer_new
+    repository: 2gis-on-premise/bs-syncer_new
     pullPolicy: IfNotPresent
-    tag: 0.3
+    tag: 8.14.6
   securityContext: {}
   resources:
     requests:
@@ -990,9 +990,9 @@ syncer:
     rtw: ''
     aiSuggestedQueries: ''
 
-# @param GIN_MODE Go application operating mode; default is `release`, `debug` mode is also supported
+# @param GINMODE Go application operating mode; default is `release`, `debug` mode is also supported
 
-GIN_MODE: release
+GINMODE: release
 
 # @section Magg settings
 
@@ -1009,11 +1009,11 @@ GIN_MODE: release
 # @extra magg.resources.limits.memory Memory limit; recommended value: `128Mi`
 
 magg:
-  enabled: true
+  enabled: false
   image:
-    repository: docker-hub.2gis.ru/usrch/metrics-aggregator
+    repository: 2gis-on-premise/metrics-aggregator
     pullPolicy: IfNotPresent
-    tag: master
+    tag: 0.1.0
   ports:
     metrics: 9999
   resources:
@@ -1049,14 +1049,14 @@ serviceAccount:
 # @param service.filesStorage.port Service (svc) port for the filesStorage component
 # @param service.controller.port Service (svc) port for the controller component
 # @param service.indexer.port Service (svc) port for the indexer component
-# @param service.ingress_router.port Service (svc) port for the ingress-router
+# @param service.ingressRouter.port Service (svc) port for the ingress-router
 
-# @skip service.ingress_router.external.enable Enable or disable direct HTTP route to ingress-router (internal use)
-# @skip service.ingress_router.external.host External address for direct HTTP route to ingress-router (internal use)
+# @skip service.ingressRouter.external.enable Enable or disable direct HTTP route to ingress-router (internal use)
+# @skip service.ingressRouter.external.host External address for direct HTTP route to ingress-router (internal use)
 
 # @param service.geodetector.port Service (svc) port for the geodetector component
-# @param service.queryTransformerMock.ports.http Service (svc) HTTP port for the queryTransformerMock
-# @param service.queryTransformerMock.ports.grpc Service (svc) gRPC port for the queryTransformerMock
+# @skip service.queryTransformerMock.ports.http Service (svc) HTTP port for the queryTransformerMock
+# @skip service.queryTransformerMock.ports.grpc Service (svc) gRPC port for the queryTransformerMock
 
 service:
   worker:
@@ -1079,7 +1079,7 @@ service:
     port: 80
   indexer:
     port: 80
-  ingress_router:
+  ingressRouter:
     port: 9092
     external:
       enable: false
@@ -1087,39 +1087,39 @@ service:
   geodetector:
     port: 10091
   queryTransformerMock:
-    ports: 
+    ports:
       http: 8000
       grpc: 8091
 
-# @section queryTransformerMock
+# @skip section queryTransformerMock
 
-# @param queryTransformerMock.enabled Enable or disable the queryTransformerMock component
-# @param queryTransformerMock.image.repository Docker image repository
-# @param queryTransformerMock.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
-# @param queryTransformerMock.image.tag Docker image tag
-# @param queryTransformerMock.imagePullSecrets Kubernetes image pull secrets
-# @param queryTransformerMock.replicaCount Number of replicas for queryTransformerMock (used if HPA is disabled)
-# @param queryTransformerMock.ports.grpc gRPC port
-# @param queryTransformerMock.ports.http HTTP port
+# @skip queryTransformerMock.enabled Enable or disable the queryTransformerMock component
+# @skip queryTransformerMock.image.repository Docker image repository
+# @skip queryTransformerMock.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @skip queryTransformerMock.image.tag Docker image tag
+# @skip queryTransformerMock.imagePullSecrets Kubernetes image pull secrets
+# @skip queryTransformerMock.replicaCount Number of replicas for queryTransformerMock (used if HPA is disabled)
+# @skip queryTransformerMock.ports.grpc gRPC port
+# @skip queryTransformerMock.ports.http HTTP port
 
 # @skip queryTransformerMock.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
-# @extra queryTransformerMock.resources.requests.cpu CPU request; recommended value: `50m`
-# @extra queryTransformerMock.resources.requests.memory Memory request; recommended value: `100Mi`
-# @extra queryTransformerMock.resources.limits.cpu CPU limit; recommended value: `1`
-# @extra queryTransformerMock.resources.limits.memory Memory limit; recommended value: `8Gi`
+# @skip queryTransformerMock.resources.requests.cpu CPU request; recommended value: `50m`
+# @skip queryTransformerMock.resources.requests.memory Memory request; recommended value: `100Mi`
+# @skip queryTransformerMock.resources.limits.cpu CPU limit; recommended value: `1`
+# @skip queryTransformerMock.resources.limits.memory Memory limit; recommended value: `8Gi`
 
-# @param queryTransformerMock.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
-# @param queryTransformerMock.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
-# @param queryTransformerMock.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
-# @param queryTransformerMock.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
-# @param queryTransformerMock.matchLabels Selector match labels
+# @skip queryTransformerMock.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @skip queryTransformerMock.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @skip queryTransformerMock.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @skip queryTransformerMock.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @skip queryTransformerMock.matchLabels Selector match labels
 
 queryTransformerMock:
   enabled: false
   image:
-    repository: docker-hub.2gis.ru/usrch/query-transformer-mock
+    repository: 2gis-on-premise/query-transformer-mock
     pullPolicy: IfNotPresent
-    tag: master_9290908e
+    tag: 0.0.1
   imagePullSecrets: []
   replicaCount: 1
   ports:
@@ -1139,125 +1139,125 @@ queryTransformerMock:
   matchLabels: {}
 
 
-# @section ingress_router
+# @section ingressRouter
 
-# @param ingress_router.enabled Enable or disable ingress_router
-# @param ingress_router.replicaCount Number of replicas for ingress_router (used if HPA is disabled)
+# @param ingressRouter.enabled Enable or disable ingressRouter
+# @param ingressRouter.replicaCount Number of replicas for ingressRouter (used if HPA is disabled)
 
-# @param ingress_router.livenessProbe.enabled Enable liveness probe
-# @param ingress_router.livenessProbe.httpGet.path HTTP path for the liveness probe
-# @param ingress_router.livenessProbe.httpGet.port HTTP port for the liveness probe
-# @param ingress_router.livenessProbe.httpGet.scheme HTTP scheme for the liveness probe
-# @param ingress_router.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
-# @param ingress_router.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
-# @param ingress_router.livenessProbe.successThreshold Minimum consecutive successes for the liveness probe
-# @param ingress_router.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
+# @param ingressRouter.livenessProbe.enabled Enable liveness probe
+# @param ingressRouter.livenessProbe.httpGet.path HTTP path for the liveness probe
+# @param ingressRouter.livenessProbe.httpGet.port HTTP port for the liveness probe
+# @param ingressRouter.livenessProbe.httpGet.scheme HTTP scheme for the liveness probe
+# @param ingressRouter.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param ingressRouter.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param ingressRouter.livenessProbe.successThreshold Minimum consecutive successes for the liveness probe
+# @param ingressRouter.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
 
-# @param ingress_router.readinessProbe.enabled Enable readiness probe
-# @param ingress_router.readinessProbe.httpGet.path HTTP path for the readiness probe
-# @param ingress_router.readinessProbe.httpGet.port HTTP port for the readiness probe
-# @param ingress_router.readinessProbe.httpGet.scheme HTTP scheme for the readiness probe
-# @param ingress_router.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
-# @param ingress_router.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
-# @param ingress_router.readinessProbe.successThreshold Minimum consecutive successes for the readiness probe
-# @param ingress_router.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+# @param ingressRouter.readinessProbe.enabled Enable readiness probe
+# @param ingressRouter.readinessProbe.httpGet.path HTTP path for the readiness probe
+# @param ingressRouter.readinessProbe.httpGet.port HTTP port for the readiness probe
+# @param ingressRouter.readinessProbe.httpGet.scheme HTTP scheme for the readiness probe
+# @param ingressRouter.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param ingressRouter.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param ingressRouter.readinessProbe.successThreshold Minimum consecutive successes for the readiness probe
+# @param ingressRouter.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
 
-# @param ingress_router.startupProbe.enabled Enable startup probe
-# @param ingress_router.startupProbe.httpGet.path HTTP path for the startup probe
-# @param ingress_router.startupProbe.httpGet.port HTTP port for the startup probe
-# @param ingress_router.startupProbe.httpGet.scheme HTTP scheme for the startup probe
-# @param ingress_router.startupProbe.initialDelaySeconds Initial delay (in seconds) before starting the startup probe
-# @param ingress_router.startupProbe.timeoutSeconds Timeout (in seconds) for the startup probe
-# @param ingress_router.startupProbe.periodSeconds Interval (in seconds) between startup probe checks
-# @param ingress_router.startupProbe.successThreshold Minimum consecutive successes for the startup probe
-# @param ingress_router.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
+# @param ingressRouter.startupProbe.enabled Enable startup probe
+# @param ingressRouter.startupProbe.httpGet.path HTTP path for the startup probe
+# @param ingressRouter.startupProbe.httpGet.port HTTP port for the startup probe
+# @param ingressRouter.startupProbe.httpGet.scheme HTTP scheme for the startup probe
+# @param ingressRouter.startupProbe.initialDelaySeconds Initial delay (in seconds) before starting the startup probe
+# @param ingressRouter.startupProbe.timeoutSeconds Timeout (in seconds) for the startup probe
+# @param ingressRouter.startupProbe.periodSeconds Interval (in seconds) between startup probe checks
+# @param ingressRouter.startupProbe.successThreshold Minimum consecutive successes for the startup probe
+# @param ingressRouter.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
 
-# @param ingress_router.loggerLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
-# @param ingress_router.loggerFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
+# @param ingressRouter.loggerLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param ingressRouter.loggerFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
 
-# @skip ingress_router.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
-# @extra ingress_router.resources.requests.cpu CPU request; recommended value: `1`
-# @extra ingress_router.resources.requests.memory Memory request; recommended value: `400Mi`
-# @extra ingress_router.resources.limits.cpu CPU limit; recommended value: `2`
-# @extra ingress_router.resources.limits.memory Memory limit; recommended value: `2Gi`
+# @skip ingressRouter.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra ingressRouter.resources.requests.cpu CPU request; recommended value: `1`
+# @extra ingressRouter.resources.requests.memory Memory request; recommended value: `400Mi`
+# @extra ingressRouter.resources.limits.cpu CPU limit; recommended value: `2`
+# @extra ingressRouter.resources.limits.memory Memory limit; recommended value: `2Gi`
 
-# @param ingress_router.hpa.enabled Enable or disable Horizontal Pod Autoscaler (HPA)
-# @param ingress_router.hpa.minReplicas Minimum number of replicas
-# @param ingress_router.hpa.maxReplicas Maximum number of replicas
-# @param ingress_router.hpa.averageCPUValue Target average CPU utilization (as a direct value of requested CPU)
+# @param ingressRouter.hpa.enabled Enable or disable Horizontal Pod Autoscaler (HPA)
+# @param ingressRouter.hpa.minReplicas Minimum number of replicas
+# @param ingressRouter.hpa.maxReplicas Maximum number of replicas
+# @param ingressRouter.hpa.averageCPUValue Target average CPU utilization (as a direct value of requested CPU)
 
-# @param ingress_router.hpa.behavior.scaleDown.policies[0].periodSeconds Duration (in seconds) the policy must be true
-# @param ingress_router.hpa.behavior.scaleDown.policies[0].type Type of scaling (percentage or absolute number of pods to reduce)
-# @param ingress_router.hpa.behavior.scaleDown.policies[0].value Number or percentage of pods to reduce
-# @param ingress_router.hpa.behavior.scaleDown.stabilizationWindowSeconds Stabilization window to prevent flapping
+# @param ingressRouter.hpa.behavior.scaleDown.policies[0].periodSeconds Duration (in seconds) the policy must be true
+# @param ingressRouter.hpa.behavior.scaleDown.policies[0].type Type of scaling (percentage or absolute number of pods to reduce)
+# @param ingressRouter.hpa.behavior.scaleDown.policies[0].value Number or percentage of pods to reduce
+# @param ingressRouter.hpa.behavior.scaleDown.stabilizationWindowSeconds Stabilization window to prevent flapping
 
-# @param ingress_router.hpa.behavior.scaleUp.selectPolicy Policy selection strategy: `Min` or `Disabled`
-# @param ingress_router.hpa.behavior.scaleUp.policies[0].periodSeconds Duration (in seconds) the policy must be true
-# @param ingress_router.hpa.behavior.scaleUp.policies[0].type Type of scaling (percentage or absolute number of pods to increase)
-# @param ingress_router.hpa.behavior.scaleUp.policies[0].value Number or percentage of pods to increase
-# @param ingress_router.hpa.behavior.scaleUp.policies[1].periodSeconds Duration (in seconds) the policy must be true
-# @param ingress_router.hpa.behavior.scaleUp.policies[1].type Type of scaling (percentage or absolute number of pods to increase)
-# @param ingress_router.hpa.behavior.scaleUp.policies[1].value Number or percentage of pods to increase
-# @param ingress_router.hpa.behavior.scaleUp.stabilizationWindowSeconds Stabilization window to prevent flapping
+# @param ingressRouter.hpa.behavior.scaleUp.selectPolicy Policy selection strategy: `Min` or `Disabled`
+# @param ingressRouter.hpa.behavior.scaleUp.policies[0].periodSeconds Duration (in seconds) the policy must be true
+# @param ingressRouter.hpa.behavior.scaleUp.policies[0].type Type of scaling (percentage or absolute number of pods to increase)
+# @param ingressRouter.hpa.behavior.scaleUp.policies[0].value Number or percentage of pods to increase
+# @param ingressRouter.hpa.behavior.scaleUp.policies[1].periodSeconds Duration (in seconds) the policy must be true
+# @param ingressRouter.hpa.behavior.scaleUp.policies[1].type Type of scaling (percentage or absolute number of pods to increase)
+# @param ingressRouter.hpa.behavior.scaleUp.policies[1].value Number or percentage of pods to increase
+# @param ingressRouter.hpa.behavior.scaleUp.stabilizationWindowSeconds Stabilization window to prevent flapping
 
-# @param ingress_router.vpa.enabled Enable or disable Vertical Pod Autoscaler (VPA)
-# @param ingress_router.vpa.updateMode VPA operating mode; `Off` means no automatic resource changes
+# @param ingressRouter.vpa.enabled Enable or disable Vertical Pod Autoscaler (VPA)
+# @param ingressRouter.vpa.updateMode VPA operating mode; `Off` means no automatic resource changes
 
-# @param ingress_router.imagePullSecrets Kubernetes image pull secrets
-# @param ingress_router.experimentComponent.enabled Enable or disable A/B experiments
-# @param ingress_router.rateLimitComponent.enabled Enable or disable rate limiting
-# @param ingress_router.prestopHook.enabled Enable or disable container lifecycle [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)
-# @param ingress_router.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
-# @param ingress_router.envoy.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param ingressRouter.imagePullSecrets Kubernetes image pull secrets
+# @param ingressRouter.experimentComponent.enabled Enable or disable A/B experiments
+# @param ingressRouter.rateLimitComponent.enabled Enable or disable rate limiting
+# @param ingressRouter.prestopHook.enabled Enable or disable container lifecycle [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)
+# @param ingressRouter.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param ingressRouter.envoy.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
-# @param ingress_router.envoy.image.repository Docker image repository
-# @param ingress_router.envoy.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
-# @param ingress_router.envoy.image.tag Docker image tag
-# @skip ingress_router.envoy.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
-# @extra ingress_router.envoy.resources.requests.cpu CPU request; recommended value: `200m`
-# @extra ingress_router.envoy.resources.requests.memory Memory request; recommended value: `128Mi`
-# @extra ingress_router.envoy.resources.limits.cpu CPU limit; recommended value: `800m`
-# @extra ingress_router.envoy.resources.limits.memory Memory limit; recommended value: `512Mi`
-# @param ingress_router.envoy.ports.admin HTTP port for Envoy admin console
-# @param ingress_router.envoy.ports.grpc gRPC port used by Envoy
+# @param ingressRouter.envoy.image.repository Docker image repository
+# @param ingressRouter.envoy.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param ingressRouter.envoy.image.tag Docker image tag
+# @skip ingressRouter.envoy.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra ingressRouter.envoy.resources.requests.cpu CPU request; recommended value: `200m`
+# @extra ingressRouter.envoy.resources.requests.memory Memory request; recommended value: `128Mi`
+# @extra ingressRouter.envoy.resources.limits.cpu CPU limit; recommended value: `800m`
+# @extra ingressRouter.envoy.resources.limits.memory Memory limit; recommended value: `512Mi`
+# @param ingressRouter.envoy.ports.admin HTTP port for Envoy admin console
+# @param ingressRouter.envoy.ports.grpc gRPC port used by Envoy
 
-# @param ingress_router.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
-# @param ingress_router.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
-# @param ingress_router.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+# @param ingressRouter.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param ingressRouter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param ingressRouter.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 
-# @param ingress_router.strategy.type Deployment strategy; can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
-# @param ingress_router.strategy.rollingUpdate.maxUnavailable Maximum number of unavailable pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
-# @param ingress_router.strategy.rollingUpdate.maxSurge Maximum number of extra pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+# @param ingressRouter.strategy.type Deployment strategy; can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
+# @param ingressRouter.strategy.rollingUpdate.maxUnavailable Maximum number of unavailable pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+# @param ingressRouter.strategy.rollingUpdate.maxSurge Maximum number of extra pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
 
-# @param ingress_router.image.repository Docker image repository
-# @param ingress_router.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
-# @param ingress_router.image.tag Docker image tag
-# @param ingress_router.matchLabels Selector match labels
-# @param ingress_router.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param ingressRouter.image.repository Docker image repository
+# @param ingressRouter.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param ingressRouter.image.tag Docker image tag
+# @param ingressRouter.matchLabels Selector match labels
+# @param ingressRouter.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
 
-# @param ingress_router.sapphire_url Custom URL for the `head` service
-# @param ingress_router.sapphire_request_timeout_ms Timeout (in ms) for requests to the `head` service
-# @param ingress_router.prometheus_url Prometheus URL for rate limiting
-# @param ingress_router.rate_limit_rules Big Search usage quotas
+# @param ingressRouter.sapphireUrl Custom URL for the `head` service
+# @param ingressRouter.sapphire_request_timeoutMs Timeout (in ms) for requests to the `head` service
+# @param ingressRouter.prometheusUrl Prometheus URL for rate limiting
+# @param ingressRouter.rateLimitRules Big Search usage quotas
 
-# @param ingress_router.ports.monitor TCP port for service endpoints such as `/metrics`
-# @param ingress_router.ports.http TCP port for API requests
+# @param ingressRouter.ports.monitor TCP port for service endpoints such as `/metrics`
+# @param ingressRouter.ports.http TCP port for API requests
 
 # A/B experiments routing
-# @param ingress_router.headers Header used for A/B experiment routing
-# @param ingress_router.ab.sapphire_base.port Port of the AB Sapphire base service
-# @param ingress_router.ab.sapphire_base.exact_match Header value for AB Sapphire base
-# @param ingress_router.ab.contour1.port Port of AB experiment 1 head service
-# @param ingress_router.ab.contour1.address Address of AB experiment 1 head service
-# @param ingress_router.ab.contour1.exact_match Header value for AB experiment 1
-# @param ingress_router.ab.contour2.port Port of AB experiment 2 head service
-# @param ingress_router.ab.contour2.address Address of AB experiment 2 head service
-# @param ingress_router.ab.contour2.exact_match Header value for AB experiment 2
-# @param ingress_router.ab.contour3.port Port of AB experiment 3 head service
-# @param ingress_router.ab.contour3.address Address of AB experiment 3 head service
-# @param ingress_router.ab.contour3.exact_match Header value for AB experiment 3
+# @param ingressRouter.headers Header used for A/B experiment routing
+# @skip ingressRouter.ab.sapphire_base.port Port of the AB Sapphire base service
+# @skip ingressRouter.ab.sapphire_base.exact_match Header value for AB Sapphire base
+# @skip ingressRouter.ab.contour1.port Port of AB experiment 1 head service
+# @skip ingressRouter.ab.contour1.address Address of AB experiment 1 head service
+# @skip ingressRouter.ab.contour1.exact_match Header value for AB experiment 1
+# @skip ingressRouter.ab.contour2.port Port of AB experiment 2 head service
+# @skip ingressRouter.ab.contour2.address Address of AB experiment 2 head service
+# @skip ingressRouter.ab.contour2.exact_match Header value for AB experiment 2
+# @skip ingressRouter.ab.contour3.port Port of AB experiment 3 head service
+# @skip ingressRouter.ab.contour3.address Address of AB experiment 3 head service
+# @skip ingressRouter.ab.contour3.exact_match Header value for AB experiment 3
 
-ingress_router:
+ingressRouter:
   enabled: true
   replicaCount: 1
   livenessProbe:
@@ -1302,7 +1302,7 @@ ingress_router:
       cpu: 1
       memory: 400Mi
   hpa:
-    enabled: true
+    enabled: false
     minReplicas: 2
     maxReplicas: 5
     averageCPUValue: 700m
@@ -1324,8 +1324,8 @@ ingress_router:
             value: 5
         stabilizationWindowSeconds: 30
   vpa:
-    enabled: true
-    updateMode: "Off"
+    enabled: false
+    updateMode: Off
   prestopHook:
     enabled: true
   podSecurityContext: {}
@@ -1342,7 +1342,7 @@ ingress_router:
       requests:
         cpu: 200m
         memory: 128Mi
-    ports: 
+    ports:
       admin: 9901
       grpc: 8091
   tolerations: []
@@ -1353,18 +1353,18 @@ ingress_router:
       maxUnavailable: 25%
       maxSurge: 25%
   image:
-    repository: docker-hub.2gis.ru/usrch/bs-ingress_router
+    repository: 2gis-on-premise/bs-ingress-router
     pullPolicy: IfNotPresent
-    tag: test_5
+    tag: 8.14.6
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
-  sapphire_url: ""
-  sapphire_request_timeout_ms: 5000
-  prometheus_url: ''
-  rate_limit_rules: []
+  sapphireUrl: ''
+  sapphire_request_timeoutMs: 5000
+  prometheusUrl: ''
+  rateLimitRules: []
   # - name: 'cpu_usage'
-  #   query: 'sum(increase(sapphire_cpu_usage_total{cluster="production-k8s", kubernetes_namespace="search", app=~"big-search-(blue|green)", search_part="head"}[15m])) by (api_key)'
+  #   query: 'sum(increase(sapphire_cpu_usage_total{cluster="production-k8s", kubernetes_namespace="search", app=~"search-api-(blue|green)", search_part="head"}[15m])) by (api_key)'
   #   limit: 200000000
   #   ttl_sec: 60
   #   update_frequency_sec: 10
@@ -1384,15 +1384,15 @@ ingress_router:
       exact_match: "0"
     contour1:
       port: "9092"
-      address: big-search-dev-2-ingress-router
+      address: ''
       exact_match: "1"
     contour2:
       port: "9092"
-      address: big-search-stg-green-ingress-router
+      address: ''
       exact_match: "2"
     contour3:
       port: "9092"
-      address: big-search-dev-5-ingress-router
+      address: ''
       exact_match: "3"
 
 # @section geodetector
@@ -1405,11 +1405,11 @@ ingress_router:
 # @param geodetector.image.tag Docker image tag
 # @param geodetector.imagePullSecrets Kubernetes image pull secrets
 
-# @param geodetector.geodetector_grpc_threads Number of threads for gRPC execution
-# @param geodetector.data_update_frequency_sec Frequency (in seconds) of index information updates
-# @param geodetector.geodetector_main_threads Number of threads per main handler
-# @param geodetector.geodetector_fs_threads Number of threads for FS task processor
-# @param geodetector.geodetector_mon_threads Number of threads allocated for collecting metrics
+# @param geodetector.geodetectorGrpcThreads Number of threads for gRPC execution
+# @param geodetector.dataUpdateFrequencySec Frequency (in seconds) of index information updates
+# @param geodetector.geodetectorMainThreads Number of threads per main handler
+# @param geodetector.geodetectorFsThreads Number of threads for FS task processor
+# @param geodetector.geodetectorMonThreads Number of threads allocated for collecting metrics
 # @param geodetector.loggerLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
 # @param geodetector.loggerFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
 # @param geodetector.executeDebugCommands Enable execution of debug commands (e.g., simulate crash)
@@ -1530,25 +1530,25 @@ geodetector:
     successThreshold: 1
     failureThreshold: 200
   image:
-    repository: docker-hub.2gis.ru/usrch/bs-geodetector
+    repository: 2gis-on-premise/bs-geodetector
     pullPolicy: IfNotPresent
-    tag: test_5
+    tag: 8.14.6
   imagePullSecrets: []
-  geodetector_grpc_threads: 2
-  data_update_frequency_sec: 60
-  geodetector_main_threads: 4
-  geodetector_fs_threads: 2
+  geodetectorGrpcThreads: 2
+  dataUpdateFrequencySec: 60
+  geodetectorMainThreads: 4
+  geodetectorFsThreads: 2
   loggerLevel: info
   loggerFormat: json
   executeDebugCommands: true
-  geodetector_mon_threads: 2
+  geodetectorMonThreads: 2
   matchLabels: {}
   podLabels: {}
   podAnnotations: {}
   podSecurityContext: {}
   securityContext: {}
   hpa:
-    enabled: true
+    enabled: false
     minReplicas: 2
     maxReplicas: 3
     averageCPUValue: 700m
@@ -1570,8 +1570,8 @@ geodetector:
             periodSeconds: 15
         stabilizationWindowSeconds: 30
   vpa:
-    enabled: true
-    updateMode: "Off"
+    enabled: false
+    updateMode: Off
   ports:
     grpc: 10091
     server: 10092
@@ -1614,10 +1614,10 @@ geodetector:
 
 ingress:
   enabled: false
-  className: "nginx"
+  className: nginx
   annotations: {}
   hosts:
-    - host: big-search.example.com
+    - host: search-api.example.com
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -1638,7 +1638,7 @@ customCAs:
 
 # @param onpremise Enable specific parameters for on-premise deployment
 
-onpremise: false
+onpremise: true
 
 # @section Deployment Artifacts Storage settings
 
@@ -1655,6 +1655,6 @@ dgctlStorage:
   bucket: ''
   accessKey: ''
   secretKey: ''
-  manifest: '1'
+  manifest: ''
   region: ''
   secure: false

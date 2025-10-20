@@ -2,14 +2,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "big-search.fullname" . }}-indexer
+  name: {{ include "search-api.fullname" . }}-indexer
   labels:
-    {{- include "big-search.labels" . | nindent 4 }}
+    {{- include "search-api.labels" . | nindent 4 }}
     search/part: indexer
     {{- if (.Values.dgctlStorage).manifest }}
-    {{- with (include "big-search.manifestCode" .) }}
+    {{- with (include "search-api.manifestCode" .) }}
     manifest: {{ . | quote }}
-    {{- end }}{{- /* include "big-search.manifestCode" */}}
+    {{- end }}{{- /* include "search-api.manifestCode" */}}
     {{- end }}{{- /* .Values.dgctlStorage */}}
 spec:
   {{- if not .Values.indexer.hpa.enabled }}
@@ -17,7 +17,7 @@ spec:
   {{- end }}{{- /* not .Values.indexer.hpa.enabled */}}
   selector:
     matchLabels:
-      {{- include "big-search.selectorLabels" . | nindent 6 }}
+      {{- include "search-api.selectorLabels" . | nindent 6 }}
     {{- with .Values.indexer.matchLabels }}
       {{- toYaml . | nindent 6 }}
     {{- end }}{{- /* .Values.indexer.matchLabels */}}
@@ -33,7 +33,7 @@ spec:
         prometheus.io/port: {{ .Values.indexer.ports.http | quote }}
         prometheus.io/scrape: "true"
       labels:
-        {{- include "big-search.labels" . | nindent 8 }}
+        {{- include "search-api.labels" . | nindent 8 }}
         search/part: indexer
       {{- with .Values.indexer.podLabels }}
         {{- toYaml . | nindent 8 }}
@@ -43,7 +43,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- /* .Values.indexer.imagePullSecrets */}}
-      serviceAccountName: {{ include "big-search.serviceAccountName" . }}
+      serviceAccountName: {{ include "search-api.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.indexer.podSecurityContext | nindent 8 }}
       containers:
@@ -53,13 +53,13 @@ spec:
           resources:
             {{- toYaml .Values.indexer.resources | nindent 12 }}
           env:
-            - name: GIN_MODE
+            - name: GINMODE
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "big-search.fullname" . }}
-                  key: GIN_MODE
+                  name: {{ include "search-api.fullname" . }}
+                  key: GINMODE
             {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.env.custom.ca.path" . | nindent 12 }}
+            {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}
           ports:
             - name: http
@@ -69,7 +69,7 @@ spec:
               mountPath: /app/config.yaml
               subPath: indexer.yaml
           {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
           {{- if .Values.indexer.livenessProbe.enabled }}
           livenessProbe:
@@ -94,8 +94,8 @@ spec:
       volumes:
         - name: indexer-config
           configMap:
-            name: {{ include "big-search.fullname" . }}
+            name: {{ include "search-api.fullname" . }}
         {{- if .Values.customCAs.bundle }}
-        {{- include "big-search.custom.ca.deploys.volumes" . | nindent 8 }}
+        {{- include "search-api.custom.ca.deploys.volumes" . | nindent 8 }}
         {{- end }}{{- /* .Values.customCAs.bundle */}}
 {{- end }}{{- /* empty .Values.indexerServices.externalFilesStorageUrl */}}

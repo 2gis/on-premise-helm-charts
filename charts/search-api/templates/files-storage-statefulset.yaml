@@ -2,25 +2,25 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "big-search.fullname" . }}-files-storage
+  name: {{ include "search-api.fullname" . }}-files-storage
   labels:
-    {{- include "big-search.labels" . | nindent 4 }}
+    {{- include "search-api.labels" . | nindent 4 }}
     search/part: files-storage
     {{- if (.Values.dgctlStorage).manifest }}
-    {{- with (include "big-search.manifestCode" .) }}
+    {{- with (include "search-api.manifestCode" .) }}
     manifest: {{ . | quote }}
-    {{- end }}{{- /* include "big-search.manifestCode" */}}
+    {{- end }}{{- /* include "search-api.manifestCode" */}}
     {{- end }}{{- /* .Values.dgctlStorage */}}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "big-search.selectorLabels" . | nindent 6 }}
+      {{- include "search-api.selectorLabels" . | nindent 6 }}
     {{- with .Values.filesStorage.matchLabels }}
       {{- toYaml . | nindent 6 }}
     {{- end }}{{- /* .Values.filesStorage.matchLabels */}}
       search/part: files-storage
-  serviceName: {{ include "big-search.fullname" . }}-files-storage
+  serviceName: {{ include "search-api.fullname" . }}-files-storage
   template:
     metadata:
       annotations:
@@ -32,7 +32,7 @@ spec:
         prometheus.io/port: {{ .Values.filesStorage.ports.http | quote }}
         prometheus.io/scrape: "true"
       labels:
-        {{- include "big-search.labels" . | nindent 8 }}
+        {{- include "search-api.labels" . | nindent 8 }}
         search/part: files-storage
       {{- with .Values.filesStorage.podLabels }}
         {{- toYaml . | nindent 8 }}
@@ -42,7 +42,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- /* .Values.filesStorage.imagePullSecrets */}}
-      serviceAccountName: {{ include "big-search.serviceAccountName" . }}
+      serviceAccountName: {{ include "search-api.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.filesStorage.podSecurityContext | nindent 8 }}
       containers:
@@ -52,13 +52,13 @@ spec:
           resources:
             {{- toYaml .Values.filesStorage.resources | nindent 12 }}
           env:
-            - name: GIN_MODE
+            - name: GINMODE
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "big-search.fullname" . }}
-                  key: GIN_MODE
+                  name: {{ include "search-api.fullname" . }}
+                  key: GINMODE
             {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.env.custom.ca.path" . | nindent 12 }}
+            {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}
           ports:
             - name: http
@@ -70,7 +70,7 @@ spec:
               mountPath: /app/config.yaml
               subPath: files-storage.yaml
           {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
           {{- if .Values.filesStorage.livenessProbe.enabled }}
           livenessProbe:
@@ -95,9 +95,9 @@ spec:
       volumes:
         - name: files-storage-config
           configMap:
-            name: {{ include "big-search.fullname" . }}
+            name: {{ include "search-api.fullname" . }}
         {{- if .Values.customCAs.bundle }}
-        {{- include "big-search.custom.ca.deploys.volumes" . | nindent 8 }}
+        {{- include "search-api.custom.ca.deploys.volumes" . | nindent 8 }}
         {{- end }}{{- /* .Values.customCAs.bundle */}}
         {{- if not .Values.filesStorage.data.persistent.enabled }}
         - name: files-storage

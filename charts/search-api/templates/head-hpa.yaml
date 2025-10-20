@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "big-search.fullname" . }}-head
+  name: {{ include "search-api.fullname" . }}-head
   labels:
-    {{- include "big-search.labels" . | nindent 4 }}
+    {{- include "search-api.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "big-search.fullname" . }}-head
+    name: {{ include "search-api.fullname" . }}-head
   minReplicas: {{ .Values.head.hpa.minReplicas }}
   maxReplicas: {{ .Values.head.hpa.maxReplicas }}
   metrics:

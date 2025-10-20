@@ -1,12 +1,12 @@
 {{- if .Values.ingress.enabled -}}
   {{- $ctx := dict }}
-  {{- if .Values.ingress_router.enabled }}
-    {{- $_ := set $ctx "fullName" (printf "%s-ingress-router" (include "big-search.fullname" .)) }}
-    {{- $_ := set $ctx "svcPort" .Values.service.ingress_router.port }}
+  {{- if .Values.ingressRouter.enabled }}
+    {{- $_ := set $ctx "fullName" (printf "%s-ingress-router" (include "search-api.fullname" .)) }}
+    {{- $_ := set $ctx "svcPort" .Values.service.ingressRouter.port }}
   {{- else }}
-    {{- $_ := set $ctx "fullName" (printf "%s-head" (include "big-search.fullname" .)) }}
+    {{- $_ := set $ctx "fullName" (printf "%s-head" (include "search-api.fullname" .)) }}
     {{- $_ := set $ctx "svcPort" .Values.service.head.port }}
-  {{- end }}{{- /* if not .Values.ingress_router.enabled */}}
+  {{- end }}{{- /* if not .Values.ingressRouter.enabled */}}
 {{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
   {{- $_ := set .Values.ingress.annotations "kubernetes.io/ingress.class" .Values.ingress.className}}
@@ -23,7 +23,7 @@ kind: Ingress
 metadata:
   name: {{ $ctx.fullName }}
   labels:
-    {{- include "big-search.labels" . | nindent 4 }}
+    {{- include "search-api.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

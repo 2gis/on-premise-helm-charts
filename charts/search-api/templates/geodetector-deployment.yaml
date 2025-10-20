@@ -2,14 +2,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "big-search.fullname" . }}-geodetector
+  name: {{ include "search-api.fullname" . }}-geodetector
   labels:
-    {{- include "big-search.labels" . | nindent 4 }}
+    {{- include "search-api.labels" . | nindent 4 }}
     search/part: geodetector
     {{- if (.Values.dgctlStorage).manifest }}
-    {{- with (include "big-search.manifestCode" .) }}
+    {{- with (include "search-api.manifestCode" .) }}
     manifest: {{ . | quote }}
-    {{- end }}{{- /* include "big-search.manifestCode" */}}
+    {{- end }}{{- /* include "search-api.manifestCode" */}}
     {{- end }}{{- /* .Values.dgctlStorage */}}
 spec:
   {{- if not .Values.geodetector.hpa.enabled }}
@@ -17,7 +17,7 @@ spec:
   {{- end }}{{- /* not .Values.geodetector.hpa.enabled */}}
   selector:
     matchLabels:
-      {{- include "big-search.selectorLabels" . | nindent 6 }}
+      {{- include "search-api.selectorLabels" . | nindent 6 }}
     {{- with .Values.geodetector.matchLabels }}
       {{- toYaml . | nindent 6 }}
     {{- end }}{{- /* .Values.geodetector.matchLabels */}}
@@ -33,7 +33,7 @@ spec:
         prometheus.io/port: {{ .Values.magg.ports.metrics | quote }}
         prometheus.io/scrape: "true"
       labels:
-        {{- include "big-search.labels" . | nindent 8 }}
+        {{- include "search-api.labels" . | nindent 8 }}
       {{- with .Values.geodetector.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- /* .Values.geodetector.podLabels */}}
@@ -59,7 +59,7 @@ spec:
         {{- end }}{{- /* .Values.geodetector.data.persistent.enabled */}}
         - name: geodetector-config
           configMap:
-            name: {{ include "big-search.fullname" . }}
+            name: {{ include "search-api.fullname" . }}
             defaultMode: 420
       containers:
         - name: geodetector
@@ -83,7 +83,7 @@ spec:
           resources:
             {{- toYaml .Values.geodetector.resources | nindent 12 }}
           {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
           volumeMounts:
             - name: geodetector-data
@@ -120,13 +120,13 @@ spec:
           resources:
             {{- toYaml .Values.syncer.resources | nindent 12 }}
           env:
-            - name: GIN_MODE
+            - name: GINMODE
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "big-search.fullname" . }}
-                  key: GIN_MODE
+                  name: {{ include "search-api.fullname" . }}
+                  key: GINMODE
             {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.env.custom.ca.path" . | nindent 12 }}
+            {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}
           volumeMounts:
             - name: geodetector-data
@@ -135,7 +135,7 @@ spec:
               mountPath: /app/config.yaml
               subPath: syncer-worker.yaml
           {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
         {{- if .Values.magg.enabled }}
         - name: magg
@@ -150,18 +150,18 @@ spec:
             - name: GOMAXPROCS
               value: "1"
             {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.env.custom.ca.path" . | nindent 12 }}
+            {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}
           {{- if .Values.customCAs.bundle }}
           volumeMounts:
-            {{- include "big-search.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
           ports:
             - containerPort: {{ .Values.magg.ports.metrics }}
           resources:
             {{- toYaml .Values.magg.resources | nindent 12 }}
         {{ end }}{{- /* .Values.magg.enabled */}}
-      serviceAccountName: {{ include "big-search.serviceAccountName" . }}
+      serviceAccountName: {{ include "search-api.serviceAccountName" . }}
       securityContext: {{- toYaml .Values.geodetector.podSecurityContext | nindent 8 }}
   strategy:
   {{- .Values.geodetector.strategy | toYaml | nindent 4 }}

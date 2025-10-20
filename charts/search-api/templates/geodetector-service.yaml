@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "big-search.fullname" . }}-geodetector
+  name: {{ include "search-api.fullname" . }}-geodetector
   labels:
-    {{- include "big-search.labels" . | nindent 4 }}
+    {{- include "search-api.labels" . | nindent 4 }}
     search/part: geodetector
 spec:
   type: ClusterIP
@@ -14,6 +14,6 @@ spec:
       port: {{ .Values.service.geodetector.port }}
       targetPort: {{ .Values.geodetector.ports.grpc }}
   selector:
-{{- include "big-search.selectorLabels" . | nindent 4 }}
+{{- include "search-api.selectorLabels" . | nindent 4 }}
     search/part: geodetector
 {{ end }}{{- /* .Values.geodetector.enabled */}}

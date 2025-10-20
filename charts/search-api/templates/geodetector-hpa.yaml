@@ -3,14 +3,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "big-search.fullname" . }}-geodetector
+  name: {{ include "search-api.fullname" . }}-geodetector
   labels:
-    {{- include "big-search.labels" . | nindent 4 }}
+    {{- include "search-api.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "big-search.fullname" . }}-geodetector
+    name: {{ include "search-api.fullname" . }}-geodetector
   minReplicas: {{ .Values.geodetector.hpa.minReplicas }}
   maxReplicas: {{ .Values.geodetector.hpa.maxReplicas }}
   metrics:

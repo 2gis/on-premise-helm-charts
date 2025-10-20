@@ -2,15 +2,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "big-search.fullname" . }}-query-transformer-mock
+  name: {{ include "search-api.fullname" . }}-query-transformer-mock
   labels:
-    {{- include "big-search.labels" . | nindent 4 }}
+    {{- include "search-api.labels" . | nindent 4 }}
     search/part: query-transformer-mock
 spec:
   replicas: {{ .Values.queryTransformerMock.replicaCount }}
   selector:
     matchLabels:
-      {{- include "big-search.selectorLabels" . | nindent 6 }}
+      {{- include "search-api.selectorLabels" . | nindent 6 }}
     {{- with .Values.queryTransformerMock.matchLabels }}
       {{- toYaml . | nindent 6 }}
     {{- end }}{{- /* .Values.queryTransformerMock.matchLabels */}}
@@ -23,7 +23,7 @@ spec:
       {{- end }}{{- /* .Values.queryTransformerMock.podAnnotations */}}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       labels:
-        {{- include "big-search.labels" . | nindent 8 }}
+        {{- include "search-api.labels" . | nindent 8 }}
       {{- with .Values.queryTransformerMock.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- /* .Values.queryTransformerMock.podLabels */}}
@@ -33,7 +33,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- /* .Values.queryTransformerMock.imagePullSecrets */}}
-      serviceAccountName: {{ include "big-search.serviceAccountName" . }}
+      serviceAccountName: {{ include "search-api.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.queryTransformerMock.podSecurityContext | nindent 8 }}
       containers:

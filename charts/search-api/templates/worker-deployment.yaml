@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "big-search.fullname" . }}-worker
+  name: {{ include "search-api.fullname" . }}-worker
   labels:
-    {{- include "big-search.labels" . | nindent 4 }}
+    {{- include "search-api.labels" . | nindent 4 }}
     search/part: worker
     {{- if (.Values.dgctlStorage).manifest }}
-    {{- with (include "big-search.manifestCode" .) }}
+    {{- with (include "search-api.manifestCode" .) }}
     manifest: {{ . | quote }}
-    {{- end }}{{- /* include "big-search.manifestCode" */}}
+    {{- end }}{{- /* include "search-api.manifestCode" */}}
     {{- end }}{{- /* .Values.dgctlStorage */}}
 spec:
   {{- if not .Values.worker.hpa.enabled }}
@@ -16,7 +16,7 @@ spec:
   {{- end }}{{- /* not .Values.worker.hpa.enabled */}}
   selector:
     matchLabels:
-      {{- include "big-search.selectorLabels" . | nindent 6 }}
+      {{- include "search-api.selectorLabels" . | nindent 6 }}
       search/part: worker
     {{- with .Values.worker.matchLabels }}
       {{- toYaml . | nindent 6 }}
@@ -32,7 +32,7 @@ spec:
         prometheus.io/port: {{ .Values.magg.ports.metrics | quote }}
         prometheus.io/scrape: "true"
       labels:
-        {{- include "big-search.labels" . | nindent 8 }}
+        {{- include "search-api.labels" . | nindent 8 }}
         search/part: worker
         role: worker
       {{- with .Values.worker.podLabels }}
@@ -43,7 +43,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- /* .Values.worker.imagePullSecrets */}}
-      serviceAccountName: {{ include "big-search.serviceAccountName" . }}
+      serviceAccountName: {{ include "search-api.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.worker.podSecurityContext | nindent 8 }}
       containers:
@@ -54,7 +54,7 @@ spec:
           imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
           {{- if .Values.customCAs.bundle }}
           env:
-            {{- include "big-search.env.custom.ca.path" . | nindent 12 }}
+            {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
           ports:
             - name: http-port
@@ -91,7 +91,7 @@ spec:
               mountPath: /app/worker_vars.yaml
               subPath: worker_vars.yaml
           {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}
@@ -103,13 +103,13 @@ spec:
           resources:
             {{- toYaml .Values.syncer.resources | nindent 12 }}
           env:
-            - name: GIN_MODE
+            - name: GINMODE
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "big-search.fullname" . }}
-                  key: GIN_MODE
+                  name: {{ include "search-api.fullname" . }}
+                  key: GINMODE
             {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.env.custom.ca.path" . | nindent 12 }}
+            {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}
           volumeMounts:
             - name: worker-data
@@ -118,7 +118,7 @@ spec:
               mountPath: /app/config.yaml
               subPath: syncer-worker.yaml
             {{- if .Values.customCAs.bundle }}
-              {{- include "big-search.custom.ca.volumeMounts" . | nindent 12 }}
+              {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}
         {{- if .Values.magg.enabled }}
         - name: magg
@@ -133,11 +133,11 @@ spec:
             - name: GOMAXPROCS
               value: "1"
             {{- if .Values.customCAs.bundle }}
-            {{- include "big-search.env.custom.ca.path" . | nindent 12 }}
+            {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}
           {{- if .Values.customCAs.bundle }}
           volumeMounts:
-            {{- include "big-search.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
           ports:
             - containerPort: {{ .Values.magg.ports.metrics }}
@@ -162,7 +162,7 @@ spec:
         {{ end }}{{- /* .Values.worker.data.persistent.enabled */}}
         - name: worker-config
           configMap:
-            name: {{ include "big-search.fullname" . }}
+            name: {{ include "search-api.fullname" . }}
       {{- with .Values.worker.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
