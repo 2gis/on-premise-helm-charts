@@ -55,23 +55,25 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 ### [Deployment](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/) settings
 
-| Name                            | Description                                                                                                                          | Value   |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| `labels`                        | Custom labels to set to Deployment resource                                                                                          | `{}`    |
-| `annotations`                   | Custom annotations to set to Deployment resource                                                                                     | `{}`    |
-| `replicaCount`                  | A replica count for the pod                                                                                                          | `1`     |
-| `revisionHistoryLimit`          | Number of replica sets to keep for deployment rollbacks                                                                              | `1`     |
-| `strategy`                      | Deployment [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy). Undergoes template rendering  | `{}`    |
-| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                         | `{}`    |
-| `imagePullSecrets`              | Kubernetes image pull secrets                                                                                                        | `[]`    |
-| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                        | `{}`    |
-| `priorityClassName`             | Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name | `""`    |
-| `terminationGracePeriodSeconds` | Maximum time allowed for graceful shutdown                                                                                           | `60`    |
-| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                   | `{}`    |
-| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)           | `{}`    |
-| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                     | `[]`    |
-| `enableServiceLinks`            | Services injection into containers environment                                                                                       | `false` |
-| `restartPolicy`                 | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)                    | `""`    |
+| Name                            | Description                                                                                                                                  | Value   |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `labels`                        | Custom labels to set to Deployment resource                                                                                                  | `{}`    |
+| `annotations`                   | Custom annotations to set to Deployment resource                                                                                             | `{}`    |
+| `replicaCount`                  | A replica count for the pod                                                                                                                  | `1`     |
+| `revisionHistoryLimit`          | Number of replica sets to keep for deployment rollbacks                                                                                      | `1`     |
+| `strategy`                      | Deployment [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy). Undergoes template rendering          | `{}`    |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                 | `{}`    |
+| `imagePullSecrets`              | Kubernetes image pull secrets                                                                                                                | `[]`    |
+| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                | `{}`    |
+| `priorityClassName`             | Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name         | `""`    |
+| `terminationGracePeriodSeconds` | Maximum time allowed for graceful shutdown                                                                                                   | `60`    |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                           | `{}`    |
+| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                   | `{}`    |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                             | `[]`    |
+| `enableServiceLinks`            | Services injection into containers environment                                                                                               | `false` |
+| `restartPolicy`                 | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)                            | `""`    |
+| `updateStrategy`                | Kubernetes StatefulSet [update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies)           | `{}`    |
+| `volumeClaimTemplates`          | Kubernetes StatefulSet [volue claim template](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#volume-claim-templates) | `[]`    |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -149,16 +151,17 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 ### [Job](https://kubernetes.io/docs/concepts/workloads/controllers/job/) settings
 
-| Name                        | Description                                                                                                       | Value |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
-| `job.activeDeadlineSeconds` | Number of seconds active deadline.                                                                                | `""`  |
-| `job.backoffLimit`          | Number of retries before considering a Job as failed.                                                             | `""`  |
-| `job.backoffLimitPerIndex`  | Maximal number of pod failures per index.                                                                         | `""`  |
-| `job.podFailurePolicy`      | Pod failure policy.                                                                                               | `""`  |
-| `job.completions`           | Number of successful pods for completion Job.                                                                     | `""`  |
-| `job.completionMode`        | Completion mode (NonIndexed or Indexed).                                                                          | `""`  |
-| `job.parallelism`           | Number of pods running at any instant.                                                                            | `""`  |
-| `job.restartPolicy`         | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy) | `""`  |
+| Name                          | Description                                                                                                       | Value |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
+| `job.activeDeadlineSeconds`   | Number of seconds active deadline.                                                                                | `""`  |
+| `job.ttlSecondsAfterFinished` | A time-to-live mechanism to clean up old Jobs that have finished execution.                                       | `""`  |
+| `job.backoffLimit`            | Number of retries before considering a Job as failed.                                                             | `""`  |
+| `job.backoffLimitPerIndex`    | Maximal number of pod failures per index.                                                                         | `""`  |
+| `job.podFailurePolicy`        | Pod failure policy.                                                                                               | `""`  |
+| `job.completions`             | Number of successful pods for completion Job.                                                                     | `""`  |
+| `job.completionMode`          | Completion mode (NonIndexed or Indexed).                                                                          | `""`  |
+| `job.parallelism`             | Number of pods running at any instant.                                                                            | `""`  |
+| `job.restartPolicy`           | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy) | `""`  |
 
 ### Network Policy configuration
 

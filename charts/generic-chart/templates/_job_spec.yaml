@@ -5,6 +5,9 @@ spec:
   {{- if ($job).activeDeadlineSeconds }}
   activeDeadlineSeconds: {{ ($job).activeDeadlineSeconds }}
   {{- end }}
+  {{- if ($job).ttlSecondsAfterFinished }}
+  ttlSecondsAfterFinished: {{ ($job).ttlSecondsAfterFinished }}
+  {{- end }}
   {{- if ($job).backoffLimit }}
   backoffLimit: {{ ($job).backoffLimit }}
   {{- end }}
