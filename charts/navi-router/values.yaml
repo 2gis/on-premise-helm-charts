@@ -81,7 +81,7 @@ image:
 # @skip router.localRestrictions.matrixSize[0]
 # @skip router.localRestrictions.matrixSize[1]
 # @skip router.localRestrictions.matrixSize[2]
-# @extra router.localRestrictions.privateRoutingWalkingDistanceKm Max allowed distance between points in different projects in pedestrian mode
+# @extra router.localRestrictions.privateRoutingWalkingDistanceKm Max allowed distance between points in different projects in pedestrian mode **FOR FUTURE RELEASE**
 # @skip router.localRestrictions.privateRoutingWalkingDistanceKm[0]
 # @extra router.backupPorts [nullable] Optional creation of backup ports duplicating the service
 # @param router.backupPorts.base Backup ports start with `base` and assignd sequentially up
