@@ -53,7 +53,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-router
   pullPolicy: IfNotPresent
-  tag: 6.33.0.4
+  tag: 6.35.0.3
 
 
 # @section Navi-Router service settings
@@ -63,6 +63,15 @@ image:
 # @param router.logMessageField Field name in logs
 # @param router.additionalSections Additional configurations sections for the Navi-Router service
 # @param router.castleUrl URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @param router.citiesFilename Name of the cities file on Castle
+# @param router.sentry.enabled If sending crash dumps to Sentry needed
+# @param router.sentry.address Sentry URL
+# @param router.sentry.project Sentry project ID
+# @param router.sentry.username Sentry username
+# @param router.sentry.printMessages If outgoing messages needed
+# @param router.sentry.debug Debugging switch
+# @param router.sentry.reportPath Local directory to dump
+# @param router.sentry.handler Handler file location
 # @extra router.localRestrictions.distanceBetweenPointsKm Max allowed distance between points
 # @skip router.localRestrictions.distanceBetweenPointsKm[0]
 # @extra router.localRestrictions.pointsCount Max allowed points count
@@ -72,10 +81,13 @@ image:
 # @skip router.localRestrictions.matrixSize[0]
 # @skip router.localRestrictions.matrixSize[1]
 # @skip router.localRestrictions.matrixSize[2]
+# @extra router.localRestrictions.privateRoutingWalkingDistanceKm Max allowed distance between points in different projects in pedestrian mode **FOR FUTURE RELEASE**
+# @skip router.localRestrictions.privateRoutingWalkingDistanceKm[0]
 # @extra router.backupPorts [nullable] Optional creation of backup ports duplicating the service
 # @param router.backupPorts.base Backup ports start with `base` and assignd sequentially up
 # @param router.backupPorts.number Number of backup ports created
-# @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
+# @extra router.rulesUrl URL of the rules file
+# @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace
 # @param rules List of routing rules, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
 
 router:
@@ -84,6 +96,16 @@ router:
   logMessageField: custom.navi_msg
   additionalSections: ''
   castleUrl: ''
+  citiesFilename: cities.conf.zip
+  sentry:
+    enabled: false
+    address: sentry.local
+    project: router
+    username: navi
+    printMessages: false
+    debug: false
+    reportPath: /tmp/sentry
+    handler: /usr/sbin/2gis/mosesd/crashpad_handler
   localRestrictions:
     distanceBetweenPointsKm:
     - type: distance-matrix-api
@@ -95,6 +117,9 @@ router:
     - type: distance-matrix-api
       sources_count: 25
       targets_count: 30
+    privateRoutingWalkingDistanceKm:
+    - type: routing-api
+      value: 100
   backupPorts:
     base: 50000
     number: 0
