@@ -1,0 +1,66 @@
+{{- if .Values.queryTransformerMock.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "search-api.fullname" . }}-query-transformer-mock
+  labels:
+    {{- include "search-api.labels" . | nindent 4 }}
+    search/part: query-transformer-mock
+spec:
+  replicas: {{ .Values.queryTransformerMock.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "search-api.selectorLabels" . | nindent 6 }}
+    {{- with .Values.queryTransformerMock.matchLabels }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}{{- /* .Values.queryTransformerMock.matchLabels */}}
+      search/part: query-transformer-mock
+  template:
+    metadata:
+      annotations:
+      {{- with .Values.queryTransformerMock.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.queryTransformerMock.podAnnotations */}}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      labels:
+        {{- include "search-api.labels" . | nindent 8 }}
+      {{- with .Values.queryTransformerMock.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.queryTransformerMock.podLabels */}}
+        search/part: query-transformer-mock
+    spec:
+      {{- with .Values.queryTransformerMock.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.queryTransformerMock.imagePullSecrets */}}
+      serviceAccountName: {{ include "search-api.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.queryTransformerMock.podSecurityContext | nindent 8 }}
+      containers:
+        - name: query-transformer
+          securityContext:
+            {{- toYaml .Values.queryTransformerMock.securityContext | nindent 12 }}
+          image: "{{ .Values.queryTransformerMock.image.repository }}:{{ .Values.queryTransformerMock.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.queryTransformerMock.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.queryTransformerMock.resources | nindent 12 }}
+          ports:
+            - name: grpc
+              containerPort: {{ .Values.queryTransformerMock.ports.grpc }}
+              protocol: TCP
+            - name: http
+              containerPort: {{ .Values.queryTransformerMock.ports.http }}
+              protocol: TCP
+      {{- with .Values.queryTransformerMock.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.queryTransformerMock.nodeSelector */}}
+      {{- with .Values.queryTransformerMock.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.queryTransformerMock.affinity */}}
+      {{- with .Values.queryTransformerMock.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.queryTransformerMock.tolerations */}}
+{{- end }}{{- /* if .Values.queryTransformerMock.enabled */}}

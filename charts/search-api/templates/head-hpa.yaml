@@ -1,0 +1,26 @@
+{{- if .Values.head.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "search-api.fullname" . }}-head
+  labels:
+    {{- include "search-api.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "search-api.fullname" . }}-head
+  minReplicas: {{ .Values.head.hpa.minReplicas }}
+  maxReplicas: {{ .Values.head.hpa.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: AverageValue
+          averageValue: {{ .Values.head.hpa.averageCPUValue }}
+  {{- if .Values.head.hpa.behavior }}
+  behavior:
+    {{- .Values.head.hpa.behavior | toYaml | nindent 4 }}
+  {{- end }}{{- /* .Values.head.hpa.behavior */}}
+{{- end }}{{- /* .Values.head.hpa.enabled */}}

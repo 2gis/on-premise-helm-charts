@@ -1,0 +1,28 @@
+{{- if .Values.geodetector.enabled }}
+{{- if .Values.geodetector.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "search-api.fullname" . }}-geodetector
+  labels:
+    {{- include "search-api.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "search-api.fullname" . }}-geodetector
+  minReplicas: {{ .Values.geodetector.hpa.minReplicas }}
+  maxReplicas: {{ .Values.geodetector.hpa.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: AverageValue
+          averageValue: {{ .Values.geodetector.hpa.averageCPUValue }}
+  {{- if .Values.geodetector.hpa.behavior }}
+  behavior:
+    {{- .Values.geodetector.hpa.behavior | toYaml | nindent 4 }}
+  {{- end }}{{- /* .Values.geodetector.hpa.behavior */}}
+{{- end }}{{- /* .Values.geodetector.hpa.enabled */}}
+{{ end }}{{- /* .Values.geodetector.enabled */}}

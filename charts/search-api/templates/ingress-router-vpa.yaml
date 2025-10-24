@@ -1,0 +1,17 @@
+{{- if .Values.ingressRouter.enabled }}
+{{- if .Values.ingressRouter.vpa.enabled }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "search-api.fullname" . }}-ingress-router
+  labels:
+    {{- include "search-api.labels" . | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "search-api.fullname" . }}-ingress-router
+  updatePolicy:
+    updateMode: {{ .Values.ingressRouter.vpa.updateMode | quote }}
+{{- end }}{{- /* .Values.ingressRouter.vpa.enabled */}}
+{{- end }}{{- /* .Values.ingressRouter.enabled */}}

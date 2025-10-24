@@ -1,0 +1,17 @@
+{{- if empty .Values.indexerServices.externalFilesStorageUrl }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "search-api.fullname" . }}-controller
+  labels:
+    {{- include "search-api.labels" . | nindent 4 }}
+spec:
+  ports:
+    - port: {{ .Values.service.controller.port }}
+      targetPort: {{ .Values.controller.ports.http }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "search-api.selectorLabels" . | nindent 4 }}
+    search/part: controller
+{{- end }}

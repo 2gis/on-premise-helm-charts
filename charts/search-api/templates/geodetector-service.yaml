@@ -1,0 +1,19 @@
+{{- if .Values.geodetector.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "search-api.fullname" . }}-geodetector
+  labels:
+    {{- include "search-api.labels" . | nindent 4 }}
+    search/part: geodetector
+spec:
+  type: ClusterIP
+  ports:
+    - name: grpc
+      protocol: TCP
+      port: {{ .Values.service.geodetector.port }}
+      targetPort: {{ .Values.geodetector.ports.grpc }}
+  selector:
+{{- include "search-api.selectorLabels" . | nindent 4 }}
+    search/part: geodetector
+{{ end }}{{- /* .Values.geodetector.enabled */}}

@@ -1,0 +1,313 @@
+# bluegreen: 'blue'
+
+ingress:
+  enabled: true
+  className: istio
+  hosts:
+    - host: bigsearchonprem.istio.k8s.2gis.dev
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - bigsearchonprem.istio.k8s.2gis.dev
+      secretName: any-istio-k8s-2gis-dev-cert
+worker:
+  podSecurityContext:
+    runAsUser: 100000000
+    runAsGroup: 100000000
+    fsGroup: 100000000
+  image:
+    repository: docker-hub.2gis.ru/on-premise/bs-worker
+#    tag: vx-dev_43296
+#  livenessProbe: {}
+#  readinessProbe: {}
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 30
+  prestopHook:
+    enabled: false
+  data:
+    storageClassName: "topolvm-ext4"
+    persistent:
+      enabled: false
+head:
+  # podSecurityContext:
+  #   runAsUser: 100000000
+  #   runAsGroup: 100000000
+  #   fsGroup: 100000000
+  # queryTransformer:
+  #   enabled: false
+  #   endpoint: "grpc://query-transformer-grpc-service.nlp.svc.cluster.local"
+  #   port: 6767
+  #   ssl: false
+  head:
+    image:
+      repository: docker-hub.2gis.ru/on-premise/bs-head
+#      tag: vx-dev_43296
+    startupProbe:
+      enabled: true
+      initialDelaySeconds: 30
+    prestopHook:
+      enabled: false
+    bigSearchSearchers:
+      - ExpandingSearcher
+      - Suggestor2
+      - DiscoveryPartialSearcher
+      - DiscoveryPartialSearcherStrict
+      - OneBranchExpandingSearcher
+      - GeoUniSearcher
+      - AddressSuggestor
+      - SearcherByPhone
+    adsEnable: false
+  nginx:
+    image:
+      repository: docker-hub.2gis.ru/on-premise/bs-nginx
+#      repository: docker-hub.2gis.ru/usrch/nginx
+#      tag: 1.25.11
+  data:
+    storageClassName: "topolvm-ext4"
+    persistent:
+      enabled: false
+
+service:
+  ingressRouter:
+    external:
+      enable: false
+      host: 'zhukov-op-ir.istio.k8s.2gis.dev'
+
+ingressRouter:
+  # enabled: false
+  image:
+    repository: docker-hub.2gis.ru/on-premise/bs-ingress-router
+#    tag: vx-dev_43296
+  # podSecurityContext:
+  #   runAsUser: 100000000
+  #   runAsGroup: 100000000
+  #   fsGroup: 100000000
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app
+            operator: In
+            values:
+            - ingress-router
+        topologyKey: "kubernetes.io/hostname"
+  prestopHook:
+    enabled: false
+  experimentComponent:
+    enabled: false
+  rateLimitComponent:
+    enabled: false
+  ab:
+    sapphire_base:
+      port: "8080"
+      exact_match: "0"
+    contour1:
+      address: 'big-search-stg-green-ingress-router'
+    contour2:
+      address: 'big-search-stg-blue-ingress-router'
+    contour3:
+      address: 'big-search-stg-yellow-ingress-router'
+# вот этого блока быть не должно, так как rateLimitComponent is NOT enabled
+# но пока не умеем работать с пустыми параметрами
+  prometheusUrl: "https://prometheus.2gis.io/prometheus/api/v1/query_range"
+  rateLimitRules:
+  - name: 'cpu_usage'
+    query: 'sum(increase(sapphire_cpu_usage_total{cluster="production-k8s", kubernetes_namespace="search", app=~"search-api-(blue|green)", search_part="head"}[15m])) by (api_key)'
+    limit: 200000000
+    ttl_sec: 60
+    update_frequency_sec: 10
+    headers:
+      api_key: 'X-DG-Api-Key'
+# конец "ненужного блока"
+
+geodetector:
+  image:
+    repository: docker-hub.2gis.ru/on-premise/bs-geodetector
+#    tag: vx-dev_43296
+  enabled: false
+  data:
+    storageClassName: "topolvm-ext4"
+    persistent:
+      enabled: false
+  prestopHook:
+    enabled: false
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+  podSecurityContext:
+    runAsUser: 100000000
+    runAsGroup: 100000000
+    fsGroup: 100000000
+
+syncer:
+  image:
+    repository: docker-hub.2gis.ru/on-premise/bs-syncer_new
+#    tag: vx-dev_43296
+indexer:
+  image:
+    repository: docker-hub.2gis.ru/on-premise/bs-indexer
+#    tag: vx-dev_43296
+  hpa:
+    enabled: true
+  podSecurityContext:
+    runAsUser: 100000000
+    runAsGroup: 100000000
+    fsGroup: 100000000
+
+queryTransformerMock:
+  enabled: false
+
+magg:
+  enabled: true
+  image:
+    repository: docker-hub.2gis.ru/on-premise/bs-metrics-aggregator
+
+controller:
+  podSecurityContext:
+    runAsUser: 100000000
+    runAsGroup: 100000000
+    fsGroup: 100000000
+  image:
+    repository: docker-hub.2gis.ru/on-premise/bs-controller
+#    tag: vx-dev_43296
+#  projectListUrl: "https://s3.2gis.one/usrch/test-projects-list.json"
+  projectListUrl: "http://catalog.k8s.n3.2gis.io/2.0/region/list?key=1c35663a-4e3e-4c83-a1d4-ecbc187043dc&type=region,segment,universe&fields=items.last_imported_data_source,items.country_code,items.allow_for_indexing,items.allow_for_delete"
+  extraProjects:
+    - project_id: 9
+      language: ru
+      location: ru
+      url: 'https://s3.2gis.one/feed-swapping/gis.v4.9.ru.RU.dgdat.zip'
+      name: 'Екатеринбург'
+    - project_id: 993
+      language: ru
+      location: ru
+      url: 'https://s3.2gis.one/otello-feeds-production/city-feed.zip'
+      name: 'otello_cities'
+    - project_id: 994
+      language: ru
+      location: ru
+      url: 'https://s3.2gis.one/otello-feeds-production/suggest_feed.zip'
+      name: 'otello_hotels'
+  data:
+    storageClassName: "topolvm-ext4"
+    persistent:
+      enabled: false
+filesStorage:
+  podSecurityContext:
+    runAsUser: 100000000
+    runAsGroup: 100000000
+    fsGroup: 100000000
+  image:
+    repository: docker-hub.2gis.ru/on-premise/bs-files_storage
+#    tag: vx-dev_43296
+#   livenessProbe:
+#     enabled: false
+#   readinessProbe:
+#     periodSeconds: 55
+# indexer:
+#   nodeSelector:
+#     role: worker.search
+#   tolerations:
+#   - key: "role"
+#     operator: "Equal"
+#     value: "worker.search"
+#     effect: "NoSchedule"
+#   readinessProbe:
+#     enabled: false
+  data:
+    persistent:
+      enabled: false
+    storageClassName: "ceph-csi-rbd-ssd"
+    resources:
+      requests:
+        storage: 30Gi
+  versionTTL: 168h
+
+customCAs:
+  bundle: ''
+  # bundle: |
+  #   -----BEGIN CERTIFICATE-----
+  #   MIIF4zCCA8ugAwIBAgIQFu42GSI04aNOOoAVMOuN1zANBgkqhkiG9w0BAQsFADAx
+  #   MQswCQYDVQQGEwJSVTENMAsGA1UEChMEMkdpczETMBEGA1UEAxMKMkdpc1Jvb3RD
+  #   QTAeFw0yMDAzMjAwOTU3NTVaFw0zNjAzMjAxMDA3NTRaMDExCzAJBgNVBAYTAlJV
+  #   MQ0wCwYDVQQKEwQyR2lzMRMwEQYDVQQDEwoyR2lzUm9vdENBMIICIjANBgkqhkiG
+  #   9w0BAQEFAAOCAg8AMIICCgKCAgEAmJF5vNVe3wI/UIaePM8AunaSngabueBhBPWz
+  #   Ew7Qz1bEbbI+dDK3oDhvK2Zupo5Sp3GksXMYSpYfSPeRAXpuHmuIe/QhRUIcftO6
+  #   UYkhuS9uYKx6eI+rz+CuO1DI2H6YfKxXlRoPb9GgKTSNTPKGLE4MSN7Uf0R+ch/5
+  #   L5asS/zkPfJUV1nZ+TpN9UI31ezI8GdakdbMe3Halt1M5Ei4IdG6i7l4WqohCbiu
+  #   mRyKpbkq6M2Clv7VPNvbSfnBnEPE1PpZ1YU9vpTdI+UZmdU4y5PIaawFq4848LlN
+  #   fVxqlr0u2BoWBpziyozM8gSZp9PzT/UmXKEHWxxDRG7DIoMMDwEJvPAccAQ9rglb
+  #   UL43haMspv7Id+JvbPC63eAvtvzkj6R3lKs7Y2EQCYVaA5oKXevZZQo/ZoWZqY3p
+  #   RYVIXiJu8HpAyyyWzUXzydjYwPiqjJ/rGjoPvO60GzFmbBR7nKL7xn0Kn+Ity6px
+  #   0G1ACdgDH9ySjDVzS3OXW4wZTMC7hULVTkx7itbDmOwETPzJ7bMMWXMpZkqyOPio
+  #   ZTQ8Oxrz1/63LsNy4Xjio0eKPLN9tdRiwR8+6BB9Io6RxkyCdZUsCM1VRrHSetUS
+  #   xOq/EArvb6zC85SXMLCfWZ5tEvurBjST5/wftObtTw0aDWyDRZfKM4J/7yNARGi9
+  #   Kq8yGo0CAwEAAaOB9jCB8zALBgNVHQ8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAd
+  #   BgNVHQ4EFgQUHONfigRa879PWACH2Xo8Rg55J44wEAYJKwYBBAGCNxUBBAMCAQAw
+  #   gaEGA1UdIASBmTCBljCBkwYIKgMEiy9DWQUwgYYwUgYIKwYBBQUHAgIwRh5EADIA
+  #   RwBJAFMAIABDAGUAcgB0AGkAZgBpAGMAYQB0AGUAcwAgAFAAbwBsAGkAYwB5ACAA
+  #   UwB0AGEAdABlAG0AZQBuAHQwMAYIKwYBBQUHAgEWJGh0dHA6Ly9wa2kuMmdpcy5j
+  #   b20vMmdpc3BraS9jcHMuaHRtbDANBgkqhkiG9w0BAQsFAAOCAgEAJqy3p2My6T56
+  #   t/Aue6uThYuuVjDl+2ObNlKs54zMzNbmBwsOPuDKWhEbgelOrmPj7DMMe7JrfuVX
+  #   CuWjYOtQxjtAuZx264dp0yMv2IkcjHMnwLc5UEZbyFj1lU3AH2e+dtRrcD45zuCq
+  #   HJH3vsCOQ0TvJivHZmPNR4zqVULA9aiUNQKaQrnwD9KNBA8qKCRPAXLZ0jOBXFUV
+  #   M/m+lZavssQInp/5ZyZ7GOZ47/aAMSpJ9kKgBm6DaeRcyXfla8hRcrr9BlEEWjx/
+  #   OQVBazYIpM+6EtP3Mw9fNIxtXSBDVcHrE6AHOG5S+sSOhelmbAGjF7lDNLDq2Q31
+  #   QSYhxK60uye4Zu3hBuKnQHrmUch0iyzNjMtA3NnBX3o5t4yWamjrVhPh4P/bDJJV
+  #   HF8nDWTgkpzispsANZtUr4WbxFtvO8Gvb3YwGs9oM3KMFff4ckYxIpwE0IN/0eHq
+  #   nlFREmK14ZmNEaaWXRrGX63oXR3CjVdBhH0toiUisyKAikS4SP/GWH9KOjEw6qAi
+  #   NCescmndlYquxUEeDZQfVvALBG7XGXSji7ebxYjkzFvwcFfvLxgnBXKJM15U27AK
+  #   a6IhalBZdqAPE7oBUAduRo+udmR5YarjNUkzsw+7mAZpofquolBx5+7NOEE8pFbi
+  #   hNJaG1Q/MoUeJqjtlxwz54taHF4WCbY=
+  #   -----END CERTIFICATE-----
+  #   -----BEGIN CERTIFICATE-----
+  #   MIIEXjCCA0agAwIBAgITTAAADSh3w5QjRzyPRAAAAAANKDANBgkqhkiG9w0BAQsF
+  #   ADBFMRUwEwYKCZImiZPyLGQBGRYFbG9jYWwxFDASBgoJkiaJk/IsZAEZFgQyZ2lz
+  #   MRYwFAYDVQQDEw0yR2lzSXNzdWluZ0NBMB4XDTIyMDUwNDA1MDY0NloXDTI3MDUw
+  #   MzA1MDY0NlowXTELMAkGA1UEBhMCUlUxFDASBgNVBAcTC05vdm9zaWJpcnNrMRYw
+  #   FAYDVQQKEw1Eb3VibGVHSVMgTExDMSAwHgYDVQQDExcyR0lTIERvbWFpbiBTZWN1
+  #   cmUgQ0EgMTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMnDtOUrpKa3
+  #   p6rs+Jc92BE3Frbi+dTnplH9RpwpjrzL/A4LN16IYZ3uXVly7wMZzyh/AJQso28q
+  #   Hv5gpMM76dYDRyu1DPj9zs7S0rHRfTBrQWqQy2DGQbL4DStUDHIr9je7k6ezn33b
+  #   +vUuXNe+gkU1qb1waD0vP22T8aq9M+Sg/TPrl3fgsXg0rgEq6fhUcvCwExQpv39S
+  #   uelZn4OVgTzjaun72zVp0LbfRb/Ux0TzzLtZy2cjceeCqOIWsUnP6RBAyXUGTvws
+  #   X9HduJhwZa24DwQFhiFsrLJhdQNMNN/k30eVhEcUOPoyxuq/9qdkzNzTCHsoUlSj
+  #   OBlQF/FpxmUCAwEAAaOCAS0wggEpMB0GA1UdDgQWBBQ27z477uQATrN+/8tVJVZs
+  #   AyPLMTAfBgNVHSMEGDAWgBR6iCfz2IDX6y6XFxpzWs7iDkRsCDA+BgNVHR8ENzA1
+  #   MDOgMaAvhi1odHRwOi8vcGtpLjJnaXMuY29tLzJnaXNwa2kvMkdpc0lzc3VpbmdD
+  #   QS5jcmwwSQYIKwYBBQUHAQEEPTA7MDkGCCsGAQUFBzAChi1odHRwOi8vcGtpLjJn
+  #   aXMuY29tLzJnaXNwa2kvMkdpc0lzc3VpbmdDQS5jcnQwDwYDVR0TAQH/BAUwAwEB
+  #   /zALBgNVHQ8EBAMCAYYwPgYJKwYBBAGCNxUHBDEwLwYnKwYBBAGCNxUIh4PvbIeV
+  #   3DSG+Y0Wg6yHTYeh9W6BGYPj2TiHl89dAgFkAgEHMA0GCSqGSIb3DQEBCwUAA4IB
+  #   AQBFyznaRGUbXUl9TNpyBtBVm5xiZ/KkGQ1emhR3J05u35tuq3ZAXaNx2S8jLiZk
+  #   39NrN0ud/NC/Z1dcjKmMpCnSTMXqulxYYSgnP7pc1ke8JHBuMMYdR41TY5bcZc18
+  #   ZFqTKwUIaMpnnN3auBLs4FtNdQ1DAqxU43Z/Mlpz8SeS/ZOFqwN4TUHfHYtKeu8d
+  #   1fV+iJwH2pFF33qXRJCi7CVNY40wwjdUWlIClpD1eJuTM+nNDjCoQJusy82tLiNF
+  #   d6mJseUj30+8WEC4bmGQyjq0FOVMPnivt6VV+DZ6IaW+yyB1p/siboSw2OA7LuRT
+  #   2RSr1Xo25ph1TxFtvvhBpz7k
+  #   -----END CERTIFICATE-----
+  certsPath: ''
+
+onpremise: true
+
+s3Client:
+  enabled: true
+  endpoint: ''
+  accessKeyId: ''
+  secretAccessKey: ''
+  bucket: ''
+  useSsl: false
+
+dgctlStorage:
+  host: ''
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+  manifest: ''
+  region: ''
+  secure: false
