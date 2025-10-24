@@ -144,7 +144,7 @@ tilegen:
   # @param tilegen.imagePullSecrets Kubernetes image pull secrets.
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.75.9
+    tag: 4.77.0
     pullPolicy: IfNotPresent
 
   imagePullSecrets: []
@@ -237,9 +237,17 @@ tilegen:
 # @param proxy.access.raster.token Service key for raster data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).
 # @param proxy.access.vector.token Service key for vector data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).
 
+# @extra proxy.access.skipExactOrigins **Skip requests with exact origins feature settings**
+# @param proxy.access.skipExactOrigins.enabled If enabled, only requests with exact origins will skip access key check, otherwise all requests will be checked.
+# @param proxy.access.skipExactOrigins.regexpPattern Regular expression for matching origins that will skip access key check (e.g. `regexpPattern: '^.*\.example\.com$'`). **Required**
+
 # @extra proxy.access.stat **Statistics receiver settings**
 # @param proxy.access.stat.enabled If statistics receiver is enabled.
 # @param proxy.access.stat.url Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
+
+# @extra proxy.access.stat.registerExactHosts **Register requests to stat-receiver for exact hosts feature settings**
+# @param proxy.access.stat.registerExactHosts.enabled If disabled, all requests will be registered in stat-receiver, otherwise the only requests to exact hosts that matches regexp will be registered (hosts of tiles-api).
+# @param proxy.access.stat.registerExactHosts.regexpPattern Regular expression for matching hosts that will be registered to statistics (e.g. `regexpPattern: '^.*\.example\.com$'`). **Required**
 
 proxy:
   logLevelOverride: ''
@@ -247,7 +255,7 @@ proxy:
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.75.9
+    tag: 4.77.0
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -268,6 +276,16 @@ proxy:
     stat:
       enabled: false
       url: ''
+
+      registerExactHosts:
+        enabled: false
+        # example: '^example\.ru$'
+        regexpPattern: ''
+
+    skipExactOrigins:
+      enabled: false
+      # example: '^https://example\.ru$'
+      regexpPattern: ''
 
     vector:
       token: ''
@@ -308,7 +326,7 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.75.9
+    tag: 4.77.0
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
@@ -467,7 +485,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.75.9
+    tag: 4.77.0
     pullPolicy: IfNotPresent
 
 
