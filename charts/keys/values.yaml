@@ -23,10 +23,12 @@ featureFlags:
   # @param featureFlags.enableAudit Enable audit logging for sending to DB.
   # @param featureFlags.enableAuditKafka Enable audit logging for sending to Kafka.
   # @param featureFlags.enablePublicAPISign Enable signing responses in Public API.
+  # @param featureFlags.enableRedis Enable redis for keys.
 
   enableAudit: false
   enableAuditKafka: false
   enablePublicAPISign: false
+  enableRedis: true
 
 backend:
   image:

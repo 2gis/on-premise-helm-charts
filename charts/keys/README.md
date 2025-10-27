@@ -42,6 +42,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `featureFlags.enableAudit`         | Enable audit logging for sending to DB.    | `false` |
 | `featureFlags.enableAuditKafka`    | Enable audit logging for sending to Kafka. | `false` |
 | `featureFlags.enablePublicAPISign` | Enable signing responses in Public API.    | `false` |
+| `featureFlags.enableRedis`         | Enable redis for keys.                     | `true`  |
 
 ### Admin service settings
 

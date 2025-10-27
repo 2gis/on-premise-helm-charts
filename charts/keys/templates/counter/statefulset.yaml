@@ -1,4 +1,7 @@
 {{- if .Values.counter.enabled }}
+{{- if not .Values.featureFlags.enableRedis }}
+  {{- fail "Counter requires enableRedis feature flag to be enabled" }}
+{{- end }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
