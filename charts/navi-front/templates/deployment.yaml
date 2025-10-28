@@ -67,13 +67,30 @@ spec:
               exec:
                 command: ["/bin/sh", "-c", "sleep 5; /usr/sbin/nginx -s quit; while killall -0 nginx; do sleep 1; done"]
           livenessProbe:
+            {{- if .Values.customLivenessProbe }}
+            {{- include "tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+            {{- else if .Values.livenessProbe.enabled }}
             httpGet:
               path: /healthcheck
               port: http
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            {{- end }}
           readinessProbe:
+            {{- if .Values.customReadinessProbe }}
+            {{- include "tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+            {{- else if .Values.readinessProbe.enabled }}
             httpGet:
               path: /healthcheck
               port: http
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
         {{- if .Values.sidecars }}
