@@ -92,8 +92,16 @@ startupProbe:
 customLivenessProbe: {}
 customReadinessProbe: {}
 customStartupProbe: {}
-command: []
-args: []
+command:
+  - /usr/sbin/2gis/mosesd/tini
+  - '--'
+args:
+  - /usr/sbin/2gis/mosesd/attractord
+  - '--config'
+  - '{{ .Values.attractor.configFilepath }}/attractord.conf'
+  - '--validate-config'
+  - /usr/share/2gis/schemas/config_schemas/attractor_conf.schema.json
+  - '--validate-config-dry-run'
 # Set the timezone using a valid IANA timezone name, such as "Europe/Moscow" or "America/New_York".
 # Full list of supported timezones: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 #
@@ -112,7 +120,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-attractor
   pullPolicy: IfNotPresent
-  tag: 7.42.0.3
+  tag: 7.46.0.2
 
 
 # @section Service account settings
@@ -263,6 +271,7 @@ pdb:
 # @param attractor.sentry.handler Handler file location
 # @param attractor.indexFilename Name of the index file on Castle
 # @param attractor.citiesFilename Name of the cities file on Castle
+# @param attractor.configFilepath Configs mountpoint path
 # @param attractor.disableUpdates Test switch for disabling runtime background updates
 # @extra attractor.indices List of dynamic indices kill switches.
 # @skip attractor.indices.carOptions.enabled
@@ -312,6 +321,7 @@ attractor:
     handler: /usr/sbin/2gis/mosesd/crashpad_handler
   indexFilename: index.json.zip
   citiesFilename: cities.conf.zip
+  configFilepath: /src/etc/2gis/mosesd
   disableUpdates: false
   indices:
     # items in alphabet order
