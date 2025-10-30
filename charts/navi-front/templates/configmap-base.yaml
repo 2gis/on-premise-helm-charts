@@ -164,7 +164,7 @@ data:
         {{- if .Values.multimodLocation }}
         {{ include "tplvalues.render" ( dict "value" .Values.multimodLocation "context" . ) | nindent 8 }}
         {{- else }}
-        location /ctx_multi_mod {
+        location ~* ^/ctx_multi_mod {
             {{ include "front.getInternalACL" . | nindent 12 }}
             rewrite ^/ctx_multi_mod(.*)$ $1 break;
             add_header X-Region {{ .Values.front.multimod.host }} always;
