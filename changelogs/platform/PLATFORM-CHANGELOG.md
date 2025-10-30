@@ -1,3 +1,38 @@
+## [2.45.0] (2025-10-30)
+
+#### Images
+```
+dgtt
+	- dgtt:0.2.27-b188673e09
+mapgl-js-api
+	- mapgl:1.65.0
+	+ mapgl:1.66.0
+navi-async-matrix
+	- navi-async-matrix:1.16.1
+	+ navi-async-matrix:1.18.0
+	- navi-merger-async-matrix:1.16.1
+	+ navi-merger-async-matrix:1.18.0
+navi-attractor
+	- navi-attractor:7.42.0.3
+	+ navi-attractor:7.46.0.2
+navi-back
+	- navi-back:7.42.0.3
+	+ navi-back:7.46.0.2
+navi-router
+	- navi-router:6.33.0.4
+	+ navi-router:6.35.0.3
+tiles-api
+	- tiles-api-importer:4.75.9
+	+ tiles-api-importer:4.77.0
+	- tiles-api-importer:4.75.9
+	+ tiles-api-importer:4.77.0
+	- tiles-api-proxy:4.75.9
+	+ tiles-api-proxy:4.77.0
+	- tiles-api:4.75.9
+	+ tiles-api:4.77.0
+```
+[Full list of image versions](platform_image_versions.txt)
+
 ## [2.44.0] (2025-09-30)
 
 #### Images
