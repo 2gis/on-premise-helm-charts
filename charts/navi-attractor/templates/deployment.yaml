@@ -84,14 +84,24 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.command }}
           command:
+            {{- if .Values.command }}
             {{- include "tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.args }}
+            {{- else }}
+            - /usr/sbin/2gis/mosesd/tini
+            - '--'
+            {{- end }}
           args:
+            {{- if .Values.args }}
             {{- include "tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
-          {{- end }}
+            {{- else }}
+            - /usr/sbin/2gis/mosesd/attractord
+            - '--config'
+            - '{{ .Values.attractor.configFilepath }}/attractord.conf'
+            - '--validate-config'
+            - /usr/share/2gis/schemas/config_schemas/attractor_conf.schema.json
+            - '--validate-config-dry-run'
+            {{- end }}
           volumeMounts:
           - name: {{ include "generic-chart.fullname" . }}-configmap
             mountPath: {{ printf "%s/attractord.conf" .Values.attractor.configFilepath | quote }}

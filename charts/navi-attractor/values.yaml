@@ -92,16 +92,8 @@ startupProbe:
 customLivenessProbe: {}
 customReadinessProbe: {}
 customStartupProbe: {}
-command:
-  - /usr/sbin/2gis/mosesd/tini
-  - '--'
-args:
-  - /usr/sbin/2gis/mosesd/attractord
-  - '--config'
-  - '{{ .Values.attractor.configFilepath }}/attractord.conf'
-  - '--validate-config'
-  - /usr/share/2gis/schemas/config_schemas/attractor_conf.schema.json
-  - '--validate-config-dry-run'
+command: []
+args: []
 # Set the timezone using a valid IANA timezone name, such as "Europe/Moscow" or "America/New_York".
 # Full list of supported timezones: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 #
