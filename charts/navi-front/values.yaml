@@ -26,6 +26,20 @@ dgctlDockerRegistry: ''
 #     image: your-image
 #     imagePullPolicy: Always
 #
+# @param livenessProbe.enabled Enable livenessProbe
+# @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+# @param livenessProbe.periodSeconds Period seconds for livenessProbe
+# @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+# @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+# @param livenessProbe.successThreshold Success threshold for livenessProbe
+# @param readinessProbe.enabled Enable readinessProbe
+# @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+# @param readinessProbe.periodSeconds Period seconds for readinessProbe
+# @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+# @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+# @param readinessProbe.successThreshold Success threshold for readinessProbe
+# @param customLivenessProbe Override default liveness probe
+# @param customReadinessProbe Override default readiness probe
 
 enableServiceLinks: false
 replicaCount: 1
@@ -41,6 +55,22 @@ tolerations: []
 affinity: {}
 sidecars: []
 
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 0
+  timeoutSeconds: 1
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 0
+  timeoutSeconds: 1
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+customLivenessProbe: {}
+customReadinessProbe: {}
 
 # @section Deployment settings
 

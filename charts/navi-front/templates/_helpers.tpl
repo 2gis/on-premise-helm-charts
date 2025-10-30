@@ -36,6 +36,7 @@ Tsp-carrouting requires splitter
         {{- range $header, $value := $ctx.Values.front.locationExtraProxyHeaders }}
         {{- printf "    proxy_set_header %s \"%s\";\n" $header $value }}
         {{- end }}
+        {{- printf "    proxy_set_header x-key-visibility $key_visibility;\n" }}
         {{- if $ctx.Values.front.keepalive.enabled -}}
         {{- printf "    proxy_set_header Connection \"\";\n" }}
         {{- printf "    proxy_http_version 1.1;\n" }}
@@ -61,6 +62,7 @@ Tsp-carrouting requires splitter
         {{- end }}
         {{- printf "    proxy_set_header X-Splitter-Host http://%s;\n" $service.metadata.name }}
         {{- printf "    proxy_set_header X-Moses-Host http://%s;\n" $back_host }}
+        {{- printf "    proxy_set_header x-key-visibility $key_visibility;\n" }}
         {{- if $ctx.Values.front.keepalive.enabled -}}
         {{- printf "    proxy_set_header Connection \"\";\n" }}
         {{- printf "    proxy_http_version 1.1;\n" }}

@@ -96,6 +96,7 @@ customReadinessProbe: {}
 customStartupProbe: {}
 command: []
 args: []
+
 # Set the timezone using a valid IANA timezone name, such as "Europe/Moscow" or "America/New_York".
 # Full list of supported timezones: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 #
@@ -114,7 +115,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.42.0.3
+  tag: 7.46.0.2
 
 
 # @section Navi-Back application settings
@@ -149,6 +150,7 @@ image:
 # @param naviback.logMessageField Field name in logs for messages data.
 # @param naviback.indexFilename Name of the index file on Castle
 # @param naviback.citiesFilename Name of the cities file on Castle
+# @param naviback.configFilepath Configs mountpoint path
 # @param naviback.sentry.enabled If sending crash dumps to Sentry needed
 # @param naviback.sentry.address Sentry URL
 # @param naviback.sentry.project Sentry project ID
@@ -170,6 +172,7 @@ image:
 # @skip naviback.indices.ctxOptions.enabled
 # @skip naviback.indices.entrances.enabled
 # @skip naviback.indices.etaCorrectionCores
+# @skip naviback.indices.edgeTransitionProbability.enabled
 # @skip naviback.indices.forecastedSpeeds.enabled
 # @skip naviback.indices.forecastedSpeedsIndex.enabled
 # @skip naviback.indices.forecastedLongSpeeds.enabled
@@ -190,6 +193,7 @@ image:
 # @skip naviback.indices.tugc2gisIndex.enabled
 # @skip naviback.indices.tugcUsers.enabled
 # @skip naviback.indices.tugcUsersIndex.enabled
+# @skip naviback.indices.turnPenalties.enabled
 # @skip naviback.indices.routeAsUsual.enabled
 # @skip naviback.indices.walkingUserSpeeds.enabled
 # @extra naviback.additionalSections Optinal JSON block to be added to config file as-is
@@ -246,6 +250,8 @@ image:
 # @param naviback.hierarchies.skipShortcuts Skip shortcuts in SN cache
 # @param naviback.hierarchies.s3path Hierarchies cache remote location
 # @param naviback.hierarchies.volume Hierarchies local cache specification. Leave empty for default emptydir.
+# @param naviback.hierarchies.mountPath Hierarchies mountpoint filepath
+# @skip naviback.truckUniverse.enabled
 # @param naviback.etaScheduleIndex.enabled If Schedule Index available
 # @param naviback.etaScheduleIndex.url Schedule Index remote url
 # @param naviback.etaScheduleIndex.etaScheduleNodes ETA Schedule nodes
@@ -279,6 +285,7 @@ naviback:
   logMessageField: custom.navi_msg
   indexFilename: index.json.zip
   citiesFilename: cities.conf.zip
+  configFilepath: /src/etc/2gis/mosesd
   sentry:
     enabled: false
     address: sentry.local
@@ -305,6 +312,8 @@ naviback:
     etaCorrectionCores:
       enabled: false
       proxy: false
+    edgeTransitionProbability:
+      enabled: true
     forecastedSpeeds:
       enabled: false
     forecastedSpeedsIndex:
@@ -344,6 +353,8 @@ naviback:
       enabled: false
     tugcUsersIndex:
       enabled: false
+    turnPenalties:
+      enabled: true
     routeAsUsual:
       enabled: false
     walkingUserSpeeds:
@@ -393,6 +404,9 @@ naviback:
     skipShortcuts: false
     s3path: ''
     volume: {}
+    mountPath: /tmp/hierarchies
+  truckUniverse:
+    enabled: false
   etaScheduleIndex:
     enabled: false
     url: ''
@@ -416,6 +430,7 @@ rules: []
 # @param envoy.resources.requests.memory [nullable] Memory request, recommended value `100Mi`
 # @param envoy.resources.limits.cpu [nullable] CPU limit, recommended value `100m`
 # @param envoy.resources.limits.memory [nullable] Memory limit, recommended value `100Mi`
+# @param envoy.configFilepath Configs mountpoint path
 
 envoy:
   image:
@@ -424,6 +439,7 @@ envoy:
     tag: 1.27.0
   concurrency: ''
   resources: {}
+  configFilepath: /src/etc/envoy
 
 
 # @section Service account settings

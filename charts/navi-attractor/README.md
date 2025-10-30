@@ -69,7 +69,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | ------------------ | ----------- | -------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-attractor` |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                   |
-| `image.tag`        | Tag         | `7.42.0.3`                       |
+| `image.tag`        | Tag         | `7.46.0.2`                       |
 
 ### Service account settings
 
@@ -175,6 +175,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | `attractor.sentry.handler`              | Handler file location                                                                                                                                                                    | `/usr/sbin/2gis/mosesd/crashpad_handler` |
 | `attractor.indexFilename`               | Name of the index file on Castle                                                                                                                                                         | `index.json.zip`                         |
 | `attractor.citiesFilename`              | Name of the cities file on Castle                                                                                                                                                        | `cities.conf.zip`                        |
+| `attractor.configFilepath`              | Configs mountpoint path                                                                                                                                                                  | `/src/etc/2gis/mosesd`                   |
 | `attractor.disableUpdates`              | Test switch for disabling runtime background updates                                                                                                                                     | `false`                                  |
 | `attractor.indices`                     | List of dynamic indices kill switches.                                                                                                                                                   |                                          |
 | `attractor.overrideConfig`              | Complete config override. For test purposes only.                                                                                                                                        | `""`                                     |

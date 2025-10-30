@@ -112,7 +112,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-attractor
   pullPolicy: IfNotPresent
-  tag: 7.42.0.3
+  tag: 7.46.0.2
 
 
 # @section Service account settings
@@ -263,6 +263,7 @@ pdb:
 # @param attractor.sentry.handler Handler file location
 # @param attractor.indexFilename Name of the index file on Castle
 # @param attractor.citiesFilename Name of the cities file on Castle
+# @param attractor.configFilepath Configs mountpoint path
 # @param attractor.disableUpdates Test switch for disabling runtime background updates
 # @extra attractor.indices List of dynamic indices kill switches.
 # @skip attractor.indices.carOptions.enabled
@@ -312,6 +313,7 @@ attractor:
     handler: /usr/sbin/2gis/mosesd/crashpad_handler
   indexFilename: index.json.zip
   citiesFilename: cities.conf.zip
+  configFilepath: /src/etc/2gis/mosesd
   disableUpdates: false
   indices:
     # items in alphabet order

@@ -84,33 +84,43 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.command }}
           command:
+            {{- if .Values.command }}
             {{- include "tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.args }}
+            {{- else }}
+            - /usr/sbin/2gis/mosesd/tini
+            - '--'
+            {{- end }}
           args:
+            {{- if .Values.args }}
             {{- include "tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
-          {{- end }}
+            {{- else }}
+            - /usr/sbin/2gis/mosesd/attractord
+            - '--config'
+            - '{{ .Values.attractor.configFilepath }}/attractord.conf'
+            - '--validate-config'
+            - /usr/share/2gis/schemas/config_schemas/attractor_conf.schema.json
+            - '--validate-config-dry-run'
+            {{- end }}
           volumeMounts:
           - name: {{ include "generic-chart.fullname" . }}-configmap
-            mountPath: /etc/2gis/mosesd/attractord.conf
+            mountPath: {{ printf "%s/attractord.conf" .Values.attractor.configFilepath | quote }}
             subPath: attractord.conf
           - name: {{ include "generic-chart.fullname" . }}-configmap
-            mountPath: /etc/2gis/mosesd/rules.conf
+            mountPath: {{ printf "%s/rules.conf" .Values.attractor.configFilepath | quote }}
             subPath: rules.conf
           {{- if .Values.extraVolumeMounts }}
           {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 10 }}
           {{- end }}
           {{- if .Values.kafka.fileProperties }}
           - name: {{ include "generic-chart.fullname" . }}-secret
-            mountPath: /etc/2gis/mosesd/secret/
+            mountPath: {{ printf "%s/secret/" .Values.attractor.configFilepath | quote }}
           {{- end }}
           {{- range $section := list "roadLocks" }}
           {{- with $ }}
           {{- if $section | get .Values | dig "kafka" "fileProperties" (dict) }}
           - name: {{ include "generic-chart.fullname" . }}-{{ $section }}-secret
-            mountPath: /etc/2gis/mosesd/secret-{{ $section }}/
+            mountPath: {{ printf "%s/secret-%s/" .Values.attractor.configFilepath $section | quote }}
             secret:
               secretName: {{ include "generic-chart.fullname" . }}-{{ $section }}-secret
           {{- end }}{{/* if fileProperties */}}
