@@ -4,7 +4,7 @@ metadata:
   name: {{ include "generic-chart.fullname" . }}
   labels:
     {{- include "generic-chart.labels" . | nindent 4 }}
-    rule: {{ .Values.naviback.appRule | default .Values.naviback.app_rule | default "" | quote  }}
+    rule: {{ .Values.naviback.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
     {{- if .Values.dataGroup.enabled }}
     dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
@@ -196,16 +196,21 @@ spec:
           command:
             {{- include "tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- else }}
-          command: [ "/usr/sbin/2gis/mosesd/tini", "--" ]
+          command:
+            - /usr/sbin/2gis/mosesd/tini
+            - "--"
           {{- end }}
           {{- if .Values.args }}
           args:
             {{- include "tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-          - /usr/sbin/2gis/mosesd/mosesd
-          - --config
-          - {{ printf "%s/navi-back.conf" .Values.naviback.configFilepath | quote }}
+            - /usr/sbin/2gis/mosesd/mosesd
+            - "--config"
+            - {{ printf "%s/navi-back.conf" .Values.naviback.configFilepath | quote }}
+            - "--validate-config"
+            - /usr/share/2gis/schemas/config_schemas/moses_conf.schema.json
+            - "--validate-config-dry-run"
           {{- end }}
           volumeMounts:
             - name: {{ include "generic-chart.fullname" . }}-configmap
@@ -295,9 +300,9 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: RULE
-              value: {{ .Values.naviback.appRule | default .Values.naviback.app_rule | default "" | quote  }}
+              value: {{ .Values.naviback.app_rule | default "" | quote  }}
             - name: PROJECT
-              value: {{ .Values.appProject | default .Values.app_project | default "" | quote }}
+              value: {{ .Values.app_project | default "" | quote }}
           {{- if .Values.customCAs.bundle }}
             - name: SSL_CERT_FILE
               value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt

@@ -50,12 +50,10 @@ Usage:
 {{ include "rules.inRoutingSection" ( dict "routingValue" "<value>" "context" $) }}
 */}}
 {{- define "rules.inRoutingSection" -}}
-   {{- $ctx := $.context }}
    {{- $found := false -}}
-   {{- $appRule := $ctx.Values.naviback.appRule | default $ctx.Values.naviback.app_rule }}
-   {{- if $ctx.Values.rules -}}
-      {{- range $ctx.Values.rules -}}
-         {{- if eq .name $appRule -}}
+   {{- if $.context.Values.rules -}}
+      {{- range $.context.Values.rules -}}
+         {{- if eq .name $.context.Values.naviback.app_rule -}}
             {{- if (has $.routingValue .routing) -}}
                {{- $found = true -}}
             {{- end -}}
@@ -76,10 +74,9 @@ Usage:
    {{- $ctx := .context -}}
    {{- $sectionFound := false -}}
    {{- $matches := false -}}
-   {{- $appRule := $ctx.Values.naviback.appRule | default $ctx.Values.naviback.app_rule }}
    {{- if $ctx.Values.rules -}}
       {{- range $ctx.Values.rules -}}
-         {{- if eq .name $appRule -}}
+         {{- if eq .name $ctx.Values.naviback.app_rule -}}
             {{- $sectionFound = true -}}
             {{- $matches = (.routing | uniq | join "," | eq "ctx") -}}
          {{- end -}}
@@ -95,12 +92,10 @@ Usage:
 {{ include "rules.inQueriesSection" ( dict "queriesValue" "<value>" "context" $) }}
 */}}
 {{- define "rules.inQueriesSection" -}}
-   {{- $ctx := $.context }}
    {{- $found := false -}}
-   {{- $appRule := $ctx.Values.naviback.appRule | default $ctx.Values.naviback.app_rule }}
-   {{- if $ctx.Values.rules -}}
-      {{- range $ctx.Values.rules -}}
-         {{- if eq .name $appRule -}}
+   {{- if $.context.Values.rules -}}
+      {{- range $.context.Values.rules -}}
+         {{- if eq .name $.context.Values.naviback.app_rule -}}
             {{- if (has $.queriesValue .queries) -}}
                {{- $found = true -}}
             {{- end -}}
@@ -111,17 +106,15 @@ Usage:
 {{- end -}}
 
 {{/*
-Get a string containing comma-separated list of all queries supported by app rule
+Get a string containing comma-separated list of all queries supported by app_rule
 Usage:
 {{ include "rules.getQueriesString" (dict "context" $) }}
 */}}
 {{- define "rules.getQueriesString" }}
-  {{- $ctx := $.context }}
   {{- $result := "" }}
-  {{- $appRule := $ctx.Values.naviback.appRule | default $ctx.Values.naviback.app_rule }}
-  {{- if $ctx.Values.rules }}
-    {{- range $ctx.Values.rules }}
-        {{- if eq .name $appRule -}}
+  {{- if $.context.Values.rules }}
+    {{- range $.context.Values.rules }}
+        {{- if eq .name $.context.Values.naviback.app_rule -}}
             {{- $result = (.queries | uniq | sortAlpha | join ",") }}
         {{- end }}
     {{- end }}

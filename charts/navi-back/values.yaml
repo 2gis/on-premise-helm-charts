@@ -94,16 +94,9 @@ startupProbe:
 customLivenessProbe: {}
 customReadinessProbe: {}
 customStartupProbe: {}
-command:
-  - /usr/sbin/2gis/mosesd/tini
-  - "--"
-args:
-  - /usr/sbin/2gis/mosesd/mosesd
-  - '--config'
-  - '{{ .Values.naviback.configFilepath }}/mosesd.conf'
-  - '--validate-config'
-  - /usr/share/2gis/schemas/config_schemas/moses_conf.schema.json
-  - '--validate-config-dry-run'
+command: []
+args: []
+
 # Set the timezone using a valid IANA timezone name, such as "Europe/Moscow" or "America/New_York".
 # Full list of supported timezones: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 #
@@ -258,17 +251,15 @@ image:
 # @param naviback.hierarchies.s3path Hierarchies cache remote location
 # @param naviback.hierarchies.volume Hierarchies local cache specification. Leave empty for default emptydir.
 # @param naviback.hierarchies.mountPath Hierarchies mountpoint filepath
-# @param naviback.truckUniverse.enabled Enable Pre-calculation of the `universe' for truck driving directions.
+# @skip naviback.truckUniverse.enabled
 # @param naviback.etaScheduleIndex.enabled If Schedule Index available
 # @param naviback.etaScheduleIndex.url Schedule Index remote url
 # @param naviback.etaScheduleIndex.etaScheduleNodes ETA Schedule nodes
-# @param naviback.appRule Item name from `rules` list to load rules from.
-# @extra naivback.app_rule DEPRECATED use `naviback.appRule`
+# @param naviback.app_rule Item name from `rules` list to load rules from.
 # @param naviback.rulesUrl URL to rules file
 # @extra naviback.excludedAreasLimit Maximum number of excluded areas
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
-# @param appProject Do not use, configure with `rules` and `appRule` instead.
-# @extra app_project DEPRECATED see `appProect`
+# @param app_project Do not use, configure with `rules` and `app_rule` instead.
 # @param rules List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
 
 naviback:
@@ -420,11 +411,11 @@ naviback:
     enabled: false
     url: ''
     etaScheduleNodes: ''
-  appRule: ''
+  app_rule: ''
   rulesUrl: file://{LOCAL_ETC}/rules.conf
 
 navigroup: ''
-appProject: ''
+app_project: ''
 rules: []
 
 
@@ -445,7 +436,7 @@ envoy:
   image:
     repository: 2gis-on-premise/navi-envoy
     pullPolicy: IfNotPresent
-    tag: tools-v1.36.2
+    tag: 1.27.0
   concurrency: ''
   resources: {}
   configFilepath: /src/etc/envoy

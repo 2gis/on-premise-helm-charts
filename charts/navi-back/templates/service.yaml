@@ -8,7 +8,7 @@ metadata:
     {{- if .Values.service.labels }}
     {{- include "tplvalues.render" ( dict "value" .Values.service.labels "context" $) | nindent 4 }}
     {{- end }}
-    rule: {{ .Values.naviback.appRule | default .Values.naviback.app_rule | default "" | quote  }}
+    rule: {{ .Values.naviback.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
     type: {{ .Values.naviback.type | default "" | quote  }}
     {{- if .Values.dataGroup.enabled }}
@@ -48,7 +48,7 @@ metadata:
     {{- if .Values.service.headless.labels }}
     {{- include "tplvalues.render" ( dict "value" .Values.service.labels "context" $) | nindent 4 }}
     {{- end }}
-    rule: {{ .Values.naviback.appRule | default .Values.naviback.app_rule | default "" | quote  }}
+    rule: {{ .Values.naviback.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
     type: {{ .Values.naviback.type | default "" | quote  }}
     {{- if .Values.dataGroup.enabled }}
