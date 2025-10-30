@@ -85,7 +85,7 @@ spec:
         {{- else }}
         emptyDir: {}
         {{- end }}{{- /* if .Values.naviback.hierarchies.volume */}}
-      {{- end }}
+      {{- end }}{{- /* .Values.naviback.hierarchies.enabled */}}
       {{- if .Values.extraVolumes }}
       {{- include "tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
       {{- end }}
@@ -106,7 +106,7 @@ spec:
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
           args:
             - -c
-            - /etc/envoy/envoy.yaml
+            - {{ printf "%s/envoy.yaml" .Values.envoy.configFilepath | quote }}
           {{- if and (kindIs "string" .Values.envoy.concurrency) (eq "" .Values.envoy.concurrency) }}
           {{/* envoy.concurrency = '', skip */}}
           {{- else }}
@@ -115,7 +115,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: {{ include "generic-chart.fullname" . }}-configmap
-              mountPath: /etc/envoy/envoy.yaml
+              mountPath: {{ printf "%s/envoy.yaml" .Values.envoy.configFilepath | quote }}
               subPath: envoy.yaml
             {{- if .Values.customCAs.bundle }}
             - name: {{ include "generic-chart.fullname" . }}-configmap-ca
@@ -196,33 +196,38 @@ spec:
           command:
             {{- include "tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- else }}
-          command: [ "/usr/sbin/2gis/mosesd/tini", "--" ]
+          command:
+            - /usr/sbin/2gis/mosesd/tini
+            - "--"
           {{- end }}
           {{- if .Values.args }}
           args:
             {{- include "tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-          - /usr/sbin/2gis/mosesd/mosesd
-          - --config
-          - /etc/2gis/mosesd/navi-back.conf
+            - /usr/sbin/2gis/mosesd/mosesd
+            - "--config"
+            - {{ printf "%s/navi-back.conf" .Values.naviback.configFilepath | quote }}
+            - "--validate-config"
+            - /usr/share/2gis/schemas/config_schemas/moses_conf.schema.json
+            - "--validate-config-dry-run"
           {{- end }}
           volumeMounts:
             - name: {{ include "generic-chart.fullname" . }}-configmap
-              mountPath: /etc/2gis/mosesd/navi-back.conf
+              mountPath: {{ printf "%s/navi-back.conf" .Values.naviback.configFilepath | quote }}
               subPath: navi-back.conf
             - name: {{ include "generic-chart.fullname" . }}-configmap
-              mountPath: /etc/2gis/mosesd/rules.conf
+              mountPath: {{ printf "%s/rules.conf" .Values.naviback.configFilepath | quote }}
               subPath: rules.conf
             {{- if .Values.kafka.fileProperties }}
             - name: {{ include "generic-chart.fullname" . }}-secret
-              mountPath: /etc/2gis/mosesd/secret/
+              mountPath: {{ printf "%s/secret/" .Values.naviback.configFilepath | quote }}
             {{- end }}
             {{- range $section := list "routesharing" "trafficLights" "roadLocks" }}
             {{- with $ }}
             {{- if $section | get .Values | dig "kafka" "fileProperties" (dict) }}
             - name: {{ include "generic-chart.fullname" . }}-{{ $section }}-secret
-              mountPath: /etc/2gis/mosesd/secret-{{ $section }}/
+              mountPath: {{ printf "%s/secret-%s/" .Values.naviback.configFilepath $section | quote }}
             {{- end }}
             {{- end }}{{- /* with $ */}}
             {{- end }}{{- /* range $section */}}
@@ -232,8 +237,8 @@ spec:
             {{- end }}
             {{- if .Values.naviback.hierarchies.enabled }}
             - name: hierarchies-volume
-              mountPath: "/tmp/hierarchies"
-            {{- end }}
+              mountPath: {{ .Values.naviback.hierarchies.mountPath | quote }}
+            {{- end }}{{/* if .Values.naviback.hierarchies.enabled */}}
             {{- if .Values.extraVolumeMounts }}
             {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}

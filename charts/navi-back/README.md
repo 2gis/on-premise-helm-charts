@@ -79,7 +79,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.42.0.3`                  |
+| `image.tag`        | Tag         | `7.46.0.2`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings
@@ -115,6 +115,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.logMessageField`                              | Field name in logs for messages data.                                                                                                                                                                                                          | `custom.navi_msg`                        |
 | `naviback.indexFilename`                                | Name of the index file on Castle                                                                                                                                                                                                               | `index.json.zip`                         |
 | `naviback.citiesFilename`                               | Name of the cities file on Castle                                                                                                                                                                                                              | `cities.conf.zip`                        |
+| `naviback.configFilepath`                               | Configs mountpoint path                                                                                                                                                                                                                        | `/src/etc/2gis/mosesd`                   |
 | `naviback.sentry.enabled`                               | If sending crash dumps to Sentry needed                                                                                                                                                                                                        | `false`                                  |
 | `naviback.sentry.address`                               | Sentry URL                                                                                                                                                                                                                                     | `sentry.local`                           |
 | `naviback.sentry.project`                               | Sentry project ID                                                                                                                                                                                                                              | `navi-back`                              |
@@ -182,6 +183,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.hierarchies.skipShortcuts`                    | Skip shortcuts in SN cache                                                                                                                                                                                                                     | `false`                                  |
 | `naviback.hierarchies.s3path`                           | Hierarchies cache remote location                                                                                                                                                                                                              | `""`                                     |
 | `naviback.hierarchies.volume`                           | Hierarchies local cache specification. Leave empty for default emptydir.                                                                                                                                                                       | `{}`                                     |
+| `naviback.hierarchies.mountPath`                        | Hierarchies mountpoint filepath                                                                                                                                                                                                                | `/tmp/hierarchies`                       |
 | `naviback.etaScheduleIndex.enabled`                     | If Schedule Index available                                                                                                                                                                                                                    | `false`                                  |
 | `naviback.etaScheduleIndex.url`                         | Schedule Index remote url                                                                                                                                                                                                                      | `""`                                     |
 | `naviback.etaScheduleIndex.etaScheduleNodes`            | ETA Schedule nodes                                                                                                                                                                                                                             | `""`                                     |
@@ -205,6 +207,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `envoy.resources.requests.memory` | Memory request, recommended value `100Mi`                                                    | `undefined`                  |
 | `envoy.resources.limits.cpu`      | CPU limit, recommended value `100m`                                                          | `undefined`                  |
 | `envoy.resources.limits.memory`   | Memory limit, recommended value `100Mi`                                                      | `undefined`                  |
+| `envoy.configFilepath`            | Configs mountpoint path                                                                      | `/src/etc/envoy`             |
 
 ### Service account settings
 
