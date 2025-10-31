@@ -69,7 +69,11 @@ spec:
           - name: JAAS_CONFIG
             valueFrom:
               secretKeyRef:
+                {{- if .Values.kafka.sasl.createSecret }}
+                name: {{ include "stat-receiver-api.name" . }}-sasl
+                {{- else }}
                 name: {{ .Values.kafka.sasl.secretName }}
+                {{- end }}
                 key: {{ .Values.kafka.sasl.jaasFieldName }}
         {{- end }}
         {{- if .Values.kafka.truststore.enabled }}

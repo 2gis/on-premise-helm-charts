@@ -70,9 +70,11 @@
                                           "properties": {
                                               "enabled":       { "type": "boolean", "enum": [true] },
                                               "createSecret":  { "type": "boolean" },
-                                              "secretName":    { "$ref": "#/definitions/non_empty_string" },
+                                              "secretName":    { "type": "string" },
                                               "jaasFieldName": { "$ref": "#/definitions/non_empty_string" },
-                                              "jaas":          { "type": "string" },
+                                              "jaasLoginModule": { "$ref": "#/definitions/non_empty_string" },
+                                              "username":          { "type": "string" },
+                                              "password":          { "type": "string" },
                                               "mechanism":     { "$ref": "#/definitions/non_empty_string" }
                                           }
                                         }
