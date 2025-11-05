@@ -126,7 +126,7 @@ streams:
 # @extra kafka.sasl **Configuration for sasl authenthication**
 # @param kafka.sasl.enabled
 # @param kafka.sasl.createSecret Enable to manage password secret with helm
-# @param kafka.sasl.secretName Kubernetes secret that holds password data. Ignored when kafka.sasl.createSecret is true
+# @param kafka.sasl.secretName Kubernetes secret that holds password data. Ignored when kafka.sasl.createSecret is true. Required when kafka.sasl.createSecret is false
 # @param kafka.sasl.jaasFieldName Name of the secret's key that holds JAAS configuration
 # @param kafka.sasl.jaasLoginModule JAAS login module
 # @param kafka.sasl.username Username for kafka connection. Required when kafka.sasl.createSecret is true
