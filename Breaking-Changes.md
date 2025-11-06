@@ -1,5 +1,11 @@
 # 2GIS On-Premise Breaking-Changes
 
+## [2.x.x]
+
+### stat-receiver
+
+- `kafka.sasl.jaas` splitted to severl values: `kafka.sasl.jaasLoginModule`, `kafka.sasl.username` and `kafka.sasl.password`.
+
 ## [2.\*.\*] (2025-09-30)
 In the new versions, releases are organized into groups. Version details and breaking changes are now maintained within the files specific to each group:
 #### [Core](changelogs/core/CORE-Breaking-Changes.md)
