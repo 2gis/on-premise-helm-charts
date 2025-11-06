@@ -64,7 +64,6 @@ ui:
   redirectSafeDomains: ''
 
   # @param ui.enableServiceLimitations A flag that enables to view and edit particular key service limitations.
-  
   enableServiceLimitations: true
 
   # @section OIDC
