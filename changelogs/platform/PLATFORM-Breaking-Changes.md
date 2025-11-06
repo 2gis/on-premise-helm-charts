@@ -1,5 +1,11 @@
 # Platform Breaking-Changes
 
+## [2.47.0]
+
+### stat-receiver
+
+- `kafka.sasl.jaas` splitted to several values: `kafka.sasl.jaasLoginModule`, `kafka.sasl.username` and `kafka.sasl.password`.
+
 ## [2.46.0]
 
 ### navi-back
