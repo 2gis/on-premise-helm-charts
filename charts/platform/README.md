@@ -95,6 +95,18 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | ------------------ | ---------------------- | ----- |
 | `ui.mapStyles.url` | URL to Map Styles API. | `""`  |
 
+### Service Pro settings
+
+
+### Service CityLens settings
+
+
+### Service On-Premise settings
+
+
+### Service kitDocs settings
+
+
 ### Search API settings
 
 | Name             | Description                                                             | Value |

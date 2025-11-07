@@ -132,9 +132,40 @@ ui:
   # @section Map styles settings
 
   # @param ui.mapStyles.url URL to Map Styles API.
+  # @skip ui.mapStyles.entryPageUrl
 
   mapStyles:
     url: ''
+    entryPageUrl: ''
+
+  # @section Service Pro settings
+
+  # @skip ui.pro.entryPageUrl
+
+  pro:
+    entryPageUrl: ''
+
+  # @section Service CityLens settings
+
+  # @skip ui.cityLens.entryPageUrl
+
+  cityLens:
+    entryPageUrl: ''
+
+
+  # @section Service On-Premise settings
+
+  # @skip ui.onpremise.entryPageUrl
+
+  onpremise:
+    entryPageUrl: ''
+
+  # @section Service kitDocs settings
+
+  # @skip ui.kitDocs.entryPageUrl
+
+  kitDocs:
+    entryPageUrl: ''
 
   # @section Search API settings
 
