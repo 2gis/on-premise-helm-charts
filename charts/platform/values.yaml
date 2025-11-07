@@ -132,6 +132,7 @@ ui:
   # @section Map styles API settings
 
   # @param ui.mapStyles.url URL to Map Styles API.
+  # @param ui.mapStyles.entryPageUrl A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
 
   mapStyles:
     url: ''
