@@ -39,7 +39,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/platform-ui
-    tag: 1.9.1
+    tag: 1.15.1
 
   # @section UI service settings
 
@@ -129,13 +129,43 @@ ui:
     key: ''
     initCenter: ''
 
-  # @section Map styles API settings
+  # @section Map styles settings
 
   # @param ui.mapStyles.url URL to Map Styles API.
   # @param ui.mapStyles.entryPageUrl A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
 
   mapStyles:
     url: ''
+    entryPageUrl: ''
+
+  # @section Service Pro settings
+
+  # @param ui.pro.entryPageUrl A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
+
+  pro:
+    entryPageUrl: ''
+
+  # @section Service CityLens settings
+
+  # @param ui.cityLens.entryPageUrl A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
+
+  cityLens:
+    entryPageUrl: ''
+
+
+  # @section Service On-Premise settings
+
+  # @param ui.onpremise.entryPageUrl A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
+
+  onpremise:
+    entryPageUrl: ''
+
+  # @section Service kitDocs settings
+
+  # @param ui.kitDocs.entryPageUrl A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
+
+  kitDocs:
+    entryPageUrl: ''
 
   # @section Search API settings
 
