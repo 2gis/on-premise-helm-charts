@@ -153,8 +153,8 @@ kafka:
     storeData: ''
     storePassword: ''
   sasl:
-    enabled: false
-    createSecret: false
+    enabled: true
+    createSecret: true
     secretName: ''
     mechanism: ''
     jaasFieldName: sasl.jaas.config
