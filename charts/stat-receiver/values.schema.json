@@ -69,7 +69,6 @@
                                           "additionalProperties": false,
                                           "properties": {
                                               "enabled":       { "type": "boolean", "enum": [true] },
-                                              "createSecret":  { "type": "boolean" },
                                               "secretName":    { "type": "string" },
                                               "jaasFieldName": { "$ref": "#/definitions/non_empty_string" },
                                               "jaasLoginModule": { "$ref": "#/definitions/non_empty_string" },

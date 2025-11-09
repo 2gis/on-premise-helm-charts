@@ -125,12 +125,11 @@ streams:
 
 # @extra kafka.sasl **Configuration for sasl authenthication**
 # @param kafka.sasl.enabled
-# @param kafka.sasl.createSecret Enable to manage password secret with helm
-# @param kafka.sasl.secretName Kubernetes secret that holds password data. Ignored when kafka.sasl.createSecret is true. Required when kafka.sasl.createSecret is false
+# @param kafka.sasl.secretName Existing Kubernetes secret that holds password data. If enmpty, a new secret will be created
 # @param kafka.sasl.jaasFieldName Name of the secret's key that holds JAAS configuration
 # @param kafka.sasl.jaasLoginModule JAAS login module
-# @param kafka.sasl.username Username for kafka connection. Required when kafka.sasl.createSecret is true
-# @param kafka.sasl.password Password for kafka connection. Required when kafka.sasl.createSecret is true
+# @param kafka.sasl.username Username for kafka connection. Required when kafka.sasl.secretName is empty string
+# @param kafka.sasl.password Password for kafka connection. Required when kafka.sasl.secretName is empty string
 # @param kafka.sasl.mechanism SASL mechanism used for client connections. This may be any mechanism for which a security provider is available
 
 kafka:
@@ -154,9 +153,8 @@ kafka:
     storePassword: ''
   sasl:
     enabled: true
-    createSecret: true
     secretName: ''
-    mechanism: ''
+    mechanism: 'PLAIN'
     jaasFieldName: sasl.jaas.config
     jaasLoginModule: 'org.apache.kafka.common.security.scram.ScramLoginModule'
     username: ''
