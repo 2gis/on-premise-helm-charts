@@ -96,7 +96,6 @@ customReadinessProbe: {}
 customStartupProbe: {}
 command: []
 args: []
-
 # Set the timezone using a valid IANA timezone name, such as "Europe/Moscow" or "America/New_York".
 # Full list of supported timezones: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 #
@@ -251,15 +250,17 @@ image:
 # @param naviback.hierarchies.s3path Hierarchies cache remote location
 # @param naviback.hierarchies.volume Hierarchies local cache specification. Leave empty for default emptydir.
 # @param naviback.hierarchies.mountPath Hierarchies mountpoint filepath
-# @skip naviback.truckUniverse.enabled
+# @param naviback.truckUniverse.enabled Enable Pre-calculation of the `universe' for truck driving directions.
 # @param naviback.etaScheduleIndex.enabled If Schedule Index available
 # @param naviback.etaScheduleIndex.url Schedule Index remote url
 # @param naviback.etaScheduleIndex.etaScheduleNodes ETA Schedule nodes
-# @param naviback.app_rule Item name from `rules` list to load rules from.
+# @param naviback.appRule Item name from `rules` list to load rules from.
+# @extra naivback.app_rule DEPRECATED use `naviback.appRule`
 # @param naviback.rulesUrl URL to rules file
 # @extra naviback.excludedAreasLimit Maximum number of excluded areas
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
-# @param app_project Do not use, configure with `rules` and `app_rule` instead.
+# @param appProject Do not use, configure with `rules` and `appRule` instead.
+# @extra app_project DEPRECATED see `appProect`
 # @param rules List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
 
 naviback:
@@ -411,11 +412,11 @@ naviback:
     enabled: false
     url: ''
     etaScheduleNodes: ''
-  app_rule: ''
+  appRule: ''
   rulesUrl: file://{LOCAL_ETC}/rules.conf
 
 navigroup: ''
-app_project: ''
+appProject: ''
 rules: []
 
 
@@ -436,7 +437,7 @@ envoy:
   image:
     repository: 2gis-on-premise/navi-envoy
     pullPolicy: IfNotPresent
-    tag: 1.27.0
+    tag: 1.36.2-tools
   concurrency: ''
   resources: {}
   configFilepath: /src/etc/envoy
