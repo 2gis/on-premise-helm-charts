@@ -282,9 +282,11 @@ pdb:
 # @param attractor.restrictions.updatePeriod Update period from restrictions server.
 # @param attractor.restrictions.timeoutSeconds Timeout seconds for restrictions server
 # @param attractor.tilesMetricsThreshold The value at which we send tiles metrics (used for internal tests).
-# @param attractor.app_rule Item name from `rules` list to load rules from.
+# @param attractor.appRule Item name from `rules` list to load rules from.
+# @extra attractor.app_rule DEPRECATED see `attractor.appRule`
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
-# @param app_project Do not use, configure with `rules` and `app_rule` instead.
+# @param appProject Do not use, configure with `rules` and `app_rule` instead.
+# @extra app_project DEPRECATED see `appProject`
 # @param rules List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
 
 attractor:
@@ -341,10 +343,10 @@ attractor:
     updatePeriod: 60
     timeoutSeconds: 60
   tilesMetricsThreshold: 0
-  app_rule: ''
+  appRule: ''
 
 navigroup: ''
-app_project: ''
+appProject: ''
 rules: []
 
 # @section Kafka settings for interacting with Distance Matrix Async Service

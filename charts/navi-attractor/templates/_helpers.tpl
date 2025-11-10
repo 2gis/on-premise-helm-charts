@@ -43,10 +43,12 @@ Usage:
 {{ include "rules.inRoutingSection" ( dict "routingValue" "<value>" "context" $) }}
 */}}
 {{- define "rules.inRoutingSection" -}}
+   {{- $ctx := $.context }}
    {{- $found := false -}}
-   {{- if $.context.Values.rules -}}
-      {{- range $.context.Values.rules -}}
-         {{- if eq .name $.context.Values.attractor.app_rule -}}
+   {{- $appRule := $ctx.Values.attractor.appRule | default $ctx.Values.attractor.app_rule }}
+   {{- if $ctx.Values.rules -}}
+      {{- range $ctx.Values.rules -}}
+         {{- if eq .name $appRule -}}
             {{- if (has $.routingValue .routing) -}}
                {{- $found = true -}}
             {{- end -}}
@@ -63,10 +65,12 @@ Usage:
 {{ include "rules.inQueriesSection" ( dict "queriesValue" "<value>" "context" $) }}
 */}}
 {{- define "rules.inQueriesSection" -}}
+   {{- $ctx := $.context }}
    {{- $found := false -}}
-   {{- if $.context.Values.rules -}}
-      {{- range $.context.Values.rules -}}
-         {{- if eq .name $.context.Values.attractor.app_rule -}}
+   {{- $appRule := $ctx.Values.attractor.appRule | default $ctx.Values.attractor.app_rule }}
+   {{- if $ctx.Values.rules -}}
+      {{- range $ctx.Values.rules -}}
+         {{- if eq .name $appRule -}}
             {{- if (has $.queriesValue .queries) -}}
                {{- $found = true -}}
             {{- end -}}
