@@ -84,7 +84,7 @@ ui:
     clientSecret: ''
     scope: ''
     codeUrl: ''
-    safeHosts: '.*'
+    safeHosts: ".*"
     secure: true
 
   # @section Statuses for services
@@ -132,7 +132,7 @@ ui:
   # @section Map styles settings
 
   # @param ui.mapStyles.url URL to Map Styles API.
-  # @skip ui.mapStyles.entryPageUrl
+  # @param ui.mapStyles.entryPageUrl Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
 
   mapStyles:
     url: ''
@@ -140,29 +140,28 @@ ui:
 
   # @section Service Pro settings
 
-  # @skip ui.pro.entryPageUrl
+  # @param ui.pro.entryPageUrl Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
 
   pro:
     entryPageUrl: ''
 
   # @section Service CityLens settings
 
-  # @skip ui.cityLens.entryPageUrl
+  # @param ui.cityLens.entryPageUrl Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
 
   cityLens:
     entryPageUrl: ''
 
-
   # @section Service On-Premise settings
 
-  # @skip ui.onpremise.entryPageUrl
+  # @param ui.onpremise.entryPageUrl Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
 
   onpremise:
     entryPageUrl: ''
 
   # @section Service kitDocs settings
 
-  # @skip ui.kitDocs.entryPageUrl
+  # @param ui.kitDocs.entryPageUrl Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
 
   kitDocs:
     entryPageUrl: ''

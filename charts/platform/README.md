@@ -91,21 +91,34 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 
 ### Map styles settings
 
-| Name               | Description            | Value |
-| ------------------ | ---------------------- | ----- |
-| `ui.mapStyles.url` | URL to Map Styles API. | `""`  |
+| Name                        | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `ui.mapStyles.url`          | URL to Map Styles API.                                                                                                                                                                                                                                                                                                                                                   | `""`  |
+| `ui.mapStyles.entryPageUrl` | Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'. | `""`  |
 
 ### Service Pro settings
 
+| Name                  | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `ui.pro.entryPageUrl` | Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'. | `""`  |
 
 ### Service CityLens settings
 
+| Name                       | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `ui.cityLens.entryPageUrl` | Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'. | `""`  |
 
 ### Service On-Premise settings
 
+| Name                        | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `ui.onpremise.entryPageUrl` | Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'. | `""`  |
 
 ### Service kitDocs settings
 
+| Name                      | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `ui.kitDocs.entryPageUrl` | Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'. | `""`  |
 
 ### Search API settings
 

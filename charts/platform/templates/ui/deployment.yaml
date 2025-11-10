@@ -150,26 +150,16 @@ spec:
             - name: ANALYTICS_BSS_PRODUCT_ID
               value: {{ .Values.ui.analyticsBSS.productId | quote }}
             {{- end }}
-            {{- if .Values.ui.mapStyles.entryPageUrl }}
             - name: MAP_STYLES_ENTRY_PAGE_URL
               value: {{ .Values.ui.mapStyles.entryPageUrl | quote }}
-            {{- end }}
-            {{- if .Values.ui.pro.entryPageUrl }}
             - name: PRO_ENTRY_PAGE_URL
               value: {{ .Values.ui.pro.entryPageUrl | quote }}
-            {{- end }}
-            {{- if .Values.ui.cityLens.entryPageUrl }}
             - name: CITYLENS_ENTRY_PAGE_URL
               value: {{ .Values.ui.cityLens.entryPageUrl | quote }}
-            {{- end }}
-            {{- if .Values.ui.onpremise.entryPageUrl }}
             - name: ON_PREMISE_ENTRY_PAGE_URL
               value: {{ .Values.ui.onpremise.entryPageUrl | quote }}
-            {{- end }}
-            {{- if .Values.ui.kitDocs.entryPageUrl }}
             - name: KIT_DOCS_ENTRY_PAGE_URL
               value: {{ .Values.ui.kitDocs.entryPageUrl | quote }}
-            {{- end }}
             - name: HOME
               value: "/tmp"
       {{- with .Values.ui.nodeSelector }}
