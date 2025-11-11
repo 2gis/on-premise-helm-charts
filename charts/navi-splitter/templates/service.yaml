@@ -7,7 +7,7 @@ metadata:
     {{- if .Values.service.labels }}
     {{- include "tplvalues.render" ( dict "value" .Values.service.labels "context" $) | nindent 4 }}
     {{- end }}
-    rule: {{ .Values.splitter.app_rule | quote }}
+    rule: {{ .Values.splitter.appRule | default .Values.splitter.app_rule | quote }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
     {{- if .Values.dataGroup.enabled }}
     dataGroupTimestamp: {{ .Values.dataGroup.timestamp | quote }}
