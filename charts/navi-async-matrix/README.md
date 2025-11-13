@@ -64,7 +64,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.18.0`                            |
+| `image.tag`        | Tag         | `1.19.1`                            |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings
@@ -155,7 +155,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `dm.compositeTaskTimeoutSec`          | Timeout for executing split tasks.                                                                                            | `3600`                                     |
 | `dm.configFilepath`                   | Configs mountpoint path                                                                                                       | `/etc/2gis/`                               |
 | `dm.merger.image.repository`          | Image repository for merger.                                                                                                  | `2gis-on-premise/navi-merger-async-matrix` |
-| `dm.merger.image.tag`                 | Image tag for merger.                                                                                                         | `1.18.0`                                   |
+| `dm.merger.image.tag`                 | Image tag for merger.                                                                                                         | `1.19.1`                                   |
 | `dm.merger.replicaCount`              | A replica count for the arhiver.                                                                                              | `1`                                        |
 | `dm.merger.resources.requests.cpu`    | Merger CPU request. 1CPU recommended.                                                                                         |                                            |
 | `dm.merger.resources.requests.memory` | Merger memory request. 10Gi recommended.                                                                                      |                                            |
@@ -233,7 +233,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `s3.region`         | S3 region.                                                                                     | `""`  |
 | `s3.accessKey`      | S3 access key for accessing the bucket. **Required**                                           | `""`  |
 | `s3.secretKey`      | S3 secret key for accessing the bucket. **Required**                                           | `""`  |
-| `s3.publicNetloc`   | Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://` | `nil` |
+| `s3.publicUrl`      | Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://` | `""`  |
+| `s3.publicNetloc`   | DEPRECATED alias for `s3.publicUrl`                                                            |       |
 | `s3.expirationDays` | How many days to store results                                                                 | `14`  |
 
 ### API keys service
