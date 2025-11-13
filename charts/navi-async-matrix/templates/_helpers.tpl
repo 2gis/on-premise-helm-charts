@@ -253,7 +253,7 @@ Usage:
 
 {{- define "navi-async-matrix.mergerTopicRules" -}}
 {{- $topic := .Values.kafka.mergerTaskTopic }}
-{{- $types := list "car" "truck" "walking" "bicycle" "scooter" }}
+{{- $types := list "car" "truck" "walking" "bicycle" "scooter" "public-transport" }}
 {{- $rules := list }}
 {{- range $i, $type := $types }}
   {{- $item := dict

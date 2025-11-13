@@ -77,7 +77,7 @@ customReadinessProbe: {}
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  tag: 1.18.0
+  tag: 1.19.1
 
 
 # @section Service account settings
@@ -237,7 +237,7 @@ dm:
     replicaCount: 1
     image:
       repository: 2gis-on-premise/navi-merger-async-matrix
-      tag: 1.18.0
+      tag: 1.19.1
     resources: {}
   labels: {}
   annotations: {}
@@ -313,6 +313,7 @@ multiDc:
 # @param kafka.attractTopic Name of the topic for for attract tasks results
 # @param kafka.oneToManyTopic Name of the topic for oneToMany tasks results
 # @param kafka.vrpStatusTopic Name of the topic for VRP service integration
+# @param kafka.findPlatformTopic Name of the topic for Find Platform
 # @extra kafka.properties Properties as supported by kafka-python. Refer to inline comments for details.
 # @skip kafka.properties.bootstrap.servers
 # @skip kafka.properties.security.protocol
@@ -338,6 +339,10 @@ multiDc:
 # @skip kafka.taskTopicRules[2].topic
 # @skip kafka.taskTopicRules[2].type
 # @skip kafka.taskTopicRules[2].projects
+# @param kafka.findPlatformTopicRules ** Rules to map request type to topic for Find Platform **
+# @extra kafka.findPlatformTopicRules[0].topic
+# @extra kafka.findPlatformTopicRules[0].type
+# @extra kafka.findPlatformTopicRules[0].default
 # @param kafka.attractTopicRules ** Rules to map request type to topic for attract tasks **
 # @extra kafka.attractTopicRules[0].topic Name of the topic.
 # @extra kafka.attractTopicRules[0].default If this topic is used for projects by default.
@@ -353,6 +358,7 @@ kafka:
   attractTopic: ''
   oneToManyTopic: ''
   vrpStatusTopic: ''
+  findPlatformTopic: ''
   properties:
     bootstrap.servers: ''
     security.protocol: PLAINTEXT
@@ -374,6 +380,10 @@ kafka:
   #   type: car
   #   projects:
   #   - moscow
+  findPlatformTopicRules: []
+  # - topic: find_platform_task_topic
+  #   type: public-transport
+  #   default: true
   attractTopicRules: []
   #   - topic: attract_task_topic
   #     type: car
@@ -448,7 +458,8 @@ kafka:
 # @param s3.region S3 region.
 # @param s3.accessKey S3 access key for accessing the bucket. **Required**
 # @param s3.secretKey S3 secret key for accessing the bucket. **Required**
-# @param s3.publicNetloc Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://`
+# @param s3.publicUrl Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://`
+# @extra s3.publicNetloc DEPRECATED alias for `s3.publicUrl`
 # @param s3.expirationDays How many days to store results
 
 s3:
@@ -457,7 +468,7 @@ s3:
   region: ''
   accessKey: ''
   secretKey: ''
-  publicNetloc:
+  publicUrl: ''
   expirationDays: 14
 
 # @skip bss.enabled
