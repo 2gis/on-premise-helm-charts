@@ -31,18 +31,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.135.1`                      |
+| `backend.image.tag`        | Backend service image tag.        | `1.140.0`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
 | `admin.image.tag`          | Admin service image tag.          | `1.4.0`                        |
 
 ### Flags for enabling/disabling certain features.
 
-| Name                               | Description                                | Value   |
-| ---------------------------------- | ------------------------------------------ | ------- |
-| `featureFlags.enableAudit`         | Enable audit logging for sending to DB.    | `false` |
-| `featureFlags.enableAuditKafka`    | Enable audit logging for sending to Kafka. | `false` |
-| `featureFlags.enablePublicAPISign` | Enable signing responses in Public API.    | `false` |
-| `featureFlags.enableRedis`         | Enable redis for keys.                     | `true`  |
+| Name                               | Description                                     | Value   |
+| ---------------------------------- | ----------------------------------------------- | ------- |
+| `featureFlags.enableAudit`         | Enable audit logging for sending to DB.         | `false` |
+| `featureFlags.enableAuditKafka`    | Enable audit logging for sending to Kafka.      | `false` |
+| `featureFlags.enablePublicAPISign` | Enable signing responses in Public API.         | `false` |
+| `featureFlags.enableStatRedis`     | Enable receiving monthly statistics from Redis. | `false` |
 
 ### Admin service settings
 
@@ -240,12 +240,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Redis settings
 
-| Name             | Description                                                    | Value  |
-| ---------------- | -------------------------------------------------------------- | ------ |
-| `redis.host`     | Redis hostname or IP.                                          | `""`   |
-| `redis.port`     | Redis port.                                                    | `6379` |
-| `redis.db`       | Redis database number.                                         | `1`    |
-| `redis.password` | Redis password. Empty string if no authentication is required. | `""`   |
+| Name             | Description                                                    | Value   |
+| ---------------- | -------------------------------------------------------------- | ------- |
+| `redis.enable`   | Enable redis for keys.                                         | `false` |
+| `redis.host`     | Redis hostname or IP.                                          | `""`    |
+| `redis.port`     | Redis port.                                                    | `6379`  |
+| `redis.db`       | Redis database number.                                         | `1`     |
+| `redis.password` | Redis password. Empty string if no authentication is required. | `""`    |
 
 ### Database access settings
 

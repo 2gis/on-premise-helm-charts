@@ -134,7 +134,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_FEATURE_FLAGS_OIDC
   value: {{ .Values.api.oidc.enable | quote }}
 - name: KEYS_FEATURE_FLAGS_REDIS
-  value: {{ .Values.featureFlags.enableRedis | quote }}
+  value: {{ .Values.redis.enable | quote }}
+- name: KEYS_FEATURE_FLAGS_STAT_REDIS
+  value: {{ .Values.featureFlags.enableStatRedis | quote }}
 {{- end }}
 
 {{- define "keys.env.api" -}}
@@ -290,6 +292,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.redis" -}}
+
 - name: KEYS_REDIS_HOST
   value: {{ .Values.redis.host | quote }}
 - name: KEYS_REDIS_DB

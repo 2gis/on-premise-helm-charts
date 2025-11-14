@@ -23,17 +23,18 @@ featureFlags:
   # @param featureFlags.enableAudit Enable audit logging for sending to DB.
   # @param featureFlags.enableAuditKafka Enable audit logging for sending to Kafka.
   # @param featureFlags.enablePublicAPISign Enable signing responses in Public API.
-  # @param featureFlags.enableRedis Enable redis for keys.
+  # @param featureFlags.enableStatRedis Enable receiving monthly statistics from Redis.
 
   enableAudit: false
   enableAuditKafka: false
   enablePublicAPISign: false
-  enableRedis: true
+  enableStatRedis: false
+
 
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.135.1
+    tag: 1.140.0
 
 # @section Admin service settings
 
@@ -577,11 +578,13 @@ counter:
 # @section Redis settings
 
 redis:
+  # @param redis.enable Enable redis for keys.
   # @param redis.host Redis hostname or IP.
   # @param redis.port Redis port.
   # @param redis.db Redis database number.
   # @param redis.password Redis password. Empty string if no authentication is required.
 
+  enable: false
   host: ''
   port: 6379
   db: 1
