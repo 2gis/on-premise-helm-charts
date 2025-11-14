@@ -23,8 +23,8 @@
     proxy_ssl_server_name on;
     proxy_ssl_name     {{ $urlParts.host }};
   {{- end }}
-  {{- if and .Values.proxy.apiKey .Values.proxy.locationDG }}
-    proxy_set_header   X-API-Key {{ .Values.proxy.apiKey }};
+  {{- if .Values.proxy.locationDG }}
+    proxy_set_header   X-API-Key {{ required "A valid .Values.proxy.apiKey required" .Values.proxy.apiKey }};
   {{- end }}
     proxy_set_header   Upgrade $http_upgrade;
     proxy_set_header   Connection keep-alive;

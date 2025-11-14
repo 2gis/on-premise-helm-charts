@@ -36,7 +36,7 @@ podLabels: {}
 
 # @section Proxy server settings
 
-# @param proxy.host URL for the proxy server to serve, ex: https://traffic0.edromaps.2gis.com. **Required**
+# @param proxy.host URL for the proxy server to serve maps (jam.api.2gis.com), navigation (datagateway.api.2gis.com). **Required**
 # @param proxy.listen Port for the proxy server to listen.
 # @param proxy.locationDG Enable location for datagateway.api.2gis.com.
 # @param proxy.apiKey Datagateway access key (DGCTL key)
@@ -53,7 +53,7 @@ podLabels: {}
 
 
 proxy:
-  host: ''
+  host: jam.api.2gis.com
   listen: 8080
   locationDG: false
   apiKey: ''
