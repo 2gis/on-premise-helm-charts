@@ -60,11 +60,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                          | Description                                                                                          | Value  |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------- | ------ |
 | `splitter.logLevel`           | Logging level.                                                                                       | `info` |
-| `splitter.app_rule`           | Rule name of navi-back instance                                                                      | `""`   |
+| `splitter.appRule`            | Rule name of navi-back instance                                                                      | `""`   |
+| `splitter.app_rule`           | DEPRECATED see `splitter.appRule`                                                                    |        |
 | `splitter.goMaxProcs`         | Number of golang processes.                                                                          | `1`    |
 | `splitter.appPort`            | Application port.                                                                                    | `8080` |
 | `splitter.ctxBaseUrl`         | URL of ctx host. Format: `http(s)://HOST:PORT/ctx/2.0`.                                              | `""`   |
+| `splitter.ctxV3BaseUrl`       | URL of ctx v3 host. Format: `http(s)://HOST:PORT/ctx/3.0`.                                           | `""`   |
 | `splitter.ctxUrl`             | Full URL of get_dist_matrix_ctx host. Format: `http(s)://HOST:PORT/ctx/2.0/?source=distance_matrix`. | `""`   |
+| `splitter.findPlatformUrl`    | Full URL of find_platform host. Format: `http(s)://HOST:PORT/find_platforms`.                        | `""`   |
 | `splitter.ctxTimeout`         | get_dist_matrix_ctx request timeout.                                                                 | `60s`  |
 | `splitter.subrequestRetryN`   | Number of retries to host.                                                                           | `5`    |
 | `splitter.writeTimeout`       | Write timeout.                                                                                       | `10s`  |
@@ -179,7 +182,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                              | Description                                                                                                                                                                                    | Value                            |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | `envoy.image.repository`          | Repository                                                                                                                                                                                     | `2gis-on-premise/navi-envoy`     |
-| `envoy.image.tag`                 | Tag                                                                                                                                                                                            | `1.27.0`                         |
+| `envoy.image.tag`                 | Tag                                                                                                                                                                                            | `1.36.2-tools`                   |
 | `envoy.image.pullPolicy`          | Pull Policy                                                                                                                                                                                    | `IfNotPresent`                   |
 | `envoy.resources.requests.cpu`    | CPU request, recommended value `100m`                                                                                                                                                          | `undefined`                      |
 | `envoy.resources.requests.memory` | Memory request, recommended value `100Mi`                                                                                                                                                      | `undefined`                      |
@@ -195,6 +198,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `envoy.retry.retryOn`             | Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)                                                      | `internal,unavailable,5xx,reset` |
 | `envoy.retry.numRetries`          | Failed request [retries](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-max-retries)                             | `1`                              |
 | `envoy.retry.perTryTimeout`       | Specifies timeout on each [retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-upstream-rq-per-try-timeout-ms) | `2s`                             |
+| `envoy.configFilepath`            | Configs mountpoint path                                                                                                                                                                        | `/src/etc/envoy`                 |
 
 ### Fixed data group attributes
 

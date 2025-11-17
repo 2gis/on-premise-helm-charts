@@ -77,7 +77,7 @@ customReadinessProbe: {}
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  tag: 1.18.0
+  tag: 1.19.1
 
 
 # @section Service account settings
@@ -237,7 +237,7 @@ dm:
     replicaCount: 1
     image:
       repository: 2gis-on-premise/navi-merger-async-matrix
-      tag: 1.18.0
+      tag: 1.19.1
     resources: {}
   labels: {}
   annotations: {}
@@ -448,7 +448,8 @@ kafka:
 # @param s3.region S3 region.
 # @param s3.accessKey S3 access key for accessing the bucket. **Required**
 # @param s3.secretKey S3 secret key for accessing the bucket. **Required**
-# @param s3.publicNetloc Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://`
+# @param s3.publicUrl Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://`
+# @extra s3.publicNetloc DEPRECATED alias for `s3.publicUrl`
 # @param s3.expirationDays How many days to store results
 
 s3:
@@ -457,7 +458,7 @@ s3:
   region: ''
   accessKey: ''
   secretKey: ''
-  publicNetloc:
+  publicUrl: ''
   expirationDays: 14
 
 # @skip bss.enabled
