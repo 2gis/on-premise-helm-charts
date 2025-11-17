@@ -132,9 +132,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_FEATURE_FLAGS_EXTERNAL_OIDC
   value: {{ .Values.api.oidc.enableExternalProvider | quote }}
 - name: KEYS_FEATURE_FLAGS_OIDC
-  value: {{ .Values.api.oidc.enable | quote }}
+  value: {{ .Values.api.oidc.enabled | quote }}
 - name: KEYS_FEATURE_FLAGS_REDIS
-  value: {{ .Values.redis.enable | quote }}
+  value: {{ .Values.redis.enabled | quote }}
 - name: KEYS_FEATURE_FLAGS_STAT_REDIS
   value: {{ .Values.featureFlags.enableStatRedis | quote }}
 {{- end }}
@@ -149,7 +149,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       name: {{ include "keys.secret.deploys.name" . }}
       key: signPrivateKey
 {{- end }}
-{{- if .Values.api.oidc.enable }}
+{{- if .Values.api.oidc.enabled }}
 - name: KEYS_OIDC_ENDPOINT
   value: {{ required "A valid .Values.api.oidc.url required" .Values.api.oidc.url | quote }}
 - name: KEYS_OIDC_CLIENT_TIMEOUT

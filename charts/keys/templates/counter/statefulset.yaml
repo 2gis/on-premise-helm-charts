@@ -1,6 +1,6 @@
 {{- if .Values.counter.enabled }}
-{{- if not .Values.redis.enable }}
-  {{- fail "Counter requires redis.enable to be enabled" }}
+{{- if not .Values.redis.enabled }}
+  {{- fail "Counter requires redis.enabled to be true" }}
 {{- end }}
 apiVersion: apps/v1
 kind: StatefulSet

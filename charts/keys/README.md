@@ -88,7 +88,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.adminSessionTTL`                       | TTL of the admin users sessions. Duration string is a sequence of decimal numbers with optional fraction and unit suffix, like `100ms`, `2.3h` or `4h35m`. Valid time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`. | `336h`          |
 | `api.logLevel`                              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                                  | `warning`       |
 | `api.signPrivateKey`                        | RSA-PSS 2048 private key (in PKCS#1 format) for signing responses in Public API.                                                                                                                                           | `""`            |
-| `api.oidc.enable`                           | If OIDC authentication is enabled.                                                                                                                                                                                         | `false`         |
+| `api.oidc.enabled`                          | If OIDC authentication is enabled.                                                                                                                                                                                         | `false`         |
 | `api.oidc.enableSinglePartnerMode`          | Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).                                                                                                | `false`         |
 | `api.oidc.enableExternalProvider`           | Enable external oidc provider: do not have access to manage users.                                                                                                                                                         | `false`         |
 | `api.oidc.url`                              | URL of the OIDC provider.                                                                                                                                                                                                  | `""`            |
@@ -242,7 +242,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 | Name             | Description                                                    | Value   |
 | ---------------- | -------------------------------------------------------------- | ------- |
-| `redis.enable`   | Enable redis for keys.                                         | `false` |
+| `redis.enabled`  | Enable redis for keys.                                         | `false` |
 | `redis.host`     | Redis hostname or IP.                                          | `""`    |
 | `redis.port`     | Redis port.                                                    | `6379`  |
 | `redis.db`       | Redis database number.                                         | `1`     |
