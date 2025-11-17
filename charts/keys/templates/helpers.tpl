@@ -136,6 +136,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_FEATURE_FLAGS_REDIS
   value: {{ .Values.redis.enabled | quote }}
 - name: KEYS_FEATURE_FLAGS_STAT_REDIS
+  {{- if (and .Values.featureFlags.enableStatRedis (not .Values.redis.enabled)) }}
+    {{- fail "featureFlags.enableStatRedis requires redis.enabled to be true" }}
+  {{- end }}
   value: {{ .Values.featureFlags.enableStatRedis | quote }}
 {{- end }}
 
