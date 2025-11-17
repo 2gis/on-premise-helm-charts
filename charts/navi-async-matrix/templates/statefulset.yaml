@@ -191,16 +191,17 @@ spec:
               value: {{ .Values.dm.logLevel | quote }}
             - name: DM_ASYNC_SERVICE_LOGGER_SETTING__FORMAT
               value: {{ .Values.dm.logFormat | quote }}
-            {{- if .Values.s3.publicNetloc }}
+            {{- $s3publicUrl := .Values.s3.publicUrl | default .Values.s3.publicNetloc | default "" }}
+            {{- if $s3publicUrl }}
             # DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC for < 1.11.0
             # DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC_URL for >= 1.11.0
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC
-              value: {{ regexReplaceAllLiteral "^https?://" .Values.s3.publicNetloc "" | quote }}
-              {{- if not (regexMatch "^https?://" .Values.s3.publicNetloc) }}
-                {{- fail "s3.publicNetLoc must start with the scheme: `<scheme>://<netloc>[/]`" }}
+              value: {{ regexReplaceAllLiteral "^https?://" $s3publicUrl "" | quote }}
+              {{- if not (regexMatch "^https?://" $s3publicUrl) }}
+                {{- fail "s3.publicUrl must start with the scheme: `<scheme>://<netloc>[/]`" }}
               {{- end }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC_URL
-              value: {{ .Values.s3.publicNetloc | quote }}
+              value: {{ $s3publicUrl | quote }}
             {{- end }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CANCEL_TOPIC
               value: {{ required "A valid kafka.cancelTopic entry required" .Values.kafka.cancelTopic | quote }}
