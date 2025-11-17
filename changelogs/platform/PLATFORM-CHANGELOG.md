@@ -1,3 +1,26 @@
+## [2.46.0] (2025-11-17)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2460)
+#### Images
+```
+navi-async-matrix
+	- navi-async-matrix:1.18.0
+	+ navi-async-matrix:1.19.1
+	- navi-merger-async-matrix:1.18.0
+	+ navi-merger-async-matrix:1.19.1
+navi-attractor
+	- navi-attractor:7.46.0.2
+	+ navi-attractor:7.47.1.3
+navi-back
+	- navi-back:7.46.0.2
+	+ navi-back:7.47.1.3
+	- navi-envoy:1.27.0
+	+ navi-envoy:1.36.2-tools
+navi-splitter
+	- navi-envoy:1.27.0
+	+ navi-envoy:1.36.2-tools
+```
+[Full list of image versions](platform_image_versions.txt)
+
 ## [2.45.0] (2025-10-30)
 
 #### Images
