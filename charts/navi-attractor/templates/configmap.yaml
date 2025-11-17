@@ -215,7 +215,7 @@ data:
         "road_locks": {
           {{- $kafkaProperties := dict -}}
           {{- range $key, $_ := .Values.roadLocks.kafka.fileProperties -}}
-          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret-roadLocks/%s" $key) -}}
+          {{- $_ := set $kafkaProperties $key (printf "%s/secret-roadLocks/%s" .Values.attractor.configFilepath $key) -}}
           {{- end -}}
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.roadLocks.kafka.properties }}
           "kafka_properties":
@@ -271,7 +271,7 @@ data:
                  */ -}}
             {{- $kafkaProperties := dict -}}
             {{- range $key, $_ := .Values.kafka.fileProperties -}}
-            {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
+            {{- $_ := set $kafkaProperties $key (printf "%s/secret/%s" .Values.attractor.configFilepath $key) -}}
             {{- end -}}
             {{- $kafkaProperties := mustMerge $kafkaProperties .Values.kafka.properties }}
             "kafka_properties": {{ mustToPrettyJson $kafkaProperties | nindent 12 }},
