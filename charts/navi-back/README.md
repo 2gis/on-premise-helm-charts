@@ -79,7 +79,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.46.0.2`                  |
+| `image.tag`        | Tag         | `7.47.1.3`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings

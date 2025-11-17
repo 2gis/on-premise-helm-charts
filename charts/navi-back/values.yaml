@@ -114,7 +114,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.46.0.2
+  tag: 7.47.1.3
 
 
 # @section Navi-Back application settings
