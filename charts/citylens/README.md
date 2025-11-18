@@ -532,12 +532,16 @@ See the [documentation]() to learn about:
 
 ### Citylens routes services settings
 
+| Name                                   | Description                                                                                                                                      | Value  |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| `routes.imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                   | `[]`   |
+| `routes.terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds | `60`   |
+| `routes.migration.enabled`             | If migrations needed.                                                                                                                            | `true` |
+
+### Deployment Strategy settings
+
 | Name                                           | Description                                                                                                                                                                                              | Value           |
 | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `routes.imagePullSecrets`                      | Kubernetes image pull secrets.                                                                                                                                                                           | `[]`            |
-| `routes.terminationGracePeriodSeconds`         | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds                                                         | `60`            |
-| `routes.migration.enabled`                     | If migrations needed.                                                                                                                                                                                    | `true`          |
-| `routes`                                       | **Strategy**                                                                                                                                                                                             |                 |
 | `routes.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
 | `routes.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `routes.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
@@ -576,7 +580,7 @@ See the [documentation]() to learn about:
 | Name                          | Description  | Value                                 |
 | ----------------------------- | ------------ | ------------------------------------- |
 | `routes.api.image.repository` | Repository.  | `2gis-on-premise/citylens-routes-api` |
-| `routes.api.image.tag`        | Tag.         | `1.4.2`                               |
+| `routes.api.image.tag`        | Tag.         | `1.6.3`                               |
 | `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        |
 
 ### Resources settings
@@ -594,10 +598,10 @@ See the [documentation]() to learn about:
 
 | Name                             | Description                                                                                                                    | Value       |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `routes.api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
-| `routes.api.service.port`        | Service port.                                                                                                                  | `80`        |
 | `routes.api.service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).              | `{}`        |
 | `routes.api.service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
+| `routes.api.service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
+| `routes.api.service.port`        | Service port.                                                                                                                  | `80`        |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -644,20 +648,30 @@ See the [documentation]() to learn about:
 
 ### Metadata settings
 
-| Name                                     | Description                                                                                                                 | Value         |
-| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `routes.api.annotations`                 | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.api.labels`                      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.api.podAnnotations`              | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.api.podLabels`                   | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.api.nodeSelector`                | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
-| `routes.api.tolerations`                 | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
-| `routes.api.affinity`                    | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
-| `routes.api.tempPath`                    | Path to directory used for temp data                                                                                        | `/tmp`        |
-| `routes.api.logging`                     | Routes **Logging** settings                                                                                                 |               |
-| `routes.api.logging.level`               | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
-| `routes.api.logging.extendedRestLogging` | Extended log message. Include http metadata requests.                                                                       | `false`       |
-| `routes.api.logging.extendedSqlLogging`  | Extended sql logs. Include sql requests row.                                                                                | `false`       |
+| Name                        | Description                                                                                                                 | Value  |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `routes.api.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
+| `routes.api.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
+| `routes.api.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
+| `routes.api.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
+| `routes.api.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`   |
+| `routes.api.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`   |
+| `routes.api.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`   |
+| `routes.api.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp` |
+
+### Logging settings
+
+| Name                                     | Description                                                            | Value         |
+| ---------------------------------------- | ---------------------------------------------------------------------- | ------------- |
+| `routes.api.logging.level`               | Log message level. verbose, debug, information, warning, error, fatal. | `information` |
+| `routes.api.logging.extendedRestLogging` | Extended log message. Include http metadata requests.                  | `false`       |
+| `routes.api.logging.extendedSqlLogging`  | Extended sql logs. Include sql requests row.                           | `false`       |
+
+### OpenAPI settings
+
+| Name                 | Description           | Value   |
+| -------------------- | --------------------- | ------- |
+| `routes.api.openApi` | Show or hide swagger. | `false` |
 
 ### Citylens routes Worker
 
@@ -667,7 +681,7 @@ See the [documentation]() to learn about:
 | Name                             | Description  | Value                                     |
 | -------------------------------- | ------------ | ----------------------------------------- |
 | `routes.worker.image.repository` | Repository.  | `2gis-on-premise/citylens-worker-service` |
-| `routes.worker.image.tag`        | Tag.         | `1.4.2`                                   |
+| `routes.worker.image.tag`        | Tag.         | `1.6.3`                                   |
 | `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            |
 
 ### Resources settings
@@ -691,21 +705,25 @@ See the [documentation]() to learn about:
 
 ### Metadata settings
 
-| Name                                                          | Description                                                                                                                 | Value         |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `routes.worker.annotations`                                   | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.worker.labels`                                        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.worker.podAnnotations`                                | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.worker.podLabels`                                     | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.worker.nodeSelector`                                  | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
-| `routes.worker.tolerations`                                   | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
-| `routes.worker.affinity`                                      | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
-| `routes.worker.tempPath`                                      | Path to directory used for temp data                                                                                        | `/tmp`        |
-| `routes.worker.logging`                                       | Routes **Logging** settings                                                                                                 |               |
-| `routes.worker.logging.level`                                 | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
-| `routes.worker.logging.extendedSqlLogging`                    | Extended sql logs. Include sql requests row.                                                                                | `false`       |
-| `routes.worker.routesSettings`                                | Routes distance match settings                                                                                              |               |
-| `routes.worker.routesSettings.routePointsMatchDistanceMeters` | Calculation accuracy in meters.                                                                                             | `5`           |
+| Name                           | Description                                                                                                                 | Value  |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `routes.worker.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
+| `routes.worker.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
+| `routes.worker.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
+| `routes.worker.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
+| `routes.worker.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`   |
+| `routes.worker.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`   |
+| `routes.worker.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`   |
+| `routes.worker.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp` |
+
+### Logging settings
+
+| Name                                                          | Description                                                            | Value         |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------- |
+| `routes.worker.logging.level`                                 | Log message level. verbose, debug, information, warning, error, fatal. | `information` |
+| `routes.worker.logging.extendedSqlLogging`                    | Extended sql logs. Include sql requests row.                           | `false`       |
+| `routes.worker.routesSettings`                                | Routes distance match settings                                         |               |
+| `routes.worker.routesSettings.routePointsMatchDistanceMeters` | Calculation accuracy in meters.                                        | `5`           |
 
 ### Kafka Bus configuration settings. Based on Kafka values
 
@@ -729,7 +747,7 @@ See the [documentation]() to learn about:
 | Name                                      | Description  | Value                                        |
 | ----------------------------------------- | ------------ | -------------------------------------------- |
 | `routes.realtimeDataApi.image.repository` | Repository.  | `2gis-on-premise/citylens-realtime-data-api` |
-| `routes.realtimeDataApi.image.tag`        | Tag.         | `1.4.2`                                      |
+| `routes.realtimeDataApi.image.tag`        | Tag.         | `1.6.3`                                      |
 | `routes.realtimeDataApi.image.pullPolicy` | Pull Policy. | `IfNotPresent`                               |
 
 ### Resources settings
@@ -785,33 +803,69 @@ See the [documentation]() to learn about:
 
 ### Metadata settings
 
-| Name                                                 | Description                                                                                                                 | Value         |
-| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `routes.realtimeDataApi.annotations`                 | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.realtimeDataApi.labels`                      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.realtimeDataApi.podAnnotations`              | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`          |
-| `routes.realtimeDataApi.podLabels`                   | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`          |
-| `routes.realtimeDataApi.nodeSelector`                | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`          |
-| `routes.realtimeDataApi.tolerations`                 | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`          |
-| `routes.realtimeDataApi.affinity`                    | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`          |
-| `routes.realtimeDataApi.tempPath`                    | Path to directory used for temp data                                                                                        | `/tmp`        |
-| `routes.realtimeDataApi.logging`                     | Routes **Logging** settings                                                                                                 |               |
-| `routes.realtimeDataApi.logging.level`               | Log message level. verbose, debug, information, warning, error, fatal.                                                      | `information` |
-| `routes.realtimeDataApi.logging.extendedRestLogging` | Extended log message. Include http metadata requests.                                                                       | `false`       |
-| `routes.realtimeDataApi.logging.extendedSqlLogging`  | Extended sql logs. Include sql requests row.                                                                                | `false`       |
-| `routes.realtimeDataApi.daysToLeaveData`             | Storage of information in days.                                                                                             | `30`          |
+| Name                                    | Description                                                                                                                 | Value  |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `routes.realtimeDataApi.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
+| `routes.realtimeDataApi.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
+| `routes.realtimeDataApi.podAnnotations` | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
+| `routes.realtimeDataApi.podLabels`      | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
+| `routes.realtimeDataApi.nodeSelector`   | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).     | `{}`   |
+| `routes.realtimeDataApi.tolerations`    | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.       | `[]`   |
+| `routes.realtimeDataApi.affinity`       | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings. | `{}`   |
+| `routes.realtimeDataApi.tempPath`       | Path to directory used for temp data                                                                                        | `/tmp` |
 
-### routes.features Feature settings.
+### Realtime Data **Logging** settings
 
-| Name                                              | Description                                         | Value                               |
-| ------------------------------------------------- | --------------------------------------------------- | ----------------------------------- |
-| `routes.features.authorizationEnabled`            | Enable authorization. (If false used default user). | `true`                              |
-| `routes.features.tasksAssetEnabled`               | Enable sending data to PRO for tasks.               | `false`                             |
-| `routes.tasksAssetSettings.systemAccessToken`     | Route task asset token.                             | `""`                                |
-| `routes.tasksAssetSettings.plannedTasksAssetId`   | Identity to planned route task asset.               | `user_dyn_citylens_planned_tasks`   |
-| `routes.tasksAssetSettings.completedTasksAssetId` | Identity to completed route task asset.             | `user_dyn_citylens_completed_tasks` |
+| Name                                                 | Description                                                            | Value         |
+| ---------------------------------------------------- | ---------------------------------------------------------------------- | ------------- |
+| `routes.realtimeDataApi.logging`                     | Routes **Logging** settings                                            |               |
+| `routes.realtimeDataApi.logging.level`               | Log message level. verbose, debug, information, warning, error, fatal. | `information` |
+| `routes.realtimeDataApi.logging.extendedRestLogging` | Extended log message. Include http metadata requests.                  | `false`       |
+| `routes.realtimeDataApi.logging.extendedSqlLogging`  | Extended sql logs. Include sql requests row.                           | `false`       |
 
-### Citylens routes Clients
+### OpenAPI settings
+
+| Name                             | Description           | Value   |
+| -------------------------------- | --------------------- | ------- |
+| `routes.realtimeDataApi.openApi` | Show or hide swagger. | `false` |
+
+### Data store settings
+
+| Name                                     | Description                     | Value |
+| ---------------------------------------- | ------------------------------- | ----- |
+| `routes.realtimeDataApi.daysToLeaveData` | Storage of information in days. | `30`  |
+
+### Citylens routes feature switcher settings.
+
+| Name                                   | Description                                                  | Value   |
+| -------------------------------------- | ------------------------------------------------------------ | ------- |
+| `routes.features.authorizationEnabled` | Enable authorization. (If disabled, a default user is used). | `true`  |
+| `routes.features.tasksAssetEnabled`    | Enable sending data to PRO for tasks.                        | `false` |
+| `routes.features.multiTenantEnabled`   | Enable separating data by companies.                         | `false` |
+
+### Citylens routes PRO assets configs.
+
+| Name                                              | Description                             | Value                               |
+| ------------------------------------------------- | --------------------------------------- | ----------------------------------- |
+| `routes.tasksAssetSettings.systemAccessToken`     | Route task asset token.                 | `""`                                |
+| `routes.tasksAssetSettings.plannedTasksAssetId`   | Identity to planned route task asset.   | `user_dyn_citylens_planned_tasks`   |
+| `routes.tasksAssetSettings.completedTasksAssetId` | Identity to completed route task asset. | `user_dyn_citylens_completed_tasks` |
+
+### Citylens routes admin configs. Credentials for Hangfire dashboard UI.
+
+| Name                               | Description | Value |
+| ---------------------------------- | ----------- | ----- |
+| `routes.adminCredentials.username` | Username.   | `""`  |
+| `routes.adminCredentials.password` | Password.   | `""`  |
+
+### Citylens routes endpoints without user authorization. Use for internal usages. (Guid)
+
+| Name                                        | Description                           | Value |
+| ------------------------------------------- | ------------------------------------- | ----- |
+| `routes.endpointInternalApiKey.dataScience` | Data Science Controller. **Required** | `""`  |
+| `routes.endpointInternalApiKey.companies`   | Company Controller. **Required**      | `""`  |
+
+### Citylens routes external clients settings
 
 
 ### Navi integration
@@ -835,6 +889,6 @@ See the [documentation]() to learn about:
 
 ### RealtimeData integration
 
-| Name                      | Description                                                                                                                                    | Value |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `routes.realtimeData.url` | API RealtimeData endpoint url, ex: http://citylens-routes-realtime-data-api.svc (used for getting drivers locations in real time).**Required** | `""`  |
+| Name                      | Description                                                                                                                                     | Value |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `routes.realtimeData.url` | API RealtimeData endpoint url, ex: http://citylens-routes-realtime-data-api.svc (used for getting drivers locations in real time). **Required** | `""`  |
