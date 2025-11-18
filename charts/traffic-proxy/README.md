@@ -51,7 +51,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/traffic-proxy) to le
 | `proxy.host`               | URL for the proxy server to serve maps (jam.api.2gis.com), navigation (datagateway.api.2gis.com). **Required** | `jam.api.2gis.com` |
 | `proxy.listen`             | Port for the proxy server to listen.                                                                           | `8080`             |
 | `proxy.locationDG`         | Enable location for datagateway.api.2gis.com.                                                                  | `false`            |
-| `proxy.apiKey`             | Datagateway access key (DGCTL key)                                                                             | `""`               |
+| `proxy.licenseKey`         | Datagateway access key (DGCTL key)                                                                             | `""`               |
 | `proxy.cache.enabled`      | If caching should be enabled for the proxy server.                                                             | `true`             |
 | `proxy.cache.age`          | Cache validity period.                                                                                         | `1m`               |
 | `proxy.cache.size`         | Maximum cache size.                                                                                            | `32m`              |

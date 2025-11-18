@@ -39,7 +39,7 @@ podLabels: {}
 # @param proxy.host URL for the proxy server to serve maps (jam.api.2gis.com), navigation (datagateway.api.2gis.com). **Required**
 # @param proxy.listen Port for the proxy server to listen.
 # @param proxy.locationDG Enable location for datagateway.api.2gis.com.
-# @param proxy.apiKey Datagateway access key (DGCTL key)
+# @param proxy.licenseKey Datagateway access key (DGCTL key)
 # @skip proxy.protocol
 # @skip proxy.upstreams
 # @param proxy.cache.enabled If caching should be enabled for the proxy server.
@@ -56,7 +56,7 @@ proxy:
   host: jam.api.2gis.com
   listen: 8080
   locationDG: false
-  apiKey: ''
+  licenseKey: ''
   protocol: https  # don't document
   upstreams: []  # don't document
   cache:

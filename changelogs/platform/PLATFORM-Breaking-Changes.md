@@ -1,5 +1,11 @@
 # Platform Breaking-Changes
 
+## [2.47.0]
+
+### traffic-proxy
+
+- Renamed `proxy.apiKey` to `proxy.licenseKey`
+
 ## [2.46.0]
 
 ### navi-back
