@@ -509,7 +509,7 @@ data:
               */ -}}
           {{- $kafkaProperties := dict -}}
           {{- range $key, $_ := .Values.kafka.fileProperties -}}
-          {{- $_ := set $kafkaProperties $key (printf "%s/secret/%s" .Values.naviback.configFilepath $key) -}}
+          {{- $_ := set $kafkaProperties $key (printf "%s/secret/%s" $.Values.naviback.configFilepath $key) -}}
           {{- end -}}
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.kafka.properties }}
           "kafka_properties":
@@ -529,7 +529,7 @@ data:
         "sharing": {
           {{- $kafkaProperties := dict -}}
           {{- range $key, $_ := .Values.routesharing.kafka.fileProperties -}}
-          {{- $_ := set $kafkaProperties $key (printf "%s/secret-routesharing/%s" .Values.naviback.configFilepath $key) -}}
+          {{- $_ := set $kafkaProperties $key (printf "%s/secret-routesharing/%s" $.Values.naviback.configFilepath $key) -}}
           {{- end -}}
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.routesharing.kafka.properties }}
           "kafka_properties":
@@ -620,7 +620,7 @@ data:
         "traffic_lights_kafka": {
           {{- $kafkaProperties := dict -}}
           {{- range $key, $_ := .Values.trafficLights.kafka.fileProperties -}}
-          {{- $_ := set $kafkaProperties $key (printf "%s/secret-trafficLights/%s" .Values.naviback.configFilepath $key) -}}
+          {{- $_ := set $kafkaProperties $key (printf "%s/secret-trafficLights/%s" $.Values.naviback.configFilepath $key) -}}
           {{- end -}}
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.trafficLights.kafka.properties }}
           "kafka_properties":
@@ -644,7 +644,7 @@ data:
         "road_locks": {
           {{- $kafkaProperties := dict -}}
           {{- range $key, $_ := .Values.roadLocks.kafka.fileProperties -}}
-          {{- $_ := set $kafkaProperties $key (printf "%s/secret-roadLocks/%s" .Values.naviback.configFilepath $key) -}}
+          {{- $_ := set $kafkaProperties $key (printf "%s/secret-roadLocks/%s" $.Values.naviback.configFilepath $key) -}}
           {{- end -}}
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.roadLocks.kafka.properties }}
           "kafka_properties":
