@@ -18,7 +18,7 @@ worker:
     runAsGroup: 100000000
     fsGroup: 100000000
   image:
-    repository: docker-hub.2gis.ru/on-premise/bs-worker
+    repository: docker-hub.2gis.ru/on-premise/search-worker
 #    tag: vx-dev_43296
 #  livenessProbe: {}
 #  readinessProbe: {}
@@ -32,10 +32,10 @@ worker:
     persistent:
       enabled: false
 head:
-  # podSecurityContext:
-  #   runAsUser: 100000000
-  #   runAsGroup: 100000000
-  #   fsGroup: 100000000
+  podSecurityContext:
+    runAsUser: 100000000
+    runAsGroup: 100000000
+    fsGroup: 100000000
   # queryTransformer:
   #   enabled: false
   #   endpoint: "grpc://query-transformer-grpc-service.nlp.svc.cluster.local"
@@ -43,7 +43,7 @@ head:
   #   ssl: false
   head:
     image:
-      repository: docker-hub.2gis.ru/on-premise/bs-head
+      repository: docker-hub.2gis.ru/on-premise/search-head
 #      tag: vx-dev_43296
     startupProbe:
       enabled: true
@@ -62,7 +62,7 @@ head:
     adsEnable: false
   nginx:
     image:
-      repository: docker-hub.2gis.ru/on-premise/bs-nginx
+      repository: docker-hub.2gis.ru/on-premise/search-nginx
 #      repository: docker-hub.2gis.ru/usrch/nginx
 #      tag: 1.25.11
   data:
@@ -79,12 +79,12 @@ service:
 ingressRouter:
   # enabled: false
   image:
-    repository: docker-hub.2gis.ru/on-premise/bs-ingress-router
+    repository: docker-hub.2gis.ru/on-premise/search-ingress-router
 #    tag: vx-dev_43296
-  # podSecurityContext:
-  #   runAsUser: 100000000
-  #   runAsGroup: 100000000
-  #   fsGroup: 100000000
+  podSecurityContext:
+    runAsUser: 100000000
+    runAsGroup: 100000000
+    fsGroup: 100000000
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -101,34 +101,43 @@ ingressRouter:
     enabled: false
   rateLimitComponent:
     enabled: false
-  ab:
-    sapphire_base:
-      port: "8080"
-      exact_match: "0"
-    contour1:
-      address: 'big-search-stg-green-ingress-router'
-    contour2:
-      address: 'big-search-stg-blue-ingress-router'
-    contour3:
-      address: 'big-search-stg-yellow-ingress-router'
+  # ab:
+  #   sapphire_base:
+  #     port: "8080"
+  #     exact_match: "0"
+  #   contour1:
+  #     address: 'big-search-stg-green-ingress-router'
+  #   contour2:
+  #     address: 'big-search-stg-blue-ingress-router'
+  #   contour3:
+  #     address: 'big-search-stg-yellow-ingress-router'
 # вот этого блока быть не должно, так как rateLimitComponent is NOT enabled
 # но пока не умеем работать с пустыми параметрами
   prometheusUrl: "https://prometheus.2gis.io/prometheus/api/v1/query_range"
   rateLimitRules:
-  - name: 'cpu_usage'
-    query: 'sum(increase(sapphire_cpu_usage_total{cluster="production-k8s", kubernetes_namespace="search", app=~"search-api-(blue|green)", search_part="head"}[15m])) by (api_key)'
-    limit: 200000000
-    ttl_sec: 60
-    update_frequency_sec: 10
-    headers:
-      api_key: 'X-DG-Api-Key'
+    - name: 'cpu_usage'
+      query: 'sum(increase(sapphire_cpu_usage_total{cluster="production-k8s", kubernetes_namespace="search", app=~"big-search-(blue|green)", search_part="head"}[15m])) by (api_key)'
+      description: >
+        Правило для ограничения потребления ресурсов.
+        В данном случае оно контролирует использование процессорного времени каждым API-ключом.
+        Лимиты указываются в миллисекундах, что позволяет точно задавать допустимую нагрузку.
+      ttl_sec: 60
+      update_frequency_sec: 10
+      headers:
+        api_key: 'X-DG-Api-Key'
+      limits:
+        default: 50000000
+        overrides:
+          - limit: 300000000
+            description: "Ключи 2gis"
+            keys: []
 # конец "ненужного блока"
 
 geodetector:
   image:
-    repository: docker-hub.2gis.ru/on-premise/bs-geodetector
+    repository: docker-hub.2gis.ru/on-premise/search-geodetector
 #    tag: vx-dev_43296
-  enabled: false
+  enabled: true
   data:
     storageClassName: "topolvm-ext4"
     persistent:
@@ -146,11 +155,11 @@ geodetector:
 
 syncer:
   image:
-    repository: docker-hub.2gis.ru/on-premise/bs-syncer_new
+    repository: docker-hub.2gis.ru/on-premise/search-syncer_new
 #    tag: vx-dev_43296
 indexer:
   image:
-    repository: docker-hub.2gis.ru/on-premise/bs-indexer
+    repository: docker-hub.2gis.ru/on-premise/search-indexer
 #    tag: vx-dev_43296
   hpa:
     enabled: true
@@ -163,9 +172,9 @@ queryTransformerMock:
   enabled: false
 
 magg:
-  enabled: true
+#  enabled: true
   image:
-    repository: docker-hub.2gis.ru/on-premise/bs-metrics-aggregator
+    repository: docker-hub.2gis.ru/on-premise/search-metrics-aggregator
 
 controller:
   podSecurityContext:
@@ -173,7 +182,7 @@ controller:
     runAsGroup: 100000000
     fsGroup: 100000000
   image:
-    repository: docker-hub.2gis.ru/on-premise/bs-controller
+    repository: docker-hub.2gis.ru/on-premise/search-controller
 #    tag: vx-dev_43296
 #  projectListUrl: "https://s3.2gis.one/usrch/test-projects-list.json"
   projectListUrl: "http://catalog.k8s.n3.2gis.io/2.0/region/list?key=1c35663a-4e3e-4c83-a1d4-ecbc187043dc&type=region,segment,universe&fields=items.last_imported_data_source,items.country_code,items.allow_for_indexing,items.allow_for_delete"
@@ -203,7 +212,7 @@ filesStorage:
     runAsGroup: 100000000
     fsGroup: 100000000
   image:
-    repository: docker-hub.2gis.ru/on-premise/bs-files_storage
+    repository: docker-hub.2gis.ru/on-premise/search-files_storage
 #    tag: vx-dev_43296
 #   livenessProbe:
 #     enabled: false

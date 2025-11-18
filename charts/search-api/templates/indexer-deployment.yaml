@@ -58,6 +58,21 @@ spec:
                 configMapKeyRef:
                   name: {{ include "search-api.fullname" . }}
                   key: GINMODE
+            - name: s3AccessKey
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "search-api.fullname" . }}
+                  key: s3AccessKey
+            - name: s3SecretKey
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "search-api.fullname" . }}
+                  key: s3SecretKey
+            - name: s3Host
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "search-api.fullname" . }}
+                  key: s3Host
             {{- if .Values.customCAs.bundle }}
             {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}

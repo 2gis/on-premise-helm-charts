@@ -213,7 +213,7 @@ spec:
           resources:
             {{- toYaml .Values.syncer.resources | nindent 12 }}
           env:
-            - name: GINMODE
+            - name: GIN_MODE
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "search-api.fullname" . }}

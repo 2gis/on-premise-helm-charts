@@ -106,9 +106,9 @@ worker:
   podSecurityContext: {}
   imagePullSecrets: []
   image:
-    repository: 2gis-on-premise/bs-worker
+    repository: 2gis-on-premise/search-worker
     pullPolicy: IfNotPresent
-    tag: 8.14.6
+    tag: 8.16.0
   ports:
     http: 8092
     grpc: 8091
@@ -289,9 +289,9 @@ head:
 
   head:
     image:
-      repository: 2gis-on-premise/bs-head
+      repository: 2gis-on-premise/search-head
       pullPolicy: IfNotPresent
-      tag: 8.14.6
+      tag: 8.16.0
     ports:
       http: 9090
       monitor: 9091
@@ -377,7 +377,7 @@ head:
 
   nginx:
     image:
-      repository: 2gis-on-premise/bs-nginx
+      repository: 2gis-on-premise/search-nginx
       pullPolicy: IfNotPresent
       tag: 1.25.11
     ports:
@@ -637,9 +637,9 @@ filesStorage:
   ports:
     http: 8080
   image:
-    repository: 2gis-on-premise/bs-files_storage
+    repository: 2gis-on-premise/search-files_storage
     pullPolicy: IfNotPresent
-    tag: 8.14.6
+    tag: 8.16.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -743,9 +743,9 @@ controller:
   ports:
     http: 8080
   image:
-    repository: 2gis-on-premise/bs-controller
+    repository: 2gis-on-premise/search-controller
     pullPolicy: IfNotPresent
-    tag: 8.14.6
+    tag: 8.16.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -866,9 +866,9 @@ indexer:
     http: 8080
   loglevel: "info"
   image:
-    repository: 2gis-on-premise/bs-indexer
+    repository: 2gis-on-premise/search-indexer
     pullPolicy: IfNotPresent
-    tag: 8.14.6
+    tag: 8.16.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -968,9 +968,9 @@ syncer:
     http: 8088
   loglevel: "info"
   image:
-    repository: 2gis-on-premise/bs-syncer_new
+    repository: 2gis-on-premise/search-syncer_new
     pullPolicy: IfNotPresent
-    tag: 8.14.6
+    tag: 8.16.0
   securityContext: {}
   resources:
     requests:
@@ -1204,7 +1204,7 @@ queryTransformerMock:
 # @param ingressRouter.vpa.updateMode VPA operating mode; `Off` means no automatic resource changes
 
 # @param ingressRouter.imagePullSecrets Kubernetes image pull secrets
-# @param ingressRouter.experimentComponent.enabled Enable or disable A/B experiments
+# @param ingressRouter.dispatcherComponent.enabled Enable or disable request dispatching
 # @param ingressRouter.rateLimitComponent.enabled Enable or disable rate limiting
 # @param ingressRouter.prestopHook.enabled Enable or disable container lifecycle [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)
 # @param ingressRouter.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
@@ -1236,26 +1236,26 @@ queryTransformerMock:
 # @param ingressRouter.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
 
 # @param ingressRouter.sapphireUrl Custom URL for the `head` service
-# @param ingressRouter.sapphire_request_timeoutMs Timeout (in ms) for requests to the `head` service
+# @param ingressRouter.sapphireRequestTimeoutMs Timeout (in ms) for requests to the `head` service
 # @param ingressRouter.prometheusUrl Prometheus URL for rate limiting
 # @param ingressRouter.rateLimitRules Big Search usage quotas
 
 # @param ingressRouter.ports.monitor TCP port for service endpoints such as `/metrics`
 # @param ingressRouter.ports.http TCP port for API requests
 
-# A/B experiments routing
-# @param ingressRouter.headers Header used for A/B experiment routing
-# @skip ingressRouter.ab.sapphire_base.port Port of the AB Sapphire base service
-# @skip ingressRouter.ab.sapphire_base.exact_match Header value for AB Sapphire base
-# @skip ingressRouter.ab.contour1.port Port of AB experiment 1 head service
-# @skip ingressRouter.ab.contour1.address Address of AB experiment 1 head service
-# @skip ingressRouter.ab.contour1.exact_match Header value for AB experiment 1
-# @skip ingressRouter.ab.contour2.port Port of AB experiment 2 head service
-# @skip ingressRouter.ab.contour2.address Address of AB experiment 2 head service
-# @skip ingressRouter.ab.contour2.exact_match Header value for AB experiment 2
-# @skip ingressRouter.ab.contour3.port Port of AB experiment 3 head service
-# @skip ingressRouter.ab.contour3.address Address of AB experiment 3 head service
-# @skip ingressRouter.ab.contour3.exact_match Header value for AB experiment 3
+# Cluster routing
+# @param ingressRouter.headers Header used for request dispatching
+# @param ingressRouter.routing.sapphireBase.port Port of the AB Sapphire base service
+# @param ingressRouter.routing.sapphireBase.exactMatch Header value for AB Sapphire base
+# @param ingressRouter.routing.cluster1.port Port of cluster 1 head service
+# @param ingressRouter.routing.cluster1.address Address of cluster 1 head service
+# @param ingressRouter.routing.cluster1.exactMatch Header value for cluster 1
+# @param ingressRouter.routing.cluster2.port Port of cluster 2 head service
+# @param ingressRouter.routing.cluster2.address Address of cluster 2 head service
+# @param ingressRouter.routing.cluster2.exactMatch Header value for cluster 2
+# @param ingressRouter.routing.cluster3.port Port of cluster 3 head service
+# @param ingressRouter.routing.cluster3.address Address of cluster 3 head service
+# @param ingressRouter.routing.cluster3.exactMatch Header value for cluster 3
 
 ingressRouter:
   enabled: true
@@ -1353,14 +1353,14 @@ ingressRouter:
       maxUnavailable: 25%
       maxSurge: 25%
   image:
-    repository: 2gis-on-premise/bs-ingress-router
+    repository: 2gis-on-premise/search-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.14.6
+    tag: 8.16.0
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
   sapphireUrl: ''
-  sapphire_request_timeoutMs: 5000
+  sapphireRequestTimeoutMs: 5000
   prometheusUrl: ''
   rateLimitRules: []
   # - name: 'cpu_usage'
@@ -1373,27 +1373,27 @@ ingressRouter:
   ports:
     monitor: 9093
     http: 9092
-  experimentComponent:
+  dispatcherComponent:
     enabled: false
   rateLimitComponent:
     enabled: false
-  headers: X-Sapphire-Index
-  ab:
-    sapphire_base:
+  headers: X-Cluster-Index
+  routing:
+    sapphireBase:
       port: "8080"
-      exact_match: "0"
-    contour1:
+      exactMatch: "0"
+    cluster1:
       port: "9092"
-      address: ''
-      exact_match: "1"
-    contour2:
+      address: big-search-ab-cluster1-ingress-router
+      exactMatch: "1"
+    cluster2:
       port: "9092"
-      address: ''
-      exact_match: "2"
-    contour3:
+      address: big-search-ab-cluster2-ingress-router
+      exactMatch: "2"
+    cluster3:
       port: "9092"
-      address: ''
-      exact_match: "3"
+      address: big-search-ab-cluster3-ingress-router
+      exactMatch: "3"
 
 # @section geodetector
 
@@ -1530,9 +1530,9 @@ geodetector:
     successThreshold: 1
     failureThreshold: 200
   image:
-    repository: 2gis-on-premise/bs-geodetector
+    repository: 2gis-on-premise/search-geodetector
     pullPolicy: IfNotPresent
-    tag: 8.14.6
+    tag: 8.16.0
   imagePullSecrets: []
   geodetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60

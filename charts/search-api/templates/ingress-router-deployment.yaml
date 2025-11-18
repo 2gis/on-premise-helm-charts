@@ -65,8 +65,8 @@ spec:
               mountPath: /app/ingress_router_vars.yaml
               subPath: ingress_router_vars.yaml
             - name: ingresrouter-config
-              mountPath: /data/experiment_config.json
-              subPath:  experiment_config.json
+              mountPath: /data/dispatch_config.json
+              subPath:  dispatch_config.json
           {{- if .Values.customCAs.bundle }}
             {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}

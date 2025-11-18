@@ -458,6 +458,7 @@ data:
       {{- end }}{{- /* empty .Values.indexerServices.externalControllerUrl */}}
       {{- end }}{{- /* empty .Values.indexerServices.externalFilesStorageUrl */}}
         dst: /data/indexes
+        dst_data: /data/indexes_data
       rtw:
         enable: false
       {{- if not .Values.onpremise }}
@@ -511,6 +512,7 @@ data:
       {{- end }}{{- /* empty .Values.indexerServices.externalControllerUrl */}}
       {{- end }}{{- /* empty .Values.indexerServices.externalFilesStorageUrl */}}
         dst: /data/indexes
+        dst_data: /data/indexes_data
       rtw:
       {{- if not .Values.onpremise }}
         enable: true
@@ -566,9 +568,9 @@ data:
       interval: 1s
     s3_client:
       enable: true
-      endpoint: {{ .Values.dgctlStorage.host | quote }}
-      access_key_id: {{ .Values.dgctlStorage.accessKey | quote }}
-      secret_access_key: {{ .Values.dgctlStorage.secretKey | quote }}
+      endpoint: ${s3Host}
+      access_key_id: ${s3AccessKey}
+      secret_access_key: ${s3SecretKey}
       bucket: {{ .Values.dgctlStorage.bucket }}
       use_ssl: {{ .Values.dgctlStorage.secure }}
     {{ else }}
@@ -611,9 +613,9 @@ data:
     {{- if .Values.onpremise }}
     s3_client:
       enable: true
-      endpoint: {{ .Values.dgctlStorage.host | quote }}
-      access_key_id: {{ .Values.dgctlStorage.accessKey | quote }}
-      secret_access_key: {{ .Values.dgctlStorage.secretKey | quote }}
+      endpoint: ${s3Host}
+      access_key_id: ${s3AccessKey}
+      secret_access_key: ${s3SecretKey}
       bucket: {{ .Values.dgctlStorage.bucket }}
       use_ssl: {{ .Values.dgctlStorage.secure }}
     {{ else }}
@@ -650,35 +652,35 @@ data:
                     route_config:
                       name: local_route
                       virtual_hosts:
-                        - name: ab-services
+                        - name: routing-rules
                           domains: [ "*" ]
                           routes:
                           - match:
                               prefix: "/"
                               headers:
                                 - name: {{ .Values.ingressRouter.headers | quote }}
-                                  exact_match: {{ .Values.ingressRouter.ab.contour1.exact_match | quote }}
+                                  exact_match: {{ .Values.ingressRouter.routing.cluster1.exactMatch | quote }}
                             route:
-                              cluster: exp-1
+                              cluster: cluster-1
                           - match:
                               prefix: "/"
                               headers:
                                 - name: {{ .Values.ingressRouter.headers | quote }}
-                                  exact_match: {{ .Values.ingressRouter.ab.contour2.exact_match | quote }}
+                                  exact_match: {{ .Values.ingressRouter.routing.cluster2.exactMatch | quote }}
                             route:
-                              cluster: exp-2
+                              cluster: cluster-2
                           - match:
                               prefix: "/"
                               headers:
                                 - name: {{ .Values.ingressRouter.headers | quote }}
-                                  exact_match: {{ .Values.ingressRouter.ab.contour3.exact_match | quote }}
+                                  exact_match: {{ .Values.ingressRouter.routing.cluster3.exactMatch | quote }}
                             route:
-                              cluster: exp-3
+                              cluster: cluster-3
                           - match:
                               prefix: "/"
                               headers:
                                 - name: {{ .Values.ingressRouter.headers | quote }}
-                                  exact_match: {{ .Values.ingressRouter.ab.sapphire_base.exact_match | quote }}
+                                  exact_match: {{ .Values.ingressRouter.routing.sapphireBase.exactMatch | quote }}
                             route:
                               cluster: sapphire_base
                           - match:
@@ -704,53 +706,53 @@ data:
                   - endpoint:
                       address:
                         socket_address:
-                         port_value: {{ .Values.ingressRouter.ab.sapphire_base.port }}
+                         port_value: {{ .Values.ingressRouter.routing.sapphireBase.port }}
                          address: {{ include "search-api.fullname" . }}-head
-        - name: exp-1
+        - name: cluster-1
           connect_timeout: 1s
           type: STRICT_DNS
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: ROUND_ROBIN
           load_assignment:
-            cluster_name: exp-1
+            cluster_name: cluster-1
             endpoints:
               - lb_endpoints:
                   - endpoint:
                       address:
                         socket_address:
-                          port_value: {{ .Values.ingressRouter.ab.contour1.port }}
-                          address: {{ .Values.ingressRouter.ab.contour1.address }}
-        - name: exp-2
+                          port_value: {{ .Values.ingressRouter.routing.cluster1.port }}
+                          address: {{ .Values.ingressRouter.routing.cluster1.address }}
+        - name: cluster-2
           connect_timeout: 1s
           type: STRICT_DNS
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: ROUND_ROBIN
           load_assignment:
-            cluster_name: exp-2
+            cluster_name: cluster-2
             endpoints:
               - lb_endpoints:
                   - endpoint:
                       address:
                         socket_address:
-                          port_value: {{ .Values.ingressRouter.ab.contour2.port }}
-                          address: {{ .Values.ingressRouter.ab.contour2.address }}
-        - name: exp-3
+                          port_value: {{ .Values.ingressRouter.routing.cluster2.port }}
+                          address: {{ .Values.ingressRouter.routing.cluster2.address }}
+        - name: cluster-3
           connect_timeout: 1s
           type: STRICT_DNS
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: ROUND_ROBIN
           load_assignment:
-            cluster_name: exp-3
+            cluster_name: cluster-3
             endpoints:
               - lb_endpoints:
                   - endpoint:
                       address:
                         socket_address:
-                          port_value: {{ .Values.ingressRouter.ab.contour3.port }}
-                          address: {{ .Values.ingressRouter.ab.contour3.address }}
+                          port_value: {{ .Values.ingressRouter.routing.cluster3.port }}
+                          address: {{ .Values.ingressRouter.routing.cluster3.address }}
         - name: geodetectors
           connect_timeout: 1s
           type: STRICT_DNS
@@ -767,7 +769,6 @@ data:
                         socket_address:
                           port_value: {{ .Values.geodetector.ports.grpc }}
                           address: {{ include "search-api.fullname" . }}-geodetector
-
   ingress_router_vars.yaml: |
     server-port: {{ .Values.ingressRouter.ports.http }}
     monitor-port: {{ .Values.ingressRouter.ports.monitor }}
@@ -778,35 +779,26 @@ data:
     ingress-router-rate-limiting-threads: 1
     logger-level: {{ .Values.ingressRouter.loggerLevel }}
     logger-format: {{ .Values.ingressRouter.loggerFormat }}
-    experiment-enabled: {{ .Values.ingressRouter.experimentComponent.enabled }}
+    dispatcher-enabled: {{ .Values.ingressRouter.dispatcherComponent.enabled }}
     rate-limit-enabled: {{ .Values.ingressRouter.rateLimitComponent.enabled }}
     data-update-frequency-sec: 60
-    {{- if empty .Values.ingressRouter.sapphireUrl }}
+    {{- if empty .Values.ingressRouter.sapphire_url }}
     sapphire-address: "http://127.0.0.1:{{ .Values.ingressRouter.envoy.ports.grpc }}"
     {{ else }}
-    sapphire-address: {{ .Values.ingressRouter.sapphireUrl }}
+    sapphire-address: {{ .Values.ingressRouter.sapphire_url }}
     {{ end }}
-    sapphire-request-timeout-ms: {{ .Values.ingressRouter.sapphire_request_timeoutMs }}
+    sapphire-request-timeout-ms: {{ .Values.ingressRouter.sapphireRequestTimeoutMs }}
+    geodetector-enabled: {{ .Values.geodetector.enabled }}
     geodetector-service-url: '127.0.0.1:{{ .Values.ingressRouter.envoy.ports.grpc }}'
-    prometheus-url: {{ .Values.ingressRouter.prometheusUrl }}
+    prometheus-url: {{ .Values.ingressRouter.prometheus_url }}
     rate-limit-rules:
-      {{- toYaml .Values.ingressRouter.rateLimitRules | nindent 6 }}
+      {{- toYaml .Values.ingressRouter.rate_limit_rules | nindent 6 }}
     testsuite-enabled: false
 
-  experiment_config.json: |
+  dispatch_config.json: |
     {
-        "version": "0.1",
-        "enable": false,
-        "meta": {
-            "segments": {
-            },
-            "device_keys": {
-            }
-        },
-        "tests": [
-            {
-            }
-        ]
+      "version": "1.0",
+      "enable": false
     }
   {{- end }}
 
