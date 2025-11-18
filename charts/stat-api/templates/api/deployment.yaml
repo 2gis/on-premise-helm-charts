@@ -1,23 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "keys.api.name" . }}
+  name: {{ include "stat-api.componentname" (dict "global" $ "component" "api") }}
   {{- if or .Values.api.annotations .Values.customCAs.bundle }}
   annotations:
     {{- if .Values.customCAs.bundle }}
-    checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
+    checksum/config: {{ include (print $.Template.BasePath "/configmap-custom-ca.yaml") . | sha256sum }}
+    {{- end }}
+    {{- if .Values.clickhouse.tls.enabled }}
+    checksum/secret-tls: {{ include (print $.Template.BasePath "/secret-clickhouse-tls.yaml") . | sha256sum }}
     {{- end }}
     {{- with .Values.api.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- end }}
   labels:
-    {{- if (.Values.dgctlStorage).manifest }}
-    {{- with (include "keys.manifestCode" .) }}
-    manifest: {{ . | quote }}
-    {{- end }}
-    {{- end }}
-    {{- include "keys.api.labels" . | nindent 4 }}
+    {{- include "stat-api.labels" (dict "global" $ "component" "api") | nindent 4 }}
     {{- with .Values.api.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -30,7 +28,7 @@ spec:
     {{- toYaml .Values.api.strategy | nindent 4 }}
   selector:
     matchLabels:
-      {{- include "keys.api.selectorLabels" . | nindent 6 }}
+      {{- include "stat-api.selectorLabels" (dict "global" $ "component" "api") | nindent 6 }}
   template:
     metadata:
       {{- with .Values.api.podAnnotations }}
@@ -38,21 +36,25 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "keys.api.labels" . | nindent 8 }}
+        {{- include "stat-api.labels" (dict "global" $ "component" "api") | nindent 8 }}
         {{- with .Values.api.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      terminationGracePeriodSeconds: 60
-      {{- with include "keys.psql.initTLS" . }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "stat-api.serviceAccountName" . }}
+      {{- with include "stat-api.clickhouse.initTLS" . }}
       initContainers:
       {{- . | nindent 8 }}
       {{- end }}
       containers:
-        - name: keys-api
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+        - name: api
+          image: {{ include "stat-api.image" (dict "global" $ "component" "api") }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          command: [ "keys-api" ]
+          command: [ "api" ]
           ports:
             - name: http
               containerPort: 8080
@@ -60,32 +62,24 @@ spec:
             httpGet:
               path: /healthcheck
               port: http
-          lifecycle:
-            preStop:
-              exec:
-                command: [ "/bin/sh", "-c", "sleep 30s" ]
           resources:
             {{- toYaml .Values.api.resources | nindent 12 }}
           env:
-            {{- include "keys.env.featureFlags" . | nindent 12 }}
-            {{- include "keys.env.api" . | nindent 12 }}
-            {{- include "keys.env.db.deploys" . | nindent 12 }}
-            {{- include "keys.env.redis" . | nindent 12 }}
-            {{- include "keys.env.auth" . | nindent 12 }}
-            {{- include "keys.env.stat-api" . | nindent 12 }}
+            {{- include "stat-api.env.api" . | nindent 12 }}
+            {{- include "stat-api.env.clickhouse" . | nindent 12 }}
             {{- if .Values.customCAs.bundle }}
-            {{- include "keys.env.custom.ca.path" . | nindent 12 }}
+            {{- include "stat-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
           volumeMounts:
           {{- if .Values.customCAs.bundle }}
-          {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- include "stat-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
-          {{- include "keys.psql.volumeMount" . | nindent 12 }}
+          {{- include "stat-api.clickhouse.volumeMount" . | nindent 12 }}
       volumes:
       {{- if .Values.customCAs.bundle }}
-      {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
+      {{- include "stat-api.custom.ca.volumes" . | nindent 8 }}
       {{- end }}
-      {{- include "keys.psql.volume" . | nindent 8 }}
+      {{- include "stat-api.clickhouse.volume" . | nindent 8 }}
       {{- with .Values.api.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -96,9 +90,5 @@ spec:
       {{- end }}
       {{- with .Values.api.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
