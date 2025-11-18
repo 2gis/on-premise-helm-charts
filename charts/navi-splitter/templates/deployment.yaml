@@ -1,7 +1,7 @@
 {{- define "splitter.deployment" }}
 metadata:
   labels:
-    rule: {{ .Values.splitter.app_rule | quote }}
+    rule: {{ .Values.splitter.appRule | default .Values.splitter.app_rule | quote }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
     {{- if .Values.dataGroup.enabled }}
     dataGroupTimestamp: {{ .Values.dataGroup.timestamp | quote }}
@@ -27,7 +27,7 @@ spec:
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
           volumeMounts:
             - name: envoy-config
-              mountPath: /etc/envoy/envoy.yaml
+              mountPath: {{ printf "%s/envoy.yaml" .Values.envoy.configFilepath | quote }}
               subPath: envoy.yaml
           {{- if .Values.envoy.resources }}
           resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
@@ -39,7 +39,7 @@ spec:
                 command: ["/bin/bash", "-c", "while cat < /dev/tcp/127.0.0.1/{{ .Values.splitter.appPort }} ; do sleep 5 ; done"]
           args:
             - -c
-            - /etc/envoy/envoy.yaml
+            - {{ printf "%s/envoy.yaml" .Values.envoy.configFilepath | quote }}
             - --log-level
             - {{ .Values.envoy.systemLogs.logLevel | quote }}
           {{- if and (kindIs "string" .Values.envoy.concurrency) (eq "" .Values.envoy.concurrency) }}
@@ -86,8 +86,12 @@ spec:
               value: {{ .Values.splitter.appPort | quote }}
             - name: BASE_CTX_URL
               value: {{ .Values.splitter.ctxBaseUrl | quote }}
+            - name: BASE_CTX_V3_URL
+              value: {{ .Values.splitter.ctxV3BaseUrl | quote }}
             - name: CTX_URL
               value: {{ .Values.splitter.ctxUrl | quote }}
+            - name: FIND_PLATFORM_URL
+              value: {{ .Values.splitter.findPlatformUrl | quote }}
             - name: CTX_TIMEOUT
               value: {{ .Values.splitter.ctxTimeout | quote }}
             - name: LOG_LEVEL

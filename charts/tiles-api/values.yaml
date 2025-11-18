@@ -235,7 +235,7 @@ tilegen:
 # @param proxy.access.url API Keys endpoint url, ex: http://keys-api.svc. **Required**
 # @param proxy.access.syncPeriod Proxy sync period.
 # @param proxy.access.raster.token Service key for raster data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).
-# @param proxy.access.vector.token Service key for vector data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).
+# @param proxy.access.vector.token Service key for vector and mapbox data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).
 
 # @extra proxy.access.skipExactOrigins **Skip requests with exact origins feature settings**
 # @param proxy.access.skipExactOrigins.enabled If enabled, only requests with exact origins will skip access key check, otherwise all requests will be checked.

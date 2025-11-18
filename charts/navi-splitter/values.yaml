@@ -52,11 +52,14 @@ image:
 # @section Splitter application settings
 
 # @param splitter.logLevel Logging level.
-# @param splitter.app_rule Rule name of navi-back instance
+# @param splitter.appRule Rule name of navi-back instance
+# @extra splitter.app_rule DEPRECATED see `splitter.appRule`
 # @param splitter.goMaxProcs Number of golang processes.
 # @param splitter.appPort Application port.
 # @param splitter.ctxBaseUrl URL of ctx host. Format: `http(s)://HOST:PORT/ctx/2.0`.
+# @param splitter.ctxV3BaseUrl URL of ctx v3 host. Format: `http(s)://HOST:PORT/ctx/3.0`.
 # @param splitter.ctxUrl Full URL of get_dist_matrix_ctx host. Format: `http(s)://HOST:PORT/ctx/2.0/?source=distance_matrix`.
+# @param splitter.findPlatformUrl Full URL of find_platform host. Format: `http(s)://HOST:PORT/find_platforms`.
 # @param splitter.ctxTimeout get_dist_matrix_ctx request timeout.
 # @param splitter.subrequestRetryN Number of retries to host.
 # @param splitter.writeTimeout Write timeout.
@@ -69,11 +72,13 @@ image:
 
 splitter:
   logLevel: info
-  app_rule: ''
+  appRule: ''
   goMaxProcs: 1
   appPort: 8080
   ctxBaseUrl: ''
+  ctxV3BaseUrl: ''
   ctxUrl: ''
+  findPlatformUrl: ''
   ctxTimeout: 60s
   subrequestRetryN: 5
   readTimeout: 10s
@@ -258,12 +263,13 @@ passThrough:
 # @param envoy.retry.retryOn Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)
 # @param envoy.retry.numRetries Failed request [retries](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-max-retries)
 # @param envoy.retry.perTryTimeout Specifies timeout on each [retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-upstream-rq-per-try-timeout-ms)
+# @param envoy.configFilepath Configs mountpoint path
 
 envoy:
   image:
     repository: 2gis-on-premise/navi-envoy
     pullPolicy: IfNotPresent
-    tag: 1.27.0
+    tag: 1.36.2-tools
   resources: {}
   systemLogs:
     logLevel: info
@@ -278,6 +284,7 @@ envoy:
     retryOn: internal,unavailable,5xx,reset
     numRetries: 1
     perTryTimeout: 2s
+  configFilepath: /src/etc/envoy
 
 
 # @section Fixed data group attributes

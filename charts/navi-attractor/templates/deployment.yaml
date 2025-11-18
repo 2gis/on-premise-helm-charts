@@ -4,7 +4,7 @@ metadata:
   name: {{ include "generic-chart.fullname" . }}
   labels:
     {{- include "generic-chart.labels" . | nindent 4 }}
-    rule: {{ .Values.attractor.app_rule | default "" | quote  }}
+    rule: {{ .Values.attractor.appRule | default .Values.attractor.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
     {{- if .Values.dataGroup.enabled }}
     dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
@@ -177,13 +177,13 @@ spec:
           env:
           {{ if ne .Values.attractor.type "schedule" }}
           - name: RULE
-            value: {{ .Values.attractor.app_rule | default "" | quote  }}
+            value: {{ .Values.attractor.appRule | default .Values.attractor.app_rule | default "" | quote  }}
           {{- else -}}
           - name: RULE
             value: ""
           {{ end }}
           - name: PROJECT
-            value: {{ .Values.app_project | default "" | quote }}
+            value: {{ .Values.appProject | default .Values.app_project | default "" | quote }}
           - name: PORT_GRPC
             value: {{ .Values.attractor.grpc_port | quote }}
           - name: TZ

@@ -10,7 +10,7 @@ metadata:
     {{- if .Values.service.grpc.labels }}
     {{- include "tplvalues.render" ( dict "value" .Values.service.grpc.labels "context" $) | nindent 4 }}
     {{- end }}
-    rule: {{ .Values.attractor.app_rule | default "" | quote  }}
+    rule: {{ .Values.attractor.appRule | default .Values.attractor.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
     type: {{ .Values.attractor.type | quote  }}
     {{- if .Values.dataGroup.enabled }}
@@ -45,7 +45,7 @@ metadata:
     {{- if .Values.service.http.labels }}
     {{- include "tplvalues.render" ( dict "value" .Values.service.http.labels "context" $) | nindent 4 }}
     {{- end }}
-    rule: {{ .Values.attractor.app_rule | default "" | quote  }}
+    rule: {{ .Values.attractor.appRule | default .Values.attractor.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
     type: {{ .Values.attractor.type | quote  }}
     {{- if .Values.dataGroup.enabled }}

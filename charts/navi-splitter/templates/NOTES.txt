@@ -20,3 +20,10 @@
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
 {{- end }}
+
+{{- if .Values.splitter.app_rule }}
+#################################################################################
+######   WARNING: `splitter.app_rule` has been renamed                      #####
+######             to `splitter.appRule`                                    #####
+#################################################################################
+{{- end }}

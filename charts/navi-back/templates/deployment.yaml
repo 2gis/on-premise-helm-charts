@@ -4,7 +4,7 @@ metadata:
   name: {{ include "generic-chart.fullname" . }}
   labels:
     {{- include "generic-chart.labels" . | nindent 4 }}
-    rule: {{ .Values.naviback.app_rule | default "" | quote  }}
+    rule: {{ .Values.naviback.appRule | default .Values.naviback.app_rule | default "" | quote  }}
     navigroup: {{ .Values.navigroup | default "" | quote }}
     {{- if .Values.dataGroup.enabled }}
     dataGroupTimestamp: {{ .Values.dataGroup.timestamp | int | quote }}
@@ -300,9 +300,9 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: RULE
-              value: {{ .Values.naviback.app_rule | default "" | quote  }}
+              value: {{ .Values.naviback.appRule | default .Values.naviback.app_rule | default "" | quote  }}
             - name: PROJECT
-              value: {{ .Values.app_project | default "" | quote }}
+              value: {{ .Values.appProject | default .Values.app_project | default "" | quote }}
           {{- if .Values.customCAs.bundle }}
             - name: SSL_CERT_FILE
               value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
