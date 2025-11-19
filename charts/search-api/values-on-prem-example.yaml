@@ -28,7 +28,7 @@ worker:
   prestopHook:
     enabled: false
   data:
-    storageClassName: "topolvm-ext4"
+    storageClassName: topolvm-ext4
     persistent:
       enabled: false
 head:
@@ -38,7 +38,7 @@ head:
     fsGroup: 100000000
   # queryTransformer:
   #   enabled: false
-  #   endpoint: "grpc://query-transformer-grpc-service.nlp.svc.cluster.local"
+  #   endpoint: grpc://query-transformer-grpc-service.nlp.svc.cluster.local
   #   port: 6767
   #   ssl: false
   head:
@@ -50,6 +50,7 @@ head:
       initialDelaySeconds: 30
     prestopHook:
       enabled: false
+#    bigSearchMode: off
     bigSearchSearchers:
       - ExpandingSearcher
       - Suggestor2
@@ -65,8 +66,11 @@ head:
       repository: docker-hub.2gis.ru/on-premise/search-nginx
 #      repository: docker-hub.2gis.ru/usrch/nginx
 #      tag: 1.25.11
+  envoy:
+    image:
+      repository: docker-hub.2gis.ru/on-premise/navi-envoy
   data:
-    storageClassName: "topolvm-ext4"
+    storageClassName: topolvm-ext4
     persistent:
       enabled: false
 
@@ -94,7 +98,7 @@ ingressRouter:
             operator: In
             values:
             - ingress-router
-        topologyKey: "kubernetes.io/hostname"
+        topologyKey: kubernetes.io/hostname
   prestopHook:
     enabled: false
   experimentComponent:
@@ -103,8 +107,8 @@ ingressRouter:
     enabled: false
   # ab:
   #   sapphire_base:
-  #     port: "8080"
-  #     exact_match: "0"
+  #     port: 8080
+  #     exact_match: 0
   #   contour1:
   #     address: 'big-search-stg-green-ingress-router'
   #   contour2:
@@ -113,7 +117,7 @@ ingressRouter:
   #     address: 'big-search-stg-yellow-ingress-router'
 # вот этого блока быть не должно, так как rateLimitComponent is NOT enabled
 # но пока не умеем работать с пустыми параметрами
-  prometheusUrl: "https://prometheus.2gis.io/prometheus/api/v1/query_range"
+  prometheusUrl: https://prometheus.2gis.io/prometheus/api/v1/query_range
   rateLimitRules:
     - name: 'cpu_usage'
       query: 'sum(increase(sapphire_cpu_usage_total{cluster="production-k8s", kubernetes_namespace="search", app=~"big-search-(blue|green)", search_part="head"}[15m])) by (api_key)'
@@ -139,7 +143,7 @@ geodetector:
 #    tag: vx-dev_43296
   enabled: true
   data:
-    storageClassName: "topolvm-ext4"
+    storageClassName: topolvm-ext4
     persistent:
       enabled: false
   prestopHook:
@@ -172,7 +176,7 @@ queryTransformerMock:
   enabled: false
 
 magg:
-#  enabled: true
+  enabled: true
   image:
     repository: docker-hub.2gis.ru/on-premise/search-metrics-aggregator
 
@@ -184,7 +188,7 @@ controller:
   image:
     repository: docker-hub.2gis.ru/on-premise/search-controller
 #    tag: vx-dev_43296
-#  projectListUrl: "https://s3.2gis.one/usrch/test-projects-list.json"
+#  projectListUrl: https://s3.2gis.one/usrch/test-projects-list.json
   projectListUrl: "http://catalog.k8s.n3.2gis.io/2.0/region/list?key=1c35663a-4e3e-4c83-a1d4-ecbc187043dc&type=region,segment,universe&fields=items.last_imported_data_source,items.country_code,items.allow_for_indexing,items.allow_for_delete"
   extraProjects:
     - project_id: 9
@@ -203,7 +207,7 @@ controller:
       url: 'https://s3.2gis.one/otello-feeds-production/suggest_feed.zip'
       name: 'otello_hotels'
   data:
-    storageClassName: "topolvm-ext4"
+    storageClassName: topolvm-ext4
     persistent:
       enabled: false
 filesStorage:
@@ -222,16 +226,16 @@ filesStorage:
 #   nodeSelector:
 #     role: worker.search
 #   tolerations:
-#   - key: "role"
-#     operator: "Equal"
-#     value: "worker.search"
-#     effect: "NoSchedule"
+#   - key: role
+#     operator: Equal
+#     value: worker.search
+#     effect: NoSchedule
 #   readinessProbe:
 #     enabled: false
   data:
     persistent:
       enabled: false
-    storageClassName: "ceph-csi-rbd-ssd"
+    storageClassName: ceph-csi-rbd-ssd
     resources:
       requests:
         storage: 30Gi

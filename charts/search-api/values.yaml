@@ -343,7 +343,7 @@ head:
     workerRetryAttempts: 1
     workerTimeoutMs: 2000
     adsEnable: true
-    bigSearchMode: "on"
+    bigSearchMode: on
     bigSearchSearchers: []
     bigSearchExcludeSegments: []
     aiSuggestedQueries:
@@ -417,9 +417,9 @@ head:
 
   envoy:
     image:
-      repository: envoyproxy/envoy
+      repository: 2gis-on-premise/navi-envoy
       pullPolicy: IfNotPresent
-      tag: v1.28.0
+      tag: 1.36.2-tools
     ports:
       admin: 9901
       grpc: 8091
@@ -671,7 +671,7 @@ filesStorage:
     failureThreshold: 3
     initialDelaySeconds: 10
   versionTTL: 168h
-  loglevel: "info"
+  loglevel: info
   data:
     persistent:
       enabled: false
@@ -776,12 +776,12 @@ controller:
     timeoutSeconds: 1
     failureThreshold: 3
     initialDelaySeconds: 10
-  loglevel: "info"
+  loglevel: info
   projectListUrl: ''
   user: ''
   password: ''
-  model: "gis"
-  domain: "v4"
+  model: gis
+  domain: v4
   interval: 15s
   taskTimeout: 20m
   extraProjects: []
@@ -864,7 +864,7 @@ indexer:
   replicaCount: 3
   ports:
     http: 8080
-  loglevel: "info"
+  loglevel: info
   image:
     repository: 2gis-on-premise/search-indexer
     pullPolicy: IfNotPresent
@@ -966,7 +966,7 @@ s3Client:
 syncer:
   ports:
     http: 8088
-  loglevel: "info"
+  loglevel: info
   image:
     repository: 2gis-on-premise/search-syncer_new
     pullPolicy: IfNotPresent
@@ -1380,20 +1380,20 @@ ingressRouter:
   headers: X-Cluster-Index
   routing:
     sapphireBase:
-      port: "8080"
-      exactMatch: "0"
+      port: 8080
+      exactMatch: 0
     cluster1:
-      port: "9092"
+      port: 9092
       address: big-search-ab-cluster1-ingress-router
-      exactMatch: "1"
+      exactMatch: 1
     cluster2:
-      port: "9092"
+      port: 9092
       address: big-search-ab-cluster2-ingress-router
-      exactMatch: "2"
+      exactMatch: 2
     cluster3:
-      port: "9092"
+      port: 9092
       address: big-search-ab-cluster3-ingress-router
-      exactMatch: "3"
+      exactMatch: 3
 
 # @section geodetector
 

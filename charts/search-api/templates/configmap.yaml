@@ -364,7 +364,7 @@ data:
     search-worker-queries-count: {{ .Values.head.head.workerQueriesCount }}
     search-worker-timeout-ms: {{ .Values.head.head.workerTimeoutMs }}
     search-grpc-client-factory-name: 'grpc-client-factory'
-    search-global-search-mode: {{ .Values.head.head.bigSearchMode }}
+    search-global-search-mode: {{ ternary "on" "off" .Values.head.head.bigSearchMode }}
     testsuite-enabled: false
     search-global-searchers:
       {{- toYaml .Values.head.head.bigSearchSearchers | nindent 6 -}}
