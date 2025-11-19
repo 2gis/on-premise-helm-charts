@@ -57,18 +57,18 @@ terminationGracePeriodSeconds: 60
 prometheusEnabled: true
 livenessProbe:
   enabled: true
-  periodSeconds: 15
-  timeoutSeconds: 5
+  periodSeconds: 60
+  timeoutSeconds: 20
   failureThreshold: 5
 readinessProbe:
   enabled: true
-  periodSeconds: 15
-  timeoutSeconds: 5
+  periodSeconds: 60
+  timeoutSeconds: 20
   failureThreshold: 3
 startupProbe:
   enabled: true
-  periodSeconds: 15
-  timeoutSeconds: 5
+  periodSeconds: 60
+  timeoutSeconds: 20
   failureThreshold: 60
 customLivenessProbe: {}
 customReadinessProbe: {}
