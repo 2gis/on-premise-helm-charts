@@ -34,7 +34,7 @@ serviceAccount:
 api:
   image:
     repository: 2gis-on-premise/stat-api
-    tag: 1.0.0
+    tag: 0.1.0
 
   # @param api.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
 
@@ -157,7 +157,7 @@ api:
 migrate:
   image:
     repository: 2gis-on-premise/stat-api-migrate
-    tag: 1.0.0
+    tag: 0.1.0
 
   # @param migrate.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
   logLevel: info
