@@ -154,7 +154,7 @@ kafka:
   sasl:
     enabled: true
     secretName: ''
-    mechanism: 'PLAIN'
+    mechanism: PLAIN
     jaasFieldName: sasl.jaas.config
     jaasLoginModule: 'org.apache.kafka.common.security.scram.ScramLoginModule'
     username: ''
