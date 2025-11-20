@@ -46,23 +46,23 @@ See the [documentation](https://docs.2gis.com/en/on-premise/traffic-proxy) to le
 
 ### Proxy server settings
 
-| Name                       | Description                                                                                            | Value       |
-| -------------------------- | ------------------------------------------------------------------------------------------------------ | ----------- |
-| `proxy.host`               | URL for the proxy server to serve, ex: https://traffic0.edromaps.2gis.com. **Required**                | `""`        |
-| `proxy.listen`             | Port for the proxy server to listen.                                                                   | `8080`      |
-| `proxy.locationDG`         | Enable location for datagateway.api.2gis.com.                                                          | `false`     |
-| `proxy.apiKey`             | Datagateway access key (DGCTL key)                                                                     | `""`        |
-| `proxy.cache.enabled`      | If caching should be enabled for the proxy server.                                                     | `true`      |
-| `proxy.cache.age`          | Cache validity period.                                                                                 | `1m`        |
-| `proxy.cache.size`         | Maximum cache size.                                                                                    | `32m`       |
-| `proxy.worker.processes`   | Number of worker processes.                                                                            | `2`         |
-| `proxy.worker.connections` | Number of worker connections.                                                                          | `1024`      |
-| `proxy.log.errorLog.level` | Error log level. Allowed values: `debug`, `info`, `notice`, `warn`, `error`, `crit`, `alert`, `emerg`. | `error`     |
-| `proxy.log.accessLog`      | Access log definition.                                                                                 | `/dev/null` |
-| `proxy.keepaliveTimeout`   | Keepalive timeout.                                                                                     | `65`        |
-| `proxy.log.customFormats`  | List of custom log formats to be used in NGINX configuration                                           | `[]`        |
-| `proxy.locations`          | List of additional location blocks to be included in the NGINX configuration                           | `[]`        |
-| `proxy.httpServers`        | List of additional server blocks to be included in the NGINX configuration                             | `{}`        |
+| Name                       | Description                                                                                                    | Value              |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `proxy.host`               | URL for the proxy server to serve maps (jam.api.2gis.com), navigation (datagateway.api.2gis.com). **Required** | `jam.api.2gis.com` |
+| `proxy.listen`             | Port for the proxy server to listen.                                                                           | `8080`             |
+| `proxy.locationDG`         | Enable location for datagateway.api.2gis.com.                                                                  | `false`            |
+| `proxy.licenseKey`         | Datagateway access key (DGCTL key)                                                                             | `""`               |
+| `proxy.cache.enabled`      | If caching should be enabled for the proxy server.                                                             | `true`             |
+| `proxy.cache.age`          | Cache validity period.                                                                                         | `1m`               |
+| `proxy.cache.size`         | Maximum cache size.                                                                                            | `32m`              |
+| `proxy.worker.processes`   | Number of worker processes.                                                                                    | `2`                |
+| `proxy.worker.connections` | Number of worker connections.                                                                                  | `1024`             |
+| `proxy.log.errorLog.level` | Error log level. Allowed values: `debug`, `info`, `notice`, `warn`, `error`, `crit`, `alert`, `emerg`.         | `error`            |
+| `proxy.log.accessLog`      | Access log definition.                                                                                         | `/dev/null`        |
+| `proxy.keepaliveTimeout`   | Keepalive timeout.                                                                                             | `65`               |
+| `proxy.log.customFormats`  | List of custom log formats to be used in NGINX configuration                                                   | `[]`               |
+| `proxy.locations`          | List of additional location blocks to be included in the NGINX configuration                                   | `[]`               |
+| `proxy.httpServers`        | List of additional server blocks to be included in the NGINX configuration                                     | `{}`               |
 
 ### Deployment settings
 

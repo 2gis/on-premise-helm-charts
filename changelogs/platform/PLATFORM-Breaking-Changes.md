@@ -2,6 +2,10 @@
 
 ## [2.47.0]
 
+### traffic-proxy
+
+- Renamed `proxy.apiKey` to `proxy.licenseKey`
+
 ### stat-receiver
 
 - `kafka.sasl.jaas` splitted to several values: `kafka.sasl.jaasLoginModule`, `kafka.sasl.username` and `kafka.sasl.password`
