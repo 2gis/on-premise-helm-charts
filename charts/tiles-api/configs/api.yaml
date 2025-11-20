@@ -6,8 +6,20 @@ graceful-shutdown-time: 5s
 ui-whitelist: {{ $.Values.api.uiWhitelist }}
 {{- end }}
 
-cassandra-ssl:
-  enabled: {{ $.Values.cassandra.ssl.enabled }}
+cassandra-tls:
+  enabled: {{ $.Values.cassandra.tls.enabled }}
+  enable-host-verification: {{ $.Values.cassandra.tls.enableHostVerification }}
+{{- if $.Values.cassandra.tls.deploySecret }}
+{{- if $.Values.cassandra.tls.ca }}
+  ca-path: /tls/ca.crt
+{{- end }}
+{{- if $.Values.cassandra.tls.cert }}
+  cert-path: /tls/client.crt
+{{- end }}
+{{- if $.Values.cassandra.tls.key }}
+  key-path: /tls/client.key
+{{- end }}
+{{- end }}
 
 cassandra-clusters:
   - name: kubernetes
