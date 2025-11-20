@@ -15,7 +15,7 @@ maintainers:
 - name: 2gis
   url: https://github.com/2gis
   email: on-premise@2gis.com
-version: 2.45.0
+version: 2.46.0
 appVersion: 1.11.1
 dependencies:
 - name: generic-chart

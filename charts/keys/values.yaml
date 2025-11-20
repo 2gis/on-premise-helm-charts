@@ -23,15 +23,18 @@ featureFlags:
   # @param featureFlags.enableAudit Enable audit logging for sending to DB.
   # @param featureFlags.enableAuditKafka Enable audit logging for sending to Kafka.
   # @param featureFlags.enablePublicAPISign Enable signing responses in Public API.
+  # @param featureFlags.enableStatRedis Enable receiving monthly statistics from Redis.
 
   enableAudit: false
   enableAuditKafka: false
   enablePublicAPISign: false
+  enableStatRedis: false
+
 
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.135.1
+    tag: 1.140.0
 
 # @section Admin service settings
 
@@ -156,7 +159,7 @@ api:
       # ...
       # -----END CERTIFICATE-----
 
-  # @param api.oidc.enable If OIDC authentication is enabled.
+  # @param api.oidc.enabled If OIDC authentication is enabled.
   # @param api.oidc.enableSinglePartnerMode Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).
   # @param api.oidc.enableExternalProvider Enable external oidc provider: do not have access to manage users.
   # @param api.oidc.url URL of the OIDC provider.
@@ -168,7 +171,7 @@ api:
   # @param api.oidc.defaultPartner.role Role of the user in the default partner. Can be: 'user', 'admin'.
 
   oidc:
-    enable: false
+    enabled: false
     enableSinglePartnerMode: false
     enableExternalProvider: false
     url: ''
@@ -575,11 +578,13 @@ counter:
 # @section Redis settings
 
 redis:
+  # @param redis.enabled Enable redis for keys.
   # @param redis.host Redis hostname or IP.
   # @param redis.port Redis port.
   # @param redis.db Redis database number.
   # @param redis.password Redis password. Empty string if no authentication is required.
 
+  enabled: false
   host: ''
   port: 6379
   db: 1

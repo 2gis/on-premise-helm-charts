@@ -48,6 +48,7 @@ spec:
           resources:
             {{- toYaml .Values.tasker.resources | nindent 12 }}
           env:
+            {{- include "keys.env.featureFlags" . | nindent 12 }}
             {{- include "keys.env.db.deploys" . | nindent 12 }}
             {{- include "keys.env.tasker" . | nindent 12 }}
             {{- include "keys.env.redis" . | nindent 12 }}
