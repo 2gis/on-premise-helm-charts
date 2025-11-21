@@ -65,6 +65,14 @@ spec:
         - configMap:
             name: {{ include "tiles.fullname" . }}-api
           name: config-volume
+
+        {{- if $.Values.cassandra.tls.deploySecret }}
+        - name: cassandra-tls
+          secret:
+            secretName: {{ include "tiles.fullname" . }}-tls
+            defaultMode: 256
+        {{- end }}
+
         {{- if $.Values.customCAs.bundle }}
         - configMap:
             name: {{ include "tiles.fullname" $ }}-custom-ca
@@ -188,6 +196,13 @@ spec:
           volumeMounts:
             - mountPath: "/config"
               name: config-volume
+
+            {{- if $.Values.cassandra.tls.deploySecret }}
+            - mountPath: "/tls"
+              name: cassandra-tls
+              readOnly: true
+            {{- end }}
+
             {{- if $.Values.customCAs.bundle }}
             - mountPath: {{ include "tiles.customCA.mountPath" $ }}
               name: custom-ca
