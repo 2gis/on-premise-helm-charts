@@ -62,35 +62,35 @@ data:
         proxy_cache_path /var/cache/nginx/trafficcache keys_zone=trafficcache:{{ .Values.proxy.cache.size }};
       {{ end }}
 
-        server {
-          listen {{ .Values.proxy.listen }} default;
-          server_name _;
+          server {
+            listen {{ .Values.proxy.listen }} default;
+            server_name _;
 
-          location / {
-            {{- include "proxyParams" . | nindent 8}}
-          }
+            location / {
+              {{- include "proxyParams" . | nindent 10 }}
+            }
 
-          location /health {
-              default_type text/html;
-              return 200 "<!DOCTYPE html><h2>OK</h2>\n";
-          }
+            location /health {
+                default_type text/html;
+                return 200 "<!DOCTYPE html><h2>OK</h2>\n";
+            }
 
-      {{ if .Values.proxy.locationDG }}
-          {{- include "locationDG" . | nindent 10}}
-      {{ end }}
+          {{- if .Values.proxy.locationDG }}
+            {{- include "locationDG" . | nindent 12 }}
+          {{- end }}
 
-      {{ if .Values.proxy.locations }}
-        {{ range .Values.proxy.locations }}
-          location {{ .path }} {
-            {{- .definition | trim | nindent 14}}
-          }
-        {{ end }}
-      {{ end }}
+          {{- if .Values.proxy.locations }}
+            {{- range .Values.proxy.locations }}
+            location {{ .path }} {
+              {{- .definition | trim | nindent 16 }}
+            }
+            {{- end }}
+          {{- end }}
         }
 
-    {{ if .Values.proxy.httpServers }}
-      {{ range .Values.proxy.httpServers  }}
-        {{- . | trim | nindent 6 }}
-      {{ end }}
-    {{ end }}
+    {{- if .Values.proxy.httpServers }}
+      {{- range .Values.proxy.httpServers }}
+        {{- . | trim | nindent 8 }}
+      {{- end }}
+    {{- end }}
     }
