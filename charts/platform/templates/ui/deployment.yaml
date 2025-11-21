@@ -53,13 +53,11 @@ spec:
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}
           env:
-            {{- if .Values.ui.oauth.clientSecret}}
             - name: OAUTH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ include "platform.ui.secretName" . }}
                   key: oauthClientSecret
-            {{- end}}
             - name: CATALOG_API_KEY
               valueFrom:
                 secretKeyRef:
@@ -78,9 +76,21 @@ spec:
               value: {{ required ".Values.ui.pages is required" .Values.ui.pages | quote }}
             - name: PLATFORM_API_URL
               value: {{ .Values.ui.platform.api.url | quote }}
+            - name: ENABLE_SERVICE_LIMITATIONS
+              value: {{ .Values.ui.enableServiceLimitations | quote }}
             {{- if .Values.ui.legal }}
             - name: SHOW_LEGAL_AGREEMENTS
               value: {{ .Values.ui.legal.showLegalAgreements | quote }}
+            {{- end }}
+            {{- if .Values.ui.banners }}
+            - name: SHOW_COOKIE_BANNER
+              value: {{ .Values.ui.banners.showCookieBanner | quote }}
+            {{- end }}
+            {{- if .Values.ui.hde }}
+            - name: HDE_WIDGET_SRC
+              value: {{ .Values.ui.hde.widgetSrc | quote }}
+            - name: HDE_WIDGET_HOST
+              value: {{ .Values.ui.hde.widgetHost | quote }}
             {{- end }}
             - name: GOOGLE_ANALYTICS_ID
               value: {{ .Values.ui.googleAnalyticsId | quote}}
@@ -140,6 +150,16 @@ spec:
             - name: ANALYTICS_BSS_PRODUCT_ID
               value: {{ .Values.ui.analyticsBSS.productId | quote }}
             {{- end }}
+            - name: MAP_STYLES_ENTRY_PAGE_URL
+              value: {{ .Values.ui.mapStyles.entryPageUrl | quote }}
+            - name: PRO_ENTRY_PAGE_URL
+              value: {{ .Values.ui.pro.entryPageUrl | quote }}
+            - name: CITYLENS_ENTRY_PAGE_URL
+              value: {{ .Values.ui.cityLens.entryPageUrl | quote }}
+            - name: ON_PREMISE_ENTRY_PAGE_URL
+              value: {{ .Values.ui.onpremise.entryPageUrl | quote }}
+            - name: KIT_DOCS_ENTRY_PAGE_URL
+              value: {{ .Values.ui.kitDocs.entryPageUrl | quote }}
             - name: HOME
               value: "/tmp"
       {{- with .Values.ui.nodeSelector }}
