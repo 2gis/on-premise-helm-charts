@@ -2,6 +2,10 @@
 
 ## [2.47.0]
 
+### catalog-api
+
+- Removed JsQuery extension dependency from the service’s PostgreSQL database.
+
 ### traffic-proxy
 
 - Renamed `proxy.apiKey` to `proxy.licenseKey`
