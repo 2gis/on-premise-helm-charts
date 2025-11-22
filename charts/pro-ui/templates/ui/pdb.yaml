@@ -1,0 +1,25 @@
+{{- with .Values.pdb -}}
+{{- if .enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "pro.ui.name" $ }}
+spec:
+  # Правила ниже нужны для того чтобы ваш сервис сохранял работоспособность
+  # при проведении работ в кластере.
+  # Например, если приложению нужен кворум и
+  # для работы необходимо минимум 2 пода.
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
+  {{- else if .maxUnavailable }}
+  maxUnavailable: {{ .maxUnavailable }}
+  {{- else }}
+  # Ни minAvailable, ни maxUnavailable не заданы — это недопустимо
+  {{- end }}
+
+  selector:
+    matchLabels:
+      {{- include "pro.ui.selectorLabels" $ | nindent 6 }}
+{{- end }}
+{{- end }}
