@@ -157,7 +157,10 @@ spec:
               value: {{ $.Values.routes.worker.busConfig.consumers.appEvents.workersCount | quote }}
 
             - name: TasksAssetSettings__SystemAccessToken
-              value: {{ $.Values.routes.tasksAssetSettings.systemAccessToken | quote }}
+              valueFrom:
+                secretKeyRef:
+                  key: proTasksAssetAccessToken
+                  name: {{ include "citylens.routes.api.name" . }}-secret
             - name: TasksAssetSettings__PlannedTasksAssetId
               value: {{ $.Values.routes.tasksAssetSettings.plannedTasksAssetId | quote }}
             - name: TasksAssetSettings__CompletedTasksAssetId
@@ -168,7 +171,10 @@ spec:
             - name: Clients__ProClient__Url
               value: {{ $.Values.pro.baseUrl | quote }}
             - name: Clients__ProClient__AuthorizationToken
-              value: {{ $.Values.routes.pro.authorizationToken | quote }}
+              valueFrom:
+                secretKeyRef:
+                  key: proAuthToken
+                  name: {{ include "citylens.routes.api.name" . }}-secret
 
             - name: Clients__Navigation__Enabled
               value: "true"
@@ -177,7 +183,10 @@ spec:
             - name: Clients__Navigation__TimeoutSeconds
               value: {{ $.Values.routes.navi.timeout | quote }}
             - name: Clients__Navigation__ApiKey
-              value: {{ $.Values.routes.navi.key | quote }}
+              valueFrom:
+                secretKeyRef:
+                  key: naviApiKey
+                  name: {{ include "citylens.routes.api.name" . }}-secret
 
             - name: Features__CoverageRatioEnabled
               value: {{ $.Values.routes.features.coverageRatioEnabled | quote }}
