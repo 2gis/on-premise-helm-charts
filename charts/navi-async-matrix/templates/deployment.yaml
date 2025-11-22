@@ -48,28 +48,28 @@ spec:
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.dm.merger.image.repository }}:{{ .Values.dm.merger.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           livenessProbe:
-            {{- if .Values.customLivenessProbe }}
-            {{- include "tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
-            {{- else if .Values.livenessProbe.enabled }}
+            {{- if .Values.dm.merger.customLivenessProbe }}
+            {{- include "tplvalues.render" (dict "value" .Values.dm.merger.customLivenessProbe "context" $) | nindent 12 }}
+            {{- else if .Values.dm.merger.livenessProbe.enabled }}
             httpGet:
               path: /healthcheck
               port: 8003
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.dm.merger.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.dm.merger.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.dm.merger.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.dm.merger.livenessProbe.failureThreshold }}
             {{- end }}
           readinessProbe:
-            {{- if .Values.customReadinessProbe }}
-            {{- include "tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
-            {{- else if .Values.readinessProbe.enabled }}
+            {{- if .Values.dm.merger.customReadinessProbe }}
+            {{- include "tplvalues.render" (dict "value" .Values.dm.merger.customReadinessProbe "context" $) | nindent 12 }}
+            {{- else if .Values.dm.merger.readinessProbe.enabled }}
             httpGet:
               path: /healthcheck
               port: 8003
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.dm.merger.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.dm.merger.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.dm.merger.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.dm.merger.readinessProbe.failureThreshold }}
             {{- end }}
           resources:
             {{- toYaml .Values.dm.merger.resources | nindent 12 }}
