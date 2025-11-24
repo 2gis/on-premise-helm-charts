@@ -132,10 +132,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_FEATURE_FLAGS_EXTERNAL_OIDC
   value: {{ .Values.api.oidc.enableExternalProvider | quote }}
 - name: KEYS_FEATURE_FLAGS_OIDC
-  value: {{ .Values.api.oidc.enable | quote }}
+  value: {{ .Values.api.oidc.enabled | quote }}
 - name: KEYS_FEATURE_FLAGS_STAT_API
   value: {{ .Values.statApi.enable | quote }}
-  value: {{ .Values.api.oidc.enabled | quote }}
 - name: KEYS_FEATURE_FLAGS_REDIS
   value: {{ .Values.redis.enabled | quote }}
 - name: KEYS_FEATURE_FLAGS_STAT_REDIS
