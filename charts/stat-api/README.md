@@ -21,9 +21,9 @@ Use this Helm chart to deploy API Stat service, which is a part of 2GIS's [On-Pr
 | `imagePullSecrets`         | Kubernetes image pull secrets. | `[]`                               |
 | `imagePullPolicy`          | Pull policy.                   | `IfNotPresent`                     |
 | `api.image.repository`     | API service image repository.  | `2gis-on-premise/stat-api`         |
-| `api.image.tag`            | API service image tag.         | `1.0.0`                            |
+| `api.image.tag`            | API service image tag.         | `0.1.0`                            |
 | `migrate.image.repository` | Migrate tool image repository. | `2gis-on-premise/stat-api-migrate` |
-| `migrate.image.tag`        | Migrate tool image tag.        | `1.0.0`                            |
+| `migrate.image.tag`        | Migrate tool image tag.        | `0.1.0`                            |
 
 ### Kubernetes [Service Account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
 
