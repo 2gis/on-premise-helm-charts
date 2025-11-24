@@ -49,7 +49,7 @@ ui:
 
   # @param ui.brand Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
   # @skip ui.defaultLocale
-  # @param ui.pages A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground"`, `"map_styles"`, `"keys"`, `"statistics"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
+  # @param ui.pages A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground"`, `"map_styles"`, `"users"`, `"keys"`, `"statistics"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
   # @param ui.playgrounds A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder" (requires `ui.catalog.url`), "directions"` (requires `ui.navi.url`).
   # @skip ui.googleAnalyticsId
   # @skip ui.googleTagManagerId
