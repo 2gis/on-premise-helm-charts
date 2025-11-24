@@ -72,7 +72,7 @@ spec:
               containerPort: {{ .Values.tasks.settings.httpPort }}
               protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.tasks.settings.tempPath }}"
+            - mountPath: {{ .Values.tasks.settings.tempPath | quote }}
               name: temp-volume
           livenessProbe:
             httpGet:
@@ -145,8 +145,6 @@ spec:
 
             - name: Common__Logging__Format
               value: {{ .Values.tasks.settings.logging.format | quote }}
-            - name: Common__Logging__Targets
-              value: {{ .Values.tasks.settings.logging.targets | quote }}
             - name: Kafka__BootstrapServers
               value: {{ $.Values.kafka.bootstrapServers }}
             - name: Kafka__SecurityProtocol

@@ -1,0 +1,211 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pro-api.permissions-name" . }}
+  {{- with .Values.permissions.pod.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    {{- include "pro-api.permissionLabels" . | nindent 4 }}
+  {{- with .Values.permissions.pod.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.permissions.pod.replicaCount }}
+  revisionHistoryLimit: {{ .Values.permissions.pod.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "pro-api.permissionsSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+      {{- with .Values.permissions.pod.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pro-api.permissionLabels" . | nindent 8 }}
+      {{- with .Values.permissions.pod.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.permissions.pod.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.permissions.pod.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.permissions.pod.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.permissions.pod.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.permissions.pod.priorityClassName }}
+      priorityClassName: {{ .Values.permissions.pod.priorityClassName }}
+      {{- end }}
+      {{- with .Values.permissions.pod.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.permissions.pod.terminationGracePeriodSeconds }}
+      volumes:
+        - name: temp-volume
+          emptyDir: {}
+      containers:
+        - name: {{ include "pro-api.permissions-name" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .Values.permissions.image.repository }}:{{ .Values.permissions.image.tag }}
+          imagePullPolicy: {{ .Values.permissions.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.permissions.settings.httpPort }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ .Values.permissions.settings.grpcPort }}
+              protocol: TCP
+          volumeMounts:
+            - mountPath: {{ .Values.api.settings.tempPath | quote }}
+              name: temp-volume
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 5
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.permissions.pod.resources | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5"]
+          env:
+            - name: DEBUG
+              value: {{ .Values.api.settings.debug | quote }}
+            - name: ENV
+              value: {{ .Values.api.settings.env | quote }}
+            - name: Postgres__ConnectionString
+              value: {{ include "pro-permissions-api.connectionString" . }}
+            - name: Postgres__ConnectionStringReadonly
+              value: {{ include "pro-permissions-api.connectionStringReadOnly" . }}
+            - name: Postgres__Password
+              valueFrom:
+                secretKeyRef:
+                  key: permissionsDbConnectionPwd
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- if .Values.postgres.permissions.ro.password }}
+            - name: Postgres__PasswordRo
+              valueFrom:
+                secretKeyRef:
+                  key: permissionsDbConnectionPwdRo
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
+            - name: API_URL
+              value: http://{{ include "pro-api.name" . }}
+            - name: API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: apiKey
+                  name: {{ include "pro-api.name" . }}-secret
+            - name: Auth__Type
+              value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
+            - name: Auth__PermissionsApiKey
+              valueFrom:
+                secretKeyRef:
+                  key: permissionsApiKey
+                  name: {{ include "pro-api.name" . }}-secret
+            - name: Redis__Host
+              value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
+            - name: Redis__Port
+              value: {{ .Values.redis.port | quote }}
+            - name: Redis__Username
+              value: {{ $.Values.redis.username }}
+            {{- if .Values.redis.password }}
+            - name: Redis__Password
+              valueFrom:
+                secretKeyRef:
+                  key: redisPassword
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
+            - name: Common__HttpPort
+              value: "{{ .Values.permissions.settings.httpPort }}"
+            - name: Common__GrpcPort
+              value: "{{ .Values.permissions.settings.grpcPort }}"
+            - name: Common__Logging__Format
+              value: {{ .Values.api.settings.logging.format | quote }}
+            - name: Common__DeleteInactiveUsers
+              value: {{ .Values.permissions.settings.deleteInactiveUsers | quote }}
+            - name: Common__DefaultPermissions__OpenProUi
+              value: {{ .Values.permissions.settings.default_permissions.open_pro_ui | quote }}
+            {{- range $i, $s := .Values.permissions.settings.default_permissions.assets }}
+            - name: Common__DefaultPermissions__Assets__{{$i}}
+              value: {{ $s | quote }}
+            {{- end }}
+            {{- range $i, $s := .Values.permissions.settings.default_permissions.territories }}
+            - name: Common__DefaultPermissions__Territories__{{$i}}
+              value: {{ $s | quote }}
+            {{- end }}
+            - name: Common__DefaultPermissions__AddUserAssets__Allow
+              value: {{ .Values.permissions.settings.default_permissions.add_user_assets.allow | quote }}
+            - name: Common__DefaultPermissions__AddUserAssets__Quantity
+              value: {{ .Values.permissions.settings.default_permissions.add_user_assets.quantity | quote }}
+            - name: Common__DefaultPermissions__AddUserAssets__FileSize
+              value: {{ .Values.permissions.settings.default_permissions.add_user_assets.file_size | quote }}
+            - name: Common__DefaultPermissions__Isochrones
+              value: {{ .Values.permissions.settings.default_permissions.isochrones | quote }}
+            - name: Common__AllowPermissionsToAnyAsset
+              value: {{ .Values.permissions.settings.allowPermissionsToAnyAsset | quote }}
+            - name: Common__ShowAssetBundles
+              value: {{ .Values.permissions.settings.showAssetBundles | quote }}
+            - name: Kafka__BootstrapServers
+              value: {{ $.Values.kafka.bootstrapServers }}
+            - name: Kafka__SecurityProtocol
+              value: {{ $.Values.kafka.securityProtocol }}
+            - name: Kafka__SaslMechanism
+              value: {{ $.Values.kafka.sasl.mechanism }}
+            - name: Kafka__SaslUsername
+              value: {{ $.Values.kafka.sasl.username }}
+            {{- if .Values.kafka.sasl.password }}
+            - name: Kafka__SaslPassword
+              valueFrom:
+                secretKeyRef:
+                  key: kafkaSaslPassword
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
+            - name: Kafka__PermissionsTopicSettings__Name
+              value: {{ $.Values.kafka.permissionsTopic.name | quote }}
+            - name: Kafka__PermissionsTopicSettings__ReaderGroupId
+              value: {{ $.Values.kafka.permissionsTopic.readerGroupId | quote }}
+            - name: Kafka__EventsTopicSettings__Name
+              value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
+            - name: Kafka__UseReplicaTopics
+              value: {{ $.Values.kafka.useReplicaTopics | quote }}
+            - name: LocalCache__Enabled
+              value: {{ .Values.permissions.settings.localCache.enabled | quote }}
+            - name: LocalCache__TrackStatistics
+              value: {{ .Values.permissions.settings.localCache.trackStatistics | quote }}

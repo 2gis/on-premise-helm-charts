@@ -1,0 +1,21 @@
+{{- with .Values.api.pdb }}
+{{- if .enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "pro-api.name" $ }}
+  labels:
+    {{- include "pro-api.labels" $ | nindent 4 }}
+spec:
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
+  {{- end }}
+  {{- if .maxUnavailable }}
+  maxUnavailable: {{ .maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pro-api.selectorLabels" $ | nindent 6 }}
+{{- end }}
+{{- end }}

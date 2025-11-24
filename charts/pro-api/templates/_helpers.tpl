@@ -203,4 +203,22 @@ Manifest name
 */}}
 {{- define "pro-api.manifestCode" -}}
 {{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- end -}}
+
+{{- define "pro-api.pagerenderer-name" -}}
+{{ include "pro-api.name" . }}-pagerenderer
+{{- end -}}
+
+{{- define "pro-api.rendererSelectorLabels" -}}
+app.kubernetes.io/name: {{ include "pro-api.pagerenderer-name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}-pagerenderer
+{{- end -}}
+
+{{- define "pro-api.rendererLabels" -}}
+helm.sh/chart: {{ include "pro-api.chart" . }}
+{{ include "pro-api.rendererSelectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
