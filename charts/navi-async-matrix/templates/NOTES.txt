@@ -1,6 +1,10 @@
 Release - {{ .Release.Name }}
 Namespace - {{ .Release.Namespace }}
 
+{{- if .Values.s3.publicNetloc }}
+DEPRECATED: s3.publicNetloc renamed to s3.publicUrl
+{{- end }}
+
 {{- if .Values.ingress.enabled }}
 You can check service using curl
 {{- range $host := .Values.ingress.hosts }}

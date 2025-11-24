@@ -1,5 +1,33 @@
 # 2GIS On-Premise Changelog
 
+## [2025-11-19] Release: Core:2.1.0
+
+  [CHANGELOG](changelogs/core/CORE-CHANGELOG.md)
+
+## [2025-11-17] Release: Platform:2.46.0
+
+  [CHANGELOG](changelogs/platform/PLATFORM-CHANGELOG.md)
+
+## [2025-10-30] Release: Platform:2.45.0
+
+  [CHANGELOG](changelogs/platform/PLATFORM-CHANGELOG.md)
+
+## [2025-10-16] Release: Citylens:2.1.0
+
+  [CHANGELOG](changelogs/citylens/CITYLENS-CHANGELOG.md)
+
+## [2025-10-09] Release: Pro:2.1.0
+
+  [CHANGELOG](changelogs/pro/PRO-CHANGELOG.md)
+
+## [2.\*.\*] (2025-09-30)
+In the new versions, releases are organized into groups. Version details and breaking changes are now maintained within the files specific to each group:
+#### [Core](changelogs/core/CORE-CHANGELOG.md)
+#### [Platform](changelogs/platform/PLATFORM-CHANGELOG.md)
+#### [PRO](changelogs/pro/PRO-CHANGELOG.md)
+#### [CITYLENS](changelogs/citylens/CITYLENS-CHANGELOG.md)
+#### [EVERGIS](changelogs/evergis/EVERGIS-CHANGELOG.md)
+
 ## [1.43.0] (2025-08-26)
 #### [Breaking-Changes](Breaking-Changes.md#1430)
 #### Images

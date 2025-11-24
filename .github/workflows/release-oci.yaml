@@ -7,13 +7,13 @@ run-name: "Publish Helm Charts for Tag ${{ inputs.tag || github.event_name }} (R
 on:
   push:
     tags:
-      - \d+\.\d+\.\d+
+      - '[A-Za-z]+-[0-9]+.[0-9]+.[0-9]+'
   workflow_dispatch: # Также можно вручную запускать workflow.
     inputs:
       tag:
         description: "Tag to process"
         required: true
-        default: "1.0.0"
+        default: "Platform-2.0.0"
 
 jobs:
   publish-helm-charts:
@@ -25,28 +25,39 @@ jobs:
         run: |
           # Определяем, был ли использован workflow_dispatch
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "Using input tag: ${{ inputs.tag }}"
-            echo "TAG_VERSION=${{ inputs.tag }}" >> $GITHUB_ENV
+            RAW_TAG="${{ inputs.tag }}"
+            echo "Using input tag: $RAW_TAG"
           else
-            # Используем тег из события пуша
-            echo "Using pushed tag: ${GITHUB_REF#refs/tags/}"
-            echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+            RAW_TAG="${GITHUB_REF#refs/tags/}"
+            echo "Using pushed tag: $RAW_TAG"
           fi
 
-      # ШАГ 2. Checkout репозитория на указанный тег
+          echo "RAW_TAG=$RAW_TAG" >> $GITHUB_ENV
+
+      # ШАГ 2. Извлекаем группу и версию
+      - name: Extract group and version from tag
+        id: extract_group
+        run: |
+          GROUP=$(echo "$RAW_TAG" | grep -oE '^(PRO|Platform|Citylens|Evergis|Core)')
+          VERSION=$(echo "$RAW_TAG" | sed -E 's/^(PRO|Platform|Citylens|Evergis|Core)-//')
+
+          echo "GROUP=$GROUP" >> $GITHUB_ENV
+          echo "TAG_VERSION=$VERSION" >> $GITHUB_ENV
+
+      # ШАГ 3. Checkout репозитория на указанный тег
       - name: Checkout repository at specified tag
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.TAG_VERSION }}
+          ref: ${{ env.RAW_TAG }}
 
-      # ШАГ 3. Подтверждаем, что переключение на тег прошло успешно
+      # ШАГ 4. Подтверждаем, что переключение на тег прошло успешно
       - name: Confirm current tag
         run: |
-          echo "Checked out to tag: ${{ env.TAG_VERSION }}"
+          echo "Checked out to tag: ${{ env.RAW_TAG }}"
           git rev-parse HEAD
           git describe --tags
 
-      # ШАГ 4: Установка Helm
+      # ШАГ 5. Устанавливаем Helm
       - name: Setup Helm
         uses: azure/setup-helm@v3
         with:
@@ -54,43 +65,104 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # ШАГ 5. Обрабатываем все чарты в директории ./charts
+      # ШАГ 6. Фильтруем чарты по группе и сохраняем зависимый чарт
+      - name: Filter charts by group
+        id: filter_charts
+        run: |
+          echo "Filtering charts for group: $GROUP"
+
+          CHARTS_DIR="charts"
+          TEMP_DIR="charts_temp"
+          mkdir -p "$TEMP_DIR"
+
+          # Списки чартов по группам
+          declare -A GROUP_CHARTS
+          GROUP_CHARTS["PRO"]="pro-api pro-ui"
+          GROUP_CHARTS["Citylens"]="citylens citylens-routes-ui"
+          GROUP_CHARTS["Evergis"]="gis-platform"
+          GROUP_CHARTS["Core"]="keys license keycloak"
+
+          # Универсальная зависимость
+          UNIVERSAL_DEPENDENCY="generic-chart"
+
+          # Получаем все чарты
+          ALL_CHARTS=$(ls -1 "$CHARTS_DIR")
+
+          # Определяем чарты для сборки
+          if [[ "$GROUP" == "Platform" ]]; then
+            # Все чарты, кроме тех, что входят в другие группы
+            EXCLUDED=()
+            for g in "${!GROUP_CHARTS[@]}"; do
+              for c in ${GROUP_CHARTS[$g]}; do
+                EXCLUDED+=("$c")
+              done
+            done
+
+            SELECTED_CHARTS=()
+            for chart in $ALL_CHARTS; do
+              if [[ ! " ${EXCLUDED[*]} " =~ " $chart " ]]; then
+                SELECTED_CHARTS+=("$chart")
+              fi
+            done
+          else
+            SELECTED_CHARTS=(${GROUP_CHARTS[$GROUP]})
+          fi
+
+          echo "Selected charts: ${SELECTED_CHARTS[*]}"
+          echo "Universal dependency: $UNIVERSAL_DEPENDENCY"
+
+          # Удаляем всё, что не входит в SELECTED_CHARTS и не является universal dependency
+          for chart in $ALL_CHARTS; do
+            if [[ ! " ${SELECTED_CHARTS[*]} " =~ " $chart " ]] && [[ "$chart" != "$UNIVERSAL_DEPENDENCY" ]]; then
+              mv "$CHARTS_DIR/$chart" "$TEMP_DIR/"
+              echo "Moved $chart to $TEMP_DIR"
+            fi
+          done
+
+          echo "Charts remaining in $CHARTS_DIR:"
+          ls -1 "$CHARTS_DIR"
+
+          echo "dependency=$UNIVERSAL_DEPENDENCY" >> $GITHUB_OUTPUT
+
+      # ШАГ 7. Упаковываем чарты
       - name: Find and package Helm charts
         run: |
-          echo "Using version: ${{ env.TAG_VERSION }}"
-
-          # Создаем директорию для упакованных чартов
+          echo "Using version: $TAG_VERSION"
           mkdir -p ./packaged
 
-          # Ищем все Chart.yaml внутри папки ./charts
+          DEPENDENCY="${{ steps.filter_charts.outputs.dependency }}"
+
           for chart_path in $(find ./charts -name 'Chart.yaml'); do
-            chart_dir=$(dirname $chart_path) # Директория чарта
-            echo "Processing chart in directory: $chart_dir"
+            chart_dir=$(dirname "$chart_path")
+            chart_name=$(basename "$chart_dir")
 
-            # Проверяем, соответствует ли версия в Chart.yaml версии тега
-            echo "Checking version in Chart.yaml for $chart_path..."
-            current_version=$(grep '^version:' "$chart_path" | awk '{print $2}') # Извлекаем текущую версию из Chart.yaml
+            # Пропускаем универсальную зависимость
+            if [[ "$chart_name" == "$DEPENDENCY" ]]; then
+              echo "Skipping $chart_name (used as dependency only)"
+              continue
+            fi
 
-            if [ "$current_version" != "${TAG_VERSION}" ]; then
-              echo "Error: Version mismatch in $chart_path. Expected: ${TAG_VERSION}, Found: ${current_version}"
+            echo "Processing chart: $chart_name"
+
+            current_version=$(grep '^version:' "$chart_path" | awk '{print $2}')
+            if [ "$current_version" != "$TAG_VERSION" ]; then
+              echo "Error: Version mismatch in $chart_path. Expected: $TAG_VERSION, Found: $current_version"
               exit 1
             fi
 
-            echo "Version in $chart_path matches the expected version: ${TAG_VERSION}"
-
+            echo "Version in $chart_path matches the expected version: $TAG_VERSION"
             # Обновляем зависимости чарта
             echo "Updating dependencies for chart: $chart_dir"
             helm dependency update "$chart_dir"
-
             # Упаковываем чарт
-            helm package $chart_dir --destination ./packaged
+            helm package "$chart_dir" --destination ./packaged
           done
 
-      # ШАГ 6: Входим в GitHub Container Registry
+      # ШАГ 8. Вход в GitHub Container Registry
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # ШАГ 7. Публикуем чарты
+      # ШАГ 9. Публикуем чарты
       - name: Push packaged Helm charts to ghcr.io
         run: |
           for chart in ./packaged/*.tgz; do

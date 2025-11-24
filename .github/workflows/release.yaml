@@ -1,4 +1,3 @@
----
 name: Release Charts
 
 on:
@@ -61,6 +60,9 @@ jobs:
           EVERGIS_CHARTS=("gis-platform")
           CORE_CHARTS=("keys" "license" "keycloak")
 
+          # Универсальная зависимость
+          UNIVERSAL_DEPENDENCY="generic-chart"
+
           # Формирование списка чартов для сборки
           case "$GROUP" in
             "PRO")
@@ -94,13 +96,14 @@ jobs:
           esac
 
           echo "Selected charts: ${SELECTED_CHARTS[*]}"
+          echo "Universal dependency: $UNIVERSAL_DEPENDENCY"
 
           # Создание временной папки для ненужных чартов
           mkdir -p "$TEMP_DIR"
 
-          # Перемещение ненужных чартов
+          # Перемещение ненужных чартов (оставляем выбранные и универсальную зависимость)
           for chart in $ALL_CHARTS; do
-            if [[ ! " ${SELECTED_CHARTS[*]} " =~ " $chart " ]]; then
+            if [[ ! " ${SELECTED_CHARTS[*]} " =~ " $chart " ]] && [[ "$chart" != "$UNIVERSAL_DEPENDENCY" ]]; then
               mv "$CHARTS_DIR/$chart" "$TEMP_DIR/"
               echo "Moved $chart to $TEMP_DIR"
             fi
@@ -110,5 +113,44 @@ jobs:
           echo "Charts remaining in $CHARTS_DIR:"
           ls -1 "$CHARTS_DIR"
 
-      - name: Release chart
-        uses: helm/chart-releaser-action@v1.7.0
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: latest
+
+      - name: Install chart-releaser CLI
+        run: |
+          curl -sSL https://github.com/helm/chart-releaser/releases/download/v1.7.0/chart-releaser_1.7.0_linux_amd64.tar.gz | tar -xz
+          sudo mv cr /usr/local/bin
+
+      - name: Package charts manually
+        run: |
+          mkdir -p .cr-release-packages
+          for chart_path in $(find ./charts -name 'Chart.yaml'); do
+            chart_dir=$(dirname "$chart_path")
+            echo "Packaging chart: $chart_dir"
+            helm dependency update "$chart_dir"
+            helm package "$chart_dir" --destination .cr-release-packages
+          done
+
+      # Загрузка пакетов в GitHub Releases
+      - name: Upload charts to GitHub Releases
+        run: |
+          cr upload \
+            --owner ${{ github.repository_owner }} \
+            --git-repo ${{ github.event.repository.name }} \
+            --token ${{ secrets.GITHUB_TOKEN }} \
+            --package-path .cr-release-packages \
+            --skip-existing
+
+      # Обновление index.yaml и пуш в gh-pages
+      - name: Update index.yaml and push to gh-pages
+        run: |
+          cr index \
+            --owner ${{ github.repository_owner }} \
+            --git-repo ${{ github.event.repository.name }} \
+            --token ${{ secrets.GITHUB_TOKEN }} \
+            --package-path .cr-release-packages \
+            --index-path index.yaml \
+            --pages-branch gh-pages \
+            --push

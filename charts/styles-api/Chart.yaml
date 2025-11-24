@@ -3,8 +3,8 @@ name: styles-api
 type: application
 description: A Helm chart for Kubernetes to deploy API Styles service
 
-version: 1.43.0
-appVersion: 0.38.0
+version: 2.46.0
+appVersion: 0.42.0
 
 maintainers:
 - name: 2gis

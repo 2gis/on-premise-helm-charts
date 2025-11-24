@@ -103,12 +103,15 @@ data:
         {{- end }}
         "variables": {
           "LOCAL_PATH": "/opt/castle",
-          "LOCAL_ETC": "/etc/2gis/mosesd",
-          {{- if .Values.naviback.hierarchies.enabled }}
+          "LOCAL_ETC": {{ .Values.naviback.configFilepath | quote }},
+          {{- if or .Values.naviback.hierarchies.enabled .Values.naviback.truckUniverse.enabled }}
           "S3_CACHE_PATH": {{ .Values.naviback.hierarchies.s3path | quote }},
-          "SHORTCUT_PATH": "/tmp/hierarchies/shortcuts",
-          "PATCHES_PATH": "/tmp/hierarchies/patches",
-          {{- end }}{{- /* if .Values.naviback.hierarchies.enabled */}}
+          "SHORTCUT_PATH": {{ printf "%s/shortcuts" .Values.naviback.hierarchies.mountPath | quote }},
+          "PATCHES_PATH": {{ printf "%s/patches" .Values.naviback.hierarchies.mountPath | quote }},
+          {{- end }}{{- /* if or .Values.naviback.hierarchies.enabled .Values.naviback.truckUniverse.enabled */}}
+          {{- if .Values.trafficLights.enabled }}
+          "PASSPORTS_PATH": "{{ include "config.setCastleUrl" $ }}",
+          {{- end }}{{/* .Values.trafficLigths.enabled */}}
           "REMOTE_PATH": "{{ include "config.setCastleUrl" $ }}",
           "REMOTE_PATH_PROXY": "{{ .Values.naviback.castleUrlProxy }}",
           "REMOTE_FORECAST": "{{ include "config.setForecastUrl" $ }}",
@@ -415,16 +418,20 @@ data:
         },
         {{- end }}{{- /* .Values.naviback.indices.passZones.enabled */}}
         {{- end }}
+        {{- if .Values.naviback.indices.edgeTransitionProbability.enabled }}
         "edge_transition_probability": {
           "index_name": {{ include "config.setCastleProxyIndex" $ | quote }},
           "update_period": 0,
           "timeout_seconds": 60
         },
+        {{- end }}{{- /* .Values.naviback.indices.edgeTransitionProbability.enabled */}}
+        {{- if .Values.naviback.indices.turnPenalties.enabled }}
         "turn_penalties": {
           "index_name": {{ include "config.setCastleProxyIndex" $ | quote }},
           "update_period": 0,
           "timeout_seconds": 60
         },
+        {{- end }}{{- /* .Values.naviback.indices.turnPenalties.enabled */}}
         {{- if .Values.naviback.indices.snImport.enabled }}
         "sn_import": {
           "update_period": 0,
@@ -502,7 +509,7 @@ data:
               */ -}}
           {{- $kafkaProperties := dict -}}
           {{- range $key, $_ := .Values.kafka.fileProperties -}}
-          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret/%s" $key) -}}
+          {{- $_ := set $kafkaProperties $key (printf "%s/secret/%s" $.Values.naviback.configFilepath $key) -}}
           {{- end -}}
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.kafka.properties }}
           "kafka_properties":
@@ -522,7 +529,7 @@ data:
         "sharing": {
           {{- $kafkaProperties := dict -}}
           {{- range $key, $_ := .Values.routesharing.kafka.fileProperties -}}
-          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret-routesharing/%s" $key) -}}
+          {{- $_ := set $kafkaProperties $key (printf "%s/secret-routesharing/%s" $.Values.naviback.configFilepath $key) -}}
           {{- end -}}
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.routesharing.kafka.properties }}
           "kafka_properties":
@@ -578,6 +585,8 @@ data:
         },
           {{- end }}{{- /* if (not .Values.naviback.hierarchies.skipPatches) */}}
         {{- end }}{{- /* (not .Values.naviback.hierarchies.skipShortcuts) */}}
+        {{- end }}{{- /* if .Values.naviback.hierarchies.enabled */}}
+        {{- if or .Values.naviback.hierarchies.enabled .Values.naviback.truckUniverse.enabled }}
         "sn_import": {
           "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 600 }},
           "nodes": [
@@ -585,7 +594,16 @@ data:
           ],
           "timeout_seconds": 600
         },
-        {{- end }}{{- /* if .Values.naviback.hierarchies.enabled */}}
+        {{- end }}{{- /* if or .Values.naviback.hierarchies.enabled .Values.naviback.truckUniverse.enabled */}}
+        {{- if .Values.naviback.truckUniverse.enabled }}
+        "universe_edges_settings": {
+          "update_period": 0,
+          "nodes": [
+            "{S3_CACHE_PATH}/universe/universe_edges.bin"
+          ],
+          "timeout_seconds": 30
+        },
+        {{- end }}{{- /* if .Values.naviback.truckUniverse.enabled */}}
         {{- if .Values.naviback.etaScheduleIndex.enabled }}
         "eta_schedule": {
           "index_name": "eta_schedule_index",
@@ -602,7 +620,7 @@ data:
         "traffic_lights_kafka": {
           {{- $kafkaProperties := dict -}}
           {{- range $key, $_ := .Values.trafficLights.kafka.fileProperties -}}
-          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret-trafficLights/%s" $key) -}}
+          {{- $_ := set $kafkaProperties $key (printf "%s/secret-trafficLights/%s" $.Values.naviback.configFilepath $key) -}}
           {{- end -}}
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.trafficLights.kafka.properties }}
           "kafka_properties":
@@ -610,8 +628,15 @@ data:
           "topic": {{ .Values.trafficLights.kafka.topic | required "trafficLights.kafka.topic is not set" | quote }},
           {{- with .Values.trafficLights.projects }}
           "projects":
-            {{ . | mustToPrettyJson | nindent 12 }}
+            {{ . | mustToPrettyJson | nindent 12 }},
           {{- end }}
+          "passports": {
+            "update_period": 60,
+            "nodes": [
+               "{PASSPORTS_PATH}/traffic-passport/{project_name}.json"
+            ],
+            "timeout_seconds": 60
+          }
         },
         {{- end }}{{/* .Values.trafficLigths.enabled */}}
 
@@ -619,15 +644,15 @@ data:
         "road_locks": {
           {{- $kafkaProperties := dict -}}
           {{- range $key, $_ := .Values.roadLocks.kafka.fileProperties -}}
-          {{- $_ := set $kafkaProperties $key (printf "/etc/2gis/mosesd/secret-roadLocks/%s" $key) -}}
+          {{- $_ := set $kafkaProperties $key (printf "%s/secret-roadLocks/%s" $.Values.naviback.configFilepath $key) -}}
           {{- end -}}
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.roadLocks.kafka.properties }}
           "kafka_properties":
             {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
-          "modifications_limit_for_merge": "{{ .Values.roadLocks.modifications_limit_for_merge }}",
-          "merge_timeout_limit_ms": "{{ .Values.roadLocks.merge_timeout_limit_ms }}",
-          "merge_poll_ms": "{{ .Values.roadLocks.merge_poll_ms }}",
-          "kafka_messages_queue_size_limit": "{{ .Values.roadLocks.kafka_messages_queue_size_limit }}",
+          "modifications_limit_for_merge": {{ .Values.roadLocks.modifications_limit_for_merge | int }},
+          "merge_timeout_limit_ms": {{ .Values.roadLocks.merge_timeout_limit_ms | int }},
+          "merge_poll_ms": {{ .Values.roadLocks.merge_poll_ms | int }},
+          "kafka_messages_queue_size_limit": {{ .Values.roadLocks.kafka_messages_queue_size_limit | int }},
           "kafka_group_id_prefix": "{{ .Values.roadLocks.kafka_group_id_prefix }}"
         },
         {{- end }}{{/* .Values.roadLocks.enabled */}}
@@ -653,7 +678,6 @@ data:
           "attractor_motorcycle": {{ include "config.setAttractorMotorcycle" $ | default false -}},
           "reduce_edges_optimization_flag": {{ include "config.setReduceEdgesOptimizationFlag" $ | default false -}},
           {{- if ((.Values.resources).limits).cpu }}
-          "dist_matrix_thread_pool_size": {{ include "config.setCpuNumber" . }},
           "simple_network_build_thread_pool_size": {{ include "config.setCpuNumber" . }},
           {{- end }}
           "update_projects_limit": 2,

@@ -112,7 +112,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-attractor
   pullPolicy: IfNotPresent
-  tag: 7.42.0.3
+  tag: 7.47.1.3
 
 
 # @section Service account settings
@@ -263,6 +263,7 @@ pdb:
 # @param attractor.sentry.handler Handler file location
 # @param attractor.indexFilename Name of the index file on Castle
 # @param attractor.citiesFilename Name of the cities file on Castle
+# @param attractor.configFilepath Configs mountpoint path
 # @param attractor.disableUpdates Test switch for disabling runtime background updates
 # @extra attractor.indices List of dynamic indices kill switches.
 # @skip attractor.indices.carOptions.enabled
@@ -281,9 +282,11 @@ pdb:
 # @param attractor.restrictions.updatePeriod Update period from restrictions server.
 # @param attractor.restrictions.timeoutSeconds Timeout seconds for restrictions server
 # @param attractor.tilesMetricsThreshold The value at which we send tiles metrics (used for internal tests).
-# @param attractor.app_rule Item name from `rules` list to load rules from.
+# @param attractor.appRule Item name from `rules` list to load rules from.
+# @extra attractor.app_rule DEPRECATED see `attractor.appRule`
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
-# @param app_project Do not use, configure with `rules` and `app_rule` instead.
+# @param appProject Do not use, configure with `rules` and `app_rule` instead.
+# @extra app_project DEPRECATED see `appProject`
 # @param rules List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
 
 attractor:
@@ -312,6 +315,7 @@ attractor:
     handler: /usr/sbin/2gis/mosesd/crashpad_handler
   indexFilename: index.json.zip
   citiesFilename: cities.conf.zip
+  configFilepath: /src/etc/2gis/mosesd
   disableUpdates: false
   indices:
     # items in alphabet order
@@ -339,10 +343,10 @@ attractor:
     updatePeriod: 60
     timeoutSeconds: 60
   tilesMetricsThreshold: 0
-  app_rule: ''
+  appRule: ''
 
 navigroup: ''
-app_project: ''
+appProject: ''
 rules: []
 
 # @section Kafka settings for interacting with Distance Matrix Async Service

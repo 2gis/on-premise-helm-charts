@@ -26,6 +26,8 @@ data:
     }
     {{- end }}
 
+    js_var $key_visibility "none";
+
     {{- if .Values.front.multimod.enabled }}
     js_var $multi_region_id "none";
     js_var $multi_mod_ctx "none";
@@ -162,16 +164,17 @@ data:
         {{- if .Values.multimodLocation }}
         {{ include "tplvalues.render" ( dict "value" .Values.multimodLocation "context" . ) | nindent 8 }}
         {{- else }}
-        location /ctx_multi_mod {
+        location ~* ^/ctx_multi_mod {
             {{ include "front.getInternalACL" . | nindent 12 }}
             rewrite ^/ctx_multi_mod(.*)$ $1 break;
             add_header X-Region {{ .Values.front.multimod.host }} always;
-            proxy_set_header X-Multi-Mod-Taxi $multi_mod_taxi;
-            proxy_set_header X-Multi-Mod-Ctx $multi_mod_ctx;
-            # replace those with the below lines once multimod supports that
-            # proxy_set_header X-Multi-Mod-Taxi $multi_mod_taxi_upstream;
-            # proxy_set_header X-Multi-Mod-Ctx $multi_mod_ctx_upstream;
+            proxy_set_header x-key-visibility $key_visibility;
+            proxy_set_header X-Multi-Mod-Taxi $multi_mod_taxi_upstream;
+            proxy_set_header X-Multi-Mod-Ctx $multi_mod_ctx_upstream;
             proxy_set_header X-Region-Id $multi_region_id;
+            {{- range $header, $value := .Values.front.locationExtraProxyHeaders }}
+            {{- printf "proxy_set_header %s \"%s\";\n" $header $value | nindent 12 }}
+            {{- end }}
             {{- if .Values.front.keepalive.enabled }}
             proxy_set_header Connection "";
             proxy_http_version 1.1;
@@ -183,6 +186,14 @@ data:
         }
         {{- end }}
         {{- end }}
+
+{{/*
+        Nginx terminates location search after first regex match,
+        thus `/ctx` must be after (potential) `/ctx_multi_mod`
+*/}}
+        location ~* ^/ctx {
+            js_content bundle.geo_coding;
+        }
 
         location ~* ^/route_planner  {
             js_content bundle.geo_coding;

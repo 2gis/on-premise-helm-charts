@@ -28,21 +28,35 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Common settings
 
-| Name                   | Description                                                                                                                                                               | Value   |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `enableServiceLinks`   | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `false` |
-| `replicaCount`         | A replica count for the pod.                                                                                                                                              | `1`     |
-| `revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                            | `3`     |
-| `imagePullSecrets`     | Kubernetes image pull secrets.                                                                                                                                            | `[]`    |
-| `nameOverride`         | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                   | `""`    |
-| `fullnameOverride`     | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                               | `""`    |
-| `podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                             | `{}`    |
-| `podSecurityContext`   | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                            | `{}`    |
-| `securityContext`      | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                                | `{}`    |
-| `nodeSelector`         | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                       | `{}`    |
-| `tolerations`          | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                         | `[]`    |
-| `affinity`             | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                               | `{}`    |
-| `sidecars`             | List of additional sidecar containers                                                                                                                                     | `[]`    |
+| Name                                 | Description                                                                                                                                                               | Value   |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `enableServiceLinks`                 | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `false` |
+| `replicaCount`                       | A replica count for the pod.                                                                                                                                              | `1`     |
+| `revisionHistoryLimit`               | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                            | `3`     |
+| `imagePullSecrets`                   | Kubernetes image pull secrets.                                                                                                                                            | `[]`    |
+| `nameOverride`                       | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                   | `""`    |
+| `fullnameOverride`                   | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                               | `""`    |
+| `podAnnotations`                     | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                             | `{}`    |
+| `podSecurityContext`                 | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                            | `{}`    |
+| `securityContext`                    | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                                | `{}`    |
+| `nodeSelector`                       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                       | `{}`    |
+| `tolerations`                        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                         | `[]`    |
+| `affinity`                           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                               | `{}`    |
+| `sidecars`                           | List of additional sidecar containers                                                                                                                                     | `[]`    |
+| `livenessProbe.enabled`              | Enable livenessProbe                                                                                                                                                      | `true`  |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                                                   | `0`     |
+| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                                                          | `10`    |
+| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                                                                         | `1`     |
+| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                                                                       | `3`     |
+| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                                                                       | `1`     |
+| `readinessProbe.enabled`             | Enable readinessProbe                                                                                                                                                     | `true`  |
+| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                                                  | `0`     |
+| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                                                                         | `10`    |
+| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                                                        | `1`     |
+| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                                                      | `3`     |
+| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                                                      | `1`     |
+| `customLivenessProbe`                | Override default liveness probe                                                                                                                                           | `{}`    |
+| `customReadinessProbe`               | Override default readiness probe                                                                                                                                          | `{}`    |
 
 ### Deployment settings
 

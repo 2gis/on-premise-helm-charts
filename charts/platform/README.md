@@ -34,11 +34,12 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | Name                  | Description                    | Value                         |
 | --------------------- | ------------------------------ | ----------------------------- |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/platform-ui` |
-| `ui.image.tag`        | Tag                            | `1.9.1`                       |
+| `ui.image.tag`        | Tag                            | `1.15.1`                      |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                          |
 
 ### UI service settings
 
+<<<<<<< HEAD
 | Name                     | Description                                                                                                                                                                                                                                                                                                 | Value  |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `ui.appPort`             | Service port.                                                                                                                                                                                                                                                                                               | `3000` |
@@ -46,6 +47,16 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | `ui.pages`               | A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground"`, `"map_styles"`, `"keys"`, `"statistics"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones. | `""`   |
 | `ui.playgrounds`         | A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder" (requires `ui.catalog.url`), "directions"` (requires `ui.navi.url`).                                                                                         | `""`   |
 | `ui.redirectSafeDomains` | A regular expression used to determine whether a domain is safe for redirection.                                                                                                                                                                                                                            | `""`   |
+=======
+| Name                          | Description                                                                                                                                                                                                                                                                                          | Value  |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `ui.appPort`                  | Service port.                                                                                                                                                                                                                                                                                        | `3000` |
+| `ui.brand`                    | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                                                                      | `""`   |
+| `ui.pages`                    | A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground", "map_styles"`, `"users"`, `"keys"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones. | `""`   |
+| `ui.playgrounds`              | A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder" (requires `ui.catalog.url`), "directions"` (requires `ui.navi.url`).                                                                                  | `""`   |
+| `ui.redirectSafeDomains`      | A regular expression used to determine whether a domain is safe for redirection.                                                                                                                                                                                                                     | `""`   |
+| `ui.enableServiceLimitations` | A flag that enables to view and edit particular key service limitations.                                                                                                                                                                                                                             | `true` |
+>>>>>>> develop
 
 ### OIDC
 
@@ -88,11 +99,36 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | `ui.mapgl.key`        | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                                                                 | `""`      |
 | `ui.mapgl.initCenter` | Optional default map coordinates. Contains of two numbers in an array: `[lon,lat]` (e.g., `"[55.27,25.2]"` stands for Dubai, `"[37.64,55.74]"` — for Moscow). | `""`      |
 
-### Map styles API settings
+### Map styles settings
 
-| Name               | Description            | Value |
-| ------------------ | ---------------------- | ----- |
-| `ui.mapStyles.url` | URL to Map Styles API. | `""`  |
+| Name                        | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `ui.mapStyles.url`          | URL to Map Styles API.                                                                                                                                                                                                                                                                                                                                                   | `""`  |
+| `ui.mapStyles.entryPageUrl` | Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'. | `""`  |
+
+### Service Pro settings
+
+| Name                  | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `ui.pro.entryPageUrl` | Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'. | `""`  |
+
+### Service CityLens settings
+
+| Name                       | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `ui.cityLens.entryPageUrl` | Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'. | `""`  |
+
+### Service On-Premise settings
+
+| Name                        | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `ui.onpremise.entryPageUrl` | Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'. | `""`  |
+
+### Service kitDocs settings
+
+| Name                      | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `ui.kitDocs.entryPageUrl` | Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'. | `""`  |
 
 ### Search API settings
 

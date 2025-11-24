@@ -69,7 +69,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | ------------------ | ----------- | -------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-attractor` |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                   |
-| `image.tag`        | Tag         | `7.42.0.3`                       |
+| `image.tag`        | Tag         | `7.47.1.3`                       |
 
 ### Service account settings
 
@@ -175,6 +175,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | `attractor.sentry.handler`              | Handler file location                                                                                                                                                                    | `/usr/sbin/2gis/mosesd/crashpad_handler` |
 | `attractor.indexFilename`               | Name of the index file on Castle                                                                                                                                                         | `index.json.zip`                         |
 | `attractor.citiesFilename`              | Name of the cities file on Castle                                                                                                                                                        | `cities.conf.zip`                        |
+| `attractor.configFilepath`              | Configs mountpoint path                                                                                                                                                                  | `/src/etc/2gis/mosesd`                   |
 | `attractor.disableUpdates`              | Test switch for disabling runtime background updates                                                                                                                                     | `false`                                  |
 | `attractor.indices`                     | List of dynamic indices kill switches.                                                                                                                                                   |                                          |
 | `attractor.overrideConfig`              | Complete config override. For test purposes only.                                                                                                                                        | `""`                                     |
@@ -184,9 +185,11 @@ Attractor не имеет смысла без сервиса navi-back.
 | `attractor.restrictions.updatePeriod`   | Update period from restrictions server.                                                                                                                                                  | `60`                                     |
 | `attractor.restrictions.timeoutSeconds` | Timeout seconds for restrictions server                                                                                                                                                  | `60`                                     |
 | `attractor.tilesMetricsThreshold`       | The value at which we send tiles metrics (used for internal tests).                                                                                                                      | `0`                                      |
-| `attractor.app_rule`                    | Item name from `rules` list to load rules from.                                                                                                                                          | `""`                                     |
+| `attractor.appRule`                     | Item name from `rules` list to load rules from.                                                                                                                                          | `""`                                     |
+| `attractor.app_rule`                    | DEPRECATED see `attractor.appRule`                                                                                                                                                       |                                          |
 | `navigroup`                             | Service group identifier, allows multiple stacks deployed to the same namespace.                                                                                                         | `""`                                     |
-| `app_project`                           | Do not use, configure with `rules` and `app_rule` instead.                                                                                                                               | `""`                                     |
+| `appProject`                            | Do not use, configure with `rules` and `app_rule` instead.                                                                                                                               | `""`                                     |
+| `app_project`                           | DEPRECATED see `appProject`                                                                                                                                                              |                                          |
 | `rules`                                 | List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details | `[]`                                     |
 
 ### Kafka settings for interacting with Distance Matrix Async Service

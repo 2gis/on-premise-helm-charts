@@ -113,13 +113,13 @@ spec:
             - /bin/sh
             - -ec
             - |
-              cp /tmp/certs/* /etc/2gis/secret/psql/
-              chmod 600 /etc/2gis/secret/psql/client.key
+              cp /tmp/certs/* {{ printf "%s/secret/psql/" .Values.dm.configFilepath | quote }}
+              chmod 600 {{ printf "%s/secret/psql/client.key" .Values.dm.configFilepath | quote }}
           volumeMounts:
             - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
               mountPath: /tmp/certs
             - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
-              mountPath: /etc/2gis/secret/psql
+              mountPath: {{ printf "%s/secret/psql" .Values.dm.configFilepath | quote }}
         {{- end }}
       containers:
         - name: {{ .Chart.Name }}
@@ -151,13 +151,13 @@ spec:
           volumeMounts:
           {{- if $kafkaVolumeMounted }}
           - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
-            mountPath: /etc/2gis/secret/consumer/
+            mountPath: {{ printf "%s/secret/consumer/" .Values.dm.configFilepath | quote }}
           - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
-            mountPath: /etc/2gis/secret/producer/
+            mountPath: {{ printf "%s/secret/producer/" .Values.dm.configFilepath | quote }}
           {{- end }}
           {{- if .Values.db.tls.enabled }}
           - name: {{ printf "%s-psql" (include "navi-async-matrix.fullname" .) | quote }}
-            mountPath: /etc/2gis/secret/psql
+            mountPath: {{ printf "%s/secret/psql" .Values.dm.configFilepath | quote }}
           {{- end }}
           {{- if .Values.customCAs.bundle }}
           - name: {{ include "navi-async-matrix.fullname" . }}-ca
@@ -189,16 +189,19 @@ spec:
               value: {{ .Values.s3.expirationDays | quote }}
             - name: DM_ASYNC_SERVICE_LOGGER_SETTING__LEVEL
               value: {{ .Values.dm.logLevel | quote }}
-            {{- if .Values.s3.publicNetloc }}
+            - name: DM_ASYNC_SERVICE_LOGGER_SETTING__FORMAT
+              value: {{ .Values.dm.logFormat | quote }}
+            {{- $s3publicUrl := .Values.s3.publicUrl | default .Values.s3.publicNetloc | default "" }}
+            {{- if $s3publicUrl }}
             # DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC for < 1.11.0
             # DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC_URL for >= 1.11.0
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC
-              value: {{ regexReplaceAllLiteral "^https?://" .Values.s3.publicNetloc "" | quote }}
-              {{- if not (regexMatch "^https?://" .Values.s3.publicNetloc) }}
-                {{- fail "s3.publicNetLoc must start with the scheme: `<scheme>://<netloc>[/]`" }}
+              value: {{ regexReplaceAllLiteral "^https?://" $s3publicUrl "" | quote }}
+              {{- if not (regexMatch "^https?://" $s3publicUrl) }}
+                {{- fail "s3.publicUrl must start with the scheme: `<scheme>://<netloc>[/]`" }}
               {{- end }}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_PUBLIC_NETLOC_URL
-              value: {{ .Values.s3.publicNetloc | quote }}
+              value: {{ $s3publicUrl | quote }}
             {{- end }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_CANCEL_TOPIC
               value: {{ required "A valid kafka.cancelTopic entry required" .Values.kafka.cancelTopic | quote }}
@@ -223,8 +226,6 @@ spec:
               value: {{ required "A valid kafka.mergerStatusTopic entry required" .Values.kafka.mergerStatusTopic | quote }}
             - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__CONFIG_TYPE
               value: default
-            - name: DM_ASYNC_SERVICE_TASK_SPLIT_SIZE
-              value: {{ .Values.dm.taskSplitSize | quote }}
             - name: DM_ASYNC_SERVICE_COMPOSITE_TASK_TIMEOUT_IN_SECONDS
               value: {{ .Values.dm.compositeTaskTimeoutSec | quote }}
             {{- if .Values.multiDc.enabled }}
@@ -264,7 +265,7 @@ spec:
                       "-"
                       (lower $kafkaRole)
                     )
-                  "mountpoint" (print "/etc/2gis/secret/" (lower $kafkaRole))
+                  "mountpoint" (printf "%s/secret/%s" $.Values.dm.configFilepath (lower $kafkaRole))
                   "prefix" $kafkaPropertyEnv
                 ) | fromYaml }}
             {{- get $kafkaPropertiesEnv "ret" | toYaml | nindent 12 }}

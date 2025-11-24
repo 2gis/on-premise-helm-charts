@@ -13,6 +13,10 @@ spec:
       - name: {{ include "generic-chart.fullname" . }}-configmap
         configMap:
           name: {{ include "generic-chart.fullname" . }}-configmap
+      {{- if .Values.router.sentry.enabled }}
+      - name: sentry-volume
+        emptyDir: {}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:

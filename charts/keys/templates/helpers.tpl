@@ -135,6 +135,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: {{ .Values.api.oidc.enable | quote }}
 - name: KEYS_FEATURE_FLAGS_STAT_API
   value: {{ .Values.statApi.enable | quote }}
+  value: {{ .Values.api.oidc.enabled | quote }}
+- name: KEYS_FEATURE_FLAGS_REDIS
+  value: {{ .Values.redis.enabled | quote }}
+- name: KEYS_FEATURE_FLAGS_STAT_REDIS
+  {{- if (and .Values.featureFlags.enableStatRedis (not .Values.redis.enabled)) }}
+    {{- fail "featureFlags.enableStatRedis requires redis.enabled to be true" }}
+  {{- end }}
+  value: {{ .Values.featureFlags.enableStatRedis | quote }}
 {{- end }}
 
 {{- define "keys.env.api" -}}
@@ -147,7 +155,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       name: {{ include "keys.secret.deploys.name" . }}
       key: signPrivateKey
 {{- end }}
-{{- if .Values.api.oidc.enable }}
+{{- if .Values.api.oidc.enabled }}
 - name: KEYS_OIDC_ENDPOINT
   value: {{ required "A valid .Values.api.oidc.url required" .Values.api.oidc.url | quote }}
 - name: KEYS_OIDC_CLIENT_TIMEOUT
@@ -290,6 +298,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.redis" -}}
+
 - name: KEYS_REDIS_HOST
   value: {{ .Values.redis.host | quote }}
 - name: KEYS_REDIS_DB

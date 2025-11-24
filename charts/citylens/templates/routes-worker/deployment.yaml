@@ -63,7 +63,7 @@ spec:
               containerPort: 8080
               protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.routes.worker.tempPath }}"
+            - mountPath: {{ .Values.routes.worker.tempPath | quote }}
               name: temp-volume
           livenessProbe:
             httpGet:
@@ -103,43 +103,35 @@ spec:
 
             - name: Common__Logging__LogLevel
               value: {{ .Values.routes.worker.logging.level | quote }}
+            - name: Common__Logging__ExtendedSqlLogging
+              value: {{ .Values.routes.worker.logging.extendedSqlLogging | quote }}
 
             - name: RoutesSettings__RoutePointsMatchDistanceMeters
               value: {{ .Values.routes.worker.routesSettings.routePointsMatchDistanceMeters | quote }}
 
-            - name: PgSettings__Host
-              value: {{ required "A valid .Values.postgres.host entry required" $.Values.postgres.host | quote }}
-            - name: PgSettings__Port
-              value: {{ required "A valid .Values.postgres.port entry required" $.Values.postgres.port | quote }}
-            - name: PgSettings__UserName
-              value: {{ required "A valid .Values.postgres.username entry required" $.Values.postgres.username | quote }}
-            - name: PgSettings__Password
+            - name: Postgres__ReadWrite__ConnectionString
+              value: {{ include "routes-api.connectionString" . }}
+            - name: Postgres__ReadWrite__Password
               valueFrom:
                 secretKeyRef:
                   key: postgresPassword
                   name: {{ include "citylens.routes.api.name" . }}-secret
 
-            - name: PgSettings__Api__Database
-              value: {{ required "A valid .Values.routes.postgres.database entry required" $.Values.routes.postgres.database | quote }}
-            - name: PgSettings__Api__Timeout
-              value: {{ $.Values.routes.postgres.timeout | quote }}
-            - name: PgSettings__Api__CommandTimeout
-              value: {{ $.Values.routes.postgres.commandTimeout | quote }}
-            - name: PgSettings__Api__MaxPoolSize
-              value: {{ $.Values.routes.postgres.maxPoolSize | quote }}
-            - name: PgSettings__Api__Pooling
-              value: {{ $.Values.routes.postgres.pooling | quote }}
+            - name: Postgres__ReadOnly__ConnectionString
+              value: {{ include "routes-api.connectionString" . }}
+            - name: Postgres__ReadOnly__Password
+              valueFrom:
+                secretKeyRef:
+                  key: postgresPassword
+                  name: {{ include "citylens.routes.api.name" . }}-secret
 
-            - name: PgSettings__Hangfire__Database
-              value: {{ required "A valid .Values.routes.hangfire.postgres.database entry required" $.Values.routes.hangfire.postgres.database | quote }}
-            - name: PgSettings__Hangfire__Timeout
-              value: {{ $.Values.routes.hangfire.postgres.timeout | quote }}
-            - name: PgSettings__Hangfire__CommandTimeout
-              value: {{ $.Values.routes.hangfire.postgres.commandTimeout | quote }}
-            - name: PgSettings__Hangfire__MaxPoolSize
-              value: {{ $.Values.routes.hangfire.postgres.maxPoolSize | quote }}
-            - name: PgSettings__Hangfire__Pooling
-              value: {{ $.Values.routes.hangfire.postgres.pooling | quote }}
+            - name: Hangfire__Postgres__ConnectionString
+              value: {{ include "routes-hangfire.connectionString" . }}
+            - name: Hangfire__Postgres__Password
+              valueFrom:
+                secretKeyRef:
+                  key: postgresPassword
+                  name: {{ include "citylens.routes.api.name" . }}-secret
 
             - name: BusConfig__Broker
               value: {{ .Values.kafka.bootstrapServer | quote }}
@@ -160,9 +152,9 @@ spec:
             - name: BusConfig__Consumers__AppEvents__GroupId
               value: {{ required "A valid .Values.routes.worker.busConfig.consumers.appEvents.groupId entry required" $.Values.routes.worker.busConfig.consumers.appEvents.groupId | quote }}
             - name: BusConfig__Consumers__AppEvents__BufferSize
-              value: {{ .Values.routes.worker.busConfig.consumers.appEvents.bufferSize | quote }}
+              value: {{ $.Values.routes.worker.busConfig.consumers.appEvents.bufferSize | quote }}
             - name: BusConfig__Consumers__AppEvents__WorkersCount
-              value: {{ .Values.routes.worker.busConfig.consumers.appEvents.workersCount | quote }}
+              value: {{ $.Values.routes.worker.busConfig.consumers.appEvents.workersCount | quote }}
 
             - name: TasksAssetSettings__SystemAccessToken
               value: {{ $.Values.routes.tasksAssetSettings.systemAccessToken | quote }}

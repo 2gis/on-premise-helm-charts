@@ -25,18 +25,20 @@ strategy:
 # @param image.tag Tag
 image:
   repository: 2gis-on-premise/citylens-routes-ui
-  tag: 1.3.2
+  tag: 1.4.0
 
 # @section Environment
 
 # @param env.CATALOG_API_URL Catalog API base URL **Required**
 # @param env.MAPGL_API_URL Map API base URL **Required**
 # @param env.MAPGL_COPYRIGHT_VARIANT Copyright variant, can be '2gis', 'urbi' or empty
+# @param env.MAPGL_DEFAULT_CENTER Map center in 'lon,lat' format like '46.72185,24.70996' **Required**
 # @param env.MAPGL_KEY API key for mapgl **Required**
 # @param env.MAPGL_STYLE_ID_GRAYSCALE Map grayscale style ID
 # @param env.MAPGL_STYLE_ID_DAY Map day style ID
 # @param env.MAPGL_STYLE_ID_NIGHT Map night style ID
 # @param env.MAPGL_STYLE_ID_PASTEL Map pastel style ID
+# @param env.METRICS_API_URL Metrics service endpoint
 # @param env.ROUTES_API_URL Backend (citylens-routes-api) base URL **Required**
 # @param env.SSO_API_URL Single sign-on API URL **Required**
 # @param env.SSO_CLIENT_ID OpenID client identifier for single sign-on **Required**
@@ -46,11 +48,13 @@ env:
   CATALOG_API_URL: ''
   MAPGL_API_URL: ''
   MAPGL_COPYRIGHT_VARIANT: ''
+  MAPGL_DEFAULT_CENTER: ''
   MAPGL_KEY: ''
   MAPGL_STYLE_ID_GRAYSCALE: ''
   MAPGL_STYLE_ID_DAY: ''
   MAPGL_STYLE_ID_NIGHT: ''
   MAPGL_STYLE_ID_PASTEL: ''
+  METRICS_API_URL: ''
   ROUTES_API_URL: ''
   SSO_API_URL: ''
   SSO_CLIENT_ID: ''

@@ -47,8 +47,11 @@ Create the name of the service account to use
 {{- define "navi-async-matrix.dbDsnParams" -}}
 {{- $params := printf "?%s" (include "navi-async-matrix.dbHosts" .) }}
 {{- if .Values.db.tls.enabled }}
-{{- $params = printf "%s&sslcert=/etc/2gis/secret/psql/client.crt&sslkey=/etc/2gis/secret/psql/client.key&sslrootcert=/etc/2gis/secret/psql/ca.crt&sslmode=%s"
+{{- $params = printf "%s&sslcert=%s/secret/psql/client.crt&sslkey=%s/secret/psql/client.key&sslrootcert=%s/secret/psql/ca.crt&sslmode=%s"
               $params
+              .Values.dm.configFilepath
+              .Values.dm.configFilepath
+              .Values.dm.configFilepath
               (required "A valid db.tls.mode entry required" .Values.db.tls.mode) -}}
 {{- end }}
 {{- print $params -}}
