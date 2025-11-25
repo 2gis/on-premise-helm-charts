@@ -34,7 +34,6 @@ spec:
         - name: cassandra-tls
           secret:
             secretName: {{ include "tiles.fullname" . }}-tls
-            defaultMode: 256
         {{- end }}
 
         {{- if $.Values.customCAs.bundle }}
