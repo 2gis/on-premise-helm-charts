@@ -96,8 +96,20 @@ cassandra:
     enableHostVerification: true
     deploySecret: false
     ca: ''
+    # ca: |
+      # -----BEGIN CERTIFICATE-----
+      # ...
+      # -----END CERTIFICATE-----
     cert: ''
+    # cert: |
+      # -----BEGIN CERTIFICATE-----
+      # ...
+      # -----END CERTIFICATE-----
     key: ''
+    # key: |
+      # -----BEGIN PRIVATE KEY-----
+      # ...
+      # -----END PRIVATE KEY-----
 
   replicaFactor: 3
   consistencyLevelRead: LOCAL_ONE
