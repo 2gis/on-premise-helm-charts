@@ -841,7 +841,6 @@ See the [documentation]() to learn about:
 | -------------------------------------- | ------------------------------------------------------------ | ------- |
 | `routes.features.authorizationEnabled` | Enable authorization. (If disabled, a default user is used). | `true`  |
 | `routes.features.tasksAssetEnabled`    | Enable sending data to PRO for tasks.                        | `false` |
-| `routes.features.multiTenantEnabled`   | Enable separating data by companies.                         | `false` |
 
 ### Citylens routes PRO assets configs.
 

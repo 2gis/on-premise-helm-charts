@@ -1421,7 +1421,6 @@ routes:
 # @section Citylens routes feature switcher settings.
 # @param routes.features.authorizationEnabled Enable authorization. (If disabled, a default user is used).
 # @param routes.features.tasksAssetEnabled Enable sending data to PRO for tasks.
-# @param routes.features.multiTenantEnabled Enable separating data by companies.
 # @skip routes.features.oidcMobileAuthorizationEnabled
 # @skip routes.features.coverageRatioEnabled
 
@@ -1430,7 +1429,6 @@ routes:
     oidcMobileAuthorizationEnabled: true
     coverageRatioEnabled: true
     tasksAssetEnabled: false
-    multiTenantEnabled: false
 
 # @section Citylens routes PRO assets configs.
 # @param routes.tasksAssetSettings.systemAccessToken Route task asset token.
