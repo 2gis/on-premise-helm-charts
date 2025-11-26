@@ -1423,12 +1423,16 @@ routes:
 # @param routes.features.tasksAssetEnabled Enable sending data to PRO for tasks.
 # @skip routes.features.oidcMobileAuthorizationEnabled
 # @skip routes.features.coverageRatioEnabled
+# @skip routes.features.multiTenantEnabled
+# @skip routes.features.licenseEnabled
 
   features:
     authorizationEnabled: true
     oidcMobileAuthorizationEnabled: true
     coverageRatioEnabled: true
     tasksAssetEnabled: false
+    multiTenantEnabled: false
+    licenseEnabled: false
 
 # @section Citylens routes PRO assets configs.
 # @param routes.tasksAssetSettings.systemAccessToken Route task asset token.
