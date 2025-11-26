@@ -1056,7 +1056,7 @@ routes:
 
     image:
       repository: 2gis-on-premise/citylens-routes-api
-      tag: 1.6.3
+      tag: 1.6.5
       pullPolicy: IfNotPresent
 
 # @section Resources settings
@@ -1203,7 +1203,7 @@ routes:
 
     image:
       repository: 2gis-on-premise/citylens-worker-service
-      tag: 1.6.3
+      tag: 1.6.5
       pullPolicy: IfNotPresent
 
 # @section Resources settings
@@ -1299,7 +1299,7 @@ routes:
 
     image:
       repository: 2gis-on-premise/citylens-realtime-data-api
-      tag: 1.6.3
+      tag: 1.6.5
       pullPolicy: IfNotPresent
 
 # @section Resources settings
