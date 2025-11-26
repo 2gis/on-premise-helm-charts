@@ -74,8 +74,13 @@ types:
 # @param cassandra.credentials.jmxUser JMX user name to be used by the Kubernetes Importer Job's cleaner process.
 # @param cassandra.credentials.jmxPassword JMX password to be used by the Kubernetes Importer Job's cleaner process.
 
-# @extra cassandra.ssl **SSL configuration for accessing Apache Cassandra**
-# @param cassandra.ssl.enabled If Apache Cassandra uses SSL for client connections.
+# @extra cassandra.tls **TLS configuration for accessing Apache Cassandra**
+# @param cassandra.tls.enabled If Apache Cassandra uses TLS for client connections.
+# @param cassandra.tls.enableHostVerification Enables hostname verification during the TLS handshake.
+# @param cassandra.tls.deploySecret Creates a Kubernetes secret with TLS certificates.
+# @param cassandra.tls.ca Root certificate file.
+# @param cassandra.tls.cert Client certificate.
+# @param cassandra.tls.key Client private key.
 
 cassandra:
   environment: ''
@@ -86,8 +91,25 @@ cassandra:
     password: cassandra
     jmxUser: cassandra
     jmxPassword: cassandra
-  ssl:
+  tls:
     enabled: false
+    enableHostVerification: true
+    deploySecret: false
+    ca: ''
+    # ca: |
+      # -----BEGIN CERTIFICATE-----
+      # ...
+      # -----END CERTIFICATE-----
+    cert: ''
+    # cert: |
+      # -----BEGIN CERTIFICATE-----
+      # ...
+      # -----END CERTIFICATE-----
+    key: ''
+    # key: |
+      # -----BEGIN PRIVATE KEY-----
+      # ...
+      # -----END PRIVATE KEY-----
 
   replicaFactor: 3
   consistencyLevelRead: LOCAL_ONE
@@ -144,7 +166,7 @@ tilegen:
   # @param tilegen.imagePullSecrets Kubernetes image pull secrets.
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.77.0
+    tag: 4.80.0
     pullPolicy: IfNotPresent
 
   imagePullSecrets: []
@@ -255,7 +277,7 @@ proxy:
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.77.0
+    tag: 4.80.0
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -326,7 +348,7 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.77.0
+    tag: 4.80.0
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
@@ -485,7 +507,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.77.0
+    tag: 4.80.0
     pullPolicy: IfNotPresent
 
 
