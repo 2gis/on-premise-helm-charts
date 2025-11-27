@@ -1,9 +1,9 @@
 catalog-api
-	catalog-api:3.649.0
+	catalog-api:3.665.1
 	catalog-importer:1.12.1
 generic-chart
 mapgl-js-api
-	mapgl:1.66.0
+	mapgl:1.67.0
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
@@ -34,7 +34,7 @@ navi-vrp-solver
 navi-vrp-task-manager
 	navi-vrp-task-manager:1.13.1
 platform
-	platform-ui:1.9.1
+	platform-ui:1.15.1
 search-api
 	nginx:1.25.5
 	search-api:7.90.0
@@ -42,15 +42,15 @@ stat-receiver
 	stat-receiver-api:1.15.21
 	stat-receiver-streams:1.15.21
 styles-api
-	styles-api:0.38.0
+	styles-api:0.42.0
 tilegen-api
 	tilegen-api:1.1.8
 	tilegen-processor:1.1.8
 tiles-api
-	tiles-api-importer:4.77.0
-	tiles-api-importer:4.77.0
-	tiles-api-proxy:4.77.0
-	tiles-api:4.77.0
+	tiles-api-importer:4.80.0
+	tiles-api-importer:4.80.0
+	tiles-api-proxy:4.80.0
+	tiles-api:4.80.0
 traffic-proxy
 	nginx:1.25.5
 twins-api
