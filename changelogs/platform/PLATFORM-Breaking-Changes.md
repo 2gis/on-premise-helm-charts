@@ -1,4 +1,5 @@
 # Platform Breaking-Changes
+
 ## [2.47.0]
 
 ### catalog-api
