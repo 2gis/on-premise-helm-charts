@@ -15,6 +15,10 @@
 - `kafka.sasl.jaas` splitted to several values: `kafka.sasl.jaasLoginModule`, `kafka.sasl.username` and `kafka.sasl.password`
 - `kafka.sasl.createSecret` removed. If `kafka.sasl.secretName` is not an empty string, chart will use the specified name to reference the secret Otherwise a new secret will be created.
 
+### tiles-api
+
+- Renamed `cassandra.ssl` to `cassandra.tls`
+
 ### platform
 
 - You need to upgrade keys-backend to version 1.140.0 (Release Core 2.1.0)
