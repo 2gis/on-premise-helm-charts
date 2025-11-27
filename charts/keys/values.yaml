@@ -754,7 +754,7 @@ ldap:
 # @param statApi.retryCount Maximum number of retries for requests to Stat API.
 
 statApi:
-  enable: false
+  enabled: false
   url: ''
   timeout: 30s
   retryCount: 3
