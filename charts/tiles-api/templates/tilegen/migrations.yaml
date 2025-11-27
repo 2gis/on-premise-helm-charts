@@ -75,7 +75,7 @@ spec:
 
             - mountPath: "/config"
               name: config-volume
-            
+
             {{- if $.Values.cassandra.tls.deploySecret }}
             - mountPath: "/tls"
               name: cassandra-tls

@@ -6,9 +6,9 @@
 
 - Removed JsQuery extension dependency from the service’s PostgreSQL database.
 
-### traffic-proxy
+### platform
 
-- Renamed `proxy.apiKey` to `proxy.licenseKey`
+- You need to upgrade keys-backend to version 1.140.0 (Release Core 2.1.0)
 
 ### stat-receiver
 
@@ -19,9 +19,9 @@
 
 - Renamed `cassandra.ssl` to `cassandra.tls`
 
-### platform
+### traffic-proxy
 
-- You need to upgrade keys-backend to version 1.140.0 (Release Core 2.1.0)
+- Renamed `proxy.apiKey` to `proxy.licenseKey`
 
 ## [2.46.0]
 

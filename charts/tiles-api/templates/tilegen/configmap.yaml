@@ -36,7 +36,7 @@ data:
       {{- end }}
       {{- if .tls.key }}
       key-path: /tls/client.key
-      {{- end }}  
+      {{- end }}
       {{- end }}
     cassandra:
       name: local
@@ -130,7 +130,7 @@ data:
 
                 - mountPath: "/config"
                   name: config-volume
-                
+
                 {{- if $.Values.cassandra.tls.deploySecret }}
                 - mountPath: "/tls"
                   name: cassandra-tls
