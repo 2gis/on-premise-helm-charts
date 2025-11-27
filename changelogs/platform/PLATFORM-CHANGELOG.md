@@ -1,3 +1,31 @@
+## [2.47.0] (2025-11-27)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2470)
+#### Images
+```
+catalog-api
+	- catalog-api:3.649.0
+	+ catalog-api:3.665.1
+mapgl-js-api
+	- mapgl:1.66.0
+	+ mapgl:1.67.0
+platform
+	- platform-ui:1.9.1
+	+ platform-ui:1.15.1
+styles-api
+	- styles-api:0.38.0
+	+ styles-api:0.42.0
+tiles-api
+	- tiles-api-importer:4.77.0
+	+ tiles-api-importer:4.80.0
+	- tiles-api-importer:4.77.0
+	+ tiles-api-importer:4.80.0
+	- tiles-api-proxy:4.77.0
+	+ tiles-api-proxy:4.80.0
+	- tiles-api:4.77.0
+	+ tiles-api:4.80.0
+```
+[Full list of image versions](platform_image_versions.txt)
+
 ## [2.46.0] (2025-11-17)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2460)
 #### Images
