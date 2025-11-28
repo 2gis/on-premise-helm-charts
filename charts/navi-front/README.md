@@ -155,6 +155,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 | Name                                             | Description                                                                                                                                     | Value        |
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `nginx.customConfigPath`                         | Path to custom nginx config file. If set, default config will be ignored.                                                                       | `""`         |
 | `nginx.setRealIpFrom`                            | Defines trusted addresses that are known to send correct replacement addresses                                                                  | `127.0.0.1`  |
 | `nginx.opentracing.enabled`                      | If opentracing enabled for nginx requests                                                                                                       | `false`      |
 | `nginx.opentracing.serviceName`                  | Service name sent to jaeger                                                                                                                     | `navi-front` |
