@@ -248,6 +248,12 @@ Environment variables for the migrate job.
   value: "{{ .Values.migrate.clickhouse.clientName }}"
 - name: STAT_LOG_LEVEL
   value: "{{ .Values.migrate.logLevel }}"
+- name: STAT_KAFKA_TABLE_ENGINE_BROKERS
+  value: "{{ .Values.migrate.kafkaTableEngine.brokers }}"
+- name: STAT_KAFKA_TABLE_ENGINE_TOPIC
+  value: "{{ .Values.migrate.kafkaTableEngine.topic }}"
+- name: STAT_KAFKA_TABLE_ENGINE_GROUP_NAME
+  value: "{{ .Values.migrate.kafkaTableEngine.group }}"
 {{- end }}
 
 {{/*

@@ -162,6 +162,10 @@ migrate:
   # @param migrate.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
   logLevel: info
 
+  kafkaTableEngine:
+    brokers: ''
+    topic: ''
+    group: ''
 
   # @param migrate.clickhouse.clientName Name that will be used in client requests to ClickHouse.
 

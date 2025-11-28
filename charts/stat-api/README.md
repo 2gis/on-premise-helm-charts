@@ -89,13 +89,16 @@ Use this Helm chart to deploy API Stat service, which is a part of 2GIS's [On-Pr
 
 ### Migrate tool settings
 
-| Name                            | Description                                                                                                         | Value              |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `migrate.logLevel`              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                           | `info`             |
-| `migrate.clickhouse.clientName` | Name that will be used in client requests to ClickHouse.                                                            | `stat-api-migrate` |
-| `migrate.initialDelaySeconds`   | Delay in seconds at the service startup.                                                                            | `0`                |
-| `migrate.nodeSelector`          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`               |
-| `migrate.tolerations`           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.   | `[]`               |
+| Name                            | Description                                                                                                          | Value              |
+| ------------------------------- |----------------------------------------------------------------------------------------------------------------------|--------------------|
+| `migrate.logLevel`              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                            | `info`             |
+| `migrate.clickhouse.clientName` | Name that will be used in client requests to ClickHouse.                                                             | `stat-api-migrate` |
+| `migrate.initialDelaySeconds`   | Delay in seconds at the service startup.                                                                             | `0`                |
+| `migrate.nodeSelector`          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).  | `{}`               |
+| `migrate.tolerations`           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.    | `[]`               |
+| `migrate.kafkaTableEngine.brokers` | kafka brokers for kafkaTableEngine.                                                                                  | `""`               |
+| `migrate.kafkaTableEngine.topic`   | kafka topic for kafkaTableEngine.                                                                                    | `""`               |
+| `migrate.kafkaTableEngine.group`   | kafka group for kafkaTableEngine.                                                                                    | `""`               |
 
 ### ClickHouse settings
 
