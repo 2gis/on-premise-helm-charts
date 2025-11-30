@@ -134,7 +134,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_FEATURE_FLAGS_OIDC
   value: {{ .Values.api.oidc.enabled | quote }}
 - name: KEYS_FEATURE_FLAGS_STAT_API
-  value: {{ .Values.statApi.enable | quote }}
+  value: {{ .Values.statApi.enabled | quote }}
 - name: KEYS_FEATURE_FLAGS_REDIS
   value: {{ .Values.redis.enabled | quote }}
 - name: KEYS_FEATURE_FLAGS_STAT_REDIS
@@ -355,7 +355,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.stat-api"}}
-{{- if .Values.statApi.enable }}
+{{- if .Values.statApi.enabled }}
 - name: KEYS_STATAPI_ENDPOINT
   value: {{ .Values.statApi.url | quote }}
 - name: KEYS_STATAPI_STATAPI_TIMEOUT
