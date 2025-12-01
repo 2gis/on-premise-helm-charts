@@ -315,7 +315,7 @@ stylesImporter:
   name: styles-importer
   image:
     repository: 2gis-on-premise/pro-importer
-    tag: 2.19.2
+    tag: 2.31.1
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   nodeSelector: {}
