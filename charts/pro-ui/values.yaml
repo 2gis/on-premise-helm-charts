@@ -271,8 +271,8 @@ hpa:
 # if minAvailable and pdb.maxUnavailable are both set, only minAvailable is used
 pdb:
   enabled: false
-  minAvailable: 1
-  maxUnavailable: 0
+  minAvailable: ''
+  maxUnavailable: 1
 
 # @section Artifacts Storage settings
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
