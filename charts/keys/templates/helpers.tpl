@@ -357,7 +357,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.env.stat-api"}}
 {{- if .Values.statApi.enabled }}
 - name: KEYS_STATAPI_ENDPOINT
-  value: {{ .Values.statApi.url | quote }}
+  value: {{  required "A valid .Values.statApi.url entry required" .Values.statApi.url | quote }}
 - name: KEYS_STATAPI_STATAPI_TIMEOUT
   value: {{ .Values.statApi.timeout | quote }}
 - name: KEYS_STATAPI_RETRY_COUNT
