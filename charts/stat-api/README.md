@@ -92,9 +92,9 @@ Use this Helm chart to deploy API Stat service, which is a part of 2GIS's [On-Pr
 | Name                               | Description                                                                                                         | Value              |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------ |
 | `migrate.logLevel`                 | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                           | `info`             |
-| `migrate.kafkaTableEngine.brokers` | Kafka brokers address list, separated by comma.                                                                     | `""`               |
-| `migrate.kafkaTableEngine.topic`   | Kafka topic with data from stat-receiver (e.g. -- `type.401``).                                                     | `""`               |
-| `migrate.kafkaTableEngine.group`   | Consumer group name.                                                                                                | `""`               |
+| `migrate.kafkaTableEngine.brokers` | Kafka brokers address list, separated by comma. ***Required value***.                                               | `""`               |
+| `migrate.kafkaTableEngine.topic`   | Kafka topic with data from stat-receiver (e.g. -- `type.401``). ***Required value***.                               | `""`               |
+| `migrate.kafkaTableEngine.group`   | Consumer group name. ***Required value***.                                                                          | `""`               |
 | `migrate.clickhouse.clientName`    | Name that will be used in client requests to ClickHouse.                                                            | `stat-api-migrate` |
 | `migrate.initialDelaySeconds`      | Delay in seconds at the service startup.                                                                            | `0`                |
 | `migrate.nodeSelector`             | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`               |

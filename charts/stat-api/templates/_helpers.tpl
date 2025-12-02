@@ -249,11 +249,11 @@ Environment variables for the migrate job.
 - name: STAT_LOG_LEVEL
   value: "{{ .Values.migrate.logLevel }}"
 - name: STAT_KAFKA_TABLE_ENGINE_BROKERS
-  value: "{{ .Values.migrate.kafkaTableEngine.brokers }}"
+  value: {{ required "Valid .Values.migrate.kafkaTableEngine.brokers!" .Values.migrate.kafkaTableEngine.brokers | quote }}
 - name: STAT_KAFKA_TABLE_ENGINE_TOPIC
-  value: "{{ .Values.migrate.kafkaTableEngine.topic }}"
+  value: {{ required "Valid .Values.migrate.kafkaTableEngine.topic!" .Values.migrate.kafkaTableEngine.topic | quote }}
 - name: STAT_KAFKA_TABLE_ENGINE_GROUP_NAME
-  value: "{{ .Values.migrate.kafkaTableEngine.group }}"
+  value: {{ required "Valid .Values.migrate.kafkaTableEngine.group!" .Values.migrate.kafkaTableEngine.group | quote }}
 {{- end }}
 
 {{/*

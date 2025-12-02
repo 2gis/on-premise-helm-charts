@@ -162,9 +162,9 @@ migrate:
   # @param migrate.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
   logLevel: info
 
-  # @param migrate.kafkaTableEngine.brokers Kafka brokers address list, separated by comma.
-  # @param migrate.kafkaTableEngine.topic Kafka topic with data from stat-receiver (e.g. -- `type.401``).
-  # @param migrate.kafkaTableEngine.group Consumer group name.
+  # @param migrate.kafkaTableEngine.brokers Kafka brokers address list, separated by comma. ***Required value***.
+  # @param migrate.kafkaTableEngine.topic Kafka topic with data from stat-receiver (e.g. -- `type.401``). ***Required value***.
+  # @param migrate.kafkaTableEngine.group Consumer group name. ***Required value***.
   kafkaTableEngine:
     brokers: ''
     topic: ''
