@@ -323,15 +323,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `ldap.search.baseDN`                  | LDAP base distinguished name.                      | `dc=2gis`                                  |
 | `ldap.search.filter`                  | LDAP search filter.                                | `(&(objectClass=user)(sAMAccountName=%s))` |
 
-### Stat API connection settings
-
-| Name                 | Description                                                                                                                                                                                                                   | Value   |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `statApi.enabled`    | If Stat API integration is enabled.                                                                                                                                                                                           | `false` |
-| `statApi.url`        | URL of Stat API service. Ex: http://stat-api.svc.                                                                                                                                                                             | `""`    |
-| `statApi.timeout`    | Request timeout for Stat API calls. Duration string is a sequence of decimal numbers with optional fraction and unit suffix, like `100ms`, `2.3h` or `4h35m`. Valid time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`. | `30s`   |
-| `statApi.retryCount` | Maximum number of retries for requests to Stat API.                                                                                                                                                                           | `3`     |
-
 ### Predefined keys
 
 | Name                         | Description                     | Value |

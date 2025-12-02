@@ -72,7 +72,6 @@ spec:
             {{- include "keys.env.db.deploys" . | nindent 12 }}
             {{- include "keys.env.redis" . | nindent 12 }}
             {{- include "keys.env.auth" . | nindent 12 }}
-            {{- include "keys.env.stat-api" . | nindent 12 }}
             {{- if .Values.customCAs.bundle }}
             {{- include "keys.env.custom.ca.path" . | nindent 12 }}
             {{- end }}
