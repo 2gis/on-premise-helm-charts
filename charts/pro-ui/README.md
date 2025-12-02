@@ -170,8 +170,8 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `hpa.targetCPU`      | Target CPU utilization percentage                    | `100`   |
 | `hpa.targetMemory`   | Target Memory utilization percentage                 | `""`    |
 | `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
-| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `1`     |
-| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `0`     |
+| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
 
 ### Artifacts Storage settings
 
