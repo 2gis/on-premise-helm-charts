@@ -1184,7 +1184,7 @@ routes:
 # @param routes.api.logging.extendedSqlLogging Extended sql logs. Include sql requests row.
 
     logging:
-      level: 'information'
+      level: information
       extendedRestLogging: false
       extendedSqlLogging: false
 
@@ -1258,7 +1258,7 @@ routes:
 # @param routes.worker.logging.extendedSqlLogging Extended sql logs. Include sql requests row.
 
     logging:
-      level: 'information'
+      level: information
       extendedSqlLogging: false
 
 # @extra routes.worker.routesSettings Routes distance match settings
@@ -1280,8 +1280,8 @@ routes:
 
     busConfig:
       securityInformation:
-        saslMechanism: 'ScramSha512'
-        securityProtocol: 'SaslPlaintext'
+        saslMechanism: ScramSha512
+        securityProtocol: SaslPlaintext
       consumers:
         appEvents:
           groupId: ''
@@ -1404,7 +1404,7 @@ routes:
 # @param routes.realtimeDataApi.logging.extendedSqlLogging Extended sql logs. Include sql requests row.
 
     logging:
-      level: 'information'
+      level: information
       extendedRestLogging: false
       extendedSqlLogging: false
 
@@ -1445,16 +1445,16 @@ routes:
     completedTasksAssetId: user_dyn_citylens_completed_tasks
 
 # @section Citylens routes admin configs. Credentials for Hangfire dashboard UI.
-# @param routes.adminCredentials.username Username.
-# @param routes.adminCredentials.password Password.
+# @param routes.adminCredentials.username Username. **Required**
+# @param routes.adminCredentials.password Password. **Required**
 
   adminCredentials:
     username: ''
     password: ''
 
 # @section Citylens routes endpoints without user authorization. Use for internal usages. (Guid)
-# @param routes.endpointInternalApiKey.dataScience Data Science Controller. **Required**
-# @param routes.endpointInternalApiKey.companies Company Controller. **Required**
+# @param routes.endpointInternalApiKey.dataScience Data Science Controller, random string. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af` **Required**
+# @param routes.endpointInternalApiKey.companies Company Controller, random string. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af` **Required**
 
   endpointInternalApiKey:
     dataScience: ''

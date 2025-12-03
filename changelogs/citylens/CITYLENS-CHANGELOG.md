@@ -31,4 +31,3 @@ citylens-routes-ui
 	+ citylens-routes-ui:1.3.2
 
 ```
-

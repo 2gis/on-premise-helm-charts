@@ -852,17 +852,17 @@ See the [documentation]() to learn about:
 
 ### Citylens routes admin configs. Credentials for Hangfire dashboard UI.
 
-| Name                               | Description | Value |
-| ---------------------------------- | ----------- | ----- |
-| `routes.adminCredentials.username` | Username.   | `""`  |
-| `routes.adminCredentials.password` | Password.   | `""`  |
+| Name                               | Description            | Value |
+| ---------------------------------- | ---------------------- | ----- |
+| `routes.adminCredentials.username` | Username. **Required** | `""`  |
+| `routes.adminCredentials.password` | Password. **Required** | `""`  |
 
 ### Citylens routes endpoints without user authorization. Use for internal usages. (Guid)
 
-| Name                                        | Description                           | Value |
-| ------------------------------------------- | ------------------------------------- | ----- |
-| `routes.endpointInternalApiKey.dataScience` | Data Science Controller. **Required** | `""`  |
-| `routes.endpointInternalApiKey.companies`   | Company Controller. **Required**      | `""`  |
+| Name                                        | Description                                                                                          | Value |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ----- |
+| `routes.endpointInternalApiKey.dataScience` | Data Science Controller, random string. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af` **Required** | `""`  |
+| `routes.endpointInternalApiKey.companies`   | Company Controller, random string. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af` **Required**      | `""`  |
 
 ### Citylens routes external clients settings
 

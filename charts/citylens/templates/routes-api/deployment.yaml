@@ -194,7 +194,7 @@ spec:
             - name: Hangfire__DashboardAuthorization__Enabled
               value: "true"
             - name: Hangfire__DashboardAuthorization__Username
-              value: {{ $.Values.routes.adminCredentials.username | quote }}
+              value: {{ required "A valid .Values.routes.adminCredentials.username entry required" $.Values.routes.adminCredentials.username | quote }}
             - name: Hangfire__DashboardAuthorization__Password
               valueFrom:
                 secretKeyRef:
