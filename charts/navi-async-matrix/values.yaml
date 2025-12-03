@@ -461,11 +461,11 @@ s3:
   publicUrl: ''
   expirationDays: 14
 
-# @skip bss.enabled
-# @skip bss.url
-# @skip bss.version
+# @skip stat.enabled
+# @skip stat.url
+# @skip stat.version
 
-bss:
+stat:
   enabled: false
   url: https://example.com
   version: '0.1'

@@ -327,10 +327,9 @@ dm:
   url: ''
   key: ''
 
-# @skip bss.enabled
-# @skip bss.url
-# @skip bss.version
+# @skip stat.enabled
+# @skip stat.url
 
-bss:
+stat:
   enabled: false
   url: ''

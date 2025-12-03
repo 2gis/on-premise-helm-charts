@@ -8,6 +8,14 @@
 - `naviback.bss.client.serviceRemoteAddress` renamed to `naviback.stat.url`
 - `naviback.validation.bss` section renamed to `naviback.validation.stat`
 
+### navi-async-matrix
+
+- `bss` section renamed to `stat`
+
+### navi-vrp-task-manager
+
+- `bss` section renamed to `stat`
+
 ## [2.47.0]
 
 ### catalog-api
