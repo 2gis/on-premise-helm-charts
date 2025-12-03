@@ -1,5 +1,13 @@
 # Platform Breaking-Changes
 
+## [2.48.0]
+
+### navi-back
+
+- `naviback.bss` section renamed to `naviback.stat`
+- `naviback.bss.client.serviceRemoteAddress` renamed to `naviback.stat.url`
+- `naviback.validation.bss` section renamed to `naviback.validation.stat`
+
 ## [2.47.0]
 
 ### catalog-api

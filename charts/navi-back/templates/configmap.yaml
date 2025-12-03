@@ -537,10 +537,10 @@ data:
           "topic": {{ .Values.routesharing.kafka.topic | required "routesharing.kafka.topic is not set" | quote }}
         },
         {{- end }}{{/* .Values.routesharing.enabled */}}
-        {{- if and .Values.naviback.stat.enabled .Values.naviback.stat.client.serviceRemoteAddress }}
+        {{- if and .Values.naviback.stat.enabled .Values.naviback.stat.url }}
         "business_statistics_system": {
           "client": {
-              "service_remote_address": {{ .Values.naviback.stat.client.serviceRemoteAddress | mustToJson }},
+              "service_remote_address": {{ .Values.naviback.stat.url | mustToJson }},
               "message_count_to_flush": {{ .Values.naviback.stat.client.messageCountToFlush | mustToJson }},
               "use_compression": {{ .Values.naviback.stat.client.useCompression | mustToJson }},
               "package_size_max_bytes": {{ .Values.naviback.stat.client.packageSizeMaxBytes | mustToJson }},

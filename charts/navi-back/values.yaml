@@ -214,7 +214,7 @@ image:
 # @extra naviback.attractor.scooter Enable enhanced attractor for scooters routing
 # @extra naviback.attractor.motorcycle Enable enhanced attractor for motorcycle routing
 # @param naviback.stat.enabled Enable sending information on the construction of routes to the business statistics service
-# @param naviback.stat.client.serviceRemoteAddress Remote address business statistics service. Requeruired for enable sending information
+# @param naviback.stat.url Remote address business statistics service. Requeruired for enable sending information
 # @param naviback.stat.client.messageCountToFlush Message count to flush
 # @param naviback.stat.client.useCompression Enable compression
 # @param naviback.stat.client.packageSizeMaxBytes Package size max bytes
@@ -364,8 +364,8 @@ naviback:
   attractor: {}
   stat:
     enabled: false
+    url: ''
     client:
-      serviceRemoteAddress: ''
       messageCountToFlush: 500
       useCompression: true
       packageSizeMaxBytes: 1800000
