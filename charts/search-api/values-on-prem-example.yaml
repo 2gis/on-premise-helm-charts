@@ -105,37 +105,17 @@ ingressRouter:
     enabled: false
   rateLimitComponent:
     enabled: false
-  # ab:
-  #   sapphire_base:
-  #     port: 8080
-  #     exact_match: 0
-  #   contour1:
-  #     address: 'big-search-stg-green-ingress-router'
-  #   contour2:
-  #     address: 'big-search-stg-blue-ingress-router'
-  #   contour3:
-  #     address: 'big-search-stg-yellow-ingress-router'
-# вот этого блока быть не должно, так как rateLimitComponent is NOT enabled
-# но пока не умеем работать с пустыми параметрами
-  prometheusUrl: https://prometheus.2gis.io/prometheus/api/v1/query_range
-  rateLimitRules:
-    - name: 'cpu_usage'
-      query: 'sum(increase(sapphire_cpu_usage_total{cluster="production-k8s", kubernetes_namespace="search", app=~"big-search-(blue|green)", search_part="head"}[15m])) by (api_key)'
-      description: >
-        Правило для ограничения потребления ресурсов.
-        В данном случае оно контролирует использование процессорного времени каждым API-ключом.
-        Лимиты указываются в миллисекундах, что позволяет точно задавать допустимую нагрузку.
-      ttl_sec: 60
-      update_frequency_sec: 10
-      headers:
-        api_key: 'X-DG-Api-Key'
-      limits:
-        default: 50000000
-        overrides:
-          - limit: 300000000
-            description: "Ключи 2gis"
-            keys: []
-# конец "ненужного блока"
+#  prometheusUrl: https://prometheus.2gis.io/prometheus/api/v1/query_range
+  prometheusUrl: ''
+  rateLimitRules: []
+
+dataAdapter:
+  image:
+    repository: docker-hub.2gis.ru/on-premise/search-data_adapter
+  podSecurityContext:
+    runAsUser: 100000000
+    runAsGroup: 100000000
+    fsGroup: 100000000
 
 geodetector:
   image:
@@ -188,24 +168,6 @@ controller:
   image:
     repository: docker-hub.2gis.ru/on-premise/search-controller
 #    tag: vx-dev_43296
-#  projectListUrl: https://s3.2gis.one/usrch/test-projects-list.json
-  projectListUrl: "http://catalog.k8s.n3.2gis.io/2.0/region/list?key=1c35663a-4e3e-4c83-a1d4-ecbc187043dc&type=region,segment,universe&fields=items.last_imported_data_source,items.country_code,items.allow_for_indexing,items.allow_for_delete"
-  extraProjects:
-    - project_id: 9
-      language: ru
-      location: ru
-      url: 'https://s3.2gis.one/feed-swapping/gis.v4.9.ru.RU.dgdat.zip'
-      name: 'Екатеринбург'
-    - project_id: 993
-      language: ru
-      location: ru
-      url: 'https://s3.2gis.one/otello-feeds-production/city-feed.zip'
-      name: 'otello_cities'
-    - project_id: 994
-      language: ru
-      location: ru
-      url: 'https://s3.2gis.one/otello-feeds-production/suggest_feed.zip'
-      name: 'otello_hotels'
   data:
     storageClassName: topolvm-ext4
     persistent:

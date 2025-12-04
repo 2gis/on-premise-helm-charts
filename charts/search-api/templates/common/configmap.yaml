@@ -3,12 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "search-api.fullname" . }}
   labels:
-    {{- include "search-api.labels" . | nindent 4 -}}
-    {{- if (.Values.dgctlStorage).manifest }}
-    {{- with (include "search-api.manifestCode" .) }}
-    manifest: {{ . | quote }}
-    {{- end }}{{- /* .Values.dgctlStorage).manifest */}}
-    {{- end }}{{- /* include "search-api.labels" */}}
+    {{- include "search-api.labels" . | nindent 4 }}
 data:
   nginx.conf: |
   {{- if .Values.onpremise }}
@@ -441,7 +436,6 @@ data:
       address: ":{{ .Values.syncer.ports.http }}"
     app:
       log_level: {{ .Values.syncer.loglevel }}
-      manifest: {{ .Values.dgctlStorage.manifest }}
       indices:
         enable: true
       {{- if empty .Values.indexerServices.externalFilesStorageUrl }}
@@ -495,7 +489,6 @@ data:
       address: ":{{ .Values.syncer.ports.http }}"
     app:
       log_level: {{ .Values.syncer.loglevel }}
-      manifest: {{ .Values.dgctlStorage.manifest }}
       indices:
         enable: true
       {{- if empty .Values.indexerServices.externalFilesStorageUrl }}
@@ -535,21 +528,42 @@ data:
     server:
       address: ":{{ .Values.filesStorage.ports.http }}"
     app:
-      manifest: {{ .Values.dgctlStorage.manifest }}
       files_dir: /data
       cleanup_interval: 1m
       version_ttl: {{ .Values.filesStorage.versionTTL }}
       log_level: {{ .Values.filesStorage.loglevel }}
+{{- if .Values.onpremise }}
+  data-adapter.yaml: |
+    server:
+      address: ":{{ .Values.dataAdapter.ports.http }}"
+    app:
+      log_level: {{ .Values.dataAdapter.loglevel | quote}}
+    worker:
+      interval: {{ .Values.dataAdapter.interval }}
+      manifest_path: {{ .Values.dgctlStorage.manifest | quote }}
+      work_dir: /data
+      data_adapter_url: "http://{{ include "search-api.fullname" . }}-data-adapter:{{ .Values.service.dataAdapter.port }}"
+    s3_client:
+      enable: true
+      endpoint: ${s3Host}
+      access_key_id: ${s3AccessKey}
+      secret_access_key: ${s3SecretKey}
+      bucket: {{ .Values.dgctlStorage.bucket }}
+      use_ssl: {{ .Values.dgctlStorage.secure }}
+{{- end }}{{- /* .Values.onpremise */}}
   controller.yaml: |
     app:
       log_level: {{ .Values.controller.loglevel }}
-      manifest: {{ .Values.dgctlStorage.manifest }}
     server:
       address: ":{{ .Values.controller.ports.http }}"
     worker:
       user: {{ .Values.controller.user | quote }}
       password: {{ .Values.controller.password | quote }}
+    {{- if .Values.onpremise }}
+      project_list_url: "http://{{ include "search-api.fullname" . }}-data-adapter:{{ .Values.service.dataAdapter.port }}/projects"
+    {{- else }}
       project_list_url: {{ .Values.controller.projectListUrl | quote }}
+    {{- end }}{{- /* .Values.onpremise */}}  
       uploaded_indices_url: "http://{{ include "search-api.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/list/index/%s"
       delete_index_url: "http://{{ include "search-api.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/delete/index/%s/%s"
       model: {{ .Values.controller.model | quote }}
@@ -601,7 +615,6 @@ data:
   indexer.yaml: |
     app:
       log_level: {{ .Values.indexer.loglevel }}
-      manifest: {{ .Values.dgctlStorage.manifest }}
     server:
       address: ":{{ .Values.indexer.ports.http }}"
     worker:

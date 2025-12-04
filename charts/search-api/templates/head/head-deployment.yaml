@@ -5,11 +5,6 @@ metadata:
   labels:
     {{- include "search-api.labels" . | nindent 4 }}
     search/part: head
-    {{- if (.Values.dgctlStorage).manifest }}
-    {{- with (include "search-api.manifestCode" .) }}
-    manifest: {{ . | quote }}
-    {{- end }}{{- /* include "search-api.manifestCode" */}}
-    {{- end }}{{- /* .Values.dgctlStorage */}}
 spec:
   {{- if not .Values.head.hpa.enabled }}
   replicas: {{ .Values.head.replicaCount }}
@@ -27,7 +22,7 @@ spec:
       {{- with .Values.head.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- /* .Values.head.podAnnotations */}}
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
         prometheus.io/path: "/metrics"
         prometheus.io/port: {{ .Values.magg.ports.metrics | quote }}
         prometheus.io/scrape: "true"

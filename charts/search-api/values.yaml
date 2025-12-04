@@ -680,6 +680,94 @@ filesStorage:
       requests:
         storage: 30Gi
 
+# @section Data Adapter settings
+
+# @param dataAdapter.matchLabels Selector match labels
+# @param dataAdapter.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param dataAdapter.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param dataAdapter.ports.http HTTP port for REST API requests of the indexing system
+# @param dataAdapter.image.repository Docker image repository
+# @param dataAdapter.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param dataAdapter.image.tag Docker image tag
+# @param dataAdapter.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param dataAdapter.imagePullSecrets Kubernetes image pull secrets
+# @param dataAdapter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param dataAdapter.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param dataAdapter.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+
+# @skip dataAdapter.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra dataAdapter.resources.requests.cpu CPU request; recommended value: `100m`
+# @extra dataAdapter.resources.requests.memory Memory request; recommended value: `50Mi`
+# @extra dataAdapter.resources.limits.cpu CPU limit; recommended value: `200m`
+# @extra dataAdapter.resources.limits.memory Memory limit; recommended value: `1Gi`
+
+# @param dataAdapter.livenessProbe.enabled Enable liveness probe
+# @param dataAdapter.livenessProbe.httpGet.path HTTP path for the liveness probe
+# @param dataAdapter.livenessProbe.httpGet.port HTTP port for the liveness probe
+# @param dataAdapter.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param dataAdapter.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param dataAdapter.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
+# @param dataAdapter.livenessProbe.initialDelaySeconds Initial delay (in seconds) before starting the liveness probe
+
+# @param dataAdapter.readinessProbe.enabled Enable readiness probe
+# @param dataAdapter.readinessProbe.httpGet.path HTTP path for the readiness probe
+# @param dataAdapter.readinessProbe.httpGet.port HTTP port for the readiness probe
+# @param dataAdapter.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param dataAdapter.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param dataAdapter.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+# @param dataAdapter.readinessProbe.initialDelaySeconds Initial delay (in seconds) before starting the readiness probe
+
+# @param dataAdapter.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param dataAdapter.interval Update data interval
+# @param dataAdapter.data.resources.requests.storage Requested storage volume size
+
+dataAdapter:
+  matchLabels: {}
+  podLabels: {}
+  podAnnotations: {}
+  ports:
+    http: 8080
+  image:
+    repository: 2gis-on-premise/search-data_adapter
+    pullPolicy: IfNotPresent
+    tag: 8.15.0
+  podSecurityContext: {}
+  imagePullSecrets: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources:
+    requests:
+      cpu: 100m
+      memory: 500Mi
+    limits:
+      cpu: 200m
+      memory: 1Gi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /ping
+      port: http
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 3
+    initialDelaySeconds: 10
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /ready
+      port: http
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 3
+    initialDelaySeconds: 10
+  loglevel: info
+  interval: 15s
+  data:
+    resources:
+      requests:
+        storage: 10Gi
+
 # @section Controller settings
 
 # @param controller.matchLabels Selector match labels
@@ -1047,6 +1135,7 @@ serviceAccount:
 # @skip service.head.external.annotations.router.deis.io/ssl.enforce Temporary internal 2GIS parameter
 
 # @param service.filesStorage.port Service (svc) port for the filesStorage component
+# @param service.dataAdapter.port Service (svc) port for the dataAdapter component
 # @param service.controller.port Service (svc) port for the controller component
 # @param service.indexer.port Service (svc) port for the indexer component
 # @param service.ingressRouter.port Service (svc) port for the ingress-router
@@ -1074,6 +1163,8 @@ service:
         router.deis.io/metrics.histogram: 'true'
         router.deis.io/ssl.enforce: 'False'
   filesStorage:
+    port: 80
+  dataAdapter:
     port: 80
   controller:
     port: 80

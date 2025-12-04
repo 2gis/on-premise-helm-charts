@@ -6,11 +6,6 @@ metadata:
   labels:
     {{- include "search-api.labels" . | nindent 4 }}
     search/part: ingress-router
-    {{- if (.Values.dgctlStorage).manifest }}
-    {{- with (include "search-api.manifestCode" .) }}
-    manifest: {{ . | quote }}
-    {{- end }}{{- /* include "search-api.manifestCode" */}}
-    {{- end }}{{- /* .Values.dgctlStorage */}}
 spec:
   {{- if not .Values.ingressRouter.hpa.enabled }}
   replicas: {{ .Values.ingressRouter.replicaCount }}
@@ -28,7 +23,7 @@ spec:
       {{- with .Values.ingressRouter.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- /* .Values.ingressRouter.podAnnotations */}}
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
         prometheus.io/path: "/metrics"
         prometheus.io/port: {{ .Values.magg.ports.metrics | quote }}
         prometheus.io/scrape: "true"

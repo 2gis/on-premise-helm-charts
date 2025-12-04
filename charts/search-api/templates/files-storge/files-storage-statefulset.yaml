@@ -6,11 +6,6 @@ metadata:
   labels:
     {{- include "search-api.labels" . | nindent 4 }}
     search/part: files-storage
-    {{- if (.Values.dgctlStorage).manifest }}
-    {{- with (include "search-api.manifestCode" .) }}
-    manifest: {{ . | quote }}
-    {{- end }}{{- /* include "search-api.manifestCode" */}}
-    {{- end }}{{- /* .Values.dgctlStorage */}}
 spec:
   replicas: 1
   selector:
@@ -27,7 +22,7 @@ spec:
       {{- with .Values.filesStorage.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- /* .Values.filesStorage.podAnnotations */}}
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
         prometheus.io/path: "/metrics"
         prometheus.io/port: {{ .Values.filesStorage.ports.http | quote }}
         prometheus.io/scrape: "true"

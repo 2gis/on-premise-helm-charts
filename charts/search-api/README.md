@@ -317,6 +317,44 @@ https://wiremock.org/docs/grpc/
 | `filesStorage.data.storageClassName`              | Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)      | `""`                                   |
 | `filesStorage.data.resources.requests.storage`    | Requested storage volume size                                                                                              | `30Gi`                                 |
 
+### Data Adapter settings
+
+| Name                                             | Description                                                                                                                | Value                                 |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| `dataAdapter.matchLabels`                        | Selector match labels                                                                                                      | `{}`                                  |
+| `dataAdapter.podLabels`                          | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                         | `{}`                                  |
+| `dataAdapter.podAnnotations`                     | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)               | `{}`                                  |
+| `dataAdapter.ports.http`                         | HTTP port for REST API requests of the indexing system                                                                     | `8080`                                |
+| `dataAdapter.image.repository`                   | Docker image repository                                                                                                    | `2gis-on-premise/search-data_adapter` |
+| `dataAdapter.image.pullPolicy`                   | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)                              | `IfNotPresent`                        |
+| `dataAdapter.image.tag`                          | Docker image tag                                                                                                           | `8.15.0`                              |
+| `dataAdapter.podSecurityContext`                 | Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                | `{}`                                  |
+| `dataAdapter.imagePullSecrets`                   | Kubernetes image pull secrets                                                                                              | `[]`                                  |
+| `dataAdapter.nodeSelector`                       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)         | `{}`                                  |
+| `dataAdapter.tolerations`                        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings           | `[]`                                  |
+| `dataAdapter.affinity`                           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) | `{}`                                  |
+| `dataAdapter.resources.requests.cpu`             | CPU request; recommended value: `100m`                                                                                     |                                       |
+| `dataAdapter.resources.requests.memory`          | Memory request; recommended value: `50Mi`                                                                                  |                                       |
+| `dataAdapter.resources.limits.cpu`               | CPU limit; recommended value: `200m`                                                                                       |                                       |
+| `dataAdapter.resources.limits.memory`            | Memory limit; recommended value: `1Gi`                                                                                     |                                       |
+| `dataAdapter.livenessProbe.enabled`              | Enable liveness probe                                                                                                      | `true`                                |
+| `dataAdapter.livenessProbe.httpGet.path`         | HTTP path for the liveness probe                                                                                           | `/ping`                               |
+| `dataAdapter.livenessProbe.httpGet.port`         | HTTP port for the liveness probe                                                                                           | `http`                                |
+| `dataAdapter.livenessProbe.periodSeconds`        | Interval (in seconds) between liveness probe checks                                                                        | `5`                                   |
+| `dataAdapter.livenessProbe.timeoutSeconds`       | Timeout (in seconds) for the liveness probe                                                                                | `1`                                   |
+| `dataAdapter.livenessProbe.failureThreshold`     | Number of failures before the liveness probe is considered failed                                                          | `3`                                   |
+| `dataAdapter.livenessProbe.initialDelaySeconds`  | Initial delay (in seconds) before starting the liveness probe                                                              | `10`                                  |
+| `dataAdapter.readinessProbe.enabled`             | Enable readiness probe                                                                                                     | `true`                                |
+| `dataAdapter.readinessProbe.httpGet.path`        | HTTP path for the readiness probe                                                                                          | `/ready`                              |
+| `dataAdapter.readinessProbe.httpGet.port`        | HTTP port for the readiness probe                                                                                          | `http`                                |
+| `dataAdapter.readinessProbe.periodSeconds`       | Interval (in seconds) between readiness probe checks                                                                       | `5`                                   |
+| `dataAdapter.readinessProbe.timeoutSeconds`      | Timeout (in seconds) for the readiness probe                                                                               | `1`                                   |
+| `dataAdapter.readinessProbe.failureThreshold`    | Number of failures before the readiness probe is considered failed                                                         | `3`                                   |
+| `dataAdapter.readinessProbe.initialDelaySeconds` | Initial delay (in seconds) before starting the readiness probe                                                             | `10`                                  |
+| `dataAdapter.loglevel`                           | Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`                                              | `info`                                |
+| `dataAdapter.interval`                           | Update data interval                                                                                                       | `15s`                                 |
+| `dataAdapter.data.resources.requests.storage`    | Requested storage volume size                                                                                              | `10Gi`                                |
+
 ### Controller settings
 
 | Name                                            | Description                                                                                                                | Value                               |
@@ -473,6 +511,7 @@ https://wiremock.org/docs/grpc/
 | `service.head.port`              | Service (svc) port for the head component                                                                                                                                                                            | `8080`                               |
 | `service.head.external.enable`   | Temporary internal 2GIS parameter for On-Prem; should be disabled                                                                                                                                                    | `false`                              |
 | `service.filesStorage.port`      | Service (svc) port for the filesStorage component                                                                                                                                                                    | `80`                                 |
+| `service.dataAdapter.port`       | Service (svc) port for the dataAdapter component                                                                                                                                                                     | `80`                                 |
 | `service.controller.port`        | Service (svc) port for the controller component                                                                                                                                                                      | `80`                                 |
 | `service.indexer.port`           | Service (svc) port for the indexer component                                                                                                                                                                         | `80`                                 |
 | `service.ingressRouter.port`     | Service (svc) port for the ingress-router                                                                                                                                                                            | `9092`                               |
