@@ -142,6 +142,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     {{- fail "featureFlags.enableStatRedis requires redis.enabled to be true" }}
   {{- end }}
   value: {{ .Values.featureFlags.enableStatRedis | quote }}
+- name: KEYS_FEATURE_FLAGS_SINGLE_VISIBILITY_MODE
+  value: "true"
 {{- end }}
 
 {{- define "keys.env.api" -}}
