@@ -33,4 +33,3 @@ license
 	+ license:2.4.1
 
 ```
-
