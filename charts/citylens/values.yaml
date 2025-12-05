@@ -970,15 +970,29 @@ customCAs:
 
 # @section Citylens routes services settings
 
+routes:
+
 # @skip routes.environment
 # @param routes.imagePullSecrets Kubernetes image pull secrets.
 # @param routes.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
 # @param routes.migration.enabled If migrations needed.
 
-# @extra routes **Strategy**
+  environment: ''
+  imagePullSecrets: []
+  terminationGracePeriodSeconds: 60
+  migration:
+    enabled: true
+
+# @section Deployment Strategy settings
 # @param routes.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
 # @param routes.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
 # @param routes.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
 
 # @section PostgreSQL settings
 
@@ -1006,224 +1020,6 @@ customCAs:
 # @param routes.postgres.realtimeDataApi.poolSize.min PostgreSQL minimum connection pool size. 0 means no minimal bound.
 # @param routes.postgres.realtimeDataApi.poolSize.max PostgreSQL maximum connection pool size
 
-# @section Citylens routes API
-
-# @section Image settings
-# @param routes.api.image.repository Repository.
-# @param routes.api.image.tag Tag.
-# @param routes.api.image.pullPolicy Pull Policy.
-
-# @section Resources settings
-# @param routes.api.replicaCount A replica count for the pod.
-# @param routes.api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
-# @param routes.api.resources.requests.cpu A CPU request.
-# @param routes.api.resources.requests.memory A memory request.
-# @param routes.api.resources.limits.cpu A CPU limit.
-# @param routes.api.resources.limits.memory A memory limit.
-
-# @section Service settings
-# @param routes.api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-# @param routes.api.service.port Service port.
-# @param routes.api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param routes.api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-
-# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
-# @param routes.api.ingress.enabled If Ingress is enabled for the service.
-# @param routes.api.ingress.className Resource that contains additional configuration including the name of the controller that should implement the class.
-# @param routes.api.ingress.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param routes.api.ingress.hosts[0].host Hostname for the Ingress service. Ex.: 'citylens.api'.
-# @param routes.api.ingress.hosts[0].paths[0].path Endpoint of host.
-# @param routes.api.ingress.hosts[0].paths[0].pathType Path type of endpoint.
-# @param routes.api.ingress.tls Tls settings for https.
-
-# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
-# @param routes.api.pdb.enabled If PDB is enabled for the service.
-# @param routes.api.pdb.minAvailable How many pods must be available after the eviction.
-# @param routes.api.pdb.maxUnavailable How many pods can be unavailable after the eviction.
-
-# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
-# @param routes.api.hpa.enabled If HPA is enabled for the service.
-# @param routes.api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
-# @param routes.api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
-# @param routes.api.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
-# @param routes.api.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
-# @param routes.api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
-# @param routes.api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
-
-# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
-# @param routes.api.vpa.enabled If VPA is enabled for the service.
-# @param routes.api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
-# @param routes.api.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
-# @param routes.api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
-# @param routes.api.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
-# @param routes.api.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
-
-# @section Metadata settings
-# @param routes.api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param routes.api.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param routes.api.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param routes.api.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param routes.api.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-# @param routes.api.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-# @param routes.api.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
-# @param routes.api.tempPath Path to directory used for temp data
-
-# @extra routes.api.logging Routes **Logging** settings
-# @param routes.api.logging.level Log message level. verbose, debug, information, warning, error, fatal.
-# @param routes.api.logging.extendedRestLogging Extended log message. Include http metadata requests.
-# @param routes.api.logging.extendedSqlLogging Extended sql logs. Include sql requests row.
-
-# @section Citylens routes Worker
-
-# @section Image settings
-# @param routes.worker.image.repository Repository.
-# @param routes.worker.image.tag Tag.
-# @param routes.worker.image.pullPolicy Pull Policy.
-
-# @section Resources settings
-# @param routes.worker.replicaCount A replica count for the pod.
-# @param routes.worker.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
-# @param routes.worker.resources.requests.cpu A CPU request.
-# @param routes.worker.resources.requests.memory A memory request.
-# @param routes.worker.resources.limits.cpu A CPU limit.
-# @param routes.worker.resources.limits.memory A memory limit.
-
-# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
-# @param routes.worker.pdb.enabled If PDB is enabled for the service.
-# @param routes.worker.pdb.minAvailable How many pods must be available after the eviction.
-# @param routes.worker.pdb.maxUnavailable How many pods can be unavailable after the eviction.
-
-# @section Metadata settings
-# @param routes.worker.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param routes.worker.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param routes.worker.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param routes.worker.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param routes.worker.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-# @param routes.worker.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-# @param routes.worker.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
-# @param routes.worker.tempPath Path to directory used for temp data
-
-# @extra routes.worker.logging Routes **Logging** settings
-# @param routes.worker.logging.level Log message level. verbose, debug, information, warning, error, fatal.
-# @param routes.worker.logging.extendedSqlLogging Extended sql logs. Include sql requests row.
-
-# @extra routes.worker.routesSettings Routes distance match settings
-# @param routes.worker.routesSettings.routePointsMatchDistanceMeters Calculation accuracy in meters.
-
-# @section Kafka Bus configuration settings. Based on Kafka values
-# @extra routes.worker.busConfig Bus configuration
-# @extra routes.worker.busConfig.securityInformation SecurityInformation for the bus configuration
-# @param routes.worker.busConfig.securityInformation.saslMechanism Authentication mechanism when security_protocol is configured. Valid values are: Gssapi, Plain, ScramSha256, ScramSha512, OAuthBearer. Default: ScramSha512.
-# @param routes.worker.busConfig.securityInformation.securityProtocol Valid values are: Plaintext, Ssl, SaslPlaintext, SaslSsl. Default: SaslPlaintext.
-# @extra routes.worker.busConfig.consumers Consumers for the bus configuration.
-# @extra routes.worker.busConfig.consumers.appEvents App events for the consumers.
-# @param routes.worker.busConfig.consumers.appEvents.groupId The group ID for the app events. **Required**
-# @param routes.worker.busConfig.consumers.appEvents.bufferSize The buffer size for the app events.
-# @param routes.worker.busConfig.consumers.appEvents.workersCount The workers count for the app events.
-
-# @section Citylens RealtimeData API
-
-# @section Image settings
-# @param routes.realtimeDataApi.image.repository Repository.
-# @param routes.realtimeDataApi.image.tag Tag.
-# @param routes.realtimeDataApi.image.pullPolicy Pull Policy.
-
-# @section Resources settings
-# @param routes.realtimeDataApi.replicaCount A replica count for the pod.
-# @param routes.realtimeDataApi.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
-# @param routes.realtimeDataApi.resources.requests.cpu A CPU request.
-# @param routes.realtimeDataApi.resources.requests.memory A memory request.
-# @param routes.realtimeDataApi.resources.limits.cpu A CPU limit.
-# @param routes.realtimeDataApi.resources.limits.memory A memory limit.
-
-# @section Service settings
-# @param routes.realtimeDataApi.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
-# @param routes.realtimeDataApi.service.port Service port.
-# @param routes.realtimeDataApi.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param routes.realtimeDataApi.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-
-# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
-# @param routes.realtimeDataApi.pdb.enabled If PDB is enabled for the service.
-# @param routes.realtimeDataApi.pdb.minAvailable How many pods must be available after the eviction.
-# @param routes.realtimeDataApi.pdb.maxUnavailable How many pods can be unavailable after the eviction.
-
-# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
-# @param routes.realtimeDataApi.hpa.enabled If HPA is enabled for the service.
-# @param routes.realtimeDataApi.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
-# @param routes.realtimeDataApi.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
-# @param routes.realtimeDataApi.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
-# @param routes.realtimeDataApi.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
-# @param routes.realtimeDataApi.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
-# @param routes.realtimeDataApi.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
-
-# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
-# @param routes.realtimeDataApi.vpa.enabled If VPA is enabled for the service.
-# @param routes.realtimeDataApi.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
-# @param routes.realtimeDataApi.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
-# @param routes.realtimeDataApi.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
-# @param routes.realtimeDataApi.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
-# @param routes.realtimeDataApi.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
-
-# @section Metadata settings
-# @param routes.realtimeDataApi.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param routes.realtimeDataApi.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param routes.realtimeDataApi.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param routes.realtimeDataApi.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-# @param routes.realtimeDataApi.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
-# @param routes.realtimeDataApi.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
-# @param routes.realtimeDataApi.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
-# @param routes.realtimeDataApi.tempPath Path to directory used for temp data
-
-# @extra routes.realtimeDataApi.logging Routes **Logging** settings
-# @param routes.realtimeDataApi.logging.level Log message level. verbose, debug, information, warning, error, fatal.
-# @param routes.realtimeDataApi.logging.extendedRestLogging Extended log message. Include http metadata requests.
-# @param routes.realtimeDataApi.logging.extendedSqlLogging Extended sql logs. Include sql requests row.
-
-# @param routes.realtimeDataApi.daysToLeaveData Storage of information in days.
-
-# @section routes.features Feature settings.
-# @param routes.features.authorizationEnabled Enable authorization. (If false used default user).
-# @skip routes.features.oidcMobileAuthorizationEnabled
-# @skip routes.features.coverageRatioEnabled
-# @param routes.features.tasksAssetEnabled Enable sending data to PRO for tasks.
-
-# section routes.tasksAssetSettings PRO asset config.
-# @param routes.tasksAssetSettings.systemAccessToken Route task asset token.
-# @param routes.tasksAssetSettings.plannedTasksAssetId Identity to planned route task asset.
-# @param routes.tasksAssetSettings.completedTasksAssetId Identity to completed route task asset.
-
-# @section Citylens routes Clients
-
-# @section Navi integration
-# @param routes.navi.url Navi gateway url (used for getting navigation). **Required**
-# @skip routes.navi.timeout
-# @param routes.navi.key Navi Api Key.
-
-# @section Pro integration
-# @param routes.pro.authorizationToken Pro Authorization Token (used for creating assets).
-
-# @section Keys integration
-# @param routes.keys.url API Keys endpoint url, ex: http://keys-api.svc (used for getting oidc auth).
-# @skip routes.keys.brand
-
-# @section RealtimeData integration
-# @param routes.realtimeData.url API RealtimeData endpoint url, ex: http://citylens-routes-realtime-data-api.svc (used for getting drivers locations in real time).**Required**
-
-routes:
-
-  environment: ''
-  imagePullSecrets: []
-  terminationGracePeriodSeconds: 60
-
-  migration:
-    enabled: true
-
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1
-
   postgres:
     api:
       database: ''
@@ -1249,16 +1045,30 @@ routes:
         min: 1
         max: 10
 
+# @section Citylens routes API
+
   api:
+
+# @section Image settings
+# @param routes.api.image.repository Repository.
+# @param routes.api.image.tag Tag.
+# @param routes.api.image.pullPolicy Pull Policy.
+
     image:
       repository: 2gis-on-premise/citylens-routes-api
-      tag: 1.4.2
+      tag: 1.6.5
       pullPolicy: IfNotPresent
 
+# @section Resources settings
+# @param routes.api.replicaCount A replica count for the pod.
+# @param routes.api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param routes.api.resources.requests.cpu A CPU request.
+# @param routes.api.resources.requests.memory A memory request.
+# @param routes.api.resources.limits.cpu A CPU limit.
+# @param routes.api.resources.limits.memory A memory limit.
+
     replicaCount: 1
-
     revisionHistoryLimit: 3
-
     resources:
       requests:
         cpu: 400m
@@ -1267,11 +1077,26 @@ routes:
         cpu: 1
         memory: 1024M
 
+# @section Service settings
+# @param routes.api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param routes.api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param routes.api.service.port Service port.
+
     service:
       annotations: {}
       labels: {}
       type: ClusterIP
       port: 80
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+# @param routes.api.ingress.enabled If Ingress is enabled for the service.
+# @param routes.api.ingress.className Resource that contains additional configuration including the name of the controller that should implement the class.
+# @param routes.api.ingress.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.api.ingress.hosts[0].host Hostname for the Ingress service. Ex.: 'citylens.api'.
+# @param routes.api.ingress.hosts[0].paths[0].path Endpoint of host.
+# @param routes.api.ingress.hosts[0].paths[0].pathType Path type of endpoint.
+# @param routes.api.ingress.tls Tls settings for https.
 
     ingress:
       enabled: false
@@ -1287,10 +1112,24 @@ routes:
       #   - citylens-routes-api.example.com
       #   secretName: secret.tls
 
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @param routes.api.pdb.enabled If PDB is enabled for the service.
+# @param routes.api.pdb.minAvailable How many pods must be available after the eviction.
+# @param routes.api.pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
     pdb:
       enabled: true
       minAvailable: ''
       maxUnavailable: 1
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+# @param routes.api.hpa.enabled If HPA is enabled for the service.
+# @param routes.api.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param routes.api.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param routes.api.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+# @param routes.api.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
+# @param routes.api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @param routes.api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
     hpa:
       enabled: false
@@ -1300,6 +1139,14 @@ routes:
       scaleUpStabilizationWindowSeconds: ''
       targetCPUUtilizationPercentage: 50
       targetMemoryUtilizationPercentage: ''
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+# @param routes.api.vpa.enabled If VPA is enabled for the service.
+# @param routes.api.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param routes.api.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @param routes.api.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @param routes.api.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @param routes.api.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
 
     vpa:
       enabled: false
@@ -1311,6 +1158,16 @@ routes:
         cpu: 1
         memory: 512Mi
 
+# @section Metadata settings
+# @param routes.api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.api.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param routes.api.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.api.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param routes.api.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param routes.api.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param routes.api.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+# @param routes.api.tempPath Path to directory used for temp data
+
     annotations: {}
     labels: {}
     podAnnotations: {}
@@ -1321,21 +1178,44 @@ routes:
 
     tempPath: /tmp
 
+# @section Logging settings
+# @param routes.api.logging.level Log message level. verbose, debug, information, warning, error, fatal.
+# @param routes.api.logging.extendedRestLogging Extended log message. Include http metadata requests.
+# @param routes.api.logging.extendedSqlLogging Extended sql logs. Include sql requests row.
+
     logging:
       level: information
       extendedRestLogging: false
       extendedSqlLogging: false
 
+# @section OpenAPI settings
+# @param routes.api.openApi Show or hide swagger.
+    openApi: false
+
+# @section Citylens routes Worker
+
   worker:
+
+# @section Image settings
+# @param routes.worker.image.repository Repository.
+# @param routes.worker.image.tag Tag.
+# @param routes.worker.image.pullPolicy Pull Policy.
+
     image:
       repository: 2gis-on-premise/citylens-worker-service
-      tag: 1.4.2
+      tag: 1.6.5
       pullPolicy: IfNotPresent
 
+# @section Resources settings
+# @param routes.worker.replicaCount A replica count for the pod.
+# @param routes.worker.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param routes.worker.resources.requests.cpu A CPU request.
+# @param routes.worker.resources.requests.memory A memory request.
+# @param routes.worker.resources.limits.cpu A CPU limit.
+# @param routes.worker.resources.limits.memory A memory limit.
+
     replicaCount: 1
-
     revisionHistoryLimit: 3
-
     resources:
       requests:
         cpu: 400m
@@ -1344,10 +1224,25 @@ routes:
         cpu: 1
         memory: 1024M
 
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @param routes.worker.pdb.enabled If PDB is enabled for the service.
+# @param routes.worker.pdb.minAvailable How many pods must be available after the eviction.
+# @param routes.worker.pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
     pdb:
       enabled: true
       minAvailable: ''
       maxUnavailable: 1
+
+# @section Metadata settings
+# @param routes.worker.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.worker.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param routes.worker.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.worker.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param routes.worker.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param routes.worker.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param routes.worker.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+# @param routes.worker.tempPath Path to directory used for temp data
 
     annotations: {}
     labels: {}
@@ -1356,15 +1251,32 @@ routes:
     nodeSelector: {}
     affinity: {}
     tolerations: []
-
     tempPath: /tmp
+
+# @section Logging settings
+# @param routes.worker.logging.level Log message level. verbose, debug, information, warning, error, fatal.
+# @param routes.worker.logging.extendedSqlLogging Extended sql logs. Include sql requests row.
 
     logging:
       level: information
       extendedSqlLogging: false
 
+# @extra routes.worker.routesSettings Routes distance match settings
+# @param routes.worker.routesSettings.routePointsMatchDistanceMeters Calculation accuracy in meters.
+
     routesSettings:
       routePointsMatchDistanceMeters: 5
+
+# @section Kafka Bus configuration settings. Based on Kafka values
+# @extra routes.worker.busConfig Bus configuration
+# @extra routes.worker.busConfig.securityInformation SecurityInformation for the bus configuration
+# @param routes.worker.busConfig.securityInformation.saslMechanism Authentication mechanism when security_protocol is configured. Valid values are: Gssapi, Plain, ScramSha256, ScramSha512, OAuthBearer. Default: ScramSha512.
+# @param routes.worker.busConfig.securityInformation.securityProtocol Valid values are: Plaintext, Ssl, SaslPlaintext, SaslSsl. Default: SaslPlaintext.
+# @extra routes.worker.busConfig.consumers Consumers for the bus configuration.
+# @extra routes.worker.busConfig.consumers.appEvents App events for the consumers.
+# @param routes.worker.busConfig.consumers.appEvents.groupId The group ID for the app events. **Required**
+# @param routes.worker.busConfig.consumers.appEvents.bufferSize The buffer size for the app events.
+# @param routes.worker.busConfig.consumers.appEvents.workersCount The workers count for the app events.
 
     busConfig:
       securityInformation:
@@ -1376,16 +1288,30 @@ routes:
           bufferSize: 100
           workersCount: 10
 
+# @section Citylens RealtimeData API
+
   realtimeDataApi:
+
+# @section Image settings
+# @param routes.realtimeDataApi.image.repository Repository.
+# @param routes.realtimeDataApi.image.tag Tag.
+# @param routes.realtimeDataApi.image.pullPolicy Pull Policy.
+
     image:
       repository: 2gis-on-premise/citylens-realtime-data-api
-      tag: 1.4.2
+      tag: 1.6.5
       pullPolicy: IfNotPresent
 
+# @section Resources settings
+# @param routes.realtimeDataApi.replicaCount A replica count for the pod.
+# @param routes.realtimeDataApi.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param routes.realtimeDataApi.resources.requests.cpu A CPU request.
+# @param routes.realtimeDataApi.resources.requests.memory A memory request.
+# @param routes.realtimeDataApi.resources.limits.cpu A CPU limit.
+# @param routes.realtimeDataApi.resources.limits.memory A memory limit.
+
     replicaCount: 1
-
     revisionHistoryLimit: 3
-
     resources:
       requests:
         cpu: 400m
@@ -1394,16 +1320,36 @@ routes:
         cpu: 1
         memory: 1024M
 
+# @section Service settings
+# @param routes.realtimeDataApi.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+# @param routes.realtimeDataApi.service.port Service port.
+# @param routes.realtimeDataApi.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.realtimeDataApi.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
     service:
       annotations: {}
       labels: {}
       type: ClusterIP
       port: 80
 
+# @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+# @param routes.realtimeDataApi.pdb.enabled If PDB is enabled for the service.
+# @param routes.realtimeDataApi.pdb.minAvailable How many pods must be available after the eviction.
+# @param routes.realtimeDataApi.pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
     pdb:
       enabled: true
       minAvailable: ''
       maxUnavailable: 1
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+# @param routes.realtimeDataApi.hpa.enabled If HPA is enabled for the service.
+# @param routes.realtimeDataApi.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param routes.realtimeDataApi.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param routes.realtimeDataApi.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+# @param routes.realtimeDataApi.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
+# @param routes.realtimeDataApi.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @param routes.realtimeDataApi.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
     hpa:
       enabled: false
@@ -1413,6 +1359,14 @@ routes:
       scaleUpStabilizationWindowSeconds: ''
       targetCPUUtilizationPercentage: 50
       targetMemoryUtilizationPercentage: ''
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+# @param routes.realtimeDataApi.vpa.enabled If VPA is enabled for the service.
+# @param routes.realtimeDataApi.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param routes.realtimeDataApi.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @param routes.realtimeDataApi.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @param routes.realtimeDataApi.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @param routes.realtimeDataApi.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
 
     vpa:
       enabled: false
@@ -1424,6 +1378,16 @@ routes:
         cpu: 1
         memory: 512Mi
 
+# @section Metadata settings
+# @param routes.realtimeDataApi.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.realtimeDataApi.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param routes.realtimeDataApi.podAnnotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param routes.realtimeDataApi.podLabels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param routes.realtimeDataApi.nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param routes.realtimeDataApi.tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param routes.realtimeDataApi.affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+# @param routes.realtimeDataApi.tempPath Path to directory used for temp data
+
     annotations: {}
     labels: {}
     podAnnotations: {}
@@ -1431,38 +1395,99 @@ routes:
     nodeSelector: {}
     affinity: {}
     tolerations: []
-
     tempPath: /tmp
+
+# @section Realtime Data **Logging** settings
+# @extra routes.realtimeDataApi.logging Routes **Logging** settings
+# @param routes.realtimeDataApi.logging.level Log message level. verbose, debug, information, warning, error, fatal.
+# @param routes.realtimeDataApi.logging.extendedRestLogging Extended log message. Include http metadata requests.
+# @param routes.realtimeDataApi.logging.extendedSqlLogging Extended sql logs. Include sql requests row.
 
     logging:
       level: information
       extendedRestLogging: false
       extendedSqlLogging: false
 
+# @section OpenAPI settings
+# @param routes.realtimeDataApi.openApi Show or hide swagger.
+
+    openApi: false
+
+# @section Data store settings
+# @param routes.realtimeDataApi.daysToLeaveData Storage of information in days.
+
     daysToLeaveData: 30
+
+# @section Citylens routes feature switcher settings.
+# @param routes.features.authorizationEnabled Enable authorization. (If disabled, a default user is used).
+# @param routes.features.tasksAssetEnabled Enable sending data to PRO for tasks.
+# @skip routes.features.oidcMobileAuthorizationEnabled
+# @skip routes.features.coverageRatioEnabled
+# @skip routes.features.multiTenantEnabled
+# @skip routes.features.licenseEnabled
 
   features:
     authorizationEnabled: true
     oidcMobileAuthorizationEnabled: true
     coverageRatioEnabled: true
     tasksAssetEnabled: false
+    multiTenantEnabled: false
+    licenseEnabled: false
+
+# @section Citylens routes PRO assets configs.
+# @param routes.tasksAssetSettings.systemAccessToken Route task asset token.
+# @param routes.tasksAssetSettings.plannedTasksAssetId Identity to planned route task asset.
+# @param routes.tasksAssetSettings.completedTasksAssetId Identity to completed route task asset.
 
   tasksAssetSettings:
     systemAccessToken: ''
     plannedTasksAssetId: user_dyn_citylens_planned_tasks
     completedTasksAssetId: user_dyn_citylens_completed_tasks
 
+# @section Citylens routes admin configs. Credentials for Hangfire dashboard UI.
+# @param routes.adminCredentials.username Username. **Required**
+# @param routes.adminCredentials.password Password. **Required**
+
+  adminCredentials:
+    username: ''
+    password: ''
+
+# @section Citylens routes endpoints without user authorization. Use for internal usages. (Guid)
+# @param routes.endpointInternalApiKey.dataScience Data Science Controller, random string. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af` **Required**
+# @param routes.endpointInternalApiKey.companies Company Controller, random string. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af` **Required**
+
+  endpointInternalApiKey:
+    dataScience: ''
+    companies: ''
+
+# @section Citylens routes external clients settings
+
+# @section Navi integration
+# @param routes.navi.url Navi gateway url (used for getting navigation). **Required**
+# @skip routes.navi.timeout
+# @param routes.navi.key Navi Api Key.
+
   navi:
     url: ''
     timeout: 120
     key: ''
 
+# @section Pro integration
+# @param routes.pro.authorizationToken Pro Authorization Token (used for creating assets).
+
   pro:
     authorizationToken: ''
+
+# @section Keys integration
+# @param routes.keys.url API Keys endpoint url, ex: http://keys-api.svc (used for getting oidc auth).
+# @skip routes.keys.brand
 
   keys:
     url: ''
     brand: ''
+
+# @section RealtimeData integration
+# @param routes.realtimeData.url API RealtimeData endpoint url, ex: http://citylens-routes-realtime-data-api.svc (used for getting drivers locations in real time). **Required**
 
   realtimeData:
     url: ''
