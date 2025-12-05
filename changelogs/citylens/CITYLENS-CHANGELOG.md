@@ -1,3 +1,20 @@
+## [2.2.0] (2025-12-05)
+#### [Breaking-Changes](CITYLENS-Breaking-Changes.md#220)
+#### Images
+```
+citylens
+	- citylens-realtime-data-api:1.4.2
+	+ citylens-realtime-data-api:1.6.5
+	- citylens-routes-api:1.4.2
+	+ citylens-routes-api:1.6.5
+	- citylens-worker-service:1.4.2
+	+ citylens-worker-service:1.6.5
+citylens-routes-ui
+	- citylens-routes-ui:1.4.0
+	+ citylens-routes-ui:1.6.2
+```
+[Full list of image versions](citylens_image_versions.txt)
+
 ## [2.1.0] (2025-10-16)
 #### [Breaking-Changes](CITYLENS-Breaking-Changes.md#210)
 #### Images
