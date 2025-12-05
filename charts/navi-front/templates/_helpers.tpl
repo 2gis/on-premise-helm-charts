@@ -205,3 +205,21 @@ Looks for back service and returns its maxProcessTime label. For splitter servic
 {{- $timeout := default 0 (dig $name "metadata" "annotations" "maxProcessTime" "" .services) }}
 {{- $timeout }}
 {{- end }}
+
+{{/*
+Get custom nginx config path
+*/}}
+{{- define "nginx.customConfigPath" -}}
+{{- .Values.nginx.customConfigPath | default "/etc/nginx" -}}
+{{- end -}}
+
+{{/*
+Get jaeger nginx config path
+*/}}
+{{- define "nginx.jaegerConfigPath" -}}
+{{ $jaegerConfig :=  printf "%s/conf.d/jaeger-nginx-config.json" ( include "nginx.customConfigPath" .) }}
+{{- if .Values.nginx.customConfigPath }}
+{{- $jaegerConfig = printf "%s/jaeger-nginx-config.json" ( include "nginx.customConfigPath" .) }}
+{{- end }}
+{{- $jaegerConfig }}
+{{- end -}}

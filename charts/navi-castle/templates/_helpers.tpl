@@ -213,3 +213,10 @@ Manifest name
 {{- define "castle.manifestCode" -}}
 {{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}
+
+{{/*
+Get custom nginx config path
+*/}}
+{{- define "nginx.customConfigPath" -}}
+{{- .Values.nginx.customConfigPath | default "/etc/nginx" -}}
+{{- end -}}

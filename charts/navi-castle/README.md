@@ -121,13 +121,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Front settings
 
-| Name                     | Description                                           | Value                        |
-| ------------------------ | ----------------------------------------------------- | ---------------------------- |
-| `nginx.port`             | HTTP port on which Navi-Front will be listening.      | `8080`                       |
-| `nginx.image.repository` | Navi-Front image repository.                          | `2gis-on-premise/navi-front` |
-| `nginx.image.tag`        | Navi-Front image tag.                                 | `1.26.0`                     |
-| `nginx.nodeHeader`       | Enable header with node name (X-Node).                | `false`                      |
-| `nginx.locationsBlock`   | Optional nginx config block with additional locations | `""`                         |
+| Name                     | Description                                                               | Value                        |
+| ------------------------ | ------------------------------------------------------------------------- | ---------------------------- |
+| `nginx.port`             | HTTP port on which Navi-Front will be listening.                          | `8080`                       |
+| `nginx.image.repository` | Navi-Front image repository.                                              | `2gis-on-premise/navi-front` |
+| `nginx.image.tag`        | Navi-Front image tag.                                                     | `1.26.0`                     |
+| `nginx.nodeHeader`       | Enable header with node name (X-Node).                                    | `false`                      |
+| `nginx.locationsBlock`   | Optional nginx config block with additional locations                     | `""`                         |
+| `nginx.customConfigPath` | Path to custom nginx config file. If set, default config will be ignored. | `""`                         |
 
 ### Cron settings
 

@@ -24,14 +24,27 @@ spec:
               path: locations-block.conf
           {{- end }}
       {{- end }}
+      {{- if .Values.nginx.customConfigPath }}
+      - name: nginx-custom-config-path
+        emptyDir: {}
+      {{- end }}
       containers:
         - name: {{ include "generic-chart.containerName" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.nginx.opentracing.enabled }}
+          {{- if .Values.nginx.customConfigPath }}
+          args:
+            - nginx
+            - "-c"
+            - {{ printf "%s/nginx.conf" ( include "nginx.customConfigPath" .) | quote }}
+            - "-g"
+            - "daemon off;"
+          {{- end }}
+          {{- if or .Values.nginx.opentracing.enabled .Values.nginx.customConfigPath }}
           env:
+          {{- if .Values.nginx.opentracing.enabled }}
             - name: JAEGER_SERVICE_NAME
               value: {{ .Values.nginx.opentracing.serviceName | quote }}
             - name: JAEGER_SAMPLER_TYPE
@@ -50,13 +63,24 @@ spec:
                   fieldPath: status.hostIP
               {{- end }}
           {{- end }}
+          {{- if .Values.nginx.customConfigPath }}
+            - name: NGINX_CUSTOM_CONFIG_PATH
+              value: {{ .Values.nginx.customConfigPath | quote }}
+            - name: NGINX_ENVSUBST_OUTPUT_DIR
+              value: {{ printf "%s" ( include "nginx.customConfigPath" .) | quote }}
+          {{- end }}
+          {{- end }} {{/* end of if or .Values.nginx.opentracing.enabled .Values.nginx.customConfigPath */}}
           volumeMounts:
           - name: {{ include "generic-chart.fullname" . }}-base
-            mountPath: /etc/nginx/conf.d/front.conf
+            mountPath: {{ printf "%s/conf.d/front.conf" ( include "nginx.customConfigPath" .) }}
             subPath: front.conf
           {{- if or .Values.serverBlock .Values.locationsBlock }}
           - name: {{ include "generic-chart.fullname" . }}-extra
-            mountPath: /etc/nginx/conf.d/extra
+            mountPath: {{ printf "%s/conf.d/extra" ( include "nginx.customConfigPath" .) }}
+          {{- end }}
+          {{- if .Values.nginx.customConfigPath }}
+          - name: nginx-custom-config-path
+            mountPath: {{ .Values.nginx.customConfigPath }}
           {{- end }}
           ports:
             - name: http
