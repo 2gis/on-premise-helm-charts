@@ -155,6 +155,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- if .Values.api.oidc.enabled }}
 - name: KEYS_OIDC_ENDPOINT
   value: {{ required "A valid .Values.api.oidc.url required" .Values.api.oidc.url | quote }}
+- name: KEYS_OIDC_ISSUER_URL
+  value: {{ .Values.api.oidc.issuerUrl | quote }}
 - name: KEYS_OIDC_CLIENT_TIMEOUT
   value: {{ .Values.api.oidc.timeout | quote }}
 - name: KEYS_OIDC_CLIENT_RETRY_COUNT
