@@ -126,12 +126,12 @@ spec:
                       name: {{ include "pro-api.name" . }}-secret
                 - name: Common__Logging__Format
                   value: {{ .Values.api.settings.logging.format | quote }}
-                - name: Common__Logging__Targets
-                  value: {{ .Values.api.settings.logging.targets | quote }}
                 - name: Common__EsMetricsEnabled
                   value: {{ .Values.assetImporter.settings.esMetricsEnabled | quote }}
                 - name: Common__TtlSecondsAfterFinished
                   value: {{ .Values.assetImporter.settings.ttlSecondsAfterFinished | quote }}
+                - name: Common__PrepareAssetData
+                  value: {{ .Values.assetImporter.settings.prepareAssetData | quote }}
                 - name: Digger__Url
                   value: {{ .Values.digger.url | quote }}
                 {{ if .Values.digger.authToken }}

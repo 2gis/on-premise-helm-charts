@@ -19,5 +19,10 @@ spec:
       protocol: TCP
       name: http
       appProtocol: http
+    - port: {{ .Values.permissions.settings.grpcPort }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+      appProtocol: http
   selector:
     {{- include "pro-api.permissionsSelectorLabels" . | nindent 4 }}
