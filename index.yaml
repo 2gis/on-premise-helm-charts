@@ -1391,6 +1391,20 @@ entries:
   citylens:
   - apiVersion: v2
     appVersion: 1.18.3
+    created: "2025-12-05T06:02:22.659450079Z"
+    description: A Helm chart for Kubernetes to deploy Citylens service
+    digest: 9b34809ee89ec22a40097f99a443a485dc9b0d19797abe4845eb8e53ca828eaf
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: citylens
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/citylens-2.2.0/citylens-2.2.0.tgz
+    version: 2.2.0
+  - apiVersion: v2
+    appVersion: 1.18.3
     created: "2025-10-16T10:45:50.807863341Z"
     description: A Helm chart for Kubernetes to deploy Citylens service
     digest: 2e5b24617c21d48022684c721b7b52e38e319fe64ccdc3b185ca2955d825339c
@@ -2118,6 +2132,23 @@ entries:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/citylens-1.6.1/citylens-1.6.1.tgz
     version: 1.6.1
   citylens-routes-ui:
+  - apiVersion: v2
+    appVersion: 1.6.2
+    created: "2025-12-05T06:02:22.899681433Z"
+    dependencies:
+    - name: generic-chart
+      repository: file://../generic-chart
+      version: '>=0'
+    description: A Helm chart for Kubernetes to deploy Citylens UI service
+    digest: 1dc5b1010c3af642c54d7cadff61aa866031e36575f84ffc98c3cde6df33a0a1
+    maintainers:
+    - email: devops@2gis.ru
+      name: 2gis
+    name: citylens-routes-ui
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/citylens-routes-ui-2.2.0/citylens-routes-ui-2.2.0.tgz
+    version: 2.2.0
   - apiVersion: v2
     appVersion: 1.4.0
     created: "2025-10-16T10:45:51.056570541Z"
@@ -29091,4 +29122,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/zookeeper-1.5.2/zookeeper-1.5.2.tgz
     version: 1.5.2
-generated: "2025-11-27T12:19:21.695088469Z"
+generated: "2025-12-05T06:02:23.121462483Z"
