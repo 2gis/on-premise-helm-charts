@@ -1,59 +1,24 @@
-# Общая информация
+# 2GIS Search API service
 
-## Команды helm
-```shell
-helm install search-api . -n <namespace> # установить чарт
-helm delete search-api -n <namespace>    # удалить чарт
-helm upgrade search-api . -n <namespace> # обновить чарт
-```
+Use this Helm chart to deploy Search API service, which is a part of 2GIS's [On-Premise Search services](https://docs.2gis.com/en/on-premise/search).
 
-## Blue-green deployment
-Чарт поддерживает Blue-Green deployment. Для его использования в файле `values.txt` задайте значение для параметра
-`bluegreen`, например:
-```yaml
-bluegreen: "green"
-```
+Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-В этом случае значение `bluegreen` (`green` в данном случае) подставится как label ко всем сущностям в этом релизе.
-Если закомментировать этот параметр или оставить его пустым, релиз развернётся с label `bluegreen: ""`.
+> **Note:**
+>
+> All On-Premise services are beta, and under development.
 
-Чарт поддерживает разворачивание нескольких релизов в одном namespace. Для этого надо поменять параметр bluegreen и имя
-релиза в команде `helm install/upgrade`.
+See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn about:
 
+- Architecture of the service.
 
-Примеры:
-```shell
-helm install bs1 . -n <namespace>                       # параметр bluegreen пустой
-helm install bs2 --set bluegreen=blue . -n <namespace>  # параметр bluegreen=blue
-helm install bs3 --set bluegreen=green . -n <namespace> # параметр bluegreen=green
-```
-Таким образом у нас будет три версии поиска, которые можно отдельно обновлять/удалять/инсталлировать изолировано от
-остальных.
+- Installing the service.
 
-Можно держать стабильную рабочую версию, на которую будут идти запросы с внешнего ингресса/веб роутера, параллельно в
-том же неймспейсе можно иметь несколько версий для разработки и тестирования, с разными моделями индексов, фидов,
-структуры самого приложения и микросервисов. Убедившись в стабильности новой dev версии переключить трафик ингресса/веб
-роутера c стабильной версии на dev. И также легко переключиться (откатиться обратно).
+    When filling in the keys for `values-search.yaml` configuration file, refer to the documentation and the list of keys below.
 
-Значения `blue`/`green` весьма условные, теги могут быть любыми: `stable`, `dev`, `usrch-3456` и так далее. Их может
-быть более 2.
-Ненужную версию, на которую больше не планируется направлять трафик можно удалить без эффекта на другие версии.
-
-## Mock-сервисы для отладки и тестирования
-
-### query-transformer-mock
-В качестве mock'а для сервиса исправления опечаток у нас используется wiremock с расширением для обработки grpc.
-Для его использования нужно установить `queryTransformerMock.enabled: true` в values.yaml или передать значение явно
-при установке или обновлении чарта. Поведение сервиса настраивается в секции `queryTransformerMock.config` в виде yaml
-и при установке чарта преобразуется в json-формат, читаемый wiremock.
-
-Более подробную информацию о настройке можно посмотреть здесь:
-https://wiremock.org/docs/grpc/
+- Updating the service.
 
 ## Values
-
-### internal 2gis parametrs
-
 
 ### Worker settings
 
