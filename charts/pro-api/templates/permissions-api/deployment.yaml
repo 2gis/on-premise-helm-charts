@@ -153,9 +153,9 @@ spec:
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
             - name: Common__HttpPort
-              value: "{{ .Values.permissions.settings.httpPort }}"
+              value: {{ .Values.permissions.settings.httpPort | quote }}
             - name: Common__GrpcPort
-              value: "{{ .Values.permissions.settings.grpcPort }}"
+              value: {{ .Values.permissions.settings.grpcPort | quote }}
             - name: Common__Logging__Format
               value: {{ .Values.api.settings.logging.format | quote }}
             - name: Common__DeleteInactiveUsers

@@ -345,11 +345,11 @@ spec:
             - name: SberEcommerceApi__UserName
               value: {{ .Values.ecommerce.username | quote }}
             - name: PermissionsApi__Url
-              value: "{{ include "pro-api.permissions-url" . }}"
+              value: {{ include "pro-api.permissions-url" . }}
             - name: PermissionsApi__HttpPort
-              value: "{{ .Values.permissions.service.port }}"
+              value: {{ .Values.permissions.service.port | quote }}
             - name: PermissionsApi__GrpcPort
-              value: "{{ .Values.permissions.settings.grpcPort }}"
+              value: {{ .Values.permissions.settings.grpcPort | quote }}
             {{- if .Values.permissions.settings.auth.apiKey }}
             - name: PermissionsApi__Key
               valueFrom:
