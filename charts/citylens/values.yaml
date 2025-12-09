@@ -1425,6 +1425,19 @@ routes:
     multiTenantEnabled: false
     licenseEnabled: false
 
+# @skip routes.momraEdition.enable
+# @skip routes.momraEdition.areaClusteringEnabled
+# @skip routes.momraEdition.oneRouteDirectionEnabled
+# @skip routes.momraEdition.navigationByPointsEnabled
+# @skip routes.momraEdition.incidentsEnabled
+
+momraEdition:
+  enable: false
+  areaClusteringEnabled: false
+  oneRouteDirectionEnabled: false
+  navigationByPointsEnabled: false
+  incidentsEnabled: false
+
 # @section Citylens routes PRO assets configs.
 # @param routes.tasksAssetSettings.systemAccessToken Route task asset token.
 # @param routes.tasksAssetSettings.plannedTasksAssetId Identity to planned route task asset.
