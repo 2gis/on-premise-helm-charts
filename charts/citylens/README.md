@@ -580,7 +580,7 @@ See the [documentation]() to learn about:
 | Name                          | Description  | Value                                 |
 | ----------------------------- | ------------ | ------------------------------------- |
 | `routes.api.image.repository` | Repository.  | `2gis-on-premise/citylens-routes-api` |
-| `routes.api.image.tag`        | Tag.         | `1.6.5`                               |
+| `routes.api.image.tag`        | Tag.         | `1.7.0`                               |
 | `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        |
 
 ### Resources settings
@@ -667,12 +667,6 @@ See the [documentation]() to learn about:
 | `routes.api.logging.extendedRestLogging` | Extended log message. Include http metadata requests.                  | `false`       |
 | `routes.api.logging.extendedSqlLogging`  | Extended sql logs. Include sql requests row.                           | `false`       |
 
-### OpenAPI settings
-
-| Name                 | Description           | Value   |
-| -------------------- | --------------------- | ------- |
-| `routes.api.openApi` | Show or hide swagger. | `false` |
-
 ### Citylens routes Worker
 
 
@@ -681,7 +675,7 @@ See the [documentation]() to learn about:
 | Name                             | Description  | Value                                     |
 | -------------------------------- | ------------ | ----------------------------------------- |
 | `routes.worker.image.repository` | Repository.  | `2gis-on-premise/citylens-worker-service` |
-| `routes.worker.image.tag`        | Tag.         | `1.6.5`                                   |
+| `routes.worker.image.tag`        | Tag.         | `1.7.0`                                   |
 | `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            |
 
 ### Resources settings
@@ -747,7 +741,7 @@ See the [documentation]() to learn about:
 | Name                                      | Description  | Value                                        |
 | ----------------------------------------- | ------------ | -------------------------------------------- |
 | `routes.realtimeDataApi.image.repository` | Repository.  | `2gis-on-premise/citylens-realtime-data-api` |
-| `routes.realtimeDataApi.image.tag`        | Tag.         | `1.6.5`                                      |
+| `routes.realtimeDataApi.image.tag`        | Tag.         | `1.7.0`                                      |
 | `routes.realtimeDataApi.image.pullPolicy` | Pull Policy. | `IfNotPresent`                               |
 
 ### Resources settings
@@ -822,12 +816,6 @@ See the [documentation]() to learn about:
 | `routes.realtimeDataApi.logging.level`               | Log message level. verbose, debug, information, warning, error, fatal. | `information` |
 | `routes.realtimeDataApi.logging.extendedRestLogging` | Extended log message. Include http metadata requests.                  | `false`       |
 | `routes.realtimeDataApi.logging.extendedSqlLogging`  | Extended sql logs. Include sql requests row.                           | `false`       |
-
-### OpenAPI settings
-
-| Name                             | Description           | Value   |
-| -------------------------------- | --------------------- | ------- |
-| `routes.realtimeDataApi.openApi` | Show or hide swagger. | `false` |
 
 ### Data store settings
 

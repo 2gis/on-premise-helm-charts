@@ -62,13 +62,16 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+            - name: debug
+              containerPort: 8082
+              protocol: TCP
           volumeMounts:
             - mountPath: {{ .Values.routes.api.tempPath | quote }}
               name: temp-volume
           livenessProbe:
             httpGet:
               path: /health/live
-              port: http
+              port: debug
             initialDelaySeconds: 10
             periodSeconds: 20
             timeoutSeconds: 5
@@ -77,7 +80,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health/ready
-              port: http
+              port: debug
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 5
@@ -86,7 +89,7 @@ spec:
           startupProbe:
             httpGet:
               path: /health/live
-              port: http
+              port: debug
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -108,9 +111,6 @@ spec:
               value: {{ .Values.routes.api.logging.extendedRestLogging | quote }}
             - name: Common__Logging__ExtendedSqlLogging
               value: {{ .Values.routes.api.logging.extendedSqlLogging | quote }}
-
-            - name: Common__OpenApi
-              value: {{ .Values.routes.api.openApi | quote }}
 
             - name: Postgres__ReadWrite__ConnectionString
               value: {{ include "routes-api.connectionString" . }}
@@ -180,6 +180,19 @@ spec:
               value: {{ $.Values.routes.features.coverageRatioEnabled | quote }}
             - name: Features__MultiTenantEnabled
               value: {{ $.Values.routes.features.multiTenantEnabled | quote }}
+            - name: Features__LicenseEnabled
+              value: {{ $.Values.routes.features.licenseEnabled | quote }}
+
+            - name: MomraEditionFeatures__Enabled
+              value: {{ $.Values.routes.momraEdition.enable | quote }}
+            - name: MomraEditionFeatures__AreaClusteringEnabled
+              value: {{ $.Values.routes.momraEdition.areaClusteringEnabled | quote }}
+            - name: MomraEditionFeatures__OneRouteDirectionEnabled
+              value: {{ $.Values.routes.momraEdition.oneRouteDirectionEnabled | quote }}
+            - name: MomraEditionFeatures__NavigationByPointsEnabled
+              value: {{ $.Values.routes.momraEdition.navigationByPointsEnabled | quote }}
+            - name: MomraEditionFeatures__IncidentsEnabled
+              value: {{ $.Values.routes.momraEdition.incidentsEnabled | quote }}
 
             - name: TasksAssetSettings__SystemAccessToken
               valueFrom:
