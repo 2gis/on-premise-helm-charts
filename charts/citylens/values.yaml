@@ -1431,12 +1431,12 @@ routes:
 # @skip routes.momraEdition.navigationByPointsEnabled
 # @skip routes.momraEdition.incidentsEnabled
 
-momraEdition:
-  enable: false
-  areaClusteringEnabled: false
-  oneRouteDirectionEnabled: false
-  navigationByPointsEnabled: false
-  incidentsEnabled: false
+  momraEdition:
+    enable: false
+    areaClusteringEnabled: false
+    oneRouteDirectionEnabled: false
+    navigationByPointsEnabled: false
+    incidentsEnabled: false
 
 # @section Citylens routes PRO assets configs.
 # @param routes.tasksAssetSettings.systemAccessToken Route task asset token.
