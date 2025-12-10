@@ -37,10 +37,10 @@ spec:
           configMap:
             name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-import
 
-        {{- if $.Values.cassandra.tls.deploySecret }}
+        {{- if eq (include "tiles.tls.mountSecret" $) "true" }}
         - name: cassandra-tls
           secret:
-            secretName: {{ include "tiles.fullname" $ }}-tls
+            secretName: {{ include "tiles.tls.secretName" $ }}
         {{- end }}
 
         {{- if $.Values.customCAs.bundle }}
@@ -82,7 +82,7 @@ spec:
             - mountPath: "/config"
               name: config-volume
 
-            {{- if $.Values.cassandra.tls.deploySecret }}
+            {{- if eq (include "tiles.tls.mountSecret" $) "true" }}
             - mountPath: "/tls"
               name: cassandra-tls
               readOnly: true

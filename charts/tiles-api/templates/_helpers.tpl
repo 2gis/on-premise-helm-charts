@@ -174,3 +174,15 @@ app.kubernetes.io/component: tilegen
 {{- $.Values.tilegen.serviceAccountOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{- end }}
+
+{{- define "tiles.tls.secretName" -}}
+{{- if $.Values.cassandra.tls.existingSecret.name }}
+{{- $.Values.cassandra.tls.existingSecret.name }}
+{{- else }}
+{{- include "tiles.fullname" . }}-tls
+{{- end }}
+{{- end }}
+
+{{- define "tiles.tls.mountSecret" -}}
+{{ or $.Values.cassandra.tls.deploySecret (not (empty $.Values.cassandra.tls.existingSecret.name)) }}
+{{- end }}

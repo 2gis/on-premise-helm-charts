@@ -38,6 +38,17 @@ data:
       key-path: /tls/client.key
       {{- end }}
       {{- end }}
+      {{- if .tls.existingSecret.name }}
+      {{- if .tls.existingSecret.caFileName }}
+        ca-path: /tls/{{ .tls.existingSecret.caFileName }}
+      {{- end }}
+      {{- if .tls.existingSecret.clientCertFileName }}
+        cert-path: /tls/{{ .tls.existingSecret.clientCertFileName }}
+      {{- end }}
+      {{- if .tls.existingSecret.clientKeyFileName }}
+        key-path: /tls/{{ .tls.existingSecret.clientKeyFileName }}
+      {{- end }}
+      {{- end }}
     cassandra:
       name: local
       num-retries: 2
@@ -97,10 +108,10 @@ data:
               configMap:
                 name: {{ include "tiles.fullname" $ }}-tilegen
 
-            {{- if $.Values.cassandra.tls.deploySecret }}
+            {{- if eq (include "tiles.tls.mountSecret" $) "true" }}
             - name: cassandra-tls
               secret:
-                secretName: {{ include "tiles.fullname" . }}-tls
+                secretName: {{ include "tiles.tls.secretName" $ }}
             {{- end }}
 
             {{- if $.Values.customCAs.bundle }}
@@ -131,7 +142,7 @@ data:
                 - mountPath: "/config"
                   name: config-volume
 
-                {{- if $.Values.cassandra.tls.deploySecret }}
+                {{- if eq (include "tiles.tls.mountSecret" $) "true" }}
                 - mountPath: "/tls"
                   name: cassandra-tls
                   readOnly: true

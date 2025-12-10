@@ -81,6 +81,10 @@ types:
 # @param cassandra.tls.ca Root certificate file.
 # @param cassandra.tls.cert Client certificate.
 # @param cassandra.tls.key Client private key.
+# @param cassandra.tls.existingSecret.name Uses an existing Kubernetes secret with TLS certificates.
+# @param cassandra.tls.existingSecret.caFileName The file name of the CA certificate in the existing secret.
+# @param cassandra.tls.existingSecret.clientCertFileName The file name of the client certificate in the existing secret.
+# @param cassandra.tls.existingSecret.clientKeyFileName The file name of the client key in the existing secret.
 
 cassandra:
   environment: ''
@@ -110,6 +114,14 @@ cassandra:
       # -----BEGIN PRIVATE KEY-----
       # ...
       # -----END PRIVATE KEY-----
+    existingSecret:
+      name: ''
+      caFileName: ''
+      # caFileName: 'ca.crt'
+      clientCertFileName: ''
+      # clientCertFileName: 'tls.crt'
+      clientKeyFileName: ''
+      # clientKeyFileName: 'tls.key'
 
   replicaFactor: 3
   consistencyLevelRead: LOCAL_ONE
@@ -166,7 +178,7 @@ tilegen:
   # @param tilegen.imagePullSecrets Kubernetes image pull secrets.
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.80.0
+    tag: 4.80.3
     pullPolicy: IfNotPresent
 
   imagePullSecrets: []
@@ -277,7 +289,7 @@ proxy:
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.80.0
+    tag: 4.80.3
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -348,7 +360,7 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.80.0
+    tag: 4.80.3
     pullPolicy: IfNotPresent
 
   terminationGracePeriodSeconds: 30
@@ -507,7 +519,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.80.0
+    tag: 4.80.3
     pullPolicy: IfNotPresent
 
 
