@@ -29,7 +29,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name               | Description | Value                    |
 | ------------------ | ----------- | ------------------------ |
 | `image.repository` | Repository  | `2gis-on-premise/pro-ui` |
-| `image.tag`        | Tag         | `4.33.0`                 |
+| `image.tag`        | Tag         | `4.43.0`                 |
 
 ### Common deployment settings
 
@@ -162,13 +162,16 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### Autoscaling configuration
 
-| Name               | Description                          | Value   |
-| ------------------ | ------------------------------------ | ------- |
-| `hpa.enabled`      | Enable hpa for PRO UI                | `false` |
-| `hpa.minReplicas`  | Minimum number of PRO UI replicas    | `2`     |
-| `hpa.maxReplicas`  | Maximum number of PRO UI replicas    | `5`     |
-| `hpa.targetCPU`    | Target CPU utilization percentage    | `100`   |
-| `hpa.targetMemory` | Target Memory utilization percentage | `""`    |
+| Name                 | Description                                          | Value   |
+| -------------------- | ---------------------------------------------------- | ------- |
+| `hpa.enabled`        | Enable hpa for PRO UI                                | `false` |
+| `hpa.minReplicas`    | Minimum number of PRO UI replicas                    | `2`     |
+| `hpa.maxReplicas`    | Maximum number of PRO UI replicas                    | `5`     |
+| `hpa.targetCPU`      | Target CPU utilization percentage                    | `100`   |
+| `hpa.targetMemory`   | Target Memory utilization percentage                 | `""`    |
+| `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
+| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
 
 ### Artifacts Storage settings
 
@@ -189,7 +192,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `stylesImporter.name`                       | Styles Import job name.                                                                                                                                  | `styles-importer`              |
 | `stylesImporter.image.repository`           | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `stylesImporter.image.tag`                  | Docker image tag.                                                                                                                                        | `2.31.1`                       |
+| `stylesImporter.image.tag`                  | Docker image tag.                                                                                                                                        | `2.46.1`                       |
 | `stylesImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `stylesImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
 | `stylesImporter.nodeSelector`               | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                      | `{}`                           |

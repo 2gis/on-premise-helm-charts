@@ -27,7 +27,7 @@ strategy:
 # @param image.tag Tag
 image:
   repository: 2gis-on-premise/pro-ui
-  tag: 4.33.0
+  tag: 4.43.0
 
 # @section Common deployment settings
 
@@ -265,8 +265,16 @@ hpa:
   targetCPU: 100
   targetMemory: ''
 
-# @section Artifacts Storage settings
+# @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+# if minAvailable and pdb.maxUnavailable are both set, only minAvailable is used
+pdb:
+  enabled: false
+  minAvailable: ''
+  maxUnavailable: 1
 
+# @section Artifacts Storage settings
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
 # @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
 # @param dgctlStorage.bucket S3 bucket name. **Required**
@@ -307,7 +315,7 @@ stylesImporter:
   name: styles-importer
   image:
     repository: 2gis-on-premise/pro-importer
-    tag: 2.31.1
+    tag: 2.46.1
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   nodeSelector: {}

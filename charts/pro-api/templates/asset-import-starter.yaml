@@ -116,8 +116,6 @@ spec:
             {{- end }}
             - name: Common__Logging__Format
               value: {{ .Values.api.settings.logging.format | quote }}
-            - name: Common__Logging__Targets
-              value: {{ .Values.api.settings.logging.targets | quote }}
             - name: Common__FailJobOnError
               value: "true"
             - name: Common__TtlSecondsAfterFinished

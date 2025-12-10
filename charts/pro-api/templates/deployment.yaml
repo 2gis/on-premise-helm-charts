@@ -280,8 +280,6 @@ spec:
                   key: apiKey
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
-            - name: Auth__PermissionsApiUrl
-              value: {{ include "pro-api.permissions-url" . }}
             {{- if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
@@ -312,8 +310,6 @@ spec:
             {{- end }}
             - name: Common__Logging__Format
               value: {{ .Values.api.settings.logging.format | quote }}
-            - name: Common__Logging__Targets
-              value: {{ .Values.api.settings.logging.targets | quote }}
             - name: Common__EsDataCentersCount
               value: {{ .Values.api.settings.esDataCentersCount | quote }}
             - name: RateLimiter__RequestsLimit
@@ -330,12 +326,8 @@ spec:
               value: {{ .Values.api.settings.layerGeneration.isochroneLayerMaxPointsCount | quote }}
             - name: TasksApi__Url
               value: http://{{ include "pro-api.tasks-name" . }}:{{ .Values.tasks.settings.grpcPort }}
-            - name: TasksApi__UseForLayerDataPreparation
-              value: {{ .Values.api.settings.tasksApi.useForLayerDataPreparation | quote }}
             - name: BackgroundJobs__InitOnStartupJob__Enabled
               value: {{ ne .Values.api.settings.backgroundJobs.enableInitOnStartupJob false | quote }}
-            - name: BackgroundJobs__LayerDataPrepareJob__Enabled
-              value: {{ ne .Values.api.settings.backgroundJobs.enableLayerDataPrepareJob false | quote }}
             - name: BackgroundJobs__ClearCacheJob__Enabled
               value: {{ ne .Values.api.settings.backgroundJobs.enableClearCacheJob false | quote }}
             - name: BackgroundJobs__ClearMetadataAndStorageJob__Enabled
@@ -352,6 +344,19 @@ spec:
               value: {{ .Values.ecommerce.url | quote }}
             - name: SberEcommerceApi__UserName
               value: {{ .Values.ecommerce.username | quote }}
+            - name: PermissionsApi__Url
+              value: {{ include "pro-api.permissions-url" . }}
+            - name: PermissionsApi__HttpPort
+              value: {{ .Values.permissions.service.port | quote }}
+            - name: PermissionsApi__GrpcPort
+              value: {{ .Values.permissions.settings.grpcPort | quote }}
+            {{- if .Values.permissions.settings.auth.apiKey }}
+            - name: PermissionsApi__Key
+              valueFrom:
+                secretKeyRef:
+                  key: permissionsApiKey
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
             {{- if .Values.ecommerce.password }}
             - name: SberEcommerceApi__Password
               valueFrom:

@@ -34,7 +34,7 @@ featureFlags:
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.140.0
+    tag: 1.144.1
 
 # @section Admin service settings
 
@@ -746,6 +746,18 @@ ldap:
     baseDN: dc=2gis
     filter: (&(objectClass=user)(sAMAccountName=%s))
 
+# @section Stat API connection settings
+
+# @param statApi.enabled If Stat API integration is enabled.
+# @param statApi.url URL of Stat API service. Ex: http://stat-api.svc. ***Required value***.
+# @param statApi.timeout Request timeout for Stat API calls. Duration string is a sequence of decimal numbers with optional fraction and unit suffix, like `100ms`, `2.3h` or `4h35m`. Valid time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
+# @param statApi.retryCount Maximum number of retries for requests to Stat API.
+
+statApi:
+  enabled: false
+  url: ''
+  timeout: 30s
+  retryCount: 3
 
 # @section Predefined keys
 
