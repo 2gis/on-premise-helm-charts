@@ -108,7 +108,7 @@ worker:
   image:
     repository: 2gis-on-premise/search-worker
     pullPolicy: IfNotPresent
-    tag: 8.16.1
+    tag: 8.16.0
   ports:
     http: 8092
     grpc: 8091
@@ -291,7 +291,7 @@ head:
     image:
       repository: 2gis-on-premise/search-head
       pullPolicy: IfNotPresent
-      tag: 8.16.1
+      tag: 8.16.0
     ports:
       http: 9090
       monitor: 9091
@@ -639,7 +639,7 @@ filesStorage:
   image:
     repository: 2gis-on-premise/search-files_storage
     pullPolicy: IfNotPresent
-    tag: 8.16.1
+    tag: 8.16.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -730,7 +730,7 @@ dataAdapter:
   image:
     repository: 2gis-on-premise/search-data_adapter
     pullPolicy: IfNotPresent
-    tag: 8.16.1
+    tag: 8.15.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -833,7 +833,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-controller
     pullPolicy: IfNotPresent
-    tag: 8.16.1
+    tag: 8.16.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -956,7 +956,7 @@ indexer:
   image:
     repository: 2gis-on-premise/search-indexer
     pullPolicy: IfNotPresent
-    tag: 8.16.1
+    tag: 8.16.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1058,7 +1058,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-syncer_new
     pullPolicy: IfNotPresent
-    tag: 8.16.1
+    tag: 8.16.0
   securityContext: {}
   resources:
     requests:
@@ -1446,7 +1446,7 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.16.1
+    tag: 8.16.0
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
@@ -1623,7 +1623,7 @@ geodetector:
   image:
     repository: 2gis-on-premise/search-geodetector
     pullPolicy: IfNotPresent
-    tag: 8.16.1
+    tag: 8.16.0
   imagePullSecrets: []
   geodetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60
