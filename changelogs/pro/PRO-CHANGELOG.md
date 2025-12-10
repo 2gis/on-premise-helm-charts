@@ -1,3 +1,25 @@
+## [2.2.0] (2025-12-10)
+
+#### Images
+```
+pro-api
+	- pro-api:2.31.1
+	+ pro-api:2.46.2
+	- pro-importer:2.31.1
+	+ pro-importer:2.46.2
+	+ pro-pagerenderer-api:2.46.2
+	- pro-permissions-api:2.31.1
+	+ pro-permissions-api:2.46.2
+	- pro-tasks-api:2.31.1
+	+ pro-tasks-api:2.46.2
+pro-ui
+	- pro-importer:2.31.1
+	+ pro-importer:2.46.2
+	- pro-ui:4.33.0
+	+ pro-ui:4.43.0
+```
+[Full list of image versions](pro_image_versions.txt)
+
 ## [2.1.0] (2025-10-09)
 #### [Breaking-Changes](PRO-Breaking-Changes.md#210)
 #### Images
