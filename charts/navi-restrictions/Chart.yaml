@@ -4,7 +4,7 @@ description: A Helm chart for Kubernetes to deploy Restrictions backend
 
 type: application
 
-version: 2.47.0
+version: 2.47.1
 appVersion: 1.0.1
 
 maintainers:
