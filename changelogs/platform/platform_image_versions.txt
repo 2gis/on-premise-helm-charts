@@ -7,8 +7,8 @@ mapgl-js-api
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
-	navi-async-matrix:1.19.1
-	navi-merger-async-matrix:1.19.1
+	navi-async-matrix:1.19.3
+	navi-merger-async-matrix:1.19.3
 navi-attractor
 	navi-attractor:7.47.1.3
 navi-back
