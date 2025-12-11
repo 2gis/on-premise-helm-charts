@@ -1,3 +1,15 @@
+## [2.47.1] (2025-12-11)
+
+#### Images
+```
+navi-async-matrix
+	- navi-async-matrix:1.19.1
+	+ navi-async-matrix:1.19.3
+	- navi-merger-async-matrix:1.19.1
+	+ navi-merger-async-matrix:1.19.3
+```
+[Full list of image versions](platform_image_versions.txt)
+
 ## [2.47.0] (2025-11-27)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2470)
 #### Images
