@@ -77,7 +77,7 @@ customReadinessProbe: {}
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  tag: 1.19.1
+  tag: 1.19.3
 
 
 # @section Service account settings
@@ -237,7 +237,7 @@ dm:
     replicaCount: 1
     image:
       repository: 2gis-on-premise/navi-merger-async-matrix
-      tag: 1.19.1
+      tag: 1.19.3
     resources: {}
   labels: {}
   annotations: {}
