@@ -246,11 +246,11 @@ spec:
                   fieldPath: metadata.name
             - name: DM_ASYNC_SERVICE_KMS__URL
               value: {{ .Values.keys.url | quote }}
-            {{- if .Values.bss.enabled }}
+            {{- if .Values.stat.enabled }}
             - name: DM_ASYNC_SERVICE_BSS__URL
-              value: {{ .Values.bss.url | quote }}
+              value: {{ .Values.stat.url | quote }}
             - name: DM_ASYNC_SERVICE_BSS__VERSION
-              value: {{ .Values.bss.version | quote }}
+              value: {{ .Values.stat.version | quote }}
             {{- end }}
             {{- range $kafkaRole, $overridesProperty := (dict
                   "PRODUCER" "producerOverrides"
