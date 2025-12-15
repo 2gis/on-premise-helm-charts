@@ -47,11 +47,11 @@ spec:
           resources:
             {{- toYaml .Values.filesStorage.resources | nindent 12 }}
           env:
-            - name: GINMODE
+            - name: GIN_MODE
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "search-api.fullname" . }}
-                  key: GINMODE
+                  key: GIN_MODE
             {{- if .Values.customCAs.bundle }}
             {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}

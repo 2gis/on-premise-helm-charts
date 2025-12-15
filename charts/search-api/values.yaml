@@ -97,6 +97,8 @@ owner: ''
 # @param worker.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be unavailable during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
 # @param worker.strategy.rollingUpdate.maxSurge Maximum number of extra pods that can be created during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
 # @param worker.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+# @param worker.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
+# @param worker.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
 
 worker:
   replicaCount: 2
@@ -108,7 +110,7 @@ worker:
   image:
     repository: 2gis-on-premise/search-worker
     pullPolicy: IfNotPresent
-    tag: 8.16.0
+    tag: 8.17.1
   ports:
     http: 8092
     grpc: 8091
@@ -119,16 +121,19 @@ worker:
   dataUpdateFrequencySec: 60
   rtw:
     lifeTime: 1800
+  syncer:
+    includeProjectKeyRegexp: 'gis\.v4.*'
+    excludeProjectKeyRegexp: '^$'
   queueLimit: 30
   executeDebugCommands: false
   securityContext: {}
   resources:
     requests:
       cpu: 1400m
-      memory: 4000Mi
+      memory: 5500Mi
     limits:
       cpu: 6000m
-      memory: 6300Mi
+      memory: 7500Mi
   livenessProbe:
     enabled: true
     httpGet:
@@ -273,7 +278,7 @@ head:
 # @param head.head.workerRetryAttempts Number of retry attempts to contact a worker
 # @param head.head.workerTimeoutMs Timeout (in milliseconds) for waiting for a response from a worker
 # @param head.head.adsEnable Enable or disable advertising
-# @param head.head.bigSearchMode Enable or disable big search (`on`, `off`)
+# @param head.head.bigSearchMode.enabled Enable or disable big search (true, false)
 # @param head.head.bigSearchSearchers List of searchers for which big search is enabled
 # @skip head.head.bigSearchExcludeSegments List of projects to exclude from indexing
 # @param head.head.aiSuggestedQueries.enabled Enable or disable AI Suggested Queries
@@ -286,12 +291,14 @@ head:
 # @param head.head.throttle.updateIntervalSeconds Interval (in seconds) for updating the throttling level
 # @param head.head.throttle.inputMetric.updateIntervalSeconds Interval (in seconds) for updating the input metric value
 # @param head.head.throttle.inputMetric.calculateForPeriods Number of update periods to use for input metric calculation
+# @param head.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
+# @param head.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
 
   head:
     image:
       repository: 2gis-on-premise/search-head
       pullPolicy: IfNotPresent
-      tag: 8.16.0
+      tag: 8.17.1
     ports:
       http: 9090
       monitor: 9091
@@ -336,28 +343,32 @@ head:
       periodSeconds: 10
       successThreshold: 1
       failureThreshold: 200
-    allowSearchExtendedParams: true
+    allowSearchExtendedParams: false
     prestopHook:
       enabled: true
     workerQueriesCount: 32
     workerRetryAttempts: 1
     workerTimeoutMs: 2000
-    adsEnable: true
-    bigSearchMode: on
+    adsEnable: false
+    bigSearchMode:
+      enabled: true
     bigSearchSearchers: []
     bigSearchExcludeSegments: []
     aiSuggestedQueries:
-      enabled: true
+      enabled: false
     executeDebugCommands: false
     throttle:
-      enabled: true
-      threshold: 250
+      enabled: false
+      threshold: 300
       engageFactor: 60
       releaseFactor: 20
       updateIntervalSeconds: 1
       inputMetric:
         updateIntervalSeconds: 5
         calculateForPeriods: 12
+  syncer:
+    includeProjectKeyRegexp: 'gis\.v4.*'
+    excludeProjectKeyRegexp: '^$'
 
 # @param head.nginx.image.repository Docker image repository
 # @param head.nginx.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
@@ -373,7 +384,7 @@ head:
 
 # @param head.nginx.keepAliveCount Maximum number of idle keepalive connections to upstream servers
 # @param head.nginx.enableAccessLog Enable or disable access logs for each request (disabled to reduce log volume)
-# @param head.nginx.logLevel Log level for Nginx; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param head.nginx.logLevel Log level for Nginx; can be `trace`, `debug`, `info`, `warn`, `error`, or `critical`
 
   nginx:
     image:
@@ -414,6 +425,7 @@ head:
 # @param head.envoy.faultInjection.clients.worker Specifies the fault injection settings for the worker client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
 # @param head.envoy.faultInjection.clients.qt Specifies the fault injection settings for the query transformer client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
 # @param head.envoy.faultInjection.clients.ai Specifies the fault injection settings for the AI vector search client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
+# @param head.envoy.faultInjection.clients.recsys Specifies the fault injection settings for the recsys ranker client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
 
   envoy:
     image:
@@ -439,6 +451,7 @@ head:
         worker: {}
         qt: {}
         ai: {}
+        recsys: {}
 
 
 # @skip head.initSapphireDocs.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
@@ -487,7 +500,7 @@ head:
     enabled: false
     minReplicas: 2
     maxReplicas: 50
-    averageCPUValue: 700m
+    averageCPUValue: 600m
     behavior:
       scaleDown:
         policies:
@@ -522,13 +535,13 @@ head:
       ssl: false
     timeoutMs: 20
 
-# @param head.aiVectorSearch.enabled Enable or disable aiVectorSearch
-# @param head.aiVectorSearch.endpoint.address Address of the aiVectorSearch service
-# @param head.aiVectorSearch.endpoint.port Port of the aiVectorSearch service
-# @param head.aiVectorSearch.endpoint.ssl Enable or disable TLS encryption for the aiVectorSearch service
-# @param head.aiVectorSearch.clientFactoryName Client factory name for the aiVectorSearch client (used to enable/disable SSL when debugging locally)
-# @param head.aiVectorSearch.timeoutMs Connection timeout (in milliseconds) for the aiVectorSearch service
-# @param head.aiVectorSearch.searchers List of searchers for which aiVectorSearch will be enabled
+# @skip head.aiVectorSearch.enabled Enable or disable aiVectorSearch
+# @skip head.aiVectorSearch.endpoint.address Address of the aiVectorSearch service
+# @skip head.aiVectorSearch.endpoint.port Port of the aiVectorSearch service
+# @skip head.aiVectorSearch.endpoint.ssl Enable or disable TLS encryption for the aiVectorSearch service
+# @skip head.aiVectorSearch.clientFactoryName Client factory name for the aiVectorSearch client (used to enable/disable SSL when debugging locally)
+# @skip head.aiVectorSearch.timeoutMs Connection timeout (in milliseconds) for the aiVectorSearch service
+# @skip head.aiVectorSearch.searchers List of searchers for which aiVectorSearch will be enabled
 
   aiVectorSearch:
     enabled: false
@@ -536,9 +549,27 @@ head:
       address: ''
       port: 50051
       ssl: false
-    clientFactoryName: grpc-client-factory
+    clientFactoryName: 'grpc-client-factory'
     timeoutMs: 500
-    searchers:
+    searchers: []
+
+# @param head.recsysRanker.enabled Enable or disable recsysRanker
+# @param head.recsysRanker.endpoint.address Address of the recsysRanker service
+# @param head.recsysRanker.endpoint.port Port of the recsysRanker service
+# @param head.recsysRanker.endpoint.ssl Enable or disable TLS encryption for the recsysRanker service
+# @param head.recsysRanker.clientFactoryName Client factory name for the recsysRanker client (used to enable/disable SSL when debugging locally)
+# @param head.recsysRanker.timeoutMs Connection timeout (in milliseconds) for the recsysRanker service
+# @param head.recsysRanker.searchersList List of searchers for which recsysRanker will be enabled
+
+  recsysRanker:
+    enabled: false
+    endpoint:
+      address: discovery-search-reranker.recsys.svc.cluster.local
+      port: 50051
+      ssl: false
+    clientFactoryName: 'grpc-client-factory'
+    timeoutMs: 500
+    searchersList:
       - ExpandingSearcher
 
 # @param head.grpcClientCircuitBreaker.clients List of gRPC client circuit breaker configurations, each defining thresholds and behavior per client.
@@ -627,6 +658,8 @@ indexerServices:
 # @param filesStorage.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
 
 # @param filesStorage.data.persistent.enabled Enable or disable a persistent volume for the service
+# Enable persistent storage for FilesStorage service if you want to save time on re-indexing in case of an evict or kill and restart FilesStorage's pod.
+
 # @param filesStorage.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
 # @param filesStorage.data.resources.requests.storage Requested storage volume size
 
@@ -639,7 +672,7 @@ filesStorage:
   image:
     repository: 2gis-on-premise/search-files_storage
     pullPolicy: IfNotPresent
-    tag: 8.16.0
+    tag: 8.17.1
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -807,22 +840,33 @@ dataAdapter:
 
 # @param controller.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
 # @param controller.projectListUrl URL of the project list for indexing
+# @skip controller.s3ProjectPrefix prefix to s3 objects, e.g. /indexer/prod/feed_backups/.
 # @param controller.user Username for accessing the indexing project list
 # @param controller.password Password for accessing the indexing project list
-# @param controller.model Part of the index name
-# @param controller.domain Part of the index name
+# @param controller.props [array] Properties list
+# @extra controller.props[].model index model name
+# @extra controller.props[].domain index domain
+# @extra controller.props[].language index language
+# @extra controller.props[].location index location
 # @param controller.interval Indexing task synchronization interval
 # @param controller.taskTimeout Timeout for completing an indexing task; after this time, the task is returned to the queue if not completed successfully
 # @param controller.extraProjects Additional list of projects with their URLs
+# @param controller.qdbFiles List of special QDB files used for indexing.
+# @param controller.adIndexesModel  Model used for filtering indexes for which ads will be built
+# @param controller.adIndexesDomain Domain used for filtering indexes for which ads will be built
 # @param controller.adWeightsEnable Enable or disable updating of ad weights
-# @skip controller.adWeightsUrl URL of the ad weights source
-# @skip controller.monthlyAdWeightsEnable Enable monthly update of ad targeting
-# @skip controller.monthlyAdWeightsTargetingsUrl URL of the monthly ad targeting source
-# @skip controller.monthlyAdWeightsUrl URL of a specific monthly ad weight target
+# @param controller.adWeightsUrl URL of the ad weights source
+# @param controller.monthlyAdWeightsEnable Enable monthly update of ad targeting
+# @param controller.monthlyAdWeightsTargetingsUrl URL of the monthly ad targeting source
+# @param controller.monthlyAdWeightsUrl URL of a specific monthly ad weight target
 # @param controller.data.persistent.enabled Enable or disable a persistent volume for the service
 # @param controller.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
 # @param controller.data.resources.requests.storage Requested storage volume size
 # @param controller.notAllowedProjectKeys List of projects from the general list that should not be indexed
+# @param controller.tasksPriorities.default Default priority value applied to all indexing tasks if no specific override is defined
+# @param controller.tasksPriorities.overrides A map of specific task identifiers to their custom priority values
+#        Each key corresponds to a task name (e.g., "gis.v4.32.ru.ru"),
+#        and the value defines its priority (integer, higher means earlier execution)
 
 controller:
   matchLabels: {}
@@ -833,7 +877,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-controller
     pullPolicy: IfNotPresent
-    tag: 8.16.0
+    tag: 8.17.1
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -866,14 +910,23 @@ controller:
     initialDelaySeconds: 10
   loglevel: info
   projectListUrl: ''
+  s3ProjectPrefix: ''
   user: ''
   password: ''
-  model: gis
-  domain: v4
+  props:
+    - model: gis
+      domain: v4
+    - model: gis
+      domain: geodetector
+      language: nolang
+      location: '-'
   interval: 15s
   taskTimeout: 20m
   extraProjects: []
-  adWeightsEnable: true
+  qdbFiles: {}
+  adIndexesModel: gis
+  adIndexesDomain: v4
+  adWeightsEnable: false
   adWeightsUrl: ''
   monthlyAdWeightsEnable: false
   monthlyAdWeightsTargetingsUrl: ''
@@ -886,6 +939,9 @@ controller:
       requests:
         storage: 10Gi
   notAllowedProjectKeys: []
+  tasksPriorities:
+    default: 1
+    overrides: {}
 
 # @section Indexer settings
 
@@ -956,7 +1012,7 @@ indexer:
   image:
     repository: 2gis-on-premise/search-indexer
     pullPolicy: IfNotPresent
-    tag: 8.16.0
+    tag: 8.17.1
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1017,6 +1073,7 @@ indexer:
 # @param s3Client.accessKeyId S3 access key ID
 # @param s3Client.secretAccessKey S3 secret access key
 # @param s3Client.bucket S3 bucket name
+# @param s3Client.region S3 region for the S3 client
 # @param s3Client.useSsl Enable or disable SSL
 
 s3Client:
@@ -1025,6 +1082,7 @@ s3Client:
   accessKeyId: ''
   secretAccessKey: ''
   bucket: ''
+  region: ''
   useSsl: false
 
 # @section Syncer settings
@@ -1050,6 +1108,7 @@ s3Client:
 
 # @param syncer.endpoints.rtw Endpoint for downloading real-time weights
 # @param syncer.endpoints.aiSuggestedQueries Endpoint for downloading AI Suggested Queries
+# @param syncer.endpoints.dispatchConfig Endpoint for downloading dispatch config
 
 syncer:
   ports:
@@ -1058,7 +1117,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-syncer_new
     pullPolicy: IfNotPresent
-    tag: 8.16.0
+    tag: 8.17.1
   securityContext: {}
   resources:
     requests:
@@ -1077,6 +1136,17 @@ syncer:
   endpoints:
     rtw: ''
     aiSuggestedQueries: ''
+    dispatchConfig: ''
+
+# @skip section FeedSandbox settings
+
+# @skip feedSandbox.feedBackups.enable Enable storing backups to s3 in feed-sandbox app
+# @skip feedSandbox.feedBackups.prefix Object key prefix. Example: 'indexer/prod/feed_backups'
+
+feedSandbox:
+  feedBackups:
+    enable: false
+    prefix: ''
 
 # @param GINMODE Go application operating mode; default is `release`, `debug` mode is also supported
 
@@ -1171,7 +1241,7 @@ service:
   indexer:
     port: 80
   ingressRouter:
-    port: 9092
+    port: 80
     external:
       enable: false
       host: ''
@@ -1347,6 +1417,9 @@ queryTransformerMock:
 # @param ingressRouter.routing.cluster3.port Port of cluster 3 head service
 # @param ingressRouter.routing.cluster3.address Address of cluster 3 head service
 # @param ingressRouter.routing.cluster3.exactMatch Header value for cluster 3
+# @param ingressRouter.data.persistent.enabled Enable or disable a persistent volume for the service
+# @param ingressRouter.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+# @param ingressRouter.data.resources.requests.storage Requested storage volume size
 
 ingressRouter:
   enabled: true
@@ -1395,7 +1468,7 @@ ingressRouter:
   hpa:
     enabled: false
     minReplicas: 2
-    maxReplicas: 5
+    maxReplicas: 8
     averageCPUValue: 700m
     behavior:
       scaleDown:
@@ -1417,6 +1490,13 @@ ingressRouter:
   vpa:
     enabled: false
     updateMode: Off
+  data:
+    persistent:
+      enabled: false
+    storageClassName: ''
+    resources:
+      requests:
+        storage: 100Mi
   prestopHook:
     enabled: true
   podSecurityContext: {}
@@ -1433,7 +1513,7 @@ ingressRouter:
       requests:
         cpu: 200m
         memory: 128Mi
-    ports:
+    ports: 
       admin: 9901
       grpc: 8091
   tolerations: []
@@ -1446,7 +1526,7 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.16.0
+    tag: 8.17.1
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
@@ -1454,13 +1534,6 @@ ingressRouter:
   sapphireRequestTimeoutMs: 5000
   prometheusUrl: ''
   rateLimitRules: []
-  # - name: 'cpu_usage'
-  #   query: 'sum(increase(sapphire_cpu_usage_total{cluster="production-k8s", kubernetes_namespace="search", app=~"search-api-(blue|green)", search_part="head"}[15m])) by (api_key)'
-  #   limit: 200000000
-  #   ttl_sec: 60
-  #   update_frequency_sec: 10
-  #   headers:
-  #     api_key: 'X-DG-Api-Key'
   ports:
     monitor: 9093
     http: 9092
@@ -1504,6 +1577,8 @@ ingressRouter:
 # @param geodetector.loggerLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
 # @param geodetector.loggerFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
 # @param geodetector.executeDebugCommands Enable execution of debug commands (e.g., simulate crash)
+# @param geodetector.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
+# @param geodetector.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
 
 # @param geodetector.matchLabels Selector match labels
 # @param geodetector.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
@@ -1623,7 +1698,7 @@ geodetector:
   image:
     repository: 2gis-on-premise/search-geodetector
     pullPolicy: IfNotPresent
-    tag: 8.16.0
+    tag: 8.17.1
   imagePullSecrets: []
   geodetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60
@@ -1631,8 +1706,11 @@ geodetector:
   geodetectorFsThreads: 2
   loggerLevel: info
   loggerFormat: json
-  executeDebugCommands: true
+  executeDebugCommands: false
   geodetectorMonThreads: 2
+  syncer:
+    includeProjectKeyRegexp: '(gis\.geodetector.*|gis\.v4\.65536\.en\.ru)'
+    excludeProjectKeyRegexp: 'gis\.geodetector\.65536\.nolang\.-'
   matchLabels: {}
   podLabels: {}
   podAnnotations: {}
@@ -1640,8 +1718,8 @@ geodetector:
   securityContext: {}
   hpa:
     enabled: false
-    minReplicas: 2
-    maxReplicas: 3
+    minReplicas: 3
+    maxReplicas: 8
     averageCPUValue: 700m
     behavior:
       scaleDown:
@@ -1680,7 +1758,7 @@ geodetector:
         storage: 8Gi
     storageClassName: ''
     persistent:
-      enabled: true
+      enabled: false
   prestopHook:
     enabled: true
   strategy:
@@ -1727,7 +1805,7 @@ customCAs:
     # -----END CERTIFICATE-----
   certsPath: ''
 
-# @param onpremise Enable specific parameters for on-premise deployment
+# @skip onpremise Enable specific parameters for on-premise deployment
 
 onpremise: true
 

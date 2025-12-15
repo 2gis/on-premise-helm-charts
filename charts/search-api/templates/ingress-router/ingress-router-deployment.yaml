@@ -35,7 +35,22 @@ spec:
         search/part: ingress-router
     spec:
       volumes:
-        - name: ingresrouter-config
+        {{- if .Values.ingressRouter.data.persistent.enabled }}
+        - name: ingress-router-data
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                accessModes: [ "ReadWriteOnce" ]
+                storageClassName: {{ .Values.ingressRouter.data.storageClassName | quote }}
+                volumeMode: Filesystem
+                resources:
+        {{- .Values.ingressRouter.data.resources | toYaml | nindent 18 }}
+        {{ else }}
+        - name: ingress-router-data
+          emptyDir:
+            sizeLimit: {{ .Values.ingressRouter.data.resources.requests.storage }}
+        {{ end }}{{- /* .Values.ingressRouter.data.persistent.enabled */}}
+        - name: ingress-router-config
           configMap:
             name: {{ include "search-api.fullname" . }}
             defaultMode: 420
@@ -55,13 +70,15 @@ spec:
             - name: ingress-router
               containerPort: {{ .Values.ingressRouter.ports.http }}
               protocol: TCP
+            - name: http-syncer
+              containerPort: {{ .Values.syncer.ports.http }}
+              protocol: TCP
           volumeMounts:
-            - name: ingresrouter-config
-              mountPath: /app/ingress_router_vars.yaml
-              subPath: ingress_router_vars.yaml
-            - name: ingresrouter-config
-              mountPath: /data/dispatch_config.json
-              subPath:  dispatch_config.json
+            - name: ingress-router-config
+              mountPath: /app/ingressRouter_vars.yaml
+              subPath: ingressRouter_vars.yaml
+            - name: ingress-router-data
+              mountPath: /data/dispatch_config
           {{- if .Values.customCAs.bundle }}
             {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
@@ -86,6 +103,28 @@ spec:
                   - '-c'
                   - sleep 30
           {{- end }}{{- /* .Values.ingressRouter.prestopHook.enabled */}}
+        - name: syncer
+          securityContext:
+            {{- toYaml .Values.syncer.securityContext | nindent 12 }}
+          image: {{ .Values.syncer.image.repository }}:{{ .Values.syncer.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.syncer.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.syncer.resources | nindent 12 }}
+          env:
+            - name: GIN_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "search-api.fullname" . }}
+                  key: GIN_MODE
+            {{- if .Values.customCAs.bundle }}
+            {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}{{- /* .Values.customCAs.bundle */}}
+          volumeMounts:
+            - name: ingress-router-data
+              mountPath: /data/dispatch_config
+            - name: ingress-router-config
+              mountPath: /app/config.yaml
+              subPath: syncer-ingress-router.yaml
         - name: envoy
           securityContext:
             {{- toYaml .Values.ingressRouter.envoy.securityContext | nindent 12 }}
@@ -100,7 +139,9 @@ spec:
           resources:
             {{- toYaml .Values.ingressRouter.envoy.resources | nindent 12 }}
           volumeMounts:
-            - name: ingresrouter-config
+            - name: ingress-router-data
+              mountPath: /data
+            - name: ingress-router-config
               mountPath: /etc/envoy/ingress_service_envoy.yaml
               subPath: ingress_service_envoy.yaml
           {{- if .Values.customCAs.bundle }}
@@ -114,7 +155,7 @@ spec:
                   - /bin/bash
                   - '-c'
                   - while cat < /dev/tcp/127.0.0.1/8080 ; do sleep 5 ; done
-          {{- end }}{{- /* .Values.ingressRouter.prestopHook.enabled */}}
+          {{- end }}{{- /* .Values.ingressRouter.prestopHook.enabled */}}  
           startupProbe:
             httpGet:
               path: /ready

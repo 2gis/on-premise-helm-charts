@@ -8,6 +8,7 @@ metadata:
     search/part: geodetector
 spec:
   type: ClusterIP
+  clusterIP: None
   ports:
     - name: grpc
       protocol: TCP

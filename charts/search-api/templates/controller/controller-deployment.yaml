@@ -46,11 +46,11 @@ spec:
           resources:
             {{- toYaml .Values.controller.resources | nindent 12 }}
           env:
-            - name: GINMODE
+            - name: GIN_MODE
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "search-api.fullname" . }}
-                  key: GINMODE
+                  key: GIN_MODE
             - name: s3AccessKey
               valueFrom:
                 secretKeyRef:

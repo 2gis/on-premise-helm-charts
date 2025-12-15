@@ -261,6 +261,17 @@ data:
                                   "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
                                   {{- toYaml .Values.head.envoy.faultInjection.clients.ai | nindent 34 }}
                             {{- end }}
+                            - match:
+                                prefix: "/recsysranker.RecSysRanker/"
+                              route:
+                                cluster: recsys_ranker
+                                auto_host_rewrite: true
+                            {{- if (and (index .Values.head.envoy.faultInjection.clients "recsys") (.Values.head.envoy.faultInjection.enabled)) }}
+                              typed_per_filter_config:
+                                envoy.filters.http.fault:
+                                  "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
+                                  {{- toYaml .Values.head.envoy.faultInjection.clients.recsys | nindent 34 }}
+                            {{- end }}
                         {{- end }}{{- /* .Values.onpremise */}}
                     http_filters:
                     {{- if .Values.head.envoy.faultInjection.enabled }}
@@ -338,6 +349,29 @@ data:
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
         {{- end }}{{- /* .Values.head.aiVectorSearch.endpoint.ssl */}}
+        - name: recsys_ranker
+          connect_timeout: 1s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          dns_refresh_rate: 1s
+          lb_policy: {{ .Values.head.envoy.policy }}
+          http2_protocol_options: { }
+          load_assignment:
+            cluster_name: recsys_ranker
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          port_value: {{ .Values.head.recsysRanker.endpoint.port }}
+                          address: "{{ .Values.head.recsysRanker.endpoint.address }}"
+        {{- if .Values.head.recsysRanker.endpoint.ssl }}
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+              sni: {{ .Values.head.recsysRanker.endpoint.address }}
+        {{- end }}{{- /* .Values.head.recsysRanker.endpoint.ssl */}}
         {{- end }}{{- /* .Values.onpremise */}}
 
   head_vars.yaml: |
@@ -353,13 +387,12 @@ data:
     ads-enable: {{ .Values.head.head.adsEnable }}
     data-update-frequency-sec: 60
     big-search-mode-update-frequency-sec: 30
-    search-api-mode-update-frequency-sec: 30
     search-default-timeout-ms: 5000
     search-worker-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
     search-worker-queries-count: {{ .Values.head.head.workerQueriesCount }}
     search-worker-timeout-ms: {{ .Values.head.head.workerTimeoutMs }}
     search-grpc-client-factory-name: 'grpc-client-factory'
-    search-global-search-mode: {{ ternary "on" "off" .Values.head.head.bigSearchMode }}
+    search-global-search-mode: {{ ternary "on" "off" .Values.head.head.bigSearchMode.enabled }}
     testsuite-enabled: false
     search-global-searchers:
       {{- toYaml .Values.head.head.bigSearchSearchers | nindent 6 -}}
@@ -383,6 +416,11 @@ data:
     ai-vector-search-timeout-ms: 2
     ai-vector-search-searchers: []
     ai-vector-search-grpc-client-factory-name:  'grpc-client-factory'
+    search-recsys-ranker-enabled: false
+    search-recsys-ranker-url: '127.0.0.1:1234'
+    search-recsys-ranker-timeout-ms: 2
+    search-recsys-ranker-searchers: []
+    search-recsys-ranker-grpc-client-factory-name: 'grpc-client-factory'
     ads-enable: false
     grpc-client-circuit-breaker-clients: []
   {{- else }}
@@ -409,6 +447,13 @@ data:
       {{- toYaml .Values.head.queryTransformer.searchersList | nindent 6 }}
     search-query-transformer-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
     search-query-transformer-timeout-ms: {{ .Values.head.queryTransformer.timeoutMs }}
+
+    search-recsys-ranker-enabled: {{ .Values.head.recsysRanker.enabled }}
+    search-recsys-ranker-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
+    search-recsys-ranker-timeout-ms: {{ .Values.head.recsysRanker.timeoutMs }}
+    search-recsys-ranker-searchers:
+      {{- toYaml .Values.head.recsysRanker.searchersList | nindent 6 }}
+    search-recsys-ranker-grpc-client-factory-name: 'grpc-client-factory'
 
     grpc-client-circuit-breaker-clients:
       {{- toYaml .Values.head.grpcClientCircuitBreaker.clients | nindent 6 }}
@@ -446,11 +491,13 @@ data:
         download_url: "{{ .Values.indexerServices.externalFilesStorageUrl }}/download/index/%s/%s?force=true"
         uploaded_url: "{{ .Values.indexerServices.externalFilesStorageUrl }}/list/index/%s?force=true"
       {{- if empty .Values.indexerServices.externalControllerUrl }}
-        stats_url: "https://search-api-controller.istio.k8s.2gis.dev/stats"
+        stats_url: "https://big-search-controller.istio.k8s.2gis.dev/stats"
       {{- else }}
         stats_url: "{{ .Values.indexerServices.externalControllerUrl }}/stats"
       {{- end }}{{- /* empty .Values.indexerServices.externalControllerUrl */}}
       {{- end }}{{- /* empty .Values.indexerServices.externalFilesStorageUrl */}}
+        include_project_key_regexp: '{{ .Values.head.syncer.includeProjectKeyRegexp }}'
+        exclude_project_key_regexp: '{{ .Values.head.syncer.excludeProjectKeyRegexp }}'
         dst: /data/indexes
         dst_data: /data/indexes_data
       rtw:
@@ -481,9 +528,11 @@ data:
         dst: /data/ai_suggested_queries
         download_url: {{ .Values.syncer.endpoints.aiSuggestedQueries | quote }}
     {{- end }}{{- /* .Values.onpremise */}}
+      dispatch_config:
+        enable: false
       poll_interval:
-        min: 300
-        max: 600
+        min: 30
+        max: 120
   syncer-worker.yaml: |
     server:
       address: ":{{ .Values.syncer.ports.http }}"
@@ -499,11 +548,13 @@ data:
         download_url: "{{ .Values.indexerServices.externalFilesStorageUrl }}/download/index/%s/%s?force=true"
         uploaded_url: "{{ .Values.indexerServices.externalFilesStorageUrl }}/list/index/%s?force=true"
       {{- if empty .Values.indexerServices.externalControllerUrl }}
-        stats_url: "https://search-api-controller.istio.k8s.2gis.dev/stats"
+        stats_url: "https://big-search-controller.istio.k8s.2gis.dev/stats"
       {{- else }}
         stats_url: "{{ .Values.indexerServices.externalControllerUrl }}/stats"
       {{- end }}{{- /* empty .Values.indexerServices.externalControllerUrl */}}
       {{- end }}{{- /* empty .Values.indexerServices.externalFilesStorageUrl */}}
+        include_project_key_regexp: '{{ .Values.worker.syncer.includeProjectKeyRegexp }}'
+        exclude_project_key_regexp: '{{ .Values.worker.syncer.excludeProjectKeyRegexp }}'
         dst: /data/indexes
         dst_data: /data/indexes_data
       rtw:
@@ -524,6 +575,75 @@ data:
       poll_interval:
         min: 10
         max: 120
+
+  syncer-geodetector.yaml: |
+    server:
+      address: ":{{ .Values.syncer.ports.http }}"
+    app:
+      log_level: {{ .Values.syncer.loglevel }}
+      indices:
+        enable: true
+      {{- if empty .Values.indexerServices.externalFilesStorageUrl }}
+        download_url: "http://{{ include "search-api.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/download/index/%s/%s"
+        uploaded_url: "http://{{ include "search-api.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/list/index/%s"
+        stats_url: "http://{{ include "search-api.fullname" . }}-controller:{{ .Values.service.filesStorage.port }}/stats"
+      {{- else }}
+        download_url: "{{ .Values.indexerServices.externalFilesStorageUrl }}/download/index/%s/%s?force=true"
+        uploaded_url: "{{ .Values.indexerServices.externalFilesStorageUrl }}/list/index/%s?force=true"
+      {{- if empty .Values.indexerServices.externalControllerUrl }}
+        stats_url: "https://big-search-controller.istio.k8s.2gis.dev/stats"
+      {{- else }}
+        stats_url: "{{ .Values.indexerServices.externalControllerUrl }}/stats"
+      {{- end }}{{- /* empty .Values.indexerServices.externalControllerUrl */}}
+      {{- end }}{{- /* empty .Values.indexerServices.externalFilesStorageUrl */}}
+        include_project_key_regexp: '{{ .Values.geodetector.syncer.includeProjectKeyRegexp }}'
+        exclude_project_key_regexp: '{{ .Values.geodetector.syncer.excludeProjectKeyRegexp }}'
+        dst: /data/indexes
+        dst_data: /data/indexes_data
+      rtw:
+        enable: false
+      ads:
+        enable: false
+      poll_interval:
+        min: 10
+        max: 120
+  syncer-ingress-router.yaml: |
+    server:
+      address: ":{{ .Values.syncer.ports.http }}"
+    app:
+      log_level: {{ .Values.syncer.loglevel }}
+      indices:
+        enable: false
+      rtw:
+        enable: false
+      ads:
+        enable: false
+      ai_suggested_queries:
+        enable: false
+      dispatch_config:
+      {{- if not .Values.onpremise }}
+        enable: true
+        dst: /data/dispatch_config
+        download_url: s3://{{ .Values.s3Client.bucket }}/{{ .Values.syncer.endpoints.dispatchConfig }}
+      {{- else }}
+        enable: false
+      {{- end }}{{- /* not .Values.onpremise */}}
+      poll_interval:
+        min: 10
+        max: 120
+    {{ if .Values.onpremise }}
+    s3_client:
+      enable: false
+    {{- else -}}
+    s3_client:
+      enable: {{ .Values.s3Client.enabled }}
+      endpoint: ${s3Host}
+      access_key_id: ${s3AccessKey}
+      secret_access_key: ${s3SecretKey}
+      bucket: {{ .Values.s3Client.bucket }}
+      use_ssl: {{ .Values.s3Client.useSsl }}
+      region: {{ .Values.s3Client.region }}
+    {{ end }}{{- /* .Values.onpremise */}}
   files-storage.yaml: |
     server:
       address: ":{{ .Values.filesStorage.ports.http }}"
@@ -532,7 +652,7 @@ data:
       cleanup_interval: 1m
       version_ttl: {{ .Values.filesStorage.versionTTL }}
       log_level: {{ .Values.filesStorage.loglevel }}
-{{- if .Values.onpremise }}
+  {{- if .Values.onpremise }}
   data-adapter.yaml: |
     server:
       address: ":{{ .Values.dataAdapter.ports.http }}"
@@ -550,7 +670,7 @@ data:
       secret_access_key: ${s3SecretKey}
       bucket: {{ .Values.dgctlStorage.bucket }}
       use_ssl: {{ .Values.dgctlStorage.secure }}
-{{- end }}{{- /* .Values.onpremise */}}
+  {{- end }}{{- /* .Values.onpremise */}}
   controller.yaml: |
     app:
       log_level: {{ .Values.controller.loglevel }}
@@ -564,15 +684,21 @@ data:
     {{- else }}
       project_list_url: {{ .Values.controller.projectListUrl | quote }}
     {{- end }}{{- /* .Values.onpremise */}}  
+      {{- if .Values.feedSandbox.enabled }}
+      s3_project_prefix: {{ .Values.feedSandbox.feedBackups.prefix | quote }}
+      {{- end }}
       uploaded_indices_url: "http://{{ include "search-api.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/list/index/%s"
       delete_index_url: "http://{{ include "search-api.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/delete/index/%s/%s"
-      model: {{ .Values.controller.model | quote }}
-      domain: {{ .Values.controller.domain | quote }}
+      props: {{- toYaml .Values.controller.props | nindent 8 }}
       interval: {{ .Values.controller.interval }}
       task_timeout: {{ .Values.controller.taskTimeout }}
     {{- if .Values.onpremise }}
+      tasks_priorities:
+        default: 1
+        overrides: {}
       not_allowed_project_keys: []
       extra_projects: []
+      qdb_files: {}
     ads:
       upload_ad_url: ''
       ad_weights:
@@ -588,11 +714,49 @@ data:
       bucket: {{ .Values.dgctlStorage.bucket }}
       use_ssl: {{ .Values.dgctlStorage.secure }}
     {{ else }}
+      tasks_priorities:
+        {{- toYaml .Values.controller.tasksPriorities | nindent 8 }}
       not_allowed_project_keys: {{- toYaml .Values.controller.notAllowedProjectKeys | nindent 8 }}
       extra_projects:
         {{- toYaml .Values.controller.extraProjects | nindent 8 }}
+      qdb_files:
+      {{- range $key, $files := .Values.controller.qdbFiles }}
+        {{ $key }}:
+        {{- $bucket := $.Values.s3Client.bucket }}
+        {{- $defaultNames := list "manual.csv" "qdb.csv" }}
+        {{- $defaultUrls := dict "manual.csv" (printf "s3://%s/qdb/manual.csv" $bucket) "qdb.csv" (printf "s3://%s/qdb/locality.csv" $bucket) }}
+        {{- $seenDefaults := dict }}
+        {{- $ordered := list }}
+
+        {{- if kindIs "slice" $files }}
+          {{- range $file := $files }}
+            {{- $name := $file.name }}
+            {{- $defaultUrl := get $defaultUrls $name | default (printf "s3://%s/qdb/%s" $bucket $name) }}
+            {{- $url := $file.url | default $defaultUrl }}
+            {{- $entry := dict "name" $name "url" $url }}
+            {{- if has $name $defaultNames }}
+              {{- $_ := set $seenDefaults $name true }}
+            {{- end }}
+            {{- $ordered = append $ordered $entry }}
+          {{- end }}
+        {{- end }}
+
+        {{- range $def := $defaultNames }}
+          {{- if not (hasKey $seenDefaults $def) }}
+        - name: {{ $def }}
+          url: {{ get $defaultUrls $def }}
+          {{- end }}
+        {{- end }}
+
+        {{- range $entry := $ordered }}
+        - name: {{ $entry.name }}
+          url: {{ $entry.url }}
+        {{- end }}
+      {{- end }}{{- /* range $key, $files := .Values.controller.qdbFiles */}}
     ads:
       upload_ad_url: "http://{{ include "search-api.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/upload/ad"
+      indexes_model: {{ .Values.controller.adIndexesModel }}
+      indexes_domain: {{ .Values.controller.adIndexesDomain }}
       ad_weights:
         enable: {{ .Values.controller.adWeightsEnable }}
         url: {{ .Values.controller.adWeightsUrl | quote }}
@@ -606,9 +770,9 @@ data:
       interval: 15m
     s3_client:
       enable: {{ .Values.s3Client.enabled }}
-      endpoint: {{ .Values.s3Client.endpoint | quote }}
-      access_key_id: {{ .Values.s3Client.accessKeyId | quote }}
-      secret_access_key: {{ .Values.s3Client.secretAccessKey | quote }}
+      endpoint: ${s3Host}
+      access_key_id: ${s3AccessKey}
+      secret_access_key: ${s3SecretKey}
       bucket: {{ .Values.s3Client.bucket }}
       use_ssl: {{ .Values.s3Client.useSsl }}
     {{ end }}{{- /* .Values.onpremise */}}
@@ -623,7 +787,12 @@ data:
       build_index_script_path: "/app/PyTools/build_index.py"
       acquire_task_url: "http://{{ include "search-api.fullname" . }}-controller:{{ .Values.service.controller.port }}/acquire_task/%s"
       upload_index_url: "http://{{ include "search-api.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/upload/index"
-    {{- if .Values.onpremise }}
+      {{- if not .Values.onpremise }}
+      feed_backups:
+        enable: {{ .Values.feedSandbox.feedBackups.enable }}
+        prefix: {{ .Values.feedSandbox.feedBackups.prefix }}
+      {{ end }}{{- /* not .Values.onpremise */}}
+    {{ if .Values.onpremise }}
     s3_client:
       enable: true
       endpoint: ${s3Host}
@@ -631,16 +800,17 @@ data:
       secret_access_key: ${s3SecretKey}
       bucket: {{ .Values.dgctlStorage.bucket }}
       use_ssl: {{ .Values.dgctlStorage.secure }}
-    {{ else }}
+      region: {{ .Values.dgctlStorage.region }}
+    {{- else -}}
     s3_client:
       enable: {{ .Values.s3Client.enabled }}
-      endpoint: {{ .Values.s3Client.endpoint | quote }}
-      access_key_id: {{ .Values.s3Client.accessKeyId }}
-      secret_access_key: {{ .Values.s3Client.secretAccessKey }}
+      endpoint: ${s3Host}
+      access_key_id: ${s3AccessKey}
+      secret_access_key: ${s3SecretKey}
       bucket: {{ .Values.s3Client.bucket }}
       use_ssl: {{ .Values.s3Client.useSsl }}
+      region: {{ .Values.s3Client.region }}
     {{ end }}{{- /* .Values.onpremise */}}
-
   {{- if .Values.ingressRouter.enabled }}
   ingress_service_envoy.yaml: |
     admin:
@@ -782,6 +952,7 @@ data:
                         socket_address:
                           port_value: {{ .Values.geodetector.ports.grpc }}
                           address: {{ include "search-api.fullname" . }}-geodetector
+
   ingress_router_vars.yaml: |
     server-port: {{ .Values.ingressRouter.ports.http }}
     monitor-port: {{ .Values.ingressRouter.ports.monitor }}
@@ -795,17 +966,17 @@ data:
     dispatcher-enabled: {{ .Values.ingressRouter.dispatcherComponent.enabled }}
     rate-limit-enabled: {{ .Values.ingressRouter.rateLimitComponent.enabled }}
     data-update-frequency-sec: 60
-    {{- if empty .Values.ingressRouter.sapphire_url }}
+    {{- if empty .Values.ingressRouter.sapphireUrl }}
     sapphire-address: "http://127.0.0.1:{{ .Values.ingressRouter.envoy.ports.grpc }}"
     {{ else }}
-    sapphire-address: {{ .Values.ingressRouter.sapphire_url }}
-    {{ end }}
+    sapphire-address: {{ .Values.ingressRouter.sapphireUrl }}
+    {{ end }}{{- /* empty .Values.ingressRouter.sapphireUrl */}}
     sapphire-request-timeout-ms: {{ .Values.ingressRouter.sapphireRequestTimeoutMs }}
     geodetector-enabled: {{ .Values.geodetector.enabled }}
     geodetector-service-url: '127.0.0.1:{{ .Values.ingressRouter.envoy.ports.grpc }}'
-    prometheus-url: {{ .Values.ingressRouter.prometheus_url }}
+    prometheus-url: {{ .Values.ingressRouter.prometheusUrl }}
     rate-limit-rules:
-      {{- toYaml .Values.ingressRouter.rate_limit_rules | nindent 6 }}
+      {{- toYaml .Values.ingressRouter.rateLimitRules | nindent 6 }}
     testsuite-enabled: false
 
   dispatch_config.json: |
@@ -813,7 +984,7 @@ data:
       "version": "1.0",
       "enable": false
     }
-  {{- end }}
+  {{- end }}{{- /* Values.ingressRouter.enabled  */}}
 
   {{- if .Values.geodetector.enabled }}
   geodetector_vars.yaml: |
@@ -830,7 +1001,7 @@ data:
     geodetector-mon-threads: {{ .Values.geodetector.geodetectorMonThreads }}
   {{- end }}
 
-  GINMODE: {{ .Values.GINMODE }}
+  GIN_MODE: {{ .Values.GINMODE }}
 {{- if .Values.customCAs.bundle }}
   custom-ca.crt: |-
 {{- .Values.customCAs.bundle | nindent 4 }}

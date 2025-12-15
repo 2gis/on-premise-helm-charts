@@ -50,7 +50,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "search-api.fullname" . }}
-                  key: GINMODE
+                  key: GIN_MODE
             - name: s3AccessKey
               valueFrom:
                 secretKeyRef:

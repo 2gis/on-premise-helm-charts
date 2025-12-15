@@ -1,0 +1,34 @@
+{{- if .Values.feedSandbox.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ include "search-api.fullname" . }}-feed-sandbox
+  namespace: search
+spec:
+  hostnames:
+  - {{ .Values.feedSandbox.host }}
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: shared
+    namespace: istio-gateways
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: canary
+    namespace: istio-gateways
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: stable
+    namespace: istio-gateways
+  rules:
+  - backendRefs:
+    - group: ""
+      kind: Service
+      name: {{ include "search-api.fullname" . }}-controller
+      port: {{ .Values.service.controller.port }}
+      weight: 1
+    matches:
+    - path:
+        type: PathPrefix
+        value: /
+{{- end }}

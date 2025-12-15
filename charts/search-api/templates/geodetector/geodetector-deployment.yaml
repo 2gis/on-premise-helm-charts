@@ -115,11 +115,11 @@ spec:
           resources:
             {{- toYaml .Values.syncer.resources | nindent 12 }}
           env:
-            - name: GINMODE
+            - name: GIN_MODE
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "search-api.fullname" . }}
-                  key: GINMODE
+                  key: GIN_MODE
             {{- if .Values.customCAs.bundle }}
             {{- include "search-api.env.custom.ca.path" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}
@@ -128,7 +128,7 @@ spec:
               mountPath: /data
             - name: geodetector-config
               mountPath: /app/config.yaml
-              subPath: syncer-worker.yaml
+              subPath: syncer-geodetector.yaml
           {{- if .Values.customCAs.bundle }}
             {{- include "search-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}

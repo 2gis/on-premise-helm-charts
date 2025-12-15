@@ -34,6 +34,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- /* .Values.indexer.podLabels */}}
     spec:
+      terminationGracePeriodSeconds: 900
       {{- with .Values.indexer.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -48,11 +49,11 @@ spec:
           resources:
             {{- toYaml .Values.indexer.resources | nindent 12 }}
           env:
-            - name: GINMODE
+            - name: GIN_MODE
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "search-api.fullname" . }}
-                  key: GINMODE
+                  key: GIN_MODE
             - name: s3AccessKey
               valueFrom:
                 secretKeyRef:
