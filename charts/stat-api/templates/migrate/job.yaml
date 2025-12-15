@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "stat-api.componentname" (dict "global" $ "component" "migrate") }}
+  labels:
+    {{- include "stat-api.labels" (dict "global" $ "component" "migrate") | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-10"
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "stat-api.componentname" (dict "global" $ "component" "migrate") }}
+      labels:
+        {{- include "stat-api.labels" (dict "global" $ "component" "migrate") | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      initContainers:
+      {{- if .Values.migrate.initialDelaySeconds }}
+        - name: delay
+          image: {{ include "stat-api.image" (dict "global" $ "component" "migrate") }}
+          command: [ "sh", "-c", "sleep {{ .Values.migrate.initialDelaySeconds }}" ]
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+      {{- end }}
+      {{- include "stat-api.clickhouse.initTLS" . | nindent 8 }}
+      containers:
+        - name: migrate
+          image: {{ include "stat-api.image" (dict "global" $ "component" "migrate") }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: [ "migrate" ]
+          args:
+            - "--command=up"
+            {{- with .Values.clickhouse.cluster }}
+            - "--use-cluster"
+            - "--cluster={{ . }}"
+            {{- end }}
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+          env:
+            {{- include "stat-api.env.migrate" . | nindent 12 }}
+            {{- include "stat-api.env.clickhouse" . | nindent 12 }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "stat-api.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+          {{- if .Values.customCAs.bundle }}
+          {{- include "stat-api.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+          {{- include "stat-api.clickhouse.volumeMount" . | nindent 12 }}
+      volumes:
+      {{- if .Values.customCAs.bundle }}
+      {{- include "stat-api.custom.ca.volumes" . | nindent 8 }}
+      {{- end }}
+      {{- include "stat-api.clickhouse.volume" . | nindent 8 }}
+      {{- with .Values.migrate.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.migrate.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
