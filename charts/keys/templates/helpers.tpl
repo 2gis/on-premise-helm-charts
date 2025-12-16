@@ -2,8 +2,16 @@
 {{- .Release.Name | trunc 32 | trimSuffix "-" }}
 {{- end }}
 
+{{- define "serviceApi.name" -}}
+{{- .Release.Name | trunc 32 | trimSuffix "-" }}
+{{- end }}
+
 {{- define "keys.api.name" -}}
 {{ include "keys.name" . }}-api
+{{- end }}
+
+{{- define "service.api.name" -}}
+{{ include "serviceApi.name" . }}-service-api
 {{- end }}
 
 {{- define "keys.tasker.name" -}}
@@ -55,6 +63,16 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.api.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-api
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "service.api.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}-service-api
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "service.api.labels" -}}
+{{ include "service.api.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.api.labels" -}}
@@ -271,6 +289,20 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.db.deploys" -}}
+{{- include "keys.env.db" . }}
+- name: KEYS_DB_RO_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.deploys.name" . }}
+      key: dbROPassword
+- name: KEYS_DB_RW_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "keys.secret.deploys.name" . }}
+      key: dbRWPassword
+{{- end }}
+
+{{- define "serviceApi.env.db.deploys" -}}
 {{- include "keys.env.db" . }}
 - name: KEYS_DB_RO_PASSWORD
   valueFrom:
@@ -789,5 +821,9 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 Manifest name
 */}}
 {{- define "keys.manifestCode" -}}
+{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- end }}
+
+{{- define "service.api.manifestCode" -}}
 {{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}
