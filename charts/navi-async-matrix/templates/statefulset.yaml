@@ -248,7 +248,7 @@ spec:
               value: {{ .Values.keys.url | quote }}
             {{- if .Values.stat.enabled }}
             - name: DM_ASYNC_SERVICE_BSS__URL
-              value: {{ .Values.stat.url | quote }}
+              value: {{ required "A valid .Values.stat.url entry required" .Values.stat.url | quote }}
             - name: DM_ASYNC_SERVICE_BSS__VERSION
               value: {{ .Values.stat.version | quote }}
             {{- end }}

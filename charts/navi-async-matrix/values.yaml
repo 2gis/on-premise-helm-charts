@@ -461,13 +461,13 @@ s3:
   publicUrl: ''
   expirationDays: 14
 
-# @skip stat.enabled
-# @skip stat.url
+# @param stat.enabled Is integration with statistic service enabled
+# @param stat.url URL of the statistic service (e.g - http(s)://stat-receiver/bss/3). **Required** if integration with statistic service enabled
 # @skip stat.version
 
 stat:
   enabled: false
-  url: https://example.com
+  url: ''
   version: '0.1'
 
 # @section API keys service

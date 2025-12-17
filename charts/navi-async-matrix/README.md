@@ -226,16 +226,18 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### S3-compatible storage settings
 
-| Name                | Description                                                                                    | Value |
-| ------------------- | ---------------------------------------------------------------------------------------------- | ----- |
-| `s3.host`           | S3 endpoint URL, ex: http://async-matrix-s3.host. **Required**                                 | `""`  |
-| `s3.bucket`         | S3 bucket name. **Required**                                                                   | `""`  |
-| `s3.region`         | S3 region.                                                                                     | `""`  |
-| `s3.accessKey`      | S3 access key for accessing the bucket. **Required**                                           | `""`  |
-| `s3.secretKey`      | S3 secret key for accessing the bucket. **Required**                                           | `""`  |
-| `s3.publicUrl`      | Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://` | `""`  |
-| `s3.publicNetloc`   | DEPRECATED alias for `s3.publicUrl`                                                            |       |
-| `s3.expirationDays` | How many days to store results                                                                 | `14`  |
+| Name                | Description                                                                                                                    | Value   |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `s3.host`           | S3 endpoint URL, ex: http://async-matrix-s3.host. **Required**                                                                 | `""`    |
+| `s3.bucket`         | S3 bucket name. **Required**                                                                                                   | `""`    |
+| `s3.region`         | S3 region.                                                                                                                     | `""`    |
+| `s3.accessKey`      | S3 access key for accessing the bucket. **Required**                                                                           | `""`    |
+| `s3.secretKey`      | S3 secret key for accessing the bucket. **Required**                                                                           | `""`    |
+| `s3.publicUrl`      | Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://`                                 | `""`    |
+| `s3.publicNetloc`   | DEPRECATED alias for `s3.publicUrl`                                                                                            |         |
+| `s3.expirationDays` | How many days to store results                                                                                                 | `14`    |
+| `stat.enabled`      | Is integration with statistic service enabled                                                                                  | `false` |
+| `stat.url`          | URL of the statistic service (e.g - http(s)://stat-receiver/bss/3). **Required** if integration with statistic service enabled | `""`    |
 
 ### API keys service
 

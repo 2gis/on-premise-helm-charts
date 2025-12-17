@@ -327,8 +327,8 @@ dm:
   url: ''
   key: ''
 
-# @skip stat.enabled
-# @skip stat.url
+# @param stat.enabled Is integration with statistic service enabled
+# @param stat.url URL of the statistic service (e.g - http(s)://stat-receiver/bss/3). **Required** if integration with statistic service enabled
 
 stat:
   enabled: false

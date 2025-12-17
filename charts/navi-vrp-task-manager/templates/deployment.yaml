@@ -120,7 +120,7 @@ spec:
               value: "3"
             {{- if .Values.stat.enabled }}
             - name: BSS__URL
-              value: {{ .Values.stat.url | quote }}
+              value: {{ required "A valid .Values.stat.url entry required" .Values.stat.url | quote }}
             {{- end }}
             - name: KMS__URL
               value: {{ .Values.keys.url | quote }}
