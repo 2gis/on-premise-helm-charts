@@ -1,0 +1,12 @@
+apiVersion: v2
+name: stat-api
+type: application
+description: A Helm chart for Kubernetes to deploy Stat service
+
+version: 1.43.0
+appVersion: 0.1.0
+
+maintainers:
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com

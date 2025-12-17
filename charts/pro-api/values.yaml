@@ -10,7 +10,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.31.1
+    tag: 2.46.2
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -112,6 +112,15 @@ api:
     serviceAccount: runner
     serviceAccountOverride: ''
 
+  # @param api.pdb.enabled If PDB is enabled for the service.
+  # @param api.pdb.minAvailable How many pods must be available after the eviction.
+  # @param api.pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: ''
+
   # @param api.settings.licenseKey License key. **Required**
   # @param api.settings.tempPath Path to directory used for temp data
   # @skip api.settings.logEsQueries
@@ -122,7 +131,6 @@ api:
   # @skip api.settings.dataCenterId
   # @extra api.settings.logging Logging settings
   # @param api.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
-  # @param api.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
   # @extra api.settings.rateLimiter rate limiter settings
   # @param api.settings.rateLimiter.requestsLimit max number of requests from one user during time window (0 means rate limiter is disabled)
   # @param api.settings.rateLimiter.windowSizeInSeconds the size of time windows to count and limit incoming requests
@@ -142,7 +150,6 @@ api:
   # @param api.settings.backgroundJobs.enableUserAssetsImporter If user data importer job is enabled for the service.
   # @param api.settings.backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
   # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount Maximum number of points in a layer for generating isochrones.
-  # @skip api.settings.tasksApi.useForLayerDataPreparation
   # @param api.settings.corsOrigins Cors policy: allow any origin if empty. Example: `https://*.host.ae;https://*.host.ru;`
   settings:
     licenseKey: ''
@@ -156,7 +163,6 @@ api:
     dataCenterId: ''
     logging:
       format: simple
-      targets: ''
     rateLimiter:
       requestsLimit: 1024
       windowSizeInSeconds: 1
@@ -180,8 +186,6 @@ api:
       enableAssetsStreaming: false
     layerGeneration:
       isochroneLayerMaxPointsCount: 500
-    tasksApi:
-      useForLayerDataPreparation: true
 
 # @section Permissions API configuration & settings
 
@@ -192,7 +196,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.31.1
+    tag: 2.46.2
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -262,17 +266,34 @@ permissions:
     type: ClusterIP
     port: 80
 
+  # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+  # @param permissions.pdb.enabled If PDB is enabled for the service.
+  # @param permissions.pdb.minAvailable How many pods must be available after the eviction.
+  # @param permissions.pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: ''
+
   # @skip permissions.settings.host
   # @skip permissions.settings.deleteInactiveUsers
+  # @skip permissions.settings.showAssetBundles
   # @skip permissions.settings.localCache.enabled
   # @skip permissions.settings.localCache.trackStatistics
+  # @param permissions.settings.httpPort Http port for interaction via the rest api
+  # @param permissions.settings.grpcPort Grpc port for interaction via the grpc api
   # @param permissions.settings.auth.apiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`. **Required**
   # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
   settings:
     host: ''
+    httpPort: 8091
+    grpcPort: 8092
     deleteInactiveUsers: false
     allowPermissionsToAnyAsset: false
+    showAssetBundles: false
     localCache:
       enabled: true
       trackStatistics: false
@@ -282,7 +303,6 @@ permissions:
     # @section Default permissions for new users
     # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
     # @param permissions.settings.default_permissions.assets Ids of assets to be accessed. Use '*' symbol to allow access to all assets.
-    # @param permissions.settings.default_permissions.analytics Ids of analytics to be accessed. Use '*' symbol to allow access to all analytics.
     # @param permissions.settings.default_permissions.territories Ids of territories to be accessed. Use '*' symbol to allow access to all territories.
     # @param permissions.settings.default_permissions.add_user_assets.allow Allow user to add assets.
     # @param permissions.settings.default_permissions.add_user_assets.quantity Maximum number of assets that can be added by the user.
@@ -291,7 +311,6 @@ permissions:
     default_permissions:
       open_pro_ui: true
       assets: [branch, building]
-      analytics: ['*']
       territories: []
       add_user_assets:
         allow: true
@@ -308,7 +327,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.31.1
+    tag: 2.46.2
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -404,6 +423,15 @@ tasks:
     type: ClusterIP
     port: 80
 
+  # @param tasks.pdb.enabled If PDB is enabled for the service.
+  # @param tasks.pdb.minAvailable How many pods must be available after the eviction.
+  # @param tasks.pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: ''
+
   # @param tasks.settings.enabled If Tasks API is disabled it will not be deployed to k8s
   # @skip tasks.settings.env
   # @param tasks.settings.tempPath Path to directory used for temp data
@@ -411,7 +439,6 @@ tasks:
   # @param tasks.settings.grpcPort Grpc port for interaction via the grpc api
   # @extra tasks.settings.logging Logging settings
   # @param tasks.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
-  # @param tasks.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
   # @param tasks.settings.worker.resourceIntensiveTasksWorkersCount Number of threads that will be used by Hangfire-server to performs resource-intensive tasks
   # @param tasks.settings.worker.regularTasksWorkersCount Number of threads that will be used by Hangfire-server to performs other tasks
   # @param tasks.settings.worker.longRunningTasksWorkersCount Number of threads that will be used by Hangfire-server to performs long tasks
@@ -439,7 +466,6 @@ tasks:
     grpcPort: 8083
     logging:
       format: simple
-      targets: ''
     worker:
       resourceIntensiveTasksWorkersCount: 5
       regularTasksWorkersCount: 5
@@ -474,6 +500,114 @@ tasks:
       removeExpiredSmbDashboards:
         enabled: false
 
+
+# @section Page Renderer API configuration & settings
+
+pagerenderer:
+
+  # @param pagerenderer.image.repository Repository
+  # @param pagerenderer.image.tag Tag
+  # @param pagerenderer.image.pullPolicy Pull Policy
+  image:
+    repository: 2gis-on-premise/pro-pagerenderer-api
+    tag: 2.46.2
+    pullPolicy: IfNotPresent
+
+  # @param pagerenderer.pod.replicaCount A replica count for the pod.
+  # @param pagerenderer.pod.imagePullSecrets Kubernetes image pull secrets.
+  # @param pagerenderer.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param pagerenderer.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param pagerenderer.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
+  # @param pagerenderer.pod.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
+  # @param pagerenderer.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  # @param pagerenderer.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param pagerenderer.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param pagerenderer.pod.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+  # @param pagerenderer.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param pagerenderer.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param pagerenderer.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @extra pagerenderer.pod.resources **Limits for the application service**
+  # @param pagerenderer.pod.resources.requests.cpu A CPU request.
+  # @param pagerenderer.pod.resources.requests.memory A memory request.
+  # @param pagerenderer.pod.resources.limits.cpu A CPU limit.
+  # @param pagerenderer.pod.resources.limits.memory A memory limit.
+  pod:
+    replicaCount: 1
+    imagePullSecrets: []
+    nodeSelector: {}
+    affinity: {}
+    priorityClassName: ''
+    terminationGracePeriodSeconds: 60
+    tolerations: []
+    podAnnotations: {}
+    podLabels: {}
+    podSecurityContext: {}
+    annotations: {}
+    labels: {}
+    revisionHistoryLimit: 3
+    resources:
+      requests:
+        cpu: 300m
+        memory: 256M
+      limits:
+        cpu: 1
+        memory: 1G
+
+  # @param pagerenderer.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+  # @param pagerenderer.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param pagerenderer.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param pagerenderer.service.port PRO API service port.
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+
+  # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+  # @param pagerenderer.pdb.enabled If PDB is enabled for the service.
+  # @param pagerenderer.pdb.minAvailable How many pods must be available after the eviction.
+  # @param pagerenderer.pdb.maxUnavailable How many pods can be unavailable after the eviction.
+
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: ''
+
+  # @param pagerenderer.vpa.enabled If VPA is enabled for the service.
+  # @param pagerenderer.vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+  # @param pagerenderer.vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+  # @param pagerenderer.vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+  # @param pagerenderer.vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+  # @param pagerenderer.vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+  vpa:
+    enabled: false
+    updateMode: Auto
+    minAllowed:
+      cpu: 300m
+      memory: 256M
+    maxAllowed:
+      cpu: 1
+      memory: 1G
+
+  # @param pagerenderer.settings.enabled If Page Renderer API is disabled it will not be deployed to k8s
+  # @param pagerenderer.settings.httpPort Http port for interaction via the rest api
+  # @param pagerenderer.settings.grpcPort Grpc port for interaction via the grpc api
+  # @extra pagerenderer.settings.logging Logging settings
+  # @param pagerenderer.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
+  # @param pagerenderer.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
+  # @param pagerenderer.settings.auth.apiKey Secret API Key to perform authorized service actions, random string. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`
+  settings:
+    enabled: false
+    httpPort: 8282
+    grpcPort: 8283
+    logging:
+      format: simple
+      targets: ''
+    auth:
+      apiKey: ''
+
+
 # @section asset importer settings
 
 # @param assetImporter.appName Data Import job name.
@@ -503,11 +637,12 @@ tasks:
 # @skip assetImporter.settings.esMetricsEnabled
 # @param assetImporter.settings.failedImportJobsLimit How many import jobs can fail before scheduler stops creating new imports
 # @param assetImporter.settings.ttlSecondsAfterFinished Kubernetes [time-to-live setting] (https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished)
+# @skip assetImporter.settings.prepareAssetData
 
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.31.1
+  tag: 2.46.2
   imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2
@@ -534,6 +669,7 @@ assetImporter:
     esMetricsEnabled: false
     failedImportJobsLimit: 0
     ttlSecondsAfterFinished: 86400  # 1 day
+    prepareAssetData: false
 
 # @section common infrastructure settings
 
