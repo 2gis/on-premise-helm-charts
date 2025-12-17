@@ -176,7 +176,7 @@ nginx:
   port: 8080
   image:
     repository: 2gis-on-premise/navi-front
-    tag: 1.26.0
+    tag: 1.28.1
   nodeHeader: false
   locationsBlock: ''
   customConfigPath: ''
