@@ -83,9 +83,9 @@ data:
           },
           {
             "service_name": "bss",
-            "schemas_folder": {{ .Values.naviback.validation.bss.schemasFolder | quote }},
-            "request_schema_name": {{ .Values.naviback.validation.bss.requestSchemaName | quote }},
-            "response_schema_name": {{ .Values.naviback.validation.bss.responseSchemaName | quote }}
+            "schemas_folder": {{ .Values.naviback.validation.stat.schemasFolder | quote }},
+            "request_schema_name": {{ .Values.naviback.validation.stat.requestSchemaName | quote }},
+            "response_schema_name": {{ .Values.naviback.validation.stat.responseSchemaName | quote }}
           },
           {
             "service_name": "distance_matrix",
@@ -537,18 +537,18 @@ data:
           "topic": {{ .Values.routesharing.kafka.topic | required "routesharing.kafka.topic is not set" | quote }}
         },
         {{- end }}{{/* .Values.routesharing.enabled */}}
-        {{- if and .Values.naviback.bss.enabled .Values.naviback.bss.client.serviceRemoteAddress }}
+        {{- if and .Values.naviback.stat.enabled .Values.naviback.stat.url }}
         "business_statistics_system": {
           "client": {
-              "service_remote_address": {{ .Values.naviback.bss.client.serviceRemoteAddress | mustToJson }},
-              "message_count_to_flush": {{ .Values.naviback.bss.client.messageCountToFlush | mustToJson }},
-              "use_compression": {{ .Values.naviback.bss.client.useCompression | mustToJson }},
-              "package_size_max_bytes": {{ .Values.naviback.bss.client.packageSizeMaxBytes | mustToJson }},
-              "pending_transmission_max_count": {{ .Values.naviback.bss.client.pendingTransmissionMaxCount | mustToJson }},
-              "timeout_ms": {{ .Values.naviback.bss.client.timeoutLimitMilSec | mustToJson }}
+              "service_remote_address": {{ .Values.naviback.stat.url | mustToJson }},
+              "message_count_to_flush": {{ .Values.naviback.stat.client.messageCountToFlush | mustToJson }},
+              "use_compression": {{ .Values.naviback.stat.client.useCompression | mustToJson }},
+              "package_size_max_bytes": {{ .Values.naviback.stat.client.packageSizeMaxBytes | mustToJson }},
+              "pending_transmission_max_count": {{ .Values.naviback.stat.client.pendingTransmissionMaxCount | mustToJson }},
+              "timeout_ms": {{ .Values.naviback.stat.client.timeoutLimitMilSec | mustToJson }}
             }
         },
-        {{- end }}{{- /* .Values.naviback.bss.enabled */}}
+        {{- end }}{{- /* .Values.naviback.stat.enabled */}}
         {{- if not .Values.license.notSupported }}
         {{- $licenseUrl := .Values.license.url | required "Valid license.url required!" }}
         "pasportool_client": {

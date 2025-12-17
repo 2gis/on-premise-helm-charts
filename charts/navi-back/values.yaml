@@ -213,13 +213,13 @@ image:
 # @extra naviback.attractor.truck Enable enhanced attractor for truck routing
 # @extra naviback.attractor.scooter Enable enhanced attractor for scooters routing
 # @extra naviback.attractor.motorcycle Enable enhanced attractor for motorcycle routing
-# @param naviback.bss.enabled Enable sending information on the construction of routes to the business statistics service
-# @param naviback.bss.client.serviceRemoteAddress Remote address business statistics service. Requeruired for enable sending information
-# @param naviback.bss.client.messageCountToFlush Message count to flush
-# @param naviback.bss.client.useCompression Enable compression
-# @param naviback.bss.client.packageSizeMaxBytes Package size max bytes
-# @param naviback.bss.client.pendingTransmissionMaxCount Pending transmission max count
-# @param naviback.bss.client.timeoutLimitMilSec Maximum request time limit in milliseconds
+# @param naviback.stat.enabled Enable sending information on the construction of routes to the business statistics service
+# @param naviback.stat.url Remote address business statistics service. Requeruired for enable sending information
+# @param naviback.stat.client.messageCountToFlush Message count to flush
+# @param naviback.stat.client.useCompression Enable compression
+# @param naviback.stat.client.packageSizeMaxBytes Package size max bytes
+# @param naviback.stat.client.pendingTransmissionMaxCount Pending transmission max count
+# @param naviback.stat.client.timeoutLimitMilSec Maximum request time limit in milliseconds
 # @extra naviback.reduceEdgesOptimizationFlag Enable optimizations for distance matrix queries processing
 # @param naviback.behindSplitter The current instance is behind splitter or not
 # @param naviback.overrideConfig Complete config override. For test purposes only
@@ -232,9 +232,9 @@ image:
 # @param naviback.validation.ctx.schemasFolder Path to folder with ctx JSON schemas
 # @param naviback.validation.ctx.requestSchemaName Name of ctx request validation schema
 # @param naviback.validation.ctx.responseSchemaName Name of ctx response validation schema
-# @param naviback.validation.bss.schemasFolder Path to folder with bss JSON schemas
-# @param naviback.validation.bss.requestSchemaName Name of bss request validation schema
-# @param naviback.validation.bss.responseSchemaName Name of bss response validation schema
+# @param naviback.validation.stat.schemasFolder Path to folder with stat (bss) JSON schemas
+# @param naviback.validation.stat.requestSchemaName Name of stat (bss) request validation schema
+# @param naviback.validation.stat.responseSchemaName Name of stat (bss) response validation schema
 # @param naviback.validation.distanceMatrix.schemasFolder Path to folder with distance matrix JSON schemas
 # @param naviback.validation.distanceMatrix.requestSchemaName Name of distance matrix request validation schema
 # @param naviback.validation.distanceMatrix.responseSchemaName Name of distance matrix response validation schema
@@ -362,10 +362,10 @@ naviback:
       enabled: false
   simpleNetwork: {}
   attractor: {}
-  bss:
+  stat:
     enabled: false
+    url: ''
     client:
-      serviceRemoteAddress: ''
       messageCountToFlush: 500
       useCompression: true
       packageSizeMaxBytes: 1800000
@@ -384,7 +384,7 @@ naviback:
       schemasFolder: /usr/share/2gis/schemas/nsr_schemas
       requestSchemaName: CTXRequestModel.json
       responseSchemaName: CTXResponseModelV4.json
-    bss:
+    stat:
       schemasFolder: /usr/share/2gis/schemas/bss_schemas
       requestSchemaName: ''
       responseSchemaName: 401.schema.json

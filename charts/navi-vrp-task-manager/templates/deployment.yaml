@@ -118,9 +118,9 @@ spec:
               value: {{ .Values.s3.vrp.bucket | quote }}
             - name: STAGE_POLLER_PERIOD
               value: "3"
-            {{- if .Values.bss.enabled }}
+            {{- if .Values.stat.enabled }}
             - name: BSS__URL
-              value: {{ .Values.bss.url | quote }}
+              value: {{ required "A valid .Values.stat.url entry required" .Values.stat.url | quote }}
             {{- end }}
             - name: KMS__URL
               value: {{ .Values.keys.url | quote }}
