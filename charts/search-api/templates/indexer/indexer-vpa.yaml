@@ -11,5 +11,5 @@ spec:
     kind: Deployment
     name: {{ include "search-api.fullname" . }}-indexer
   updatePolicy:
-    updateMode: {{ .Values.indexer.vpa.updateMode | quote }}
+    updateMode: {{ ternary "On" "Off" .Values.indexer.vpa.updateMode | quote }}
 {{- end }}

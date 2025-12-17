@@ -75,8 +75,8 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: ingress-router-config
-              mountPath: /app/ingressRouter_vars.yaml
-              subPath: ingressRouter_vars.yaml
+              mountPath: /app/ingress_router_vars.yaml
+              subPath: ingress_router_vars.yaml
             - name: ingress-router-data
               mountPath: /data/dispatch_config
           {{- if .Values.customCAs.bundle }}

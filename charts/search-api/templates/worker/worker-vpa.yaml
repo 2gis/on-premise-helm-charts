@@ -11,5 +11,5 @@ spec:
     kind: Deployment
     name: {{ include "search-api.fullname" . }}-worker
   updatePolicy:
-    updateMode: {{ .Values.worker.vpa.updateMode | quote }}
+    updateMode: {{ ternary "On" "Off" .Values.worker.vpa.updateMode | quote }}
 {{- end }}

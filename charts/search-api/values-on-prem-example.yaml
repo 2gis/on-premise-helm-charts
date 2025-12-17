@@ -1,17 +1,5 @@
 # bluegreen: 'blue'
 
-ingress:
-  enabled: true
-  className: istio
-  hosts:
-    - host: bigsearchonprem.istio.k8s.2gis.dev
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - hosts:
-        - bigsearchonprem.istio.k8s.2gis.dev
-      secretName: any-istio-k8s-2gis-dev-cert
 worker:
   podSecurityContext:
     runAsUser: 100000000
@@ -116,6 +104,7 @@ dataAdapter:
     runAsUser: 100000000
     runAsGroup: 100000000
     fsGroup: 100000000
+  interval: 1m
 
 geodetector:
   image:

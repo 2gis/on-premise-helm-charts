@@ -272,6 +272,17 @@ data:
                                   "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
                                   {{- toYaml .Values.head.envoy.faultInjection.clients.recsys | nindent 34 }}
                             {{- end }}
+                            - match:
+                                prefix: "/friendsinfoaggregator.FriendsInfoAggregatorAPI/"
+                              route:
+                                cluster: friends_service
+                                auto_host_rewrite: true
+                            {{- if (and (index .Values.head.envoy.faultInjection.clients "friends") (.Values.head.envoy.faultInjection.enabled)) }}
+                              typed_per_filter_config:
+                                envoy.filters.http.fault:
+                                  "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
+                                  {{- toYaml .Values.head.envoy.faultInjection.clients.friends | nindent 34 }}
+                            {{- end }}
                         {{- end }}{{- /* .Values.onpremise */}}
                     http_filters:
                     {{- if .Values.head.envoy.faultInjection.enabled }}
@@ -315,7 +326,7 @@ data:
                       address:
                         socket_address:
                         {{- if .Values.queryTransformerMock.enabled }}
-                          port_value: {{ .Values.queryTransformerMock.ports.grpc }}
+                          port_value: {{ .Values.service.queryTransformerMock.ports.grpc }}
                           address: "{{ include "search-api.fullname" . }}-query-transformer-mock"
                         {{- else }}
                           port_value: {{ .Values.head.queryTransformer.endpoint.port }}
@@ -372,6 +383,33 @@ data:
               "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
               sni: {{ .Values.head.recsysRanker.endpoint.address }}
         {{- end }}{{- /* .Values.head.recsysRanker.endpoint.ssl */}}
+        - name: friends_service
+          connect_timeout: 1s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          dns_refresh_rate: 1s
+          lb_policy: {{ .Values.head.envoy.policy }}
+          http2_protocol_options: { }
+          load_assignment:
+            cluster_name: friends_service
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                        {{- if .Values.friendsServiceMock.enabled }}
+                          port_value: {{ .Values.service.friendsServiceMock.ports.grpc }}
+                          address: "{{ include "search-api.fullname" . }}-friends-service-mock"
+                        {{- else }}
+                          port_value: {{ .Values.head.friendsService.endpoint.port }}
+                          address: {{ .Values.head.friendsService.endpoint.address }}
+                        {{- end }}
+        {{- if and .Values.head.friendsService.endpoint.ssl (not .Values.friendsServiceMock.enabled) }}
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+        {{- end }}{{- /* .Values.head.friendsService.endpoint.ssl */}}
         {{- end }}{{- /* .Values.onpremise */}}
 
   head_vars.yaml: |
@@ -421,6 +459,11 @@ data:
     search-recsys-ranker-timeout-ms: 2
     search-recsys-ranker-searchers: []
     search-recsys-ranker-grpc-client-factory-name: 'grpc-client-factory'
+    friends-service-enabled: false
+    friends-service-url: '127.0.0.1:1234'
+    friends-service-timeout-ms: 2
+    friends-service-grpc-client-factory-name: 'grpc-client-factory'
+    friends-service-searchers: []
     ads-enable: false
     grpc-client-circuit-breaker-clients: []
   {{- else }}
@@ -442,6 +485,14 @@ data:
     ai-vector-search-searchers:
       {{- toYaml .Values.head.aiVectorSearch.searchers | nindent 6 }}
     ai-vector-search-grpc-client-factory-name:  'grpc-client-factory'
+    friends-service-enabled: {{ .Values.head.friendsService.enabled }}
+    friends-service-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
+    friends-service-timeout-ms: {{ .Values.head.friendsService.timeout_ms }}
+    friends-service-grpc-client-factory-name: 'grpc-client-factory'
+    friends-service-searchers:
+      {{- toYaml .Values.head.friendsService.searchers | nindent 6 }}
+    friends-service-username: {{ .Values.head.friendsService.endpoint.credentials.username }}
+    friends-service-password: {{ .Values.head.friendsService.endpoint.credentials.password }}
 
     search-query-transformer-searchers:
       {{- toYaml .Values.head.queryTransformer.searchersList | nindent 6 }}
@@ -457,7 +508,7 @@ data:
 
     grpc-client-circuit-breaker-clients:
       {{- toYaml .Values.head.grpcClientCircuitBreaker.clients | nindent 6 }}
-  {{- end -}}{{- /* .Values.onpremise */}}
+      {{- end -}}{{- /* .Values.onpremise */}}
   worker_vars.yaml: |
     server-grpc-port: {{ .Values.worker.ports.grpc }}
     worker-grpc-threads: 2
@@ -683,10 +734,10 @@ data:
       project_list_url: "http://{{ include "search-api.fullname" . }}-data-adapter:{{ .Values.service.dataAdapter.port }}/projects"
     {{- else }}
       project_list_url: {{ .Values.controller.projectListUrl | quote }}
-    {{- end }}{{- /* .Values.onpremise */}}  
       {{- if .Values.feedSandbox.enabled }}
       s3_project_prefix: {{ .Values.feedSandbox.feedBackups.prefix | quote }}
       {{- end }}
+    {{- end }}{{- /* .Values.onpremise */}}    
       uploaded_indices_url: "http://{{ include "search-api.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/list/index/%s"
       delete_index_url: "http://{{ include "search-api.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/delete/index/%s/%s"
       props: {{- toYaml .Values.controller.props | nindent 8 }}
@@ -978,12 +1029,6 @@ data:
     rate-limit-rules:
       {{- toYaml .Values.ingressRouter.rateLimitRules | nindent 6 }}
     testsuite-enabled: false
-
-  dispatch_config.json: |
-    {
-      "version": "1.0",
-      "enable": false
-    }
   {{- end }}{{- /* Values.ingressRouter.enabled  */}}
 
   {{- if .Values.geodetector.enabled }}
@@ -1002,6 +1047,29 @@ data:
   {{- end }}
 
   GIN_MODE: {{ .Values.GINMODE }}
+
+  {{- if .Values.friendsServiceMock.enabled }}
+  friends-service-mock-mappings.json: |
+    {
+      "request" : {
+        "urlPath" : "/friendsinfoaggregator.FriendsInfoAggregatorAPI/GetFriendsInfo",
+        "method" : "POST",
+        "bodyPatterns" : []
+      },
+      "response" : {
+        "status" : 200,
+        "delayDistribution": {
+          "milliseconds" : 100,
+          "type" : "fixed"
+        },
+        "body" : "{\n  \"friends_info\": [\n    {\n      \"user_id\":7947,\n      \"public_user_id\": \"mock_friend_id_1\",\n      \"name\": \"Василий Иванов\",\n      \"phone_book_name\": \"вася\",\n      \"last_interacted_at\": 1762668583,\n      \"avatar_preview_tpl\": \"localhost:9099\/friend\/7947\"\n    },\n    {\n      \"user_id\": 5472,\n      \"public_user_id\": \"mock_friend_id_2\",\n      \"name\": \"Михаил Петров\", \n      \"phone_book_name\": \"миша\",\n      \"last_interacted_at\": 1716557591,\n      \"avatar_preview_tpl\": \"localhost:9099\/friend\/5472\"\n    }\n  ]\n}",
+        "headers" : {
+          "grpc-status-name" : "OK"
+        }
+      }
+    }
+  {{- end }}{{- /* .Values.friendsServiceMock.enabled */}}
+
 {{- if .Values.customCAs.bundle }}
   custom-ca.crt: |-
 {{- .Values.customCAs.bundle | nindent 4 }}

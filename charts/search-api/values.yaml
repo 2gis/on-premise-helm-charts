@@ -110,7 +110,7 @@ worker:
   image:
     repository: 2gis-on-premise/search-worker
     pullPolicy: IfNotPresent
-    tag: 8.17.1
+    tag: 8.17.2
   ports:
     http: 8092
     grpc: 8091
@@ -298,7 +298,7 @@ head:
     image:
       repository: 2gis-on-premise/search-head
       pullPolicy: IfNotPresent
-      tag: 8.17.1
+      tag: 8.17.2
     ports:
       http: 9090
       monitor: 9091
@@ -572,6 +572,30 @@ head:
     searchersList:
       - ExpandingSearcher
 
+  # @param head.friendsService.enabled Enable or disable friendsService
+  # @param head.friendsService.endpoint.address Address of the friendsService service
+  # @param head.friendsService.endpoint.port Port of the friendsService service
+  # @param head.friendsService.endpoint.ssl Enable or disable TLS encryption for the friendsService service
+  # @param head.friendsService.endpoint.credentials.username Username to connect to the friendsService service
+  # @param head.friendsService.endpoint.credentials.password Password to connect to the friendsService service
+  # @param head.friendsService.clientFactoryName Client factory name for the friendsService client (used to enable/disable SSL when debugging locally)
+  # @param head.friendsService.timeout_ms Connection timeout (in milliseconds) for the friendsService service
+  # @param head.friendsService.searchers List of searchers for which friendsService will be enabled
+
+  friendsService:
+    enabled: false
+    endpoint:
+      address: 'friends-info-aggregator-grpc.social-graph.svc.cluster.local'
+      port: 5000
+      ssl: false
+      credentials:
+        username: ''
+        password: ''
+    clientFactoryName: 'grpc-client-factory'
+    timeout_ms: 150
+    searchers:
+      - Suggestor2
+
 # @param head.grpcClientCircuitBreaker.clients List of gRPC client circuit breaker configurations, each defining thresholds and behavior per client.
 
   grpcClientCircuitBreaker:
@@ -672,7 +696,7 @@ filesStorage:
   image:
     repository: 2gis-on-premise/search-files_storage
     pullPolicy: IfNotPresent
-    tag: 8.17.1
+    tag: 8.17.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -877,7 +901,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-controller
     pullPolicy: IfNotPresent
-    tag: 8.17.1
+    tag: 8.17.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1012,7 +1036,7 @@ indexer:
   image:
     repository: 2gis-on-premise/search-indexer
     pullPolicy: IfNotPresent
-    tag: 8.17.1
+    tag: 8.17.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1117,7 +1141,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-syncer_new
     pullPolicy: IfNotPresent
-    tag: 8.17.1
+    tag: 8.17.2
   securityContext: {}
   resources:
     requests:
@@ -1216,6 +1240,8 @@ serviceAccount:
 # @param service.geodetector.port Service (svc) port for the geodetector component
 # @skip service.queryTransformerMock.ports.http Service (svc) HTTP port for the queryTransformerMock
 # @skip service.queryTransformerMock.ports.grpc Service (svc) gRPC port for the queryTransformerMock
+# @skip service.friendsServiceMock.ports.http Service (svc) HTTP port for the friendsServiceMock
+# @skip service.friendsServiceMock.ports.grpc Service (svc) gRPC port for the friendsServiceMock
 
 service:
   worker:
@@ -1248,6 +1274,10 @@ service:
   geodetector:
     port: 10091
   queryTransformerMock:
+    ports:
+      http: 8000
+      grpc: 8091
+  friendsServiceMock:
     ports:
       http: 8000
       grpc: 8091
@@ -1299,6 +1329,52 @@ queryTransformerMock:
   podAnnotations: {}
   matchLabels: {}
 
+# @section friendsServiceMock
+
+# @skip friendsServiceMock.enabled Enable or disable the friendsServiceMock component
+# @skip friendsServiceMock.image.repository Docker image repository
+# @skip friendsServiceMock.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @skip friendsServiceMock.image.tag Docker image tag
+# @skip friendsServiceMock.imagePullSecrets Kubernetes image pull secrets
+# @skip friendsServiceMock.replicaCount Number of replicas for queryTransformerMock (used if HPA is disabled)
+# @skip friendsServiceMock.ports.grpc gRPC port
+# @skip friendsServiceMock.ports.http HTTP port
+
+# @skip friendsServiceMock.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip friendsServiceMock.resources.requests.cpu CPU request; recommended value: `50m`
+# @skip friendsServiceMock.resources.requests.memory Memory request; recommended value: `100Mi`
+# @skip friendsServiceMock.resources.limits.cpu CPU limit; recommended value: `1`
+# @skip friendsServiceMock.resources.limits.memory Memory limit; recommended value: `8Gi`
+
+# @skip friendsServiceMock.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @skip friendsServiceMock.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @skip friendsServiceMock.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @skip friendsServiceMock.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @skip friendsServiceMock.matchLabels Selector match labels
+
+friendsServiceMock:
+  enabled: false
+  image:
+    repository: docker-hub.2gis.ru/usrch/bs-friends-service-mock
+    pullPolicy: IfNotPresent
+    tag: 3.13.1-0.11.0_1
+  imagePullSecrets: []
+  replicaCount: 1
+  ports:
+    grpc: 8080
+    http: 8000
+  resources:
+    requests:
+      cpu: 50m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 8Gi
+  podSecurityContext: {}
+  securityContext: {}
+  podLabels: {}
+  podAnnotations: {}
+  matchLabels: {}
 
 # @section ingressRouter
 
@@ -1526,7 +1602,7 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.17.1
+    tag: 8.17.2
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
@@ -1698,7 +1774,7 @@ geodetector:
   image:
     repository: 2gis-on-premise/search-geodetector
     pullPolicy: IfNotPresent
-    tag: 8.17.1
+    tag: 8.17.2
   imagePullSecrets: []
   geodetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60

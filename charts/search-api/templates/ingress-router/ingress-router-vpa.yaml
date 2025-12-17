@@ -12,6 +12,6 @@ spec:
     kind: Deployment
     name: {{ include "search-api.fullname" . }}-ingress-router
   updatePolicy:
-    updateMode: {{ .Values.ingressRouter.vpa.updateMode | quote }}
+    updateMode: {{ ternary "On" "Off" .Values.ingressRouter.vpa.updateMode | quote }}
 {{- end }}{{- /* .Values.ingressRouter.vpa.enabled */}}
 {{- end }}{{- /* .Values.ingressRouter.enabled */}}

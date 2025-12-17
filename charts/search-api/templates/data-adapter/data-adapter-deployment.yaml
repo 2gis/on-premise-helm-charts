@@ -46,7 +46,7 @@ spec:
           resources:
             {{- toYaml .Values.dataAdapter.resources | nindent 12 }}
           env:
-            - name: GINMODE
+            - name: GIN_MODE
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "search-api.fullname" . }}

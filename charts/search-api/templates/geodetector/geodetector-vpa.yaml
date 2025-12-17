@@ -12,6 +12,6 @@ spec:
     kind: Deployment
     name: {{ include "search-api.fullname" . }}-geodetector
   updatePolicy:
-    updateMode: {{ .Values.geodetector.vpa.updateMode | quote }}
+    updateMode: {{ ternary "On" "Off" .Values.geodetector.vpa.updateMode | quote }}
 {{- end }}{{- /* .Values.geodetector.vpa.enabled */}}
 {{- end }}{{- /* .Values.geodetector.enabled */}}
