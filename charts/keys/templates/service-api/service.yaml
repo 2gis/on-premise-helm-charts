@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "service.api.name" . }}
+  {{- with .Values.api.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "service.api.labels" . | nindent 4 }}
+    {{- with .Values.api.service.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.serviceApi.service.type }}
+  ports:
+    - port: {{ .Values.serviceApi.service.port }}
+      name: http
+      targetPort: http
+  selector:
+    {{- include "service.api.selectorLabels" . | nindent 4 }}

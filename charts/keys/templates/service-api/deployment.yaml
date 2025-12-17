@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "service.api.name" . }}
+  {{- if or .Values.serviceApi.annotations .Values.customCAs.bundle }}
+  annotations:
+    {{- if .Values.customCAs.bundle }}
+    checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
+    {{- end }}
+    {{- with .Values.serviceApi.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  labels:
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "service.api.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}
+    {{- end }}
+    {{- include "service.api.labels" . | nindent 4 }}
+    {{- with .Values.serviceApi.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if not .Values.serviceApi.hpa.enabled }}
+  replicas: {{ .Values.api.replicas }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.serviceApi.revisionHistoryLimit }}
+  strategy:
+    {{- toYaml .Values.serviceApi.strategy | nindent 4 }}
+  selector:
+    matchLabels:
+      {{- include "service.api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.serviceApi.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "service.api.labels" . | nindent 8 }}
+        {{- with .Values.serviceApi.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      terminationGracePeriodSeconds: 60
+      {{- with include "keys.psql.initTLS" . }}
+      initContainers:
+      {{- . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: service-api
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.serviceApiBackend.image.repository }}:{{ .Values.backend.image.tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: [ "service-api" ]
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 30s" ]
+          resources:
+            {{- toYaml .Values.serviceApi.resources | nindent 12 }}
+          env:
+            - name: KEYS_LOG_LEVEL
+              value: {{ .Values.serviceApi.logLevel | quote }}
+            {{- include "keys.env.featureFlags" . | nindent 12 }}
+            {{- include "keys.env.db.deploys" . | nindent 12 }}
+            {{- include "keys.env.redis" . | nindent 12 }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "keys.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+          {{- if .Values.customCAs.bundle }}
+          {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+          {{- include "keys.psql.volumeMount" . | nindent 12 }}
+      volumes:
+      {{- if .Values.customCAs.bundle }}
+      {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
+      {{- end }}
+      {{- include "keys.psql.volume" . | nindent 8 }}
+      {{- with .Values.api.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.api.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.api.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

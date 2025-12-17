@@ -1,5 +1,11 @@
 # Platform Breaking-Changes
 
+## [2.48.0]
+
+### keys-api
+
+- KeysAPI was splits into two applications: KeysAPI and ServiceAPI
+
 ## [2.47.0]
 
 ### catalog-api

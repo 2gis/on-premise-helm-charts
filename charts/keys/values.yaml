@@ -33,8 +33,13 @@ featureFlags:
 
 backend:
   image:
-    repository: 2gis-on-premise/keys-backend
-    tag: 1.144.1
+    repository: service-keys/zuul
+    tag: 1.147.1
+
+serviceApiBackend:
+  image:
+    repository: service-keys/zuul
+    tag: 1.147.1
 
 # @section Admin service settings
 
@@ -269,7 +274,55 @@ api:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: ''
 
+serviceApi:
+  logLevel: warning
 
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 256Mi
+
+  annotations: { }
+  labels: { }
+
+  podAnnotations: { }
+  podLabels: { }
+
+  # @param tasker.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+  revisionHistoryLimit: 3
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  service:
+    annotations: { }
+    labels: { }
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: false
+    hosts:
+      - host: keys-api.host
+        paths:
+          - path: "/service/v1"
+          - path: "/public/v1"
+
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    scaleDownStabilizationWindowSeconds: ''
+    scaleUpStabilizationWindowSeconds: ''
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: ''
 # @section Import service settings
 
 import:
