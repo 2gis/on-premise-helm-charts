@@ -140,7 +140,7 @@ resources:
     memory: 32M
   limits:
     cpu: 100m
-    memory: 64M
+    memory: 96M
 
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
