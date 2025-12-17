@@ -1,0 +1,30 @@
+﻿{{- if .Values.pagerenderer.settings.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pro-api.pagerenderer-name" . }}
+  {{- if .Values.pagerenderer.service.annotations }}
+  annotations:
+    {{- toYaml .Values.pagerenderer.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "pro-api.rendererLabels" . | nindent 4 }}
+    {{- if .Values.pagerenderer.service.labels }}
+    {{- toYaml .Values.pagerenderer.service.labels | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.pagerenderer.service.type }}
+  ports:
+    - port: {{ .Values.pagerenderer.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      appProtocol: http
+    - port: {{ .Values.pagerenderer.settings.grpcPort }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+      appProtocol: http
+  selector:
+    {{- include "pro-api.rendererSelectorLabels" . | nindent 4 }}
+{{- end }}

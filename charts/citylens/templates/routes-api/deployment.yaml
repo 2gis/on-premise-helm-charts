@@ -109,6 +109,9 @@ spec:
             - name: Common__Logging__ExtendedSqlLogging
               value: {{ .Values.routes.api.logging.extendedSqlLogging | quote }}
 
+            - name: Common__OpenApi
+              value: {{ .Values.routes.api.openApi | quote }}
+
             - name: Postgres__ReadWrite__ConnectionString
               value: {{ include "routes-api.connectionString" . }}
             - name: Postgres__ReadWrite__Password
@@ -116,6 +119,8 @@ spec:
                 secretKeyRef:
                   key: postgresPassword
                   name: {{ include "citylens.routes.api.name" . }}-secret
+            - name: PgSettings__MultiTenantEnabled
+              value: {{ $.Values.routes.features.multiTenantEnabled | quote }}
 
             - name: Postgres__ReadOnly__ConnectionString
               value: {{ include "routes-api.connectionString" . }}
@@ -133,23 +138,6 @@ spec:
                   key: postgresPassword
                   name: {{ include "citylens.routes.api.name" . }}-secret
 
-            - name: S3__BucketPrefix
-              value: {{ required "A valid .Values.s3.bucketPrefix entry required" $.Values.s3.bucketPrefix | quote }}
-            - name: S3__LogsBucketPrefix
-              value: {{ required "A valid .Values.s3.logsBucketPrefix entry required" $.Values.s3.logsBucketPrefix | quote }}
-            - name: S3__AccessKey
-              valueFrom:
-                secretKeyRef:
-                  key: s3AccessKey
-                  name: {{ include "citylens.routes.api.name" . }}-secret
-            - name: S3__SecretAccessKey
-              valueFrom:
-                secretKeyRef:
-                  key: s3SecretAccessKey
-                  name: {{ include "citylens.routes.api.name" . }}-secret
-            - name: S3__Region
-              value: {{ $.Values.s3.region | quote }}
-
             - name: Clients__Navigation__Enabled
               value: "true"
             - name: Clients__Navigation__Url
@@ -157,7 +145,10 @@ spec:
             - name: Clients__Navigation__TimeoutSeconds
               value: {{ $.Values.routes.navi.timeout | quote }}
             - name: Clients__Navigation__ApiKey
-              value: {{ $.Values.routes.navi.key | quote }}
+              valueFrom:
+                secretKeyRef:
+                  key: naviApiKey
+                  name: {{ include "citylens.routes.api.name" . }}-secret
 
             - name: Clients__Keys__Enabled
               value: "true"
@@ -171,7 +162,10 @@ spec:
             - name: Clients__ProClient__Url
               value: {{ $.Values.pro.baseUrl | quote }}
             - name: Clients__ProClient__AuthorizationToken
-              value: {{ $.Values.routes.pro.authorizationToken | quote }}
+              valueFrom:
+                secretKeyRef:
+                  key: proAuthToken
+                  name: {{ include "citylens.routes.api.name" . }}-secret
 
             - name: Clients__RealTimeData__Enabled
               value: "true"
@@ -184,10 +178,42 @@ spec:
               value: {{ $.Values.routes.features.oidcMobileAuthorizationEnabled | quote }}
             - name: Features__CoverageRatioEnabled
               value: {{ $.Values.routes.features.coverageRatioEnabled | quote }}
+            - name: Features__MultiTenantEnabled
+              value: {{ $.Values.routes.features.multiTenantEnabled | quote }}
 
             - name: TasksAssetSettings__SystemAccessToken
-              value: {{ $.Values.routes.tasksAssetSettings.systemAccessToken | quote }}
+              valueFrom:
+                secretKeyRef:
+                  key: proTasksAssetAccessToken
+                  name: {{ include "citylens.routes.api.name" . }}-secret
             - name: TasksAssetSettings__PlannedTasksAssetId
               value: {{ $.Values.routes.tasksAssetSettings.plannedTasksAssetId | quote }}
             - name: TasksAssetSettings__CompletedTasksAssetId
               value: {{ $.Values.routes.tasksAssetSettings.completedTasksAssetId | quote }}
+
+            - name: Hangfire__DashboardAuthorization__Enabled
+              value: "true"
+            - name: Hangfire__DashboardAuthorization__Username
+              value: {{ required "A valid .Values.routes.adminCredentials.username entry required" $.Values.routes.adminCredentials.username | quote }}
+            - name: Hangfire__DashboardAuthorization__Password
+              valueFrom:
+                secretKeyRef:
+                  key: adminPassword
+                  name: {{ include "citylens.routes.api.name" . }}-secret
+
+            - name: EndpointApiKey__Enabled
+              value: "true"
+            - name: EndpointApiKey__Data__0__Controller
+              value: "DataScience"
+            - name: EndpointApiKey__Data__0__Key
+              valueFrom:
+                secretKeyRef:
+                  key: dataScienceApiKey
+                  name: {{ include "citylens.routes.api.name" . }}-api-key-secret
+            - name: EndpointApiKey__Data__1__Controller
+              value: "Companies"
+            - name: EndpointApiKey__Data__1__Key
+              valueFrom:
+                secretKeyRef:
+                  key: companiesApiKey
+                  name: {{ include "citylens.routes.api.name" . }}-api-key-secret

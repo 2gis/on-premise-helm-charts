@@ -63,7 +63,10 @@ spec:
           imagePullPolicy: {{ .Values.permissions.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 8081
+              containerPort: {{ .Values.permissions.settings.httpPort }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ .Values.permissions.settings.grpcPort }}
               protocol: TCP
           volumeMounts:
             - mountPath: {{ .Values.api.settings.tempPath | quote }}
@@ -149,20 +152,18 @@ spec:
                   key: redisPassword
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
+            - name: Common__HttpPort
+              value: {{ .Values.permissions.settings.httpPort | quote }}
+            - name: Common__GrpcPort
+              value: {{ .Values.permissions.settings.grpcPort | quote }}
             - name: Common__Logging__Format
               value: {{ .Values.api.settings.logging.format | quote }}
-            - name: Common__Logging__Targets
-              value: {{ .Values.api.settings.logging.targets | quote }}
             - name: Common__DeleteInactiveUsers
               value: {{ .Values.permissions.settings.deleteInactiveUsers | quote }}
             - name: Common__DefaultPermissions__OpenProUi
               value: {{ .Values.permissions.settings.default_permissions.open_pro_ui | quote }}
             {{- range $i, $s := .Values.permissions.settings.default_permissions.assets }}
             - name: Common__DefaultPermissions__Assets__{{$i}}
-              value: {{ $s | quote }}
-            {{- end }}
-            {{- range $i, $s := .Values.permissions.settings.default_permissions.analytics }}
-            - name: Common__DefaultPermissions__Analytics__{{$i}}
               value: {{ $s | quote }}
             {{- end }}
             {{- range $i, $s := .Values.permissions.settings.default_permissions.territories }}
@@ -179,6 +180,8 @@ spec:
               value: {{ .Values.permissions.settings.default_permissions.isochrones | quote }}
             - name: Common__AllowPermissionsToAnyAsset
               value: {{ .Values.permissions.settings.allowPermissionsToAnyAsset | quote }}
+            - name: Common__ShowAssetBundles
+              value: {{ .Values.permissions.settings.showAssetBundles | quote }}
             - name: Kafka__BootstrapServers
               value: {{ $.Values.kafka.bootstrapServers }}
             - name: Kafka__SecurityProtocol

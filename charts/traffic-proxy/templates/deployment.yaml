@@ -26,7 +26,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") $ | fromYaml).data | toYaml | sha256sum }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") $ | fromYaml).stringData | toYaml | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -71,9 +72,14 @@ spec:
               exec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           volumeMounts:
-            - name: {{ include "generic-chart.name" $ }}-configmap
+            - name: {{ include "generic-chart.name" . }}-configmap
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
+          {{- if .Values.proxy.locationDG }}
+            - name: {{ include "generic-chart.name" . }}-secret
+              mountPath: /etc/nginx/secrets/api-key.conf
+              subPath: api-key.conf
+          {{- end }}
           {{- if .Values.proxy.cache.enabled }}
             - name: trafficcache
               mountPath: /var/cache/nginx/trafficcache
@@ -82,9 +88,11 @@ spec:
         - name: {{ include "generic-chart.name" . }}-configmap
           configMap:
             name: {{ include "generic-chart.fullname" . }}
-            items:
-              - key: nginx.conf
-                path: nginx.conf
+      {{- if .Values.proxy.locationDG }}
+        - name: {{ include "generic-chart.name" . }}-secret
+          secret:
+            secretName: {{ include "generic-chart.name" . }}-secret
+      {{- end }}
       {{- if .Values.proxy.cache.enabled }}
         - name: trafficcache
           emptyDir: {}

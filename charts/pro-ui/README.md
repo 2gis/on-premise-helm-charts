@@ -29,7 +29,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name               | Description | Value                    |
 | ------------------ | ----------- | ------------------------ |
 | `image.repository` | Repository  | `2gis-on-premise/pro-ui` |
-| `image.tag`        | Tag         | `4.33.0`                 |
+| `image.tag`        | Tag         | `4.43.0`                 |
 
 ### Common deployment settings
 
@@ -54,10 +54,10 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name                                | Description                                                                                                                                                                                                                                                                                                                                                                                                       | Value                  |
 | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `ui.healthcheckPath`                | Application http path for health check                                                                                                                                                                                                                                                                                                                                                                            | `/api/healthcheck/app` |
-| `ui.appTheme`                       | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                                                                                                                                                                                   | `urbi`                 |
-| `ui.appLocale`                      | Language in the app. Possible values: `"ar_AE"`, `"en_AE"` or `"ru_RU"`.                                                                                                                                                                                                                                                                                                                                          | `en_AE`                |
-| `ui.appInitialMapCenter`            | Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).                                                                                                                                                                                                                                                                  | `[46.71, 24.72]`       |
-| `ui.supportDocumentationLink`       | Product online documentation root link. Ex.: 'https://docs.urbi.ae/en/pro', 'https://docs.2gis.com/ru/pro'                                                                                                                                                                                                                                                                                                        | `""`                   |
+| `ui.appTheme`                       | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                                                                                                                                                                                   | `2gis`                 |
+| `ui.appLocale`                      | Language in the app. Possible values: `"ar_AE"`, `"en_AE"` or `"ru_RU"`.                                                                                                                                                                                                                                                                                                                                          | `ru_RU`                |
+| `ui.appInitialMapCenter`            | Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).                                                                                                                                                                                                                                                                  | `[37.64, 55.74]`       |
+| `ui.supportDocumentationLink`       | Product online documentation root link. Ex.: 'https://docs.2gis.com/pro/overview', 'https://docs.urbi.ae/pro/overview'.                                                                                                                                                                                                                                                                                           | `""`                   |
 | `ui.immersiveModels`                | A string value for config to enabling 3D-models. Possible values: [{"id":4,"name":"Ground","mapOptions":{"center":[53.287567,23.564967],"styleZoom":19.2,"pitch":45,"rotation":0},"objects":[{"buildingIds":[],"coords":[53.284762,23.569323],"scale":90,"rotateX":0.5,"rotateY":0,"moveX":0,"moveY":0,"moveZ":0,"models":[{"path":"/static/models/adnoc/ground.glb","name":"Ground","displayName":"Ground"}]}]}] | `""`                   |
 | `ui.publicS3Url`                    | Optional URL of public S3 where style data will be placed. Example: https://s3.domain.example.com/                                                                                                                                                                                                                                                                                                                | `""`                   |
 | `ui.auth.sso`                       | Flag to turn on/off the authorization. Possible values: `"true"` or `"false"`.                                                                                                                                                                                                                                                                                                                                    | `false`                |
@@ -162,13 +162,16 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### Autoscaling configuration
 
-| Name               | Description                          | Value   |
-| ------------------ | ------------------------------------ | ------- |
-| `hpa.enabled`      | Enable hpa for PRO UI                | `false` |
-| `hpa.minReplicas`  | Minimum number of PRO UI replicas    | `2`     |
-| `hpa.maxReplicas`  | Maximum number of PRO UI replicas    | `5`     |
-| `hpa.targetCPU`    | Target CPU utilization percentage    | `100`   |
-| `hpa.targetMemory` | Target Memory utilization percentage | `""`    |
+| Name                 | Description                                          | Value   |
+| -------------------- | ---------------------------------------------------- | ------- |
+| `hpa.enabled`        | Enable hpa for PRO UI                                | `false` |
+| `hpa.minReplicas`    | Minimum number of PRO UI replicas                    | `2`     |
+| `hpa.maxReplicas`    | Maximum number of PRO UI replicas                    | `5`     |
+| `hpa.targetCPU`      | Target CPU utilization percentage                    | `100`   |
+| `hpa.targetMemory`   | Target Memory utilization percentage                 | `""`    |
+| `pdb.enabled`        | If PDB is enabled for the service.                   | `false` |
+| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
 
 ### Artifacts Storage settings
 
@@ -189,7 +192,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `stylesImporter.name`                       | Styles Import job name.                                                                                                                                  | `styles-importer`              |
 | `stylesImporter.image.repository`           | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
-| `stylesImporter.image.tag`                  | Docker image tag.                                                                                                                                        | `2.31.1`                       |
+| `stylesImporter.image.tag`                  | Docker image tag.                                                                                                                                        | `2.46.2`                       |
 | `stylesImporter.backoffLimit`               | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `stylesImporter.successfulJobsHistoryLimit` | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
 | `stylesImporter.nodeSelector`               | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                      | `{}`                           |

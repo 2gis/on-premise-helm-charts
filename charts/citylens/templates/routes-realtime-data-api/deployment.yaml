@@ -108,6 +108,9 @@ spec:
             - name: Common__Logging__ExtendedSqlLogging
               value: {{ .Values.routes.realtimeDataApi.logging.extendedSqlLogging | quote }}
 
+            - name: Common__OpenApi
+              value: {{ .Values.routes.realtimeDataApi.openApi | quote }}
+
             - name: Postgres__ReadWrite__ConnectionString
               value: {{ include "routes-realtime-data-api.connectionString" . }}
             - name: Postgres__ReadWrite__Password
