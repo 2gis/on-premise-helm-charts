@@ -10,15 +10,15 @@ worker:
 #    tag: vx-dev_43296
 #  livenessProbe: {}
 #  readinessProbe: {}
-  startupProbe:
-    enabled: true
-    initialDelaySeconds: 30
-  prestopHook:
-    enabled: false
-  data:
-    storageClassName: topolvm-ext4
-    persistent:
-      enabled: false
+  # startupProbe:
+  #   enabled: true
+  #   initialDelaySeconds: 30
+  # prestopHook:
+  #   enabled: false
+  # data:
+  #   storageClassName: topolvm-ext4
+  #   persistent:
+  #     enabled: false
 head:
   podSecurityContext:
     runAsUser: 100000000
@@ -33,22 +33,22 @@ head:
     image:
       repository: docker-hub.2gis.ru/on-premise/search-head
 #      tag: vx-dev_43296
-    startupProbe:
-      enabled: true
-      initialDelaySeconds: 30
-    prestopHook:
-      enabled: false
+    # startupProbe:
+    #   enabled: true
+    #   initialDelaySeconds: 30
+    # prestopHook:
+    #   enabled: false
 #    bigSearchMode: off
-    bigSearchSearchers:
-      - ExpandingSearcher
-      - Suggestor2
-      - DiscoveryPartialSearcher
-      - DiscoveryPartialSearcherStrict
-      - OneBranchExpandingSearcher
-      - GeoUniSearcher
-      - AddressSuggestor
-      - SearcherByPhone
-    adsEnable: false
+    # bigSearchSearchers:
+    #   - ExpandingSearcher
+    #   - Suggestor2
+    #   - DiscoveryPartialSearcher
+    #   - DiscoveryPartialSearcherStrict
+    #   - OneBranchExpandingSearcher
+    #   - GeoUniSearcher
+    #   - AddressSuggestor
+    #   - SearcherByPhone
+    # adsEnable: false
   nginx:
     image:
       repository: docker-hub.2gis.ru/on-premise/search-nginx
@@ -57,16 +57,16 @@ head:
   envoy:
     image:
       repository: docker-hub.2gis.ru/on-premise/navi-envoy
-  data:
-    storageClassName: topolvm-ext4
-    persistent:
-      enabled: false
+  # data:
+  #   storageClassName: topolvm-ext4
+  #   persistent:
+  #     enabled: false
 
-service:
-  ingressRouter:
-    external:
-      enable: false
-      host: 'zhukov-op-ir.istio.k8s.2gis.dev'
+# service:
+#   ingressRouter:
+#     external:
+#       enable: false
+#       host: 'zhukov-op-ir.istio.k8s.2gis.dev'
 
 ingressRouter:
   # enabled: false
@@ -77,25 +77,23 @@ ingressRouter:
     runAsUser: 100000000
     runAsGroup: 100000000
     fsGroup: 100000000
-  affinity:
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchExpressions:
-          - key: app
-            operator: In
-            values:
-            - ingress-router
-        topologyKey: kubernetes.io/hostname
-  prestopHook:
-    enabled: false
-  experimentComponent:
-    enabled: false
-  rateLimitComponent:
-    enabled: false
+  # affinity:
+  #   podAntiAffinity:
+  #     requiredDuringSchedulingIgnoredDuringExecution:
+  #     - labelSelector:
+  #         matchExpressions:
+  #         - key: app
+  #           operator: In
+  #           values:
+  #           - ingress-router
+  #       topologyKey: kubernetes.io/hostname
+  # prestopHook:
+  #   enabled: false
+  # rateLimitComponent:
+  #   enabled: false
 #  prometheusUrl: https://prometheus.2gis.io/prometheus/api/v1/query_range
-  prometheusUrl: ''
-  rateLimitRules: []
+  # prometheusUrl: ''
+  # rateLimitRules: []
 
 dataAdapter:
   image:
@@ -104,19 +102,19 @@ dataAdapter:
     runAsUser: 100000000
     runAsGroup: 100000000
     fsGroup: 100000000
-  interval: 1m
+  # interval: 1m
 
 geodetector:
   image:
     repository: docker-hub.2gis.ru/on-premise/search-geodetector
 #    tag: vx-dev_43296
   enabled: true
-  data:
-    storageClassName: topolvm-ext4
-    persistent:
-      enabled: false
-  prestopHook:
-    enabled: false
+  # data:
+  #   storageClassName: topolvm-ext4
+  #   persistent:
+  #     enabled: false
+  # prestopHook:
+  #   enabled: false
   # livenessProbe:
   #   enabled: false
   # readinessProbe:
@@ -141,8 +139,8 @@ indexer:
     runAsGroup: 100000000
     fsGroup: 100000000
 
-queryTransformerMock:
-  enabled: false
+# queryTransformerMock:
+#   enabled: false
 
 magg:
   enabled: true
@@ -157,10 +155,10 @@ controller:
   image:
     repository: docker-hub.2gis.ru/on-premise/search-controller
 #    tag: vx-dev_43296
-  data:
-    storageClassName: topolvm-ext4
-    persistent:
-      enabled: false
+  # data:
+  #   storageClassName: topolvm-ext4
+  #   persistent:
+  #     enabled: false
 filesStorage:
   podSecurityContext:
     runAsUser: 100000000
@@ -183,14 +181,14 @@ filesStorage:
 #     effect: NoSchedule
 #   readinessProbe:
 #     enabled: false
-  data:
-    persistent:
-      enabled: false
-    storageClassName: ceph-csi-rbd-ssd
-    resources:
-      requests:
-        storage: 30Gi
-  versionTTL: 168h
+  # data:
+  #   persistent:
+  #     enabled: false
+  #   storageClassName: ceph-csi-rbd-ssd
+  #   resources:
+  #     requests:
+  #       storage: 30Gi
+  # versionTTL: 168h
 
 customCAs:
   bundle: ''
@@ -257,7 +255,7 @@ customCAs:
   #   -----END CERTIFICATE-----
   certsPath: ''
 
-onpremise: true
+# onpremise: true
 
 s3Client:
   enabled: true

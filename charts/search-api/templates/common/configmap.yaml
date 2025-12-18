@@ -737,7 +737,7 @@ data:
       {{- if .Values.feedSandbox.enabled }}
       s3_project_prefix: {{ .Values.feedSandbox.feedBackups.prefix | quote }}
       {{- end }}
-    {{- end }}{{- /* .Values.onpremise */}}    
+    {{- end }}{{- /* .Values.onpremise */}}
       uploaded_indices_url: "http://{{ include "search-api.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/list/index/%s"
       delete_index_url: "http://{{ include "search-api.fullname" . }}-files-storage:{{ .Values.service.filesStorage.port }}/delete/index/%s/%s"
       props: {{- toYaml .Values.controller.props | nindent 8 }}

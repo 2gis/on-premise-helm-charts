@@ -352,7 +352,10 @@ head:
     adsEnable: false
     bigSearchMode:
       enabled: true
-    bigSearchSearchers: []
+    bigSearchSearchers:
+      - ExpandingSearcher
+# ExpandingSearcher is the default searcher, for additional serchers look docs in docs.2gis.com
+
     bigSearchExcludeSegments: []
     aiSuggestedQueries:
       enabled: false
@@ -564,13 +567,12 @@ head:
   recsysRanker:
     enabled: false
     endpoint:
-      address: discovery-search-reranker.recsys.svc.cluster.local
+      address: ''
       port: 50051
       ssl: false
     clientFactoryName: 'grpc-client-factory'
     timeoutMs: 500
-    searchersList:
-      - ExpandingSearcher
+    searchersList: []
 
   # @param head.friendsService.enabled Enable or disable friendsService
   # @param head.friendsService.endpoint.address Address of the friendsService service
@@ -585,7 +587,7 @@ head:
   friendsService:
     enabled: false
     endpoint:
-      address: 'friends-info-aggregator-grpc.social-graph.svc.cluster.local'
+      address: ''
       port: 5000
       ssl: false
       credentials:
@@ -593,8 +595,7 @@ head:
         password: ''
     clientFactoryName: 'grpc-client-factory'
     timeout_ms: 150
-    searchers:
-      - Suggestor2
+    searchers: []
 
 # @param head.grpcClientCircuitBreaker.clients List of gRPC client circuit breaker configurations, each defining thresholds and behavior per client.
 
@@ -638,8 +639,8 @@ head:
 # @param indexerServices.externalFilesStorageUrl Enable and define the external index storage URL; if empty, a custom indexing and storage system will be deployed
 # @param indexerServices.externalControllerUrl Enable and define the external controller api URL
 indexerServices:
-  externalFilesStorageUrl: ""
-  externalControllerUrl: ""
+  externalFilesStorageUrl: ''
+  externalControllerUrl: ''
 
 # @section FileStorage settings
 
@@ -1215,7 +1216,7 @@ serviceAccount:
   create: false
   automount: false
   annotations: {}
-  name: ""
+  name: ''
 
 # @param service.worker.port Service (svc) port for the worker
 # @param service.head.type Service (svc) type for the head component
