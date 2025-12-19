@@ -81,7 +81,7 @@ customReadinessProbe: {}
 image:
   repository: 2gis-on-premise/navi-front
   pullPolicy: IfNotPresent
-  tag: 1.26.0
+  tag: 1.28.1
 
 
 # @section Navi-Front service settings
@@ -233,6 +233,7 @@ pdb:
 
 # @section Nginx container
 
+# @param nginx.customConfigPath Path to custom nginx config file. If set, default config will be ignored.
 # @param nginx.setRealIpFrom Defines trusted addresses that are known to send correct replacement addresses
 # @param nginx.opentracing.enabled If opentracing enabled for nginx requests
 # @param nginx.opentracing.serviceName Service name sent to jaeger
@@ -247,6 +248,7 @@ pdb:
 # @param nginx.protectInternalLocations.allowedNetworks CIDR blocks to allow access to internal locations from. For debug purposes only
 
 nginx:
+  customConfigPath: ''
   setRealIpFrom: 127.0.0.1
   opentracing:
     enabled: false
