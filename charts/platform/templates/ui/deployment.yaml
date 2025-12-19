@@ -53,27 +53,27 @@ spec:
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}
           env:
-            {{- if .Values.ui.oauth.clientSecret}}
+            {{- if .Values.ui.oauth.clientSecret }}
             - name: OAUTH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ include "platform.ui.secretName" . }}
                   key: oauthClientSecret
-            {{- end}}
-            {{- if .Values.ui.catalog.key}}
+            {{- end }}
+            {{- if .Values.ui.catalog.key }}
             - name: CATALOG_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "platform.ui.secretName" . }}
                   key: catalogApiKey
-            {{- end}}
-            {{- if .Values.ui.navi.key}}
+            {{- end }}
+            {{- if .Values.ui.navi.key }}
             - name: NAVI_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "platform.ui.secretName" . }}
                   key: naviApiKey
-            {{- end}}
+            {{- end }}
             - name: DEFAULT_LOCALE
               value: {{ .Values.ui.defaultLocale | quote }}
             - name: BRAND
