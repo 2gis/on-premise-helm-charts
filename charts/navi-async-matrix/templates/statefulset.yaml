@@ -135,19 +135,39 @@ spec:
             - name: http
               containerPort: {{ .Values.dm.port | int }}
               protocol: TCP
-          livenessProbe: &healthProbe
+          livenessProbe:
+            {{- if .Values.customLivenessProbe }}
+            {{- include "tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+            {{- else if .Values.livenessProbe.enabled }}
             httpGet:
               path: /healthcheck
               port: http
-            failureThreshold: 5
-            periodSeconds: 15
-            timeoutSeconds: 5
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            {{- end }}
           readinessProbe:
-            <<: *healthProbe
-            failureThreshold: 3
+            {{- if .Values.customReadinessProbe }}
+            {{- include "tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+            {{- else if .Values.readinessProbe.enabled }}
+            httpGet:
+              path: /healthcheck
+              port: http
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            {{- end }}
           startupProbe:
-            <<: *healthProbe
-            failureThreshold: 60
+            {{- if .Values.customStartupProbe }}
+            {{- include "tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+            {{- else if .Values.startupProbe.enabled }}
+            httpGet:
+              path: /healthcheck
+              port: http
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            {{- end }}
           volumeMounts:
           {{- if $kafkaVolumeMounted }}
           - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
@@ -212,6 +232,10 @@ spec:
             - name: DM_ASYNC_SERVICE_TOPIC_RULES
               {{- /* topicRules is a structure, hence mustToJson */}}
               value: {{ .Values.kafka.taskTopicRules | mustToJson | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_FIND_PLATFORM_TOPIC
+              value: {{ .Values.kafka.findPlatformTopic | quote }}
+            - name: DM_ASYNC_SERVICE_FIND_PLATFORM_TOPIC_RULES
+              value: {{ .Values.kafka.findPlatformTopicRules | mustToJson | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ATTRACT_TOPIC
               value: {{ required "A valid kafka.attractTopic entry required" .Values.kafka.attractTopic | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ONE_TO_MANY_TOPIC
@@ -294,13 +318,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "navi-async-matrix.fullname" . | quote }}
                   key: dmApiKey
-            {{- if .Values.keys.truckToken }}
-            - name: DM_ASYNC_SERVICE_KMS__TRUCK_DM_ASYNC_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "navi-async-matrix.fullname" . | quote }}
-                  key: dmApiTruckKey
-            {{- end }}
             {{- if .Values.customCAs.bundle }}
             - name: SSL_CERT_FILE
               value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt

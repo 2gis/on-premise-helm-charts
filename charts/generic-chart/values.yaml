@@ -2,10 +2,11 @@
 
 # @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
 # @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+# @param containerNameOverride Override the default container name used in pod specifications and VPA configurations
 
 nameOverride: ''
 fullnameOverride: ''
-
+containerNameOverride: ''
 
 # @section [Deployment](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/) settings
 
@@ -58,7 +59,7 @@ volumeClaimTemplates: []
 hpa:
   enabled: false
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 2
   scaleDown: {}
   scaleUp: {}
   targetCPUUtilizationPercentage: 80
@@ -69,7 +70,8 @@ hpa:
 
 # @param vpa.enabled If VPA is enabled for the service
 # @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start)
-# @param vpa.containerName Name of a container to measure utilization for
+# @param vpa.containerName Name of a container to measure utilization for (deprecated, use vpa.containerNameOverride instead)
+# @param vpa.containerNameOverride Override the container name specifically for VPA configuration (takes precedence over vpa.containerName)
 # @param vpa.controlledValues Controlled values, one of: RequestsOnly or RequestsAndLimits
 # @extra vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down
 # @extra vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down
@@ -80,6 +82,7 @@ vpa:
   enabled: false
   updateMode: Auto
   containerName: ''
+  containerNameOverride: ''
   controlledValues: RequestsOnly
 
 

@@ -79,7 +79,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.47.1.3`                  |
+| `image.tag`        | Tag         | `7.49.0.3`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings
@@ -148,7 +148,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.attractor.scooter`                            | Enable enhanced attractor for scooters routing                                                                                                                                                                                                 |                                          |
 | `naviback.attractor.motorcycle`                         | Enable enhanced attractor for motorcycle routing                                                                                                                                                                                               |                                          |
 | `naviback.stat.enabled`                                 | Enable sending information on the construction of routes to the business statistics service                                                                                                                                                    | `false`                                  |
-| `naviback.stat.url`                                     | Remote address business statistics service. Requeruired for enable sending information                                                                                                                                                         | `""`                                     |
+| `naviback.stat.url`                                     | Remote address business statistics service. Required for enabling                                                                                                                                                                              | `""`                                     |
 | `naviback.stat.client.messageCountToFlush`              | Message count to flush                                                                                                                                                                                                                         | `500`                                    |
 | `naviback.stat.client.useCompression`                   | Enable compression                                                                                                                                                                                                                             | `true`                                   |
 | `naviback.stat.client.packageSizeMaxBytes`              | Package size max bytes                                                                                                                                                                                                                         | `1800000`                                |
@@ -370,6 +370,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `roadLocks.kafka_group_id_prefix`           | Prefix for kafka groud_id                                                | `""`     |
 | `roadLocks.kafka.properties`                | Properties as supported by librdkafka, see `kafka` section and comments  |          |
 | `roadLocks.kafka.fileProperties`            | Properties stored in file, see `kafka` section and comments              | `{}`     |
+
+### ETA display optins.
+
+| Name                        | Description                                      | Value  |
+| --------------------------- | ------------------------------------------------ | ------ |
+| `etaDisplayOptions.enabled` | True if personalized ETA display options enabled | `true` |
 
 ### License settings
 
