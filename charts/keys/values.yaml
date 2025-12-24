@@ -307,14 +307,6 @@ serviceApi:
     type: ClusterIP
     port: 80
 
-  ingress:
-    enabled: false
-    hosts:
-      - host: keys-api.host
-        paths:
-          - path: "/service/v1"
-          - path: "/public/v1"
-
   hpa:
     enabled: false
     minReplicas: 1

@@ -26,6 +26,20 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
+          - path: "/service/v1"
+            pathType: Prefix
+            backend:
+              service:
+                name:{{ include "service.api.name" $ }}
+                port:
+                  number: {{ $.Values.serviceApi.service.port }}
+          - path: "/public/v1"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "service.api.name" $ }}
+                port:
+                  number: {{ $.Values.serviceApi.service.port }}
           {{- range .paths }}
           - path: {{ .path }}
             pathType: Prefix

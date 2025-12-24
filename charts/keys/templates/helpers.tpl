@@ -302,20 +302,6 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       key: dbRWPassword
 {{- end }}
 
-{{- define "serviceApi.env.db.deploys" -}}
-{{- include "keys.env.db" . }}
-- name: KEYS_DB_RO_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "keys.secret.deploys.name" . }}
-      key: dbROPassword
-- name: KEYS_DB_RW_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ include "keys.secret.deploys.name" . }}
-      key: dbRWPassword
-{{- end }}
-
 {{- define "keys.env.db.jobs" -}}
 {{- include "keys.env.db" . }}
 - name: KEYS_DB_RO_PASSWORD
@@ -821,9 +807,5 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 Manifest name
 */}}
 {{- define "keys.manifestCode" -}}
-{{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
-{{- end }}
-
-{{- define "service.api.manifestCode" -}}
 {{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
 {{- end }}
