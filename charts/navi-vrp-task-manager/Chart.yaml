@@ -7,7 +7,7 @@ keywords:
 - vrp
 - tsp
 - task-manager
-version: 2.47.1
+version: 2.48.0
 appVersion: 1.13.1
 dependencies:
 - name: generic-chart
