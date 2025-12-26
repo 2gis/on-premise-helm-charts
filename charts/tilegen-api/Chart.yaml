@@ -4,7 +4,7 @@ description: API for generating vector tiles from user data
 
 type: application
 
-version: 2.47.1
+version: 2.48.0
 appVersion: 1.1.8
 
 maintainers:
