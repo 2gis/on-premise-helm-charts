@@ -11,6 +11,8 @@
 ### navi-async-matrix
 
 - `bss` section renamed to `stat`
+- `keys.truckToken` was removed. Now, the `keys.token` is used for trucks
+- You need to upgrade keys-backend to version 1.144.1 (Release Core 2.2.0)
 
 ### navi-vrp-task-manager
 

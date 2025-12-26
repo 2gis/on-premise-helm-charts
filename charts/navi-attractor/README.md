@@ -69,7 +69,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | ------------------ | ----------- | -------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-attractor` |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                   |
-| `image.tag`        | Tag         | `7.47.1.3`                       |
+| `image.tag`        | Tag         | `7.49.0.3`                       |
 
 ### Service account settings
 
@@ -156,6 +156,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | `attractor.castleUrl`                   | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster                                                                          | `""`                                     |
 | `attractor.castleUrlProxy`              | URL of Proxy Navi-Castle service. Needs only OnPrem. More priority than attractor.castleUrl and attractor.restrictions.url.                                                              | `""`                                     |
 | `attractor.handlersNumber`              | Total number of HTTP/GRPC handlers.                                                                                                                                                      | `20`                                     |
+| `attractor.queueSize`                   | Internal queue size                                                                                                                                                                      | `256`                                    |
 | `attractor.maxProcessTime`              | Maximum processing time limit in minutes.                                                                                                                                                | `20`                                     |
 | `attractor.responseTimelimit`           | Maximum response time limit in minutes.                                                                                                                                                  | `120`                                    |
 | `attractor.requestTimeout`              | Maximum request time limit in minutes.                                                                                                                                                   | `120`                                    |

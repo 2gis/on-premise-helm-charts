@@ -72,18 +72,35 @@ Usage:
 {{- end -}}
 
 {{/*
-   * Guess container name for VPA resource policies.
-   * Use .Values.vpa.containerName if set, undergoes template render.
-   * Assume Chart.Name if not specified otherwise.
-   */}}
+Container name resolution (backward-compatible)
+Priority:
+  1) .Values.containerNameOverride
+  2) .Values.vpa.containerName
+  3) "<chart>-<release>"
+*/}}
 {{- define "generic-chart.containerName" -}}
-  {{- if (.Values.vpa).containerName }}
-    {{- include "tplvalues.render" (dict
-                                        "value" .Values.vpa.containerName
-                                        "context" .) }}
-  {{- else }}
-    {{- .Chart.Name | replace "_" "-" }}
-  {{- end }}
+{{- if .Values.containerNameOverride -}}
+  {{- include "tplvalues.render" (dict "value" .Values.containerNameOverride "context" .) -}}
+{{- else if (.Values.vpa).containerName -}}
+  {{- include "tplvalues.render" (dict "value" .Values.vpa.containerName "context" .) -}}
+{{- else -}}
+  {{- printf "%s" (.Chart.Name | replace "_" "-") -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+VPA-specific container name
+Priority:
+  1) .Values.vpa.containerNameOverride
+  2) include "generic-chart.containerName"
+Backwards compatibility: legacy .Values.vpa.containerName is honored via generic-chart.containerName.
+*/}}
+{{- define "generic-chart.vpaContainerName" -}}
+{{- if (.Values.vpa).containerNameOverride -}}
+  {{- include "tplvalues.render" (dict "value" .Values.vpa.containerNameOverride "context" .) -}}
+{{- else -}}
+  {{- include "generic-chart.containerName" . -}}
+{{- end -}}
 {{- end -}}
 
 {{- /*

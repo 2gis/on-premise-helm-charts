@@ -630,6 +630,8 @@ data:
           "projects":
             {{ . | mustToPrettyJson | nindent 12 }},
           {{- end }}
+          "workers_count" : 8,
+          "messages_queue_size_limit": 400,
           "passports": {
             "update_period": 60,
             "nodes": [
@@ -657,10 +659,36 @@ data:
         },
         {{- end }}{{/* .Values.roadLocks.enabled */}}
 
+        {{- if .Values.etaDisplayOptions.enabled }}
+        "eta_display_options": [
+          {
+            "interval_start": 0,
+            "strategy": "threshold",
+            "value": 60
+          },
+          {
+            "interval_start": 900,
+            "strategy": "threshold",
+            "value": 120
+          },
+          {
+            "interval_start": 1500,
+            "strategy": "threshold",
+            "value": 180
+          },
+          {
+            "interval_start": 2100,
+            "strategy": "percent",
+            "value": 10
+          }
+        ],
+        {{- end}}{{/* .Values.etaDisplayOptions.enabled */}}
+
         {{- if .Values.naviback.additionalSections }}
           {{- include "tplvalues.render" ( dict "value" .Values.naviback.additionalSections "context" $) | nindent 8 }}
         {{- end }}
         "server_info": {
+          "container_image": {{ printf "%s/%s:%s" .Values.dgctlDockerRegistry .Values.image.repository .Values.image.tag | quote }},
           "tiles_metrics_threshold": {{ .Values.naviback.tilesMetricsThreshold | int }},
           "simple_network_car": {{ include "config.setSimpleNetworkCar" $ | default false -}},
           "simple_network_pedestrian": {{ include "config.setSimpleNetworkPedestrian" $ | default false -}},

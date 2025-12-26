@@ -31,6 +31,7 @@ data:
         "port": {{ .Values.attractor.appPort }},
         "handlers_number": {{ .Values.attractor.handlersNumber | int }},
         "log_verbose": false,
+        "queue_size": {{ .Values.attractor.queueSize | int }},
         "max_process_time": {{ .Values.attractor.maxProcessTime | int }},
         "response_timelimit": {{ .Values.attractor.responseTimelimit | int }},
         "request_timeout": {{ .Values.attractor.requestTimeout | int }},
@@ -290,6 +291,7 @@ data:
           {{- include "tplvalues.render" ( dict "value" .Values.attractor.additional_sections "context" $) | nindent 8 }}
         {{- end }}
         "server_info": {
+          "container_image": {{ printf "%s/%s:%s" .Values.dgctlDockerRegistry .Values.image.repository .Values.image.tag | quote }},
           "tiles_metrics_threshold": {{ .Values.attractor.tilesMetricsThreshold | int }},
           "attractor_car" : {{ include "config.setAttractorCar" $ | default false -}},
           "attractor_pedestrian" : {{ include "config.setAttractorPedestrian" $ | default false -}},

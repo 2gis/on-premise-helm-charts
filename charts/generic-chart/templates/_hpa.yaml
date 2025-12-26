@@ -1,6 +1,8 @@
 {{- define "generic-chart.hpa.tpl" -}}
 {{ $ctx := . }}
-{{- if (.Values.hpa).enabled }}
+{{- $hpa := (.Values.hpa | default dict) -}}
+{{ $enabled := (hasKey $hpa "enabled") | ternary $hpa.enabled true }}
+{{- if $enabled }}
 apiVersion: {{ include "generic-chart.capabilities.hpa.apiVersion" . }}
 kind: HorizontalPodAutoscaler
 metadata:
@@ -12,8 +14,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "generic-chart.fullname" . }}
-  minReplicas: {{ (.Values.hpa).minReplicas }}
-  maxReplicas: {{ (.Values.hpa).maxReplicas }}
+  minReplicas: {{ default 1 (.Values.hpa).minReplicas }}
+  maxReplicas: {{ default 2 (.Values.hpa).maxReplicas }}
   behavior:
     {{- if (.Values.hpa).scaleUp }}
     scaleUp:
@@ -24,12 +26,12 @@ spec:
       {{- include "tplvalues.render" (dict "value" (.Values.hpa).scaleDown "context" $ctx) | nindent 8 }}
     {{- end }}
   metrics:
-    {{- if (.Values.hpa).targetCPUUtilizationPercentage }}
+    {{- if or (not (hasKey .Values "hpa")) ((.Values.hpa).targetCPUUtilizationPercentage) }}
     - {{- include "generic-chart.capabilities.hpa.type" . | nindent 6 }}
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ (.Values.hpa).targetCPUUtilizationPercentage }}
+          averageUtilization: {{ default 80 (.Values.hpa).targetCPUUtilizationPercentage }}
     {{- end }}
     {{- if (.Values.hpa).targetMemoryUtilizationPercentage }}
     - {{- include "generic-chart.capabilities.hpa.type" . | nindent 6 }}

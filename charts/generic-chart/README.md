@@ -48,10 +48,11 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 ### Common settings
 
-| Name               | Description                                                                 | Value |
-| ------------------ | --------------------------------------------------------------------------- | ----- |
-| `nameOverride`     | Base name to use in all the Kubernetes entities deployed by this chart.     | `""`  |
-| `fullnameOverride` | Base fullname to use in all the Kubernetes entities deployed by this chart. | `""`  |
+| Name                    | Description                                                                           | Value |
+| ----------------------- | ------------------------------------------------------------------------------------- | ----- |
+| `nameOverride`          | Base name to use in all the Kubernetes entities deployed by this chart.               | `""`  |
+| `fullnameOverride`      | Base fullname to use in all the Kubernetes entities deployed by this chart.           | `""`  |
+| `containerNameOverride` | Override the default container name used in pod specifications and VPA configurations | `""`  |
 
 ### [Deployment](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/) settings
 
@@ -81,7 +82,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `hpa.enabled`                           | If HPA is enabled for the service                                                                                                                                   | `false` |
 | `hpa.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down                                                                                       | `1`     |
-| `hpa.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up                                                                                         | `100`   |
+| `hpa.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up                                                                                         | `2`     |
 | `hpa.scaleDown`                         | Scale-down settings structure                                                                                                                                       | `{}`    |
 | `hpa.scaleUp`                           | Scale-up settings structure                                                                                                                                         | `{}`    |
 | `hpa.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used       | `80`    |
@@ -89,16 +90,17 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 ### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
 
-| Name                    | Description                                                                                                 | Value          |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------- | -------------- |
-| `vpa.enabled`           | If VPA is enabled for the service                                                                           | `false`        |
-| `vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start) | `Auto`         |
-| `vpa.containerName`     | Name of a container to measure utilization for                                                              | `""`           |
-| `vpa.controlledValues`  | Controlled values, one of: RequestsOnly or RequestsAndLimits                                                | `RequestsOnly` |
-| `vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down                                   |                |
-| `vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down                                         |                |
-| `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up                                     |                |
-| `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up                                           |                |
+| Name                        | Description                                                                                                 | Value          |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------- |
+| `vpa.enabled`               | If VPA is enabled for the service                                                                           | `false`        |
+| `vpa.updateMode`            | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start) | `Auto`         |
+| `vpa.containerName`         | Name of a container to measure utilization for (deprecated, use vpa.containerNameOverride instead)          | `""`           |
+| `vpa.containerNameOverride` | Override the container name specifically for VPA configuration (takes precedence over vpa.containerName)    | `""`           |
+| `vpa.controlledValues`      | Controlled values, one of: RequestsOnly or RequestsAndLimits                                                | `RequestsOnly` |
+| `vpa.minAllowed.cpu`        | Lower limit for the number of CPUs to which the autoscaler can scale down                                   |                |
+| `vpa.minAllowed.memory`     | Lower limit for the RAM size to which the autoscaler can scale down                                         |                |
+| `vpa.maxAllowed.cpu`        | Upper limit for the number of CPUs to which the autoscaler can scale up                                     |                |
+| `vpa.maxAllowed.memory`     | Upper limit for the RAM size to which the autoscaler can scale up                                           |                |
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
