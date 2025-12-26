@@ -76,7 +76,7 @@ spec:
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
           {{- if .Values.proxy.locationDG }}
-            - name: {{ include "generic-chart.name" . }}-secret
+            - name: {{ include "generic-chart.fullname" . }}-secret
               mountPath: /etc/nginx/secrets/api-key.conf
               subPath: api-key.conf
           {{- end }}
@@ -89,9 +89,9 @@ spec:
           configMap:
             name: {{ include "generic-chart.fullname" . }}
       {{- if .Values.proxy.locationDG }}
-        - name: {{ include "generic-chart.name" . }}-secret
+        - name: {{ include "generic-chart.fullname" . }}-secret
           secret:
-            secretName: {{ include "generic-chart.name" . }}-secret
+            secretName: {{ include "generic-chart.fullname" . }}-secret
       {{- end }}
       {{- if .Values.proxy.cache.enabled }}
         - name: trafficcache
