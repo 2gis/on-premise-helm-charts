@@ -17,7 +17,7 @@ spec:
     updateMode: {{ .updateMode | default "Auto" | quote }}
   resourcePolicy:
     containerPolicies:
-      - containerName: {{ include "generic-chart.containerName" $ctx }}
+      - containerName: {{ include "generic-chart.vpaContainerName" $ctx }}
         controlledValues: {{ .controlledValues }}
         mode: Auto
         {{- with .minAllowed }}

@@ -30,3 +30,20 @@ Check for deprecated values
     {{- fail "`requestsSignCheck.enabledKeys` requires `requestsSignCheck.hashSalt`" }}
 {{- end }}
 {{- end }}{{/* check.values */}}
+
+{{/*
+Get count of CPU from limits.
+Usage:
+{{ include "config.setCpuNumber" $ }}
+*/}}
+{{- define "config.setCpuNumber" }}
+{{- $cpu_divider := 1 }}
+{{- $num_threads := 0 }}
+{{- $resources := regexSplit "m" (toString .Values.resources.limits.cpu) -1 }}
+{{- if eq (len $resources) 2 }}
+ {{- $cpu_divider = 1000 }}
+{{- end }}
+{{- $cpu_value := index $resources 0 }}
+{{- $num_threads = ceil (divf $cpu_value $cpu_divider) }}
+{{- print $num_threads }}
+{{- end -}}

@@ -5,14 +5,14 @@ metadata:
 data:
   front.conf: |-
   {{- if .Values.nginx.opentracing.enabled }}
-    opentracing_load_tracer /usr/local/lib/libjaegertracing_plugin.so /etc/nginx/conf.d/jaeger-nginx-config.json;
+    opentracing_load_tracer /usr/local/lib/libjaegertracing_plugin.so {{ include "nginx.jaegerConfigPath" . }};
     opentracing on;
     {{- range $key, $value := .Values.nginx.opentracing.tags }}
     opentracing_tag {{ $key }} {{ $value }};
     {{- end }}
   {{- end }}
 
-    js_import bundle.js;
+    js_import /etc/nginx/bundle.js;
 
     {{- if .Values.front.tsp_carrouting.enabled }}
     upstream {{ .Values.front.tsp_carrouting.host }} {
@@ -71,7 +71,7 @@ data:
     }
 
     {{- if .Values.serverBlock }}
-    include /etc/nginx/conf.d/extra/server-block.conf;
+    {{ printf "include %s/conf.d/extra/server-block.conf;" ( include "nginx.customConfigPath" .) }}
     {{- end }}
 
     server {
@@ -108,7 +108,7 @@ data:
 
         {{- if .Values.locationsBlock }}
         # comes before default locations taking precedence
-        include /etc/nginx/conf.d/extra/locations-block.conf;
+        {{ printf "include %s/conf.d/extra/locations-block.conf;" ( include "nginx.customConfigPath" .) }}
         {{- end }}
 
         location ~* ^/get_dist_matrix$ {

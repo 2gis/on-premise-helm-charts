@@ -18,7 +18,7 @@ spec:
         emptyDir: {}
       {{- end }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: &containerName {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
@@ -86,6 +86,8 @@ spec:
             {{- end }}
             - name: TZ
               value: {{ .Values.timezone | quote }}
+            - name: CONTAINER_NAME
+              value: *containerName
           lifecycle:
             # wait for the endpoint removal process
             preStop:

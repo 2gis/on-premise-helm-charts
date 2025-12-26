@@ -1,3 +1,45 @@
+## [2.48.0] (2025-12-26)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2480)
+#### Images
+```
+navi-async-matrix
+	- navi-async-matrix:1.19.3
+	+ navi-async-matrix:1.20.1
+	- navi-merger-async-matrix:1.19.3
+	+ navi-merger-async-matrix:1.20.1
+navi-attractor
+	- navi-attractor:7.47.1.3
+	+ navi-attractor:7.49.0.3
+navi-back
+	- navi-back:7.47.1.3
+	+ navi-back:7.49.0.3
+navi-castle
+	- navi-front:1.26.0
+	+ navi-front:1.28.1
+navi-front
+	- navi-front:1.26.0
+	+ navi-front:1.28.1
+navi-router
+	- navi-router:6.35.0.3
+	+ navi-router:6.38.0.2
+navi-splitter
+	- navi-splitter:1.11.1
+	+ navi-splitter:1.15.0
+stat-api
+	+ stat-api-migrate:0.2.0
+	+ stat-api:0.2.0
+tiles-api
+	- tiles-api-importer:4.80.0
+	+ tiles-api-importer:4.80.3
+	- tiles-api-importer:4.80.0
+	+ tiles-api-importer:4.80.3
+	- tiles-api-proxy:4.80.0
+	+ tiles-api-proxy:4.80.3
+	- tiles-api:4.80.0
+	+ tiles-api:4.80.3
+```
+[Full list of image versions](platform_image_versions.txt)
+
 ## [2.47.1] (2025-12-11)
 
 #### Images

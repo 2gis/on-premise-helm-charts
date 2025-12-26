@@ -327,10 +327,9 @@ dm:
   url: ''
   key: ''
 
-# @skip bss.enabled
-# @skip bss.url
-# @skip bss.version
+# @param stat.enabled Is integration with statistic service enabled
+# @param stat.url URL of the statistic service (e.g - http(s)://stat-receiver/bss/3). **Required** if integration with statistic service enabled
 
-bss:
+stat:
   enabled: false
   url: ''

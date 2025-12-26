@@ -170,14 +170,16 @@ castle:
 # @param nginx.image.tag Navi-Front image tag.
 # @param nginx.nodeHeader Enable header with node name (X-Node).
 # @param nginx.locationsBlock Optional nginx config block with additional locations
+# @param nginx.customConfigPath Path to custom nginx config file. If set, default config will be ignored.
 
 nginx:
   port: 8080
   image:
     repository: 2gis-on-premise/navi-front
-    tag: 1.26.0
+    tag: 1.28.1
   nodeHeader: false
   locationsBlock: ''
+  customConfigPath: ''
 
 
 # @section Cron settings

@@ -191,7 +191,9 @@
 
 ### API Distance Matrix Async service
 
-| Name     | Description                                       | Value |
-| -------- | ------------------------------------------------- | ----- |
-| `dm.url` | Distance Matrix Async service URL. **Required**   | `""`  |
-| `dm.key` | API key to authorize at the service. **Required** | `""`  |
+| Name           | Description                                                                                                                    | Value   |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `dm.url`       | Distance Matrix Async service URL. **Required**                                                                                | `""`    |
+| `dm.key`       | API key to authorize at the service. **Required**                                                                              | `""`    |
+| `stat.enabled` | Is integration with statistic service enabled                                                                                  | `false` |
+| `stat.url`     | URL of the statistic service (e.g - http(s)://stat-receiver/bss/3). **Required** if integration with statistic service enabled | `""`    |

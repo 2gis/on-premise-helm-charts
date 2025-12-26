@@ -28,43 +28,46 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Common settings
 
-| Name                                 | Description                                                                                                                 | Value  |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `replicaCount`                       | A replica count for the pod.                                                                                                | `1`    |
-| `imagePullSecrets`                   | Kubernetes image pull secrets.                                                                                              | `[]`   |
-| `nameOverride`                       | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`   |
-| `fullnameOverride`                   | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`   |
-| `podAnnotations`                     | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`   |
-| `podLabels`                          | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`   |
-| `annotations`                        | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
-| `labels`                             | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
-| `podSecurityContext`                 | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).              | `{}`   |
-| `securityContext`                    | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                  | `{}`   |
-| `nodeSelector`                       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`   |
-| `tolerations`                        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`   |
-| `affinity`                           | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`   |
-| `priorityClassName`                  | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                | `""`   |
-| `terminationGracePeriodSeconds`      | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).           | `60`   |
-| `prometheusEnabled`                  | If Prometheus scrape is enabled.                                                                                            | `true` |
-| `livenessProbe.enabled`              | Enable livenessProbe.                                                                                                       | `true` |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe.                                                                                    | `20`   |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe.                                                                                           | `5`    |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe.                                                                                          | `3`    |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe.                                                                                        | `5`    |
-| `readinessProbe.enabled`             | Enable readinessProbe.                                                                                                      | `true` |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe.                                                                                   | `10`   |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe.                                                                                          | `5`    |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe.                                                                                         | `3`    |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe.                                                                                       | `3`    |
-| `customLivenessProbe`                | Override default liveness probe.                                                                                            | `{}`   |
-| `customReadinessProbe`               | Override default readiness probe.                                                                                           | `{}`   |
+| Name                              | Description                                                                                                                 | Value  |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `replicaCount`                    | A replica count for the pod.                                                                                                | `1`    |
+| `imagePullSecrets`                | Kubernetes image pull secrets.                                                                                              | `[]`   |
+| `nameOverride`                    | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`   |
+| `fullnameOverride`                | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`   |
+| `podAnnotations`                  | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`   |
+| `podLabels`                       | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`   |
+| `annotations`                     | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
+| `labels`                          | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
+| `podSecurityContext`              | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).              | `{}`   |
+| `securityContext`                 | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                  | `{}`   |
+| `nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`   |
+| `tolerations`                     | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`   |
+| `affinity`                        | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`   |
+| `priorityClassName`               | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                | `""`   |
+| `terminationGracePeriodSeconds`   | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).           | `60`   |
+| `prometheusEnabled`               | If Prometheus scrape is enabled.                                                                                            | `true` |
+| `livenessProbe.enabled`           | Enable livenessProbe.                                                                                                       | `true` |
+| `livenessProbe.periodSeconds`     | Period seconds for livenessProbe.                                                                                           | `15`   |
+| `livenessProbe.timeoutSeconds`    | Timeout seconds for livenessProbe.                                                                                          | `5`    |
+| `livenessProbe.failureThreshold`  | Failure threshold for livenessProbe.                                                                                        | `5`    |
+| `readinessProbe.enabled`          | Enable readinessProbe.                                                                                                      | `true` |
+| `readinessProbe.periodSeconds`    | Period seconds for readinessProbe.                                                                                          | `15`   |
+| `readinessProbe.timeoutSeconds`   | Timeout seconds for readinessProbe.                                                                                         | `5`    |
+| `readinessProbe.failureThreshold` | Failure threshold for readinessProbe.                                                                                       | `3`    |
+| `startupProbe.enabled`            | Enable startupProbe.                                                                                                        | `true` |
+| `startupProbe.periodSeconds`      | Period seconds for startupProbe.                                                                                            | `15`   |
+| `startupProbe.timeoutSeconds`     | Timeout seconds for startupProbe.                                                                                           | `5`    |
+| `startupProbe.failureThreshold`   | Failure threshold for startupProbe.                                                                                         | `60`   |
+| `customLivenessProbe`             | Override default liveness probe.                                                                                            | `{}`   |
+| `customReadinessProbe`            | Override default readiness probe.                                                                                           | `{}`   |
+| `customStartupProbe`              | Override default startup probe.                                                                                             | `{}`   |
 
 ### Deployment settings
 
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.19.3`                            |
+| `image.tag`        | Tag         | `1.20.1`                            |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings
@@ -143,24 +146,36 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Distance Matrix Async API settings
 
-| Name                                  | Description                                                                                                                   | Value                                      |
-| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `dm.port`                             | Distance Matrix Async API HTTP port.                                                                                          | `8000`                                     |
-| `dm.configType`                       | Configuration type. Must always be `env`.                                                                                     | `env`                                      |
-| `dm.logLevel`                         | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                 | `INFO`                                     |
-| `dm.logFormat`                        | Logging format, one of: 'plaintext' (default), 'json'                                                                         | `plaintext`                                |
-| `dm.workerCount`                      | Number of Distance Matrix Async workers.                                                                                      | `4`                                        |
-| `dm.citiesUrl`                        | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`                                       |
-| `dm.citiesUpdatePeriod`               | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600`                                     |
-| `dm.compositeTaskTimeoutSec`          | Timeout for executing split tasks.                                                                                            | `3600`                                     |
-| `dm.configFilepath`                   | Configs mountpoint path                                                                                                       | `/etc/2gis/`                               |
-| `dm.merger.image.repository`          | Image repository for merger.                                                                                                  | `2gis-on-premise/navi-merger-async-matrix` |
-| `dm.merger.image.tag`                 | Image tag for merger.                                                                                                         | `1.19.3`                                   |
-| `dm.merger.replicaCount`              | A replica count for the arhiver.                                                                                              | `1`                                        |
-| `dm.merger.resources.requests.cpu`    | Merger CPU request. 1CPU recommended.                                                                                         |                                            |
-| `dm.merger.resources.requests.memory` | Merger memory request. 10Gi recommended.                                                                                      |                                            |
-| `dm.merger.resources.limits.cpu`      | Merger CPU limit. 1CPU recommended.                                                                                           |                                            |
-| `dm.merger.resources.limits.memory`   | Merger memory limit. 20Gi recommended.                                                                                        |                                            |
+| Name                                           | Description                                                                                                                   | Value                                      |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| `dm.port`                                      | Distance Matrix Async API HTTP port.                                                                                          | `8000`                                     |
+| `dm.configType`                                | Configuration type. Must always be `env`.                                                                                     | `env`                                      |
+| `dm.logLevel`                                  | Logging level, one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.                                                                 | `INFO`                                     |
+| `dm.logFormat`                                 | Logging format, one of: 'plaintext' (default), 'json'                                                                         | `plaintext`                                |
+| `dm.workerCount`                               | Number of Distance Matrix Async workers.                                                                                      | `4`                                        |
+| `dm.citiesUrl`                                 | URL of the information about cities provided by the Navi-Castle service, ex: http://navi-castle.svc/cities.conf. **Required** | `""`                                       |
+| `dm.citiesUpdatePeriod`                        | Period (in seconds) between requesting data from `citiesUrl`.                                                                 | `3600`                                     |
+| `dm.compositeTaskTimeoutSec`                   | Timeout for executing split tasks.                                                                                            | `3600`                                     |
+| `dm.configFilepath`                            | Configs mountpoint path                                                                                                       | `/etc/2gis/`                               |
+| `dm.merger.image.repository`                   | Image repository for merger.                                                                                                  | `2gis-on-premise/navi-merger-async-matrix` |
+| `dm.merger.image.tag`                          | Image tag for merger.                                                                                                         | `1.20.1`                                   |
+| `dm.merger.replicaCount`                       | A replica count for the arhiver.                                                                                              | `1`                                        |
+| `dm.merger.livenessProbe.enabled`              | Enable livenessProbe for merger.                                                                                              | `true`                                     |
+| `dm.merger.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe for merger.                                                                           | `20`                                       |
+| `dm.merger.livenessProbe.periodSeconds`        | Period seconds for livenessProbe for merger.                                                                                  | `5`                                        |
+| `dm.merger.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe for merger.                                                                                 | `3`                                        |
+| `dm.merger.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe for merger.                                                                               | `5`                                        |
+| `dm.merger.readinessProbe.enabled`             | Enable readinessProbe for merger.                                                                                             | `true`                                     |
+| `dm.merger.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe for merger.                                                                          | `10`                                       |
+| `dm.merger.readinessProbe.periodSeconds`       | Period seconds for readinessProbe for merger.                                                                                 | `5`                                        |
+| `dm.merger.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe for merger.                                                                                | `3`                                        |
+| `dm.merger.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe for merger.                                                                              | `3`                                        |
+| `dm.merger.customLivenessProbe`                | Override default liveness probe for merger.                                                                                   | `{}`                                       |
+| `dm.merger.customReadinessProbe`               | Override default readiness probe for merger.                                                                                  | `{}`                                       |
+| `dm.merger.resources.requests.cpu`             | Merger CPU request. 1CPU recommended.                                                                                         |                                            |
+| `dm.merger.resources.requests.memory`          | Merger memory request. 10Gi recommended.                                                                                      |                                            |
+| `dm.merger.resources.limits.cpu`               | Merger CPU limit. 1CPU recommended.                                                                                           |                                            |
+| `dm.merger.resources.limits.memory`            | Merger memory limit. 20Gi recommended.                                                                                        |                                            |
 
 ### Database settings
 
@@ -204,6 +219,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `kafka.attractTopic`                          | Name of the topic for for attract tasks results                                                                           | `""`                       |
 | `kafka.oneToManyTopic`                        | Name of the topic for oneToMany tasks results                                                                             | `""`                       |
 | `kafka.vrpStatusTopic`                        | Name of the topic for VRP service integration                                                                             | `""`                       |
+| `kafka.findPlatformTopic`                     | Name of the topic for Find Platform                                                                                       | `""`                       |
 | `kafka.properties`                            | Properties as supported by kafka-python. Refer to inline comments for details.                                            |                            |
 | `kafka.sensitiveProperties`                   | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                       |
 | `kafka.fileProperties`                        | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                       |
@@ -218,6 +234,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `kafka.taskTopicRules[].default`              | If this topic is used for projects by default.                                                                            |                            |
 | `kafka.taskTopicRules[].type`                 | Routing type for tasks in the topic (`car`, `truck`), defaults to `car`                                                   |                            |
 | `kafka.taskTopicRules[].projects`             | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                            |
+| `kafka.findPlatformTopicRules`                | ** Rules to map request type to topic for Find Platform **                                                                | `[]`                       |
+| `kafka.findPlatformTopicRules[0].topic`       |                                                                                                                           |                            |
+| `kafka.findPlatformTopicRules[0].type`        |                                                                                                                           |                            |
+| `kafka.findPlatformTopicRules[0].default`     |                                                                                                                           |                            |
 | `kafka.attractTopicRules`                     | ** Rules to map request type to topic for attract tasks **                                                                | `[]`                       |
 | `kafka.attractTopicRules[0].topic`            | Name of the topic.                                                                                                        |                            |
 | `kafka.attractTopicRules[0].default`          | If this topic is used for projects by default.                                                                            |                            |
@@ -226,24 +246,25 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### S3-compatible storage settings
 
-| Name                | Description                                                                                    | Value |
-| ------------------- | ---------------------------------------------------------------------------------------------- | ----- |
-| `s3.host`           | S3 endpoint URL, ex: http://async-matrix-s3.host. **Required**                                 | `""`  |
-| `s3.bucket`         | S3 bucket name. **Required**                                                                   | `""`  |
-| `s3.region`         | S3 region.                                                                                     | `""`  |
-| `s3.accessKey`      | S3 access key for accessing the bucket. **Required**                                           | `""`  |
-| `s3.secretKey`      | S3 secret key for accessing the bucket. **Required**                                           | `""`  |
-| `s3.publicUrl`      | Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://` | `""`  |
-| `s3.publicNetloc`   | DEPRECATED alias for `s3.publicUrl`                                                            |       |
-| `s3.expirationDays` | How many days to store results                                                                 | `14`  |
+| Name                | Description                                                                                                                    | Value   |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `s3.host`           | S3 endpoint URL, ex: http://async-matrix-s3.host. **Required**                                                                 | `""`    |
+| `s3.bucket`         | S3 bucket name. **Required**                                                                                                   | `""`    |
+| `s3.region`         | S3 region.                                                                                                                     | `""`    |
+| `s3.accessKey`      | S3 access key for accessing the bucket. **Required**                                                                           | `""`    |
+| `s3.secretKey`      | S3 secret key for accessing the bucket. **Required**                                                                           | `""`    |
+| `s3.publicUrl`      | Announce proxy URL for S3 results instead of s3.url if not empty. Must start with `http(s)://`                                 | `""`    |
+| `s3.publicNetloc`   | DEPRECATED alias for `s3.publicUrl`                                                                                            |         |
+| `s3.expirationDays` | How many days to store results                                                                                                 | `14`    |
+| `stat.enabled`      | Is integration with statistic service enabled                                                                                  | `false` |
+| `stat.url`          | URL of the statistic service (e.g - http(s)://stat-receiver/bss/3). **Required** if integration with statistic service enabled | `""`    |
 
 ### API keys service
 
-| Name              | Description                                                                    | Value |
-| ----------------- | ------------------------------------------------------------------------------ | ----- |
-| `keys.url`        | API keys service URL, ex: http://keys-api.svc/service/v1/keys. **Required**    | `""`  |
-| `keys.token`      | API token to authorize at the service. Required if truck car routing in use.   | `""`  |
-| `keys.truckToken` | Truck API token to authorize at the service. Required if truck routing in use. | `""`  |
+| Name         | Description                                                                  | Value |
+| ------------ | ---------------------------------------------------------------------------- | ----- |
+| `keys.url`   | API keys service URL, ex: http://keys-api.svc/service/v1/keys. **Required**  | `""`  |
+| `keys.token` | API token to authorize at the service. Required if truck car routing in use. | `""`  |
 
 ### customCAs **Custom Certificate Authority**
 
