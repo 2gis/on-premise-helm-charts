@@ -48,7 +48,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | Name               | Description | Value                   |
 | ------------------ | ----------- | ----------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/mapgl` |
-| `image.tag`        | Tag         | `1.67.0`                |
+| `image.tag`        | Tag         | `1.69.0`                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
 
 ### Environment variables
@@ -59,6 +59,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `env.MAPGL_HOST`                | URL for MapGL JS API service, e.g. 'https://mapgl-api.ingress.host'                                                                               | `""`                                                                                              |
 | `env.MAPGL_TILES_API`           | URL of the Tiles API service, e.g. 'https://tiles-api.ingress.host'                                                                               | `""`                                                                                              |
 | `env.MAPGL_TILESET`             | Tileset of the Tiles API service to use.                                                                                                          | `web`                                                                                             |
+| `env.MAPGL_RELIEF_TILESET`      | Tileset of the terrain.                                                                                                                           | `dem`                                                                                             |
 | `env.MAPGL_IMMERSIVE_TILESET`   | Additional immersive tileset of the Tiles API service to use.                                                                                     | `web_immersive`                                                                                   |
 | `env.MAPGL_TRAFFICSERVER`       | Domain name of the Traffic Proxy service, e.g. 'https://traffic-proxy.ingress.host'                                                               | `https://traffic-proxy.ingress.host`                                                              |
 | `env.MAPGL_STYLESERVER`         | URL of the Styles API service, e.g. 'https://styles.ingress.host'                                                                                 | `""`                                                                                              |
