@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "service.api.name" . }}
+  name: {{ include "keys.serviceAPI.name" . }}
   {{- if or .Values.serviceApi.annotations .Values.customCAs.bundle }}
   annotations:
     {{- if .Values.customCAs.bundle }}
@@ -17,7 +17,7 @@ metadata:
     manifest: {{ . | quote }}
     {{- end }}
     {{- end }}
-    {{- include "service.api.labels" . | nindent 4 }}
+    {{- include "keys.serviceAPI.labels" . | nindent 4 }}
     {{- with .Values.serviceApi.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -30,7 +30,7 @@ spec:
     {{- toYaml .Values.serviceApi.strategy | nindent 4 }}
   selector:
     matchLabels:
-      {{- include "service.api.selectorLabels" . | nindent 6 }}
+      {{- include "keys.serviceAPI.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.serviceApi.podAnnotations }}
@@ -38,7 +38,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "service.api.labels" . | nindent 8 }}
+        {{- include "keys.serviceAPI.labels" . | nindent 8 }}
         {{- with .Values.serviceApi.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -52,7 +52,7 @@ spec:
         - name: service-api
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.serviceApiBackend.image.repository }}:{{ .Values.backend.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          command: [ "service-api" ]
+          command: [ "keys-service-api" ]
           ports:
             - name: http
               containerPort: 8080

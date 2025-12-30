@@ -2,16 +2,12 @@
 {{- .Release.Name | trunc 32 | trimSuffix "-" }}
 {{- end }}
 
-{{- define "serviceApi.name" -}}
-{{- .Release.Name | trunc 32 | trimSuffix "-" }}
-{{- end }}
-
 {{- define "keys.api.name" -}}
 {{ include "keys.name" . }}-api
 {{- end }}
 
-{{- define "service.api.name" -}}
-{{ include "serviceApi.name" . }}-service-api
+{{- define "keys.serviceAPI.name" -}}
+{{- .Release.Name | trunc 32 | trimSuffix "-" }}-service-api
 {{- end }}
 
 {{- define "keys.tasker.name" -}}
@@ -65,13 +61,13 @@ app.kubernetes.io/name: {{ .Chart.Name }}-api
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{- define "service.api.selectorLabels" -}}
+{{- define "keys.serviceAPI.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-service-api
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{- define "service.api.labels" -}}
-{{ include "service.api.selectorLabels" . }}
+{{- define "keys.serviceAPI.labels" -}}
+{{ include "keys.serviceAPI.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 

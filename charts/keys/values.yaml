@@ -33,12 +33,7 @@ featureFlags:
 
 backend:
   image:
-    repository: service-keys/zuul
-    tag: 1.147.1
-
-serviceApiBackend:
-  image:
-    repository: service-keys/zuul
+    repository: 2gis-on-premise/keys-backend
     tag: 1.147.1
 
 # @section Admin service settings
