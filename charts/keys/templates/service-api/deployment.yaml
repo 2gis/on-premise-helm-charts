@@ -50,7 +50,7 @@ spec:
       {{- end }}
       containers:
         - name: service-api
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.serviceApiBackend.image.repository }}:{{ .Values.backend.image.tag }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           command: [ "keys-service-api" ]
           ports:

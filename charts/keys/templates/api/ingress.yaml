@@ -40,14 +40,12 @@ spec:
                 name: {{ include "keys.serviceAPI.name" $ }}
                 port:
                   number: {{ $.Values.serviceApi.service.port }}
-          {{- range .paths }}
-          - path: {{ .path }}
+          - path: "/"
             pathType: Prefix
             backend:
               service:
-                name: {{ include "keys.api.name" $ }}
+                name:{{ include "keys.api.name" $ }}
                 port:
                   number: {{ $.Values.api.service.port }}
-          {{- end }}
     {{- end }}
 {{- end }}
