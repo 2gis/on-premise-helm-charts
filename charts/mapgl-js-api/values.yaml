@@ -137,10 +137,10 @@ ingress:
 resources:
   requests:
     cpu: 30m
-    memory: 32M
+    memory: 32Mi
   limits:
     cpu: 100m
-    memory: 96M
+    memory: 96Mi
 
 
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings

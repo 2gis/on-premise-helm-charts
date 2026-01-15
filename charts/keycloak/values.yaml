@@ -668,10 +668,10 @@ keycloakConfigCli:
   resources:
     requests:
       cpu: 500m
-      memory: 256M
+      memory: 256Mi
     limits:
       cpu: 1
-      memory: 512M
+      memory: 512Mi
 
   containerSecurityContext:
     enabled: true

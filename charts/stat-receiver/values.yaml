@@ -94,10 +94,10 @@ streams:
   resources:
     requests:
       cpu: 1
-      memory: 4G
+      memory: 4Gi
     limits:
       cpu: 2
-      memory: 4G
+      memory: 4Gi
 
 
 # @section Kafka service settings

@@ -322,7 +322,7 @@ stylesImporter:
   resources:
     requests:
       cpu: 700m
-      memory: 768M
+      memory: 768Mi
     limits:
       cpu: 1000m
       memory: 8Gi
