@@ -1,0 +1,114 @@
+{{- if .Values.onpremise }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-data-adapter
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+    search/part: data-adapter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "search-api-v8.selectorLabels" . | nindent 6 }}
+    {{- with .Values.dataAdapter.matchLabels }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}{{- /* .Values.dataAdapter.matchLabels */}}
+      search/part: data-adapter
+  template:
+    metadata:
+      annotations:
+      {{- with .Values.dataAdapter.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.dataAdapter.podAnnotations */}}
+        checksum/config: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: {{ .Values.dataAdapter.ports.http | quote }}
+        prometheus.io/scrape: "true"
+      labels:
+        {{- include "search-api-v8.labels" . | nindent 8 }}
+        search/part: data-adapter
+      {{- with .Values.dataAdapter.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.dataAdapter.podLabels */}}
+    spec:
+      {{- with .Values.dataAdapter.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.dataAdapter.imagePullSecrets */}}
+      serviceAccountName: {{ include "search-api-v8.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.dataAdapter.podSecurityContext | nindent 8 }}
+      containers:
+        - name: data-adapter
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.dataAdapter.image.repository }}:{{ .Values.dataAdapter.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.dataAdapter.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.dataAdapter.resources | nindent 12 }}
+          env:
+            - name: GIN_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "search-api-v8.fullname" . }}
+                  key: GIN_MODE
+            - name: s3AccessKey
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "search-api-v8.fullname" . }}
+                  key: s3AccessKey
+            - name: s3SecretKey
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "search-api-v8.fullname" . }}
+                  key: s3SecretKey
+            - name: s3Host
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "search-api-v8.fullname" . }}
+                  key: s3Host
+            {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}{{- /* .Values.customCAs.bundle */}}
+          ports:
+            - name: http
+              containerPort: {{ .Values.dataAdapter.ports.http }}
+          volumeMounts:
+            - name: data-adapter-config
+              mountPath: /app/config.yaml
+              subPath: data-adapter.yaml
+            - name: data-adapter-data
+              mountPath: /data
+          {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          {{- if .Values.dataAdapter.livenessProbe.enabled }}
+          livenessProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataAdapter.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{ end -}}{{- /* .Values.dataAdapter.livenessProbe.enabled */}}
+          {{- if .Values.dataAdapter.readinessProbe.enabled }}
+          readinessProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataAdapter.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{ end -}}{{- /* .Values.dataAdapter.readinessProbe.enabled */}}
+      {{- with .Values.dataAdapter.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.dataAdapter.nodeSelector */}}
+      {{- with .Values.dataAdapter.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.dataAdapter.affinity */}}
+      {{- with .Values.dataAdapter.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.dataAdapter.tolerations */}}
+      volumes:
+        - name: data-adapter-config
+          configMap:
+            name: {{ include "search-api-v8.fullname" . }}
+        - name: data-adapter-data
+          emptyDir:
+            sizeLimit: {{ .Values.dataAdapter.data.resources.requests.storage }}
+        {{- if .Values.customCAs.bundle }}
+        {{- include "search-api-v8.custom.ca.deploys.volumes" . | nindent 8 }}
+        {{- end }}{{- /* .Values.customCAs.bundle */}}
+  {{- end }}{{- /* .Values.onpremise */}}

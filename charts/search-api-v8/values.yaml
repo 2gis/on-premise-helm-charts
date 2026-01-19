@@ -1,0 +1,1855 @@
+# @skip section internal 2gis parametrs
+
+# @skip bluegreen Internal parameters for 2Gis infrastructure
+# @skip owner Internal parameters for 2Gis infrastructure
+
+bluegreen: ''
+owner: ''
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+# @section Worker settings
+
+# @param worker.enabled Enable worker service
+# @param worker.replicaCount Number of worker replicas (used if HPA is disabled)
+# @param worker.matchLabels Selector match labels
+# @param worker.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param worker.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param worker.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param worker.imagePullSecrets Kubernetes image pull secrets
+# @param worker.image.repository Image Repository
+# @param worker.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param worker.image.tag Image Tag
+# @param worker.ports.http HTTP port used by the worker
+# @param worker.ports.grpc gRPC port used by the worker
+# @param worker.loggerLevel Log level of the worker app; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param worker.loggerFormat Log format used by the worker; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. We recommend using `json`
+# @param worker.workerMainThreads Number of main task processor threads
+# @param worker.workerFbThreads Number of fallback task processor threads
+# @param worker.dataUpdateFrequencySec Frequency (in seconds) at which the worker updates data (indexes and RTW)
+# @param worker.rtw.lifeTime Lifetime of Real-Time Weights (in seconds)
+# @param worker.queueLimit Maximum number of tasks in the main task processor queue. If exceeded, tasks are sent to the fallback processor
+# @param worker.executeDebugCommands Enables execution of debug commands (e.g., simulating head or worker crashes)
+# @param worker.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+
+# @skip worker.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra worker.resources.requests.cpu A CPU request, recommended value `1400m`
+# @extra worker.resources.requests.memory A memory request, recommended value `3840Mi`
+# @extra worker.resources.limits.cpu A CPU limit, recommended value `6000m`
+# @extra worker.resources.limits.memory A memory limit, recommended value `6Gi`
+
+# @param worker.livenessProbe.enabled Enable of livenessProbe
+# @param worker.livenessProbe.httpGet.path HTTP path for livenessProbe
+# @param worker.livenessProbe.httpGet.port HTTP port for livenessProbe
+# @param worker.livenessProbe.httpGet.scheme Scheme for livenessProbe
+# @param worker.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param worker.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param worker.livenessProbe.successThreshold Minimum consecutive successes for the readiness probe to be considered successful
+# @param worker.livenessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+
+# @param worker.readinessProbe.enabled Enable readiness probe
+# @param worker.readinessProbe.httpGet.path HTTP path for the readiness probe
+# @param worker.readinessProbe.httpGet.port HTTP port for the readiness probe
+# @param worker.readinessProbe.httpGet.scheme HTTP scheme for the readiness probe
+# @param worker.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param worker.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param worker.readinessProbe.successThreshold Minimum consecutive successes for the readiness probe to be considered successful
+# @param worker.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+
+# @param worker.startupProbe.enabled Enable startup probe
+# @param worker.startupProbe.httpGet.path HTTP path for the startup probe
+# @param worker.startupProbe.httpGet.port HTTP port for the startup probe
+# @param worker.startupProbe.httpGet.scheme HTTP scheme for the startup probe
+# @param worker.startupProbe.initialDelaySeconds Initial delay (in seconds) before starting the startup probe
+# @param worker.startupProbe.timeoutSeconds Timeout (in seconds) for the startup probe
+# @param worker.startupProbe.periodSeconds Interval (in seconds) between startup probe checks
+# @param worker.startupProbe.successThreshold Minimum consecutive successes for the startup probe to be considered successful
+# @param worker.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
+
+# @param worker.prestopHook.enabled Enable or disable the container lifecycle preStop hook
+
+# @param worker.hpa.enabled Enable or disable Horizontal Pod Autoscaler (HPA)
+# @param worker.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down
+# @param worker.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up
+# @param worker.hpa.averageCPUValue Target average CPU utilization (represented as a direct value of requested CPU); if not specified the default autoscaling policy will be used
+# @param worker.hpa.behavior.scaleDown.policies[0].periodSeconds Indicates the length of time in the past for which the policy must hold true
+# @param worker.hpa.behavior.scaleDown.policies[0].type The type of amount by which the pod count should be reduced; This can be a percentage of the current pod count or a specific number of pods
+# @param worker.hpa.behavior.scaleDown.policies[0].value The amount by which the pod count should be increased
+# @param worker.hpa.behavior.scaleDown.stabilizationWindowSeconds The stabilization window is used to restrict the flapping of replica count when the metrics used for scaling keep fluctuating
+# @param worker.hpa.behavior.scaleUp.selectPolicy By setting the value to Min which would select the policy which allows the smallest change in the replica count; Setting the value to Disabled completely disables scaling in that direction
+# @param worker.hpa.behavior.scaleUp.policies[0].periodSeconds Indicates the length of time in the past for which the policy must hold true
+# @param worker.hpa.behavior.scaleUp.policies[0].type The type of amount by which the pod count should be increased; This can be a percentage of the current pod count or a specific number of pods
+# @param worker.hpa.behavior.scaleUp.policies[0].value The amount by which the pod count should be increased
+# @param worker.hpa.behavior.scaleUp.policies[1].type The type of amount by which the pod count should be increased; This can be a percentage of the current pod count or a specific number of pods
+# @param worker.hpa.behavior.scaleUp.policies[1].value The amount by which the pod count should be increased
+# @param worker.hpa.behavior.scaleUp.policies[1].periodSeconds Indicates the length of time in the past for which the policy must hold true
+# @param worker.hpa.behavior.scaleUp.stabilizationWindowSeconds The stabilization window is used to restrict the flapping of replica count when the metrics used for scaling keep fluctuating
+
+# @param worker.vpa.enabled Enable or disable Vertical Pod Autoscaler (VPA)
+# @param worker.vpa.updateMode VPA operating mode: `Off` means VPA will not automatically change resource requests
+
+# @param worker.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param worker.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param worker.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+
+# @param worker.data.persistent.enabled Enable persistent volume for the service
+# @param worker.data.storageClassName Storage class to use. See Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+# @param worker.data.resources.requests.storage Storage volume size
+
+# @param worker.strategy.type Kubernetes deployment strategy. Can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
+# @param worker.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be unavailable during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+# @param worker.strategy.rollingUpdate.maxSurge Maximum number of extra pods that can be created during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+# @param worker.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+# @param worker.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
+# @param worker.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
+
+worker:
+  enabled: true
+  replicaCount: 2
+  matchLabels: {}
+  podLabels: {}
+  podAnnotations: {}
+  podSecurityContext: {}
+  imagePullSecrets: []
+  image:
+    repository: 2gis-on-premise/search-worker
+    pullPolicy: IfNotPresent
+    tag: 8.17.3
+  ports:
+    http: 8092
+    grpc: 8091
+  loggerLevel: info
+  loggerFormat: json
+  workerMainThreads: 4
+  workerFbThreads: 4
+  dataUpdateFrequencySec: 60
+  rtw:
+    lifeTime: 1800
+  syncer:
+    includeProjectKeyRegexp: 'gis\.v4.*'
+    excludeProjectKeyRegexp: '^$'
+  queueLimit: 30
+  executeDebugCommands: false
+  securityContext: {}
+  resources:
+    requests:
+      cpu: 1400m
+      memory: 5500Mi
+    limits:
+      cpu: 6000m
+      memory: 7500Mi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /status
+      port: http-port
+      scheme: HTTP
+    timeoutSeconds: 1
+    periodSeconds: 5
+    successThreshold: 1
+    failureThreshold: 36
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /status
+      port: http-port
+      scheme: HTTP
+    timeoutSeconds: 1
+    periodSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
+  startupProbe:
+    enabled: true
+    httpGet:
+      path: /ready
+      port: http-syncer
+      scheme: HTTP
+    initialDelaySeconds: 30
+    timeoutSeconds: 2
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 200
+  prestopHook:
+    enabled: true
+  hpa:
+    enabled: false
+    minReplicas: 36
+    maxReplicas: 300
+    averageCPUValue: 1200m
+    behavior:
+      scaleDown:
+        policies:
+          - periodSeconds: 180
+            type: Percent
+            value: 3
+        stabilizationWindowSeconds: 1200
+      scaleUp:
+        selectPolicy: Min
+        policies:
+          - periodSeconds: 15
+            type: Percent
+            value: 10
+          - type: Pods
+            value: 5
+            periodSeconds: 15
+        stabilizationWindowSeconds: 30
+  vpa:
+    enabled: false
+    updateMode: Off
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  data:
+    persistent:
+      enabled: false
+    storageClassName: ''
+    resources:
+      requests:
+        storage: 8Gi
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 5%
+      maxSurge: 5%
+  revisionHistoryLimit: 10
+
+# @section Head settings
+
+# @param head.enabled Enable head service
+# @param head.replicaCount Number of head replicas (used if HPA is disabled)
+# @param head.matchLabels Selector match labels
+# @param head.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param head.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param head.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param head.imagePullSecrets Kubernetes image pull secrets
+
+head:
+  enabled: true
+  replicaCount: 1
+  matchLabels: {}
+  podLabels: {}
+  podAnnotations: {}
+  podSecurityContext: {}
+  imagePullSecrets: []
+
+# @param head.head.image.repository Docker image repository
+# @param head.head.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param head.head.image.tag Docker image tag
+# @param head.head.ports.grpc grpc port for requests to the Head service
+# @param head.head.ports.http TCP port for requests to the Head service
+# @param head.head.ports.monitor TCP port for service endpoints such as /metrics, etc.
+# @param head.head.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+
+# @skip head.head.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra head.head.resources.requests.cpu CPU request; recommended value: `900m`
+# @extra head.head.resources.requests.memory Memory request; recommended value: `4600Mi`
+# @extra head.head.resources.limits.cpu CPU limit; recommended value: `2000m`
+# @extra head.head.resources.limits.memory Memory limit; recommended value: `8Gi`
+
+# @param head.head.loggerLevel Log level of the Head app; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param head.head.loggerFormat Log format used by the Head app; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. We recommend using `json`
+
+# @param head.head.livenessProbe.enabled Enable liveness probe
+# @param head.head.livenessProbe.httpGet.path HTTP path for the liveness probe
+# @param head.head.livenessProbe.httpGet.port HTTP port for the liveness probe
+# @param head.head.livenessProbe.httpGet.scheme HTTP scheme for the liveness probe
+# @param head.head.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param head.head.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param head.head.livenessProbe.successThreshold Minimum consecutive successes for the liveness probe to be considered successful
+# @param head.head.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
+
+# @param head.head.readinessProbe.enabled Enable readiness probe
+# @param head.head.readinessProbe.httpGet.path HTTP path for the readiness probe
+# @param head.head.readinessProbe.httpGet.port HTTP port for the readiness probe
+# @param head.head.readinessProbe.httpGet.scheme HTTP scheme for the readiness probe
+# @param head.head.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param head.head.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param head.head.readinessProbe.successThreshold Minimum consecutive successes for the readiness probe to be considered successful
+# @param head.head.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+
+# @param head.head.startupProbe.enabled Enable startup probe
+# @param head.head.startupProbe.httpGet.path HTTP path for the startup probe
+# @param head.head.startupProbe.httpGet.port HTTP port for the startup probe
+# @param head.head.startupProbe.httpGet.scheme HTTP scheme for the startup probe
+# @param head.head.startupProbe.initialDelaySeconds Initial delay (in seconds) before starting the startup probe
+# @param head.head.startupProbe.timeoutSeconds Timeout (in seconds) for the startup probe
+# @param head.head.startupProbe.periodSeconds Interval (in seconds) between startup probe checks
+# @param head.head.startupProbe.successThreshold Minimum consecutive successes for the startup probe to be considered successful
+# @param head.head.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
+
+# @param head.head.allowSearchExtendedParams Allow passing debug parameters in the request
+
+# @param head.head.prestopHook.enabled Enable or disable the container lifecycle preStop hook
+
+# @param head.head.workerQueriesCount Number of parts into which a request is split before being sent to workers (map operation in map-reduce)
+# @param head.head.workerRetryAttempts Number of retry attempts to contact a worker
+# @param head.head.workerTimeoutMs Timeout (in milliseconds) for waiting for a response from a worker
+# @param head.head.adsEnable Enable or disable advertising
+# @param head.head.bigSearchMode.enabled Enable or disable big search (true, false)
+# @param head.head.bigSearchSearchers List of searchers for which big search is enabled. If empty, the search will work as V7, despite the bigSearchMode being enabled.
+# @skip head.head.bigSearchExcludeSegments List of projects to exclude from indexing
+# @param head.head.aiSuggestedQueries.enabled Enable or disable AI Suggested Queries
+# @param head.head.executeDebugCommands Enable execution of debug commands (e.g., simulating head or worker crashes)
+
+# @param head.head.throttle.enabled Enable or disable big search throttling
+# @param head.head.throttle.threshold Threshold value beyond which throttling is activated
+# @param head.head.throttle.engageFactor Throttling engage rate
+# @param head.head.throttle.releaseFactor Throttling release rate
+# @param head.head.throttle.updateIntervalSeconds Interval (in seconds) for updating the throttling level
+# @param head.head.throttle.inputMetric.updateIntervalSeconds Interval (in seconds) for updating the input metric value
+# @param head.head.throttle.inputMetric.calculateForPeriods Number of update periods to use for input metric calculation
+# @param head.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
+# @param head.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
+
+  head:
+    image:
+      repository: 2gis-on-premise/search-head
+      pullPolicy: IfNotPresent
+      tag: 8.17.3
+    ports:
+      grpc: 9010
+      http: 9090
+      monitor: 9091
+    securityContext: {}
+    resources:
+      requests:
+        cpu: 900m
+        memory: 4600Mi
+      limits:
+        cpu: 2000m
+        memory: 8Gi
+    loggerLevel: info
+    loggerFormat: json
+    livenessProbe:
+      enabled: true
+      httpGet:
+        path: /v2/status
+        port: http-nginx
+        scheme: HTTP
+      timeoutSeconds: 1
+      periodSeconds: 5
+      successThreshold: 1
+      failureThreshold: 36
+    readinessProbe:
+      enabled: true
+      httpGet:
+        path: /status
+        port: http-sapphire
+        scheme: HTTP
+      timeoutSeconds: 1
+      periodSeconds: 5
+      successThreshold: 1
+      failureThreshold: 3
+    startupProbe:
+      enabled: true
+      httpGet:
+        path: /ready
+        port: http-syncer
+        scheme: HTTP
+      initialDelaySeconds: 30
+      timeoutSeconds: 2
+      periodSeconds: 10
+      successThreshold: 1
+      failureThreshold: 200
+    allowSearchExtendedParams: false
+    prestopHook:
+      enabled: true
+    workerQueriesCount: 32
+    workerRetryAttempts: 1
+    workerTimeoutMs: 2000
+    adsEnable: false
+    bigSearchMode:
+      enabled: true
+    bigSearchSearchers:
+      - ExpandingSearcher
+# ExpandingSearcher is the default searcher, for additional serchers look docs in docs.2gis.com
+# possible values of searchers
+#      - ExpandingSearcher
+#      - Suggestor2
+#      - GeoUniSearcher
+#      - AddressSuggestor
+#      - SearcherByPhone
+# For additional information look docs in docs.2gis.com
+
+    bigSearchExcludeSegments: []
+    aiSuggestedQueries:
+      enabled: false
+    executeDebugCommands: false
+    throttle:
+      enabled: false
+      threshold: 300
+      engageFactor: 60
+      releaseFactor: 20
+      updateIntervalSeconds: 1
+      inputMetric:
+        updateIntervalSeconds: 5
+        calculateForPeriods: 12
+  syncer:
+    includeProjectKeyRegexp: 'gis\.v4.*'
+    excludeProjectKeyRegexp: '^$'
+
+# @param head.nginx.image.repository Docker image repository
+# @param head.nginx.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param head.nginx.image.tag Docker image tag
+# @param head.nginx.ports.http HTTP port used by Nginx
+# @param head.nginx.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+
+# @skip head.nginx.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra head.nginx.resources.requests.cpu CPU request; recommended value: `100m`
+# @extra head.nginx.resources.requests.memory Memory request; recommended value: `64Mi`
+# @extra head.nginx.resources.limits.cpu CPU limit; recommended value: `250m`
+# @extra head.nginx.resources.limits.memory Memory limit; recommended value: `256Mi`
+
+# @param head.nginx.keepAliveCount Maximum number of idle keepalive connections to upstream servers
+# @param head.nginx.enableAccessLog Enable or disable access logs for each request (disabled to reduce log volume)
+# @param head.nginx.logLevel Log level for Nginx; can be `trace`, `debug`, `info`, `warn`, `error`, or `critical`
+
+  nginx:
+    image:
+      repository: 2gis-on-premise/search-nginx
+      pullPolicy: IfNotPresent
+      tag: 1.25.11
+    ports:
+      http: 8080
+    securityContext: {}
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+      limits:
+        cpu: 250m
+        memory: 256Mi
+    keepAliveCount: 100
+    enableAccessLog: false
+    logLevel: warn
+
+# @param head.envoy.image.repository Docker image repository
+# @param head.envoy.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param head.envoy.image.tag Docker image tag
+# @param head.envoy.ports.admin Web access port for the Envoy admin console
+# @param head.envoy.ports.grpc gRPC port used by Envoy
+# @param head.envoy.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+
+# @skip head.envoy.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra head.envoy.resources.requests.cpu CPU request; recommended value: `200m`
+# @extra head.envoy.resources.requests.memory Memory request; recommended value: `128Mi`
+# @extra head.envoy.resources.limits.cpu CPU limit; recommended value: `800m`
+# @extra head.envoy.resources.limits.memory Memory limit; recommended value: `512Mi`
+
+# @param head.envoy.enableAccessLog Enable or disable logging of requests passing through Envoy
+# @param head.envoy.policy Load balancing policy; can be `ROUND_ROBIN`, `LEAST_REQUEST`, or `RANDOM`
+
+# @param head.envoy.faultInjection.enabled Enables or disables the fault injection feature in Envoy for testing service resilience.
+# @param head.envoy.faultInjection.clients.worker Specifies the fault injection settings for the worker client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
+# @param head.envoy.faultInjection.clients.qt Specifies the fault injection settings for the query transformer client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
+# @param head.envoy.faultInjection.clients.ai Specifies the fault injection settings for the AI vector search client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
+# @param head.envoy.faultInjection.clients.recsys Specifies the fault injection settings for the recsys ranker client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
+
+  envoy:
+    image:
+      repository: 2gis-on-premise/navi-envoy
+      pullPolicy: IfNotPresent
+      tag: 1.36.2-tools
+    ports:
+      admin: 9901
+      grpc: 8091
+    securityContext: {}
+    resources:
+      requests:
+        cpu: 200m
+        memory: 128Mi
+      limits:
+        cpu: 800m
+        memory: 512Mi
+    enableAccessLog: false
+    policy: ROUND_ROBIN
+    faultInjection:
+      enabled: false
+      clients:
+        worker: {}
+        qt: {}
+        ai: {}
+        recsys: {}
+
+# @param head.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param head.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param head.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+
+# @param head.hpa.enabled Enable or disable Horizontal Pod Autoscaler (HPA) for the service
+# @param head.hpa.minReplicas Minimum number of replicas the autoscaler can scale down to
+# @param head.hpa.maxReplicas Maximum number of replicas the autoscaler can scale up to
+# @param head.hpa.averageCPUValue Target average CPU utilization (as a direct value of requested CPU); if not specified, the default autoscaling policy is used
+
+# @param head.hpa.behavior.scaleDown.policies[0].periodSeconds Duration (in seconds) the policy must be true to take effect
+# @param head.hpa.behavior.scaleDown.policies[0].type Type of scaling (percentage or absolute number of pods to reduce)
+# @param head.hpa.behavior.scaleDown.policies[0].value Number or percentage of pods to reduce
+# @param head.hpa.behavior.scaleDown.stabilizationWindowSeconds Stabilization window to prevent frequent replica count changes due to metric fluctuations
+
+# @param head.hpa.behavior.scaleUp.selectPolicy Policy selection strategy: `Min` selects the smallest change; `Disabled` disables scaling in this direction
+# @param head.hpa.behavior.scaleUp.policies[0].periodSeconds Duration (in seconds) the policy must be true to take effect
+# @param head.hpa.behavior.scaleUp.policies[0].type Type of scaling (percentage or absolute number of pods to increase)
+# @param head.hpa.behavior.scaleUp.policies[0].value Number or percentage of pods to increase
+# @param head.hpa.behavior.scaleUp.stabilizationWindowSeconds Stabilization window to prevent frequent replica count changes due to metric fluctuations
+
+# @param head.vpa.enabled Enable or disable Vertical Pod Autoscaler (VPA)
+# @param head.vpa.updateMode VPA operating mode: `Off` means VPA will not automatically change resource requests
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  hpa:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 50
+    averageCPUValue: 600m
+    behavior:
+      scaleDown:
+        policies:
+          - periodSeconds: 180
+            type: Percent
+            value: 3
+        stabilizationWindowSeconds: 600
+      scaleUp:
+        policies:
+          - periodSeconds: 15
+            type: Percent
+            value: 10
+        stabilizationWindowSeconds: 30
+        selectPolicy: Max
+  vpa:
+    enabled: false
+    updateMode: Off
+
+# @param head.queryTransformer.enabled Enable or disable the queryTransformer
+# @param head.queryTransformer.searchersList List of searchers for which the queryTransformer will be enabled
+# @param head.queryTransformer.endpoint.address Address of the queryTransformer service
+# @param head.queryTransformer.endpoint.port Port of the queryTransformer service
+# @param head.queryTransformer.endpoint.ssl Enable or disable TLS encryption for the queryTransformer service
+# @param head.queryTransformer.timeoutMs Connection timeout (in milliseconds) for the queryTransformer service
+
+  queryTransformer:
+    enabled: false
+    searchersList: []
+    endpoint:
+      address: ''
+      port: 6767
+      ssl: false
+    timeoutMs: 20
+
+# @skip head.aiVectorSearch.enabled Enable or disable aiVectorSearch
+# @skip head.aiVectorSearch.endpoint.address Address of the aiVectorSearch service
+# @skip head.aiVectorSearch.endpoint.port Port of the aiVectorSearch service
+# @skip head.aiVectorSearch.endpoint.ssl Enable or disable TLS encryption for the aiVectorSearch service
+# @skip head.aiVectorSearch.clientFactoryName Client factory name for the aiVectorSearch client (used to enable/disable SSL when debugging locally)
+# @skip head.aiVectorSearch.timeoutMs Connection timeout (in milliseconds) for the aiVectorSearch service
+# @skip head.aiVectorSearch.searchers List of searchers for which aiVectorSearch will be enabled
+
+  aiVectorSearch:
+    enabled: false
+    endpoint:
+      address: ''
+      port: 50051
+      ssl: false
+    clientFactoryName: 'grpc-client-factory'
+    timeoutMs: 500
+    searchers: []
+
+# @param head.recsysRanker.enabled Enable or disable recsysRanker
+# @param head.recsysRanker.endpoint.address Address of the recsysRanker service
+# @param head.recsysRanker.endpoint.port Port of the recsysRanker service
+# @param head.recsysRanker.endpoint.ssl Enable or disable TLS encryption for the recsysRanker service
+# @param head.recsysRanker.clientFactoryName Client factory name for the recsysRanker client (used to enable/disable SSL when debugging locally)
+# @param head.recsysRanker.timeoutMs Connection timeout (in milliseconds) for the recsysRanker service
+# @param head.recsysRanker.searchersList List of searchers for which recsysRanker will be enabled
+
+  recsysRanker:
+    enabled: false
+    endpoint:
+      address: ''
+      port: 50051
+      ssl: false
+    clientFactoryName: 'grpc-client-factory'
+    timeoutMs: 500
+    searchersList: []
+
+  # @param head.friendsService.enabled Enable or disable friendsService
+  # @param head.friendsService.endpoint.address Address of the friendsService service
+  # @param head.friendsService.endpoint.port Port of the friendsService service
+  # @param head.friendsService.endpoint.ssl Enable or disable TLS encryption for the friendsService service
+  # @param head.friendsService.endpoint.credentials.username Username to connect to the friendsService service
+  # @param head.friendsService.endpoint.credentials.password Password to connect to the friendsService service
+  # @param head.friendsService.clientFactoryName Client factory name for the friendsService client (used to enable/disable SSL when debugging locally)
+  # @param head.friendsService.timeout_ms Connection timeout (in milliseconds) for the friendsService service
+  # @param head.friendsService.searchers List of searchers for which friendsService will be enabled
+
+  friendsService:
+    enabled: false
+    endpoint:
+      address: ''
+      port: 5000
+      ssl: false
+      credentials:
+        username: ''
+        password: ''
+    clientFactoryName: 'grpc-client-factory'
+    timeout_ms: 150
+    searchers: []
+
+# @param head.grpcClientCircuitBreaker.clients List of gRPC client circuit breaker configurations, each defining thresholds and behavior per client.
+
+  grpcClientCircuitBreaker:
+    clients: []
+    # - name: query-transformer
+    #   service_name: querytransformer.QueryTransformer
+    #   enabled: true
+    #   threshold: 25
+    #   minimum_observations_required: 10
+    #   restore_delay_seconds: 30
+    #   restore_jitter_percent: 10
+    #   update_interval_seconds: 5
+    #   lookback_periods: 6
+
+# @param head.data.persistent.enabled Enable or disable a persistent volume for the service
+# @param head.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+# @param head.data.resources.requests.storage Requested storage volume size
+
+  data:
+    persistent:
+      enabled: false
+    storageClassName: ''
+    resources:
+      requests:
+        storage: 8Gi
+
+# @param head.strategy.type Type of Kubernetes deployment strategy; can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
+# @param head.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be unavailable during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+# @param head.strategy.rollingUpdate.maxSurge Maximum number of extra pods that can be created during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 5%
+      maxSurge: 5%
+
+# @param head.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) purposes
+  revisionHistoryLimit: 10
+
+# @param indexerServices.externalFilesStorageUrl Enable and define the external index storage URL; if empty, a custom indexing and storage system will be deployed
+# @param indexerServices.externalControllerUrl Enable and define the external controller api URL
+indexerServices:
+  externalFilesStorageUrl: ''
+  externalControllerUrl: ''
+
+# @section FileStorage settings
+
+# @param filesStorage.matchLabels Selector match labels
+# @param filesStorage.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param filesStorage.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param filesStorage.ports.http HTTP port for REST API requests of the indexing system
+# @param filesStorage.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param filesStorage.image.repository Docker image repository
+# @param filesStorage.image.tag Docker image tag
+# @param filesStorage.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param filesStorage.imagePullSecrets Kubernetes image pull secrets
+# @param filesStorage.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param filesStorage.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param filesStorage.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+
+# @skip filesStorage.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra filesStorage.resources.requests.cpu CPU request; recommended value: `500m`
+# @extra filesStorage.resources.requests.memory Memory request; recommended value: `2Gi`
+# @extra filesStorage.resources.limits.cpu CPU limit; recommended value: `8000m`
+# @extra filesStorage.resources.limits.memory Memory limit; recommended value: `4Gi`
+
+# @param filesStorage.livenessProbe.enabled Enable liveness probe
+# @param filesStorage.livenessProbe.httpGet.path HTTP path for the liveness probe
+# @param filesStorage.livenessProbe.httpGet.port HTTP port for the liveness probe
+# @param filesStorage.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param filesStorage.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param filesStorage.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
+# @param filesStorage.livenessProbe.initialDelaySeconds Initial delay (in seconds) before starting the liveness probe
+
+# @param filesStorage.readinessProbe.enabled Enable readiness probe
+# @param filesStorage.readinessProbe.httpGet.path HTTP path for the readiness probe
+# @param filesStorage.readinessProbe.httpGet.port HTTP port for the readiness probe
+# @param filesStorage.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param filesStorage.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param filesStorage.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+# @param filesStorage.readinessProbe.initialDelaySeconds Initial delay (in seconds) before starting the readiness probe
+
+# @param filesStorage.versionTTL Time to live for old (unused) index versions
+# @param filesStorage.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+
+# @param filesStorage.data.persistent.enabled Enable or disable a persistent volume for the service
+# Enable persistent storage for FilesStorage service if you want to save time on re-indexing in case of an evict or kill and restart FilesStorage's pod.
+
+# @param filesStorage.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+# @param filesStorage.data.resources.requests.storage Requested storage volume size
+
+filesStorage:
+  matchLabels: {}
+  podLabels: {}
+  podAnnotations: {}
+  ports:
+    http: 8080
+  image:
+    repository: 2gis-on-premise/search-files_storage
+    pullPolicy: IfNotPresent
+    tag: 8.17.3
+  podSecurityContext: {}
+  imagePullSecrets: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources:
+    requests:
+      cpu: 500m
+      memory: 2Gi
+    limits:
+      cpu: 8000m
+      memory: 4Gi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /ping
+      port: http
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 3
+    initialDelaySeconds: 10
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /ping
+      port: http
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 3
+    initialDelaySeconds: 10
+  versionTTL: 168h
+  loglevel: info
+  data:
+    persistent:
+      enabled: false
+    storageClassName: ''
+    resources:
+      requests:
+        storage: 30Gi
+
+# @section Data Adapter settings
+
+# @param dataAdapter.matchLabels Selector match labels
+# @param dataAdapter.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param dataAdapter.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param dataAdapter.ports.http HTTP port for REST API requests of the indexing system
+# @param dataAdapter.image.repository Docker image repository
+# @param dataAdapter.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param dataAdapter.image.tag Docker image tag
+# @param dataAdapter.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param dataAdapter.imagePullSecrets Kubernetes image pull secrets
+# @param dataAdapter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param dataAdapter.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param dataAdapter.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+
+# @skip dataAdapter.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra dataAdapter.resources.requests.cpu CPU request; recommended value: `100m`
+# @extra dataAdapter.resources.requests.memory Memory request; recommended value: `50Mi`
+# @extra dataAdapter.resources.limits.cpu CPU limit; recommended value: `200m`
+# @extra dataAdapter.resources.limits.memory Memory limit; recommended value: `1Gi`
+
+# @param dataAdapter.livenessProbe.enabled Enable liveness probe
+# @param dataAdapter.livenessProbe.httpGet.path HTTP path for the liveness probe
+# @param dataAdapter.livenessProbe.httpGet.port HTTP port for the liveness probe
+# @param dataAdapter.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param dataAdapter.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param dataAdapter.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
+# @param dataAdapter.livenessProbe.initialDelaySeconds Initial delay (in seconds) before starting the liveness probe
+
+# @param dataAdapter.readinessProbe.enabled Enable readiness probe
+# @param dataAdapter.readinessProbe.httpGet.path HTTP path for the readiness probe
+# @param dataAdapter.readinessProbe.httpGet.port HTTP port for the readiness probe
+# @param dataAdapter.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param dataAdapter.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param dataAdapter.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+# @param dataAdapter.readinessProbe.initialDelaySeconds Initial delay (in seconds) before starting the readiness probe
+
+# @param dataAdapter.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param dataAdapter.interval Update data interval
+# @param dataAdapter.data.resources.requests.storage Requested storage volume size
+
+dataAdapter:
+  matchLabels: {}
+  podLabels: {}
+  podAnnotations: {}
+  ports:
+    http: 8080
+  image:
+    repository: 2gis-on-premise/search-data_adapter
+    pullPolicy: IfNotPresent
+    tag: 8.17.3
+  podSecurityContext: {}
+  imagePullSecrets: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources:
+    requests:
+      cpu: 100m
+      memory: 500Mi
+    limits:
+      cpu: 200m
+      memory: 1Gi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /ping
+      port: http
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 3
+    initialDelaySeconds: 10
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /ready
+      port: http
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 3
+    initialDelaySeconds: 10
+  loglevel: info
+  interval: 15s
+  data:
+    resources:
+      requests:
+        storage: 10Gi
+
+
+# @section Portal settings
+
+# @param portal.enabled Enable or disable the portal component
+# @param portal.matchLabels Selector match labels
+# @param portal.podLabels Kubernetes pod labels
+# @param portal.podAnnotations Kubernetes pod annotations
+# @param portal.ports.http HTTP port for REST API requests
+# @param portal.image.repository Docker image repository
+# @param portal.image.pullPolicy Image pull policy
+# @param portal.image.tag Docker image tag
+# @param portal.podSecurityContext Kubernetes podSecurityContext
+# @param portal.imagePullSecrets Kubernetes image pull secrets
+# @param portal.nodeSelector Kubernetes node selectors
+# @param portal.tolerations Kubernetes tolerations settings
+# @param portal.affinity Kubernetes pod affinity settings
+
+# @skip portal.resources Kubernetes resource management settings
+# @extra portal.resources.requests.cpu CPU request; recommended value: `200m`
+# @extra portal.resources.requests.memory Memory request; recommended value: `100Mi`
+# @extra portal.resources.limits.cpu CPU limit; recommended value: `500m`
+# @extra portal.resources.limits.memory Memory limit; recommended value: `1Gi`
+
+# @param portal.livenessProbe.enabled Enable liveness probe
+# @param portal.livenessProbe.httpGet.path HTTP path for the liveness probe
+# @param portal.livenessProbe.httpGet.port HTTP port for the liveness probe
+# @param portal.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param portal.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param portal.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
+# @param portal.livenessProbe.initialDelaySeconds Initial delay (in seconds) before starting the liveness probe
+
+# @param portal.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param portal.services.controllerHost Controller host in form "host:port"
+# @param portal.services.fstorageHost Files storage host in form "host:port"
+
+portal:
+  enabled: false
+  matchLabels: {}
+  podLabels: {}
+  podAnnotations: {}
+  ports:
+    http: 8088
+  image:
+    repository: usrch/bs-portal
+    pullPolicy: IfNotPresent
+    tag: 8.17.3
+  podSecurityContext: {}
+  imagePullSecrets: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources:
+    requests:
+      cpu: 200m
+      memory: 100Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /ping
+      port: http
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 3
+    initialDelaySeconds: 10
+  loglevel: "info"
+  services:
+    controllerHost: ""
+    fstorageHost: ""
+
+
+# @section Controller settings
+
+# @param controller.matchLabels Selector match labels
+# @param controller.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param controller.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param controller.ports.http HTTP port for REST API requests of the indexing system
+# @param controller.image.repository Docker image repository
+# @param controller.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param controller.image.tag Docker image tag
+# @param controller.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param controller.imagePullSecrets Kubernetes image pull secrets
+# @param controller.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param controller.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param controller.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+
+# @skip controller.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra controller.resources.requests.cpu CPU request; recommended value: `100m`
+# @extra controller.resources.requests.memory Memory request; recommended value: `50Mi`
+# @extra controller.resources.limits.cpu CPU limit; recommended value: `200m`
+# @extra controller.resources.limits.memory Memory limit; recommended value: `1Gi`
+
+# @param controller.livenessProbe.enabled Enable liveness probe
+# @param controller.livenessProbe.httpGet.path HTTP path for the liveness probe
+# @param controller.livenessProbe.httpGet.port HTTP port for the liveness probe
+# @param controller.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param controller.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param controller.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
+# @param controller.livenessProbe.initialDelaySeconds Initial delay (in seconds) before starting the liveness probe
+
+# @param controller.readinessProbe.enabled Enable readiness probe
+# @param controller.readinessProbe.httpGet.path HTTP path for the readiness probe
+# @param controller.readinessProbe.httpGet.port HTTP port for the readiness probe
+# @param controller.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param controller.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param controller.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+# @param controller.readinessProbe.initialDelaySeconds Initial delay (in seconds) before starting the readiness probe
+
+# @param controller.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param controller.projectListUrl URL of the project list for indexing
+# @param controller.s3ProjectPrefix prefix to s3 objects, e.g. /indexer/prod/feed_backups/.
+# @param controller.props [array] Properties list
+# @extra controller.props[].model index model name
+# @extra controller.props[].domain index domain
+# @extra controller.props[].language index language
+# @extra controller.props[].location index location
+# @param controller.interval Indexing task synchronization interval
+# @param controller.taskTimeout Timeout for completing an indexing task; after this time, the task is returned to the queue if not completed successfully
+# @param controller.extraProjects Additional list of projects with their URLs
+# @param controller.qdbFiles List of special QDB files used for indexing.
+# @param controller.adIndexesModel  Model used for filtering indexes for which ads will be built
+# @param controller.adIndexesDomain Domain used for filtering indexes for which ads will be built
+# @param controller.adWeightsEnable Enable or disable updating of ad weights
+# @param controller.adWeightsUrl URL of the ad weights source
+# @param controller.monthlyAdWeightsEnable Enable monthly update of ad targeting
+# @param controller.monthlyAdWeightsTargetingsUrl URL of the monthly ad targeting source
+# @param controller.monthlyAdWeightsUrl URL of a specific monthly ad weight target
+# @param controller.data.persistent.enabled Enable or disable a persistent volume for the service
+# @param controller.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+# @param controller.data.resources.requests.storage Requested storage volume size
+# @param controller.notAllowedProjectKeys List of projects from the general list that should not be indexed
+# @param controller.tasksPriorities.default Default priority value applied to all indexing tasks if no specific override is defined
+# @param controller.tasksPriorities.overrides A map of specific task identifiers to their custom priority values
+#        Each key corresponds to a task name (e.g., "gis.v4.32.ru.ru"),
+#        and the value defines its priority (integer, higher means earlier execution)
+
+controller:
+  matchLabels: {}
+  podLabels: {}
+  podAnnotations: {}
+  ports:
+    http: 8080
+  image:
+    repository: 2gis-on-premise/search-controller
+    pullPolicy: IfNotPresent
+    tag: 8.17.3
+  podSecurityContext: {}
+  imagePullSecrets: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources:
+    requests:
+      cpu: 100m
+      memory: 50Mi
+    limits:
+      cpu: 200m
+      memory: 1Gi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /ping
+      port: http
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 3
+    initialDelaySeconds: 10
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /ping
+      port: http
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 3
+    initialDelaySeconds: 10
+  loglevel: info
+  projectListUrl: ''
+  s3ProjectPrefix: ''
+  props:
+    - model: gis
+      domain: v4
+    - model: gis
+      domain: geodetector
+      language: nolang
+      location: '-'
+  interval: 15s
+  taskTimeout: 20m
+  extraProjects: []
+  qdbFiles: {}
+  adIndexesModel: gis
+  adIndexesDomain: v4
+  adWeightsEnable: false
+  adWeightsUrl: ''
+  monthlyAdWeightsEnable: false
+  monthlyAdWeightsTargetingsUrl: ''
+  monthlyAdWeightsUrl: ''
+  data:
+    persistent:
+      enabled: false
+    storageClassName: ''
+    resources:
+      requests:
+        storage: 10Gi
+  notAllowedProjectKeys: []
+  tasksPriorities:
+    default: 1
+    overrides: {}
+
+# @section Indexer settings
+
+# @param indexer.matchLabels Selector match labels
+# @param indexer.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param indexer.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param indexer.replicaCount Number of indexer replicas (used if HPA is disabled)
+# @param indexer.ports.http HTTP port for REST API requests of the indexing system
+# @param indexer.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param indexer.image.repository Docker image repository
+# @param indexer.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param indexer.image.tag Docker image tag
+# @param indexer.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param indexer.imagePullSecrets Kubernetes image pull secrets
+# @param indexer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param indexer.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param indexer.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+
+# @skip indexer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra indexer.resources.requests.cpu CPU request; recommended value: `500m`
+# @extra indexer.resources.requests.memory Memory request; recommended value: `2Gi`
+# @extra indexer.resources.limits.cpu CPU limit; recommended value: `4000m`
+# @extra indexer.resources.limits.memory Memory limit; recommended value: `16Gi`
+
+# @param indexer.livenessProbe.enabled Enable liveness probe
+# @param indexer.livenessProbe.httpGet.path HTTP path for the liveness probe
+# @param indexer.livenessProbe.httpGet.port HTTP port for the liveness probe
+# @param indexer.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param indexer.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param indexer.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
+# @param indexer.livenessProbe.initialDelaySeconds Initial delay (in seconds) before starting the liveness probe
+
+# @param indexer.readinessProbe.enabled Enable readiness probe
+# @param indexer.readinessProbe.httpGet.path HTTP path for the readiness probe
+# @param indexer.readinessProbe.httpGet.port HTTP port for the readiness probe
+# @param indexer.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param indexer.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param indexer.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+# @param indexer.readinessProbe.initialDelaySeconds Initial delay (in seconds) before starting the readiness probe
+
+# @param indexer.hpa.enabled Enable or disable Horizontal Pod Autoscaler (HPA)
+# @param indexer.hpa.minReplicas Minimum number of replicas the autoscaler can scale down to
+# @param indexer.hpa.maxReplicas Maximum number of replicas the autoscaler can scale up to
+# @param indexer.hpa.averageCPUValue Target average CPU utilization (as a direct value of requested CPU); if not specified, the default autoscaling policy is used
+
+# @param indexer.hpa.behavior.scaleDown.policies[0].periodSeconds Duration (in seconds) the policy must be true to take effect
+# @param indexer.hpa.behavior.scaleDown.policies[0].type Type of scaling (percentage or absolute number of pods to reduce)
+# @param indexer.hpa.behavior.scaleDown.policies[0].value Number or percentage of pods to reduce
+# @param indexer.hpa.behavior.scaleDown.stabilizationWindowSeconds Stabilization window to prevent frequent replica count changes due to metric fluctuations
+
+# @param indexer.hpa.behavior.scaleUp.selectPolicy Policy selection strategy: `Min` selects the smallest change; `Disabled` disables scaling in this direction
+# @param indexer.hpa.behavior.scaleUp.policies[0].periodSeconds Duration (in seconds) the policy must be true to take effect
+# @param indexer.hpa.behavior.scaleUp.policies[0].type Type of scaling (percentage or absolute number of pods to increase)
+# @param indexer.hpa.behavior.scaleUp.policies[0].value Number or percentage of pods to increase
+# @param indexer.hpa.behavior.scaleUp.stabilizationWindowSeconds Stabilization window to prevent frequent replica count changes due to metric fluctuations
+
+# @param indexer.vpa.enabled Enable or disable Vertical Pod Autoscaler (VPA)
+# @param indexer.vpa.updateMode VPA operating mode: `Off` means VPA will not automatically change resource requests
+
+indexer:
+  matchLabels: {}
+  podLabels: {}
+  podAnnotations: {}
+  replicaCount: 3
+  ports:
+    http: 8080
+  loglevel: info
+  image:
+    repository: 2gis-on-premise/search-indexer
+    pullPolicy: IfNotPresent
+    tag: 8.17.3
+  podSecurityContext: {}
+  imagePullSecrets: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources:
+    requests:
+      cpu: 500m
+      memory: 2Gi
+    limits:
+      cpu: 4000m
+      memory: 16Gi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /ping
+      port: http
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 3
+    initialDelaySeconds: 10
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /ping
+      port: http
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 3
+    initialDelaySeconds: 10
+  hpa:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 50
+    averageCPUValue: 600m
+    behavior:
+      scaleDown:
+        policies:
+          - periodSeconds: 15
+            type: Percent
+            value: 100
+        stabilizationWindowSeconds: 60
+      scaleUp:
+        policies:
+          - periodSeconds: 15
+            type: Percent
+            value: 100
+        stabilizationWindowSeconds: 0
+        selectPolicy: Max
+  vpa:
+    enabled: false
+    updateMode: Off
+
+# @section s3Client settings
+
+# @param s3Client.enabled Enable or disable S3 support for the indexing system
+# @param s3Client.endpoint S3 endpoint address
+# @param s3Client.accessKeyId S3 access key ID
+# @param s3Client.secretAccessKey S3 secret access key
+# @param s3Client.bucket S3 bucket name
+# @param s3Client.region S3 region for the S3 client
+# @param s3Client.useSsl Enable or disable SSL
+
+s3Client:
+  enabled: true
+  endpoint: ''
+  accessKeyId: ''
+  secretAccessKey: ''
+  bucket: ''
+  region: ''
+  useSsl: false
+
+# @section Syncer settings
+
+# @param syncer.ports.http HTTP port for REST API requests of the indexing system
+# @param syncer.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param syncer.image.repository Docker image repository
+# @param syncer.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param syncer.image.tag Docker image tag
+# @param syncer.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+
+# @skip syncer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra syncer.resources.requests.cpu CPU request; recommended value: `20m`
+# @extra syncer.resources.requests.memory Memory request; recommended value: `128Mi`
+# @extra syncer.resources.limits.cpu CPU limit; recommended value: `100m`
+# @extra syncer.resources.limits.memory Memory limit; recommended value: `256Mi`
+
+# @skip syncer.initResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra syncer.initResources.requests.cpu CPU request for the syncer init container; recommended value: `500m`
+# @extra syncer.initResources.requests.memory Memory request for the syncer init container; recommended value: `128Mi`
+# @extra syncer.initResources.limits.cpu CPU limit for the syncer init container; recommended value: `2000m`
+# @extra syncer.initResources.limits.memory Memory limit for the syncer init container; recommended value: `256Mi`
+
+# @param syncer.endpoints.rtw Endpoint for downloading real-time weights
+# @param syncer.endpoints.aiSuggestedQueries Endpoint for downloading AI Suggested Queries
+# @param syncer.endpoints.dispatchConfig Endpoint for downloading dispatch config
+
+syncer:
+  ports:
+    http: 8088
+  loglevel: info
+  image:
+    repository: 2gis-on-premise/search-syncer
+    pullPolicy: IfNotPresent
+    tag: 8.17.3
+  securityContext: {}
+  resources:
+    requests:
+      cpu: 20m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+  endpoints:
+    rtw: ''
+    aiSuggestedQueries: ''
+    dispatchConfig: ''
+
+# @skip section FeedSandbox settings
+
+# @skip feedSandbox.feedBackups.enable Enable storing backups to s3 in feed-sandbox app
+# @skip feedSandbox.feedBackups.prefix Object key prefix. Example: 'indexer/prod/feed_backups'
+
+feedSandbox:
+  feedBackups:
+    enable: false
+    prefix: ''
+
+# @param GINMODE Go application operating mode; default is `release`, `debug` mode is also supported
+
+GINMODE: release
+
+# @section Magg settings
+
+# @param magg.enabled Enable or disable the metrics aggregator container
+# @param magg.image.repository Docker image repository
+# @param magg.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param magg.image.tag Docker image tag
+# @param magg.ports.metrics HTTP port for Prometheus to scrape metrics
+
+# @skip magg.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra magg.resources.requests.cpu CPU request; recommended value: `10m`
+# @extra magg.resources.requests.memory Memory request; recommended value: `32Mi`
+# @extra magg.resources.limits.cpu CPU limit; recommended value: `100m`
+# @extra magg.resources.limits.memory Memory limit; recommended value: `128Mi`
+
+magg:
+  enabled: false
+  image:
+    repository: 2gis-on-premise/metrics-aggregator
+    pullPolicy: IfNotPresent
+    tag: 0.1.0
+  ports:
+    metrics: 9999
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+# @param serviceAccount.create Specifies whether a ServiceAccount should be created
+# @param serviceAccount.automount Set to `false` to opt out of automounting API credentials. See [credential automounting](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#opt-out-of-api-credential-automounting)
+# @param serviceAccount.annotations Annotations to add to the ServiceAccount
+# @param serviceAccount.name Name of the ServiceAccount to use
+
+serviceAccount:
+  create: false
+  automount: false
+  annotations: {}
+  name: ''
+
+# @param service.worker.port Service (svc) port for the worker
+# @param service.head.ports.grpc Service (svc) grpc port for the head component
+# @param service.head.ports.http Service (svc) http port for the head component
+
+# @param service.filesStorage.port Service (svc) port for the filesStorage component
+# @param service.dataAdapter.port Service (svc) port for the dataAdapter component
+# @param service.portal.port Service (svc) port for the portal component
+# @param service.controller.port Service (svc) port for the controller component
+# @param service.indexer.port Service (svc) port for the indexer component
+# @param service.ingressRouter.ports.http Service (svc) http port for the ingress-router
+# @param service.ingressRouter.ports.grpc Service (svc) grpc port for the ingress-router
+
+# @skip service.ingressRouter.external.enable Enable or disable direct HTTP route to ingress-router (internal use)
+# @skip service.ingressRouter.external.host External address for direct HTTP route to ingress-router (internal use)
+
+# @param service.geodetector.port Service (svc) port for the geodetector component
+
+service:
+  worker:
+    port: 8091
+  head:
+    ports:
+      grpc: 9010
+      http: 9090
+  filesStorage:
+    port: 80
+  dataAdapter:
+    port: 80
+  portal:
+    port: 80
+  controller:
+    port: 80
+  indexer:
+    port: 80
+  ingressRouter:
+    ports:
+      http: 9092
+      grpc: 9001
+    external:
+      enable: false
+      host: ''
+  geodetector:
+    port: 10091
+
+# @section ingressRouter
+
+# @param ingressRouter.enabled Enable or disable ingressRouter
+# @param ingressRouter.replicaCount Number of replicas for ingressRouter (used if HPA is disabled)
+
+# @param ingressRouter.livenessProbe.enabled Enable liveness probe
+# @param ingressRouter.livenessProbe.httpGet.path HTTP path for the liveness probe
+# @param ingressRouter.livenessProbe.httpGet.port HTTP port for the liveness probe
+# @param ingressRouter.livenessProbe.httpGet.scheme HTTP scheme for the liveness probe
+# @param ingressRouter.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param ingressRouter.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param ingressRouter.livenessProbe.successThreshold Minimum consecutive successes for the liveness probe
+# @param ingressRouter.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
+
+# @param ingressRouter.readinessProbe.enabled Enable readiness probe
+# @param ingressRouter.readinessProbe.httpGet.path HTTP path for the readiness probe
+# @param ingressRouter.readinessProbe.httpGet.port HTTP port for the readiness probe
+# @param ingressRouter.readinessProbe.httpGet.scheme HTTP scheme for the readiness probe
+# @param ingressRouter.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param ingressRouter.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param ingressRouter.readinessProbe.successThreshold Minimum consecutive successes for the readiness probe
+# @param ingressRouter.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+
+# @param ingressRouter.startupProbe.enabled Enable startup probe
+# @param ingressRouter.startupProbe.httpGet.path HTTP path for the startup probe
+# @param ingressRouter.startupProbe.httpGet.port HTTP port for the startup probe
+# @param ingressRouter.startupProbe.httpGet.scheme HTTP scheme for the startup probe
+# @param ingressRouter.startupProbe.initialDelaySeconds Initial delay (in seconds) before starting the startup probe
+# @param ingressRouter.startupProbe.timeoutSeconds Timeout (in seconds) for the startup probe
+# @param ingressRouter.startupProbe.periodSeconds Interval (in seconds) between startup probe checks
+# @param ingressRouter.startupProbe.successThreshold Minimum consecutive successes for the startup probe
+# @param ingressRouter.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
+
+# @param ingressRouter.loggerLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param ingressRouter.loggerFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
+
+# @skip ingressRouter.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra ingressRouter.resources.requests.cpu CPU request; recommended value: `1`
+# @extra ingressRouter.resources.requests.memory Memory request; recommended value: `400Mi`
+# @extra ingressRouter.resources.limits.cpu CPU limit; recommended value: `2`
+# @extra ingressRouter.resources.limits.memory Memory limit; recommended value: `2Gi`
+
+# @param ingressRouter.hpa.enabled Enable or disable Horizontal Pod Autoscaler (HPA)
+# @param ingressRouter.hpa.minReplicas Minimum number of replicas
+# @param ingressRouter.hpa.maxReplicas Maximum number of replicas
+# @param ingressRouter.hpa.averageCPUValue Target average CPU utilization (as a direct value of requested CPU)
+
+# @param ingressRouter.hpa.behavior.scaleDown.policies[0].periodSeconds Duration (in seconds) the policy must be true
+# @param ingressRouter.hpa.behavior.scaleDown.policies[0].type Type of scaling (percentage or absolute number of pods to reduce)
+# @param ingressRouter.hpa.behavior.scaleDown.policies[0].value Number or percentage of pods to reduce
+# @param ingressRouter.hpa.behavior.scaleDown.stabilizationWindowSeconds Stabilization window to prevent flapping
+
+# @param ingressRouter.hpa.behavior.scaleUp.selectPolicy Policy selection strategy: `Min` or `Disabled`
+# @param ingressRouter.hpa.behavior.scaleUp.policies[0].periodSeconds Duration (in seconds) the policy must be true
+# @param ingressRouter.hpa.behavior.scaleUp.policies[0].type Type of scaling (percentage or absolute number of pods to increase)
+# @param ingressRouter.hpa.behavior.scaleUp.policies[0].value Number or percentage of pods to increase
+# @param ingressRouter.hpa.behavior.scaleUp.policies[1].periodSeconds Duration (in seconds) the policy must be true
+# @param ingressRouter.hpa.behavior.scaleUp.policies[1].type Type of scaling (percentage or absolute number of pods to increase)
+# @param ingressRouter.hpa.behavior.scaleUp.policies[1].value Number or percentage of pods to increase
+# @param ingressRouter.hpa.behavior.scaleUp.stabilizationWindowSeconds Stabilization window to prevent flapping
+
+# @param ingressRouter.vpa.enabled Enable or disable Vertical Pod Autoscaler (VPA)
+# @param ingressRouter.vpa.updateMode VPA operating mode; `Off` means no automatic resource changes
+
+# @param ingressRouter.imagePullSecrets Kubernetes image pull secrets
+# @param ingressRouter.dispatcherComponent.enabled Enable or disable request dispatching
+# @param ingressRouter.rateLimitComponent.enabled Enable or disable rate limiting
+# @param ingressRouter.prestopHook.enabled Enable or disable container lifecycle [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)
+# @param ingressRouter.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param ingressRouter.envoy.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+
+# @param ingressRouter.envoy.image.repository Docker image repository
+# @param ingressRouter.envoy.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param ingressRouter.envoy.image.tag Docker image tag
+# @skip ingressRouter.envoy.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra ingressRouter.envoy.resources.requests.cpu CPU request; recommended value: `200m`
+# @extra ingressRouter.envoy.resources.requests.memory Memory request; recommended value: `128Mi`
+# @extra ingressRouter.envoy.resources.limits.cpu CPU limit; recommended value: `800m`
+# @extra ingressRouter.envoy.resources.limits.memory Memory limit; recommended value: `512Mi`
+# @param ingressRouter.envoy.ports.admin HTTP port for Envoy admin console
+# @param ingressRouter.envoy.ports.grpc gRPC port used by Envoy
+
+# @param ingressRouter.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param ingressRouter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param ingressRouter.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+
+# @param ingressRouter.strategy.type Deployment strategy; can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
+# @param ingressRouter.strategy.rollingUpdate.maxUnavailable Maximum number of unavailable pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+# @param ingressRouter.strategy.rollingUpdate.maxSurge Maximum number of extra pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+
+# @param ingressRouter.image.repository Docker image repository
+# @param ingressRouter.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param ingressRouter.image.tag Docker image tag
+# @param ingressRouter.matchLabels Selector match labels
+# @param ingressRouter.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+
+# @param ingressRouter.searchServiceUrl Custom URL for the `head` service
+# @param ingressRouter.searchRequestTimeoutMs Timeout (in ms) for requests to the `head` service
+# @param ingressRouter.prometheusUrl Prometheus URL for rate limiting
+# @param ingressRouter.rateLimitRules Big Search usage quotas
+
+# @param ingressRouter.ports.monitor TCP port for service endpoints such as `/metrics`
+# @param ingressRouter.ports.http TCP port for API requests
+# @param ingressRouter.ports.grpc TCP port for grpc requests
+
+# Cluster routing
+# @param ingressRouter.headers Header used for request dispatching
+# @param ingressRouter.routing.searchBase.port Port of the AB Sapphire base service
+# @param ingressRouter.routing.searchBase.exactMatch Header value for AB Sapphire base
+# @param ingressRouter.routing.cluster1.port Port of cluster 1 head service
+# @param ingressRouter.routing.cluster1.address Address of cluster 1 head service
+# @param ingressRouter.routing.cluster1.exactMatch Header value for cluster 1
+# @param ingressRouter.routing.cluster2.port Port of cluster 2 head service
+# @param ingressRouter.routing.cluster2.address Address of cluster 2 head service
+# @param ingressRouter.routing.cluster2.exactMatch Header value for cluster 2
+# @param ingressRouter.routing.cluster3.port Port of cluster 3 head service
+# @param ingressRouter.routing.cluster3.address Address of cluster 3 head service
+# @param ingressRouter.routing.cluster3.exactMatch Header value for cluster 3
+# @param ingressRouter.data.persistent.enabled Enable or disable a persistent volume for the service
+# @param ingressRouter.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+# @param ingressRouter.data.resources.requests.storage Requested storage volume size
+
+ingressRouter:
+  enabled: true
+  replicaCount: 1
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /status
+      port: ingress-router
+      scheme: HTTP
+    timeoutSeconds: 1
+    periodSeconds: 5
+    successThreshold: 1
+    failureThreshold: 4
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /status
+      port: ingress-router
+      scheme: HTTP
+    timeoutSeconds: 1
+    periodSeconds: 5
+    successThreshold: 1
+    failureThreshold: 2
+  startupProbe:
+    enabled: true
+    httpGet:
+      path: /status
+      port: ingress-router
+      scheme: HTTP
+    initialDelaySeconds: 5
+    timeoutSeconds: 1
+    periodSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  affinity: {}
+  loggerLevel: info
+  loggerFormat: json
+  resources:
+    limits:
+      cpu: 2
+      memory: 2Gi
+    requests:
+      cpu: 1
+      memory: 400Mi
+  hpa:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 8
+    averageCPUValue: 700m
+    behavior:
+      scaleDown:
+        policies:
+          - periodSeconds: 180
+            type: Percent
+            value: 3
+        stabilizationWindowSeconds: 1200
+      scaleUp:
+        selectPolicy: Min
+        policies:
+          - periodSeconds: 15
+            type: Percent
+            value: 10
+          - periodSeconds: 15
+            type: Pods
+            value: 5
+        stabilizationWindowSeconds: 30
+  vpa:
+    enabled: false
+    updateMode: Off
+  data:
+    persistent:
+      enabled: false
+    storageClassName: ''
+    resources:
+      requests:
+        storage: 100Mi
+  prestopHook:
+    enabled: true
+  podSecurityContext: {}
+  envoy:
+    securityContext: {}
+    image:
+      repository: 2gis-on-premise/navi-envoy
+      pullPolicy: IfNotPresent
+      tag: 1.36.2-tools
+    resources:
+      limits:
+        cpu: 800m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 128Mi
+    ports:
+      admin: 9901
+      grpc: 8091
+  tolerations: []
+  nodeSelector: {}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  image:
+    repository: 2gis-on-premise/search-ingress-router
+    pullPolicy: IfNotPresent
+    tag: 8.17.3
+  imagePullSecrets: []
+  matchLabels: {}
+  podLabels: {}
+  searchServiceUrl: ''
+  searchRequestTimeoutMs: 5000
+  prometheusUrl: ''
+  rateLimitRules: []
+  ports:
+    monitor: 9093
+    http: 9092
+    grpc: 9001
+  dispatcherComponent:
+    enabled: false
+  rateLimitComponent:
+    enabled: false
+  headers: x-cluster-index
+  routing:
+    searchBase:
+      port: 9010
+      exactMatch: 0
+    cluster1:
+      port: 9001
+      address: big-search-ab-cluster1-ingress-router
+      exactMatch: 1
+    cluster2:
+      port: 9001
+      address: big-search-ab-cluster2-ingress-router
+      exactMatch: 2
+    cluster3:
+      port: 9001
+      address: big-search-ab-cluster3-ingress-router
+      exactMatch: 3
+
+# @section geodetector
+
+# @param geodetector.enabled Enable or disable the geodetector service
+# @param geodetector.replicaCount Number of replicas for geodetector (used if HPA is disabled)
+
+# @param geodetector.image.repository Docker image repository
+# @param geodetector.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param geodetector.image.tag Docker image tag
+# @param geodetector.imagePullSecrets Kubernetes image pull secrets
+
+# @param geodetector.geodetectorGrpcThreads Number of threads for gRPC execution
+# @param geodetector.dataUpdateFrequencySec Frequency (in seconds) of index information updates
+# @param geodetector.geodetectorMainThreads Number of threads per main handler
+# @param geodetector.geodetectorFsThreads Number of threads for FS task processor
+# @param geodetector.geodetectorMonThreads Number of threads allocated for collecting metrics
+# @param geodetector.loggerLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param geodetector.loggerFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
+# @param geodetector.executeDebugCommands Enable execution of debug commands (e.g., simulate crash)
+# @param geodetector.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
+# @param geodetector.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
+
+# @param geodetector.matchLabels Selector match labels
+# @param geodetector.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param geodetector.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+
+# @param geodetector.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param geodetector.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+
+# @param geodetector.hpa.enabled Enable or disable Horizontal Pod Autoscaler (HPA)
+# @param geodetector.hpa.minReplicas Minimum number of replicas
+# @param geodetector.hpa.maxReplicas Maximum number of replicas
+# @param geodetector.hpa.averageCPUValue Target average CPU utilization (as a direct value of requested CPU)
+
+# @param geodetector.hpa.behavior.scaleDown.policies[0].periodSeconds Duration (in seconds) the policy must be true
+# @param geodetector.hpa.behavior.scaleDown.policies[0].type Type of scaling (percentage or absolute number of pods to reduce)
+# @param geodetector.hpa.behavior.scaleDown.policies[0].value Number or percentage of pods to reduce
+# @param geodetector.hpa.behavior.scaleDown.stabilizationWindowSeconds Stabilization window to prevent flapping
+
+# @param geodetector.hpa.behavior.scaleUp.selectPolicy Policy selection strategy: `Min` or `Disabled`
+# @param geodetector.hpa.behavior.scaleUp.policies[0].periodSeconds Duration (in seconds) the policy must be true
+# @param geodetector.hpa.behavior.scaleUp.policies[0].type Type of scaling (percentage or absolute number of pods to increase)
+# @param geodetector.hpa.behavior.scaleUp.policies[0].value Number or percentage of pods to increase
+# @param geodetector.hpa.behavior.scaleUp.policies[1].periodSeconds Duration (in seconds) the policy must be true
+# @param geodetector.hpa.behavior.scaleUp.policies[1].type Type of scaling (percentage or absolute number of pods to increase)
+# @param geodetector.hpa.behavior.scaleUp.policies[1].value Number or percentage of pods to increase
+# @param geodetector.hpa.behavior.scaleUp.stabilizationWindowSeconds Stabilization window to prevent flapping
+
+# @param geodetector.vpa.enabled Enable or disable Vertical Pod Autoscaler (VPA)
+# @param geodetector.vpa.updateMode VPA operating mode; `Off` means no automatic resource changes
+
+# @param geodetector.ports.grpc gRPC port for API requests
+# @param geodetector.ports.server gRPC server port
+# @param geodetector.ports.monitor Port for Prometheus metrics
+
+# @skip geodetector.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra geodetector.resources.requests.cpu CPU request; recommended value: `1`
+# @extra geodetector.resources.requests.memory Memory request; recommended value: `4000Mi`
+# @extra geodetector.resources.limits.cpu CPU limit; recommended value: `2`
+# @extra geodetector.resources.limits.memory Memory limit; recommended value: `6Gi`
+
+# @param geodetector.data.resources.requests.storage Requested storage volume size
+# @param geodetector.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+# @param geodetector.data.persistent.enabled Enable or disable persistent volume for the service
+
+# @param geodetector.livenessProbe.enabled Enable liveness probe
+# @param geodetector.livenessProbe.httpGet.path HTTP path for the liveness probe
+# @param geodetector.livenessProbe.httpGet.port HTTP port for the liveness probe
+# @param geodetector.livenessProbe.httpGet.scheme HTTP scheme for the liveness probe
+# @param geodetector.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param geodetector.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param geodetector.livenessProbe.successThreshold Minimum consecutive successes for the liveness probe
+# @param geodetector.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
+
+# @param geodetector.readinessProbe.enabled Enable readiness probe
+# @param geodetector.readinessProbe.httpGet.path HTTP path for the readiness probe
+# @param geodetector.readinessProbe.httpGet.port HTTP port for the readiness probe
+# @param geodetector.readinessProbe.httpGet.scheme HTTP scheme for the readiness probe
+# @param geodetector.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param geodetector.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param geodetector.readinessProbe.successThreshold Minimum consecutive successes for the readiness probe
+# @param geodetector.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+
+# @param geodetector.startupProbe.enabled Enable startup probe
+# @param geodetector.startupProbe.httpGet.path HTTP path for the startup probe
+# @param geodetector.startupProbe.httpGet.port HTTP port for the startup probe
+# @param geodetector.startupProbe.httpGet.scheme HTTP scheme for the startup probe
+# @param geodetector.startupProbe.initialDelaySeconds Initial delay (in seconds) before starting the startup probe
+# @param geodetector.startupProbe.timeoutSeconds Timeout (in seconds) for the startup probe
+# @param geodetector.startupProbe.periodSeconds Interval (in seconds) between startup probe checks
+# @param geodetector.startupProbe.successThreshold Minimum consecutive successes for the startup probe
+# @param geodetector.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
+
+# @param geodetector.prestopHook.enabled Enable or disable container lifecycle [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)
+
+# @param geodetector.strategy.type Deployment strategy; can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
+# @param geodetector.strategy.rollingUpdate.maxUnavailable Maximum number of unavailable pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+# @param geodetector.strategy.rollingUpdate.maxSurge Maximum number of extra pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+
+# @param geodetector.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param geodetector.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param geodetector.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+
+geodetector:
+  enabled: true
+  replicaCount: 1
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /status
+      port: geodetector-srv
+      scheme: HTTP
+    timeoutSeconds: 1
+    periodSeconds: 5
+    successThreshold: 1
+    failureThreshold: 36
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /status
+      port: geodetector-srv
+      scheme: HTTP
+    timeoutSeconds: 1
+    periodSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
+  startupProbe:
+    enabled: true
+    httpGet:
+      path: /ready
+      port: http-syncer
+      scheme: HTTP
+    initialDelaySeconds: 30
+    timeoutSeconds: 2
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 200
+  image:
+    repository: 2gis-on-premise/search-geodetector
+    pullPolicy: IfNotPresent
+    tag: 8.17.3
+  imagePullSecrets: []
+  geodetectorGrpcThreads: 2
+  dataUpdateFrequencySec: 60
+  geodetectorMainThreads: 4
+  geodetectorFsThreads: 2
+  loggerLevel: info
+  loggerFormat: json
+  executeDebugCommands: false
+  geodetectorMonThreads: 2
+  syncer:
+    includeProjectKeyRegexp: '(gis\.geodetector.*|gis\.v4\.65536\.en\.ru)'
+    excludeProjectKeyRegexp: 'gis\.geodetector\.65536\.nolang\.-'
+  matchLabels: {}
+  podLabels: {}
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  hpa:
+    enabled: false
+    minReplicas: 3
+    maxReplicas: 8
+    averageCPUValue: 700m
+    behavior:
+      scaleDown:
+        policies:
+          - periodSeconds: 180
+            type: Percent
+            value: 3
+        stabilizationWindowSeconds: 1200
+      scaleUp:
+        selectPolicy: Min
+        policies:
+          - periodSeconds: 15
+            type: Percent
+            value: 10
+          - type: Pods
+            value: 5
+            periodSeconds: 15
+        stabilizationWindowSeconds: 30
+  vpa:
+    enabled: false
+    updateMode: Off
+  ports:
+    grpc: 10091
+    server: 10092
+    monitor: 10093
+  resources:
+    requests:
+      cpu: 1
+      memory: 4000Mi
+    limits:
+      cpu: 2
+      memory: 6Gi
+  data:
+    resources:
+      requests:
+        storage: 8Gi
+    storageClassName: ''
+    persistent:
+      enabled: false
+  prestopHook:
+    enabled: true
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+
+# @section Ingress settings
+
+# @param ingress.enabled Enable or disable Ingress for the service
+# @param ingress.className Name of the Ingress controller class
+# @param ingress.annotations Annotations to apply to the Ingress resource
+# @param ingress.hosts[0].host Hostname for the Ingress service
+# @param ingress.hosts[0].paths[0].path Path for the specified host in the Ingress service
+# @param ingress.hosts[0].paths[0].pathType Type of path matching (e.g., `Prefix`, `Exact`)
+# @param ingress.tls TLS configuration for the Ingress resource
+
+ingress:
+  enabled: false
+  className: nginx
+  annotations: {}
+  hosts:
+    - host: search-api-v8.example.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of an X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Mount path for the custom CA bundle inside the container. If empty, the default is: "/usr/local/share/ca-certificates"
+
+customCAs:
+  bundle: ''
+# bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
+  certsPath: ''
+
+# @skip onpremise Enable specific parameters for on-premise deployment
+
+onpremise: true
+
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`
+# @param dgctlStorage.bucket S3 bucket name
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate
+# @param dgctlStorage.secure If S3 uses https.
+# @param dgctlStorage.region S3 region
+
+dgctlStorage:
+  host: ''
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+  manifest: ''
+  region: ''
+  secure: false
