@@ -114,7 +114,7 @@ worker:
   podSecurityContext: {}
   imagePullSecrets: []
   image:
-    repository: 2gis-on-premise/search-worker
+    repository: 2gis-on-premise/search-api-v8-worker
     pullPolicy: IfNotPresent
     tag: 8.17.3
   ports:
@@ -305,7 +305,7 @@ head:
 
   head:
     image:
-      repository: 2gis-on-premise/search-head
+      repository: 2gis-on-premise/search-api-v8-head
       pullPolicy: IfNotPresent
       tag: 8.17.3
     ports:
@@ -408,7 +408,7 @@ head:
 
   nginx:
     image:
-      repository: 2gis-on-premise/search-nginx
+      repository: 2gis-on-premise/search-api-v8-nginx
       pullPolicy: IfNotPresent
       tag: 1.25.11
     ports:
@@ -695,7 +695,7 @@ filesStorage:
   ports:
     http: 8080
   image:
-    repository: 2gis-on-premise/search-files_storage
+    repository: 2gis-on-premise/search-api-v8-files_storage
     pullPolicy: IfNotPresent
     tag: 8.17.3
   podSecurityContext: {}
@@ -786,7 +786,7 @@ dataAdapter:
   ports:
     http: 8080
   image:
-    repository: 2gis-on-premise/search-data_adapter
+    repository: 2gis-on-premise/search-api-v8-data_adapter
     pullPolicy: IfNotPresent
     tag: 8.17.3
   podSecurityContext: {}
@@ -971,7 +971,7 @@ controller:
   ports:
     http: 8080
   image:
-    repository: 2gis-on-premise/search-controller
+    repository: 2gis-on-premise/search-api-v8-controller
     pullPolicy: IfNotPresent
     tag: 8.17.3
   podSecurityContext: {}
@@ -1104,7 +1104,7 @@ indexer:
     http: 8080
   loglevel: info
   image:
-    repository: 2gis-on-premise/search-indexer
+    repository: 2gis-on-premise/search-api-v8-indexer
     pullPolicy: IfNotPresent
     tag: 8.17.3
   podSecurityContext: {}
@@ -1209,7 +1209,7 @@ syncer:
     http: 8088
   loglevel: info
   image:
-    repository: 2gis-on-premise/search-syncer
+    repository: 2gis-on-premise/search-api-v8-syncer
     pullPolicy: IfNotPresent
     tag: 8.17.3
   securityContext: {}
@@ -1549,7 +1549,7 @@ ingressRouter:
       maxUnavailable: 25%
       maxSurge: 25%
   image:
-    repository: 2gis-on-premise/search-ingress-router
+    repository: 2gis-on-premise/search-api-v8-ingress-router
     pullPolicy: IfNotPresent
     tag: 8.17.3
   imagePullSecrets: []
@@ -1722,7 +1722,7 @@ geodetector:
     successThreshold: 1
     failureThreshold: 200
   image:
-    repository: 2gis-on-premise/search-geodetector
+    repository: 2gis-on-premise/search-api-v8-geodetector
     pullPolicy: IfNotPresent
     tag: 8.17.3
   imagePullSecrets: []
