@@ -59,7 +59,7 @@ navi-vrp-solver
 navi-vrp-task-manager
 	navi-vrp-task-manager:1.13.1
 platform
-	platform-ui:1.15.1
+	platform-ui:1.23.2
 pro-api
 	pro-api:2.26.0
 	pro-importer:2.26.0
