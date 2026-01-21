@@ -30,7 +30,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name:{{ include "keys.serviceAPI.name" $ }}
+                name: {{ include "keys.serviceAPI.name" $ }}
                 port:
                   number: {{ $.Values.serviceApi.service.port }}
           - path: "/public/v1"
@@ -44,7 +44,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name:{{ include "keys.api.name" $ }}
+                name: {{ include "keys.api.name" $ }}
                 port:
                   number: {{ $.Values.api.service.port }}
     {{- end }}
