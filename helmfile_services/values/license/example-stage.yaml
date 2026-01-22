@@ -1,0 +1,6 @@
+
+license:
+  type: 1
+persistence:
+  bucket: 'onpremise-artifacts-stage'
+  root: 'license_state'

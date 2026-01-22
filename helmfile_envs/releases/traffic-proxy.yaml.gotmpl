@@ -1,0 +1,55 @@
+dgctlDockerRegistry: {{ .Values.global.dgctlDockerRegistry }}
+
+proxy:
+  host: ''
+  listen: 8080
+  protocol: https  # don't document
+  upstreams: []  # don't document
+  cache:
+    enabled: true
+    age: 1m
+    size: 32m
+  worker:
+    processes: 2
+    connections: 1024
+  log:
+    customFormats: []
+    # - name: small
+    #   escape: json
+    #   format: |
+    #     '{"time_local":"$time_local",'
+    #     '"remote_addr":"$remote_addr",'
+    #     '"request":"$request",'
+    #     '"status":"$status",'
+    #     '"host":"$host"}'
+    errorLog:
+      level: error
+
+    accessLog: off
+    # accessLog: '/dev/stdout main'
+
+  keepaliveTimeout: 65
+
+  locations: []
+  # - path: /test/
+  #   definition: |
+  #     default_type text/html;
+  #     return 200 "<!DOCTYPE html><h2>test page</h2>\n";
+
+  httpServers: {}
+      # examplecfg: |
+      # server {
+      #   listen 0.0.0.0:8080;
+
+      #   location / {
+      #       default_type text/html;
+      #       return 200 "<!DOCTYPE html><h2>test page</h2>\n";
+      #   }
+      # }
+
+{{ $a := print .Release.Name ".ingress.enabled" }}
+{{ $IsIngressEnabled :=  .Values.apps | get $a false -}}
+{{- $ingressData := dict "name" .Release.Name "Values" $.Values "isEnabled" $IsIngressEnabled -}}
+
+ingress:
+  {{- include "ingress" $ingressData | nindent 2 }}
