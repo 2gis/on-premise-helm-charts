@@ -31,7 +31,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.144.1`                      |
+| `backend.image.tag`        | Backend service image tag.        | `1.149.1`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
 | `admin.image.tag`          | Admin service image tag.          | `1.4.0`                        |
 
@@ -92,6 +92,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `api.oidc.enableSinglePartnerMode`          | Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).                                                                                                | `false`         |
 | `api.oidc.enableExternalProvider`           | Enable external oidc provider: do not have access to manage users.                                                                                                                                                         | `false`         |
 | `api.oidc.url`                              | URL of the OIDC provider.                                                                                                                                                                                                  | `""`            |
+| `api.oidc.issuerUrl`                        | Allows discovery to work when the issuer_url reported by upstream is mismatched with the discovery URL.                                                                                                                    | `""`            |
 | `api.oidc.retryCount`                       | Maximum number of retries for requests to OIDC provider.                                                                                                                                                                   | `3`             |
 | `api.oidc.timeout`                          | Timeout for requests to OIDC provider.                                                                                                                                                                                     | `3s`            |
 | `api.oidc.defaultPartner`                   | **Settings for single partner mode feature. Info specified here will be returned in responses from Auth API**                                                                                                              |                 |
