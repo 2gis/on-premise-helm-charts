@@ -95,14 +95,14 @@ proxy:
   # @param proxy.httpServers List of additional server blocks to be included in the NGINX configuration
   httpServers: {}
       # examplecfg: |
-      # server {
-      #   listen 0.0.0.0:8080;
-
-      #   location / {
-      #       default_type text/html;
-      #       return 200 "<!DOCTYPE html><h2>test page</h2>\n";
+      #   server {
+      #       listen 0.0.0.0:8080;
+      #
+      #       location / {
+      #             default_type text/html;
+      #             return 200 "<!DOCTYPE html><h2>test page</h2>\n";
+      #       }
       #   }
-      # }
 
 
 # @section Deployment settings

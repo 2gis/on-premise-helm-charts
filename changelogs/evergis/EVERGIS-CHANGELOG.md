@@ -8,4 +8,3 @@ gis-platform
 	+ zookeeper:3.7.0-debian-10-r265
 
 ```
-

@@ -19,6 +19,17 @@ tls:
   key-path: /tls/client.key
 {{- end }}
 {{- end }}
+{{- if $.Values.cassandra.tls.existingSecret.name }}
+{{- if $.Values.cassandra.tls.existingSecret.caFileName }}
+  ca-path: /tls/{{ $.Values.cassandra.tls.existingSecret.caFileName }}
+{{- end }}
+{{- if $.Values.cassandra.tls.existingSecret.clientCertFileName }}
+  cert-path: /tls/{{ $.Values.cassandra.tls.existingSecret.clientCertFileName }}
+{{- end }}
+{{- if $.Values.cassandra.tls.existingSecret.clientKeyFileName }}
+  key-path: /tls/{{ $.Values.cassandra.tls.existingSecret.clientKeyFileName }}
+{{- end }}
+{{- end }}
 
 storage:
   host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}

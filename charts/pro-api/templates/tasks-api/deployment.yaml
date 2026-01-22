@@ -147,8 +147,6 @@ spec:
 
             - name: Common__Logging__Format
               value: {{ .Values.tasks.settings.logging.format | quote }}
-            - name: Common__Logging__Targets
-              value: {{ .Values.tasks.settings.logging.targets | quote }}
             - name: Kafka__BootstrapServers
               value: {{ $.Values.kafka.bootstrapServers }}
             - name: Kafka__SecurityProtocol
@@ -235,6 +233,16 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: redisPassword
+                  name: {{ include "pro-api.name" . }}-secret
+            {{- end }}
+
+            {{- if .Values.pagerenderer.settings.enabled }}
+            - name: PageRendererApi__Url
+              value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}
+            - name: PageRendererApi__ApiKey
+              valueFrom:
+                secretKeyRef:
+                  key: pagerendererApiKey
                   name: {{ include "pro-api.name" . }}-secret
             {{- end }}
 {{- end }}

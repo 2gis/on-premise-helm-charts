@@ -1,3 +1,13 @@
+## [2.3.0] (2026-01-22)
+
+#### Images
+```
+keys
+	- keys-backend:1.144.1
+	+ keys-backend:1.149.1
+```
+[Full list of image versions](core_image_versions.txt)
+
 ## [2.2.0] (2025-12-05)
 
 #### Images
@@ -33,4 +43,3 @@ license
 	+ license:2.4.1
 
 ```
-

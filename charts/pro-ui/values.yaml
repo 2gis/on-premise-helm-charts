@@ -27,7 +27,7 @@ strategy:
 # @param image.tag Tag
 image:
   repository: 2gis-on-premise/pro-ui
-  tag: 4.33.0
+  tag: 4.43.0
 
 # @section Common deployment settings
 
@@ -70,16 +70,16 @@ ui:
   # @param ui.appTheme Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
   # @param ui.appLocale Language in the app. Possible values: `"ar_AE"`, `"en_AE"` or `"ru_RU"`.
   # @param ui.appInitialMapCenter Default map coordinates, it contains of two numbers in an array: [lng, lat] (e.g., [55.27, 25.2] stands for Dubai, [37.64, 55.74] — for Moscow).
-  # @param ui.supportDocumentationLink Product online documentation root link. Ex.: 'https://docs.urbi.ae/en/pro', 'https://docs.2gis.com/ru/pro'
+  # @param ui.supportDocumentationLink Product online documentation root link. Ex.: 'https://docs.2gis.com/pro/overview', 'https://docs.urbi.ae/pro/overview'.
   # @param ui.immersiveModels A string value for config to enabling 3D-models. Possible values: [{"id":4,"name":"Ground","mapOptions":{"center":[53.287567,23.564967],"styleZoom":19.2,"pitch":45,"rotation":0},"objects":[{"buildingIds":[],"coords":[53.284762,23.569323],"scale":90,"rotateX":0.5,"rotateY":0,"moveX":0,"moveY":0,"moveZ":0,"models":[{"path":"/static/models/adnoc/ground.glb","name":"Ground","displayName":"Ground"}]}]}]
   # @param ui.publicS3Url Optional URL of public S3 where style data will be placed. Example: https://s3.domain.example.com/
 
   healthcheckPath: /api/healthcheck/app
   logLevel: error
   isOnPremise: true
-  appTheme: urbi
-  appLocale: en_AE
-  appInitialMapCenter: '[46.71, 24.72]'
+  appTheme: 2gis
+  appLocale: ru_RU
+  appInitialMapCenter: '[37.64, 55.74]'
   supportDocumentationLink: ''
   immersiveModels: ''
   publicS3Url: ''
@@ -265,8 +265,16 @@ hpa:
   targetCPU: 100
   targetMemory: ''
 
-# @section Artifacts Storage settings
+# @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.minAvailable How many pods must be available after the eviction.
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+# if minAvailable and pdb.maxUnavailable are both set, only minAvailable is used
+pdb:
+  enabled: false
+  minAvailable: ''
+  maxUnavailable: 1
 
+# @section Artifacts Storage settings
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
 # @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
 # @param dgctlStorage.bucket S3 bucket name. **Required**
@@ -307,7 +315,7 @@ stylesImporter:
   name: styles-importer
   image:
     repository: 2gis-on-premise/pro-importer
-    tag: 2.31.1
+    tag: 2.46.2
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   nodeSelector: {}

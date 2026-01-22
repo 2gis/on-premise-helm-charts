@@ -87,6 +87,10 @@ spec:
                   requests:
                     storage: {{ .Values.persistentVolume.size }}
         {{- end }}
+        {{- if .Values.nginx.customConfigPath }}
+        - name: nginx-custom-config-path
+          emptyDir: {}
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
@@ -108,7 +112,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
           - name: {{ include "castle.fullname" . }}-castle-nginx-config
-            mountPath: /etc/nginx/conf.d/castle.conf
+            mountPath: {{ printf "%s/conf.d/castle.conf" ( include "nginx.customConfigPath" .) }}
             subPath: castle.conf
           {{- if .Values.persistentVolume.enabled }}
           - name: {{ include "castle.fullname" . }}-pvc
@@ -117,8 +121,25 @@ spec:
           - name: {{ include "castle.fullname" . }}-data
             mountPath: {{ .Values.castle.castleDataPath }}
           {{- end }}
+          {{- if .Values.nginx.customConfigPath }}
+          - name: nginx-custom-config-path
+            mountPath: {{ .Values.nginx.customConfigPath }}
+          {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if.Values.nginx.customConfigPath }}
+          env:
+            - name: NGINX_CUSTOM_CONFIG_PATH
+              value: {{ .Values.nginx.customConfigPath | quote }}
+          {{- end }}
+          {{- if .Values.nginx.customConfigPath }}
+          args:
+            - nginx
+            - "-c"
+            - {{ printf "%s/nginx.conf" ( include "nginx.customConfigPath" .) | quote }}
+            - "-g"
+            - "daemon off;"
           {{- end }}
           ports:
             - name: http

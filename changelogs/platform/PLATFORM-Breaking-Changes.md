@@ -1,5 +1,23 @@
 # Platform Breaking-Changes
 
+## [2.48.0]
+
+### navi-back
+
+- `naviback.bss` section renamed to `naviback.stat`
+- `naviback.bss.client.serviceRemoteAddress` renamed to `naviback.stat.url`
+- `naviback.validation.bss` section renamed to `naviback.validation.stat`
+
+### navi-async-matrix
+
+- `bss` section renamed to `stat`
+- `keys.truckToken` was removed. Now, the `keys.token` is used for trucks
+- You need to upgrade keys-backend to version 1.144.1 (Release Core 2.2.0)
+
+### navi-vrp-task-manager
+
+- `bss` section renamed to `stat`
+
 ## [2.47.0]
 
 ### catalog-api

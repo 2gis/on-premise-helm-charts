@@ -187,7 +187,7 @@ spec:
             {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
 {{- /* generic-chart.containerName redefined in _helpers.tpl */}}
-        - name: {{ include "generic-chart.containerName" . }}
+        - name: &containerName {{ include "generic-chart.containerName" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
@@ -309,6 +309,8 @@ spec:
           {{- end }}
             - name: TZ
               value: {{ .Values.timezone | quote }}
+            - name: CONTAINER_NAME
+              value: *containerName
           lifecycle:
             # wait for the endpoint removal process
             preStop:

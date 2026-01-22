@@ -63,6 +63,9 @@ data:
           "timeout_seconds": 60
         },
         "server_info": {
+          {{- if ((.Values.resources).limits).cpu }}
+          "shared_thread_pool_size" : {{ include "config.setCpuNumber" . }},
+          {{- end }}
           "server_id": "{{ include "generic-chart.fullname" . }}"
         },
         "local_restrictions_for_demo_keys": {

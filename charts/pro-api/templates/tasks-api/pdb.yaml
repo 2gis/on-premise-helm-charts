@@ -1,0 +1,21 @@
+{{- with .Values.tasks.pdb }}
+{{- if .enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "pro-api.tasks-name" $ }}
+  labels:
+    {{- include "pro-api.tasksApiLabels" $ | nindent 4 }}
+spec:
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
+  {{- end }}
+  {{- if .maxUnavailable }}
+  maxUnavailable: {{ .maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pro-api.tasksApiSelectorLabels" $ | nindent 6 }}
+{{- end }}
+{{- end }}

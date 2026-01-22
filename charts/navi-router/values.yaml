@@ -53,7 +53,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-router
   pullPolicy: IfNotPresent
-  tag: 6.35.0.3
+  tag: 6.38.0.2
 
 
 # @section Navi-Router service settings

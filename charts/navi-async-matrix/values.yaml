@@ -24,17 +24,20 @@ dgctlDockerRegistry: ''
 # @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).
 # @param prometheusEnabled If Prometheus scrape is enabled.
 # @param livenessProbe.enabled Enable livenessProbe.
-# @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe.
 # @param livenessProbe.periodSeconds Period seconds for livenessProbe.
 # @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe.
 # @param livenessProbe.failureThreshold Failure threshold for livenessProbe.
 # @param readinessProbe.enabled Enable readinessProbe.
-# @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe.
 # @param readinessProbe.periodSeconds Period seconds for readinessProbe.
 # @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe.
 # @param readinessProbe.failureThreshold Failure threshold for readinessProbe.
+# @param startupProbe.enabled Enable startupProbe.
+# @param startupProbe.periodSeconds Period seconds for startupProbe.
+# @param startupProbe.timeoutSeconds Timeout seconds for startupProbe.
+# @param startupProbe.failureThreshold Failure threshold for startupProbe.
 # @param customLivenessProbe Override default liveness probe.
 # @param customReadinessProbe Override default readiness probe.
+# @param customStartupProbe Override default startup probe.
 
 replicaCount: 1
 imagePullSecrets: []
@@ -54,18 +57,22 @@ terminationGracePeriodSeconds: 60
 prometheusEnabled: true
 livenessProbe:
   enabled: true
-  initialDelaySeconds: 20
-  periodSeconds: 5
-  timeoutSeconds: 3
+  periodSeconds: 15
+  timeoutSeconds: 5
   failureThreshold: 5
 readinessProbe:
   enabled: true
-  initialDelaySeconds: 10
-  periodSeconds: 5
-  timeoutSeconds: 3
+  periodSeconds: 15
+  timeoutSeconds: 5
   failureThreshold: 3
+startupProbe:
+  enabled: true
+  periodSeconds: 15
+  timeoutSeconds: 5
+  failureThreshold: 60
 customLivenessProbe: {}
 customReadinessProbe: {}
+customStartupProbe: {}
 
 
 # @section Deployment settings
@@ -77,7 +84,7 @@ customReadinessProbe: {}
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  tag: 1.19.1
+  tag: 1.20.1
 
 
 # @section Service account settings
@@ -213,6 +220,18 @@ vpa:
 # @param dm.merger.image.repository Image repository for merger.
 # @param dm.merger.image.tag Image tag for merger.
 # @param dm.merger.replicaCount A replica count for the arhiver.
+# @param dm.merger.livenessProbe.enabled Enable livenessProbe for merger.
+# @param dm.merger.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe for merger.
+# @param dm.merger.livenessProbe.periodSeconds Period seconds for livenessProbe for merger.
+# @param dm.merger.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe for merger.
+# @param dm.merger.livenessProbe.failureThreshold Failure threshold for livenessProbe for merger.
+# @param dm.merger.readinessProbe.enabled Enable readinessProbe for merger.
+# @param dm.merger.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe for merger.
+# @param dm.merger.readinessProbe.periodSeconds Period seconds for readinessProbe for merger.
+# @param dm.merger.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe for merger.
+# @param dm.merger.readinessProbe.failureThreshold Failure threshold for readinessProbe for merger.
+# @param dm.merger.customLivenessProbe Override default liveness probe for merger.
+# @param dm.merger.customReadinessProbe Override default readiness probe for merger.
 # @skip dm.merger.resources
 # @extra dm.merger.resources.requests.cpu Merger CPU request. 1CPU recommended.
 # @extra dm.merger.resources.requests.memory Merger memory request. 10Gi recommended.
@@ -237,7 +256,21 @@ dm:
     replicaCount: 1
     image:
       repository: 2gis-on-premise/navi-merger-async-matrix
-      tag: 1.19.1
+      tag: 1.20.1
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 5
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 3
+    customLivenessProbe: {}
+    customReadinessProbe: {}
     resources: {}
   labels: {}
   annotations: {}
@@ -313,6 +346,7 @@ multiDc:
 # @param kafka.attractTopic Name of the topic for for attract tasks results
 # @param kafka.oneToManyTopic Name of the topic for oneToMany tasks results
 # @param kafka.vrpStatusTopic Name of the topic for VRP service integration
+# @param kafka.findPlatformTopic Name of the topic for Find Platform
 # @extra kafka.properties Properties as supported by kafka-python. Refer to inline comments for details.
 # @skip kafka.properties.bootstrap.servers
 # @skip kafka.properties.security.protocol
@@ -338,6 +372,10 @@ multiDc:
 # @skip kafka.taskTopicRules[2].topic
 # @skip kafka.taskTopicRules[2].type
 # @skip kafka.taskTopicRules[2].projects
+# @param kafka.findPlatformTopicRules ** Rules to map request type to topic for Find Platform **
+# @extra kafka.findPlatformTopicRules[0].topic
+# @extra kafka.findPlatformTopicRules[0].type
+# @extra kafka.findPlatformTopicRules[0].default
 # @param kafka.attractTopicRules ** Rules to map request type to topic for attract tasks **
 # @extra kafka.attractTopicRules[0].topic Name of the topic.
 # @extra kafka.attractTopicRules[0].default If this topic is used for projects by default.
@@ -353,6 +391,7 @@ kafka:
   attractTopic: ''
   oneToManyTopic: ''
   vrpStatusTopic: ''
+  findPlatformTopic: ''
   properties:
     bootstrap.servers: ''
     security.protocol: PLAINTEXT
@@ -374,6 +413,10 @@ kafka:
   #   type: car
   #   projects:
   #   - moscow
+  findPlatformTopicRules: []
+  # - topic: find_platform_task_topic
+  #   type: public-transport
+  #   default: true
   attractTopicRules: []
   #   - topic: attract_task_topic
   #     type: car
@@ -461,25 +504,23 @@ s3:
   publicUrl: ''
   expirationDays: 14
 
-# @skip bss.enabled
-# @skip bss.url
-# @skip bss.version
+# @param stat.enabled Is integration with statistic service enabled
+# @param stat.url URL of the statistic service (e.g - http(s)://stat-receiver/bss/3). **Required** if integration with statistic service enabled
+# @skip stat.version
 
-bss:
+stat:
   enabled: false
-  url: https://example.com
+  url: ''
   version: '0.1'
 
 # @section API keys service
 
 # @param keys.url API keys service URL, ex: http://keys-api.svc/service/v1/keys. **Required**
 # @param keys.token API token to authorize at the service. Required if truck car routing in use.
-# @param keys.truckToken Truck API token to authorize at the service. Required if truck routing in use.
 
 keys:
   url: ''
   token: ''
-  truckToken: ''
 
 
 # @section customCAs **Custom Certificate Authority**

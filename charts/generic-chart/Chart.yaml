@@ -4,7 +4,7 @@ description: Generic library Helm chart for 2Gis
 type: library
 keywords:
 - library
-version: 2.47.0
+version: 2.48.0
 maintainers:
 - name: 2gis
   url: https://github.com/2gis
