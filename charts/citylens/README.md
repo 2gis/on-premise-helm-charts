@@ -74,15 +74,15 @@ See the [documentation]() to learn about:
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                                                                  | Description                                                                                                           | Value                      |
-| --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `api.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                    |
-| `api.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                       |
-| `api.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `0`                        |
-| `api.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-api.example.com` |
-| `api.ingress.hosts[0].paths[0].path`                                  | Endpoint of host.                                                                                                     | `/`                        |
-| `api.ingress.hosts[0].paths[0].pathType`                              | Path type of endpoint.                                                                                                | `Prefix`                   |
-| `api.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                       |
+| Name                                                                  | Description                                                                                                           | Value                                                 |
+| --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `api.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                                               |
+| `api.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                                                  |
+| `api.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `{"nginx.ingress.kubernetes.io/proxy-body-size":"0"}` |
+| `api.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.api'.                                                                | `citylens-api.example.com`                            |
+| `api.ingress.hosts[0].paths[0].path`                                  | Endpoint of host.                                                                                                     | `/`                                                   |
+| `api.ingress.hosts[0].paths[0].pathType`                              | Path type of endpoint.                                                                                                | `Prefix`                                              |
+| `api.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                                                  |
 
 ### Auth settings for authentication
 
@@ -168,15 +168,15 @@ See the [documentation]() to learn about:
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                                                                  | Description                                                                                                           | Value                      |
-| --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `web.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                    |
-| `web.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                       |
-| `web.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `0`                        |
-| `web.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.web'.                                                                | `citylens-web.example.com` |
-| `web.ingress.hosts[0].paths[0].path`                                  | Endpoint of host.                                                                                                     | `/`                        |
-| `web.ingress.hosts[0].paths[0].pathType`                              | Path type of endpoint.                                                                                                | `Prefix`                   |
-| `web.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                       |
+| Name                                                                  | Description                                                                                                           | Value                                                 |
+| --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `web.ingress.enabled`                                                 | If Ingress is enabled for the service.                                                                                | `false`                                               |
+| `web.ingress.className`                                               | Resource that contains additional configuration including the name of the controller that should implement the class. | `""`                                                  |
+| `web.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter (default 1MB).                                                                              | `{"nginx.ingress.kubernetes.io/proxy-body-size":"0"}` |
+| `web.ingress.hosts[0].host`                                           | Hostname for the Ingress service. Ex.: 'citylens.web'.                                                                | `citylens-web.example.com`                            |
+| `web.ingress.hosts[0].paths[0].path`                                  | Endpoint of host.                                                                                                     | `/`                                                   |
+| `web.ingress.hosts[0].paths[0].pathType`                              | Path type of endpoint.                                                                                                | `Prefix`                                              |
+| `web.ingress.tls`                                                     | Tls settings for https.                                                                                               | `[]`                                                  |
 
 ### Auth settings for authentication
 
