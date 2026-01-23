@@ -151,7 +151,6 @@ tilesImporter:
 # @param taskProcessor.repository Docker Repository Image.
 # @param taskProcessor.tag Docker image tag.
 # @param taskProcessor.imagePullPolicy Image pull Policy.
-# @param taskProcessor.imagePullSecrets Image pull secrets.
 # @param taskProcessor.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
 # @param taskProcessor.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param taskProcessor.tempVolume Temporary data storage volume
@@ -167,7 +166,6 @@ taskProcessor:
   repository: 2gis-on-premise/tilegen-processor
   tag: 1.1.8
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: []
   backoffLimit: 1
   nodeSelector: {}
   tempVolume: {}

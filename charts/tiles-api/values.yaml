@@ -4,6 +4,12 @@
 
 dgctlDockerRegistry: ''
 
+# @section Common settings
+
+# @param imagePullSecrets Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+
+imagePullSecrets: []
+
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
@@ -175,13 +181,10 @@ tilegen:
   # @param tilegen.image.repository Docker Repository.
   # @param tilegen.image.tag Docker image tag.
   # @param tilegen.image.pullPolicy Kubernetes pull policy for the service's Docker image.
-  # @param tilegen.imagePullSecrets Kubernetes image pull secrets.
   image:
     repository: 2gis-on-premise/tiles-api-importer
     tag: 4.80.3
     pullPolicy: IfNotPresent
-
-  imagePullSecrets: []
 
   labels: {}
   annotations: {}
@@ -356,7 +359,6 @@ api:
   # @param api.image.repository Docker Repository.
   # @param api.image.tag Docker image tag.
   # @param api.image.pullPolicy Kubernetes pull policy for the service's Docker image.
-  # @param api.imagePullSecrets Kubernetes image pull secrets.
 
   image:
     repository: 2gis-on-premise/tiles-api
@@ -389,8 +391,6 @@ api:
   nodeSelector: {}
   affinity: {}
   tolerations: []
-
-  imagePullSecrets: []
 
   # @extra api.strategy.rollingUpdate **Service's Rolling Update strategy settings**
   # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
@@ -515,7 +515,6 @@ importer:
   # @param importer.image.repository Docker Repository.
   # @param importer.image.tag Docker image tag.
   # @param importer.image.pullPolicy Kubernetes pull policy for the service's Docker image.
-  # @param importer.imagePullSecrets Kubernetes image pull secrets.
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
@@ -560,7 +559,6 @@ importer:
   retryCount: 3
 
   tolerations: []
-  imagePullSecrets: []
   nodeSelector: {}
 
   # @extra importer.workerResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the workers**

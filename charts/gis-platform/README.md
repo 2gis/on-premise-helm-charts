@@ -26,9 +26,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ### Common settings
 
-| Name  | Description                                                                 | Value |
-| ----- | --------------------------------------------------------------------------- | ----- |
-| `url` | URL for the GIS platform ex: https://gis-platform.ingress.host **Required** | `""`  |
+| Name               | Description                                                                                                                                         | Value |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `url`              | URL for the GIS platform ex: https://gis-platform.ingress.host **Required**                                                                         | `""`  |
+| `imagePullSecrets` | Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) | `[]`  |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 

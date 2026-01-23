@@ -8,9 +8,10 @@ dgctlDockerRegistry: ''
 # @section Common settings
 
 # @param url URL for the GIS platform ex: https://gis-platform.ingress.host **Required**
+# @param imagePullSecrets Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 url: ''
-
+imagePullSecrets: []
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 

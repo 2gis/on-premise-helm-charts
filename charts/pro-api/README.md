@@ -2,6 +2,12 @@
 
 ## Values
 
+### Common settings
+
+| Name               | Description                    | Value |
+| ------------------ | ------------------------------ | ----- |
+| `imagePullSecrets` | Kubernetes image pull secrets. | `[]`  |
+
 ### Geo API configuration & settings
 
 | Name                                                        | Description                                                                                                                                                                                                                                            | Value                     |
@@ -17,7 +23,6 @@
 | `api.ingress.hosts[0].paths[0].pathType`                    | Type of the path for the Ingress service.                                                                                                                                                                                                              | `Prefix`                  |
 | `api.ingress.tls`                                           | TLS configuration                                                                                                                                                                                                                                      | `[]`                      |
 | `api.pod.replicaCount`                                      | A replica count for the pod.                                                                                                                                                                                                                           | `2`                       |
-| `api.pod.imagePullSecrets`                                  | Kubernetes image pull secrets.                                                                                                                                                                                                                         | `[]`                      |
 | `api.pod.nameOverride`                                      | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                                                                                                | `""`                      |
 | `api.pod.fullnameOverride`                                  | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                                                                                                            | `""`                      |
 | `api.pod.nodeSelector`                                      | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                                                                    | `{}`                      |
@@ -88,7 +93,6 @@
 | `permissions.ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service                                                                                                         | `Prefix`                              |
 | `permissions.ingress.tls`                        | TLS configuration                                                                                                                                | `[]`                                  |
 | `permissions.pod.replicaCount`                   | A replica count for the pod.                                                                                                                     | `1`                                   |
-| `permissions.pod.imagePullSecrets`               | Kubernetes image pull secrets.                                                                                                                   | `[]`                                  |
 | `permissions.pod.nodeSelector`                   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                              | `{}`                                  |
 | `permissions.pod.affinity`                       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                      | `{}`                                  |
 | `permissions.pod.priorityClassName`              | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                                     | `""`                                  |
@@ -150,7 +154,6 @@
 | `tasks.ingress.tls`                                        | TLS configuration                                                                                                                                                                                        | `[]`                            |
 | `tasks.pod.apiReplicaCount`                                | A replica count for the api pod.                                                                                                                                                                         | `1`                             |
 | `tasks.pod.workerReplicaCount`                             | A replica count for the worker pod.                                                                                                                                                                      | `1`                             |
-| `tasks.pod.imagePullSecrets`                               | Kubernetes image pull secrets.                                                                                                                                                                           | `[]`                            |
 | `tasks.pod.nodeSelector`                                   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`                            |
 | `tasks.pod.affinity`                                       | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`                            |
 | `tasks.pod.priorityClassName`                              | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                                                                                             | `""`                            |
@@ -211,7 +214,6 @@
 | `pagerenderer.image.tag`                         | Tag                                                                                                                                              | `2.46.2`                               |
 | `pagerenderer.image.pullPolicy`                  | Pull Policy                                                                                                                                      | `IfNotPresent`                         |
 | `pagerenderer.pod.replicaCount`                  | A replica count for the pod.                                                                                                                     | `1`                                    |
-| `pagerenderer.pod.imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                   | `[]`                                   |
 | `pagerenderer.pod.nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                              | `{}`                                   |
 | `pagerenderer.pod.affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                      | `{}`                                   |
 | `pagerenderer.pod.priorityClassName`             | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                                     | `""`                                   |
@@ -261,7 +263,6 @@
 | `assetImporter.appName`                            | Data Import job name.                                                                                                                                    | `asset-importer`               |
 | `assetImporter.repository`                         | Docker Repository Image.                                                                                                                                 | `2gis-on-premise/pro-importer` |
 | `assetImporter.tag`                                | Docker image tag.                                                                                                                                        | `2.46.2`                       |
-| `assetImporter.imagePullSecrets`                   | Kubernetes image pull secrets.                                                                                                                           | `[]`                           |
 | `assetImporter.schedule`                           | Import job schedule.                                                                                                                                     | `0 18 * * *`                   |
 | `assetImporter.backoffLimit`                       | The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.   | `2`                            |
 | `assetImporter.successfulJobsHistoryLimit`         | How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits). | `3`                            |
