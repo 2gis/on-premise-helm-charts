@@ -69,7 +69,7 @@ env:
   MAPGL_TILES_API: ''
   MAPGL_TILESET: web
   MAPGL_IMMERSIVE_TILESET: web_immersive
-  MAPGL_RELIEF_TILESET: dem
+  MAPGL_RELIEF_TILESET: web_relief
   MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
   MAPGL_STYLESERVER: ''
   MAPGL_ICONS_URL: ''
