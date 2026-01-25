@@ -120,7 +120,7 @@ api:
   resources:
     limits:
       cpu: 1000m
-      memory: 1024Mi
+      memory: 1Gi
     requests:
       cpu: 100m
       memory: 256Mi
@@ -250,7 +250,7 @@ cron:
   resources:
     limits:
       cpu: 1000m
-      memory: 1024Mi
+      memory: 1Gi
     requests:
       cpu: 100m
       memory: 256Mi

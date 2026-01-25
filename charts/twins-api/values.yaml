@@ -282,7 +282,7 @@ importer:
       memory: 512Mi
     limits:
       cpu: 2
-      memory: 2048Mi
+      memory: 2Gi
 
   # @section importer.cleaner **Cleaner scheme settings**
   # @param importer.cleaner.enabled If clean schemes is enabled for the service

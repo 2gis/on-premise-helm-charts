@@ -75,7 +75,7 @@ api:
         memory: 256Mi
       limits:
         cpu: 1
-        memory: 1024Mi
+        memory: 1Gi
     strategy:
       type: RollingUpdate
       rollingUpdate:
@@ -390,7 +390,7 @@ tasks:
         memory: 256Mi
       limits:
         cpu: 1
-        memory: 1024Mi
+        memory: 1Gi
     strategy:
       type: RollingUpdate
       rollingUpdate:
