@@ -75,7 +75,7 @@ api:
         memory: 256Mi
       limits:
         cpu: 1
-        memory: 1Gi
+        memory: 1024Mi
     strategy:
       type: RollingUpdate
       rollingUpdate:
@@ -254,7 +254,7 @@ permissions:
         memory: 256Mi
       limits:
         cpu: 1
-        memory: 1Gi
+        memory: 1024Mi
 
   # @param permissions.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param permissions.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -390,7 +390,7 @@ tasks:
         memory: 256Mi
       limits:
         cpu: 1
-        memory: 1Gi
+        memory: 1024Mi
     strategy:
       type: RollingUpdate
       rollingUpdate:
@@ -551,7 +551,7 @@ pagerenderer:
         memory: 256Mi
       limits:
         cpu: 1
-        memory: 1Gi
+        memory: 1024Mi
 
   # @param pagerenderer.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param pagerenderer.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -656,7 +656,7 @@ assetImporter:
       memory: 768Mi
     limits:
       cpu: 1000m
-      memory: 8Gi
+      memory: 8192Mi
   suspended: false
   startOnDeploy: true
   startOnDeployMode: ScheduleManifest

@@ -1075,7 +1075,7 @@ routes:
         memory: 256Mi
       limits:
         cpu: 1
-        memory: 1Gi
+        memory: 1024Mi
 
 # @section Service settings
 # @param routes.api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -1222,7 +1222,7 @@ routes:
         memory: 256Mi
       limits:
         cpu: 1
-        memory: 1Gi
+        memory: 1024Mi
 
 # @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 # @param routes.worker.pdb.enabled If PDB is enabled for the service.
@@ -1318,7 +1318,7 @@ routes:
         memory: 256Mi
       limits:
         cpu: 1
-        memory: 1Gi
+        memory: 1024Mi
 
 # @section Service settings
 # @param routes.realtimeDataApi.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).

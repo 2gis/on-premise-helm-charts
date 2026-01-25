@@ -49,10 +49,10 @@ api:
   resources:
     requests:
       cpu: 500m
-      memory: 1.5Gi
+      memory: 1500Mi
     limits:
       cpu: 1
-      memory: 1.5Gi
+      memory: 1500Mi
 
 
 # @section Streams service settings

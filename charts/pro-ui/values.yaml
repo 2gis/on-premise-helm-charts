@@ -325,6 +325,6 @@ stylesImporter:
       memory: 768Mi
     limits:
       cpu: 1000m
-      memory: 8Gi
+      memory: 8192Mi
   maxParallelJobs: 1
   startOnDeploy: false

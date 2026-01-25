@@ -124,10 +124,10 @@ api:
   resources:
     requests:
       cpu: 2
-      memory: 6Gi
+      memory: 6000Mi
     limits:
       cpu: 4
-      memory: 6.5Gi
+      memory: 6500Mi
 
 
   # @section Service settings
@@ -416,7 +416,7 @@ importer:
       memory: 512Mi
     limits:
       cpu: 2
-      memory: 2Gi
+      memory: 2048Mi
 
   # @section importer.cleaner **Cleaner scheme settings**
   # @param importer.cleaner.enabled If clean schemes is enabled for the service
