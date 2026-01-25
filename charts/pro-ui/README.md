@@ -201,7 +201,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | `stylesImporter.resources.requests.cpu`     | A CPU request.                                                                                                                                           | `700m`                         |
 | `stylesImporter.resources.requests.memory`  | A memory request.                                                                                                                                        | `768Mi`                        |
 | `stylesImporter.resources.limits.cpu`       | A CPU limit.                                                                                                                                             | `1000m`                        |
-| `stylesImporter.resources.limits.memory`    | A memory limit.                                                                                                                                          | `8Gi`                          |
+| `stylesImporter.resources.limits.memory`    | A memory limit.                                                                                                                                          | `8192Mi`                       |
 
 ## Maintainers
 
