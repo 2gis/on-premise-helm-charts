@@ -54,7 +54,7 @@
 | `api.pdb.enabled`                                           | If PDB is enabled for the service.                                                                                                                                                                                                                     | `false`                   |
 | `api.pdb.minAvailable`                                      | How many pods must be available after the eviction.                                                                                                                                                                                                    | `1`                       |
 | `api.pdb.maxUnavailable`                                    | How many pods can be unavailable after the eviction.                                                                                                                                                                                                   | `""`                      |
-| `api.settings.licenseKey`                                   | License key. **Required**                                                                                                                                                                                                                              | `""`                      |
+| `api.settings.licenseKey`                                   | PRO license key. Contact your vendor to obtain it. **Required**                                                                                                                                                                                        | `""`                      |
 | `api.settings.tempPath`                                     | Path to directory used for temp data                                                                                                                                                                                                                   | `/tmp`                    |
 | `api.settings.logging`                                      | Logging settings                                                                                                                                                                                                                                       |                           |
 | `api.settings.logging.format`                               | Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text                                                                                                                    | `simple`                  |
@@ -408,17 +408,17 @@
 
 ### Catalog API settings
 
-| Name          | Description                                                                                        | Value |
-| ------------- | -------------------------------------------------------------------------------------------------- | ----- |
-| `catalog.url` | URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc | `""`  |
-| `catalog.key` | Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).                           | `""`  |
+| Name          | Description                                                                                                  | Value |
+| ------------- | ------------------------------------------------------------------------------------------------------------ | ----- |
+| `catalog.url` | URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc           | `""`  |
+| `catalog.key` | Client access key for the Catalog API, issued by Keys API. The key must have the **search** feature enabled. | `""`  |
 
 ### Navigation API settings
 
-| Name       | Description                                                                                                      | Value |
-| ---------- | ---------------------------------------------------------------------------------------------------------------- | ----- |
-| `navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-back.svc | `""`  |
-| `navi.key` | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).                         | `""`  |
+| Name       | Description                                                                                                        | Value |
+| ---------- | ------------------------------------------------------------------------------------------------------------------ | ----- |
+| `navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-front.svc  | `""`  |
+| `navi.key` | Client access key for the Navigation API, issued by Keys API. The key must have the **isochrone** feature enabled. | `""`  |
 
 ### License Service API settings
 

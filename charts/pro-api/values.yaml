@@ -121,7 +121,7 @@ api:
     minAvailable: 1
     maxUnavailable: ''
 
-  # @param api.settings.licenseKey License key. **Required**
+  # @param api.settings.licenseKey PRO license key. Contact your vendor to obtain it. **Required**
   # @param api.settings.tempPath Path to directory used for temp data
   # @skip api.settings.logEsQueries
   # @skip api.settings.debug
@@ -902,7 +902,7 @@ digger:
 # @section Catalog API settings
 
 # @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc
-# @param catalog.key Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).
+# @param catalog.key Client access key for the Catalog API, issued by Keys API. The key must have the **search** feature enabled.
 
 catalog:
   url: ''
@@ -911,8 +911,9 @@ catalog:
 
 # @section Navigation API settings
 
-# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-back.svc
-# @param navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-front.svc
+# @param navi.key Client access key for the Navigation API, issued by Keys API. The key must have the **isochrone** feature enabled.
+
 
 navi:
   url: ''
