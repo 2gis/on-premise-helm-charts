@@ -197,7 +197,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `app_project`                                           | DEPRECATED see `appProect`                                                                                                                                                                                                                     |                                          |
 | `rules`                                                 | List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details                                                       | `[]`                                     |
 
-### Envoy settings, ignored if not `transmitter.enabled`.
+### Envoy settings, ignored if neither `remoteAttractor.enabled` nor `transmitter.enabled` is true.
 
 | Name                              | Description                                                                                  | Value                        |
 | --------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------- |
@@ -317,13 +317,29 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Settings for attractor connection.
 
+| Name                                  | Description                                                                                                                                                                                    | Value                  |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `remoteAttractor.enabled`             | if attractor connection required                                                                                                                                                               | `false`                |
+| `remoteAttractor.type`                | connection type one of: grpc, grpc-async, grpc-stream, grpc-async-stream, ws, ws-async                                                                                                         | `grpc-async-stream`    |
+| `remoteAttractor.host`                | attractor service, ex: navi-attractor.host                                                                                                                                                     | `""`                   |
+| `remoteAttractor.port`                | attractor port                                                                                                                                                                                 | `50051`                |
+| `remoteAttractor.responseTimeoutMs`   | response waiting timeout                                                                                                                                                                       | `1000`                 |
+| `remoteAttractor.connectTimeout`      | Establish connection [timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-connect-timeout)                | `2s`                   |
+| `remoteAttractor.clusterTimeout`      | Response [timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-timeout)                           | `120s`                 |
+| `remoteAttractor.retry.enabled`       | Enable retry failed requests                                                                                                                                                                   | `false`                |
+| `remoteAttractor.retry.retryOn`       | Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)                                                      | `internal,unavailable` |
+| `remoteAttractor.retry.numRetries`    | Failed request [retries](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-max-retries)                             | `5`                    |
+| `remoteAttractor.retry.perTryTimeout` | Specifies timeout on each [retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-upstream-rq-per-try-timeout-ms) | `2s`                   |
+
+### Settings for DEPRECATED attractor connection.
+
 | Name                              | Description                                                                                                                                                                                    | Value                        |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `transmitter.enabled`             | if attractor connection required                                                                                                                                                               | `false`                      |
 | `transmitter.type`                | connection type one of: grpc, grpc-async, grpc-stream, ws, ws-async                                                                                                                            | `grpc-async-stream`          |
 | `transmitter.host`                | attractor service                                                                                                                                                                              | `http://navi-attractor.host` |
 | `transmitter.port`                | attractor port                                                                                                                                                                                 | `50051`                      |
-| `transmitter.responseTimeoutMs`   | response waiting timeout                                                                                                                                                                       | `2000`                       |
+| `transmitter.responseTimeoutMs`   | response waiting timeout                                                                                                                                                                       | `1000`                       |
 | `transmitter.connectTimeout`      | Establish connection [timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-connect-timeout)                | `2s`                         |
 | `transmitter.clusterTimeout`      | Response [timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-timeout)                           | `120s`                       |
 | `transmitter.retry.enabled`       | Enable retry failed requests                                                                                                                                                                   | `false`                      |
