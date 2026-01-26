@@ -4,10 +4,6 @@ Use this Helm chart to deploy Tiles API service, which is a part of 2GIS's [On-P
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-> **Note:**
->
-> All On-Premise services are beta, and under development.
-
 See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 - Architecture of the service.
