@@ -17,6 +17,7 @@ dgctlDockerRegistry: ''
 # @param affinity Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
 # @param redeployLabel If this label is changed since the last deployment, the whole chart will be redeployed
+# @param imagePullSecrets Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 enableServiceLinks: true
 podAnnotations: {}
@@ -28,7 +29,7 @@ nodeSelector: {}
 affinity: {}
 tolerations: []
 redeployLabel: ''
-
+imagePullSecrets: []
 
 # @section Deployment Artifacts Storage settings
 

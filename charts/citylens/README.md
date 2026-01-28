@@ -26,6 +26,12 @@ See the [documentation]() to learn about:
 | --------------------- | --------------------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port` **Required** | `""`  |
 
+### Common settings
+
+| Name               | Description                                                                                                                                         | Value |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `imagePullSecrets` | Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) | `[]`  |
+
 ### Deployment Artifacts Storage settings
 
 | Name                     | Description                                                                                                                                                                                                                                                           | Value   |
@@ -534,7 +540,6 @@ See the [documentation]() to learn about:
 
 | Name                                   | Description                                                                                                                                      | Value  |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| `routes.imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                   | `[]`   |
 | `routes.terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds | `60`   |
 | `routes.migration.enabled`             | If migrations needed.                                                                                                                            | `true` |
 

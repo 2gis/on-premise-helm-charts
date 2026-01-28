@@ -4,11 +4,11 @@ kind: StatefulSet
 metadata:
   name: {{ include "gis-platform-spcore.fullname" . }}
 spec:
-{{- if .Values.spcore.resetCluster }}
+  {{- if .Values.spcore.resetCluster }}
   replicas: 1
-{{- else }}
+  {{- else }}
   replicas: {{ .Values.spcore.replicaCount }}
-{{- end }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "gis-platform-spcore.selectorLabels" . | nindent 6 }}
@@ -22,10 +22,14 @@ spec:
         {{- include "gis-platform-spcore.selectorLabels" . | nindent 8 }}
     spec:
       terminationGracePeriodSeconds: {{ .Values.spcore.terminationGracePeriodSeconds }}
-{{- if .Values.spcore.nodeSelector }}
+      {{- if .Values.spcore.nodeSelector }}
       nodeSelector:
-{{ toYaml .Values.spcore.nodeSelector | indent 8 }}
-{{- end }}
+      {{ toYaml .Values.spcore.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- if .Values.spcore.priorityClassName }}
       priorityClassName: {{ .Values.spcore.priorityClassName }}
       {{- end }}

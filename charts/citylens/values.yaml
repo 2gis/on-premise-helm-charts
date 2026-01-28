@@ -4,6 +4,12 @@
 
 dgctlDockerRegistry: ''
 
+# @section Common settings
+
+# @param imagePullSecrets Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+
+imagePullSecrets: []
+
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 host. Format: `host:port`. **Required**
@@ -973,12 +979,10 @@ customCAs:
 routes:
 
 # @skip routes.environment
-# @param routes.imagePullSecrets Kubernetes image pull secrets.
 # @param routes.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
 # @param routes.migration.enabled If migrations needed.
 
   environment: ''
-  imagePullSecrets: []
   terminationGracePeriodSeconds: 60
   migration:
     enabled: true
