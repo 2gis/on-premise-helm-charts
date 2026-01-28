@@ -420,7 +420,8 @@ appProject: ''
 rules: []
 
 
-# @section Envoy settings, ignored if not `transmitter.enabled`.
+# @section Envoy settings, ignored if neither `remoteAttractor.enabled` nor `transmitter.enabled` is true.
+# `remoteAttractor` has priority over deprecated `transmitter`.
 
 # @param envoy.image.repository Repository
 # @param envoy.image.tag Tag
@@ -648,6 +649,37 @@ s3:
 
 # @section Settings for attractor connection.
 
+# @param remoteAttractor.enabled if attractor connection required
+# @param remoteAttractor.type connection type one of: grpc, grpc-async, grpc-stream, grpc-async-stream, ws, ws-async
+# @param remoteAttractor.host attractor service, ex: navi-attractor.host
+# @param remoteAttractor.port attractor port
+# @param remoteAttractor.responseTimeoutMs response waiting timeout
+# @param remoteAttractor.connectTimeout Establish connection [timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-connect-timeout)
+# @param remoteAttractor.clusterTimeout Response [timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-timeout)
+# @param remoteAttractor.retry.enabled Enable retry failed requests
+# @param remoteAttractor.retry.retryOn Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)
+# @param remoteAttractor.retry.numRetries Failed request [retries](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-max-retries)
+# @param remoteAttractor.retry.perTryTimeout Specifies timeout on each [retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#config-http-filters-router-x-envoy-upstream-rq-per-try-timeout-ms)
+
+remoteAttractor:
+  enabled: false
+  type: grpc-async-stream
+  host: ''
+  port: 50051
+  responseTimeoutMs: 1000
+  connectTimeout: 2s
+  clusterTimeout: 120s
+  retry:
+    enabled: false
+    retryOn: internal,unavailable
+    numRetries: 5
+    perTryTimeout: 2s
+
+# DEPRECATED (backward compatibility): use remoteAttractor instead.
+# transmitter is kept as an alias for older configs and will be removed in a future release.
+
+# @section Settings for DEPRECATED attractor connection.
+
 # @param transmitter.enabled if attractor connection required
 # @param transmitter.type connection type one of: grpc, grpc-async, grpc-stream, ws, ws-async
 # @param transmitter.host attractor service
@@ -665,7 +697,7 @@ transmitter:
   type: grpc-async-stream
   host: http://navi-attractor.host
   port: 50051
-  responseTimeoutMs: 2000
+  responseTimeoutMs: 1000
   connectTimeout: 2s
   clusterTimeout: 120s
   retry:

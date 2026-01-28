@@ -64,12 +64,12 @@ data:
         "handler": {{ .Values.naviback.sentry.handler | default "/usr/sbin/2gis/mosesd/crashpad_handler" | quote }}
       },
       {{- end }}
-      {{- if .Values.transmitter.enabled }}
-      "transmitter": {
-        "type": {{ .Values.transmitter.type | quote }},
+      {{- if (index .Values (include "config.attractor" .) | default dict).enabled }}
+      "remote_attractor": {
+        "type": {{ (index .Values (include "config.attractor" .) | default dict).type | quote }},
         "host": "127.0.0.1",
         "port": 9999,
-        "timeout_limit_ms": {{ .Values.transmitter.responseTimeoutMs | int }}
+        "timeout_limit_ms": {{ default 1000 ((index .Values (include "config.attractor" .) | default dict).responseTimeoutMs) | quote }}
       },
       {{- end }}
       "context": {
@@ -769,7 +769,7 @@ data:
   {{- end }}{{- /* .Values.naviback.overrideConfig */}}
   rules.conf: |-
     {{- include "rules.renderRules" . }}
-  {{- if .Values.transmitter.enabled }}
+  {{- if (index .Values (include "config.attractor" .) | default dict).enabled }}
   envoy.yaml: |
     admin:
       address:
@@ -801,12 +801,12 @@ data:
                       prefix: "/"
                     route:
                       cluster: attractor
-                      timeout: {{ .Values.transmitter.clusterTimeout }}
-                      {{- if .Values.transmitter.retry.enabled }}
+                      timeout: {{ default "2s" ((index .Values (include "config.attractor" .) | default dict).clusterTimeout) | quote }}
+                      {{- if (dig "retry" "enabled" false (index .Values (include "config.attractor" .) | default dict)) }}
                       retry_policy:
-                        retry_on: {{ .Values.transmitter.retry.retryOn | quote }}
-                        num_retries: {{ .Values.transmitter.retry.numRetries | int }}
-                        per_try_timeout: {{ .Values.transmitter.retry.perTryTimeout }}
+                        retry_on: {{ (dig "retry" "retryOn" "" (index .Values (include "config.attractor" .) | default dict))  | quote }}
+                        num_retries: {{ (dig "retry" "numRetries" 5 (index .Values (include "config.attractor" .) | default dict))  | int }} 
+                        per_try_timeout: {{ (dig "retry" "perTryTimeout" "2s" (index .Values (include "config.attractor" .) | default dict))  | quote }} 
                         retry_host_predicate:
                           - name: envoy.retry_host_predicates.previous_hosts
                             typed_config:
@@ -818,7 +818,7 @@ data:
                   "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
       clusters:
       - name: attractor
-        connect_timeout: {{ .Values.transmitter.connectTimeout }}
+        connect_timeout: {{ default "2s" ((index .Values (include "config.attractor" .) | default dict).connectTimeout) | quote }}
         type: STRICT_DNS
         dns_lookup_family: V4_ONLY
         lb_policy: ROUND_ROBIN
@@ -831,6 +831,6 @@ data:
             - endpoint:
                 address:
                   socket_address:
-                    address: {{ .Values.transmitter.host | default "localhost" | quote }}
-                    port_value: {{ .Values.transmitter.port | default 8080 | int }}
-  {{- end }}{{- /* if .Values.transmitter.enabled */}}
+                    address: {{ default "localhost" ((index .Values (include "config.attractor" .) | default dict).host) | quote }}
+                    port_value: {{ default "8080" ((index .Values (include "config.attractor" .) | default dict).port) | int }}
+  {{- end }}{{- /* if eq (include "config.remoteAttractorEnabled" .) "true" */}}
