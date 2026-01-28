@@ -72,7 +72,7 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | `api.service.port`              | Service port.                                                                                                                                  | `80`                                |
 | `api.service.targetPort`        | Port inside the container.                                                                                                                     | `8080`                              |
 | `api.resources`                 | **Limits for the API service**                                                                                                                 |                                     |
-| `api.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `0.5`                               |
+| `api.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `500m`                              |
 | `api.resources.requests.memory` | A memory request.                                                                                                                              | `1500Mi`                            |
 | `api.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`                                 |
 | `api.resources.limits.memory`   | A memory limit.                                                                                                                                | `1500Mi`                            |
@@ -94,9 +94,9 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | `streams.image.pullPolicy`          | Pull Policy                                                                                                                                    | `IfNotPresent`                          |
 | `streams.resources`                 | **Limits for the Streams service**                                                                                                             |                                         |
 | `streams.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `1`                                     |
-| `streams.resources.requests.memory` | A memory request.                                                                                                                              | `4G`                                    |
+| `streams.resources.requests.memory` | A memory request.                                                                                                                              | `4Gi`                                   |
 | `streams.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `2`                                     |
-| `streams.resources.limits.memory`   | A memory limit.                                                                                                                                | `4G`                                    |
+| `streams.resources.limits.memory`   | A memory limit.                                                                                                                                | `4Gi`                                   |
 
 ### Kafka service settings
 

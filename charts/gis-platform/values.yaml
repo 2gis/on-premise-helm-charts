@@ -80,10 +80,10 @@ spcore:
   resources:
     requests:
       cpu: 800m
-      memory: 4096Mi
+      memory: 4Gi
     limits:
       cpu: 800m
-      memory: 4096Mi
+      memory: 4Gi
 
   # @extra spcore.cors **CORS settings.**
   # @param spcore.cors.allowEveryone If true, requests from any origin will be allowed.

@@ -192,10 +192,10 @@ taskProcessor:
 resources:
   requests:
     cpu: 400m
-    memory: 256M
+    memory: 256Mi
   limits:
     cpu: 1
-    memory: 1024M
+    memory: 1024Mi
 
 # @extra Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 

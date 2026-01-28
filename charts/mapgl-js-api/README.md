@@ -102,9 +102,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | Name                        | Description       | Value  |
 | --------------------------- | ----------------- | ------ |
 | `resources.requests.cpu`    | A CPU request.    | `30m`  |
-| `resources.requests.memory` | A memory request. | `32M`  |
+| `resources.requests.memory` | A memory request. | `32Mi` |
 | `resources.limits.cpu`      | A CPU limit.      | `100m` |
-| `resources.limits.memory`   | A memory limit.   | `96M`  |
+| `resources.limits.memory`   | A memory limit.   | `96Mi` |
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
