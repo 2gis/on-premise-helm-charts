@@ -4,10 +4,6 @@ Use this Helm chart to deploy Citylens services, which is a part of 2GIS's [On-P
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-> **Note:**
->
-> All On-Premise services are beta, and under development.
-
 See the [documentation]() to learn about:
 
 - Architecture of the service.

@@ -2,10 +2,6 @@
 
 Use this Helm chart to deploy the Stat Receiver service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
 
-> **Note:**
->
-> All On-Premise services are beta, and under development.
-
 ## Installing
 
 To install the service create a YAML file that will contain:
