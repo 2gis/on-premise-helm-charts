@@ -42,7 +42,7 @@ podLabels: {}
 
 image:
   repository: 2gis-on-premise/mapgl
-  tag: 1.67.0
+  tag: 1.69.1
   pullPolicy: IfNotPresent
 
 
@@ -53,6 +53,7 @@ image:
 # @param env.MAPGL_TILES_API URL of the Tiles API service, e.g. 'https://tiles-api.ingress.host'
 # @param env.MAPGL_TILESET Tileset of the Tiles API service to use.
 # @param env.MAPGL_IMMERSIVE_TILESET Additional immersive tileset of the Tiles API service to use.
+# @param env.MAPGL_RELIEF_TILESET Tileset of the terrain.
 # @param env.MAPGL_TRAFFICSERVER Domain name of the Traffic Proxy service, e.g. 'https://traffic-proxy.ingress.host'
 # @param env.MAPGL_STYLESERVER URL of the Styles API service, e.g. 'https://styles.ingress.host'
 # @param env.MAPGL_ICONS_URL URL of the icons directory, e.g. 'https://s3.ingress.host/styles/assets/icons'. This s3 URL must be public available (accessible from browser).
@@ -68,6 +69,7 @@ env:
   MAPGL_TILES_API: ''
   MAPGL_TILESET: web
   MAPGL_IMMERSIVE_TILESET: web_immersive
+  MAPGL_RELIEF_TILESET: web_relief
   MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
   MAPGL_STYLESERVER: ''
   MAPGL_ICONS_URL: ''
