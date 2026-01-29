@@ -48,6 +48,10 @@ spec:
           tolerations:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with $.Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           enableServiceLinks: {{ $.Values.enableServiceLinks }}
           containers:
             - name: castle-cron

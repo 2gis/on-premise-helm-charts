@@ -2,10 +2,6 @@
 
 Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
 
-> **Note:**
->
-> All On-Premise services are beta, and under development.
-
 ## Values
 
 ### Docker Registry settings
@@ -167,6 +163,6 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | Name                           | Description       | Value   |
 | ------------------------------ | ----------------- | ------- |
 | `ui.resources.requests.cpu`    | A CPU request.    | `300m`  |
-| `ui.resources.requests.memory` | A memory request. | `384M`  |
+| `ui.resources.requests.memory` | A memory request. | `384Mi` |
 | `ui.resources.limits.cpu`      | A CPU limit.      | `1100m` |
-| `ui.resources.limits.memory`   | A memory limit.   | `512M`  |
+| `ui.resources.limits.memory`   | A memory limit.   | `512Mi` |

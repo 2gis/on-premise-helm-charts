@@ -230,6 +230,16 @@ Usage:
    -}}
 {{- end -}}
 
+{{/*
+Returns remoteAttractor if enabled or transmitter instead.
+*/}}
+{{- define "config.attractor" -}}
+  {{- if .Values.remoteAttractor.enabled -}}
+    remoteAttractor
+  {{- else -}}
+    transmitter
+  {{- end -}}
+{{- end -}}
 
 {{/*
 Set attractor_car parameter in server config section
@@ -237,13 +247,13 @@ Usage:
 {{ include "config.setAttractorCar" $ }}
 
 Sets value from naviback.attractor[] if specified,
-`false` if transmitter.enabled (external attractor given),
+`false` if remoteAttractor.enabled (external attractor given),
 or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorCar" -}}
     {{-
         dig "car"
-        (.Values.transmitter.enabled | ternary
+        ((index .Values (include "config.attractor" .) | default dict).enabled | ternary
             false
             (include "rules.inRoutingSection" (dict "routingValue" "driving" "context" .))
         )
@@ -258,13 +268,13 @@ Usage:
 {{ include "config.setAttractorPedestrian" $ }}
 
 Sets value from naviback.attractor[] if specified,
-`false` if transmitter.enabled (external attractor given),
+`false` if remoteAttractor.enabled (external attractor given),
 or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorPedestrian" -}}
     {{-
         dig "pedestrian"
-        (.Values.transmitter.enabled | ternary
+        ((index .Values (include "config.attractor" .) | default dict).enabled | ternary
             false
             (or (include "rules.inRoutingSection" (dict "routingValue" "ctx" "context" .))
                 (include "rules.inRoutingSection" (dict "routingValue" "public_transport" "context" .))
@@ -281,13 +291,13 @@ Usage:
 {{ include "config.setAttractorTaxi" $ }}
 
 Sets value from naviback.attractor[] if specified,
-`false` if transmitter.enabled (external attractor given),
+`false` if remoteAttractor.enabled (external attractor given),
 or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorTaxi" -}}
     {{-
         dig "taxi"
-        (.Values.transmitter.enabled | ternary
+        ((index .Values (include "config.attractor" .) | default dict).enabled | ternary
             false
             (include "rules.inRoutingSection" (dict "routingValue" "taxi" "context" .))
         )
@@ -302,13 +312,13 @@ Usage:
 {{ include "config.setAttractorTruck" $ }}
 
 Sets value from naviback.attractor[] if specified,
-`false` if transmitter.enabled (external attractor given),
+`false` if remoteAttractor.enabled (external attractor given),
 or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorTruck" -}}
     {{-
         dig "truck"
-        (.Values.transmitter.enabled | ternary
+        ((index .Values (include "config.attractor" .) | default dict).enabled | ternary
             false
             (include "rules.inRoutingSection" (dict "routingValue" "truck" "context" .))
         )
@@ -323,7 +333,7 @@ Usage:
 {{ include "config.setAttractorBicycle" $ }}
 
 Sets value from naviback.attractor[] if specified,
-`false` if transmitter.enabled (external attractor given),
+`false` if remoteAttractor.enabled (external attractor given),
 or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorBicycle" -}}
@@ -333,7 +343,7 @@ or makes a guess from the routing list.
     {{-
         $has_bicycle_or_scooter | ternary
             (or $bicycle $scooter)
-            (.Values.transmitter.enabled | ternary
+            ((index .Values (include "config.attractor" .) | default dict).enabled | ternary
                 false
                 (or (include "rules.inRoutingSection" (dict "routingValue" "bicycle" "context" .))
                     (include "rules.inRoutingSection" (dict "routingValue" "scooter" "context" .))
@@ -349,13 +359,13 @@ Usage:
 {{ include "config.setAttractorMotorcycle" $ }}
 
 Sets value from naviback.attractor[] if specified,
-`false` if transmitter.enabled (external attractor given),
+`false` if remoteAttractor.enabled (external attractor given),
 or makes a guess from the routing list.
 */}}
 {{- define "config.setAttractorMotorcycle" -}}
     {{-
         dig "motorcycle"
-        (.Values.transmitter.enabled | ternary
+        ((index .Values (include "config.attractor" .) | default dict).enabled | ternary
             false
             (include "rules.inRoutingSection" (dict "routingValue" "motorcycle" "context" .))
         )

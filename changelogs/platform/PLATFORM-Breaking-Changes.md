@@ -1,5 +1,11 @@
 # Platform Breaking-Changes
 
+## [2.49.0]
+
+### navi-back
+
+- `transmitter` is deprecated. Set `remoteAttractor` instead
+
 ## [2.48.0]
 
 ### navi-back

@@ -4,10 +4,6 @@ Use this Helm chart to deploy MapGL JS API service, which is a part of 2GIS's [O
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-> **Note:**
->
-> All On-Premise services are beta, and under development.
-
 See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 - Architecture of the service.
@@ -48,7 +44,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | Name               | Description | Value                   |
 | ------------------ | ----------- | ----------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/mapgl` |
-| `image.tag`        | Tag         | `1.67.0`                |
+| `image.tag`        | Tag         | `1.69.1`                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
 
 ### Environment variables
@@ -60,6 +56,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `env.MAPGL_TILES_API`           | URL of the Tiles API service, e.g. 'https://tiles-api.ingress.host'                                                                               | `""`                                                                                              |
 | `env.MAPGL_TILESET`             | Tileset of the Tiles API service to use.                                                                                                          | `web`                                                                                             |
 | `env.MAPGL_IMMERSIVE_TILESET`   | Additional immersive tileset of the Tiles API service to use.                                                                                     | `web_immersive`                                                                                   |
+| `env.MAPGL_RELIEF_TILESET`      | Tileset of the terrain.                                                                                                                           | `web_relief`                                                                                      |
 | `env.MAPGL_TRAFFICSERVER`       | Domain name of the Traffic Proxy service, e.g. 'https://traffic-proxy.ingress.host'                                                               | `https://traffic-proxy.ingress.host`                                                              |
 | `env.MAPGL_STYLESERVER`         | URL of the Styles API service, e.g. 'https://styles.ingress.host'                                                                                 | `""`                                                                                              |
 | `env.MAPGL_ICONS_URL`           | URL of the icons directory, e.g. 'https://s3.ingress.host/styles/assets/icons'. This s3 URL must be public available (accessible from browser).   | `""`                                                                                              |
@@ -102,9 +99,9 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | Name                        | Description       | Value  |
 | --------------------------- | ----------------- | ------ |
 | `resources.requests.cpu`    | A CPU request.    | `30m`  |
-| `resources.requests.memory` | A memory request. | `32M`  |
+| `resources.requests.memory` | A memory request. | `32Mi` |
 | `resources.limits.cpu`      | A CPU limit.      | `100m` |
-| `resources.limits.memory`   | A memory limit.   | `96M`  |
+| `resources.limits.memory`   | A memory limit.   | `96Mi` |
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 

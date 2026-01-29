@@ -1,4 +1,10 @@
-﻿# @section Geo API configuration & settings
+﻿# @section Common settings
+
+# @param imagePullSecrets Kubernetes image pull secrets.
+
+imagePullSecrets: []
+
+# @section Geo API configuration & settings
 
 api:
 
@@ -31,7 +37,6 @@ api:
     #   secretName: secret.tls
 
   # @param api.pod.replicaCount A replica count for the pod.
-  # @param api.pod.imagePullSecrets Kubernetes image pull secrets.
   # @param api.pod.nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
   # @param api.pod.fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
   # @param api.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
@@ -55,7 +60,6 @@ api:
   # @param api.pod.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
   pod:
     replicaCount: 2
-    imagePullSecrets: []
     nameOverride: ''
     fullnameOverride: ''
     nodeSelector: {}
@@ -72,10 +76,10 @@ api:
     resources:
       requests:
         cpu: 400m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1024M
+        memory: 1024Mi
     strategy:
       type: RollingUpdate
       rollingUpdate:
@@ -217,7 +221,6 @@ permissions:
     #   secretName: secret.tls
 
   # @param permissions.pod.replicaCount A replica count for the pod.
-  # @param permissions.pod.imagePullSecrets Kubernetes image pull secrets.
   # @param permissions.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param permissions.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param permissions.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
@@ -236,7 +239,6 @@ permissions:
   # @param permissions.pod.resources.limits.memory A memory limit.
   pod:
     replicaCount: 1
-    imagePullSecrets: []
     nodeSelector: {}
     affinity: {}
     priorityClassName: ''
@@ -251,10 +253,10 @@ permissions:
     resources:
       requests:
         cpu: 300m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1G
+        memory: 1024Mi
 
   # @param permissions.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param permissions.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -349,7 +351,6 @@ tasks:
 
   # @param tasks.pod.apiReplicaCount A replica count for the api pod.
   # @param tasks.pod.workerReplicaCount A replica count for the worker pod.
-  # @param tasks.pod.imagePullSecrets Kubernetes image pull secrets.
   # @param tasks.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param tasks.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param tasks.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
@@ -372,7 +373,6 @@ tasks:
   pod:
     apiReplicaCount: 1
     workerReplicaCount: 1
-    imagePullSecrets: []
     nodeSelector: {}
     affinity: {}
     priorityClassName: ''
@@ -387,10 +387,10 @@ tasks:
     resources:
       requests:
         cpu: 400m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1024M
+        memory: 1024Mi
     strategy:
       type: RollingUpdate
       rollingUpdate:
@@ -514,7 +514,6 @@ pagerenderer:
     pullPolicy: IfNotPresent
 
   # @param pagerenderer.pod.replicaCount A replica count for the pod.
-  # @param pagerenderer.pod.imagePullSecrets Kubernetes image pull secrets.
   # @param pagerenderer.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param pagerenderer.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param pagerenderer.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
@@ -533,7 +532,6 @@ pagerenderer:
   # @param pagerenderer.pod.resources.limits.memory A memory limit.
   pod:
     replicaCount: 1
-    imagePullSecrets: []
     nodeSelector: {}
     affinity: {}
     priorityClassName: ''
@@ -548,10 +546,10 @@ pagerenderer:
     resources:
       requests:
         cpu: 300m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1G
+        memory: 1024Mi
 
   # @param pagerenderer.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param pagerenderer.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -613,7 +611,6 @@ pagerenderer:
 # @param assetImporter.appName Data Import job name.
 # @param assetImporter.repository Docker Repository Image.
 # @param assetImporter.tag Docker image tag.
-# @param assetImporter.imagePullSecrets Kubernetes image pull secrets.
 # @param assetImporter.schedule Import job schedule.
 # @param assetImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
 # @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
@@ -643,7 +640,6 @@ assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
   tag: 2.46.2
-  imagePullSecrets: []
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -653,10 +649,10 @@ assetImporter:
   resources:
     requests:
       cpu: 700m
-      memory: 768M
+      memory: 768Mi
     limits:
       cpu: 1000m
-      memory: 8Gi
+      memory: 8192Mi
   suspended: false
   startOnDeploy: true
   startOnDeployMode: ScheduleManifest

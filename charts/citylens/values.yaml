@@ -4,6 +4,12 @@
 
 dgctlDockerRegistry: ''
 
+# @section Common settings
+
+# @param imagePullSecrets Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+
+imagePullSecrets: []
+
 # @section Deployment Artifacts Storage settings
 
 # @param dgctlStorage.host S3 host. Format: `host:port`. **Required**
@@ -973,12 +979,10 @@ customCAs:
 routes:
 
 # @skip routes.environment
-# @param routes.imagePullSecrets Kubernetes image pull secrets.
 # @param routes.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
 # @param routes.migration.enabled If migrations needed.
 
   environment: ''
-  imagePullSecrets: []
   terminationGracePeriodSeconds: 60
   migration:
     enabled: true
@@ -1072,10 +1076,10 @@ routes:
     resources:
       requests:
         cpu: 400m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1024M
+        memory: 1024Mi
 
 # @section Service settings
 # @param routes.api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -1219,10 +1223,10 @@ routes:
     resources:
       requests:
         cpu: 400m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1024M
+        memory: 1024Mi
 
 # @section Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 # @param routes.worker.pdb.enabled If PDB is enabled for the service.
@@ -1315,10 +1319,10 @@ routes:
     resources:
       requests:
         cpu: 400m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1024M
+        memory: 1024Mi
 
 # @section Service settings
 # @param routes.realtimeDataApi.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).

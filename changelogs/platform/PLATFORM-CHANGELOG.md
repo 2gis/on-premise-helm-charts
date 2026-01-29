@@ -1,3 +1,13 @@
+## [2.49.0] (2026-01-28)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2490)
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.67.0
+	+ mapgl:1.69.1
+```
+[Full list of image versions](platform_image_versions.txt)
+
 ## [2.48.0] (2025-12-26)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2480)
 #### Images
