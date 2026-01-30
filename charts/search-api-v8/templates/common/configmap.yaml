@@ -938,7 +938,7 @@ data:
                               cluster: cluster-3
                               auto_host_rewrite: true
                           - match:
-                              prefix: "/geodetector.GeoDetector/"
+                              prefix: "/geodetector.GeoDetectorService/"
                             route:
                               cluster: geodetectors
                               auto_host_rewrite: true

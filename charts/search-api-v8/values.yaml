@@ -116,7 +116,7 @@ worker:
   image:
     repository: 2gis-on-premise/search-api-v8-worker
     pullPolicy: IfNotPresent
-    tag: 8.17.4
+    tag: 8.17.5
   ports:
     http: 8092
     grpc: 8091
@@ -307,7 +307,7 @@ head:
     image:
       repository: 2gis-on-premise/search-api-v8-head
       pullPolicy: IfNotPresent
-      tag: 8.17.4
+      tag: 8.17.5
     ports:
       grpc: 9010
       http: 9090
@@ -697,7 +697,7 @@ filesStorage:
   image:
     repository: 2gis-on-premise/search-api-v8-files_storage
     pullPolicy: IfNotPresent
-    tag: 8.17.4
+    tag: 8.17.5
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -788,7 +788,7 @@ dataAdapter:
   image:
     repository: 2gis-on-premise/search-api-v8-data_adapter
     pullPolicy: IfNotPresent
-    tag: 8.17.4
+    tag: 8.17.5
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -871,7 +871,7 @@ portal:
   image:
     repository: usrch/bs-portal
     pullPolicy: IfNotPresent
-    tag: 8.17.4
+    tag: 8.17.5
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -973,7 +973,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-api-v8-controller
     pullPolicy: IfNotPresent
-    tag: 8.17.4
+    tag: 8.17.5
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1106,7 +1106,7 @@ indexer:
   image:
     repository: 2gis-on-premise/search-api-v8-indexer
     pullPolicy: IfNotPresent
-    tag: 8.17.4
+    tag: 8.17.5
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1211,7 +1211,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-api-v8-syncer
     pullPolicy: IfNotPresent
-    tag: 8.17.4
+    tag: 8.17.5
   securityContext: {}
   resources:
     requests:
@@ -1551,7 +1551,7 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-api-v8-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.17.4
+    tag: 8.17.5
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
@@ -1724,7 +1724,7 @@ geodetector:
   image:
     repository: 2gis-on-premise/search-api-v8-geodetector
     pullPolicy: IfNotPresent
-    tag: 8.17.4
+    tag: 8.17.5
   imagePullSecrets: []
   geodetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60
