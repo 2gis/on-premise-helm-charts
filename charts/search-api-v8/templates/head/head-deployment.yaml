@@ -1,0 +1,294 @@
+{{- if .Values.head.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-head
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+    search/part: head
+spec:
+  {{- if not .Values.head.hpa.enabled }}
+  replicas: {{ .Values.head.replicaCount }}
+  {{- end }}{{- /* not .Values.head.hpa.enabled */}}
+  selector:
+    matchLabels:
+      {{- include "search-api-v8.selectorLabels" . | nindent 6 }}
+    {{- with .Values.head.matchLabels }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}{{- /* .Values.head.matchLabels */}}
+      search/part: head
+  template:
+    metadata:
+      annotations:
+      {{- with .Values.head.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.head.podAnnotations */}}
+        checksum/config: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: {{ .Values.magg.ports.metrics | quote }}
+        prometheus.io/scrape: "true"
+      labels:
+        {{- include "search-api-v8.labels" . | nindent 8 }}
+      {{- with .Values.head.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.head.podLabels */}}
+        search/part: head
+        role: head
+    spec:
+      {{- with .Values.head.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.head.imagePullSecrets */}}
+      serviceAccountName: {{ include "search-api-v8.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.head.podSecurityContext | nindent 8 }}
+      {{ if not .Values.onpremise }}
+      initContainers:
+        - name: init-sapphire-docs
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.head.head.image.repository }}:{{ .Values.head.head.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.head.head.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.head.initSapphireDocs.resources | nindent 12 }}
+          volumeMounts:
+            - name: head-docs
+              mountPath: /var/www
+          command: [ "/bin/sh", "-c" ]
+          args: [ "cp -R /var/www.src/* /var/www/" ]
+      {{- end -}}{{- /* .Values.onpremise */}}
+      containers:
+        - name: head
+          securityContext:
+            {{- toYaml .Values.head.head.securityContext | nindent 12 }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.head.head.image.repository }}:{{ .Values.head.head.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.head.head.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.head.head.resources | nindent 12 }}
+          {{- if .Values.customCAs.bundle }}
+          env:
+            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          ports:
+            - name: grpc-sapphire
+              containerPort: {{ .Values.head.head.ports.grpc }}
+            - name: http-sapphire
+              containerPort: {{ .Values.head.head.ports.http }}
+              protocol: TCP
+            - name: http-nginx
+              containerPort: {{ .Values.head.nginx.ports.http }}
+              protocol: TCP
+            - name: http-syncer
+              containerPort: {{ .Values.syncer.ports.http }}
+              protocol: TCP
+          {{- if .Values.head.head.livenessProbe.enabled }}
+          livenessProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.head.head.livenessProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.head.head.livenessProbe.enabled */}}
+          {{- if .Values.head.head.readinessProbe.enabled }}
+          readinessProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.head.head.readinessProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.head.head.readinessProbe.enabled */}}
+          {{- if .Values.head.head.startupProbe.enabled }}
+          startupProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.head.head.startupProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.head.head.startupProbe.enabled */}}
+          {{- if .Values.head.head.prestopHook.enabled }}
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 15" ]
+          {{- end}}{{- /* .Values.head.head.prestopHook.enabled */}}
+          volumeMounts:
+            - name: head-data
+              mountPath: /data
+            - name: head-config
+              mountPath: /app/sapphire_vars.yaml
+              subPath: head_vars.yaml
+          {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+        - name: nginx
+          securityContext:
+            {{- toYaml .Values.head.nginx.securityContext | nindent 12 }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.head.nginx.image.repository }}:{{ .Values.head.nginx.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.head.nginx.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.head.nginx.resources | nindent 12 }}
+          {{ if .Values.onpremise }}
+          volumeMounts:
+            - name: head-config
+              mountPath: /var/nginx/conf.d/nginx.conf
+              subPath: nginx.conf
+            - name: head-data
+              mountPath: /var/2gis/sapphire2
+            - name: head-docs
+              mountPath: /var/www
+          {{ else }}
+          volumeMounts:
+            - name: head-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: head-data
+              mountPath: /var/2gis/sapphire2
+            - name: head-docs
+              mountPath: /var/www
+          {{- end -}}{{- /* .Values.onpremise */}}
+          {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          {{- if .Values.customCAs.bundle }}
+          env:
+            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          {{- if .Values.head.head.prestopHook.enabled }}
+          lifecycle:
+            # wait for the main container to shut down
+            preStop:
+              exec:
+                command:
+                  - "/bin/bash"
+                  - "-c"
+                  - "while cat < /dev/tcp/127.0.0.1/{{ .Values.head.nginx.ports.http }} ; do sleep 5 ; done"
+          {{- end }}{{- /* .Values.head.head.prestopHook.enabled */}}
+        - name: envoy
+          securityContext:
+            {{- toYaml .Values.head.envoy.securityContext | nindent 12 }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.head.envoy.image.repository }}:{{ .Values.head.envoy.image.tag | default .Chart.AppVersion }}'
+          command: ["envoy"]
+          args: ["-c", "/var/envoy/envoy.yaml"]
+          imagePullPolicy: {{ .Values.head.envoy.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.head.envoy.resources | nindent 12 }}
+          {{- if .Values.customCAs.bundle }}
+          env:
+            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          ports:
+            - name: admin
+              containerPort: {{ .Values.head.envoy.ports.admin }}
+              protocol: TCP
+          volumeMounts:
+            - name: head-config
+              mountPath: /var/envoy/envoy.yaml
+              subPath: envoy.yaml
+          {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          {{- if .Values.head.head.prestopHook.enabled }}
+          lifecycle:
+            # wait for the main container to shut down
+            preStop:
+              exec:
+                command:
+                  - "/bin/bash"
+                  - "-c"
+                  - "while cat < /dev/tcp/127.0.0.1/{{ .Values.head.nginx.ports.http }} ; do sleep 5 ; done"
+          {{- end}}{{- /* .Values.head.head.prestopHook.enabled */}}
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: admin
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /ready
+              port: admin
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: admin
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 3
+        - name: syncer
+          securityContext:
+            {{- toYaml .Values.syncer.securityContext | nindent 12 }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.syncer.image.repository }}:{{ .Values.syncer.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.syncer.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.syncer.resources | nindent 12 }}
+          env:
+            - name: GIN_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "search-api-v8.fullname" . }}
+                  key: GIN_MODE
+            {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}{{- /* .Values.customCAs.bundle */}}
+          volumeMounts:
+            - name: head-data
+              mountPath: /data
+            - name: head-config
+              mountPath: /app/config.yaml
+              subPath: syncer-head.yaml
+            {{- if .Values.customCAs.bundle }}
+              {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- end }}{{- /* .Values.customCAs.bundle */}}
+        {{- if .Values.magg.enabled }}
+        - name: magg
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.magg.image.repository }}:{{ .Values.magg.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.magg.image.pullPolicy }}
+          env:
+            - name: METRICS_AGGREGATOR_PORT
+              value: {{ .Values.magg.ports.metrics | quote }}
+            - name: METRICS_AGGREGATOR_SOURCES
+              value: "http://127.0.0.1:{{ .Values.head.head.ports.monitor }}/metrics,\
+                http://127.0.0.1:{{ .Values.head.envoy.ports.admin }}/stats/prometheus,\
+                http://127.0.0.1:{{ .Values.syncer.ports.http }}/metrics"
+            - name: GOMAXPROCS
+              value: "1"
+            {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}{{- /* .Values.customCAs.bundle */}}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          ports:
+            - containerPort: {{ .Values.magg.ports.metrics }}
+          resources:
+            {{- toYaml .Values.magg.resources | nindent 12 }}
+        {{ end }}{{- /* .Values.magg.enabled */}}
+      volumes:
+        {{- if .Values.head.data.persistent.enabled }}
+        - name: head-data
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                accessModes: [ "ReadWriteOnce" ]
+                storageClassName: {{ .Values.head.data.storageClassName | quote }}
+                volumeMode: Filesystem
+                resources:
+                  {{- .Values.head.data.resources | toYaml | nindent 18 }}
+        {{ else }}
+        - name: head-data
+          emptyDir:
+            sizeLimit: {{ .Values.head.data.resources.requests.storage }}
+        {{ end }}{{- /* .Values.head.data.persistent.enabled */}}
+        - name: head-config
+          configMap:
+            name: {{ include "search-api-v8.fullname" . }}
+        - name: head-docs
+          emptyDir: {}
+        {{- if .Values.customCAs.bundle }}
+        {{- include "search-api-v8.custom.ca.deploys.volumes" . | nindent 8 }}
+        {{- end }}{{- /* .Values.customCAs.bundle */}}
+      {{- with .Values.head.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.head.nodeSelector */}}
+      {{- with .Values.head.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.head.affinity */}}
+      {{- with .Values.head.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.head.tolerations */}}
+  strategy:
+  {{- .Values.head.strategy | toYaml | nindent 4 }}
+{{- end }}{{- /* .Values.head.enabled */}}

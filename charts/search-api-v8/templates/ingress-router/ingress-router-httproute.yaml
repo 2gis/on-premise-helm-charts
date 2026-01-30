@@ -1,0 +1,45 @@
+{{- if .Values.ingressRouter.enabled }}
+{{- if .Values.service.ingressRouter.external.enable }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-external
+spec:
+  hostnames:
+  - {{ .Values.service.ingressRouter.external.host }}
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: shared
+    namespace: istio-gateways
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: canary
+    namespace: istio-gateways
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: stable
+    namespace: istio-gateways
+  rules:
+  - backendRefs:
+    - group: ""
+      kind: Service
+      name: {{ include "search-api-v8.fullname" . }}-head
+      port: {{ .Values.service.head.ports.http}}
+      weight: 1
+    matches:
+    - path:
+        type: PathPrefix
+        value: /v2/status
+  - backendRefs:
+    - group: ""
+      kind: Service
+      name: {{ include "search-api-v8.fullname" . }}-ingress-router
+      port: {{ .Values.service.ingressRouter.port }}
+      weight: 1
+    matches:
+    - path:
+        type: PathPrefix
+        value: /
+{{- end }}{{- /* .Values.service.ingressRouter.external.enable */}}
+{{- end }}{{- /* .Values.ingressRouter.enabled */}}
