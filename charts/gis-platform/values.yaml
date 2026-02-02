@@ -8,9 +8,10 @@ dgctlDockerRegistry: ''
 # @section Common settings
 
 # @param url URL for the GIS platform ex: https://gis-platform.ingress.host **Required**
+# @param imagePullSecrets Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 url: ''
-
+imagePullSecrets: []
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -80,10 +81,10 @@ spcore:
   resources:
     requests:
       cpu: 800m
-      memory: 4096Mi
+      memory: 4Gi
     limits:
       cpu: 800m
-      memory: 4096Mi
+      memory: 4Gi
 
   # @extra spcore.cors **CORS settings.**
   # @param spcore.cors.allowEveryone If true, requests from any origin will be allowed.

@@ -4,10 +4,6 @@ Use this Helm chart to deploy Citylens services, which is a part of 2GIS's [On-P
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-> **Note:**
->
-> All On-Premise services are beta, and under development.
-
 See the [documentation]() to learn about:
 
 - Architecture of the service.
@@ -25,6 +21,12 @@ See the [documentation]() to learn about:
 | Name                  | Description                                                                                         | Value |
 | --------------------- | --------------------------------------------------------------------------------------------------- | ----- |
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port` **Required** | `""`  |
+
+### Common settings
+
+| Name               | Description                                                                                                                                         | Value |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `imagePullSecrets` | Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) | `[]`  |
 
 ### Deployment Artifacts Storage settings
 
@@ -534,7 +536,6 @@ See the [documentation]() to learn about:
 
 | Name                                   | Description                                                                                                                                      | Value  |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| `routes.imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                   | `[]`   |
 | `routes.terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds | `60`   |
 | `routes.migration.enabled`             | If migrations needed.                                                                                                                            | `true` |
 
@@ -585,14 +586,14 @@ See the [documentation]() to learn about:
 
 ### Resources settings
 
-| Name                                   | Description                                                                                                                                    | Value   |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `routes.api.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`     |
-| `routes.api.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
-| `routes.api.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`  |
-| `routes.api.resources.requests.memory` | A memory request.                                                                                                                              | `256M`  |
-| `routes.api.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`     |
-| `routes.api.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024M` |
+| Name                                   | Description                                                                                                                                    | Value    |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `routes.api.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`      |
+| `routes.api.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`      |
+| `routes.api.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`   |
+| `routes.api.resources.requests.memory` | A memory request.                                                                                                                              | `256Mi`  |
+| `routes.api.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`      |
+| `routes.api.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024Mi` |
 
 ### Service settings
 
@@ -680,14 +681,14 @@ See the [documentation]() to learn about:
 
 ### Resources settings
 
-| Name                                      | Description                                                                                                                                    | Value   |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `routes.worker.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`     |
-| `routes.worker.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
-| `routes.worker.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`  |
-| `routes.worker.resources.requests.memory` | A memory request.                                                                                                                              | `256M`  |
-| `routes.worker.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`     |
-| `routes.worker.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024M` |
+| Name                                      | Description                                                                                                                                    | Value    |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `routes.worker.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`      |
+| `routes.worker.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`      |
+| `routes.worker.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`   |
+| `routes.worker.resources.requests.memory` | A memory request.                                                                                                                              | `256Mi`  |
+| `routes.worker.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`      |
+| `routes.worker.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024Mi` |
 
 ### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
@@ -746,14 +747,14 @@ See the [documentation]() to learn about:
 
 ### Resources settings
 
-| Name                                               | Description                                                                                                                                    | Value   |
-| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `routes.realtimeDataApi.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`     |
-| `routes.realtimeDataApi.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
-| `routes.realtimeDataApi.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`  |
-| `routes.realtimeDataApi.resources.requests.memory` | A memory request.                                                                                                                              | `256M`  |
-| `routes.realtimeDataApi.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`     |
-| `routes.realtimeDataApi.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024M` |
+| Name                                               | Description                                                                                                                                    | Value    |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `routes.realtimeDataApi.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`      |
+| `routes.realtimeDataApi.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`      |
+| `routes.realtimeDataApi.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`   |
+| `routes.realtimeDataApi.resources.requests.memory` | A memory request.                                                                                                                              | `256Mi`  |
+| `routes.realtimeDataApi.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`      |
+| `routes.realtimeDataApi.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024Mi` |
 
 ### Service settings
 
