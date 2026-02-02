@@ -1060,7 +1060,7 @@ routes:
 
     image:
       repository: 2gis-on-premise/citylens-routes-api
-      tag: 1.8.0
+      tag: 1.8.1
       pullPolicy: IfNotPresent
 
 # @section Resources settings
@@ -1203,7 +1203,7 @@ routes:
 
     image:
       repository: 2gis-on-premise/citylens-worker-service
-      tag: 1.8.0
+      tag: 1.8.1
       pullPolicy: IfNotPresent
 
 # @section Resources settings
@@ -1299,7 +1299,7 @@ routes:
 
     image:
       repository: 2gis-on-premise/citylens-realtime-data-api
-      tag: 1.8.0
+      tag: 1.8.1
       pullPolicy: IfNotPresent
 
 # @section Resources settings
@@ -1414,33 +1414,30 @@ routes:
     daysToLeaveData: 30
 
 # @section Citylens routes feature switcher settings.
-# @param routes.features.authorizationEnabled Enable authorization. (If disabled, a default user is used).
-# @param routes.features.tasksAssetEnabled Enable sending data to PRO for tasks.
-# @skip routes.features.oidcMobileAuthorizationEnabled
-# @skip routes.features.coverageRatioEnabled
-# @skip routes.features.multiTenantEnabled
-# @skip routes.features.licenseEnabled
+# @param routes.features.authorizationEnabled Enables user authentication and authorization. When disabled, the system runs with hardcoded default user.
+# @param routes.features.oidcMobileAuthorizationEnabled Enables driver authentication and authorization.
+# @param routes.features.coverageRatioEnabled Enables sending coverage ratio data to the PRO.
+# @param routes.features.tasksAssetEnabled Enables sending route task data (planned/completed) to the PRO platform as dynamic assets. Requires valid PRO token and asset IDs.
+# @param routes.features.multiTenantEnabled Enables strict data isolation by tenant (company).
+# @param routes.features.licenseEnabled Enables license by tenant (company).
+# @param routes.features.areaClusteringEnabled Enables generate tasks by area.
+# @param routes.features.oneRouteDirectionEnabled Enables one direction way.
+# @param routes.features.navigationByPointsEnabled Enables create task with navigation by points.
+# @param routes.features.incidentsEnabled Enables real-time incident reporting.
+# @param routes.features.driverStatusEnabled Enables real-time driver status reporting.
 
   features:
-    authorizationEnabled: true
-    oidcMobileAuthorizationEnabled: true
-    coverageRatioEnabled: true
+    authorizationEnabled: false
+    oidcMobileAuthorizationEnabled: false
+    coverageRatioEnabled: false
     tasksAssetEnabled: false
     multiTenantEnabled: false
     licenseEnabled: false
-
-# @skip routes.momraEdition.enable
-# @skip routes.momraEdition.areaClusteringEnabled
-# @skip routes.momraEdition.oneRouteDirectionEnabled
-# @skip routes.momraEdition.navigationByPointsEnabled
-# @skip routes.momraEdition.incidentsEnabled
-
-  momraEdition:
-    enable: false
     areaClusteringEnabled: false
     oneRouteDirectionEnabled: false
     navigationByPointsEnabled: false
     incidentsEnabled: false
+    driverStatusEnabled: false
 
 # @section Citylens routes PRO assets configs.
 # @param routes.tasksAssetSettings.systemAccessToken Route task asset token.

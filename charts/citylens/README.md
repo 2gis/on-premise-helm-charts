@@ -581,7 +581,7 @@ See the [documentation]() to learn about:
 | Name                          | Description  | Value                                 |
 | ----------------------------- | ------------ | ------------------------------------- |
 | `routes.api.image.repository` | Repository.  | `2gis-on-premise/citylens-routes-api` |
-| `routes.api.image.tag`        | Tag.         | `1.8.0`                               |
+| `routes.api.image.tag`        | Tag.         | `1.8.1`                               |
 | `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        |
 
 ### Resources settings
@@ -676,7 +676,7 @@ See the [documentation]() to learn about:
 | Name                             | Description  | Value                                     |
 | -------------------------------- | ------------ | ----------------------------------------- |
 | `routes.worker.image.repository` | Repository.  | `2gis-on-premise/citylens-worker-service` |
-| `routes.worker.image.tag`        | Tag.         | `1.8.0`                                   |
+| `routes.worker.image.tag`        | Tag.         | `1.8.1`                                   |
 | `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            |
 
 ### Resources settings
@@ -742,7 +742,7 @@ See the [documentation]() to learn about:
 | Name                                      | Description  | Value                                        |
 | ----------------------------------------- | ------------ | -------------------------------------------- |
 | `routes.realtimeDataApi.image.repository` | Repository.  | `2gis-on-premise/citylens-realtime-data-api` |
-| `routes.realtimeDataApi.image.tag`        | Tag.         | `1.8.0`                                      |
+| `routes.realtimeDataApi.image.tag`        | Tag.         | `1.8.1`                                      |
 | `routes.realtimeDataApi.image.pullPolicy` | Pull Policy. | `IfNotPresent`                               |
 
 ### Resources settings
@@ -826,10 +826,19 @@ See the [documentation]() to learn about:
 
 ### Citylens routes feature switcher settings.
 
-| Name                                   | Description                                                  | Value   |
-| -------------------------------------- | ------------------------------------------------------------ | ------- |
-| `routes.features.authorizationEnabled` | Enable authorization. (If disabled, a default user is used). | `true`  |
-| `routes.features.tasksAssetEnabled`    | Enable sending data to PRO for tasks.                        | `false` |
+| Name                                             | Description                                                                                                                        | Value   |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `routes.features.authorizationEnabled`           | Enables user authentication and authorization. When disabled, the system runs with hardcoded default user.                         | `false` |
+| `routes.features.oidcMobileAuthorizationEnabled` | Enables driver authentication and authorization.                                                                                   | `false` |
+| `routes.features.coverageRatioEnabled`           | Enables sending coverage ratio data to the PRO.                                                                                    | `false` |
+| `routes.features.tasksAssetEnabled`              | Enables sending route task data (planned/completed) to the PRO platform as dynamic assets. Requires valid PRO token and asset IDs. | `false` |
+| `routes.features.multiTenantEnabled`             | Enables strict data isolation by tenant (company).                                                                                 | `false` |
+| `routes.features.licenseEnabled`                 | Enables license by tenant (company).                                                                                               | `false` |
+| `routes.features.areaClusteringEnabled`          | Enables generate tasks by area.                                                                                                    | `false` |
+| `routes.features.oneRouteDirectionEnabled`       | Enables one direction way.                                                                                                         | `false` |
+| `routes.features.navigationByPointsEnabled`      | Enables create task with navigation by points.                                                                                     | `false` |
+| `routes.features.incidentsEnabled`               | Enables real-time incident reporting.                                                                                              | `false` |
+| `routes.features.driverStatusEnabled`            | Enables real-time driver status reporting.                                                                                         | `false` |
 
 ### Citylens routes PRO assets configs.
 

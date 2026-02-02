@@ -183,16 +183,16 @@ spec:
             - name: Features__LicenseEnabled
               value: {{ $.Values.routes.features.licenseEnabled | quote }}
 
-            - name: MomraEditionFeatures__Enabled
-              value: {{ $.Values.routes.momraEdition.enable | quote }}
-            - name: MomraEditionFeatures__AreaClusteringEnabled
-              value: {{ $.Values.routes.momraEdition.areaClusteringEnabled | quote }}
-            - name: MomraEditionFeatures__OneRouteDirectionEnabled
-              value: {{ $.Values.routes.momraEdition.oneRouteDirectionEnabled | quote }}
-            - name: MomraEditionFeatures__NavigationByPointsEnabled
-              value: {{ $.Values.routes.momraEdition.navigationByPointsEnabled | quote }}
-            - name: MomraEditionFeatures__IncidentsEnabled
-              value: {{ $.Values.routes.momraEdition.incidentsEnabled | quote }}
+            - name: Features__AreaClusteringEnabled
+              value: {{ $.Values.routes.features.areaClusteringEnabled | quote }}
+            - name: Features__OneRouteDirectionEnabled
+              value: {{ $.Values.routes.features.oneRouteDirectionEnabled | quote }}
+            - name: Features__NavigationByPointsEnabled
+              value: {{ $.Values.routes.features.navigationByPointsEnabled | quote }}
+            - name: Features__IncidentsEnabled
+              value: {{ $.Values.routes.features.incidentsEnabled | quote }}
+            - name: Features__DriverStatusEnabled
+              value: {{ $.Values.routes.features.driverStatusEnabled | quote }}
 
             - name: TasksAssetSettings__SystemAccessToken
               valueFrom:
