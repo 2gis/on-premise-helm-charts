@@ -34,8 +34,12 @@ cassandra-tls:
 
 cassandra-clusters:
   - name: kubernetes
-    timeout: {{ .Values.cassandra.timeout }}
-    num-retries: 2
+    {{- with $.Values.api.cqlRetryPolicy }}
+    retry-policy:
+      retry-count: {{ .retryCount }}
+      min-delay: {{ .minDelay }}
+      max-delay: {{ .maxDelay }}
+    {{- end }}
     reconnect-interval: 30s
 
     keyspaces:
@@ -64,6 +68,7 @@ cassandra-clusters:
     hosts:
        {{- toYaml .hosts | nindent 8 }}
 
+    timeout: {{ .timeout }}
     replication-factor: {{ .replicaFactor }}
 
     consistency-level-read: {{ .consistencyLevelRead }}
