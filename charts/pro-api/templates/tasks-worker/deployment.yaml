@@ -35,7 +35,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with .Values.tasks.pod.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -119,13 +119,13 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: tasksDbConnectionPwd
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- if .Values.postgres.tasks.ro.password }}
             - name: Postgres__PasswordRo
               valueFrom:
                 secretKeyRef:
                   key: tasksDbConnectionPwdRo
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
 
             - name: FeatureManagement__AssetDataPreparation
@@ -140,8 +140,6 @@ spec:
               value: {{ $.Values.tasks.settings.features.emailNotifications.enabled | quote }}
             - name: FeatureManagement__UserManagement
               value: {{ $.Values.tasks.settings.features.userManagement.enabled | quote }}
-            - name: FeatureManagement__RemoveExpiredSmbDashboards
-              value: {{ $.Values.tasks.settings.features.removeExpiredSmbDashboards.enabled | quote }}
 
             - name: Common__Logging__Format
               value: {{ .Values.tasks.settings.logging.format | quote }}
@@ -158,7 +156,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: kafkaSaslPassword
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{ end }}
             - name: Kafka__EventsTopicSettings__Name
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
@@ -191,7 +189,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: esPassword
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{ end }}
             - name: Elastic__IndexPrefix
               value: {{ $.Values.elastic.indexPrefix | quote }}
@@ -205,7 +203,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: diggerAuthToken
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{ end }}
 
             - name: S3Settings__Url
@@ -230,19 +228,19 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: s3AccessKey
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             - name: S3Settings__SecretKey
               valueFrom:
                 secretKeyRef:
                   key: s3SecretKey
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             - name: GeoApi__Url
               value: http://{{ include "pro-api.name" . }}
             - name: GeoApi__Key
               valueFrom:
                 secretKeyRef:
                   key: apiKey
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             - name: Common__DataCenterId
               value: {{ .Values.api.settings.dataCenterId | quote }}
 
@@ -253,7 +251,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
             {{- if .Values.tasks.settings.features.assetDataPreparation.enabled }}
             - name: AssetDataPreparation__Segments
@@ -266,12 +264,20 @@ spec:
               value: {{ .Values.mailerAdmin.url | quote }}
             - name: MailerAdminClient__Username
               value: {{ .Values.mailerAdmin.username | quote }}
+            {{- if .Values.mailerAdmin.password }}
             - name: MailerAdminClient__Password
-              value: {{ .Values.mailerAdmin.password | quote }}
+              valueFrom:
+                secretKeyRef:
+                  key: mailerAdminPassword
+                  name: {{ include "pro-api.secretName" . }}
+            {{- end }}
             - name: MailerSenderClient__Enabled
               value: {{ .Values.mailerSender.enabled | quote }}
             - name: MailerSenderClient__Url
               value: {{ .Values.mailerSender.url | quote }}
             - name: MailerSenderClient__ApiKey
               value: {{ .Values.mailerSender.apiKey | quote }}
+
+            - name: PageRendererApi__Url
+              value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}
 {{- end }}

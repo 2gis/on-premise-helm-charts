@@ -31,7 +31,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with .Values.pagerenderer.pod.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -100,7 +100,29 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 5"]
           env:
             - name: ENV
-              value: {{ .Values.pagerenderer.settings.env | quote }}
+              value: {{ .Values.api.settings.env | quote }}
+            - name: API_URL
+              value: http://{{ include "pro-api.name" . }}
+            - name: S3Settings__Url
+              value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
+            - name: S3Settings__Secure
+              value: {{ .Values.dgctlStorage.secure | quote }}
+            - name: S3Settings__Region
+              value: {{ .Values.dgctlStorage.region }}
+            - name: S3Settings__DisablePayloadSigning
+              value: {{ .Values.dgctlStorage.disablePayloadSigning | quote }}
+            - name: S3Settings__LayerDataBucket
+              value: {{ required "A valid .Values.s3.layerDataBucket entry required" $.Values.s3.layerDataBucket }}
+            - name: S3Settings__AccessKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3AccessKey
+                  name: {{ include "pro-api.secretName" . }}
+            - name: S3Settings__SecretKey
+              valueFrom:
+                secretKeyRef:
+                  key: s3SecretKey
+                  name: {{ include "pro-api.secretName" . }}
             - name: Common__HttpPort
               value: {{ .Values.pagerenderer.settings.httpPort | quote }}
             - name: Common__GrpcPort
@@ -109,9 +131,5 @@ spec:
               value: {{ .Values.pagerenderer.settings.logging.format | quote }}
             - name: Common__Logging__Targets
               value: {{ .Values.pagerenderer.settings.logging.targets | quote }}
-            - name: ApiKey
-              valueFrom:
-                secretKeyRef:
-                  key: pagerendererApiKey
-                  name: {{ include "pro-api.name" . }}-secret
+
 {{- end }}

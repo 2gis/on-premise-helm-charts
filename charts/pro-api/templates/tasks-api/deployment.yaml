@@ -35,7 +35,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with .Values.tasks.pod.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -122,13 +122,13 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: tasksDbConnectionPwd
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- if .Values.postgres.tasks.ro.password }}
             - name: Postgres__PasswordRo
               valueFrom:
                 secretKeyRef:
                   key: tasksDbConnectionPwdRo
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
             - name: FeatureManagement__AssetDataPreparation
               value: {{ $.Values.tasks.settings.features.assetDataPreparation.enabled | quote }}
@@ -142,8 +142,6 @@ spec:
               value: {{ $.Values.tasks.settings.features.emailNotifications.enabled | quote }}
             - name: FeatureManagement__UserManagement
               value: {{ $.Values.tasks.settings.features.userManagement.enabled | quote }}
-            - name: FeatureManagement__RemoveExpiredSmbDashboards
-              value: {{ $.Values.tasks.settings.features.removeExpiredSmbDashboards.enabled | quote }}
 
             - name: Common__Logging__Format
               value: {{ .Values.tasks.settings.logging.format | quote }}
@@ -160,7 +158,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: kafkaSaslPassword
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
             - name: Kafka__EventsTopicSettings__Name
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
@@ -181,46 +179,20 @@ spec:
               value: {{ .Values.tasks.settings.features.assetDataPreparation.segments | quote }}
             {{- end }}
 
-            - name: Admin__Auth__Schema
-              value: {{ .Values.tasks.settings.admin.auth.schema | quote }}
-            {{- if .Values.tasks.settings.admin.auth.basic.username }}
-            - name: Admin__Auth__Basic__Username
-              value: {{ .Values.tasks.settings.admin.auth.basic.username | quote }}
-            {{- end }}
-            {{- if eq .Values.tasks.settings.admin.auth.schema "Basic"}}
-            - name: Admin__Auth__Basic__Password
+            - name: Auth__Enabled
+              value: {{ .Values.tasks.settings.auth.enabled | quote }}
+            - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
-                  key: tasksAdminAuthBasicPassword
-                  name: {{ include "pro-api.name" . }}-secret
+                  key: tasksApiKey
+                  name: {{ include "pro-api.secretName" . }}
+            - name: Auth__Authority
+              value: {{ .Values.authProvider.host | quote }}
+            {{- range $i, $r := .Values.tasks.settings.auth.adminRequiredRoles }}
+            - name: Auth__AdminRequiredRoles__{{$i}}
+              value: {{ $r | quote }}
             {{- end }}
-            {{- if .Values.tasks.settings.admin.auth.oidc.authority }}
-            - name: Admin__Auth__Oidc__Authority
-              value: {{ .Values.tasks.settings.admin.auth.oidc.authority | quote }}
-            {{- end }}
-            {{- if .Values.tasks.settings.admin.auth.oidc.clientId }}
-            - name: Admin__Auth__Oidc__ClientId
-              value: {{ .Values.tasks.settings.admin.auth.oidc.clientId | quote }}
-            {{- end }}
-            {{- if .Values.tasks.settings.admin.auth.oidc.clientSecret }}
-            - name: Admin__Auth__Oidc__ClientSecret
-              valueFrom:
-                secretKeyRef:
-                  key: tasksAdminAuthOidcClientSecret
-                  name: {{ include "pro-api.name" . }}-secret
-            {{- end }}
-            {{- if .Values.tasks.settings.admin.auth.oidc.nameClaim }}
-            - name: Admin__Auth__Oidc__NameClaim
-              value: {{ .Values.tasks.settings.admin.auth.oidc.nameClaim | quote }}
-            {{- end }}
-            {{- if .Values.tasks.settings.admin.auth.oidc.roleClaim }}
-            - name: Admin__Auth__Oidc__RoleClaim
-              value: {{ .Values.tasks.settings.admin.auth.oidc.roleClaim | quote }}
-            {{- end }}
-            {{- if .Values.tasks.settings.admin.auth.oidc.requiredRole }}
-            - name: Admin__Auth__Oidc__RequiredRole
-              value: {{ .Values.tasks.settings.admin.auth.oidc.requiredRole | quote }}
-            {{- end }}
+
 
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
@@ -233,16 +205,22 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: redisPassword
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
 
-            {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__Url
               value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}
+            {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__ApiKey
               valueFrom:
                 secretKeyRef:
                   key: pagerendererApiKey
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
+
+            - name: Security__SecretKey
+              valueFrom:
+                secretKeyRef:
+                  key: securitySecretKey
+                  name: {{ include "pro-api.secretName" . }}
 {{- end }}
