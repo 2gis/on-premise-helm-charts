@@ -810,7 +810,7 @@ authProvider:
   enabled: false
   host: ''
   schema: ''
-  allowedHosts : []
+  allowedHosts: []
   basic:
     users:
       - username: ''
@@ -986,3 +986,4 @@ ecommerce:
 
 security:
   secretKey: ''
+
