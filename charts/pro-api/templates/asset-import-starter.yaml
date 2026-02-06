@@ -127,4 +127,4 @@ spec:
                 secretKeyRef:
                   key: routingApi2gisKey
                   name: {{ include "pro-api.secretName" . }}
-  {{ end }}
+{{ end }}
