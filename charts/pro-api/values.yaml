@@ -76,10 +76,10 @@ api:
     resources:
       requests:
         cpu: 400m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1024M
+        memory: 1024Mi
     strategy:
       type: RollingUpdate
       rollingUpdate:
@@ -97,10 +97,10 @@ api:
     updateMode: Auto
     minAllowed:
       cpu: 400m
-      memory: 256M
+      memory: 256Mi
     maxAllowed:
       cpu: 1
-      memory: 1024M
+      memory: 1024Mi
 
   # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -253,10 +253,10 @@ permissions:
     resources:
       requests:
         cpu: 300m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1G
+        memory: 1024Mi
 
   # @param permissions.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param permissions.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -392,10 +392,10 @@ tasks:
     resources:
       requests:
         cpu: 400m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1024M
+        memory: 1024Mi
     strategy:
       type: RollingUpdate
       rollingUpdate:
@@ -413,10 +413,10 @@ tasks:
     updateMode: Auto
     minAllowed:
       cpu: 400m
-      memory: 256M
+      memory: 256Mi
     maxAllowed:
       cpu: 1
-      memory: 1024M
+      memory: 1024Mi
 
   # @param tasks.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param tasks.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -534,10 +534,10 @@ pagerenderer:
     resources:
       requests:
         cpu: 300m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1G
+        memory: 1024Mi
 
   # @param pagerenderer.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param pagerenderer.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -571,10 +571,10 @@ pagerenderer:
     updateMode: Auto
     minAllowed:
       cpu: 300m
-      memory: 256M
+      memory: 256Mi
     maxAllowed:
       cpu: 1
-      memory: 1G
+      memory: 1024Mi
 
   # @param pagerenderer.settings.enabled If Page Renderer API is disabled it will not be deployed to k8s
   # @param pagerenderer.settings.httpPort Http port for interaction via the rest api
@@ -636,10 +636,10 @@ assetImporter:
   resources:
     requests:
       cpu: 700m
-      memory: 768M
+      memory: 768Mi
     limits:
       cpu: 1000m
-      memory: 8Gi
+      memory: 8192Mi
   suspended: false
   startOnDeploy: true
   startOnDeployMode: ScheduleManifest
