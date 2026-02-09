@@ -116,9 +116,9 @@ api:
     serviceAccount: runner
     serviceAccountOverride: ''
 
-  # @param pdb.enabled If PDB is enabled for the service.
-  # @param pdb.minAvailable How many pods must be available after the eviction.
-  # @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+  # @param api.pdb.enabled If PDB is enabled for the service.
+  # @param api.pdb.minAvailable How many pods must be available after the eviction.
+  # @param api.pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
   pdb:
     enabled: false
@@ -270,9 +270,9 @@ permissions:
 
   # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-  # @param pdb.enabled If PDB is enabled for the service.
-  # @param pdb.minAvailable How many pods must be available after the eviction.
-  # @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+  # @param permissions.pdb.enabled If PDB is enabled for the service.
+  # @param permissions.pdb.minAvailable How many pods must be available after the eviction.
+  # @param permissions.pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
   pdb:
     enabled: false
@@ -289,9 +289,9 @@ permissions:
   # @param permissions.settings.auth.apiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`. **Required**
   # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
-  # @param permissions.settings.auth.enabled Enables or disables authentication **Required**
-  # @param permissions.settings.auth.apiKey Api key for service to service calls **Required**
-  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI **Required**
+  # @param permissions.settings.auth.enabled Enables or disables authentication **Required if permissions.settings.auth.enabled: true**
+  # @param permissions.settings.auth.apiKey Api key for service to service calls **Required if permissions.settings.auth.enabled: true**
+  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. Example: `Admin` or `PermAdmin`. **Required**
   settings:
     host: ''
     httpPort: 8091
@@ -428,9 +428,9 @@ tasks:
     type: ClusterIP
     port: 80
 
-  # @param pdb.enabled If PDB is enabled for the service.
-  # @param pdb.minAvailable How many pods must be available after the eviction.
-  # @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+  # @param tasks.pdb.enabled If PDB is enabled for the service.
+  # @param tasks.pdb.minAvailable How many pods must be available after the eviction.
+  # @param tasks.pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
   pdb:
     enabled: false
@@ -451,7 +451,7 @@ tasks:
   # @param tasks.settings.auth Authentication settings
   # @param tasks.settings.auth.enabled Enables or disables authentication **Required**
   # @param tasks.settings.auth.apiKey Api key for service to service calls **Required**
-  # @param tasks.settings.auth.adminRequiredRoles Roles required to access Tasks Admin UI
+  # @param tasks.settings.auth.adminRequiredRoles Roles required to access Tasks Admin UI. Example: `Admin`
   # @skip tasks.settings.features.assetDataPreparation
   # @skip tasks.settings.features.cleanCitylensFrames
   # @skip tasks.settings.features.removeUnusedUserAssetFiles
@@ -551,9 +551,9 @@ pagerenderer:
 
   # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-  # @param pdb.enabled If PDB is enabled for the service.
-  # @param pdb.minAvailable How many pods must be available after the eviction.
-  # @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
+  # @param pagerenderer.pdb.enabled If PDB is enabled for the service.
+  # @param pagerenderer.pdb.minAvailable How many pods must be available after the eviction.
+  # @param pagerenderer.pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
   pdb:
     enabled: false
@@ -800,8 +800,8 @@ postgres:
 # @param authProvider.oidc.authority URL of the OIDC provider **Required if schema is "Oidc"**
 # @param authProvider.oidc.clientId Client ID registered with the OIDC provider **Required if schema is "Oidc"**
 # @param authProvider.oidc.clientSecret Client secret for the OIDC provider **Required if schema is "Oidc"**
-# @param authProvider.oidc.nameClaim Claim name that contains the user's name
-# @param authProvider.oidc.roleClaim  Claim name that contains the user's role
+# @param authProvider.oidc.nameClaim Claim name that contains the user's name. Example: 'name'
+# @param authProvider.oidc.roleClaim  Claim name that contains the user's role. Example: 'role'
 authProvider:
   enabled: false
   host: ''
@@ -817,8 +817,8 @@ authProvider:
     authority: ''
     clientId: ''
     clientSecret: ''
-    nameClaim: 'name'
-    roleClaim: 'roles'
+    nameClaim: ''
+    roleClaim: ''
 
 # @section Kafka settings (supported version 2.7)
 
