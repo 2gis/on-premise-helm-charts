@@ -448,7 +448,6 @@ tasks:
   # @param tasks.settings.worker.regularTasksWorkersCount Number of threads that will be used by Hangfire-server to performs other tasks
   # @param tasks.settings.worker.longRunningTasksWorkersCount Number of threads that will be used by Hangfire-server to performs long tasks
   # @param tasks.settings.features.auditLogging.enabled Enable audit log feature
-  # @param tasks.settings.auth Authentication settings
   # @param tasks.settings.auth.enabled Enables or disables authentication **Required**
   # @param tasks.settings.auth.apiKey Api key for service to service calls **Required**
   # @param tasks.settings.auth.adminRequiredRoles Roles required to access Tasks Admin UI. Example: `Admin`
@@ -582,6 +581,7 @@ pagerenderer:
   # @extra pagerenderer.settings.logging Logging settings
   # @param pagerenderer.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
   # @param pagerenderer.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
+  # @param pagerenderer.settings.auth.apiKey Secret API Key to perform authorized service actions, random string. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`
   settings:
     enabled: false
     httpPort: 8282
@@ -794,9 +794,9 @@ postgres:
 # @param authProvider.host Host address of the authentication provider (used if enabled is true)
 # @param authProvider.schema Authentication scheme to use. Supported values: "Basic", "Oidc" **Required**
 # @param authProvider.allowedHosts List of allowed hosts. For allowed all hosts use '*'
-# @param authProvider.basic Basic authentication settings
-# @param authProvider.basic.users List of users for basic authentication (used if schema is "Basic") **Required if schema is "Basic"**
-# @param authProvider.oidc OIDC provider settings
+# @param authProvider.basic.users[0].username Username for basic authentication
+# @param authProvider.basic.users[0].password Password for basic authentication
+# @param authProvider.basic.users[0].roles Roles assigned to the user. Example: 'Admin'
 # @param authProvider.oidc.authority URL of the OIDC provider **Required if schema is "Oidc"**
 # @param authProvider.oidc.clientId Client ID registered with the OIDC provider **Required if schema is "Oidc"**
 # @param authProvider.oidc.clientSecret Client secret for the OIDC provider **Required if schema is "Oidc"**
