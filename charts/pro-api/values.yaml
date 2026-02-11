@@ -709,6 +709,7 @@ dgctlStorage:
 # @param s3.layerDataBucket S3 bucket with prepared layer data. **Required**
 # @param s3.snapshotBucket S3 bucket for storing snapshots of inclemental data updates. **Required**
 # @param s3.resourcesBucket S3 bucket for storing static resources. **Required**
+# Note: S3 host, secure, region, accessKey, and secretKey are taken from dgctlStorage.* settings for these buckets.
 
 s3:
   assetsDataBucket: ''
