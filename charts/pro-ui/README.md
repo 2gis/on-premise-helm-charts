@@ -25,7 +25,7 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 | Name               | Description | Value                    |
 | ------------------ | ----------- | ------------------------ |
 | `image.repository` | Repository  | `2gis-on-premise/pro-ui` |
-| `image.tag`        | Tag         | `4.43.0`                 |
+| `image.tag`        | Tag         | `4.50.0`                 |
 
 ### Common deployment settings
 
