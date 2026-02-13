@@ -1256,7 +1256,7 @@ GINMODE: release
 magg:
   enabled: false
   image:
-    repository: 2gis-on-premise/metrics-aggregator
+    repository: 2gis-on-premise/search-api-v8-metrics-aggregator
     pullPolicy: IfNotPresent
     tag: 0.1.0
   ports:
