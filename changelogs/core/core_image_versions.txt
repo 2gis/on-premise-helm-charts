@@ -3,7 +3,7 @@ keycloak
 	keycloak-themes:0.0.8
 	keycloak:21.1.1-debian-11-r4
 keys
-	keys-backend:1.144.1
+	keys-backend:1.149.1
 	keys-ui:1.4.0
 license
 	license:2.4.1

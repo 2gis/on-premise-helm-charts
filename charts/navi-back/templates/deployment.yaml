@@ -97,7 +97,7 @@ spec:
         {{- include "tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
-        {{- if .Values.transmitter.enabled }}
+        {{- if (index .Values (include "config.attractor" .) | default dict).enabled }}
 {{- /* generic-chart.containerName redefined in _helpers.tpl */}}
         - name: {{ include "generic-chart.containerName" . }}-envoy
           securityContext:

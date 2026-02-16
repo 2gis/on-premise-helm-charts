@@ -4,10 +4,6 @@ Use this Helm chart to deploy Search API service, which is a part of 2GIS's [On-
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-> **Note:**
->
-> All On-Premise services are beta, and under development.
-
 See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn about:
 
 - Architecture of the service.
@@ -40,6 +36,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `affinity`                      | Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                                                         | `{}`   |
 | `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                                                          | `[]`   |
 | `redeployLabel`                 | If this label is changed since the last deployment, the whole chart will be redeployed                                                                                    | `""`   |
+| `imagePullSecrets`              | Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)                       | `[]`   |
 
 ### Deployment Artifacts Storage settings
 

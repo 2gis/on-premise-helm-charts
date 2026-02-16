@@ -34,7 +34,7 @@ featureFlags:
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.144.1
+    tag: 1.149.1
 
 # @section Admin service settings
 
@@ -163,6 +163,7 @@ api:
   # @param api.oidc.enableSinglePartnerMode Enable single partner mode: all users are binded to the preconfigured partner (needed when external OIDC provider is used).
   # @param api.oidc.enableExternalProvider Enable external oidc provider: do not have access to manage users.
   # @param api.oidc.url URL of the OIDC provider.
+  # @param api.oidc.issuerUrl Allows discovery to work when the issuer_url reported by upstream is mismatched with the discovery URL.
   # @param api.oidc.retryCount Maximum number of retries for requests to OIDC provider.
   # @param api.oidc.timeout Timeout for requests to OIDC provider.
   # @extra api.oidc.defaultPartner **Settings for single partner mode feature. Info specified here will be returned in responses from Auth API**
@@ -175,6 +176,7 @@ api:
     enableSinglePartnerMode: false
     enableExternalProvider: false
     url: ''
+    issuerUrl: ''
     retryCount: 3
     timeout: 3s
     defaultPartner:

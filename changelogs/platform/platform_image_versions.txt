@@ -3,7 +3,7 @@ catalog-api
 	catalog-importer:1.12.1
 generic-chart
 mapgl-js-api
-	mapgl:1.67.0
+	mapgl:1.69.1
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
