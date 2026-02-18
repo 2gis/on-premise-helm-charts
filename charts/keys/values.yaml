@@ -262,6 +262,14 @@ api:
   # @param api.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
   # @param api.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
 
+  # @param serviceApi.hpa.enabled If HPA is enabled for the service.
+  # @param serviceApi.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+  # @param serviceApi.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+  # @param serviceApi.hpa.scaleDownStabilizationWindowSeconds Scale-down window.
+  # @param serviceApi.hpa.scaleUpStabilizationWindowSeconds Scale-up window.
+  # @param serviceApi.hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+  # @param serviceApi.hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+
   hpa:
     enabled: false
     minReplicas: 1
@@ -271,7 +279,77 @@ api:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: ''
 
+# @section Service Api service settings
 
+# @param serviceApi.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+serviceApi:
+  logLevel: warning
+
+  # @param serviceApi.replicas A replica count for the pod.
+
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 256Mi
+
+  # @param serviceApi.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param serviceApi.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  annotations: {}
+  labels: {}
+
+  # @param serviceApi.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param serviceApi.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  podAnnotations: {}
+  podLabels: {}
+
+  # @param serviceApi.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param serviceApi.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param serviceApi.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+
+  # @param serviceApi.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+  revisionHistoryLimit: 3
+
+  # @param serviceApi.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param serviceApi.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param serviceApi.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  # @param serviceApi.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param serviceApi.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param serviceApi.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param serviceApi.service.port Service port.
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    scaleDownStabilizationWindowSeconds: ''
+    scaleUpStabilizationWindowSeconds: ''
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: ''
 # @section Import service settings
 
 import:
@@ -808,6 +886,12 @@ dgctlStorage:
 # @param api.resources.requests.memory A memory request.
 # @param api.resources.limits.cpu A CPU limit.
 # @param api.resources.limits.memory A memory limit.
+
+# @extra serviceApi.resources **Limits for the Service API service**
+# @param serviceApi.resources.requests.cpu A CPU request.
+# @param serviceApi.resources.requests.memory A memory request.
+# @param serviceApi.resources.limits.cpu A CPU limit.
+# @param serviceApi.resources.limits.memory A memory limit.
 
 # @extra import.resources **Limits for the Import service**
 # @param import.resources.requests.cpu A CPU request.
