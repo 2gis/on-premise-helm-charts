@@ -124,15 +124,43 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
-| Name                                          | Description                                                                                                                                                          | Value   |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `api.hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
-| `api.hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
-| `api.hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
-| `api.hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
-| `api.hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
-| `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
-| `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+| Name                                                 | Description                                                                                                                                                          | Value   |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `api.hpa.enabled`                                    | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `api.hpa.minReplicas`                                | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `api.hpa.maxReplicas`                                | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
+| `api.hpa.scaleDownStabilizationWindowSeconds`        | Scale-down window.                                                                                                                                                   | `""`    |
+| `api.hpa.scaleUpStabilizationWindowSeconds`          | Scale-up window.                                                                                                                                                     | `""`    |
+| `api.hpa.targetCPUUtilizationPercentage`             | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `api.hpa.targetMemoryUtilizationPercentage`          | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+| `serviceApi.hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `serviceApi.hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `serviceApi.hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
+| `serviceApi.hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
+| `serviceApi.hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
+| `serviceApi.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `serviceApi.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+
+### Service Api service settings
+
+| Name                                               | Description                                                                                                                                                                                              | Value           |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `serviceApi.logLevel`                              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                | `warning`       |
+| `serviceApi.annotations`                           | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                | `{}`            |
+| `serviceApi.labels`                                | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                          | `{}`            |
+| `serviceApi.podAnnotations`                        | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                            | `{}`            |
+| `serviceApi.podLabels`                             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`            |
+| `serviceApi.nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
+| `serviceApi.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                              | `{}`            |
+| `serviceApi.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                        | `[]`            |
+| `serviceApi.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                           | `3`             |
+| `serviceApi.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
+| `serviceApi.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
+| `serviceApi.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
+| `serviceApi.service.annotations`                   | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                        | `{}`            |
+| `serviceApi.service.labels`                        | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                  | `{}`            |
+| `serviceApi.service.type`                          | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                           | `ClusterIP`     |
+| `serviceApi.service.port`                          | Service port.                                                                                                                                                                                            | `80`            |
 
 ### Import service settings
 
@@ -355,48 +383,53 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 
 ### Limits
 
-| Name                                           | Description                           | Value   |
-| ---------------------------------------------- | ------------------------------------- | ------- |
-| `admin.resources`                              | **Limits for the Admin service**      |         |
-| `admin.resources.requests.cpu`                 | A CPU request.                        | `300m`  |
-| `admin.resources.requests.memory`              | A memory request.                     | `256Mi` |
-| `admin.resources.limits.cpu`                   | A CPU limit.                          | `1`     |
-| `admin.resources.limits.memory`                | A memory limit.                       | `384Mi` |
-| `api.resources`                                | **Limits for the API service**        |         |
-| `api.resources.requests.cpu`                   | A CPU request.                        | `50m`   |
-| `api.resources.requests.memory`                | A memory request.                     | `128Mi` |
-| `api.resources.limits.cpu`                     | A CPU limit.                          | `1`     |
-| `api.resources.limits.memory`                  | A memory limit.                       | `256Mi` |
-| `import.resources`                             | **Limits for the Import service**     |         |
-| `import.resources.requests.cpu`                | A CPU request.                        | `10m`   |
-| `import.resources.requests.memory`             | A memory request.                     | `32Mi`  |
-| `import.resources.limits.cpu`                  | A CPU limit.                          | `100m`  |
-| `import.resources.limits.memory`               | A memory limit.                       | `64Mi`  |
-| `migrate.resources`                            | **Limits for the Migrate service**    |         |
-| `migrate.resources.requests.cpu`               | A CPU request.                        | `10m`   |
-| `migrate.resources.requests.memory`            | A memory request.                     | `32Mi`  |
-| `migrate.resources.limits.cpu`                 | A CPU limit.                          | `100m`  |
-| `migrate.resources.limits.memory`              | A memory limit.                       | `64Mi`  |
-| `tasker.resources`                             | **Limits for the Tasker service**     |         |
-| `tasker.resources.requests.cpu`                | A CPU request.                        | `10m`   |
-| `tasker.resources.requests.memory`             | A memory request.                     | `32Mi`  |
-| `tasker.resources.limits.cpu`                  | A CPU limit.                          | `100m`  |
-| `tasker.resources.limits.memory`               | A memory limit.                       | `64Mi`  |
-| `dispatcher.resources`                         | **Limits for the Dispatcher service** |         |
-| `dispatcher.resources.requests.cpu`            | A CPU request.                        | `10m`   |
-| `dispatcher.resources.requests.memory`         | A memory request.                     | `32Mi`  |
-| `dispatcher.resources.limits.cpu`              | A CPU limit.                          | `100m`  |
-| `dispatcher.resources.limits.memory`           | A memory limit.                       | `64Mi`  |
-| `dispatcher.cleaner.resources`                 | **Limits for the Cleaner service**    |         |
-| `dispatcher.cleaner.resources.requests.cpu`    | A CPU request.                        | `10m`   |
-| `dispatcher.cleaner.resources.requests.memory` | A memory request.                     | `32Mi`  |
-| `dispatcher.cleaner.resources.limits.cpu`      | A CPU limit.                          | `100m`  |
-| `dispatcher.cleaner.resources.limits.memory`   | A memory limit.                       | `64Mi`  |
-| `counter.resources`                            | **Limits for the Counter service**    |         |
-| `counter.resources.requests.cpu`               | A CPU request.                        | `20m`   |
-| `counter.resources.requests.memory`            | A memory request.                     | `32Mi`  |
-| `counter.resources.limits.cpu`                 | A CPU limit.                          | `1000m` |
-| `counter.resources.limits.memory`              | A memory limit.                       | `512Mi` |
+| Name                                           | Description                            | Value   |
+| ---------------------------------------------- | -------------------------------------- | ------- |
+| `admin.resources`                              | **Limits for the Admin service**       |         |
+| `admin.resources.requests.cpu`                 | A CPU request.                         | `300m`  |
+| `admin.resources.requests.memory`              | A memory request.                      | `256Mi` |
+| `admin.resources.limits.cpu`                   | A CPU limit.                           | `1`     |
+| `admin.resources.limits.memory`                | A memory limit.                        | `384Mi` |
+| `api.resources`                                | **Limits for the API service**         |         |
+| `api.resources.requests.cpu`                   | A CPU request.                         | `50m`   |
+| `api.resources.requests.memory`                | A memory request.                      | `128Mi` |
+| `api.resources.limits.cpu`                     | A CPU limit.                           | `1`     |
+| `api.resources.limits.memory`                  | A memory limit.                        | `256Mi` |
+| `serviceApi.resources`                         | **Limits for the Service API service** |         |
+| `serviceApi.resources.requests.cpu`            | A CPU request.                         | `50m`   |
+| `serviceApi.resources.requests.memory`         | A memory request.                      | `128Mi` |
+| `serviceApi.resources.limits.cpu`              | A CPU limit.                           | `1`     |
+| `serviceApi.resources.limits.memory`           | A memory limit.                        | `256Mi` |
+| `import.resources`                             | **Limits for the Import service**      |         |
+| `import.resources.requests.cpu`                | A CPU request.                         | `10m`   |
+| `import.resources.requests.memory`             | A memory request.                      | `32Mi`  |
+| `import.resources.limits.cpu`                  | A CPU limit.                           | `100m`  |
+| `import.resources.limits.memory`               | A memory limit.                        | `64Mi`  |
+| `migrate.resources`                            | **Limits for the Migrate service**     |         |
+| `migrate.resources.requests.cpu`               | A CPU request.                         | `10m`   |
+| `migrate.resources.requests.memory`            | A memory request.                      | `32Mi`  |
+| `migrate.resources.limits.cpu`                 | A CPU limit.                           | `100m`  |
+| `migrate.resources.limits.memory`              | A memory limit.                        | `64Mi`  |
+| `tasker.resources`                             | **Limits for the Tasker service**      |         |
+| `tasker.resources.requests.cpu`                | A CPU request.                         | `10m`   |
+| `tasker.resources.requests.memory`             | A memory request.                      | `32Mi`  |
+| `tasker.resources.limits.cpu`                  | A CPU limit.                           | `100m`  |
+| `tasker.resources.limits.memory`               | A memory limit.                        | `64Mi`  |
+| `dispatcher.resources`                         | **Limits for the Dispatcher service**  |         |
+| `dispatcher.resources.requests.cpu`            | A CPU request.                         | `10m`   |
+| `dispatcher.resources.requests.memory`         | A memory request.                      | `32Mi`  |
+| `dispatcher.resources.limits.cpu`              | A CPU limit.                           | `100m`  |
+| `dispatcher.resources.limits.memory`           | A memory limit.                        | `64Mi`  |
+| `dispatcher.cleaner.resources`                 | **Limits for the Cleaner service**     |         |
+| `dispatcher.cleaner.resources.requests.cpu`    | A CPU request.                         | `10m`   |
+| `dispatcher.cleaner.resources.requests.memory` | A memory request.                      | `32Mi`  |
+| `dispatcher.cleaner.resources.limits.cpu`      | A CPU limit.                           | `100m`  |
+| `dispatcher.cleaner.resources.limits.memory`   | A memory limit.                        | `64Mi`  |
+| `counter.resources`                            | **Limits for the Counter service**     |         |
+| `counter.resources.requests.cpu`               | A CPU request.                         | `20m`   |
+| `counter.resources.requests.memory`            | A memory request.                      | `32Mi`  |
+| `counter.resources.limits.cpu`                 | A CPU limit.                           | `1000m` |
+| `counter.resources.limits.memory`              | A memory limit.                        | `512Mi` |
 
 ### customCAs **Custom Certificate Authority**
 

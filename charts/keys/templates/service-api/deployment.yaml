@@ -52,7 +52,7 @@ spec:
         - name: service-api
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          command: [ "keys-service-api" ]
+          command: [ "keys-api" ]
           ports:
             - name: http
               containerPort: 8080
@@ -69,7 +69,6 @@ spec:
           env:
             - name: KEYS_LOG_LEVEL
               value: {{ .Values.serviceApi.logLevel | quote }}
-            {{- include "keys.env.featureFlags" . | nindent 12 }}
             {{- include "keys.env.db.deploys" . | nindent 12 }}
             {{- include "keys.env.redis" . | nindent 12 }}
             {{- if .Values.customCAs.bundle }}
@@ -85,15 +84,15 @@ spec:
       {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
       {{- end }}
       {{- include "keys.psql.volume" . | nindent 8 }}
-      {{- with .Values.api.nodeSelector }}
+      {{- with .Values.serviceApi.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.api.affinity }}
+      {{- with .Values.serviceApi.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.api.tolerations }}
+      {{- with .Values.serviceApi.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

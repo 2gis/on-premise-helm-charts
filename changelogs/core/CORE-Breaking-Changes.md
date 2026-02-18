@@ -1,5 +1,11 @@
 # Core Breaking-Changes
 
+## [2.4.0]
+
+### keys-api
+
+- KeysAPI was splits into two applications: KeysAPI and ServiceAPI
+
 ## [2.1.0]
 
 ### keys
