@@ -1,3 +1,8 @@
+## [2.4.0] (2026-02-18)
+#### [Breaking-Changes](CORE-Breaking-Changes.md#240)
+
+[Full list of image versions](core_image_versions.txt)
+
 ## [2.3.0] (2026-01-22)
 
 #### Images
