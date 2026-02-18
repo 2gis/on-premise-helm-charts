@@ -283,6 +283,10 @@ api:
 serviceApi:
   logLevel: warning
 
+  # @param serviceApi.replicas A replica count for the pod.
+
+  replicas: 1
+
   resources:
     requests:
       cpu: 50m

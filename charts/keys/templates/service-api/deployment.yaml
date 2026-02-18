@@ -23,7 +23,7 @@ metadata:
     {{- end }}
 spec:
   {{- if not .Values.serviceApi.hpa.enabled }}
-  replicas: {{ .Values.api.replicas }}
+  replicas: {{ .Values.serviceApi.replicas }}
   {{- end }}
   revisionHistoryLimit: {{ .Values.serviceApi.revisionHistoryLimit }}
   strategy:
