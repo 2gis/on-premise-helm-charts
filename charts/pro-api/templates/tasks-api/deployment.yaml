@@ -207,9 +207,11 @@ spec:
                   key: redisPassword
                   name: {{ include "pro-api.secretName" . }}
             {{- end }}
-
+  
+            {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__Url
               value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}
+            {{- end }}
             {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__ApiKey
               valueFrom:
