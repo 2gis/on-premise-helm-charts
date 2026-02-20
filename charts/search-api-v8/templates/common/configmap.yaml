@@ -213,7 +213,7 @@ data:
                     route_config:
                       name: local_route
                       virtual_hosts:
-                        {{ if .Values.onpremise -}}
+                      {{- if .Values.onpremise }}
                         - name: local_service
                           domains: [ "*" ]
                           routes:
@@ -221,7 +221,13 @@ data:
                                 prefix: "/"
                               route:
                                 cluster: workers
-                        {{- else -}}
+                                auto_host_rewrite: true
+                            - match:
+                                prefix: "/geodetector.GeoDetectorService/"
+                              route:
+                                cluster: geodetectors
+                                auto_host_rewrite: true
+                      {{- else }}
                         - name: local_service
                           domains: [ "*" ]
                           routes:
@@ -283,7 +289,18 @@ data:
                                   "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
                                   {{- toYaml .Values.head.envoy.faultInjection.clients.friends | nindent 34 }}
                             {{- end }}
-                        {{- end }}{{- /* .Values.onpremise */}}
+                            - match:
+                                prefix: "/geodetector.GeoDetectorService/"
+                              route:
+                                cluster: geodetectors
+                                auto_host_rewrite: true
+                            {{- if (and (index .Values.head.envoy.faultInjection.clients "geodetector") (.Values.head.envoy.faultInjection.enabled)) }}
+                              typed_per_filter_config:
+                                envoy.filters.http.fault:
+                                  "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
+                                  {{- toYaml .Values.head.envoy.faultInjection.clients.geodetector | nindent 34 }}
+                            {{- end }}
+                      {{- end -}}{{- /* .Values.onpremise */}}
                     http_filters:
                     {{- if .Values.head.envoy.faultInjection.enabled }}
                       - name: envoy.filters.http.fault
@@ -310,7 +327,25 @@ data:
                         socket_address:
                           port_value: {{ .Values.worker.ports.grpc }}
                           address: {{ include "search-api-v8.fullname" . }}-worker
-        {{ if not .Values.onpremise -}}
+      {{- if .Values.geodetector.enabled }}
+        - name: geodetectors
+          connect_timeout: 1s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          dns_refresh_rate: 1s
+          lb_policy: {{ .Values.head.envoy.policy }}
+          http2_protocol_options: { }
+          load_assignment:
+            cluster_name: geodetectors
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          port_value: {{ .Values.geodetector.ports.grpc }}
+                          address: {{ include "search-api-v8.fullname" . }}-geodetector
+      {{- end }}{{- /* Values.geodetector.enabled */}}
+      {{- if not .Values.onpremise }}
         - name: qt
           connect_timeout: 1s
           type: STRICT_DNS
@@ -410,7 +445,7 @@ data:
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
         {{- end }}{{- /* .Values.head.friendsService.endpoint.ssl */}}
-        {{- end }}{{- /* .Values.onpremise */}}
+      {{- end -}}{{- /* .Values.onpremise */}}
 
   head_vars.yaml: |
     server-grpc-port: {{ .Values.head.head.ports.grpc }}
@@ -433,8 +468,12 @@ data:
     search-grpc-client-factory-name: 'grpc-client-factory'
     search-global-search-mode: {{ ternary "on" "off" .Values.head.head.bigSearchMode.enabled }}
     testsuite-enabled: false
+    sentry-dsn: {{ .Values.sentry.headDsn | quote }}
+    {{- include "search-api-v8.sentry.vars.common" . | nindent 4 }}
     search-global-searchers:
-      {{- toYaml .Values.head.head.bigSearchSearchers | nindent 6 -}}
+      {{- toYaml .Values.head.head.bigSearchSearchers | nindent 6 }}
+    geodetector-enabled: {{ .Values.geodetector.enabled }}
+    geodetector-service-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
   {{ if .Values.onpremise }}
     search-allow-extended-params: false
     search-exclude-segments: []
@@ -506,7 +545,6 @@ data:
     search-recsys-ranker-searchers:
       {{- toYaml .Values.head.recsysRanker.searchersList | nindent 6 }}
     search-recsys-ranker-grpc-client-factory-name: 'grpc-client-factory'
-
     grpc-client-circuit-breaker-clients:
       {{- toYaml .Values.head.grpcClientCircuitBreaker.clients | nindent 6 }}
       {{- end -}}{{- /* .Values.onpremise */}}
@@ -521,6 +559,8 @@ data:
     logger-level: {{ .Values.worker.loggerLevel }}
     logger-format: {{ .Values.worker.loggerFormat }}
     data-update-frequency-sec: {{ .Values.worker.dataUpdateFrequencySec }}
+    sentry-dsn: {{ .Values.sentry.workerDsn | quote }}
+    {{- include "search-api-v8.sentry.vars.common" . | nindent 4 }}
   {{- if .Values.onpremise }}
     rtw-lifetime-sec: 0
   {{- else }}
@@ -703,6 +743,7 @@ data:
       log_level: {{ .Values.portal.loglevel }}
     server:
       address: ":{{ .Values.portal.ports.http }}"
+      base_path: "/portal"
     services:
     {{- if empty .Values.indexerServices.externalControllerUrl }}
       controller_host: "{{ include "search-api-v8.fullname" . }}-controller:{{ .Values.service.filesStorage.port }}"
@@ -716,6 +757,15 @@ data:
       fstorage_host: "{{ .Values.indexerServices.externalFilesStorageUrl }}"
       ignore_version: true
     {{- end }}{{- /* empty .Values.indexerServices.externalFilesStorageUrl */}}
+    worker:
+      enabled: true
+      interval: 10s
+      resolve_timeout: 2s
+      head_host: "{{ include "search-api-v8.fullname" . }}-head"
+      status_port: {{ .Values.head.head.ports.http }}
+      status_path: "/v2/status"
+      request_timeout: 2s
+      max_concurrent: 5
   files-storage.yaml: |
     server:
       address: ":{{ .Values.filesStorage.ports.http }}"
@@ -913,6 +963,7 @@ data:
                             route:
                               cluster: search_base_cluster
                               auto_host_rewrite: true
+                        {{- if not .Values.onpremise }}
                           - match:
                               prefix: "/unisearch.proto.SearchService/"
                               headers:
@@ -937,6 +988,7 @@ data:
                             route:
                               cluster: cluster-3
                               auto_host_rewrite: true
+                        {{- end -}}{{- /* not .Values.onpremise */}}
                           - match:
                               prefix: "/geodetector.GeoDetectorService/"
                             route:
@@ -963,6 +1015,7 @@ data:
                         socket_address:
                          port_value: {{ .Values.ingressRouter.routing.searchBase.port }}
                          address: {{ include "search-api-v8.fullname" . }}-head
+      {{- if not .Values.onpremise }}
         - name: cluster-1
           connect_timeout: 1s
           type: STRICT_DNS
@@ -1011,6 +1064,7 @@ data:
                         socket_address:
                           port_value: {{ .Values.ingressRouter.routing.cluster3.port }}
                           address: {{ .Values.ingressRouter.routing.cluster3.address }}
+      {{- end -}}{{- /* not .Values.onpremise */}}
         - name: geodetectors
           connect_timeout: 1s
           type: STRICT_DNS
@@ -1027,7 +1081,6 @@ data:
                         socket_address:
                           port_value: {{ .Values.geodetector.ports.grpc }}
                           address: {{ include "search-api-v8.fullname" . }}-geodetector
-
   ingress_router_vars.yaml: |
     server-grpc-port: {{ .Values.ingressRouter.ports.grpc }}
     server-port: {{ .Values.ingressRouter.ports.http }}
@@ -1042,6 +1095,8 @@ data:
     dispatcher-enabled: {{ .Values.ingressRouter.dispatcherComponent.enabled }}
     rate-limit-enabled: {{ .Values.ingressRouter.rateLimitComponent.enabled }}
     data-update-frequency-sec: 60
+    sentry-dsn: {{ .Values.sentry.ingressRouterDsn | quote }}
+    {{- include "search-api-v8.sentry.vars.common" . | nindent 4 }}
     {{- if empty .Values.ingressRouter.searchServiceUrl }}
     search-service-url: '127.0.0.1:{{ .Values.ingressRouter.envoy.ports.grpc }}'
     {{ else }}
@@ -1068,6 +1123,8 @@ data:
     geodetector-fs-threads: {{ .Values.geodetector.geodetectorFsThreads }}
     logger-level: {{ .Values.geodetector.loggerLevel }}
     logger-format: {{ .Values.geodetector.loggerFormat }}
+    sentry-dsn: {{ .Values.sentry.geodetectorDsn | quote }}
+    {{- include "search-api-v8.sentry.vars.common" . | nindent 4 }}
     execute-debug-commands: {{ .Values.geodetector.executeDebugCommands }}
     geodetector-mon-threads: {{ .Values.geodetector.geodetectorMonThreads }}
   {{- end }}{{- /* .Values.geodetector.enabled  */}}

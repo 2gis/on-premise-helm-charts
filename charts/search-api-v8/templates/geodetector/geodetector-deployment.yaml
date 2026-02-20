@@ -34,6 +34,7 @@ spec:
       {{- end }}{{- /* .Values.geodetector.podLabels */}}
         search/part: geodetector
     spec:
+      terminationGracePeriodSeconds: 120
       volumes:
         {{- if .Values.geodetector.data.persistent.enabled }}
         - name: geodetector-data
@@ -52,6 +53,9 @@ spec:
           emptyDir:
             sizeLimit: {{ .Values.geodetector.data.resources.requests.storage }}
         {{- end }}{{- /* .Values.geodetector.data.persistent.enabled */}}
+        - name: geodetector-sentry
+          emptyDir:
+            sizeLimit: {{ .Values.sentry.storageSize }}
         - name: geodetector-config
           configMap:
             name: {{ include "search-api-v8.fullname" . }}
@@ -126,6 +130,8 @@ spec:
           volumeMounts:
             - name: geodetector-data
               mountPath: /data
+            - name: geodetector-sentry
+              mountPath: {{ .Values.sentry.databasePath }}
             - name: geodetector-config
               mountPath: /app/config.yaml
               subPath: syncer-geodetector.yaml

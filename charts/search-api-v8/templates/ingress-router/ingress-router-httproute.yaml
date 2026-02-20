@@ -24,13 +24,29 @@ spec:
   - backendRefs:
     - group: ""
       kind: Service
-      name: {{ include "search-api-v8.fullname" . }}-head
-      port: {{ .Values.service.head.ports.http}}
+      name: {{ include "search-api-v8.fullname" . }}-portal
+      port: {{ .Values.service.portal.port }}
       weight: 1
     matches:
     - path:
         type: PathPrefix
         value: /v2/status
+  - backendRefs:
+    - group: ""
+      kind: Service
+      name: {{ include "search-api-v8.fullname" . }}-portal
+      port: {{ .Values.service.portal.port }}
+      weight: 1
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          replacePrefixMatch: /
+          type: ReplacePrefixMatch
+    matches:
+    - path:
+        type: PathPrefix
+        value: /portal
   - backendRefs:
     - group: ""
       kind: Service
