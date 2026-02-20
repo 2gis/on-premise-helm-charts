@@ -286,11 +286,9 @@ permissions:
   # @skip permissions.settings.localCache.trackStatistics
   # @param permissions.settings.httpPort Http port for interaction via the rest api
   # @param permissions.settings.grpcPort Grpc port for interaction via the grpc api
-  # @param permissions.settings.auth.apiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`. **Required**
   # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
-  # @param permissions.settings.auth.enabled Enables or disables authentication **Required if permissions.settings.auth.enabled: true**
-  # @param permissions.settings.auth.apiKey Api key for service to service calls **Required if permissions.settings.auth.enabled: true**
+  # @param permissions.settings.auth.apiKey Api key for service to service calls **Required*
   # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. Example: `Admin` or `PermAdmin`. **Required**
   settings:
     host: ''
@@ -303,7 +301,6 @@ permissions:
       enabled: true
       trackStatistics: false
     auth:
-      enabled: false
       apiKey: ''
       uiRequiredRoles: []
 
