@@ -35,6 +35,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- /* .Values.worker.podLabels */}}
     spec:
+      terminationGracePeriodSeconds: 120
       {{- with .Values.worker.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -81,6 +82,8 @@ spec:
                 command: [ "/bin/sh", "-c", "sleep 30" ]
           {{- end }}{{- /* .Values.worker.prestopHook.enabled */}}
           volumeMounts:
+            - name: worker-sentry
+              mountPath: {{ .Values.sentry.databasePath }}
             - name: worker-data
               mountPath: /data
             - name: worker-config
@@ -156,6 +159,9 @@ spec:
           emptyDir:
             sizeLimit: {{ .Values.worker.data.resources.requests.storage }}
         {{ end }}{{- /* .Values.worker.data.persistent.enabled */}}
+        - name: worker-sentry
+          emptyDir:
+            sizeLimit: {{ .Values.sentry.storageSize }}
         - name: worker-config
           configMap:
             name: {{ include "search-api-v8.fullname" . }}

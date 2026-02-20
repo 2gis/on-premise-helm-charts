@@ -89,6 +89,10 @@ spec:
           readinessProbe:
             {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataAdapter.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{ end -}}{{- /* .Values.dataAdapter.readinessProbe.enabled */}}
+          {{- if .Values.dataAdapter.startupProbe.enabled }}
+          startupProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataAdapter.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{ end -}}{{- /* .Values.dataAdapter.startupProbe.enabled */}}
       {{- with .Values.dataAdapter.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
