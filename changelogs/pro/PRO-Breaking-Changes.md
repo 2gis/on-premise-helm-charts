@@ -1,6 +1,6 @@
 # PRO Breaking-Changes
 
-## [2.51.0]
+## [2.52.0]
 
 ### pro-api
 
