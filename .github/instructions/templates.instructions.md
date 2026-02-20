@@ -37,6 +37,19 @@ excludeAgent: ["coding-agent"]
   {{- end }}
   ```
 - When `hpa.enabled: true`, the `replicas` field must be omitted from the Deployment spec
+- Parameters marked `**Required**` (unconditionally) must use `required` in templates:
+  ```yaml
+  host: {{ required "Valid .Values.postgres.host required!" .Values.postgres.host }}
+  ```
+- Parameters marked `**Required** if <condition>` must use `required` **inside** the guard block, not bare:
+  ```yaml
+  {{- if eq .Values.authProvider.schema "Oidc" }}
+  # correct — required fires only when the field is actually needed
+  - name: OIDC_AUTHORITY
+    value: {{ required "Valid .Values.authProvider.oidc.authority required when schema is Oidc!" .Values.authProvider.oidc.authority | quote }}
+  {{- end }}
+  ```
+  Referencing the value bare inside the block (without `required`) means a user who sets `schema: Oidc` but forgets the field will get an empty env-var instead of a clear error.
 - CronJobs must include `successfulJobsHistoryLimit` and `failedJobsHistoryLimit` (default `3`)
 - ConfigMaps and Secrets must have checksum annotations to trigger pod restarts on config changes:
   ```yaml

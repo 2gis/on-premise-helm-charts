@@ -51,6 +51,7 @@ When performing a code review, flag the following:
 
 **CRITICAL (block merge):**
 - Missing `required` validation for mandatory settings that have empty defaults
+- Missing `required` validation for conditionally-mandatory parameters inside their guard block (e.g., a parameter marked `**Required** if schema is "Oidc"` must use `required` inside the `{{- if eq .Values.schema "Oidc" }}` block, not just be referenced bare)
 - `values.yaml` changed but `README.md` not regenerated
 - Breaking change not documented in `Breaking-Changes.md`
 - PR targets `master` without being a documented hotfix
