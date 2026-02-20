@@ -5,6 +5,16 @@ excludeAgent: ["coding-agent"]
 
 # Rules for values.yaml
 
+## Recommended section order
+
+Sections in `values.yaml` should appear in this order:
+1. **Docker Registry settings** — always first; must include `dgctlDockerRegistry`
+2. **Common settings** — `replicaCount`, `imagePullSecrets`, image, etc.
+3. Service-specific sections
+4. Kubernetes resource sections (`hpa`, `vpa`, `pdb`, `serviceAccount`, `ingress`, `service`, `resources`, …)
+
+## General rules
+
 - All setting names use camelCase starting with a lowercase letter (`accessKey`, `dgctlDockerRegistry`)
 - Every chart must have a `dgctlDockerRegistry` parameter in the "Docker Registry settings" section
 - Mandatory settings (DB host, service URLs) must have an empty string default (`''`) and must be validated with `required` in templates:

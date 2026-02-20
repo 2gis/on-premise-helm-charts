@@ -20,14 +20,17 @@ When performing a code review, respond in **Russian**.
 When performing a code review, verify:
 
 - PR targets `develop` branch (except urgent hotfixes, which target `master`)
+- PR title starts with the service name, e.g. `navi-back: add X feature` or `[tiles-api] Upgraded version`
 - PR description includes a **Changelog** section and **Issues** references
 - Breaking changes are documented in `Breaking-Changes.md`
+- If `values.yaml` was changed, `README.md` must be regenerated (`make prepare && make charts/<chart-name>`, Linux only)
+- If a new chart is added, it has `templates/NOTES.txt` and a generated `README.md`
 
 ## Breaking Changes
 
 When performing a code review, verify:
 
-- Any change that removes or renames a parameter, changes a default value in a breaking way, or changes the chart API must be documented in `Breaking-Changes.md` and in the PR description
+- Any change that removes or renames a parameter, changes a default value in a breaking way, or changes the chart API must be documented in the group's `changelogs/<group>/*-Breaking-Changes.md` (referenced from `Breaking-Changes.md`) and in the PR description
 - Add a deprecation notice in `templates/NOTES.txt` for renamed/removed parameters instead of silently dropping them
 
 ## What to Flag in Review
