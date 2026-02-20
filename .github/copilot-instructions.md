@@ -3,6 +3,37 @@
 This repository contains Helm charts for deploying 2GIS On-Premise products on Kubernetes.
 Charts share a common library chart (`generic-chart`) and follow internal coding standards.
 
+## Required Before Each Commit
+
+```sh
+# Lint the chart(s) you modified
+helm lint charts/<chart-name>
+
+# If you changed values.yaml, regenerate README.md (requires Docker; Linux only)
+make prepare && make charts/<chart-name>
+
+# Run pre-commit hooks (trailing whitespace, end-of-file, etc.)
+pre-commit run --all-files
+```
+
+## Development Flow
+
+```sh
+# Build dependencies for a chart (needed after cloning or adding a dependency)
+helm dependency build charts/<chart-name>
+
+# Lint a single chart (quick sanity check)
+helm lint charts/<chart-name>
+
+# Full lint as used in CI
+ct lint --charts charts/<chart-name>
+
+# Validate that all README.md files are up-to-date
+.github/scripts/check-readme.sh
+```
+
+CI runs `ct lint --target-branch master` on every PR and fails if any `README.md` is out of date.
+
 ## Repository Structure
 
 ```
@@ -69,24 +100,6 @@ bitnami-config.json       # Config for readme-generator-for-helm annotation tags
 7. Create one `.yaml` file per Kubernetes resource using dashed filenames
 8. Generate `README.md`: `make prepare && make charts/<chart-name>`
 9. Lint: `helm lint charts/<chart-name>`
-
-## Linting and Validation
-
-```sh
-# Lint a single chart
-helm lint charts/<chart-name>
-
-# Full lint with chart-testing (as used in CI)
-ct lint --charts charts/<chart-name>
-
-# Validate all READMEs are up-to-date (requires readme-generator-for-helm installed)
-.github/scripts/check-readme.sh
-
-# Run pre-commit hooks (trailing whitespace, EOF, etc.)
-make run-pre-commit   # or: pre-commit run --all-files
-```
-
-CI runs `ct lint --target-branch master` on every PR. It also runs `check-readme.sh` and fails if any `README.md` is out of date.
 
 ## values.yaml Conventions
 

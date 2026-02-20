@@ -1,0 +1,28 @@
+name: "Copilot Setup Steps"
+
+# Run automatically when this file changes, and allow manual triggering from Actions tab.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'v3.17.2'
+
+      - name: Set up chart-testing (ct)
+        uses: helm/chart-testing-action@v2.6.0
