@@ -31,6 +31,7 @@ dgctlDockerRegistry: ''
 # @param worker.dataUpdateFrequencySec Frequency (in seconds) at which the worker updates data (indexes and RTW)
 # @param worker.rtw.lifeTime Lifetime of Real-Time Weights (in seconds)
 # @param worker.queueLimit Maximum number of tasks in the main task processor queue. If exceeded, tasks are sent to the fallback processor
+
 # @param worker.executeDebugCommands Enables execution of debug commands (e.g., simulating head or worker crashes)
 # @param worker.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
@@ -116,7 +117,7 @@ worker:
   image:
     repository: 2gis-on-premise/search-api-v8-worker
     pullPolicy: IfNotPresent
-    tag: 8.17.5
+    tag: 8.18.2
   ports:
     http: 8092
     grpc: 8091
@@ -307,7 +308,7 @@ head:
     image:
       repository: 2gis-on-premise/search-api-v8-head
       pullPolicy: IfNotPresent
-      tag: 8.17.5
+      tag: 8.18.2
     ports:
       grpc: 9010
       http: 9090
@@ -446,6 +447,7 @@ head:
 # @param head.envoy.faultInjection.clients.qt Specifies the fault injection settings for the query transformer client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
 # @param head.envoy.faultInjection.clients.ai Specifies the fault injection settings for the AI vector search client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
 # @param head.envoy.faultInjection.clients.recsys Specifies the fault injection settings for the recsys ranker client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
+# @param head.envoy.faultInjection.clients.geodetector Specifies the fault injection settings for the geodetector client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
 
   envoy:
     image:
@@ -472,6 +474,7 @@ head:
         qt: {}
         ai: {}
         recsys: {}
+        geodetector: {}
 
 # @param head.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 # @param head.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
@@ -553,7 +556,7 @@ head:
       port: 50051
       ssl: false
     clientFactoryName: 'grpc-client-factory'
-    timeoutMs: 500
+    timeoutMs: 600
     searchers: []
 
 # @param head.recsysRanker.enabled Enable or disable recsysRanker
@@ -697,7 +700,7 @@ filesStorage:
   image:
     repository: 2gis-on-premise/search-api-v8-files_storage
     pullPolicy: IfNotPresent
-    tag: 8.17.5
+    tag: 8.18.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -775,6 +778,14 @@ filesStorage:
 # @param dataAdapter.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
 # @param dataAdapter.readinessProbe.initialDelaySeconds Initial delay (in seconds) before starting the readiness probe
 
+# @param dataAdapter.startupProbe.enabled Enable readiness probe
+# @param dataAdapter.startupProbe.httpGet.path HTTP path for the readiness probe
+# @param dataAdapter.startupProbe.httpGet.port HTTP port for the readiness probe
+# @param dataAdapter.startupProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param dataAdapter.startupProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param dataAdapter.startupProbe.failureThreshold Number of failures before the readiness probe is considered failed
+# @param dataAdapter.startupProbe.initialDelaySeconds Initial delay (in seconds) before starting the readiness probe
+
 # @param dataAdapter.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
 # @param dataAdapter.interval Update data interval
 # @param dataAdapter.data.resources.requests.storage Requested storage volume size
@@ -788,7 +799,7 @@ dataAdapter:
   image:
     repository: 2gis-on-premise/search-api-v8-data_adapter
     pullPolicy: IfNotPresent
-    tag: 8.17.5
+    tag: 8.18.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -819,6 +830,15 @@ dataAdapter:
     timeoutSeconds: 1
     failureThreshold: 3
     initialDelaySeconds: 10
+  startupProbe:
+    enabled: true
+    httpGet:
+      path: /ready
+      port: http
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 200
+    initialDelaySeconds: 30
   loglevel: info
   interval: 15s
   data:
@@ -871,7 +891,7 @@ portal:
   image:
     repository: usrch/bs-portal
     pullPolicy: IfNotPresent
-    tag: 8.17.5
+    tag: 8.18.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -973,7 +993,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-api-v8-controller
     pullPolicy: IfNotPresent
-    tag: 8.17.5
+    tag: 8.18.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1106,7 +1126,7 @@ indexer:
   image:
     repository: 2gis-on-premise/search-api-v8-indexer
     pullPolicy: IfNotPresent
-    tag: 8.17.5
+    tag: 8.18.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1211,7 +1231,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-api-v8-syncer
     pullPolicy: IfNotPresent
-    tag: 8.17.5
+    tag: 8.18.2
   securityContext: {}
   resources:
     requests:
@@ -1551,7 +1571,7 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-api-v8-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.17.5
+    tag: 8.18.2
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
@@ -1724,7 +1744,7 @@ geodetector:
   image:
     repository: 2gis-on-premise/search-api-v8-geodetector
     pullPolicy: IfNotPresent
-    tag: 8.17.5
+    tag: 8.18.2
   imagePullSecrets: []
   geodetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60
@@ -1796,7 +1816,6 @@ geodetector:
   tolerations: []
   affinity: {}
 
-
 # @section Ingress settings
 
 # @param ingress.enabled Enable or disable Ingress for the service
@@ -1834,6 +1853,33 @@ customCAs:
 # @skip onpremise Enable specific parameters for on-premise deployment
 
 onpremise: true
+
+# @section Sentry settings
+#
+# @param sentry.enabled Enable/disable Sentry component loading in services
+# @param sentry.workerDsn Sentry DSN for worker service. Empty string disables Sentry initialization for worker
+# @param sentry.headDsn Sentry DSN for head service. Empty string disables Sentry initialization for head
+# @param sentry.ingressRouterDsn Sentry DSN for ingress-router service. Empty string disables Sentry initialization for ingress-router
+# @param sentry.geodetectorDsn Sentry DSN for geodetector service. Empty string disables Sentry initialization for geodetector
+# @param sentry.environment Deployment environment tag (production / staging / unknown)
+# @param sentry.dc Data center tag (m9, m1, n2, n3, unknown)
+# @param sentry.tracesSampleRate Performance tracing sample rate (0.0..1.0)
+# @param sentry.databasePath Directory for sentry-native local storage (queue, crash dumps)
+# @param sentry.storageSize Size limit for Sentry local storage volume (Kubernetes emptyDir). Format examples: "50Mi", "200Mi", "1Gi"
+# @param sentry.handlerPath Path to crashpad_handler binary for sentry-native. If empty, the default handler lookup is used.
+
+sentry:
+  enabled: false
+  workerDsn: ""
+  headDsn: ""
+  ingressRouterDsn: ""
+  geodetectorDsn: ""
+  environment: unknown
+  dc: unknown
+  tracesSampleRate: 0.0
+  databasePath: ".sentry-native"
+  storageSize: "500Mi"
+  handlerPath: ""
 
 # @section Deployment Artifacts Storage settings
 

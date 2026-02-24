@@ -34,6 +34,7 @@ spec:
       {{- end }}{{- /* .Values.ingressRouter.podLabels */}}
         search/part: ingress-router
     spec:
+      terminationGracePeriodSeconds: 120
       volumes:
         {{- if .Values.ingressRouter.data.persistent.enabled }}
         - name: ingress-router-data
@@ -50,6 +51,9 @@ spec:
           emptyDir:
             sizeLimit: {{ .Values.ingressRouter.data.resources.requests.storage }}
         {{ end }}{{- /* .Values.ingressRouter.data.persistent.enabled */}}
+        - name: ingress-router-sentry
+          emptyDir:
+            sizeLimit: {{ .Values.sentry.storageSize }}
         - name: ingress-router-config
           configMap:
             name: {{ include "search-api-v8.fullname" . }}
@@ -81,6 +85,8 @@ spec:
               subPath: ingress_router_vars.yaml
             - name: ingress-router-data
               mountPath: /data/dispatch_config
+            - name: ingress-router-sentry
+              mountPath: {{ .Values.sentry.databasePath }}
           {{- if .Values.customCAs.bundle }}
             {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
@@ -148,7 +154,7 @@ spec:
           image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.ingressRouter.envoy.image.repository }}:{{ .Values.ingressRouter.envoy.image.tag | default .Chart.AppVersion }}'
           imagePullPolicy: {{ .Values.ingressRouter.envoy.image.pullPolicy }}
           command: ["envoy"]
-          args: ["-c", "/etc/envoy/ingress_service_envoy.yaml"]
+          args: ["-c", "/var/envoy/envoy.yaml"]
           ports:
             - name: admin
               containerPort: {{ .Values.ingressRouter.envoy.ports.admin }}
@@ -159,7 +165,7 @@ spec:
             - name: ingress-router-data
               mountPath: /data
             - name: ingress-router-config
-              mountPath: /etc/envoy/ingress_service_envoy.yaml
+              mountPath: /var/envoy/envoy.yaml
               subPath: ingress_service_envoy.yaml
           {{- if .Values.customCAs.bundle }}
             {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
@@ -172,7 +178,7 @@ spec:
                   - /bin/bash
                   - '-c'
                   - while cat < /dev/tcp/127.0.0.1/8080 ; do sleep 5 ; done
-          {{- end }}{{- /* .Values.ingressRouter.prestopHook.enabled */}}  
+          {{- end }}{{- /* .Values.ingressRouter.prestopHook.enabled */}}
           startupProbe:
             httpGet:
               path: /ready

@@ -35,6 +35,7 @@ spec:
         search/part: head
         role: head
     spec:
+      terminationGracePeriodSeconds: 120
       {{- with .Values.head.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -222,6 +223,8 @@ spec:
           volumeMounts:
             - name: head-data
               mountPath: /data
+            - name: head-sentry
+              mountPath: {{ .Values.sentry.databasePath }}
             - name: head-config
               mountPath: /app/config.yaml
               subPath: syncer-head.yaml
@@ -269,6 +272,9 @@ spec:
           emptyDir:
             sizeLimit: {{ .Values.head.data.resources.requests.storage }}
         {{ end }}{{- /* .Values.head.data.persistent.enabled */}}
+        - name: head-sentry
+          emptyDir:
+            sizeLimit: {{ .Values.sentry.storageSize }}
         - name: head-config
           configMap:
             name: {{ include "search-api-v8.fullname" . }}
