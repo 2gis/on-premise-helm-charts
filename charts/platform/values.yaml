@@ -39,7 +39,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/platform-ui
-    tag: 1.24.0
+    tag: 1.25.1
 
   # @section UI service settings
 
@@ -86,7 +86,7 @@ ui:
     clientSecret: ''
     scope: ''
     codeUrl: ''
-    safeHosts: ".*"
+    safeHosts: '.*'
     secure: true
 
   # @section Statuses for services
