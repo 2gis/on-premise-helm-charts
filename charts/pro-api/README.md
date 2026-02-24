@@ -116,19 +116,17 @@
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                                                   | Description                                                                                                                                                                    | Value   |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| `permissions.pdb.enabled`                              | If PDB is enabled for the service.                                                                                                                                             | `false` |
-| `permissions.pdb.minAvailable`                         | How many pods must be available after the eviction.                                                                                                                            | `1`     |
-| `permissions.pdb.maxUnavailable`                       | How many pods can be unavailable after the eviction.                                                                                                                           | `""`    |
-| `permissions.settings.httpPort`                        | Http port for interaction via the rest api                                                                                                                                     | `8091`  |
-| `permissions.settings.grpcPort`                        | Grpc port for interaction via the grpc api                                                                                                                                     | `8092`  |
-| `permissions.settings.auth.apiKey`                     | Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`. **Required** | `""`    |
-| `permissions.settings.default_permissions.open_pro_ui` | Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.                                            | `true`  |
-| `permissions.settings.allowPermissionsToAnyAsset`      | Allow using '*' resource in asset resource type in Permissions UI.                                                                                                             | `false` |
-| `permissions.settings.auth.enabled`                    | Enables or disables authentication **Required if permissions.settings.auth.enabled: true**                                                                                     | `false` |
-| `permissions.settings.auth.apiKey`                     | Api key for service to service calls **Required if permissions.settings.auth.enabled: true**                                                                                   | `""`    |
-| `permissions.settings.auth.uiRequiredRoles`            | Roles required to access Permission UI. Example: `Admin` or `PermAdmin`. **Required**                                                                                          | `[]`    |
+| Name                                                   | Description                                                                                                                         | Value   |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `permissions.pdb.enabled`                              | If PDB is enabled for the service.                                                                                                  | `false` |
+| `permissions.pdb.minAvailable`                         | How many pods must be available after the eviction.                                                                                 | `1`     |
+| `permissions.pdb.maxUnavailable`                       | How many pods can be unavailable after the eviction.                                                                                | `""`    |
+| `permissions.settings.httpPort`                        | Http port for interaction via the rest api                                                                                          | `8091`  |
+| `permissions.settings.grpcPort`                        | Grpc port for interaction via the grpc api                                                                                          | `8092`  |
+| `permissions.settings.default_permissions.open_pro_ui` | Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI. | `true`  |
+| `permissions.settings.allowPermissionsToAnyAsset`      | Allow using '*' resource in asset resource type in Permissions UI.                                                                  | `false` |
+| `permissions.settings.auth.apiKey`                     | Api key for service to service calls **Required*                                                                                    | `""`    |
+| `permissions.settings.auth.uiRequiredRoles`            | Roles required to access Permission UI. Example: `Admin` or `PermAdmin`. **Required**                                               | `[]`    |
 
 ### Default permissions for new users
 
@@ -364,7 +362,7 @@
 | `authProvider.allowedHosts`            | List of allowed hosts. For allowed all hosts use '*'                         | `[]`    |
 | `authProvider.basic.users[0].username` | Username for basic authentication                                            | `""`    |
 | `authProvider.basic.users[0].password` | Password for basic authentication                                            | `""`    |
-| `authProvider.basic.users[0].roles`    | Roles assigned to the user. Example: 'Admin'                                 | `[""]`  |
+| `authProvider.basic.users[0].roles`    | Roles assigned to the user. Example: `Admin` or `PermAdmin`. **Required**    | `[""]`  |
 | `authProvider.oidc.authority`          | URL of the OIDC provider **Required if schema is "Oidc"**                    | `""`    |
 | `authProvider.oidc.clientId`           | Client ID registered with the OIDC provider **Required if schema is "Oidc"** | `""`    |
 | `authProvider.oidc.clientSecret`       | Client secret for the OIDC provider **Required if schema is "Oidc"**         | `""`    |
