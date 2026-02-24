@@ -30,7 +30,7 @@ spec:
         - name: importer
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          command: [ "twins-importer", "import" ]
+          command: [ "twins", "import" ]
           resources:
             {{- toYaml .Values.importer.resources | nindent 12 }}
           env:
