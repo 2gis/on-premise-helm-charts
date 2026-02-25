@@ -1863,7 +1863,6 @@ onpremise: true
 # @param sentry.geodetectorDsn Sentry DSN for geodetector service. Empty string disables Sentry initialization for geodetector
 # @param sentry.environment Deployment environment tag (production / staging / unknown)
 # @param sentry.dc Data center tag (m9, m1, n2, n3, unknown)
-# @param sentry.blueGreen Blue/green deployment tag (blue / green / unknown)
 # @param sentry.tracesSampleRate Performance tracing sample rate (0.0..1.0)
 # @param sentry.databasePath Directory for sentry-native local storage (queue, crash dumps)
 # @param sentry.storageSize Size limit for Sentry local storage volume (Kubernetes emptyDir). Format examples: "50Mi", "200Mi", "1Gi"
@@ -1877,7 +1876,6 @@ sentry:
   geodetectorDsn: ""
   environment: unknown
   dc: unknown
-  blueGreen: unknown
   tracesSampleRate: 0.0
   databasePath: ".sentry-native"
   storageSize: "500Mi"

@@ -768,7 +768,6 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `sentry.geodetectorDsn`   | Sentry DSN for geodetector service. Empty string disables Sentry initialization for geodetector           | `""`             |
 | `sentry.environment`      | Deployment environment tag (production / staging / unknown)                                               | `unknown`        |
 | `sentry.dc`               | Data center tag (m9, m1, n2, n3, unknown)                                                                 | `unknown`        |
-| `sentry.blueGreen`        | Blue/green deployment tag (blue / green / unknown)                                                        | `unknown`        |
 | `sentry.tracesSampleRate` | Performance tracing sample rate (0.0..1.0)                                                                | `0`              |
 | `sentry.databasePath`     | Directory for sentry-native local storage (queue, crash dumps)                                            | `.sentry-native` |
 | `sentry.storageSize`      | Size limit for Sentry local storage volume (Kubernetes emptyDir). Format examples: "50Mi", "200Mi", "1Gi" | `500Mi`          |
