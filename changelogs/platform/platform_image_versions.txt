@@ -1,5 +1,5 @@
 catalog-api
-	catalog-api:3.665.1
+	catalog-api:3.671.0
 	catalog-importer:1.12.1
 generic-chart
 mapgl-js-api
