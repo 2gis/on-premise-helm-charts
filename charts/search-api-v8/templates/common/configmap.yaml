@@ -257,7 +257,7 @@ data:
                                   {{- toYaml .Values.head.envoy.faultInjection.clients.qt | nindent 34 }}
                             {{- end }}
                             - match:
-                                prefix: "/metasearch.MetaWorker/"
+                                prefix: "/aisearchworker.AiSearchWorker/"
                               route:
                                 cluster: ai_vector_search
                                 auto_host_rewrite: true
@@ -289,6 +289,7 @@ data:
                                   "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
                                   {{- toYaml .Values.head.envoy.faultInjection.clients.friends | nindent 34 }}
                             {{- end }}
+                            {{- if .Values.geodetector.enabled }}
                             - match:
                                 prefix: "/geodetector.GeoDetectorService/"
                               route:
@@ -299,7 +300,8 @@ data:
                                 envoy.filters.http.fault:
                                   "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
                                   {{- toYaml .Values.head.envoy.faultInjection.clients.geodetector | nindent 34 }}
-                            {{- end }}
+                            {{- end }}{{- /* Values.head.envoy.faultInjection.clients "geodetector" */}}
+                            {{- end }}{{- /* Values.geodetector.enabled */}}
                       {{- end -}}{{- /* .Values.onpremise */}}
                     http_filters:
                     {{- if .Values.head.envoy.faultInjection.enabled }}
@@ -989,11 +991,13 @@ data:
                               cluster: cluster-3
                               auto_host_rewrite: true
                         {{- end -}}{{- /* not .Values.onpremise */}}
+                        {{- if .Values.geodetector.enabled }}
                           - match:
                               prefix: "/geodetector.GeoDetectorService/"
                             route:
                               cluster: geodetectors
                               auto_host_rewrite: true
+                        {{- end }}{{- /* Values.geodetector.enabled */}}
                     http_filters:
                       - name: envoy.filters.http.router
                         typed_config:
@@ -1090,6 +1094,7 @@ data:
     ingress-router-grpc-threads: 1
     ingress-router-mon-threads: 1
     ingress-router-rate-limiting-threads: 1
+    ingress-router-bg-threads: 2
     logger-level: {{ .Values.ingressRouter.loggerLevel }}
     logger-format: {{ .Values.ingressRouter.loggerFormat }}
     dispatcher-enabled: {{ .Values.ingressRouter.dispatcherComponent.enabled }}
