@@ -228,7 +228,7 @@ search:
 
 # @section Keys settings
 
-# @param keys.url URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required**
+# @param keys.url URL of the Keys service API, ex: http://{keys-service-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required**
 # @param keys.token Keys service API key
 # @param keys.client.connectingTimeout The time period within which the TCP connecting process must be completed
 # @param keys.client.idleTimeout The time after which an idle connection will be automatically closed
