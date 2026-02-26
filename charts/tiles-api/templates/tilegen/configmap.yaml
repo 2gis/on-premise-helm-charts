@@ -51,7 +51,12 @@ data:
       {{- end }}
     cassandra:
       name: local
-      num-retries: 2
+      {{- with $.Values.tilegen.cqlRetryPolicy }}
+      retry-policy:
+        retry-count: {{ .retryCount }}
+        min-delay: {{ .minDelay }}
+        max-delay: {{ .maxDelay }}
+      {{- end }}
       reconnect-interval: 30s
       timeout: {{ .timeout }}
       replication-factor: {{ .replicaFactor }}
