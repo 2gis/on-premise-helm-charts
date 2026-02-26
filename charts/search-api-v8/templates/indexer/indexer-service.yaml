@@ -1,0 +1,18 @@
+{{- if empty .Values.indexerServices.externalFilesStorageUrl }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-indexer
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.service.indexer.port }}
+      targetPort: {{ .Values.indexer.ports.http }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "search-api-v8.selectorLabels" . | nindent 4 }}
+    search/part: indexer
+{{- end }}
