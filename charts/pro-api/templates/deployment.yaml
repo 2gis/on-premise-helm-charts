@@ -280,13 +280,11 @@ spec:
                   key: apiKey
                   name: {{ include "pro-api.secretName" . }}
             {{- end }}
-            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.secretName" . }}
-            {{- end }}
             {{- range $i, $s := .Values.api.settings.auth.shareKeys }}
             - name: Auth__ShareKeys__{{$i}}
               value: {{ $s | quote }}
@@ -350,13 +348,11 @@ spec:
               value: {{ .Values.permissions.service.port | quote }}
             - name: PermissionsApi__GrpcPort
               value: {{ .Values.permissions.settings.grpcPort | quote }}
-            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: PermissionsApi__Key
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.secretName" . }}
-            {{- end }}
             {{- if .Values.ecommerce.password }}
             - name: SberEcommerceApi__Password
               valueFrom:

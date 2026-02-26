@@ -181,16 +181,23 @@ spec:
 
             - name: Auth__Enabled
               value: {{ .Values.tasks.settings.auth.enabled | quote }}
+            {{- if .Values.tasks.settings.auth.enabled }}
             - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
                   key: tasksApiKey
                   name: {{ include "pro-api.secretName" . }}
+            {{- if .Values.authProvider.enabled }}
             - name: Auth__Authority
-              value: {{ .Values.authProvider.host | quote }}
+              value: {{ required "A valid .Values.authProvider.host entry required when authProvider.enabled is true" .Values.authProvider.host | quote }}
+            {{- if not .Values.tasks.settings.auth.adminRequiredRoles }}
+            {{- fail "A valid .Values.tasks.settings.auth.adminRequiredRoles entry required when authProvider.enabled and tasks.settings.auth.enabled are true" }}
+            {{- end }}
             {{- range $i, $r := .Values.tasks.settings.auth.adminRequiredRoles }}
             - name: Auth__AdminRequiredRoles__{{$i}}
               value: {{ $r | quote }}
+            {{- end }}
+            {{- end }}
             {{- end }}
 
 
@@ -207,7 +214,7 @@ spec:
                   key: redisPassword
                   name: {{ include "pro-api.secretName" . }}
             {{- end }}
-  
+
             {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__Url
               value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}

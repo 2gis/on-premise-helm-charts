@@ -133,19 +133,23 @@ spec:
                   key: apiKey
                   name: {{ include "pro-api.secretName" . }}
 
-            - name: Auth__Enabled
-              value: {{ .Values.permissions.settings.auth.enabled | quote }}
             - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.secretName" . }}
-            - name: Auth__Authority
-              value: {{ .Values.authProvider.host | quote }}
 
+            {{- if .Values.authProvider.enabled }}
+            - name: Auth__Authority
+              value: {{ required "A valid .Values.authProvider.host entry required when authProvider.enabled is true" .Values.authProvider.host | quote }}
+
+            {{- if not .Values.permissions.settings.auth.uiRequiredRoles }}
+            {{- fail "A valid .Values.permissions.settings.auth.uiRequiredRoles entry required when authProvider.enabled is true" }}
+            {{- end }}
             {{- range $i, $r := .Values.permissions.settings.auth.uiRequiredRoles }}
             - name: Auth__UiRequiredRoles__{{$i}}
               value: {{ $r | quote }}
+            {{- end }}
             {{- end }}
 
             - name: Redis__Host
@@ -225,7 +229,7 @@ spec:
 
             {{- if .Values.authProvider.enabled }}
             - name: AuthProvider__Schema
-              value: {{ .Values.authProvider.schema | quote }}
+              value: {{ required "A valid .Values.authProvider.schema entry required when authProvider.enabled is true. Supported values: Basic, Oidc" .Values.authProvider.schema | quote }}
             {{- range $hostIndex, $host := .Values.authProvider.allowedHosts }}
             - name: AuthProvider__AllowedHosts__{{ $hostIndex }}
               value: {{ $host | quote }}
@@ -271,5 +275,3 @@ spec:
                 secretKeyRef:
                   key: securitySecretKey
                   name: {{ include "pro-api.secretName" . }}
-
-

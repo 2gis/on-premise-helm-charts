@@ -246,13 +246,11 @@ spec:
 
             - name: PermissionsApi__Url
               value: {{ include "pro-api.permissions-url" . }}
-            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: PermissionsApi__Key
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.secretName" . }}
-            {{- end }}
             {{- if .Values.tasks.settings.features.assetDataPreparation.enabled }}
             - name: AssetDataPreparation__Segments
               value: {{ .Values.tasks.settings.features.assetDataPreparation.segments | quote }}
