@@ -1,4 +1,4 @@
-# @section Common settings
+﻿# @section Common settings
 
 # @param imagePullSecrets Kubernetes image pull secrets.
 
@@ -578,7 +578,6 @@ pagerenderer:
   # @extra pagerenderer.settings.logging Logging settings
   # @param pagerenderer.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
   # @param pagerenderer.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
-  # @param pagerenderer.settings.auth.apiKey Secret API Key to perform authorized service actions, random string. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`. **Required if** `pagerenderer.settings.enabled: true`
   settings:
     enabled: false
     httpPort: 8282
@@ -586,8 +585,6 @@ pagerenderer:
     logging:
       format: simple
       targets: ''
-    auth:
-      apiKey: ''
 
 
 # @section asset importer settings

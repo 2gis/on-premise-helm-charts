@@ -232,24 +232,23 @@
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                                    | Description                                                                                                                                                                 | Value    |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `pagerenderer.pdb.enabled`              | If PDB is enabled for the service.                                                                                                                                          | `false`  |
-| `pagerenderer.pdb.minAvailable`         | How many pods must be available after the eviction.                                                                                                                         | `1`      |
-| `pagerenderer.pdb.maxUnavailable`       | How many pods can be unavailable after the eviction.                                                                                                                        | `""`     |
-| `pagerenderer.vpa.enabled`              | If VPA is enabled for the service.                                                                                                                                          | `false`  |
-| `pagerenderer.vpa.updateMode`           | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).                                                                | `Auto`   |
-| `pagerenderer.vpa.minAllowed.cpu`       | Lower limit for the number of CPUs to which the autoscaler can scale down.                                                                                                  | `300m`   |
-| `pagerenderer.vpa.minAllowed.memory`    | Lower limit for the RAM size to which the autoscaler can scale down.                                                                                                        | `256Mi`  |
-| `pagerenderer.vpa.maxAllowed.cpu`       | Upper limit for the number of CPUs to which the autoscaler can scale up.                                                                                                    | `1`      |
-| `pagerenderer.vpa.maxAllowed.memory`    | Upper limit for the RAM size to which the autoscaler can scale up.                                                                                                          | `1024Mi` |
-| `pagerenderer.settings.enabled`         | If Page Renderer API is disabled it will not be deployed to k8s                                                                                                             | `false`  |
-| `pagerenderer.settings.httpPort`        | Http port for interaction via the rest api                                                                                                                                  | `8282`   |
-| `pagerenderer.settings.grpcPort`        | Grpc port for interaction via the grpc api                                                                                                                                  | `8283`   |
-| `pagerenderer.settings.logging`         | Logging settings                                                                                                                                                            |          |
-| `pagerenderer.settings.logging.format`  | Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text                                         | `simple` |
-| `pagerenderer.settings.logging.targets` | Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).                     | `""`     |
-| `pagerenderer.settings.auth.apiKey`     | Secret API Key to perform authorized service actions, random string. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`. **Required if** `pagerenderer.settings.enabled: true` | `""`     |
+| Name                                    | Description                                                                                                                                             | Value    |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `pagerenderer.pdb.enabled`              | If PDB is enabled for the service.                                                                                                                      | `false`  |
+| `pagerenderer.pdb.minAvailable`         | How many pods must be available after the eviction.                                                                                                     | `1`      |
+| `pagerenderer.pdb.maxUnavailable`       | How many pods can be unavailable after the eviction.                                                                                                    | `""`     |
+| `pagerenderer.vpa.enabled`              | If VPA is enabled for the service.                                                                                                                      | `false`  |
+| `pagerenderer.vpa.updateMode`           | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).                                            | `Auto`   |
+| `pagerenderer.vpa.minAllowed.cpu`       | Lower limit for the number of CPUs to which the autoscaler can scale down.                                                                              | `300m`   |
+| `pagerenderer.vpa.minAllowed.memory`    | Lower limit for the RAM size to which the autoscaler can scale down.                                                                                    | `256Mi`  |
+| `pagerenderer.vpa.maxAllowed.cpu`       | Upper limit for the number of CPUs to which the autoscaler can scale up.                                                                                | `1`      |
+| `pagerenderer.vpa.maxAllowed.memory`    | Upper limit for the RAM size to which the autoscaler can scale up.                                                                                      | `1024Mi` |
+| `pagerenderer.settings.enabled`         | If Page Renderer API is disabled it will not be deployed to k8s                                                                                         | `false`  |
+| `pagerenderer.settings.httpPort`        | Http port for interaction via the rest api                                                                                                              | `8282`   |
+| `pagerenderer.settings.grpcPort`        | Grpc port for interaction via the grpc api                                                                                                              | `8283`   |
+| `pagerenderer.settings.logging`         | Logging settings                                                                                                                                        |          |
+| `pagerenderer.settings.logging.format`  | Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text                     | `simple` |
+| `pagerenderer.settings.logging.targets` | Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify). | `""`     |
 
 ### asset importer settings
 

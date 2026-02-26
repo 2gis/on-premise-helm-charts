@@ -219,13 +219,6 @@ spec:
             - name: PageRendererApi__Url
               value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}
             {{- end }}
-            {{- if .Values.pagerenderer.settings.enabled }}
-            - name: PageRendererApi__ApiKey
-              valueFrom:
-                secretKeyRef:
-                  key: pagerendererApiKey
-                  name: {{ include "pro-api.secretName" . }}
-            {{- end }}
 
             - name: Security__SecretKey
               valueFrom:
