@@ -3,7 +3,7 @@ catalog-api
 	catalog-importer:1.12.1
 generic-chart
 mapgl-js-api
-	mapgl:1.69.1
+	mapgl:1.70.1
 navi-async-grpc-proxy
 	async-grpc-proxy:1.0.0
 navi-async-matrix
@@ -34,10 +34,23 @@ navi-vrp-solver
 navi-vrp-task-manager
 	navi-vrp-task-manager:1.13.1
 platform
-	platform-ui:1.15.1
+	platform-ui:1.25.1
 search-api
 	nginx:1.25.5
 	search-api:7.90.0
+search-api-v8
+	navi-envoy:1.36.2-tools
+	search-api-v8-controller:8.18.3
+	search-api-v8-data_adapter:8.18.3
+	search-api-v8-files_storage:8.18.3
+	search-api-v8-geodetector:8.18.3
+	search-api-v8-head:8.18.3
+	search-api-v8-indexer:8.18.3
+	search-api-v8-ingress-router:8.18.3
+	search-api-v8-metrics-aggregator:0.1.0
+	search-api-v8-nginx:1.25.11
+	search-api-v8-syncer:8.18.3
+	search-api-v8-worker:8.18.3
 stat-api
 	stat-api-migrate:0.2.0
 	stat-api:0.2.0
@@ -50,10 +63,10 @@ tilegen-api
 	tilegen-api:1.1.8
 	tilegen-processor:1.1.8
 tiles-api
-	tiles-api-importer:4.80.3
-	tiles-api-importer:4.80.3
-	tiles-api-proxy:4.80.3
-	tiles-api:4.80.3
+	tiles-api-importer:4.81.3
+	tiles-api-importer:4.81.3
+	tiles-api-proxy:4.81.3
+	tiles-api:4.81.3
 traffic-proxy
 	nginx:1.25.5
 twins-api
