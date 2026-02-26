@@ -1,4 +1,4 @@
-﻿# @section Common settings
+# @section Common settings
 
 # @param imagePullSecrets Kubernetes image pull secrets.
 
@@ -288,8 +288,8 @@ permissions:
   # @param permissions.settings.grpcPort Grpc port for interaction via the grpc api
   # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
-  # @param permissions.settings.auth.apiKey Api key for service to service calls **Required*
-  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. Example: `Admin` or `PermAdmin`. **Required**
+  # @param permissions.settings.auth.apiKey Api key for service to service calls. **Required**
+  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required if** `authProvider.enabled: true`
   settings:
     host: ''
     httpPort: 8091
@@ -445,9 +445,9 @@ tasks:
   # @param tasks.settings.worker.regularTasksWorkersCount Number of threads that will be used by Hangfire-server to performs other tasks
   # @param tasks.settings.worker.longRunningTasksWorkersCount Number of threads that will be used by Hangfire-server to performs long tasks
   # @param tasks.settings.features.auditLogging.enabled Enable audit log feature
-  # @param tasks.settings.auth.enabled Enables or disables authentication **Required**
-  # @param tasks.settings.auth.apiKey Api key for service to service calls **Required**
-  # @param tasks.settings.auth.adminRequiredRoles Roles required to access Tasks Admin UI. Example: `Admin`
+  # @param tasks.settings.auth.enabled Enables or disables authentication
+  # @param tasks.settings.auth.apiKey Api key for service to service calls. **Required if** `tasks.settings.auth.enabled: true`
+  # @param tasks.settings.auth.adminRequiredRoles Roles required to access Tasks Admin UI. Must be set to the same values as `permissions.settings.auth.uiRequiredRoles`. **Required if** `authProvider.enabled: true` and `tasks.settings.auth.enabled: true`
   # @skip tasks.settings.features.assetDataPreparation
   # @skip tasks.settings.features.cleanCitylensFrames
   # @skip tasks.settings.features.removeUnusedUserAssetFiles
@@ -578,6 +578,7 @@ pagerenderer:
   # @extra pagerenderer.settings.logging Logging settings
   # @param pagerenderer.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
   # @param pagerenderer.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
+  # @param pagerenderer.settings.auth.apiKey Secret API Key to perform authorized service actions, random string. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`. **Required if** `pagerenderer.settings.enabled: true`
   settings:
     enabled: false
     httpPort: 8282
@@ -585,6 +586,8 @@ pagerenderer:
     logging:
       format: simple
       targets: ''
+    auth:
+      apiKey: ''
 
 
 # @section asset importer settings
@@ -784,18 +787,18 @@ postgres:
 
 # @section Auth Provider Configuration
 # @title Auth Provider
-# @param authProvider.enabled Enables or disables the AuthProvider **Required**
-# @param authProvider.host Host address of the authentication provider (used if enabled is true)
-# @param authProvider.schema Authentication scheme to use. Supported values: "Basic", "Oidc" **Required**
-# @param authProvider.allowedHosts List of allowed hosts. For allowed all hosts use '*'
-# @param authProvider.basic.users[0].username Username for basic authentication
-# @param authProvider.basic.users[0].password Password for basic authentication
-# @param authProvider.basic.users[0].roles Roles assigned to the user. Example: `Admin` or `PermAdmin`. **Required**
-# @param authProvider.oidc.authority URL of the OIDC provider **Required if schema is "Oidc"**
-# @param authProvider.oidc.clientId Client ID registered with the OIDC provider **Required if schema is "Oidc"**
-# @param authProvider.oidc.clientSecret Client secret for the OIDC provider **Required if schema is "Oidc"**
-# @param authProvider.oidc.nameClaim Claim name that contains the user's name. Example: 'name'
-# @param authProvider.oidc.roleClaim  Claim name that contains the user's role. Example: 'role'
+# @param authProvider.enabled Enables or disables the authentication provider for Permissions UI and Tasks Admin UI access.
+# @param authProvider.host Host address of the authentication provider. Must point to the pro-api-permissions URL. **Required if** `authProvider.enabled: true`
+# @param authProvider.schema Authentication scheme to use. Supported values: `Basic`, `Oidc`. **Required if** `authProvider.enabled: true`
+# @param authProvider.allowedHosts List of allowed hosts. For allowed all hosts use `['*']`
+# @param authProvider.basic.users[0].username Username for basic authentication. **Required if** `authProvider.schema: Basic`
+# @param authProvider.basic.users[0].password Password for basic authentication. **Required if** `authProvider.schema: Basic`
+# @param authProvider.basic.users[0].roles Roles assigned to the user. The values are arbitrary strings. The parameters `permissions.settings.auth.uiRequiredRoles` and `tasks.settings.auth.adminRequiredRoles` must reference the roles defined here. **Required if** `authProvider.schema: Basic`
+# @param authProvider.oidc.authority URL of the OIDC provider. **Required if** `authProvider.schema: Oidc`
+# @param authProvider.oidc.clientId Client ID registered with the OIDC provider. **Required if** `authProvider.schema: Oidc`
+# @param authProvider.oidc.clientSecret Client secret for the OIDC provider. **Required if** `authProvider.schema: Oidc`
+# @param authProvider.oidc.nameClaim Claim name that contains the user's name. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
+# @param authProvider.oidc.roleClaim Claim name that contains the user's role. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
 authProvider:
   enabled: false
   host: ''
