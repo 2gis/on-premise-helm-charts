@@ -1,0 +1,169 @@
+{{- if .Values.geodetector.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-geodetector
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+    search/part: geodetector
+spec:
+  {{- if not .Values.geodetector.hpa.enabled }}
+  replicas: {{ .Values.geodetector.replicaCount }}
+  {{- end }}{{- /* not .Values.geodetector.hpa.enabled */}}
+  selector:
+    matchLabels:
+      {{- include "search-api-v8.selectorLabels" . | nindent 6 }}
+    {{- with .Values.geodetector.matchLabels }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}{{- /* .Values.geodetector.matchLabels */}}
+      search/part: geodetector
+  template:
+    metadata:
+      annotations:
+      {{- with .Values.geodetector.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.geodetector.podAnnotations */}}
+        checksum/config: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: {{ .Values.magg.ports.metrics | quote }}
+        prometheus.io/scrape: "true"
+      labels:
+        {{- include "search-api-v8.labels" . | nindent 8 }}
+      {{- with .Values.geodetector.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.geodetector.podLabels */}}
+        search/part: geodetector
+    spec:
+      terminationGracePeriodSeconds: 120
+      volumes:
+        {{- if .Values.geodetector.data.persistent.enabled }}
+        - name: geodetector-data
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  {{- .Values.geodetector.data.resources | toYaml | nindent 18 }}
+                storageClassName: {{ .Values.geodetector.data.storageClassName | quote }}
+                volumeMode: Filesystem
+        {{ else }}
+        - name: geodetector-data
+          emptyDir:
+            sizeLimit: {{ .Values.geodetector.data.resources.requests.storage }}
+        {{- end }}{{- /* .Values.geodetector.data.persistent.enabled */}}
+        - name: geodetector-sentry
+          emptyDir:
+            sizeLimit: {{ .Values.sentry.storageSize }}
+        - name: geodetector-config
+          configMap:
+            name: {{ include "search-api-v8.fullname" . }}
+            defaultMode: 420
+      containers:
+        - name: geodetector
+          securityContext:
+            {{- toYaml .Values.geodetector.securityContext | nindent 12 }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.geodetector.image.repository }}:{{ .Values.geodetector.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.geodetector.image.pullPolicy }}
+          ports:
+            - name: geodetector-srv
+              containerPort: {{ .Values.geodetector.ports.server }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ .Values.geodetector.ports.grpc }}
+              protocol: TCP
+            - name: monitor
+              containerPort: {{ .Values.geodetector.ports.monitor }}
+              protocol: TCP
+            - name: http-syncer
+              containerPort: {{ .Values.syncer.ports.http }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.geodetector.resources | nindent 12 }}
+          {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          volumeMounts:
+            - name: geodetector-data
+              mountPath: /data
+            - name: geodetector-config
+              mountPath: /app/geodetector_vars.yaml
+              subPath: geodetector_vars.yaml
+          {{- if .Values.geodetector.livenessProbe.enabled }}
+          livenessProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.geodetector.livenessProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.geodetector.livenessProbe.enabled */}}
+          {{- if .Values.geodetector.readinessProbe.enabled }}
+          readinessProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.geodetector.readinessProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.geodetector.readinessProbe.enabled */}}
+          {{- if .Values.geodetector.startupProbe.enabled }}
+          startupProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.geodetector.startupProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.geodetector.startupProbe.enabled */}}
+          {{- if .Values.geodetector.prestopHook.enabled }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - '-c'
+                  - sleep 30
+          {{- end }}{{- /* .Values.geodetector.prestopHook.enabled */}}
+        - name: syncer
+          securityContext:
+            {{- toYaml .Values.syncer.securityContext | nindent 12 }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.syncer.image.repository }}:{{ .Values.syncer.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.syncer.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.syncer.resources | nindent 12 }}
+          env:
+            - name: GIN_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "search-api-v8.fullname" . }}
+                  key: GIN_MODE
+            {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}{{- /* .Values.customCAs.bundle */}}
+          volumeMounts:
+            - name: geodetector-data
+              mountPath: /data
+            - name: geodetector-sentry
+              mountPath: {{ .Values.sentry.databasePath }}
+            - name: geodetector-config
+              mountPath: /app/config.yaml
+              subPath: syncer-geodetector.yaml
+          {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+        {{- if .Values.magg.enabled }}
+        - name: magg
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.magg.image.repository }}:{{ .Values.magg.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.magg.image.pullPolicy }}
+          env:
+            - name: METRICS_AGGREGATOR_PORT
+              value: {{ .Values.magg.ports.metrics | quote }}
+            - name: METRICS_AGGREGATOR_SOURCES
+              value: "http://127.0.0.1:{{ .Values.geodetector.ports.monitor }}/metrics,\
+                http://127.0.0.1:{{ .Values.syncer.ports.http }}/metrics"
+            - name: GOMAXPROCS
+              value: "1"
+            {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}{{- /* .Values.customCAs.bundle */}}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          ports:
+            - containerPort: {{ .Values.magg.ports.metrics }}
+          resources:
+            {{- toYaml .Values.magg.resources | nindent 12 }}
+        {{ end }}{{- /* .Values.magg.enabled */}}
+      serviceAccountName: {{ include "search-api-v8.serviceAccountName" . }}
+      securityContext: {{- toYaml .Values.geodetector.podSecurityContext | nindent 8 }}
+  strategy:
+  {{- .Values.geodetector.strategy | toYaml | nindent 4 }}
+{{ end }}{{- /* .Values.geodetector.enabled */}}

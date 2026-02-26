@@ -50,7 +50,7 @@ prepare:
 	&& docker build --tag readme-generator-for-helm $(ROOT)/dockerfiles/readme-generator \
 	|| echo "\nUsing $(GENERATOR) with ID $(GENERATOR_TAG)"
 
-charts/*: prepare
+charts/*: prepare run-pre-commit
 	@echo ""
 	@echo "Building README for $@..."
 	@docker run --rm -it \

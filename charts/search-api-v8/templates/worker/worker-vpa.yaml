@@ -1,0 +1,15 @@
+{{- if .Values.worker.vpa.enabled }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-worker
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "search-api-v8.fullname" . }}-worker
+  updatePolicy:
+    updateMode: {{ ternary "On" "Off" .Values.worker.vpa.updateMode | quote }}
+{{- end }}

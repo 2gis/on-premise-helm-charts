@@ -1,0 +1,21 @@
+You have just deployed a helm chart for the new version of search.
+You can run a test query:
+1. wait until all pods are in the Ready status:
+kubectl get pod -n {{ .Release.Namespace }}
+
+2. You can forward a port like this:
+{{- if .Values.ingressRouter.enabled }}
+kubectl port-forward svc/{{ include "search-api-v8.fullname" . }}-ingress-router {{ .Values.service.ingressRouter.port }}:http -n {{ .Release.Namespace }}
+or directly to head service
+{{- end }}{{- /* if .Values.ingressRouter.enabled */}}
+kubectl port-forward svc/{{ include "search-api-v8.fullname" . }}-head {{ .Values.service.head.port }}:http -n {{ .Release.Namespace }}
+
+3. Send a test request:
+curl http://localhost:8080/v2/search?fmt=plain&end=10&seg=1&q=kafe
+
+{{- if .Values.ingress.enabled }}
+Or you can send a request to the ingress address.
+{{- range $host := .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}/v2/search?fmt=plain&end=10&seg=1&q=kafe
+{{- end }}{{- /* range $host := .Values.ingress.hosts */}}
+{{- end }}{{- /* if .Values.ingress.enabled */}}

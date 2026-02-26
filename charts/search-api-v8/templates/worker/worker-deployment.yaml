@@ -1,0 +1,182 @@
+{{- if .Values.worker.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-worker
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+    search/part: worker
+spec:
+  {{- if not .Values.worker.hpa.enabled }}
+  replicas: {{ .Values.worker.replicaCount }}
+  {{- end }}{{- /* not .Values.worker.hpa.enabled */}}
+  selector:
+    matchLabels:
+      {{- include "search-api-v8.selectorLabels" . | nindent 6 }}
+      search/part: worker
+    {{- with .Values.worker.matchLabels }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}{{- /* .Values.worker.matchLabels */}}
+  template:
+    metadata:
+      annotations:
+      {{- with .Values.worker.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.worker.podAnnotations */}}
+        checksum/config: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: {{ .Values.magg.ports.metrics | quote }}
+        prometheus.io/scrape: "true"
+      labels:
+        {{- include "search-api-v8.labels" . | nindent 8 }}
+        search/part: worker
+        role: worker
+      {{- with .Values.worker.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.worker.podLabels */}}
+    spec:
+      terminationGracePeriodSeconds: 120
+      {{- with .Values.worker.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.worker.imagePullSecrets */}}
+      serviceAccountName: {{ include "search-api-v8.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.worker.podSecurityContext | nindent 8 }}
+      containers:
+        - name: worker
+          securityContext:
+            {{- toYaml .Values.worker.securityContext | nindent 12 }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+          {{- if .Values.customCAs.bundle }}
+          env:
+            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          ports:
+            - name: http-port
+              containerPort: {{ .Values.worker.ports.http }}
+              protocol: TCP
+            - name: grpc-port
+              containerPort: {{ .Values.worker.ports.grpc }}
+              protocol: TCP
+            - name: http-syncer
+              containerPort: {{ .Values.syncer.ports.http }}
+              protocol: TCP
+          {{- if .Values.worker.livenessProbe.enabled }}
+          livenessProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- end }}{{- /* .Values.worker.livenessProbe.enabled */}}
+          {{- if .Values.worker.readinessProbe.enabled }}
+          readinessProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- end -}}{{- /* .Values.worker.readinessProbe.enabled */}}
+          {{- if .Values.worker.startupProbe.enabled }}
+          startupProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- end -}}{{- /* .Values.worker.startupProbe.enabled */}}
+          {{- if .Values.worker.prestopHook.enabled }}
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 30" ]
+          {{- end }}{{- /* .Values.worker.prestopHook.enabled */}}
+          volumeMounts:
+            - name: worker-sentry
+              mountPath: {{ .Values.sentry.databasePath }}
+            - name: worker-data
+              mountPath: /data
+            - name: worker-config
+              mountPath: /app/worker_vars.yaml
+              subPath: worker_vars.yaml
+          {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+        - name: syncer
+          securityContext:
+            {{- toYaml .Values.syncer.securityContext | nindent 12 }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.syncer.image.repository }}:{{ .Values.syncer.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.syncer.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.syncer.resources | nindent 12 }}
+          env:
+            - name: GIN_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "search-api-v8.fullname" . }}
+                  key: GIN_MODE
+            {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}{{- /* .Values.customCAs.bundle */}}
+          volumeMounts:
+            - name: worker-data
+              mountPath: /data
+            - name: worker-config
+              mountPath: /app/config.yaml
+              subPath: syncer-worker.yaml
+            {{- if .Values.customCAs.bundle }}
+              {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+            {{- end }}{{- /* .Values.customCAs.bundle */}}
+        {{- if .Values.magg.enabled }}
+        - name: magg
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.magg.image.repository }}:{{ .Values.magg.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.magg.image.pullPolicy }}
+          env:
+            - name: METRICS_AGGREGATOR_PORT
+              value: {{ .Values.magg.ports.metrics | quote }}
+            - name: METRICS_AGGREGATOR_SOURCES
+              value: "http://127.0.0.1:{{ .Values.worker.ports.http }}/metrics,\
+                      http://127.0.0.1:{{ .Values.syncer.ports.http }}/metrics"
+            - name: GOMAXPROCS
+              value: "1"
+            {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}{{- /* .Values.customCAs.bundle */}}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          ports:
+            - containerPort: {{ .Values.magg.ports.metrics }}
+          resources:
+            {{- toYaml .Values.magg.resources | nindent 12 }}
+        {{ end }}{{- /* .Values.magg.enabled */}}
+      volumes:
+        {{- if .Values.worker.data.persistent.enabled }}
+        - name: worker-data
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                accessModes: [ "ReadWriteOnce" ]
+                storageClassName: {{ .Values.worker.data.storageClassName | quote }}
+                volumeMode: Filesystem
+                resources:
+                  {{- .Values.worker.data.resources | toYaml | nindent 18 }}
+        {{ else }}
+        - name: worker-data
+          emptyDir:
+            sizeLimit: {{ .Values.worker.data.resources.requests.storage }}
+        {{ end }}{{- /* .Values.worker.data.persistent.enabled */}}
+        - name: worker-sentry
+          emptyDir:
+            sizeLimit: {{ .Values.sentry.storageSize }}
+        - name: worker-config
+          configMap:
+            name: {{ include "search-api-v8.fullname" . }}
+      {{- with .Values.worker.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.worker.nodeSelector */}}
+      {{- with .Values.worker.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.worker.affinity */}}
+      {{- with .Values.worker.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.worker.tolerations */}}
+  strategy:
+  {{- .Values.worker.strategy | toYaml | nindent 4 }}
+{{- end }}{{- /* .Values.worker.enabled */}}

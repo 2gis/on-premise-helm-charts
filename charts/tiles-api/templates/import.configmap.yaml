@@ -17,7 +17,12 @@ data:
     types: {{ include "importer.types" $type | nindent 6 }}
     cassandra:
       name: local
-      num-retries: 2
+      {{- with $.Values.importer.cqlRetryPolicy }}
+      retry-policy:
+        retry-count: {{ .retryCount }}
+        min-delay: {{ .minDelay }}
+        max-delay: {{ .maxDelay }}
+      {{- end }}
       reconnect-interval: 30s
       keyspaces:
         - tileset: {{ $type.name | default (include "tiles.kind" $type) }}
