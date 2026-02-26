@@ -1,5 +1,37 @@
 # Platform Breaking-Changes
 
+## [2.50.0]
+
+Before upgrading, update the key service from the [Core:2.4.0](../core/CORE-CHANGELOG.md) release.
+
+### catalog-api
+
+- Replace `http://keys-api` with `http://keys-service-api` in the `keys.url`
+
+### tiles-api
+
+- Replace `http://keys-api` with `http://keys-service-api` in the `proxy.access.url`
+
+### twins-api
+
+- Replace `http://keys-api` with `http://keys-service-api` in the `api.keys.url`
+
+### navi-async-matrix
+
+- Replace `http://keys-api/service/v1/keys` with `http://keys-service-api/service/v1/keys` in the `keys.url`
+
+### navi-router
+
+- Replace `http://keys-api/service/v1/keys` with `http://keys-service-api/service/v1/keys` in the `keys.url`
+
+### navi-vrp-task-manager
+
+- Replace `http://keys-api/service/v1/keys` with `http://keys-service-api/service/v1/keys` in the `keys.url`
+
+### navi-vrp-solver
+
+- Renamed `naviBack` to `naviFront`
+
 ## [2.49.0]
 
 ### navi-back

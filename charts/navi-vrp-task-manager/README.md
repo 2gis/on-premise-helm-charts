@@ -183,11 +183,11 @@
 
 ### API keys service
 
-| Name              | Description                                                                 | Value |
-| ----------------- | --------------------------------------------------------------------------- | ----- |
-| `keys.url`        | API keys service URL, ex: http://keys-api.svc/service/v1/keys. **Required** | `""`  |
-| `keys.token`      | API token to authorize at the service. **Required**                         | `""`  |
-| `keys.pollPeriod` | Period for poll information from API keys.                                  | `20`  |
+| Name              | Description                                                                         | Value |
+| ----------------- | ----------------------------------------------------------------------------------- | ----- |
+| `keys.url`        | API keys service URL, ex: http://keys-service-api.svc/service/v1/keys. **Required** | `""`  |
+| `keys.token`      | API token to authorize at the service. **Required**                                 | `""`  |
+| `keys.pollPeriod` | Period for poll information from API keys.                                          | `20`  |
 
 ### API Distance Matrix Async service
 

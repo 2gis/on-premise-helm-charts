@@ -157,9 +157,9 @@
 | `s3.vrp.accessKey` | S3 access key for accessing the bucket. **Required**              | `""`  |
 | `s3.vrp.secretKey` | S3 secret key for accessing the bucket. **Required**              | `""`  |
 
-### Settings for interacting with Navi Back
+### Settings for interacting with Navi Front
 
-| Name           | Description                                   | Value |
-| -------------- | --------------------------------------------- | ----- |
-| `naviBack.url` | Async Navi Backend endpoint URL. **Required** | `""`  |
-| `naviBack.key` | Key for access to Navi Back. **Required**     | `""`  |
+| Name            | Description                                                                             | Value |
+| --------------- | --------------------------------------------------------------------------------------- | ----- |
+| `naviFront.url` | Navi Front endpoint URL, ex: http://navi-front.svc/carrouting/6.0.1/global **Required** | `""`  |
+| `naviFront.key` | Key for access to Navi Front. **Required**                                              | `""`  |
