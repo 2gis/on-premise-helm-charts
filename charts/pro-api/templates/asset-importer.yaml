@@ -74,12 +74,12 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: s3AccessKey
-                      name: {{ include "pro-api.name" . }}-secret
+                      name: {{ include "pro-api.secretName" . }}
                 - name: S3Settings__SecretKey
                   valueFrom:
                     secretKeyRef:
                       key: s3SecretKey
-                      name: {{ include "pro-api.name" . }}-secret
+                      name: {{ include "pro-api.secretName" . }}
                 - name: Elastic__InstanceName
                   value: {{ $.Values.elastic.instanceName | default $.Values.elastic.host }}
                 {{- range $i, $s := $.Values.elastic.nodes}}
@@ -97,7 +97,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: esPassword
-                      name: {{ include "pro-api.name" . }}-secret
+                      name: {{ include "pro-api.secretName" . }}
                 {{ end }}
                 - name: Elastic__IndexPrefix
                   value: {{ $.Values.elastic.indexPrefix | quote }}
@@ -111,7 +111,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: apiKey
-                      name: {{ include "pro-api.name" . }}-secret
+                      name: {{ include "pro-api.secretName" . }}
                 {{- end }}
                 {{- if .Values.assetImporter.settings.files }}
                 - name: FILES
@@ -123,7 +123,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: dbConnectionPwd
-                      name: {{ include "pro-api.name" . }}-secret
+                      name: {{ include "pro-api.secretName" . }}
                 - name: Common__Logging__Format
                   value: {{ .Values.api.settings.logging.format | quote }}
                 - name: Common__EsMetricsEnabled
@@ -139,7 +139,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: diggerAuthToken
-                      name: {{ include "pro-api.name" . }}-secret
+                      name: {{ include "pro-api.secretName" . }}
                 {{ end }}
                 - name: Navi__Url
                   value: {{ .Values.navi.url }}
@@ -147,7 +147,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: routingApi2gisKey
-                      name: {{ include "pro-api.name" . }}-secret
+                      name: {{ include "pro-api.secretName" . }}
                 - name: TileGen__Url
                   value: {{ .Values.tileGen.url | quote }}
                 - name: TileGen__UserDataTileSet
