@@ -52,7 +52,7 @@ spec:
         - name: service-api
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          command: [ "keys-api" ]
+          command: [ "service-api" ]
           ports:
             - name: http
               containerPort: 8080
