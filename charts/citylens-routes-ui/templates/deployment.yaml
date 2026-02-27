@@ -78,6 +78,11 @@ spec:
               value: {{ required "A valid .Values.env.ROUTES_API_URL entry required" .Values.env.ROUTES_API_URL | quote }}
             - name: ENV_FLAGS_ENABLE_Q1_FEATURES
               value: {{ .Values.env.ENV_FLAGS_ENABLE_Q1_FEATURES | quote }}
+            - name: CATALOG_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: CATALOG_API_KEY
+                  name: {{ include "citylens-ui.name" . }}-secret
             - name: MAPGL_KEY
               valueFrom:
                 secretKeyRef:
