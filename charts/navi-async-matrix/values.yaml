@@ -276,6 +276,34 @@ dm:
   annotations: {}
 
 
+# @section Cronjobs Settings
+
+# @param cronjob.cleanup.enabled Enables or disables cronjob
+# @param cronjob.cleanup.schedule Schedule follows the Cron syntax.
+# @param cronjob.cleanup.suspend Suspend execution of Jobs.
+# @param cronjob.cleanup.concurrencyPolicy Concurrent executions of a Job that is created by this CronJob.
+# @param cronjob.cleanup.failedJobsHistoryLimit How many failed Jobs should be kept.
+# @param cronjob.cleanup.successfulJobsHistoryLimit How many completed Jobs should be kept.
+# @param cronjob.cleanup.suffix Suffix for CronJob name.
+# @param cronjob.cleanup.resources Container [resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) structure.
+# @param cronjob.cleanup.restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
+# @param cronjob.cleanup.backoffLimit Number of retries before considering a Job as failed.
+
+
+cronjob:
+  cleanup:
+    enabled: false
+    schedule: "0 0 * * *"
+    suspend: false
+    concurrencyPolicy: Forbid
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 0
+    suffix: cleanup
+    resources: {}
+    restartPolicy: Never
+    backoffLimit: 1
+
+
 # @section Database settings
 
 # @param db.host PostgreSQL hostname or IP. **Required**
@@ -290,7 +318,8 @@ dm:
 # @param db.tls.cert Certificate of postgresql server.
 # @param db.tls.key Key of postgresql server.
 # @param db.tls.mode Level of protection.
-# @param db.expirationSec How many seconds to store results. (0 - disable)
+# @param db.expirationSec How many seconds to store results. If cronjob.cleanup.enabled set to true will be used in cronjob and application cleanup will be disabled
+# (0 - disable, if cronjob.cleanup.enabled set to true, install will fail to prevent cleaning all data)
 # @param db.expirationPeriodSec Period of checking the need to clear the results.
 
 db:
@@ -515,7 +544,7 @@ stat:
 
 # @section API keys service
 
-# @param keys.url API keys service URL, ex: http://keys-service-api.svc/service/v1/keys. **Required**
+# @param keys.url API keys service URL, ex: http://keys-api.svc/service/v1/keys. **Required**
 # @param keys.token API token to authorize at the service. Required if truck car routing in use.
 
 keys:

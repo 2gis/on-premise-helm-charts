@@ -237,11 +237,11 @@ spec:
             - name: DM_ASYNC_SERVICE_FIND_PLATFORM_TOPIC_RULES
               value: {{ .Values.kafka.findPlatformTopicRules | mustToJson | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ATTRACT_TOPIC
-              value: {{ required "A valid kafka.attractTopic entry required" .Values.kafka.attractTopic | quote }}
+              value: {{ .Values.kafka.attractTopic | default "" | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ONE_TO_MANY_TOPIC
               value: {{ required "A valid kafka.oneToManyTopic entry required" .Values.kafka.oneToManyTopic | quote }}
             - name: DM_ASYNC_SERVICE_ATTRACT_TOPIC_RULES
-              value: {{ required "A valid kafka.attractTopicRules entry required" .Values.kafka.attractTopicRules | mustToJson | quote }}
+              value: {{ .Values.kafka.attractTopicRules | mustToJson | quote }}
             {{- if .Values.kafka.vrpStatusTopic }}
             - name: DM_ASYNC_SERVICE_SUBSCRIBER_TOPIC
               value: {{ .Values.kafka.vrpStatusTopic | quote }}
@@ -258,7 +258,7 @@ spec:
             - name: DM_ASYNC_SERVICE_REDIRECT_HEADER
               value: {{ .Values.multiDc.redirectHeader | default "" | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ATTRACT_TOPIC
-              value: {{ required "A valid multiDc.secondaryTopics.attractTopic entry required" .Values.multiDc.secondaryTopics.attractTopic | quote }}
+              value: {{ .Values.multiDc.secondaryTopics.attractTopic | default "" | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ONE_TO_MANY_TOPIC
               value: {{ required "A valid multiDc.secondaryTopics.oneToManyTopic entry required" .Values.multiDc.secondaryTopics.oneToManyTopic | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ARCHIVE_RESPONSE_TOPIC
@@ -303,11 +303,13 @@ spec:
                   name: {{ include "navi-async-matrix.fullname" . | quote }}
                   key: dbDsn
             {{- if .Values.db.expirationSec }}
+            {{- if not .Values.cronjob.cleanup.enabled }}
             - name: DM_ASYNC_SERVICE_DB_EXPIRATION_IN_SEC
               value: {{ .Values.db.expirationSec | quote }}
             - name: DM_ASYNC_SERVICE_DB_EXPIRATION_CHECK_PERIOD
               value: {{ .Values.db.expirationPeriodSec | quote }}
-            {{- end }}
+            {{- end }}{{/* not .Values.cronjob.cleanup.enabled */}}
+            {{- end }}{{/* .Values.db.expirationSec */}}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
