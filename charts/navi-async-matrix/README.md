@@ -173,24 +173,39 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `dm.merger.resources.limits.cpu`               | Merger CPU limit. 1CPU recommended.                                                                                           |                                            |
 | `dm.merger.resources.limits.memory`            | Merger memory limit. 20Gi recommended.                                                                                        |                                            |
 
+### Cronjobs Settings
+
+| Name                                         | Description                                                                                                       | Value       |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------- |
+| `cronjob.cleanup.enabled`                    | Enables or disables cronjob                                                                                       | `false`     |
+| `cronjob.cleanup.schedule`                   | Schedule follows the Cron syntax.                                                                                 | `0 0 * * *` |
+| `cronjob.cleanup.suspend`                    | Suspend execution of Jobs.                                                                                        | `false`     |
+| `cronjob.cleanup.concurrencyPolicy`          | Concurrent executions of a Job that is created by this CronJob.                                                   | `Forbid`    |
+| `cronjob.cleanup.failedJobsHistoryLimit`     | How many failed Jobs should be kept.                                                                              | `1`         |
+| `cronjob.cleanup.successfulJobsHistoryLimit` | How many completed Jobs should be kept.                                                                           | `0`         |
+| `cronjob.cleanup.suffix`                     | Suffix for CronJob name.                                                                                          | `cleanup`   |
+| `cronjob.cleanup.resources`                  | Container [resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) structure.  | `{}`        |
+| `cronjob.cleanup.restartPolicy`              | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy) | `Never`     |
+| `cronjob.cleanup.backoffLimit`               | Number of retries before considering a Job as failed.                                                             | `1`         |
+
 ### Database settings
 
-| Name                     | Description                                                                  | Value         |
-| ------------------------ | ---------------------------------------------------------------------------- | ------------- |
-| `db.host`                | PostgreSQL hostname or IP. **Required**                                      | `""`          |
-| `db.port`                | PostgreSQL port.                                                             | `5432`        |
-| `db.extraHosts`          | List of PostgreSQL extra hosts and ports. For more details, see values.yaml. | `[]`          |
-| `db.name`                | PostgreSQL database name. **Required**                                       | `""`          |
-| `db.user`                | PostgreSQL username. **Required**                                            | `""`          |
-| `db.password`            | PostgreSQL password. **Required**                                            | `""`          |
-| `db.schema`              | PostgreSQL schema.                                                           | `public`      |
-| `db.tls.enabled`         | If tls connection to postgresql is enabled.                                  | `false`       |
-| `db.tls.rootCert`        | Root certificate file.                                                       | `""`          |
-| `db.tls.cert`            | Certificate of postgresql server.                                            | `""`          |
-| `db.tls.key`             | Key of postgresql server.                                                    | `""`          |
-| `db.tls.mode`            | Level of protection.                                                         | `verify-full` |
-| `db.expirationSec`       | How many seconds to store results. (0 - disable)                             | `0`           |
-| `db.expirationPeriodSec` | Period of checking the need to clear the results.                            | `86400`       |
+| Name                     | Description                                                                                                                                | Value         |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
+| `db.host`                | PostgreSQL hostname or IP. **Required**                                                                                                    | `""`          |
+| `db.port`                | PostgreSQL port.                                                                                                                           | `5432`        |
+| `db.extraHosts`          | List of PostgreSQL extra hosts and ports. For more details, see values.yaml.                                                               | `[]`          |
+| `db.name`                | PostgreSQL database name. **Required**                                                                                                     | `""`          |
+| `db.user`                | PostgreSQL username. **Required**                                                                                                          | `""`          |
+| `db.password`            | PostgreSQL password. **Required**                                                                                                          | `""`          |
+| `db.schema`              | PostgreSQL schema.                                                                                                                         | `public`      |
+| `db.tls.enabled`         | If tls connection to postgresql is enabled.                                                                                                | `false`       |
+| `db.tls.rootCert`        | Root certificate file.                                                                                                                     | `""`          |
+| `db.tls.cert`            | Certificate of postgresql server.                                                                                                          | `""`          |
+| `db.tls.key`             | Key of postgresql server.                                                                                                                  | `""`          |
+| `db.tls.mode`            | Level of protection.                                                                                                                       | `verify-full` |
+| `db.expirationSec`       | How many seconds to store results. If cronjob.cleanup.enabled set to true will be used in cronjob and application cleanup will be disabled | `0`           |
+| `db.expirationPeriodSec` | Period of checking the need to clear the results.                                                                                          | `86400`       |
 
 ### Multi-DC settings
 
@@ -257,10 +272,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### API keys service
 
-| Name         | Description                                                                         | Value |
-| ------------ | ----------------------------------------------------------------------------------- | ----- |
-| `keys.url`   | API keys service URL, ex: http://keys-service-api.svc/service/v1/keys. **Required** | `""`  |
-| `keys.token` | API token to authorize at the service. Required if truck car routing in use.        | `""`  |
+| Name         | Description                                                                  | Value |
+| ------------ | ---------------------------------------------------------------------------- | ----- |
+| `keys.url`   | API keys service URL, ex: http://keys-api.svc/service/v1/keys. **Required**  | `""`  |
+| `keys.token` | API token to authorize at the service. Required if truck car routing in use. | `""`  |
 
 ### customCAs **Custom Certificate Authority**
 
