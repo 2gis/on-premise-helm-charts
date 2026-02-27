@@ -57,4 +57,4 @@ tiles-api
 traffic-proxy
 	nginx:1.25.5
 twins-api
-	twins-api:1.22.1
+	twins-api:1.22.2
