@@ -84,7 +84,7 @@ customStartupProbe: {}
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  tag: 1.20.1
+  tag: 1.22.0
 
 
 # @section Service account settings
@@ -256,7 +256,7 @@ dm:
     replicaCount: 1
     image:
       repository: 2gis-on-premise/navi-merger-async-matrix
-      tag: 1.20.1
+      tag: 1.22.0
     livenessProbe:
       enabled: true
       initialDelaySeconds: 20
@@ -276,6 +276,34 @@ dm:
   annotations: {}
 
 
+# @section Cronjobs Settings
+
+# @param cronjob.cleanup.enabled Enables or disables cronjob
+# @param cronjob.cleanup.schedule Schedule follows the Cron syntax.
+# @param cronjob.cleanup.suspend Suspend execution of Jobs.
+# @param cronjob.cleanup.concurrencyPolicy Concurrent executions of a Job that is created by this CronJob.
+# @param cronjob.cleanup.failedJobsHistoryLimit How many failed Jobs should be kept.
+# @param cronjob.cleanup.successfulJobsHistoryLimit How many completed Jobs should be kept.
+# @param cronjob.cleanup.suffix Suffix for CronJob name.
+# @param cronjob.cleanup.resources Container [resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) structure.
+# @param cronjob.cleanup.restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
+# @param cronjob.cleanup.backoffLimit Number of retries before considering a Job as failed.
+
+
+cronjob:
+  cleanup:
+    enabled: false
+    schedule: "0 0 * * *"
+    suspend: false
+    concurrencyPolicy: Forbid
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 0
+    suffix: cleanup
+    resources: {}
+    restartPolicy: Never
+    backoffLimit: 1
+
+
 # @section Database settings
 
 # @param db.host PostgreSQL hostname or IP. **Required**
@@ -290,7 +318,8 @@ dm:
 # @param db.tls.cert Certificate of postgresql server.
 # @param db.tls.key Key of postgresql server.
 # @param db.tls.mode Level of protection.
-# @param db.expirationSec How many seconds to store results. (0 - disable)
+# @param db.expirationSec How many seconds to store results. If cronjob.cleanup.enabled set to true will be used in cronjob and application cleanup will be disabled
+# (0 - disable, if cronjob.cleanup.enabled set to true, install will fail to prevent cleaning all data)
 # @param db.expirationPeriodSec Period of checking the need to clear the results.
 
 db:
@@ -381,6 +410,8 @@ multiDc:
 # @extra kafka.attractTopicRules[0].default If this topic is used for projects by default.
 # @extra kafka.attractTopicRules[0].type Routing type for tasks in the topic (`car`, `truck`, `walking`, `bicycle`, `scooter`), defaults to `car`
 # @extra kafka.attractTopicRules[0].projects List of projects to use this topic for, e.g., `['moscow']`.
+# @param kafka.maxMessageSizeBytes Messages size threshold, transfer through S3 exceeding ones
+# @param kafka.compressionType Messages compression, either empty or `lz4`, defaults to empty (no compression). On back/attractor side set with `kafka.properties[compression.type]=lz4`
 
 kafka:
   groupId: navi_async_matrix
@@ -421,6 +452,8 @@ kafka:
   #   - topic: attract_task_topic
   #     type: car
   #     default: true
+  maxMessageSizeBytes: 1048576
+  compressionType: ''
 
 # More on Kafka properties.
 #
@@ -535,3 +568,15 @@ customCAs:
     # ...
     # -----END CERTIFICATE-----
   certsPath: ''
+
+
+# @section Sentry
+
+# @param sentry.enabled If Sentry integration needed
+# @param sentry.address Sentry URL
+# @param sentry.environment Environment type ('production', 'staging', etc.)
+
+sentry:
+  enabled: false
+  address: sentry.local
+  environment: local
