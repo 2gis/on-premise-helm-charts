@@ -1,0 +1,60 @@
+{{- if .Values.cronjob.cleanup.enabled }}
+{{- if eq (int .Values.db.expirationSec) 0 }}
+{{- fail "The variable db.expirationSec cannot be 0 when cronjob.cleanup is enabled. Please provide a non-zero integer value." }}
+{{- end }}
+{{- end }}
+
+{{- define "cleanup.cronjob" }}
+{{- $name := include "generic-chart.fullname" $ }}
+{{- if .Values.cronjob.cleanup.enabled }}
+spec:
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: "{{ $name }}-cleanup-cron"
+        spec:
+          {{- if .Values.db.tls.enabled }}
+          volumes:
+            - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+              secret:
+                secretName: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+                defaultMode: 600
+          {{- end }}
+
+          serviceAccountName: {{ include "navi-async-matrix.serviceAccountName" . }}
+          containers:
+            - name: "{{ $name }}-cleanup-cron"
+              image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
+              imagePullPolicy: IfNotPresent
+              resources:
+                {{- toYaml $.Values.cronjob.cleanup.resources | nindent 16 }}
+              env:
+              - name: DM_ASYNC_SERVICE_DB_SCHEMA
+                value: {{ .Values.db.schema | quote }}
+              - name: DM_ASYNC_SERVICE_DB_EXPIRATION_IN_SEC
+                value: {{ .Values.db.expirationSec | quote }}
+              - name: DM_ASYNC_SERVICE_DB_DSN
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "navi-async-matrix.fullname" . | quote }}
+                    key: dbDsn
+              args: ["--clean-finished-tasks"]
+              {{- if .Values.db.tls.enabled }}
+              volumeMounts:
+                - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+                  mountPath: {{ printf "%s/secret/psql" .Values.dm.configFilepath | quote }}
+              {{- end }}
+{{- end }}
+{{- end }}{{- /* define "cleanup.cronjob" */}}
+
+{{- define "cleanup.cronjobTemplate" }}
+{{- if .Values.cronjob.cleanup.enabled }}
+{{- template "generic-chart.cronjob.tpl" (dict "ctx" . "cronJob" .Values.cronjob.cleanup "job" .Values.cronjob.cleanup ) }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.cronjob.cleanup.enabled }}
+{{ template "generic-chart.merge" (list . "cleanup.cronjob" "cleanup.cronjobTemplate") }}
+{{- end }}
