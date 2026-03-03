@@ -23,7 +23,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 ### Common settings
 
 | Name                       | Description                       | Value                          |
-| -------------------------- | --------------------------------- |--------------------------------|
+| -------------------------- | --------------------------------- | ------------------------------ |
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
