@@ -131,7 +131,7 @@ rules: []
 # @section Key management service settings
 
 # @param keys.enabled Disable or enable key management service
-# @param keys.url Address of key management service server
+# @param keys.url API keys service URL, ex: http://keys-service-api.svc/service/v1/keys
 # @param keys.refreshIntervalSec Keys refresh interval in seconds
 # @param keys.downloadTimeoutSec Keys download timeout in seconds
 # @param keys.commonToken Mater key to retrieve all per-service API keys, keys.apis ignored, if commonToken set

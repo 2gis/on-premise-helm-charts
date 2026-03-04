@@ -1,3 +1,41 @@
+## [2.50.0] (2026-02-26)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2500)
+#### Images
+```
+catalog-api
+	- catalog-api:3.665.1
+	+ catalog-api:3.671.0
+mapgl-js-api
+	- mapgl:1.69.1
+	+ mapgl:1.70.1
+platform
+	- platform-ui:1.15.1
+	+ platform-ui:1.25.1
+search-api-v8
+	+ navi-envoy:1.36.2-tools
+	+ search-api-v8-controller:8.18.3
+	+ search-api-v8-data_adapter:8.18.3
+	+ search-api-v8-files_storage:8.18.3
+	+ search-api-v8-geodetector:8.18.3
+	+ search-api-v8-head:8.18.3
+	+ search-api-v8-indexer:8.18.3
+	+ search-api-v8-ingress-router:8.18.3
+	+ search-api-v8-metrics-aggregator:0.1.0
+	+ search-api-v8-nginx:1.25.11
+	+ search-api-v8-syncer:8.18.3
+	+ search-api-v8-worker:8.18.3
+tiles-api
+	- tiles-api-importer:4.80.3
+	+ tiles-api-importer:4.81.3
+	- tiles-api-importer:4.80.3
+	+ tiles-api-importer:4.81.3
+	- tiles-api-proxy:4.80.3
+	+ tiles-api-proxy:4.81.3
+	- tiles-api:4.80.3
+	+ tiles-api:4.81.3
+```
+[Full list of image versions](platform_image_versions.txt)
+
 ## [2.49.0] (2026-01-28)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2490)
 #### Images

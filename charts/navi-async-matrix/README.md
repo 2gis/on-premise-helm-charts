@@ -257,10 +257,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### API keys service
 
-| Name         | Description                                                                  | Value |
-| ------------ | ---------------------------------------------------------------------------- | ----- |
-| `keys.url`   | API keys service URL, ex: http://keys-api.svc/service/v1/keys. **Required**  | `""`  |
-| `keys.token` | API token to authorize at the service. Required if truck car routing in use. | `""`  |
+| Name         | Description                                                                         | Value |
+| ------------ | ----------------------------------------------------------------------------------- | ----- |
+| `keys.url`   | API keys service URL, ex: http://keys-service-api.svc/service/v1/keys. **Required** | `""`  |
+| `keys.token` | API token to authorize at the service. Required if truck car routing in use.        | `""`  |
 
 ### customCAs **Custom Certificate Authority**
 

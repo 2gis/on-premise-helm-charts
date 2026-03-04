@@ -175,6 +175,19 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `networkPolicy.egress.enabled`                     | Enable creation of NetworkPolicy resources for egress rules  | `false` |
 | `networkPolicy.egress.config`                      | Array of egress rules                                        | `[]`    |
 
+### [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+
+| Name                  | Description                       | Value |
+| --------------------- | --------------------------------- | ----- |
+| `httpRoute.hostnames` | List of hostnames served by route | `[]`  |
+
+### [GRPCRoute](https://gateway-api.sigs.k8s.io/api-types/grpcroute/) configuration
+
+| Name                  | Description                                                                                        | Value |
+| --------------------- | -------------------------------------------------------------------------------------------------- | ----- |
+| `grpcRoute.hostnames` | List of hostnames served by route                                                                  | `[]`  |
+| `grpcRoute.port`      | Destination grpcroute.spec.rules.backendRefs.port number, must be set if grpcRoute.enabled is true | `nil` |
+
 ## Maintainers
 
 | Name | Email | Url |

@@ -1,5 +1,5 @@
 {{- with .Values.permissions.pdb }}
-{{- if .enabled }}
+  {{- if .enabled }}
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
@@ -17,5 +17,5 @@ spec:
   selector:
     matchLabels:
       {{- include "pro-api.permissionsSelectorLabels" $ | nindent 6 }}
-{{- end }}
-{{- end }}
+  {{- end }}
+  {{- end }}

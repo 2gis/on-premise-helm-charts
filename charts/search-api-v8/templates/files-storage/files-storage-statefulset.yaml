@@ -1,0 +1,113 @@
+{{- if empty .Values.indexerServices.externalFilesStorageUrl }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-files-storage
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+    search/part: files-storage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "search-api-v8.selectorLabels" . | nindent 6 }}
+    {{- with .Values.filesStorage.matchLabels }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}{{- /* .Values.filesStorage.matchLabels */}}
+      search/part: files-storage
+  serviceName: {{ include "search-api-v8.fullname" . }}-files-storage
+  template:
+    metadata:
+      annotations:
+      {{- with .Values.filesStorage.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.filesStorage.podAnnotations */}}
+        checksum/config: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: {{ .Values.filesStorage.ports.http | quote }}
+        prometheus.io/scrape: "true"
+      labels:
+        {{- include "search-api-v8.labels" . | nindent 8 }}
+        search/part: files-storage
+      {{- with .Values.filesStorage.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.filesStorage.podLabels */}}
+    spec:
+      {{- with .Values.filesStorage.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.filesStorage.imagePullSecrets */}}
+      serviceAccountName: {{ include "search-api-v8.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.filesStorage.podSecurityContext | nindent 8 }}
+      containers:
+        - name: files-storage
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.filesStorage.image.repository }}:{{ .Values.filesStorage.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.filesStorage.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.filesStorage.resources | nindent 12 }}
+          env:
+            - name: GIN_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "search-api-v8.fullname" . }}
+                  key: GIN_MODE
+            {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}{{- /* .Values.customCAs.bundle */}}
+          ports:
+            - name: http
+              containerPort: {{ .Values.filesStorage.ports.http }}
+          volumeMounts:
+            - name: files-storage
+              mountPath: /data
+            - name: files-storage-config
+              mountPath: /app/config.yaml
+              subPath: files-storage.yaml
+          {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
+          {{- if .Values.filesStorage.livenessProbe.enabled }}
+          livenessProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.filesStorage.livenessProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.filesStorage.livenessProbe.enabled */}}
+          {{- if .Values.filesStorage.readinessProbe.enabled }}
+          readinessProbe:
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.filesStorage.readinessProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.filesStorage.readinessProbe.enabled */}}
+      {{- with .Values.filesStorage.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.filesStorage.nodeSelector */}}
+      {{- with .Values.filesStorage.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.filesStorage.affinity */}}
+      {{- with .Values.filesStorage.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* .Values.filesStorage.tolerations */}}
+      volumes:
+        - name: files-storage-config
+          configMap:
+            name: {{ include "search-api-v8.fullname" . }}
+        {{- if .Values.customCAs.bundle }}
+        {{- include "search-api-v8.custom.ca.deploys.volumes" . | nindent 8 }}
+        {{- end }}{{- /* .Values.customCAs.bundle */}}
+        {{- if not .Values.filesStorage.data.persistent.enabled }}
+        - name: files-storage
+          emptyDir:
+            sizeLimit: {{ .Values.filesStorage.data.resources.requests.storage }}
+        {{- end }}{{- /* if not .Values.filesStorage.data.persistent.enabled */}}
+  {{- if .Values.filesStorage.data.persistent.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: files-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: {{ .Values.filesStorage.data.storageClassName | quote }}
+        volumeMode: Filesystem
+        resources:
+          {{- .Values.filesStorage.data.resources | toYaml | nindent 10 }}
+  {{ end }}{{- /* .Values.filesStorage.data.persistent.enabled */}}
+{{- end }}{{- /* empty .Values.indexerServices.externalFilesStorageUrl */}}

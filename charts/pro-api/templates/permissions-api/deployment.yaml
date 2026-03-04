@@ -117,13 +117,13 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: permissionsDbConnectionPwd
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- if .Values.postgres.permissions.ro.password }}
             - name: Postgres__PasswordRo
               valueFrom:
                 secretKeyRef:
                   key: permissionsDbConnectionPwdRo
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
             - name: API_URL
               value: http://{{ include "pro-api.name" . }}
@@ -131,14 +131,27 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: apiKey
-                  name: {{ include "pro-api.name" . }}-secret
-            - name: Auth__Type
-              value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
-            - name: Auth__PermissionsApiKey
+                  name: {{ include "pro-api.secretName" . }}
+
+            - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
+
+            {{- if .Values.authProvider.enabled }}
+            - name: Auth__Authority
+              value: {{ required "A valid .Values.authProvider.host entry required when authProvider.enabled is true" .Values.authProvider.host | quote }}
+
+            {{- if not .Values.permissions.settings.auth.uiRequiredRoles }}
+            {{- fail "A valid .Values.permissions.settings.auth.uiRequiredRoles entry required when authProvider.enabled is true" }}
+            {{- end }}
+            {{- range $i, $r := .Values.permissions.settings.auth.uiRequiredRoles }}
+            - name: Auth__UiRequiredRoles__{{$i}}
+              value: {{ $r | quote }}
+            {{- end }}
+            {{- end }}
+
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
@@ -150,12 +163,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: redisPassword
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
             - name: Common__HttpPort
-              value: {{ .Values.permissions.settings.httpPort | quote }}
+              value: "{{ .Values.permissions.settings.httpPort }}"
             - name: Common__GrpcPort
-              value: {{ .Values.permissions.settings.grpcPort | quote }}
+              value: "{{ .Values.permissions.settings.grpcPort }}"
             - name: Common__Logging__Format
               value: {{ .Values.api.settings.logging.format | quote }}
             - name: Common__DeleteInactiveUsers
@@ -195,7 +208,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: kafkaSaslPassword
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
             - name: Kafka__PermissionsTopicSettings__Name
               value: {{ $.Values.kafka.permissionsTopic.name | quote }}
@@ -209,3 +222,56 @@ spec:
               value: {{ .Values.permissions.settings.localCache.enabled | quote }}
             - name: LocalCache__TrackStatistics
               value: {{ .Values.permissions.settings.localCache.trackStatistics | quote }}
+
+            # AuthProvider
+            - name: AuthProvider__Enabled
+              value: {{ .Values.authProvider.enabled | quote }}
+
+            {{- if .Values.authProvider.enabled }}
+            - name: AuthProvider__Schema
+              value: {{ required "A valid .Values.authProvider.schema entry required when authProvider.enabled is true. Supported values: Basic, Oidc" .Values.authProvider.schema | quote }}
+            {{- range $hostIndex, $host := .Values.authProvider.allowedHosts }}
+            - name: AuthProvider__AllowedHosts__{{ $hostIndex }}
+              value: {{ $host | quote }}
+            {{- end }}
+
+            # Basic Auth
+            {{- if eq (default "" .Values.authProvider.schema) "Basic" }}
+            {{- range $userIndex, $user := .Values.authProvider.basic.users }}
+            - name: AuthProvider__Basic__Users__{{ $userIndex }}__Username
+              value: {{ $user.username | quote }}
+            - name: AuthProvider__Basic__Users__{{ $userIndex }}__Password
+              valueFrom:
+                secretKeyRef:
+                  key: {{ printf "authUserBasic-%d-%s-password" $userIndex $user.username }}
+                  name: {{ include "pro-api.name" $ }}-secret
+            {{- range $roleIndex, $role := $user.roles }}
+            - name: AuthProvider__Basic__Users__{{ $userIndex }}__Roles__{{ $roleIndex }}
+              value: {{ $role | quote }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+
+            # OIDC Auth
+            {{- if eq (default "" .Values.authProvider.schema) "Oidc" }}
+            - name: AuthProvider__Oidc__Authority
+              value: {{ .Values.authProvider.oidc.authority | quote }}
+            - name: AuthProvider__Oidc__ClientId
+              value: {{ .Values.authProvider.oidc.clientId | quote }}
+            - name: AuthProvider__Oidc__ClientSecret
+              valueFrom:
+                secretKeyRef:
+                  key: authProviderOidcClientSecret
+                  name: {{ include "pro-api.secretName" . }}
+            - name: AuthProvider__Oidc__NameClaim
+              value: {{ .Values.authProvider.oidc.nameClaim | quote }}
+            - name: AuthProvider__Oidc__RoleClaim
+              value: {{ .Values.authProvider.oidc.roleClaim | quote }}
+            {{- end }}
+            {{- end }}
+
+            - name: Security__SecretKey
+              valueFrom:
+                secretKeyRef:
+                  key: securitySecretKey
+                  name: {{ include "pro-api.secretName" . }}

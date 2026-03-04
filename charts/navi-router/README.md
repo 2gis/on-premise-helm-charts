@@ -83,7 +83,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                      | Description                                                                           | Value       |
 | ------------------------- | ------------------------------------------------------------------------------------- | ----------- |
 | `keys.enabled`            | Disable or enable key management service                                              | `false`     |
-| `keys.url`                | Address of key management service server                                              | `""`        |
+| `keys.url`                | API keys service URL, ex: http://keys-service-api.svc/service/v1/keys                 | `""`        |
 | `keys.refreshIntervalSec` | Keys refresh interval in seconds                                                      | `30`        |
 | `keys.downloadTimeoutSec` | Keys download timeout in seconds                                                      | `30`        |
 | `keys.commonToken`        | Mater key to retrieve all per-service API keys, keys.apis ignored, if commonToken set | `""`        |
