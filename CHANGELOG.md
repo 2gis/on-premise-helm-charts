@@ -1,5 +1,9 @@
 # 2GIS On-Premise Changelog
 
+## [2026-03-04] Release: Core:2.5.0
+
+  [CHANGELOG](changelogs/core/CORE-CHANGELOG.md)
+
 ## [2026-02-27] Release: Pro:2.3.0
 
   [CHANGELOG](changelogs/pro/PRO-CHANGELOG.md)
