@@ -175,18 +175,22 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Cronjobs Settings
 
-| Name                                         | Description                                                                                                       | Value       |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------- |
-| `cronjob.cleanup.enabled`                    | Enables or disables cronjob                                                                                       | `false`     |
-| `cronjob.cleanup.schedule`                   | Schedule follows the Cron syntax.                                                                                 | `0 0 * * *` |
-| `cronjob.cleanup.suspend`                    | Suspend execution of Jobs.                                                                                        | `false`     |
-| `cronjob.cleanup.concurrencyPolicy`          | Concurrent executions of a Job that is created by this CronJob.                                                   | `Forbid`    |
-| `cronjob.cleanup.failedJobsHistoryLimit`     | How many failed Jobs should be kept.                                                                              | `1`         |
-| `cronjob.cleanup.successfulJobsHistoryLimit` | How many completed Jobs should be kept.                                                                           | `0`         |
-| `cronjob.cleanup.suffix`                     | Suffix for CronJob name.                                                                                          | `cleanup`   |
-| `cronjob.cleanup.resources`                  | Container [resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) structure.  | `{}`        |
-| `cronjob.cleanup.restartPolicy`              | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy) | `Never`     |
-| `cronjob.cleanup.backoffLimit`               | Number of retries before considering a Job as failed.                                                             | `1`         |
+| Name                                         | Description                                                                                                                                          | Value       |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `cronjob.cleanup.enabled`                    | Enables or disables cronjob to clean the database of completed tasks. Use db.expirationSec to specify how many seconds the results should be stored. | `false`     |
+| `cronjob.cleanup.schedule`                   | Schedule follows the Cron syntax.                                                                                                                    | `0 0 * * *` |
+| `cronjob.cleanup.suspend`                    | Suspend execution of Jobs.                                                                                                                           | `false`     |
+| `cronjob.cleanup.concurrencyPolicy`          | Concurrent executions of a Job that is created by this CronJob.                                                                                      | `Forbid`    |
+| `cronjob.cleanup.failedJobsHistoryLimit`     | How many failed Jobs should be kept.                                                                                                                 | `1`         |
+| `cronjob.cleanup.successfulJobsHistoryLimit` | How many completed Jobs should be kept.                                                                                                              | `0`         |
+| `cronjob.cleanup.suffix`                     | Suffix for CronJob name.                                                                                                                             | `cleanup`   |
+| `cronjob.cleanup.resources`                  | Container [resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) structure.                                     | `{}`        |
+| `cronjob.cleanup.resources.requests.cpu`     | CPU request, recommended value `100m`.                                                                                                               | `undefined` |
+| `cronjob.cleanup.resources.requests.memory`  | Memory request, recommended value `512Mi`.                                                                                                           | `undefined` |
+| `cronjob.cleanup.resources.limits.cpu`       | CPU limit, recommended value `1000m`.                                                                                                                | `undefined` |
+| `cronjob.cleanup.resources.limits.memory`    | Memory limit, recommended value `1Gi`.                                                                                                               | `undefined` |
+| `cronjob.cleanup.restartPolicy`              | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)                                    | `Never`     |
+| `cronjob.cleanup.backoffLimit`               | Number of retries before considering a Job as failed.                                                                                                | `1`         |
 
 ### Database settings
 

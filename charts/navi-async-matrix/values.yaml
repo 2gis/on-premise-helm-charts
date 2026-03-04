@@ -278,7 +278,7 @@ dm:
 
 # @section Cronjobs Settings
 
-# @param cronjob.cleanup.enabled Enables or disables cronjob
+# @param cronjob.cleanup.enabled Enables or disables cronjob to clean the database of completed tasks. Use db.expirationSec to specify how many seconds the results should be stored.
 # @param cronjob.cleanup.schedule Schedule follows the Cron syntax.
 # @param cronjob.cleanup.suspend Suspend execution of Jobs.
 # @param cronjob.cleanup.concurrencyPolicy Concurrent executions of a Job that is created by this CronJob.
@@ -286,6 +286,10 @@ dm:
 # @param cronjob.cleanup.successfulJobsHistoryLimit How many completed Jobs should be kept.
 # @param cronjob.cleanup.suffix Suffix for CronJob name.
 # @param cronjob.cleanup.resources Container [resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) structure.
+# @param cronjob.cleanup.resources.requests.cpu [nullable] CPU request, recommended value `100m`.
+# @param cronjob.cleanup.resources.requests.memory [nullable] Memory request, recommended value `512Mi`.
+# @param cronjob.cleanup.resources.limits.cpu [nullable] CPU limit, recommended value `1000m`.
+# @param cronjob.cleanup.resources.limits.memory [nullable] Memory limit, recommended value `1Gi`.
 # @param cronjob.cleanup.restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
 # @param cronjob.cleanup.backoffLimit Number of retries before considering a Job as failed.
 
