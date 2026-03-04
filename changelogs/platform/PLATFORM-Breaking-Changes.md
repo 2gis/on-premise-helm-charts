@@ -2,7 +2,7 @@
 
 ## [2.50.0]
 
-Before upgrading, update the key service from the [Core:2.4.0](../core/CORE-CHANGELOG.md) release.
+Before upgrading, update the keys service to the [Core:2.4.0](../core/CORE-CHANGELOG.md) release.
 
 ### catalog-api
 
