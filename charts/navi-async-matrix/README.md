@@ -63,7 +63,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.20.1`                            |
+| `image.tag`        | Tag         | `1.22.0`                            |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings
@@ -154,7 +154,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `dm.compositeTaskTimeoutSec`                   | Timeout for executing split tasks.                                                                                            | `3600`                                     |
 | `dm.configFilepath`                            | Configs mountpoint path                                                                                                       | `/etc/2gis/`                               |
 | `dm.merger.image.repository`                   | Image repository for merger.                                                                                                  | `2gis-on-premise/navi-merger-async-matrix` |
-| `dm.merger.image.tag`                          | Image tag for merger.                                                                                                         | `1.20.1`                                   |
+| `dm.merger.image.tag`                          | Image tag for merger.                                                                                                         | `1.22.0`                                   |
 | `dm.merger.replicaCount`                       | A replica count for the arhiver.                                                                                              | `1`                                        |
 | `dm.merger.livenessProbe.enabled`              | Enable livenessProbe for merger.                                                                                              | `true`                                     |
 | `dm.merger.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe for merger.                                                                           | `20`                                       |
@@ -173,24 +173,43 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `dm.merger.resources.limits.cpu`               | Merger CPU limit. 1CPU recommended.                                                                                           |                                            |
 | `dm.merger.resources.limits.memory`            | Merger memory limit. 20Gi recommended.                                                                                        |                                            |
 
+### Cronjobs Settings
+
+| Name                                         | Description                                                                                                                                          | Value       |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `cronjob.cleanup.enabled`                    | Enables or disables cronjob to clean the database of completed tasks. Use db.expirationSec to specify how many seconds the results should be stored. | `false`     |
+| `cronjob.cleanup.schedule`                   | Schedule follows the Cron syntax.                                                                                                                    | `0 0 * * *` |
+| `cronjob.cleanup.suspend`                    | Suspend execution of Jobs.                                                                                                                           | `false`     |
+| `cronjob.cleanup.concurrencyPolicy`          | Concurrent executions of a Job that is created by this CronJob.                                                                                      | `Forbid`    |
+| `cronjob.cleanup.failedJobsHistoryLimit`     | How many failed Jobs should be kept.                                                                                                                 | `1`         |
+| `cronjob.cleanup.successfulJobsHistoryLimit` | How many completed Jobs should be kept.                                                                                                              | `0`         |
+| `cronjob.cleanup.suffix`                     | Suffix for CronJob name.                                                                                                                             | `cleanup`   |
+| `cronjob.cleanup.resources`                  | Container [resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) structure.                                     | `{}`        |
+| `cronjob.cleanup.resources.requests.cpu`     | CPU request, recommended value `100m`.                                                                                                               | `undefined` |
+| `cronjob.cleanup.resources.requests.memory`  | Memory request, recommended value `512Mi`.                                                                                                           | `undefined` |
+| `cronjob.cleanup.resources.limits.cpu`       | CPU limit, recommended value `1000m`.                                                                                                                | `undefined` |
+| `cronjob.cleanup.resources.limits.memory`    | Memory limit, recommended value `1Gi`.                                                                                                               | `undefined` |
+| `cronjob.cleanup.restartPolicy`              | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)                                    | `Never`     |
+| `cronjob.cleanup.backoffLimit`               | Number of retries before considering a Job as failed.                                                                                                | `1`         |
+
 ### Database settings
 
-| Name                     | Description                                                                  | Value         |
-| ------------------------ | ---------------------------------------------------------------------------- | ------------- |
-| `db.host`                | PostgreSQL hostname or IP. **Required**                                      | `""`          |
-| `db.port`                | PostgreSQL port.                                                             | `5432`        |
-| `db.extraHosts`          | List of PostgreSQL extra hosts and ports. For more details, see values.yaml. | `[]`          |
-| `db.name`                | PostgreSQL database name. **Required**                                       | `""`          |
-| `db.user`                | PostgreSQL username. **Required**                                            | `""`          |
-| `db.password`            | PostgreSQL password. **Required**                                            | `""`          |
-| `db.schema`              | PostgreSQL schema.                                                           | `public`      |
-| `db.tls.enabled`         | If tls connection to postgresql is enabled.                                  | `false`       |
-| `db.tls.rootCert`        | Root certificate file.                                                       | `""`          |
-| `db.tls.cert`            | Certificate of postgresql server.                                            | `""`          |
-| `db.tls.key`             | Key of postgresql server.                                                    | `""`          |
-| `db.tls.mode`            | Level of protection.                                                         | `verify-full` |
-| `db.expirationSec`       | How many seconds to store results. (0 - disable)                             | `0`           |
-| `db.expirationPeriodSec` | Period of checking the need to clear the results.                            | `86400`       |
+| Name                     | Description                                                                                                                                | Value         |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
+| `db.host`                | PostgreSQL hostname or IP. **Required**                                                                                                    | `""`          |
+| `db.port`                | PostgreSQL port.                                                                                                                           | `5432`        |
+| `db.extraHosts`          | List of PostgreSQL extra hosts and ports. For more details, see values.yaml.                                                               | `[]`          |
+| `db.name`                | PostgreSQL database name. **Required**                                                                                                     | `""`          |
+| `db.user`                | PostgreSQL username. **Required**                                                                                                          | `""`          |
+| `db.password`            | PostgreSQL password. **Required**                                                                                                          | `""`          |
+| `db.schema`              | PostgreSQL schema.                                                                                                                         | `public`      |
+| `db.tls.enabled`         | If tls connection to postgresql is enabled.                                                                                                | `false`       |
+| `db.tls.rootCert`        | Root certificate file.                                                                                                                     | `""`          |
+| `db.tls.cert`            | Certificate of postgresql server.                                                                                                          | `""`          |
+| `db.tls.key`             | Key of postgresql server.                                                                                                                  | `""`          |
+| `db.tls.mode`            | Level of protection.                                                                                                                       | `verify-full` |
+| `db.expirationSec`       | How many seconds to store results. If cronjob.cleanup.enabled set to true will be used in cronjob and application cleanup will be disabled | `0`           |
+| `db.expirationPeriodSec` | Period of checking the need to clear the results.                                                                                          | `86400`       |
 
 ### Multi-DC settings
 
@@ -205,40 +224,42 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Kafka settings
 
-| Name                                          | Description                                                                                                               | Value                      |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `kafka.groupId`                               | Distance Matrix Async API group identifier.                                                                               | `navi_async_matrix`        |
-| `kafka.cancelTopic`                           | Name of the topic for canceling or receiving information about finished tasks.                                            | `""`                       |
-| `kafka.mergerGroupId`                         | Group identifier for merger tasks.                                                                                        | `navi_async_matrix_merger` |
-| `kafka.mergerStatusTopic`                     | Name of the topic for status merger tasks.                                                                                | `""`                       |
-| `kafka.mergerTaskTopic`                       | Name of the topic for merger tasks.                                                                                       | `""`                       |
-| `kafka.attractTopic`                          | Name of the topic for for attract tasks results                                                                           | `""`                       |
-| `kafka.oneToManyTopic`                        | Name of the topic for oneToMany tasks results                                                                             | `""`                       |
-| `kafka.vrpStatusTopic`                        | Name of the topic for VRP service integration                                                                             | `""`                       |
-| `kafka.findPlatformTopic`                     | Name of the topic for Find Platform                                                                                       | `""`                       |
-| `kafka.properties`                            | Properties as supported by kafka-python. Refer to inline comments for details.                                            |                            |
-| `kafka.sensitiveProperties`                   | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                          | `{}`                       |
-| `kafka.fileProperties`                        | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details. | `{}`                       |
-| `kafka.consumerOverrides.properties`          | Consumer specific properties as simple key-value pairs.                                                                   | `{}`                       |
-| `kafka.consumerOverrides.sensitiveProperties` | Consumer specific properties mounted as secrets.                                                                          | `{}`                       |
-| `kafka.consumerOverrides.fileProperties`      | Consumer specific properties mounted as regular files.                                                                    | `{}`                       |
-| `kafka.producerOverrides.properties`          | Consumer specific properties as simple key-value pairs.                                                                   | `{}`                       |
-| `kafka.producerOverrides.sensitiveProperties` | Consumer specific properties mounted as secrets.                                                                          | `{}`                       |
-| `kafka.producerOverrides.fileProperties`      | Consumer specific properties mounted as regular files.                                                                    | `{}`                       |
-| `kafka.taskTopicRules`                        | **Information about the topics that Distance Matrix Async API will use to send the requests.**                            |                            |
-| `kafka.taskTopicRules[].topic`                | Name of the topic.                                                                                                        |                            |
-| `kafka.taskTopicRules[].default`              | If this topic is used for projects by default.                                                                            |                            |
-| `kafka.taskTopicRules[].type`                 | Routing type for tasks in the topic (`car`, `truck`), defaults to `car`                                                   |                            |
-| `kafka.taskTopicRules[].projects`             | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                            |
-| `kafka.findPlatformTopicRules`                | ** Rules to map request type to topic for Find Platform **                                                                | `[]`                       |
-| `kafka.findPlatformTopicRules[0].topic`       |                                                                                                                           |                            |
-| `kafka.findPlatformTopicRules[0].type`        |                                                                                                                           |                            |
-| `kafka.findPlatformTopicRules[0].default`     |                                                                                                                           |                            |
-| `kafka.attractTopicRules`                     | ** Rules to map request type to topic for attract tasks **                                                                | `[]`                       |
-| `kafka.attractTopicRules[0].topic`            | Name of the topic.                                                                                                        |                            |
-| `kafka.attractTopicRules[0].default`          | If this topic is used for projects by default.                                                                            |                            |
-| `kafka.attractTopicRules[0].type`             | Routing type for tasks in the topic (`car`, `truck`, `walking`, `bicycle`, `scooter`), defaults to `car`                  |                            |
-| `kafka.attractTopicRules[0].projects`         | List of projects to use this topic for, e.g., `['moscow']`.                                                               |                            |
+| Name                                          | Description                                                                                                                                               | Value                      |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `kafka.groupId`                               | Distance Matrix Async API group identifier.                                                                                                               | `navi_async_matrix`        |
+| `kafka.cancelTopic`                           | Name of the topic for canceling or receiving information about finished tasks.                                                                            | `""`                       |
+| `kafka.mergerGroupId`                         | Group identifier for merger tasks.                                                                                                                        | `navi_async_matrix_merger` |
+| `kafka.mergerStatusTopic`                     | Name of the topic for status merger tasks.                                                                                                                | `""`                       |
+| `kafka.mergerTaskTopic`                       | Name of the topic for merger tasks.                                                                                                                       | `""`                       |
+| `kafka.attractTopic`                          | Name of the topic for for attract tasks results                                                                                                           | `""`                       |
+| `kafka.oneToManyTopic`                        | Name of the topic for oneToMany tasks results                                                                                                             | `""`                       |
+| `kafka.vrpStatusTopic`                        | Name of the topic for VRP service integration                                                                                                             | `""`                       |
+| `kafka.findPlatformTopic`                     | Name of the topic for Find Platform                                                                                                                       | `""`                       |
+| `kafka.properties`                            | Properties as supported by kafka-python. Refer to inline comments for details.                                                                            |                            |
+| `kafka.sensitiveProperties`                   | As kafka.properties, but kept in Secrets. Refer to inlines comments for details.                                                                          | `{}`                       |
+| `kafka.fileProperties`                        | As kafka.properties, but kept in a file, which passed to application as a filename. Refer to inline comments for details.                                 | `{}`                       |
+| `kafka.consumerOverrides.properties`          | Consumer specific properties as simple key-value pairs.                                                                                                   | `{}`                       |
+| `kafka.consumerOverrides.sensitiveProperties` | Consumer specific properties mounted as secrets.                                                                                                          | `{}`                       |
+| `kafka.consumerOverrides.fileProperties`      | Consumer specific properties mounted as regular files.                                                                                                    | `{}`                       |
+| `kafka.producerOverrides.properties`          | Consumer specific properties as simple key-value pairs.                                                                                                   | `{}`                       |
+| `kafka.producerOverrides.sensitiveProperties` | Consumer specific properties mounted as secrets.                                                                                                          | `{}`                       |
+| `kafka.producerOverrides.fileProperties`      | Consumer specific properties mounted as regular files.                                                                                                    | `{}`                       |
+| `kafka.taskTopicRules`                        | **Information about the topics that Distance Matrix Async API will use to send the requests.**                                                            |                            |
+| `kafka.taskTopicRules[].topic`                | Name of the topic.                                                                                                                                        |                            |
+| `kafka.taskTopicRules[].default`              | If this topic is used for projects by default.                                                                                                            |                            |
+| `kafka.taskTopicRules[].type`                 | Routing type for tasks in the topic (`car`, `truck`), defaults to `car`                                                                                   |                            |
+| `kafka.taskTopicRules[].projects`             | List of projects to use this topic for, e.g., `['moscow']`.                                                                                               |                            |
+| `kafka.findPlatformTopicRules`                | ** Rules to map request type to topic for Find Platform **                                                                                                | `[]`                       |
+| `kafka.findPlatformTopicRules[0].topic`       |                                                                                                                                                           |                            |
+| `kafka.findPlatformTopicRules[0].type`        |                                                                                                                                                           |                            |
+| `kafka.findPlatformTopicRules[0].default`     |                                                                                                                                                           |                            |
+| `kafka.attractTopicRules`                     | ** Rules to map request type to topic for attract tasks **                                                                                                | `[]`                       |
+| `kafka.attractTopicRules[0].topic`            | Name of the topic.                                                                                                                                        |                            |
+| `kafka.attractTopicRules[0].default`          | If this topic is used for projects by default.                                                                                                            |                            |
+| `kafka.attractTopicRules[0].type`             | Routing type for tasks in the topic (`car`, `truck`, `walking`, `bicycle`, `scooter`), defaults to `car`                                                  |                            |
+| `kafka.attractTopicRules[0].projects`         | List of projects to use this topic for, e.g., `['moscow']`.                                                                                               |                            |
+| `kafka.maxMessageSizeBytes`                   | Messages size threshold, transfer through S3 exceeding ones                                                                                               | `1048576`                  |
+| `kafka.compressionType`                       | Messages compression, either empty or `lz4`, defaults to empty (no compression). On back/attractor side set with `kafka.properties[compression.type]=lz4` | `""`                       |
 
 ### S3-compatible storage settings
 
@@ -268,6 +289,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
 | `customCAs.certsPath` | Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"          | `""`  |
+
+### Sentry
+
+| Name                 | Description                                      | Value          |
+| -------------------- | ------------------------------------------------ | -------------- |
+| `sentry.enabled`     | If Sentry integration needed                     | `false`        |
+| `sentry.address`     | Sentry URL                                       | `sentry.local` |
+| `sentry.environment` | Environment type ('production', 'staging', etc.) | `local`        |
 
 ## Maintainers
 
