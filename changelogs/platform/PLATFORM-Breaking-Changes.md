@@ -1,5 +1,11 @@
 # Platform Breaking-Changes
 
+## [2.51.0]
+
+### keys
+- A temporary flag, `--migrate-data`, has been added for this release. This flag triggers the data migration required for merging Public Transport API and Routing API data in the service.
+- Ensure that `keys` service is upgraded prior to upgrading any of the `navi` services.
+
 ## [2.50.0]
 
 Before upgrading, update the keys service to the [Core:2.4.0](../core/CORE-CHANGELOG.md) release.
