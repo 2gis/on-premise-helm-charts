@@ -365,7 +365,7 @@
 | `authProvider.oidc.clientId`           | Client ID registered with the OIDC provider. **Required if** `authProvider.schema: Oidc`                                                                                                                                                                  | `""`   |
 | `authProvider.oidc.clientSecret`       | Client secret for the OIDC provider. **Required if** `authProvider.schema: Oidc`                                                                                                                                                                          | `""`   |
 | `authProvider.oidc.nameClaim`          | Claim name that contains the user's name. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`                                                                                                    | `""`   |
-| `authProvider.oidc.roleClaim`          | Claim name that contains the user's role. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`                                                                                                    | `""`   |
+| `authProvider.oidc.roleClaim`          | Claim name that contains the user's roles. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`                                                                                                   | `""`   |
 
 ### Kafka settings (supported version 2.7)
 
