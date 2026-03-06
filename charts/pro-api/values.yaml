@@ -289,7 +289,7 @@ permissions:
   # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
   # @param permissions.settings.auth.apiKey Api key for service to service calls. **Required**
-  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required if** `authProvider.enabled: true`
+  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required**
   settings:
     host: ''
     httpPort: 8091
@@ -447,7 +447,7 @@ tasks:
   # @param tasks.settings.features.auditLogging.enabled Enable audit log feature
   # @param tasks.settings.auth.enabled Enables or disables authentication
   # @param tasks.settings.auth.apiKey Api key for service to service calls. **Required if** `tasks.settings.auth.enabled: true`
-  # @param tasks.settings.auth.adminRequiredRoles Roles required to access Tasks Admin UI. Must be set to the same values as `permissions.settings.auth.uiRequiredRoles`. **Required if** `authProvider.enabled: true` and `tasks.settings.auth.enabled: true`
+  # @param tasks.settings.auth.adminRequiredRoles Roles required to access Tasks Admin UI. Must be set to the same values as `permissions.settings.auth.uiRequiredRoles`. **Required if** `tasks.settings.auth.enabled: true`
   # @skip tasks.settings.features.assetDataPreparation
   # @skip tasks.settings.features.cleanCitylensFrames
   # @skip tasks.settings.features.removeUnusedUserAssetFiles
@@ -785,9 +785,8 @@ postgres:
 
 # @section Auth Provider Configuration
 # @title Auth Provider
-# @param authProvider.enabled Enables or disables the authentication provider for Permissions UI and Tasks Admin UI access.
-# @param authProvider.host Host address of the authentication provider. Must point to the pro-api-permissions URL. **Required if** `authProvider.enabled: true`
-# @param authProvider.schema Authentication scheme to use. Supported values: `Basic`, `Oidc`. **Required if** `authProvider.enabled: true`
+# @param authProvider.host Host address of the authentication provider. Must point to the pro-api-permissions URL. **Required**
+# @param authProvider.schema Authentication scheme to use. Supported values: `Basic`, `Oidc`. **Required**
 # @param authProvider.allowedHosts List of allowed hosts. For allowed all hosts use `['*']`
 # @param authProvider.basic.users[0].username Username for basic authentication. **Required if** `authProvider.schema: Basic`
 # @param authProvider.basic.users[0].password Password for basic authentication. **Required if** `authProvider.schema: Basic`
@@ -796,9 +795,8 @@ postgres:
 # @param authProvider.oidc.clientId Client ID registered with the OIDC provider. **Required if** `authProvider.schema: Oidc`
 # @param authProvider.oidc.clientSecret Client secret for the OIDC provider. **Required if** `authProvider.schema: Oidc`
 # @param authProvider.oidc.nameClaim Claim name that contains the user's name. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
-# @param authProvider.oidc.roleClaim Claim name that contains the user's role. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
+# @param authProvider.oidc.roleClaim Claim name that contains the user's roles. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
 authProvider:
-  enabled: false
   host: ''
   schema: ''
   allowedHosts: []
