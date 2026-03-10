@@ -125,7 +125,7 @@ api:
     minAvailable: 1
     maxUnavailable: ''
 
-  # @param api.settings.licenseKey License key. **Required**
+  # @param api.settings.licenseKey PRO license key. Contact your vendor to obtain it. **Required**
   # @param api.settings.tempPath Path to directory used for temp data
   # @skip api.settings.logEsQueries
   # @skip api.settings.debug
@@ -289,7 +289,7 @@ permissions:
   # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
   # @param permissions.settings.auth.apiKey Api key for service to service calls. **Required**
-  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required if** `authProvider.enabled: true`
+  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required**
   settings:
     host: ''
     httpPort: 8091
@@ -447,7 +447,7 @@ tasks:
   # @param tasks.settings.features.auditLogging.enabled Enable audit log feature
   # @param tasks.settings.auth.enabled Enables or disables authentication
   # @param tasks.settings.auth.apiKey Api key for service to service calls. **Required if** `tasks.settings.auth.enabled: true`
-  # @param tasks.settings.auth.adminRequiredRoles Roles required to access Tasks Admin UI. Must be set to the same values as `permissions.settings.auth.uiRequiredRoles`. **Required if** `authProvider.enabled: true` and `tasks.settings.auth.enabled: true`
+  # @param tasks.settings.auth.adminRequiredRoles Roles required to access Tasks Admin UI. Must be set to the same values as `permissions.settings.auth.uiRequiredRoles`. **Required if** `tasks.settings.auth.enabled: true`
   # @skip tasks.settings.features.assetDataPreparation
   # @skip tasks.settings.features.cleanCitylensFrames
   # @skip tasks.settings.features.removeUnusedUserAssetFiles
@@ -686,6 +686,7 @@ dgctlStorage:
 # @param s3.layerDataBucket S3 bucket with prepared layer data. **Required**
 # @param s3.snapshotBucket S3 bucket for storing snapshots of inclemental data updates. **Required**
 # @param s3.resourcesBucket S3 bucket for storing static resources. **Required**
+# Note: S3 host, secure, region, accessKey, and secretKey are taken from dgctlStorage.* settings for these buckets.
 
 s3:
   assetsDataBucket: ''
@@ -784,10 +785,9 @@ postgres:
 
 # @section Auth Provider Configuration
 # @title Auth Provider
-# @param authProvider.enabled Enables or disables the authentication provider for Permissions UI and Tasks Admin UI access.
-# @param authProvider.host Host address of the authentication provider. Must point to the pro-api-permissions URL. **Required if** `authProvider.enabled: true`
-# @param authProvider.schema Authentication scheme to use. Supported values: `Basic`, `Oidc`. **Required if** `authProvider.enabled: true`
-# @param authProvider.allowedHosts List of allowed hosts. For allowed all hosts use `['*']`
+# @param authProvider.host Host address of the authentication provider. Must point to the pro-api-permissions URL. **Required**
+# @param authProvider.schema Authentication scheme to use. Supported values: `Basic`, `Oidc`. **Required**
+# @param authProvider.allowedHosts List of allowed hosts for accessing `authProvider`. For allowing all hosts use `['*']`. Example: ['pro-api-permissions.example.com','pro-api-tasks.example.com']
 # @param authProvider.basic.users[0].username Username for basic authentication. **Required if** `authProvider.schema: Basic`
 # @param authProvider.basic.users[0].password Password for basic authentication. **Required if** `authProvider.schema: Basic`
 # @param authProvider.basic.users[0].roles Roles assigned to the user. The values are arbitrary strings. The parameters `permissions.settings.auth.uiRequiredRoles` and `tasks.settings.auth.adminRequiredRoles` must reference the roles defined here. **Required if** `authProvider.schema: Basic`
@@ -795,9 +795,8 @@ postgres:
 # @param authProvider.oidc.clientId Client ID registered with the OIDC provider. **Required if** `authProvider.schema: Oidc`
 # @param authProvider.oidc.clientSecret Client secret for the OIDC provider. **Required if** `authProvider.schema: Oidc`
 # @param authProvider.oidc.nameClaim Claim name that contains the user's name. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
-# @param authProvider.oidc.roleClaim Claim name that contains the user's role. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
+# @param authProvider.oidc.roleClaim Claim name that contains the user's roles. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
 authProvider:
-  enabled: false
   host: ''
   schema: ''
   allowedHosts: []
@@ -911,7 +910,7 @@ digger:
 # @section Catalog API settings
 
 # @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc
-# @param catalog.key Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).
+# @param catalog.key Client access key for the Catalog API, issued by Keys API. The key must have the **search** feature enabled.
 
 catalog:
   url: ''
@@ -920,8 +919,9 @@ catalog:
 
 # @section Navigation API settings
 
-# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-back.svc
-# @param navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-front.svc
+# @param navi.key Client access key for the Navigation API, issued by Keys API. The key must have the **isochrone** feature enabled.
+
 
 navi:
   url: ''
