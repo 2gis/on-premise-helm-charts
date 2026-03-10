@@ -787,7 +787,7 @@ postgres:
 # @title Auth Provider
 # @param authProvider.host Host address of the authentication provider. Must point to the pro-api-permissions URL. **Required**
 # @param authProvider.schema Authentication scheme to use. Supported values: `Basic`, `Oidc`. **Required**
-# @param authProvider.allowedHosts List of allowed hosts. For allowed all hosts use `['*']`
+# @param authProvider.allowedHosts List of allowed hosts for accessing `authProvider`. For allowing all hosts use `['*']`. Example: ['pro-api-permissions.example.com','pro-api-tasks.example.com']
 # @param authProvider.basic.users[0].username Username for basic authentication. **Required if** `authProvider.schema: Basic`
 # @param authProvider.basic.users[0].password Password for basic authentication. **Required if** `authProvider.schema: Basic`
 # @param authProvider.basic.users[0].roles Roles assigned to the user. The values are arbitrary strings. The parameters `permissions.settings.auth.uiRequiredRoles` and `tasks.settings.auth.adminRequiredRoles` must reference the roles defined here. **Required if** `authProvider.schema: Basic`
