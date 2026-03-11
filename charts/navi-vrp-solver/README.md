@@ -43,7 +43,7 @@
 | Name               | Description | Value                             |
 | ------------------ | ----------- | --------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-vrp-solver` |
-| `image.tag`        | Tag         | `1.13.1`                          |
+| `image.tag`        | Tag         | `1.16.2`                          |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                    |
 
 ### Navi VRP Solver application settings

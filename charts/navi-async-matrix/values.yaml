@@ -84,7 +84,7 @@ customStartupProbe: {}
 image:
   repository: 2gis-on-premise/navi-async-matrix
   pullPolicy: IfNotPresent
-  tag: 1.22.0
+  tag: 1.22.3
 
 
 # @section Service account settings
@@ -256,7 +256,7 @@ dm:
     replicaCount: 1
     image:
       repository: 2gis-on-premise/navi-merger-async-matrix
-      tag: 1.22.0
+      tag: 1.22.3
     livenessProbe:
       enabled: true
       initialDelaySeconds: 20

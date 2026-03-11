@@ -49,7 +49,7 @@ terminationGracePeriodSeconds: 60
 image:
   repository: 2gis-on-premise/navi-vrp-task-manager
   pullPolicy: IfNotPresent
-  tag: 1.13.1
+  tag: 1.16.2
 
 
 # @section Navi VRP Task Manager application settings
