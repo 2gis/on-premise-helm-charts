@@ -40,6 +40,7 @@ spec:
                   secretKeyRef:
                     name: {{ include "navi-async-matrix.fullname" . | quote }}
                     key: dbDsn
+              command: ["/opt/dm_async_app"]
               args: ["--clean-finished-tasks"]
               {{- if .Values.db.tls.enabled }}
               volumeMounts:
