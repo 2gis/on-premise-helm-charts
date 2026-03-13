@@ -9,14 +9,7 @@ spec:
     {{- . | toYaml | nindent 4 }}
   {{- end }}
   parentRefs:
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: canary
-      namespace: istio-gateways
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: stable
-      namespace: istio-gateways
+    {{- include "generic-chart.httpRouteParentRefs" . | nindent 4 }}
   rules:
     - backendRefs:
         - group: ""
