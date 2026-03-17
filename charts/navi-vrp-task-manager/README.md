@@ -43,7 +43,7 @@
 | Name               | Description | Value                                   |
 | ------------------ | ----------- | --------------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-vrp-task-manager` |
-| `image.tag`        | Tag         | `1.16.2`                                |
+| `image.tag`        | Tag         | `""`                                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                          |
 
 ### Navi VRP Task Manager application settings
@@ -191,9 +191,10 @@
 
 ### API Distance Matrix Async service
 
-| Name           | Description                                                                                                                    | Value   |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| `dm.url`       | Distance Matrix Async service URL. **Required**                                                                                | `""`    |
-| `dm.key`       | API key to authorize at the service. **Required**                                                                              | `""`    |
-| `stat.enabled` | Is integration with statistic service enabled                                                                                  | `false` |
-| `stat.url`     | URL of the statistic service (e.g - http(s)://stat-receiver/bss/3). **Required** if integration with statistic service enabled | `""`    |
+| Name                      | Description                                                                                                                    | Value   |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `dm.url`                  | Distance Matrix Async service URL. **Required**                                                                                | `""`    |
+| `dm.key`                  | API key to authorize at the service. **Required**                                                                              | `""`    |
+| `stat.enabled`            | Is integration with statistic service enabled                                                                                  | `false` |
+| `stat.url`                | URL of the statistic service (e.g - http(s)://stat-receiver/bss/3). **Required** if integration with statistic service enabled | `""`    |
+| `cities.linkToCitiesFile` | Link to cities.conf file (e.g. - http(s)://castle.svc/cities.conf). **Required**                                               | `""`    |
