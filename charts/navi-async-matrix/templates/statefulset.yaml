@@ -43,6 +43,7 @@ spec:
       {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
+        app.kubernetes.io/component: {{ include "generic-chart.fullname" . }} 
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

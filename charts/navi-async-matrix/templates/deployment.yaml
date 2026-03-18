@@ -17,8 +17,8 @@ spec:
         checksum/custom-ca: {{ (include (print $.Template.BasePath "/configmap-ca.yaml") . | fromYaml).data | toYaml | sha256sum }}
         {{- end }}
       labels:
-        app.kubernetes.io/name: {{ include "generic-chart.name" . }}-merger
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "navi-async-matrix.mergerlabels" . | nindent 8 }}
+        app.kubernetes.io/component: {{ include "generic-chart.fullname" . }}-merger
     spec:
       volumes:
       {{- $kafkaVolumeMounted := (

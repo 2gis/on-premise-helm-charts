@@ -230,6 +230,9 @@ vpa:
 # @param dm.merger.readinessProbe.periodSeconds Period seconds for readinessProbe for merger.
 # @param dm.merger.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe for merger.
 # @param dm.merger.readinessProbe.failureThreshold Failure threshold for readinessProbe for merger.
+# @param dm.merger.pdb.enabled If PDB is enabled for the merger
+# @param dm.merger.pdb.minAvailable How many pods must be available after the eviction of merger
+# @param dm.merger.pdb.maxUnavailable How many pods can be unavailable after the eviction of merger
 # @param dm.merger.customLivenessProbe Override default liveness probe for merger.
 # @param dm.merger.customReadinessProbe Override default readiness probe for merger.
 # @skip dm.merger.resources
@@ -269,6 +272,10 @@ dm:
       periodSeconds: 5
       timeoutSeconds: 3
       failureThreshold: 3
+    pdb:
+      enabled: true
+      minAvailable: ''
+      maxUnavailable: 1
     customLivenessProbe: {}
     customReadinessProbe: {}
     resources: {}

@@ -14,6 +14,7 @@ spec:
         metadata:
           labels:
             app: "{{ $name }}-cleanup-cron"
+            app.kubernetes.io/component: "{{ $name }}-cronjob"
         spec:
           {{- if .Values.db.tls.enabled }}
           volumes:
