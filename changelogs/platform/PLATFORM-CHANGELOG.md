@@ -1,3 +1,30 @@
+## [2.51.0] (2026-03-19)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2510)
+#### Images
+```
+navi-async-matrix
+	- navi-async-matrix:1.20.1
+	+ navi-async-matrix:1.22.3
+	- navi-merger-async-matrix:1.20.1
+	+ navi-merger-async-matrix:1.22.3
+navi-attractor
+	- navi-attractor:7.49.0.3
+	+ navi-attractor:7.52.1.2
+navi-back
+	- navi-back:7.49.0.3
+	+ navi-back:7.52.1.2
+navi-router
+	- navi-router:6.38.0.2
+	+ navi-router:6.40.0.2
+navi-vrp-solver
+	- navi-vrp-solver:1.13.1
+	+ navi-vrp-solver:1.16.3
+navi-vrp-task-manager
+	- navi-vrp-task-manager:1.13.1
+	+ navi-vrp-task-manager:1.16.3
+```
+[Full list of image versions](platform_image_versions.txt)
+
 ## [2.50.0] (2026-02-26)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2500)
 #### Images
