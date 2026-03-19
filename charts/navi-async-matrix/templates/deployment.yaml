@@ -17,8 +17,8 @@ spec:
         checksum/custom-ca: {{ (include (print $.Template.BasePath "/configmap-ca.yaml") . | fromYaml).data | toYaml | sha256sum }}
         {{- end }}
       labels:
-        app.kubernetes.io/name: {{ include "generic-chart.name" . }}-merger
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "navi-async-matrix.mergerlabels" . | nindent 8 }}
+        app.kubernetes.io/component: {{ include "generic-chart.fullname" . }}-merger
     spec:
       volumes:
       {{- $kafkaVolumeMounted := (
@@ -34,6 +34,13 @@ spec:
           secret:
             secretName: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
       {{- end }}
+      {{- if .Values.db.tls.enabled }}
+        - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
+          secret:
+            secretName: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+        - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+          emptyDir: {}
+      {{- end }}
       {{- if .Values.customCAs.bundle }}
         - name: {{ include "navi-async-matrix.fullname" . }}-ca
           configMap:
@@ -41,6 +48,29 @@ spec:
       {{- end }}
       # TODO: SA name from generic-chart
       serviceAccountName: {{ include "navi-async-matrix.serviceAccountName" . }}
+      initContainers:
+        {{- if .Values.db.tls.enabled }}
+        - name: copy-certs
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              cp /tmp/certs/* {{ printf "%s/secret/psql/" .Values.dm.configFilepath | quote }}
+              chmod 600 {{ printf "%s/secret/psql/client.key" .Values.dm.configFilepath | quote }}
+          volumeMounts:
+            - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
+              mountPath: /tmp/certs
+            - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
+              mountPath: {{ printf "%s/secret/psql" .Values.dm.configFilepath | quote }}
+        {{- end }}
       containers:
         - name: {{ .Chart.Name }}-merger
           securityContext:
@@ -82,6 +112,12 @@ spec:
               value: {{ .Values.dm.logFormat | quote }}
             - name: LOGGER_SETTING__VERBOSE
               value: "true"
+            {{- if .Values.sentry.enabled }}
+            - name: SENTRY__DSN
+              value: {{ .Values.sentry.address | quote }}
+            - name: SENTRY__ENVIRONMENT
+              value: {{ .Values.sentry.environment | quote }}
+            {{- end }}
             - name: S3_ENDPOINT_URL
               value: {{ required "A valid s3.host entry required" .Values.s3.host | quote }}
             - name: S3_BUCKET
@@ -95,6 +131,13 @@ spec:
                 secretKeyRef:
                   name: {{ include "navi-async-matrix.fullname" . | quote }}
                   key: s3key
+            - name: DATABASE__SCHEMA_NAME
+              value: {{ .Values.db.schema | quote }}
+            - name: DATABASE__DSN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  key: dbDsn
             - name: KAFKA_PRODUCER_SETTING__TOPIC
               value: {{ required "A valid kafka.mergerStatusTopic entry required" .Values.kafka.mergerStatusTopic | quote }}
             - name: KAFKA_CONSUMER_SETTING__TOPIC
@@ -125,6 +168,10 @@ spec:
             mountPath: {{ printf "%s/secret/consumer/" $.Values.dm.configFilepath | quote }}
           - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
             mountPath: {{ printf "%s/secret/producer/" $.Values.dm.configFilepath | quote }}
+          {{- end }}
+          {{- if .Values.db.tls.enabled }}
+          - name: {{ printf "%s-psql" (include "navi-async-matrix.fullname" .) | quote }}
+            mountPath: {{ printf "%s/secret/psql" .Values.dm.configFilepath | quote }}
           {{- end }}
           {{- if .Values.customCAs.bundle }}
           - name: {{ include "navi-async-matrix.fullname" . }}-ca
