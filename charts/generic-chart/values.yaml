@@ -207,3 +207,19 @@ networkPolicy:
   egress:
     enabled: false
     config: []
+
+# @section [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+
+# @param httpRoute.hostnames List of hostnames served by route
+
+httpRoute:
+  hostnames: []
+
+# @section [GRPCRoute](https://gateway-api.sigs.k8s.io/api-types/grpcroute/) configuration
+
+# @param grpcRoute.hostnames List of hostnames served by route
+# @param grpcRoute.port Destination grpcroute.spec.rules.backendRefs.port number, must be set if grpcRoute.enabled is true
+
+grpcRoute:
+  hostnames: []
+  port: null

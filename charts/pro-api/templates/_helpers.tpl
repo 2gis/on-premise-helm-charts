@@ -1,3 +1,7 @@
+{{- define "pro-api.namespace" -}}
+{{ .Release.Namespace }}
+{{- end }}
+
 {{- define "pro-api.name" -}}
 {{- if .Values.api.pod.fullnameOverride -}}
 {{- .Values.api.pod.fullnameOverride | trunc 63 | trimSuffix "-" -}}
@@ -222,3 +226,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{- define "pro-api.secretName" -}}
+{{ printf "%s-secret" (include "pro-api.name" .) }}
+{{- end }}

@@ -112,7 +112,7 @@ spec:
             - name: STORAGE__DM__BUCKET
               value: {{ .Values.s3.dm.bucket | quote }}
             - name: MOSES__URL
-              value: {{ .Values.naviBack.url | quote }}
+              value: {{ .Values.naviFront.url | quote }}
             - name: KAFKA__PRODUCER__TOPIC
               value: {{ .Values.kafka.statusTopic | quote }}
             - name: KAFKA__CONSUMER__TOPIC

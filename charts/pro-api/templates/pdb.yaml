@@ -17,5 +17,5 @@ spec:
   selector:
     matchLabels:
       {{- include "pro-api.selectorLabels" $ | nindent 6 }}
-{{- end }}
-{{- end }}
+  {{- end }}
+  {{- end }}

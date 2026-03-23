@@ -1,22 +1,12 @@
-{{- with .Values.pdb }}
-{{- if .enabled }}
----
-
-apiVersion: policy/v1
-kind: PodDisruptionBudget
+{{- define "dmasync.pdb" }}
 metadata:
-  name: {{ include "navi-async-matrix.fullname" $ }}
-  labels:
-    {{- include "navi-async-matrix.labels" $ | nindent 4 }}
+  name: {{ (include "navi-async-matrix.fullname" $) }}
 spec:
-  {{- if .minAvailable }}
-  minAvailable: {{ .minAvailable }}
-  {{- end }}
-  {{- if .maxUnavailable }}
-  maxUnavailable: {{ .maxUnavailable }}
-  {{- end }}
   selector:
     matchLabels:
-      {{- include "navi-async-matrix.selectorLabels" $ | nindent 6 }}
+{{ include "navi-async-matrix.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: {{ include "generic-chart.fullname" . }}
 {{- end }}
+{{- if .Values.pdb.enabled }}
+{{- template "generic-chart.merge" (list . "dmasync.pdb" "generic-chart.pdb.tpl") }}
 {{- end }}

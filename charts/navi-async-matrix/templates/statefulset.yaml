@@ -43,6 +43,7 @@ spec:
       {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
+        app.kubernetes.io/component: {{ include "generic-chart.fullname" . }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -237,17 +238,23 @@ spec:
             - name: DM_ASYNC_SERVICE_FIND_PLATFORM_TOPIC_RULES
               value: {{ .Values.kafka.findPlatformTopicRules | mustToJson | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ATTRACT_TOPIC
-              value: {{ required "A valid kafka.attractTopic entry required" .Values.kafka.attractTopic | quote }}
+              value: {{ .Values.kafka.attractTopic | default "" | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ONE_TO_MANY_TOPIC
               value: {{ required "A valid kafka.oneToManyTopic entry required" .Values.kafka.oneToManyTopic | quote }}
             - name: DM_ASYNC_SERVICE_ATTRACT_TOPIC_RULES
-              value: {{ required "A valid kafka.attractTopicRules entry required" .Values.kafka.attractTopicRules | mustToJson | quote }}
+              value: {{ .Values.kafka.attractTopicRules | mustToJson | quote }}
             {{- if .Values.kafka.vrpStatusTopic }}
             - name: DM_ASYNC_SERVICE_SUBSCRIBER_TOPIC
               value: {{ .Values.kafka.vrpStatusTopic | quote }}
             {{- end }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ARCHIVE_RESPONSE_TOPIC
               value: {{ required "A valid kafka.mergerStatusTopic entry required" .Values.kafka.mergerStatusTopic | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__MAX_MESSAGE_SIZE_BYTES
+              value: {{ .Values.kafka.maxMessageSizeBytes | int | quote }}
+            {{- if .Values.kafka.compressionType }}
+            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__COMPRESSION_TYPE
+              value: {{ .Values.kafka.compressionType | quote }}
+            {{- end }}
             - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__CONFIG_TYPE
               value: default
             - name: DM_ASYNC_SERVICE_COMPOSITE_TASK_TIMEOUT_IN_SECONDS
@@ -258,7 +265,7 @@ spec:
             - name: DM_ASYNC_SERVICE_REDIRECT_HEADER
               value: {{ .Values.multiDc.redirectHeader | default "" | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ATTRACT_TOPIC
-              value: {{ required "A valid multiDc.secondaryTopics.attractTopic entry required" .Values.multiDc.secondaryTopics.attractTopic | quote }}
+              value: {{ .Values.multiDc.secondaryTopics.attractTopic | default "" | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ONE_TO_MANY_TOPIC
               value: {{ required "A valid multiDc.secondaryTopics.oneToManyTopic entry required" .Values.multiDc.secondaryTopics.oneToManyTopic | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ARCHIVE_RESPONSE_TOPIC
@@ -275,6 +282,12 @@ spec:
               value: {{ required "A valid .Values.stat.url entry required" .Values.stat.url | quote }}
             - name: DM_ASYNC_SERVICE_BSS__VERSION
               value: {{ .Values.stat.version | quote }}
+            {{- end }}
+            {{- if .Values.sentry.enabled }}
+            - name: DM_ASYNC_SERVICE_SENTRY__DSN
+              value: {{ .Values.sentry.address | quote }}
+            - name: DM_ASYNC_SERVICE_SENTRY__ENVIRONMENT
+              value: {{ .Values.sentry.environment | quote }}
             {{- end }}
             {{- range $kafkaRole, $overridesProperty := (dict
                   "PRODUCER" "producerOverrides"
@@ -303,11 +316,13 @@ spec:
                   name: {{ include "navi-async-matrix.fullname" . | quote }}
                   key: dbDsn
             {{- if .Values.db.expirationSec }}
+            {{- if not .Values.cronjob.cleanup.enabled }}
             - name: DM_ASYNC_SERVICE_DB_EXPIRATION_IN_SEC
               value: {{ .Values.db.expirationSec | quote }}
             - name: DM_ASYNC_SERVICE_DB_EXPIRATION_CHECK_PERIOD
               value: {{ .Values.db.expirationPeriodSec | quote }}
-            {{- end }}
+            {{- end }}{{/* not .Values.cronjob.cleanup.enabled */}}
+            {{- end }}{{/* .Values.db.expirationSec */}}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:

@@ -173,6 +173,15 @@ tilegen:
   logLevelOverride: ''
   logFormatOverride: ''
 
+  # @extra tilegen.cqlRetryPolicy **CQL retry policy settings**
+  # @param tilegen.cqlRetryPolicy.retryCount Number of retry attempts.
+  # @param tilegen.cqlRetryPolicy.minDelay Minimum delay between retries.
+  # @param tilegen.cqlRetryPolicy.maxDelay Maximum delay between retries.
+  cqlRetryPolicy:
+    retryCount: 3
+    minDelay: 100ms
+    maxDelay: 1s
+
   tileset:
     name: userdata
     keyspace: dgis_userdata
@@ -183,7 +192,7 @@ tilegen:
   # @param tilegen.image.pullPolicy Kubernetes pull policy for the service's Docker image.
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.80.3
+    tag: 4.81.3
     pullPolicy: IfNotPresent
 
   labels: {}
@@ -269,7 +278,7 @@ tilegen:
 
 # @extra proxy.access **API Keys service access settings**
 # @param proxy.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
-# @param proxy.access.url API Keys endpoint url, ex: http://keys-api.svc. **Required**
+# @param proxy.access.url API Keys endpoint url, ex: http://keys-service-api.svc. **Required**
 # @param proxy.access.syncPeriod Proxy sync period.
 # @param proxy.access.raster.token Service key for raster data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).
 # @param proxy.access.vector.token Service key for vector and mapbox data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).
@@ -292,7 +301,7 @@ proxy:
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.80.3
+    tag: 4.81.3
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -362,8 +371,17 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.80.3
+    tag: 4.81.3
     pullPolicy: IfNotPresent
+
+  # @extra api.cqlRetryPolicy **Cassandra retry policy settings**
+  # @param api.cqlRetryPolicy.retryCount Number of retry attempts.
+  # @param api.cqlRetryPolicy.minDelay Minimum delay between retries.
+  # @param api.cqlRetryPolicy.maxDelay Maximum delay between retries.
+  cqlRetryPolicy:
+    retryCount: 1
+    minDelay: 0s
+    maxDelay: 0s
 
   terminationGracePeriodSeconds: 30
   containerPort: 8000
@@ -511,6 +529,15 @@ importer:
   logLevelOverride: ''
   logFormatOverride: ''
 
+  # @extra importer.cqlRetryPolicy **Cassandra retry policy settings**
+  # @param importer.cqlRetryPolicy.retryCount Number of retry attempts.
+  # @param importer.cqlRetryPolicy.minDelay Minimum delay between retries.
+  # @param importer.cqlRetryPolicy.maxDelay Maximum delay between retries.
+  cqlRetryPolicy:
+    retryCount: 3
+    minDelay: 100ms
+    maxDelay: 1s
+
   # @extra importer.image **Docker image settings**
   # @param importer.image.repository Docker Repository.
   # @param importer.image.tag Docker image tag.
@@ -518,7 +545,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.80.3
+    tag: 4.81.3
     pullPolicy: IfNotPresent
 
 
