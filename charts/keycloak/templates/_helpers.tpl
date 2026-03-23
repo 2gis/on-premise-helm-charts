@@ -1,111 +1,79 @@
 {{/*
-Expand the name of the chart.
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
 */}}
-{{- define "keycloak.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
 
-{{- define "keycloak.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{/*
+Return the proper Keycloak image name
+*/}}
+{{- define "keycloak.image" -}}
+{{ .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+{{- end -}}
+
+{{/*
+Return the proper keycloak-config-cli image name
+*/}}
+{{- define "keycloak.keycloakConfigCli.image" -}}
+{{ .Values.dgctlDockerRegistry }}/{{ .Values.keycloakConfigCli.image.repository }}:{{ .Values.keycloakConfigCli.image.tag }}
+{{- end -}}
+
+{{/*
+Return the proper keycloak-themes image name
+*/}}
+{{- define "keycloak.keycloakThemes.image" -}}
+{{ .Values.dgctlDockerRegistry }}/{{ .Values.keycloakThemes.image.repository }}:{{ .Values.keycloakThemes.image.tag }}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "keycloak.imagePullSecrets" -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.keycloakConfigCli.image) "context" .) -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified postgresql name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "keycloak.postgresql.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" .) -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified headless service name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "keycloak.headless.serviceName" -}}
+{{- printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified headless service name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "keycloak.headless.ispn.serviceName" -}}
+{{- printf "%s-headless-ispn-%s" (include "common.names.fullname" .) (replace "." "-" .Chart.AppVersion) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "keycloak.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "keycloak.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Common labels
-*/}}
-{{- define "keycloak.labels" -}}
-helm.sh/chart: {{ include "keycloak.chart" . }}
-{{ include "keycloak.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "keycloak.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "keycloak.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Allow the release namespace to be overridden for multi-namespace deployments in combined charts.
-*/}}
-{{- define "keycloak.names.namespace" -}}
-{{- default .Release.Namespace .Values.namespaceOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{- define "keycloak.tplvalues.render" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
-{{- end -}}
-
-{{- define "keycloak.serviceAccount" -}}
-{{- if empty $.Values.serviceAccountOverride }}
-{{- include "keycloak.fullname" . }}
-{{- else }}
-{{- $.Values.serviceAccountOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-
-{{/*
-Return the path Keycloak is hosted on. This looks at httpRelativePath and returns it with a trailing slash. For example:
-    / -> / (the default httpRelativePath)
-    /auth -> /auth/ (trailing slash added)
-    /custom/ -> /custom/ (unchanged)
-*/}}
-{{- define "keycloak.httpPath" -}}
-{{ ternary .Values.httpRelativePath (printf "%s%s" .Values.httpRelativePath "/") (hasSuffix "/" .Values.httpRelativePath) }}
-{{- end -}}
-
-{{/*
-Return the Keycloak configuration configmap
+Return the Keycloak configuration ConfigMap name.
 */}}
 {{- define "keycloak.configmapName" -}}
 {{- if .Values.existingConfigmap -}}
-    {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
+    {{- tpl .Values.existingConfigmap . -}}
 {{- else -}}
-    {{- printf "%s-configuration" (include "keycloak.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if a configmap object should be created
-*/}}
-{{- define "keycloak.createConfigmap" -}}
-{{- if and .Values.configuration (not .Values.existingConfigmap) }}
-    {{- true -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the Keycloak initdb scripts configmap
-*/}}
-{{- define "keycloak.initdbScriptsCM" -}}
-{{- if .Values.initdbScriptsConfigMap -}}
-    {{- printf "%s" .Values.initdbScriptsConfigMap -}}
-{{- else -}}
-    {{- printf "%s-init-scripts" (include "keycloak.fullname" .) -}}
+    {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -113,11 +81,10 @@ Return the Keycloak initdb scripts configmap
 Return the secret containing the Keycloak admin password
 */}}
 {{- define "keycloak.secretName" -}}
-{{- $secretName := .Values.auth.existingSecret -}}
-{{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+{{- if .Values.auth.existingSecret -}}
+    {{- tpl .Values.auth.existingSecret . -}}
 {{- else -}}
-    {{- printf "%s" (include "keycloak.fullname" .) | trunc 63 | trimSuffix "-" -}}
+    {{- include "common.names.fullname" . -}}
 {{- end -}}
 {{- end -}}
 
@@ -125,82 +92,148 @@ Return the secret containing the Keycloak admin password
 Return the secret key that contains the Keycloak admin password
 */}}
 {{- define "keycloak.secretKey" -}}
-{{- $secretName := .Values.auth.existingSecret -}}
-{{- if and $secretName .Values.auth.passwordSecretKey -}}
-    {{- printf "%s" .Values.auth.passwordSecretKey -}}
+{{- if and .Values.auth.existingSecret .Values.auth.passwordSecretKey -}}
+    {{- tpl .Values.auth.passwordSecretKey . -}}
 {{- else -}}
     {{- print "admin-password" -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
+Return the keycloak-config-cli configuration ConfigMap name.
+*/}}
+{{- define "keycloak.keycloakConfigCli.configmapName" -}}
+{{- if .Values.keycloakConfigCli.existingConfigmap -}}
+    {{- tpl .Values.keycloakConfigCli.existingConfigmap . -}}
+{{- else -}}
+    {{- printf "%s-keycloak-config-cli-configmap" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Database hostname
+*/}}
+{{- define "keycloak.database.host" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- include "keycloak.postgresql.fullname" . -}}{{- if eq .Values.postgresql.architecture "replication" }}-primary{{- end -}}
+{{- else -}}
+    {{- tpl .Values.externalDatabase.host . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Database port
+*/}}
+{{- define "keycloak.database.port" -}}
+{{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled -}}
+{{- end -}}
+
+{{/*
+Return the Database database name
+*/}}
+{{- define "keycloak.database.name" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- coalesce (((.Values.global).postgresql).auth).database .Values.postgresql.auth.database "postgres" -}}
+{{- else -}}
+    {{- tpl .Values.externalDatabase.database . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Database user
+*/}}
+{{- define "keycloak.database.user" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- coalesce (((.Values.global).postgresql).auth).username .Values.postgresql.auth.username | default "" -}}
+{{- else -}}
+    {{- tpl .Values.externalDatabase.user . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Database schema
+*/}}
+{{- define "keycloak.database.schema" -}}
+{{- ternary "public" .Values.externalDatabase.schema .Values.postgresql.enabled -}}
+{{- end -}}
+
+{{/*
+Return extra connection parameters for the Database DSN
+*/}}
+{{- define "keycloak.database.extraParams" -}}
+{{- if .Values.externalDatabase.extraParams -}}
+    {{- printf "&%s" (tpl .Values.externalDatabase.extraParams .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Database secret name
+*/}}
+{{- define "keycloak.database.secretName" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- if not (empty (coalesce (((.Values.global).postgresql).auth).existingSecret .Values.postgresql.auth.existingSecret | default "")) -}}
+        {{- tpl (coalesce (((.Values.global).postgresql).auth).existingSecret .Values.postgresql.auth.existingSecret) . -}}
+    {{- else -}}
+        {{- include "keycloak.postgresql.fullname" . -}}
+    {{- end -}}
+{{- else if not (empty .Values.externalDatabase.existingSecret) -}}
+    {{- tpl .Values.externalDatabase.existingSecret . -}}
+{{- else -}}
+    {{- printf "%s-externaldb" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Database secret key that contains the database user
+*/}}
+{{- define "keycloak.database.secretUserKey" -}}
+{{- default "db-user" .Values.externalDatabase.existingSecretUserKey -}}
+{{- end -}}
+
+{{/*
+Return the Database secret key that contains the database password
+*/}}
+{{- define "keycloak.database.secretPasswordKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- default "password" .Values.postgresql.auth.secretKeys.userPasswordKey -}}
+{{- else if .Values.externalDatabase.existingSecret -}}
+    {{- default "db-password" .Values.externalDatabase.existingSecretPasswordKey -}}
+{{- else -}}
+    {{- print "db-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Keycloak initdb scripts ConfigMap name.
+*/}}
+{{- define "keycloak.initdbScripts.configmapName" -}}
+{{- if .Values.initdbScriptsConfigMap -}}
+    {{- tpl .Values.initdbScriptsConfigMap . -}}
+{{- else -}}
+    {{- printf "%s-init-scripts" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the secret containing Keycloak HTTPS/TLS certificates
 */}}
-{{- define "keycloak.tlsSecretName" -}}
-{{- $secretName := .Values.tls.existingSecret -}}
-{{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+{{- define "keycloak.tls.secretName" -}}
+{{- if .Values.tls.existingSecret -}}
+    {{- tpl .Values.tls.existingSecret . -}}
 {{- else -}}
-    {{- printf "%s-crt" (include "keycloak.fullname" .) -}}
+    {{- printf "%s-crt" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return the secret containing Keycloak HTTPS/TLS keystore and truststore passwords
 */}}
-{{- define "keycloak.tlsPasswordsSecretName" -}}
-{{- $secretName := .Values.tls.passwordsSecret -}}
-{{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+{{- define "keycloak.tls.passwordsSecretName" -}}
+{{- if .Values.tls.passwordsSecret -}}
+    {{- tpl .Values.tls.passwordsSecret . -}}
 {{- else -}}
-    {{- printf "%s-tls-passwords" (include "keycloak.fullname" .) | trunc 63 | trimSuffix "-" -}}
+    {{- printf "%s-tls-passwords" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Return the secret containing Keycloak SPI TLS certificates
-*/}}
-{{- define "keycloak.spiPasswordsSecretName" -}}
-{{- $secretName := .Values.spi.passwordsSecret -}}
-{{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
-{{- else -}}
-    {{- printf "%s-spi-passwords" (include "keycloak.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if a TLS secret object should be created
-*/}}
-{{- define "keycloak.createTlsSecret" -}}
-{{- if and .Values.tls.enabled .Values.tls.autoGenerated (not .Values.tls.existingSecret) }}
-    {{- true -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Reuses the value from an existing secret, otherwise sets its value to a default value.
-
-Usage:
-{{ include "common.secrets.lookup" (dict "secret" "secret-name" "key" "keyName" "defaultValue" .Values.myValue "context" $) }}
-
-Params:
-  - secret - String - Required - Name of the 'Secret' resource where the password is stored.
-  - key - String - Required - Name of the key in the secret.
-  - defaultValue - String - Required - The path to the validating value in the values.yaml, e.g: "mysql.password". Will pick first parameter with a defined value.
-  - context - Context - Required - Parent context.
-
-*/}}
-{{- define "keycloak.secrets.lookup" -}}
-{{- $value := "" -}}
-{{- $defaultValue := required "\n'keycloak.secrets.lookup': Argument 'defaultValue' missing or empty" .defaultValue -}}
-{{- $secretData := (lookup "v1" "Secret" (include "keycloak.names.namespace" .context) .secret).data -}}
-{{- if and $secretData (hasKey $secretData .key) -}}
-  {{- $value = index $secretData .key -}}
-{{- else -}}
-  {{- $value = $defaultValue | toString | b64enc -}}
-{{- end -}}
-{{- printf "%s" $value -}}
 {{- end -}}
 
 {{/*
@@ -208,6 +241,7 @@ Compile all warnings into a single message.
 */}}
 {{- define "keycloak.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "keycloak.validateValues.database" .) -}}
 {{- $messages := append $messages (include "keycloak.validateValues.tls" .) -}}
 {{- $messages := append $messages (include "keycloak.validateValues.production" .) -}}
 {{- $messages := without $messages "" -}}
@@ -218,51 +252,33 @@ Compile all warnings into a single message.
 {{- end -}}
 {{- end -}}
 
+{{/* Validate values of Keycloak - database */}}
+{{- define "keycloak.validateValues.database" -}}
+{{- if and (not .Values.postgresql.enabled) (not .Values.externalDatabase.host) -}}
+keycloak: database
+    You disabled the PostgreSQL sub-chart but did not specify an external PostgreSQL host.
+    Either deploy the PostgreSQL sub-chart (--set postgresql.enabled=true),
+    or set a value for the external database host (--set externalDatabase.host=FOO)
+    and set a value for the external database password (--set externalDatabase.password=BAR)
+    or existing secret (--set externalDatabase.existingSecret=BAR).
+{{- end -}}
+{{- end -}}
+
 {{/* Validate values of Keycloak - TLS enabled */}}
 {{- define "keycloak.validateValues.tls" -}}
-{{- if and .Values.tls.enabled (not .Values.tls.autoGenerated) (not .Values.tls.existingSecret) }}
+{{- if and .Values.tls.enabled (not .Values.tls.autoGenerated.enabled) (not .Values.tls.existingSecret) }}
 keycloak: tls.enabled
-    In order to enable TLS, you also need to provide
-    an existing secret containing the Keystore and Truststore or
-    enable auto-generated certificates.
+    In order to enable TLS, you need to provide a secret with the TLS
+    certificates (--set tls.existingSecret=FOO) or enable auto-generated
+    TLS certificates (--set tls.autoGenerated.enabled=true).
 {{- end -}}
 {{- end -}}
 
 {{/* Validate values of Keycloak - Production mode enabled */}}
 {{- define "keycloak.validateValues.production" -}}
-{{- if and .Values.production (not .Values.tls.enabled) (not (eq .Values.proxy "edge")) -}}
+{{- if and .Values.production (not .Values.tls.enabled) (empty .Values.proxyHeaders) -}}
 keycloak: production
-    In order to enable Production mode, you also need to enable HTTPS/TLS
-    using the value 'tls.enabled' and providing an existing secret containing the Keystore and Trustore.
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the target Kubernetes version
-*/}}
-{{- define "capabilities.kubeVersion" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.kubeVersion }}
-    {{- .Values.global.kubeVersion -}}
-    {{- else }}
-    {{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
-    {{- end -}}
-{{- else }}
-{{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for Horizontal Pod Autoscaler.
-*/}}
-{{- define "capabilities.hpa.apiVersion" -}}
-{{- if semverCompare "<1.23-0" (include "capabilities.kubeVersion" .) -}}
-{{- if .beta2 -}}
-{{- print "autoscaling/v2beta2" -}}
-{{- else -}}
-{{- print "autoscaling/v2beta1" -}}
-{{- end -}}
-{{- else -}}
-{{- print "autoscaling/v2" -}}
+    In order to enable Production mode, you also need to enable
+    HTTPS/TLS (--set tls.enabled=true) or use proxy headers (--set proxyHeaders=FOO).
 {{- end -}}
 {{- end -}}

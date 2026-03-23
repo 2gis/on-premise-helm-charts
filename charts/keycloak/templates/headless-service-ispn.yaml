@@ -3,10 +3,11 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if and .Values.cache.enabled .Values.cache.useHeadlessServiceWithAppVersion }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "keycloak.headless.serviceName" . }}
+  name: {{ template "keycloak.headless.ispn.serviceName" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
     app.kubernetes.io/component: keycloak
@@ -39,3 +40,5 @@ spec:
   selector: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 4 }}
     app.kubernetes.io/component: keycloak
     app.kubernetes.io/part-of: keycloak
+    app.kubernetes.io/app-version: {{ .Chart.AppVersion | quote }}
+{{- end }}
