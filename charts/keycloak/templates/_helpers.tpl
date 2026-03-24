@@ -287,9 +287,16 @@ keycloak: production
 Check input values
 */}}
 {{- define "keycloak.check-values" -}}
-{{- if .Values.defaultUser.enabled }}
-{{ $username := required "A valid .Values.defaultUser.name entry required" .Values.defaultUser.name }}
-{{ $email := required "A valid .Values.defaultUser.email entry required" .Values.defaultUser.email }}
-{{ $password := required "A valid .Values.defaultUser.password entry required" .Values.defaultUser.password }}
-{{- end }}
+{{- $registry := required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry -}}
+{{- if not .Values.postgresql.enabled -}}
+{{- $externalHost := required "A valid .Values.externalDatabase.host entry required" .Values.externalDatabase.host  -}}
+{{- $externalPort := required "A valid .Values.externalDatabase.port entry required" .Values.externalDatabase.port  -}}
+{{- $externalDatabase := required "A valid .Values.externalDatabase.database entry required" .Values.externalDatabase.database  -}}
+{{- $externalUser := required "A valid .Values.externalDatabase.user entry required" .Values.externalDatabase.user  -}}
+{{- end -}}
+{{- if .Values.defaultUser.enabled -}}
+{{- $username := required "A valid .Values.defaultUser.name entry required" .Values.defaultUser.name -}}
+{{- $email := required "A valid .Values.defaultUser.email entry required" .Values.defaultUser.email -}}
+{{- $password := required "A valid .Values.defaultUser.password entry required" .Values.defaultUser.password -}}
+{{- end -}}
 {{- end -}}
