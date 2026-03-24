@@ -88,7 +88,7 @@ usePasswordFiles: true
 # @param image.debug Enable Keycloak image debug mode
 #
 image:
-  repository: on-premise/keycloak
+  repository: 2gis-on-premise/keycloak
   tag: 26.3.3
   # Specify a imagePullPolicy
   # ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -995,7 +995,7 @@ keycloakConfigCli:
   # @param keycloakConfigCli.image.pullSecrets keycloak-config-cli container image pull secrets
   #
   image:
-    repository: on-premise/keycloak-config-cli
+    repository: 2gis-on-premise/keycloak-config-cli
     tag: 6.4.0-debian-12-r11
     digest: ""
     # Specify a imagePullPolicy
@@ -1199,7 +1199,7 @@ keycloakThemes:
   # @param keycloakThemes.image.tag keycloak-themes container image tag
   # @param keycloakThemes.image.pullPolicy keycloak-themes container image pull policy
   image:
-    repository: on-premise/keycloak-themes
+    repository: 2gis-on-premise/keycloak-themes
     tag: 0.0.9
     pullPolicy: IfNotPresent
   # @param keycloakThemes.resources Set Keycloak themes init container requests and limits for different resources like CPU or memory (essential for production workloads)

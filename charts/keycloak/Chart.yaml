@@ -22,8 +22,9 @@ keywords:
 - keycloak
 - access-management
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com
 name: keycloak
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/keycloak
