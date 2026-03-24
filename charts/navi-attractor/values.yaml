@@ -112,7 +112,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-attractor
   pullPolicy: IfNotPresent
-  tag: 7.49.0.3
+  tag: 7.52.1.2
 
 
 # @section Service account settings

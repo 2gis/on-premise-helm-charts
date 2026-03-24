@@ -1,5 +1,11 @@
 # Platform Breaking-Changes
 
+## [2.51.0]
+
+### navi-vrp-task-manager
+
+- Added new required parameter: `cities.linkToCitiesFile`
+
 ## [2.50.0]
 
 Before upgrading, update the keys service to the [Core:2.4.0](../core/CORE-CHANGELOG.md) release.
