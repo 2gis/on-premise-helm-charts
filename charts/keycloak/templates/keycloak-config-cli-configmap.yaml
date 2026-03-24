@@ -19,7 +19,7 @@ data:
   {{- if .Values.keycloakConfigCli.configurationDir }}
   {{- range $name, $bytes := $.Files.Glob (printf "%s/*" .Values.keycloakConfigCli.configurationDir ) }}
   {{ $name | base }}: |-
-    {{- tpl ($.Files.Get $name) . | nindent 4 }}
+    {{- tpl ($.Files.Get $name) $ | nindent 4 }}
   {{- end }}
   {{- else }}
   {{- range $fileName, $fileContent := .Values.keycloakConfigCli.configuration }}

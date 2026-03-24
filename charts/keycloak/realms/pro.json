@@ -29,5 +29,25 @@
   ],
   "internationalizationEnabled": true,
   "supportedLocales": ["en", "ru"],
-  "defaultLocale": "en"
+  "defaultLocale": "en",
+  {{- if .Values.defaultUser.enabled }}
+  "users": [
+    {
+      "username": "{{ .Values.defaultUser.name }}",
+      "email":  "{{ .Values.defaultUser.email }}",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "{{ .Values.defaultUser.password }}"
+        }
+      ],
+      "clientRoles": {
+        "account": [ "manage-account" ]
+      }
+    }
+  ]
+  {{- else }}
+  "users": []
+  {{- end }}
 }

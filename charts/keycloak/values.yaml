@@ -1353,3 +1353,14 @@ externalDatabase:
   existingSecretPasswordKey: ""
   annotations: {}
   extraParams: ""
+
+# @section Keycloak default user for access on-premise services
+# @param defaultUser.enabled Switch to enable or disable the defaultUser
+# @param defaultUser.name Default user name
+# @param defaultUser.email Default user email
+# @param defaultUser.password Default user password
+defaultUser:
+  enabled: false
+  name: ''
+  email: ''
+  password: ''

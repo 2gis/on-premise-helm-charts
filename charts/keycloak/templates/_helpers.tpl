@@ -282,3 +282,14 @@ keycloak: production
     HTTPS/TLS (--set tls.enabled=true) or use proxy headers (--set proxyHeaders=FOO).
 {{- end -}}
 {{- end -}}
+
+{{/*
+Check input values
+*/}}
+{{- define "keycloak.check-values" -}}
+{{- if .Values.defaultUser.enabled }}
+{{ $username := required "A valid .Values.defaultUser.name entry required" .Values.defaultUser.name }}
+{{ $email := required "A valid .Values.defaultUser.email entry required" .Values.defaultUser.email }}
+{{ $password := required "A valid .Values.defaultUser.password entry required" .Values.defaultUser.password }}
+{{- end }}
+{{- end -}}

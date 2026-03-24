@@ -17,6 +17,7 @@ This is modified [bitnami keycloak chart](https://github.com/bitnami/charts/tree
 Changes:
 
 - Added realms configuration via [.json files](./realms)
+- Added default user creation in configured realms
 - Added init container with extra themes
 - Removed bitmami`s warnings about insecure images
 - Changed some default values
@@ -407,3 +408,12 @@ Changes:
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                                | `""`               |
 | `externalDatabase.annotations`               | Additional custom annotations for external database secret object                                                 | `{}`               |
 | `externalDatabase.extraParams`               | Additional JDBC connection parameters appended to the JDBC URL (KC_DB_URL).                                       | `""`               |
+
+### Keycloak default user for access on-premise services
+
+| Name                   | Description                                 | Value   |
+| ---------------------- | ------------------------------------------- | ------- |
+| `defaultUser.enabled`  | Switch to enable or disable the defaultUser | `false` |
+| `defaultUser.name`     | Default user name                           | `""`    |
+| `defaultUser.email`    | Default user email                          | `""`    |
+| `defaultUser.password` | Default user password                       | `""`    |
