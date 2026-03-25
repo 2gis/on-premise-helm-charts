@@ -1193,7 +1193,7 @@ keycloakThemes:
   # @param keycloakThemes.enabled Whether to enable import themes
   #
   enabled: true
-   Bitnami keycloak-config-cli image
+  # Bitnami keycloak-themes image
   # ref: https://hub.docker.com/r/bitnami/keycloak-config-cli/tags/
   # @param keycloakThemes.image.repository keycloak-themes container image repository
   # @param keycloakThemes.image.tag keycloak-themes container image tag
