@@ -21,7 +21,7 @@ spec:
             - name: {{ include "navi-async-matrix.fullname-psql" . | quote }}
               secret:
                 secretName: {{ include "navi-async-matrix.fullname-psql" . | quote }}
-                defaultMode: 600
+                defaultMode: 0600
           {{- end }}
 
           serviceAccountName: {{ include "navi-async-matrix.serviceAccountName" . }}

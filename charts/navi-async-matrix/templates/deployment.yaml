@@ -18,7 +18,9 @@ spec:
         {{- end }}
       labels:
         {{- include "navi-async-matrix.mergerlabels" . | nindent 8 }}
-        app.kubernetes.io/component: {{ include "generic-chart.fullname" . }}-merger
+      {{- if and .Values.dm.merger.pdb.enabled .Values.dm.merger.pdb.component }}
+        app.kubernetes.io/component: {{ .Values.dm.merger.pdb.component }}
+      {{- end }}
     spec:
       volumes:
       {{- $kafkaVolumeMounted := (
