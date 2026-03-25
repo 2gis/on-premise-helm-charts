@@ -159,11 +159,13 @@ ingress:
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 # @param pdb.enabled If PDB is enabled for the service.
+# @param pdb.component If set, label with component name will be added to pdb to secure it from assigning to non dmasync pods.
 # @param pdb.minAvailable How many pods must be available after the eviction.
 # @param pdb.maxUnavailable How many pods can be unavailable after the eviction.
 
 pdb:
   enabled: true
+  component: dmasync
   minAvailable: ''
   maxUnavailable: 1
 
@@ -230,9 +232,10 @@ vpa:
 # @param dm.merger.readinessProbe.periodSeconds Period seconds for readinessProbe for merger.
 # @param dm.merger.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe for merger.
 # @param dm.merger.readinessProbe.failureThreshold Failure threshold for readinessProbe for merger.
-# @param dm.merger.pdb.enabled If PDB is enabled for the merger
-# @param dm.merger.pdb.minAvailable How many pods must be available after the eviction of merger
-# @param dm.merger.pdb.maxUnavailable How many pods can be unavailable after the eviction of merger
+# @param dm.merger.pdb.enabled If PDB is enabled for the merger.
+# @param dm.merger.pdb.component If set, label with component name will be added to pdb to secure it from assigning to non merger pods.
+# @param dm.merger.pdb.minAvailable How many pods must be available after the eviction of merger.
+# @param dm.merger.pdb.maxUnavailable How many pods can be unavailable after the eviction of merger.
 # @param dm.merger.customLivenessProbe Override default liveness probe for merger.
 # @param dm.merger.customReadinessProbe Override default readiness probe for merger.
 # @skip dm.merger.resources
@@ -274,6 +277,7 @@ dm:
       failureThreshold: 3
     pdb:
       enabled: true
+      component: merger
       minAvailable: ''
       maxUnavailable: 1
     customLivenessProbe: {}
