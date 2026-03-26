@@ -446,7 +446,7 @@ head:
 
   envoy:
     image:
-      repository: 2gis-on-premise/navi-envoy
+      repository: 2gis-on-premise/search-api-v8-envoy
       pullPolicy: IfNotPresent
       tag: 1.36.2-tools
     ports:
@@ -1556,7 +1556,7 @@ ingressRouter:
   envoy:
     securityContext: {}
     image:
-      repository: 2gis-on-premise/navi-envoy
+      repository: 2gis-on-premise/search-api-v8-envoy
       pullPolicy: IfNotPresent
       tag: 1.36.2-tools
     resources:
