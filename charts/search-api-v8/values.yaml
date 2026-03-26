@@ -6,7 +6,9 @@
 bluegreen: ''
 owner: ''
 
-# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+# @section Docker registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. **required**
 
 dgctlDockerRegistry: ''
 
@@ -32,7 +34,6 @@ dgctlDockerRegistry: ''
 # @param worker.rtw.lifeTime Lifetime of Real-Time Weights (in seconds)
 # @param worker.queueLimit Maximum number of tasks in the main task processor queue. If exceeded, tasks are sent to the fallback processor
 
-# @param worker.executeDebugCommands Enables execution of debug commands (e.g., simulating head or worker crashes)
 # @param worker.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
 # @skip worker.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
@@ -117,7 +118,7 @@ worker:
   image:
     repository: 2gis-on-premise/search-api-v8-worker
     pullPolicy: IfNotPresent
-    tag: 8.18.3
+    tag: 8.19.0
   ports:
     http: 8092
     grpc: 8091
@@ -132,7 +133,6 @@ worker:
     includeProjectKeyRegexp: 'gis\.v4.*'
     excludeProjectKeyRegexp: '^$'
   queueLimit: 30
-  executeDebugCommands: false
   securityContext: {}
   resources:
     requests:
@@ -280,8 +280,6 @@ head:
 # @param head.head.startupProbe.successThreshold Minimum consecutive successes for the startup probe to be considered successful
 # @param head.head.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
 
-# @param head.head.allowSearchExtendedParams Allow passing debug parameters in the request
-
 # @param head.head.prestopHook.enabled Enable or disable the container lifecycle preStop hook
 
 # @param head.head.workerQueriesCount Number of parts into which a request is split before being sent to workers (map operation in map-reduce)
@@ -292,7 +290,6 @@ head:
 # @param head.head.bigSearchSearchers List of searchers for which big search is enabled. If empty, the search will work as V7, despite the bigSearchMode being enabled.
 # @skip head.head.bigSearchExcludeSegments List of projects to exclude from indexing
 # @param head.head.aiSuggestedQueries.enabled Enable or disable AI Suggested Queries
-# @param head.head.executeDebugCommands Enable execution of debug commands (e.g., simulating head or worker crashes)
 
 # @param head.head.throttle.enabled Enable or disable big search throttling
 # @param head.head.throttle.threshold Threshold value beyond which throttling is activated
@@ -308,7 +305,7 @@ head:
     image:
       repository: 2gis-on-premise/search-api-v8-head
       pullPolicy: IfNotPresent
-      tag: 8.18.3
+      tag: 8.19.0
     ports:
       grpc: 9010
       http: 9090
@@ -354,7 +351,6 @@ head:
       periodSeconds: 10
       successThreshold: 1
       failureThreshold: 200
-    allowSearchExtendedParams: false
     prestopHook:
       enabled: true
     workerQueriesCount: 32
@@ -377,7 +373,6 @@ head:
     bigSearchExcludeSegments: []
     aiSuggestedQueries:
       enabled: false
-    executeDebugCommands: false
     throttle:
       enabled: false
       threshold: 300
@@ -451,7 +446,7 @@ head:
 
   envoy:
     image:
-      repository: 2gis-on-premise/navi-envoy
+      repository: 2gis-on-premise/search-api-v8-envoy
       pullPolicy: IfNotPresent
       tag: 1.36.2-tools
     ports:
@@ -525,12 +520,12 @@ head:
     enabled: false
     updateMode: Off
 
-# @param head.queryTransformer.enabled Enable or disable the queryTransformer
-# @param head.queryTransformer.searchersList List of searchers for which the queryTransformer will be enabled
-# @param head.queryTransformer.endpoint.address Address of the queryTransformer service
-# @param head.queryTransformer.endpoint.port Port of the queryTransformer service
-# @param head.queryTransformer.endpoint.ssl Enable or disable TLS encryption for the queryTransformer service
-# @param head.queryTransformer.timeoutMs Connection timeout (in milliseconds) for the queryTransformer service
+# @skip head.queryTransformer.enabled Enable or disable the queryTransformer
+# @skip head.queryTransformer.searchersList List of searchers for which the queryTransformer will be enabled
+# @skip head.queryTransformer.endpoint.address Address of the queryTransformer service
+# @skip head.queryTransformer.endpoint.port Port of the queryTransformer service
+# @skip head.queryTransformer.endpoint.ssl Enable or disable TLS encryption for the queryTransformer service
+# @skip head.queryTransformer.timeoutMs Connection timeout (in milliseconds) for the queryTransformer service
 
   queryTransformer:
     enabled: false
@@ -555,17 +550,17 @@ head:
       address: ''
       port: 50051
       ssl: false
-    clientFactoryName: 'grpc-client-factory'
+    clientFactoryName: grpc-client-factory
     timeoutMs: 600
     searchers: []
 
-# @param head.recsysRanker.enabled Enable or disable recsysRanker
-# @param head.recsysRanker.endpoint.address Address of the recsysRanker service
-# @param head.recsysRanker.endpoint.port Port of the recsysRanker service
-# @param head.recsysRanker.endpoint.ssl Enable or disable TLS encryption for the recsysRanker service
-# @param head.recsysRanker.clientFactoryName Client factory name for the recsysRanker client (used to enable/disable SSL when debugging locally)
-# @param head.recsysRanker.timeoutMs Connection timeout (in milliseconds) for the recsysRanker service
-# @param head.recsysRanker.searchersList List of searchers for which recsysRanker will be enabled
+# @skip head.recsysRanker.enabled Enable or disable recsysRanker
+# @skip head.recsysRanker.endpoint.address Address of the recsysRanker service
+# @skip head.recsysRanker.endpoint.port Port of the recsysRanker service
+# @skip head.recsysRanker.endpoint.ssl Enable or disable TLS encryption for the recsysRanker service
+# @skip head.recsysRanker.clientFactoryName Client factory name for the recsysRanker client (used to enable/disable SSL when debugging locally)
+# @skip head.recsysRanker.timeoutMs Connection timeout (in milliseconds) for the recsysRanker service
+# @skip head.recsysRanker.searchersList List of searchers for which recsysRanker will be enabled
 
   recsysRanker:
     enabled: false
@@ -573,19 +568,19 @@ head:
       address: ''
       port: 50051
       ssl: false
-    clientFactoryName: 'grpc-client-factory'
+    clientFactoryName: grpc-client-factory
     timeoutMs: 500
     searchersList: []
 
-  # @param head.friendsService.enabled Enable or disable friendsService
-  # @param head.friendsService.endpoint.address Address of the friendsService service
-  # @param head.friendsService.endpoint.port Port of the friendsService service
-  # @param head.friendsService.endpoint.ssl Enable or disable TLS encryption for the friendsService service
-  # @param head.friendsService.endpoint.credentials.username Username to connect to the friendsService service
-  # @param head.friendsService.endpoint.credentials.password Password to connect to the friendsService service
-  # @param head.friendsService.clientFactoryName Client factory name for the friendsService client (used to enable/disable SSL when debugging locally)
-  # @param head.friendsService.timeout_ms Connection timeout (in milliseconds) for the friendsService service
-  # @param head.friendsService.searchers List of searchers for which friendsService will be enabled
+  # @skip head.friendsService.enabled Enable or disable friendsService
+  # @skip head.friendsService.endpoint.address Address of the friendsService service
+  # @skip head.friendsService.endpoint.port Port of the friendsService service
+  # @skip head.friendsService.endpoint.ssl Enable or disable TLS encryption for the friendsService service
+  # @skip head.friendsService.endpoint.credentials.username Username to connect to the friendsService service
+  # @skip head.friendsService.endpoint.credentials.password Password to connect to the friendsService service
+  # @skip head.friendsService.clientFactoryName Client factory name for the friendsService client (used to enable/disable SSL when debugging locally)
+  # @skip head.friendsService.timeoutMs Connection timeout (in milliseconds) for the friendsService service
+  # @skip head.friendsService.searchers List of searchers for which friendsService will be enabled
 
   friendsService:
     enabled: false
@@ -596,8 +591,8 @@ head:
       credentials:
         username: ''
         password: ''
-    clientFactoryName: 'grpc-client-factory'
-    timeout_ms: 150
+    clientFactoryName: grpc-client-factory
+    timeoutMs: 150
     searchers: []
 
 # @param head.grpcClientCircuitBreaker.clients List of gRPC client circuit breaker configurations, each defining thresholds and behavior per client.
@@ -698,9 +693,9 @@ filesStorage:
   ports:
     http: 8080
   image:
-    repository: 2gis-on-premise/search-api-v8-files_storage
+    repository: 2gis-on-premise/search-api-v8-files-storage
     pullPolicy: IfNotPresent
-    tag: 8.18.3
+    tag: 8.19.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -797,9 +792,9 @@ dataAdapter:
   ports:
     http: 8080
   image:
-    repository: 2gis-on-premise/search-api-v8-data_adapter
+    repository: 2gis-on-premise/search-api-v8-data-adapter
     pullPolicy: IfNotPresent
-    tag: 8.18.3
+    tag: 8.19.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -891,7 +886,7 @@ portal:
   image:
     repository: usrch/bs-portal
     pullPolicy: IfNotPresent
-    tag: 8.18.3
+    tag: 8.19.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -993,7 +988,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-api-v8-controller
     pullPolicy: IfNotPresent
-    tag: 8.18.3
+    tag: 8.19.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1126,7 +1121,7 @@ indexer:
   image:
     repository: 2gis-on-premise/search-api-v8-indexer
     pullPolicy: IfNotPresent
-    tag: 8.18.3
+    tag: 8.19.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1180,24 +1175,24 @@ indexer:
     enabled: false
     updateMode: Off
 
-# @section s3Client settings
+# @section s3 settings
 
-# @param s3Client.enabled Enable or disable S3 support for the indexing system
-# @param s3Client.endpoint S3 endpoint address
-# @param s3Client.accessKeyId S3 access key ID
-# @param s3Client.secretAccessKey S3 secret access key
-# @param s3Client.bucket S3 bucket name
-# @param s3Client.region S3 region for the S3 client
-# @param s3Client.useSsl Enable or disable SSL
+# @param s3.enabled Enable or disable S3 support for the indexing system
+# @param s3.endpoint S3 endpoint address
+# @param s3.accessKey S3 access key ID
+# @param s3.secretKey S3 secret access key
+# @param s3.bucket S3 bucket name
+# @param s3.region S3 region for the S3 client
+# @param s3.secure Enable or disable SSL
 
-s3Client:
+s3:
   enabled: true
   endpoint: ''
-  accessKeyId: ''
-  secretAccessKey: ''
+  accessKey: ''
+  secretKey: ''
   bucket: ''
   region: ''
-  useSsl: false
+  secure: false
 
 # @section Syncer settings
 
@@ -1231,7 +1226,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-api-v8-syncer
     pullPolicy: IfNotPresent
-    tag: 8.18.3
+    tag: 8.19.0
   securityContext: {}
   resources:
     requests:
@@ -1247,12 +1242,12 @@ syncer:
 
 # @skip section FeedSandbox settings
 
-# @skip feedSandbox.feedBackups.enable Enable storing backups to s3 in feed-sandbox app
+# @skip feedSandbox.feedBackups.enabled Enable storing backups to s3 in feed-sandbox app
 # @skip feedSandbox.feedBackups.prefix Object key prefix. Example: 'indexer/prod/feed_backups'
 
 feedSandbox:
   feedBackups:
-    enable: false
+    enabled: false
     prefix: ''
 
 # @param GINMODE Go application operating mode; default is `release`, `debug` mode is also supported
@@ -1312,7 +1307,7 @@ serviceAccount:
 # @param service.ingressRouter.ports.http Service (svc) http port for the ingress-router
 # @param service.ingressRouter.ports.grpc Service (svc) grpc port for the ingress-router
 
-# @skip service.ingressRouter.external.enable Enable or disable direct HTTP route to ingress-router (internal use)
+# @skip service.ingressRouter.external.enabled Enable or disable direct HTTP route to ingress-router (internal use)
 # @skip service.ingressRouter.external.host External address for direct HTTP route to ingress-router (internal use)
 
 # @param service.geodetector.port Service (svc) port for the geodetector component
@@ -1339,7 +1334,7 @@ service:
       http: 9092
       grpc: 9001
     external:
-      enable: false
+      enabled: false
       host: ''
   geodetector:
     port: 10091
@@ -1444,6 +1439,7 @@ service:
 # @param ingressRouter.searchRequestTimeoutMs Timeout (in ms) for requests to the `head` service
 # @param ingressRouter.prometheusUrl Prometheus URL for rate limiting
 # @param ingressRouter.rateLimitRules Big Search usage quotas
+# @param ingressRouter.filteredUserAgentList filtered User-Agent list
 
 # @param ingressRouter.ports.monitor TCP port for service endpoints such as `/metrics`
 # @param ingressRouter.ports.http TCP port for API requests
@@ -1462,6 +1458,18 @@ service:
 # @param ingressRouter.routing.cluster3.port Port of cluster 3 head service
 # @param ingressRouter.routing.cluster3.address Address of cluster 3 head service
 # @param ingressRouter.routing.cluster3.exactMatch Header value for cluster 3
+# @param ingressRouter.routing.sanitized.port Port of sanitized head service
+# @param ingressRouter.routing.sanitized.address Address of sanitized head service
+# @param ingressRouter.routing.sanitized.exactMatch Header value for sanitized cluster
+# @param ingressRouter.debug_headers Header used for debug mode
+# @param ingressRouter.debug_routing.ingressRouter.port Port for ingressRouter cluster
+# @param ingressRouter.debug_routing.ingressRouter.exactMatch Header value for ingressRouter
+# @param ingressRouter.debug_routing.head.port Port for head cluster
+# @param ingressRouter.debug_routing.head.exactMatch Header value for head
+# @param ingressRouter.debug_routing.geodetector.port Port for geodetector cluster
+# @param ingressRouter.debug_routing.geodetector.exactMatch Header value for geodetector
+# @param ingressRouter.debug_routing.worker.port Port for worker cluster
+# @param ingressRouter.debug_routing.worker.exactMatch Header value for worker
 # @param ingressRouter.data.persistent.enabled Enable or disable a persistent volume for the service
 # @param ingressRouter.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
 # @param ingressRouter.data.resources.requests.storage Requested storage volume size
@@ -1548,7 +1556,7 @@ ingressRouter:
   envoy:
     securityContext: {}
     image:
-      repository: 2gis-on-premise/navi-envoy
+      repository: 2gis-on-premise/search-api-v8-envoy
       pullPolicy: IfNotPresent
       tag: 1.36.2-tools
     resources:
@@ -1571,7 +1579,7 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-api-v8-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.18.3
+    tag: 8.19.0
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
@@ -1579,6 +1587,7 @@ ingressRouter:
   searchRequestTimeoutMs: 5000
   prometheusUrl: ''
   rateLimitRules: []
+  filteredUserAgentList: []
   ports:
     monitor: 9093
     http: 9092
@@ -1604,6 +1613,24 @@ ingressRouter:
       port: 9001
       address: big-search-ab-cluster3-ingress-router
       exactMatch: 3
+    sanitized:
+      port: 80
+      address: bigsearch-sanitized-grpc.istio.k8s.2gis.dev
+      exactMatch: 4
+  debug_headers: x-debug-service-name
+  debug_routing:
+    ingressRouter:
+      port: 9001
+      exactMatch: "ingress-router"
+    head:
+      port: 9010
+      exactMatch: "head"
+    geodetector:
+      port: 10091
+      exactMatch: "geodetector"
+    worker:
+      port: 8091
+      exactMatch: "worker"
 
 # @section geodetector
 
@@ -1622,7 +1649,6 @@ ingressRouter:
 # @param geodetector.geodetectorMonThreads Number of threads allocated for collecting metrics
 # @param geodetector.loggerLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
 # @param geodetector.loggerFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
-# @param geodetector.executeDebugCommands Enable execution of debug commands (e.g., simulate crash)
 # @param geodetector.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
 # @param geodetector.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
 
@@ -1744,7 +1770,7 @@ geodetector:
   image:
     repository: 2gis-on-premise/search-api-v8-geodetector
     pullPolicy: IfNotPresent
-    tag: 8.18.3
+    tag: 8.19.0
   imagePullSecrets: []
   geodetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60
@@ -1752,7 +1778,6 @@ geodetector:
   geodetectorFsThreads: 2
   loggerLevel: info
   loggerFormat: json
-  executeDebugCommands: false
   geodetectorMonThreads: 2
   syncer:
     includeProjectKeyRegexp: '(gis\.geodetector.*|gis\.v4\.65536\.en\.ru)'
@@ -1899,3 +1924,7 @@ dgctlStorage:
   manifest: ''
   region: ''
   secure: false
+
+# @skip debugMode Disable specific parameters for debug mode
+
+debugMode: false
