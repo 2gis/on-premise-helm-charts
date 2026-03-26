@@ -4,7 +4,7 @@ type: application
 description: A Helm chart for Kubernetes to deploy Stat Receiver
 
 version: 2.51.0
-appVersion: 0.15.36
+appVersion: 1.16.0
 
 maintainers:
 - name: 2gis
