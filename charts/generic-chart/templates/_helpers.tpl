@@ -235,6 +235,28 @@ Params:
 {{- end -}}
 
 {{/*
+Return parentRefs for HTTPRoute.
+
+If .Values.httpRoute.parentRefs is provided by a consuming chart, use it.
+Otherwise return default canary/stable gateways.
+This keeps behavior stable for consumers that do not inherit library-chart values.
+*/}}
+{{- define "generic-chart.httpRouteParentRefs" -}}
+{{- if and (hasKey .Values "httpRoute") (kindIs "map" .Values.httpRoute) (hasKey .Values.httpRoute "parentRefs") -}}
+{{- .Values.httpRoute.parentRefs | toYaml -}}
+{{- else -}}
+- group: gateway.networking.k8s.io
+  kind: Gateway
+  name: canary
+  namespace: istio-gateways
+- group: gateway.networking.k8s.io
+  kind: Gateway
+  name: stable
+  namespace: istio-gateways
+{{- end -}}
+{{- end -}}
+
+{{/*
 
 https://gateway-api.sigs.k8s.io/api-types/grpcroute/#cross-serving
 

@@ -1,3 +1,42 @@
+## [2.52.0] (2026-03-26)
+
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.70.1
+	+ mapgl:1.71.0
+search-api
+	- search-api:7.90.0
+	+ search-api:7.105.1
+search-api-v8
+	- search-api-v8-controller:8.18.3
+	+ search-api-v8-controller:8.19.0
+	- search-api-v8-data_adapter:8.18.3
+	+ search-api-v8-data-adapter:8.19.0
+	- navi-envoy:1.36.2-tools
+	+ search-api-v8-envoy:1.36.2-tools
+	- search-api-v8-files_storage:8.18.3
+	+ search-api-v8-files-storage:8.19.0
+	- search-api-v8-geodetector:8.18.3
+	+ search-api-v8-geodetector:8.19.0
+	- search-api-v8-head:8.18.3
+	+ search-api-v8-head:8.19.0
+	- search-api-v8-indexer:8.18.3
+	+ search-api-v8-indexer:8.19.0
+	- search-api-v8-ingress-router:8.18.3
+	+ search-api-v8-ingress-router:8.19.0
+	- search-api-v8-syncer:8.18.3
+	+ search-api-v8-syncer:8.19.0
+	- search-api-v8-worker:8.18.3
+	+ search-api-v8-worker:8.19.0
+stat-receiver
+	- stat-receiver-api:1.15.21
+	+ stat-receiver-api:1.16.0
+	- stat-receiver-streams:1.15.21
+	+ stat-receiver-streams:1.16.0
+```
+[Full list of image versions](platform_image_versions.txt)
+
 ## [2.51.0] (2026-03-19)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2510)
 #### Images
