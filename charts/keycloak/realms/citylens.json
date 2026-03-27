@@ -1,0 +1,53 @@
+{
+  "realm" : "Citylens",
+  "displayName" : "Citylens",
+  "enabled": true,
+  "defaultRole" : {
+    "name" : "citylens-default",
+    "description" : "Default role for Citylens realm"
+  },
+  "clients": [
+    {
+      "clientId": "citylens-client",
+      "name": "citylens-client",
+      "enabled": true,
+      "description": "CityLens application client",
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": ["*"],
+      "webOrigins": ["*"],
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": true,
+      "frontchannelLogout": true,
+      "attributes": {
+        "login_theme": "keycloak",
+        "frontchannel.logout.session.required": true,
+        "backchannel.logout.session.required": true
+      }
+    }
+  ],
+  "internationalizationEnabled": true,
+  "supportedLocales": ["en", "ru"],
+  "defaultLocale": "en",
+  {{- if .Values.defaultUser.enabled }}
+  "users": [
+    {
+      "username": "{{ .Values.defaultUser.name }}",
+      "email":  "{{ .Values.defaultUser.email }}",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "{{ .Values.defaultUser.password }}"
+        }
+      ],
+      "clientRoles": {
+        "account": [ "manage-account" ]
+      }
+    }
+  ]
+  {{- else }}
+  "users": []
+  {{- end }}
+}
