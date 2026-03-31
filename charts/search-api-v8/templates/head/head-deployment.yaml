@@ -6,6 +6,11 @@ metadata:
   labels:
     {{- include "search-api-v8.labels" . | nindent 4 }}
     search/part: head
+    {{- if (.Values.dgctlStorage).manifest }}
+    {{- with (include "search-api-v8.manifestCode" .) }}
+    manifest: {{ . | quote }}
+    {{- end }}{{- /* include "search-api-v8.manifestCode" */}}
+    {{- end }}{{- /* .Values.dgctlStorage */}}
 spec:
   {{- if not .Values.head.hpa.enabled }}
   replicas: {{ .Values.head.replicaCount }}
@@ -23,7 +28,7 @@ spec:
       {{- with .Values.head.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- /* .Values.head.podAnnotations */}}
-        checksum/config: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ (include (print $.Template.BasePath "/common/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
         prometheus.io/path: "/metrics"
         prometheus.io/port: {{ .Values.magg.ports.metrics | quote }}
         prometheus.io/scrape: "true"
@@ -43,19 +48,6 @@ spec:
       serviceAccountName: {{ include "search-api-v8.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.head.podSecurityContext | nindent 8 }}
-      {{ if not .Values.onpremise }}
-      initContainers:
-        - name: init-sapphire-docs
-          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.head.head.image.repository }}:{{ .Values.head.head.image.tag | default .Chart.AppVersion }}'
-          imagePullPolicy: {{ .Values.head.head.image.pullPolicy }}
-          resources:
-            {{- toYaml .Values.head.initSapphireDocs.resources | nindent 12 }}
-          volumeMounts:
-            - name: head-docs
-              mountPath: /var/www
-          command: [ "/bin/sh", "-c" ]
-          args: [ "cp -R /var/www.src/* /var/www/" ]
-      {{- end -}}{{- /* .Values.onpremise */}}
       containers:
         - name: head
           securityContext:
@@ -121,8 +113,6 @@ spec:
               subPath: nginx.conf
             - name: head-data
               mountPath: /var/2gis/sapphire2
-            - name: head-docs
-              mountPath: /var/www
           {{ else }}
           volumeMounts:
             - name: head-config
@@ -130,8 +120,6 @@ spec:
               subPath: nginx.conf
             - name: head-data
               mountPath: /var/2gis/sapphire2
-            - name: head-docs
-              mountPath: /var/www
           {{- end -}}{{- /* .Values.onpremise */}}
           {{- if .Values.customCAs.bundle }}
             {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
@@ -278,8 +266,6 @@ spec:
         - name: head-config
           configMap:
             name: {{ include "search-api-v8.fullname" . }}
-        - name: head-docs
-          emptyDir: {}
         {{- if .Values.customCAs.bundle }}
         {{- include "search-api-v8.custom.ca.deploys.volumes" . | nindent 8 }}
         {{- end }}{{- /* .Values.customCAs.bundle */}}

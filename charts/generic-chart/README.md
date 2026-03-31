@@ -177,9 +177,14 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 ### [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
 
-| Name                  | Description                       | Value |
-| --------------------- | --------------------------------- | ----- |
-| `httpRoute.hostnames` | List of hostnames served by route | `[]`  |
+| Name                                | Description                                         | Value            |
+| ----------------------------------- | --------------------------------------------------- | ---------------- |
+| `httpRoute.hostnames`               | List of hostnames served by route                   | `[]`             |
+| `httpRoute.parentRefs`              | List of parent references (gateways) for HTTPRoute. |                  |
+| `httpRoute.parentRefs[0].name`      | Name for the first default parentRef                | `canary`         |
+| `httpRoute.parentRefs[0].namespace` | Namespace for the first default parentRef           | `istio-gateways` |
+| `httpRoute.parentRefs[1].name`      | Name for the second default parentRef               | `stable`         |
+| `httpRoute.parentRefs[1].namespace` | Namespace for the second default parentRef          | `istio-gateways` |
 
 ### [GRPCRoute](https://gateway-api.sigs.k8s.io/api-types/grpcroute/) configuration
 

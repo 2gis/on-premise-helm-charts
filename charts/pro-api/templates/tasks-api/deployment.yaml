@@ -187,19 +187,16 @@ spec:
                 secretKeyRef:
                   key: tasksApiKey
                   name: {{ include "pro-api.secretName" . }}
-            {{- if .Values.authProvider.enabled }}
             - name: Auth__Authority
-              value: {{ required "A valid .Values.authProvider.host entry required when authProvider.enabled is true" .Values.authProvider.host | quote }}
+              value: {{ required "A valid .Values.authProvider.host entry required" .Values.authProvider.host | quote }}
             {{- if not .Values.tasks.settings.auth.adminRequiredRoles }}
-            {{- fail "A valid .Values.tasks.settings.auth.adminRequiredRoles entry required when authProvider.enabled and tasks.settings.auth.enabled are true" }}
+            {{- fail "A valid .Values.tasks.settings.auth.adminRequiredRoles entry required when tasks.settings.auth.enabled is true" }}
             {{- end }}
             {{- range $i, $r := .Values.tasks.settings.auth.adminRequiredRoles }}
             - name: Auth__AdminRequiredRoles__{{$i}}
               value: {{ $r | quote }}
             {{- end }}
             {{- end }}
-            {{- end }}
-
 
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}

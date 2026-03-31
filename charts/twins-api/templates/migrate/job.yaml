@@ -30,7 +30,7 @@ spec:
         - name: migrate
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: [ "twins-migrate" ]
+          command: [ "twins", "migrate" ]
           resources:
             {{- toYaml .Values.migrate.resources | nindent 12 }}
           env:

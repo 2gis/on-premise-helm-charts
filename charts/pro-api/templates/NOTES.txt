@@ -1,2 +1,9 @@
 Release - {{ .Release.Name }}
 Namespace - {{ .Release.Namespace }}
+
+{{- if empty .Values.authProvider.allowedHosts }}
+#################################################################################
+######   WARNING: `authProvider.allowedHosts` is empty!                     #####
+######      Access to Permissions UI or Tasks Admin UI may be restricted.   #####
+#################################################################################
+{{- end }}

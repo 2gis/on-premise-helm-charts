@@ -2,9 +2,9 @@
 
 ## [2.51.0]
 
-### keys
-- A temporary flag, `--migrate-data`, has been added for this release. This flag triggers the data migration required for merging Public Transport API and Routing API data in the service.
-- Ensure that `keys` service is upgraded prior to upgrading any of the `navi` services.
+### navi-vrp-task-manager
+
+- Added new required parameter: `cities.linkToCitiesFile`
 
 ## [2.50.0]
 
