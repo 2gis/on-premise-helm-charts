@@ -1,8 +1,6 @@
 {{- define "merger.deployment" }}
 metadata:
   name: {{ include "generic-chart.fullname" . }}-merger
-  labels:
-    navigroup: {{ .Values.navigroup | default "" | quote }}
 spec:
   replicas: {{ .Values.dm.merger.replicaCount | default 1 }}
   selector:
