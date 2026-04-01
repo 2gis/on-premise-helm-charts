@@ -43,7 +43,9 @@ spec:
       {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
-        app.kubernetes.io/component: {{ include "generic-chart.fullname" . }}
+      {{- if and .Values.pdb.enabled .Values.pdb.component }}
+        app.kubernetes.io/component: {{ .Values.pdb.component }}
+      {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
