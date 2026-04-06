@@ -216,6 +216,7 @@ spec:
 
             - name: EndpointApiKey__Enabled
               value: "true"
+
             - name: EndpointApiKey__Data__0__Controller
               value: "DataScience"
             - name: EndpointApiKey__Data__0__Key
@@ -223,10 +224,19 @@ spec:
                 secretKeyRef:
                   key: dataScienceApiKey
                   name: {{ include "citylens.routes.api.name" . }}-api-key-secret
+
             - name: EndpointApiKey__Data__1__Controller
               value: "Companies"
             - name: EndpointApiKey__Data__1__Key
               valueFrom:
                 secretKeyRef:
                   key: companiesApiKey
+                  name: {{ include "citylens.routes.api.name" . }}-api-key-secret
+
+            - name: EndpointApiKey__Data__2__Controller
+              value: "Users"
+            - name: EndpointApiKey__Data__2__Key
+              valueFrom:
+                secretKeyRef:
+                  key: usersApiKey
                   name: {{ include "citylens.routes.api.name" . }}-api-key-secret
