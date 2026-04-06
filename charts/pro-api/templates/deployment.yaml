@@ -133,14 +133,14 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: catalogApi2gisKey
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             - name: Navi__Url
               value: {{ .Values.navi.url }}
             - name: Navi__Key
               valueFrom:
                 secretKeyRef:
                   key: routingApi2gisKey
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             - name: SEARCH_API_URL
               value: {{ .Values.search.url }}
             - name: Elastic__InstanceName
@@ -160,7 +160,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: esPassword
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{ end }}
             - name: Elastic__IndexPrefix
               value: {{ $.Values.elastic.indexPrefix | quote }}
@@ -183,13 +183,13 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: dbConnectionPwd
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- if .Values.postgres.api.ro.password }}
             - name: Postgres__PasswordRo
               valueFrom:
                 secretKeyRef:
                   key: dbConnectionPwdRo
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
             - name: S3Settings__Url
               value: {{ required "A valid .Values.dgctlStorage.host entry required" $.Values.dgctlStorage.host }}
@@ -213,12 +213,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: s3AccessKey
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             - name: S3Settings__SecretKey
               valueFrom:
                 secretKeyRef:
                   key: s3SecretKey
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             - name: Kafka__BootstrapServers
               value: {{ $.Values.kafka.bootstrapServers }}
             - name: Kafka__SecurityProtocol
@@ -232,7 +232,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: kafkaSaslPassword
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
             - name: Kafka__AssetTopicsReaderGroupId
               value: {{ $.Values.kafka.assetTopicsReaderGroupId }}
@@ -241,9 +241,9 @@ spec:
             - name: Kafka__RefreshAssetsIntervalMinutes
               value: {{ $.Values.kafka.refreshAssetsIntervalMinutes | quote }}
             - name: Kafka__ImportTasksTopicSettings__Name
-              value: {{ $.Values.kafka.importTasksTopic.name }}
+              value: {{ required "A valid .Values.kafka.importTasksTopic.name entry required" $.Values.kafka.importTasksTopic.name }}
             - name: Kafka__ImportTasksTopicSettings__ReaderGroupId
-              value: {{ $.Values.kafka.importTasksTopic.readerGroupId }}
+              value: {{ required "A valid .Values.kafka.importTasksTopic.readerGroupId entry required" $.Values.kafka.importTasksTopic.readerGroupId }}
             - name: Kafka__AssetDataTopicSettings__Name
               value: {{ required "A valid .Values.kafka.assetDataTopic.name entry required" $.Values.kafka.assetDataTopic.name }}
             - name: Kafka__EventsTopicSettings__Name
@@ -263,7 +263,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: authClientSecret
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
             - name: Auth__UserInfoEndpoint
               value: {{ .Values.api.settings.auth.userInfoEndpoint | quote }}
@@ -278,15 +278,13 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: apiKey
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
-            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
-                  name: {{ include "pro-api.name" . }}-secret
-            {{- end }}
+                  name: {{ include "pro-api.secretName" . }}
             {{- range $i, $s := .Values.api.settings.auth.shareKeys }}
             - name: Auth__ShareKeys__{{$i}}
               value: {{ $s | quote }}
@@ -306,7 +304,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: redisPassword
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
             - name: Common__Logging__Format
               value: {{ .Values.api.settings.logging.format | quote }}
@@ -345,22 +343,25 @@ spec:
             - name: SberEcommerceApi__UserName
               value: {{ .Values.ecommerce.username | quote }}
             - name: PermissionsApi__Url
-              value: {{ include "pro-api.permissions-url" . }}
+              value: "{{ include "pro-api.permissions-url" . }}"
             - name: PermissionsApi__HttpPort
               value: {{ .Values.permissions.service.port | quote }}
             - name: PermissionsApi__GrpcPort
               value: {{ .Values.permissions.settings.grpcPort | quote }}
-            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: PermissionsApi__Key
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
-                  name: {{ include "pro-api.name" . }}-secret
-            {{- end }}
+                  name: {{ include "pro-api.secretName" . }}
             {{- if .Values.ecommerce.password }}
             - name: SberEcommerceApi__Password
               valueFrom:
                 secretKeyRef:
                   key: ecommercePassword
-                  name: {{ include "pro-api.name" . }}-secret
+                  name: {{ include "pro-api.secretName" . }}
             {{- end }}
+            - name: Security__SecretKey
+              valueFrom:
+                secretKeyRef:
+                  key: securitySecretKey
+                  name: {{ include "pro-api.secretName" . }}

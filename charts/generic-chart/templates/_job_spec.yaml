@@ -2,28 +2,28 @@
 {{ $ctx := .ctx }}
 {{ $job := .job }}
 spec:
-  {{- if ($job).activeDeadlineSeconds }}
+  {{- if "activeDeadlineSeconds" | hasKey $job }}
   activeDeadlineSeconds: {{ ($job).activeDeadlineSeconds }}
   {{- end }}
-  {{- if ($job).ttlSecondsAfterFinished }}
+  {{- if "ttlSecondsAfterFinished" | hasKey $job }}
   ttlSecondsAfterFinished: {{ ($job).ttlSecondsAfterFinished }}
   {{- end }}
-  {{- if ($job).backoffLimit }}
+  {{- if "backoffLimit" | hasKey $job }}
   backoffLimit: {{ ($job).backoffLimit }}
   {{- end }}
-  {{- if ($job).backoffLimitPerIndex }}
+  {{- if "backoffLimitPerIndex" | hasKey $job }}
   backoffLimitPerIndex: {{ ($job).backoffLimitPerIndex }}
   {{- end }}
-  {{- if ($job).podFailurePolicy }}
+  {{- if "podFailurePolicy" | hasKey $job }}
   podFailurePolicy: {{ ($job).podFailurePolicy }}
   {{- end }}
-  {{- if ($job).completions }}
+  {{- if "completions" | hasKey $job }}
   completions: {{ ($job).completions }}
   {{- end }}
-  {{- if ($job).completionMode }}
+  {{- if "completionMode" | hasKey $job }}
   completionMode: {{ ($job).completionMode }}
   {{- end }}
-  {{- if ($job).parallelism }}
+  {{- if "parallelism" | hasKey $job }}
   parallelism: {{ ($job).parallelism }}
   {{- end }}
   template:

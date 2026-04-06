@@ -175,6 +175,24 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `networkPolicy.egress.enabled`                     | Enable creation of NetworkPolicy resources for egress rules  | `false` |
 | `networkPolicy.egress.config`                      | Array of egress rules                                        | `[]`    |
 
+### [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+
+| Name                                | Description                                         | Value            |
+| ----------------------------------- | --------------------------------------------------- | ---------------- |
+| `httpRoute.hostnames`               | List of hostnames served by route                   | `[]`             |
+| `httpRoute.parentRefs`              | List of parent references (gateways) for HTTPRoute. |                  |
+| `httpRoute.parentRefs[0].name`      | Name for the first default parentRef                | `canary`         |
+| `httpRoute.parentRefs[0].namespace` | Namespace for the first default parentRef           | `istio-gateways` |
+| `httpRoute.parentRefs[1].name`      | Name for the second default parentRef               | `stable`         |
+| `httpRoute.parentRefs[1].namespace` | Namespace for the second default parentRef          | `istio-gateways` |
+
+### [GRPCRoute](https://gateway-api.sigs.k8s.io/api-types/grpcroute/) configuration
+
+| Name                  | Description                                                                                        | Value |
+| --------------------- | -------------------------------------------------------------------------------------------------- | ----- |
+| `grpcRoute.hostnames` | List of hostnames served by route                                                                  | `[]`  |
+| `grpcRoute.port`      | Destination grpcroute.spec.rules.backendRefs.port number, must be set if grpcRoute.enabled is true | `nil` |
+
 ## Maintainers
 
 | Name | Email | Url |

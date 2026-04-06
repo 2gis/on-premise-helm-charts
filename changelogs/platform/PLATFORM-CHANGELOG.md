@@ -1,3 +1,107 @@
+## [2.52.0] (2026-03-26)
+
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.70.1
+	+ mapgl:1.71.0
+search-api
+	- search-api:7.90.0
+	+ search-api:7.105.1
+search-api-v8
+	- search-api-v8-controller:8.18.3
+	+ search-api-v8-controller:8.19.0
+	- search-api-v8-data_adapter:8.18.3
+	+ search-api-v8-data-adapter:8.19.0
+	- navi-envoy:1.36.2-tools
+	+ search-api-v8-envoy:1.36.2-tools
+	- search-api-v8-files_storage:8.18.3
+	+ search-api-v8-files-storage:8.19.0
+	- search-api-v8-geodetector:8.18.3
+	+ search-api-v8-geodetector:8.19.0
+	- search-api-v8-head:8.18.3
+	+ search-api-v8-head:8.19.0
+	- search-api-v8-indexer:8.18.3
+	+ search-api-v8-indexer:8.19.0
+	- search-api-v8-ingress-router:8.18.3
+	+ search-api-v8-ingress-router:8.19.0
+	- search-api-v8-syncer:8.18.3
+	+ search-api-v8-syncer:8.19.0
+	- search-api-v8-worker:8.18.3
+	+ search-api-v8-worker:8.19.0
+stat-receiver
+	- stat-receiver-api:1.15.21
+	+ stat-receiver-api:1.16.0
+	- stat-receiver-streams:1.15.21
+	+ stat-receiver-streams:1.16.0
+```
+[Full list of image versions](platform_image_versions.txt)
+
+## [2.51.0] (2026-03-19)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2510)
+#### Images
+```
+navi-async-matrix
+	- navi-async-matrix:1.20.1
+	+ navi-async-matrix:1.22.3
+	- navi-merger-async-matrix:1.20.1
+	+ navi-merger-async-matrix:1.22.3
+navi-attractor
+	- navi-attractor:7.49.0.3
+	+ navi-attractor:7.52.1.2
+navi-back
+	- navi-back:7.49.0.3
+	+ navi-back:7.52.1.2
+navi-router
+	- navi-router:6.38.0.2
+	+ navi-router:6.40.0.2
+navi-vrp-solver
+	- navi-vrp-solver:1.13.1
+	+ navi-vrp-solver:1.16.3
+navi-vrp-task-manager
+	- navi-vrp-task-manager:1.13.1
+	+ navi-vrp-task-manager:1.16.3
+```
+[Full list of image versions](platform_image_versions.txt)
+
+## [2.50.0] (2026-02-26)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2500)
+#### Images
+```
+catalog-api
+	- catalog-api:3.665.1
+	+ catalog-api:3.671.0
+mapgl-js-api
+	- mapgl:1.69.1
+	+ mapgl:1.70.1
+platform
+	- platform-ui:1.15.1
+	+ platform-ui:1.25.1
+search-api-v8
+	+ navi-envoy:1.36.2-tools
+	+ search-api-v8-controller:8.18.3
+	+ search-api-v8-data_adapter:8.18.3
+	+ search-api-v8-files_storage:8.18.3
+	+ search-api-v8-geodetector:8.18.3
+	+ search-api-v8-head:8.18.3
+	+ search-api-v8-indexer:8.18.3
+	+ search-api-v8-ingress-router:8.18.3
+	+ search-api-v8-metrics-aggregator:0.1.0
+	+ search-api-v8-nginx:1.25.11
+	+ search-api-v8-syncer:8.18.3
+	+ search-api-v8-worker:8.18.3
+tiles-api
+	- tiles-api-importer:4.80.3
+	+ tiles-api-importer:4.81.3
+	- tiles-api-importer:4.80.3
+	+ tiles-api-importer:4.81.3
+	- tiles-api-proxy:4.80.3
+	+ tiles-api-proxy:4.81.3
+	- tiles-api:4.80.3
+	+ tiles-api:4.81.3
+```
+[Full list of image versions](platform_image_versions.txt)
+
 ## [2.49.0] (2026-01-28)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2490)
 #### Images

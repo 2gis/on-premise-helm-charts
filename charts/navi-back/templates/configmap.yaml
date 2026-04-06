@@ -805,8 +805,8 @@ data:
                       {{- if (dig "retry" "enabled" false (index .Values (include "config.attractor" .) | default dict)) }}
                       retry_policy:
                         retry_on: {{ (dig "retry" "retryOn" "" (index .Values (include "config.attractor" .) | default dict))  | quote }}
-                        num_retries: {{ (dig "retry" "numRetries" 5 (index .Values (include "config.attractor" .) | default dict))  | int }} 
-                        per_try_timeout: {{ (dig "retry" "perTryTimeout" "2s" (index .Values (include "config.attractor" .) | default dict))  | quote }} 
+                        num_retries: {{ (dig "retry" "numRetries" 5 (index .Values (include "config.attractor" .) | default dict))  | int }}
+                        per_try_timeout: {{ (dig "retry" "perTryTimeout" "2s" (index .Values (include "config.attractor" .) | default dict))  | quote }}
                         retry_host_predicate:
                           - name: envoy.retry_host_predicates.previous_hosts
                             typed_config:

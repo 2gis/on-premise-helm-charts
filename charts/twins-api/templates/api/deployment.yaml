@@ -47,6 +47,7 @@ spec:
       containers:
         - name: twins-api
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          command: [ "twins", "server" ]
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

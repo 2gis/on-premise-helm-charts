@@ -207,3 +207,37 @@ networkPolicy:
   egress:
     enabled: false
     config: []
+
+# @section [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+
+# @param httpRoute.hostnames List of hostnames served by route
+# @extra httpRoute.parentRefs List of parent references (gateways) for HTTPRoute.
+# @skip httpRoute.parentRefs[0].group
+# @skip httpRoute.parentRefs[0].kind
+# @param httpRoute.parentRefs[0].name Name for the first default parentRef
+# @param httpRoute.parentRefs[0].namespace Namespace for the first default parentRef
+# @skip httpRoute.parentRefs[1].group
+# @skip httpRoute.parentRefs[1].kind
+# @param httpRoute.parentRefs[1].name Name for the second default parentRef
+# @param httpRoute.parentRefs[1].namespace Namespace for the second default parentRef
+
+httpRoute:
+  hostnames: []
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: canary
+      namespace: istio-gateways
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: stable
+      namespace: istio-gateways
+
+# @section [GRPCRoute](https://gateway-api.sigs.k8s.io/api-types/grpcroute/) configuration
+
+# @param grpcRoute.hostnames List of hostnames served by route
+# @param grpcRoute.port Destination grpcroute.spec.rules.backendRefs.port number, must be set if grpcRoute.enabled is true
+
+grpcRoute:
+  hostnames: []
+  port: null

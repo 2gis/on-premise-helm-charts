@@ -37,7 +37,7 @@ dgctlStorage:
 
 image:
   repository: 2gis-on-premise/twins-api
-  tag: 1.20.0
+  tag: 1.23.3
   pullPolicy: IfNotPresent
 
 # @section API service settings
@@ -55,7 +55,7 @@ api:
       maxUnavailable: 0
       maxSurge: 1
 
-  # @param api.keys.url URL of the Keys service, ex: http://{keys-api}.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required**
+  # @param api.keys.url URL of the Keys API service, ex: http://keys-service-api.svc. This URL should be accessible from all the pods within your Kubernetes cluster. **Required**
   # @param api.keys.token Keys service API key **Required**
   # @param api.keys.requestTimeout Timeout for requests to the Keys API.
   keys:

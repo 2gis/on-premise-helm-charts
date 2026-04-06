@@ -233,3 +233,55 @@ Params:
 {{- end -}}
 {{- printf "%s" $secretData -}}
 {{- end -}}
+
+{{/*
+Return parentRefs for HTTPRoute.
+
+If .Values.httpRoute.parentRefs is provided by a consuming chart, use it.
+Otherwise return default canary/stable gateways.
+This keeps behavior stable for consumers that do not inherit library-chart values.
+*/}}
+{{- define "generic-chart.httpRouteParentRefs" -}}
+{{- if and (hasKey .Values "httpRoute") (kindIs "map" .Values.httpRoute) (hasKey .Values.httpRoute "parentRefs") -}}
+{{- .Values.httpRoute.parentRefs | toYaml -}}
+{{- else -}}
+- group: gateway.networking.k8s.io
+  kind: Gateway
+  name: canary
+  namespace: istio-gateways
+- group: gateway.networking.k8s.io
+  kind: Gateway
+  name: stable
+  namespace: istio-gateways
+{{- end -}}
+{{- end -}}
+
+{{/*
+
+https://gateway-api.sigs.k8s.io/api-types/grpcroute/#cross-serving
+
+Implementations that support GRPCRoute must enforce uniqueness of hostnames
+between GRPCRoutes and HTTPRoutes. If a route (A) of type HTTPRoute or
+GRPCRoute is attached to a Listener and that listener already has another Route
+(B) of the other type attached and the intersection of the hostnames of A and B
+is non-empty, then the implementation must reject Route A.
+
+*/}}
+{{- define "generic-chart.checkHostnames" }}
+    {{- if (and $.Values.httpRoute.enabled $.Values.grpcRoute.enabled) }}
+        {{- $commonHostnames := list }}
+        {{- range $httpHost := $.Values.httpRoute.hostnames }}
+            {{- if has $httpHost $.Values.grpcRoute.hostnames }}
+                {{- $commonHostnames = append $commonHostnames $httpHost }}
+            {{- end }}
+        {{- end }}
+        {{- range $grpcHost := $.Values.grpcRoute.hostnames }}
+            {{- if has $grpcHost $.Values.httpRoute.hostnames }}
+                {{- $commonHostnames = append $commonHostnames $grpcHost }}
+            {{- end }}
+        {{- end }}
+        {{- if ($commonHostnames) }}
+            {{ fail (printf "HTTPRoute and GRPCRoute have same hostnames:\n%s\n" ($commonHostnames | uniq | sortAlpha | toYaml)) }}
+        {{- end }}
+    {{- end }}
+{{- end }}
