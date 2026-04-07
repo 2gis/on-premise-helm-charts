@@ -212,6 +212,28 @@ kafka:
   taskTopic: ''
   statusTopic: ''
 
+# More on Kafka properties.
+#
+# kafka.properties, kafka.sensitiveProperties and kafka.fileProperties are sections to specify
+# Kafka properties as supported by kafka-python:
+# https://buildmedia.readthedocs.org/media/pdf/kafka-python/master/kafka-python.pdf
+#
+# Properties are case-insensitive, '.' and '_' can be used interchangeably, i.e.
+# the following ones mean the same thing:
+# - bootstrap.servers
+# - bootstrap_servers
+# - BOOTstrap.SERVErs
+# Even though kafka-python native word splitter is '_', there '.' is rather used for similiarity
+# with corresponding settings in navi-back.
+#
+# Both kafka.properties and kafka.sensitiveProperties pass values through to the application,
+# the difference is that kafka.properties are openly disclosed in Pod specification, while
+# kafka.sensitiveProperties is kept in Secrets and never disclosed.
+#
+# kafka.fileProperties keep their values in Secrets the same way as kafka.sensitiveProperties,
+# but these secrets get mounted in application container as files. Application gets pathnames
+# to these files instead of actual values.
+#
 # Kafka properties for common use-cases:
 #
 # Note that <Set-by-CI from user.p12> means that actual content passed from
@@ -219,31 +241,37 @@ kafka:
 #
 #   $ helm install navi-back . --set-file 'kafka.fileProperties.ssl\.keystore\.location=user.p12'
 #
-# 1. SSL authentication with key file protected with password 123:
+# 1. SSL authentication with key file protected with password 'password':
 #
 #  properties:
 #    bootstrap.servers: kafka.host:9092
 #    security.protocol: SSL
-#    ssl.keystore.password: '123'
+#  sensitiveProperties:
+#    ssl.password: password
 #  fileProperties:
-#    ssl.ca.location: '<Set-by-CI from ca.crt>'
-#    ssl.certificate.location: '<Set-by-CI from user.crt>'
-#    ssl.key.location: '<Set-by-CI from user.pem>'
+#    ssl.cafile: '<Set-by-CI from ca.crt>'
+#    ssl.certfile: '<Set-by-CI from user.crt>'
+#    ssl.keyfile: '<Set-by-CI from user.pem>'
 #
-# 2. login/password SASL as test-username/123:
+# 2. login/password SASL as kafkauser/123:
 #
 #  properties:
 #    bootstrap.servers: kafka.host:9092
 #    security.protocol: SASL_PLAINTEXT
 #    sasl.mechanism: SCRAM-SHA-512
-#    sasl.username: test-username
-#    sasl.password: '123'
+#    sasl.plain.username: user
+#  sensitiveProperties:
+#    sasl.plain.password: password
 #
 # 3. Unauthenticated:
 #
 #  properties:
 #    bootstrap.servers: kafka.host:9092
 #    security.protocol: PLAINTEXT
+#
+# Note that .p12 or .jks formats are not supported, they need to be
+# converted to PEM/RSA with openssl or other utility:
+#   https://github.com/dpkp/kafka-python/issues/2052
 
 
 # @section S3-compatible storage settings
