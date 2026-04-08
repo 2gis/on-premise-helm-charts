@@ -13,6 +13,7 @@ metadata:
 spec:
   replicas: {{ .Values.replicas }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds | int }}
   {{- if .Values.strategy }}
   strategy:
     {{- toYaml .Values.strategy | nindent 4 }}
@@ -74,10 +75,16 @@ spec:
               value: {{ required "A valid .Values.env.SSO_CLIENT_ID entry required" .Values.env.SSO_CLIENT_ID | quote }}
             - name: SSO_SCOPE
               value: {{ required "A valid .Values.env.SSO_SCOPE entry required" .Values.env.SSO_SCOPE | quote }}
+            - name: SSO_SIGNUP_URL
+              value: {{ .Values.env.SSO_SIGNUP_URL | quote }}
             - name: ROUTES_API_URL
               value: {{ required "A valid .Values.env.ROUTES_API_URL entry required" .Values.env.ROUTES_API_URL | quote }}
-            - name: ENV_FLAGS_ENABLE_Q1_FEATURES
-              value: {{ .Values.env.ENV_FLAGS_ENABLE_Q1_FEATURES | quote }}
+            - name: FEATURE_FLAGS_OFFLINE_ENVIRONMENT
+              value: {{ .Values.env.FEATURE_FLAGS_OFFLINE_ENVIRONMENT | quote }}
+            - name: FEATBIT_SDK_KEY
+              value: {{ .Values.env.FEATBIT_SDK_KEY | quote }}
+            - name: FEATBIT_SERVER_URL
+              value: {{ .Values.env.FEATBIT_SERVER_URL | quote }}
             - name: CATALOG_API_KEY
               valueFrom:
                 secretKeyRef:
