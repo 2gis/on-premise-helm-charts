@@ -214,6 +214,8 @@ spec:
               value: {{ $.Values.kafka.permissionsTopic.readerGroupId | quote }}
             - name: Kafka__EventsTopicSettings__Name
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
+            - name: Kafka__EventsTopicSettings__ReaderGroupId
+              value: {{ required "A valid .Values.kafka.eventsTopic.readerGroupId entry required" $.Values.kafka.eventsTopic.readerGroupId }}
             - name: Kafka__UseReplicaTopics
               value: {{ $.Values.kafka.useReplicaTopics | quote }}
             - name: LocalCache__Enabled
