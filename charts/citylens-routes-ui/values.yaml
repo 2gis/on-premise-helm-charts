@@ -25,10 +25,11 @@ strategy:
 # @param image.tag Tag
 image:
   repository: 2gis-on-premise/citylens-routes-ui
-  tag: 1.6.2
+  tag: 2.1.0
 
 # @section Environment
 
+# @param env.CATALOG_API_KEY API key for catalog **Required**
 # @param env.CATALOG_API_URL Catalog API base URL **Required**
 # @param env.MAPGL_API_URL Map API base URL **Required**
 # @param env.MAPGL_COPYRIGHT_VARIANT Copyright variant, can be '2gis', 'urbi' or empty
@@ -44,7 +45,10 @@ image:
 # @param env.SSO_CLIENT_ID OpenID client identifier for single sign-on **Required**
 # @param env.SSO_CLIENT_SECRET OpenID client identifier for single sign-on **Required**
 # @param env.SSO_SCOPE OpenID scope for single sign-on **Required**
+# @param env.SSO_SIGNUP_URL Signup URL for SSO
+# @param env.FEATURE_FLAGS_OFFLINE_ENVIRONMENT Feature offline environment
 env:
+  CATALOG_API_KEY: ''
   CATALOG_API_URL: ''
   MAPGL_API_URL: ''
   MAPGL_COPYRIGHT_VARIANT: ''
@@ -60,6 +64,8 @@ env:
   SSO_CLIENT_ID: ''
   SSO_CLIENT_SECRET: ''
   SSO_SCOPE: ''
+  SSO_SIGNUP_URL: ''
+  FEATURE_FLAGS_OFFLINE_ENVIRONMENT: ''
 
 # @section Common deployment settings
 
@@ -77,6 +83,7 @@ env:
 # @param readinessProbe.enabled Enable [readinessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)
 # @param livenessProbe.enabled Enable [livenessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)
 # @param containerPort Port on which application listen connection in container
+# @param progressDeadlineSeconds Deadline
 replicas: 1
 revisionHistoryLimit: 3
 terminationGracePeriodSeconds: 60
@@ -93,6 +100,7 @@ readinessProbe:
 livenessProbe:
   enabled: true
 containerPort: 3000
+progressDeadlineSeconds: 60
 
 # @section Logs
 
@@ -140,10 +148,10 @@ ingress:
   annotations: {}
   className: nginx
   hosts:
-  - host: citylens-routes-ui.example.com
-    paths:
-    - path: /
-      pathType: Prefix
+    - host: citylens-routes-ui.example.com
+      paths:
+        - path: /
+          pathType: Prefix
   tls: []
   # - hosts:
   #   - citylens-routes-ui.example.com
