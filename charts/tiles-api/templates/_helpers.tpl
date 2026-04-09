@@ -58,7 +58,9 @@ dgis_tileserver_{{ include "tiles.kind" . }}_{{ required "Valid .Values.cassandr
 {{- end -}}
 
 {{- define "tiles.type" -}}
-{{- if .subtype -}}
+{{- if has .subtype (list "general_v4" "detailed_v4") -}}
+vector
+{{- else if .subtype -}}
 ald
 {{- else if has .kind (list "web" "native") -}}
 vector
