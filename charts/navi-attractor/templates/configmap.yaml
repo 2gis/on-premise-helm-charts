@@ -53,7 +53,18 @@ data:
         "print_outgoing_messages": {{ .Values.attractor.sentry.printMessages | default false }},
         "debug": {{ .Values.attractor.sentry.debug | default false }},
         "path": {{ .Values.attractor.sentry.reportPath | default "/tmp/sentry" | quote }},
-        "handler": {{ .Values.attractor.sentry.handler | default "/usr/sbin/2gis/mosesd/crashpad_handler" | quote }}
+        "handler": {{ .Values.attractor.sentry.handler | default "/usr/sbin/2gis/navi-back/crashpad_handler" | quote }},
+        "min_severity_level": {{ .Values.attractor.sentry.minSeverityLevel | default "error" | quote }},
+        "logs_buffer_size": {{ .Values.attractor.sentry.logsBufferSize | default 100 | int }}
+      },
+      {{- end }}
+      {{- if .Values.attractor.telemetry.enabled }}
+      "telemetry": {
+        "host": {{ .Values.attractor.telemetry.host | quote }},
+        "port": {{ .Values.attractor.telemetry.port | int }},
+        "max_queue_size": {{ .Values.attractor.telemetry.maxQueueSize | default 2048 | int }},
+        "schedule_delay_millis": {{ .Values.attractor.telemetry.scheduleDelayMillis | default 500 | int }},
+        "max_export_batch_size": {{ .Values.attractor.telemetry.maxExportBatchSize | default 512 | int }}
       },
       {{- end }}
       "context": {
