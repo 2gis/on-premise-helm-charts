@@ -95,6 +95,7 @@ data:
     {{- end }}
     pro:
       {{- with .Values.pro }}
+      ui_base_url: {{ .uiBaseUrl | squote }}
       client:
         base_url: {{ .baseUrl }}
         token: {{ .key }}

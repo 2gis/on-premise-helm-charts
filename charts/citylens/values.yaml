@@ -948,6 +948,7 @@ headerLinks:
 
 # @section PRO integration (only when Pro reporter enabled)
 
+# @param pro.uiBaseUrl PRO UI URL. Ex: http(s)://pro-ui.
 # @param pro.baseUrl PRO API URL. Ex: http(s)://pro-api.svc
 # @param pro.key PRO API auth token
 # @param pro.verifySsl Set to `false` if pro.baseUrl must be accessed via https without certificate validation. **Required**
@@ -955,6 +956,7 @@ headerLinks:
 # @param pro.objectsAssetId PRO Objects asset id (used for filters actualization). Ex: your_objects_asset_name
 
 pro:
+  uiBaseUrl: ''
   baseUrl: ''
   key: ''
   verifySsl: true

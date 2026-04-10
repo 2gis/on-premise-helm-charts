@@ -519,6 +519,7 @@ See the [documentation]() to learn about:
 
 | Name                 | Description                                                                                           | Value  |
 | -------------------- | ----------------------------------------------------------------------------------------------------- | ------ |
+| `pro.uiBaseUrl`      | PRO UI URL. Ex: http(s)://pro-ui.                                                                     | `""`   |
 | `pro.baseUrl`        | PRO API URL. Ex: http(s)://pro-api.svc                                                                | `""`   |
 | `pro.key`            | PRO API auth token                                                                                    | `""`   |
 | `pro.verifySsl`      | Set to `false` if pro.baseUrl must be accessed via https without certificate validation. **Required** | `true` |
