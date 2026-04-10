@@ -494,6 +494,20 @@ Usage:
 {{- end -}}
 
 {{/*
+Set index name for edge_transition_probability.
+If AB test is enabled, use dedicated AB index, otherwise fallback to castle proxy/default index.
+Usage:
+{{ include "config.edgeTransitionProbabilityIndexName" $ }}
+*/}}
+{{- define "config.edgeTransitionProbabilityIndexName" -}}
+   {{- if .Values.naviback.indices.abTestIndex.enabled -}}
+   {{- printf .Values.naviback.indices.abTestIndex.indexName -}}
+   {{- else -}}
+   {{- include "config.setCastleProxyIndex" . -}}
+   {{- end -}}
+{{- end -}}
+
+{{/*
 Set restriction url
 If naviback.castleUrlProxy set return naviback.castleUrlProxy,
 else if naviback.restrictions.url set return naviback.restrictions.url,

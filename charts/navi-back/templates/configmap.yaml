@@ -53,6 +53,18 @@ data:
         "request_timeout": {{ .Values.naviback.requestTimeout | default 120 | int }}
       },
       {{- end }}
+      {{- if .Values.stateTransmitter.enabled }}
+      "state_transmitter": {
+        {{- $kafkaProperties := dict -}}
+        {{- range $key, $_ := .Values.stateTransmitter.kafka.fileProperties -}}
+        {{- $_ := set $kafkaProperties $key (printf "%s/secret-stateTransmitter/%s" $.Values.naviback.configFilepath $key) -}}
+        {{- end -}}
+        {{- $kafkaProperties := mustMerge $kafkaProperties .Values.stateTransmitter.kafka.properties }}
+        "kafka_properties":
+          {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
+        "kafka_topic": {{ .Values.stateTransmitter.kafka.topic | required "stateTransmitter.kafka.topic is not set" | quote }}
+      },
+      {{- end }}{{/* .Values.stateTransmitter.enabled */}}
       {{- if .Values.naviback.sentry.enabled }}
       "error_tracker": {
         "report_destination_address": {{ .Values.naviback.sentry.address | quote }},
@@ -61,7 +73,9 @@ data:
         "print_outgoing_messages": {{ .Values.naviback.sentry.printMessages | default false }},
         "debug": {{ .Values.naviback.sentry.debug | default false }},
         "path": {{ .Values.naviback.sentry.reportPath | default "/tmp/sentry" | quote }},
-        "handler": {{ .Values.naviback.sentry.handler | default "/usr/sbin/2gis/mosesd/crashpad_handler" | quote }}
+        "handler": {{ .Values.naviback.sentry.handler | default "/usr/sbin/2gis/navi-back/crashpad_handler" | quote }},
+        "min_severity_level": {{ .Values.naviback.sentry.minSeverityLevel | default "error" | quote }},
+        "logs_buffer_size": {{ .Values.naviback.sentry.logsBufferSize | default 100 | int }}
       },
       {{- end }}
       {{- if (index .Values (include "config.attractor" .) | default dict).enabled }}
@@ -70,6 +84,15 @@ data:
         "host": "127.0.0.1",
         "port": 9999,
         "timeout_limit_ms": {{ default 1000 ((index .Values (include "config.attractor" .) | default dict).responseTimeoutMs) | quote }}
+      },
+      {{- end }}
+      {{- if .Values.naviback.telemetry.enabled }}
+      "telemetry": {
+        "host": {{ .Values.naviback.telemetry.host | quote }},
+        "port": {{ .Values.naviback.telemetry.port | int }},
+        "max_queue_size": {{ .Values.naviback.telemetry.maxQueueSize | default 2048 | int }},
+        "schedule_delay_millis": {{ .Values.naviback.telemetry.scheduleDelayMillis | default 500 | int }},
+        "max_export_batch_size": {{ .Values.naviback.telemetry.maxExportBatchSize | default 512 | int }}
       },
       {{- end }}
       "context": {
@@ -149,6 +172,17 @@ data:
             ],
             "timeout_seconds": 30
           }
+          {{- if .Values.naviback.indices.abTestIndex.enabled -}}
+          ,
+          {
+            "index_name": "{{ .Values.naviback.indices.abTestIndex.indexName | default "ab_test" }}",
+            "update_period": 600,
+            "nodes": [
+              "{REMOTE_PATH}/{{ .Values.naviback.indices.abTestIndex.filename | default "index_ab.json" }}"
+            ],
+            "timeout_seconds": 30
+          }
+          {{- end }}{{- /* if .Values.naviback.indices.abTestIndex.enabled */}}
           {{- if .Values.naviback.castleUrlProxy -}}
           ,
           {
@@ -171,7 +205,7 @@ data:
             "index_name": "speed_index",
             "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
             "nodes": [
-              "{REMOTE_ECA}/{{ .Values.naviback.indices.speedIndex.filename | default "traffic/moses/speeds5.json" }}"
+              "{REMOTE_ECA}/{{ .Values.naviback.indices.speedIndex.filename | default "traffic/moses/speeds5.json.zip" }}"
             ],
             "timeout_seconds": 60
           }
@@ -420,7 +454,7 @@ data:
         {{- end }}
         {{- if .Values.naviback.indices.edgeTransitionProbability.enabled }}
         "edge_transition_probability": {
-          "index_name": {{ include "config.setCastleProxyIndex" $ | quote }},
+          "index_name": {{ include "config.edgeTransitionProbabilityIndexName" $ | quote }},
           "update_period": 0,
           "timeout_seconds": 60
         },
