@@ -42,12 +42,16 @@ app.kubernetes.io/component: api
 {{- end -}}
 
 {{- define "tiles.kind" -}}
-{{- if .subtype }}
+{{- if eq .subtype "general-v4" -}}
+{{- .kind }}_general_v4
+{{- else if eq .subtype "detailed-v4" -}}
+{{- .kind }}_detailed_v4
+{{- else if .subtype -}}
 {{- .kind }}_{{ .subtype }}
 {{- else }}
 {{- .kind }}
 {{- end }}
-{{- end }}
+{{- end -}}
 
 {{- define "tiles.keyspace" -}}
 {{- if .keyspace }}
@@ -98,7 +102,11 @@ tiles-api-mapbox
 {{- end -}}
 
 {{- define "importer.types" -}}
-{{- if .subtype -}}
+{{- if eq .subtype "general-v4" -}}
+- general_v4
+{{- else if eq .subtype "detailed-v4" -}}
+- detailed_v4
+{{- else if .subtype -}}
 - {{ .subtype }}
 {{- else if has .kind (list "web" "native") -}}
 - vtiles
