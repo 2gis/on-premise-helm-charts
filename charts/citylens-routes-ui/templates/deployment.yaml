@@ -81,6 +81,8 @@ spec:
               value: {{ required "A valid .Values.env.ROUTES_API_URL entry required" .Values.env.ROUTES_API_URL | quote }}
             - name: ENV_FLAGS_ENABLE_Q1_FEATURES
               value: {{ .Values.env.ENV_FLAGS_ENABLE_Q1_FEATURES | quote }}
+            - name: ENABLE_DEV_TOOLS
+              value: {{ .Values.env.ENABLE_DEV_TOOLS | quote }}
             - name: FEATURE_FLAGS_OFFLINE_ENVIRONMENT
               value: {{ .Values.env.FEATURE_FLAGS_OFFLINE_ENVIRONMENT | quote }}
             - name: FEATBIT_SDK_KEY
