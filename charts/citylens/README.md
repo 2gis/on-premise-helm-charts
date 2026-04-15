@@ -457,8 +457,8 @@ See the [documentation]() to learn about:
 | `kafka.bootstrapServer`         | A Kafka broker endpoint. **Required**                                                                                                     | `""`             |
 | `kafka.username`                | A Kafka username for connection. **Required**                                                                                             | `""`             |
 | `kafka.password`                | A Kafka password for connection. **Required**                                                                                             | `""`             |
-| `kafka.securityProtocol`        | Protocol used to communicate with brokers. Currently supported: SASL_PLAINTEXT.                                                           | `SASL_PLAINTEXT` |
-| `kafka.saslMechanism`           | Authentication mechanism. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.                                                          | `SCRAM-SHA-512`  |
+| `kafka.securityProtocol`        | Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SASL_PLAINTEXT.                                                   | `SASL_PLAINTEXT` |
+| `kafka.saslMechanism`           | Authentication mechanism. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512. Required for SASL_PLAINTEXT protocol.                    | `SCRAM-SHA-512`  |
 | `kafka.produceTimeoutSeconds`   | Timeout for producer.                                                                                                                     | `5`              |
 | `kafka.topics.frames`           | List of topics for Frames saver worker. **Required**                                                                                      | `""`             |
 | `kafka.topics.tracks`           | List of topics for Tracks metadata worker. **Required**                                                                                   | `""`             |
