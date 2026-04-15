@@ -53,7 +53,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-router
   pullPolicy: IfNotPresent
-  tag: 6.40.0.2
+  tag: 6.42.0.2
 
 
 # @section Navi-Router service settings
@@ -72,6 +72,14 @@ image:
 # @param router.sentry.debug Debugging switch
 # @param router.sentry.reportPath Local directory to dump
 # @param router.sentry.handler Handler file location
+# @param router.sentry.min_severity_level Minimal severity level to log in sentry
+# @param router.sentry.logs_buffer_size Size of buffer to send to sentry
+# @param router.telemetry.enabled Send telemetry to Opentelemetry server
+# @param router.telemetry.host Telemetry host
+# @param router.telemetry.port Telemetry port
+# @param router.telemetry.max_queue_size Max number of buffered spans
+# @param router.telemetry.schedule_delay_millis Interval of export of the buffered spans, ms
+# @param router.telemetry.max_export_batch_size Max number of spans sent to the exporter in a single export call
 # @extra router.localRestrictions.distanceBetweenPointsKm Max allowed distance between points
 # @skip router.localRestrictions.distanceBetweenPointsKm[0]
 # @extra router.localRestrictions.pointsCount Max allowed points count
@@ -89,6 +97,7 @@ image:
 # @extra router.rulesUrl URL of the rules file
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace
 # @param rules List of routing rules, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
+# @param abTestOptions AB test options for routing rules, passed as JSON object. If set, mounted as router_rules_ab_test_options.json
 
 router:
   appPort: 8080
@@ -106,6 +115,8 @@ router:
     debug: false
     reportPath: /tmp/sentry
     handler: /usr/sbin/2gis/mosesd/crashpad_handler
+    min_severity_level: error
+    logs_buffer_size: 0
   localRestrictions:
     distanceBetweenPointsKm:
     - type: distance-matrix-api
@@ -123,9 +134,17 @@ router:
   backupPorts:
     base: 50000
     number: 0
+  telemetry:
+    enabled: false
+    host: telemetry.server
+    port: 4318
+    max_queue_size: 2048
+    schedule_delay_millis: 500
+    max_export_batch_size: 512
 
 navigroup: ''
 rules: []
+abTestOptions: {}
 
 
 # @section Key management service settings

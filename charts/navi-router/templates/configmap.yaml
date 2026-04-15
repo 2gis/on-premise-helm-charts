@@ -40,7 +40,18 @@ data:
         "print_outgoing_messages": {{ .Values.router.sentry.printMessages | default false }},
         "debug": {{ .Values.router.sentry.debug | default false }},
         "path": {{ .Values.router.sentry.reportPath | default "/tmp/sentry" | quote }},
-        "handler": {{ .Values.router.sentry.handler | default "/usr/sbin/2gis/mosesd/crashpad_handler" | quote }}
+        "handler": {{ .Values.router.sentry.handler | default "/usr/sbin/2gis/mosesd/crashpad_handler" | quote }},
+        "min_severity_level": {{ .Values.router.sentry.min_severity_level | default "error" | quote }},
+        "logs_buffer_size": {{ .Values.router.sentry.logs_buffer_size | default 0 | int }}
+      },
+      {{- end }}
+      {{- if .Values.router.telemetry.enabled }}
+      "telemetry": {
+        "host": {{ .Values.router.telemetry.host | quote }},
+        "port": {{ .Values.router.telemetry.port | int }},
+        "max_queue_size": {{ .Values.router.telemetry.max_queue_size | default 2048 | int }},
+        "schedule_delay_millis": {{ .Values.router.telemetry.schedule_delay_millis | default 500 | int }},
+        "max_export_batch_size": {{ .Values.router.telemetry.max_export_batch_size | default 512 | int }}
       },
       {{- end }}
       "context": {
@@ -126,3 +137,7 @@ data:
     }
   rules.conf: |-
     {{- include "rules.renderRules" . }}
+  {{- if .Values.abTestOptions }}
+  router_rules_ab_test_options.json: |-
+    {{- .Values.abTestOptions | toJson | nindent 4 }}
+  {{- end }}

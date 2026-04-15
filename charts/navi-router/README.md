@@ -4,6 +4,10 @@ Use this Helm chart to deploy Navi-Router service, which is a part of 2GIS's [On
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
+> **Note:**
+>
+> All On-Premise services are beta, and under development.
+
 See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn about:
 
 - Architecture of the service.
@@ -46,7 +50,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                         |
 | ------------------ | ----------- | ----------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-router` |
-| `image.tag`        | Tag         | `6.40.0.2`                    |
+| `image.tag`        | Tag         | `6.42.0.2`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
 ### Navi-Router service settings
@@ -67,6 +71,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `router.sentry.debug`                                      | Debugging switch                                                                                                                                             | `false`                                  |
 | `router.sentry.reportPath`                                 | Local directory to dump                                                                                                                                      | `/tmp/sentry`                            |
 | `router.sentry.handler`                                    | Handler file location                                                                                                                                        | `/usr/sbin/2gis/mosesd/crashpad_handler` |
+| `router.sentry.min_severity_level`                         | Minimal severity level to log in sentry                                                                                                                      | `error`                                  |
+| `router.sentry.logs_buffer_size`                           | Size of buffer to send to sentry                                                                                                                             | `0`                                      |
+| `router.telemetry.enabled`                                 | Send telemetry to Opentelemetry server                                                                                                                       | `false`                                  |
+| `router.telemetry.host`                                    | Telemetry host                                                                                                                                               | `telemetry.server`                       |
+| `router.telemetry.port`                                    | Telemetry port                                                                                                                                               | `4318`                                   |
+| `router.telemetry.max_queue_size`                          | Max number of buffered spans                                                                                                                                 | `2048`                                   |
+| `router.telemetry.schedule_delay_millis`                   | Interval of export of the buffered spans, ms                                                                                                                 | `500`                                    |
+| `router.telemetry.max_export_batch_size`                   | Max number of spans sent to the exporter in a single export call                                                                                             | `512`                                    |
 | `router.localRestrictions.distanceBetweenPointsKm`         | Max allowed distance between points                                                                                                                          |                                          |
 | `router.localRestrictions.pointsCount`                     | Max allowed points count                                                                                                                                     |                                          |
 | `router.localRestrictions.matrixSize`                      | Max allowed matrix size                                                                                                                                      |                                          |
@@ -77,6 +89,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `router.rulesUrl`                                          | URL of the rules file                                                                                                                                        |                                          |
 | `navigroup`                                                | Service group identifier, allows multiple stacks deployed to the same namespace                                                                              | `""`                                     |
 | `rules`                                                    | List of routing rules, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details | `[]`                                     |
+| `abTestOptions`                                            | AB test options for routing rules, passed as JSON object. If set, mounted as router_rules_ab_test_options.json                                               | `{}`                                     |
 
 ### Key management service settings
 
