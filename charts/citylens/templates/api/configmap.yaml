@@ -9,9 +9,11 @@ data:
       bootstrap_servers: {{  required "A valid .Values.kafka.bootstrap.servers entry required" .bootstrapServer | squote }}
       security:
         security_protocol: {{ required "A valid .Values.kafka.securityProtocol entry required" .securityProtocol | squote }}
+        {{- if eq .securityProtocol "SASL_PLAINTEXT" }}
         sasl_mechanism: {{ required "A valid .Values.kafka.saslMechanism entry required" .saslMechanism | squote }}
         sasl_plain_username: {{ required "A valid .Values.kafka.username entry required" .username | squote }}
         sasl_plain_password: {{ required "A valid .Values.kafka.password entry required" .password | squote }}
+        {{- end }}
     topics:
       frames: {{ required "A valid .Values.kafka.topics.frames entry required" .topics.frames | squote }}
       tracks: {{ required "A valid .Values.kafka.topics.tracks entry required" .topics.tracks | squote }}
