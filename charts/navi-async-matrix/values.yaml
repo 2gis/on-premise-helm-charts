@@ -511,13 +511,13 @@ kafka:
 #    ssl.certfile: '<Set-by-CI from user.crt>'
 #    ssl.keyfile: '<Set-by-CI from user.pem>'
 #
-# 2. login/password SASL as kafkauser/123:
+# 2. login/password SASL as kafkauser/password:
 #
 #  properties:
 #    bootstrap.servers: kafka.host:9092
 #    security.protocol: SASL_PLAINTEXT
 #    sasl.mechanism: SCRAM-SHA-512
-#    sasl.plain.username: user
+#    sasl.plain.username: kafkauser
 #  sensitiveProperties:
 #    sasl.plain.password: password
 #
