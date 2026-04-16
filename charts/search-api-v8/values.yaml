@@ -1440,7 +1440,7 @@ service:
 # @param ingressRouter.prometheusUrl Prometheus URL for rate limiting
 # @param ingressRouter.rateLimitRules Big Search usage quotas
 # @param ingressRouter.filteredUserAgentList filtered User-Agent list
-# @param ingressRouter.masterApiKey api key for advanced features
+# @skip ingressRouter.masterApiKey api key for advanced features
 
 # @param ingressRouter.ports.monitor TCP port for service endpoints such as `/metrics`
 # @param ingressRouter.ports.http TCP port for API requests
