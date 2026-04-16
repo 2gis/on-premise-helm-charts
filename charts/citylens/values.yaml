@@ -110,7 +110,7 @@ api:
   image:
     repository: 2gis-on-premise/citylens-api
     pullPolicy: IfNotPresent
-    tag: 1.18.3
+    tag: 1.19.2
 
   replicas: 4
 
@@ -224,6 +224,8 @@ api:
 # @param web.auth.verifySsl Enable\Disable SSL check.
 # @param web.auth.pkce Enable\Disable PKCE (Proof Key for Code Exchange) in Authorization Code flow.
 
+# @param web.cookiesSecretKey Secret key used for signing cookies. Format: hex string. Ex: `5d6f45a5fc12445dbac2f59c3b6c7cb1`. **Required**
+
 # @section Custom settings
 
 # @param web.logLevel Log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.
@@ -246,7 +248,7 @@ web:
   image:
     repository: 2gis-on-premise/citylens-web
     pullPolicy: IfNotPresent
-    tag: 1.18.3
+    tag: 1.19.2
 
   replicas: 1
 
@@ -283,6 +285,8 @@ web:
     # - hosts:
     #   - citylens-web.example.com
     #   secretName: secret.tls
+
+  cookiesSecretKey: ''
 
   auth:
     enabled: false
@@ -746,7 +750,7 @@ worker:
     image:
       repository: 2gis-on-premise/citylens-workers
       pullPolicy: IfNotPresent
-      tag: 1.18.3
+      tag: 1.19.2
 
     revisionHistoryLimit: 3
 
@@ -782,7 +786,7 @@ migrations:
   image:
     repository: 2gis-on-premise/citylens-database
     pullPolicy: IfNotPresent
-    tag: 1.18.0
+    tag: 1.19.0
 
   resources:
     requests:
@@ -948,6 +952,7 @@ headerLinks:
 
 # @section PRO integration (only when Pro reporter enabled)
 
+# @param pro.uiBaseUrl PRO UI URL. Ex: http(s)://pro-ui.
 # @param pro.baseUrl PRO API URL. Ex: http(s)://pro-api.svc
 # @param pro.key PRO API auth token
 # @param pro.verifySsl Set to `false` if pro.baseUrl must be accessed via https without certificate validation. **Required**
@@ -955,6 +960,7 @@ headerLinks:
 # @param pro.objectsAssetId PRO Objects asset id (used for filters actualization). Ex: your_objects_asset_name
 
 pro:
+  uiBaseUrl: ''
   baseUrl: ''
   key: ''
   verifySsl: true
