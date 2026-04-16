@@ -307,6 +307,13 @@ spec:
                 secretKeyRef:
                   key: rtr.webapi.password
                   name: {{ print (include "castle.fullname" $) "-rtr" }}
+            {{- if .Values.rtr.s3.enabled }}
+            - name: CASTLE_RESTRICTION_JSON_S3_PWD
+              valueFrom:
+                secretKeyRef:
+                  key: rtr.s3.secretKey
+                  name: {{ print (include "castle.fullname" $) "-rtr" }}
+            {{- end }}{{- /* .Values.rtr.s3.enabled */}}
             - name: POD_NAME
               valueFrom:
                 fieldRef:

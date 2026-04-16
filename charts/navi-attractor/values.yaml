@@ -260,8 +260,17 @@ pdb:
 # @param attractor.sentry.username Sentry username
 # @param attractor.sentry.printMessages If outgoing messages needed
 # @param attractor.sentry.debug Debugging switch
+# @param attractor.sentry.environment Environment name
 # @param attractor.sentry.reportPath Local directory to dump
 # @param attractor.sentry.handler Handler file location
+# @param attractor.sentry.minSeverityLevel Minimal severity level to log in sentry
+# @param attractor.sentry.logsBufferSize Size of buffer to send to sentry
+# @param attractor.telemetry.enabled Send telemetry to Opentelemetry server
+# @param attractor.telemetry.host Telemetry host
+# @param attractor.telemetry.port Telemetry port
+# @param attractor.telemetry.maxQueueSize Max number of buffered spans
+# @param attractor.telemetry.scheduleDelayMillis Interval of export of the buffered spans, ms
+# @param attractor.telemetry.maxExportBatchSize Max number of spans sent to the exporter in a single export call
 # @param attractor.indexFilename Name of the index file on Castle
 # @param attractor.citiesFilename Name of the cities file on Castle
 # @param attractor.configFilepath Configs mountpoint path
@@ -292,6 +301,13 @@ pdb:
 
 attractor:
   appPort: 8080
+  telemetry:
+    enabled: false
+    host: telemetry.server
+    port: 4318
+    maxQueueSize: 2048
+    scheduleDelayMillis: 500
+    maxExportBatchSize: 512
   castleUrl: ''
   castleUrlProxy: ''
   handlersNumber: 20
@@ -313,8 +329,11 @@ attractor:
     username: navi
     printMessages: false
     debug: false
+    environment: ''
     reportPath: /tmp/sentry
-    handler: /usr/sbin/2gis/mosesd/crashpad_handler
+    handler: /usr/sbin/2gis/navi-back/crashpad_handler
+    minSeverityLevel: error
+    logsBufferSize: 100
   indexFilename: index.json.zip
   citiesFilename: cities.conf.zip
   configFilepath: /src/etc/2gis/mosesd

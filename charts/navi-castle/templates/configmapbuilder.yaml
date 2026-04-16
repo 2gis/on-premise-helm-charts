@@ -195,12 +195,24 @@ data:
     restriction_json:
     {
         remote_name: 'restrictions-temp-%project%.json',
-        remote_dir: '',
+        remote_dir: '{{ .Values.rtr.restrictionJson.remoteDir }}',
 
         local_name: '%project%-restriction.json',
         local_dir: 'restrictions/%project%',
 
         post_processing: RestrictionFilter
+
+        {{- if .Values.rtr.s3.enabled }}
+        s3:
+        {
+            server: '{{ .Values.rtr.s3.host }}',
+            bucket: '{{ .Values.rtr.s3.bucket }}',
+            login: '{{ .Values.rtr.s3.accessKey }}',
+            pwd: 'from-env',
+            header: '{{ .Values.rtr.restrictionJson.header }}',
+            timeout: {{ .Values.rtr.restrictionJson.timeout }}
+        },
+        {{- end }}{{- /* .Values.rtr.s3.enabled */}}
 
         http:
         {
