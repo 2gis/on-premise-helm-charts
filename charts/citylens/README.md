@@ -191,6 +191,7 @@ See the [documentation]() to learn about:
 | `web.auth.clientSecret`  | Client Secret from keycloak. **Required**                                                                                                                                                                                  | `""`    |
 | `web.auth.verifySsl`     | Enable\Disable SSL check.                                                                                                                                                                                                  | `true`  |
 | `web.auth.pkce`          | Enable\Disable PKCE (Proof Key for Code Exchange) in Authorization Code flow.                                                                                                                                              | `false` |
+| `web.cookiesSecretKey`   | Secret key used for signing cookies. Format: hex string. Ex: `5d6f45a5fc12445dbac2f59c3b6c7cb1`. **Required**                                                                                                              | `""`    |
 
 ### Custom settings
 

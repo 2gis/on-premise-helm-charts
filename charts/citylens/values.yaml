@@ -224,6 +224,8 @@ api:
 # @param web.auth.verifySsl Enable\Disable SSL check.
 # @param web.auth.pkce Enable\Disable PKCE (Proof Key for Code Exchange) in Authorization Code flow.
 
+# @param web.cookiesSecretKey Secret key used for signing cookies. Format: hex string. Ex: `5d6f45a5fc12445dbac2f59c3b6c7cb1`. **Required**
+
 # @section Custom settings
 
 # @param web.logLevel Log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.
@@ -283,6 +285,8 @@ web:
     # - hosts:
     #   - citylens-web.example.com
     #   secretName: secret.tls
+
+  cookiesSecretKey: ''
 
   auth:
     enabled: false
