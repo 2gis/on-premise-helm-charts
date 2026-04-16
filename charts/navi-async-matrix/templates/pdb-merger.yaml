@@ -1,18 +1,11 @@
 {{- define "merger.pdb" }}
 metadata:
-  name: {{ include "navi-async-matrix.fullname" . }}-merger
-spec:
-{{- if .Values.dm.merger.pdb.minAvailable }}
-  minAvailable: {{ .Values.dm.merger.pdb.minAvailable }}
+  name: {{ include "generic-chart.fullname" . }}-merger
 {{- end }}
-{{- if .Values.dm.merger.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.dm.merger.pdb.maxUnavailable }}
-{{- end }}
-  selector:
-    matchLabels:
-{{ include "navi-async-matrix.mergerlabels" $ | nindent 6 }}
-      app.kubernetes.io/component: {{ include "generic-chart.fullname" . }}-merger
-{{- end }}
-{{- if .Values.dm.merger.pdb.enabled }}
-{{- template "generic-chart.merge" (list . "merger.pdb" "generic-chart.pdb.tpl") }}
+{{ if .Values.dm.merger.pdb.enabled }}
+{{- template "generic-chart.merge" (list
+    (merge (dict "pdbctx" .Values.dm.merger.pdb) .)
+    "merger.pdb"
+    "generic-chart.pdb.tpl"
+) }}
 {{- end }}
