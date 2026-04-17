@@ -84,7 +84,7 @@ data:
         "type": {{ (index .Values (include "config.attractor" .) | default dict).type | quote }},
         "host": "127.0.0.1",
         "port": 9999,
-        "timeout_limit_ms": {{ default 1000 ((index .Values (include "config.attractor" .) | default dict).responseTimeoutMs) | quote }}
+        "timeout_limit_ms": {{ default 550 ((index .Values (include "config.attractor" .) | default dict).responseTimeoutMs) | int }}
       },
       {{- end }}
       {{- if .Values.naviback.telemetry.enabled }}
