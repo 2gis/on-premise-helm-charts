@@ -179,6 +179,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 | Name                                | Description                                         | Value            |
 | ----------------------------------- | --------------------------------------------------- | ---------------- |
+| `httpRoute.enabled`                 | If HTTPRoute is enabled for the service.            | `false`          |
 | `httpRoute.hostnames`               | List of hostnames served by route                   | `[]`             |
 | `httpRoute.parentRefs`              | List of parent references (gateways) for HTTPRoute. |                  |
 | `httpRoute.parentRefs[0].name`      | Name for the first default parentRef                | `canary`         |

@@ -210,6 +210,7 @@ networkPolicy:
 
 # @section [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
 
+# @param httpRoute.enabled If HTTPRoute is enabled for the service.
 # @param httpRoute.hostnames List of hostnames served by route
 # @extra httpRoute.parentRefs List of parent references (gateways) for HTTPRoute.
 # @skip httpRoute.parentRefs[0].group
@@ -222,6 +223,7 @@ networkPolicy:
 # @param httpRoute.parentRefs[1].namespace Namespace for the second default parentRef
 
 httpRoute:
+  enabled: false
   hostnames: []
   parentRefs:
     - group: gateway.networking.k8s.io
