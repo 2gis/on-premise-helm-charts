@@ -1,5 +1,12 @@
 # Citylens Breaking-Changes
 
+## [2.3.0]
+
+### citylens
+
+- Added new required parameters:
+  - `.Values.routes.endpointInternalApiKey.users`
+
 ## [2.2.0]
 
 ### citylens
