@@ -1415,21 +1415,21 @@ routes:
 
 # @section Citylens routes feature switcher settings.
 # @param routes.features.authorizationEnabled Enables user authentication and authorization. When disabled, the system runs with hardcoded default user.
-# @param routes.features.oidcMobileAuthorizationEnabled Enables driver authentication and authorization.
-# @param routes.features.coverageRatioEnabled Enables sending coverage ratio data to the PRO.
 # @param routes.features.tasksAssetEnabled Enables sending route task data (planned/completed) to the PRO platform as dynamic assets. Requires valid PRO token and asset IDs.
-# @param routes.features.multiTenantEnabled Enables strict data isolation by tenant (company).
-# @param routes.features.licenseEnabled Enables license by tenant (company).
-# @param routes.features.areaClusteringEnabled Enables generate tasks by area.
-# @param routes.features.oneRouteDirectionEnabled Enables one direction way.
-# @param routes.features.navigationByPointsEnabled Enables create task with navigation by points.
-# @param routes.features.incidentsEnabled Enables real-time incident reporting.
-# @param routes.features.driverStatusEnabled Enables real-time driver status reporting.
+# @skip routes.features.oidcMobileAuthorizationEnabled Enables driver authentication and authorization.
+# @skip routes.features.coverageRatioEnabled Enables sending coverage ratio data to the PRO.
+# @skip routes.features.multiTenantEnabled Enables strict data isolation by tenant (company).
+# @skip routes.features.licenseEnabled Enables license by tenant (company).
+# @skip routes.features.areaClusteringEnabled Enables generate tasks by area.
+# @skip routes.features.oneRouteDirectionEnabled Enables one direction way.
+# @skip routes.features.navigationByPointsEnabled Enables create task with navigation by points.
+# @skip routes.features.incidentsEnabled Enables real-time incident reporting.
+# @skip routes.features.driverStatusEnabled Enables real-time driver status reporting.
 
   features:
-    authorizationEnabled: false
-    oidcMobileAuthorizationEnabled: false
-    coverageRatioEnabled: false
+    authorizationEnabled: true
+    oidcMobileAuthorizationEnabled: true
+    coverageRatioEnabled: true
     tasksAssetEnabled: false
     multiTenantEnabled: false
     licenseEnabled: false
