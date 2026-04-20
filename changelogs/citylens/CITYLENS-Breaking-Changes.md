@@ -4,7 +4,6 @@
 
 ### citylens-routes-ui
 
-- `env.MAPGL_KEY` split into `env.CATALOG_API_KEY` and `env.MAPGL_KEY`
 - Added new required parameters:
   - `env.CATALOG_API_KEY`
 
