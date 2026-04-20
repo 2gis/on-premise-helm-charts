@@ -1,5 +1,13 @@
 # Citylens Breaking-Changes
 
+## [2.3.0]
+
+### citylens-routes-ui
+
+- `env.MAPGL_KEY` split into `env.CATALOG_API_KEY` and `env.MAPGL_KEY`
+- Added new required parameters:
+  - `env.CATALOG_API_KEY`
+
 ## [2.2.0]
 
 ### citylens
