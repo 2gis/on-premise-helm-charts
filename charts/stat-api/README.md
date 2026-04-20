@@ -13,7 +13,7 @@ Use this Helm chart to deploy API Stat service, which is a part of 2GIS's [On-Pr
 ### Common settings
 
 | Name                       | Description                    | Value                              |
-| -------------------------- | ------------------------------ |------------------------------------|
+| -------------------------- | ------------------------------ | ---------------------------------- |
 | `imagePullSecrets`         | Kubernetes image pull secrets. | `[]`                               |
 | `imagePullPolicy`          | Pull policy.                   | `IfNotPresent`                     |
 | `api.image.repository`     | API service image repository.  | `2gis-on-premise/stat-api`         |
