@@ -362,18 +362,28 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Route sharing properties. Leave with defaults, FOR FUTURE RELEASE
 
+| Name                                | Description                                                             | Value   |
+| ----------------------------------- | ----------------------------------------------------------------------- | ------- |
+| `routesharing.enabled`              | If route sharing enabled                                                | `false` |
+| `routesharing.kafka.topic`          | Topic to use for route sharing                                          | `""`    |
+| `routesharing.kafka.topicAux`       | Auxiliary topic to use for route sharing in MobileSDK                   | `""`    |
+| `routesharing.kafka.properties`     | Properties as supported by librdkafka, see `kafka` section and comments |         |
+| `routesharing.kafka.fileProperties` | Properties stored in file, see `kafka` section and comments             | `{}`    |
+
+### Requests saving options. Leave with defaults, FOR TEST PURPOSES ONLY
+
+| Name                                 | Description                                                             | Value   |
+| ------------------------------------ | ----------------------------------------------------------------------- | ------- |
+| `requestSaving.enabled`              | If requests saving enabled                                              | `false` |
+| `requestSaving.apis`                 | APIs for which requests will be saved                                   | `[]`    |
+| `requestSaving.kafka.topic`          | Topic to use for route sharing                                          | `""`    |
+| `requestSaving.kafka.properties`     | Properties as supported by librdkafka, see `kafka` section and comments |         |
+| `requestSaving.kafka.fileProperties` | Properties stored in file, see `kafka` section and comments             | `{}`    |
+
+### Service state transmitting options. Leave with defaults, FOR TEST PURPOSES ONLY
+
 | Name                                    | Description                                                             | Value   |
 | --------------------------------------- | ----------------------------------------------------------------------- | ------- |
-| `routesharing.enabled`                  | If route sharing enabled                                                | `false` |
-| `routesharing.kafka.topic`              | Topic to use for route sharing                                          | `""`    |
-| `routesharing.kafka.topicAux`           | Auxiliary topic to use for route sharing in MobileSDK                   | `""`    |
-| `routesharing.kafka.properties`         | Properties as supported by librdkafka, see `kafka` section and comments |         |
-| `routesharing.kafka.fileProperties`     | Properties stored in file, see `kafka` section and comments             | `{}`    |
-| `requestSaving.enabled`                 | If requests saving enabled                                              | `false` |
-| `requestSaving.apis`                    | APIs for which requests will be saved                                   | `[]`    |
-| `requestSaving.kafka.topic`             | Topic to use for route sharing                                          | `""`    |
-| `requestSaving.kafka.properties`        | Properties as supported by librdkafka, see `kafka` section and comments |         |
-| `requestSaving.kafka.fileProperties`    | Properties stored in file, see `kafka` section and comments             | `{}`    |
 | `stateTransmitter.enabled`              | If state transmission enabled                                           | `false` |
 | `stateTransmitter.kafka.topic`          | Topic to use for state transmission                                     | `""`    |
 | `stateTransmitter.kafka.properties`     | Properties as supported by librdkafka, see `kafka` section and comments |         |

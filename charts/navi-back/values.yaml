@@ -759,6 +759,8 @@ routesharing:
       security.protocol: PLAINTEXT
     fileProperties: {}
 
+# @section Requests saving options. Leave with defaults, FOR TEST PURPOSES ONLY
+
 # @param requestSaving.enabled If requests saving enabled
 # @param requestSaving.apis APIs for which requests will be saved
 # @param requestSaving.kafka.topic Topic to use for route sharing
@@ -776,6 +778,8 @@ requestSaving:
       bootstrap.servers: ''
       security.protocol: PLAINTEXT
     fileProperties: {}
+
+# @section Service state transmitting options. Leave with defaults, FOR TEST PURPOSES ONLY
 
 # @param stateTransmitter.enabled If state transmission enabled
 # @param stateTransmitter.kafka.topic Topic to use for state transmission
