@@ -45,8 +45,8 @@ image:
 # @param env.SSO_CLIENT_ID OpenID client identifier for single sign-on **Required**
 # @param env.SSO_CLIENT_SECRET OpenID client identifier for single sign-on **Required**
 # @param env.SSO_SCOPE OpenID scope for single sign-on **Required**
-# @param env.SSO_SIGNUP_URL Signup URL for SSO
-# @param env.FEATURE_FLAGS_OFFLINE_ENVIRONMENT Feature offline environment
+# @skip env.SSO_SIGNUP_URL Signup URL for SSO
+# @skip env.FEATURE_FLAGS_OFFLINE_ENVIRONMENT Feature offline environment
 env:
   CATALOG_API_KEY: ''
   CATALOG_API_URL: ''
