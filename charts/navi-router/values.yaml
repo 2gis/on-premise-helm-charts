@@ -70,16 +70,17 @@ image:
 # @param router.sentry.username Sentry username
 # @param router.sentry.printMessages If outgoing messages needed
 # @param router.sentry.debug Debugging switch
+# @param router.sentry.environment Environment name
 # @param router.sentry.reportPath Local directory to dump
 # @param router.sentry.handler Handler file location
-# @param router.sentry.min_severity_level Minimal severity level to log in sentry
-# @param router.sentry.logs_buffer_size Size of buffer to send to sentry
+# @param router.sentry.minSeverityLevel Minimal severity level to log in sentry
+# @param router.sentry.logsBufferSize Size of buffer to send to sentry
 # @param router.telemetry.enabled Send telemetry to Opentelemetry server
 # @param router.telemetry.host Telemetry host
 # @param router.telemetry.port Telemetry port
-# @param router.telemetry.max_queue_size Max number of buffered spans
-# @param router.telemetry.schedule_delay_millis Interval of export of the buffered spans, ms
-# @param router.telemetry.max_export_batch_size Max number of spans sent to the exporter in a single export call
+# @param router.telemetry.maxQueueSize Max number of buffered spans
+# @param router.telemetry.scheduleDelayMillis Interval of export of the buffered spans, ms
+# @param router.telemetry.maxExportBatchSize Max number of spans sent to the exporter in a single export call
 # @extra router.localRestrictions.distanceBetweenPointsKm Max allowed distance between points
 # @skip router.localRestrictions.distanceBetweenPointsKm[0]
 # @extra router.localRestrictions.pointsCount Max allowed points count
@@ -113,10 +114,11 @@ router:
     username: navi
     printMessages: false
     debug: false
+    environment: ''
     reportPath: /tmp/sentry
     handler: /usr/sbin/2gis/mosesd/crashpad_handler
-    min_severity_level: error
-    logs_buffer_size: 0
+    minSeverityLevel: error
+    logsBufferSize: 100
   localRestrictions:
     distanceBetweenPointsKm:
     - type: distance-matrix-api
@@ -138,9 +140,9 @@ router:
     enabled: false
     host: telemetry.server
     port: 4318
-    max_queue_size: 2048
-    schedule_delay_millis: 500
-    max_export_batch_size: 512
+    maxQueueSize: 2048
+    scheduleDelayMillis: 500
+    maxExportBatchSize: 512
 
 navigroup: ''
 rules: []
@@ -150,7 +152,7 @@ abTestOptions: {}
 # @section Key management service settings
 
 # @param keys.enabled Disable or enable key management service
-# @param keys.url API keys service URL, ex: http://keys-service-api.svc/service/v1/keys
+# @param keys.url API keys service URL, Ex: http://keys-service-api.svc/service/v1/keys
 # @param keys.refreshIntervalSec Keys refresh interval in seconds
 # @param keys.downloadTimeoutSec Keys download timeout in seconds
 # @param keys.commonToken Mater key to retrieve all per-service API keys, keys.apis ignored, if commonToken set
