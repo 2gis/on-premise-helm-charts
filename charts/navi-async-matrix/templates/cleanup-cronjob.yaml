@@ -39,7 +39,7 @@ spec:
               - name: DM_ASYNC_SERVICE_DB_DSN
                 valueFrom:
                   secretKeyRef:
-                    name: {{ include "navi-async-matrix.fullname" . | quote }}
+                    name: {{ include "generic-chart.fullname" . | quote }}
                     key: dbDsn
               command: ["/opt/dm_async_app"]
               args: ["--clean-finished-tasks"]

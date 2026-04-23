@@ -1,6 +1,6 @@
 {{- define "merger.pdb" }}
 metadata:
-  name: {{ include "navi-async-matrix.fullname" . }}-merger
+  name: {{ include "generic-chart.fullname" . }}-merger
 {{- end }}
 {{ if .Values.dm.merger.pdb.enabled }}
 {{- template "generic-chart.merge" (list
