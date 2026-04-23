@@ -7,7 +7,6 @@ In the new versions, releases are organized into groups. Version details and bre
 #### [PRO](changelogs/pro/PRO-Breaking-Changes.md)
 #### [CITYLENS](changelogs/citylens/CITYLENS-Breaking-Changes.md)
 #### [EVERGIS](changelogs/evergis/EVERGIS-Breaking-Changes.md)
-#### [Navi](changelogs/navi/NAVI-Breaking-Changes.md)
 
 ## [1.43.0]
 
