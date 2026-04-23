@@ -65,7 +65,7 @@ spec:
         secret:
           secretName: {{ include "generic-chart.fullname" . }}-secret
       {{- end }}
-      {{- range $section := list "routesharing" "trafficLights" "roadLocks" }}
+      {{- range $section := list "routesharing" "trafficLights" "roadLocks" "stateTransmitter" "requestSaving" }}
       {{- with $ }}
       {{- if $section | get .Values | dig "kafka" "fileProperties" (dict) }}
       - name: {{ include "generic-chart.fullname" . }}-{{ $section }}-secret
@@ -190,28 +190,26 @@ spec:
         - name: &containerName {{ include "generic-chart.containerName" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}'
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.command }}
           command:
+            {{- if .Values.command }}
             {{- include "tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
-          {{- else }}
-          command:
-            - /usr/sbin/2gis/mosesd/tini
+            {{- else }}
+            - /usr/sbin/2gis/navi-back/tini
             - "--"
-          {{- end }}
-          {{- if .Values.args }}
+            {{- end }}
           args:
+            {{- if .Values.args }}
             {{- include "tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
-          {{- else }}
-          args:
-            - /usr/sbin/2gis/mosesd/mosesd
+            {{- else }}
+            - /usr/sbin/2gis/navi-back/navi-back
             - "--config"
-            - {{ printf "%s/navi-back.conf" .Values.naviback.configFilepath | quote }}
+            - "{{ .Values.naviback.configFilepath }}/navi-back.conf"
             - "--validate-config"
             - /usr/share/2gis/schemas/config_schemas/moses_conf.schema.json
             - "--validate-config-dry-run"
-          {{- end }}
+            {{- end }}
           volumeMounts:
             - name: {{ include "generic-chart.fullname" . }}-configmap
               mountPath: {{ printf "%s/navi-back.conf" .Values.naviback.configFilepath | quote }}
@@ -223,7 +221,7 @@ spec:
             - name: {{ include "generic-chart.fullname" . }}-secret
               mountPath: {{ printf "%s/secret/" .Values.naviback.configFilepath | quote }}
             {{- end }}
-            {{- range $section := list "routesharing" "trafficLights" "roadLocks" }}
+            {{- range $section := list "routesharing" "trafficLights" "roadLocks"  "stateTransmitter" "requestSaving" }}
             {{- with $ }}
             {{- if $section | get .Values | dig "kafka" "fileProperties" (dict) }}
             - name: {{ include "generic-chart.fullname" . }}-{{ $section }}-secret

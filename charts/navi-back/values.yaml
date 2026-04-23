@@ -114,7 +114,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.52.1.2
+  tag: 7.54.1.2
 
 
 # @section Navi-Back application settings
@@ -156,8 +156,17 @@ image:
 # @param naviback.sentry.username Sentry username
 # @param naviback.sentry.printMessages If outgoing messages needed
 # @param naviback.sentry.debug Debugging switch
+# @param naviback.sentry.environment Environment name
 # @param naviback.sentry.reportPath Local directory to dump
 # @param naviback.sentry.handler Handler file location
+# @param naviback.sentry.minSeverityLevel Minimal severity level to log in sentry
+# @param naviback.sentry.logsBufferSize Size of buffer to send to sentry
+# @param naviback.telemetry.enabled Send telemetry to Opentelemetry server
+# @param naviback.telemetry.host Telemetry host
+# @param naviback.telemetry.port Telemetry port
+# @param naviback.telemetry.maxQueueSize Max number of buffered spans
+# @param naviback.telemetry.scheduleDelayMillis Interval of export of the buffered spans, ms
+# @param naviback.telemetry.maxExportBatchSize Max number of spans sent to the exporter in a single export call
 # @extra naviback.castleHost DEPRECATED: Use naviback.castleUrl. Domain name of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @param naviback.castleUrl URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @param naviback.castleUrlProxy URL of Proxy Navi-Castle service. Needs only OnPrem. More priority than naviback.castleUrl and naviback.restrictions.url
@@ -195,6 +204,7 @@ image:
 # @skip naviback.indices.turnPenalties.enabled
 # @skip naviback.indices.routeAsUsual.enabled
 # @skip naviback.indices.walkingUserSpeeds.enabled
+# @skip naviback.indices.abTestIndex Need only a/b testing index
 # @extra naviback.additionalSections Optinal JSON block to be added to config file as-is
 # @skip naviback.simpleNetwork
 # @extra naviback.simpleNetwork.bicycle Enable simple network for bicycle routing
@@ -294,8 +304,18 @@ naviback:
     username: navi
     printMessages: false
     debug: false
+    environment: ''
     reportPath: /tmp/sentry
-    handler: /usr/sbin/2gis/mosesd/crashpad_handler
+    handler: /usr/sbin/2gis/navi-back/crashpad_handler
+    minSeverityLevel: error
+    logsBufferSize: 100
+  telemetry:
+    enabled: false
+    host: telemetry.server
+    port: 4318
+    maxQueueSize: 2048
+    scheduleDelayMillis: 500
+    maxExportBatchSize: 512
   castleUrl: ''
   castleUrlProxy: ''
   grpcPort: 50051
@@ -359,6 +379,8 @@ naviback:
     routeAsUsual:
       enabled: false
     walkingUserSpeeds:
+      enabled: false
+    abTestIndex:
       enabled: false
   simpleNetwork: {}
   attractor: {}
@@ -633,7 +655,7 @@ kafka:
 # @section S3-compatible storage settings for interacting with Distance Matrix Async Service
 
 # @param s3.enabled if S3 storage is enabled
-# @param s3.host S3 endpoint, ex: async-matrix-s3.host
+# @param s3.host S3 endpoint, Ex: async-matrix-s3.host
 # @param s3.bucket S3 bucket name
 # @param s3.accessKey S3 access key for accessing the bucket
 # @param s3.secretKey S3 secret key for accessing the bucket
@@ -651,7 +673,7 @@ s3:
 
 # @param remoteAttractor.enabled if attractor connection required
 # @param remoteAttractor.type connection type one of: grpc, grpc-async, grpc-stream, grpc-async-stream, ws, ws-async
-# @param remoteAttractor.host attractor service, ex: navi-attractor.host
+# @param remoteAttractor.host attractor service, Ex: navi-attractor.host
 # @param remoteAttractor.port attractor port
 # @param remoteAttractor.responseTimeoutMs response waiting timeout
 # @param remoteAttractor.connectTimeout Establish connection [timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-connect-timeout)
@@ -721,12 +743,52 @@ dataGroup:
 
 # @param routesharing.enabled If route sharing enabled
 # @param routesharing.kafka.topic Topic to use for route sharing
+# @param routesharing.kafka.topicAux Auxiliary topic to use for route sharing in MobileSDK
 # @extra routesharing.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
 # @skip routesharing.kafka.properties.bootstrap.servers
 # @skip routesharing.kafka.properties.security.protocol
 # @param routesharing.kafka.fileProperties Properties stored in file, see `kafka` section and comments
 
 routesharing:
+  enabled: false
+  kafka:
+    topic: ''
+    topicAux: ''
+    properties:
+      bootstrap.servers: ''
+      security.protocol: PLAINTEXT
+    fileProperties: {}
+
+# @section Requests saving options. Leave with defaults, FOR TEST PURPOSES ONLY
+
+# @param requestSaving.enabled If requests saving enabled
+# @param requestSaving.apis APIs for which requests will be saved
+# @param requestSaving.kafka.topic Topic to use for route sharing
+# @extra requestSaving.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
+# @skip requestSaving.kafka.properties.bootstrap.servers
+# @skip requestSaving.kafka.properties.security.protocol
+# @param requestSaving.kafka.fileProperties Properties stored in file, see `kafka` section and comments
+
+requestSaving:
+  enabled: false
+  apis: []
+  kafka:
+    topic: ''
+    properties:
+      bootstrap.servers: ''
+      security.protocol: PLAINTEXT
+    fileProperties: {}
+
+# @section Service state transmitting options. Leave with defaults, FOR TEST PURPOSES ONLY
+
+# @param stateTransmitter.enabled If state transmission enabled
+# @param stateTransmitter.kafka.topic Topic to use for state transmission
+# @extra stateTransmitter.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
+# @skip stateTransmitter.kafka.properties.bootstrap.servers
+# @skip stateTransmitter.kafka.properties.security.protocol
+# @param stateTransmitter.kafka.fileProperties Properties stored in file, see `kafka` section and comments
+
+stateTransmitter:
   enabled: false
   kafka:
     topic: ''
