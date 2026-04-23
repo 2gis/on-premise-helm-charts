@@ -1,0 +1,13 @@
+{{- define "attractor.httpRoute" }}
+spec:
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: {{ include "generic-chart.fullname" . }}-http
+          port: {{ .Values.service.http.port }}
+          weight: 1
+{{- end }}
+{{- if .Values.httpRoute.enabled }}
+{{- template "generic-chart.merge" (list . "attractor.httpRoute" "generic-chart.httpRoute.tpl") }}
+{{- end }}
