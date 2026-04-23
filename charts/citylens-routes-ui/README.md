@@ -21,12 +21,13 @@
 | Name               | Description | Value                                |
 | ------------------ | ----------- | ------------------------------------ |
 | `image.repository` | Repository  | `2gis-on-premise/citylens-routes-ui` |
-| `image.tag`        | Tag         | `1.6.2`                              |
+| `image.tag`        | Tag         | `2.2.0`                              |
 
 ### Environment
 
 | Name                           | Description                                                          | Value |
 | ------------------------------ | -------------------------------------------------------------------- | ----- |
+| `env.CATALOG_API_KEY`          | API key for catalog **Required**                                     | `""`  |
 | `env.CATALOG_API_URL`          | Catalog API base URL **Required**                                    | `""`  |
 | `env.MAPGL_API_URL`            | Map API base URL **Required**                                        | `""`  |
 | `env.MAPGL_COPYRIGHT_VARIANT`  | Copyright variant, can be '2gis', 'urbi' or empty                    | `""`  |
@@ -61,6 +62,7 @@
 | `readinessProbe.enabled`        | Enable [readinessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) | `true`    |
 | `livenessProbe.enabled`         | Enable [livenessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)  | `true`    |
 | `containerPort`                 | Port on which application listen connection in container                                                                                        | `3000`    |
+| `progressDeadlineSeconds`       | Deadline                                                                                                                                        | `60`      |
 
 ### Logs
 

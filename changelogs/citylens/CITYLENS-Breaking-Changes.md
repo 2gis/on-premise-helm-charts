@@ -1,5 +1,12 @@
 # Citylens Breaking-Changes
 
+## [2.3.0]
+
+### citylens-routes-ui
+
+- Added new required parameters:
+  - `env.CATALOG_API_KEY`
+
 ## [2.2.0]
 
 ### citylens
