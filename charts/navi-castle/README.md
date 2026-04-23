@@ -189,6 +189,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `rtr.puzzleSegments.serverUrl`            | URL puzzle segments.                                                                                                              | `""`                                            |
 | `rtr.webapi.baseDir`                      | Base dir on webapi.                                                                                                               | `/2.0/region/list?fields=*&type=segment,region` |
 | `rtr.webapi.serverUrl`                    | URL webapi.                                                                                                                       | `""`                                            |
+| `rtr.s3.enabled`                          | Enable S3 source for restriction_json.                                                                                            | `false`                                         |
+| `rtr.s3.host`                             | S3 endpoint URL, ex: http://restriction-s3.host.                                                                                  | `""`                                            |
+| `rtr.s3.bucket`                           | S3 bucket name.                                                                                                                   | `""`                                            |
+| `rtr.s3.region`                           | S3 region.                                                                                                                        | `""`                                            |
+| `rtr.s3.accessKey`                        | S3 access key for accessing the bucket.                                                                                           | `""`                                            |
+| `rtr.s3.secretKey`                        | S3 secret key for accessing the bucket.                                                                                           | `""`                                            |
+| `rtr.s3.secure`                           | Establish secure channel                                                                                                          | `true`                                          |
+| `rtr.restrictionJson.remoteDir`           | Remote directory for restriction_json. Empty for HTTP source, `restrictions` for S3.                                              | `""`                                            |
+| `rtr.restrictionJson.header`              | HTTP header used for change detection.                                                                                            | `Last-Modified`                                 |
+| `rtr.restrictionJson.timeout`             | Queries request timeout in seconds.                                                                                               | `30`                                            |
 
 ### customCAs **Custom Certificate Authority**
 
