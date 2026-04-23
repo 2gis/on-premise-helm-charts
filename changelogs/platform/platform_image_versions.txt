@@ -1,5 +1,5 @@
 catalog-api
-	catalog-api:3.671.0
+	catalog-api:3.675.0
 	catalog-importer:1.12.1
 mapgl-js-api
 	mapgl:1.71.0
