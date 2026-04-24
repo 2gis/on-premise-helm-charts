@@ -192,7 +192,7 @@ tilegen:
   # @param tilegen.image.pullPolicy Kubernetes pull policy for the service's Docker image.
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.81.3
+    tag: 4.84.1
     pullPolicy: IfNotPresent
 
   labels: {}
@@ -297,7 +297,7 @@ proxy:
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.81.3
+    tag: 4.84.1
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -362,7 +362,7 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.81.3
+    tag: 4.84.1
     pullPolicy: IfNotPresent
 
   # @extra api.cqlRetryPolicy **Cassandra retry policy settings**
@@ -536,7 +536,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.81.3
+    tag: 4.84.1
     pullPolicy: IfNotPresent
 
 
