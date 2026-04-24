@@ -206,7 +206,7 @@ data:
             "index_name": "speed_index",
             "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
             "nodes": [
-              "{REMOTE_ECA}/{{ .Values.naviback.indices.speedIndex.filename | default "traffic/moses/speeds5.json.zip" }}"
+              "{REMOTE_ECA}/{{ .Values.naviback.indices.speedIndex.filename | default "traffic/moses/speeds5.json" }}"
             ],
             "timeout_seconds": 60
           }
@@ -584,7 +584,7 @@ data:
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.requestSaving.kafka.properties }}
           "kafka_properties":
             {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
-          "topic": {{ .Values.requestSaving.kafka.topic | required "requestSaving.kafka.topic is not set" | quote }},          
+          "topic": {{ .Values.requestSaving.kafka.topic | required "requestSaving.kafka.topic is not set" | quote }},
           "apis": {{ .Values.requestSaving.apis | mustToPrettyJson | nindent 12 }}
         },
         {{- end }}{{/* .Values.requestSaving.enabled */}}
