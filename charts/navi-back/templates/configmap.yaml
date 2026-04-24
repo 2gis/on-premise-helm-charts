@@ -206,7 +206,7 @@ data:
             "index_name": "speed_index",
             "update_period": {{ .Values.naviback.disableUpdates | ternary 604800 20 }},
             "nodes": [
-              "{REMOTE_ECA}/{{ .Values.naviback.indices.speedIndex.filename | default "traffic/moses/speeds5.json" }}"
+              "{REMOTE_ECA}/{{ .Values.naviback.indices.speedIndex.filename | default "traffic/moses/speeds5.json.zip" }}"
             ],
             "timeout_seconds": 60
           }
