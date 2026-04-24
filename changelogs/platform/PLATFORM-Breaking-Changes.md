@@ -2,6 +2,15 @@
 
 ## [2.51.0]
 
+### search-api-v8
+
+- Portal skip
+- s3.endpoint -> s3.host
+- ingressRouter.debug_headers -> ingressRouter.debugHeaders
+- ingressRouter.debug_routing -> ingressRouter.debugRouting
+- controller-deployment.yaml update checksum/secret and checksum/configmap
+- sentry values
+
 ### navi-vrp-task-manager
 
 - Added new required parameter: `cities.linkToCitiesFile`

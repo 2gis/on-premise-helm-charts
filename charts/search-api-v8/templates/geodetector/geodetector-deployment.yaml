@@ -107,15 +107,6 @@ spec:
           startupProbe:
             {{- include "common.tplvalues.render" (dict "value" (omit .Values.geodetector.startupProbe "enabled") "context" $) | nindent 12 -}}
           {{ end -}}{{- /* .Values.geodetector.startupProbe.enabled */}}
-          {{- if .Values.geodetector.prestopHook.enabled }}
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - /bin/sh
-                  - '-c'
-                  - sleep 30
-          {{- end }}{{- /* .Values.geodetector.prestopHook.enabled */}}
         - name: syncer
           securityContext:
             {{- toYaml .Values.syncer.securityContext | nindent 12 }}
