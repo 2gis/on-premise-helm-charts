@@ -42,16 +42,12 @@ app.kubernetes.io/component: api
 {{- end -}}
 
 {{- define "tiles.kind" -}}
-{{- if eq .subtype "general-v4" -}}
-{{- .kind }}_general_v4
-{{- else if eq .subtype "detailed-v4" -}}
-{{- .kind }}_detailed_v4
-{{- else if .subtype -}}
+{{- if .subtype }}
 {{- .kind }}_{{ .subtype }}
 {{- else }}
 {{- .kind }}
 {{- end }}
-{{- end -}}
+{{- end }}
 
 {{- define "tiles.keyspace" -}}
 {{- if .keyspace }}
@@ -62,9 +58,7 @@ dgis_tileserver_{{ include "tiles.kind" . }}_{{ required "Valid .Values.cassandr
 {{- end -}}
 
 {{- define "tiles.type" -}}
-{{- if has .subtype (list "general_v4" "detailed_v4") -}}
-vector
-{{- else if .subtype -}}
+{{- if .subtype -}}
 ald
 {{- else if has .kind (list "web" "native") -}}
 vector
@@ -102,11 +96,7 @@ tiles-api-mapbox
 {{- end -}}
 
 {{- define "importer.types" -}}
-{{- if eq .subtype "general-v4" -}}
-- general_v4
-{{- else if eq .subtype "detailed-v4" -}}
-- detailed_v4
-{{- else if .subtype -}}
+{{- if .subtype -}}
 - {{ .subtype }}
 {{- else if has .kind (list "web" "native") -}}
 - vtiles
