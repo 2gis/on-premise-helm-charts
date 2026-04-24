@@ -107,6 +107,14 @@ Attractor не имеет смысла без сервиса navi-back.
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service | `Prefix`                     |
 | `ingress.tls`                        | TLS configuration                        | `[]`                         |
 
+### [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+
+| Name                   | Description                                                                                                           | Value   |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------- | ------- |
+| `httpRoute.enabled`    | If HTTPRoute is enabled for the service.                                                                              | `false` |
+| `httpRoute.hostnames`  | List of hostnames served by route.                                                                                    | `[]`    |
+| `httpRoute.parentRefs` | List of parent references (gateways) for HTTPRoute. Defaults: canary and stable gateways in istio-gateways namespace. |         |
+
 ### Limits
 
 | Name                        | Description                                 | Value       |

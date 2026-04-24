@@ -584,7 +584,7 @@ data:
           {{- $kafkaProperties := mustMerge $kafkaProperties .Values.requestSaving.kafka.properties }}
           "kafka_properties":
             {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
-          "topic": {{ .Values.requestSaving.kafka.topic | required "requestSaving.kafka.topic is not set" | quote }},          
+          "topic": {{ .Values.requestSaving.kafka.topic | required "requestSaving.kafka.topic is not set" | quote }},
           "apis": {{ .Values.requestSaving.apis | mustToPrettyJson | nindent 12 }}
         },
         {{- end }}{{/* .Values.requestSaving.enabled */}}
@@ -771,6 +771,11 @@ data:
           "clear_cache_threshold": {{ .Values.naviback.clearCacheThreshold | int }},
           "engine_update_period_sec": {{ .Values.naviback.engineUpdatePeriodSec }},
           "lightweight_mode" : {{ .Values.naviback.lightweightMode }},
+          {{- if (include "rules.inQueriesSection" (dict "queriesValue" "get_hull" "context" .)) }}
+          "isochrones_enabled" : true,
+          {{- else }}
+          "isochrones_enabled" : false,
+          {{- end }}{{- /* "get_hull" */}}
           {{- if .Values.naviback.server_id }}
           "server_id": "{{- include "tplvalues.render" ( dict "value" .Values.naviback.server_id "context" .) }}",
           {{- else }}

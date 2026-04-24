@@ -213,7 +213,7 @@ Name for psql intermediate volume for copy secrets and change permissions
 */ -}}
 
 {{- define "navi-async-matrix.fullname-psql-raw" -}}
-{{- printf "%s-psql-raw" (include "navi-async-matrix.fullname" .) -}}
+{{- printf "%s-psql-raw" (include "generic-chart.fullname" .) -}}
 {{- end }}
 
 {{- /*
@@ -221,7 +221,7 @@ Name for psql secret and volume
 */ -}}
 
 {{- define "navi-async-matrix.fullname-psql" -}}
-{{- printf "%s-psql" (include "navi-async-matrix.fullname" .) -}}
+{{- printf "%s-psql" (include "generic-chart.fullname" .) -}}
 {{- end }}
 
 {{/*
