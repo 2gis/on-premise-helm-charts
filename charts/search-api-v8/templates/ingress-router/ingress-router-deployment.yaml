@@ -108,15 +108,6 @@ spec:
           startupProbe:
             {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressRouter.startupProbe "enabled") "context" $) | nindent 12 -}}
           {{ end -}}{{- /* .Values.ingressRouter.startupProbe.enabled */}}
-          {{- if .Values.ingressRouter.prestopHook.enabled }}
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - /bin/sh
-                  - '-c'
-                  - sleep 30
-          {{- end }}{{- /* .Values.ingressRouter.prestopHook.enabled */}}
         - name: syncer
           securityContext:
             {{- toYaml .Values.syncer.securityContext | nindent 12 }}
@@ -183,7 +174,7 @@ spec:
                 command:
                   - /bin/bash
                   - '-c'
-                  - while cat < /dev/tcp/127.0.0.1/8080 ; do sleep 5 ; done
+                  - while cat < /dev/null > /dev/tcp/127.0.0.1/{{ .Values.ingressRouter.ports.http }} ; do sleep 5 ; done
           {{- end }}{{- /* .Values.ingressRouter.prestopHook.enabled */}}
           startupProbe:
             httpGet:

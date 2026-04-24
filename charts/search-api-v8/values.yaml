@@ -70,8 +70,6 @@ dgctlDockerRegistry: ''
 # @param worker.startupProbe.successThreshold Minimum consecutive successes for the startup probe to be considered successful
 # @param worker.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
 
-# @param worker.prestopHook.enabled Enable or disable the container lifecycle preStop hook
-
 # @param worker.hpa.enabled Enable or disable Horizontal Pod Autoscaler (HPA)
 # @param worker.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down
 # @param worker.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up
@@ -104,6 +102,7 @@ dgctlDockerRegistry: ''
 # @param worker.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be unavailable during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
 # @param worker.strategy.rollingUpdate.maxSurge Maximum number of extra pods that can be created during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
 # @param worker.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+# @param worker.gracefulShutdownInterval Interval (in seconds) used by the application to finish processing current requests before shutting down
 # @param worker.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
 # @param worker.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
 
@@ -118,7 +117,7 @@ worker:
   image:
     repository: 2gis-on-premise/search-api-v8-worker
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.2
   ports:
     http: 8092
     grpc: 8091
@@ -172,13 +171,11 @@ worker:
     periodSeconds: 10
     successThreshold: 1
     failureThreshold: 200
-  prestopHook:
-    enabled: true
   hpa:
     enabled: false
     minReplicas: 36
     maxReplicas: 300
-    averageCPUValue: 1200m
+    averageCPUValue: 1300m
     behavior:
       scaleDown:
         policies:
@@ -215,6 +212,7 @@ worker:
       maxUnavailable: 5%
       maxSurge: 5%
   revisionHistoryLimit: 10
+  gracefulShutdownInterval: 30s
 
 # @section Head settings
 
@@ -298,6 +296,7 @@ head:
 # @param head.head.throttle.updateIntervalSeconds Interval (in seconds) for updating the throttling level
 # @param head.head.throttle.inputMetric.updateIntervalSeconds Interval (in seconds) for updating the input metric value
 # @param head.head.throttle.inputMetric.calculateForPeriods Number of update periods to use for input metric calculation
+# @param head.head.gracefulShutdownInterval Interval (in seconds) used by the application to finish processing current requests before shutting down
 # @param head.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
 # @param head.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
 
@@ -305,7 +304,7 @@ head:
     image:
       repository: 2gis-on-premise/search-api-v8-head
       pullPolicy: IfNotPresent
-      tag: 8.19.0
+      tag: 8.20.2
     ports:
       grpc: 9010
       http: 9090
@@ -314,7 +313,7 @@ head:
     resources:
       requests:
         cpu: 900m
-        memory: 4600Mi
+        memory: 5000Mi
       limits:
         cpu: 2000m
         memory: 8Gi
@@ -382,6 +381,7 @@ head:
       inputMetric:
         updateIntervalSeconds: 5
         calculateForPeriods: 12
+    gracefulShutdownInterval: 30s
   syncer:
     includeProjectKeyRegexp: 'gis\.v4.*'
     excludeProjectKeyRegexp: '^$'
@@ -501,7 +501,7 @@ head:
     enabled: false
     minReplicas: 2
     maxReplicas: 50
-    averageCPUValue: 600m
+    averageCPUValue: 700m
     behavior:
       scaleDown:
         policies:
@@ -695,7 +695,7 @@ filesStorage:
   image:
     repository: 2gis-on-premise/search-api-v8-files-storage
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -794,7 +794,7 @@ dataAdapter:
   image:
     repository: 2gis-on-premise/search-api-v8-data-adapter
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -842,21 +842,21 @@ dataAdapter:
         storage: 10Gi
 
 
-# @section Portal settings
+# @skip section Portal settings. Leave with defaults, FOR FUTURE RELEASE.
 
-# @param portal.enabled Enable or disable the portal component
-# @param portal.matchLabels Selector match labels
-# @param portal.podLabels Kubernetes pod labels
-# @param portal.podAnnotations Kubernetes pod annotations
-# @param portal.ports.http HTTP port for REST API requests
-# @param portal.image.repository Docker image repository
-# @param portal.image.pullPolicy Image pull policy
-# @param portal.image.tag Docker image tag
-# @param portal.podSecurityContext Kubernetes podSecurityContext
-# @param portal.imagePullSecrets Kubernetes image pull secrets
-# @param portal.nodeSelector Kubernetes node selectors
-# @param portal.tolerations Kubernetes tolerations settings
-# @param portal.affinity Kubernetes pod affinity settings
+# @skip portal.enabled Enable or disable the portal component
+# @skip portal.matchLabels Selector match labels
+# @skip portal.podLabels Kubernetes pod labels
+# @skip portal.podAnnotations Kubernetes pod annotations
+# @skip portal.ports.http HTTP port for REST API requests
+# @skip portal.image.repository Docker image repository
+# @skip portal.image.pullPolicy Image pull policy
+# @skip portal.image.tag Docker image tag
+# @skip portal.podSecurityContext Kubernetes podSecurityContext
+# @skip portal.imagePullSecrets Kubernetes image pull secrets
+# @skip portal.nodeSelector Kubernetes node selectors
+# @skip portal.tolerations Kubernetes tolerations settings
+# @skip portal.affinity Kubernetes pod affinity settings
 
 # @skip portal.resources Kubernetes resource management settings
 # @extra portal.resources.requests.cpu CPU request; recommended value: `200m`
@@ -864,17 +864,17 @@ dataAdapter:
 # @extra portal.resources.limits.cpu CPU limit; recommended value: `500m`
 # @extra portal.resources.limits.memory Memory limit; recommended value: `1Gi`
 
-# @param portal.livenessProbe.enabled Enable liveness probe
-# @param portal.livenessProbe.httpGet.path HTTP path for the liveness probe
-# @param portal.livenessProbe.httpGet.port HTTP port for the liveness probe
-# @param portal.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
-# @param portal.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
-# @param portal.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
-# @param portal.livenessProbe.initialDelaySeconds Initial delay (in seconds) before starting the liveness probe
+# @skip portal.livenessProbe.enabled Enable liveness probe
+# @skip portal.livenessProbe.httpGet.path HTTP path for the liveness probe
+# @skip portal.livenessProbe.httpGet.port HTTP port for the liveness probe
+# @skip portal.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @skip portal.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @skip portal.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
+# @skip portal.livenessProbe.initialDelaySeconds Initial delay (in seconds) before starting the liveness probe
 
-# @param portal.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
-# @param portal.services.controllerHost Controller host in form "host:port"
-# @param portal.services.fstorageHost Files storage host in form "host:port"
+# @skip portal.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @skip portal.services.controllerHost Controller host in form "host:port"
+# @skip portal.services.fstorageHost Files storage host in form "host:port"
 
 portal:
   enabled: false
@@ -884,9 +884,9 @@ portal:
   ports:
     http: 8088
   image:
-    repository: usrch/bs-portal
+    repository: 2gis-on-premise/search-api-v8-portal
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -988,7 +988,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-api-v8-controller
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1121,7 +1121,7 @@ indexer:
   image:
     repository: 2gis-on-premise/search-api-v8-indexer
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.2
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1178,7 +1178,7 @@ indexer:
 # @section s3 settings
 
 # @param s3.enabled Enable or disable S3 support for the indexing system
-# @param s3.endpoint S3 endpoint address
+# @param s3.host S3 endpoint address
 # @param s3.accessKey S3 access key ID
 # @param s3.secretKey S3 secret access key
 # @param s3.bucket S3 bucket name
@@ -1187,7 +1187,7 @@ indexer:
 
 s3:
   enabled: true
-  endpoint: ''
+  host: ''
   accessKey: ''
   secretKey: ''
   bucket: ''
@@ -1226,7 +1226,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-api-v8-syncer
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.2
   securityContext: {}
   resources:
     requests:
@@ -1440,13 +1440,14 @@ service:
 # @param ingressRouter.prometheusUrl Prometheus URL for rate limiting
 # @param ingressRouter.rateLimitRules Big Search usage quotas
 # @param ingressRouter.filteredUserAgentList filtered User-Agent list
+# @param ingressRouter.masterApiKey api key for advanced features
 
 # @param ingressRouter.ports.monitor TCP port for service endpoints such as `/metrics`
 # @param ingressRouter.ports.http TCP port for API requests
 # @param ingressRouter.ports.grpc TCP port for grpc requests
 
 # Cluster routing
-# @param ingressRouter.headers Header used for request dispatching
+# @param ingressRouter.routeHeader used for request dispatching
 # @param ingressRouter.routing.searchBase.port Port of the AB Sapphire base service
 # @param ingressRouter.routing.searchBase.exactMatch Header value for AB Sapphire base
 # @param ingressRouter.routing.cluster1.port Port of cluster 1 head service
@@ -1461,18 +1462,19 @@ service:
 # @param ingressRouter.routing.sanitized.port Port of sanitized head service
 # @param ingressRouter.routing.sanitized.address Address of sanitized head service
 # @param ingressRouter.routing.sanitized.exactMatch Header value for sanitized cluster
-# @param ingressRouter.debug_headers Header used for debug mode
-# @param ingressRouter.debug_routing.ingressRouter.port Port for ingressRouter cluster
-# @param ingressRouter.debug_routing.ingressRouter.exactMatch Header value for ingressRouter
-# @param ingressRouter.debug_routing.head.port Port for head cluster
-# @param ingressRouter.debug_routing.head.exactMatch Header value for head
-# @param ingressRouter.debug_routing.geodetector.port Port for geodetector cluster
-# @param ingressRouter.debug_routing.geodetector.exactMatch Header value for geodetector
-# @param ingressRouter.debug_routing.worker.port Port for worker cluster
-# @param ingressRouter.debug_routing.worker.exactMatch Header value for worker
+# @param ingressRouter.debugHeaders Header used for debug mode
+# @param ingressRouter.debugRouting.ingressRouter.port Port for ingressRouter cluster
+# @param ingressRouter.debugRouting.ingressRouter.exactMatch Header value for ingressRouter
+# @param ingressRouter.debugRouting.head.port Port for head cluster
+# @param ingressRouter.debugRouting.head.exactMatch Header value for head
+# @param ingressRouter.debugRouting.geodetector.port Port for geodetector cluster
+# @param ingressRouter.debugRouting.geodetector.exactMatch Header value for geodetector
+# @param ingressRouter.debugRouting.worker.port Port for worker cluster
+# @param ingressRouter.debugRouting.worker.exactMatch Header value for worker
 # @param ingressRouter.data.persistent.enabled Enable or disable a persistent volume for the service
 # @param ingressRouter.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
 # @param ingressRouter.data.resources.requests.storage Requested storage volume size
+# @param ingressRouter.gracefulShutdownInterval Interval (in seconds) used by the application to finish processing current requests before shutting down
 
 ingressRouter:
   enabled: true
@@ -1517,12 +1519,12 @@ ingressRouter:
       memory: 2Gi
     requests:
       cpu: 1
-      memory: 400Mi
+      memory: 500Mi
   hpa:
     enabled: false
     minReplicas: 2
     maxReplicas: 8
-    averageCPUValue: 700m
+    averageCPUValue: 900m
     behavior:
       scaleDown:
         policies:
@@ -1579,7 +1581,7 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-api-v8-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.2
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
@@ -1588,6 +1590,7 @@ ingressRouter:
   prometheusUrl: ''
   rateLimitRules: []
   filteredUserAgentList: []
+  masterApiKey: ''
   ports:
     monitor: 9093
     http: 9092
@@ -1596,29 +1599,29 @@ ingressRouter:
     enabled: false
   rateLimitComponent:
     enabled: false
-  headers: x-cluster-index
+  routeHeader: x-router-target-cluster
   routing:
     searchBase:
       port: 9010
-      exactMatch: 0
+      exactMatch: cluster-base
     cluster1:
       port: 9001
       address: big-search-ab-cluster1-ingress-router
-      exactMatch: 1
+      exactMatch: cluster-1
     cluster2:
       port: 9001
       address: big-search-ab-cluster2-ingress-router
-      exactMatch: 2
+      exactMatch: cluster-2
     cluster3:
       port: 9001
       address: big-search-ab-cluster3-ingress-router
-      exactMatch: 3
+      exactMatch: cluster-3
     sanitized:
       port: 80
       address: bigsearch-sanitized-grpc.istio.k8s.2gis.dev
-      exactMatch: 4
-  debug_headers: x-debug-service-name
-  debug_routing:
+      exactMatch: sanitized-cluster
+  debugHeaders: x-debug-service-name
+  debugRouting:
     ingressRouter:
       port: 9001
       exactMatch: "ingress-router"
@@ -1631,6 +1634,7 @@ ingressRouter:
     worker:
       port: 8091
       exactMatch: "worker"
+  gracefulShutdownInterval: 30s
 
 # @section geodetector
 
@@ -1723,8 +1727,6 @@ ingressRouter:
 # @param geodetector.startupProbe.successThreshold Minimum consecutive successes for the startup probe
 # @param geodetector.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
 
-# @param geodetector.prestopHook.enabled Enable or disable container lifecycle [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)
-
 # @param geodetector.strategy.type Deployment strategy; can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
 # @param geodetector.strategy.rollingUpdate.maxUnavailable Maximum number of unavailable pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
 # @param geodetector.strategy.rollingUpdate.maxSurge Maximum number of extra pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
@@ -1732,6 +1734,8 @@ ingressRouter:
 # @param geodetector.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 # @param geodetector.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
 # @param geodetector.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+
+# @param geodetector.gracefulShutdownInterval Interval (in seconds) used by the application to finish processing current requests before shutting down
 
 geodetector:
   enabled: true
@@ -1770,7 +1774,7 @@ geodetector:
   image:
     repository: 2gis-on-premise/search-api-v8-geodetector
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.2
   imagePullSecrets: []
   geodetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60
@@ -1789,9 +1793,9 @@ geodetector:
   securityContext: {}
   hpa:
     enabled: false
-    minReplicas: 3
+    minReplicas: 2
     maxReplicas: 8
-    averageCPUValue: 700m
+    averageCPUValue: 900m
     behavior:
       scaleDown:
         policies:
@@ -1819,10 +1823,10 @@ geodetector:
   resources:
     requests:
       cpu: 1
-      memory: 4000Mi
+      memory: 250Mi
     limits:
       cpu: 2
-      memory: 6Gi
+      memory: 1000Mi
   data:
     resources:
       requests:
@@ -1830,8 +1834,6 @@ geodetector:
     storageClassName: ''
     persistent:
       enabled: false
-  prestopHook:
-    enabled: true
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -1840,6 +1842,7 @@ geodetector:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  gracefulShutdownInterval: 30s
 
 # @section Ingress settings
 
@@ -1895,16 +1898,16 @@ onpremise: true
 
 sentry:
   enabled: false
-  workerDsn: ""
-  headDsn: ""
-  ingressRouterDsn: ""
-  geodetectorDsn: ""
+  workerDsn: ''
+  headDsn: ''
+  ingressRouterDsn: ''
+  geodetectorDsn: ''
   environment: unknown
   dc: unknown
   tracesSampleRate: 0.0
-  databasePath: ".sentry-native"
-  storageSize: "500Mi"
-  handlerPath: ""
+  databasePath: .sentry-native
+  storageSize: 500Mi
+  handlerPath: ''
 
 # @section Deployment Artifacts Storage settings
 

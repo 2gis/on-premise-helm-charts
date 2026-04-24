@@ -80,12 +80,6 @@ spec:
           startupProbe:
             {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.startupProbe "enabled") "context" $) | nindent 12 }}
           {{- end -}}{{- /* .Values.worker.startupProbe.enabled */}}
-          {{- if .Values.worker.prestopHook.enabled }}
-          lifecycle:
-            preStop:
-              exec:
-                command: [ "/bin/sh", "-c", "sleep 30" ]
-          {{- end }}{{- /* .Values.worker.prestopHook.enabled */}}
           volumeMounts:
             - name: worker-sentry
               mountPath: {{ .Values.sentry.databasePath }}
