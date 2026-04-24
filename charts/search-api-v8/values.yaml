@@ -118,7 +118,7 @@ worker:
   image:
     repository: 2gis-on-premise/search-api-v8-worker
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.0
   ports:
     http: 8092
     grpc: 8091
@@ -305,7 +305,7 @@ head:
     image:
       repository: 2gis-on-premise/search-api-v8-head
       pullPolicy: IfNotPresent
-      tag: 8.19.0
+      tag: 8.20.0
     ports:
       grpc: 9010
       http: 9090
@@ -695,7 +695,7 @@ filesStorage:
   image:
     repository: 2gis-on-premise/search-api-v8-files-storage
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -794,7 +794,7 @@ dataAdapter:
   image:
     repository: 2gis-on-premise/search-api-v8-data-adapter
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -886,7 +886,7 @@ portal:
   image:
     repository: usrch/bs-portal
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -988,7 +988,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-api-v8-controller
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1121,7 +1121,7 @@ indexer:
   image:
     repository: 2gis-on-premise/search-api-v8-indexer
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1226,7 +1226,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-api-v8-syncer
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.0
   securityContext: {}
   resources:
     requests:
@@ -1440,6 +1440,7 @@ service:
 # @param ingressRouter.prometheusUrl Prometheus URL for rate limiting
 # @param ingressRouter.rateLimitRules Big Search usage quotas
 # @param ingressRouter.filteredUserAgentList filtered User-Agent list
+# @skip ingressRouter.masterApiKey api key for advanced features
 
 # @param ingressRouter.ports.monitor TCP port for service endpoints such as `/metrics`
 # @param ingressRouter.ports.http TCP port for API requests
@@ -1579,7 +1580,7 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-api-v8-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.0
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
@@ -1588,6 +1589,7 @@ ingressRouter:
   prometheusUrl: ''
   rateLimitRules: []
   filteredUserAgentList: []
+  masterApiKey: ''
   ports:
     monitor: 9093
     http: 9092
@@ -1770,7 +1772,7 @@ geodetector:
   image:
     repository: 2gis-on-premise/search-api-v8-geodetector
     pullPolicy: IfNotPresent
-    tag: 8.19.0
+    tag: 8.20.0
   imagePullSecrets: []
   geodetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60

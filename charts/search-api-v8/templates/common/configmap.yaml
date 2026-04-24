@@ -374,6 +374,7 @@ data:
             name: envoy.transport_sockets.tls
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+              sni: {{ .Values.head.queryTransformer.endpoint.address }}
         {{- end }}
         - name: ai_vector_search
           connect_timeout: 1s
@@ -396,6 +397,7 @@ data:
             name: envoy.transport_sockets.tls
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+              sni: {{ .Values.head.aiVectorSearch.endpoint.address }}
         {{- end }}{{- /* .Values.head.aiVectorSearch.endpoint.ssl */}}
         - name: recsys_ranker
           connect_timeout: 1s
@@ -446,6 +448,7 @@ data:
             name: envoy.transport_sockets.tls
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+              sni: {{ .Values.head.friendsService.endpoint.address }}
         {{- end }}{{- /* .Values.head.friendsService.endpoint.ssl */}}
       {{- end -}}{{- /* .Values.onpremise */}}
 
@@ -1215,6 +1218,7 @@ data:
       {{- toYaml .Values.ingressRouter.rateLimitRules | nindent 6 }}
     filtered-user-agent-list:
       {{- toYaml .Values.ingressRouter.filteredUserAgentList | nindent 6 }}
+    master-api-key: {{ .Values.ingressRouter.masterApiKey | quote }}
     allow-extended-params: {{ .Values.debugMode }}
     debug-mode-enabled: {{ .Values.debugMode }}
     debug-service-url: '127.0.0.1:{{ .Values.ingressRouter.envoy.ports.grpc }}'
