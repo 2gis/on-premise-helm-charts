@@ -136,9 +136,9 @@ jobs:
             chart_dir=$(dirname "$chart_path")
             chart_name=$(basename "$chart_dir")
 
-            # Пропускаем универсальную зависимость
-            if [[ "$chart_name" == "$DEPENDENCY" ]]; then
-              echo "Skipping $chart_name (used as dependency only)"
+            # Пропускаем универсальную зависимость только, если это не Platform
+            if [[ "$chart_name" == "$DEPENDENCY" && "$GROUP" != "Platform" ]]; then
+              echo "Skipping $chart_name (used as dependency only for non-Platform releases)"
               continue
             fi
 
@@ -151,10 +151,8 @@ jobs:
             fi
 
             echo "Version in $chart_path matches the expected version: $TAG_VERSION"
-            # Обновляем зависимости чарта
             echo "Updating dependencies for chart: $chart_dir"
             helm dependency update "$chart_dir"
-            # Упаковываем чарт
             helm package "$chart_dir" --destination ./packaged
           done
 
