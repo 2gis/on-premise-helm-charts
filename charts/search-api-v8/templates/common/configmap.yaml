@@ -461,8 +461,8 @@ data:
     sapphire-bg-threads: 1
     sapphire-grpc-threads: 1
     sapphire-mon-threads: 1
-    logger-level: {{ .Values.head.head.loggerLevel }}
-    logger-format: {{ .Values.head.head.loggerFormat }}
+    logger-level: {{ .Values.head.head.logLevel }}
+    logger-format: {{ .Values.head.head.logFormat }}
     ads-enable: {{ .Values.head.head.adsEnable }}
     data-update-frequency-sec: 60
     big-search-mode-update-frequency-sec: 30
@@ -559,8 +559,8 @@ data:
     worker-fb-threads: {{ .Values.worker.workerFbThreads }}
     worker-fs-threads: 2
     worker-bg-threads: 1
-    logger-level: {{ .Values.worker.loggerLevel }}
-    logger-format: {{ .Values.worker.loggerFormat }}
+    logger-level: {{ .Values.worker.logLevel }}
+    logger-format: {{ .Values.worker.logFormat }}
     data-update-frequency-sec: {{ .Values.worker.dataUpdateFrequencySec }}
     sentry-dsn: {{ .Values.sentry.workerDsn | quote }}
     {{- include "search-api-v8.sentry.vars.common" . | nindent 4 }}
@@ -1213,8 +1213,8 @@ data:
     ingress-router-mon-threads: 1
     ingress-router-rate-limiting-threads: 1
     ingress-router-bg-threads: 2
-    logger-level: {{ .Values.ingressRouter.loggerLevel }}
-    logger-format: {{ .Values.ingressRouter.loggerFormat }}
+    logger-level: {{ .Values.ingressRouter.logLevel }}
+    logger-format: {{ .Values.ingressRouter.logFormat }}
     dispatcher-enabled: {{ .Values.ingressRouter.dispatcherComponent.enabled }}
     rate-limit-enabled: {{ .Values.ingressRouter.rateLimitComponent.enabled }}
     data-update-frequency-sec: 60
@@ -1255,8 +1255,8 @@ data:
     data-update-frequency-sec: {{ .Values.geodetector.dataUpdateFrequencySec }}
     geodetector-main-threads: {{ .Values.geodetector.geodetectorMainThreads }}
     geodetector-fs-threads: {{ .Values.geodetector.geodetectorFsThreads }}
-    logger-level: {{ .Values.geodetector.loggerLevel }}
-    logger-format: {{ .Values.geodetector.loggerFormat }}
+    logger-level: {{ .Values.geodetector.logLevel }}
+    logger-format: {{ .Values.geodetector.logFormat }}
     sentry-dsn: {{ .Values.sentry.geodetectorDsn | quote }}
     {{- include "search-api-v8.sentry.vars.common" . | nindent 4 }}
     geodetector-mon-threads: {{ .Values.geodetector.geodetectorMonThreads }}

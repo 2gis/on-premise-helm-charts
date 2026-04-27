@@ -1,15 +1,15 @@
 # Platform Breaking-Changes
 
-## [2.51.0]
+# [2.54.0]
 
 ### search-api-v8
 
-- Portal skip
-- s3.endpoint -> s3.host
 - ingressRouter.debug_headers -> ingressRouter.debugHeaders
 - ingressRouter.debug_routing -> ingressRouter.debugRouting
+- ingressRouter.headers -> ingressRouter.routeHeader
 - controller-deployment.yaml update checksum/secret and checksum/configmap
-- sentry values
+
+## [2.51.0]
 
 ### navi-vrp-task-manager
 

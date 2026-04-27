@@ -26,8 +26,8 @@ dgctlDockerRegistry: ''
 # @param worker.image.tag Image Tag
 # @param worker.ports.http HTTP port used by the worker
 # @param worker.ports.grpc gRPC port used by the worker
-# @param worker.loggerLevel Log level of the worker app; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
-# @param worker.loggerFormat Log format used by the worker; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. We recommend using `json`
+# @param worker.logLevel Log level of the worker app; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param worker.logFormat Log format used by the worker; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. We recommend using `json`
 # @param worker.workerMainThreads Number of main task processor threads
 # @param worker.workerFbThreads Number of fallback task processor threads
 # @param worker.dataUpdateFrequencySec Frequency (in seconds) at which the worker updates data (indexes and RTW)
@@ -121,8 +121,8 @@ worker:
   ports:
     http: 8092
     grpc: 8091
-  loggerLevel: info
-  loggerFormat: json
+  logLevel: info
+  logFormat: json
   workerMainThreads: 4
   workerFbThreads: 4
   dataUpdateFrequencySec: 60
@@ -247,8 +247,8 @@ head:
 # @extra head.head.resources.limits.cpu CPU limit; recommended value: `2000m`
 # @extra head.head.resources.limits.memory Memory limit; recommended value: `8Gi`
 
-# @param head.head.loggerLevel Log level of the Head app; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
-# @param head.head.loggerFormat Log format used by the Head app; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. We recommend using `json`
+# @param head.head.logLevel Log level of the Head app; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param head.head.logFormat Log format used by the Head app; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. We recommend using `json`
 
 # @param head.head.livenessProbe.enabled Enable liveness probe
 # @param head.head.livenessProbe.httpGet.path HTTP path for the liveness probe
@@ -317,8 +317,8 @@ head:
       limits:
         cpu: 2000m
         memory: 8Gi
-    loggerLevel: info
-    loggerFormat: json
+    logLevel: info
+    logFormat: json
     livenessProbe:
       enabled: true
       httpGet:
@@ -908,10 +908,10 @@ portal:
     timeoutSeconds: 1
     failureThreshold: 3
     initialDelaySeconds: 10
-  loglevel: "info"
+  loglevel: info
   services:
-    controllerHost: ""
-    fstorageHost: ""
+    controllerHost: ''
+    fstorageHost: ''
 
 
 # @section Controller settings
@@ -1372,8 +1372,8 @@ service:
 # @param ingressRouter.startupProbe.successThreshold Minimum consecutive successes for the startup probe
 # @param ingressRouter.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
 
-# @param ingressRouter.loggerLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
-# @param ingressRouter.loggerFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
+# @param ingressRouter.logLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param ingressRouter.logFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
 
 # @skip ingressRouter.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
 # @extra ingressRouter.resources.requests.cpu CPU request; recommended value: `1`
@@ -1511,8 +1511,8 @@ ingressRouter:
     successThreshold: 1
     failureThreshold: 5
   affinity: {}
-  loggerLevel: info
-  loggerFormat: json
+  logLevel: info
+  logFormat: json
   resources:
     limits:
       cpu: 2
@@ -1624,16 +1624,16 @@ ingressRouter:
   debugRouting:
     ingressRouter:
       port: 9001
-      exactMatch: "ingress-router"
+      exactMatch: ingress-router
     head:
       port: 9010
-      exactMatch: "head"
+      exactMatch: head
     geodetector:
       port: 10091
-      exactMatch: "geodetector"
+      exactMatch: geodetector
     worker:
       port: 8091
-      exactMatch: "worker"
+      exactMatch: worker
   gracefulShutdownInterval: 30s
 
 # @section geodetector
@@ -1651,8 +1651,8 @@ ingressRouter:
 # @param geodetector.geodetectorMainThreads Number of threads per main handler
 # @param geodetector.geodetectorFsThreads Number of threads for FS task processor
 # @param geodetector.geodetectorMonThreads Number of threads allocated for collecting metrics
-# @param geodetector.loggerLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
-# @param geodetector.loggerFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
+# @param geodetector.logLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param geodetector.logFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
 # @param geodetector.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
 # @param geodetector.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
 
@@ -1780,8 +1780,8 @@ geodetector:
   dataUpdateFrequencySec: 60
   geodetectorMainThreads: 4
   geodetectorFsThreads: 2
-  loggerLevel: info
-  loggerFormat: json
+  logLevel: info
+  logFormat: json
   geodetectorMonThreads: 2
   syncer:
     includeProjectKeyRegexp: '(gis\.geodetector.*|gis\.v4\.65536\.en\.ru)'
