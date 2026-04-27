@@ -151,8 +151,10 @@ jobs:
             fi
 
             echo "Version in $chart_path matches the expected version: $TAG_VERSION"
+            # Обновляем зависимости чарта
             echo "Updating dependencies for chart: $chart_dir"
             helm dependency update "$chart_dir"
+            # Упаковываем чарт
             helm package "$chart_dir" --destination ./packaged
           done
 
