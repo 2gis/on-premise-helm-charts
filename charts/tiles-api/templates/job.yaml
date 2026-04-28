@@ -1,5 +1,5 @@
 {{- if $.Values.importer.enabled }}
-{{- range $_, $type := $.Values.types }}
+{{- range $_, $type := (include "tiles.expandedTypes" $ | fromYaml).list }}
 {{- if (not $type.importAndCleanerDisabled) }}
 ---
 

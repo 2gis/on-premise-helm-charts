@@ -1,4 +1,4 @@
-{{- range $index, $type := (required "Valid $.Values.types required" $.Values.types) }}
+{{- range $index, $type := (include "tiles.expandedTypes" $ | fromYaml).list }}
 {{- if (not $type.importAndCleanerDisabled) }}
 ---
 apiVersion: v1

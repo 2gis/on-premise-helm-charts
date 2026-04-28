@@ -60,7 +60,7 @@ dgis_tileserver_{{ include "tiles.kind" . }}_{{ required "Valid .Values.cassandr
 {{- define "tiles.type" -}}
 {{- if .subtype -}}
 ald
-{{- else if has .kind (list "web" "native") -}}
+{{- else if has .kind (list "web" "native" "native-v4") -}}
 vector
 {{- else if eq .kind "raster" -}}
 raster
@@ -88,7 +88,7 @@ app.kubernetes.io/component: importer
 tiles-api-vector
 {{- else if eq . "raster" -}}
 tiles-api-raster
-{{- else if eq . "native" -}}
+{{- else if has . (list "native" "native-v4") -}}
 tiles-api-mobile-sdk
 {{- else if eq . "mapbox" -}}
 tiles-api-mapbox
@@ -98,7 +98,7 @@ tiles-api-mapbox
 {{- define "importer.types" -}}
 {{- if .subtype -}}
 - {{ .subtype }}
-{{- else if has .kind (list "web" "native") -}}
+{{- else if has .kind (list "web" "native" "native-v4") -}}
 - vtiles
 - poiicons
 {{- else if eq .kind "raster" -}}
@@ -186,3 +186,32 @@ app.kubernetes.io/component: tilegen
 {{- define "tiles.tls.mountSecret" -}}
 {{ or $.Values.cassandra.tls.deploySecret (not (empty $.Values.cassandra.tls.existingSecret.name)) }}
 {{- end }}
+
+{{/*
+Expand native-v4 kind into two separate tilesets: native-v4-detailed and native-v4-general.
+All other kinds are passed through unchanged.
+Usage: range (include "tiles.expandedTypes" $ | fromYaml).list
+*/}}
+{{- define "tiles.expandedTypes" -}}
+list:
+  {{- range $.Values.types }}
+  {{- if eq .kind "native-v4" }}
+  - kind: "native-v4"
+    name: "native-v4-detailed"
+    subtype: ""
+    keyspace: {{ .keyspace | default "" | quote }}
+    importAndCleanerDisabled: {{ .importAndCleanerDisabled | default false }}
+  - kind: "native-v4"
+    name: "native-v4-general"
+    subtype: ""
+    keyspace: {{ .keyspace | default "" | quote }}
+    importAndCleanerDisabled: {{ .importAndCleanerDisabled | default false }}
+  {{- else }}
+  - kind: {{ .kind | quote }}
+    name: {{ .name | default "" | quote }}
+    subtype: {{ .subtype | default "" | quote }}
+    keyspace: {{ .keyspace | default "" | quote }}
+    importAndCleanerDisabled: {{ .importAndCleanerDisabled | default false }}
+  {{- end }}
+  {{- end }}
+{{- end -}}
