@@ -53,14 +53,14 @@ app.kubernetes.io/component: api
 {{- if .keyspace }}
 {{- .keyspace }}
 {{- else -}}
-dgis_tileserver_{{ include "tiles.kind" . }}_{{ required "Valid .Values.cassandra.environment required" $.Values.cassandra.environment }}_{{ include "tiles.manifestCode" $ }}
+dgis_tileserver_{{ include "tiles.kind" $ |  sha256sum | trunc 8 }}_{{ required "Valid .Values.cassandra.environment required" $.Values.cassandra.environment }}_{{ include "tiles.manifestCode" $ }}
 {{- end -}}
 {{- end -}}
 
 {{- define "tiles.type" -}}
 {{- if .subtype -}}
 ald
-{{- else if has .kind (list "web" "native" "native-v4") -}}
+{{- else if has .kind (list "web" "native" "native-v4-detailed" "native-v4-general") -}}
 vector
 {{- else if eq .kind "raster" -}}
 raster
@@ -88,7 +88,7 @@ app.kubernetes.io/component: importer
 tiles-api-vector
 {{- else if eq . "raster" -}}
 tiles-api-raster
-{{- else if has . (list "native" "native-v4") -}}
+{{- else if has . (list "native" "native-v4-detailed" "native-v4-general") -}}
 tiles-api-mobile-sdk
 {{- else if eq . "mapbox" -}}
 tiles-api-mapbox
@@ -98,9 +98,15 @@ tiles-api-mapbox
 {{- define "importer.types" -}}
 {{- if .subtype -}}
 - {{ .subtype }}
-{{- else if has .kind (list "web" "native" "native-v4") -}}
+{{- else if has .kind (list "web" "native") -}}
 - vtiles
 - poiicons
+{{- else if eq .kind "native-v4-detailed" -}}
+- vtiles_v4_detailed
+- poiicons_v4_detailed
+{{- else if eq .kind "native-v4-general" -}}
+- vtiles_v4_general
+- poiicons_v4_general
 {{- else if eq .kind "raster" -}}
 - tiles
 {{- else if eq .kind "mapbox" -}}
@@ -196,14 +202,14 @@ Usage: range (include "tiles.expandedTypes" $ | fromYaml).list
 list:
   {{- range $.Values.types }}
   {{- if eq .kind "native-v4" }}
-  - kind: "native-v4"
-    name: "native-v4-detailed"
-    subtype: ""
+  - kind: "native-v4-detailed"
+    name: {{ .name | default "" | quote }}
+    subtype: {{ .subtype | default "" | quote }}
     keyspace: {{ .keyspace | default "" | quote }}
     importAndCleanerDisabled: {{ .importAndCleanerDisabled | default false }}
-  - kind: "native-v4"
-    name: "native-v4-general"
-    subtype: ""
+  - kind: "native-v4-general"
+    name: {{ .name | default "" | quote }}
+    subtype: {{ .subtype | default "" | quote }}
     keyspace: {{ .keyspace | default "" | quote }}
     importAndCleanerDisabled: {{ .importAndCleanerDisabled | default false }}
   {{- else }}
