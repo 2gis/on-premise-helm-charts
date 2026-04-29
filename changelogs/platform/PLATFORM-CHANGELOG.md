@@ -1,3 +1,53 @@
+## [2.53.0] (2026-04-29)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2530)
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.71.0
+	+ mapgl:1.72.0
+navi-attractor
+	- navi-attractor:7.52.1.2
+	+ navi-attractor:7.54.1.2
+navi-back
+	- navi-back:7.52.1.2
+	+ navi-back:7.54.1.2
+navi-router
+	- navi-router:6.40.0.2
+	+ navi-router:6.42.0.2
+search-api-v8
+	- search-api-v8-controller:8.19.0
+	+ search-api-v8-controller:8.20.0
+	- search-api-v8-data-adapter:8.19.0
+	+ search-api-v8-data-adapter:8.20.0
+	- search-api-v8-files-storage:8.19.0
+	+ search-api-v8-files-storage:8.20.0
+	- search-api-v8-geodetector:8.19.0
+	+ search-api-v8-geodetector:8.20.0
+	- search-api-v8-head:8.19.0
+	+ search-api-v8-head:8.20.0
+	- search-api-v8-indexer:8.19.0
+	+ search-api-v8-indexer:8.20.0
+	- search-api-v8-ingress-router:8.19.0
+	+ search-api-v8-ingress-router:8.20.0
+	- search-api-v8-syncer:8.19.0
+	+ search-api-v8-syncer:8.20.0
+	- search-api-v8-worker:8.19.0
+	+ search-api-v8-worker:8.20.0
+stat-api
+	- stat-api-migrate:0.2.0
+	+ stat-api-migrate:0.2.1
+	- stat-api:0.2.0
+	+ stat-api:0.2.1
+tiles-api
+	- tiles-api-importer:4.81.3
+	+ tiles-api-importer:4.84.1
+	- tiles-api-proxy:4.81.3
+	+ tiles-api-proxy:4.84.1
+	- tiles-api:4.81.3
+	+ tiles-api:4.84.1
+```
+[Full list of image versions](platform_image_versions.txt)
+
 ## [2.52.0] (2026-03-26)
 
 #### Images
