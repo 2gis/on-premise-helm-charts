@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "generic-chart.fullname" . }}-base
 data:
-  front.conf: |-
+  navi-front.conf: |-
   {{- if .Values.nginx.opentracing.enabled }}
     opentracing_load_tracer /usr/local/lib/libjaegertracing_plugin.so {{ include "nginx.jaegerConfigPath" . }};
     opentracing on;
@@ -35,12 +35,12 @@ data:
 
     # map router's rule name to the actual CTX upstream
     map $multi_mod_ctx $multi_mod_ctx_upstream {
-        {{- include "front.mapUpstreams" . | nindent 8 }}
+        {{- include "navi-front.mapUpstreams" . | nindent 8 }}
     }
 
     # map router's rule name to the actual TAXI upstream
     map $multi_mod_taxi $multi_mod_taxi_upstream {
-        {{- include "front.mapUpstreams" . | nindent 8 }}
+        {{- include "navi-front.mapUpstreams" . | nindent 8 }}
     }
 
     upstream {{ .Values.front.multimod.host }} {
@@ -54,12 +54,12 @@ data:
     }
     {{- end }}
 
-    {{ include "front.createUpstreams" . | nindent 4 }}
+    {{ include "navi-front.createUpstreams" . | nindent 4 }}
 
-    upstream router_{{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }} {
-        server {{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }} max_fails=0;
+    upstream router_{{ ternary (include "navi-front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }} {
+        server {{ ternary (include "navi-front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }} max_fails=0;
         {{- range (.Values.front.router.backupPorts.number | int | until) }}
-        server {{ ternary (include "front.createRouterUpstream" $) $.Values.front.router.host $.Values.front.router.discover }}:{{ . | add $.Values.front.router.backupPorts.base }} max_fails=0;
+        server {{ ternary (include "navi-front.createRouterUpstream" $) $.Values.front.router.host $.Values.front.router.discover }}:{{ . | add $.Values.front.router.backupPorts.base }} max_fails=0;
         {{- end }}{{- /* range */}}
         {{- $routerKeepalive := deepCopy .Values.front.keepalive | merge .Values.front.router.keepalive }}
         {{- if $routerKeepalive.enabled }}
@@ -165,7 +165,7 @@ data:
         {{ include "tplvalues.render" ( dict "value" .Values.multimodLocation "context" . ) | nindent 8 }}
         {{- else }}
         location ~* ^/ctx_multi_mod {
-            {{ include "front.getInternalACL" . | nindent 12 }}
+            {{ include "navi-front.getInternalACL" . | nindent 12 }}
             rewrite ^/ctx_multi_mod(.*)$ $1 break;
             add_header X-Region {{ .Values.front.multimod.host }} always;
             proxy_set_header x-key-visibility $key_visibility;
@@ -208,7 +208,7 @@ data:
         }
 
         location /geocoding {
-            {{ include "front.getInternalACL" . | nindent 12 }}
+            {{ include "navi-front.getInternalACL" . | nindent 12 }}
             proxy_next_upstream_timeout {{ .Values.front.router.proxy.nextUpstreamTimeout }};
             {{- with .Values.front.router.proxy.connectTimeout }}
             proxy_connect_timeout {{ . }};
@@ -227,7 +227,7 @@ data:
             # retries limited by request timeout
             proxy_next_upstream_tries 1024;
             proxy_next_upstream {{ .Values.front.router.proxy.nextUpstream }};
-            proxy_pass http://router_{{ ternary (include "front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }};
+            proxy_pass http://router_{{ ternary (include "navi-front.createRouterUpstream" .) .Values.front.router.host .Values.front.router.discover }};
         }
 
         location /healthcheck {
@@ -244,5 +244,5 @@ data:
             add_header 'Content-Type' 'text/plain';
         }
 
-        {{ include "front.createLocations" . | nindent 8 }}
+        {{ include "navi-front.createLocations" . | nindent 8 }}
     }

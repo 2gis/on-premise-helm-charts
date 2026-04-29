@@ -1,8 +1,6 @@
 {{- define "merger.deployment" }}
 metadata:
   name: {{ include "generic-chart.fullname" . }}-merger
-  labels:
-    navigroup: {{ .Values.navigroup | default "" | quote }}
 spec:
   replicas: {{ .Values.dm.merger.replicaCount | default 1 }}
   selector:
@@ -18,7 +16,9 @@ spec:
         {{- end }}
       labels:
         {{- include "navi-async-matrix.mergerlabels" . | nindent 8 }}
-        app.kubernetes.io/component: {{ include "generic-chart.fullname" . }}-merger
+      {{- if and .Values.dm.merger.pdb.enabled .Values.dm.merger.pdb.component }}
+        app.kubernetes.io/component: {{ .Values.dm.merger.pdb.component }}
+      {{- end }}
     spec:
       volumes:
       {{- $kafkaVolumeMounted := (
@@ -27,12 +27,12 @@ spec:
               or (.Values.kafka.producerOverrides).fileProperties
             ) }}
       {{- if $kafkaVolumeMounted }}
-        - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+        - name: {{ printf "%s-consumer" (include "generic-chart.fullname" .) | quote }}
           secret:
-            secretName: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
-        - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+            secretName: {{ printf "%s-consumer" (include "generic-chart.fullname" .) | quote }}
+        - name: {{ printf "%s-producer" (include "generic-chart.fullname" .) | quote }}
           secret:
-            secretName: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+            secretName: {{ printf "%s-producer" (include "generic-chart.fullname" .) | quote }}
       {{- end }}
       {{- if .Values.db.tls.enabled }}
         - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
@@ -42,9 +42,9 @@ spec:
           emptyDir: {}
       {{- end }}
       {{- if .Values.customCAs.bundle }}
-        - name: {{ include "navi-async-matrix.fullname" . }}-ca
+        - name: {{ include "generic-chart.fullname" . }}-ca
           configMap:
-            name: {{ include "navi-async-matrix.fullname" . }}-ca
+            name: {{ include "generic-chart.fullname" . }}-ca
       {{- end }}
       # TODO: SA name from generic-chart
       serviceAccountName: {{ include "navi-async-matrix.serviceAccountName" . }}
@@ -129,14 +129,14 @@ spec:
             - name: S3_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  name: {{ include "generic-chart.fullname" . | quote }}
                   key: s3key
             - name: DATABASE__SCHEMA_NAME
               value: {{ .Values.db.schema | quote }}
             - name: DATABASE__DSN
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  name: {{ include "generic-chart.fullname" . | quote }}
                   key: dbDsn
             - name: KAFKA_PRODUCER_SETTING__TOPIC
               value: {{ required "A valid kafka.mergerStatusTopic entry required" .Values.kafka.mergerStatusTopic | quote }}
@@ -153,7 +153,7 @@ spec:
                     "kafka" $.Values.kafka
                     "overrides" ($overridesProperty | get $.Values.kafka)
                     "secretname" (print
-                        (include "navi-async-matrix.fullname" $)
+                        (include "generic-chart.fullname" $)
                         "-"
                         (lower $kafkaRole)
                       )
@@ -164,17 +164,17 @@ spec:
               {{- end }}{{- /* range */}}
           volumeMounts:
           {{- if $kafkaVolumeMounted }}
-          - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+          - name: {{ printf "%s-consumer" (include "generic-chart.fullname" .) | quote }}
             mountPath: {{ printf "%s/secret/consumer/" $.Values.dm.configFilepath | quote }}
-          - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+          - name: {{ printf "%s-producer" (include "generic-chart.fullname" .) | quote }}
             mountPath: {{ printf "%s/secret/producer/" $.Values.dm.configFilepath | quote }}
           {{- end }}
           {{- if .Values.db.tls.enabled }}
-          - name: {{ printf "%s-psql" (include "navi-async-matrix.fullname" .) | quote }}
+          - name: {{ printf "%s-psql" (include "generic-chart.fullname" .) | quote }}
             mountPath: {{ printf "%s/secret/psql" .Values.dm.configFilepath | quote }}
           {{- end }}
           {{- if .Values.customCAs.bundle }}
-          - name: {{ include "navi-async-matrix.fullname" . }}-ca
+          - name: {{ include "generic-chart.fullname" . }}-ca
             mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
             subPath: custom-ca.crt
           {{- end }}

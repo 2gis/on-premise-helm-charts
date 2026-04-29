@@ -30,6 +30,11 @@ spec:
           - name: {{ include "generic-chart.fullname" . }}-configmap
             mountPath: /src/etc/rules.conf
             subPath: rules.conf
+          {{- if .Values.abTestOptions }}
+          - name: {{ include "generic-chart.fullname" . }}-configmap
+            mountPath: /src/etc/router_rules_ab_test_options.json
+            subPath: router_rules_ab_test_options.json
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.router.appPort }}

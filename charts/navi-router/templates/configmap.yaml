@@ -39,8 +39,20 @@ data:
         "user_name": {{ .Values.router.sentry.username | quote }},
         "print_outgoing_messages": {{ .Values.router.sentry.printMessages | default false }},
         "debug": {{ .Values.router.sentry.debug | default false }},
+        "environment": {{ .Values.router.sentry.environment | default "staging" | quote }},
         "path": {{ .Values.router.sentry.reportPath | default "/tmp/sentry" | quote }},
-        "handler": {{ .Values.router.sentry.handler | default "/usr/sbin/2gis/mosesd/crashpad_handler" | quote }}
+        "handler": {{ .Values.router.sentry.handler | default "/usr/sbin/2gis/mosesd/crashpad_handler" | quote }},
+        "min_severity_level": {{ .Values.router.sentry.minSeverityLevel | default "error" | quote }},
+        "logs_buffer_size": {{ .Values.router.sentry.logsBufferSize | default 100 | int }}
+      },
+      {{- end }}
+      {{- if .Values.router.telemetry.enabled }}
+      "telemetry": {
+        "host": {{ .Values.router.telemetry.host | quote }},
+        "port": {{ .Values.router.telemetry.port | int }},
+        "max_queue_size": {{ .Values.router.telemetry.maxQueueSize | default 2048 | int }},
+        "schedule_delay_millis": {{ .Values.router.telemetry.scheduleDelayMillis | default 500 | int }},
+        "max_export_batch_size": {{ .Values.router.telemetry.maxExportBatchSize | default 512 | int }}
       },
       {{- end }}
       "context": {
@@ -126,3 +138,7 @@ data:
     }
   rules.conf: |-
     {{- include "rules.renderRules" . }}
+  {{- if .Values.abTestOptions }}
+  router_rules_ab_test_options.json: |-
+    {{- .Values.abTestOptions | toJson | nindent 4 }}
+  {{- end }}
