@@ -84,12 +84,6 @@ spec:
           startupProbe:
             {{- include "common.tplvalues.render" (dict "value" (omit .Values.head.head.startupProbe "enabled") "context" $) | nindent 12 -}}
           {{ end -}}{{- /* .Values.head.head.startupProbe.enabled */}}
-          {{- if .Values.head.head.prestopHook.enabled }}
-          lifecycle:
-            preStop:
-              exec:
-                command: [ "/bin/sh", "-c", "sleep 15" ]
-          {{- end}}{{- /* .Values.head.head.prestopHook.enabled */}}
           volumeMounts:
             - name: head-data
               mountPath: /data
@@ -136,7 +130,7 @@ spec:
                 command:
                   - "/bin/bash"
                   - "-c"
-                  - "while cat < /dev/tcp/127.0.0.1/{{ .Values.head.nginx.ports.http }} ; do sleep 5 ; done"
+                  - "while cat < /dev/null > /dev/tcp/127.0.0.1/{{ .Values.head.head.ports.grpc }} ; do sleep 5 ; done"
           {{- end }}{{- /* .Values.head.head.prestopHook.enabled */}}
         - name: envoy
           securityContext:
@@ -170,7 +164,7 @@ spec:
                 command:
                   - "/bin/bash"
                   - "-c"
-                  - "while cat < /dev/tcp/127.0.0.1/{{ .Values.head.nginx.ports.http }} ; do sleep 5 ; done"
+                  - "while cat < /dev/null > /dev/tcp/127.0.0.1/{{ .Values.head.head.ports.grpc }} ; do sleep 5 ; done"
           {{- end}}{{- /* .Values.head.head.prestopHook.enabled */}}
           startupProbe:
             httpGet:
