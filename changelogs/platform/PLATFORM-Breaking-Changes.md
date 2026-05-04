@@ -1,5 +1,14 @@
 # Platform Breaking-Changes
 
+# [2.54.0]
+
+### search-api-v8
+
+- ingressRouter.debug_headers -> ingressRouter.debugHeaders
+- ingressRouter.debug_routing -> ingressRouter.debugRouting
+- ingressRouter.headers -> ingressRouter.routeHeader
+- controller-deployment.yaml update checksum/secret and checksum/configmap
+
 ## [2.53.0]
 
 Public Transport API has become part of the Routing API. If you use the Public Transport API, please update the keys service to the [Core:2.6.0](../core/CORE-CHANGELOG.md) release.
