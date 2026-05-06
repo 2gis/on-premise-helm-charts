@@ -53,7 +53,7 @@ app.kubernetes.io/component: api
 {{- if .keyspace }}
 {{- .keyspace }}
 {{- else -}}
-dgis_tileserver_{{ include "tiles.kind" $ |  sha256sum | trunc 8 }}_{{ required "Valid .Values.cassandra.environment required" $.Values.cassandra.environment }}_{{ include "tiles.manifestCode" $ }}
+ts_{{ include "tiles.kind" $ | replace "-" "_"}}_{{ required "Valid .Values.cassandra.environment required" $.Values.cassandra.environment }}_{{ include "tiles.manifestCode" $ }}
 {{- end -}}
 {{- end -}}
 
