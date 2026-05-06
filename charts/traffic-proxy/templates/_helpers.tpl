@@ -61,7 +61,7 @@ location = /forecast/index.json {
     {{- include "proxyParams" . }}
 }
 
-location ~ ^/forecast/([^/]+)/forecasted_speeds_v2\.zip$ {
+location ~ ^/forecast/([^/]+)/.*\.zip$ {
     rewrite ^/forecast/(.*)$ /api/v1/services/navi/proxy/forecast-speeds/$1 break;
     {{- include "proxyParams" . }}
 }
@@ -72,7 +72,7 @@ location = /long-forecast/index.json {
     {{- include "proxyParams" . }}
 }
 
-location ~ ^/long-forecast/([^/]+)/forecasted_speeds_v2\.zip$ {
+location ~ ^/long-forecast/([^/]+)/.*\.zip$ {
     rewrite ^/long-forecast/(.*)$ /api/v1/services/navi/proxy/long-forecast-speeds/long_forecast_data/$1 break;
     {{- include "proxyParams" . }}
 }
