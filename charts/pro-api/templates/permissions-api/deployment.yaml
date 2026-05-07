@@ -133,6 +133,8 @@ spec:
                   key: apiKey
                   name: {{ include "pro-api.secretName" . }}
 
+            - name: Auth__Enabled
+              value: {{ .Values.permissions.settings.auth.enabled | quote }}
             - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
@@ -150,6 +152,12 @@ spec:
               value: {{ $r | quote }}
             {{- end }}
 
+            - name: BackgroundJobs__InitOnStartupJob__Enabled
+              value: {{ ne .Values.permissions.settings.backgroundJobs.enableInitOnStartupJob false | quote }}
+            - name: BackgroundJobs__ActualizePermissionsJob__Enabled
+              value: {{ ne .Values.permissions.settings.backgroundJobs.enableActualizePermissionsJob false | quote }}
+
+
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
@@ -163,6 +171,8 @@ spec:
                   key: redisPassword
                   name: {{ include "pro-api.secretName" . }}
             {{- end }}
+            - name: Common__DataCenterId
+              value: {{ .Values.api.settings.dataCenterId | quote }}
             - name: Common__HttpPort
               value: "{{ .Values.permissions.settings.httpPort }}"
             - name: Common__GrpcPort
@@ -173,6 +183,10 @@ spec:
               value: {{ .Values.permissions.settings.deleteInactiveUsers | quote }}
             - name: Common__DefaultPermissions__OpenProUi
               value: {{ .Values.permissions.settings.default_permissions.open_pro_ui | quote }}
+            {{- if .Values.permissions.settings.default_permissions.new_user_expiration_days }}
+            - name: Common__DefaultPermissions__NewUserExpirationDays
+              value: {{ .Values.permissions.settings.default_permissions.new_user_expiration_days | quote }}
+            {{- end }}
             {{- range $i, $s := .Values.permissions.settings.default_permissions.assets }}
             - name: Common__DefaultPermissions__Assets__{{$i}}
               value: {{ $s | quote }}
@@ -214,6 +228,8 @@ spec:
               value: {{ $.Values.kafka.permissionsTopic.readerGroupId | quote }}
             - name: Kafka__EventsTopicSettings__Name
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
+            - name: Kafka__EventsTopicSettings__ReaderGroupId
+              value: {{ required "A valid .Values.kafka.eventsTopic.readerGroupId entry required" $.Values.kafka.eventsTopic.readerGroupId }}
             - name: Kafka__UseReplicaTopics
               value: {{ $.Values.kafka.useReplicaTopics | quote }}
             - name: LocalCache__Enabled
@@ -223,12 +239,15 @@ spec:
 
             # AuthProvider
             - name: AuthProvider__Enabled
-              value: "true"
+              value: {{ .Values.authProvider.enabled | quote }}
+
+            {{- if .Values.authProvider.enabled }}
             - name: AuthProvider__Schema
-              value: {{ required "A valid .Values.authProvider.schema entry required. Supported values: Basic, Oidc" .Values.authProvider.schema | quote }}
+              value: {{ .Values.authProvider.schema | quote }}
             {{- range $hostIndex, $host := .Values.authProvider.allowedHosts }}
             - name: AuthProvider__AllowedHosts__{{ $hostIndex }}
               value: {{ $host | quote }}
+            {{- end }}
             {{- end }}
 
             # Basic Auth
