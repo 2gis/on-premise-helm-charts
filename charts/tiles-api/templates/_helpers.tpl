@@ -60,7 +60,7 @@ ts_{{ include "tiles.kind" $ | replace "-" "_"}}_{{ required "Valid .Values.cass
 {{- define "tiles.type" -}}
 {{- if .subtype -}}
 ald
-{{- else if has .kind (list "web" "native" "native-v4-detailed" "native-v4-general") -}}
+{{- else if has .kind (list "web" "native" "native-v4-detailed" "native-v4-general" "native-v4-universe") -}}
 vector
 {{- else if eq .kind "raster" -}}
 raster
@@ -88,7 +88,7 @@ app.kubernetes.io/component: importer
 tiles-api-vector
 {{- else if eq . "raster" -}}
 tiles-api-raster
-{{- else if has . (list "native" "native-v4-detailed" "native-v4-general") -}}
+{{- else if has . (list "native" "native-v4-detailed" "native-v4-general" "native-v4-universe") -}}
 tiles-api-mobile-sdk
 {{- else if eq . "mapbox" -}}
 tiles-api-mapbox
@@ -107,6 +107,8 @@ tiles-api-mapbox
 {{- else if eq .kind "native-v4-general" -}}
 - vtiles_v4_general
 - poiicons_v4_general
+{{- else if eq .kind "native-v4-universe" -}}
+- vtiles_v4_universe
 {{- else if eq .kind "raster" -}}
 - tiles
 {{- else if eq .kind "mapbox" -}}
@@ -194,7 +196,7 @@ app.kubernetes.io/component: tilegen
 {{- end }}
 
 {{/*
-Expand native-v4 kind into two separate tilesets: native-v4-detailed and native-v4-general.
+Expand native-v4 kind into two separate tilesets: native-v4-universe, native-v4-detailed and native-v4-general.
 All other kinds are passed through unchanged.
 Usage: range (include "tiles.expandedTypes" $ | fromYaml).list
 */}}
@@ -208,6 +210,11 @@ list:
     keyspace: {{ .keyspace | default "" | quote }}
     importAndCleanerDisabled: {{ .importAndCleanerDisabled | default false }}
   - kind: "native-v4-general"
+    name: {{ .name | default "" | quote }}
+    subtype: {{ .subtype | default "" | quote }}
+    keyspace: {{ .keyspace | default "" | quote }}
+    importAndCleanerDisabled: {{ .importAndCleanerDisabled | default false }}
+  - kind: "native-v4-universe"
     name: {{ .name | default "" | quote }}
     subtype: {{ .subtype | default "" | quote }}
     keyspace: {{ .keyspace | default "" | quote }}
