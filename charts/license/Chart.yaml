@@ -4,7 +4,7 @@ type: application
 description: A Helm chart for Kubernetes to deploy License service
 
 version: 2.6.0
-appVersion: 2.4.1
+appVersion: 2.6.0
 
 maintainers:
 - name: 2gis
