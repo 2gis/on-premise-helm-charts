@@ -376,7 +376,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-  {{- if and .Values.persistentVolume.enabled (eq .Values.persistentVolume.type "pvc") }}
+{{- if and .Values.persistentVolume.enabled (eq .Values.persistentVolume.type "pvc") }}
   volumeClaimTemplates:
     - metadata:
         name: {{ include "castle.fullname" . }}-pvc
@@ -389,4 +389,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistentVolume.size }}
-  {{- end }}
+  {{- with .Values.persistentVolume.claimRetention }}
+  persistentVolumeClaimRetentionPolicy: {{ toYaml . | nindent 4 }}
+  {{- end }}{{- /* .Values.persistentVolume.claimRetention */}}
+{{- end }}

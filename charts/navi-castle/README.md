@@ -151,13 +151,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
 
-| Name                            | Description                                                                           | Value               |
-| ------------------------------- | ------------------------------------------------------------------------------------- | ------------------- |
-| `persistentVolume.enabled`      | If Kubernetes persistence volume should be enabled for Castle.                        | `false`             |
-| `persistentVolume.accessModes`  | Volume access mode.                                                                   | `["ReadWriteOnce"]` |
-| `persistentVolume.storageClass` | Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/). | `""`                |
-| `persistentVolume.size`         | Volume size.                                                                          | `5Gi`               |
-| `persistentVolume.type`         | Volume type `pvc` or `ephemeral`.                                                     | `pvc`               |
+| Name                                          | Description                                                                                                                                                                                          | Value               |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `persistentVolume.enabled`                    | If Kubernetes persistence volume should be enabled for Castle.                                                                                                                                       | `false`             |
+| `persistentVolume.accessModes`                | Volume access mode.                                                                                                                                                                                  | `["ReadWriteOnce"]` |
+| `persistentVolume.storageClass`               | Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/).                                                                                                                | `""`                |
+| `persistentVolume.size`                       | Volume size.                                                                                                                                                                                         | `5Gi`               |
+| `persistentVolume.type`                       | Volume type `pvc` or `ephemeral`.                                                                                                                                                                    | `pvc`               |
+| `persistentVolume.claimRetention`             | Optional [PersistentVolumeClaim retention policy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention) for the StatefulSet volume claim template. |                     |
+| `persistentVolume.claimRetention.whenDeleted` | What happens to PVCs created from the volume claim template when the StatefulSet is deleted (`Retain` or `Delete`).                                                                                  |                     |
+| `persistentVolume.claimRetention.whenScaled`  | What happens to PVCs when the StatefulSet replica count is scaled down (`Retain` or `Delete`).                                                                                                       |                     |
 
 ### RTR settings. Leave with defaults, FOR FUTURE RELEASE.
 
