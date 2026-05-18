@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "staticmaps.fullname" $ }}
+  labels:
+    {{- include "staticmaps.labels" $ | nindent 4 }}
+data:
+  config.yaml: |
+    {{- with .Values.app }}
+    logLevel: {{ .log.level }}
+    logFormat: {{ .log.format }}
+    server:
+      port: {{ .apiPort }}
+    app:
+      fetchTimeout: "{{ $.Values.tiles.requestTimeout }}"
+      attributionDir: "{{ .attributionDir }}"
+      tilesUrl: {{ required "Valid .Values.tiles.url required!" $.Values.tiles.url }}
+    markers:
+      localDir: "{{ .markers.localDir }}"
+      fetchTimeout: "{{ .markers.fetchTimeout }}"
+      cacheDir: "{{ .markers.cacheDir }}"
+      cacheExpire: "{{ .markers.cacheExpire }}"
+    {{- with .access }}
+    access:
+      enabled: {{ .enabled }}
+      {{- if .enabled }}
+      host: {{ required "Valid .Values.keys.url required!" $.Values.keys.url }}
+      syncPeriod: "{{ $.Values.keys.requestTimeout }}"
+      bss:
+        enabled: {{ .stat.enabled }}
+        host: {{ .stat.url }}
+      {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- with .Values.license }}
+    license:
+      serviceHost: {{ required "Valid .Values.license.url required!" .url }}
+      retryPeriod: "{{ .retryPeriod }}"
+    {{- end }}

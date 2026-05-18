@@ -1,0 +1,133 @@
+{{- with .Values -}}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "staticmaps.fullname" $ }}
+  {{- if not (empty .annotations) }}
+  annotations:
+    {{- toYaml .annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "staticmaps.labels" $ | nindent 4 }}
+    {{- if not (empty .labels) }}
+    {{- toYaml .labels | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if not .hpa.enabled }}
+  replicas: {{ .replicas }}
+  {{- end }}
+  revisionHistoryLimit: {{ .revisionHistoryLimit }}
+  {{- if .strategy }}
+  strategy:
+    {{- toYaml .strategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "staticmaps.selectorLabels" $ | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include "staticmaps.checksum" (merge (dict "path" "/configmap.yaml") $) }}
+        checksum/secret: {{ include "staticmaps.checksum" (merge (dict "path" "/secret.yaml") $) }}
+        {{- if $.Values.customCAs.bundle }}
+        checksum/custom-ca: {{ include "staticmaps.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
+        {{- end }}
+        {{- if not (empty .podAnnotations) }}
+        {{- toYaml .podAnnotations | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "staticmaps.labels" $ | nindent 8 }}
+        {{- if not (empty .podLabels) }}
+        {{- toYaml .podLabels | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: staticmaps
+          {{- with .image }}
+          image: "{{ required "A valid $.Values.dgctlDockerRegistry entry required" $.Values.dgctlDockerRegistry }}/{{ .repository }}:{{ .tag }}"
+          imagePullPolicy: {{ .pullPolicy }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .app.apiPort }}              
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+          volumeMounts:
+            - mountPath: {{ .app.markers.cacheDir }}
+              name: cache
+            - mountPath: {{ .app.markers.localDir }}
+              name: markers
+            - mountPath: {{ .app.attributionDir }}
+              name: attribution
+            - mountPath: /config
+              name: config
+            {{- if .customCAs.bundle }}
+            - mountPath: {{ include "staticmaps.customCA.mountPath" $ }}
+              name: custom-ca
+              readOnly: true
+            {{- end }}
+          env:
+            - name: CONFIG_PATH
+              value: /config/config.yaml
+            - name: TILESERVER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "staticmaps.fullname" $ }}
+                  key: tilesKey
+            {{- if .app.access.enabled }}
+            - name: KEYS_API_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "staticmaps.fullname" $ }}
+                  key: accessToken
+            {{- end }}
+            {{- if .customCAs.bundle }}
+            - name: SSL_CERT_DIR
+              value: {{ include "staticmaps.customCA.mountPath" $ }}
+            {{- end }}
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+          {{- with .containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: markers
+          emptyDir: {}
+        - name: cache
+          emptyDir: {}
+        - name: attribution
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: {{ include "staticmaps.fullname" $ }}
+        {{- if $.Values.customCAs.bundle }}
+        - name: custom-ca
+          configMap:
+            name: {{ include "staticmaps.fullname" $ }}-custom-ca
+        {{- end }}
+      {{- if not (empty .nodeSelector) }}
+      nodeSelector:
+        {{- toYaml .nodeSelector | nindent 8 }}
+      {{- end }}
+      {{- if not (empty .affinity) }}
+      affinity:
+        {{- toYaml .affinity | nindent 8 }}
+      {{- end }}
+      {{- if not (empty .tolerations) }}
+      tolerations:
+        {{- toYaml .tolerations | nindent 8 }}
+      {{- end }}
+      {{- if not (empty .imagePullSecrets) }}
+      imagePullSecrets:
+        {{- toYaml .imagePullSecrets | nindent 8 }}
+      {{- end }}
+{{- end -}}
