@@ -21,11 +21,104 @@
       "authorizationServicesEnabled": true,
       "frontchannelLogout": true,
       "attributes": {
-        "login_theme": "geopotok",
+        "login_theme": "keycloak",
         "frontchannel.logout.session.required": true,
         "backchannel.logout.session.required": true
-      }
+      },
+      "protocolMappers": [
+        {
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "client_id",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "client_id",
+            "jsonType.label": "String",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "email",
+        "basic"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt",
+        "organization",
+        "name",
+        "avatar"
+      ]
     }
+  ],
+  "roles": {
+    "client": {
+      "geoflow-client": [
+        {
+          "name": "geoflow-default",
+          "description": "Default role for Geoflow realm",
+          "composite": true,
+          "clientRole": true,
+          "containerId": "geoflow-client"
+        }
+      ]
+    }
+  },
+  "clientScopes": [
+  {
+    "name": "name",
+    "protocol": "openid-connect",
+    "attributes": {
+      "include.in.token.scope": "true",
+      "display.on.consent.screen": "true"
+    }
+  },
+  {
+    "name": "avatar",
+    "protocol": "openid-connect",
+    "description": "",
+    "attributes": {
+      "include.in.token.scope": "true",
+      "display.on.consent.screen": "true"
+    }
+  }
   ],
   "internationalizationEnabled": true,
   "supportedLocales": ["en", "ru"],
@@ -43,8 +136,12 @@
         }
       ],
       "clientRoles": {
-        "account": [ "manage-account" ]
-      }
+        "account": [ "manage-account" ],
+        "geoflow-client": [ "geoflow-default" ] 
+      },
+      "realmRoles": [
+        "geoflow-default"
+      ]
     }
   ]
   {{- else }}

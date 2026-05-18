@@ -1,17 +1,17 @@
 {
-  "realm" : "Citylens",
-  "displayName" : "Citylens",
+  "realm" : "Platform",
+  "displayName" : "Platform",
   "enabled": true,
   "defaultRole" : {
-    "name" : "citylens-default",
-    "description" : "Default role for Citylens realm"
+    "name" : "platform-default",
+    "description" : "Default role for Platform realm"
   },
   "clients": [
     {
-      "clientId": "citylens-client",
-      "name": "citylens-client",
+      "clientId": "platform-client",
+      "name": "platform-client",
       "enabled": true,
-      "description": "Citylens application client",
+      "description": "Platform application client",
       "clientAuthenticatorType": "client-secret",
       "redirectUris": ["*"],
       "webOrigins": ["*"],
@@ -90,13 +90,13 @@
   ],
   "roles": {
     "client": {
-      "citylens-client": [
+      "platform-client": [
         {
-          "name": "citylens-default",
-          "description": "Default role for Citylens realm",
+          "name": "platform-default",
+          "description": "Default role for Platform realm",
           "composite": true,
           "clientRole": true,
-          "containerId": "citylens-client"
+          "containerId": "platform-client"
         }
       ]
     }
@@ -137,10 +137,10 @@
       ],
       "clientRoles": {
         "account": [ "manage-account" ],
-        "citylens-client": [ "citylens-default" ] 
+        "platform-client": [ "platform-default" ] 
       },
       "realmRoles": [
-        "citylens-default"
+        "platform-default"
       ]
     }
   ]
