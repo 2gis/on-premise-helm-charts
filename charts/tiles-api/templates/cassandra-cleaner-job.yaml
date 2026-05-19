@@ -6,10 +6,12 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-cleaner-job
+  name: {{ include "tiles.fullname" $ }}-{{ printf "%s-%s" $type.kind ($type.subtype | default "regular") | sha256sum | trunc 8 }}-cleaner-job
   labels:
     {{- include "tiles.labels" $ | nindent 4 }}
     {{- include "tiles.cleaner.label" $ | nindent 4 }}
+    tiles-kind: {{ $type.kind }}
+    tiles-subtype: {{ $type.subtype | default "regular" }}
   annotations:
     {{- include "importer.removable-hook-annotations" $ | nindent 4 }}
     "helm.sh/hook-weight": "1" # before imports
@@ -18,10 +20,12 @@ spec:
   backoffLimit: 0
   template:
     metadata:
-      name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-cleaner
+      name: {{ include "tiles.fullname" $ }}-{{ printf "%s-%s" $type.kind ($type.subtype | default "regular") | sha256sum | trunc 8 }}-cleaner
       labels:
         {{- include "tiles.selectorLabels" $ | nindent 8 }}
         {{- include "tiles.cleaner.label" $ | nindent 8 }}
+        tiles-kind: {{ $type.kind }}
+        tiles-subtype: {{ $type.subtype | default "regular" }}
     spec:
       {{- with $.Values.podSecurityContext }}
       securityContext:
@@ -35,7 +39,7 @@ spec:
 
         - name: config-volume
           configMap:
-            name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-import
+            name: {{ include "tiles.fullname" $ }}-{{ printf "%s-%s" $type.kind ($type.subtype | default "regular") | sha256sum | trunc 8 }}-import
 
         {{- if eq (include "tiles.tls.mountSecret" $) "true" }}
         - name: cassandra-tls

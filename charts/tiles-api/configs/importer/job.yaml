@@ -1,12 +1,14 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "tiles.fullname" . }}-{{ .kind }}-{{`{{.task_id}}`}}
+  name: {{ include "tiles.fullname" . }}-{{ .kind | sha256sum | trunc 8 }}-{{`{{.task_id}}`}}
   labels:
     task-id: {{`{{.task_id}}`}}
     import-id: {{`{{.import_id}}`}}
     {{- include "tiles.labels" . | nindent 4 }}
     {{- include "tiles.importer.label" . | nindent 4 }}
+    tiles-kind: {{ .kind }}
+    tiles-subtype: {{ .subtype | default "regular" }}
 
 spec:
   backoffLimit: {{ .backoffLimit }}
@@ -18,6 +20,8 @@ spec:
         import-id: {{`{{.import_id}}`}}
         {{- include "tiles.selectorLabels" . | nindent 8 }}
         {{- include "tiles.importer.label" . | nindent 8 }}
+        tiles-kind: {{ .kind }}
+        tiles-subtype: {{ .subtype | default "regular" }}
 
     spec:
       {{- with .Values.podSecurityContext }}
@@ -30,7 +34,7 @@ spec:
 
         - name: config-volume
           configMap:
-            name: {{ include "tiles.fullname" . }}-{{ .kind }}-{{ .subtype | default "regular" }}-import
+            name: {{ include "tiles.fullname" . }}-{{ printf "%s-%s" .kind (.subtype | default "regular") | sha256sum | trunc 8 }}-import
 
         {{- if eq (include "tiles.tls.mountSecret" $) "true" }}
         - name: cassandra-tls
