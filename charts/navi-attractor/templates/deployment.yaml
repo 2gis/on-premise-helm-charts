@@ -109,6 +109,10 @@ spec:
           - name: {{ include "generic-chart.fullname" . }}-configmap
             mountPath: {{ printf "%s/rules.conf" .Values.attractor.configFilepath | quote }}
             subPath: rules.conf
+          {{- if .Values.attractor.sentry.enabled }}
+          - name: sentry-volume
+            mountPath: {{ .Values.attractor.sentry.reportPath | default "/tmp/sentry" | quote }}
+          {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 10 }}
           {{- end }}
