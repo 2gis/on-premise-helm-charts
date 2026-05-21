@@ -55,7 +55,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                   | Description                                                                                   | Value                        |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ---------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/search-api` |
-| `api.image.tag`        | Tag                                                                                           | `7.105.1`                    |
+| `api.image.tag`        | Tag                                                                                           | `7.107.0`                    |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`               |
 
 ### API settings
@@ -74,7 +74,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                     | Description                                                                                   | Value                   |
 | ------------------------ | --------------------------------------------------------------------------------------------- | ----------------------- |
 | `nginx.image.repository` | Docker Repository                                                                             | `2gis-on-premise/nginx` |
-| `nginx.image.tag`        | Docker image tag                                                                              | `1.25.5`                |
+| `nginx.image.tag`        | Docker image tag                                                                              | `1.30.1`                |
 | `nginx.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`          |
 | `nginx.httpPort`         | HTTP port on which NGINX will be listening                                                    | `8080`                  |
 
