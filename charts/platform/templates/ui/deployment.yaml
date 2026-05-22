@@ -146,7 +146,7 @@ spec:
               value: {{ .Values.ui.license.url | quote }}
             {{- if .Values.ui.godmode }}
             - name: GOD_MODE
-              value: {{ .Values.ui.godmode | quote }}
+              value: {{ .Values.ui.godmode | default "false" | quote }}
             {{- end }}
             - name: REDIRECT_SAFE_DOMAINS
               value: {{ .Values.ui.redirectSafeDomains }}
