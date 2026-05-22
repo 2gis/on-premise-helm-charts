@@ -1,5 +1,11 @@
 # Core Breaking-Changes
 
+## [2.7.0]
+
+### keys
+
+- KeysAPI - you need to add the `X-Company-Id` header to `Access-Control-Allow-Headers` for the Platform Manager to work
+
 ## [2.5.0]
 
 Before upgrading, update the Platform services to the [Platform:2.50.0](../platform/PLATFORM-CHANGELOG.md) release.
