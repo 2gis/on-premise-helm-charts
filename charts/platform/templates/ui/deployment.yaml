@@ -74,6 +74,13 @@ spec:
                   name: {{ include "platform.ui.secretName" . }}
                   key: naviApiKey
             {{- end }}
+            {{- if .Values.ui.static.key }}
+            - name: STATIC_MAP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "platform.ui.secretName" . }}
+                  key: staticApiKey
+            {{- end }}
             - name: DEFAULT_LOCALE
               value: {{ .Values.ui.defaultLocale | quote }}
             - name: BRAND
@@ -128,8 +135,6 @@ spec:
               value: {{ .Values.ui.status.mapgl | quote }}
             - name: STATIC_MAP_URL
               value: {{ .Values.ui.static.url | quote }}
-            - name: STATIC_MAP_KEY
-              value: {{ .Values.ui.static.key | quote }}
             - name: SEARCH_STATUS
               value: {{ .Values.ui.status.search | quote }}
             - name: NAVI_API_STATUS
