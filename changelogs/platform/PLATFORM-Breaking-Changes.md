@@ -1,5 +1,11 @@
 # Platform Breaking-Changes
 
+## [2.54.0]
+
+### platform
+
+- You need to upgrade keys-backend to version 1.165.1 and license to version 2.6.0 (Release Core 2.7.0)
+
 ## [2.53.0]
 
 Public Transport API has become part of the Routing API. If you use the Public Transport API, please update the keys service to the [Core:2.6.0](../core/CORE-CHANGELOG.md) release.
