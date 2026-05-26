@@ -112,11 +112,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                 | Description                                          | Value  |
-| -------------------- | ---------------------------------------------------- | ------ |
-| `pdb.enabled`        | If PDB is enabled for the service.                   | `true` |
-| `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`   |
-| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`    |
+| Name                 | Description                                                                                             | Value     |
+| -------------------- | ------------------------------------------------------------------------------------------------------- | --------- |
+| `pdb.enabled`        | If PDB is enabled for the service.                                                                      | `true`    |
+| `pdb.component`      | If set, label with component name will be added to pdb to secure it from assigning to non dmasync pods. | `dmasync` |
+| `pdb.minAvailable`   | How many pods must be available after the eviction.                                                     | `""`      |
+| `pdb.maxUnavailable` | How many pods can be unavailable after the eviction.                                                    | `1`       |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -166,9 +167,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `dm.merger.readinessProbe.periodSeconds`       | Period seconds for readinessProbe for merger.                                                                                 | `5`                                        |
 | `dm.merger.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe for merger.                                                                                | `3`                                        |
 | `dm.merger.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe for merger.                                                                              | `3`                                        |
-| `dm.merger.pdb.enabled`                        | If PDB is enabled for the merger                                                                                              | `true`                                     |
-| `dm.merger.pdb.minAvailable`                   | How many pods must be available after the eviction of merger                                                                  | `""`                                       |
-| `dm.merger.pdb.maxUnavailable`                 | How many pods can be unavailable after the eviction of merger                                                                 | `1`                                        |
+| `dm.merger.pdb.enabled`                        | If PDB is enabled for the merger.                                                                                             | `true`                                     |
+| `dm.merger.pdb.component`                      | If set, label with component name will be added to pdb to secure it from assigning to non merger pods.                        | `merger`                                   |
+| `dm.merger.pdb.minAvailable`                   | How many pods must be available after the eviction of merger.                                                                 | `""`                                       |
+| `dm.merger.pdb.maxUnavailable`                 | How many pods can be unavailable after the eviction of merger.                                                                | `1`                                        |
 | `dm.merger.customLivenessProbe`                | Override default liveness probe for merger.                                                                                   | `{}`                                       |
 | `dm.merger.customReadinessProbe`               | Override default readiness probe for merger.                                                                                  | `{}`                                       |
 | `dm.merger.resources.requests.cpu`             | Merger CPU request. 1CPU recommended.                                                                                         |                                            |

@@ -1,3 +1,13 @@
+## [2.6.0] (2026-04-01)
+
+#### Images
+```
+keys
+	- keys-backend:1.151.0
+	+ keys-backend:1.154.0
+```
+[Full list of image versions](core_image_versions.txt)
+
 ## [2.5.0] (2026-03-04)
 #### [Breaking-Changes](CORE-Breaking-Changes.md#250)
 #### Images

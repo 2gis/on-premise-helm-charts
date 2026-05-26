@@ -21,7 +21,7 @@ spec:
         - name: cleaner-job
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          command: [ "twins-importer", "clear" ]
+          command: [ "twins", "ctl", "clear" ]
           resources:
             {{- toYaml .Values.importer.cleaner.resources | nindent 12 }}
           env:

@@ -1,5 +1,9 @@
 # Platform Breaking-Changes
 
+## [2.53.0]
+
+Public Transport API has become part of the Routing API. If you use the Public Transport API, please update the keys service to the [Core:2.6.0](../core/CORE-CHANGELOG.md) release.
+
 ## [2.51.0]
 
 ### navi-vrp-task-manager

@@ -46,7 +46,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                         |
 | ------------------ | ----------- | ----------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-router` |
-| `image.tag`        | Tag         | `6.40.0.2`                    |
+| `image.tag`        | Tag         | `6.42.0.2`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
 ### Navi-Router service settings
@@ -65,8 +65,17 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `router.sentry.username`                                   | Sentry username                                                                                                                                              | `navi`                                   |
 | `router.sentry.printMessages`                              | If outgoing messages needed                                                                                                                                  | `false`                                  |
 | `router.sentry.debug`                                      | Debugging switch                                                                                                                                             | `false`                                  |
+| `router.sentry.environment`                                | Environment name                                                                                                                                             | `""`                                     |
 | `router.sentry.reportPath`                                 | Local directory to dump                                                                                                                                      | `/tmp/sentry`                            |
 | `router.sentry.handler`                                    | Handler file location                                                                                                                                        | `/usr/sbin/2gis/mosesd/crashpad_handler` |
+| `router.sentry.minSeverityLevel`                           | Minimal severity level to log in sentry                                                                                                                      | `error`                                  |
+| `router.sentry.logsBufferSize`                             | Size of buffer to send to sentry                                                                                                                             | `100`                                    |
+| `router.telemetry.enabled`                                 | Send telemetry to Opentelemetry server                                                                                                                       | `false`                                  |
+| `router.telemetry.host`                                    | Telemetry host                                                                                                                                               | `telemetry.server`                       |
+| `router.telemetry.port`                                    | Telemetry port                                                                                                                                               | `4318`                                   |
+| `router.telemetry.maxQueueSize`                            | Max number of buffered spans                                                                                                                                 | `2048`                                   |
+| `router.telemetry.scheduleDelayMillis`                     | Interval of export of the buffered spans, ms                                                                                                                 | `500`                                    |
+| `router.telemetry.maxExportBatchSize`                      | Max number of spans sent to the exporter in a single export call                                                                                             | `512`                                    |
 | `router.localRestrictions.distanceBetweenPointsKm`         | Max allowed distance between points                                                                                                                          |                                          |
 | `router.localRestrictions.pointsCount`                     | Max allowed points count                                                                                                                                     |                                          |
 | `router.localRestrictions.matrixSize`                      | Max allowed matrix size                                                                                                                                      |                                          |
@@ -77,13 +86,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `router.rulesUrl`                                          | URL of the rules file                                                                                                                                        |                                          |
 | `navigroup`                                                | Service group identifier, allows multiple stacks deployed to the same namespace                                                                              | `""`                                     |
 | `rules`                                                    | List of routing rules, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details | `[]`                                     |
+| `abTestOptions`                                            | AB test options for routing rules, passed as JSON object. If set, mounted as router_rules_ab_test_options.json                                               | `{}`                                     |
 
 ### Key management service settings
 
 | Name                      | Description                                                                           | Value       |
 | ------------------------- | ------------------------------------------------------------------------------------- | ----------- |
 | `keys.enabled`            | Disable or enable key management service                                              | `false`     |
-| `keys.url`                | API keys service URL, ex: http://keys-service-api.svc/service/v1/keys                 | `""`        |
+| `keys.url`                | API keys service URL, Ex: http://keys-service-api.svc/service/v1/keys                 | `""`        |
 | `keys.refreshIntervalSec` | Keys refresh interval in seconds                                                      | `30`        |
 | `keys.downloadTimeoutSec` | Keys download timeout in seconds                                                      | `30`        |
 | `keys.commonToken`        | Mater key to retrieve all per-service API keys, keys.apis ignored, if commonToken set | `""`        |

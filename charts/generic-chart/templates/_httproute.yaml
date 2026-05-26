@@ -1,4 +1,5 @@
 {{- define "generic-chart.httpRoute.tpl" -}}
+{{- if (.Values.httpRoute).enabled -}}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -9,14 +10,7 @@ spec:
     {{- . | toYaml | nindent 4 }}
   {{- end }}
   parentRefs:
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: canary
-      namespace: istio-gateways
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: stable
-      namespace: istio-gateways
+    {{- include "generic-chart.httpRouteParentRefs" . | nindent 4 }}
   rules:
     - backendRefs:
         - group: ""
@@ -24,4 +18,5 @@ spec:
           name: {{  include "generic-chart.fullname" . }}
           port: {{ (.Values.service).port | default 80 | int }}
           weight: 1
+{{- end }}{{/* if enabled */}}
 {{- end }}{{/* define */}}

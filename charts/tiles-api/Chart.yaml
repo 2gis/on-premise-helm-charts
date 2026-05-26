@@ -4,8 +4,8 @@ description: Tiles API for getting cartographic data
 
 type: application
 
-version: 2.51.0
-appVersion: 4.81.3
+version: 2.53.0
+appVersion: 4.84.1
 
 maintainers:
 - name: 2gis

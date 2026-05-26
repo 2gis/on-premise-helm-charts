@@ -1,5 +1,5 @@
 {{- if .Values.ingressRouter.enabled }}
-{{- if .Values.service.ingressRouter.external.enable }}
+{{- if .Values.service.ingressRouter.external.enabled }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -57,5 +57,5 @@ spec:
     - path:
         type: PathPrefix
         value: /
-{{- end }}{{- /* .Values.service.ingressRouter.external.enable */}}
+{{- end }}{{- /* .Values.service.ingressRouter.external.enabled */}}
 {{- end }}{{- /* .Values.ingressRouter.enabled */}}
