@@ -1319,12 +1319,12 @@ postgresql:
   enabled: false
   auth:
     postgresPassword: ""
-    username: bn_keycloak
+    username: ""
     password: ""
-    database: bitnami_keycloak
+    database: ""
     existingSecret: ""
     secretKeys:
-      userPasswordKey: password
+      userPasswordKey: ""
   architecture: standalone
 
 # External PostgreSQL configuration
@@ -1344,9 +1344,9 @@ postgresql:
 externalDatabase:
   host: ""
   port: 5432
-  user: bn_keycloak
+  user: ""
   password: ""
-  database: bitnami_keycloak
+  database: ""
   schema: public
   existingSecret: ""
   existingSecretUserKey: ""
@@ -1359,8 +1359,12 @@ externalDatabase:
 # @param defaultUser.name Default user name
 # @param defaultUser.email Default user email
 # @param defaultUser.password Default user password
+# @param defaultUser.firstName Default user first name
+# @param defaultUser.lastName Default user last name
 defaultUser:
   enabled: false
   name: ''
   email: ''
   password: ''
+  firstName: ''
+  lastName: ''

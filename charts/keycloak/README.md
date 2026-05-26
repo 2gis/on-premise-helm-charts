@@ -387,33 +387,35 @@ Changes:
 
 ### Database parameters
 
-| Name                                         | Description                                                                                                       | Value              |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                                                             | `false`            |
-| `postgresql.auth.postgresPassword`           | Password for the "postgres" admin user. Ignored if `auth.existingSecret` with key `postgres-password` is provided | `""`               |
-| `postgresql.auth.username`                   | Name for a custom user to create                                                                                  | `bn_keycloak`      |
-| `postgresql.auth.password`                   | Password for the custom user to create                                                                            | `""`               |
-| `postgresql.auth.database`                   | Name for a custom database to create                                                                              | `bitnami_keycloak` |
-| `postgresql.auth.existingSecret`             | Name of existing secret to use for PostgreSQL credentials                                                         | `""`               |
-| `postgresql.auth.secretKeys.userPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.    | `password`         |
-| `postgresql.architecture`                    | PostgreSQL architecture (`standalone` or `replication`)                                                           | `standalone`       |
-| `externalDatabase.host`                      | Database host                                                                                                     | `""`               |
-| `externalDatabase.port`                      | Database port number                                                                                              | `5432`             |
-| `externalDatabase.user`                      | Non-root username for Keycloak                                                                                    | `bn_keycloak`      |
-| `externalDatabase.password`                  | Password for the non-root username for Keycloak                                                                   | `""`               |
-| `externalDatabase.database`                  | Keycloak database name                                                                                            | `bitnami_keycloak` |
-| `externalDatabase.schema`                    | Keycloak database schema                                                                                          | `public`           |
-| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                           | `""`               |
-| `externalDatabase.existingSecretUserKey`     | Name of an existing secret key containing the database user                                                       | `""`               |
-| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                                | `""`               |
-| `externalDatabase.annotations`               | Additional custom annotations for external database secret object                                                 | `{}`               |
-| `externalDatabase.extraParams`               | Additional JDBC connection parameters appended to the JDBC URL (KC_DB_URL).                                       | `""`               |
+| Name                                         | Description                                                                                                       | Value        |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------ |
+| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                                                             | `false`      |
+| `postgresql.auth.postgresPassword`           | Password for the "postgres" admin user. Ignored if `auth.existingSecret` with key `postgres-password` is provided | `""`         |
+| `postgresql.auth.username`                   | Name for a custom user to create                                                                                  | `""`         |
+| `postgresql.auth.password`                   | Password for the custom user to create                                                                            | `""`         |
+| `postgresql.auth.database`                   | Name for a custom database to create                                                                              | `""`         |
+| `postgresql.auth.existingSecret`             | Name of existing secret to use for PostgreSQL credentials                                                         | `""`         |
+| `postgresql.auth.secretKeys.userPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.    | `""`         |
+| `postgresql.architecture`                    | PostgreSQL architecture (`standalone` or `replication`)                                                           | `standalone` |
+| `externalDatabase.host`                      | Database host                                                                                                     | `""`         |
+| `externalDatabase.port`                      | Database port number                                                                                              | `5432`       |
+| `externalDatabase.user`                      | Non-root username for Keycloak                                                                                    | `""`         |
+| `externalDatabase.password`                  | Password for the non-root username for Keycloak                                                                   | `""`         |
+| `externalDatabase.database`                  | Keycloak database name                                                                                            | `""`         |
+| `externalDatabase.schema`                    | Keycloak database schema                                                                                          | `public`     |
+| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                           | `""`         |
+| `externalDatabase.existingSecretUserKey`     | Name of an existing secret key containing the database user                                                       | `""`         |
+| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                                | `""`         |
+| `externalDatabase.annotations`               | Additional custom annotations for external database secret object                                                 | `{}`         |
+| `externalDatabase.extraParams`               | Additional JDBC connection parameters appended to the JDBC URL (KC_DB_URL).                                       | `""`         |
 
 ### Keycloak default user for access on-premise services
 
-| Name                   | Description                                 | Value   |
-| ---------------------- | ------------------------------------------- | ------- |
-| `defaultUser.enabled`  | Switch to enable or disable the defaultUser | `false` |
-| `defaultUser.name`     | Default user name                           | `""`    |
-| `defaultUser.email`    | Default user email                          | `""`    |
-| `defaultUser.password` | Default user password                       | `""`    |
+| Name                    | Description                                 | Value   |
+| ----------------------- | ------------------------------------------- | ------- |
+| `defaultUser.enabled`   | Switch to enable or disable the defaultUser | `false` |
+| `defaultUser.name`      | Default user name                           | `""`    |
+| `defaultUser.email`     | Default user email                          | `""`    |
+| `defaultUser.password`  | Default user password                       | `""`    |
+| `defaultUser.firstName` | Default user first name                     | `""`    |
+| `defaultUser.lastName`  | Default user last name                      | `""`    |

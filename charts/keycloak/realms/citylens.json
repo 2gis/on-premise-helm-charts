@@ -128,6 +128,8 @@
     {
       "username": "{{ .Values.defaultUser.name }}",
       "email":  "{{ .Values.defaultUser.email }}",
+      "firstName": "{{ .Values.defaultUser.firstName }}",
+      "lastName": "{{ .Values.defaultUser.lastName }}",
       "enabled": true,
       "credentials": [
         {
@@ -137,7 +139,7 @@
       ],
       "clientRoles": {
         "account": [ "manage-account" ],
-        "citylens-client": [ "citylens-default" ] 
+        "citylens-client": [ "citylens-default" ]
       },
       "realmRoles": [
         "citylens-default"
