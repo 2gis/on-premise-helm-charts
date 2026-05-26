@@ -2,6 +2,10 @@
 
 ## [2.7.0]
 
+### keys
+
+- KeysAPI - you need to add the `X-Company-Id` header to `Access-Control-Allow-Headers` for the Platform Manager to work
+
 ### keycloak
 
 - Renamed `postgres.host` to `externalDatabase.host`
