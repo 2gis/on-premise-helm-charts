@@ -319,7 +319,10 @@ data:
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: {{ .Values.head.envoy.policy }}
-          http2_protocol_options: { }
+          http2_protocol_options:
+            connection_keepalive:
+              interval: 15s
+              timeout: 5s
           load_assignment:
             cluster_name: workers
             endpoints:
@@ -336,7 +339,10 @@ data:
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: {{ .Values.head.envoy.policy }}
-          http2_protocol_options: { }
+          http2_protocol_options:
+            connection_keepalive:
+              interval: 15s
+              timeout: 5s
           load_assignment:
             cluster_name: geodetectors
             endpoints:
@@ -461,8 +467,8 @@ data:
     sapphire-bg-threads: 1
     sapphire-grpc-threads: 1
     sapphire-mon-threads: 1
-    logger-level: {{ .Values.head.head.loggerLevel }}
-    logger-format: {{ .Values.head.head.loggerFormat }}
+    logger-level: {{ .Values.head.head.logLevel }}
+    logger-format: {{ .Values.head.head.logFormat }}
     ads-enable: {{ .Values.head.head.adsEnable }}
     data-update-frequency-sec: 60
     big-search-mode-update-frequency-sec: 30
@@ -549,6 +555,8 @@ data:
     grpc-client-circuit-breaker-clients:
       {{- toYaml .Values.head.grpcClientCircuitBreaker.clients | nindent 6 }}
       {{- end -}}{{- /* .Values.onpremise */}}
+    graceful-shutdown-interval: {{ .Values.head.head.gracefulShutdownInterval }}
+
   worker_vars.yaml: |
     server-grpc-port: {{ .Values.worker.ports.grpc }}
     worker-grpc-threads: 2
@@ -557,8 +565,8 @@ data:
     worker-fb-threads: {{ .Values.worker.workerFbThreads }}
     worker-fs-threads: 2
     worker-bg-threads: 1
-    logger-level: {{ .Values.worker.loggerLevel }}
-    logger-format: {{ .Values.worker.loggerFormat }}
+    logger-level: {{ .Values.worker.logLevel }}
+    logger-format: {{ .Values.worker.logFormat }}
     data-update-frequency-sec: {{ .Values.worker.dataUpdateFrequencySec }}
     sentry-dsn: {{ .Values.sentry.workerDsn | quote }}
     {{- include "search-api-v8.sentry.vars.common" . | nindent 4 }}
@@ -568,6 +576,8 @@ data:
     rtw-lifetime-sec: {{ .Values.worker.rtw.lifeTime }}
   {{- end }}{{- /* .Values.onpremise */}}
     queue-limit: {{ .Values.worker.queueLimit }}
+    graceful-shutdown-interval: {{ .Values.worker.gracefulShutdownInterval }}
+
   syncer-head.yaml: |
     server:
       address: ":{{ .Values.syncer.ports.http }}"
@@ -736,7 +746,7 @@ data:
       secret_access_key: ${s3SecretKey}
       bucket: {{ .Values.s3.bucket }}
       use_ssl: {{ .Values.s3.secure }}
-      region: {{ .Values.s3.region }}
+      region: {{ .Values.s3.region | quote }}
     {{ end }}{{- /* .Values.onpremise */}}
   portal.yaml: |
     app:
@@ -812,6 +822,7 @@ data:
       props: {{- toYaml .Values.controller.props | nindent 8 }}
       interval: {{ .Values.controller.interval }}
       task_timeout: {{ .Values.controller.taskTimeout }}
+      allowed_project_keys: {{- toYaml .Values.controller.allowedProjectKeys | nindent 8 }}
     {{- if .Values.onpremise }}
       tasks_priorities:
         default: 1
@@ -916,8 +927,8 @@ data:
       feed_backups:
         enable: {{ .Values.feedSandbox.feedBackups.enabled }}
         prefix: {{ .Values.feedSandbox.feedBackups.prefix }}
-      {{ end }}{{- /* not .Values.onpremise */}}
-    {{ if .Values.onpremise }}
+      {{- end -}}{{- /* not .Values.onpremise */}}
+    {{- if .Values.onpremise }}
     s3_client:
       enable: true
       endpoint: ${s3Host}
@@ -925,8 +936,8 @@ data:
       secret_access_key: ${s3SecretKey}
       bucket: {{ .Values.dgctlStorage.bucket }}
       use_ssl: {{ .Values.dgctlStorage.secure }}
-      region: {{ .Values.dgctlStorage.region }}
-    {{- else -}}
+      region: {{ .Values.dgctlStorage.region | quote }}
+    {{- else }}
     s3_client:
       enable: {{ .Values.s3.enabled }}
       endpoint: ${s3Host}
@@ -934,8 +945,8 @@ data:
       secret_access_key: ${s3SecretKey}
       bucket: {{ .Values.s3.bucket }}
       use_ssl: {{ .Values.s3.secure }}
-      region: {{ .Values.s3.region }}
-    {{ end }}{{- /* .Values.onpremise */}}
+      region: {{ .Values.s3.region | quote }}
+    {{- end -}}{{- /* .Values.onpremise */}}
   {{- if .Values.ingressRouter.enabled }}
   ingress_service_envoy.yaml: |
     admin:
@@ -966,8 +977,16 @@ data:
                           - match:
                               prefix: "/unisearch.proto.SearchService/"
                               headers:
-                                - name: {{ .Values.ingressRouter.headers | quote }}
+                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
                                   exact_match: {{ .Values.ingressRouter.routing.searchBase.exactMatch | quote }}
+                            route:
+                              cluster: search_base_cluster
+                              auto_host_rewrite: true
+                          - match:
+                              prefix: "/unisearch.proto.SearchService/"
+                              headers:
+                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
+                                  present_match: false
                             route:
                               cluster: search_base_cluster
                               auto_host_rewrite: true
@@ -975,35 +994,43 @@ data:
                           - match:
                               prefix: "/unisearch.proto.SearchService/"
                               headers:
-                                - name: {{ .Values.ingressRouter.headers | quote }}
+                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
                                   exact_match: {{ .Values.ingressRouter.routing.cluster1.exactMatch | quote }}
                             route:
                               cluster: cluster-1
                               auto_host_rewrite: true
+                            request_headers_to_remove:
+                            - {{ .Values.ingressRouter.routeHeader }}
                           - match:
                               prefix: "/unisearch.proto.SearchService/"
                               headers:
-                                - name: {{ .Values.ingressRouter.headers | quote }}
+                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
                                   exact_match: {{ .Values.ingressRouter.routing.cluster2.exactMatch | quote }}
                             route:
                               cluster: cluster-2
                               auto_host_rewrite: true
+                            request_headers_to_remove:
+                            - {{ .Values.ingressRouter.routeHeader }}
                           - match:
                               prefix: "/unisearch.proto.SearchService/"
                               headers:
-                                - name: {{ .Values.ingressRouter.headers | quote }}
+                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
                                   exact_match: {{ .Values.ingressRouter.routing.cluster3.exactMatch | quote }}
                             route:
                               cluster: cluster-3
                               auto_host_rewrite: true
+                            request_headers_to_remove:
+                            - {{ .Values.ingressRouter.routeHeader }}
                           - match:
                               prefix: "/unisearch.proto.SearchService/"
                               headers:
-                                - name: {{ .Values.ingressRouter.headers | quote }}
+                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
                                   exact_match: {{ .Values.ingressRouter.routing.sanitized.exactMatch | quote }}
                             route:
                               cluster: sanitized
                               auto_host_rewrite: true
+                            request_headers_to_remove:
+                            - {{ .Values.ingressRouter.routeHeader }}
                         {{- end -}}{{- /* not .Values.onpremise */}}
                         {{- if .Values.geodetector.enabled }}
                           - match:
@@ -1016,32 +1043,32 @@ data:
                           - match:
                                 prefix: "/debug.proto.DebugService/"
                                 headers:
-                                  - name: {{ .Values.ingressRouter.debug_headers | quote }}
-                                    exact_match: {{ .Values.ingressRouter.debug_routing.ingressRouter.exactMatch | quote }}
+                                  - name: {{ .Values.ingressRouter.debugHeaders | quote }}
+                                    exact_match: {{ .Values.ingressRouter.debugRouting.ingressRouter.exactMatch | quote }}
                             route:
                               cluster: self-ingress-router
                               auto_host_rewrite: true
                           - match:
                               prefix: "/debug.proto.DebugService/"
                               headers:
-                                - name: {{ .Values.ingressRouter.debug_headers | quote }}
-                                  exact_match: {{ .Values.ingressRouter.debug_routing.head.exactMatch | quote }}
+                                - name: {{ .Values.ingressRouter.debugHeaders | quote }}
+                                  exact_match: {{ .Values.ingressRouter.debugRouting.head.exactMatch | quote }}
                             route:
                               cluster: search_base_cluster
                               auto_host_rewrite: true
                           - match:
                               prefix: "/debug.proto.DebugService/"
                               headers:
-                                - name: {{ .Values.ingressRouter.debug_headers | quote }}
-                                  exact_match: {{ .Values.ingressRouter.debug_routing.geodetector.exactMatch | quote }}
+                                - name: {{ .Values.ingressRouter.debugHeaders | quote }}
+                                  exact_match: {{ .Values.ingressRouter.debugRouting.geodetector.exactMatch | quote }}
                             route:
                               cluster: geodetectors
                               auto_host_rewrite: true
                           - match:
                               prefix: "/debug.proto.DebugService/"
                               headers:
-                                - name: {{ .Values.ingressRouter.debug_headers | quote }}
-                                  exact_match: {{ .Values.ingressRouter.debug_routing.worker.exactMatch | quote }}
+                                - name: {{ .Values.ingressRouter.debugHeaders | quote }}
+                                  exact_match: {{ .Values.ingressRouter.debugRouting.worker.exactMatch | quote }}
                             route:
                               cluster: workers
                               auto_host_rewrite: true
@@ -1057,7 +1084,10 @@ data:
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: ROUND_ROBIN
-          http2_protocol_options: { }
+          http2_protocol_options:
+            connection_keepalive:
+              interval: 15s
+              timeout: 5s
           load_assignment:
             cluster_name: search_base_cluster
             endpoints:
@@ -1074,7 +1104,10 @@ data:
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: ROUND_ROBIN
-          http2_protocol_options: { }
+          http2_protocol_options:
+            connection_keepalive:
+              interval: 15s
+              timeout: 5s
           load_assignment:
             cluster_name: cluster-1
             endpoints:
@@ -1090,7 +1123,10 @@ data:
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: ROUND_ROBIN
-          http2_protocol_options: { }
+          http2_protocol_options:
+            connection_keepalive:
+              interval: 15s
+              timeout: 5s
           load_assignment:
             cluster_name: cluster-2
             endpoints:
@@ -1106,7 +1142,10 @@ data:
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: ROUND_ROBIN
-          http2_protocol_options: { }
+          http2_protocol_options:
+            connection_keepalive:
+              interval: 15s
+              timeout: 5s
           load_assignment:
             cluster_name: cluster-3
             endpoints:
@@ -1122,7 +1161,10 @@ data:
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: ROUND_ROBIN
-          http2_protocol_options: { }
+          http2_protocol_options:
+            connection_keepalive:
+              interval: 60s
+              timeout: 30s
           load_assignment:
             cluster_name: sanitized
             endpoints:
@@ -1139,7 +1181,10 @@ data:
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: {{ .Values.head.envoy.policy }}
-          http2_protocol_options: { }
+          http2_protocol_options:
+            connection_keepalive:
+              interval: 15s
+              timeout: 5s
           load_assignment:
             cluster_name: geodetectors
             endpoints:
@@ -1156,7 +1201,10 @@ data:
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: ROUND_ROBIN
-          http2_protocol_options: { }
+          http2_protocol_options:
+            connection_keepalive:
+              interval: 15s
+              timeout: 5s
           load_assignment:
             cluster_name: self-ingress-router
             endpoints:
@@ -1164,7 +1212,7 @@ data:
                   - endpoint:
                       address:
                         socket_address:
-                          port_value: {{ .Values.ingressRouter.debug_routing.ingressRouter.port }}
+                          port_value: {{ .Values.ingressRouter.debugRouting.ingressRouter.port }}
                           address: {{ include "search-api-v8.fullname" . }}-ingress-router
         - name: workers
           connect_timeout: 1s
@@ -1172,7 +1220,10 @@ data:
           dns_lookup_family: V4_ONLY
           dns_refresh_rate: 1s
           lb_policy: ROUND_ROBIN
-          http2_protocol_options: { }
+          http2_protocol_options:
+            connection_keepalive:
+              interval: 15s
+              timeout: 5s
           load_assignment:
             cluster_name: workers
             endpoints:
@@ -1180,7 +1231,7 @@ data:
                   - endpoint:
                       address:
                         socket_address:
-                          port_value: {{ .Values.ingressRouter.debug_routing.worker.port }}
+                          port_value: {{ .Values.ingressRouter.debugRouting.worker.port }}
                           address: {{ include "search-api-v8.fullname" . }}-worker
       {{- end -}}{{- /* and .Values.debugMode (not .Values.onpremise) */}}
   ingress_router_vars.yaml: |
@@ -1193,8 +1244,8 @@ data:
     ingress-router-mon-threads: 1
     ingress-router-rate-limiting-threads: 1
     ingress-router-bg-threads: 2
-    logger-level: {{ .Values.ingressRouter.loggerLevel }}
-    logger-format: {{ .Values.ingressRouter.loggerFormat }}
+    logger-level: {{ .Values.ingressRouter.logLevel }}
+    logger-format: {{ .Values.ingressRouter.logFormat }}
     dispatcher-enabled: {{ .Values.ingressRouter.dispatcherComponent.enabled }}
     rate-limit-enabled: {{ .Values.ingressRouter.rateLimitComponent.enabled }}
     data-update-frequency-sec: 60
@@ -1223,9 +1274,10 @@ data:
     debug-mode-enabled: {{ .Values.debugMode }}
     debug-service-url: '127.0.0.1:{{ .Values.ingressRouter.envoy.ports.grpc }}'
     testsuite-enabled: false
+    graceful-shutdown-interval: {{ .Values.ingressRouter.gracefulShutdownInterval }}
   {{- end }}{{- /* .Values.ingressRouter.enabled  */}}
 
-  {{- if .Values.geodetector.enabled }}
+{{- if .Values.geodetector.enabled }}
   geodetector_vars.yaml: |
     server-grpc-port: {{ .Values.geodetector.ports.grpc }}
     monitor-port: {{ .Values.geodetector.ports.monitor }}
@@ -1234,11 +1286,12 @@ data:
     data-update-frequency-sec: {{ .Values.geodetector.dataUpdateFrequencySec }}
     geodetector-main-threads: {{ .Values.geodetector.geodetectorMainThreads }}
     geodetector-fs-threads: {{ .Values.geodetector.geodetectorFsThreads }}
-    logger-level: {{ .Values.geodetector.loggerLevel }}
-    logger-format: {{ .Values.geodetector.loggerFormat }}
+    logger-level: {{ .Values.geodetector.logLevel }}
+    logger-format: {{ .Values.geodetector.logFormat }}
     sentry-dsn: {{ .Values.sentry.geodetectorDsn | quote }}
     {{- include "search-api-v8.sentry.vars.common" . | nindent 4 }}
     geodetector-mon-threads: {{ .Values.geodetector.geodetectorMonThreads }}
+    graceful-shutdown-interval: {{ .Values.geodetector.gracefulShutdownInterval }}
   {{- end }}{{- /* .Values.geodetector.enabled  */}}
 
   GIN_MODE: {{ .Values.GINMODE }}
