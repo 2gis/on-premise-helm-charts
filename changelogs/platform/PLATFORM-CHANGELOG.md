@@ -1,3 +1,65 @@
+## [2.54.0] (2026-05-27)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2540)
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.72.0
+	+ mapgl:1.73.0
+navi-attractor
+	- navi-attractor:7.54.1.2
+	+ navi-attractor:7.56.0.4
+navi-back
+	- navi-back:7.54.1.2
+	+ navi-back:7.56.0.4
+navi-castle
+	- navi-front:1.28.1
+	+ navi-front:1.29.1
+navi-front
+	- navi-front:1.28.1
+	+ navi-front:1.29.1
+navi-router
+	- navi-router:6.42.0.2
+	+ navi-router:6.43.0.3
+platform
+	- platform-ui:1.25.1
+	+ platform-ui:1.32.0
+search-api
+	- nginx:1.25.5
+	+ nginx:1.30.2
+	- search-api:7.105.1
+	+ search-api:7.107.0
+search-api-v8
+	- search-api-v8-controller:8.20.0
+	+ search-api-v8-controller:8.20.3
+	- search-api-v8-data-adapter:8.20.0
+	+ search-api-v8-data-adapter:8.20.3
+	- search-api-v8-files-storage:8.20.0
+	+ search-api-v8-files-storage:8.20.3
+	- search-api-v8-geodetector:8.20.0
+	+ search-api-v8-geodetector:8.20.3
+	- search-api-v8-head:8.20.0
+	+ search-api-v8-head:8.20.3
+	- search-api-v8-indexer:8.20.0
+	+ search-api-v8-indexer:8.20.3
+	- search-api-v8-ingress-router:8.20.0
+	+ search-api-v8-ingress-router:8.20.3
+	- search-api-v8-syncer:8.20.0
+	+ search-api-v8-syncer:8.20.3
+	- search-api-v8-worker:8.20.0
+	+ search-api-v8-worker:8.20.3
+tiles-api
+	- tiles-api-importer:4.84.1
+	+ tiles-api-importer:4.87.2
+	- tiles-api-proxy:4.84.1
+	+ tiles-api-proxy:4.87.2
+	- tiles-api:4.84.1
+	+ tiles-api:4.87.2
+traffic-proxy
+	- nginx:1.25.5
+	+ nginx:1.30.2
+```
+[Full list of image versions](platform_image_versions.txt)
+
 ## [2.53.0] (2026-04-29)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2530)
 #### Images

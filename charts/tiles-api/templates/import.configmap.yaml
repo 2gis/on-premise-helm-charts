@@ -1,12 +1,14 @@
-{{- range $index, $type := (required "Valid $.Values.types required" $.Values.types) }}
+{{- range $index, $type := (include "tiles.expandedTypes" $ | fromYaml).list }}
 {{- if (not $type.importAndCleanerDisabled) }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-import
+  name: {{ include "tiles.fullname" $ }}-{{ printf "%s-%s" $type.kind ($type.subtype | default "regular") | sha256sum | trunc 8 }}-import
   labels:
     {{- include "tiles.labels" $ | nindent 4 }}
+    tiles-kind: {{ $type.kind }}
+    tiles-subtype: {{ $type.subtype | default "regular" }}
   annotations:
     {{- include "importer.removable-hook-annotations" $ | nindent 4 }}
 
