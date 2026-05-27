@@ -1,6 +1,10 @@
 # Platform Breaking-Changes
 
-# [2.54.0]
+## [2.54.0]
+
+### platform
+
+- You need to upgrade keys-backend to version 1.165.1 and license to version 2.6.0 (Release Core 2.7.0)
 
 ### search-api-v8
 
