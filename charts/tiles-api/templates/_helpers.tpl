@@ -53,14 +53,14 @@ app.kubernetes.io/component: api
 {{- if .keyspace }}
 {{- .keyspace }}
 {{- else -}}
-dgis_tileserver_{{ include "tiles.kind" . }}_{{ required "Valid .Values.cassandra.environment required" $.Values.cassandra.environment }}_{{ include "tiles.manifestCode" $ }}
+ts_{{ include "tiles.kind" $ | replace "-" "_"}}_{{ required "Valid .Values.cassandra.environment required" $.Values.cassandra.environment }}_{{ include "tiles.manifestCode" $ }}
 {{- end -}}
 {{- end -}}
 
 {{- define "tiles.type" -}}
 {{- if .subtype -}}
 ald
-{{- else if has .kind (list "web" "native") -}}
+{{- else if has .kind (list "web" "native" "native-v4-detailed" "native-v4-general" "native-v4-universe") -}}
 vector
 {{- else if eq .kind "raster" -}}
 raster
@@ -88,7 +88,7 @@ app.kubernetes.io/component: importer
 tiles-api-vector
 {{- else if eq . "raster" -}}
 tiles-api-raster
-{{- else if eq . "native" -}}
+{{- else if has . (list "native" "native-v4-detailed" "native-v4-general" "native-v4-universe") -}}
 tiles-api-mobile-sdk
 {{- else if eq . "mapbox" -}}
 tiles-api-mapbox
@@ -101,6 +101,14 @@ tiles-api-mapbox
 {{- else if has .kind (list "web" "native") -}}
 - vtiles
 - poiicons
+{{- else if eq .kind "native-v4-detailed" -}}
+- vtiles_v4_detailed
+- poiicons_v4_detailed
+{{- else if eq .kind "native-v4-general" -}}
+- vtiles_v4_general
+- poiicons_v4_general
+{{- else if eq .kind "native-v4-universe" -}}
+- vtiles_v4_universe
 {{- else if eq .kind "raster" -}}
 - tiles
 {{- else if eq .kind "mapbox" -}}
@@ -186,3 +194,37 @@ app.kubernetes.io/component: tilegen
 {{- define "tiles.tls.mountSecret" -}}
 {{ or $.Values.cassandra.tls.deploySecret (not (empty $.Values.cassandra.tls.existingSecret.name)) }}
 {{- end }}
+
+{{/*
+Expand native-v4 kind into two separate tilesets: native-v4-universe, native-v4-detailed and native-v4-general.
+All other kinds are passed through unchanged.
+Usage: range (include "tiles.expandedTypes" $ | fromYaml).list
+*/}}
+{{- define "tiles.expandedTypes" -}}
+list:
+  {{- range $.Values.types }}
+  {{- if eq .kind "native-v4" }}
+  - kind: "native-v4-detailed"
+    name: {{ .name | default "" | quote }}
+    subtype: {{ .subtype | default "" | quote }}
+    keyspace: {{ .keyspace | default "" | quote }}
+    importAndCleanerDisabled: {{ .importAndCleanerDisabled | default false }}
+  - kind: "native-v4-general"
+    name: {{ .name | default "" | quote }}
+    subtype: {{ .subtype | default "" | quote }}
+    keyspace: {{ .keyspace | default "" | quote }}
+    importAndCleanerDisabled: {{ .importAndCleanerDisabled | default false }}
+  - kind: "native-v4-universe"
+    name: {{ .name | default "" | quote }}
+    subtype: {{ .subtype | default "" | quote }}
+    keyspace: {{ .keyspace | default "" | quote }}
+    importAndCleanerDisabled: {{ .importAndCleanerDisabled | default false }}
+  {{- else }}
+  - kind: {{ .kind | quote }}
+    name: {{ .name | default "" | quote }}
+    subtype: {{ .subtype | default "" | quote }}
+    keyspace: {{ .keyspace | default "" | quote }}
+    importAndCleanerDisabled: {{ .importAndCleanerDisabled | default false }}
+  {{- end }}
+  {{- end }}
+{{- end -}}

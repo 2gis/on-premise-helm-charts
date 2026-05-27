@@ -1,41 +1,59 @@
-{{- if .Values.hpa.enabled }}
-apiVersion: {{ include "capabilities.hpa.apiVersion" $ }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.autoscaling.hpa.enabled }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" (dict "context" .) }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "keycloak.fullname" . }}
-  namespace: {{ include "keycloak.names.namespace" . | quote }}
-  labels: {{- include "keycloak.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
     app.kubernetes.io/component: keycloak
+    app.kubernetes.io/part-of: keycloak
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
+  {{- end }}
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
-    name: {{ template "keycloak.fullname" . }}
-  minReplicas: {{ .Values.hpa.minReplicas }}
-  maxReplicas: {{ .Values.hpa.maxReplicas }}
+    name: {{ template "common.names.fullname" . }}
+  minReplicas: {{ .Values.autoscaling.hpa.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.hpa.maxReplicas }}
   metrics:
-    {{- if .Values.hpa.targetCPU }}
+    {{- if .Values.autoscaling.hpa.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        {{- if semverCompare "<1.23-0" (include "capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.hpa.targetCPU }}
-        {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ .Values.hpa.targetCPU }}
-        {{- end }}
+          averageUtilization: {{ .Values.autoscaling.hpa.targetCPU }}
     {{- end }}
-    {{- if .Values.hpa.targetMemory }}
+    {{- if .Values.autoscaling.hpa.targetMemory }}
     - type: Resource
       resource:
         name: memory
-        {{- if semverCompare "<1.23-0" (include "capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.hpa.targetMemory }}
-        {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ .Values.hpa.targetMemory }}
-        {{- end }}
+          averageUtilization: {{ .Values.autoscaling.hpa.targetMemory }}
     {{- end }}
+  {{- if or .Values.autoscaling.hpa.behavior.scaleDown.policies .Values.autoscaling.hpa.behavior.scaleUp.policies }}
+  behavior:
+    {{- if .Values.autoscaling.hpa.behavior.scaleDown.policies }}
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.autoscaling.hpa.behavior.scaleDown.stabilizationWindowSeconds }}
+      selectPolicy: {{ .Values.autoscaling.hpa.behavior.scaleDown.selectPolicy }}
+      policies:
+        {{- toYaml .Values.autoscaling.hpa.behavior.scaleDown.policies | nindent 8 }}
+    {{- end }}
+    {{- if .Values.autoscaling.hpa.behavior.scaleUp.policies }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.autoscaling.hpa.behavior.scaleUp.stabilizationWindowSeconds }}
+      selectPolicy: {{ .Values.autoscaling.hpa.behavior.scaleUp.selectPolicy }}
+      policies:
+       {{- toYaml .Values.autoscaling.hpa.behavior.scaleUp.policies | nindent 8 }}
+    {{- end }}
+  {{- end }}
 {{- end }}

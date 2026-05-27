@@ -44,7 +44,7 @@ cassandra-clusters:
 
     keyspaces:
       {{- $default := true }}
-      {{- range $_, $type := $.Values.types }}
+      {{- range $_, $type := (include "tiles.expandedTypes" $ | fromYaml).list }}
       - tileset: {{ $type.name | default (include "tiles.kind" $type) }}
         keyspace: {{ include "tiles.keyspace" (merge $type $) }}
         type: {{ include "tiles.type" $type }}
