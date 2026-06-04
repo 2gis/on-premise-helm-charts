@@ -299,7 +299,6 @@ permissions:
   # @param permissions.settings.httpPort Http port for interaction via the rest api
   # @param permissions.settings.grpcPort Grpc port for interaction via the grpc api
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
-  # @param permissions.settings.auth.enabled Enables or disables authentication **Required**
   # @param permissions.settings.auth.apiKey Api key for service to service calls. **Required**
   # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required **
   settings:
@@ -313,7 +312,6 @@ permissions:
       enabled: true
       trackStatistics: false
     auth:
-      enabled: false
       apiKey: ''
       uiRequiredRoles: []
     backgroundJobs:
