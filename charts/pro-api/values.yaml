@@ -34,6 +34,8 @@ api:
       - path: /
         pathType: Prefix
     tls: []
+    # - hosts:
+    #   - pro-api.example.com
     #   secretName: secret.tls
 
   # @param api.pod.replicaCount A replica count for the pod.
@@ -218,6 +220,8 @@ permissions:
       - path: /
         pathType: Prefix
     tls: []
+    # - hosts:
+    #   - pro-permissions-api.example.com
     #   secretName: secret.tls
 
   # @param permissions.pod.replicaCount A replica count for the pod.
@@ -294,11 +298,10 @@ permissions:
   # @skip permissions.settings.backgroundJobs.enableActualizePermissionsJob
   # @param permissions.settings.httpPort Http port for interaction via the rest api
   # @param permissions.settings.grpcPort Grpc port for interaction via the grpc api
-  # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
   # @param permissions.settings.auth.enabled Enables or disables authentication **Required**
   # @param permissions.settings.auth.apiKey Api key for service to service calls. **Required**
-  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required if** `authProvider.enabled: true`
+  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required **
   settings:
     host: ''
     httpPort: 8091
@@ -318,23 +321,23 @@ permissions:
       enableActualizePermissionsJob: true
 
     # @section Default permissions for new users
-    # @param permissions.settings.default_permissions.new_user_expiration_days Number of days a new user has access after registration. After this period, access will expire unless upgraded.
-    # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
-    # @param permissions.settings.default_permissions.assets Ids of assets to be accessed. Use '*' symbol to allow access to all assets.
-    # @param permissions.settings.default_permissions.territories Ids of territories to be accessed. Use '*' symbol to allow access to all territories.
-    # @param permissions.settings.default_permissions.add_user_assets.allow Allow user to add assets.
-    # @param permissions.settings.default_permissions.add_user_assets.quantity Maximum number of assets that can be added by the user.
-    # @param permissions.settings.default_permissions.add_user_assets.file_size Maximum file size of the asset that can be added by the user.
-    # @param permissions.settings.default_permissions.isochrones Maximum number of isochrones that can be created by the user.
-    default_permissions:
-      new_user_expiration_days: null
-      open_pro_ui: true
+    # @param permissions.settings.defaultPermissions.newUserExpirationDays Number of days a new user has access after registration. After this period, access will expire unless upgraded. Ensure that the current date plus this value does not exceed December 31, 9999 — otherwise new user registration will fail. Note that the maximum safe value decreases over time.
+    # @param permissions.settings.defaultPermissions.openProUi Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
+    # @param permissions.settings.defaultPermissions.assets Ids of assets to be accessed. Use '*' symbol to allow access to all assets.
+    # @param permissions.settings.defaultPermissions.territories Ids of territories to be accessed. Use '*' symbol to allow access to all territories.
+    # @param permissions.settings.defaultPermissions.addUserAssets.allow Allow user to add assets.
+    # @param permissions.settings.defaultPermissions.addUserAssets.quantity Maximum number of assets that can be added by the user.
+    # @param permissions.settings.defaultPermissions.addUserAssets.fileSize Maximum file size of the asset that can be added by the user.
+    # @param permissions.settings.defaultPermissions.isochrones Maximum number of isochrones that can be created by the user.
+    defaultPermissions:
+      newUserExpirationDays: null
+      openProUi: true
       assets: [branch, building]
       territories: []
-      add_user_assets:
+      addUserAssets:
         allow: true
         quantity: 100
-        file_size: 100
+        fileSize: 100
       isochrones: 1000
 
 # @section Tasks API configuration & settings
@@ -364,6 +367,8 @@ tasks:
       - path: /
         pathType: Prefix
     tls: []
+    # - hosts:
+    #   - pro-tasks-api.example.com
     #   secretName: secret.tls
 
   # @param tasks.pod.apiReplicaCount A replica count for the api pod.
@@ -513,6 +518,7 @@ pagerenderer:
     pullPolicy: IfNotPresent
 
   # @param pagerenderer.pod.replicaCount A replica count for the pod.
+  # @param pagerenderer.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param pagerenderer.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param pagerenderer.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
   # @param pagerenderer.pod.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
@@ -534,15 +540,12 @@ pagerenderer:
   # @skip pagerenderer.pod.imagePullSecrets
   pod:
     replicaCount: 1
+    nodeSelector: {}
     imagePullSecrets: []
     affinity: {}
     priorityClassName: ''
     terminationGracePeriodSeconds: 60
-    tolerations:
-      - effect: NoSchedule
-        key: role
-        operator: Equal
-        value: worker.datascience
+    tolerations: []
     podAnnotations: {}
     podLabels: {}
     podSecurityContext: {}
@@ -603,10 +606,17 @@ pagerenderer:
   # @extra pagerenderer.settings.logging Logging settings
   # @param pagerenderer.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
   # @param pagerenderer.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
-  # @param pagerenderer.settings.grpcRoute If set, use GRPCRoute. If empty, connect directly to service.
+  # @param pagerenderer.settings.grpcRoute.hostname Hostname for GRPCRoute.
+  # @param pagerenderer.settings.grpcRoute.parentRefs List of parent references (gateways) for GRPCRoute. Defaults: canary and stable gateways in istio-gateways namespace.
   settings:
     enabled: false
-    grpcRoute: ''
+    grpcRoute:
+      hostname: ''
+      parentRefs: []
+        # - group: gateway.networking.k8s.io
+        #   kind: Gateway
+        #   name: stable
+        #   namespace: istio-gateways
     auth:
       apiKey: ''
     httpPort: 8282
@@ -814,7 +824,6 @@ postgres:
 
 # @section Auth Provider Configuration
 # @title Auth Provider
-# @param authProvider.enabled Enables or disables the AuthProvider **Required**
 # @param authProvider.host Host address of the authentication provider. Must point to the pro-api-permissions URL. **Required**
 # @param authProvider.schema Authentication scheme to use. Supported values: `Basic`, `Oidc`. **Required**
 # @param authProvider.allowedHosts List of allowed hosts for accessing `authProvider`. For allowing all hosts use `['*']`. Example: ['pro-api-permissions.example.com','pro-api-tasks.example.com']
@@ -827,7 +836,6 @@ postgres:
 # @param authProvider.oidc.nameClaim Claim name that contains the user's name. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
 # @param authProvider.oidc.roleClaim Claim name that contains the user's roles. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
 authProvider:
-  enabled: false
   host: ''
   schema: ''
   allowedHosts: []

@@ -1,23 +1,19 @@
 ﻿{{- if .Values.pagerenderer.settings.enabled }}
-{{- if .Values.pagerenderer.settings.grpcRouteHost }}
-
+{{- if .Values.pagerenderer.settings.grpcRoute.hostname }}
+{{- if not .Values.pagerenderer.settings.grpcRoute.parentRefs }}
+{{- fail "A valid .Values.pagerenderer.settings.grpcRoute.parentRefs entry required when pagerenderer.settings.enabled is true" }}
+{{- end }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: GRPCRoute
 metadata:
   name: {{ include "pro-api.pagerenderer-name" . }}
-  namespace: urbigeo
 spec:
   hostnames:
-    - {{ .Values.pagerenderer.settings.grpcRouteHost }}
+    - {{ .Values.pagerenderer.settings.grpcRoute.hostname }}
+  {{- with .Values.pagerenderer.settings.grpcRoute.parentRefs }}
   parentRefs:
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: canary
-      namespace: istio-gateways
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: stable
-      namespace: istio-gateways
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
   rules:
     - backendRefs:
         - group: ""

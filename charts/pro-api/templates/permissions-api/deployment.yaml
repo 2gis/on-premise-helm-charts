@@ -134,7 +134,7 @@ spec:
                   name: {{ include "pro-api.secretName" . }}
 
             - name: Auth__Enabled
-              value: {{ .Values.permissions.settings.auth.enabled | quote }}
+              value: "true"
             - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
@@ -182,27 +182,27 @@ spec:
             - name: Common__DeleteInactiveUsers
               value: {{ .Values.permissions.settings.deleteInactiveUsers | quote }}
             - name: Common__DefaultPermissions__OpenProUi
-              value: {{ .Values.permissions.settings.default_permissions.open_pro_ui | quote }}
-            {{- if .Values.permissions.settings.default_permissions.new_user_expiration_days }}
+              value: {{ .Values.permissions.settings.defaultPermissions.openProUi | quote }}
+            {{- if .Values.permissions.settings.defaultPermissions.newUserExpirationDays }}
             - name: Common__DefaultPermissions__NewUserExpirationDays
-              value: {{ .Values.permissions.settings.default_permissions.new_user_expiration_days | quote }}
+              value: {{ .Values.permissions.settings.defaultPermissions.newUserExpirationDays | quote }}
             {{- end }}
-            {{- range $i, $s := .Values.permissions.settings.default_permissions.assets }}
+            {{- range $i, $s := .Values.permissions.settings.defaultPermissions.assets }}
             - name: Common__DefaultPermissions__Assets__{{$i}}
               value: {{ $s | quote }}
             {{- end }}
-            {{- range $i, $s := .Values.permissions.settings.default_permissions.territories }}
+            {{- range $i, $s := .Values.permissions.settings.defaultPermissions.territories }}
             - name: Common__DefaultPermissions__Territories__{{$i}}
               value: {{ $s | quote }}
             {{- end }}
             - name: Common__DefaultPermissions__AddUserAssets__Allow
-              value: {{ .Values.permissions.settings.default_permissions.add_user_assets.allow | quote }}
+              value: {{ .Values.permissions.settings.defaultPermissions.addUserAssets.allow | quote }}
             - name: Common__DefaultPermissions__AddUserAssets__Quantity
-              value: {{ .Values.permissions.settings.default_permissions.add_user_assets.quantity | quote }}
+              value: {{ .Values.permissions.settings.defaultPermissions.addUserAssets.quantity | quote }}
             - name: Common__DefaultPermissions__AddUserAssets__FileSize
-              value: {{ .Values.permissions.settings.default_permissions.add_user_assets.file_size | quote }}
+              value: {{ .Values.permissions.settings.defaultPermissions.addUserAssets.fileSize | quote }}
             - name: Common__DefaultPermissions__Isochrones
-              value: {{ .Values.permissions.settings.default_permissions.isochrones | quote }}
+              value: {{ .Values.permissions.settings.defaultPermissions.isochrones | quote }}
             - name: Common__AllowPermissionsToAnyAsset
               value: {{ .Values.permissions.settings.allowPermissionsToAnyAsset | quote }}
             - name: Common__ShowAssetBundles
@@ -239,15 +239,12 @@ spec:
 
             # AuthProvider
             - name: AuthProvider__Enabled
-              value: {{ .Values.authProvider.enabled | quote }}
-
-            {{- if .Values.authProvider.enabled }}
+              value: "true"
             - name: AuthProvider__Schema
-              value: {{ .Values.authProvider.schema | quote }}
+              value: {{ required "A valid .Values.authProvider.schema entry required. Supported values: Basic, Oidc" .Values.authProvider.schema | quote }}
             {{- range $hostIndex, $host := .Values.authProvider.allowedHosts }}
             - name: AuthProvider__AllowedHosts__{{ $hostIndex }}
               value: {{ $host | quote }}
-            {{- end }}
             {{- end }}
 
             # Basic Auth
