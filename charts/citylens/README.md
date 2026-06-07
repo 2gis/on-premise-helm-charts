@@ -581,7 +581,7 @@ See the [documentation]() to learn about:
 | Name                          | Description  | Value                                 |
 | ----------------------------- | ------------ | ------------------------------------- |
 | `routes.api.image.repository` | Repository.  | `2gis-on-premise/citylens-routes-api` |
-| `routes.api.image.tag`        | Tag.         | `2.1.0`                               |
+| `routes.api.image.tag`        | Tag.         | `2.1.6`                               |
 | `routes.api.image.pullPolicy` | Pull Policy. | `IfNotPresent`                        |
 
 ### Resources settings
@@ -676,7 +676,7 @@ See the [documentation]() to learn about:
 | Name                             | Description  | Value                                     |
 | -------------------------------- | ------------ | ----------------------------------------- |
 | `routes.worker.image.repository` | Repository.  | `2gis-on-premise/citylens-worker-service` |
-| `routes.worker.image.tag`        | Tag.         | `2.1.0`                                   |
+| `routes.worker.image.tag`        | Tag.         | `2.1.6`                                   |
 | `routes.worker.image.pullPolicy` | Pull Policy. | `IfNotPresent`                            |
 
 ### Resources settings
@@ -742,7 +742,7 @@ See the [documentation]() to learn about:
 | Name                                      | Description  | Value                                        |
 | ----------------------------------------- | ------------ | -------------------------------------------- |
 | `routes.realtimeDataApi.image.repository` | Repository.  | `2gis-on-premise/citylens-realtime-data-api` |
-| `routes.realtimeDataApi.image.tag`        | Tag.         | `2.1.0`                                      |
+| `routes.realtimeDataApi.image.tag`        | Tag.         | `2.1.6`                                      |
 | `routes.realtimeDataApi.image.pullPolicy` | Pull Policy. | `IfNotPresent`                               |
 
 ### Resources settings
@@ -839,12 +839,13 @@ See the [documentation]() to learn about:
 | `routes.tasksAssetSettings.plannedTasksAssetId`   | Identity to planned route task asset.   | `user_dyn_citylens_planned_tasks`   |
 | `routes.tasksAssetSettings.completedTasksAssetId` | Identity to completed route task asset. | `user_dyn_citylens_completed_tasks` |
 
-### Citylens routes admin configs. Credentials for Hangfire dashboard UI.
+### Citylens routes admin configs
 
-| Name                               | Description            | Value |
-| ---------------------------------- | ---------------------- | ----- |
-| `routes.adminCredentials.username` | Username. **Required** | `""`  |
-| `routes.adminCredentials.password` | Password. **Required** | `""`  |
+| Name                                       | Description                                                                                                                           | Value |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `routes.adminCredentials.username`         | Admin panel login. **Required**                                                                                                       | `""`  |
+| `routes.adminCredentials.password`         | Admin panel password. Use a strong, randomly generated value. **Required**                                                            | `""`  |
+| `routes.adminCredentials.cookieSigningKey` | Secret key used to sign authentication cookies (HMAC-SHA256). Must be at least 32 characters of high-entropy randomness. **Required** | `""`  |
 
 ### Citylens routes endpoints without user authorization. Use for internal usages. (Guid)
 

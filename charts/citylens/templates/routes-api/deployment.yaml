@@ -206,13 +206,6 @@ spec:
 
             - name: Hangfire__DashboardAuthorization__Enabled
               value: "true"
-            - name: Hangfire__DashboardAuthorization__Username
-              value: {{ required "A valid .Values.routes.adminCredentials.username entry required" $.Values.routes.adminCredentials.username | quote }}
-            - name: Hangfire__DashboardAuthorization__Password
-              valueFrom:
-                secretKeyRef:
-                  key: adminPassword
-                  name: {{ include "citylens.routes.api.name" . }}-secret
 
             - name: EndpointApiKey__Enabled
               value: "true"
@@ -240,3 +233,16 @@ spec:
                 secretKeyRef:
                   key: usersApiKey
                   name: {{ include "citylens.routes.api.name" . }}-api-key-secret
+
+            - name: Admin__Username
+              value: {{ required "A valid .Values.routes.adminCredentials.username entry required" $.Values.routes.adminCredentials.username | quote }}
+            - name: Admin__Password
+              valueFrom:
+                secretKeyRef:
+                  key: adminPassword
+                  name: {{ include "citylens.routes.api.name" . }}-secret
+            - name: Admin__CookieSigningKey
+              valueFrom:
+                secretKeyRef:
+                  key: adminCookieSigningKey
+                  name: {{ include "citylens.routes.api.name" . }}-secret
