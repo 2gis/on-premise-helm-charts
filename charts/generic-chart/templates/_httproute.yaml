@@ -1,4 +1,5 @@
 {{- define "generic-chart.httpRoute.tpl" -}}
+{{- if (.Values.httpRoute).enabled -}}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -17,4 +18,5 @@ spec:
           name: {{  include "generic-chart.fullname" . }}
           port: {{ (.Values.service).port | default 80 | int }}
           weight: 1
+{{- end }}{{/* if enabled */}}
 {{- end }}{{/* define */}}

@@ -30,20 +30,21 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | Name                  | Description                    | Value                         |
 | --------------------- | ------------------------------ | ----------------------------- |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/platform-ui` |
-| `ui.image.tag`        | Tag                            | `1.25.1`                      |
+| `ui.image.tag`        | Tag                            | `1.32.0`                      |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                          |
 
 ### UI service settings
 
-| Name                          | Description                                                                                                                                                                                                                                                                                                            | Value  |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `ui.appPort`                  | Service port.                                                                                                                                                                                                                                                                                                          | `3000` |
-| `ui.brand`                    | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                                                                                        | `""`   |
-| `ui.pages`                    | A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground"`, `"map_styles"`, `"users"`, `"keys"`, `"statistics"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones. | `""`   |
-| `ui.publicPages`              | A list of pages available in the application for unauthenticated users, delimited by commas. Subset of 'ui.pages'. When no values are specified and authentication is enabled, all pages will require authentication.                                                                                                  | `""`   |
-| `ui.playgrounds`              | A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder"` (requires `ui.catalog.url`), `"directions"` (requires `ui.navi.url`).                                                                                                  | `""`   |
-| `ui.redirectSafeDomains`      | A regular expression used to determine whether a domain is safe for redirection.                                                                                                                                                                                                                                       | `""`   |
-| `ui.enableServiceLimitations` | A flag that enables to view and edit particular key service limitations.                                                                                                                                                                                                                                               | `true` |
+| Name                          | Description                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `ui.appPort`                  | Service port.                                                                                                                                                                                                                                                                                                                       | `3000` |
+| `ui.brand`                    | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                                                                                                     | `""`   |
+| `ui.pages`                    | A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground"`, `"map_styles"`, `"users"`, `"keys"`, `"statistics"`, `"license"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones. | `""`   |
+| `ui.publicPages`              | A list of pages available in the application for unauthenticated users, delimited by commas. Subset of 'ui.pages'. When no values are specified and authentication is enabled, all pages will require authentication.                                                                                                               | `""`   |
+| `ui.playgrounds`              | A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder"` (requires `ui.catalog.url`), `"directions"` (requires `ui.navi.url`), "static"` (requires `ui.static.url`).                                                                         | `""`   |
+| `ui.redirectSafeDomains`      | A regular expression used to determine whether a domain is safe for redirection.                                                                                                                                                                                                                                                    | `""`   |
+| `ui.bffSecure`                | A flag that determines whether to enable or disable HTTPS for backend for frontend related cookies. Possible values are: `true` or `false`.                                                                                                                                                                                         | `true` |
+| `ui.enableServiceLimitations` | A flag that enables to view and edit particular key service limitations.                                                                                                                                                                                                                                                            | `true` |
 
 ### OIDC
 
@@ -93,6 +94,12 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | `ui.mapStyles.url`          | URL to Map Styles API.                                                                                                                                                                                                                                                                                                                                                   | `""`  |
 | `ui.mapStyles.entryPageUrl` | Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'. | `""`  |
 
+### License settings
+
+| Name             | Description                                                                                                                                                                                                                              | Value |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ui.license.url` | URL to License API. Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well. | `""`  |
+
 ### Service Pro settings
 
 | Name                  | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
@@ -130,6 +137,13 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
 | `ui.navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/navigation). Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well. | `""`  |
 | `ui.navi.key` | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/navigation).                                                                                                                                                                                                                | `""`  |
+
+### Static Map settings
+
+| Name            | Description                                               | Value |
+| --------------- | --------------------------------------------------------- | ----- |
+| `ui.static.url` | URL for [Static API](https://static.maps.2gis.com).       | `""`  |
+| `ui.static.key` | Access key to [Static API](https://static.maps.2gis.com). | `""`  |
 
 ### Strategy settings
 

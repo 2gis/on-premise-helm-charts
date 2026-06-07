@@ -1,5 +1,17 @@
 # 2GIS On-Premise Changelog
 
+## [2026-05-27] Release: Platform:2.54.0
+
+  [CHANGELOG](changelogs/platform/PLATFORM-CHANGELOG.md)
+
+## [2026-05-26] Release: Core:2.7.0
+
+  [CHANGELOG](changelogs/core/CORE-CHANGELOG.md)
+
+## [2026-04-29] Release: Platform:2.53.0
+
+  [CHANGELOG](changelogs/platform/PLATFORM-CHANGELOG.md)
+
 ## [2026-04-01] Release: Core:2.6.0
 
   [CHANGELOG](changelogs/core/CORE-CHANGELOG.md)

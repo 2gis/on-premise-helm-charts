@@ -121,7 +121,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | ------------------------ | ------------------------------------------------------------------------- | ---------------------------- |
 | `nginx.port`             | HTTP port on which Navi-Front will be listening.                          | `8080`                       |
 | `nginx.image.repository` | Navi-Front image repository.                                              | `2gis-on-premise/navi-front` |
-| `nginx.image.tag`        | Navi-Front image tag.                                                     | `1.28.1`                     |
+| `nginx.image.tag`        | Navi-Front image tag.                                                     | `1.29.1`                     |
 | `nginx.nodeHeader`       | Enable header with node name (X-Node).                                    | `false`                      |
 | `nginx.locationsBlock`   | Optional nginx config block with additional locations                     | `""`                         |
 | `nginx.customConfigPath` | Path to custom nginx config file. If set, default config will be ignored. | `""`                         |
@@ -151,13 +151,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Kubernetes [Persistence Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) settings
 
-| Name                            | Description                                                                           | Value               |
-| ------------------------------- | ------------------------------------------------------------------------------------- | ------------------- |
-| `persistentVolume.enabled`      | If Kubernetes persistence volume should be enabled for Castle.                        | `false`             |
-| `persistentVolume.accessModes`  | Volume access mode.                                                                   | `["ReadWriteOnce"]` |
-| `persistentVolume.storageClass` | Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/). | `""`                |
-| `persistentVolume.size`         | Volume size.                                                                          | `5Gi`               |
-| `persistentVolume.type`         | Volume type `pvc` or `ephemeral`.                                                     | `pvc`               |
+| Name                                          | Description                                                                                                                                                                                          | Value               |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `persistentVolume.enabled`                    | If Kubernetes persistence volume should be enabled for Castle.                                                                                                                                       | `false`             |
+| `persistentVolume.accessModes`                | Volume access mode.                                                                                                                                                                                  | `["ReadWriteOnce"]` |
+| `persistentVolume.storageClass`               | Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/).                                                                                                                | `""`                |
+| `persistentVolume.size`                       | Volume size.                                                                                                                                                                                         | `5Gi`               |
+| `persistentVolume.type`                       | Volume type `pvc` or `ephemeral`.                                                                                                                                                                    | `pvc`               |
+| `persistentVolume.claimRetention`             | Optional [PersistentVolumeClaim retention policy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention) for the StatefulSet volume claim template. |                     |
+| `persistentVolume.claimRetention.whenDeleted` | What happens to PVCs created from the volume claim template when the StatefulSet is deleted (`Retain` or `Delete`).                                                                                  |                     |
+| `persistentVolume.claimRetention.whenScaled`  | What happens to PVCs when the StatefulSet replica count is scaled down (`Retain` or `Delete`).                                                                                                       |                     |
 
 ### RTR settings. Leave with defaults, FOR FUTURE RELEASE.
 
@@ -189,6 +192,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `rtr.puzzleSegments.serverUrl`            | URL puzzle segments.                                                                                                              | `""`                                            |
 | `rtr.webapi.baseDir`                      | Base dir on webapi.                                                                                                               | `/2.0/region/list?fields=*&type=segment,region` |
 | `rtr.webapi.serverUrl`                    | URL webapi.                                                                                                                       | `""`                                            |
+| `rtr.s3.enabled`                          | Enable S3 source for restriction_json.                                                                                            | `false`                                         |
+| `rtr.s3.host`                             | S3 endpoint URL, ex: http://restriction-s3.host.                                                                                  | `""`                                            |
+| `rtr.s3.bucket`                           | S3 bucket name.                                                                                                                   | `""`                                            |
+| `rtr.s3.region`                           | S3 region.                                                                                                                        | `""`                                            |
+| `rtr.s3.accessKey`                        | S3 access key for accessing the bucket.                                                                                           | `""`                                            |
+| `rtr.s3.secretKey`                        | S3 secret key for accessing the bucket.                                                                                           | `""`                                            |
+| `rtr.s3.secure`                           | Establish secure channel                                                                                                          | `true`                                          |
+| `rtr.restrictionJson.remoteDir`           | Remote directory for restriction_json. Empty for HTTP source, `restrictions` for S3.                                              | `""`                                            |
+| `rtr.restrictionJson.header`              | HTTP header used for change detection.                                                                                            | `Last-Modified`                                 |
+| `rtr.restrictionJson.timeout`             | Queries request timeout in seconds.                                                                                               | `30`                                            |
 
 ### customCAs **Custom Certificate Authority**
 

@@ -39,7 +39,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/platform-ui
-    tag: 1.25.1
+    tag: 1.32.0
 
   # @section UI service settings
 
@@ -49,12 +49,13 @@ ui:
 
   # @param ui.brand Branding inside the app. Possible values: `"2gis"` or `"urbi"`.
   # @skip ui.defaultLocale
-  # @param ui.pages A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground"`, `"map_styles"`, `"users"`, `"keys"`, `"statistics"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
+  # @param ui.pages A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground"`, `"map_styles"`, `"users"`, `"keys"`, `"statistics"`, `"license"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones.
   # @param ui.publicPages A list of pages available in the application for unauthenticated users, delimited by commas. Subset of 'ui.pages'. When no values are specified and authentication is enabled, all pages will require authentication.
-  # @param ui.playgrounds A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder"` (requires `ui.catalog.url`), `"directions"` (requires `ui.navi.url`).
+  # @param ui.playgrounds A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder"` (requires `ui.catalog.url`), `"directions"` (requires `ui.navi.url`), "static"` (requires `ui.static.url`).
   # @skip ui.googleAnalyticsId
   # @skip ui.googleTagManagerId
   # @param ui.redirectSafeDomains A regular expression used to determine whether a domain is safe for redirection.
+  # @param ui.bffSecure A flag that determines whether to enable or disable HTTPS for backend for frontend related cookies. Possible values are: `true` or `false`.
 
   brand: ''
   defaultLocale: en
@@ -64,6 +65,7 @@ ui:
   googleAnalyticsId: ''
   googleTagManagerId: ''
   redirectSafeDomains: ''
+  bffSecure: true
 
   # @param ui.enableServiceLimitations A flag that enables to view and edit particular key service limitations.
   enableServiceLimitations: true
@@ -140,6 +142,13 @@ ui:
     url: ''
     entryPageUrl: ''
 
+  # @section License settings
+
+  # @param ui.license.url URL to License API. Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well.
+
+  license:
+    url: ''
+
   # @section Service Pro settings
 
   # @param ui.pro.entryPageUrl Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
@@ -183,6 +192,14 @@ ui:
   # @param ui.navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/navigation).
 
   navi:
+    url: ''
+    key: ''
+
+  # @section Static Map settings
+
+  # @param ui.static.url URL for [Static API](https://static.maps.2gis.com).
+  # @param ui.static.key Access key to [Static API](https://static.maps.2gis.com).
+  static:
     url: ''
     key: ''
 

@@ -1,6 +1,6 @@
-{{- define "front.service" }}
+{{- define "navi-front.service" }}
 metadata:
   labels:
     navigroup: {{ .Values.navigroup | default "" | quote }}
-{{- end }}{{- /* define "front.service" */}}
-{{- template "generic-chart.merge" (list . "front.service" "generic-chart.service.tpl") }}
+{{- end }}{{- /* define "navi-front.service" */}}
+{{- template "generic-chart.merge" (list . "navi-front.service" "generic-chart.service.tpl") }}
