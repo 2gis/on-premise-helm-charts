@@ -133,6 +133,8 @@ spec:
                   key: apiKey
                   name: {{ include "pro-api.secretName" . }}
 
+            - name: Auth__Enabled
+              value: "true"
             - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
@@ -150,6 +152,12 @@ spec:
               value: {{ $r | quote }}
             {{- end }}
 
+            - name: BackgroundJobs__InitOnStartupJob__Enabled
+              value: {{ ne .Values.permissions.settings.backgroundJobs.enableInitOnStartupJob false | quote }}
+            - name: BackgroundJobs__ActualizePermissionsJob__Enabled
+              value: {{ ne .Values.permissions.settings.backgroundJobs.enableActualizePermissionsJob false | quote }}
+
+
             - name: Redis__Host
               value: {{ required "A valid .Values.redis.host entry required" $.Values.redis.host }}
             - name: Redis__Port
@@ -163,6 +171,8 @@ spec:
                   key: redisPassword
                   name: {{ include "pro-api.secretName" . }}
             {{- end }}
+            - name: Common__DataCenterId
+              value: {{ .Values.api.settings.dataCenterId | quote }}
             - name: Common__HttpPort
               value: "{{ .Values.permissions.settings.httpPort }}"
             - name: Common__GrpcPort
@@ -172,23 +182,27 @@ spec:
             - name: Common__DeleteInactiveUsers
               value: {{ .Values.permissions.settings.deleteInactiveUsers | quote }}
             - name: Common__DefaultPermissions__OpenProUi
-              value: {{ .Values.permissions.settings.default_permissions.open_pro_ui | quote }}
-            {{- range $i, $s := .Values.permissions.settings.default_permissions.assets }}
+              value: {{ .Values.permissions.settings.defaultPermissions.openProUi | quote }}
+            {{- if .Values.permissions.settings.defaultPermissions.newUserExpirationDays }}
+            - name: Common__DefaultPermissions__NewUserExpirationDays
+              value: {{ .Values.permissions.settings.defaultPermissions.newUserExpirationDays | quote }}
+            {{- end }}
+            {{- range $i, $s := .Values.permissions.settings.defaultPermissions.assets }}
             - name: Common__DefaultPermissions__Assets__{{$i}}
               value: {{ $s | quote }}
             {{- end }}
-            {{- range $i, $s := .Values.permissions.settings.default_permissions.territories }}
+            {{- range $i, $s := .Values.permissions.settings.defaultPermissions.territories }}
             - name: Common__DefaultPermissions__Territories__{{$i}}
               value: {{ $s | quote }}
             {{- end }}
             - name: Common__DefaultPermissions__AddUserAssets__Allow
-              value: {{ .Values.permissions.settings.default_permissions.add_user_assets.allow | quote }}
+              value: {{ .Values.permissions.settings.defaultPermissions.addUserAssets.allow | quote }}
             - name: Common__DefaultPermissions__AddUserAssets__Quantity
-              value: {{ .Values.permissions.settings.default_permissions.add_user_assets.quantity | quote }}
+              value: {{ .Values.permissions.settings.defaultPermissions.addUserAssets.quantity | quote }}
             - name: Common__DefaultPermissions__AddUserAssets__FileSize
-              value: {{ .Values.permissions.settings.default_permissions.add_user_assets.file_size | quote }}
+              value: {{ .Values.permissions.settings.defaultPermissions.addUserAssets.fileSize | quote }}
             - name: Common__DefaultPermissions__Isochrones
-              value: {{ .Values.permissions.settings.default_permissions.isochrones | quote }}
+              value: {{ .Values.permissions.settings.defaultPermissions.isochrones | quote }}
             - name: Common__AllowPermissionsToAnyAsset
               value: {{ .Values.permissions.settings.allowPermissionsToAnyAsset | quote }}
             - name: Common__ShowAssetBundles
@@ -214,6 +228,8 @@ spec:
               value: {{ $.Values.kafka.permissionsTopic.readerGroupId | quote }}
             - name: Kafka__EventsTopicSettings__Name
               value: {{ required "A valid .Values.kafka.eventsTopic.name entry required" $.Values.kafka.eventsTopic.name }}
+            - name: Kafka__EventsTopicSettings__ReaderGroupId
+              value: {{ required "A valid .Values.kafka.eventsTopic.readerGroupId entry required" $.Values.kafka.eventsTopic.readerGroupId }}
             - name: Kafka__UseReplicaTopics
               value: {{ $.Values.kafka.useReplicaTopics | quote }}
             - name: LocalCache__Enabled
