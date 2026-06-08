@@ -254,6 +254,9 @@ spec:
               value: {{ $.Values.kafka.useReplicaTopics | quote }}
             - name: Auth__Type
               value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
+            {{- if and (ne $.Values.api.settings.auth.type "none") (not $.Values.api.settings.auth.apiKey) }}
+            {{- fail "A valid .Values.api.settings.auth.apiKey entry required when api.settings.auth.type is not 'none'" }}
+            {{- end }}
             - name: Auth__Url
               value: {{ required "A valid .Values.api.settings.auth.url entry required" $.Values.api.settings.auth.url }}
             - name: Auth__ClientId
