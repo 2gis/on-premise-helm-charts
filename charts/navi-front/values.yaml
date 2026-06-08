@@ -81,7 +81,7 @@ customReadinessProbe: {}
 image:
   repository: 2gis-on-premise/navi-front
   pullPolicy: IfNotPresent
-  tag: 1.28.1
+  tag: 1.29.1
 
 
 # @section Navi-Front service settings
@@ -186,6 +186,18 @@ ingress:
   # - hosts:
   #   - navi-front.example.com
   #   secretName: secret.tls
+
+
+# @section [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+
+# @param httpRoute.enabled If HTTPRoute is enabled for the service.
+# @param httpRoute.hostnames List of hostnames served by route.
+# @extra httpRoute.parentRefs List of parent references (gateways) for HTTPRoute. Defaults: canary and stable gateways in istio-gateways namespace.
+# @extra httpRoute.matches List of HTTPRouteMatch objects for request routing rules.
+
+httpRoute:
+  enabled: false
+  hostnames: []
 
 
 # @section Limits

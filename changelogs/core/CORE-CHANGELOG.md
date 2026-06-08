@@ -1,3 +1,23 @@
+## [2.7.0] (2026-05-26)
+#### [Breaking-Changes](CORE-Breaking-Changes.md#270)
+#### Images
+```
+keycloak
+	- keycloak-config-cli:5.6.1-debian-11-r18
+	+ keycloak-config-cli:6.4.0-debian-12-r11
+	- keycloak-themes:0.0.8
+	+ keycloak-themes:0.0.9
+	- keycloak:21.1.1-debian-11-r4
+	+ keycloak:26.3.3
+keys
+	- keys-backend:1.154.0
+	+ keys-backend:1.165.1
+license
+	- license:2.4.1
+	+ license:2.6.0
+```
+[Full list of image versions](core_image_versions.txt)
+
 ## [2.6.0] (2026-04-01)
 
 #### Images

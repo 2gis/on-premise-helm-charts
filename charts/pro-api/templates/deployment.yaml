@@ -254,6 +254,9 @@ spec:
               value: {{ $.Values.kafka.useReplicaTopics | quote }}
             - name: Auth__Type
               value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
+            {{- if and (ne $.Values.api.settings.auth.type "none") (not $.Values.api.settings.auth.apiKey) }}
+            {{- fail "A valid .Values.api.settings.auth.apiKey entry required when api.settings.auth.type is not 'none'" }}
+            {{- end }}
             - name: Auth__Url
               value: {{ required "A valid .Values.api.settings.auth.url entry required" $.Values.api.settings.auth.url }}
             - name: Auth__ClientId
@@ -280,11 +283,13 @@ spec:
                   key: apiKey
                   name: {{ include "pro-api.secretName" . }}
             {{- end }}
+            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.secretName" . }}
+            {{- end }}
             {{- range $i, $s := .Values.api.settings.auth.shareKeys }}
             - name: Auth__ShareKeys__{{$i}}
               value: {{ $s | quote }}
@@ -348,11 +353,13 @@ spec:
               value: {{ .Values.permissions.service.port | quote }}
             - name: PermissionsApi__GrpcPort
               value: {{ .Values.permissions.settings.grpcPort | quote }}
+            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: PermissionsApi__Key
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.secretName" . }}
+            {{- end }}
             {{- if .Values.ecommerce.password }}
             - name: SberEcommerceApi__Password
               valueFrom:

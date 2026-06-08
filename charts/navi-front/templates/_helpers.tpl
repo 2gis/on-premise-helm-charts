@@ -1,7 +1,7 @@
 {{/*
 Create upstream nginx entry for found navi-back service
 */}}
-{{- define "front.renderUpstream" -}}
+{{- define "navi-front.renderUpstream" -}}
     {{- $service := .service -}}
     {{- $upstream := $service.metadata.name -}}
     {{- $ctx := .context -}}
@@ -21,7 +21,7 @@ Create location nginx entry for found navi-back service
 Render location only if rule is not empty string
 Tsp-carrouting requires splitter
 */}}
-{{- define "front.renderLocation" -}}
+{{- define "navi-front.renderLocation" -}}
     {{- $service := .service -}}
     {{- $services:= .services }}
     {{- $rule := get $service.metadata.labels "rule" }}
@@ -29,7 +29,7 @@ Tsp-carrouting requires splitter
     {{- if (ne $rule "") -}}
         {{- printf "location /%s {\n" $rule }}
         {{- printf "\n" }}
-        {{- include "front.getInternalACL" $ctx | indent 4 }}
+        {{- include "navi-front.getInternalACL" $ctx | indent 4 }}
         {{- printf "\n" }}
         {{- printf "    rewrite ^/%s(.*)$ $1 break;\n" $rule }}
         {{- printf "    add_header X-Region %s always;\n" $service.metadata.name }}
@@ -41,7 +41,7 @@ Tsp-carrouting requires splitter
         {{- printf "    proxy_set_header Connection \"\";\n" }}
         {{- printf "    proxy_http_version 1.1;\n" }}
         {{- end -}}
-        {{- $proxy_read_timeout := include "front.getProxyReadTimeout" (dict "name" $service.metadata.name "services" $services) | int }}
+        {{- $proxy_read_timeout := include "navi-front.getProxyReadTimeout" (dict "name" $service.metadata.name "services" $services) | int }}
         {{- if $proxy_read_timeout }}
         {{- printf "    proxy_read_timeout %d;\n" $proxy_read_timeout }}
         {{- end }}
@@ -53,7 +53,7 @@ Tsp-carrouting requires splitter
         {{- $back_host := $service.metadata.name | replace "-splitter" "-back" -}}
         {{- printf "location /tsp_%s {\n" $rule }}
         {{- printf "\n" }}
-        {{- include "front.getInternalACL" $ctx | indent 4 }}
+        {{- include "navi-front.getInternalACL" $ctx | indent 4 }}
         {{- printf "\n" }}
         {{- printf "    rewrite ^/tsp_%s(.*)$ $1 break;\n" $rule }}
         {{- printf "    add_header X-Region %s always;\n" $service.metadata.name }}
@@ -67,7 +67,7 @@ Tsp-carrouting requires splitter
         {{- printf "    proxy_set_header Connection \"\";\n" }}
         {{- printf "    proxy_http_version 1.1;\n" }}
         {{- end -}}
-        {{- $proxy_read_timeout := include "front.getProxyReadTimeout" (dict "name" $service.metadata.name "services" $services) | int }}
+        {{- $proxy_read_timeout := include "navi-front.getProxyReadTimeout" (dict "name" $service.metadata.name "services" $services) | int }}
         {{- if $proxy_read_timeout }}
         {{- printf "    proxy_read_timeout %d;\n" $proxy_read_timeout }}
         {{- end }}
@@ -81,7 +81,7 @@ Tsp-carrouting requires splitter
 {{/*
 Checking that the back service is valid
 */}}
-{{- define "front.isValidBackService" -}}
+{{- define "navi-front.isValidBackService" -}}
     {{- $service := .service -}}
     {{- $is_valid := false -}}
     {{- $navigroup := default "" .context.Values.navigroup -}}
@@ -100,7 +100,7 @@ Checking that the back service is valid
 {{/*
 Checking that the router service is valid
 */}}
-{{- define "front.isValidRouterService" -}}
+{{- define "navi-front.isValidRouterService" -}}
     {{- $service := .service -}}
     {{- $is_valid := false -}}
     {{- $navigroup := default "" .context.Values.navigroup -}}
@@ -117,7 +117,7 @@ Checking that the router service is valid
 {{/*
 Create locations for rules upstreams
 */}}
-{{- define "front.createLocations" -}}
+{{- define "navi-front.createLocations" -}}
 {{- $ns := print .Release.Namespace -}}
 {{- $svc_lookup := (lookup "v1" "Service" $ns "").items -}}
 {{- $services := dict }}
@@ -126,8 +126,8 @@ Create locations for rules upstreams
 {{- end }}
 {{- range $_, $service := $services -}}
     {{- if kindIs "map" $service.metadata.labels }}
-        {{- if (include "front.isValidBackService" (dict "service" $service "context" $)) }}
-            {{- include "front.renderLocation" (dict "service" $service "context" $ "services" $services) -}}
+        {{- if (include "navi-front.isValidBackService" (dict "service" $service "context" $)) }}
+            {{- include "navi-front.renderLocation" (dict "service" $service "context" $ "services" $services) -}}
         {{- end }}
     {{- end }}
 {{- end }}
@@ -136,12 +136,12 @@ Create locations for rules upstreams
 {{/*
 Create upstreams for running navi-back in the namespace
 */}}
-{{- define "front.createUpstreams" -}}
+{{- define "navi-front.createUpstreams" -}}
 {{- $ns := print .Release.Namespace }}
 {{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
     {{- if kindIs "map" $service.metadata.labels }}
-        {{- if (include "front.isValidBackService" ( dict "service" $service "context" $)) }}
-            {{- include "front.renderUpstream" ( dict "service" $service "context" $) }}
+        {{- if (include "navi-front.isValidBackService" ( dict "service" $service "context" $)) }}
+            {{- include "navi-front.renderUpstream" ( dict "service" $service "context" $) }}
         {{- end }}
     {{- end }}
 {{- end }}
@@ -152,11 +152,11 @@ Map names of rules to the actual upstreams
 
 TODO there is the same services lookup runs four times
 */}}
-{{- define "front.mapUpstreams" -}}
+{{- define "navi-front.mapUpstreams" -}}
 {{- $ns := print .Release.Namespace -}}
 {{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
     {{- if kindIs "map" $service.metadata.labels -}}
-        {{- if (include "front.isValidBackService" ( dict "service" $service "context" $)) -}}
+        {{- if (include "navi-front.isValidBackService" ( dict "service" $service "context" $)) -}}
             {{- if get $service.metadata.labels "rule" -}}
                 {{- printf "%s\t%s;\n" (get $service.metadata.labels "rule" | quote) ($service.metadata.name | quote) }}
             {{- end -}}
@@ -168,12 +168,12 @@ TODO there is the same services lookup runs four times
 {{/*
 Create upstreams for running navi-router in the namespace
 */}}
-{{- define "front.createRouterUpstream" -}}
+{{- define "navi-front.createRouterUpstream" -}}
 {{- $location := "router" -}}
 {{- $ns := print .Release.Namespace -}}
 {{- range $index, $service := (lookup "v1" "Service" $ns "").items -}}
     {{- if kindIs "map" $service.metadata.labels }}
-        {{- if (include "front.isValidRouterService" ( dict "service" $service "context" $)) }}
+        {{- if (include "navi-front.isValidRouterService" ( dict "service" $service "context" $)) }}
             {{- $location = $service.metadata.name -}}
             {{- print $location -}}
         {{- end }}
@@ -184,7 +184,7 @@ Create upstreams for running navi-router in the namespace
 {{/*
 Render ACL for private locations
 */}}
-{{- define "front.getInternalACL" }}
+{{- define "navi-front.getInternalACL" }}
 {{- if not (and (hasKey .Values.nginx.protectInternalLocations "disabled") .Values.nginx.protectInternalLocations.disabled) -}}
     {{- if .Values.nginx.protectInternalLocations.allowedNetworks -}}
         {{- range .Values.nginx.protectInternalLocations.allowedNetworks -}}
@@ -200,7 +200,7 @@ Render ACL for private locations
 {{/*
 Looks for back service and returns its maxProcessTime label. For splitter service looks for corresponding back
 */}}
-{{- define "front.getProxyReadTimeout" }}
+{{- define "navi-front.getProxyReadTimeout" }}
 {{- $name := replace "-splitter" "-back" .name }}
 {{- $timeout := default 0 (dig $name "metadata" "annotations" "maxProcessTime" "" .services) }}
 {{- $timeout }}

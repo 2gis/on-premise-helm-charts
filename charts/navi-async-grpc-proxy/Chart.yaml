@@ -6,8 +6,8 @@ keywords:
 - navi
 - dm-async-matrix
 - async-grpc-proxy
-version: 2.52.0
-appVersion: 0.0.2
+version: 2.54.0
+appVersion: 1.0.0
 maintainers:
 - name: 2gis
   url: https://github.com/2gis

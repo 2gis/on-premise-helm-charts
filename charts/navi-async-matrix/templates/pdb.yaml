@@ -1,12 +1,1 @@
-{{- define "dmasync.pdb" }}
-metadata:
-  name: {{ (include "navi-async-matrix.fullname" $) }}
-spec:
-  selector:
-    matchLabels:
-{{ include "navi-async-matrix.selectorLabels" $ | nindent 6 }}
-      app.kubernetes.io/component: {{ include "generic-chart.fullname" . }}
-{{- end }}
-{{- if .Values.pdb.enabled }}
-{{- template "generic-chart.merge" (list . "dmasync.pdb" "generic-chart.pdb.tpl") }}
-{{- end }}
+{{- template "generic-chart.pdb.tpl" . }}

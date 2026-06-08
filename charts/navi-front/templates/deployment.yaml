@@ -1,4 +1,4 @@
-{{- define "front.deployment" }}
+{{- define "navi-front.deployment" }}
 spec:
   template:
     metadata:
@@ -72,8 +72,8 @@ spec:
           {{- end }} {{/* end of if or .Values.nginx.opentracing.enabled .Values.nginx.customConfigPath */}}
           volumeMounts:
           - name: {{ include "generic-chart.fullname" . }}-base
-            mountPath: {{ printf "%s/conf.d/front.conf" ( include "nginx.customConfigPath" .) }}
-            subPath: front.conf
+            mountPath: {{ printf "%s/conf.d/navi-front.conf" ( include "nginx.customConfigPath" .) }}
+            subPath: navi-front.conf
           {{- if or .Values.serverBlock .Values.locationsBlock }}
           - name: {{ include "generic-chart.fullname" . }}-extra
             mountPath: {{ printf "%s/conf.d/extra" ( include "nginx.customConfigPath" .) }}
@@ -120,5 +120,5 @@ spec:
         {{- if .Values.sidecars }}
         {{- include "tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
-{{- end }}{{- /* define "front.deployment" */}}
-{{- template "generic-chart.merge" (list . "front.deployment" "generic-chart.deployment.tpl") }}
+{{- end }}{{- /* define "navi-front.deployment" */}}
+{{- template "generic-chart.merge" (list . "navi-front.deployment" "generic-chart.deployment.tpl") }}

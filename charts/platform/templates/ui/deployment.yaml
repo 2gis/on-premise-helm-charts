@@ -74,6 +74,13 @@ spec:
                   name: {{ include "platform.ui.secretName" . }}
                   key: naviApiKey
             {{- end }}
+            {{- if .Values.ui.static.key }}
+            - name: STATIC_MAP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "platform.ui.secretName" . }}
+                  key: staticApiKey
+            {{- end }}
             - name: DEFAULT_LOCALE
               value: {{ .Values.ui.defaultLocale | quote }}
             - name: BRAND
@@ -88,6 +95,10 @@ spec:
               value: {{ .Values.ui.platform.api.url | quote }}
             - name: ENABLE_SERVICE_LIMITATIONS
               value: {{ .Values.ui.enableServiceLimitations | quote }}
+            {{- if .Values.ui.sentryEnvironment }}
+            - name: SENTRY_ENVIRONMENT
+              value: {{ .Values.ui.sentryEnvironment | quote }}
+            {{- end }}
             {{- if .Values.ui.legal }}
             - name: SHOW_LEGAL_AGREEMENTS
               value: {{ .Values.ui.legal.showLegalAgreements | quote }}
@@ -122,6 +133,8 @@ spec:
               value: {{ .Values.ui.mapgl.initCenter | quote }}
             - name: MAPGL_STATUS
               value: {{ .Values.ui.status.mapgl | quote }}
+            - name: STATIC_MAP_URL
+              value: {{ .Values.ui.static.url | quote }}
             - name: SEARCH_STATUS
               value: {{ .Values.ui.status.search | quote }}
             - name: NAVI_API_STATUS
@@ -134,8 +147,12 @@ spec:
               value: {{ .Values.ui.status.keys | quote }}
             - name: MAP_STYLES_STATUS
               value: {{ .Values.ui.status.mapStyles | quote }}
+            - name: LICENSE_API_URL
+              value: {{ .Values.ui.license.url | quote }}
+            {{- if .Values.ui.godmode }}
             - name: GOD_MODE
-              value: {{ .Values.ui.godmode | default "false" | quote }}
+              value: {{ .Values.ui.godmode | quote }}
+            {{- end }}
             - name: REDIRECT_SAFE_DOMAINS
               value: {{ .Values.ui.redirectSafeDomains }}
             - name: PLAYGROUNDS
@@ -170,8 +187,28 @@ spec:
               value: {{ .Values.ui.onpremise.entryPageUrl | quote }}
             - name: KIT_DOCS_ENTRY_PAGE_URL
               value: {{ .Values.ui.kitDocs.entryPageUrl | quote }}
+            - name: BFF_SECURE
+              value: {{ .Values.ui.bffSecure | quote }}
             - name: HOME
               value: "/tmp"
+            {{- if .Values.ui.features }}
+            - name: FEATURE_MSDK
+              value: {{ .Values.ui.features.mSDK | quote }}
+            - name: FEATURE_MULTI_COMPANIES
+              value: {{ .Values.ui.features.multiCompanies | quote }}
+            {{- end }}
+            {{- if .Values.ui.uxFeedbackId }}
+            - name: UX_FEEDBACK_ID
+              value: {{ .Values.ui.uxFeedbackId | quote }}
+            {{- end }}
+            {{- if .Values.ui.fileStorage }}
+            - name: FILE_STORAGE_INNER_URL
+              value: {{ .Values.ui.fileStorage.innerUrl | quote }}
+            {{- end }}
+            {{- if .Values.ui.infoBanners }}
+            - name: BANNERS_CONFIG_PATH
+              value: {{ .Values.ui.infoBanners.configPath | quote }}
+            {{- end }}
       {{- with .Values.ui.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
