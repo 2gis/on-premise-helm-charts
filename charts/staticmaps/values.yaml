@@ -87,7 +87,7 @@ strategy:
     maxUnavailable: 0
     maxSurge: 1
 
-# @section StatefulSet settings
+# @section Deployment settings
 
 # @param image.repository Repository.
 # @param image.tag Tag.
@@ -97,6 +97,19 @@ image:
   repository: 2gis-on-premise/staticmaps
   tag: 1.0.0
   pullPolicy: IfNotPresent
+
+# @section Service settings
+
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
+# @param service.port Service port
+
+service:
+  annotations: {}
+  labels: {}
+  type: ClusterIP
+  port: 8080
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -157,12 +170,12 @@ resources:
 
 app:
   apiPort: 8080
-  attributionDir: '/attribution'
+  attributionDir: '/usr/share/staticmaps/pictures/attribution'
   log:
     level: info
     format: json
   markers:
-    localDir: '/markers'
+    localDir: '/usr/share/staticmaps/pictures/markers'
     fetchTimeout: 3s
     cacheDir: '/cache'
     cacheExpire: 2h
@@ -187,12 +200,12 @@ tiles:
 
 # @param keys.url URL of the Keys API service, ex: http://keys-service-api.svc **Required**
 # @param keys.token Keys service API key **Required**
-# @param keys.requestTimeout Timeout for requests to the Keys API.
+# @param keys.syncPeriod Duration how often static maps API should try to update keys data.
 
 keys:
   url: ''
   token: ''
-  requestTimeout: 5s
+  syncPeriod: 5m
 
 # @section License service settings
 

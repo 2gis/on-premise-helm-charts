@@ -41,7 +41,7 @@ spec:
               service:
                 name: {{ include "staticmaps.fullname" $ }}
                 port:
-                  name: status
+                  name: http
           {{- end }}
     {{- end }}
 

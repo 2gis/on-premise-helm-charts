@@ -73,13 +73,22 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
 
-### StatefulSet settings
+### Deployment settings
 
 | Name               | Description  | Value                        |
 | ------------------ | ------------ | ---------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/staticmaps` |
 | `image.tag`        | Tag.         | `1.0.0`                      |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`               |
+
+### Service settings
+
+| Name                  | Description                                                                                                                   | Value       |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)              | `{}`        |
+| `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                        | `{}`        |
+| `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) | `ClusterIP` |
+| `service.port`        | Service port                                                                                                                  | `8080`      |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -103,21 +112,21 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 ### StaticMaps service application settings
 
-| Name                       | Description                                                                                        | Value          |
-| -------------------------- | -------------------------------------------------------------------------------------------------- | -------------- |
-| `app.log.level`            | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`, `panic`. | `info`         |
-| `app.log.format`           | Log format for the service. Can be: `text`, `json`.                                                | `json`         |
-| `app.attributionDir`       | Path to the directory with attribution files.                                                      | `/attribution` |
-| `app.markers`              | **Markers settings**                                                                               |                |
-| `app.markers.localDir`     | Path to the directory with local markers.                                                          | `/markers`     |
-| `app.markers.fetchTimeout` | Timeout for fetching markers from external sources.                                                | `3s`           |
-| `app.markers.cacheDir`     | Path to the directory for caching markers.                                                         | `/cache`       |
-| `app.markers.cacheExpire`  | Duration for which cached markers are considered valid.                                            | `2h`           |
-| `app.access`               | **API Keys service access settings**                                                               |                |
-| `app.access.enabled`       | If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.          | `false`        |
-| `app.access.stat`          | **Statistics receiver settings**                                                                   |                |
-| `app.access.stat.enabled`  | If statistics receiver is enabled.                                                                 | `false`        |
-| `app.access.stat.url`      | Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**                       | `""`           |
+| Name                       | Description                                                                                        | Value                                        |
+| -------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `app.log.level`            | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`, `panic`. | `info`                                       |
+| `app.log.format`           | Log format for the service. Can be: `text`, `json`.                                                | `json`                                       |
+| `app.attributionDir`       | Path to the directory with attribution files.                                                      | `/usr/share/staticmaps/pictures/attribution` |
+| `app.markers`              | **Markers settings**                                                                               |                                              |
+| `app.markers.localDir`     | Path to the directory with local markers.                                                          | `/usr/share/staticmaps/pictures/markers`     |
+| `app.markers.fetchTimeout` | Timeout for fetching markers from external sources.                                                | `3s`                                         |
+| `app.markers.cacheDir`     | Path to the directory for caching markers.                                                         | `/cache`                                     |
+| `app.markers.cacheExpire`  | Duration for which cached markers are considered valid.                                            | `2h`                                         |
+| `app.access`               | **API Keys service access settings**                                                               |                                              |
+| `app.access.enabled`       | If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.          | `false`                                      |
+| `app.access.stat`          | **Statistics receiver settings**                                                                   |                                              |
+| `app.access.stat.enabled`  | If statistics receiver is enabled.                                                                 | `false`                                      |
+| `app.access.stat.url`      | Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**                       | `""`                                         |
 
 ### Tiles service settings
 
@@ -129,11 +138,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 ### Keys service settings
 
-| Name                  | Description                                                               | Value |
-| --------------------- | ------------------------------------------------------------------------- | ----- |
-| `keys.url`            | URL of the Keys API service, ex: http://keys-service-api.svc **Required** | `""`  |
-| `keys.token`          | Keys service API key **Required**                                         | `""`  |
-| `keys.requestTimeout` | Timeout for requests to the Keys API.                                     | `5s`  |
+| Name              | Description                                                               | Value |
+| ----------------- | ------------------------------------------------------------------------- | ----- |
+| `keys.url`        | URL of the Keys API service, ex: http://keys-service-api.svc **Required** | `""`  |
+| `keys.token`      | Keys service API key **Required**                                         | `""`  |
+| `keys.syncPeriod` | Duration how often static maps API should try to update keys data.        | `5m`  |
 
 ### License service settings
 

@@ -26,10 +26,12 @@ data:
       enabled: {{ .enabled }}
       {{- if .enabled }}
       host: {{ required "Valid .Values.keys.url required!" $.Values.keys.url }}
-      syncPeriod: "{{ $.Values.keys.requestTimeout }}"
+      syncPeriod: "{{ $.Values.keys.syncPeriod }}"
       bss:
         enabled: {{ .stat.enabled }}
-        host: {{ .stat.url }}
+        {{- if .stat.enabled }}
+        host: {{ required "Valid .Values.app.access.stat.url required!" .stat.url }}
+        {{- end }}
       {{- end }}
     {{- end }}
     {{- end }}

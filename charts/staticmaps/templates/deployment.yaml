@@ -63,10 +63,6 @@ spec:
           volumeMounts:
             - mountPath: {{ .app.markers.cacheDir }}
               name: cache
-            - mountPath: {{ .app.markers.localDir }}
-              name: markers
-            - mountPath: {{ .app.attributionDir }}
-              name: attribution
             - mountPath: /config
               name: config
             {{- if .customCAs.bundle }}
@@ -100,11 +96,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
-        - name: markers
-          emptyDir: {}
         - name: cache
-          emptyDir: {}
-        - name: attribution
           emptyDir: {}
         - name: config
           configMap:
