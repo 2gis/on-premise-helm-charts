@@ -1,5 +1,14 @@
 # PRO Breaking-Changes
 
+## [2.4.0]
+
+### pro-api
+- Renamed `permissions.settings.default_permissions` to `permissions.settings.defaultPermissions`
+- Renamed `permissions.settings.defaultPermissions.new_user_expiration_days` to `permissions.settings.defaultPermissions.newUserExpirationDays`
+- Renamed `permissions.settings.defaultPermissions.open_pro_ui` to `permissions.settings.defaultPermissions.openProUi`
+- Renamed `permissions.settings.defaultPermissions.add_user_assets` to `permissions.settings.defaultPermissions.addUserAssets`
+- Renamed `permissions.settings.defaultPermissions.addUserAssets.file_size` to `permissions.settings.defaultPermissions.addUserAssets.fileSize`
+
 ## [2.3.0]
 
 ### pro-api
