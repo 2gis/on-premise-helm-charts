@@ -16,7 +16,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.52.0
+    tag: 2.61.0
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -34,6 +34,8 @@ api:
       - path: /
         pathType: Prefix
     tls: []
+    # - hosts:
+    #   - pro-api.example.com
     #   secretName: secret.tls
 
   # @param api.pod.replicaCount A replica count for the pod.
@@ -200,7 +202,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.52.0
+    tag: 2.61.0
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -218,6 +220,8 @@ permissions:
       - path: /
         pathType: Prefix
     tls: []
+    # - hosts:
+    #   - pro-permissions-api.example.com
     #   secretName: secret.tls
 
   # @param permissions.pod.replicaCount A replica count for the pod.
@@ -268,6 +272,12 @@ permissions:
     type: ClusterIP
     port: 80
 
+  # @param permissions.headlessService.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+  # @param permissions.headlessService.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  headlessService:
+    annotations: {}
+    labels: {}
+
   # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
   # @param permissions.pdb.enabled If PDB is enabled for the service.
@@ -284,12 +294,13 @@ permissions:
   # @skip permissions.settings.showAssetBundles
   # @skip permissions.settings.localCache.enabled
   # @skip permissions.settings.localCache.trackStatistics
+  # @skip permissions.settings.backgroundJobs.enableInitOnStartupJob
+  # @skip permissions.settings.backgroundJobs.enableActualizePermissionsJob
   # @param permissions.settings.httpPort Http port for interaction via the rest api
   # @param permissions.settings.grpcPort Grpc port for interaction via the grpc api
-  # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
   # @param permissions.settings.auth.apiKey Api key for service to service calls. **Required**
-  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required**
+  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required **
   settings:
     host: ''
     httpPort: 8091
@@ -303,23 +314,28 @@ permissions:
     auth:
       apiKey: ''
       uiRequiredRoles: []
+    backgroundJobs:
+      enableInitOnStartupJob: true
+      enableActualizePermissionsJob: true
 
     # @section Default permissions for new users
-    # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
-    # @param permissions.settings.default_permissions.assets Ids of assets to be accessed. Use '*' symbol to allow access to all assets.
-    # @param permissions.settings.default_permissions.territories Ids of territories to be accessed. Use '*' symbol to allow access to all territories.
-    # @param permissions.settings.default_permissions.add_user_assets.allow Allow user to add assets.
-    # @param permissions.settings.default_permissions.add_user_assets.quantity Maximum number of assets that can be added by the user.
-    # @param permissions.settings.default_permissions.add_user_assets.file_size Maximum file size of the asset that can be added by the user.
-    # @param permissions.settings.default_permissions.isochrones Maximum number of isochrones that can be created by the user.
-    default_permissions:
-      open_pro_ui: true
+    # @param permissions.settings.defaultPermissions.newUserExpirationDays Number of days a new user has access after registration. After this period, access will expire unless upgraded. Ensure that the current date plus this value does not exceed December 31, 9999 — otherwise new user registration will fail. Note that the maximum safe value decreases over time.
+    # @param permissions.settings.defaultPermissions.openProUi Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
+    # @param permissions.settings.defaultPermissions.assets Ids of assets to be accessed. Use '*' symbol to allow access to all assets.
+    # @param permissions.settings.defaultPermissions.territories Ids of territories to be accessed. Use '*' symbol to allow access to all territories.
+    # @param permissions.settings.defaultPermissions.addUserAssets.allow Allow user to add assets.
+    # @param permissions.settings.defaultPermissions.addUserAssets.quantity Maximum number of assets that can be added by the user.
+    # @param permissions.settings.defaultPermissions.addUserAssets.fileSize Maximum file size of the asset that can be added by the user.
+    # @param permissions.settings.defaultPermissions.isochrones Maximum number of isochrones that can be created by the user.
+    defaultPermissions:
+      newUserExpirationDays: null
+      openProUi: true
       assets: [branch, building]
       territories: []
-      add_user_assets:
+      addUserAssets:
         allow: true
         quantity: 100
-        file_size: 100
+        fileSize: 100
       isochrones: 1000
 
 # @section Tasks API configuration & settings
@@ -331,7 +347,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.52.0
+    tag: 2.61.0
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -349,6 +365,8 @@ tasks:
       - path: /
         pathType: Prefix
     tls: []
+    # - hosts:
+    #   - pro-tasks-api.example.com
     #   secretName: secret.tls
 
   # @param tasks.pod.apiReplicaCount A replica count for the api pod.
@@ -494,7 +512,7 @@ pagerenderer:
   # @param pagerenderer.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-pagerenderer-api
-    tag: 2.52.0
+    tag: 2.61.0
     pullPolicy: IfNotPresent
 
   # @param pagerenderer.pod.replicaCount A replica count for the pod.
@@ -512,11 +530,16 @@ pagerenderer:
   # @extra pagerenderer.pod.resources **Limits for the application service**
   # @param pagerenderer.pod.resources.requests.cpu A CPU request.
   # @param pagerenderer.pod.resources.requests.memory A memory request.
+  # @param pagerenderer.pod.resources.requests.aliyun.com/gpu-mem A GPU request.
   # @param pagerenderer.pod.resources.limits.cpu A CPU limit.
   # @param pagerenderer.pod.resources.limits.memory A memory limit.
+  # @param pagerenderer.pod.resources.limits.aliyun.com/gpu-mem A GPU memory limit.
+  # @skip pagerenderer.pod.tolerations
+  # @skip pagerenderer.pod.imagePullSecrets
   pod:
     replicaCount: 1
     nodeSelector: {}
+    imagePullSecrets: []
     affinity: {}
     priorityClassName: ''
     terminationGracePeriodSeconds: 60
@@ -529,11 +552,13 @@ pagerenderer:
     revisionHistoryLimit: 3
     resources:
       requests:
-        cpu: 300m
-        memory: 256Mi
+        cpu: "1"
+        memory: 1Gi
+        aliyun.com/gpu-mem: "1"
       limits:
-        cpu: 1
-        memory: 1024Mi
+        cpu: "1"
+        memory: 4Gi
+        aliyun.com/gpu-mem: "1"
 
   # @param pagerenderer.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param pagerenderer.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -573,13 +598,25 @@ pagerenderer:
       memory: 1024Mi
 
   # @param pagerenderer.settings.enabled If Page Renderer API is disabled it will not be deployed to k8s
+  # @param pagerenderer.settings.auth.apiKey Api key for service to service calls. **Required if** `pagerenderer.settings.auth.enabled: true`
   # @param pagerenderer.settings.httpPort Http port for interaction via the rest api
   # @param pagerenderer.settings.grpcPort Grpc port for interaction via the grpc api
   # @extra pagerenderer.settings.logging Logging settings
   # @param pagerenderer.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
   # @param pagerenderer.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
+  # @param pagerenderer.settings.grpcRoute.hostname Hostname for GRPCRoute.
+  # @param pagerenderer.settings.grpcRoute.parentRefs List of parent references (gateways) for GRPCRoute. Defaults: canary and stable gateways in istio-gateways namespace.
   settings:
     enabled: false
+    grpcRoute:
+      hostname: ''
+      parentRefs: []
+        # - group: gateway.networking.k8s.io
+        #   kind: Gateway
+        #   name: stable
+        #   namespace: istio-gateways
+    auth:
+      apiKey: ''
     httpPort: 8282
     grpcPort: 8283
     logging:
@@ -620,7 +657,7 @@ pagerenderer:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.52.0
+  tag: 2.61.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3

@@ -131,5 +131,11 @@ spec:
               value: {{ .Values.pagerenderer.settings.logging.format | quote }}
             - name: Common__Logging__Targets
               value: {{ .Values.pagerenderer.settings.logging.targets | quote }}
+            - name: LD_LIBRARY_PATH
+              value: "/usr/lib/x86_64-linux-gnu:/usr/local/nvidia/lib64:/usr/local/nvidia/lib"
+            - name: LIBGL_ALWAYS_SOFTWARE
+              value: "0"
+            - name: __GLX_VENDOR_LIBRARY_NAME
+              value: "nvidia"
 
 {{- end }}

@@ -1,0 +1,30 @@
+﻿{{- if .Values.pagerenderer.settings.enabled }}
+{{- if .Values.pagerenderer.settings.grpcRoute.hostname }}
+{{- if not .Values.pagerenderer.settings.grpcRoute.parentRefs }}
+{{- fail "A valid .Values.pagerenderer.settings.grpcRoute.parentRefs entry required when pagerenderer.settings.enabled is true" }}
+{{- end }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: {{ include "pro-api.pagerenderer-name" . }}
+spec:
+  hostnames:
+    - {{ .Values.pagerenderer.settings.grpcRoute.hostname }}
+  {{- with .Values.pagerenderer.settings.grpcRoute.parentRefs }}
+  parentRefs:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: {{ include "pro-api.pagerenderer-name" . }}
+          port: {{ .Values.pagerenderer.settings.grpcPort }}
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+{{- end }}
+{{- end }}

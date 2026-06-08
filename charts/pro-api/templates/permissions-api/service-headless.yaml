@@ -1,0 +1,23 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pro-api.permissions-name" . }}-headless
+  {{- with .Values.permissions.headlessService.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "pro-api.permissionLabels" . | nindent 4 }}
+  {{- with .Values.permissions.headlessService.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  clusterIP: None
+  ports:
+    - port: {{ .Values.permissions.settings.grpcPort }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+      appProtocol: http2
+  selector:
+    {{- include "pro-api.permissionsSelectorLabels" . | nindent 4 }}
