@@ -6,6 +6,7 @@
 
 - Added new required parameters:
   - `.Values.routes.endpointInternalApiKey.users`
+  - `.Values.routes.adminCredentials.cookieSigningKey`
 
 ## [2.2.0]
 
