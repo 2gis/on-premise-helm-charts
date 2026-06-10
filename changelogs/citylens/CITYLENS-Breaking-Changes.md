@@ -12,6 +12,11 @@
   - Open the admin panel at `https://<.Values.routes.api.ingress.hosts[0].host>/internal/admin` (credentials: `.Values.routes.adminCredentials`) and assign the **Owner** role to at least one user.
   - In the admin panel, go to **Hangfire Dashboard → Recurring Jobs** and manually trigger the **`MigrateUserRolesJob`** job to migrate existing users to the new role model.
 
+### citylens-routes-ui
+
+- Added new required parameters:
+  - `env.CATALOG_API_KEY`
+
 ## [2.2.0]
 
 ### citylens
