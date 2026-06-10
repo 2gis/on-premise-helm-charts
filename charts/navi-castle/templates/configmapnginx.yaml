@@ -24,6 +24,13 @@ data:
             autoindex_format json;
         }
 
+        location /navi-data-sync {
+            expires epoch;
+            alias  {{ .Values.castle.castleDataPath }}/backup;
+            autoindex on;
+            autoindex_format json;
+        }
+
         {{- if .Values.nginx.locationsBlock }}
           {{ .Values.nginx.locationsBlock | nindent 8 }}
         {{- end }}

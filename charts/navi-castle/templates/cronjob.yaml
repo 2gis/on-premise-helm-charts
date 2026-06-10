@@ -91,7 +91,7 @@ spec:
               - name: {{ include "castle.fullname" $ }}-pvc
                 mountPath: {{ $.Values.castle.castleDataPath }}
               resources:
-                {{- toYaml $.Values.resources | nindent 16 }}
+                {{- toYaml ($.Values.cron.resources | default $.Values.resources) | nindent 16 }}
 {{- end -}} {{/* if */}}
 {{- end -}} {{/* range $flavor */}}
 {{- end -}} {{/* range $i, $e */}}

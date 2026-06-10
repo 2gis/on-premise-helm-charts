@@ -109,7 +109,7 @@ ingress:
 
 # @section Limits
 
-# @param resources [nullable] Container resources requirements structure.
+# @param resources [nullable] Default container resources requirements structure. Used by `nginx.resources`, `cron.resources`, and `rtr.resources` when they are empty.
 # @param resources.requests.cpu [nullable] CPU request, recommended value `100m`.
 # @param resources.requests.memory [nullable] Memory request, recommended value `128Mi`.
 # @param resources.limits.cpu [nullable] CPU limit, recommended value `1000m`.
@@ -171,6 +171,11 @@ castle:
 # @param nginx.nodeHeader Enable header with node name (X-Node).
 # @param nginx.locationsBlock Optional nginx config block with additional locations
 # @param nginx.customConfigPath Path to custom nginx config file. If set, default config will be ignored.
+# @param nginx.resources [nullable] Container resources requirements for `castle-nginx`. Empty value falls back to `resources`.
+# @param nginx.resources.requests.cpu [nullable] CPU request for `castle-nginx`.
+# @param nginx.resources.requests.memory [nullable] Memory request for `castle-nginx`.
+# @param nginx.resources.limits.cpu [nullable] CPU limit for `castle-nginx`.
+# @param nginx.resources.limits.memory [nullable] Memory limit for `castle-nginx`.
 
 nginx:
   port: 8080
@@ -180,6 +185,7 @@ nginx:
   nodeHeader: false
   locationsBlock: ''
   customConfigPath: ''
+  resources: {}
 
 
 # @section Cron settings
@@ -194,6 +200,11 @@ nginx:
 # @param cron.successfulJobsHistoryLimit How many completed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
 # @param cron.failedJobsHistoryLimit How many failed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).
 # @param cron.prometheusPort Container port for supercronic prometheus
+# @param cron.resources [nullable] Container resources requirements for `castle-cron`. Empty value falls back to `resources`.
+# @param cron.resources.requests.cpu [nullable] CPU request for `castle-cron`.
+# @param cron.resources.requests.memory [nullable] Memory request for `castle-cron`.
+# @param cron.resources.limits.cpu [nullable] CPU limit for `castle-cron`.
+# @param cron.resources.limits.memory [nullable] Memory limit for `castle-cron`.
 
 cron:
   enabled:
@@ -208,6 +219,7 @@ cron:
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
   prometheusPort: 9476
+  resources: {}
 
 
 # @section Init settings
@@ -285,9 +297,15 @@ persistentVolume:
 # @param rtr.restrictionJson.remoteDir Remote directory for restriction_json. Empty for HTTP source, `restrictions` for S3.
 # @param rtr.restrictionJson.header HTTP header used for change detection.
 # @param rtr.restrictionJson.timeout Queries request timeout in seconds.
+# @param rtr.resources [nullable] Container resources requirements for `castle-rtr`. Empty value falls back to `resources`.
+# @param rtr.resources.requests.cpu [nullable] CPU request for `castle-rtr`.
+# @param rtr.resources.requests.memory [nullable] Memory request for `castle-rtr`.
+# @param rtr.resources.limits.cpu [nullable] CPU limit for `castle-rtr`.
+# @param rtr.resources.limits.memory [nullable] Memory limit for `castle-rtr`.
 
 rtr:
   enabled: false
+  resources: {}
   http:
     baseDir: export-restrictions-json
     serverUrl: ''
