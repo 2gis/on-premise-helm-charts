@@ -1,4 +1,10 @@
-﻿# @section Geo API configuration & settings
+﻿# @section Common settings
+
+# @param imagePullSecrets Kubernetes image pull secrets.
+
+imagePullSecrets: []
+
+# @section Geo API configuration & settings
 
 api:
 
@@ -10,7 +16,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.46.2
+    tag: 2.61.0
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -28,10 +34,11 @@ api:
       - path: /
         pathType: Prefix
     tls: []
+    # - hosts:
+    #   - pro-api.example.com
     #   secretName: secret.tls
 
   # @param api.pod.replicaCount A replica count for the pod.
-  # @param api.pod.imagePullSecrets Kubernetes image pull secrets.
   # @param api.pod.nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
   # @param api.pod.fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
   # @param api.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
@@ -55,7 +62,6 @@ api:
   # @param api.pod.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
   pod:
     replicaCount: 2
-    imagePullSecrets: []
     nameOverride: ''
     fullnameOverride: ''
     nodeSelector: {}
@@ -72,10 +78,10 @@ api:
     resources:
       requests:
         cpu: 400m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1024M
+        memory: 1024Mi
     strategy:
       type: RollingUpdate
       rollingUpdate:
@@ -93,10 +99,10 @@ api:
     updateMode: Auto
     minAllowed:
       cpu: 400m
-      memory: 256M
+      memory: 256Mi
     maxAllowed:
       cpu: 1
-      memory: 1024M
+      memory: 1024Mi
 
   # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -121,7 +127,7 @@ api:
     minAvailable: 1
     maxUnavailable: ''
 
-  # @param api.settings.licenseKey License key. **Required**
+  # @param api.settings.licenseKey PRO license key. Contact your vendor to obtain it. **Required**
   # @param api.settings.tempPath Path to directory used for temp data
   # @skip api.settings.logEsQueries
   # @skip api.settings.debug
@@ -196,7 +202,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.46.2
+    tag: 2.61.0
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -214,10 +220,11 @@ permissions:
       - path: /
         pathType: Prefix
     tls: []
+    # - hosts:
+    #   - pro-permissions-api.example.com
     #   secretName: secret.tls
 
   # @param permissions.pod.replicaCount A replica count for the pod.
-  # @param permissions.pod.imagePullSecrets Kubernetes image pull secrets.
   # @param permissions.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param permissions.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param permissions.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
@@ -236,7 +243,6 @@ permissions:
   # @param permissions.pod.resources.limits.memory A memory limit.
   pod:
     replicaCount: 1
-    imagePullSecrets: []
     nodeSelector: {}
     affinity: {}
     priorityClassName: ''
@@ -251,10 +257,10 @@ permissions:
     resources:
       requests:
         cpu: 300m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1G
+        memory: 1024Mi
 
   # @param permissions.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param permissions.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -265,6 +271,12 @@ permissions:
     labels: {}
     type: ClusterIP
     port: 80
+
+  # @param permissions.headlessService.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+  # @param permissions.headlessService.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  headlessService:
+    annotations: {}
+    labels: {}
 
   # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
@@ -282,11 +294,13 @@ permissions:
   # @skip permissions.settings.showAssetBundles
   # @skip permissions.settings.localCache.enabled
   # @skip permissions.settings.localCache.trackStatistics
+  # @skip permissions.settings.backgroundJobs.enableInitOnStartupJob
+  # @skip permissions.settings.backgroundJobs.enableActualizePermissionsJob
   # @param permissions.settings.httpPort Http port for interaction via the rest api
   # @param permissions.settings.grpcPort Grpc port for interaction via the grpc api
-  # @param permissions.settings.auth.apiKey Secret Permissions API Key to perform authorized service actions, random string. Must be set if type not 'none'. Example: `c7d74870-ec28-4543-b408-b49bfed84399`. **Required**
-  # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
+  # @param permissions.settings.auth.apiKey Api key for service to service calls. **Required**
+  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required **
   settings:
     host: ''
     httpPort: 8091
@@ -299,23 +313,29 @@ permissions:
       trackStatistics: false
     auth:
       apiKey: ''
+      uiRequiredRoles: []
+    backgroundJobs:
+      enableInitOnStartupJob: true
+      enableActualizePermissionsJob: true
 
     # @section Default permissions for new users
-    # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
-    # @param permissions.settings.default_permissions.assets Ids of assets to be accessed. Use '*' symbol to allow access to all assets.
-    # @param permissions.settings.default_permissions.territories Ids of territories to be accessed. Use '*' symbol to allow access to all territories.
-    # @param permissions.settings.default_permissions.add_user_assets.allow Allow user to add assets.
-    # @param permissions.settings.default_permissions.add_user_assets.quantity Maximum number of assets that can be added by the user.
-    # @param permissions.settings.default_permissions.add_user_assets.file_size Maximum file size of the asset that can be added by the user.
-    # @param permissions.settings.default_permissions.isochrones Maximum number of isochrones that can be created by the user.
-    default_permissions:
-      open_pro_ui: true
+    # @param permissions.settings.defaultPermissions.newUserExpirationDays Number of days a new user has access after registration. After this period, access will expire unless upgraded. Ensure that the current date plus this value does not exceed December 31, 9999 — otherwise new user registration will fail. Note that the maximum safe value decreases over time.
+    # @param permissions.settings.defaultPermissions.openProUi Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
+    # @param permissions.settings.defaultPermissions.assets Ids of assets to be accessed. Use '*' symbol to allow access to all assets.
+    # @param permissions.settings.defaultPermissions.territories Ids of territories to be accessed. Use '*' symbol to allow access to all territories.
+    # @param permissions.settings.defaultPermissions.addUserAssets.allow Allow user to add assets.
+    # @param permissions.settings.defaultPermissions.addUserAssets.quantity Maximum number of assets that can be added by the user.
+    # @param permissions.settings.defaultPermissions.addUserAssets.fileSize Maximum file size of the asset that can be added by the user.
+    # @param permissions.settings.defaultPermissions.isochrones Maximum number of isochrones that can be created by the user.
+    defaultPermissions:
+      newUserExpirationDays: null
+      openProUi: true
       assets: [branch, building]
       territories: []
-      add_user_assets:
+      addUserAssets:
         allow: true
         quantity: 100
-        file_size: 100
+        fileSize: 100
       isochrones: 1000
 
 # @section Tasks API configuration & settings
@@ -327,7 +347,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.46.2
+    tag: 2.61.0
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -345,11 +365,12 @@ tasks:
       - path: /
         pathType: Prefix
     tls: []
+    # - hosts:
+    #   - pro-tasks-api.example.com
     #   secretName: secret.tls
 
   # @param tasks.pod.apiReplicaCount A replica count for the api pod.
   # @param tasks.pod.workerReplicaCount A replica count for the worker pod.
-  # @param tasks.pod.imagePullSecrets Kubernetes image pull secrets.
   # @param tasks.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param tasks.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param tasks.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
@@ -372,7 +393,6 @@ tasks:
   pod:
     apiReplicaCount: 1
     workerReplicaCount: 1
-    imagePullSecrets: []
     nodeSelector: {}
     affinity: {}
     priorityClassName: ''
@@ -387,10 +407,10 @@ tasks:
     resources:
       requests:
         cpu: 400m
-        memory: 256M
+        memory: 256Mi
       limits:
         cpu: 1
-        memory: 1024M
+        memory: 1024Mi
     strategy:
       type: RollingUpdate
       rollingUpdate:
@@ -408,10 +428,10 @@ tasks:
     updateMode: Auto
     minAllowed:
       cpu: 400m
-      memory: 256M
+      memory: 256Mi
     maxAllowed:
       cpu: 1
-      memory: 1024M
+      memory: 1024Mi
 
   # @param tasks.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param tasks.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -443,21 +463,14 @@ tasks:
   # @param tasks.settings.worker.regularTasksWorkersCount Number of threads that will be used by Hangfire-server to performs other tasks
   # @param tasks.settings.worker.longRunningTasksWorkersCount Number of threads that will be used by Hangfire-server to performs long tasks
   # @param tasks.settings.features.auditLogging.enabled Enable audit log feature
-  # @param tasks.settings.admin.auth.schema Authentication scheme for Tasks Admin UI (Basic, OIDC, Undefined)
-  # @param tasks.settings.admin.auth.basic.username Username for Basic authentication scheme
-  # @param tasks.settings.admin.auth.basic.password Password for Basic authentication scheme
-  # @param tasks.settings.admin.auth.oidc.authority Authority of the OpenID Connect (OIDC) identity provider
-  # @param tasks.settings.admin.auth.oidc.clientId Client of application
-  # @param tasks.settings.admin.auth.oidc.clientSecret Client secret of application
-  # @param tasks.settings.admin.auth.oidc.nameClaim Property name in OIDC profile for name claim
-  # @param tasks.settings.admin.auth.oidc.roleClaim Property name in OIDC profile for role claim
-  # @param tasks.settings.admin.auth.oidc.requiredRole Required role for Tasks Admin UI
+  # @param tasks.settings.auth.enabled Enables or disables authentication
+  # @param tasks.settings.auth.apiKey Api key for service to service calls. **Required if** `tasks.settings.auth.enabled: true`
+  # @param tasks.settings.auth.adminRequiredRoles Roles required to access Tasks Admin UI. Must be set to the same values as `permissions.settings.auth.uiRequiredRoles`. **Required if** `tasks.settings.auth.enabled: true`
   # @skip tasks.settings.features.assetDataPreparation
   # @skip tasks.settings.features.cleanCitylensFrames
   # @skip tasks.settings.features.removeUnusedUserAssetFiles
   # @skip tasks.settings.features.emailNotifications
   # @skip tasks.settings.features.userManagement
-  # @skip tasks.settings.features.removeExpiredSmbDashboards
   settings:
     enabled: true
     env: ''
@@ -470,19 +483,10 @@ tasks:
       resourceIntensiveTasksWorkersCount: 5
       regularTasksWorkersCount: 5
       longRunningTasksWorkersCount: 1
-    admin:
-      auth:
-        schema: 'Undefined'
-        basic:
-          username: admin
-          password: ''
-        oidc:
-          authority: ''
-          clientId: ''
-          clientSecret: ''
-          nameClaim: ''
-          roleClaim: ''
-          requiredRole: ''
+    auth:
+      enabled: false
+      apiKey: ''
+      adminRequiredRoles: []
     features:
       assetDataPreparation:
         enabled: false
@@ -497,8 +501,6 @@ tasks:
         enabled: false
       userManagement:
         enabled: true
-      removeExpiredSmbDashboards:
-        enabled: false
 
 
 # @section Page Renderer API configuration & settings
@@ -510,11 +512,10 @@ pagerenderer:
   # @param pagerenderer.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-pagerenderer-api
-    tag: 2.46.2
+    tag: 2.61.0
     pullPolicy: IfNotPresent
 
   # @param pagerenderer.pod.replicaCount A replica count for the pod.
-  # @param pagerenderer.pod.imagePullSecrets Kubernetes image pull secrets.
   # @param pagerenderer.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param pagerenderer.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param pagerenderer.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
@@ -529,12 +530,16 @@ pagerenderer:
   # @extra pagerenderer.pod.resources **Limits for the application service**
   # @param pagerenderer.pod.resources.requests.cpu A CPU request.
   # @param pagerenderer.pod.resources.requests.memory A memory request.
+  # @param pagerenderer.pod.resources.requests.aliyun.com/gpu-mem A GPU request.
   # @param pagerenderer.pod.resources.limits.cpu A CPU limit.
   # @param pagerenderer.pod.resources.limits.memory A memory limit.
+  # @param pagerenderer.pod.resources.limits.aliyun.com/gpu-mem A GPU memory limit.
+  # @skip pagerenderer.pod.tolerations
+  # @skip pagerenderer.pod.imagePullSecrets
   pod:
     replicaCount: 1
-    imagePullSecrets: []
     nodeSelector: {}
+    imagePullSecrets: []
     affinity: {}
     priorityClassName: ''
     terminationGracePeriodSeconds: 60
@@ -547,11 +552,13 @@ pagerenderer:
     revisionHistoryLimit: 3
     resources:
       requests:
-        cpu: 300m
-        memory: 256M
+        cpu: "1"
+        memory: 1Gi
+        aliyun.com/gpu-mem: "1"
       limits:
-        cpu: 1
-        memory: 1G
+        cpu: "1"
+        memory: 4Gi
+        aliyun.com/gpu-mem: "1"
 
   # @param pagerenderer.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   # @param pagerenderer.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -585,27 +592,36 @@ pagerenderer:
     updateMode: Auto
     minAllowed:
       cpu: 300m
-      memory: 256M
+      memory: 256Mi
     maxAllowed:
       cpu: 1
-      memory: 1G
+      memory: 1024Mi
 
   # @param pagerenderer.settings.enabled If Page Renderer API is disabled it will not be deployed to k8s
+  # @param pagerenderer.settings.auth.apiKey Api key for service to service calls. **Required if** `pagerenderer.settings.auth.enabled: true`
   # @param pagerenderer.settings.httpPort Http port for interaction via the rest api
   # @param pagerenderer.settings.grpcPort Grpc port for interaction via the grpc api
   # @extra pagerenderer.settings.logging Logging settings
   # @param pagerenderer.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
   # @param pagerenderer.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
-  # @param pagerenderer.settings.auth.apiKey Secret API Key to perform authorized service actions, random string. Example: `4230b288-301e-4ec6-82c6-db6a8a72c2af`
+  # @param pagerenderer.settings.grpcRoute.hostname Hostname for GRPCRoute.
+  # @param pagerenderer.settings.grpcRoute.parentRefs List of parent references (gateways) for GRPCRoute. Defaults: canary and stable gateways in istio-gateways namespace.
   settings:
     enabled: false
+    grpcRoute:
+      hostname: ''
+      parentRefs: []
+        # - group: gateway.networking.k8s.io
+        #   kind: Gateway
+        #   name: stable
+        #   namespace: istio-gateways
+    auth:
+      apiKey: ''
     httpPort: 8282
     grpcPort: 8283
     logging:
       format: simple
       targets: ''
-    auth:
-      apiKey: ''
 
 
 # @section asset importer settings
@@ -613,7 +629,6 @@ pagerenderer:
 # @param assetImporter.appName Data Import job name.
 # @param assetImporter.repository Docker Repository Image.
 # @param assetImporter.tag Docker image tag.
-# @param assetImporter.imagePullSecrets Kubernetes image pull secrets.
 # @param assetImporter.schedule Import job schedule.
 # @param assetImporter.backoffLimit The number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering a Job as failed.
 # @param assetImporter.successfulJobsHistoryLimit How many completed and failed jobs should be kept. See [docs](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits).
@@ -642,8 +657,7 @@ pagerenderer:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.46.2
-  imagePullSecrets: []
+  tag: 2.61.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -653,10 +667,10 @@ assetImporter:
   resources:
     requests:
       cpu: 700m
-      memory: 768M
+      memory: 768Mi
     limits:
       cpu: 1000m
-      memory: 8Gi
+      memory: 8192Mi
   suspended: false
   startOnDeploy: true
   startOnDeployMode: ScheduleManifest
@@ -709,6 +723,7 @@ dgctlStorage:
 # @param s3.layerDataBucket S3 bucket with prepared layer data. **Required**
 # @param s3.snapshotBucket S3 bucket for storing snapshots of inclemental data updates. **Required**
 # @param s3.resourcesBucket S3 bucket for storing static resources. **Required**
+# Note: S3 host, secure, region, accessKey, and secretKey are taken from dgctlStorage.* settings for these buckets.
 
 s3:
   assetsDataBucket: ''
@@ -805,13 +820,43 @@ postgres:
       password: ''
     ro: {}
 
+# @section Auth Provider Configuration
+# @title Auth Provider
+# @param authProvider.host Host address of the authentication provider. Must point to the pro-api-permissions URL. **Required**
+# @param authProvider.schema Authentication scheme to use. Supported values: `Basic`, `Oidc`. **Required**
+# @param authProvider.allowedHosts List of allowed hosts for accessing `authProvider`. For allowing all hosts use `['*']`. Example: ['pro-api-permissions.example.com','pro-api-tasks.example.com']
+# @param authProvider.basic.users[0].username Username for basic authentication. **Required if** `authProvider.schema: Basic`
+# @param authProvider.basic.users[0].password Password for basic authentication. **Required if** `authProvider.schema: Basic`
+# @param authProvider.basic.users[0].roles Roles assigned to the user. The values are arbitrary strings. The parameters `permissions.settings.auth.uiRequiredRoles` and `tasks.settings.auth.adminRequiredRoles` must reference the roles defined here. **Required if** `authProvider.schema: Basic`
+# @param authProvider.oidc.authority URL of the OIDC provider. **Required if** `authProvider.schema: Oidc`
+# @param authProvider.oidc.clientId Client ID registered with the OIDC provider. **Required if** `authProvider.schema: Oidc`
+# @param authProvider.oidc.clientSecret Client secret for the OIDC provider. **Required if** `authProvider.schema: Oidc`
+# @param authProvider.oidc.nameClaim Claim name that contains the user's name. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
+# @param authProvider.oidc.roleClaim Claim name that contains the user's roles. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
+authProvider:
+  host: ''
+  schema: ''
+  allowedHosts: []
+  basic:
+    users:
+      - username: ''
+        password: ''
+        roles:
+          - ''
+  oidc:
+    authority: ''
+    clientId: ''
+    clientSecret: ''
+    nameClaim: ''
+    roleClaim: ''
+
 # @section Kafka settings (supported version 2.7)
 
 # @param kafka.bootstrapServers Kafka bootstrap servers. Format: 'host1:port1,host2:port2'
-# @param kafka.securityProtocol Kafka security protocol. Supported options: SaslPlaintext.
+# @param kafka.securityProtocol Kafka security protocol. Supported options: Plaintext, SaslPlaintext.
 # @param kafka.createTopics Automatically create topics in their absence.
 # @extra kafka.sasl **Kafka sasl settings** (see [the documentation](https://kafka.apache.org/documentation/#security_sasl_config))
-# @param kafka.sasl.mechanism Kafka sasl mechanism. Supported options: ScramSha512.
+# @param kafka.sasl.mechanism Kafka sasl mechanism. Supported options: Plain, ScramSha256, ScramSha512.
 # @param kafka.sasl.username Kafka sasl username.
 # @param kafka.sasl.password Kafka sasl password.
 # @param kafka.assetTopicsReaderGroupId Kafka consumer group for reading streaming assets data.
@@ -902,7 +947,7 @@ digger:
 # @section Catalog API settings
 
 # @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc
-# @param catalog.key Access key to [Catalog API](https://docs.2gis.com/en/on-premise/search).
+# @param catalog.key Client access key for the Catalog API, issued by Keys API. The key must have the **search** feature enabled.
 
 catalog:
   url: ''
@@ -911,8 +956,9 @@ catalog:
 
 # @section Navigation API settings
 
-# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-back.svc
-# @param navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview).
+# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-front.svc
+# @param navi.key Client access key for the Navigation API, issued by Keys API. The key must have the **isochrone** feature enabled.
+
 
 navi:
   url: ''
@@ -962,3 +1008,8 @@ ecommerce:
   url: ''
   username: ''
   password: ''
+
+# @skip security
+
+security:
+  secretKey: ''

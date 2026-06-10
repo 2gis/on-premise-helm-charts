@@ -1,0 +1,23 @@
+{{- if .Values.ingressRouter.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-ingress-router
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+    search/part: ingress-router
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.service.ingressRouter.ports.http }}
+      targetPort: {{ .Values.ingressRouter.ports.http }}
+    - name: grpc
+      protocol: TCP
+      port: {{ .Values.service.ingressRouter.ports.grpc }}
+      targetPort: {{ .Values.ingressRouter.ports.grpc }}
+  selector:
+    {{- include "search-api-v8.selectorLabels" . | nindent 4 }}
+    search/part: ingress-router
+{{ end }}{{- /* .Values.ingressRouter.enabled */}}

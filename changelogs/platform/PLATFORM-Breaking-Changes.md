@@ -1,5 +1,75 @@
 # Platform Breaking-Changes
 
+## [2.54.0]
+
+### platform
+
+- You need to upgrade keys-backend to version 1.165.1 and license to version 2.6.0 (Release Core 2.7.0)
+
+### search-api-v8
+
+- ingressRouter.debug_headers -> ingressRouter.debugHeaders
+- ingressRouter.debug_routing -> ingressRouter.debugRouting
+- ingressRouter.headers -> ingressRouter.routeHeader
+- head.head.loggerLevel -> head.head.logLevel
+- head.head.loggerFormat -> head.head.logFormat
+- worker.loggerLevel -> worker.logLevel
+- worker.loggerFormat -> worker.logFormat
+- ingressRouter.loggerLevel -> ingressRouter.logLevel
+- ingressRouter.loggerFormat -> ingressRouter.logFormat
+- geodetector.loggerLevel -> geodetector.logLevel
+- geodetector.loggerFormat -> geodetector.logFormat
+- s3.endpoint -> s3.host
+- controller-deployment.yaml update checksum/secret and checksum/configmap
+
+## [2.53.0]
+
+Public Transport API has become part of the Routing API. If you use the Public Transport API, please update the keys service to the [Core:2.6.0](../core/CORE-CHANGELOG.md) release.
+
+## [2.51.0]
+
+### navi-vrp-task-manager
+
+- Added new required parameter: `cities.linkToCitiesFile`
+
+## [2.50.0]
+
+Before upgrading, update the keys service to the [Core:2.4.0](../core/CORE-CHANGELOG.md) release.
+
+### catalog-api
+
+- Replace `http://keys-api` with `http://keys-service-api` in the `keys.url`
+
+### tiles-api
+
+- Replace `http://keys-api` with `http://keys-service-api` in the `proxy.access.url`
+
+### twins-api
+
+- Replace `http://keys-api` with `http://keys-service-api` in the `api.keys.url`
+
+### navi-async-matrix
+
+- Replace `http://keys-api/service/v1/keys` with `http://keys-service-api/service/v1/keys` in the `keys.url`
+
+### navi-router
+
+- Replace `http://keys-api/service/v1/keys` with `http://keys-service-api/service/v1/keys` in the `keys.url`
+
+### navi-vrp-task-manager
+
+- Replace `http://keys-api/service/v1/keys` with `http://keys-service-api/service/v1/keys` in the `keys.url`
+
+### navi-vrp-solver
+
+- Renamed `naviBack` to `naviFront`
+
+## [2.49.0]
+
+### navi-back
+
+- `transmitter` is deprecated. Set `remoteAttractor` instead
+
 ## [2.48.0]
 
 ### navi-back

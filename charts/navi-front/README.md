@@ -4,10 +4,6 @@ Use this Helm chart to deploy Navi-Front service, which is a part of 2GIS's [On-
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-> **Note:**
->
-> All On-Premise services are beta, and under development.
-
 See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn about:
 
 - Architecture of the service.
@@ -63,7 +59,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                        |
 | ------------------ | ----------- | ---------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-front` |
-| `image.tag`        | Tag         | `1.28.1`                     |
+| `image.tag`        | Tag         | `1.29.1`                     |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`               |
 
 ### Navi-Front service settings
@@ -120,6 +116,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                      |
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                 |
 | `ingress.tls`                        | TLS configuration                         | `[]`                     |
+
+### [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+
+| Name                   | Description                                                                                                           | Value   |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------- | ------- |
+| `httpRoute.enabled`    | If HTTPRoute is enabled for the service.                                                                              | `false` |
+| `httpRoute.hostnames`  | List of hostnames served by route.                                                                                    | `[]`    |
+| `httpRoute.parentRefs` | List of parent references (gateways) for HTTPRoute. Defaults: canary and stable gateways in istio-gateways namespace. |         |
+| `httpRoute.matches`    | List of HTTPRouteMatch objects for request routing rules.                                                             |         |
 
 ### Limits
 

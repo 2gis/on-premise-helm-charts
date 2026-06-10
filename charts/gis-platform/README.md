@@ -2,10 +2,6 @@
 
 Use this Helm chart to deploy the GIS Platform service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
 
-> **Note:**
->
-> All On-Premise services are beta, and under development.
-
 See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to learn about:
 
 - Architecture of the service.
@@ -26,9 +22,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ### Common settings
 
-| Name  | Description                                                                 | Value |
-| ----- | --------------------------------------------------------------------------- | ----- |
-| `url` | URL for the GIS platform ex: https://gis-platform.ingress.host **Required** | `""`  |
+| Name               | Description                                                                                                                                         | Value |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `url`              | URL for the GIS platform ex: https://gis-platform.ingress.host **Required**                                                                         | `""`  |
+| `imagePullSecrets` | Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) | `[]`  |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -143,23 +140,23 @@ See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to lea
 
 ### Limits
 
-| Name                                  | Description                          | Value    |
-| ------------------------------------- | ------------------------------------ | -------- |
-| `spcore.resources`                    | **Limits for the SPCore service**    |          |
-| `spcore.resources.requests.cpu`       | A CPU request.                       | `800m`   |
-| `spcore.resources.requests.memory`    | A memory request.                    | `4096Mi` |
-| `spcore.resources.limits.cpu`         | A CPU limit.                         | `800m`   |
-| `spcore.resources.limits.memory`      | A memory limit.                      | `4096Mi` |
-| `portal.resources`                    | **Limits for the Portal service**    |          |
-| `portal.resources.requests.cpu`       | A CPU request.                       | `100m`   |
-| `portal.resources.requests.memory`    | A memory request.                    | `512Mi`  |
-| `portal.resources.limits.cpu`         | A CPU limit.                         | `100m`   |
-| `portal.resources.limits.memory`      | A memory limit.                      | `512Mi`  |
-| `zookeeper.resources`                 | **Limits for the ZooKeeper service** |          |
-| `zookeeper.resources.requests.cpu`    | A CPU request.                       | `100m`   |
-| `zookeeper.resources.requests.memory` | A memory request.                    | `512Mi`  |
-| `zookeeper.resources.limits.cpu`      | A CPU limit.                         | `200m`   |
-| `zookeeper.resources.limits.memory`   | A memory limit.                      | `512Mi`  |
+| Name                                  | Description                          | Value   |
+| ------------------------------------- | ------------------------------------ | ------- |
+| `spcore.resources`                    | **Limits for the SPCore service**    |         |
+| `spcore.resources.requests.cpu`       | A CPU request.                       | `800m`  |
+| `spcore.resources.requests.memory`    | A memory request.                    | `4Gi`   |
+| `spcore.resources.limits.cpu`         | A CPU limit.                         | `800m`  |
+| `spcore.resources.limits.memory`      | A memory limit.                      | `4Gi`   |
+| `portal.resources`                    | **Limits for the Portal service**    |         |
+| `portal.resources.requests.cpu`       | A CPU request.                       | `100m`  |
+| `portal.resources.requests.memory`    | A memory request.                    | `512Mi` |
+| `portal.resources.limits.cpu`         | A CPU limit.                         | `100m`  |
+| `portal.resources.limits.memory`      | A memory limit.                      | `512Mi` |
+| `zookeeper.resources`                 | **Limits for the ZooKeeper service** |         |
+| `zookeeper.resources.requests.cpu`    | A CPU request.                       | `100m`  |
+| `zookeeper.resources.requests.memory` | A memory request.                    | `512Mi` |
+| `zookeeper.resources.limits.cpu`      | A CPU limit.                         | `200m`  |
+| `zookeeper.resources.limits.memory`   | A memory limit.                      | `512Mi` |
 
 
 ## Maintainers

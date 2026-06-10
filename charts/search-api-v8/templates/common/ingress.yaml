@@ -1,0 +1,67 @@
+{{- if .Values.ingress.enabled -}}
+  {{- $ctx := dict }}
+  {{- if .Values.ingressRouter.enabled }}
+    {{- $_ := set $ctx "fullName" (printf "%s-ingress-router" (include "search-api-v8.fullname" .)) }}
+    {{- $_ := set $ctx "svcPort" .Values.service.ingressRouter.ports.http }}
+  {{- else }}
+    {{- $_ := set $ctx "fullName" (printf "%s-head" (include "search-api-v8.fullname" .)) }}
+    {{- $_ := set $ctx "svcPort" .Values.service.head.port }}
+  {{- end }}{{- /* if not .Values.ingressRouter.enabled */}}
+{{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
+  {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
+  {{- $_ := set .Values.ingress.annotations "kubernetes.io/ingress.class" .Values.ingress.className}}
+  {{- end }}{{- /* not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") */}}
+{{- end }}{{- /* if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) */}}
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}{{- /* semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion */}}
+kind: Ingress
+metadata:
+  name: {{ $ctx.fullName }}
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}{{- /* .Values.ingress.annotations */}}
+spec:
+  {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}{{- /* .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) */}}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}{{- /* .hosts */}}
+      secretName: {{ .secretName }}
+    {{- end }}{{- /* .Values.ingress.tls */}}
+  {{- end }}{{- /* if .Values.ingress.tls */}}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: {{ .pathType }}
+            {{- end }}{{- /* if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) */}}
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $ctx.fullName }}
+                port:
+                  number: {{ $ctx.svcPort }}
+              {{- else }}
+              serviceName: {{ $ctx.fullName }}
+              servicePort: {{ $ctx.svcPort }}
+              {{- end }}{{- /* semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion */}}
+          {{- end }}{{- /* range .paths */}}
+    {{- end }}{{- /* range .Values.ingress.hosts */}}
+{{- end }}{{- /* if .Values.ingress.enabled */}}

@@ -33,6 +33,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
+{{- define "navi-async-matrix.mergerlabels" -}}
+app.kubernetes.io/name: {{ include "navi-async-matrix.name" . }}-merger
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
 {{/*
 Create the name of the service account to use
 */}}
@@ -208,7 +213,7 @@ Name for psql intermediate volume for copy secrets and change permissions
 */ -}}
 
 {{- define "navi-async-matrix.fullname-psql-raw" -}}
-{{- printf "%s-psql-raw" (include "navi-async-matrix.fullname" .) -}}
+{{- printf "%s-psql-raw" (include "generic-chart.fullname" .) -}}
 {{- end }}
 
 {{- /*
@@ -216,7 +221,7 @@ Name for psql secret and volume
 */ -}}
 
 {{- define "navi-async-matrix.fullname-psql" -}}
-{{- printf "%s-psql" (include "navi-async-matrix.fullname" .) -}}
+{{- printf "%s-psql" (include "generic-chart.fullname" .) -}}
 {{- end }}
 
 {{/*

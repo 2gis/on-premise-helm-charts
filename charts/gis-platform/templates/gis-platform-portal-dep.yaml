@@ -17,10 +17,14 @@ spec:
       labels:
         {{- include "gis-platform-portal.selectorLabels" . | nindent 8 }}
     spec:
-{{- if .Values.portal.nodeSelector }}
+      {{- if .Values.portal.nodeSelector }}
       nodeSelector:
-{{ toYaml .Values.portal.nodeSelector | indent 8 }}
-{{- end }}
+      {{ toYaml .Values.portal.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- if .Values.portal.priorityClassName }}
       priorityClassName: {{ .Values.portal.priorityClassName }}
       {{- end }}

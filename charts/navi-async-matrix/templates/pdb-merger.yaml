@@ -1,0 +1,11 @@
+{{- define "merger.pdb" }}
+metadata:
+  name: {{ include "generic-chart.fullname" . }}-merger
+{{- end }}
+{{ if .Values.dm.merger.pdb.enabled }}
+{{- template "generic-chart.merge" (list
+    (merge (dict "pdbctx" .Values.dm.merger.pdb) .)
+    "merger.pdb"
+    "generic-chart.pdb.tpl"
+) }}
+{{- end }}

@@ -1,0 +1,23 @@
+{{- if .Values.head.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-head
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.head.type }}
+  clusterIP: None
+  ports:
+    - port: {{ .Values.service.head.ports.grpc }}
+      targetPort: {{ .Values.head.head.ports.grpc }}
+      protocol: TCP
+      name: grpc
+    - port: {{ .Values.service.head.ports.http }}
+      targetPort: {{ .Values.head.head.ports.http }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "search-api-v8.selectorLabels" . | nindent 4 }}
+    search/part: head
+{{- end }}{{- /* .Values.head.enabled */}}

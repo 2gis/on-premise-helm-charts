@@ -52,4 +52,8 @@ spec:
           nodeSelector:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
 {{- end }}

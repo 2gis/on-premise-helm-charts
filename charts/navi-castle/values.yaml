@@ -134,11 +134,11 @@ resources: {}
 # @extra castle.startupProbe [nullable] Settings for startup probes
 # @param castle.startupProbe.periodSeconds Check period for startup probes.
 # @param castle.startupProbe.failureThreshold Threshold for startup probes.
-# @extra castle.storePeriod [nullable] Retention period for the corresponding data if enabled, ref. `cron`, `init` and `rtr` sections. Supported values: `day`, `month`, `week` or a specific number of days.
-# @param castle.storePeriod.import Retention period for `import` job data, ref. `cron/init.enabled.import`
-# @param castle.storePeriod.restriction Retention period for `restriction` job data, ref. `cron/init.enabled.restriction`
-# @param castle.storePeriod.restrictionImport Retention period for `restrictionImport` job data, ref. `cron/init.enabled.restrictionImport`
-# @param castle.storePeriod.rtr Retention period for `rtr` data, ref. `rtr.enabled`
+# @extra castle.storePeriod [nullable] Retention period for the corresponding data if enabled, ref. `cron`, `init` and `rtr` sections. Supported values: `day`, `month`, `week` or a specific number of days. Includes retention of the main dataset plus 3 additional backup copies.
+# @param castle.storePeriod.import Retention period for `import` job data, ref. `cron/init.enabled.import`. Includes retention of the main dataset plus 3 additional backup copies.
+# @param castle.storePeriod.restriction Retention period for `restriction` job data, ref. `cron/init.enabled.restriction`. Includes retention of the main dataset plus 3 additional backup copies.
+# @param castle.storePeriod.restrictionImport Retention period for `restrictionImport` job data, ref. `cron/init.enabled.restrictionImport`. Includes retention of the main dataset plus 3 additional backup copies.
+# @param castle.storePeriod.rtr Retention period for `rtr` data, ref. `rtr.enabled`. Includes retention of the main dataset plus 3 additional backup copies.
 
 castle:
   image:
@@ -176,7 +176,7 @@ nginx:
   port: 8080
   image:
     repository: 2gis-on-premise/navi-front
-    tag: 1.28.1
+    tag: 1.29.1
   nodeHeader: false
   locationsBlock: ''
   customConfigPath: ''
@@ -230,6 +230,9 @@ init:
 # @param persistentVolume.storageClass Volume [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/).
 # @param persistentVolume.size Volume size.
 # @param persistentVolume.type Volume type `pvc` or `ephemeral`.
+# @extra persistentVolume.claimRetention Optional [PersistentVolumeClaim retention policy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention) for the StatefulSet volume claim template.
+# @extra persistentVolume.claimRetention.whenDeleted What happens to PVCs created from the volume claim template when the StatefulSet is deleted (`Retain` or `Delete`).
+# @extra persistentVolume.claimRetention.whenScaled What happens to PVCs when the StatefulSet replica count is scaled down (`Retain` or `Delete`).
 
 persistentVolume:
   enabled: false
@@ -272,12 +275,34 @@ persistentVolume:
 # @param rtr.puzzleSegments.serverUrl URL puzzle segments.
 # @param rtr.webapi.baseDir Base dir on webapi.
 # @param rtr.webapi.serverUrl URL webapi.
+# @param rtr.s3.enabled Enable S3 source for restriction_json.
+# @param rtr.s3.host S3 endpoint URL, ex: http://restriction-s3.host.
+# @param rtr.s3.bucket S3 bucket name.
+# @param rtr.s3.region S3 region.
+# @param rtr.s3.accessKey S3 access key for accessing the bucket.
+# @param rtr.s3.secretKey S3 secret key for accessing the bucket.
+# @param rtr.s3.secure Establish secure channel
+# @param rtr.restrictionJson.remoteDir Remote directory for restriction_json. Empty for HTTP source, `restrictions` for S3.
+# @param rtr.restrictionJson.header HTTP header used for change detection.
+# @param rtr.restrictionJson.timeout Queries request timeout in seconds.
 
 rtr:
   enabled: false
   http:
     baseDir: export-restrictions-json
     serverUrl: ''
+  s3:
+    enabled: false
+    host: ''
+    bucket: ''
+    region: ''
+    accessKey: ''
+    secretKey: ''
+    secure: true
+  restrictionJson:
+    remoteDir: ''
+    header: 'Last-Modified'
+    timeout: 30
   kafka:
     groupId: castle-rtr
     properties:

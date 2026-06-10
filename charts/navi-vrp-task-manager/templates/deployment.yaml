@@ -142,6 +142,8 @@ spec:
               value: {{ .Values.kafka.statusTopic | quote }}
             - name: KAFKA__CONSUMER_DM__TOPIC
               value: {{ .Values.kafka.messageBusTopic | quote }}
+            - name: CITIES__LINK_TO_CITIES_FILE
+              value: {{ required "A valid Values.cities.linkToCitiesFile entry required" .Values.cities.linkToCitiesFile | quote }}
             {{- if .Values.multiDc.enabled }}
             - name: APP__LOCATION
               value: {{ .Values.multiDc.location | quote }}

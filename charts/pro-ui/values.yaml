@@ -27,7 +27,7 @@ strategy:
 # @param image.tag Tag
 image:
   repository: 2gis-on-premise/pro-ui
-  tag: 4.43.0
+  tag: 4.60.0
 
 # @section Common deployment settings
 
@@ -315,16 +315,16 @@ stylesImporter:
   name: styles-importer
   image:
     repository: 2gis-on-premise/pro-importer
-    tag: 2.46.2
+    tag: 2.61.0
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
   nodeSelector: {}
   resources:
     requests:
       cpu: 700m
-      memory: 768M
+      memory: 768Mi
     limits:
       cpu: 1000m
-      memory: 8Gi
+      memory: 8192Mi
   maxParallelJobs: 1
   startOnDeploy: false

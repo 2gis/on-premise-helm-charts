@@ -1,15 +1,17 @@
 {{- if $.Values.importer.enabled }}
-{{- range $_, $type := $.Values.types }}
+{{- range $_, $type := (include "tiles.expandedTypes" $ | fromYaml).list }}
 {{- if (not $type.importAndCleanerDisabled) }}
 ---
 
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name:  {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-importer-job
+  name:  {{ include "tiles.fullname" $ }}-{{ printf "%s-%s" $type.kind ($type.subtype | default "regular") | sha256sum | trunc 8 }}-importer-job
   labels:
     {{- include "tiles.labels" $ | nindent 4 }}
     {{- include "tiles.importer.label" $ | nindent 4 }}
+    tiles-kind: {{ $type.kind }}
+    tiles-subtype: {{ .subtype | default "regular" }}
   annotations:
     {{- include "importer.removable-hook-annotations" $ | nindent 4 }}
     "helm.sh/hook-weight": "2" # after cleaning
@@ -18,10 +20,12 @@ spec:
   backoffLimit: 0
   template:
     metadata:
-      name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-importer
+      name: {{ include "tiles.fullname" $ }}-{{ printf "%s-%s" $type.kind ($type.subtype | default "regular") | sha256sum | trunc 8 }}-importer
       labels:
         {{- include "tiles.selectorLabels" $ | nindent 8 }}
         {{- include "tiles.importer.label" $ | nindent 8 }}
+        tiles-kind: {{ $type.kind }}
+        tiles-subtype: {{ $type.subtype | default "regular" }}
     spec:
       {{- with $.Values.podSecurityContext }}
       securityContext:
@@ -35,7 +39,7 @@ spec:
 
         - name: config-volume
           configMap:
-            name: {{ include "tiles.fullname" $ }}-{{ $type.kind }}-{{ $type.subtype | default "regular" }}-import
+            name: {{ include "tiles.fullname" $ }}-{{ printf "%s-%s" $type.kind ($type.subtype | default "regular") | sha256sum | trunc 8 }}-import
 
         {{- if eq (include "tiles.tls.mountSecret" $) "true" }}
         - name: cassandra-tls
@@ -59,7 +63,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with $.Values.importer.imagePullSecrets }}
+      {{- with $.Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}

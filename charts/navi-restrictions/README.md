@@ -4,10 +4,6 @@ Use this Helm chart to deploy Restrictions API service, which is a part of 2GIS'
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-> **Note:**
->
-> All On-Premise services are beta, and under development.
-
 See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to learn about:
 
 - Architecture of the service.

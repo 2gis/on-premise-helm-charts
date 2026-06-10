@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "navi-async-matrix.fullname" . }}
+  name: {{ include "generic-chart.fullname" . }}
   {{- with .Values.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -15,7 +15,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  serviceName: {{ include "navi-async-matrix.fullname" . }}
+  serviceName: {{ include "generic-chart.fullname" . }}
   {{- if .Values.updateStrategy }}
   updateStrategy:
     {{- toYaml .Values.updateStrategy | nindent 4 }}
@@ -42,6 +42,9 @@ spec:
         {{- include "navi-async-matrix.labels" . | nindent 8 }}
       {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if and .Values.pdb.enabled .Values.pdb.component }}
+        app.kubernetes.io/component: {{ .Values.pdb.component }}
       {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -70,21 +73,21 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       volumes:
-        - name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
+        - name: {{ printf "%s-configmap" (include "generic-chart.fullname" .) | quote }}
           configMap:
-            name: {{ printf "%s-configmap" (include "navi-async-matrix.fullname" .) | quote }}
+            name: {{ printf "%s-configmap" (include "generic-chart.fullname" .) | quote }}
       {{- $kafkaVolumeMounted := (
               .Values.kafka.fileProperties |
               or (.Values.kafka.consumerOverrides).fileProperties |
               or (.Values.kafka.producerOverrides).fileProperties
             ) }}
       {{- if $kafkaVolumeMounted }}
-        - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+        - name: {{ printf "%s-consumer" (include "generic-chart.fullname" .) | quote }}
           secret:
-            secretName: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
-        - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+            secretName: {{ printf "%s-consumer" (include "generic-chart.fullname" .) | quote }}
+        - name: {{ printf "%s-producer" (include "generic-chart.fullname" .) | quote }}
           secret:
-            secretName: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+            secretName: {{ printf "%s-producer" (include "generic-chart.fullname" .) | quote }}
       {{- end }}
       {{- if .Values.db.tls.enabled }}
         - name: {{ include "navi-async-matrix.fullname-psql-raw" . | quote }}
@@ -94,9 +97,9 @@ spec:
           emptyDir: {}
       {{- end }}
       {{- if .Values.customCAs.bundle }}
-        - name: {{ include "navi-async-matrix.fullname" . }}-ca
+        - name: {{ include "generic-chart.fullname" . }}-ca
           configMap:
-            name: {{ include "navi-async-matrix.fullname" . }}-ca
+            name: {{ include "generic-chart.fullname" . }}-ca
       {{- end }}
       initContainers:
         {{- if .Values.db.tls.enabled }}
@@ -170,17 +173,17 @@ spec:
             {{- end }}
           volumeMounts:
           {{- if $kafkaVolumeMounted }}
-          - name: {{ printf "%s-consumer" (include "navi-async-matrix.fullname" .) | quote }}
+          - name: {{ printf "%s-consumer" (include "generic-chart.fullname" .) | quote }}
             mountPath: {{ printf "%s/secret/consumer/" .Values.dm.configFilepath | quote }}
-          - name: {{ printf "%s-producer" (include "navi-async-matrix.fullname" .) | quote }}
+          - name: {{ printf "%s-producer" (include "generic-chart.fullname" .) | quote }}
             mountPath: {{ printf "%s/secret/producer/" .Values.dm.configFilepath | quote }}
           {{- end }}
           {{- if .Values.db.tls.enabled }}
-          - name: {{ printf "%s-psql" (include "navi-async-matrix.fullname" .) | quote }}
+          - name: {{ printf "%s-psql" (include "generic-chart.fullname" .) | quote }}
             mountPath: {{ printf "%s/secret/psql" .Values.dm.configFilepath | quote }}
           {{- end }}
           {{- if .Values.customCAs.bundle }}
-          - name: {{ include "navi-async-matrix.fullname" . }}-ca
+          - name: {{ include "generic-chart.fullname" . }}-ca
             mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
             subPath: custom-ca.crt
           {{- end }}
@@ -237,17 +240,23 @@ spec:
             - name: DM_ASYNC_SERVICE_FIND_PLATFORM_TOPIC_RULES
               value: {{ .Values.kafka.findPlatformTopicRules | mustToJson | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ATTRACT_TOPIC
-              value: {{ required "A valid kafka.attractTopic entry required" .Values.kafka.attractTopic | quote }}
+              value: {{ .Values.kafka.attractTopic | default "" | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ONE_TO_MANY_TOPIC
               value: {{ required "A valid kafka.oneToManyTopic entry required" .Values.kafka.oneToManyTopic | quote }}
             - name: DM_ASYNC_SERVICE_ATTRACT_TOPIC_RULES
-              value: {{ required "A valid kafka.attractTopicRules entry required" .Values.kafka.attractTopicRules | mustToJson | quote }}
+              value: {{ .Values.kafka.attractTopicRules | mustToJson | quote }}
             {{- if .Values.kafka.vrpStatusTopic }}
             - name: DM_ASYNC_SERVICE_SUBSCRIBER_TOPIC
               value: {{ .Values.kafka.vrpStatusTopic | quote }}
             {{- end }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_ARCHIVE_RESPONSE_TOPIC
               value: {{ required "A valid kafka.mergerStatusTopic entry required" .Values.kafka.mergerStatusTopic | quote }}
+            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__MAX_MESSAGE_SIZE_BYTES
+              value: {{ .Values.kafka.maxMessageSizeBytes | int | quote }}
+            {{- if .Values.kafka.compressionType }}
+            - name: DM_ASYNC_SERVICE_KAFKA_PRODUCER_SETTING__COMPRESSION_TYPE
+              value: {{ .Values.kafka.compressionType | quote }}
+            {{- end }}
             - name: DM_ASYNC_SERVICE_ARCHIVER_K8S_SETTING__CONFIG_TYPE
               value: default
             - name: DM_ASYNC_SERVICE_COMPOSITE_TASK_TIMEOUT_IN_SECONDS
@@ -258,7 +267,7 @@ spec:
             - name: DM_ASYNC_SERVICE_REDIRECT_HEADER
               value: {{ .Values.multiDc.redirectHeader | default "" | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ATTRACT_TOPIC
-              value: {{ required "A valid multiDc.secondaryTopics.attractTopic entry required" .Values.multiDc.secondaryTopics.attractTopic | quote }}
+              value: {{ .Values.multiDc.secondaryTopics.attractTopic | default "" | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ONE_TO_MANY_TOPIC
               value: {{ required "A valid multiDc.secondaryTopics.oneToManyTopic entry required" .Values.multiDc.secondaryTopics.oneToManyTopic | quote }}
             - name: DM_ASYNC_SERVICE_KAFKA_CONSUMER_SETTING__KAFKA_CONSUMER_SYNC_ARCHIVE_RESPONSE_TOPIC
@@ -276,6 +285,12 @@ spec:
             - name: DM_ASYNC_SERVICE_BSS__VERSION
               value: {{ .Values.stat.version | quote }}
             {{- end }}
+            {{- if .Values.sentry.enabled }}
+            - name: DM_ASYNC_SERVICE_SENTRY__DSN
+              value: {{ .Values.sentry.address | quote }}
+            - name: DM_ASYNC_SERVICE_SENTRY__ENVIRONMENT
+              value: {{ .Values.sentry.environment | quote }}
+            {{- end }}
             {{- range $kafkaRole, $overridesProperty := (dict
                   "PRODUCER" "producerOverrides"
                   "CONSUMER" "consumerOverrides"
@@ -285,7 +300,7 @@ spec:
                   "kafka" $.Values.kafka
                   "overrides" ($overridesProperty | get $.Values.kafka)
                   "secretname" (print
-                      (include "navi-async-matrix.fullname" $)
+                      (include "generic-chart.fullname" $)
                       "-"
                       (lower $kafkaRole)
                     )
@@ -300,23 +315,25 @@ spec:
             - name: DM_ASYNC_SERVICE_DB_DSN
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  name: {{ include "generic-chart.fullname" . | quote }}
                   key: dbDsn
             {{- if .Values.db.expirationSec }}
+            {{- if not .Values.cronjob.cleanup.enabled }}
             - name: DM_ASYNC_SERVICE_DB_EXPIRATION_IN_SEC
               value: {{ .Values.db.expirationSec | quote }}
             - name: DM_ASYNC_SERVICE_DB_EXPIRATION_CHECK_PERIOD
               value: {{ .Values.db.expirationPeriodSec | quote }}
-            {{- end }}
+            {{- end }}{{/* not .Values.cronjob.cleanup.enabled */}}
+            {{- end }}{{/* .Values.db.expirationSec */}}
             - name: DM_ASYNC_SERVICE_STORAGE_SETTING__S3_STORAGE_CONNECTION__AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  name: {{ include "generic-chart.fullname" . | quote }}
                   key: s3key
             - name: DM_ASYNC_SERVICE_KMS__DM_ASYNC_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "navi-async-matrix.fullname" . | quote }}
+                  name: {{ include "generic-chart.fullname" . | quote }}
                   key: dmApiKey
             {{- if .Values.customCAs.bundle }}
             - name: SSL_CERT_FILE

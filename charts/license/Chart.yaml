@@ -3,8 +3,8 @@ name: license
 type: application
 description: A Helm chart for Kubernetes to deploy License service
 
-version: 2.3.0
-appVersion: 2.4.1
+version: 2.7.0
+appVersion: 2.6.0
 
 maintainers:
 - name: 2gis

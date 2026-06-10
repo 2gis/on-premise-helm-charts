@@ -2,10 +2,6 @@
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-> **Note:**
->
-> All On-Premise services are beta, and under development.
-
 See the [documentation](https://docs.2gis.com/en/on-premise/architecture/services/license) to learn about:
 
 - Architecture of the service.
@@ -54,7 +50,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 | Name               | Description  | Value                     |
 | ------------------ | ------------ | ------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/license` |
-| `image.tag`        | Tag.         | `2.4.1`                   |
+| `image.tag`        | Tag.         | `2.6.0`                   |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`            |
 
 ### License service application settings

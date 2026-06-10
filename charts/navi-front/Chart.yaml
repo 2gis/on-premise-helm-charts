@@ -5,8 +5,8 @@ type: application
 keywords:
 - navi
 - front
-version: 2.48.0
-appVersion: 1.28.1
+version: 2.54.0
+appVersion: 1.29.1
 dependencies:
 - name: generic-chart
   version: '*'

@@ -93,7 +93,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.api.imagePullSecrets }}
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
