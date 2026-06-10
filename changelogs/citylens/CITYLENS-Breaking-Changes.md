@@ -1,5 +1,17 @@
 # Citylens Breaking-Changes
 
+## [2.3.0]
+
+### citylens
+
+- Added new required parameters:
+  - `.Values.routes.endpointInternalApiKey.users`
+  - `.Values.routes.adminCredentials.cookieSigningKey`
+
+- Introduced a new role model. After upgrading, the following manual steps are required:
+  - Open the admin panel at `https://<.Values.routes.api.ingress.hosts[0].host>/internal/admin` (credentials: `.Values.routes.adminCredentials`) and assign the **Owner** role to at least one user.
+  - In the admin panel, go to **Hangfire Dashboard → Recurring Jobs** and manually trigger the **`MigrateUserRolesJob`** job to migrate existing users to the new role model.
+
 ## [2.2.0]
 
 ### citylens
