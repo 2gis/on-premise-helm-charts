@@ -1,10 +1,10 @@
 citylens
 	citylens-api:1.18.3
 	citylens-database:1.18.0
-	citylens-realtime-data-api:1.6.5
-	citylens-routes-api:1.6.5
+	citylens-realtime-data-api:2.1.6
+	citylens-routes-api:2.1.6
 	citylens-web:1.18.3
-	citylens-worker-service:1.6.5
+	citylens-worker-service:2.1.6
 	citylens-workers:1.18.3
 citylens-routes-ui
-	citylens-routes-ui:1.6.2
+	citylens-routes-ui:2.2.0
