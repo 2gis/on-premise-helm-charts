@@ -29,14 +29,15 @@ data:
 
       sendfile on;
       tcp_nopush on;
-      keepalive_timeout 65;
+      keepalive_timeout 10;
+      send_timeout 10;
 
       include /etc/nginx/conf.d/*.conf;
     }
 
   default.conf.template: |
     server {
-      listen 3000;
+      listen {{ required "A valid .Values.containerPort required" .Values.containerPort }};
       root /usr/share/nginx/html;
       error_page 500 502 503 504 /50x.html;
       gzip_static on;
