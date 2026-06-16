@@ -166,7 +166,7 @@ resources:
 
 # @extra app.access.stat **Statistics receiver settings**
 # @param app.access.stat.enabled If statistics receiver is enabled.
-# @param app.access.stat.url Statistics receiver endpoint url, ex: http(s)://host:port/path. **Required**
+# @param app.access.stat.url Statistics receiver endpoint url, ex: http(s)://stat-receiver/bss/3. **Required if** `app.access.stat.enabled: true`
 
 app:
   apiPort: 8080
@@ -198,8 +198,8 @@ tiles:
 
 # @section Keys service settings
 
-# @param keys.url URL of the Keys API service, ex: http://keys-service-api.svc **Required**
-# @param keys.token Keys service API key **Required**
+# @param keys.url URL of the Keys API service, ex: http://keys-service-api.svc **Required if** `app.access.enabled: true`
+# @param keys.token Keys service API key **Required if** `app.access.enabled: true`
 # @param keys.syncPeriod Duration how often static maps API should try to update keys data.
 
 keys:
