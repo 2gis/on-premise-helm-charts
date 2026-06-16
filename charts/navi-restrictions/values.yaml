@@ -119,7 +119,7 @@ api:
   image:
     repository: 2gis-on-premise/navi-restrictions-api
     pullPolicy: IfNotPresent
-    tag: 1.0.2
+    tag: 1.0.3
 
   resources:
     limits:
@@ -249,7 +249,7 @@ cron:
   image:
     repository: 2gis-on-premise/navi-restrictions-syncer
     pullPolicy: IfNotPresent
-    tag: 1.0.1
+    tag: 1.0.2
 
   resources:
     limits:
