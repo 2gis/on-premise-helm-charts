@@ -1,0 +1,19 @@
+---
+bases:
+- ../common.yaml
+---
+
+releases:
+  - name: "{{ .Environment.Name }}-license"
+    chart: 2gis-on-premise/license
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    version: "{{ .Values.version }}"
+    missingFileHandler: Info
+    labels:
+      service: license
+    values:
+      - ../values/dgctl/_common.gotmpl
+      - ../values/dgctl/{{ .Environment.Name }}.yaml
+      - ../values/license/_common.gotmpl
+      - ../values/license/{{ .Environment.Name }}.yaml

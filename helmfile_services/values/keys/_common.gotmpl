@@ -1,0 +1,56 @@
+api:
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+    - host: keys-api.{{ .Values.domain }}
+      paths:
+      - path: /
+        pathType: Prefix
+    tls:
+    - hosts:
+      - keys-api.{{ .Values.domain }}
+      secretName: {{ .Values.tlsSecret }}
+
+admin:
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+    - host: keys-admin.{{ .Values.domain }}
+      paths:
+      - path: /
+        pathType: Prefix
+    tls:
+    - hosts:
+      - keys-admin.{{ .Values.domain }}
+      secretName: {{ .Values.tlsSecret }}
+
+postgres:
+  ro:
+    host: '!!!'
+    port: 5432
+    timeout: 3s
+    name: '!!!'
+    schema: '!!!'
+    username: '!!!'
+    password: '!!!'
+
+  rw:
+    host: '!!!'
+    port: 5432
+    timeout: 3s
+    name: '!!!'
+    schema: '!!!'
+    username: '!!!'
+    password: '!!!'
+
+kafka:
+  audit:
+    bootstrapServers: '!!!'
+    username: '!!!'
+    password: '!!!'
+    topic: '!!!'
+    produce:
+      retryCount: 5
+      idempotentWrite: true
