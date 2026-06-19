@@ -130,7 +130,7 @@ ingress:
       pathType: Prefix
   tls: []
   # - hosts:
-  #   - license.example.com
+  #   - staticmaps.example.com
   #   secretName: secret.tls
 
 # @section Limits
