@@ -83,13 +83,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Limits
 
-| Name                        | Description                                 | Value       |
-| --------------------------- | ------------------------------------------- | ----------- |
-| `resources`                 | Container resources requirements structure. | `{}`        |
-| `resources.requests.cpu`    | CPU request, recommended value `100m`.      | `undefined` |
-| `resources.requests.memory` | Memory request, recommended value `128Mi`.  | `undefined` |
-| `resources.limits.cpu`      | CPU limit, recommended value `1000m`.       | `undefined` |
-| `resources.limits.memory`   | Memory limit, recommended value `512Mi`.    | `undefined` |
+| Name                        | Description                                                                                                                               | Value       |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `resources`                 | Default container resources requirements structure. Used by `nginx.resources`, `cron.resources`, and `rtr.resources` when they are empty. | `{}`        |
+| `resources.requests.cpu`    | CPU request, recommended value `100m`.                                                                                                    | `undefined` |
+| `resources.requests.memory` | Memory request, recommended value `128Mi`.                                                                                                | `undefined` |
+| `resources.limits.cpu`      | CPU limit, recommended value `1000m`.                                                                                                     | `undefined` |
+| `resources.limits.memory`   | Memory limit, recommended value `512Mi`.                                                                                                  | `undefined` |
 
 ### Navi-Castle service settings
 
@@ -97,7 +97,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `castle.image.repository`              | Navi-Castle service image repository.                                                                                                                                                                                                          | `2gis-on-premise/navi-castle` |
 | `castle.image.pullPolicy`              | Navi-Castle service pull policy.                                                                                                                                                                                                               | `IfNotPresent`                |
-| `castle.image.tag`                     | Navi-Castle service image tag.                                                                                                                                                                                                                 | `1.9.12`                      |
+| `castle.image.tag`                     | Navi-Castle service image tag.                                                                                                                                                                                                                 | `1.10.8`                      |
 | `castle.castleDataPath`                | Path to the data directory.                                                                                                                                                                                                                    | `/opt/castle/data`            |
 | `castle.excludeProjects`               | Array of project labels to exclude                                                                                                                                                                                                             | `[]`                          |
 | `castle.restrictions`                  | Section ignored if castle.restriction.enabled=false                                                                                                                                                                                            |                               |
@@ -117,14 +117,19 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Front settings
 
-| Name                     | Description                                                               | Value                        |
-| ------------------------ | ------------------------------------------------------------------------- | ---------------------------- |
-| `nginx.port`             | HTTP port on which Navi-Front will be listening.                          | `8080`                       |
-| `nginx.image.repository` | Navi-Front image repository.                                              | `2gis-on-premise/navi-front` |
-| `nginx.image.tag`        | Navi-Front image tag.                                                     | `1.28.1`                     |
-| `nginx.nodeHeader`       | Enable header with node name (X-Node).                                    | `false`                      |
-| `nginx.locationsBlock`   | Optional nginx config block with additional locations                     | `""`                         |
-| `nginx.customConfigPath` | Path to custom nginx config file. If set, default config will be ignored. | `""`                         |
+| Name                              | Description                                                                                 | Value                        |
+| --------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------- |
+| `nginx.port`                      | HTTP port on which Navi-Front will be listening.                                            | `8080`                       |
+| `nginx.image.repository`          | Navi-Front image repository.                                                                | `2gis-on-premise/navi-front` |
+| `nginx.image.tag`                 | Navi-Front image tag.                                                                       | `1.29.1`                     |
+| `nginx.nodeHeader`                | Enable header with node name (X-Node).                                                      | `false`                      |
+| `nginx.locationsBlock`            | Optional nginx config block with additional locations                                       | `""`                         |
+| `nginx.customConfigPath`          | Path to custom nginx config file. If set, default config will be ignored.                   | `""`                         |
+| `nginx.resources`                 | Container resources requirements for `castle-nginx`. Empty value falls back to `resources`. | `{}`                         |
+| `nginx.resources.requests.cpu`    | CPU request for `castle-nginx`.                                                             | `undefined`                  |
+| `nginx.resources.requests.memory` | Memory request for `castle-nginx`.                                                          | `undefined`                  |
+| `nginx.resources.limits.cpu`      | CPU limit for `castle-nginx`.                                                               | `undefined`                  |
+| `nginx.resources.limits.memory`   | Memory limit for `castle-nginx`.                                                            | `undefined`                  |
 
 ### Cron settings
 
@@ -140,6 +145,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `cron.successfulJobsHistoryLimit` | How many completed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits). | `3`           |
 | `cron.failedJobsHistoryLimit`     | How many failed jobs should be kept. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).    | `3`           |
 | `cron.prometheusPort`             | Container port for supercronic prometheus                                                                                                                    | `9476`        |
+| `cron.resources`                  | Container resources requirements for `castle-cron`. Empty value falls back to `resources`.                                                                   | `{}`          |
+| `cron.resources.requests.cpu`     | CPU request for `castle-cron`.                                                                                                                               | `undefined`   |
+| `cron.resources.requests.memory`  | Memory request for `castle-cron`.                                                                                                                            | `undefined`   |
+| `cron.resources.limits.cpu`       | CPU limit for `castle-cron`.                                                                                                                                 | `undefined`   |
+| `cron.resources.limits.memory`    | Memory limit for `castle-cron`.                                                                                                                              | `undefined`   |
 
 ### Init settings
 
@@ -202,6 +212,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `rtr.restrictionJson.remoteDir`           | Remote directory for restriction_json. Empty for HTTP source, `restrictions` for S3.                                              | `""`                                            |
 | `rtr.restrictionJson.header`              | HTTP header used for change detection.                                                                                            | `Last-Modified`                                 |
 | `rtr.restrictionJson.timeout`             | Queries request timeout in seconds.                                                                                               | `30`                                            |
+| `rtr.resources`                           | Container resources requirements for `castle-rtr`. Empty value falls back to `resources`.                                         | `{}`                                            |
+| `rtr.resources.requests.cpu`              | CPU request for `castle-rtr`.                                                                                                     | `undefined`                                     |
+| `rtr.resources.requests.memory`           | Memory request for `castle-rtr`.                                                                                                  | `undefined`                                     |
+| `rtr.resources.limits.cpu`                | CPU limit for `castle-rtr`.                                                                                                       | `undefined`                                     |
+| `rtr.resources.limits.memory`             | Memory limit for `castle-rtr`.                                                                                                    | `undefined`                                     |
 
 ### customCAs **Custom Certificate Authority**
 
