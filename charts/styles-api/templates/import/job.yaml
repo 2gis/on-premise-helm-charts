@@ -1,0 +1,54 @@
+{{- if .Values.stylesImport.startOnDeploy }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "styles.import.name" . }}
+  labels:
+    {{- include "styles.import.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "10"
+spec:
+  backoffLimit: {{ .Values.stylesImport.backoffLimit }}
+  template:
+    metadata:
+      name: {{ include "styles.import.name" . }}
+      labels:
+        {{- include "styles.import.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      {{- if .Values.customCAs.bundle }}
+      volumes:
+        {{- include "styles.custom.ca.jobs.volumes" . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: import
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: [ "mgs", "tools", "import", "--wait", "dgw://" ]
+          env:
+            {{- include "styles.env.import" . | nindent 12 }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "styles.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            {{- include "styles.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.stylesImport.resources | nindent 12 }}
+      {{- with .Values.stylesImport.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.stylesImport.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
+
