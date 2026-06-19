@@ -30,6 +30,19 @@ jobs:
           echo "nextdate=$(date +%d.%m.%Y -d $nextdate)" >> $GITHUB_OUTPUT
           echo "startdate=$(date +%d.%m.%Y -d $nextdate'-1 week')" >> $GITHUB_OUTPUT
 
+      - name: Map tag to icon and title
+        id: map_icon
+        run: |
+          case "${{ steps.extract_tag.outputs.tag }}" in
+            PRO)      ICON="docs-pro";       TITLE="2ГИС Про" ;;
+            Citylens) ICON="docs-citylens";  TITLE="2ГИС Ситискан" ;;
+            Core)     ICON="docs-core";      TITLE="базовых сервисов" ;;
+            Platform) ICON="docs-platform";  TITLE="API-платформы" ;;
+            *)        ICON="docs-on-premise"; TITLE="${{ steps.extract_tag.outputs.tag }}" ;;
+          esac
+          echo "icon=$ICON" >> $GITHUB_OUTPUT
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+
       - uses: mattermost/action-mattermost-notify@master
         if: ${{ github.event.workflow_run.conclusion == 'success' && steps.extract_tag.outputs.tag == 'Platform' }}
         with:
@@ -37,11 +50,13 @@ jobs:
           MATTERMOST_USERNAME: Github
           MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
           TEXT: |
-            Опубликован On-Premise: ${{ steps.extract_tag.outputs.tag }} ${{ steps.extract_tag.outputs.version }}
-            Документация: https://confluence.2gis.ru/display/ONPREM/Release+Platform+${{ steps.extract_tag.outputs.version }}+On-Premise
-            Дата следующего планового релиза: ${{ steps.nextrelease.outputs.nextdate }}
-            Дата формирования списка кандидатов релиза: ${{ steps.nextrelease.outputs.startdate }}
-            Актуальная информация по датам и содержанию релизов: https://jira.2gis.ru/projects/ONPREM?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased
+            ### :docs-on-premise: Релиз On-Premise ${{ steps.map_icon.outputs.title }} :${{ steps.map_icon.outputs.icon }}: ${{ steps.extract_tag.outputs.version }}
+
+            :book: [Документация к релизу](https://confluence.2gis.ru/display/ONPREM/Release+Platform+${{ steps.extract_tag.outputs.version }}+On-Premise)
+            :calendar: Дата следующего планового релиза: **${{ steps.nextrelease.outputs.nextdate }}**
+            :hourglass: Дата формирования списка кандидатов релиза: **${{ steps.nextrelease.outputs.startdate }}**
+
+            :memo: [Актуальная информация по датам и содержанию релизов](https://jira.2gis.ru/projects/ONPREM?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased)
 
       - uses: mattermost/action-mattermost-notify@master
         if: ${{ github.event.workflow_run.conclusion == 'success' && steps.extract_tag.outputs.tag != 'Platform' }}
@@ -50,6 +65,8 @@ jobs:
           MATTERMOST_USERNAME: Github
           MATTERMOST_ICON_URL: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/256px-GitHub_Invertocat_Logo.svg.png
           TEXT: |
-            Опубликован On-Premise: ${{ steps.extract_tag.outputs.tag }} ${{ steps.extract_tag.outputs.version }}
-            Документация: https://confluence.2gis.ru/display/ONPREM/Release+${{ steps.extract_tag.outputs.tag }}+${{ steps.extract_tag.outputs.version }}+On-Premise
-            Актуальная информация по содержанию релиза: https://jira.2gis.ru/projects/ONPREM?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased
+            ### :docs-on-premise: Релиз On-Premise ${{ steps.map_icon.outputs.title }} :${{ steps.map_icon.outputs.icon }}: ${{ steps.extract_tag.outputs.version }}
+
+            :book: [Документация к релизу](https://confluence.2gis.ru/display/ONPREM/Release+${{ steps.extract_tag.outputs.tag }}+${{ steps.extract_tag.outputs.version }}+On-Premise)
+
+            :memo: [Актуальная информация по датам и содержанию релизов](https://jira.2gis.ru/projects/ONPREM?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased)
