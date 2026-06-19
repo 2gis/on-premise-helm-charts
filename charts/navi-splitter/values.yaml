@@ -137,6 +137,16 @@ ingress:
   #   - navi-splitter.example.com
   #   secretName: secret.tls
 
+# @section [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+
+# @param httpRoute.enabled If HTTPRoute is enabled for the service.
+# @param httpRoute.hostnames List of hostnames served by route.
+# @extra httpRoute.parentRefs List of parent references (gateways) for HTTPRoute. Defaults: canary and stable gateways in istio-gateways namespace.
+
+httpRoute:
+  enabled: false
+  hostnames: []
+
 # @section Limits
 
 # @skip resources
@@ -258,6 +268,10 @@ passThrough:
 # @param envoy.accessLogs.enabled if access logging enabled
 # @param envoy.clusterTimeout Cluster timeout.
 # @param envoy.connectTimeout Connect timeout.
+# @param envoy.attractor.clusterTimeout Envoy timeout for attrator cluster, if not set, will fallback to envoy.clusterTimeout value
+# @param envoy.attractor.connectTimeout Envoy timeout for attrator cluster, if not set, will fallback to envoy.connectTimeout value
+# @param envoy.oneToMany.clusterTimeout Envoy timeout for Moses(OneToMany) cluster, if not set, will fallback to envoy.clusterTimeout value
+# @param envoy.oneToMany.connectTimeout Envoy timeout for Moses(OneToMany) cluster, if not set, will fallback to envoy.connectTimeout value
 # @param envoy.concurrency The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0`
 # @param envoy.retry.enabled Enable retry failed requests
 # @param envoy.retry.retryOn Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)
@@ -278,6 +292,12 @@ envoy:
     enabled: false
   clusterTimeout: 15s
   connectTimeout: 1s
+  attractor:
+    clusterTimeout: ''
+    connectTimeout: ''
+  oneToMany:
+    clusterTimeout: ''
+    connectTimeout: ''
   concurrency: ''
   retry:
     enabled: false
