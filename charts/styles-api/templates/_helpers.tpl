@@ -58,6 +58,16 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
+{{- define "styles.import.name" -}}
+{{ include "styles.name" . }}-import
+{{- end }}
+
+{{- define "styles.import.labels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}-import
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
 {{- define "styles.env.loglevel" -}}
 - name: MGS_LOG_LEVEL
   value: {{ .Values.log.level | quote }}
@@ -148,6 +158,50 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "styles.env.migrate" -}}
 {{ include "styles.env.loglevel" . }}
 {{ include "styles.env.db.jobs" . }}
+{{- end }}
+
+{{- define "styles.env.s3.jobs" -}}
+{{ include "styles.env.s3" . }}
+- name: MGS_S3_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "styles.secret.jobs.name" . }}
+      key: s3AccessKey
+- name: MGS_S3_SECRET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "styles.secret.jobs.name" . }}
+      key: s3SecretKey
+{{- end }}
+
+{{- define "styles.env.dgctlStorage" -}}
+- name: MGS_DGW_ENDPOINT
+  value: {{ printf "%s://%s" (.Values.dgctlStorage.secure | ternary "https" "http") (required "A valid .Values.dgctlStorage.host required" .Values.dgctlStorage.host) | quote }}
+- name: MGS_DGW_BUCKET
+  value: {{ required "A valid .Values.dgctlStorage.bucket required" .Values.dgctlStorage.bucket | quote }}
+- name: MGS_DGW_REGION
+  value: {{ .Values.dgctlStorage.region | quote }}
+- name: MGS_DGW_SECURE
+  value: {{ .Values.dgctlStorage.secure | quote }}
+- name: MGS_DGW_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "styles.secret.jobs.name" . }}
+      key: dgwAccessKey
+- name: MGS_DGW_SECRET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "styles.secret.jobs.name" . }}
+      key: dgwSecretKey
+- name: MGS_DGW_MANIFEST_PATH
+  value: {{ required "A valid .Values.dgctlStorage.manifest required" .Values.dgctlStorage.manifest | quote }}
+{{- end }}
+
+{{- define "styles.env.import" -}}
+{{ include "styles.env.loglevel" . }}
+{{ include "styles.env.db.jobs" . }}
+{{ include "styles.env.s3.jobs" . }}
+{{ include "styles.env.dgctlStorage" . }}
 {{- end }}
 
 {{/*
