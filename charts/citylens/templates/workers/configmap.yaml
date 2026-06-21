@@ -25,11 +25,13 @@ data:
     {{- with .Values.kafka }}
     kafka:
       broker: {{ .bootstrapServer }}
-      is_credentials_enabled: true
+      is_credentials_enabled: {{ ne .securityProtocol "PLAINTEXT" }}
+      {{- if ne .securityProtocol "PLAINTEXT" }}
       credentials:
         mechanism: {{ required "A valid .Values.kafka.saslMechanism entry required" .saslMechanism | squote }}
         username: {{ required "A valid .Values.kafka.username entry required" .username | squote }}
         password: {{ required "A valid .Values.kafka.password entry required" .password | squote }}
+      {{- end }}
       advanced:
         stream_wait_empty: true
         topic_allow_declare: false
