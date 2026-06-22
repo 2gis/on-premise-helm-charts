@@ -1,6 +1,6 @@
 catalog-api
-	catalog-api:3.675.0
-	catalog-importer:1.12.1
+	catalog-api:3.684.0
+	catalog-importer:1.22.0
 mapgl-js-api
 	mapgl:1.73.0
 navi-async-grpc-proxy
