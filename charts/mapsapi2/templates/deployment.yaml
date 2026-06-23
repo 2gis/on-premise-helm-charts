@@ -1,0 +1,124 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mapsapi2.fullname" . }}
+  {{- if .Values.annotations }}
+  annotations:
+    {{- toYaml .Values.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "mapsapi2.labels" . | nindent 4 }}
+  {{- if .Values.labels }}
+    {{- toYaml .Values.labels | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- toYaml .Values.strategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "mapsapi2.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "mapsapi2.selectorLabels" . | nindent 8 }}
+      {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PUBLIC_HOST
+              value: {{ required "A valid .Values.env.PUBLIC_HOST entry required" .Values.env.PUBLIC_HOST | quote }}
+            - name: MAPSAPI2_PROTOCOL
+              value: {{ .Values.env.MAPSAPI2_PROTOCOL | quote }}
+            {{- if .Values.env.MAPSAPI2_TILE_SERVER }}
+            - name: MAPSAPI2_TILE_SERVER
+              value: {{ .Values.env.MAPSAPI2_TILE_SERVER | quote }}
+            {{- end }}
+            {{- if .Values.env.MAPSAPI2_RETINA_TILE_SERVER }}
+            - name: MAPSAPI2_RETINA_TILE_SERVER
+              value: {{ .Values.env.MAPSAPI2_RETINA_TILE_SERVER | quote }}
+            {{- end }}
+            {{- if .Values.env.MAPSAPI2_TRAFFIC_TILE_SERVER }}
+            - name: MAPSAPI2_TRAFFIC_TILE_SERVER
+              value: {{ .Values.env.MAPSAPI2_TRAFFIC_TILE_SERVER | quote }}
+            {{- end }}
+            {{- if .Values.env.MAPSAPI2_TRAFFIC_TIMESTAMP_SERVER }}
+            - name: MAPSAPI2_TRAFFIC_TIMESTAMP_SERVER
+              value: {{ .Values.env.MAPSAPI2_TRAFFIC_TIMESTAMP_SERVER | quote }}
+            {{- end }}
+            {{- if .Values.env.MAPSAPI2_TRAFFIC_SCORE_SERVER }}
+            - name: MAPSAPI2_TRAFFIC_SCORE_SERVER
+              value: {{ .Values.env.MAPSAPI2_TRAFFIC_SCORE_SERVER | quote }}
+            {{- end }}
+            {{- if .Values.env.MAPSAPI2_WEB_API_SERVER }}
+            - name: MAPSAPI2_WEB_API_SERVER
+              value: {{ .Values.env.MAPSAPI2_WEB_API_SERVER | quote }}
+            {{- end }}
+            {{- if .Values.env.MAPSAPI2_WEB_API_KEY }}
+            - name: MAPSAPI2_WEB_API_KEY
+              value: {{ .Values.env.MAPSAPI2_WEB_API_KEY | quote }}
+            {{- end }}
+            {{- if .Values.env.MAPSAPI2_DEMO_KEY }}
+            - name: MAPSAPI2_DEMO_KEY
+              value: {{ .Values.env.MAPSAPI2_DEMO_KEY | quote }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            failureThreshold: 5
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5"]
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

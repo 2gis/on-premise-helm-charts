@@ -1,0 +1,22 @@
+{{- with .Values.pdb }}
+{{- if .enabled }}
+---
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "mapsapi2.fullname" $ }}
+  labels:
+    {{- include "mapsapi2.labels" $ | nindent 4 }}
+spec:
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
+  {{- end }}
+  {{- if .maxUnavailable }}
+  maxUnavailable: {{ .maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "mapsapi2.selectorLabels" $ | nindent 6 }}
+{{- end }}
+{{- end }}

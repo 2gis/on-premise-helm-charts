@@ -1,0 +1,31 @@
+{{ with .Values.vpa }}
+{{- if .enabled }}
+---
+
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "mapsapi2.fullname" $ }}
+  labels:
+    {{- include "mapsapi2.labels" $ | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "mapsapi2.fullname" $ }}
+  updatePolicy:
+    updateMode: {{ .updateMode }}
+  resourcePolicy:
+    containerPolicies:
+      - containerName: {{ include "mapsapi2.name" $ }}
+        mode: Auto
+        {{- with .minAllowed }}
+        minAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .maxAllowed }}
+        maxAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+{{- end }}
+{{- end }}
