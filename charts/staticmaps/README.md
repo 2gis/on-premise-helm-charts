@@ -78,7 +78,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | Name               | Description  | Value                        |
 | ------------------ | ------------ | ---------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/staticmaps` |
-| `image.tag`        | Tag.         | `1.0.0`                      |
+| `image.tag`        | Tag.         | `1.0.2`                      |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`               |
 
 ### Service settings

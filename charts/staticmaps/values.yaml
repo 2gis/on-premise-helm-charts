@@ -95,7 +95,7 @@ strategy:
 
 image:
   repository: 2gis-on-premise/staticmaps
-  tag: 1.0.0
+  tag: 1.0.2
   pullPolicy: IfNotPresent
 
 # @section Service settings
