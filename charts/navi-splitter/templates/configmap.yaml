@@ -149,7 +149,11 @@ data:
         dns_lookup_family: V4_ONLY
         lb_policy: ROUND_ROBIN
         # empty parameter specifying not to sway off gRPC
-        http2_protocol_options: {}
+        typed_extension_protocol_options:
+          envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+            "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+            explicit_http_config:
+              http2_protocol_options: {}
         load_assignment:
           cluster_name: attractor
           endpoints:
@@ -167,7 +171,11 @@ data:
         dns_lookup_family: V4_ONLY
         lb_policy: LEAST_REQUEST
         # empty parameter specifying not to sway off gRPC
-        http2_protocol_options: {}
+        typed_extension_protocol_options:
+          envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+            "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+            explicit_http_config:
+              http2_protocol_options: {}
         load_assignment:
           cluster_name: oneToMany
           endpoints:

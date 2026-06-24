@@ -283,7 +283,7 @@ envoy:
   image:
     repository: 2gis-on-premise/navi-envoy
     pullPolicy: IfNotPresent
-    tag: 1.36.2-tools
+    tag: 1.38.1-tools
   resources: {}
   systemLogs:
     logLevel: info
