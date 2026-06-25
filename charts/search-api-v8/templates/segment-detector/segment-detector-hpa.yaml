@@ -1,0 +1,28 @@
+{{- if .Values.segmentDetector.enabled }}
+{{- if .Values.segmentDetector.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-segment-detector
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "search-api-v8.fullname" . }}-segment-detector
+  minReplicas: {{ .Values.segmentDetector.hpa.minReplicas }}
+  maxReplicas: {{ .Values.segmentDetector.hpa.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: AverageValue
+          averageValue: {{ .Values.segmentDetector.hpa.averageCPUValue }}
+  {{- if .Values.segmentDetector.hpa.behavior }}
+  behavior:
+    {{- .Values.segmentDetector.hpa.behavior | toYaml | nindent 4 }}
+  {{- end }}{{- /* .Values.segmentDetector.hpa.behavior */}}
+{{- end }}{{- /* .Values.segmentDetector.hpa.enabled */}}
+{{ end }}{{- /* .Values.segmentDetector.enabled */}}

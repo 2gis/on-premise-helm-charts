@@ -117,7 +117,7 @@ worker:
   image:
     repository: 2gis-on-premise/search-api-v8-worker
     pullPolicy: IfNotPresent
-    tag: 8.20.3
+    tag: 8.25.1
   ports:
     http: 8092
     grpc: 8091
@@ -205,7 +205,7 @@ worker:
     storageClassName: ''
     resources:
       requests:
-        storage: 8Gi
+        storage: 6Gi
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -286,6 +286,7 @@ head:
 # @param head.head.adsEnable Enable or disable advertising
 # @param head.head.bigSearchMode.enabled Enable or disable big search (true, false)
 # @param head.head.bigSearchSearchers List of searchers for which big search is enabled. If empty, the search will work as V7, despite the bigSearchMode being enabled.
+# @param head.head.segmentDetectorClientTimeoutMs Timeout (ms) for SegmentDetector client
 # @skip head.head.bigSearchExcludeSegments List of projects to exclude from indexing
 # @param head.head.aiSuggestedQueries.enabled Enable or disable AI Suggested Queries
 
@@ -304,7 +305,7 @@ head:
     image:
       repository: 2gis-on-premise/search-api-v8-head
       pullPolicy: IfNotPresent
-      tag: 8.20.3
+      tag: 8.24.0
     ports:
       grpc: 9010
       http: 9090
@@ -313,7 +314,7 @@ head:
     resources:
       requests:
         cpu: 900m
-        memory: 5000Mi
+        memory: 5500Mi
       limits:
         cpu: 2000m
         memory: 8Gi
@@ -323,7 +324,7 @@ head:
       enabled: true
       httpGet:
         path: /v2/status
-        port: http-nginx
+        port: http-sapphire
         scheme: HTTP
       timeoutSeconds: 1
       periodSeconds: 5
@@ -368,7 +369,7 @@ head:
 #      - AddressSuggestor
 #      - SearcherByPhone
 # For additional information look docs in docs.2gis.com
-
+    segmentDetectorClientTimeoutMs: 500
     bigSearchExcludeSegments: []
     aiSuggestedQueries:
       enabled: false
@@ -386,46 +387,12 @@ head:
     includeProjectKeyRegexp: 'gis\.v4.*'
     excludeProjectKeyRegexp: '^$'
 
-# @param head.nginx.image.repository Docker image repository
-# @param head.nginx.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
-# @param head.nginx.image.tag Docker image tag
-# @param head.nginx.ports.http HTTP port used by Nginx
-# @param head.nginx.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
-
-# @skip head.nginx.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
-# @extra head.nginx.resources.requests.cpu CPU request; recommended value: `100m`
-# @extra head.nginx.resources.requests.memory Memory request; recommended value: `64Mi`
-# @extra head.nginx.resources.limits.cpu CPU limit; recommended value: `250m`
-# @extra head.nginx.resources.limits.memory Memory limit; recommended value: `256Mi`
-
-# @param head.nginx.keepAliveCount Maximum number of idle keepalive connections to upstream servers
-# @param head.nginx.enableAccessLog Enable or disable access logs for each request (disabled to reduce log volume)
-# @param head.nginx.logLevel Log level for Nginx; can be `trace`, `debug`, `info`, `warn`, `error`, or `critical`
-
-  nginx:
-    image:
-      repository: 2gis-on-premise/search-api-v8-nginx
-      pullPolicy: IfNotPresent
-      tag: 1.25.11
-    ports:
-      http: 8080
-    securityContext: {}
-    resources:
-      requests:
-        cpu: 100m
-        memory: 64Mi
-      limits:
-        cpu: 250m
-        memory: 256Mi
-    keepAliveCount: 100
-    enableAccessLog: false
-    logLevel: warn
-
 # @param head.envoy.image.repository Docker image repository
 # @param head.envoy.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
 # @param head.envoy.image.tag Docker image tag
 # @param head.envoy.ports.admin Web access port for the Envoy admin console
 # @param head.envoy.ports.grpc gRPC port used by Envoy
+# @param head.envoy.ports.http HTTP port used by Envoy
 # @param head.envoy.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
 # @skip head.envoy.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
@@ -442,7 +409,7 @@ head:
 # @param head.envoy.faultInjection.clients.qt Specifies the fault injection settings for the query transformer client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
 # @param head.envoy.faultInjection.clients.ai Specifies the fault injection settings for the AI vector search client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
 # @param head.envoy.faultInjection.clients.recsys Specifies the fault injection settings for the recsys ranker client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
-# @param head.envoy.faultInjection.clients.geodetector Specifies the fault injection settings for the geodetector client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
+# @param head.envoy.faultInjection.clients.segmentDetector Specifies the fault injection settings for the segment-detector client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
 
   envoy:
     image:
@@ -452,6 +419,7 @@ head:
     ports:
       admin: 9901
       grpc: 8091
+      http: 8092
     securityContext: {}
     resources:
       requests:
@@ -469,7 +437,7 @@ head:
         qt: {}
         ai: {}
         recsys: {}
-        geodetector: {}
+        segmentDetector: {}
 
 # @param head.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 # @param head.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
@@ -554,12 +522,29 @@ head:
     timeoutMs: 600
     searchers: []
 
+  # @skip head.autocompleteChips.enabled Enable or disable autocompleteChips
+  # @skip head.autocompleteChips.endpoint.address Address of the autocompleteChips service
+  # @skip head.autocompleteChips.endpoint.port Port of the autocompleteChips service
+  # @skip head.autocompleteChips.endpoint.ssl Enable or disable TLS encryption for the autocompleteChips service
+  # @skip head.autocompleteChips.clientFactoryName Client factory name for the autocompleteChips client (used to enable/disable SSL when debugging locally)
+  # @skip head.autocompleteChips.timeoutMs Connection timeout (in milliseconds) for the autocompleteChips service
+  # @skip head.autocompleteChips.searchers List of searchers for which autocompleteChips will be enabled
+
+  autocompleteChips:
+    enabled: false
+    endpoint:
+      address: ''
+      port: 50051
+      ssl: false
+    clientFactoryName: grpc-client-factory
+    timeoutMs: 200
+    searchers: []
+
 # @skip head.recsysRanker.enabled Enable or disable recsysRanker
 # @skip head.recsysRanker.endpoint.address Address of the recsysRanker service
 # @skip head.recsysRanker.endpoint.port Port of the recsysRanker service
 # @skip head.recsysRanker.endpoint.ssl Enable or disable TLS encryption for the recsysRanker service
 # @skip head.recsysRanker.clientFactoryName Client factory name for the recsysRanker client (used to enable/disable SSL when debugging locally)
-# @skip head.recsysRanker.timeoutMs Connection timeout (in milliseconds) for the recsysRanker service
 # @skip head.recsysRanker.searchersList List of searchers for which recsysRanker will be enabled
 
   recsysRanker:
@@ -569,7 +554,6 @@ head:
       port: 50051
       ssl: false
     clientFactoryName: grpc-client-factory
-    timeoutMs: 500
     searchersList: []
 
   # @skip head.friendsService.enabled Enable or disable friendsService
@@ -619,7 +603,7 @@ head:
     storageClassName: ''
     resources:
       requests:
-        storage: 8Gi
+        storage: 6Gi
 
 # @param head.strategy.type Type of Kubernetes deployment strategy; can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
 # @param head.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be unavailable during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
@@ -695,7 +679,7 @@ filesStorage:
   image:
     repository: 2gis-on-premise/search-api-v8-files-storage
     pullPolicy: IfNotPresent
-    tag: 8.20.3
+    tag: 8.25.1
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -794,7 +778,7 @@ dataAdapter:
   image:
     repository: 2gis-on-premise/search-api-v8-data-adapter
     pullPolicy: IfNotPresent
-    tag: 8.20.3
+    tag: 8.25.1
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -875,6 +859,7 @@ dataAdapter:
 # @skip portal.loglevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
 # @skip portal.services.controllerHost Controller host in form "host:port"
 # @skip portal.services.fstorageHost Files storage host in form "host:port"
+# @param portal.services.fsHeavyOpsTimeout Timeout for heavy files-storage operations
 
 portal:
   enabled: false
@@ -886,7 +871,7 @@ portal:
   image:
     repository: 2gis-on-premise/search-api-v8-portal
     pullPolicy: IfNotPresent
-    tag: 8.20.3
+    tag: 8.25.1
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -912,6 +897,7 @@ portal:
   services:
     controllerHost: ''
     fstorageHost: ''
+    fsHeavyOpsTimeout: 2m
 
 
 # @section Controller settings
@@ -961,6 +947,7 @@ portal:
 # @extra controller.props[].location index location
 # @param controller.interval Indexing task synchronization interval
 # @param controller.taskTimeout Timeout for completing an indexing task; after this time, the task is returned to the queue if not completed successfully
+# @param controller.projectsApiRequestTimeout Timeout for HTTP requests to the projects list API
 # @param controller.extraProjects Additional list of projects with their URLs
 # @param controller.qdbFiles List of special QDB files used for indexing.
 # @param controller.adIndexesModel  Model used for filtering indexes for which ads will be built
@@ -970,9 +957,6 @@ portal:
 # @param controller.monthlyAdWeightsEnable Enable monthly update of ad targeting
 # @param controller.monthlyAdWeightsTargetingsUrl URL of the monthly ad targeting source
 # @param controller.monthlyAdWeightsUrl URL of a specific monthly ad weight target
-# @param controller.data.persistent.enabled Enable or disable a persistent volume for the service
-# @param controller.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
-# @param controller.data.resources.requests.storage Requested storage volume size
 # @param controller.allowedProjectKeys List of projects from the general list that should be indexed
 # @param controller.notAllowedProjectKeys List of projects from the general list that should not be indexed
 # @param controller.tasksPriorities.default Default priority value applied to all indexing tasks if no specific override is defined
@@ -989,7 +973,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-api-v8-controller
     pullPolicy: IfNotPresent
-    tag: 8.20.3
+    tag: 8.25.1
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1027,11 +1011,12 @@ controller:
     - model: gis
       domain: v4
     - model: gis
-      domain: geodetector
+      domain: geo
       language: nolang
       location: '-'
   interval: 15s
   taskTimeout: 20m
+  projectsApiRequestTimeout: 5s
   extraProjects: []
   qdbFiles: {}
   adIndexesModel: gis
@@ -1041,15 +1026,10 @@ controller:
   monthlyAdWeightsEnable: false
   monthlyAdWeightsTargetingsUrl: ''
   monthlyAdWeightsUrl: ''
-  data:
-    persistent:
-      enabled: false
-    storageClassName: ''
-    resources:
-      requests:
-        storage: 10Gi
   allowedProjectKeys: []
-  notAllowedProjectKeys: []
+  notAllowedProjectKeys:
+    - "gis.v4.65536.ru.ru"
+    - "gis.geo.65536.nolang.-"
   tasksPriorities:
     default: 1
     overrides: {}
@@ -1111,6 +1091,7 @@ controller:
 
 # @param indexer.vpa.enabled Enable or disable Vertical Pod Autoscaler (VPA)
 # @param indexer.vpa.updateMode VPA operating mode: `Off` means VPA will not automatically change resource requests
+# @param indexer.indexStatsMetricsEnabled Enable or disable export of indexes_stats* metrics from indexer
 
 indexer:
   matchLabels: {}
@@ -1120,10 +1101,11 @@ indexer:
   ports:
     http: 8080
   loglevel: info
+  indexStatsMetricsEnabled: false
   image:
     repository: 2gis-on-premise/search-api-v8-indexer
     pullPolicy: IfNotPresent
-    tag: 8.20.3
+    tag: 8.25.1
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1228,7 +1210,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-api-v8-syncer
     pullPolicy: IfNotPresent
-    tag: 8.20.3
+    tag: 8.25.1
   securityContext: {}
   resources:
     requests:
@@ -1312,7 +1294,7 @@ serviceAccount:
 # @skip service.ingressRouter.external.enabled Enable or disable direct HTTP route to ingress-router (internal use)
 # @skip service.ingressRouter.external.host External address for direct HTTP route to ingress-router (internal use)
 
-# @param service.geodetector.port Service (svc) port for the geodetector component
+# @param service.segmentDetector.port Service (svc) port for the segment-detector component
 
 service:
   worker:
@@ -1338,7 +1320,7 @@ service:
     external:
       enabled: false
       host: ''
-  geodetector:
+  segmentDetector:
     port: 10091
 
 # @section ingressRouter
@@ -1441,7 +1423,6 @@ service:
 # @param ingressRouter.searchRequestTimeoutMs Timeout (in ms) for requests to the `head` service
 # @param ingressRouter.prometheusUrl Prometheus URL for rate limiting
 # @param ingressRouter.rateLimitRules Big Search usage quotas
-# @param ingressRouter.filteredUserAgentList filtered User-Agent list
 # @param ingressRouter.masterApiKey api key for advanced features
 
 # @param ingressRouter.ports.monitor TCP port for service endpoints such as `/metrics`
@@ -1452,27 +1433,6 @@ service:
 # @param ingressRouter.routeHeader used for request dispatching
 # @param ingressRouter.routing.searchBase.port Port of the AB Sapphire base service
 # @param ingressRouter.routing.searchBase.exactMatch Header value for AB Sapphire base
-# @param ingressRouter.routing.cluster1.port Port of cluster 1 head service
-# @param ingressRouter.routing.cluster1.address Address of cluster 1 head service
-# @param ingressRouter.routing.cluster1.exactMatch Header value for cluster 1
-# @param ingressRouter.routing.cluster2.port Port of cluster 2 head service
-# @param ingressRouter.routing.cluster2.address Address of cluster 2 head service
-# @param ingressRouter.routing.cluster2.exactMatch Header value for cluster 2
-# @param ingressRouter.routing.cluster3.port Port of cluster 3 head service
-# @param ingressRouter.routing.cluster3.address Address of cluster 3 head service
-# @param ingressRouter.routing.cluster3.exactMatch Header value for cluster 3
-# @param ingressRouter.routing.sanitized.port Port of sanitized head service
-# @param ingressRouter.routing.sanitized.address Address of sanitized head service
-# @param ingressRouter.routing.sanitized.exactMatch Header value for sanitized cluster
-# @param ingressRouter.debugHeaders Header used for debug mode
-# @param ingressRouter.debugRouting.ingressRouter.port Port for ingressRouter cluster
-# @param ingressRouter.debugRouting.ingressRouter.exactMatch Header value for ingressRouter
-# @param ingressRouter.debugRouting.head.port Port for head cluster
-# @param ingressRouter.debugRouting.head.exactMatch Header value for head
-# @param ingressRouter.debugRouting.geodetector.port Port for geodetector cluster
-# @param ingressRouter.debugRouting.geodetector.exactMatch Header value for geodetector
-# @param ingressRouter.debugRouting.worker.port Port for worker cluster
-# @param ingressRouter.debugRouting.worker.exactMatch Header value for worker
 # @param ingressRouter.data.persistent.enabled Enable or disable a persistent volume for the service
 # @param ingressRouter.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
 # @param ingressRouter.data.resources.requests.storage Requested storage volume size
@@ -1583,7 +1543,7 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-api-v8-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.20.3
+    tag: 8.25.1
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
@@ -1591,7 +1551,6 @@ ingressRouter:
   searchRequestTimeoutMs: 5000
   prometheusUrl: ''
   rateLimitRules: []
-  filteredUserAgentList: []
   masterApiKey: ''
   ports:
     monitor: 9093
@@ -1606,147 +1565,117 @@ ingressRouter:
     searchBase:
       port: 9010
       exactMatch: cluster-base
-    cluster1:
-      port: 9001
-      address: big-search-ab-cluster1-ingress-router
-      exactMatch: cluster-1
-    cluster2:
-      port: 9001
-      address: big-search-ab-cluster2-ingress-router
-      exactMatch: cluster-2
-    cluster3:
-      port: 9001
-      address: big-search-ab-cluster3-ingress-router
-      exactMatch: cluster-3
-    sanitized:
-      port: 80
-      address: bigsearch-sanitized-grpc.istio.k8s.2gis.dev
-      exactMatch: sanitized-cluster
-  debugHeaders: x-debug-service-name
-  debugRouting:
-    ingressRouter:
-      port: 9001
-      exactMatch: ingress-router
-    head:
-      port: 9010
-      exactMatch: head
-    geodetector:
-      port: 10091
-      exactMatch: geodetector
-    worker:
-      port: 8091
-      exactMatch: worker
   gracefulShutdownInterval: 30s
 
-# @section geodetector
+# @section segmentDetector
 
-# @param geodetector.enabled Enable or disable the geodetector service
-# @param geodetector.replicaCount Number of replicas for geodetector (used if HPA is disabled)
+# @param segmentDetector.enabled Enable or disable the segment-detector service
+# @param segmentDetector.replicaCount Number of replicas for segment-detector (used if HPA is disabled)
 
-# @param geodetector.image.repository Docker image repository
-# @param geodetector.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
-# @param geodetector.image.tag Docker image tag
-# @param geodetector.imagePullSecrets Kubernetes image pull secrets
+# @param segmentDetector.image.repository Docker image repository
+# @param segmentDetector.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param segmentDetector.image.tag Docker image tag
+# @param segmentDetector.imagePullSecrets Kubernetes image pull secrets
 
-# @param geodetector.geodetectorGrpcThreads Number of threads for gRPC execution
-# @param geodetector.dataUpdateFrequencySec Frequency (in seconds) of index information updates
-# @param geodetector.geodetectorMainThreads Number of threads per main handler
-# @param geodetector.geodetectorFsThreads Number of threads for FS task processor
-# @param geodetector.geodetectorMonThreads Number of threads allocated for collecting metrics
-# @param geodetector.logLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
-# @param geodetector.logFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
-# @param geodetector.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
-# @param geodetector.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
+# @param segmentDetector.segmentDetectorGrpcThreads Number of threads for gRPC execution
+# @param segmentDetector.dataUpdateFrequencySec Frequency (in seconds) of index information updates
+# @param segmentDetector.segmentDetectorMainThreads Number of threads per main handler
+# @param segmentDetector.segmentDetectorFsThreads Number of threads for FS task processor
+# @param segmentDetector.segmentDetectorMonThreads Number of threads allocated for collecting metrics
+# @param segmentDetector.logLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param segmentDetector.logFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
+# @param segmentDetector.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
+# @param segmentDetector.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
 
-# @param geodetector.matchLabels Selector match labels
-# @param geodetector.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
-# @param geodetector.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param segmentDetector.matchLabels Selector match labels
+# @param segmentDetector.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param segmentDetector.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 
-# @param geodetector.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
-# @param geodetector.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param segmentDetector.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param segmentDetector.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
-# @param geodetector.hpa.enabled Enable or disable Horizontal Pod Autoscaler (HPA)
-# @param geodetector.hpa.minReplicas Minimum number of replicas
-# @param geodetector.hpa.maxReplicas Maximum number of replicas
-# @param geodetector.hpa.averageCPUValue Target average CPU utilization (as a direct value of requested CPU)
+# @param segmentDetector.hpa.enabled Enable or disable Horizontal Pod Autoscaler (HPA)
+# @param segmentDetector.hpa.minReplicas Minimum number of replicas
+# @param segmentDetector.hpa.maxReplicas Maximum number of replicas
+# @param segmentDetector.hpa.averageCPUValue Target average CPU utilization (as a direct value of requested CPU)
 
-# @param geodetector.hpa.behavior.scaleDown.policies[0].periodSeconds Duration (in seconds) the policy must be true
-# @param geodetector.hpa.behavior.scaleDown.policies[0].type Type of scaling (percentage or absolute number of pods to reduce)
-# @param geodetector.hpa.behavior.scaleDown.policies[0].value Number or percentage of pods to reduce
-# @param geodetector.hpa.behavior.scaleDown.stabilizationWindowSeconds Stabilization window to prevent flapping
+# @param segmentDetector.hpa.behavior.scaleDown.policies[0].periodSeconds Duration (in seconds) the policy must be true
+# @param segmentDetector.hpa.behavior.scaleDown.policies[0].type Type of scaling (percentage or absolute number of pods to reduce)
+# @param segmentDetector.hpa.behavior.scaleDown.policies[0].value Number or percentage of pods to reduce
+# @param segmentDetector.hpa.behavior.scaleDown.stabilizationWindowSeconds Stabilization window to prevent flapping
 
-# @param geodetector.hpa.behavior.scaleUp.selectPolicy Policy selection strategy: `Min` or `Disabled`
-# @param geodetector.hpa.behavior.scaleUp.policies[0].periodSeconds Duration (in seconds) the policy must be true
-# @param geodetector.hpa.behavior.scaleUp.policies[0].type Type of scaling (percentage or absolute number of pods to increase)
-# @param geodetector.hpa.behavior.scaleUp.policies[0].value Number or percentage of pods to increase
-# @param geodetector.hpa.behavior.scaleUp.policies[1].periodSeconds Duration (in seconds) the policy must be true
-# @param geodetector.hpa.behavior.scaleUp.policies[1].type Type of scaling (percentage or absolute number of pods to increase)
-# @param geodetector.hpa.behavior.scaleUp.policies[1].value Number or percentage of pods to increase
-# @param geodetector.hpa.behavior.scaleUp.stabilizationWindowSeconds Stabilization window to prevent flapping
+# @param segmentDetector.hpa.behavior.scaleUp.selectPolicy Policy selection strategy: `Min` or `Disabled`
+# @param segmentDetector.hpa.behavior.scaleUp.policies[0].periodSeconds Duration (in seconds) the policy must be true
+# @param segmentDetector.hpa.behavior.scaleUp.policies[0].type Type of scaling (percentage or absolute number of pods to increase)
+# @param segmentDetector.hpa.behavior.scaleUp.policies[0].value Number or percentage of pods to increase
+# @param segmentDetector.hpa.behavior.scaleUp.policies[1].periodSeconds Duration (in seconds) the policy must be true
+# @param segmentDetector.hpa.behavior.scaleUp.policies[1].type Type of scaling (percentage or absolute number of pods to increase)
+# @param segmentDetector.hpa.behavior.scaleUp.policies[1].value Number or percentage of pods to increase
+# @param segmentDetector.hpa.behavior.scaleUp.stabilizationWindowSeconds Stabilization window to prevent flapping
 
-# @param geodetector.vpa.enabled Enable or disable Vertical Pod Autoscaler (VPA)
-# @param geodetector.vpa.updateMode VPA operating mode; `Off` means no automatic resource changes
+# @param segmentDetector.vpa.enabled Enable or disable Vertical Pod Autoscaler (VPA)
+# @param segmentDetector.vpa.updateMode VPA operating mode; `Off` means no automatic resource changes
 
-# @param geodetector.ports.grpc gRPC port for API requests
-# @param geodetector.ports.server gRPC server port
-# @param geodetector.ports.monitor Port for Prometheus metrics
+# @param segmentDetector.ports.grpc gRPC port for API requests
+# @param segmentDetector.ports.server gRPC server port
+# @param segmentDetector.ports.monitor Port for Prometheus metrics
 
-# @skip geodetector.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
-# @extra geodetector.resources.requests.cpu CPU request; recommended value: `1`
-# @extra geodetector.resources.requests.memory Memory request; recommended value: `4000Mi`
-# @extra geodetector.resources.limits.cpu CPU limit; recommended value: `2`
-# @extra geodetector.resources.limits.memory Memory limit; recommended value: `6Gi`
+# @skip segmentDetector.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra segmentDetector.resources.requests.cpu CPU request; recommended value: `1`
+# @extra segmentDetector.resources.requests.memory Memory request; recommended value: `4000Mi`
+# @extra segmentDetector.resources.limits.cpu CPU limit; recommended value: `2`
+# @extra segmentDetector.resources.limits.memory Memory limit; recommended value: `6Gi`
 
-# @param geodetector.data.resources.requests.storage Requested storage volume size
-# @param geodetector.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
-# @param geodetector.data.persistent.enabled Enable or disable persistent volume for the service
+# @param segmentDetector.data.resources.requests.storage Requested storage volume size
+# @param segmentDetector.data.storageClassName Storage class to use; see Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+# @param segmentDetector.data.persistent.enabled Enable or disable persistent volume for the service
 
-# @param geodetector.livenessProbe.enabled Enable liveness probe
-# @param geodetector.livenessProbe.httpGet.path HTTP path for the liveness probe
-# @param geodetector.livenessProbe.httpGet.port HTTP port for the liveness probe
-# @param geodetector.livenessProbe.httpGet.scheme HTTP scheme for the liveness probe
-# @param geodetector.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
-# @param geodetector.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
-# @param geodetector.livenessProbe.successThreshold Minimum consecutive successes for the liveness probe
-# @param geodetector.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
+# @param segmentDetector.livenessProbe.enabled Enable liveness probe
+# @param segmentDetector.livenessProbe.httpGet.path HTTP path for the liveness probe
+# @param segmentDetector.livenessProbe.httpGet.port HTTP port for the liveness probe
+# @param segmentDetector.livenessProbe.httpGet.scheme HTTP scheme for the liveness probe
+# @param segmentDetector.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param segmentDetector.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param segmentDetector.livenessProbe.successThreshold Minimum consecutive successes for the liveness probe
+# @param segmentDetector.livenessProbe.failureThreshold Number of failures before the liveness probe is considered failed
 
-# @param geodetector.readinessProbe.enabled Enable readiness probe
-# @param geodetector.readinessProbe.httpGet.path HTTP path for the readiness probe
-# @param geodetector.readinessProbe.httpGet.port HTTP port for the readiness probe
-# @param geodetector.readinessProbe.httpGet.scheme HTTP scheme for the readiness probe
-# @param geodetector.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
-# @param geodetector.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
-# @param geodetector.readinessProbe.successThreshold Minimum consecutive successes for the readiness probe
-# @param geodetector.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+# @param segmentDetector.readinessProbe.enabled Enable readiness probe
+# @param segmentDetector.readinessProbe.httpGet.path HTTP path for the readiness probe
+# @param segmentDetector.readinessProbe.httpGet.port HTTP port for the readiness probe
+# @param segmentDetector.readinessProbe.httpGet.scheme HTTP scheme for the readiness probe
+# @param segmentDetector.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param segmentDetector.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param segmentDetector.readinessProbe.successThreshold Minimum consecutive successes for the readiness probe
+# @param segmentDetector.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
 
-# @param geodetector.startupProbe.enabled Enable startup probe
-# @param geodetector.startupProbe.httpGet.path HTTP path for the startup probe
-# @param geodetector.startupProbe.httpGet.port HTTP port for the startup probe
-# @param geodetector.startupProbe.httpGet.scheme HTTP scheme for the startup probe
-# @param geodetector.startupProbe.initialDelaySeconds Initial delay (in seconds) before starting the startup probe
-# @param geodetector.startupProbe.timeoutSeconds Timeout (in seconds) for the startup probe
-# @param geodetector.startupProbe.periodSeconds Interval (in seconds) between startup probe checks
-# @param geodetector.startupProbe.successThreshold Minimum consecutive successes for the startup probe
-# @param geodetector.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
+# @param segmentDetector.startupProbe.enabled Enable startup probe
+# @param segmentDetector.startupProbe.httpGet.path HTTP path for the startup probe
+# @param segmentDetector.startupProbe.httpGet.port HTTP port for the startup probe
+# @param segmentDetector.startupProbe.httpGet.scheme HTTP scheme for the startup probe
+# @param segmentDetector.startupProbe.initialDelaySeconds Initial delay (in seconds) before starting the startup probe
+# @param segmentDetector.startupProbe.timeoutSeconds Timeout (in seconds) for the startup probe
+# @param segmentDetector.startupProbe.periodSeconds Interval (in seconds) between startup probe checks
+# @param segmentDetector.startupProbe.successThreshold Minimum consecutive successes for the startup probe
+# @param segmentDetector.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
 
-# @param geodetector.strategy.type Deployment strategy; can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
-# @param geodetector.strategy.rollingUpdate.maxUnavailable Maximum number of unavailable pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
-# @param geodetector.strategy.rollingUpdate.maxSurge Maximum number of extra pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+# @param segmentDetector.strategy.type Deployment strategy; can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
+# @param segmentDetector.strategy.rollingUpdate.maxUnavailable Maximum number of unavailable pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+# @param segmentDetector.strategy.rollingUpdate.maxSurge Maximum number of extra pods during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
 
-# @param geodetector.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
-# @param geodetector.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
-# @param geodetector.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+# @param segmentDetector.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param segmentDetector.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param segmentDetector.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 
-# @param geodetector.gracefulShutdownInterval Interval (in seconds) used by the application to finish processing current requests before shutting down
+# @param segmentDetector.gracefulShutdownInterval Interval (in seconds) used by the application to finish processing current requests before shutting down
 
-geodetector:
+segmentDetector:
   enabled: true
   replicaCount: 1
   livenessProbe:
     enabled: true
     httpGet:
       path: /status
-      port: geodetector-srv
+      port: segdetector-srv
       scheme: HTTP
     timeoutSeconds: 1
     periodSeconds: 5
@@ -1756,7 +1685,7 @@ geodetector:
     enabled: true
     httpGet:
       path: /status
-      port: geodetector-srv
+      port: segdetector-srv
       scheme: HTTP
     timeoutSeconds: 1
     periodSeconds: 5
@@ -1774,20 +1703,20 @@ geodetector:
     successThreshold: 1
     failureThreshold: 200
   image:
-    repository: 2gis-on-premise/search-api-v8-geodetector
+    repository: 2gis-on-premise/search-api-v8-segment-detector
     pullPolicy: IfNotPresent
-    tag: 8.20.3
+    tag: 8.25.1
   imagePullSecrets: []
-  geodetectorGrpcThreads: 2
+  segmentDetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60
-  geodetectorMainThreads: 4
-  geodetectorFsThreads: 2
+  segmentDetectorMainThreads: 4
+  segmentDetectorFsThreads: 2
   logLevel: info
   logFormat: json
-  geodetectorMonThreads: 2
+  segmentDetectorMonThreads: 2
   syncer:
-    includeProjectKeyRegexp: '(gis\.geodetector.*|gis\.v4\.65536\.en\.ru)'
-    excludeProjectKeyRegexp: 'gis\.geodetector\.65536\.nolang\.-'
+    includeProjectKeyRegexp: '(gis\.geo.*|gis\.v4\.65536\.en\.ru)'
+    excludeProjectKeyRegexp: 'gis\.geo\.65536\.nolang\.-'
   matchLabels: {}
   podLabels: {}
   podAnnotations: {}
@@ -1832,7 +1761,7 @@ geodetector:
   data:
     resources:
       requests:
-        storage: 8Gi
+        storage: 200Mi
     storageClassName: ''
     persistent:
       enabled: false
@@ -1890,7 +1819,7 @@ onpremise: true
 # @param sentry.workerDsn Sentry DSN for worker service. Empty string disables Sentry initialization for worker
 # @param sentry.headDsn Sentry DSN for head service. Empty string disables Sentry initialization for head
 # @param sentry.ingressRouterDsn Sentry DSN for ingress-router service. Empty string disables Sentry initialization for ingress-router
-# @param sentry.geodetectorDsn Sentry DSN for geodetector service. Empty string disables Sentry initialization for geodetector
+# @param sentry.segmentDetectorDsn Sentry DSN for segment-detector service. Empty string disables Sentry initialization for segment-detector
 # @param sentry.environment Deployment environment tag (production / staging / unknown)
 # @param sentry.dc Data center tag (m9, m1, n2, n3, unknown)
 # @param sentry.tracesSampleRate Performance tracing sample rate (0.0..1.0)
@@ -1903,7 +1832,7 @@ sentry:
   workerDsn: ''
   headDsn: ''
   ingressRouterDsn: ''
-  geodetectorDsn: ''
+  segmentDetectorDsn: ''
   environment: unknown
   dc: unknown
   tracesSampleRate: 0.0
