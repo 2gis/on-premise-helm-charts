@@ -75,7 +75,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.56.0.4`                  |
+| `image.tag`        | Tag         | `7.58.0.2`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings
@@ -110,7 +110,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `naviback.logLevel`                                     | Logging level, one of: Verbose, Info, Warning, Error, Fatal                                                                                                                                                                                    | `Info`                                      |
 | `naviback.logMessageField`                              | Field name in logs for messages data.                                                                                                                                                                                                          | `custom.navi_msg`                           |
 | `naviback.indexFilename`                                | Name of the index file on Castle                                                                                                                                                                                                               | `index.json.zip`                            |
-| `naviback.citiesFilename`                               | Name of the cities file on Castle                                                                                                                                                                                                              | `cities.conf.zip`                           |
+| `naviback.citiesFilename`                               | Name of the cities file on Castle (json or protobuf format supported `cities.conf.pb3.zip`)                                                                                                                                                    | `cities.conf.zip`                           |
 | `naviback.configFilepath`                               | Configs mountpoint path                                                                                                                                                                                                                        | `/src/etc/2gis/mosesd`                      |
 | `naviback.sentry.enabled`                               | If sending crash dumps to Sentry needed                                                                                                                                                                                                        | `false`                                     |
 | `naviback.sentry.address`                               | Sentry URL                                                                                                                                                                                                                                     | `sentry.local`                              |
@@ -207,7 +207,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                              | Description                                                                                  | Value                        |
 | --------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------- |
 | `envoy.image.repository`          | Repository                                                                                   | `2gis-on-premise/navi-envoy` |
-| `envoy.image.tag`                 | Tag                                                                                          | `1.36.2-tools`               |
+| `envoy.image.tag`                 | Tag                                                                                          | `1.38.1-tools`               |
 | `envoy.image.pullPolicy`          | Pull Policy                                                                                  | `IfNotPresent`               |
 | `envoy.concurrency`               | The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0` | `""`                         |
 | `envoy.resources`                 | Container resources requirements structure                                                   | `{}`                         |

@@ -63,7 +63,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.22.3`                            |
+| `image.tag`        | Tag         | `1.23.0`                            |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings
@@ -155,7 +155,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `dm.compositeTaskTimeoutSec`                   | Timeout for executing split tasks.                                                                                            | `3600`                                     |
 | `dm.configFilepath`                            | Configs mountpoint path                                                                                                       | `/etc/2gis/`                               |
 | `dm.merger.image.repository`                   | Image repository for merger.                                                                                                  | `2gis-on-premise/navi-merger-async-matrix` |
-| `dm.merger.image.tag`                          | Image tag for merger.                                                                                                         | `1.22.3`                                   |
+| `dm.merger.image.tag`                          | Image tag for merger.                                                                                                         | `1.23.0`                                   |
 | `dm.merger.replicaCount`                       | A replica count for the arhiver.                                                                                              | `1`                                        |
 | `dm.merger.livenessProbe.enabled`              | Enable livenessProbe for merger.                                                                                              | `true`                                     |
 | `dm.merger.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe for merger.                                                                           | `20`                                       |
