@@ -114,7 +114,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.54.1.2
+  tag: 7.58.0.2
 
 
 # @section Navi-Back application settings
@@ -148,7 +148,7 @@ image:
 # @param naviback.logLevel Logging level, one of: Verbose, Info, Warning, Error, Fatal
 # @param naviback.logMessageField Field name in logs for messages data.
 # @param naviback.indexFilename Name of the index file on Castle
-# @param naviback.citiesFilename Name of the cities file on Castle
+# @param naviback.citiesFilename Name of the cities file on Castle (json or protobuf format supported `cities.conf.pb3.zip`)
 # @param naviback.configFilepath Configs mountpoint path
 # @param naviback.sentry.enabled If sending crash dumps to Sentry needed
 # @param naviback.sentry.address Sentry URL
@@ -460,7 +460,7 @@ envoy:
   image:
     repository: 2gis-on-premise/navi-envoy
     pullPolicy: IfNotPresent
-    tag: 1.36.2-tools
+    tag: 1.38.1-tools
   concurrency: ''
   resources: {}
   configFilepath: /src/etc/envoy
