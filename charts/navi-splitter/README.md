@@ -4,6 +4,10 @@ Use this Helm chart to deploy Splitter service, which is a part of 2GIS's Navi [
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
+> **Note:**
+>
+> All On-Premise services are beta, and under development.
+
 See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn about:
 
 - Architecture of the service.
@@ -102,6 +106,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                    |
 | `ingress.tls`                        | TLS configuration                         | `[]`                        |
 
+### [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+
+| Name                   | Description                                                                                                           | Value   |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------- | ------- |
+| `httpRoute.enabled`    | If HTTPRoute is enabled for the service.                                                                              | `false` |
+| `httpRoute.hostnames`  | List of hostnames served by route.                                                                                    | `[]`    |
+| `httpRoute.parentRefs` | List of parent references (gateways) for HTTPRoute. Defaults: canary and stable gateways in istio-gateways namespace. |         |
+
 ### Limits
 
 | Name                        | Description                                | Value       |
@@ -178,7 +190,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                              | Description                                                                                                                                                                                    | Value                            |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | `envoy.image.repository`          | Repository                                                                                                                                                                                     | `2gis-on-premise/navi-envoy`     |
-| `envoy.image.tag`                 | Tag                                                                                                                                                                                            | `1.36.2-tools`                   |
+| `envoy.image.tag`                 | Tag                                                                                                                                                                                            | `1.38.1-tools`                   |
 | `envoy.image.pullPolicy`          | Pull Policy                                                                                                                                                                                    | `IfNotPresent`                   |
 | `envoy.resources.requests.cpu`    | CPU request, recommended value `100m`                                                                                                                                                          | `undefined`                      |
 | `envoy.resources.requests.memory` | Memory request, recommended value `100Mi`                                                                                                                                                      | `undefined`                      |
@@ -189,6 +201,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `envoy.accessLogs.enabled`        | if access logging enabled                                                                                                                                                                      | `false`                          |
 | `envoy.clusterTimeout`            | Cluster timeout.                                                                                                                                                                               | `15s`                            |
 | `envoy.connectTimeout`            | Connect timeout.                                                                                                                                                                               | `1s`                             |
+| `envoy.attractor.clusterTimeout`  | Envoy timeout for attrator cluster, if not set, will fallback to envoy.clusterTimeout value                                                                                                    | `""`                             |
+| `envoy.attractor.connectTimeout`  | Envoy timeout for attrator cluster, if not set, will fallback to envoy.connectTimeout value                                                                                                    | `""`                             |
+| `envoy.oneToMany.clusterTimeout`  | Envoy timeout for Moses(OneToMany) cluster, if not set, will fallback to envoy.clusterTimeout value                                                                                            | `""`                             |
+| `envoy.oneToMany.connectTimeout`  | Envoy timeout for Moses(OneToMany) cluster, if not set, will fallback to envoy.connectTimeout value                                                                                            | `""`                             |
 | `envoy.concurrency`               | The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0`                                                                                                   | `""`                             |
 | `envoy.retry.enabled`             | Enable retry failed requests                                                                                                                                                                   | `false`                          |
 | `envoy.retry.retryOn`             | Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)                                                      | `internal,unavailable,5xx,reset` |

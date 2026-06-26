@@ -69,7 +69,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | ------------------ | ----------- | -------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-attractor` |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                   |
-| `image.tag`        | Tag         | `7.56.0.4`                       |
+| `image.tag`        | Tag         | `7.58.0.2`                       |
 
 ### Service account settings
 
@@ -192,7 +192,7 @@ Attractor не имеет смысла без сервиса navi-back.
 | `attractor.telemetry.scheduleDelayMillis` | Interval of export of the buffered spans, ms                                                                                                                                             | `500`                                       |
 | `attractor.telemetry.maxExportBatchSize`  | Max number of spans sent to the exporter in a single export call                                                                                                                         | `512`                                       |
 | `attractor.indexFilename`                 | Name of the index file on Castle                                                                                                                                                         | `index.json.zip`                            |
-| `attractor.citiesFilename`                | Name of the cities file on Castle                                                                                                                                                        | `cities.conf.zip`                           |
+| `attractor.citiesFilename`                | Name of the cities file on Castle (json or protobuf format supported `cities.conf.pb3.zip`)                                                                                              | `cities.conf.zip`                           |
 | `attractor.configFilepath`                | Configs mountpoint path                                                                                                                                                                  | `/src/etc/2gis/mosesd`                      |
 | `attractor.disableUpdates`                | Test switch for disabling runtime background updates                                                                                                                                     | `false`                                     |
 | `attractor.indices`                       | List of dynamic indices kill switches.                                                                                                                                                   |                                             |
