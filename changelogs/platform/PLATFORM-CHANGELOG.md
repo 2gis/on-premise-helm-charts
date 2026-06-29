@@ -58,7 +58,7 @@ traffic-proxy
 	- nginx:1.25.5
 	+ nginx:1.30.2
 ```
-[Full list of image versions](platform_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.54.0/changelogs/platform/platform_image_versions.txt)
 
 ## [2.53.0] (2026-04-29)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2530)
@@ -108,7 +108,7 @@ tiles-api
 	- tiles-api:4.81.3
 	+ tiles-api:4.84.1
 ```
-[Full list of image versions](platform_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.53.0/changelogs/platform/platform_image_versions.txt)
 
 ## [2.52.0] (2026-03-26)
 
@@ -147,7 +147,7 @@ stat-receiver
 	- stat-receiver-streams:1.15.21
 	+ stat-receiver-streams:1.16.0
 ```
-[Full list of image versions](platform_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.52.0/changelogs/platform/platform_image_versions.txt)
 
 ## [2.51.0] (2026-03-19)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2510)
@@ -174,7 +174,7 @@ navi-vrp-task-manager
 	- navi-vrp-task-manager:1.13.1
 	+ navi-vrp-task-manager:1.16.3
 ```
-[Full list of image versions](platform_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.51.0/changelogs/platform/platform_image_versions.txt)
 
 ## [2.50.0] (2026-02-26)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2500)
@@ -212,7 +212,7 @@ tiles-api
 	- tiles-api:4.80.3
 	+ tiles-api:4.81.3
 ```
-[Full list of image versions](platform_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.50.0/changelogs/platform/platform_image_versions.txt)
 
 ## [2.49.0] (2026-01-28)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2490)
@@ -222,7 +222,7 @@ mapgl-js-api
 	- mapgl:1.67.0
 	+ mapgl:1.69.1
 ```
-[Full list of image versions](platform_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.49.0/changelogs/platform/platform_image_versions.txt)
 
 ## [2.48.0] (2025-12-26)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2480)
@@ -264,7 +264,7 @@ tiles-api
 	- tiles-api:4.80.0
 	+ tiles-api:4.80.3
 ```
-[Full list of image versions](platform_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.48.0/changelogs/platform/platform_image_versions.txt)
 
 ## [2.47.1] (2025-12-11)
 
@@ -276,7 +276,7 @@ navi-async-matrix
 	- navi-merger-async-matrix:1.19.1
 	+ navi-merger-async-matrix:1.19.3
 ```
-[Full list of image versions](platform_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.47.1/changelogs/platform/platform_image_versions.txt)
 
 ## [2.47.0] (2025-11-27)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2470)
@@ -304,7 +304,7 @@ tiles-api
 	- tiles-api:4.77.0
 	+ tiles-api:4.80.0
 ```
-[Full list of image versions](platform_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.47.0/changelogs/platform/platform_image_versions.txt)
 
 ## [2.46.0] (2025-11-17)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2460)
@@ -327,7 +327,7 @@ navi-splitter
 	- navi-envoy:1.27.0
 	+ navi-envoy:1.36.2-tools
 ```
-[Full list of image versions](platform_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.46.0/changelogs/platform/platform_image_versions.txt)
 
 ## [2.45.0] (2025-10-30)
 
@@ -362,7 +362,7 @@ tiles-api
 	- tiles-api:4.75.9
 	+ tiles-api:4.77.0
 ```
-[Full list of image versions](platform_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.45.0/changelogs/platform/platform_image_versions.txt)
 
 ## [2.44.0] (2025-09-30)
 
