@@ -305,7 +305,7 @@ head:
     image:
       repository: 2gis-on-premise/search-api-v8-head
       pullPolicy: IfNotPresent
-      tag: 8.24.0
+      tag: 8.25.1
     ports:
       grpc: 9010
       http: 9090
@@ -1028,8 +1028,8 @@ controller:
   monthlyAdWeightsUrl: ''
   allowedProjectKeys: []
   notAllowedProjectKeys:
-    - "gis.v4.65536.ru.ru"
-    - "gis.geo.65536.nolang.-"
+    - 'gis.v4.65536.ru.ru'
+    - 'gis.geo.65536.nolang.-'
   tasksPriorities:
     default: 1
     overrides: {}

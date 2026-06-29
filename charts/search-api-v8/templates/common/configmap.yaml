@@ -845,6 +845,7 @@ data:
       secret_access_key: ${s3SecretKey}
       bucket: {{ .Values.s3.bucket }}
       use_ssl: {{ .Values.s3.secure }}
+      region: {{ .Values.s3.region | quote }}
     {{ end }}{{- /* .Values.onpremise */}}
   indexer.yaml: |
     app:
