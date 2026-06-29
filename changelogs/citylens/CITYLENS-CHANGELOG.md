@@ -13,7 +13,7 @@ citylens-routes-ui
 	- citylens-routes-ui:1.6.2
 	+ citylens-routes-ui:2.2.0
 ```
-[Full list of image versions](citylens_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.3.0/changelogs/citylens/citylens_image_versions.txt)
 
 ## [2.2.0] (2025-12-05)
 #### [Breaking-Changes](CITYLENS-Breaking-Changes.md#220)
@@ -30,7 +30,7 @@ citylens-routes-ui
 	- citylens-routes-ui:1.4.0
 	+ citylens-routes-ui:1.6.2
 ```
-[Full list of image versions](citylens_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.2.0/changelogs/citylens/citylens_image_versions.txt)
 
 ## [2.1.0] (2025-10-16)
 #### [Breaking-Changes](CITYLENS-Breaking-Changes.md#210)
@@ -47,7 +47,7 @@ citylens-routes-ui
 	- citylens-routes-ui:1.3.2
 	+ citylens-routes-ui:1.4.0
 ```
-[Full list of image versions](citylens_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.1.0/changelogs/citylens/citylens_image_versions.txt)
 
 ## [2.0.0] (2025-09-30)
 

@@ -19,7 +19,7 @@ pro-ui
 	- pro-ui:4.50.0
 	+ pro-ui:4.60.0
 ```
-[Full list of image versions](pro_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.4.0/changelogs/pro/pro_image_versions.txt)
 
 ## [2.3.0] (2026-02-27)
 #### [Breaking-Changes](PRO-Breaking-Changes.md#230)
@@ -42,7 +42,7 @@ pro-ui
 	- pro-ui:4.43.0
 	+ pro-ui:4.50.0
 ```
-[Full list of image versions](pro_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.3.0/changelogs/pro/pro_image_versions.txt)
 
 ## [2.2.0] (2025-12-10)
 
@@ -64,7 +64,7 @@ pro-ui
 	- pro-ui:4.33.0
 	+ pro-ui:4.43.0
 ```
-[Full list of image versions](pro_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.2.0/changelogs/pro/pro_image_versions.txt)
 
 ## [2.1.0] (2025-10-09)
 #### [Breaking-Changes](PRO-Breaking-Changes.md#210)
@@ -86,7 +86,7 @@ pro-ui
 	+ pro-ui:4.33.0
 
 ```
-[Full list of image versions](pro_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.1.0/changelogs/pro/pro_image_versions.txt)
 
 ## [2.0.0] (2025-09-30)
 

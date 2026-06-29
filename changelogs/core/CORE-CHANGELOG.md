@@ -1,3 +1,13 @@
+## [2.8.0] (2026-06-29)
+#### [Breaking-Changes](CORE-Breaking-Changes.md#280)
+#### Images
+```
+keys
+	- keys-backend:1.165.1
+	+ keys-backend:1.173.0
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.8.0/changelogs/core/core_image_versions.txt)
+
 ## [2.7.0] (2026-05-26)
 #### [Breaking-Changes](CORE-Breaking-Changes.md#270)
 #### Images
@@ -16,7 +26,7 @@ license
 	- license:2.4.1
 	+ license:2.6.0
 ```
-[Full list of image versions](core_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.7.0/changelogs/core/core_image_versions.txt)
 
 ## [2.6.0] (2026-04-01)
 
@@ -26,7 +36,7 @@ keys
 	- keys-backend:1.151.0
 	+ keys-backend:1.154.0
 ```
-[Full list of image versions](core_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.6.0/changelogs/core/core_image_versions.txt)
 
 ## [2.5.0] (2026-03-04)
 #### [Breaking-Changes](CORE-Breaking-Changes.md#250)
@@ -38,12 +48,12 @@ keys
 	- keys-ui:1.4.0
 	+ keys-ui:1.7.0
 ```
-[Full list of image versions](core_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.5.0/changelogs/core/core_image_versions.txt)
 
 ## [2.4.0] (2026-02-18)
 #### [Breaking-Changes](CORE-Breaking-Changes.md#240)
 
-[Full list of image versions](core_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.4.0/changelogs/core/core_image_versions.txt)
 
 ## [2.3.0] (2026-01-22)
 
@@ -53,7 +63,7 @@ keys
 	- keys-backend:1.144.1
 	+ keys-backend:1.149.1
 ```
-[Full list of image versions](core_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.3.0/changelogs/core/core_image_versions.txt)
 
 ## [2.2.0] (2025-12-05)
 
@@ -63,7 +73,7 @@ keys
 	- keys-backend:1.140.0
 	+ keys-backend:1.144.1
 ```
-[Full list of image versions](core_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.2.0/changelogs/core/core_image_versions.txt)
 
 ## [2.1.0] (2025-11-19)
 #### [Breaking-Changes](CORE-Breaking-Changes.md#210)
@@ -73,7 +83,7 @@ keys
 	- keys-backend:1.135.1
 	+ keys-backend:1.140.0
 ```
-[Full list of image versions](core_image_versions.txt)
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.1.0/changelogs/core/core_image_versions.txt)
 
 ## [2.0.0] (2025-09-30)
 
