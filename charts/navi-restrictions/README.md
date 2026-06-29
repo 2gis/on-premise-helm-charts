@@ -4,10 +4,6 @@ Use this Helm chart to deploy Restrictions API service, which is a part of 2GIS'
 
 Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
 
-> **Note:**
->
-> All On-Premise services are beta, and under development.
-
 See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to learn about:
 
 - Architecture of the service.
@@ -52,10 +48,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/restrictions) to lea
 | ----------------------- | ------------------------------- | ------------------------------------------ |
 | `api.image.repository`  | API service image repository    | `2gis-on-premise/navi-restrictions-api`    |
 | `api.image.pullPolicy`  | API service pull policy         | `IfNotPresent`                             |
-| `api.image.tag`         | API service image tag           | `1.0.3`                                    |
+| `api.image.tag`         | API service image tag           | `1.0.2`                                    |
 | `cron.image.repository` | Syncer service image repository | `2gis-on-premise/navi-restrictions-syncer` |
 | `cron.image.pullPolicy` | Syncer service pull policy      | `IfNotPresent`                             |
-| `cron.image.tag`        | Syncer service image tag        | `1.0.2`                                    |
+| `cron.image.tag`        | Syncer service image tag        | `1.0.1`                                    |
 
 ### Service account settings
 
