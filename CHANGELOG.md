@@ -1,5 +1,9 @@
 # 2GIS On-Premise Changelog
 
+## [2026-06-29] Release: Core:2.8.0
+
+  [CHANGELOG](changelogs/core/CORE-CHANGELOG.md)
+
 ## [2026-06-10] Release: Citylens:2.3.0
 
   [CHANGELOG](changelogs/citylens/CITYLENS-CHANGELOG.md)
