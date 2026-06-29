@@ -139,6 +139,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: {{ .Values.featureFlags.enableAudit | quote }}
 - name: KEYS_FEATURE_FLAGS_AUDIT_KAFKA
   value: {{ .Values.featureFlags.enableAuditKafka | quote }}
+- name: KEYS_FEATURE_FLAGS_AUDIT_BSS
+  value: {{ .Values.featureFlags.enableAuditBSS | quote }}
 - name: KEYS_FEATURE_FLAGS_PUBLIC_API_SIGN
   value: {{ .Values.featureFlags.enablePublicAPISign | quote }}
 - name: KEYS_FEATURE_FLAGS_SINGLE_PARTNER_MODE
@@ -806,4 +808,23 @@ Manifest name
 */}}
 {{- define "keys.manifestCode" -}}
 {{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- end }}
+
+{{- define "keys.env.auditEnvMetadata"}}
+- name: KEYS_AUDIT_METADATA_POD_NAME
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.name
+- name: KEYS_AUDIT_METADATA_POD_NAMESPACE
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.namespace
+- name: KEYS_AUDIT_METADATA_NODE_NAME
+  valueFrom:
+    fieldRef:
+      fieldPath: spec.nodeName
+- name: KEYS_AUDIT_METADATA_POD_IP
+  valueFrom:
+    fieldRef:
+      fieldPath: status.podIP
 {{- end }}
