@@ -137,7 +137,7 @@ ingress:
   #   - navi-splitter.example.com
   #   secretName: secret.tls
 
-# @section [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+# @section [HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/) configuration
 
 # @param httpRoute.enabled If HTTPRoute is enabled for the service.
 # @param httpRoute.hostnames List of hostnames served by route.
