@@ -1,18 +1,15 @@
-# 2GIS Static Maps service
+# 2GIS Static Maps service (Static API)
 
-Use this Helm chart to deploy Static Maps service, which is a part of 2GIS's [On-Premise Maps services](https://docs.2gis.com/en/on-premise/map).
+Use this Helm chart to deploy the Static Maps service (Static API), which is part of the Maps API in the 2GIS On-Premise solution.
 
-Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
+For details about Static Maps (Static API), see the On-Premise Maps API documentation, including:
 
-See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
+- Service architecture.
+- Service installation.
 
-- Architecture of the service.
+  When configuring the `values-staticmaps.yaml` file, refer to the documentation and the list of available keys below.
 
-- Installing the service.
-
-    When filling in the keys for `values-staticmaps.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
+- Service updates.
 
 ## Values
 
