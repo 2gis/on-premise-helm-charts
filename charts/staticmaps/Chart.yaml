@@ -1,0 +1,12 @@
+apiVersion: v2
+name: staticmaps
+type: application
+description: A Helm chart for Kubernetes to deploy StaticMaps service
+
+version: 0.0.1
+appVersion: 1.0.2
+
+maintainers:
+- name: 2gis
+  url: https://github.com/2gis
+  email: on-premise@2gis.com
