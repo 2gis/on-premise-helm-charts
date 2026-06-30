@@ -66,9 +66,6 @@ spec:
             - name: http-sapphire
               containerPort: {{ .Values.head.head.ports.http }}
               protocol: TCP
-            - name: http-nginx
-              containerPort: {{ .Values.head.nginx.ports.http }}
-              protocol: TCP
             - name: http-syncer
               containerPort: {{ .Values.syncer.ports.http }}
               protocol: TCP
@@ -93,45 +90,6 @@ spec:
           {{- if .Values.customCAs.bundle }}
             {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
-        - name: nginx
-          securityContext:
-            {{- toYaml .Values.head.nginx.securityContext | nindent 12 }}
-          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.head.nginx.image.repository }}:{{ .Values.head.nginx.image.tag | default .Chart.AppVersion }}'
-          imagePullPolicy: {{ .Values.head.nginx.image.pullPolicy }}
-          resources:
-            {{- toYaml .Values.head.nginx.resources | nindent 12 }}
-          {{ if .Values.onpremise }}
-          volumeMounts:
-            - name: head-config
-              mountPath: /var/nginx/conf.d/nginx.conf
-              subPath: nginx.conf
-            - name: head-data
-              mountPath: /var/2gis/sapphire2
-          {{ else }}
-          volumeMounts:
-            - name: head-config
-              mountPath: /etc/nginx/nginx.conf
-              subPath: nginx.conf
-            - name: head-data
-              mountPath: /var/2gis/sapphire2
-          {{- end -}}{{- /* .Values.onpremise */}}
-          {{- if .Values.customCAs.bundle }}
-            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
-          {{- end }}{{- /* .Values.customCAs.bundle */}}
-          {{- if .Values.customCAs.bundle }}
-          env:
-            {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
-          {{- end }}{{- /* .Values.customCAs.bundle */}}
-          {{- if .Values.head.head.prestopHook.enabled }}
-          lifecycle:
-            # wait for the main container to shut down
-            preStop:
-              exec:
-                command:
-                  - "/bin/bash"
-                  - "-c"
-                  - "while cat < /dev/null > /dev/tcp/127.0.0.1/{{ .Values.head.head.ports.grpc }} ; do sleep 5 ; done"
-          {{- end }}{{- /* .Values.head.head.prestopHook.enabled */}}
         - name: envoy
           securityContext:
             {{- toYaml .Values.head.envoy.securityContext | nindent 12 }}

@@ -1,0 +1,230 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+dgctlDockerRegistry: ''
+
+# @section Common settings
+
+# @param nameOverride Base name to use in all the Kubernetes entities deployed by this chart.
+# @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
+
+# @param annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+# @param podAnnotations Kubernetes pod [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+# @param podLabels Kubernetes pod [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+
+# @param nodeSelector Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param tolerations Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param affinity Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.
+
+# @param imagePullSecrets Kubernetes [secrets for pulling the image from the registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+
+nameOverride: ''
+fullnameOverride: ''
+
+annotations: {}
+labels: {}
+
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+imagePullSecrets: []
+
+# @section API settings
+
+# @param replicas Number of replicas of API pods
+# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+replicas: 1
+revisionHistoryLimit: 3
+
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+# @param hpa.enabled If HPA is enabled for the service
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up
+# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window
+# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used
+# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used
+
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  scaleDownStabilizationWindowSeconds: ''
+  scaleUpStabilizationWindowSeconds: ''
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ''
+
+# @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
+
+# @param pdb.enabled If PDB is enabled for the service
+# @param pdb.minAvailable How many pods must be available after the eviction
+# @param pdb.maxUnavailable How many pods can be unavailable after the eviction
+
+pdb:
+  enabled: false
+  minAvailable: ''
+  maxUnavailable: 1
+
+# @section Strategy settings
+
+# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
+# @section Deployment settings
+
+# @param image.repository Repository.
+# @param image.tag Tag.
+# @param image.pullPolicy Pull Policy.
+
+image:
+  repository: 2gis-on-premise/staticmaps
+  tag: 1.0.2
+  pullPolicy: IfNotPresent
+
+# @section Service settings
+
+# @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
+# @param service.port Service port
+
+service:
+  annotations: {}
+  labels: {}
+  type: ClusterIP
+  port: 8080
+
+# @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+# @param ingress.enabled If Ingress is enabled for the service.
+# @param ingress.className Name of the Ingress controller class.
+# @param ingress.hosts[0].host Hostname for the Ingress service.
+# @param ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
+# @param ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
+# @param ingress.tls TLS configuration
+
+ingress:
+  enabled: false
+  className: nginx
+  hosts:
+  - host: staticmaps.example.com
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: []
+  # - hosts:
+  #   - staticmaps.example.com
+  #   secretName: secret.tls
+
+# @section Limits
+
+# @param resources.requests.cpu A CPU request.
+# @param resources.requests.memory A memory request.
+# @param resources.limits.cpu A CPU limit.
+# @param resources.limits.memory A memory limit.
+
+resources:
+  limits:
+    cpu: 700m
+    memory: 256Mi
+  requests:
+    cpu: 400m
+    memory: 128Mi
+
+# @section StaticMaps service application settings
+
+# @param app.log.level Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`, `panic`.
+# @param app.log.format Log format for the service. Can be: `text`, `json`.
+# @skip app.apiPort
+# @param app.attributionDir Path to the directory with attribution files.
+
+# @extra app.markers **Markers settings**
+# @param app.markers.localDir Path to the directory with local markers.
+# @param app.markers.fetchTimeout Timeout for fetching markers from external sources.
+# @param app.markers.cacheDir Path to the directory for caching markers.
+# @param app.markers.cacheExpire Duration for which cached markers are considered valid.
+
+# @extra app.access **API Keys service access settings**
+# @param app.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
+
+# @extra app.access.stat **Statistics receiver settings**
+# @param app.access.stat.enabled If statistics receiver is enabled.
+# @param app.access.stat.url Statistics receiver endpoint url, ex: http(s)://stat-receiver/bss/3. **Required if** `app.access.stat.enabled: true`
+
+app:
+  apiPort: 8080
+  attributionDir: '/usr/share/staticmaps/pictures/attribution'
+  log:
+    level: info
+    format: json
+  markers:
+    localDir: '/usr/share/staticmaps/pictures/markers'
+    fetchTimeout: 3s
+    cacheDir: '/cache'
+    cacheExpire: 2h
+  access:
+    enabled: false
+    stat:
+      enabled: false
+      url: ''
+
+# @section Tiles service settings
+
+# @param tiles.url URL of the Tiles API service, ex: http://tiles-service-api.svc **Required**
+# @param tiles.key Tiles access key **Required**
+# @param tiles.requestTimeout Timeout for requests to the Tiles API.
+
+tiles:
+  url: ''
+  key: ''
+  requestTimeout: 5s
+
+# @section Keys service settings
+
+# @param keys.url URL of the Keys API service, ex: http://keys-service-api.svc **Required if** `app.access.enabled: true`
+# @param keys.token Keys service API key **Required if** `app.access.enabled: true`
+# @param keys.syncPeriod Duration how often static maps API should try to update keys data.
+
+keys:
+  url: ''
+  token: ''
+  syncPeriod: 5m
+
+# @section License service settings
+
+# @param license.url Address of the License service. Ex: https://license.svc **Required**
+# @param license.retryPeriod Duration how often static maps API should try to update license status if it is failing to get it.
+
+license:
+  url: ''
+  retryPeriod: 30s
+
+# @section **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container.
+
+customCAs:
+  bundle: ''
+  # bundle: |
+  #   -----BEGIN CERTIFICATE-----
+  #   ...
+  #   -----END CERTIFICATE-----
+  certsPath: ''

@@ -84,7 +84,7 @@ data:
         "type": {{ (index .Values (include "config.attractor" .) | default dict).type | quote }},
         "host": "127.0.0.1",
         "port": 9999,
-        "timeout_limit_ms": {{ default 1000 ((index .Values (include "config.attractor" .) | default dict).responseTimeoutMs) | quote }}
+        "timeout_limit_ms": {{ default 1000 ((index .Values (include "config.attractor" .) | default dict).responseTimeoutMs) | int }}
       },
       {{- end }}
       {{- if .Values.naviback.telemetry.enabled }}
@@ -151,9 +151,9 @@ data:
         },
         "cities": {
           "update_period": 0,
-          {{- /* search .zip in files */}}
+          {{- /* search .zip in files, extract content name (part before first .zip, without path prefix) */}}
           {{- if regexMatch ".*\\.zip.*" .Values.naviback.citiesFilename }}
-          "content": "cities.conf",
+          "content": {{ regexReplaceAll "^(?:.*/)?(.+?)\\.zip.*$" .Values.naviback.citiesFilename "${1}" | quote }},
           {{- end }}
           "nodes": [
             "{REMOTE_PATH}/{{ .Values.naviback.citiesFilename }}"
@@ -879,7 +879,11 @@ data:
         dns_lookup_family: V4_ONLY
         lb_policy: ROUND_ROBIN
         # empty parameter specifying not to sway off gRPC
-        http2_protocol_options: {}
+        typed_extension_protocol_options:
+          envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+            "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+            explicit_http_config:
+              http2_protocol_options: {}
         load_assignment:
           cluster_name: attractor
           endpoints:
