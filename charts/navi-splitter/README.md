@@ -102,7 +102,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                    |
 | `ingress.tls`                        | TLS configuration                         | `[]`                        |
 
-### [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+### [HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/) configuration
 
 | Name                   | Description                                                                                                           | Value   |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------- | ------- |
