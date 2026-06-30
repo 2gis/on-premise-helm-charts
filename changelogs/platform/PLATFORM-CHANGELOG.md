@@ -1,3 +1,69 @@
+## [2.55.0] (2026-06-30)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2550)
+#### Images
+```
+catalog-api
+	- catalog-api:3.675.0
+	+ catalog-api:3.684.0
+	- catalog-importer:1.12.1
+	+ catalog-importer:1.22.0
+mapgl-js-api
+	- mapgl:1.73.0
+	+ mapgl:1.75.0
+navi-async-matrix
+	- navi-async-matrix:1.22.3
+	+ navi-async-matrix:1.23.0
+	- navi-merger-async-matrix:1.22.3
+	+ navi-merger-async-matrix:1.23.0
+navi-attractor
+	- navi-attractor:7.56.0.4
+	+ navi-attractor:7.58.0.5
+navi-back
+	- navi-back:7.56.0.4
+	+ navi-back:7.58.0.5
+	- navi-envoy:1.36.2-tools
+	+ navi-envoy:1.38.1-tools
+navi-castle
+	- navi-castle:1.9.12
+	+ navi-castle:1.10.8
+navi-restrictions
+	- navi-restrictions-api:1.0.1
+	+ navi-restrictions-api:1.0.3
+	- navi-restrictions-syncer:1.0.1
+	+ navi-restrictions-syncer:1.0.2
+navi-router
+	- navi-router:6.43.0.3
+	+ navi-router:6.43.1.2
+navi-splitter
+	- navi-envoy:1.36.2-tools
+	+ navi-envoy:1.38.1-tools
+search-api-v8
+	- search-api-v8-controller:8.20.3
+	+ search-api-v8-controller:8.25.1
+	- search-api-v8-data-adapter:8.20.3
+	+ search-api-v8-data-adapter:8.25.1
+	- search-api-v8-envoy:1.36.2-tools
+	+ search-api-v8-envoy:1.38.1-tools
+	- search-api-v8-files-storage:8.20.3
+	+ search-api-v8-files-storage:8.25.1
+	- search-api-v8-geodetector:8.20.3
+	- search-api-v8-head:8.20.3
+	+ search-api-v8-head:8.25.1
+	- search-api-v8-indexer:8.20.3
+	+ search-api-v8-indexer:8.25.1
+	- search-api-v8-ingress-router:8.20.3
+	+ search-api-v8-ingress-router:8.25.1
+	- search-api-v8-nginx:1.25.11
+	+ search-api-v8-segment-detector:8.25.1
+	- search-api-v8-syncer:8.20.3
+	+ search-api-v8-syncer:8.25.1
+	- search-api-v8-worker:8.20.3
+	+ search-api-v8-worker:8.25.1
+staticmaps
+	+ staticmaps:1.0.2
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.55.0/changelogs/platform/platform_image_versions.txt)
+
 ## [2.54.0] (2026-05-27)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2540)
 #### Images
