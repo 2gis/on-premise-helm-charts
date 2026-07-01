@@ -263,3 +263,46 @@ customCAs:
   # ...
   # -----END CERTIFICATE-----
   certsPath: ''
+
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 endpoint where DataGateway stores deployment artifacts. Format: `host:port`. **Required** if `stylesImport.startOnDeploy` is `true`.
+# @param dgctlStorage.secure Use HTTPS for the S3 endpoint.
+# @param dgctlStorage.bucket S3 bucket name. **Required** if `stylesImport.startOnDeploy` is `true`.
+# @param dgctlStorage.accessKey S3 access key. **Required** if `stylesImport.startOnDeploy` is `true`.
+# @param dgctlStorage.secretKey S3 secret key. **Required** if `stylesImport.startOnDeploy` is `true`.
+# @param dgctlStorage.region S3 region name. Optional.
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`. **Required** if `stylesImport.startOnDeploy` is `true`.
+
+dgctlStorage:
+  host: ''
+  secure: false
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+  region: ''
+  manifest: ''
+
+# @section Styles Import settings
+
+# @param stylesImport.startOnDeploy Run styles import job automatically on Helm install/upgrade (pre-hook).
+# @param stylesImport.backoffLimit Number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering the Job as failed.
+# @param stylesImport.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+# @param stylesImport.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+# @param stylesImport.resources.requests.cpu A CPU request.
+# @param stylesImport.resources.requests.memory A memory request.
+# @param stylesImport.resources.limits.cpu A CPU limit.
+# @param stylesImport.resources.limits.memory A memory limit.
+
+stylesImport:
+  startOnDeploy: false
+  backoffLimit: 0
+  nodeSelector: {}
+  tolerations: []
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
